@@ -1,0 +1,9 @@
+## Interface: 60000
+## Title: HealBot Taiwanese Localization
+## Author: Required
+## Notes: HealBot Localization for zhTW
+## RequiredDeps: HealBot
+## LoadOnDemand: 1
+## Version: 6.0.3.9
+
+HealBot_Localization.tw.lua

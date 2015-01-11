@@ -1,0 +1,13 @@
+------------------------------------------------------------------------
+r87 | Resike | 2014-07-31 22:16:22 +0000 (Thu, 31 Jul 2014) | 1 line
+Changed paths:
+   M /trunk/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
+
+- Code clean up.
+------------------------------------------------------------------------
+r86 | funkydude | 2013-12-01 13:20:36 +0000 (Sun, 01 Dec 2013) | 1 line
+Changed paths:
+   M /trunk/LibSharedMedia-3.0/LibSharedMedia-3.0.lua
+
+improve the comments
+------------------------------------------------------------------------

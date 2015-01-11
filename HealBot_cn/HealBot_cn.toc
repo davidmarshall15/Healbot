@@ -1,0 +1,9 @@
+﻿## Interface: 60000
+## Title: HealBot Chinese Localization
+## Author: Required
+## Notes: HealBot 中文语言文件
+## RequiredDeps: HealBot
+## LoadOnDemand: 1
+## Version: 6.0.3.9
+
+HealBot_Localization.cn.lua

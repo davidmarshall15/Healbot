@@ -1,0 +1,23 @@
+------------------------------------------------------------------------
+r3 | phanx | 2011-10-11 21:33:09 +0000 (Tue, 11 Oct 2011) | 1 line
+Changed paths:
+   A /tags/v1.0 (from /trunk:2)
+
+Provides UTF-8 aware string functions implemented in pure lua.
+------------------------------------------------------------------------
+r2 | Phanx | 2011-10-11 21:31:53 +0000 (Tue, 11 Oct 2011) | 1 line
+Changed paths:
+   A /trunk/UTF8.toc
+   A /trunk/utf8.lua
+   A /trunk/utf8data.lua
+
+- Add the files.
+------------------------------------------------------------------------
+r1 | root | 2011-10-11 21:13:19 +0000 (Tue, 11 Oct 2011) | 1 line
+Changed paths:
+   A /branches
+   A /tags
+   A /trunk
+
+utf8/mainline: Initial Import
+------------------------------------------------------------------------
