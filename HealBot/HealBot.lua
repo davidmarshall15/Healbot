@@ -4644,6 +4644,7 @@ function HealBot_OnEvent_TalentsChanged(self)
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(self)
+    HealBot_OnEvent_TalentsChanged(nil)
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerEW")      
     end

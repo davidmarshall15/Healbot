@@ -2613,6 +2613,7 @@ function HealBot_Options_DisableCheck()
         if z==0 then 
             HealBot_Config.DisabledNow=0
             HealBot_Set_Timers() 
+            HealBot_OnEvent_TalentsChanged(nil)
         end
         HealBot_setOptions_Timer(500+z)
         if z==1 then 
