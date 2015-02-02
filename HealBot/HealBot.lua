@@ -1388,11 +1388,13 @@ function HealBot_OnUpdate(self)
                         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
                             HealBot_Options_Timer[7950]=nil
                             HealBot_luVars["hbInsNameCheck"]=nil
+                            local tmpAreaId = GetCurrentMapAreaID()
                             SetMapToCurrentZone()
+                            local mapAreaID = GetCurrentMapAreaID()
+                            SetMapByID(tmpAreaId)
                             HealBot_setOptions_Timer(30)
                             local y,z = IsInInstance()
                             local mapName=HEALBOT_WORD_OUTSIDE
-                            local mapAreaID=GetCurrentMapAreaID()
                             if mapAreaID and mapAreaID>0 then
                                 mapName=GetMapNameByID(mapAreaID)
                             elseif z and z=="arena" then 
@@ -1596,7 +1598,11 @@ function HealBot_OnUpdate(self)
                 HealBot_IC_PartyMembersChanged()
             elseif HealBot_luVars["getMapID"] then
                 HealBot_luVars["getMapID"]=nil
-                HealBot_Data["MAPID"]=GetCurrentMapAreaID() or 0
+                local tmpAreaId = GetCurrentMapAreaID()
+                SetMapToCurrentZone()
+                local mapAreaID = GetCurrentMapAreaID()
+                SetMapByID(tmpAreaId)
+                HealBot_Data["MAPID"]=mapAreaID or 0
                 local difficultyID = GetDungeonDifficultyID()
                 if HealBot_Data["MAPID"]==930 and difficultyID>1 then
                     HealBot_luVars["ignoreFastHealthToT"]=true
@@ -4644,7 +4650,6 @@ function HealBot_OnEvent_TalentsChanged(self)
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(self)
-    HealBot_OnEvent_TalentsChanged(nil)
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerEW")      
     end
