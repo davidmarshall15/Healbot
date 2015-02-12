@@ -4779,7 +4779,7 @@ end
 
 function HealBot_CastNotify(unitName,spell,unit)
     local z = Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"];
-    local s = gsub(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["MSG"],"#s",spell)
+    local s = gsub(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["MSG"],"#s",GetSpellLink(spell, "")) --spell)
     s = gsub(s,"#n",unitName)
     local w=nil;
     if z==6 then
@@ -4800,7 +4800,7 @@ function HealBot_CastNotify(unitName,spell,unit)
             SendChatMessage(s,"CHANNEL",nil,chanId);
         else
             local inInst=IsInInstance()
-            if inInst then
+            if inInst and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
                 SendChatMessage(s,"INSTANCE_CHAT",nil,nil);
             else
                 SendChatMessage(s,"PARTY",nil,nil);
@@ -4813,6 +4813,13 @@ function HealBot_CastNotify(unitName,spell,unit)
         end
         if chanId then
             SendChatMessage(s,"CHANNEL",nil,chanId);
+        else
+            local inInst=IsInInstance()
+            if inInst and IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
+                SendChatMessage(s,"INSTANCE_CHAT",nil,nil);
+            else
+                SendChatMessage(s,"RAID",nil,nil);
+            end
         end
     elseif z==6 then
         SendChatMessage(s,"CHANNEL",nil,w);
