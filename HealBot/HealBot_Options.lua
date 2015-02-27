@@ -5770,6 +5770,10 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
             HealBot_setOptions_Timer(188)
            -- HealBot_SetResetFlag("SOFT")
         elseif HealBot_Config.Skin_ID>0 and HealBot_Config.Current_Skin then
+            if HealBot_Config.Current_Skin then
+	            Healbot_Config_Skins.Current_Skin = HealBot_Config.Current_Skin;
+	            Healbot_Config_Skins.Skin_ID = HealBot_Config.Skin_ID;
+            end
             if not Healbot_Config_Skins.Skins[HealBot_Config.Current_Skin] then 
                 HealBot_Config.Current_Skin=Healbot_Config_Skins.Current_Skin
                 HealBot_Config.Skin_ID = Healbot_Config_Skins.Skin_ID
@@ -5778,6 +5782,10 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
                 Healbot_Config_Skins.Skin_ID = HealBot_Config.Skin_ID
             end
         else
+            if HealBot_Config.Current_Skin then
+	            Healbot_Config_Skins.Current_Skin = HealBot_Config.Current_Skin;
+	            Healbot_Config_Skins.Skin_ID = HealBot_Config.Skin_ID;
+            end
             HealBot_Config.Current_Skin = Healbot_Config_Skins.Current_Skin
             HealBot_Config.Skin_ID = Healbot_Config_Skins.Skin_ID
         end
@@ -9892,7 +9900,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_CastNotify4,HEALBOT_OPTIONS_CASTNOTIFY4)
             HealBot_Options_SetText(HealBot_Options_CastNotify5,HEALBOT_OPTIONS_CASTNOTIFY5)
             HealBot_Options_SetText(HealBot_Options_CastNotify6,HEALBOT_OPTIONS_CASTNOTIFY6)
-            HealBot_Options_NotifyOtherMsgTxt:SetText(HEALBOT_OPTIONS_NOTIFY_MSG)
+            HealBot_Options_NotifyOtherMsgTxt:SetText(HEALBOT_OPTIONS_NOTIFY_MSG.."  ("..HEALBOT_OPTIONS_CASTNOTIFYTAGS..")")
             HealBot_HealButtons_ChatFrameTxt:SetText(HEALBOT_OPTIONS_HEAL_CHATOPT)
             DoneInitTab[328]=true
         end
