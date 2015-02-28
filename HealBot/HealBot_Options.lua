@@ -4414,38 +4414,12 @@ function HealBot_Options_FAQ_DropDown()
         info.func = function(self)
                         HealBot_Options_StorePrev["hbFAQ"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_FAQ, HEALBOT_ABOUT_FAQ_QUESTIONS[HealBot_Options_StorePrev["hbFAQ"]])
-                        if 1==HealBot_Options_StorePrev["hbFAQ"] then
-                            HealBot_Options_FAQAnswerButton:SetText("Copy Link")
-                            HealBot_Options_FAQAnswerButton:Show()
-                        else
-                            HealBot_Options_FAQAnswerButton:Hide()
-                        end
                         local g=_G["HealBot_Options_FAQAnswerTextD"] 
                         g:SetText(HEALBOT_ABOUT_FAQ_ANSWERS[HealBot_Options_StorePrev["hbFAQ"]])
                     end
         info.checked = false;
         if HealBot_Options_StorePrev["hbFAQ"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
-    end
-end
-
-
-function HealBot_Options_FAQAnswerButton_OnClick()
-    if HealBot_Options_StorePrev["hbFAQ"]==1 then
-        StaticPopupDialogs["HEALBOT_OPTIONS_FAQ_ANSWERS"] = {
-            text = HEALBOT_MODC_URL,
-            button1 = CLOSE,
-            timeout = 0,
-            whileDead = 1,
-            hideOnEscape = 1,
-            OnShow = function(self)
-                local g=_G[self:GetName().."WideEditBox"] or _G[self:GetName().."EditBox"]
-                g:SetText(HEALBOT_MODC_URL)
-            end,
-            hasEditBox = 1,
-            hasWideEditBox = 1,
-        };
-        StaticPopup_Show("HEALBOT_OPTIONS_FAQ_ANSWERS");
     end
 end
 
@@ -9900,7 +9874,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_CastNotify4,HEALBOT_OPTIONS_CASTNOTIFY4)
             HealBot_Options_SetText(HealBot_Options_CastNotify5,HEALBOT_OPTIONS_CASTNOTIFY5)
             HealBot_Options_SetText(HealBot_Options_CastNotify6,HEALBOT_OPTIONS_CASTNOTIFY6)
-            HealBot_Options_NotifyOtherMsgTxt:SetText(HEALBOT_OPTIONS_NOTIFY_MSG.."  ("..HEALBOT_OPTIONS_CASTNOTIFYTAGS..")")
+            HealBot_Options_NotifyOtherMsgTxt:SetText(HEALBOT_OPTIONS_NOTIFY_MSG) -- This is null > .."  ("..HEALBOT_OPTIONS_CASTNOTIFYTAGS..")")
             HealBot_HealButtons_ChatFrameTxt:SetText(HEALBOT_OPTIONS_HEAL_CHATOPT)
             DoneInitTab[328]=true
         end

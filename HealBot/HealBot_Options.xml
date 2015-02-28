@@ -1396,21 +1396,6 @@
                   </Frame>
                 </Frames>
               </Frame>
-              <Button name="HealBot_Options_FAQAnswerButton" inherits="UIPanelButtonTemplate" text="Copy Link">
-                <Size>
-                  <AbsDimension x="250" y="25"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_FAQ" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="-225" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnClick>HealBot_Options_FAQAnswerButton_OnClick()</OnClick>
-                </Scripts>
-              </Button>
               <Frame name="HealBot_Options_Panel0_3">
                 <Size>
                   <AbsDimension y="400"/>

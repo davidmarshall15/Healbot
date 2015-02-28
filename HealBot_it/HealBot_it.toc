@@ -1,9 +1,9 @@
-## Interface: 60000
+## Interface: 60100
 ## Title: HealBot Italian Localization
 ## Author: Required
 ## Notes: HealBot Localization for itIT
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 6.0.3.9
+## Version: 6.1.0.0
 
 HealBot_Localization.it.lua
