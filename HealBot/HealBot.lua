@@ -3417,9 +3417,9 @@ local hbStanceBuffs = {}
 function HealBot_setHbStanceBuffs()
     if HealBot_Data["PCLASSTRIM"]=="PALA" then
         hbStanceBuffs = {
-            [HEALBOT_SEAL_OF_TRUTH]=1,
-            [HEALBOT_SEAL_OF_RIGHTEOUSNESS]=2,
-            [HEALBOT_SEAL_OF_INSIGHT]=3,
+           -- [HEALBOT_SEAL_OF_TRUTH]=1,
+            [HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1,
+            [HEALBOT_SEAL_OF_INSIGHT]=2,
             }
         local i = GetSpecialization()
         local specID = 0
@@ -3548,8 +3548,9 @@ function HealBot_CheckUnitBuffs(button)
             if HealBot_GetSpellId(HealBot_BuffWatch[k]) then
                 z, x = GetSpellCooldown(HealBot_BuffWatch[k]);
             elseif HealBot_Buff_ItemID[HealBot_BuffWatch[k]] then
-                local getCD = true
-                if HealBot_BuffWatch[k]==HEALBOT_EVER_BLOOMING_FROND then
+                local getCD = false
+                if not IsInRaid() and HealBot_BuffWatch[k]==HEALBOT_EVER_BLOOMING_FROND then
+                    getCD = true
                     local mPct, hPct = 100, 100
                     local mana,maxmana=HealBot_UnitMana(xUnit)
                     if mana and maxmana and maxmana>1000 then
