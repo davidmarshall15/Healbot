@@ -3416,15 +3416,19 @@ local hbStanceBuffs = {}
 
 function HealBot_setHbStanceBuffs()
     if HealBot_Data["PCLASSTRIM"]=="PALA" then
-        hbStanceBuffs = {
-           -- [HEALBOT_SEAL_OF_TRUTH]=1,
-            [HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1,
-            [HEALBOT_SEAL_OF_INSIGHT]=2,
-            }
+        hbStanceBuffs = {}
         local i = GetSpecialization()
         local specID = 0
         if i then specID = GetSpecializationInfo(i,false,false) end
-        if specID==70 then
+        if specID==65 then
+            hbStanceBuffs[HEALBOT_SEAL_OF_COMMAND]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+        elseif specID==66 then
+            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+        else
+            hbStanceBuffs[HEALBOT_SEAL_OF_TRUTH]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=2
             hbStanceBuffs[HEALBOT_SEAL_OF_JUSTICE]=3
             hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=4
         end

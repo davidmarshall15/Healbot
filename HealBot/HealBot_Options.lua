@@ -674,6 +674,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_BEACON_OF_LIGHT,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
             HEALBOT_SEAL_OF_INSIGHT,
+            HEALBOT_SEAL_OF_COMMAND,
             HEALBOT_SEAL_OF_TRUTH,
             HEALBOT_SACRED_SHIELD,
         }
