@@ -2017,6 +2017,19 @@ function HealBot_Action_ResetSkin(barType,button,numcols)
         bar6:SetWidth(bWidth)
         barDir:SetHeight(bheight);
         barDir:SetWidth(bWidth)
+        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["OFIX"]==1 then
+            bar:SetOrientation("HORIZONTAL");
+            bar2:SetOrientation("HORIZONTAL");
+            bar3:SetOrientation("HORIZONTAL");
+            bar5:SetOrientation("HORIZONTAL");
+            bar6:SetOrientation("HORIZONTAL");
+        else
+            bar:SetOrientation("VERTICAL");
+            bar2:SetOrientation("VERTICAL");
+            bar3:SetOrientation("VERTICAL");
+            bar5:SetOrientation("VERTICAL");
+            bar6:SetOrientation("VERTICAL");
+        end
         bar5:SetPoint("TOPLEFT",bar,"TOPLEFT",-bOutline,bOutline);
         local gaf = _G["f"..b.frame.."_HealBot_Action"]
         b:SetFrameLevel(gaf:GetFrameLevel()+ 1);

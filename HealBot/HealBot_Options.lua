@@ -43,6 +43,7 @@ local HealBot_Options_Class_HoTctlAction_List={}
 local HealBot_Options_FilterHoTctl_List={}
 local HealBot_Options_ManaIndicator_List={}
 local HealBot_Options_BarsGrowDirection_List={}
+local HealBot_Options_BarsOrientation_List={}
 local HealBot_Options_ActionAnchor_List={}
 local HealBot_Options_ActionBarsCombo_List={}
 local HealBot_Options_ExtraSubSort_List={}
@@ -275,6 +276,11 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_GROW_VERTICAL,
     }
 
+    HealBot_Options_BarsOrientation_List = {
+        HEALBOT_OPTIONS_GROW_HORIZONTAL,
+        HEALBOT_OPTIONS_GROW_VERTICAL,
+    }
+    
     HealBot_Options_ManaIndicator_List = {
         HEALBOT_OPTIONS_LOWMANAINDICATOR1,
         HEALBOT_OPTIONS_LOWMANAINDICATOR2,
@@ -5222,6 +5228,22 @@ function HealBot_Options_BarsGrowDirection_DropDown()
                     end
         info.checked = false;
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_BarsOrientation_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, 2, 1 do
+        info.text = HealBot_Options_BarsOrientation_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFIX"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_BarsOrientation,HealBot_Options_BarsOrientation_List[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFIX"]]) 
+                        HealBot_Panel_ClearBarArrays()
+                        HealBot_setOptions_Timer(150)
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFIX"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -10293,6 +10315,8 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_BARSANCHOR)
             g=_G["healbotbarsgrowdirectionfontstr"]
             g:SetText(HEALBOT_OPTIONS_GROW_DIRECTION)
+            g=_G["healbotbarsorientationfontstr"]
+            g:SetText(HEALBOT_OPTIONS_BARSORIENTATION)
             g=_G["healbotaliasfontoutlinestr"]
             g:SetText(HEALBOT_OPTIONS_SKINFOUTLINE)
             g=_G["healbotframealiastextfontstr"]
@@ -10332,6 +10356,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_AliasFontName:SetValue(fontsIndex[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FONT"]] or 0)
             HealBot_Options_BarsGrowDirection.initialize = HealBot_Options_BarsGrowDirection_DropDown
             UIDropDownMenu_SetText(HealBot_Options_BarsGrowDirection, HealBot_Options_BarsGrowDirection_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"]])
+            HealBot_Options_BarsOrientation.initialize = HealBot_Options_BarsOrientation_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_BarsOrientation, HealBot_Options_BarsOrientation_List[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFIX"]])
             HealBot_Options_AliasFontOutline.initialize = HealBot_Options_AliasFontOutline_DropDown
             UIDropDownMenu_SetText(HealBot_Options_AliasFontOutline, HealBot_Options_FontOutline_List[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OUTLINE"]])
             DoneInitTab[344]=true
