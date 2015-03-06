@@ -1,7 +1,7 @@
 HealBot Continued
 -----------------
 
-Visit the Healbot website for latest download and information on Healbot: http://healbot.darktech.org
+Visit the Healbot website for information on Healbot: http://healbot.darktech.org
 
 Update path to retain settings
 ------------------------------
