@@ -6297,7 +6297,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionLocked" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="310" y="-5" />
+                          <AbsDimension x="310" y="10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -6356,6 +6356,31 @@
                         <FontString name="healbotbarsgrowdirectionfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BARSANCHOR">
                           <Anchors>
                             <Anchor point="RIGHT" relativeTo="HealBot_Options_BarsGrowDirection" relativePoint="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="12" y="-12"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_BarsOrientation" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarsGrowDirection" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotbarsorientationfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BARSORIENTATION">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_BarsOrientation" relativePoint="TOPLEFT">
                               <Offset>
                                 <AbsDimension x="12" y="-12"/>
                               </Offset>

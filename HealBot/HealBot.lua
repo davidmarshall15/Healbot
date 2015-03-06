@@ -1133,7 +1133,7 @@ function HealBot_OnUpdate(self)
                         end
                         HealBot_RecalcParty();
                     end
-                elseif HealBot_CheckTalents and HealBot_CheckTalents<GetTime() then
+                elseif HealBot_CheckTalents then
                     HealBot_CheckTalents=false; 
                     HealBot_GetTalentInfo(HealBot_Data["PGUID"], "player")
                 elseif HealBot_CheckBuffsTimehbGUID and HealBot_CheckBuffsTime<GetTime() then
@@ -1208,9 +1208,11 @@ function HealBot_OnUpdate(self)
                     elseif HealBot_Options_Timer[40] then
                         HealBot_Options_Timer[40]=nil
                         HealBot_Options_Buff_Reset()
+                        HealBot_Options_ResetDoInittab(5)
                     elseif HealBot_Options_Timer[50] then
                         HealBot_Options_Timer[50]=nil
                         HealBot_Options_Debuff_Reset()
+                        HealBot_Options_ResetDoInittab(4)
                     elseif HealBot_Options_Timer[60] then
                         HealBot_Options_Timer[60]=nil
                         HealBot_Options_EmergencyFilter_Reset()
@@ -3416,15 +3418,19 @@ local hbStanceBuffs = {}
 
 function HealBot_setHbStanceBuffs()
     if HealBot_Data["PCLASSTRIM"]=="PALA" then
-        hbStanceBuffs = {
-           -- [HEALBOT_SEAL_OF_TRUTH]=1,
-            [HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1,
-            [HEALBOT_SEAL_OF_INSIGHT]=2,
-            }
+        hbStanceBuffs = {}
         local i = GetSpecialization()
         local specID = 0
         if i then specID = GetSpecializationInfo(i,false,false) end
-        if specID==70 then
+        if specID==65 then
+            hbStanceBuffs[HEALBOT_SEAL_OF_COMMAND]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+        elseif specID==66 then
+            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+        else
+            hbStanceBuffs[HEALBOT_SEAL_OF_TRUTH]=1
+            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=2
             hbStanceBuffs[HEALBOT_SEAL_OF_JUSTICE]=3
             hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=4
         end
@@ -4647,7 +4653,7 @@ end
 
 function HealBot_OnEvent_TalentsChanged(self)
     if HealBot_UnitData[HealBot_Data["PGUID"]] then HealBot_UnitData[HealBot_Data["PGUID"]]["SPEC"] = " " end
-    HealBot_CheckTalents=GetTime()+1
+    HealBot_CheckTalents=true
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(self)
@@ -5735,6 +5741,7 @@ function HealBot_Update_Skins()
                 if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["WIDTH"]==nil then Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["WIDTH"]=144 end
                 if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["NUMCOLS"]==nil then Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["NUMCOLS"]=2 end
                 if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["RMARGIN"]==nil then Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["RMARGIN"]=1 end
+                if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["OFIX"]==nil then Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][gl]["OFIX"]=1 end
                 if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]==nil then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=1 end
                 if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["BARS"]==nil then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["BARS"]=1 end
                 if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["GROW"]==nil then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Skins[x]][gl]["GROW"]=2 end

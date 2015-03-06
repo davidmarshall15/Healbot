@@ -1057,6 +1057,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_FRAME_TITLE             = "Frame Title"
     HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Show Title"
     HEALBOT_OPTIONS_GROW_DIRECTION          = "Grow Direction"
+    HEALBOT_OPTIONS_BARSORIENTATION         = "Bar Orientation"
     HEALBOT_OPTIONS_GROW_HORIZONTAL         = "Horizontal"
     HEALBOT_OPTIONS_GROW_VERTICAL           = "Vertical"
     HEALBOT_OPTIONS_FONT_OFFSET             = "Font Offset"
