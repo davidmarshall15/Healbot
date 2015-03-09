@@ -876,7 +876,7 @@ function HealBot_Lang_ruRU()
     HEALBOT_OPTIONS_FRAME_TITLE             = "Заголовок окна";
     HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Показывать заголовок";
     HEALBOT_OPTIONS_GROW_DIRECTION          = "Направление расширения";
-    HEALBOT_OPTIONS_BARSORIENTATION         = "Ориентация полос"
+    HEALBOT_OPTIONS_BARSORIENTATION         = "Ориентация полос";
     HEALBOT_OPTIONS_GROW_HORIZONTAL         = "Горизонтально";
     HEALBOT_OPTIONS_GROW_VERTICAL           = "Вертикально";
     HEALBOT_OPTIONS_FONT_OFFSET             = "Сдвиг шрифта";
