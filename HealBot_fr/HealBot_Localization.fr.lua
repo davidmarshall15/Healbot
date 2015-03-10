@@ -887,6 +887,7 @@ HEALBOT_ABOUT_FAQ_ANSWERS = {     [1]   = "Vous surveillez les buffs manquants \
     HEALBOT_OPTIONS_FRAME_TITLE             = "Titre du cadre"
     HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Afficher le titre"
     HEALBOT_OPTIONS_GROW_DIRECTION          = "Sens d\'accroissement"
+    HEALBOT_OPTIONS_BARSORIENTATION         = "Orientation de la barre"
     HEALBOT_OPTIONS_GROW_HORIZONTAL         = "Horizontal"
     HEALBOT_OPTIONS_GROW_VERTICAL           = "Vertical"
     HEALBOT_OPTIONS_FONT_OFFSET             = "Offset police"
