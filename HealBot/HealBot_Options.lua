@@ -813,8 +813,10 @@ function HealBot_Options_setDebuffTypes()
     if HealBot_Data["PCLASSTRIM"]=="SHAM" then
         if HealBot_Config.CurrentSpec==3 then
             HealBot_Debuff_Types[HEALBOT_CLEANSE_SPIRIT]={HEALBOT_MAGIC_en, HEALBOT_CURSE_en}
+            HealBot_Debuff_Types[HEALBOT_PURIFY_SPIRIT]={HEALBOT_MAGIC_en, HEALBOT_CURSE_en}
         else
             HealBot_Debuff_Types[HEALBOT_CLEANSE_SPIRIT]={HEALBOT_CURSE_en}
+            HealBot_Debuff_Types[HEALBOT_PURIFY_SPIRIT]={HEALBOT_CURSE_en}
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         if HealBot_Config.CurrentSpec==2 then
