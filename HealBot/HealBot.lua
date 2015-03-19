@@ -6610,7 +6610,17 @@ function HealBot_Update_BuffsForSpecDD(ddId,bType)
                 HealBot_Config_Cures.HealBotDebuffDropDown[z..ddId]=4
             end
             if HealBot_Config_Cures.HealBotDebuffText[ddId] and not HealBot_Config_Cures.HealBotDebuffText[z..ddId] then 
-                HealBot_Config_Cures.HealBotDebuffText[z..ddId]=HealBot_Config_Cures.HealBotDebuffText[ddId]
+				local sName = HealBot_Config_Cures.HealBotDebuffText[ddId] 
+				if sName == HEALBOT_NATURES_CURE and z ~= 4 then 
+					sName = HEALBOT_REMOVE_CORRUPTION
+				elseif sName == HEALBOT_REMOVE_CORRUPTION and z == 4 then 
+					sName = HEALBOT_NATURES_CURE
+				elseif sName == HEALBOT_PURIFY_SPIRIT and z ~= 3 then 
+					sName = HEALBOT_CLEANSE_SPIRIT
+				elseif sName == HEALBOT_CLEANSE_SPIRIT and z == 3 then 
+					sName = HEALBOT_PURIFY_SPIRIT
+				end
+				HealBot_Config_Cures.HealBotDebuffText[z..ddId]=sName
             elseif not not HealBot_Config_Cures.HealBotDebuffText[z..ddId] then 
                 HealBot_Config_Cures.HealBotDebuffText[z..ddId]=HEALBOT_WORDS_NONE
             end
