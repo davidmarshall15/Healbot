@@ -21,9 +21,9 @@ HealBot_Default_Textures={
     [18]= {name="Tukui4", file=[[Interface\Addons\HealBot\Images\tukuibar.tga]]},----TUKUI----
 };
 HealBot_Default_Sounds={
-    [1]= {name="Tribal Bass Drum", file="Sound/Doodad/BellTollTribal.ogg"},
-    [2]= {name="Thorns", file="Sound/Spells/Thorns.ogg"},
-    [3]= {name="Elf Bell Toll", file="Sound/Doodad/BellTollNightElf.ogg"},
+    [1]= {name="Tribal Bass Drum", file="Sound\\Doodad\\BellTollTribal.ogg"},
+    [2]= {name="Thorns", file="Sound\\Spells\\Thorns.ogg"},
+    [3]= {name="Elf Bell Toll", file="Sound\\Doodad\\BellTollNightElf.ogg"},
 };
 HealBot_Default_Fonts={
     [1]= {name="Aovel Sans Black", file=[[Interface\AddOns\HealBot\Fonts\ASansBlack.ttf]]},
