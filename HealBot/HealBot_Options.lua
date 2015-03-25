@@ -7649,6 +7649,7 @@ end
 local spells={}
 local FirstBuffLoad=true
 function HealBot_Options_Buff_Reset()
+    HealBot_Options_setDebuffTypes()
     HealBot_SetAuraChecks()
     BuffTextClass = HealBot_Config_Buffs.HealBotBuffText
     local BuffDropDownClass = HealBot_Config_Buffs.HealBotBuffDropDown
