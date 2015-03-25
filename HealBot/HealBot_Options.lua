@@ -7430,6 +7430,7 @@ end
 
 local FirstDebuffLoad=true
 function HealBot_Options_Debuff_Reset()
+    HealBot_Options_setDebuffTypes()
     HealBot_SetAuraChecks()
     HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {HEALBOT_POISON_en = {}};
