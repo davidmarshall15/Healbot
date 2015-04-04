@@ -398,10 +398,10 @@ function HealBot_Options_setLists()
     }
 
     HealBot_CDebuffCasyBy_List = {
-        HEALBOT_CUSTOM_CASTBY_EVERYONE,
         HEALBOT_CUSTOM_CASTBY_ENEMY,
         HEALBOT_CUSTOM_CASTBY_FRIEND,
         HEALBOT_OPTIONS_SELFHEALS,
+        HEALBOT_CUSTOM_CASTBY_EVERYONE,
     }
     
      HealBot_Options_Class_HoTctlName_List = {
@@ -10528,14 +10528,14 @@ function HealBot_Options_InitSub2(subNo)
         end
     elseif subNo==419 then -- Always Run
         HealBot_Options_CDCCastBy.initialize = HealBot_Options_CDCCastBy_DropDown
-        local castBy=HEALBOT_CUSTOM_CASTBY_EVERYONE
+        local castBy=HEALBOT_CUSTOM_CASTBY_ENEMY
         if HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] then
             castBy=HealBot_CDebuffCasyBy_List[HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]]
         end
         UIDropDownMenu_SetText(HealBot_Options_CDCCastBy, castBy)
         if not DoneInitTab[419] then
             HealBot_Options_CDCCastByCustom.initialize = HealBot_Options_CDCCastByCustom_DropDown
-            UIDropDownMenu_SetText(HealBot_Options_CDCCastByCustom, HEALBOT_CUSTOM_CASTBY_EVERYONE)
+            UIDropDownMenu_SetText(HealBot_Options_CDCCastByCustom, HEALBOT_CUSTOM_CASTBY_ENEMY)
             DoneInitTab[419]=true
         end
     elseif subNo==420 then
