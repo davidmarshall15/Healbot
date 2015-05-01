@@ -228,6 +228,7 @@ function HealBot_Options_setLists()
         HEALBOT_CMD_TOGGLEEXCLUDEMOUNT,
         HEALBOT_CMD_SUPPRESSERRORS,
         HEALBOT_CMD_SUPPRESSSOUND,
+        HEALBOT_CMD_TOGGLECUSTOMCURECASTBY,
     }
 
     HealBot_Options_EmergencyFClass_List = {
@@ -395,13 +396,6 @@ function HealBot_Options_setLists()
         HEALBOT_CUSTOM_CAT_12,
         HEALBOT_CUSTOM_CAT_13,
         HEALBOT_CUSTOM_CAT_14,
-    }
-
-    HealBot_CDebuffCasyBy_List = {
-        HEALBOT_CUSTOM_CASTBY_ENEMY,
-        HEALBOT_CUSTOM_CASTBY_FRIEND,
-        HEALBOT_OPTIONS_SELFHEALS,
-        HEALBOT_CUSTOM_CASTBY_EVERYONE,
     }
     
      HealBot_Options_Class_HoTctlName_List = {
@@ -582,6 +576,45 @@ function HealBot_Options_setLists()
     }
     
     HealBot_Options_FrameAliasList()
+    HealBot_Options_setCDebuffCasyBy()
+end
+
+function HealBot_Options_setCDebuffCasyBy()
+    if HealBot_Globals.CustomCuresReset=="ENEMY" then
+        HealBot_CDebuffCasyBy_List = {
+            HEALBOT_CUSTOM_CASTBY_ENEMY,
+            HEALBOT_CUSTOM_CASTBY_FRIEND,
+            HEALBOT_OPTIONS_SELFHEALS,
+            HEALBOT_CUSTOM_CASTBY_EVERYONE,
+        }
+    else
+        HealBot_CDebuffCasyBy_List = {
+            HEALBOT_CUSTOM_CASTBY_EVERYONE,
+            HEALBOT_CUSTOM_CASTBY_ENEMY,
+            HEALBOT_CUSTOM_CASTBY_FRIEND,
+            HEALBOT_OPTIONS_SELFHEALS,
+        }
+    end
+end
+
+function HealBot_Options_ToggleCustomCuresCastBy()
+    if HealBot_Globals.CustomCuresReset=="ENEMY" then
+        HealBot_Globals.CustomCuresReset="ALL"
+        for dName, CastBy in pairs (HealBot_Globals.FilterCustomDebuff) do
+            CastBy=CastBy+1
+            if CastBy==5 then CastBy=1 end
+            HealBot_Globals.FilterCustomDebuff[dName]=CastBy
+        end
+    else
+        HealBot_Globals.CustomCuresReset="ENEMY"
+        for dName, CastBy in pairs (HealBot_Globals.FilterCustomDebuff) do
+            CastBy=CastBy-1
+            if CastBy==0 then CastBy=4 end
+            HealBot_Globals.FilterCustomDebuff[dName]=CastBy
+        end
+    end
+    HealBot_Options_setCDebuffCasyBy()
+    HealBot_Options_InitSub(419)
 end
 
 function HealBot_Options_setClassEn()
@@ -4340,6 +4373,8 @@ function HealBot_Options_CommandsButton_OnClick(self)
         HealBot_ToggleSuppressSetting("error")
     elseif HealBot_Options_StorePrev["hbCommands"]==18 then
         HealBot_ToggleSuppressSetting("sound")
+    elseif HealBot_Options_StorePrev["hbCommands"]==19 then
+        HealBot_Options_ToggleCustomCuresCastBy()
     end
 end
 
@@ -10528,7 +10563,10 @@ function HealBot_Options_InitSub2(subNo)
         end
     elseif subNo==419 then -- Always Run
         HealBot_Options_CDCCastBy.initialize = HealBot_Options_CDCCastBy_DropDown
-        local castBy=HEALBOT_CUSTOM_CASTBY_ENEMY
+        local castBy=HEALBOT_CUSTOM_CASTBY_EVERYONE
+        if HealBot_Globals.CustomCuresReset=="ENEMY" then
+            castBy=HEALBOT_CUSTOM_CASTBY_ENEMY
+        end
         if HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] then
             castBy=HealBot_CDebuffCasyBy_List[HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]]
         end

@@ -3100,6 +3100,20 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         local hbCasterID=HealBot_Globals.FilterCustomDebuff[dName] or 1
         if HealBot_Globals.IgnoreCustomDebuff[dName] and HealBot_Globals.IgnoreCustomDebuff[dName][HealBot_luVars["hbInsName"]] then 
             x=y+1
+        elseif HealBot_Globals.CustomCuresReset=="ALL" then
+            if hbCasterID>1 then
+                local unitCasterID=0
+                if unitCaster and unitCaster=="player" then
+                    unitCasterID=4
+                elseif unitCaster and not UnitIsEnemy("player",unitCaster) then
+                    unitCasterID=3
+                else
+                    unitCasterID=2
+                end
+                if unitCasterID~=hbCasterID then 
+                    x=y+1
+                end
+            end
         elseif hbCasterID<4 then
             local unitCasterID=0
             if unitCaster and unitCaster=="player" then
@@ -5496,12 +5510,8 @@ function HealBot_Update_Skins()
              HealBot_Globals.CustomCuresReset="6.0.3"
              HealBot_Options_ResetSetting("CUSTOM")
         end
-        if (tMajor==6 and tMinor<1) or (tMajor==6 and tMinor==1 and tPatch<2) then
-            for dName, CastBy in pairs (HealBot_Globals.FilterCustomDebuff) do
-                CastBy=CastBy-1
-                if CastBy==0 then CastBy=4 end
-                HealBot_Globals.FilterCustomDebuff[dName]=CastBy
-            end
+        if HealBot_Config.Version=="6.1.2.0" then
+            HealBot_Globals.CustomCuresReset="ENEMY"
         end
 
         if not HealBot_Globals.TestBars["PROFILE"] then HealBot_Globals.TestBars["PROFILE"]=3 end
