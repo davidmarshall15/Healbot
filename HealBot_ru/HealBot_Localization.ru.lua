@@ -935,4 +935,5 @@ function HealBot_Lang_ruRU()
     HEALBOT_ENEMY_INCLUDE_ARENA             = "Включая оппонентов арены"
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Включая питомцев"
     HEALBOT_ENEMY_EXISTS_SHOW_ARENA         = "Полосы оппонентов арены"
+    HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Вкл/Выкл свои рассеивания - по умолчанию по"
 end
