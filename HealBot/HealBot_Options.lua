@@ -580,7 +580,7 @@ function HealBot_Options_setLists()
 end
 
 function HealBot_Options_setCDebuffCasyBy()
-    if HealBot_Globals.CustomCuresReset=="ENEMY" then
+    if HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
         HealBot_CDebuffCasyBy_List = {
             HEALBOT_CUSTOM_CASTBY_ENEMY,
             HEALBOT_CUSTOM_CASTBY_FRIEND,
@@ -598,15 +598,15 @@ function HealBot_Options_setCDebuffCasyBy()
 end
 
 function HealBot_Options_ToggleCustomCuresCastBy()
-    if HealBot_Globals.CustomCuresReset=="ENEMY" then
-        HealBot_Globals.CustomCuresReset="ALL"
+    if HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
+        HealBot_Globals.CureCustomDefaultCastBy="ALL"
         for dName, CastBy in pairs (HealBot_Globals.FilterCustomDebuff) do
             CastBy=CastBy+1
             if CastBy==5 then CastBy=1 end
             HealBot_Globals.FilterCustomDebuff[dName]=CastBy
         end
     else
-        HealBot_Globals.CustomCuresReset="ENEMY"
+        HealBot_Globals.CureCustomDefaultCastBy="ENEMY"
         for dName, CastBy in pairs (HealBot_Globals.FilterCustomDebuff) do
             CastBy=CastBy-1
             if CastBy==0 then CastBy=4 end
@@ -10564,7 +10564,7 @@ function HealBot_Options_InitSub2(subNo)
     elseif subNo==419 then -- Always Run
         HealBot_Options_CDCCastBy.initialize = HealBot_Options_CDCCastBy_DropDown
         local castBy=HEALBOT_CUSTOM_CASTBY_EVERYONE
-        if HealBot_Globals.CustomCuresReset=="ENEMY" then
+        if HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
             castBy=HEALBOT_CUSTOM_CASTBY_ENEMY
         end
         if HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] then
