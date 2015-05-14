@@ -186,6 +186,7 @@ HealBot_MapScaleDefaults = {
 HealBot_GlobalsDefaults = {
     HoTindex=1,
     HoTname=HEALBOT_GUARDIAN_SPIRIT,
+    CureCustomDefaultCastBy="ALL",
     TopRole="TANK",
     TargetBarRestricted=0,
     ResLagDuration=3,

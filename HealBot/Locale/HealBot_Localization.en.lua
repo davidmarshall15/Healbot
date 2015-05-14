@@ -1116,7 +1116,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_INCLUDE_ARENA             = "Include Arena opponents"
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Including Pets"
     HEALBOT_ENEMY_EXISTS_SHOW_ARENA         = "Arena opponent bars"
-    
+    HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Toggle Custom Cures - Default Cast By"
 end
 
 if (GetLocale() == "enUK") then
