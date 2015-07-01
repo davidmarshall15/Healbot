@@ -1,9 +1,9 @@
-## Interface: 60100
+## Interface: 60200
 ## Title: HealBot Brazilian Localization
 ## Author: Required
 ## Notes: HealBot Localization for ptBR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 6.1.0.0
+## Version: 6.2.0.0
 
 HealBot_Localization.br.lua
