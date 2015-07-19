@@ -2032,6 +2032,7 @@ function HealBot_OnEvent_VariablesLoaded(self)
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARRIOR] then
         HealBot_BuffNameSwap = {[HEALBOT_COMMANDING_SHOUT] = HEALBOT_POWER_WORD_FORTITUDE}
         HealBot_BuffNameSwap2 = {[HEALBOT_COMMANDING_SHOUT] = HEALBOT_DARK_INTENT}
+        HealBot_BuffNameSwap = {[HEALBOT_BATTLE_SHOUT] = HEALBOT_HORN_OF_WINTER}
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
 		HealBot_BuffNameSwap = {[HEALBOT_DALARAN_BRILLIANCE] = HEALBOT_ARCANE_BRILLIANCE,
 		                        [HEALBOT_ARCANE_BRILLIANCE] = HEALBOT_DALARAN_BRILLIANCE}
@@ -2041,6 +2042,11 @@ function HealBot_OnEvent_VariablesLoaded(self)
         HealBot_BuffNameSwap2 = {[HEALBOT_DARK_INTENT] = HEALBOT_COMMANDING_SHOUT}
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
 		HealBot_ShortBuffs[HEALBOT_HORN_OF_WINTER]=true
+        HealBot_BuffNameSwap = {[HEALBOT_HORN_OF_WINTER] = HEALBOT_BATTLE_SHOUT}
+        HealBot_BuffNameSwap2 = {[HEALBOT_HORN_OF_WINTER] = HEALBOT_DARK_INTENT}
+	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_HUNTER] then
+        HealBot_BuffNameSwap = {[HEALBOT_TRUESHOT_AURA] = HEALBOT_BATTLE_SHOUT}
+        HealBot_BuffNameSwap2 = {[HEALBOT_TRUESHOT_AURA] = HEALBOT_HORN_OF_WINTER}
     end
 
     HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
