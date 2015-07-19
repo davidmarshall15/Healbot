@@ -1047,11 +1047,11 @@ end
 local aSwitch=0
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        local hbCheckFreqMod=HealBot_Comm_round(HealBot_luVars["qaFR"]/4, 2) 
+        local hbCheckFreqMod=HealBot_Comm_round(HealBot_luVars["qaFR"]/2, 2) 
         local hbSlowTimerMod=HealBot_Globals.RangeCheckFreq*2
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((2+hbSlowTimerMod)/hbCheckFreqMod, 4) 
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((5+hbSlowTimerMod)/hbCheckFreqMod, 4) 
         HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/hbCheckFreqMod, 4)
-        HealBot_Timers["HB3Th"]=HealBot_Comm_round((1+hbSlowTimerMod)/hbCheckFreqMod, 4) 
+        HealBot_Timers["HB3Th"]=HealBot_Comm_round((3+hbSlowTimerMod)/hbCheckFreqMod, 4) 
     else
         HealBot_Timers["HB1Th"]=1
         HealBot_Timers["HB2Th"]=(HealBot_Globals.RangeCheckFreq*10)
@@ -1067,14 +1067,14 @@ function HealBot_Action_Set_Timers()
         if HealBot_Config.DisabledNow==0 and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
             HealBot_Timers["HBA1Th"] = 0.02
         else
-            HealBot_Timers["HBA1Th"] = 20000
+            HealBot_Timers["HBA1Th"] = 1
         end
     end
     if HealBot_Config.DisabledNow==0 and ((Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARS"] and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"])
       or (Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] or Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"])) then
         HealBot_Timers["HBA2Th"] = Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"]
     else
-        HealBot_Timers["HBA2Th"] = 20000
+        HealBot_Timers["HBA2Th"] = 1
     end
 end
 
@@ -5312,10 +5312,10 @@ function HealBot_Direction_Check(unit)
             direction = floor(direction * hbdMod + 0.5) % 108
             hbX, hbY = (direction % 9) * 0.109375, floor(direction / 9) * 0.08203125;
         elseif HealBot_luVars["mapUpdate"]<GetTime() then
-            HealBot_luVars["mapUpdate"]=GetTime()+5
+            HealBot_luVars["mapUpdate"]=GetTime()+2
         end
     elseif HealBot_luVars["mapUpdate"]<GetTime() then
-        HealBot_luVars["mapUpdate"]=GetTime()+3
+        HealBot_luVars["mapUpdate"]=GetTime()+1
     end
     return hbX, hbY, direction;
 end
