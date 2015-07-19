@@ -1598,8 +1598,8 @@ function HealBot_OnUpdate(self)
             end
             if HealBot_InCombatUpdate then
                 HealBot_IC_PartyMembersChanged()
-            elseif HealBot_luVars["getMapID"] then
-                HealBot_luVars["getMapID"]=nil
+            elseif HealBot_luVars["mapUpdate"] and HealBot_luVars["mapUpdate"]<GetTime() then
+                HealBot_luVars["mapUpdate"]=nil
                 local tmpAreaId = GetCurrentMapAreaID()
                 SetMapToCurrentZone()
                 local mapAreaID = GetCurrentMapAreaID()
@@ -5296,7 +5296,6 @@ function HealBot_UnitInRange(spellName, unit) -- added by Diacono of Ursin
     return uRange
 end
 
-HealBot_luVars["mapUpdate"] = 0
 local hbPi = math.pi
 local hbaTan2 = math.atan2
 local hbdMod = 108 / math.pi / 2;
@@ -5311,11 +5310,9 @@ function HealBot_Direction_Check(unit)
             direction = hbPi - hbaTan2(px - tx, ty - py) - pFacing;
             direction = floor(direction * hbdMod + 0.5) % 108
             hbX, hbY = (direction % 9) * 0.109375, floor(direction / 9) * 0.08203125;
-        elseif HealBot_luVars["mapUpdate"]<GetTime() then
-            HealBot_luVars["mapUpdate"]=GetTime()+2
         end
-    elseif HealBot_luVars["mapUpdate"]<GetTime() then
-        HealBot_luVars["mapUpdate"]=GetTime()+1
+    elseif not HealBot_luVars["mapUpdate"] then
+        HealBot_luVars["mapUpdate"]=GetTime()+5
     end
     return hbX, hbY, direction;
 end
@@ -5355,12 +5352,13 @@ function HealBot_Range_Check(srcUnit, trgUnit, range)
 end
 
 function HealBot_getUnitCoords(unit)
-	local x, y = GetPlayerMapPosition(unit);
-	if x and y and x > 0 and y > 0 then
-		return x, y
-    else
-        return nil, nil
-	end
+    if UnitIsPlayer(unit) then
+        local x, y = GetPlayerMapPosition(unit);
+        if x and y and x > 0 and y > 0 then
+            return x, y
+        end
+    end
+    return nil, nil
 end
 
 function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)

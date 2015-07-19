@@ -1496,7 +1496,7 @@ function HealBot_Action_EnableButton(button, isTarget)
 end
 
 function HealBot_Action_ShowDirectionArrow(button, unit)
-    if (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"]==false or unit==HealBot_Data["TIPUNIT"]) and UnitIsPlayer(unit) then
+    if (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"]==false or unit==HealBot_Data["TIPUNIT"]) then
         local hbX, hbY, hbD = HealBot_Direction_Check(unit)
         if hbD then
             if not HealBot_UnitDirection[unit] then 
