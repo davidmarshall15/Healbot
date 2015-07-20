@@ -7106,11 +7106,17 @@ end
 
 function HealBot_Options_CDCCastBy_DropDown()
     local info = UIDropDownMenu_CreateInfo()
+    local cby = nil
+    if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
+        cby = HEALBOT_CUSTOM_CASTBY_EVERYONE
+    elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
+        cby = HEALBOT_CUSTOM_CASTBY_ENEMY
+    end
     for j=1, getn(HealBot_CDebuffCasyBy_List), 1 do
         info.text = HealBot_CDebuffCasyBy_List[j];
         info.func = function(self)
                         HealBot_Options_StorePrev["CDebuffcustomCastBy"] = self:GetText()
-                        if HealBot_Options_StorePrev["CDebuffcustomName"] and self:GetID()>1 then
+                        if HealBot_Options_StorePrev["CDebuffcustomName"] and self:GetID()>=1 and cby~=HealBot_CDebuffCasyBy_List[j] then
                             HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]=self:GetID()
                         elseif HealBot_Options_StorePrev["CDebuffcustomName"] then
                             HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]=nil
@@ -7119,7 +7125,10 @@ function HealBot_Options_CDCCastBy_DropDown()
                     end
         info.checked = false;
         if HealBot_Options_StorePrev["CDebuffcustomName"] then
-            local x=HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] or 1
+            local x=HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] or 0
+            if x==0 then
+                if cby and cby==HealBot_CDebuffCasyBy_List[j] then x=j; end
+            end
             if x==j then info.checked = true; end 
         end
         UIDropDownMenu_AddButton(info);
