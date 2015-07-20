@@ -1496,7 +1496,7 @@ function HealBot_Action_EnableButton(button, isTarget)
 end
 
 function HealBot_Action_ShowDirectionArrow(button, unit)
-    if (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"]==false or unit==HealBot_Data["TIPUNIT"]) and UnitIsPlayer(unit) then
+    if (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"]==false or unit==HealBot_Data["TIPUNIT"]) then
         local hbX, hbY, hbD = HealBot_Direction_Check(unit)
         if hbD then
             if not HealBot_UnitDirection[unit] then 
@@ -2629,8 +2629,7 @@ function HealBot_Action_CheckRange(button)
                         end
                     end
                 elseif uRange==0 then
-                    if not HealBot_UnitDirection[unit] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"]
-                                                       and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"]==false then
+                    if not HealBot_UnitDirection[unit] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] then
                         HealBot_Action_RefreshButton(button)
                     else
                         ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"])
@@ -2651,21 +2650,25 @@ function HealBot_Action_CheckRange(button)
                         end
                     end
                 else
-                    ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
-                    if uHealIn>0 then 
-                        ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["hr"][unit],HealBot_UnitBarsRange["hg"][unit],HealBot_UnitBarsRange["hb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
-                    end
-                    if uAbsorbs>0 then 
-                        ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["sr"][unit],HealBot_UnitBarsRange["sg"][unit],HealBot_UnitBarsRange["sb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
-                    end
-                    ebubar.txt:SetTextColor(HealBot_UnitTextRange["or"][unit],HealBot_UnitTextRange["og"][unit],HealBot_UnitTextRange["ob"][unit],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]);
-                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and 
-                       Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"]==false and not HealBot_retdebuffTargetIcon(unit) then
-                        ebuicon15:SetAlpha(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
-                    end
-                    if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]>0 then 
-                        HealBot_UnitBarsRange["3a"][unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
-                        HealBot_Action_SetBar3Value(button);
+                    if not HealBot_UnitDirection[unit] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] then
+                        HealBot_Action_RefreshButton(button)
+                    else
+                        ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
+                        if uHealIn>0 then 
+                            ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["hr"][unit],HealBot_UnitBarsRange["hg"][unit],HealBot_UnitBarsRange["hb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
+                        end
+                        if uAbsorbs>0 then 
+                            ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["sr"][unit],HealBot_UnitBarsRange["sg"][unit],HealBot_UnitBarsRange["sb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
+                        end
+                        ebubar.txt:SetTextColor(HealBot_UnitTextRange["or"][unit],HealBot_UnitTextRange["og"][unit],HealBot_UnitTextRange["ob"][unit],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]);
+                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and 
+                           Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"]==false and not HealBot_retdebuffTargetIcon(unit) then
+                            ebuicon15:SetAlpha(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
+                        end
+                        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]>0 then 
+                            HealBot_UnitBarsRange["3a"][unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
+                            HealBot_Action_SetBar3Value(button);
+                        end
                     end
                 end
             elseif HealBot_UnitDirection[unit] then

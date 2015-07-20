@@ -1047,11 +1047,11 @@ end
 local aSwitch=0
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        local hbCheckFreqMod=HealBot_Comm_round(HealBot_luVars["qaFR"]/4, 2) 
+        local hbCheckFreqMod=HealBot_Comm_round(HealBot_luVars["qaFR"]/2, 2) 
         local hbSlowTimerMod=HealBot_Globals.RangeCheckFreq*2
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((2+hbSlowTimerMod)/hbCheckFreqMod, 4) 
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((5+hbSlowTimerMod)/hbCheckFreqMod, 4) 
         HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/hbCheckFreqMod, 4)
-        HealBot_Timers["HB3Th"]=HealBot_Comm_round((1+hbSlowTimerMod)/hbCheckFreqMod, 4) 
+        HealBot_Timers["HB3Th"]=HealBot_Comm_round((3+hbSlowTimerMod)/hbCheckFreqMod, 4) 
     else
         HealBot_Timers["HB1Th"]=1
         HealBot_Timers["HB2Th"]=(HealBot_Globals.RangeCheckFreq*10)
@@ -1067,14 +1067,14 @@ function HealBot_Action_Set_Timers()
         if HealBot_Config.DisabledNow==0 and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
             HealBot_Timers["HBA1Th"] = 0.02
         else
-            HealBot_Timers["HBA1Th"] = 20000
+            HealBot_Timers["HBA1Th"] = 1
         end
     end
     if HealBot_Config.DisabledNow==0 and ((Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARS"] and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"])
       or (Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] or Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"])) then
         HealBot_Timers["HBA2Th"] = Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"]
     else
-        HealBot_Timers["HBA2Th"] = 20000
+        HealBot_Timers["HBA2Th"] = 1
     end
 end
 
@@ -1598,8 +1598,8 @@ function HealBot_OnUpdate(self)
             end
             if HealBot_InCombatUpdate then
                 HealBot_IC_PartyMembersChanged()
-            elseif HealBot_luVars["getMapID"] then
-                HealBot_luVars["getMapID"]=nil
+            elseif HealBot_luVars["mapUpdate"] and HealBot_luVars["mapUpdate"]<GetTime() then
+                HealBot_luVars["mapUpdate"]=nil
                 local tmpAreaId = GetCurrentMapAreaID()
                 SetMapToCurrentZone()
                 local mapAreaID = GetCurrentMapAreaID()
@@ -2032,6 +2032,7 @@ function HealBot_OnEvent_VariablesLoaded(self)
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARRIOR] then
         HealBot_BuffNameSwap = {[HEALBOT_COMMANDING_SHOUT] = HEALBOT_POWER_WORD_FORTITUDE}
         HealBot_BuffNameSwap2 = {[HEALBOT_COMMANDING_SHOUT] = HEALBOT_DARK_INTENT}
+        HealBot_BuffNameSwap = {[HEALBOT_BATTLE_SHOUT] = HEALBOT_HORN_OF_WINTER}
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
 		HealBot_BuffNameSwap = {[HEALBOT_DALARAN_BRILLIANCE] = HEALBOT_ARCANE_BRILLIANCE,
 		                        [HEALBOT_ARCANE_BRILLIANCE] = HEALBOT_DALARAN_BRILLIANCE}
@@ -2041,6 +2042,11 @@ function HealBot_OnEvent_VariablesLoaded(self)
         HealBot_BuffNameSwap2 = {[HEALBOT_DARK_INTENT] = HEALBOT_COMMANDING_SHOUT}
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
 		HealBot_ShortBuffs[HEALBOT_HORN_OF_WINTER]=true
+        HealBot_BuffNameSwap = {[HEALBOT_HORN_OF_WINTER] = HEALBOT_BATTLE_SHOUT}
+        HealBot_BuffNameSwap2 = {[HEALBOT_HORN_OF_WINTER] = HEALBOT_DARK_INTENT}
+	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_HUNTER] then
+        HealBot_BuffNameSwap = {[HEALBOT_TRUESHOT_AURA] = HEALBOT_BATTLE_SHOUT}
+        HealBot_BuffNameSwap2 = {[HEALBOT_TRUESHOT_AURA] = HEALBOT_HORN_OF_WINTER}
     end
 
     HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
@@ -5296,7 +5302,6 @@ function HealBot_UnitInRange(spellName, unit) -- added by Diacono of Ursin
     return uRange
 end
 
-HealBot_luVars["mapUpdate"] = 0
 local hbPi = math.pi
 local hbaTan2 = math.atan2
 local hbdMod = 108 / math.pi / 2;
@@ -5311,11 +5316,9 @@ function HealBot_Direction_Check(unit)
             direction = hbPi - hbaTan2(px - tx, ty - py) - pFacing;
             direction = floor(direction * hbdMod + 0.5) % 108
             hbX, hbY = (direction % 9) * 0.109375, floor(direction / 9) * 0.08203125;
-        elseif HealBot_luVars["mapUpdate"]<GetTime() then
-            HealBot_luVars["mapUpdate"]=GetTime()+5
         end
-    elseif HealBot_luVars["mapUpdate"]<GetTime() then
-        HealBot_luVars["mapUpdate"]=GetTime()+3
+    elseif not HealBot_luVars["mapUpdate"] then
+        HealBot_luVars["mapUpdate"]=GetTime()+5
     end
     return hbX, hbY, direction;
 end
@@ -5355,12 +5358,13 @@ function HealBot_Range_Check(srcUnit, trgUnit, range)
 end
 
 function HealBot_getUnitCoords(unit)
-	local x, y = GetPlayerMapPosition(unit);
-	if x and y and x > 0 and y > 0 then
-		return x, y
-    else
-        return nil, nil
-	end
+    if UnitIsPlayer(unit) then
+        local x, y = GetPlayerMapPosition(unit);
+        if x and y and x > 0 and y > 0 then
+            return x, y
+        end
+    end
+    return nil, nil
 end
 
 function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)

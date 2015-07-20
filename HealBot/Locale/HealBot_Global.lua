@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "6.2.0.0";
+HEALBOT_VERSION   = "6.2.0.1.b1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -221,6 +221,7 @@ function HealBot_globalVars()
     HEALBOT_A_CHEETAH                       = GetSpellInfo(5118) or "--Aspect of the Cheetah"
     HEALBOT_A_PACK                          = GetSpellInfo(13159) or "--Aspect of the Pack"
     HEALBOT_A_WILD                          = GetSpellInfo(20043) or "--Aspect of the Wild"
+    HEALBOT_TRUESHOT_AURA                   = GetSpellInfo(19506) or "--Trueshot Aura"
     HEALBOT_MENDPET                         = GetSpellInfo(136) or "--Mend Pet"
     HEALBOT_DETERRENCE                      = GetSpellInfo(19263) or "--Deterrence"
     HEALBOT_TRAP_LAUNCHER                   = GetSpellInfo(77769) or "--Trap Launcher"
