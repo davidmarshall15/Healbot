@@ -3103,10 +3103,36 @@ local DebuffClass=nil
 local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,unit)
     local x, y=HealBot_Options_retDebuffPriority(dName, debuff_type)
     if y>x then
-        local hbCasterID=HealBot_Globals.FilterCustomDebuff[dName] or 1
+        local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
+        local hbCastByEveryone = castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
+        local hbCastByEnemy = castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] or -1
+        local hbCastByFriend = castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] or -1
+        local hbCastBySelf = castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] or -1
+
+        local hbCasterID=HealBot_Globals.FilterCustomDebuff[dName] or 0
+        if hbCasterID==0 then
+            if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
+                hbCasterID = hbCastByEveryone
+            elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
+                hbCasterID = hbCastByEnemy
+            end
+        end
         if HealBot_Globals.IgnoreCustomDebuff[dName] and HealBot_Globals.IgnoreCustomDebuff[dName][HealBot_luVars["hbInsName"]] then 
             x=y+1
-        elseif HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
+        elseif hbCasterID~=hbCastByEveryone then
+            local unitCasterID=0
+            if unitCaster and unitCaster=="player" then
+                unitCasterID=hbCastBySelf --4
+            elseif unitCaster and not UnitIsEnemy("player",unitCaster) then
+                unitCasterID=hbCastByFriend --3
+            else
+                unitCasterID=hbCastByEnemy --2
+            end
+            if unitCasterID~=hbCasterID then 
+                x=y+1
+            end
+        end
+        --[[elseif HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
             if hbCasterID>1 then
                 local unitCasterID=0
                 if unitCaster and unitCaster=="player" then
@@ -3132,7 +3158,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             if unitCasterID~=hbCasterID then 
                 x=y+1
             end
-        end
+        end]]--
     elseif x>20 and HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
         y=x+1
     end
