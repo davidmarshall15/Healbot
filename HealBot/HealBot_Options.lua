@@ -31,6 +31,7 @@ local HealBot_EmergInc = {}
 
 local HealBot_Options_Class_HoTctlName_List={}
 local HealBot_CDebuffCasyBy_List={}
+local HealBot_CDebuffCasyBy_Indexed_List={}
 local HealBot_CDebuffCat_List={}
 local HealBot_Debuff_RangeWarning_List={}
 local HealBot_Debuff_Item_List={}
@@ -595,6 +596,17 @@ function HealBot_Options_setCDebuffCasyBy()
             HEALBOT_OPTIONS_SELFHEALS,
         }
     end
+    HealBot_Options_setCDebuffCasyByIndexed()
+end
+
+function HealBot_Options_setCDebuffCasyByIndexed()
+    for j=1, getn(HealBot_CDebuffCasyBy_List), 1 do
+        HealBot_CDebuffCasyBy_Indexed_List[HealBot_CDebuffCasyBy_List[j]] = j
+    end
+end
+
+function HealBot_Options_getCDebuffCasyByIndexed()
+    return HealBot_CDebuffCasyBy_Indexed_List
 end
 
 function HealBot_Options_ToggleCustomCuresCastBy()
