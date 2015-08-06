@@ -5322,6 +5322,9 @@ function HealBot_UnitInRange(spellName, unit) -- added by Diacono of Ursin
     else
         uRange = 0
     end
+    if uRange==1 and not UnitInPhase(unit) then 
+        uRange=0
+    end
     if uRange==0 and not UnitIsVisible(unit) then 
         uRange=-1 
     end
