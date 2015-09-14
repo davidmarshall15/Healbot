@@ -2648,6 +2648,15 @@ function HealBot_Options_NoAuraWhenRested_OnClick(self)
     end
 end
 
+function HealBot_Options_AdjustMaxHealth_OnClick(self)
+    if self:GetChecked() then
+        HealBot_Config.AdjustMaxHealth=true
+    else
+        HealBot_Config.AdjustMaxHealth=false
+    end
+    HealBot_SetResetFlag("SOFT")
+end
+
 function HealBot_Options_DisableHealBot(checkval)
     if checkval==1 then
         HealBot_Config.DisableHealBot=true
@@ -7746,9 +7755,6 @@ function HealBot_Options_Buff_Reset()
                 local HealBot_BuffWatchTargetSpell=HealBot_BuffWatchTarget[sName];
                 if HealBot_Data["TIPUSE"]=="YES" then HealBot_Tooltip_CheckBuffs(sName) end
                 HealBot_Set_CheckBuffs(sName)
-                if HealBot_AltBuffNames(sName) then 
-                    HealBot_Set_CheckBuffs(HealBot_AltBuffNames(sName))
-                end
         
                 if BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==2 then
                     HealBot_BuffWatchTargetSpell["Self"]=true;
@@ -9565,6 +9571,8 @@ function HealBot_Options_InitSub1(subNo)
         if not DoneInitTab[104] then
             HealBot_Options_NoAuraWhenRested:SetChecked(HealBot_Config_Buffs.NoAuraWhenRested)
             HealBot_Options_SetText(HealBot_Options_NoAuraWhenRested,HEALBOT_OPTION_IGNORE_AURA_RESTED)
+            HealBot_Options_AdjustMaxHealth:SetChecked(HealBot_Config.AdjustMaxHealth)
+            HealBot_Options_SetText(HealBot_Options_AdjustMaxHealth,HEALBOT_OPTION_ADJUST_MAX_HEALTH)
             local mmButtonShown=false
             if HealBot_Globals.MinimapIcon.hide==false then mmButtonShown=true end
             HealBot_Options_ShowMinimapButton:SetChecked(mmButtonShown)
