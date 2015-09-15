@@ -631,14 +631,14 @@ function HealBot_SlashCmd(cmd)
             HealBot_Globals.minManaBloom=ceil(x)
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_EVER_BLOOMING_FROND.." highlighted when mana below "..ceil(x).."%")
         else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Incalid Number")
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Number")
         end
     elseif (HBcmd=="healthbloom" and x) then
         if tonumber(x) and tonumber(x)>0 and tonumber(x)<=100 then
             HealBot_Globals.minHealthBloom=ceil(x)
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_EVER_BLOOMING_FROND.." highlighted when health below "..ceil(x).."%")
         else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Incalid Number")
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Number")
         end
     elseif (HBcmd=="pws") then
         if HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD] then
@@ -2265,6 +2265,8 @@ function HealBot_useCrashProtection()
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"]=false
         HealBot_Options_CrashProt:SetChecked(Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"])
         HealBot_Options_CrashProt:Disable();
+    else
+        HealBot_Options_CrashProt:Enable();
     end
 end
 
