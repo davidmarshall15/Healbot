@@ -682,7 +682,15 @@ local HealBot_Buff_Spells_Class_List={}
 local HealBot_Buff_Spells_List ={}
 
 function HealBot_Options_InitBuffSpellsClassList(tClass)
-    if tClass=="DRUI" then
+    if tClass=="DEAT" then
+        HealBot_Buff_Spells_Class_List = {
+            HEALBOT_HORN_OF_WINTER,
+            HEALBOT_BONE_SHIELD,
+        }
+    elseif tClass=="DEMO" then -- Demon Hunter
+        HealBot_Buff_Spells_Class_List = {
+        }
+    elseif tClass=="DRUI" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_MARK_OF_THE_WILD,
             HEALBOT_BARKSKIN,
@@ -694,6 +702,14 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_A_PACK,
             HEALBOT_A_WILD,
             HEALBOT_TRAP_LAUNCHER,
+            HEALBOT_LW_FEROCITY_OF_THE_RAPTOR ,
+            HEALBOT_LW_FORTITUDE_OF_THE_BEAR,
+            HEALBOT_LW_GRACE_OF_THE_CAT,
+            HEALBOT_LW_HASTE_OF_THE_HYENA,
+            HEALBOT_LW_POWER_OF_THE_PRIMATES,
+            HEALBOT_LW_QUICKNESS_OF_THE_DRAGONHAWK,
+            HEALBOT_LW_VERSATILITY_OF_THE_RAVAGER,
+            HEALBOT_LW_WISDOM_OF_THE_SERPENT,
         }
     elseif tClass=="MAGE" then
         HealBot_Buff_Spells_Class_List = {
@@ -740,6 +756,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_POWER_WORD_FORTITUDE,
             HEALBOT_FEAR_WARD,
             HEALBOT_SHADOWFORM,
+            HEALBOT_LEVITATE,
         }
     elseif tClass=="ROGU" then
         HealBot_Buff_Spells_Class_List = {
@@ -765,11 +782,6 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_COMMANDING_SHOUT,
             HEALBOT_VIGILANCE,
         }
-    elseif tClass=="DEAT" then
-        HealBot_Buff_Spells_Class_List = {
-            HEALBOT_HORN_OF_WINTER,
-            HEALBOT_BONE_SHIELD,
-        }
     end
 end
 
@@ -779,11 +791,12 @@ function HealBot_Options_InitBuffClassList()
 end
 
 local HealBot_Buff_Items_List = {
-        HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-        HEALBOT_EVER_BLOOMING_FROND,
+    HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+    HEALBOT_EVER_BLOOMING_FROND,
 };
 
 function HealBot_Options_InitBuffList()
+    table.sort(HealBot_Buff_Items_List)
     HealBot_Buff_Spells_List ={}
     for j=1, getn(HealBot_Buff_Spells_Class_List), 1 do
         local spellName=HealBot_Buff_Spells_Class_List[j]
@@ -801,17 +814,18 @@ end
 
 function HealBot_Options_GetDebuffSpells_List(class)
     local HealBot_Debuff_Spells = {
-      ["PALA"] = {HEALBOT_CLEANSE,},
+      ["DEAT"] = {},
+      ["DEMO"] = {}, -- Demon Hunter
       ["DRUI"] = {HEALBOT_REMOVE_CORRUPTION, HEALBOT_NATURES_CURE,},
-      ["PRIE"] = {HEALBOT_PURIFY,},
-      ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
       ["HUNT"] = {},
       ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
-      ["ROGU"] = {},
       ["MONK"] = {HEALBOT_DETOX,},
+      ["PALA"] = {HEALBOT_CLEANSE,},
+      ["PRIE"] = {HEALBOT_PURIFY,},
+      ["ROGU"] = {},
+      ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
       ["WARL"] = {},
       ["WARR"] = {},
-      ["DEAT"] = {},
     }
     --if (strsub(GetLocale(),1,2)~="en") then
     --    HealBot_Debuff_Spells["SHAM"] = {HEALBOT_CLEANSE_SPIRIT}

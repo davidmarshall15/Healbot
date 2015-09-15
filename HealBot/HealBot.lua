@@ -827,12 +827,6 @@ function HealBot_Reset()
     HealBot_Timers["HB3Th"]=0.2
     HealBot_Panel_ClearBlackList()
     HealBot_Panel_ClearHealTargets()
-    if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then
-        HEALBOT_ORALIUS_WHISPERING_CRYSTAL = GetItemInfo(118922) or "--Oralius' Whispering Crystal";
-    end
-    if HEALBOT_EVER_BLOOMING_FROND=="--Ever-Blooming Frond" then
-        HEALBOT_EVER_BLOOMING_FROND = GetItemInfo(118935) or "--Ever-Blooming Frond"
-    end
     HealBot_Action_ResethbInitButtons()
     HealBot_Action_EndAggro() 
     HealBot_Panel_ClearBarArrays()
@@ -1031,6 +1025,7 @@ function HealBot_OnLoad(self)
     HealBot:RegisterEvent("VARIABLES_LOADED");
     HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
     HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
+    HealBot:RegisterEvent("GET_ITEM_INFO_RECEIVED");
     SLASH_HEALBOT1 = "/healbot";
     SLASH_HEALBOT2 = "/hb";
     SlashCmdList["HEALBOT"] = function(msg)
@@ -1928,8 +1923,28 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_setOptions_Timer(405)
     elseif (event=="VARIABLES_LOADED") then
         HealBot_OnEvent_VariablesLoaded(self);
+    elseif (event=="GET_ITEM_INFO_RECEIVED") then
+        HealBot_OnEvent_ItemInfoReceived(self);
     else
         HealBot_AddDebug("OnEvent (" .. event .. ")");
+    end
+end
+
+function HealBot_OnEvent_ItemInfoReceived(self)
+    local allInfoReceived = true
+    if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then
+        HEALBOT_ORALIUS_WHISPERING_CRYSTAL = GetItemInfo(118922) or "--Oralius' Whispering Crystal"
+        allInfoReceived = false
+    end
+    if HEALBOT_EVER_BLOOMING_FROND=="--Ever-Blooming Frond" then
+        HEALBOT_EVER_BLOOMING_FROND = GetItemInfo(118935) or "--Ever-Blooming Frond"
+        allInfoReceived = false
+    end
+    if allInfoReceived then
+        HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
+        HealBot_Options_InitBuffList()
+        HealBot_Options_ResetDoInittab(5)
+        HealBot_Options_Init(5)
     end
 end
 
@@ -1971,12 +1986,12 @@ function HealBot_OnEvent_VariablesLoaded(self)
         end
     end);
     
-    if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then
+    --[[if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then
         HEALBOT_ORALIUS_WHISPERING_CRYSTAL = GetItemInfo(118922) or "--Oralius' Whispering Crystal";
     end
     if HEALBOT_EVER_BLOOMING_FROND=="--Ever-Blooming Frond" then
         HEALBOT_EVER_BLOOMING_FROND = GetItemInfo(118935) or "--Ever-Blooming Frond"
-    end
+    end]]--
     
     local pClass, pClassEN=UnitClass("player")
     HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
@@ -3667,13 +3682,13 @@ function HealBot_setLowManaTrig()
 end
 
 local HealBot_Buff_ItemID = {
-                                  [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
-                                  [HEALBOT_EVER_BLOOMING_FROND] = 118935,
+    [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
+    [HEALBOT_EVER_BLOOMING_FROND] = 118935,
 };
 
 local HealBot_Buff_Aura2Item = {
-                                  [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-                                  [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
+    [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+    [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
 };
 
 function HealBot_HasItemBuff()
@@ -3761,7 +3776,9 @@ function HealBot_CheckUnitBuffs(button)
                 z, x = GetSpellCooldown(HealBot_BuffWatch[k]);
             elseif HealBot_Buff_ItemID[HealBot_BuffWatch[k]] then
                 local getCD = false
-                if not IsInRaid() and HealBot_BuffWatch[k]==HEALBOT_EVER_BLOOMING_FROND then
+                if HealBot_BuffWatch[k]~=HEALBOT_EVER_BLOOMING_FROND then
+                    getCD = true
+                elseif not IsInRaid() then
                     getCD = true
                     local mPct, hPct = 100, 100
                     local mana,maxmana=HealBot_UnitMana(xUnit)
@@ -3790,7 +3807,7 @@ function HealBot_CheckUnitBuffs(button)
             end
             if not x then
                 -- Spec change within that last few secs - buff outdated so do nothing
-                   -- HealBot_AddDebug("HealBot_CheckUnitBuffs spec change")
+                -- HealBot_AddDebug("HealBot_CheckUnitBuffs spec change")
             elseif x<2 then
                 if hbStanceBuffs[HealBot_BuffWatch[k]] then
                     local index = GetShapeshiftForm() or 0
