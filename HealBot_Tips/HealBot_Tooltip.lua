@@ -13,10 +13,6 @@ end
 
 function HealBot_Tooltip_CheckBuffs(buff)
     HealBot_CheckBuffs[buff]=buff;
-    local z=HealBot_AltBuffNames(buff)
-    if z then 
-        HealBot_CheckBuffs[z]=buff; 
-    end
 end
 
 function HealBot_talentSpam(hbGUID,cmd,status)
