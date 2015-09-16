@@ -611,6 +611,7 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
     HEALBOT_OPTION_IGNORE_AURA_RESTED       = "Ignora eventi aura durante il riposo"
+    HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Adjust unit max health"
 
     HEALBOT_WORD_ENABLE                     = "Abilita"
     HEALBOT_WORD_DISABLE                    = "Disabilita"

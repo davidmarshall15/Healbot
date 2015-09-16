@@ -616,6 +616,7 @@ HEALBOT_OPTIONS_LOWMANAINDICATOR5       = "*25% / **50% / ***75%"
 HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
 HEALBOT_OPTION_IGNORE_AURA_RESTED       = "休息时忽略光环效果"
+HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Adjust unit max health"
 
 HEALBOT_WORD_ENABLE                     = "开启"
 HEALBOT_WORD_DISABLE                    = "禁用"

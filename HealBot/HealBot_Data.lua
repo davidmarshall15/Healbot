@@ -55,6 +55,7 @@ HealBot_ConfigDefaults = {
   CrashProtStartTime=2,
   DisableHealBot=false,
   DisableSolo=false,
+  AdjustMaxHealth=false,
   DisabledNow=0,
   SkinDefault = {[HEALBOT_SKINS_STD] = 1, [HEALBOT_OPTIONS_GROUPHEALS] = 1, [HEALBOT_OPTIONS_EMERGENCYHEALS] = 1, [HEALBOT_ZONE_AV] = 1,},
   ActionVisible = {[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0},

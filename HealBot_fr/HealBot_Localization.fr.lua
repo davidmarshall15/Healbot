@@ -619,6 +619,8 @@ HEALBOT_INFO_CPUSECS                = "CPU Sec."
     HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
     HEALBOT_OPTION_IGNORE_AURA_RESTED       = "Ignorer les  Buffs/D\195\169buffs... pendant le repos"
+    HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Adjust unit max health"
+    
 
     HEALBOT_WORD_ENABLE                     = "Activer"
     HEALBOT_WORD_DISABLE                    = "D\195\169sactiver"
