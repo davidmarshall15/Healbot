@@ -3780,7 +3780,7 @@ function HealBot_CheckUnitBuffs(button)
                 local getCD = false
                 if HealBot_BuffWatch[k]~=HEALBOT_EVER_BLOOMING_FROND then
                     getCD = true
-                elseif not IsInRaid() then
+                elseif not IsInRaid() and not UnitAffectingCombat("player") then
                     getCD = true
                     local mPct, hPct = 100, 100
                     local mana,maxmana=HealBot_UnitMana(xUnit)
