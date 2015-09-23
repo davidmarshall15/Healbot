@@ -14,6 +14,22 @@
 <a href="http://healbot.darktech.org/">HealBot Continued</a> - Change Log
 </span><br>
 <br>
+v6.2.2.0 - <b>Thanks to Acirac</b><br>
+=================<br>
+* Cleaned up HealBot_Global.lua and sorted entries alphabetically for easier updates<br>
+* Rewrote buff swap code to support all alternate buffs based on buff type (stats, stamina, attack power, spell power, mastery, haste, critical strike, multistrike, and versatility) - Buffs now have their types defined, for example Mark of The Wild is defined as being Stats and Versatility, if either one of those buff types is not cast by another player then mark of the wild will show as missing<br>
+* Added "Adjust unit max health" option to support adjusting health bar based on any aura modifiers (Supports Tyrant Velhari debuff)<br>
+* Added Lone Wolf buffs to Hunter buff list<br>
+* Added Levitate to Priest buff list<br>
+* Added GET_ITEM_INFO_RECEIVED event to make sure item info is retrieved<br>
+* Fixed HealBot_Buff_ItemID only working for ever blooming frond<br>
+* Fixed Crash Protection checkbox not reenabling after macros slots are freed<br>
+<br>
+v6.2.0.2<br>
+=================<br>
+* Players in phase now shown as out of range - Thanks to Acirac<br>
+* Fix with ignoring required buffs when similar class buff present, specifically warriors and death knights - Thanks to Acirac<br>
+<br>
 v6.2.0.1<br>
 =================<br>
 * Increased internal timers<br>
