@@ -5731,12 +5731,24 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-50" y="-45" />
+                              <AbsDimension x="-50" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_CrashProt_OnClick(self)</OnClick>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_UseGeneralMacros" inherits="SendMailRadioButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-30" y="-45" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_UseGeneralMacros_OnClick(self)</OnClick>
                         </Scripts>
                       </CheckButton>
                       <EditBox name="HealBot_Options_CrashProtEditBox" inherits="HealBot_Options_EditBoxTemplate">

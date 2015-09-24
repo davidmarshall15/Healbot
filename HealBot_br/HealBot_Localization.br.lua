@@ -553,6 +553,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_SUPPRESSSOUND                   = "Auto Berloque: Suprimir som"
     HEALBOT_SUPPRESSERROR                   = "Auto Berloque: Suprimir erros"
     HEALBOT_OPTIONS_CRASHPROT               = "Prote\195\167\195\163o de erros"
+    HEALBOT_OPTIONS_USEGENERALMACRO          = "Use general macro slots"
     HEALBOT_CP_MACRO_LEN                    = "Nome da macro deve conter de 1 a 14 caracteres"
     HEALBOT_CP_MACRO_BASE                   = "Nome da macro base"
     HEALBOT_CP_MACRO_SAVE                   = "?ltima grava\195\167\195\163o em: "
