@@ -1298,6 +1298,23 @@ function HealBot_Options_CrashProt_OnClick(self)
     if HealBot_Data["REFRESH"]==0 then HealBot_Data["REFRESH"]=1; end
 end
 
+function HealBot_Options_UseGeneralMacros_OnClick(self)
+    if self:GetChecked() then
+        Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["GENERALMACRO"]=true
+    else
+        Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["GENERALMACRO"]=false
+    end
+    DeleteMacro(HealBot_Config.CrashProtMacroName.."_0")
+    DeleteMacro(HealBot_Config.CrashProtMacroName.."_1")
+    DeleteMacro(HealBot_Config.CrashProtMacroName.."_2")
+    DeleteMacro(HealBot_Config.CrashProtMacroName.."_3")
+    DeleteMacro(HealBot_Config.CrashProtMacroName.."_4")
+    HealBot_Options_cpMacroSave:SetText(HEALBOT_CP_MACRO_SAVE)
+    HealBot_Options_SetcpMacroSave(HEALBOT_CP_MACRO_SAVE)
+    HealBot_useCrashProtection()
+    if HealBot_Data["REFRESH"]==0 then HealBot_Data["REFRESH"]=1; end
+end
+
 function HealBot_Options_CombatProt_OnClick(self)
     if self:GetChecked() then
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"]=true
@@ -2272,6 +2289,8 @@ function HealBot_Options_BarNumGroupPerCol_OnClick(self)
         Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GRPCOLS"] = false
     end
     HealBot_Options_BarNumColsSText:SetText(HealBot_Options_SetNoColsText() .. ": " .. Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NUMCOLS"]);
+    HealBot_Panel_ClearBarArrays()
+    HealBot_setOptions_Timer(150)
     if HealBot_Data["REFRESH"]<4 then HealBot_Data["REFRESH"]=4; end
 end
 
@@ -9987,6 +10006,8 @@ function HealBot_Options_InitSub1(subNo)
         if not DoneInitTab[329] then
             HealBot_Options_CrashProt:SetChecked(Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"])
             HealBot_Options_SetText(HealBot_Options_CrashProt,HEALBOT_OPTIONS_CRASHPROT)
+            HealBot_Options_UseGeneralMacros:SetChecked(Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["GENERALMACRO"])
+            HealBot_Options_SetText(HealBot_Options_UseGeneralMacros,HEALBOT_OPTIONS_USEGENERALMACRO)
             HealBot_Options_CombatProt:SetChecked(Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"])
             HealBot_Options_SetText(HealBot_Options_CombatProt,HEALBOT_OPTIONS_COMBATPROT)
             HealBot_Options_val_OnLoad(HealBot_Options_CombatPartyNo,HEALBOT_COMBATPROT_PARTYNO,0,4,1)

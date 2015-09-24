@@ -327,9 +327,13 @@ local function HealBot_cpSaveAll()
 end
 
 function HealBot_cpSave(mName, mBody)
+    local perCharacter = 1
+    if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["GENERALMACRO"] then
+        perCharacter = nil
+    end
     local z=GetMacroIndexByName(mName)
     if (z or 0) == 0 then
-        z = CreateMacro(mName, "Spell_Holy_SealOfSacrifice", mBody, 1)
+        z = CreateMacro(mName, "Spell_Holy_SealOfSacrifice", mBody, perCharacter)
     else
         z = EditMacro(z, mName, "Spell_Holy_SealOfSacrifice", mBody)
     end
@@ -2251,8 +2255,14 @@ function HealBot_OnEvent_VariablesLoaded(self)
 end
 
 function HealBot_useCrashProtection()
-    local _,z = GetNumMacros()
-    local x=18-z
+    local y,z = GetNumMacros()
+    local maxMacroSlots=18
+    if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["GENERALMACRO"] then
+        maxMacroSlots=100
+        z=y
+    end
+    
+    local x=maxMacroSlots-z
     if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] then
         for z=0,5 do
             local w=GetMacroBody(HealBot_Config.CrashProtMacroName.."_"..z)
@@ -6009,6 +6019,7 @@ function HealBot_Update_Skins()
             if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Skins[x]]["INCFOCUS"]==nil then Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Skins[x]]["INCFOCUS"]=false end
             if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Skins[x]]["INCMYTARGETS"]==nil then Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Skins[x]]["INCMYTARGETS"]=false end
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["CRASH"]==nil then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["CRASH"]=false end
+            if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["GENERALMACRO"]==nil then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["GENERALMACRO"]=false end
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBAT"]==nil then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBAT"]=false end
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBATPARTY"]==nil then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBATPARTY"]=1 end
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBATRAID"]==nil then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBATRAID"]=2 end
@@ -6333,6 +6344,7 @@ function HealBot_Update_Skins()
             
             -- Skins > Prot  (xml: 5600)
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["CRASH"]==0 then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["CRASH"]=false end
+            if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["GENERALMACRO"]==0 then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["GENERALMACRO"]=false end
             if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBAT"]==0 then Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBAT"]=false end
             
             -- Skins > Chat  (xml: 5977)

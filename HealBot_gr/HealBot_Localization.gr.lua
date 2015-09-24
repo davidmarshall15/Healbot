@@ -539,6 +539,7 @@ function HealBot_Lang_grGR()
     HEALBOT_SUPPRESSSOUND                   = "Auto Trinket: Καταστολή Ηχου"
     HEALBOT_SUPPRESSERROR                   = "Auto Trinket: Απενεργοποιηση Λαθων"
     HEALBOT_OPTIONS_CRASHPROT               = "Προστασια απο Crash"
+    HEALBOT_OPTIONS_USEGENERALMACRO         = "Use general macro slots"
     HEALBOT_CP_MACRO_LEN                    = "Το ονομα του μακρο πρεπει να ειναι μεταξυ 1 κ 14 χαρακτηρες"
     HEALBOT_CP_MACRO_BASE                   = "Βασικη ονομασια macro"
     HEALBOT_CP_MACRO_SAVE                   = "Τελευταια αποθηκευση στης: "

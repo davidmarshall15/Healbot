@@ -535,6 +535,7 @@ function HealBot_Lang_itIT()
     HEALBOT_SUPPRESSSOUND                   = "Auto Trinket: Sopprimi suono"
     HEALBOT_SUPPRESSERROR                   = "Auto Trinket: Sopprimi errori"
     HEALBOT_OPTIONS_CRASHPROT               = "Protezione dai Crash"
+    HEALBOT_OPTIONS_USEGENERALMACRO         = "Use general macro slots"
     HEALBOT_CP_MACRO_LEN                    = "Il nome della Macro deve avere da 1 a 14 caratteri"
     HEALBOT_CP_MACRO_BASE                   = "Nome Base della macro"
     HEALBOT_CP_MACRO_SAVE                   = "Ultimo salvataggio alle: "

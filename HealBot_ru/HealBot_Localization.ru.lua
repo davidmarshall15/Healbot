@@ -543,6 +543,7 @@ function HealBot_Lang_ruRU()
     HEALBOT_SUPPRESSSOUND                   = "Авто-Аксессуар: подавлять звуки";
     HEALBOT_SUPPRESSERROR                   = "Авто-Аксессуар: подавлять ошибки";
     HEALBOT_OPTIONS_CRASHPROT               = "Защита от сбоев";
+    HEALBOT_OPTIONS_USEGENERALMACRO         = "Use general macro slots"
     HEALBOT_CP_MACRO_LEN                    = "Имя макроса должно быть от 1 до 14 символов";
     HEALBOT_CP_MACRO_BASE                   = "Основное имя макроса";
     HEALBOT_CP_MACRO_SAVE                   = "Последнее сохранение в: ";

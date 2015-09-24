@@ -1544,6 +1544,7 @@ function HealBot_Panel_raidHeals()
                 end
                 if UnitExists(xUnit) then
                     HealBot_UnitGroups[xUnit]=subgroup
+                    --if xUnit == "raid15" then print("r15: "..subgroup) end
                     numGroupMembers[subgroup] = numGroupMembers[subgroup] + 1
                     if not HealBot_TrackNames[xGUID] then
                         uName=HealBot_GetUnitName(xUnit)
@@ -1720,7 +1721,7 @@ function HealBot_Panel_raidHeals()
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 then
                                 order[xUnit] = "WARRIOR";
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 then
-                                order[xUnit] = 9;
+                                order[xUnit] = subgroup;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 then
                                 order[xUnit] = 0-maxHealDiv;
                             end
