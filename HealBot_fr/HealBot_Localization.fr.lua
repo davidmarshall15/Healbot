@@ -1,4 +1,4 @@
-ï»¿-- French version (by Kubik of Vol'Jin) 2014-12-13 / V. 6.0.3.6
+ï»¿-- French version (by Kubik of Vol'Jin) 2015-09-25 / V. 6.2.2.0
 -- à = \195\160
 -- â = \195\162
 -- ç = \195\167
@@ -545,7 +545,7 @@ HEALBOT_INFO_CPUSECS                = "CPU Sec."
     HEALBOT_SUPPRESSSOUND               = "Auto Trinket : Suppr. son"
     HEALBOT_SUPPRESSERROR               = "Auto Trinket : Suppr. erreurs"
     HEALBOT_OPTIONS_CRASHPROT           = "Protection anti-Crash"
-    HEALBOT_OPTIONS_USEGENERALMACRO     = "Use general macro slots"
+    HEALBOT_OPTIONS_USEGENERALMACRO     = "Utiliser les slots macro de Wow"
     HEALBOT_CP_MACRO_LEN                = "Le nom de la macro doit avoir 1 \195\160 14 caract\195\168res"
     HEALBOT_CP_MACRO_BASE               = "hbMacro"
     HEALBOT_CP_MACRO_SAVE               = "Derni\195\168re sauvegarde: "
@@ -620,7 +620,7 @@ HEALBOT_INFO_CPUSECS                = "CPU Sec."
     HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
     HEALBOT_OPTION_IGNORE_AURA_RESTED       = "Ignorer les  Buffs/D\195\169buffs... pendant le repos"
-    HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Adjust unit max health"
+    HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Ajuster les PV max du personnage"
     
 
     HEALBOT_WORD_ENABLE                     = "Activer"
