@@ -627,6 +627,7 @@ HealBot_GlobalsDefaults = {
 			--WoD Added                
 			[HEALBOT_BREATH_OF_THE_SERPENT]=4,
             [HEALBOT_CHI_EXPLOSION]=4,
+            [HEALBOT_EXTEND_LIFE]=4,
         },
         ["ALL"] = {
             [HEALBOT_GIFT_OF_THE_NAARU]=2,

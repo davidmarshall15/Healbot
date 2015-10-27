@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "6.2.2.0";
+HEALBOT_VERSION   = "6.2.2.1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -401,6 +401,7 @@ function HealBot_globalVars()
     HEALBOT_STANCE_MONK_SERPENT             = GetSpellInfo(115070) or "--Stance of the Wise Serpent"
     HEALBOT_THUNDER_FOCUS_TEA               = GetSpellInfo(116680) or "--Thunder Focus Tea"
     HEALBOT_WINDFLURRY                      = GetSpellInfo(166916) or "--Windflurry"
+    HEALBOT_EXTEND_LIFE                     = GetSpellInfo(185158) or "--Extend Life"
     --Warlock
     HEALBOT_BLOOD_PACT                      = GetSpellInfo(166928) or "--Blood Pact";
     HEALBOT_DARK_BARGAIN                    = GetSpellInfo(110913) or "--Dark Bargain"
