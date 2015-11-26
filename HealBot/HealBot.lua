@@ -99,6 +99,7 @@ local HealBot_Ignore_NonHarmful_Debuffs = {
 local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.04,["HB2Inc"]=0,["HB2Th"]=0.2,["HB3Inc"]=0,["HB3Th"]=0.5,["HBA1Inc"]=-2,["HBA1Th"]=2000,["HBA2Inc"]=-2,["HBA2Th"]=2000}
 local arrg = {}
 local PlayerBuffs = {}
+local PlayerBuffTypes = {}
 local HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE
 local LSM = LibStub and LibStub:GetLibrary("LibSharedMedia-3.0", true)
 for i = 1, #HealBot_Default_Textures do
@@ -3727,11 +3728,20 @@ function HealBot_CheckUnitBuffs(button)
     for x,_ in pairs(PlayerBuffs) do
         PlayerBuffs[x]=nil;
     end
+    for x,_ in pairs(PlayerBuffTypes) do
+        PlayerBuffTypes[x]=nil;
+    end
 
     while true do
         local bName,_,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") 
         if bName then
             y = y + 1;
+            if (HealBot_BuffNameTypes[bName]) then
+                for _,v in pairs(HealBot_BuffNameTypes[bName]) do
+                    PlayerBuffTypes[v]=true
+                end
+            end
+            
             if not hbExcludeBuffSpells[spellID] then
                 if HealBot_Buff_Aura2Item[bName] then 
                     bName=HealBot_Buff_Aura2Item[bName] 
@@ -3864,7 +3874,7 @@ function HealBot_CheckUnitBuffs(button)
                 HealBot_ReCheckBuffsTimed[z+x]=xGUID
             end
             if checkthis then
-                if HealBot_HasBuffTypes(HealBot_BuffWatch[k]) then
+                if HealBot_HasBuffTypes(HealBot_BuffWatch[k], PlayerBuffTypes) then
                     altActive=true
                 else
                     bName=HealBot_BuffWatch[k];
@@ -3885,21 +3895,20 @@ function HealBot_CheckUnitBuffs(button)
     end
 end
 
-function HealBot_HasBuffTypes(spellName)
+function HealBot_HasBuffTypes(spellName, pBuffTypes)
     local hasBuffTypes = false
     if (HealBot_BuffNameTypes[spellName]) then
         local index = 0
         local name = nil
         local found = false
-        for k,v in pairs(HealBot_BuffNameTypes[spellName]) do
+        for _,v in pairs(HealBot_BuffNameTypes[spellName]) do
             index = index + 1
-            name = GetRaidBuffTrayAuraInfo(v)
-            if (name) then
+            if (pBuffTypes[v]) then
                 found = true
             else
                 found = false
             end
-            --print("v:"..v.." found:"..(name or "nil")
+            --print("v:"..v.." found:"..tostring(found))
             if index == 1 then
                 hasBuffTypes = found
             else
@@ -3907,7 +3916,7 @@ function HealBot_HasBuffTypes(spellName)
             end
         end
     end
-    --print("hasBuffTypes:"..tostring(hasBuffTypes))
+    --print("hasBuffTypes:"..tostring(hasBuffTypes)..", spell: "..spellName)
     return hasBuffTypes
 end
 
