@@ -1,4 +1,4 @@
---[[ HealBot Contined ]]
+--[[ HealBot Continued ]]
 
 local HealBot_Loaded=nil
 local HealBot_IamRessing = nil;
