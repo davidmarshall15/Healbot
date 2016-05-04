@@ -1,13 +1,13 @@
-ï»¿-- Spanish translator required
+Ã¯Â»Â¿-- Spanish translator required
 -------------
 -- SPANISH
 --
--- á = \195\161
--- é = \195\169    
--- í = \195\173
--- ó = \195\179
--- ú = \195\186
--- ñ = \195\177
+-- Ã¡ = \195\161
+-- Ã© = \195\169    
+-- Ã­ = \195\173
+-- Ã³ = \195\179
+-- Ãº = \195\186
+-- Ã± = \195\177
 --
 -- (http://www.wowwiki.com/Localizing_an_addon)
 --
@@ -16,14 +16,14 @@
 --
 
 function HealBot_Lang_esES()
-    HealBot_Lang_enALL()
+    HealBot_Lang_esALL()
 end
 
 function HealBot_Lang_esMX()
-    HealBot_Lang_enALL()
+    HealBot_Lang_esALL()
 end
 
-function HealBot_Lang_enALL()
+function HealBot_Lang_esALL()
 
 -----------------
 -- Translation --
@@ -927,10 +927,4 @@ HEALBOT_PLAYER_OF_REALM                 = "of"
     HEALBOT_OPTIONS_ENABLELIBUTF8           = "Enable UTF8 library"
     HEALBOT_OPTIONS_SHOWDIRECTION           = "Show Out of Range Direction"
     HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE      = "Only on Mouse Over"
-end
-
-if (GetLocale() == "esES") then
-    HealBot_Lang_esES()
-else
-    HealBot_Lang_esMX()
 end
