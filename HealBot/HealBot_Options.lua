@@ -203,7 +203,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_LANG_RURU,
         HEALBOT_OPTIONS_LANG_ESES,
         HEALBOT_OPTIONS_LANG_TWTW,
-		HEALBOT_OPTIONS_LANG_ESMX,
+        HEALBOT_OPTIONS_LANG_ESMX,
     }
     
     HealBot_Options_hbProfile_List = {
