@@ -203,6 +203,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_LANG_RURU,
         HEALBOT_OPTIONS_LANG_ESES,
         HEALBOT_OPTIONS_LANG_TWTW,
+        HEALBOT_OPTIONS_LANG_ESMX,
     }
     
     HealBot_Options_hbProfile_List = {
@@ -4372,6 +4373,8 @@ function HealBot_Options_LangsButton_OnClick(self)
         HealBot_Options_Lang("esES")
     elseif HealBot_Options_StorePrev["hbLangs"]==13 then
         HealBot_Options_Lang("zhTW")
+	elseif HealBot_Options_StorePrev["hbLangs"]==14 then
+        HealBot_Options_Lang("esMX")
     end
 end
 
@@ -8956,6 +8959,16 @@ function HealBot_Options_Lang(region)
             HealBot_Options_StorePrev["hbLangs"]=12
         else
             HealBot_AddChat("Unable to load esES (Addon: HealBot_es) - Reason: "..reason)
+            validCode=false
+        end  
+	elseif region=="esMX" then
+        loaded, reason = LoadAddOn("HealBot_es")
+        if loaded then
+            HealBot_Lang_esMX()
+            HealBot_AddChat("Switching Lang to esMX")
+            HealBot_Options_StorePrev["hbLangs"]=14
+        else
+            HealBot_AddChat("Unable to load esMX (Addon: HealBot_es) - Reason: "..reason)
             validCode=false
         end  
     elseif region=="frFR" then

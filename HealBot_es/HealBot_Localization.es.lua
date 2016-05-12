@@ -15,8 +15,15 @@
 --
 --
 
-
 function HealBot_Lang_esES()
+    HealBot_Lang_enALL()
+end
+
+function HealBot_Lang_esMX()
+    HealBot_Lang_enALL()
+end
+
+function HealBot_Lang_enALL()
 
 -----------------
 -- Translation --
@@ -920,4 +927,10 @@ HEALBOT_PLAYER_OF_REALM                 = "of"
     HEALBOT_OPTIONS_ENABLELIBUTF8           = "Enable UTF8 library"
     HEALBOT_OPTIONS_SHOWDIRECTION           = "Show Out of Range Direction"
     HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE      = "Only on Mouse Over"
+end
+
+if (GetLocale() == "esES") then
+    HealBot_Lang_esES()
+else
+    HealBot_Lang_esMX()
 end
