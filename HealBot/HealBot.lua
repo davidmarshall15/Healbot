@@ -1,4 +1,4 @@
---[[ HealBot Contined ]]
+--[[ HealBot Continued ]]
 
 local HealBot_Loaded=nil
 local HealBot_IamRessing = nil;
@@ -77,6 +77,8 @@ local HealBot_Ignore_Class_Debuffs = {
 						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
 	
 	["MONK"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+    
+    ["DEMO"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
 };
 
 local HealBot_Ignore_Movement_Debuffs = {

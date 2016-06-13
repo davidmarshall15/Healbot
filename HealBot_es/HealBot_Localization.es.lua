@@ -15,8 +15,15 @@
 --
 --
 
-
 function HealBot_Lang_esES()
+    HealBot_Lang_esALL()
+end
+
+function HealBot_Lang_esMX()
+    HealBot_Lang_esALL()
+end
+
+function HealBot_Lang_esALL()
 
 -----------------
 -- Translation --
@@ -672,7 +679,7 @@ HEALBOT_ABOUT_CATD                     = "Unit Frames, Buffs and Debuffs, Combat
 HEALBOT_ABOUT_CREDITH                  = "Credits:"
 HEALBOT_ABOUT_CREDITD                  = "Acirac, Kubik, Von, Aldetal, Brezza, CT"  -- Anyone taking on translations (if required), feel free to add yourself here.
 HEALBOT_ABOUT_LOCALH                   = "Localizations:"
-HEALBOT_ABOUT_LOCALD                   = "deDE, enUK, esES, frFR, huHU, itIT, koKR, poBR, ruRU, zhCN, zhTW"
+HEALBOT_ABOUT_LOCALD                   = "deDE, enUK, esES, esMX, frFR, huHU, itIT, koKR, poBR, ruRU, zhCN, zhTW"
 HEALBOT_ABOUT_FAQH                     = "Frequently Asked Questions"
 HEALBOT_ABOUT_FAQ_QUESTION             = "Question"
 HEALBOT_ABOUT_FAQ_ANSWER               = "Answer"
@@ -837,8 +844,9 @@ HEALBOT_PLAYER_OF_REALM                 = "of"
     HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)"
     HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by Aldetal)"
     HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - translator required)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - by milotic)"
     HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)"
+    HEALBOT_OPTIONS_LANG_ESMX               = "Mexican (esMX - by milotic)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Failed to load addon for localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Reason for failure is:"

@@ -4,6 +4,6 @@
 ## Notes: HealBot Localization for esES
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 6.2.0.0
+## Version: 6.2.3.1
 
 HealBot_Localization.es.lua
