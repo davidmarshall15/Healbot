@@ -1,6 +1,6 @@
 ## Interface: 60200
 ## Title: HealBot Spanish Localization
-## Author: Required
+## Author: Milotic
 ## Notes: HealBot Localization for esES
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
