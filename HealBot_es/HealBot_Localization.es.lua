@@ -1,13 +1,13 @@
-﻿-- Spanish translator required
+ï»¿-- Spanish translator required
 -------------
 -- SPANISH
 --
--- � = \195\161
--- � = \195\169    
--- � = \195\173
--- � = \195\179
--- � = \195\186
--- � = \195\177
+-- á = \195\161
+-- é = \195\169    
+-- í = \195\173
+-- ó = \195\179
+-- ú = \195\186
+-- ñ = \195\177
 --
 -- (http://www.wowwiki.com/Localizing_an_addon)
 --
@@ -39,7 +39,7 @@ function HealBot_Lang_esALL()
     HEALBOT_WARLOCK = "Brujo";
     HEALBOT_WARRIOR = "Guerrero";
     HEALBOT_DEATHKNIGHT = "Caballero de la Muerte";
-HEALBOT_MONK                            = "Monge";
+HEALBOT_MONK                            = "Monje";
 
     HEALBOT_DISEASE            = "Enfermedad";
     HEALBOT_MAGIC              = "Magia";
@@ -367,7 +367,7 @@ HEALBOT_HELP2={ [1] = "[HealBot] /hb d -- Restaurar opciones por defecto",
                 [3] = "[HealBot] /hb aggro 3 <n> -- Poner agro nivel 3 en porcentaje de amenaza <n>",
                 [4] = "[HealBot] /hb tr <Rol> -- Establece el rol con m\195\161s prioridad para SubOrdenar por Rol. Los roles son 'TANQUE', 'HEALER' o 'DPS'",
                 [5] = "[HealBot] /hb use10 -- Automaticamente usa el slot de Inginieria 10",
-                [6] = "[HealBot] /hb pcs <n> -- Ajusta el tamaño del indicador de carga de poder sagrado por <n>, Valor por defecto es 7 ",
+                [6] = "[HealBot] /hb pcs <n> -- Ajusta el tamaÃ±o del indicador de carga de poder sagrado por <n>, Valor por defecto es 7 ",
                 [7] = "[HealBot] /hb spt -- Alternar mascota segura",
                 [8] = "[HealBot] /hb ws -- Alternar Ocultar/Mostrar el icono de alma debilidad en lugar de PW:S con un -",
                 [9] = "[HealBot] /hb rld <n> -- En segundos, Cuanto se mantienen los nombres en verde despues de una resurrecci\195\179n",
