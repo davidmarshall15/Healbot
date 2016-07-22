@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: HealBot Taiwanese Localization
 ## Author: Required
 ## Notes: HealBot Localization for zhTW

@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: HealBot Tooltips
 ## Author: Strife
 ## Notes: HealBot Tooltips, only loads if Tooltips are used

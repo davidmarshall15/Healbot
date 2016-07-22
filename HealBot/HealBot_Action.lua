@@ -532,6 +532,7 @@ function HealBot_Action_SetrSpell()
 			HealBot_RangeSpells["HARM"]=HEALBOT_PLAGUE_STRIKE -- 30 
             x=HEALBOT_PLAGUE_STRIKE
 		end
+    elseif HealBot_Data["PCLASSTRIM"]=="DEMO" then
     end
 	if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
 	if (HealBot_RangeSpells["BUFF"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["BUFF"]=x end
@@ -4276,7 +4277,7 @@ function HealBot_MountsPets_InitMount()
     
     local x = C_MountJournal.GetNumMounts()
 	for z=1,x do
-        local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfo(z)
+        local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
         if faction and isUsable and isCollected then
             local englishFaction = UnitFactionGroup("player")
             if (faction~=HealBot_mountData["playerFaction"]) then
@@ -4286,7 +4287,7 @@ function HealBot_MountsPets_InitMount()
         end
         
         if isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
-            local _, _, _, _, mountType = C_MountJournal.GetMountInfoExtra(z)
+            local _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
             if (mountType==248 or mountType==247 or mountType==242) then
                 if HealBot_mountData["IncFlying"] then
                     table.insert(HealBot_FMount, mount);
@@ -4416,7 +4417,7 @@ end
 
 function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
-        C_MountJournal.Summon(HealBot_MountIndex[mount]) 
+        C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
     else
         HealBot_setOptions_Timer(405)
         HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_ON.." "..mount)

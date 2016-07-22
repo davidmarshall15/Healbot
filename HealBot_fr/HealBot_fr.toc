@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: HealBot French Localization
 ## Author: Kubik
 ## Notes: HealBot Localization for frFR

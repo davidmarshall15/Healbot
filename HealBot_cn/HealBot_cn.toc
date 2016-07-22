@@ -1,4 +1,4 @@
-﻿## Interface: 60200
+﻿## Interface: 70000
 ## Title: HealBot Chinese Localization
 ## Author: Required
 ## Notes: HealBot 中文语言文件

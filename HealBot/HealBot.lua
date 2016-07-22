@@ -2243,6 +2243,8 @@ function HealBot_OnEvent_VariablesLoaded(self)
         -- short buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
         -- short buffs
+    elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEMONHUNTER] then
+        -- short buffs
     end
 
     HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");

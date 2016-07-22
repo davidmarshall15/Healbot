@@ -1,11 +1,11 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: HealBot
 ## Author: Strife
 ## Notes: Adds a panel with skinable bars for healing, decursive, buffing, ressing, range checking and aggro tracking
 ## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures
 ## SavedVariables: Healbot_Config_Skins, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures, HealBot_MapScale
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
-## Version: 6.2.3.1
+## Version: 7.0.3.0
 
 embeds.xml
 

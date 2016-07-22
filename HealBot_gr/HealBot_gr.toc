@@ -1,4 +1,4 @@
-## Interface: 60200
+## Interface: 70000
 ## Title: HealBot Greek Localization
 ## Author: Snaomi
 ## Notes: HealBot Localization for grGR
