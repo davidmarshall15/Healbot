@@ -8746,12 +8746,12 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:Hide()
     g=_G["HealBot_Options_HealHideFrame"]
     g:Hide()
-    g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
-    g:SetTextColor(1,1,1,1)
-    g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
-    g:SetTextColor(1,1,0,0.92)
-    g=_G["HealBot_SkinsSubFrameSelectHealHideFramef"]
-    g:SetTextColor(1,1,0,0.92)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
+   -- g:SetTextColor(1,1,1,1)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
+   -- g:SetTextColor(1,1,0,0.92)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealHideFramef"]
+   -- g:SetTextColor(1,1,0,0.92)
     
     g=_G["HealBot_Contents_ButtonT0"]
     g:SetStatusBarColor(0.2,0.2,0.2,0.55)
@@ -10270,7 +10270,6 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_HideBars,HEALBOT_HIDE_BARS)
             HealBot_Options_HideIncFocus:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCFOCUS"])
             HealBot_Options_SetText(HealBot_Options_HideIncFocus,HEALBOT_FOCUS)
-            HealBot_SkinsSubFrameSelectHealHideFramef:SetText(HEALBOT_OPTIONS_TAB_HIDE)
             HealBot_Options_HideIncGroup:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCGROUP"])
             HealBot_Options_SetText(HealBot_Options_HideIncGroup,HEALBOT_OPTIONS_GROUPHEALS)
             HealBot_Options_HideIncTank:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCTANK"])
@@ -10283,10 +10282,12 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_HEAL_BUTTONS)
             g=_G["HealBot_IncludeTargets_Text"]
             g:SetText(HEALBOT_OPTIONS_TARGETHEALS.." "..HEALBOT_WORDS_INCLUDE)
-            g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
+            g=_G["HealBot_SkinsSubFrameSelectHealRaidFrameb"]
             g:SetText(HEALBOT_OPTIONS_EMERGENCYHEALS)
-            g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
+            g=_G["HealBot_SkinsSubFrameSelectHealSortFrameb"]
             g:SetText(HEALBOT_OPTIONS_TAB_SORT)
+            g=_G["HealBot_SkinsSubFrameSelectHealHideFrameb"]
+            g:SetText(HEALBOT_OPTIONS_TAB_HIDE)
             g=_G["healbotraidfilterfontstr"]
             g:SetText(HEALBOT_OPTIONS_EMERGFILTER)
             g=_G["healbotraidfiltergrpsfontstr"]
@@ -11439,22 +11440,19 @@ function HealBot_Options_ShowCurePanel(frameName)
 end
 
 HealBot_Options_StorePrev["CurrentHealPanel"]="HealBot_Options_HealRaidFrame"
-HealBot_Options_StorePrev["CurrentHealbarName"]="HealBot_SkinsSubFrameSelectHealRaidFrame"
-function HealBot_Options_ShowHealPanel(frameName,barName)
+HealBot_Options_StorePrev["CurrentHealButton"]="HealBot_SkinsSubFrameSelectHealRaidFrameb"
+
+function HealBot_Options_ShowHealPanel(frameName, buttonName)
     local g=_G[HealBot_Options_StorePrev["CurrentHealPanel"]]
     g:Hide()
-    g=_G[HealBot_Options_StorePrev["CurrentHealbarName"]]
-    g:SetStatusBarColor(0.58,0.08,0.08)
-    g=_G[HealBot_Options_StorePrev["CurrentHealbarName"].."f"]
-    g:SetTextColor(1,1,0,0.92)
     g=_G[frameName]
     g:Show()
-    g=_G[barName]
-    g:SetStatusBarColor(1,0.32,0.32)
-    g=_G[barName.."f"]
-    g:SetTextColor(1,1,1,1)
+    g=_G[HealBot_Options_StorePrev["CurrentHealButton"]]
+    g:UnlockHighlight()
+    g=_G[buttonName]
+    g:LockHighlight()
     HealBot_Options_StorePrev["CurrentHealPanel"]=frameName
-    HealBot_Options_StorePrev["CurrentHealbarName"]=barName
+    HealBot_Options_StorePrev["CurrentHealButton"]=buttonName
 end
 
 function HealBot_Options_OnMouseDown(self)

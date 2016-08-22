@@ -4211,39 +4211,9 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealRaidFrame","HealBot_SkinsSubFrameSelectHealRaidFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealRaidFrame","HealBot_SkinsSubFrameSelectHealRaidFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealRaidFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealRaidFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealRaidFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_EMERGENCYHEALS">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealRaidFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
                   <Button name="HealBot_SkinsSubFrameSelectHealSortFrameb" inherits="UIPanelButtonTemplate">
                     <Size>
                       <AbsDimension x="95" y="18"/>
@@ -4256,39 +4226,9 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealSortFrame","HealBot_SkinsSubFrameSelectHealSortFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealSortFrame","HealBot_SkinsSubFrameSelectHealSortFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealSortFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealSortFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealSortFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_TAB_SORT">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealSortFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
                   <Button name="HealBot_SkinsSubFrameSelectHealHideFrameb" inherits="UIPanelButtonTemplate">
                     <Size>
                       <AbsDimension x="95" y="18"/>
@@ -4301,39 +4241,10 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealHideFrame","HealBot_SkinsSubFrameSelectHealHideFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealHideFrame","HealBot_SkinsSubFrameSelectHealHideFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealHideFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealHideFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealHideFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_TAB_HIDE">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealHideFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
+
 
                   <Frame name="HealBot_Options_HealRaidFrame">
                     <Size>

@@ -2251,10 +2251,9 @@ function HealBot_OnEvent_VariablesLoaded(self)
     HealBot:RegisterEvent("PLAYER_LEAVING_WORLD");
 
     HealBot_Loaded=1;
-    
-    HealBot_SkinsSubFrameSelectHealRaidFrame:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_SkinsSubFrameSelectHealSortFrame:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_SkinsSubFrameSelectHealHideFrame:GetStatusBarTexture():SetHorizTile(false)
+
+    g=_G["HealBot_SkinsSubFrameSelectHealRaidFrameb"]
+    g:LockHighlight()
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
 end
