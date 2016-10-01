@@ -519,7 +519,8 @@ HealBot_GlobalsDefaults = {
 			[HEALBOT_DIVINITY]=2,                      
 			[HEALBOT_SYMBOL_OF_HOPE]=2,                  	
 			[HEALBOT_BODY_AND_MIND]=2,        
-            [HEALBOT_HARMONY]=2,            
+            [HEALBOT_HARMONY]=2,   
+            [HEALBOT_TRIAL_OF_LIGHT]=2,            
         },
         ["ROGU"] = {
             [HEALBOT_VANISH]=2,

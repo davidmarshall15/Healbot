@@ -374,6 +374,7 @@ function HealBot_globalVars()
     HEALBOT_SURGE_OF_DARKNESS               = GetSpellInfo(162448) or "--Surge of Darkness";
     HEALBOT_SURGE_OF_LIGHT                  = GetSpellInfo(114255) or "--Surge of Light";
     HEALBOT_TWIST_OF_FATE                   = GetSpellInfo(109142) or "--Twist of Fate";
+    HEALBOT_TRIAL_OF_LIGHT                  = GetSpellInfo(200128) or "--Trial of light";
     HEALBOT_VAMPIRIC_EMBRACE                = GetSpellInfo(15286) or "--Vampiric Embrace";
     HEALBOT_WORD_OF_MENDING                 = GetSpellInfo(155362) or "--Word of Mending";
 	--Legion Added
