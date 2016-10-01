@@ -6605,8 +6605,17 @@ function HealBot_DoReset_Buffs(pClassTrim)
             HealBot_Config_Buffs.HealBotBuffText[1]=HEALBOT_LEGACY_EMPEROR
         end
     elseif pClassTrim=="PALA" then
+        local i=1
         if HealBot_GetSpellId(HEALBOT_BLESSING_OF_KINGS) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HEALBOT_BLESSING_OF_KINGS
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_KINGS
+            i=i+1
+        end
+        if HealBot_GetSpellId(HEALBOT_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_MIGHT
+            i=i+1
+        end
+        if HealBot_GetSpellId(HEALBOT_BLESSING_OF_WISDOM) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_WISDOM
         end
     elseif pClassTrim=="PRIE" then
         if HealBot_GetSpellId(HEALBOT_POWER_WORD_FORTITUDE) then
@@ -6655,7 +6664,11 @@ function HealBot_DoReset_Cures(pClassTrim)
     HealBot_Config_Cures.HealBotDebuffDropDown = {[1]=4,[2]=4,[3]=4}
     if pClassTrim=="DRUI" then
         if HealBot_GetSpellId(HEALBOT_NATURES_CURE) then
-            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
+            if HealBot_GetSpellId(HEALBOT_REMOVE_CORRUPTION) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURES_CURE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
         elseif HealBot_GetSpellId(HEALBOT_REMOVE_CORRUPTION) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
@@ -6666,10 +6679,30 @@ function HealBot_DoReset_Cures(pClassTrim)
     elseif pClassTrim=="PALA" then
         if HealBot_GetSpellId(HEALBOT_CLEANSE) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+        elseif HealBot_GetSpellId(HEALBOT_CLEANSE_TOXIN) then
+            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE_TOXIN,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="PRIE" then
         if HealBot_GetSpellId(HEALBOT_PURIFY) then
-            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            if HealBot_GetSpellId(HEALBOT_MASS_DISPEL) then
+                if HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_PURIFY_DISEASE}
+                else
+                    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_WORDS_NONE}
+                end
+            elseif HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
+        elseif HealBot_GetSpellId(HEALBOT_MASS_DISPEL) then
+            if HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
+        elseif HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY_DISEASE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="SHAM" then
         if HealBot_GetSpellId(HEALBOT_PURIFY_SPIRIT) then
@@ -6762,7 +6795,7 @@ function HealBot_DoReset_Spells(pClassTrim)
           ["CtrlLeft"] = HEALBOT_PURIFY,
           ["Right"] = HEALBOT_HEAL,
           ["ShiftRight"] = HEALBOT_POWER_WORD_SHIELD,
-          ["CtrlRight"] = HEALBOT_PURIFY,
+          ["CtrlRight"] = HEALBOT_MASS_DISPEL,
           ["Middle"] = HEALBOT_RENEW,
           ["ShiftMiddle"] = HEALBOT_PRAYER_OF_MENDING,
           ["AltMiddle"] = HEALBOT_PRAYER_OF_HEALING,

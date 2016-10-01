@@ -434,7 +434,10 @@ HealBot_GlobalsDefaults = {
 	[HEALBOT_DEBUFF_SHADOW_BLAST]         = 11, -- Archimonde
 	[HEALBOT_DEBUFF_DARK_CONDUIT]         = 9, -- Archimonde
 	[HEALBOT_DEBUFF_SOURCE_OF_CHAOS]      = 11, -- Archimonde
-	[HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 9, -- Archimonde		     
+	[HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 9, -- Archimonde	
+    --
+    [HEALBOT_DEBUFF_BLACKENING_SOUL]      = 9,
+    [HEALBOT_DEBUFF_DARKENING_SOUL]       = 10,
 	},
     Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
     WatchHoT = {
@@ -485,7 +488,8 @@ HealBot_GlobalsDefaults = {
 			[HEALBOT_BEACON_OF_FAITH]=2,                                
 			--Legion Added
 			[HEALBOT_BLESSING_OF_SACRIFICE]=2,
-			[HEALBOT_BESTOW_FAITH]=2,			
+			[HEALBOT_BESTOW_FAITH]=2,
+            [HEALBOT_BEACON_OF_VIRTUE]=2,			
         },
         ["PRIE"] = {
             [HEALBOT_GUARDIAN_SPIRIT]=2,
@@ -514,7 +518,8 @@ HealBot_GlobalsDefaults = {
 			[HEALBOT_APOTHEOSIS]=2, --Holy                      
 			[HEALBOT_DIVINITY]=2,                      
 			[HEALBOT_SYMBOL_OF_HOPE]=2,                  	
-			[HEALBOT_BODY_AND_MIND]=2,                   			
+			[HEALBOT_BODY_AND_MIND]=2,        
+            [HEALBOT_HARMONY]=2,            
         },
         ["ROGU"] = {
             [HEALBOT_VANISH]=2,
@@ -578,6 +583,7 @@ HealBot_GlobalsDefaults = {
             [HEALBOT_GIFT_OF_THE_NAARU]=2,
 			[HEALBOT_DARKFLIGHT]=2,
 			[HEALBOT_STONEFORM]=2,
+            [HEALBOT_SHROUD_OF_THE_NAGLFAR]=2,
         },
     },
 };

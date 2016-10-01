@@ -408,6 +408,7 @@ function HealBot_Options_setLists()
         [HEALBOT_DARKFLIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_GIFT_OF_THE_NAARU]=HEALBOT_CLASSES_ALL,
         [HEALBOT_STONEFORM]=HEALBOT_CLASSES_ALL, 
+        [HEALBOT_SHROUD_OF_THE_NAGLFAR]=HEALBOT_CLASSES_ALL,
         
         --Death Knight
         [HEALBOT_ICEBOUND_FORTITUDE]=HEALBOT_DEATHKNIGHT,
@@ -437,6 +438,7 @@ function HealBot_Options_setLists()
 		--Legion Added
 		[HEALBOT_SPRING_BLOSSOMS]=HEALBOT_DRUID,               
 		[HEALBOT_CULTIVATION]=HEALBOT_DRUID,
+        [HEALBOT_HARMONY]=HEALBOT_DRUID,
         
         --Hunter
         [HEALBOT_MENDPET]=HEALBOT_HUNTER,
@@ -484,6 +486,7 @@ function HealBot_Options_setLists()
 		--Legion Added
 		[HEALBOT_BLESSING_OF_SACRIFICE]=HEALBOT_PALADIN,
 		[HEALBOT_BESTOW_FAITH]=HEALBOT_PALADIN,
+        [HEALBOT_BEACON_OF_VIRTUE]=HEALBOT_PALADIN,
         
         --Priest        
         [HEALBOT_PRAYER_OF_MENDING]=HEALBOT_PRIEST,
@@ -700,6 +703,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
             HEALBOT_BLESSING_OF_KINGS,
+            HEALBOT_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
             HEALBOT_HAND_OF_PROTECTION,
             HEALBOT_HAND_OF_SACRIFICE,
@@ -788,8 +792,8 @@ function HealBot_Options_GetDebuffSpells_List(class)
       ["HUNT"] = {},
       ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
       ["MONK"] = {HEALBOT_DETOX,},
-      ["PALA"] = {HEALBOT_CLEANSE,},
-      ["PRIE"] = {HEALBOT_PURIFY,},
+      ["PALA"] = {HEALBOT_CLEANSE, HEALBOT_CLEANSE_TOXIN},
+      ["PRIE"] = {HEALBOT_PURIFY, HEALBOT_MASS_DISPEL, HEALBOT_PURIFY_DISEASE},
       ["ROGU"] = {},
       ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
       ["WARL"] = {},
@@ -825,13 +829,16 @@ local HealBot_Debuff_Types = {
   [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
   [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
   [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
+  [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
   [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en},
   [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
   [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
   [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
+  [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
   [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
   [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
   [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en},
+  [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
   [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
   [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
 }
@@ -4920,11 +4927,14 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_RESUSCITATE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
+            HEALBOT_CLEANSE_TOXIN,
             HEALBOT_REMOVE_CORRUPTION,
             HEALBOT_NATURES_CURE,
+            HEALBOT_PURIFY_DISEASE,
             HEALBOT_PURIFY,
             HEALBOT_CLEANSE_SPIRIT,
             HEALBOT_PURIFY_SPIRIT,
+            HEALBOT_MASS_DISPEL,
             HEALBOT_LIFE_TAP,
             HEALBOT_DIVINE_SHIELD,
             HEALBOT_DIVINE_PROTECTION,
@@ -11712,7 +11722,7 @@ function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
         else
             SendAddonMessage(addon_id, msg, "PARTY" );
         end
-    elseif aType==4 and pName then
+    elseif aType==4 and pName and UnitIsPlayer(HealBot_Panel_RaidUnit(nil,pName)) then
         SendAddonMessage(addon_id, msg, "WHISPER", pName );
     elseif aType==5 then
         SendAddonMessage(addon_id, msg, "GUILD" );

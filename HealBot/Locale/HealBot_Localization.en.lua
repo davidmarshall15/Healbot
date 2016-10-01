@@ -781,7 +781,10 @@ function HealBot_Lang_enALL()
 	[HEALBOT_DEBUFF_SHACKLED_TORMENT]     = 11, -- Archimonde
 	[HEALBOT_DEBUFF_DARK_CONDUIT]         = 3, -- Archimonde
 	[HEALBOT_DEBUFF_SOURCE_OF_CHAOS]      = 11, -- Archimonde
-	[HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 8, -- Archimonde	 
+	[HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 8, -- Archimonde	
+    --
+    [HEALBOT_DEBUFF_BLACKENING_SOUL]      = 2,
+    [HEALBOT_DEBUFF_DARKENING_SOUL]       = 3,    
 	}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"

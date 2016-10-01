@@ -4387,7 +4387,7 @@ function HealBot_MountsPets_DislikeMount(action)
     local z = C_MountJournal.GetNumMounts()
     local mount=nil
 	for i=1,z do
- 		local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfo(i)
+ 		local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
  		if active then
  			mount=creatureName
             break

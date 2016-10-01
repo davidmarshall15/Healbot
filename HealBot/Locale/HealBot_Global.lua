@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.0.3.1.b1";
+HEALBOT_VERSION   = "7.0.3.1.b2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -41,6 +41,7 @@ function HealBot_globalVars()
     HEALBOT_EVER_BLOOMING_FROND             = GetItemInfo(118935) or "--Ever-Blooming Frond"
     HEALBOT_ORALIUS_WHISPERING_CRYSTAL      = GetItemInfo(118922) or "--Oralius' Whispering Crystal";
     HEALBOT_WHISPERS_OF_INSANITY            = GetSpellInfo(176151) or "--Whispers of Insanity"
+    HEALBOT_SHROUD_OF_THE_NAGLFAR           = GetSpellInfo(215247) or "--Shroud of the Naglfar"
 
     --Racial Abilities
     HEALBOT_DARKFLIGHT                      = GetSpellInfo(68992) or "--Darkflight";
@@ -209,7 +210,7 @@ function HealBot_globalVars()
     HEALBOT_BARKSKIN                        = GetSpellInfo(22812) or "--Barkskin";
     HEALBOT_DRUID_CLEARCASTING              = GetSpellInfo(16870) or "--Clearcasting";
     HEALBOT_FRENZIED_REGEN                  = GetSpellInfo(22842) or "--Frenzied Regeneration";
-    HEALBOT_HARMONY                         = GetSpellInfo(100977) or "--Harmony";
+    HEALBOT_HARMONY                         = GetSpellInfo(77495) or "--Mastery Harmony";
     HEALBOT_IRONBARK                        = GetSpellInfo(102342) or "--Ironbark";
     HEALBOT_LEADER_OF_THE_PACK              = GetSpellInfo(17007) or "--Leader of the Pack";
     HEALBOT_LIVING_SEED                     = GetSpellInfo(48500) or "--Living Seed";
@@ -292,8 +293,10 @@ function HealBot_globalVars()
     HEALBOT_BEACON_OF_FAITH                 = GetSpellInfo(156910) or "--Beacon of Faith";
     HEALBOT_BEACON_OF_INSIGHT               = GetSpellInfo(157007) or "--Beacon of Insight";
     HEALBOT_BEACON_OF_LIGHT                 = GetSpellInfo(53563) or "--Beacon of Light";
-    HEALBOT_BLESSING_OF_KINGS               = GetSpellInfo(20217) or "--Blessing of Kings";
-    HEALBOT_BLESSING_OF_MIGHT               = GetSpellInfo(19740) or "--Blessing of Might";
+    HEALBOT_BEACON_OF_VIRTUE                = GetSpellInfo(200025) or "--Beacon of Virtue";
+    HEALBOT_BLESSING_OF_KINGS               = GetSpellInfo(203538) or "--Greater Blessing of Kings";
+    HEALBOT_BLESSING_OF_MIGHT               = GetSpellInfo(203528) or "--Greater Blessing of Might";
+    HEALBOT_BLESSING_OF_WISDOM              = GetSpellInfo(203539) or "--Greater Blessing of Wisdom";
     HEALBOT_DAY_BREAK                       = GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = GetSpellInfo(465) or "--Devotion Aura";
     HEALBOT_DIVINE_PROTECTION               = GetSpellInfo(498) or "--Divine Protection";
@@ -476,10 +479,13 @@ function HealBot_globalVars()
     HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or "--Body and Soul";
     HEALBOT_CLEANSE                         = GetSpellInfo(4987) or "--Cleanse";
     HEALBOT_CLEANSE_SPIRIT                  = GetSpellInfo(51886) or "--Cleanse Spirit";
+    HEALBOT_CLEANSE_TOXIN                  = GetSpellInfo(213644) or "--Cleanse Toxins";
     HEALBOT_DETOX                           = GetSpellInfo(115450) or "--Detox";
     HEALBOT_NATURES_CURE                    = GetSpellInfo(88423) or "--Nature's Cure";
     HEALBOT_PURIFY                          = GetSpellInfo(527) or "--Purify";
     HEALBOT_PURIFY_SPIRIT                   = GetSpellInfo(77130) or "--Purify Spirit";
+    HEALBOT_PURIFY_DISEASE                  = GetSpellInfo(213634) or "--Purify Disease";
+    HEALBOT_MASS_DISPEL                     = GetSpellInfo(32375) or "--Mass Dispel";
     HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or "--Remove Curse";
     HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or "--Remove Corruption";
     HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or "--Sacred Cleansing";
@@ -714,6 +720,9 @@ function HealBot_globalVars()
 	HEALBOT_DEBUFF_DARK_CONDUIT         = GetSpellInfo(190396) or "--Dark Conduit";
 	HEALBOT_DEBUFF_SOURCE_OF_CHAOS      = GetSpellInfo(190721) or "--Source of Chaos";
 	HEALBOT_DEBUFF_MARK_OF_THE_LEGION   = GetSpellInfo(187050) or "--Mark of the Legion";
+    
+    HEALBOT_DEBUFF_BLACKENING_SOUL      = GetSpellInfo(209158) or "--Blackening Soul"
+    HEALBOT_DEBUFF_DARKENING_SOUL       = GetSpellInfo(206651) or "--Darkening Soul"
 end
 
 HealBot_globalVars()
