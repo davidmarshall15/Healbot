@@ -371,10 +371,11 @@ function HealBot_globalVars()
     HEALBOT_SHADOWFORM                      = GetSpellInfo(15473) or "--Shadowform"
     HEALBOT_SHADOW_WORD_INSANITY            = GetSpellInfo(132573) or "--Shadow Word: Insanity";
     HEALBOT_SPIRIT_SHELL                    = GetSpellInfo(109964) or "--Spirit Shell";
+    HEALBOT_SUNDERING_SOUL                  = GetSpellInfo(212570) or "--Sundering Soul";
     HEALBOT_SURGE_OF_DARKNESS               = GetSpellInfo(162448) or "--Surge of Darkness";
     HEALBOT_SURGE_OF_LIGHT                  = GetSpellInfo(114255) or "--Surge of Light";
     HEALBOT_TWIST_OF_FATE                   = GetSpellInfo(109142) or "--Twist of Fate";
-    HEALBOT_TRIAL_OF_LIGHT                  = GetSpellInfo(200128) or "--Trial of light";
+--    HEALBOT_TRIAL_OF_LIGHT                  = GetSpellInfo(200128) or "--Trial of light";
     HEALBOT_VAMPIRIC_EMBRACE                = GetSpellInfo(15286) or "--Vampiric Embrace";
     HEALBOT_WORD_OF_MENDING                 = GetSpellInfo(155362) or "--Word of Mending";
 	--Legion Added
