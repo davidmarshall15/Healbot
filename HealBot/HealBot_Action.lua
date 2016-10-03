@@ -3110,11 +3110,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
     local sysSoundSFX = strsub(GetCVar("Sound_EnableErrorSpeech") or "nil",1,1)
     local spellType="help"
     if status=="Enemy" then spellType="harm" end
-    if spellName==HEALBOT_HOLY_WORD_SERENITY then
-        scText="/use [@"..unit.."] "..spellName..";\n"
-    else
-        scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
-    end
+    scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
 
     if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
     if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Hide();\n" end

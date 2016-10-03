@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.0.3.1.b2";
+HEALBOT_VERSION   = "7.0.3.1.b3";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -164,7 +164,6 @@ function HealBot_globalVars()
     HEALBOT_FLASH_HEAL                      = GetSpellInfo(2061) or "--Flash Heal";
     HEALBOT_HALO                            = GetSpellInfo(120517) or "--Halo"
     HEALBOT_HEAL                            = GetSpellInfo(2060) or "--Heal";
-    HEALBOT_HOLY_WORD_CHASTISE              = GetSpellInfo(88625) or "--Holy Word: Chastise";
     HEALBOT_HOLY_WORD_SANCTUARY             = GetSpellInfo(88685) or "--Holy Word: Sanctuary";
     HEALBOT_HOLY_WORD_SERENITY              = GetSpellInfo(88684) or "--Holy Word: Serenity";
     HEALBOT_PENANCE                         = GetSpellInfo(47540) or "--Penance"
@@ -176,7 +175,6 @@ function HealBot_globalVars()
 	HEALBOT_POWER_WORD_RADIANCE             = GetSpellInfo(194509) or "--Power Word: Radiance";
 	HEALBOT_SHADOW_MEND                     = GetSpellInfo(186263) or "--Shadow Mend;"
 	HEALBOT_HOLY_WORD_SANCTIFY              = GetSpellInfo(34861) or "--Holy Word: Sanctify";
-	HEALBOT_HOLY_WORD_SERENITY              = GetSpellInfo(2050) or "--Holy Word: Serenity";
 	
     --Shaman
     HEALBOT_CHAIN_HEAL                      = GetSpellInfo(1064) or "--Chain Heal";

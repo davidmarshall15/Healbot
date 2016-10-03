@@ -69,10 +69,13 @@ function HealBot_Init_Spells_Defaults()
             end
         end
     end
-    HealBot_ChakraSpells()
+    if HealBot_Data["PCLASSTRIM"]=="PALA" then
+        HealBot_GreaterBlessingSpells()
+    end
 end
 
-local skipSpells={ [HEALBOT_HOLY_WORD_SANCTUARY]=true,[HEALBOT_HOLY_WORD_SERENITY]=true,[HEALBOT_HOLY_WORD_CHASTISE]=true}
+local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
+--local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true,[HEALBOT_BLESSING_OF_WISDOM]=true,[HEALBOT_BLESSING_OF_KINGS]=true}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     if not skipSpells[spellName] then
         if HealBot_FindSpellRangeCast(spellId, spellName, spellBookId) then

@@ -893,43 +893,17 @@ function HealBot_GetSpellId(spellName)
     return HealBot_luVars[spellName];
 end
 
-function HealBot_ChakraSpells()
-    local needInit=false
-    local cSanctuary=HealBot_HasBuff(HEALBOT_CHAKRA_SANCTUARY, "player")
-    local cSerenity=HealBot_HasBuff(HEALBOT_CHAKRA_SERENITY, "player")
-    local cChastise=HealBot_HasBuff(HEALBOT_CHAKRA_CHASTISE, "player")
-    
-    if HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY] and not cSanctuary then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY]=nil
-        needInit=true
+function HealBot_GreaterBlessingSpells()
+    local i = GetSpecialization()
+    if i==3 then
+        HealBot_luVars[HEALBOT_BLESSING_OF_MIGHT]=203528
+        HealBot_luVars[HEALBOT_BLESSING_OF_WISDOM]=203539
+        HealBot_luVars[HEALBOT_BLESSING_OF_KINGS]=203538
+    else
+        HealBot_luVars[HEALBOT_BLESSING_OF_MIGHT]=nil
+        HealBot_luVars[HEALBOT_BLESSING_OF_WISDOM]=nil
+        HealBot_luVars[HEALBOT_BLESSING_OF_KINGS]=nil
     end
-    if HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY] and not cSerenity then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY]=nil
-        needInit=true
-    end
-    if HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE] and not cChastise then
-        HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE]=nil
-        needInit=true
-    end
-    
-    if cSanctuary and not HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY]=88685
-        needInit=true
-    end
-    if cSerenity and not HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY]=88684
-        needInit=true
-    end
-    if cChastise and not HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE]=88625
-        needInit=true
-    end
-    
-    if needInit then
-        HealBot_Options_ResetSpellsHealperDropdown("SPELLS")
-    end
-        
-
 end
 
 function HealBot_UnitHealth(unit)
@@ -1231,7 +1205,7 @@ function HealBot_OnUpdate(self)
                         HealBot_Action_setRegisterForClicks()
                     elseif HealBot_Options_Timer[115] then
                         HealBot_Options_Timer[115]=nil
-                        HealBot_ChakraSpells()
+                        HealBot_GreaterBlessingSpells()
                     elseif HealBot_Options_Timer[120] then
                         HealBot_Options_Timer[120]=nil
                         HealBot_CheckZone();

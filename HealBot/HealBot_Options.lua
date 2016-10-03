@@ -4745,7 +4745,6 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_BLACKOUT_KICK,
             HEALBOT_TOUCH_OF_DEATH,
             HEALBOT_CRACKLING_JADE_LIGHTNING,
-            HEALBOT_HOLY_WORD_CHASTISE,
             HEALBOT_DENOUNCE,
             HEALBOT_HAMMER_OF_WRATH,
             HEALBOT_HOLY_SHOCK,
@@ -4798,8 +4797,6 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_GIFT_OF_THE_NAARU,
             HEALBOT_MENDPET,
             HEALBOT_HEALTH_FUNNEL,
-            HEALBOT_HOLY_WORD_SERENITY,
-            HEALBOT_HOLY_WORD_SANCTUARY,
             HEALBOT_SOOTHING_MIST,
             HEALBOT_ZEN_MEDITATION,
             HEALBOT_LIFE_COCOON,
@@ -4829,7 +4826,6 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_SHADOW_COVENANT,                
 			HEALBOT_SHADOW_MEND,
 			HEALBOT_HOLY_WORD_SANCTIFY,              
-			HEALBOT_HOLY_WORD_SERENITY,
 			HEALBOT_BESTOW_FAITH, --Paladin                    
 			HEALBOT_LIGHT_OF_THE_MARTYR,             			
         }
