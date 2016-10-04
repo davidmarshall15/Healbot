@@ -4765,6 +4765,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_DESPERATE_PRAYER,
             HEALBOT_CHAIN_HEAL,
             HEALBOT_FLASH_HEAL,
+            HEALBOT_HOLY_WORD_SERENITY,
             HEALBOT_FLASH_OF_LIGHT,
             HEALBOT_GREATER_HEAL,
             HEALBOT_HEALING_TOUCH,
