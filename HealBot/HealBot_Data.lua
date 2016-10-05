@@ -1,4 +1,4 @@
-HealBot_lastVerSkinUpdate="6.1.0.0"
+HealBot_lastVerSkinUpdate="7.0.0.0"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
