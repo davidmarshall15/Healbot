@@ -526,7 +526,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_BODY_AND_MIND]=2,        
                 [HEALBOT_HARMONY]=2,   
                 [HEALBOT_SUNDERING_SOUL]=3,
-                [HEALBOT_FOCUSED_WILL]=2,            
+                [HEALBOT_FOCUSED_WILL]=2,        
+                [HEALBOT_LIGHT_OF_TUURE]=2,                
             },
             ["ROGU"] = {
                 [HEALBOT_VANISH]=2,

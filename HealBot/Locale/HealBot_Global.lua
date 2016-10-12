@@ -388,6 +388,7 @@ function HealBot_globalVars()
 	HEALBOT_RAPTURE                         = GetSpellInfo(47536) or "--Rapture"; --Disc
 	HEALBOT_ATONEMENT                       = GetSpellInfo(81749) or "--Atonement";
 	HEALBOT_SHADOW_COVENANT                 = GetSpellInfo(204065) or "--Shadow Covenant";
+    HEALBOT_LIGHT_OF_TUURE                  = GetSpellInfo(208065) or "--Light of T'uure";
    
 	--Shaman
     HEALBOT_ANACESTRAL_GUIDANCE             = GetSpellInfo(108281) or "--Ancestral Guidance";
@@ -438,6 +439,7 @@ function HealBot_globalVars()
     HEALBOT_THUNDER_FOCUS_TEA               = GetSpellInfo(116680) or "--Thunder Focus Tea"
     HEALBOT_WINDFLURRY                      = GetSpellInfo(166916) or "--Windflurry"
     HEALBOT_EXTEND_LIFE                     = GetSpellInfo(185158) or "--Extend Life"
+    HEALBOT_ESSENCE_FONT                    = GetSpellInfo(191837) or "--Essence Font"
     
 	--Warlock
     HEALBOT_BLOOD_PACT                      = GetSpellInfo(166928) or "--Blood Pact";

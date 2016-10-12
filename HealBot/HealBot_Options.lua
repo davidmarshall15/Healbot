@@ -559,6 +559,7 @@ function HealBot_Options_setLists()
 		[HEALBOT_BODY_AND_MIND]=HEALBOT_PRIEST, 	
         [HEALBOT_SUNDERING_SOUL]=HEALBOT_PRIEST,
         [HEALBOT_FOCUSED_WILL]=HEALBOT_PRIEST,
+        [HEALBOT_LIGHT_OF_TUURE]=HEALBOT_PRIEST,
 		
 		--Rogue
         [HEALBOT_VANISH]=HEALBOT_ROGUE,
@@ -4802,6 +4803,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_WORD_OF_GLORY,
             HEALBOT_DIVINE_LIGHT,
             HEALBOT_LAY_ON_HANDS,
+            HEALBOT_TYRS_DELIVERANCE,
             HEALBOT_HOLY_SHOCK,
             HEALBOT_LIFEBLOOM,
             HEALBOT_HEALING_STREAM_TOTEM,
@@ -4854,7 +4856,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_BESTOW_FAITH, --Paladin                    
 			HEALBOT_LIGHT_OF_THE_MARTYR, 
             HEALBOT_BEACON_OF_VIRTUE,     
-            HEALBOT_HAND_OF_THE_PROTECTOR,            
+            HEALBOT_HAND_OF_THE_PROTECTOR,   
+            HEALBOT_ESSENCE_FONT,            
         }
     end
     local tmpHealDDlist={}
