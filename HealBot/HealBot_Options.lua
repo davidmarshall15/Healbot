@@ -4784,7 +4784,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
         HealBot_Options_SelectHealSpellsCombo_List = {
             HEALBOT_BINDING_HEAL,
             HEALBOT_HOLY_NOVA,
-           -- HEALBOT_CIRCLE_OF_HEALING,
+            HEALBOT_CIRCLE_OF_HEALING,
             HEALBOT_DESPERATE_PRAYER,
             HEALBOT_CHAIN_HEAL,
             HEALBOT_FLASH_HEAL,

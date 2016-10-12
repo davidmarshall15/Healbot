@@ -159,7 +159,7 @@ function HealBot_globalVars()
     --Priest
     HEALBOT_BINDING_HEAL                    = GetSpellInfo(32546) or "--Binding Heal"
     HEALBOT_CASCADE                         = GetSpellInfo(121135) or "--Cascade"
-    --HEALBOT_CIRCLE_OF_HEALING               = GetSpellInfo(34861) or "--Circle of Healing";
+    HEALBOT_CIRCLE_OF_HEALING               = GetSpellInfo(204883) or "--Circle of Healing";
     HEALBOT_DESPERATE_PRAYER                = GetSpellInfo(19236) or "--Desperate Prayer";
     HEALBOT_DIVINE_HYMN                     = GetSpellInfo(64843) or "--Divine Hymn";
     HEALBOT_DIVINE_STAR                     = GetSpellInfo(110744) or "--Divine Star"
