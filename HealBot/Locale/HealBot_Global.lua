@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.0.3.1";
+HEALBOT_VERSION   = "7.0.3.2.b1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -104,6 +104,8 @@ function HealBot_globalVars()
     HEALBOT_SHADOW_WORD_PAIN                = GetSpellInfo(589) or "--Shadow Word: Pain"
     HEALBOT_SHADOW_WORD_DEATH               = GetSpellInfo(32379) or "--Shadow Word: Death"
     HEALBOT_SMITE                           = GetSpellInfo(585) or "--Smite"
+    HEALBOT_HOLY_WORD_CHASTISE              = GetSpellInfo(88625) or "--Holy Word: Chastise";
+    HEALBOT_DISPEL_MAGIC                    = GetSpellInfo(528) or "--Dispel Magic"
     --Rogue
     HEALBOT_GOUGE                           = GetSpellInfo(1776) or "--Gouge"
     HEALBOT_THROW                           = GetSpellInfo(121733) or "--Throw"  
@@ -292,6 +294,7 @@ function HealBot_globalVars()
     HEALBOT_BEACON_OF_INSIGHT               = GetSpellInfo(157007) or "--Beacon of Insight";
     HEALBOT_BEACON_OF_LIGHT                 = GetSpellInfo(53563) or "--Beacon of Light";
     HEALBOT_BEACON_OF_VIRTUE                = GetSpellInfo(200025) or "--Beacon of Virtue";
+    HEALBOT_TYRS_DELIVERANCE                = GetSpellInfo(200654) or "--Tyr's Deliverance";
     HEALBOT_BLESSING_OF_KINGS               = GetSpellInfo(203538) or "--Greater Blessing of Kings";
     HEALBOT_BLESSING_OF_MIGHT               = GetSpellInfo(203528) or "--Greater Blessing of Might";
     HEALBOT_BLESSING_OF_WISDOM              = GetSpellInfo(203539) or "--Greater Blessing of Wisdom";
@@ -329,6 +332,7 @@ function HealBot_globalVars()
 	HEALBOT_BLESSING_OF_SACRIFICE           = GetSpellInfo(199448) or "--Blessing of Sacrifice";
 	HEALBOT_BESTOW_FAITH                    = GetSpellInfo(223306) or "--Bestow Faith";
 	HEALBOT_LIGHT_OF_THE_MARTYR             = GetSpellInfo(183998) or "--Light of the Martyr";
+    HEALBOT_HAND_OF_THE_PROTECTOR           = GetSpellInfo(213652) or "--Hand of the Protector";
     
 	--Priest
     HEALBOT_ANGELIC_BULWARK                 = GetSpellInfo(108945) or "--Angelic Bulwark"
@@ -343,13 +347,13 @@ function HealBot_globalVars()
     HEALBOT_CLARITY_OF_POWER                = GetSpellInfo(155246) or "--Clarity of Power"
     HEALBOT_CLARITY_OF_PURPOSE              = GetSpellInfo(155245) or "--Clarity of Purpose"
     HEALBOT_CLARITY_OF_WILL                 = GetSpellInfo(152118) or "--Clarity of Will"
-    HEALBOT_DISPEL_MAGIC                    = GetSpellInfo(528) or "--Dispel Magic"
     HEALBOT_DISPERSION                      = GetSpellInfo(47585) or "--Dispersion"
     HEALBOT_DIVINE_AEGIS                    = GetSpellInfo(47515) or "--Divine Aegis";
     HEALBOT_DIVINE_INSIGHT                  = GetSpellInfo(109175) or "--Divine Insight";
     HEALBOT_EVANGELISM                      = GetSpellInfo(81661) or "--Evangelism";
     HEALBOT_ECHO_OF_LIGHT                   = GetSpellInfo(77489) or "--Echo of Light";
     HEALBOT_FEAR_WARD                       = GetSpellInfo(6346) or "--Fear Ward";
+    HEALBOT_FOCUSED_WILL                    = GetSpellInfo(45243) or "--Focused Will";
     HEALBOT_GUARDIAN_SPIRIT                 = GetSpellInfo(47788) or "--Guardian Spirit";
     HEALBOT_GRACE                           = GetSpellInfo(47517) or "--Grace";
     HEALBOT_HOLY_NOVA                       = GetSpellInfo(132157) or "--Holy Nova";
@@ -489,17 +493,9 @@ function HealBot_globalVars()
     HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or "--Remove Curse";
     HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or "--Remove Corruption";
     HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or "--Sacred Cleansing";
-
+    
     --[[END OF SPELL LIST]]--
-    
-    
-    HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.
-    HEALBOT_MAGIC_en                        = "Magic";  -- Do NOT localize this value.
-    HEALBOT_CURSE_en                        = "Curse";  -- Do NOT localize this value.
-    HEALBOT_POISON_en                       = "Poison";  -- Do NOT localize this value.
-    HEALBOT_CUSTOM_en                       = "Custom";  -- Do NOT localize this value. 
-    
-    
+
     --Ignore Class Debuffs (ONLY DISPELLABLE DEBUFFS)
     HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE       = GetSpellInfo(34925) or "--Curse of Impotence";
     HEALBOT_DEBUFF_DECAYED_INTELLECT        = GetSpellInfo(31555) or "--Decayed Intellect";
@@ -725,10 +721,11 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_DARKENING_SOUL       = GetSpellInfo(206651) or "--Darkening Soul"
 end
 
-HealBot_globalVars()
+HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.
+HEALBOT_MAGIC_en                        = "Magic";  -- Do NOT localize this value.
+HEALBOT_CURSE_en                        = "Curse";  -- Do NOT localize this value.
+HEALBOT_POISON_en                       = "Poison";  -- Do NOT localize this value.
+HEALBOT_CUSTOM_en                       = "Custom";  -- Do NOT localize this value. 
 
-if GetLocale()=="ptBR" then
-    HEALBOT_ALT_RENEWING_MIST = "Brumas da Renovação"
-else
-    HEALBOT_ALT_RENEWING_MIST = HEALBOT_RENEWING_MIST
-end
+--HealBot_globalVars()
+

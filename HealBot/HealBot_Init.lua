@@ -74,9 +74,8 @@ function HealBot_Init_Spells_Defaults()
     end
 end
 
-local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
---local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true,[HEALBOT_BLESSING_OF_WISDOM]=true,[HEALBOT_BLESSING_OF_KINGS]=true}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
+    local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
     if not skipSpells[spellName] then
         if HealBot_FindSpellRangeCast(spellId, spellName, spellBookId) then
             HealBot_Spells[spellName].id=spellId

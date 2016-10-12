@@ -672,120 +672,7 @@ function HealBot_Lang_enALL()
 	HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Damaging Debuffs"
     HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Effect Debuffs"
     HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Other Debuffs"
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-
-			--Class Profession & Harmful Debuffs
-			[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest 
-			[HEALBOT_DARK_BARGAIN]             = 3, --Warlock
-			[HEALBOT_SHROUD_OF_PURGATORY]      = 11, --Death Knight
-			[HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering
-	
-            --[[Updated Patch 6.2.0 Warlords Of Draenor Expansion by Ariá - Silvermoon EU
-            World Bosses
-            Drov The Ruiner
-            --Tarlna The Ageless]]	
-            [HEALBOT_DEBUFF_COLOSSAL_BLOW]           = 3, -- Tarlna The Ageless
-            [HEALBOT_DEBUFF_NOXIOUS_SPIT]            = 8, -- Tarlna The Ageless
-            --Rukhmar
-            [HEALBOT_DEBUFF_PIERCED_ARMOR]           = 9, -- Rukhmar
-             --Supreme Lord Kazzak
-			[HEALBOT_DEBUFF_MARK_OF_KAZZAK]          = 8, -- Supreme Lord Kazzak
-			[HEALBOT_DEBUFF_FEL_BREATH]              = 4, -- Supreme Lord Kazzak
-			[HEALBOT_DEBUFF_SUPREME_DOOM]            = 11, -- Supreme Lord Kazzak   
-            
-			--Scenarios, Dungeons & Proving Grounds
-			[HEALBOT_DEBUFF_CHOMP]             = 3, -- Healer Challenge 
-			[HEALBOT_DEBUFF_LAVA_BURNS]        = 7, -- Healer Challenge
-			--DISPELABLE (DO NOT REMOVE)
-			[HEALBOT_DEBUFF_WITHERING_FLAMES]        = 13, -- Magmolatus (DO NOT REMOVE)
-			[HEALBOT_DEBUFF_UNSTABLE_AFFLICTION]     = 12, -- Gul'kosh (DO NOT REMOVE)
-			
-	--[[=GetMapNameByID(7545)) or "--Hellfire Citadel" 
-	Trash]]
-	[HEALBOT_DEBUFF_RESIDUAL_SHADOWS]     = 10, -- Kormrok
-	[HEALBOT_DEBUFF_CRUSH]                = 3, -- Trash
-	[HEALBOT_DEBUFF_FEL_FURY]             = 4, -- Trash
-	[HEALBOT_DEBUFF_NOXIOUS_CLOUD]        = 8, -- Trash
-	[HEALBOT_DEBUFF_RAIN_OF_FIRE]         = 10, -- Trash
-	--[HEALBOT_DEBUFF_FEL_CORRUPTION]       = 4, -- Trash/Killrog Dreadeye
-	--Hellfire Assault
-	[HEALBOT_DEBUFF_FELFIRE_MUNITIONS]    = 4, -- Hellfire Assault
-	--Iron Reaver 
-    [HEALBOT_DEBUFF_UNSTABLE_ORB]         = 12, -- Iron Reaver 
-	[HEALBOT_DEBUFF_IMMOLATION]           = 6, -- Iron Reaver 
-	--Kormrok
-    [HEALBOT_DEBUFF_SHADOW_GLOBULE]       = 11, -- Kormrok
-	[HEALBOT_DEBUFF_FIERY_GLOBULE]        = 4, -- Kormrok
-	[HEALBOT_DEBUFF_FOUL_GLOBULE]         = 4, -- Kormrok
-	[HEALBOT_DEBUFF_SHADOWY_POOL]         = 11, -- Kormrok
-	[HEALBOT_DEBUFF_FIERY_POOL]           = 4, -- Kormrok
-	[HEALBOT_DEBUFF_FOUL_POOL]            = 4, -- Kormrok
-	[HEALBOT_DEBUFF_SHADOWY_RESIDUE]      = 11, -- Kormrok
-	[HEALBOT_DEBUFF_FIERY_RESIDUE]        = 4, -- Kormrok
-	[HEALBOT_DEBUFF_FOUL_RESIDUE]         = 4, -- Kormrok
-	--Hellfire High Council
-	[HEALBOT_DEBUFF_BLOODBOIL]            = 2, -- Hellfire High Council
-	[HEALBOT_DEBUFF_REAP]                 = 10, -- Hellfire High Council
-	[HEALBOT_DEBUFF_FEL_BLADE]            = 4, -- Hellfire High Council
-	--Kilrogg Deadeye
-	[HEALBOT_DEBUFF_HEART_SEEKER]         = 5, -- Kilrogg Deadeye
-	[HEALBOT_DEBUFF_BLOOD_SPATTER]        = 2, -- Kilrogg Deadeye
-	[HEALBOT_DEBUFF_FEL_PUDDLE]           = 4, -- Kilrogg Deadeye
-	[HEALBOT_DEBUFF_VISION_OF_DEATH]      = 12, -- Kilrogg Deadeye
-	[HEALBOT_DEBUFF_RENDING_HOWL]         = 10, -- Kilrogg Deadeye
-	--Gorefiend 
-    [HEALBOT_DEBUFF_DOOM_WELL]            = 3, -- Gorefiend
-	[HEALBOT_DEBUFF_FEL_FLAMES]           = 4, -- Gorefiend
-	[HEALBOT_DEBUFF_SHARED_FATE]          = 11, -- Gorefiend
-	[HEALBOT_DEBUFF_POOL_OF_SOULS]        = 9, -- Gorefiend
-	--Shadow-Lord Iskar 
-	[HEALBOT_DEBUFF_PHANTASMAL_CORRUPTION] = 9, -- Shadow-Lord Iskar
-	[HEALBOT_DEBUFF_PHANTASMAL_NOVA]      = 9, -- Shadow-Lord Iskar
-	[HEALBOT_DEBUFF_FEL_FIRE]             = 4, -- Shadow-Lord Iskar
-	[HEALBOT_DEBUFF_RADIANCE_OF_ANZU]     = 10, -- Shadow-Lord Iskar
-	--Socrethar the Eternal
-	[HEALBOT_DEBUFF_OVERWHELMING_POWER]   = 9, -- Socrethar the Eternal
-	[HEALBOT_DEBUFF_FELBLAZE_RESIDUE]     = 4, -- Socrethar the Eternal
-	[HEALBOT_DEBUFF_VIRULENT_HAUNT]       = 12, -- Socrethar the Eternal
-	[HEALBOT_DEBUFF_GIFT_OF_THE_MANARI]   = 5, -- Socrethar the Eternal
-	--Fel Lord Zakuun
-	[HEALBOT_DEBUFF_SEED_OF_DESTRUCTION]  = 11, -- Fel Lord Zakuun
-	[HEALBOT_DEBUFF_FEL_CRYSTAL]          = 4, -- Fel Lord Zakuun
-	--Tyrant Velhari
-	[HEALBOT_DEBUFF_DESPOILED_GROUND]     = 3, -- Tyrant Velhari
-	--Xhul'horac
-	[HEALBOT_DEBUFF_ABLAZE]               = 2, -- Xhul'horac
-	[HEALBOT_DEBUFF_FELSINGED]            = 4, -- Xhul'horac
-	[HEALBOT_DEBUFF_WASTING_VOID]         = 13, -- Xhul'horac
-	[HEALBOT_DEBUFF_FEL_SURGE]            = 4, -- Xhul'horac
-	[HEALBOT_DEBUFF_VOID_SURGE]           = 12, -- Xhul'horac
-	[HEALBOT_DEBUFF_CHAINS_OF_FEL]        = 3, -- Xhul'horac
-	--Mannoroth
-	[HEALBOT_DEBUFF_GAZING_SHADOWS]       = 5, -- Mannoroth
-	[HEALBOT_DEBUFF_BLOOD_OF_MANNOROTH]   = 2, -- Mannoroth
-	[HEALBOT_DEBUFF_MARK_OF_DOOM]         = 8, -- Mannoroth
-	[HEALBOT_DEBUFF_FEL_HELLFIRE]         = 4, -- Mannoroth
-	[HEALBOT_DEBUFF_MANNOROTHS_GAZE]      = 8, -- Mannoroth
-	[HEALBOT_DEBUFF_SHADOWFORCE]          = 11, -- Mannoroth
-	[HEALBOT_DEBUFF_DOOM_SPIKE]           = 3, -- Mannoroth
-	[HEALBOT_DEBUFF_WRATH_OF_GULDAN]      = 13, -- Mannoroth
-	[HEALBOT_DEBUFF_GRIPPING_SHADOWS]     = 5, -- Mannoroth
-	--Archimonde
-	[HEALBOT_DEBUFF_DOOMFIRE]             = 3, -- Archimonde
-	[HEALBOT_DEBUFF_NETHER_TEAR]          = 8, -- Archimonde
-	[HEALBOT_DEBUFF_SHACKLED_TORMENT]     = 11, -- Archimonde
-	[HEALBOT_DEBUFF_DARK_CONDUIT]         = 3, -- Archimonde
-	[HEALBOT_DEBUFF_SOURCE_OF_CHAOS]      = 11, -- Archimonde
-	[HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 8, -- Archimonde	
-    --
-    [HEALBOT_DEBUFF_BLACKENING_SOUL]      = 2,
-    [HEALBOT_DEBUFF_DARKENING_SOUL]       = 3,    
-	}
+    HEALBOT_CUSTOM_DEBUFF_CATS = {}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
@@ -1054,6 +941,123 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Including Pets"
     HEALBOT_ENEMY_EXISTS_SHOW_ARENA         = "Arena opponent bars"
     HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Toggle Custom Cures - Default Cast By"
+end
+
+function HealBot_Lang_InitVars()
+    HEALBOT_CUSTOM_DEBUFF_CATS = {
+         -- Defaults
+        [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
+        [HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
+        [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
+        [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
+
+        --Class Profession & Harmful Debuffs
+        [HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest 
+        [HEALBOT_DARK_BARGAIN]             = 3, --Warlock
+        [HEALBOT_SHROUD_OF_PURGATORY]      = 11, --Death Knight
+        [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering
+
+        --[[Updated Patch 6.2.0 Warlords Of Draenor Expansion by Ariá - Silvermoon EU
+        World Bosses
+        Drov The Ruiner
+        --Tarlna The Ageless]]	
+        [HEALBOT_DEBUFF_COLOSSAL_BLOW]           = 3, -- Tarlna The Ageless
+        [HEALBOT_DEBUFF_NOXIOUS_SPIT]            = 8, -- Tarlna The Ageless
+        --Rukhmar
+        [HEALBOT_DEBUFF_PIERCED_ARMOR]           = 9, -- Rukhmar
+         --Supreme Lord Kazzak
+        [HEALBOT_DEBUFF_MARK_OF_KAZZAK]          = 8, -- Supreme Lord Kazzak
+        [HEALBOT_DEBUFF_FEL_BREATH]              = 4, -- Supreme Lord Kazzak
+        [HEALBOT_DEBUFF_SUPREME_DOOM]            = 11, -- Supreme Lord Kazzak   
+        
+        --Scenarios, Dungeons & Proving Grounds
+        [HEALBOT_DEBUFF_CHOMP]             = 3, -- Healer Challenge 
+        [HEALBOT_DEBUFF_LAVA_BURNS]        = 7, -- Healer Challenge
+        --DISPELABLE (DO NOT REMOVE)
+        [HEALBOT_DEBUFF_WITHERING_FLAMES]        = 13, -- Magmolatus (DO NOT REMOVE)
+        [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION]     = 12, -- Gul'kosh (DO NOT REMOVE)
+        
+        --[[=GetMapNameByID(7545)) or "--Hellfire Citadel" 
+        Trash]]
+        [HEALBOT_DEBUFF_RESIDUAL_SHADOWS]     = 10, -- Kormrok
+        [HEALBOT_DEBUFF_CRUSH]                = 3, -- Trash
+        [HEALBOT_DEBUFF_FEL_FURY]             = 4, -- Trash
+        [HEALBOT_DEBUFF_NOXIOUS_CLOUD]        = 8, -- Trash
+        [HEALBOT_DEBUFF_RAIN_OF_FIRE]         = 10, -- Trash
+        --[HEALBOT_DEBUFF_FEL_CORRUPTION]       = 4, -- Trash/Killrog Dreadeye
+        --Hellfire Assault
+        [HEALBOT_DEBUFF_FELFIRE_MUNITIONS]    = 4, -- Hellfire Assault
+        --Iron Reaver 
+        [HEALBOT_DEBUFF_UNSTABLE_ORB]         = 12, -- Iron Reaver 
+        [HEALBOT_DEBUFF_IMMOLATION]           = 6, -- Iron Reaver 
+        --Kormrok
+        [HEALBOT_DEBUFF_SHADOW_GLOBULE]       = 11, -- Kormrok
+        [HEALBOT_DEBUFF_FIERY_GLOBULE]        = 4, -- Kormrok
+        [HEALBOT_DEBUFF_FOUL_GLOBULE]         = 4, -- Kormrok
+        [HEALBOT_DEBUFF_SHADOWY_POOL]         = 11, -- Kormrok
+        [HEALBOT_DEBUFF_FIERY_POOL]           = 4, -- Kormrok
+        [HEALBOT_DEBUFF_FOUL_POOL]            = 4, -- Kormrok
+        [HEALBOT_DEBUFF_SHADOWY_RESIDUE]      = 11, -- Kormrok
+        [HEALBOT_DEBUFF_FIERY_RESIDUE]        = 4, -- Kormrok
+        [HEALBOT_DEBUFF_FOUL_RESIDUE]         = 4, -- Kormrok
+        --Hellfire High Council
+        [HEALBOT_DEBUFF_BLOODBOIL]            = 2, -- Hellfire High Council
+        [HEALBOT_DEBUFF_REAP]                 = 10, -- Hellfire High Council
+        [HEALBOT_DEBUFF_FEL_BLADE]            = 4, -- Hellfire High Council
+        --Kilrogg Deadeye
+        [HEALBOT_DEBUFF_HEART_SEEKER]         = 5, -- Kilrogg Deadeye
+        [HEALBOT_DEBUFF_BLOOD_SPATTER]        = 2, -- Kilrogg Deadeye
+        [HEALBOT_DEBUFF_FEL_PUDDLE]           = 4, -- Kilrogg Deadeye
+        [HEALBOT_DEBUFF_VISION_OF_DEATH]      = 12, -- Kilrogg Deadeye
+        [HEALBOT_DEBUFF_RENDING_HOWL]         = 10, -- Kilrogg Deadeye
+        --Gorefiend 
+        [HEALBOT_DEBUFF_DOOM_WELL]            = 3, -- Gorefiend
+        [HEALBOT_DEBUFF_FEL_FLAMES]           = 4, -- Gorefiend
+        [HEALBOT_DEBUFF_SHARED_FATE]          = 11, -- Gorefiend
+        [HEALBOT_DEBUFF_POOL_OF_SOULS]        = 9, -- Gorefiend
+        --Shadow-Lord Iskar 
+        [HEALBOT_DEBUFF_PHANTASMAL_CORRUPTION] = 9, -- Shadow-Lord Iskar
+        [HEALBOT_DEBUFF_PHANTASMAL_NOVA]      = 9, -- Shadow-Lord Iskar
+        [HEALBOT_DEBUFF_FEL_FIRE]             = 4, -- Shadow-Lord Iskar
+        [HEALBOT_DEBUFF_RADIANCE_OF_ANZU]     = 10, -- Shadow-Lord Iskar
+        --Socrethar the Eternal
+        [HEALBOT_DEBUFF_OVERWHELMING_POWER]   = 9, -- Socrethar the Eternal
+        [HEALBOT_DEBUFF_FELBLAZE_RESIDUE]     = 4, -- Socrethar the Eternal
+        [HEALBOT_DEBUFF_VIRULENT_HAUNT]       = 12, -- Socrethar the Eternal
+        [HEALBOT_DEBUFF_GIFT_OF_THE_MANARI]   = 5, -- Socrethar the Eternal
+        --Fel Lord Zakuun
+        [HEALBOT_DEBUFF_SEED_OF_DESTRUCTION]  = 11, -- Fel Lord Zakuun
+        [HEALBOT_DEBUFF_FEL_CRYSTAL]          = 4, -- Fel Lord Zakuun
+        --Tyrant Velhari
+        [HEALBOT_DEBUFF_DESPOILED_GROUND]     = 3, -- Tyrant Velhari
+        --Xhul'horac
+        [HEALBOT_DEBUFF_ABLAZE]               = 2, -- Xhul'horac
+        [HEALBOT_DEBUFF_FELSINGED]            = 4, -- Xhul'horac
+        [HEALBOT_DEBUFF_WASTING_VOID]         = 13, -- Xhul'horac
+        [HEALBOT_DEBUFF_FEL_SURGE]            = 4, -- Xhul'horac
+        [HEALBOT_DEBUFF_VOID_SURGE]           = 12, -- Xhul'horac
+        [HEALBOT_DEBUFF_CHAINS_OF_FEL]        = 3, -- Xhul'horac
+        --Mannoroth
+        [HEALBOT_DEBUFF_GAZING_SHADOWS]       = 5, -- Mannoroth
+        [HEALBOT_DEBUFF_BLOOD_OF_MANNOROTH]   = 2, -- Mannoroth
+        [HEALBOT_DEBUFF_MARK_OF_DOOM]         = 8, -- Mannoroth
+        [HEALBOT_DEBUFF_FEL_HELLFIRE]         = 4, -- Mannoroth
+        [HEALBOT_DEBUFF_MANNOROTHS_GAZE]      = 8, -- Mannoroth
+        [HEALBOT_DEBUFF_SHADOWFORCE]          = 11, -- Mannoroth
+        [HEALBOT_DEBUFF_DOOM_SPIKE]           = 3, -- Mannoroth
+        [HEALBOT_DEBUFF_WRATH_OF_GULDAN]      = 13, -- Mannoroth
+        [HEALBOT_DEBUFF_GRIPPING_SHADOWS]     = 5, -- Mannoroth
+        --Archimonde
+        [HEALBOT_DEBUFF_DOOMFIRE]             = 3, -- Archimonde
+        [HEALBOT_DEBUFF_NETHER_TEAR]          = 8, -- Archimonde
+        [HEALBOT_DEBUFF_SHACKLED_TORMENT]     = 11, -- Archimonde
+        [HEALBOT_DEBUFF_DARK_CONDUIT]         = 3, -- Archimonde
+        [HEALBOT_DEBUFF_SOURCE_OF_CHAOS]      = 11, -- Archimonde
+        [HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 8, -- Archimonde	
+        --
+        [HEALBOT_DEBUFF_BLACKENING_SOUL]      = 2,
+        [HEALBOT_DEBUFF_DARKENING_SOUL]       = 3,    
+	}
 end
 
 if (GetLocale() == "enUK") then

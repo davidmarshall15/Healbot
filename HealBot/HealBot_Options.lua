@@ -41,7 +41,21 @@ local HealBot_Options_AggroIndAlertLevel_List={}
 local HealBot_Options_AggroAlertLevel_List={}
 local HealBot_Options_SkinDefault_List={}
 local HealBot_Options_Class_HoTctlAction_List={}
-local HealBot_Options_FilterHoTctl_List={}
+local HealBot_Options_FilterHoTctl_List = {
+        HEALBOT_CLASSES_ALL,
+        HEALBOT_DEATHKNIGHT,
+        HEALBOT_DEMONHUNTER,
+        HEALBOT_DRUID,
+        HEALBOT_PALADIN,
+        HEALBOT_MONK,
+        HEALBOT_PRIEST,
+        HEALBOT_SHAMAN,
+        HEALBOT_WARRIOR,
+        HEALBOT_HUNTER,
+        HEALBOT_MAGE,
+        HEALBOT_ROGUE,
+        HEALBOT_WARLOCK,
+    }
 local HealBot_Options_ManaIndicator_List={}
 local HealBot_Options_BarsGrowDirection_List={}
 local HealBot_Options_BarsOrientation_List={}
@@ -69,6 +83,33 @@ local HealBot_Options_HealGroupsFrame_List={}
 HealBot_Options_StorePrev["FramesSelFrame"]=1
 HealBot_Options_StorePrev["customDebuffPriority"]=10
 
+local HealBot_Debuff_Types = {}
+local HealBot_Buff_Items_List = {}
+
+function HealBot_Options_InitVars()
+    HealBot_Buff_Items_List = {
+        HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+        HEALBOT_EVER_BLOOMING_FROND,
+    };
+    HealBot_Debuff_Types = {
+        [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
+        [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
+        [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
+        [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
+        [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
+        [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en},
+        [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
+        [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
+        [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
+        [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en},
+        [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
+        [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
+        [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+    }
+end
 function HealBot_Options_setLists()
     
     HealBot_Options_setClassEn()
@@ -458,7 +499,7 @@ function HealBot_Options_setLists()
         [HEALBOT_THUNDER_FOCUS_TEA]=HEALBOT_MONK,
         [HEALBOT_ZEN_MEDITATION]=HEALBOT_MONK,
         [HEALBOT_SOOTHING_MIST]=HEALBOT_MONK,
-        [HEALBOT_ALT_RENEWING_MIST]=HEALBOT_MONK,
+        [HEALBOT_RENEWING_MIST]=HEALBOT_MONK,
         [HEALBOT_ELUSIVE_BREW]=HEALBOT_MONK,
         [HEALBOT_FORTIFYING_BREW]=HEALBOT_MONK,
         [HEALBOT_DAMPEN_HARM]=HEALBOT_MONK,
@@ -487,6 +528,7 @@ function HealBot_Options_setLists()
 		[HEALBOT_BLESSING_OF_SACRIFICE]=HEALBOT_PALADIN,
 		[HEALBOT_BESTOW_FAITH]=HEALBOT_PALADIN,
         [HEALBOT_BEACON_OF_VIRTUE]=HEALBOT_PALADIN,
+        [HEALBOT_TYRS_DELIVERANCE]=HEALBOT_PALADIN,
         
         --Priest        
         [HEALBOT_PRAYER_OF_MENDING]=HEALBOT_PRIEST,
@@ -516,6 +558,7 @@ function HealBot_Options_setLists()
 		[HEALBOT_SYMBOL_OF_HOPE]=HEALBOT_PRIEST,                  	
 		[HEALBOT_BODY_AND_MIND]=HEALBOT_PRIEST, 	
         [HEALBOT_SUNDERING_SOUL]=HEALBOT_PRIEST,
+        [HEALBOT_FOCUSED_WILL]=HEALBOT_PRIEST,
 		
 		--Rogue
         [HEALBOT_VANISH]=HEALBOT_ROGUE,
@@ -617,6 +660,7 @@ function HealBot_Options_setClassEn()
                     [HEALBOT_DEMONHUNTER]="DEMO",
     }
 end
+HealBot_Options_setClassEn()
 
 function HealBot_Options_FrameAliasList()
     if Healbot_Config_Skins.FrameAlias and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin] then
@@ -647,8 +691,6 @@ function HealBot_Options_FrameAliasList()
         }
     end
 end
-
-HealBot_Options_setLists()
 
 local HealBot_Buff_Spells_Class_List={}
 local HealBot_Buff_Spells_List ={}
@@ -712,6 +754,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_RIGHTEOUS_FURY,
             HEALBOT_DEVOTION_AURA,
             HEALBOT_BEACON_OF_LIGHT,
+            HEALBOT_BEACON_OF_VIRTUE,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
             HEALBOT_SEAL_OF_INSIGHT,
             HEALBOT_SEAL_OF_COMMAND,
@@ -762,11 +805,6 @@ function HealBot_Options_InitBuffClassList()
     HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
     table.sort(HealBot_Buff_Spells_Class_List)
 end
-
-local HealBot_Buff_Items_List = {
-    HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-    HEALBOT_EVER_BLOOMING_FROND,
-};
 
 function HealBot_Options_InitBuffList()
     table.sort(HealBot_Buff_Items_List)
@@ -825,24 +863,7 @@ function HealBot_Options_GetRacialDebuffSpells_List(race)
     return HealBot_Racial_Debuff_Spells[race]
 end
 
-local HealBot_Debuff_Types = {
-  [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
-  [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
-  [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
-  [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
-  [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
-  [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en},
-  [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-  [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
-  [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
-  [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-  [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
-  [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-  [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en},
-  [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
-  [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
-  [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-}
+
 
 function HealBot_Options_setDebuffTypes()
     if HealBot_Data["PCLASSTRIM"]=="SHAM" then
@@ -4715,6 +4736,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
         HealBot_Options_SelectHealSpellsCombo_List = {
             HEALBOT_MINDBENDER,
             HEALBOT_SMITE,
+            HEALBOT_DISPEL_MAGIC,
+            HEALBOT_HOLY_WORD_CHASTISE,
             HEALBOT_HOLY_FIRE,
             HEALBOT_SHADOW_WORD_PAIN,
             HEALBOT_WRATH,
@@ -4821,6 +4844,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_CHI_EXPLOSION,
             HEALBOT_RUSHING_JADE_WIND,              
             HEALBOT_CHI_TOROEDO,
+            HEALBOT_BEACON_OF_LIGHT,
 			--Legion Added
 			HEALBOT_PLEA, --Priest                           
 			HEALBOT_POWER_WORD_RADIANCE,            
@@ -4828,7 +4852,9 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_SHADOW_MEND,
 			HEALBOT_HOLY_WORD_SANCTIFY,              
 			HEALBOT_BESTOW_FAITH, --Paladin                    
-			HEALBOT_LIGHT_OF_THE_MARTYR,             			
+			HEALBOT_LIGHT_OF_THE_MARTYR, 
+            HEALBOT_BEACON_OF_VIRTUE,     
+            HEALBOT_HAND_OF_THE_PROTECTOR,            
         }
     end
     local tmpHealDDlist={}
@@ -4886,7 +4912,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_PURGE,
             HEALBOT_WIND_SHEAR,
             HEALBOT_CYCLONE,
-            HEALBOT_DISPEL_MAGIC,
             HEALBOT_DOMINATE_MIND,
             HEALBOT_SHACKLE_UNDEAD,
             HEALBOT_PROVOKE,
@@ -4912,7 +4937,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_GIFT_OF_THE_NAARU,
             HEALBOT_POWER_WORD_SHIELD,
             HEALBOT_SPIRIT_SHELL,
-            HEALBOT_BODY_AND_MIND,
 			HEALBOT_REVIVE,
             HEALBOT_GUARDIAN_SPIRIT,
             HEALBOT_PAIN_SUPPRESSION,
@@ -4947,7 +4971,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_GUARDIAN_ANCIENT_KINGS,
             HEALBOT_UNLEASH_LIFE,
             HEALBOT_CLOUDBURST_TOTEM,
-            HEALBOT_LEVITATE,
             HEALBOT_POWER_INFUSION,
             HEALBOT_VAMPIRIC_EMBRACE,
             HEALBOT_CLARITY_OF_WILL,

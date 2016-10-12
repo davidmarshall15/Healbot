@@ -37,72 +37,15 @@ local HealBot_UnitSpecial={}
 local HealBot_UnitHealthCheck={}
 local HealBot_EnemyUnits={}
 local _=nil
-local HealBot_Ignore_Class_Debuffs = {
- 	["WARR"] = { [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
-                          [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
-                          [HEALBOT_DEBUFF_VIPER_STING] = true,
-                          [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
-                          [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-                          [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["ROGU"] = { [HEALBOT_DEBUFF_SILENCE] = true,    
-                          [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
-                          [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
-                          [HEALBOT_DEBUFF_VIPER_STING] = true,
-                          [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
-                          [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-                          [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["HUNT"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["MAGE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["DRUI"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["PALA"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["PRIE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["SHAM"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["WARL"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["DEAT"] = { [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-						  [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-	
-	["MONK"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-    ["DEMO"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-};
-
-local HealBot_Ignore_Movement_Debuffs = {
-                                  [HEALBOT_DEBUFF_FROSTBOLT] = true,
-                                  [HEALBOT_DEBUFF_MAGMA_SHACKLES] = true,
-                                  [HEALBOT_DEBUFF_SLOW] = true,
-                                  [HEALBOT_DEBUFF_CHILLED] = true,
-                                  [HEALBOT_DEBUFF_CONEOFCOLD] = true,
-                                  [HEALBOT_DEBUFF_FROST_SHOCK] = true,
-								  [HEALBOT_DEBUFF_EARTHBIND] = true,
-								  [HEALBOT_DEBUFF_SEAL_OF_JUSTICE] = true,
-};
-
-local HealBot_Ignore_NonHarmful_Debuffs = {
-                                  [HEALBOT_DEBUFF_MAJOR_DREAMLESS] = true,
-                                  [HEALBOT_DEBUFF_GREATER_DREAMLESS] = true,
-                                  [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,
-};
+local HealBot_Ignore_Class_Debuffs = {};
+local HealBot_Ignore_Movement_Debuffs = {};
+local HealBot_Ignore_NonHarmful_Debuffs = {};
 
 local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.04,["HB2Inc"]=0,["HB2Th"]=0.2,["HB3Inc"]=0,["HB3Th"]=0.5,["HBA1Inc"]=-2,["HBA1Th"]=2000,["HBA2Inc"]=-2,["HBA2Th"]=2000}
 local arrg = {}
 local PlayerBuffs = {}
 local PlayerBuffTypes = {}
-local HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE
+local HealBot_dSpell=nil
 local LSM = LibStub and LibStub:GetLibrary("LibSharedMedia-3.0", true)
 for i = 1, #HealBot_Default_Textures do
     LSM:Register("statusbar", HealBot_Default_Textures[i].name, HealBot_Default_Textures[i].file)
@@ -127,9 +70,7 @@ local HealBot_BuffWatch={}
 local HealBot_unitHealth={}
 local HealBot_unitHealthMax={}
 
-local CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
-                     [HEALBOT_PAIN_SUPPRESSION]=true, 
-                     [HEALBOT_POWER_INFUSION]=true,}
+local CooldownBuffs={}
 
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
 local HealBot_VehicleUnit={}
@@ -147,6 +88,8 @@ local hbShareSkins={}
 local HealBot_trackHidenFrames={}
 local calibrateHBScale, hbScale = 0,0
 local _
+local HealBot_Buff_ItemID = {};
+local HealBot_Buff_Aura2Item = {};
 
 HealBot_luVars["hbInsName"]=HEALBOT_WORD_OUTSIDE
 HealBot_luVars["TargetUnitID"]="player"
@@ -164,6 +107,64 @@ HealBot_luVars["EnemyBarsOn"]=true
 HealBot_luVars["EnemyBarsCastOn"]=0
 HealBot_luVars["UseCrashProtection"]=GetTime()+2
 HealBot_luVars["BodyAndSoul"]=0
+
+function HealBot_InitVars()
+    CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
+                   [HEALBOT_PAIN_SUPPRESSION]=true, 
+                   [HEALBOT_POWER_INFUSION]=true,}
+    HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE;
+    HealBot_Ignore_NonHarmful_Debuffs = {[HEALBOT_DEBUFF_MAJOR_DREAMLESS] = true,
+                                         [HEALBOT_DEBUFF_GREATER_DREAMLESS] = true,
+                                         [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,};
+    HealBot_Ignore_Movement_Debuffs = {[HEALBOT_DEBUFF_FROSTBOLT] = true,
+                                       [HEALBOT_DEBUFF_MAGMA_SHACKLES] = true,
+                                       [HEALBOT_DEBUFF_SLOW] = true,
+                                       [HEALBOT_DEBUFF_CHILLED] = true,
+                                       [HEALBOT_DEBUFF_CONEOFCOLD] = true,
+                                       [HEALBOT_DEBUFF_FROST_SHOCK] = true,
+                                       [HEALBOT_DEBUFF_EARTHBIND] = true,
+                                       [HEALBOT_DEBUFF_SEAL_OF_JUSTICE] = true,};
+    HealBot_Ignore_Class_Debuffs = {
+        ["WARR"] = { [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
+                     [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
+                     [HEALBOT_DEBUFF_VIPER_STING] = true,
+                     [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
+                     [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},  
+        ["ROGU"] = { [HEALBOT_DEBUFF_SILENCE] = true,    
+                     [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
+                     [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
+                     [HEALBOT_DEBUFF_VIPER_STING] = true,
+                     [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
+                     [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["HUNT"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},    
+        ["MAGE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["DRUI"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["PALA"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["PRIE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["SHAM"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},   
+        ["WARL"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["DEAT"] = { [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["MONK"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},    
+        ["DEMO"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+    };
+    HealBot_Buff_ItemID = {
+        [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
+        [HEALBOT_EVER_BLOOMING_FROND] = 118935,
+    };
+    HealBot_Buff_Aura2Item = {
+        [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+        [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
+    };
+end
 
 function HealBot_retLSM()
     return LSM
@@ -1931,6 +1932,11 @@ end
 
 function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_globalVars()
+    HealBot_Lang_InitVars()
+    HealBot_Data_InitVars()
+    HealBot_InitVars()
+    HealBot_Options_InitVars()
+    HealBot_Options_setLists()
     table.foreach(HealBot_ConfigDefaults, function (key,val)
         if HealBot_Config[key]==nil then
             HealBot_Config[key] = val;
@@ -3670,16 +3676,6 @@ function HealBot_setLowManaTrig()
         hbLowManaTrig={[1]=1,[2]=2,[3]=3}
     end
 end
-
-local HealBot_Buff_ItemID = {
-    [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
-    [HEALBOT_EVER_BLOOMING_FROND] = 118935,
-};
-
-local HealBot_Buff_Aura2Item = {
-    [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-    [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
-};
 
 function HealBot_HasItemBuff()
     for x,_ in pairs(HealBot_Buff_ItemID) do
