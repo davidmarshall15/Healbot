@@ -1146,7 +1146,11 @@ function HealBot_OnUpdate(self)
                         HealBot_Action_ResetSkin("init")
                     elseif HealBot_Options_Timer[5] then
                         HealBot_Options_Timer[5]=nil
-                        HealBot_Options_InitBuffList()
+                        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then 
+                            HealBot_OnEvent_ItemInfoReceived() 
+                        else
+                            HealBot_Options_InitBuffList()
+                        end
                     elseif HealBot_Options_Timer[10] then
                         HealBot_Options_Timer[10]=nil
                         if HealBot_Config_Buffs.NoAuraWhenRested and not IsResting() then HealBot_Queue_AllActiveMyBuffs() end
@@ -1924,9 +1928,11 @@ function HealBot_OnEvent_ItemInfoReceived(self)
     end
     if allInfoReceived then
         HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
+        HealBot_OnEvent_VariablesLoaded(self)
+        HealBot_AddDebug("Oralius Whispering Crystal Found")
+    else
         HealBot_Options_InitBuffList()
-        HealBot_Options_ResetDoInittab(5)
-        HealBot_Options_Init(5)
+        HealBot_AddDebug("Oralius Whispering Crystal NOT Found")
     end
 end
 

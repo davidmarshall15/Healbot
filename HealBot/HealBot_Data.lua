@@ -592,6 +592,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_DARKFLIGHT]=2,
                 [HEALBOT_STONEFORM]=2,
                 [HEALBOT_SHROUD_OF_THE_NAGLFAR]=2,
+                [HEALBOT_SPIRIT_FRAGMENT]=2,
             },
         },
     };
