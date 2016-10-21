@@ -2963,13 +2963,13 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
         HB_prefix = strlower(bkey).."-"
     end
     local HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
-    local sName,sTar,sTrin1,sTrin2,AvoidBC=nil,0, 0, 0, 0
+    local sName,sTar,sTrin1,sTrin2,AvoidBC=nil, false, false, false, false
     if status=="Enabled" then
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     elseif status=="Disabled" then
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     elseif status=="Enemy" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+        sName = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
         buttonType="harmbutton"
         sType="harm"
     end
