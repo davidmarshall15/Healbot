@@ -6097,9 +6097,6 @@ function HealBot_Update_Skins()
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2=false
             end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor=false
-            end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget=false
             end
@@ -6109,9 +6106,6 @@ function HealBot_Update_Skins()
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2=false
             end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor=false
-            end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget=false
             end
@@ -6120,9 +6114,6 @@ function HealBot_Update_Skins()
             end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2=false
-            end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor=false
             end
         end
         if HealBot_Data["PCLASSTRIM"] and HealBot_Class_Buffs[HealBot_Data["PCLASSTRIM"]] then
@@ -6247,15 +6238,12 @@ function HealBot_Update_Skins()
         if HealBot_Config_Spells.EnabledSpellTarget==0 then HealBot_Config_Spells.EnabledSpellTarget=false end
         if HealBot_Config_Spells.EnabledSpellTrinket1==0 then HealBot_Config_Spells.EnabledSpellTrinket1=false end
         if HealBot_Config_Spells.EnabledSpellTrinket2==0 then HealBot_Config_Spells.EnabledSpellTrinket2=false end
-        if HealBot_Config_Spells.EnabledAvoidBlueCursor==0 then HealBot_Config_Spells.EnabledAvoidBlueCursor=false end
         if HealBot_Config_Spells.DisabledSpellTarget==0 then HealBot_Config_Spells.DisabledSpellTarget=false end
         if HealBot_Config_Spells.DisabledSpellTrinket1==0 then HealBot_Config_Spells.DisabledSpellTrinket1=false end
         if HealBot_Config_Spells.DisabledSpellTrinket2==0 then HealBot_Config_Spells.DisabledSpellTrinket2=false end
-        if HealBot_Config_Spells.DisabledAvoidBlueCursor==0 then HealBot_Config_Spells.DisabledAvoidBlueCursor=false end
         if HealBot_Config_Spells.EnemySpellTarget==0 then HealBot_Config_Spells.EnemySpellTarget=false end
         if HealBot_Config_Spells.EnemySpellTrinket1==0 then HealBot_Config_Spells.EnemySpellTrinket1=false end
         if HealBot_Config_Spells.EnemySpellTrinket2==0 then HealBot_Config_Spells.EnemySpellTrinket2=false end
-        if HealBot_Config_Spells.EnemyAvoidBlueCursor==0 then HealBot_Config_Spells.EnemyAvoidBlueCursor=false end
         if HealBot_Globals.SmartCast==0 then HealBot_Globals.SmartCast=false end
         if HealBot_Globals.SmartCastDebuff==0 then HealBot_Globals.SmartCastDebuff=false end
         if HealBot_Globals.SmartCastBuff==0 then HealBot_Globals.SmartCastBuff=false end

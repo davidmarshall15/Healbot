@@ -70,17 +70,14 @@ HealBot_Config_SpellsDefaults = {
   EnabledSpellTarget={},
   EnabledSpellTrinket1={},
   EnabledSpellTrinket2={},
-  EnabledAvoidBlueCursor={},
   DisabledKeyCombo = nil,
   DisabledSpellTarget={},
   DisabledSpellTrinket1={},
   DisabledSpellTrinket2={},
-  DisabledAvoidBlueCursor={},
   EnemyKeyCombo=nil,
   EnemySpellTarget={},
   EnemySpellTrinket1={},
   EnemySpellTrinket2={},
-  EnemyAvoidBlueCursor={},
   ButtonCastMethod = 2,
 };
 

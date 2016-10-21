@@ -15,7 +15,3 @@ Locale\HealBot_Localization.en.lua
 HealBot.xml
 HealBot_Action.xml
 HealBot_Options.xml
-
-
-
- 
