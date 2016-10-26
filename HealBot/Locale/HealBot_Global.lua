@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.1.a1";
+HEALBOT_VERSION   = "7.1.0.1.a2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -206,7 +206,9 @@ function HealBot_globalVars()
     HEALBOT_SHROUD_OF_PURGATORY             = GetSpellInfo(116888) or "--Shroud of Purgatory"; 
     HEALBOT_UNHOLY_AURA                     = GetSpellInfo(55610) or "--Unholy Aura"
     HEALBOT_VAMPIRIC_BLOOD                  = GetSpellInfo(55233) or "--Vampiric Blood";
+    
     --Demon Hunter
+    HEALBOT_DEMON_SPIKES                    = GetSpellInfo(203720) or "--Demon Spikes";
     
 	--Druid
     HEALBOT_BARKSKIN                        = GetSpellInfo(22812) or "--Barkskin";
@@ -214,6 +216,7 @@ function HealBot_globalVars()
     HEALBOT_FRENZIED_REGEN                  = GetSpellInfo(22842) or "--Frenzied Regeneration";
     HEALBOT_HARMONY                         = GetSpellInfo(77495) or "--Mastery Harmony";
     HEALBOT_IRONBARK                        = GetSpellInfo(102342) or "--Ironbark";
+    HEALBOT_IRONFUR                         = GetSpellInfo(192081) or "--Ironfur";
     HEALBOT_LEADER_OF_THE_PACK              = GetSpellInfo(17007) or "--Leader of the Pack";
     HEALBOT_LIVING_SEED                     = GetSpellInfo(48500) or "--Living Seed";
     HEALBOT_MARK_OF_THE_WILD                = GetSpellInfo(1126) or "--Mark of the Wild";
@@ -726,6 +729,7 @@ function HealBot_globalVars()
     
     HEALBOT_DEBUFF_BLACKENING_SOUL      = GetSpellInfo(209158) or "--Blackening Soul"
     HEALBOT_DEBUFF_DARKENING_SOUL       = GetSpellInfo(206651) or "--Darkening Soul"
+    HEALBOT_DEBUFF_SHADOW_BURST         = GetSpellInfo(204040) or "--Shadow Burst"
 end
 
 HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.

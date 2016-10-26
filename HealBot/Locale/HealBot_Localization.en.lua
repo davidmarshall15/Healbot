@@ -1055,7 +1055,8 @@ function HealBot_Lang_InitVars()
         [HEALBOT_DEBUFF_MARK_OF_THE_LEGION]   = 8, -- Archimonde	
         --
         [HEALBOT_DEBUFF_BLACKENING_SOUL]      = 2,
-        [HEALBOT_DEBUFF_DARKENING_SOUL]       = 3,    
+        [HEALBOT_DEBUFF_DARKENING_SOUL]       = 3, 
+        [HEALBOT_DEBUFF_SHADOW_BURST]         = 11,        
 	}
 end
 
