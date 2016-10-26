@@ -1824,7 +1824,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_AURA") then
         HealBot_OnEvent_UnitAura(self,arg1);
     elseif (event=="UNIT_HEALTH") or (event=="UNIT_MAXHEALTH") then
-        HealBot_OnEvent_UnitHealth(true,arg1,UnitHealth(arg1),HealBot_UnitMaxHealth(arg1));
+        if (arg1) then HealBot_OnEvent_UnitHealth(true,arg1,UnitHealth(arg1),HealBot_UnitMaxHealth(arg1)); end
     elseif (event=="UNIT_COMBAT") then 
         if arg1 then HealBot_OnEvent_UnitCombat(arg1); end
     elseif (event=="UNIT_THREAT_SITUATION_UPDATE") or (event=="UNIT_THREAT_LIST_UPDATE") then
