@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.0";
+HEALBOT_VERSION   = "7.1.0.1.a1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -43,6 +43,7 @@ function HealBot_globalVars()
     HEALBOT_WHISPERS_OF_INSANITY            = GetSpellInfo(176151) or "--Whispers of Insanity"
     HEALBOT_SHROUD_OF_THE_NAGLFAR           = GetSpellInfo(215247) or "--Shroud of the Naglfar"
     HEALBOT_SPIRIT_FRAGMENT                 = GetSpellInfo(221878) or "--Spirit Fragment"
+    HEALBOT_NORGANNONS_FORESIGHT            = GetSpellInfo(208215) or "--Norgannon's Foresight";
 
     --Racial Abilities
     HEALBOT_DARKFLIGHT                      = GetSpellInfo(68992) or "--Darkflight";
@@ -390,7 +391,10 @@ function HealBot_globalVars()
 	HEALBOT_ATONEMENT                       = GetSpellInfo(81749) or "--Atonement";
 	HEALBOT_SHADOW_COVENANT                 = GetSpellInfo(204065) or "--Shadow Covenant";
     HEALBOT_LIGHT_OF_TUURE                  = GetSpellInfo(208065) or "--Light of T'uure";
-   
+    HEALBOT_BLESSING_OF_TUURE               = GetSpellInfo(196644) or "--Blessing of T'uure";
+    HEALBOT_POWER_OF_THE_NAARU              = GetSpellInfo(196490) or "--Power of the Naaru";
+    HEALBOT_POWER_OF_THE_DARK_SIDE          = GetSpellInfo(198069) or "--Power of the Dark Side";
+
 	--Shaman
     HEALBOT_ANACESTRAL_GUIDANCE             = GetSpellInfo(108281) or "--Ancestral Guidance";
     HEALBOT_ANACESTRAL_SWIFTNESS            = GetSpellInfo(16188) or "--Ancestral Swiftness";

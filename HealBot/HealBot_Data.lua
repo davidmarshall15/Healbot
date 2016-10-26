@@ -524,7 +524,10 @@ function HealBot_Data_InitVars()
                 [HEALBOT_HARMONY]=2,   
                 [HEALBOT_SUNDERING_SOUL]=3,
                 [HEALBOT_FOCUSED_WILL]=2,        
-                [HEALBOT_LIGHT_OF_TUURE]=2,                
+                [HEALBOT_LIGHT_OF_TUURE]=2, 
+                [HEALBOT_BLESSING_OF_TUURE]=2,
+                [HEALBOT_POWER_OF_THE_NAARU]=2,
+                [HEALBOT_POWER_OF_THE_DARK_SIDE]=2,
             },
             ["ROGU"] = {
                 [HEALBOT_VANISH]=2,
@@ -590,6 +593,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_STONEFORM]=2,
                 [HEALBOT_SHROUD_OF_THE_NAGLFAR]=2,
                 [HEALBOT_SPIRIT_FRAGMENT]=2,
+                [HEALBOT_NORGANNONS_FORESIGHT]=2,
             },
         },
     };
