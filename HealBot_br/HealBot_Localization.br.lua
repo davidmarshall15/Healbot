@@ -839,7 +839,6 @@ function HealBot_Lang_ptBR()
                                   }
 
     HEALBOT_OPTIONS_SKINAUTHOR              = "Autor do Skin:"
-    HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Evitar\ncursor azul"
     HEALBOT_PLAYER_OF_REALM                 = "de"
     
     HEALBOT_OPTIONS_LANG                    = "Language"

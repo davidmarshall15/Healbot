@@ -532,6 +532,7 @@ function HealBot_Action_SetrSpell()
 			HealBot_RangeSpells["HARM"]=HEALBOT_PLAGUE_STRIKE -- 30 
             x=HEALBOT_PLAGUE_STRIKE
 		end
+    elseif HealBot_Data["PCLASSTRIM"]=="DEMO" then
     end
 	if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
 	if (HealBot_RangeSpells["BUFF"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["BUFF"]=x end
@@ -2962,13 +2963,13 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
         HB_prefix = strlower(bkey).."-"
     end
     local HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
-    local sName,sTar,sTrin1,sTrin2,AvoidBC=nil,0, 0, 0, 0
+    local sName,sTar,sTrin1,sTrin2=nil, false, false, false
     if status=="Enabled" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+        sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     elseif status=="Disabled" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+        sName, sTar, sTrin1, sTrin2 = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     elseif status=="Enemy" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+        sName = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
         buttonType="harmbutton"
         sType="harm"
     end
@@ -3048,8 +3049,8 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             end
             button.showhbmenu = showHBmenu
         elseif HealBot_GetSpellId(sName) then
-            if sTar or sTrin1 or sTrin2 or AvoidBC then
-                local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, button.unit, status)
+            if sTar or sTrin1 or sTrin2 then
+                local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, button.unit, status)
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j,"macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, mText)
@@ -3078,8 +3079,8 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix.."type-item"..j, "item");
             button:SetAttribute(HB_prefix.."item-item"..j, sName);
         else
-            if sTar or sTrin1 or sTrin2 or AvoidBC then
-                local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, button.unit, status)
+            if sTar or sTrin1 or sTrin2 then
+                local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, button.unit, status)
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j,"macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, mText)
@@ -3103,38 +3104,32 @@ function HealBot_Action_SethbFocusButtonAttrib(button)
     button:SetAttribute("type-focus1", "focus")
 end
 
-function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellTrin2, spellAvoidBC, unit, status)
+function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellTrin2, unit, status)
     local smName=""
     local scText=""
     local sysSoundSFX = strsub(GetCVar("Sound_EnableErrorSpeech") or "nil",1,1)
     local spellType="help"
     if status=="Enemy" then spellType="harm" end
-    if spellName==HEALBOT_HOLY_WORD_SERENITY then
-        scText="/use [@"..unit.."] "..spellName..";\n"
-    else
-        scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
-    end
+    scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
 
-    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
+    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0\n" end
     if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Hide();\n" end
     if spellTar then smName=smName.."/target "..unit..";\n" end
     if spellTrin1 then smName=smName.."/use 13;\n" end
     if spellTrin2 then smName=smName.."/use 14;\n" end
     if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
     if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear(); UIErrorsFrame:Show();\n" end
-    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
+    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1\n" end
     smName=smName..scText
-    if spellAvoidBC then smName=smName.."/use 4;" end
     if strlen(smName)>255 then
         smName=""
-        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
+        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0\n" end
         if spellTar then smName=smName.."/target "..HealBot_GetUnitName(unit)..";\n" end
         if spellTrin1 then smName=smName.."/use 13;\n" end
         if spellTrin2 then smName=smName.."/use 14;\n" end
         if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
+        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1\n" end
         smName=smName..scText
-        if spellAvoidBC then smName=smName.."/use 4;" end
         if strlen(smName)>255 then
             smName=""
             if spellTar then smName=smName.."/target "..HealBot_GetUnitName(unit)..";\n" end
@@ -3142,7 +3137,6 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
             if spellTrin2 then smName=smName.."/use 14;\n" end
             if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
             smName=smName..scText
-            if spellAvoidBC then smName=smName.."/use 4;" end
             if strlen(smName)>255 then
                 smName=spellName
             end
@@ -3354,11 +3348,10 @@ function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.EnabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnabledSpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.EnabledSpellTrinket2
-    local hbAvoidBC  = HealBot_Config_Spells.EnabledAvoidBlueCursor
     if not hbCombos then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false
 end
 
 function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
@@ -3366,11 +3359,10 @@ function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.DisabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.DisabledSpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.DisabledSpellTrinket2
-    local hbAvoidBC  = HealBot_Config_Spells.DisabledAvoidBlueCursor
     if not hbCombos then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false
 end
 
 function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
@@ -3378,11 +3370,10 @@ function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.EnemySpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnemySpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.EnemySpellTrinket2
-    local hbAvoidBC  = HealBot_Config_Spells.EnemyAvoidBlueCursor
     if not hbCombos then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false
 end
 
 local hbInitButtons=false
@@ -4276,7 +4267,7 @@ function HealBot_MountsPets_InitMount()
     
     local x = C_MountJournal.GetNumMounts()
 	for z=1,x do
-        local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfo(z)
+        local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
         if faction and isUsable and isCollected then
             local englishFaction = UnitFactionGroup("player")
             if (faction~=HealBot_mountData["playerFaction"]) then
@@ -4286,7 +4277,7 @@ function HealBot_MountsPets_InitMount()
         end
         
         if isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
-            local _, _, _, _, mountType = C_MountJournal.GetMountInfoExtra(z)
+            local _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
             if (mountType==248 or mountType==247 or mountType==242) then
                 if HealBot_mountData["IncFlying"] then
                     table.insert(HealBot_FMount, mount);
@@ -4386,7 +4377,7 @@ function HealBot_MountsPets_DislikeMount(action)
     local z = C_MountJournal.GetNumMounts()
     local mount=nil
 	for i=1,z do
- 		local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfo(i)
+ 		local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
  		if active then
  			mount=creatureName
             break
@@ -4416,7 +4407,7 @@ end
 
 function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
-        C_MountJournal.Summon(HealBot_MountIndex[mount]) 
+        C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
     else
         HealBot_setOptions_Timer(405)
         HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_ON.." "..mount)

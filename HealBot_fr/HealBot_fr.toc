@@ -1,9 +1,9 @@
-## Interface: 60200
+## Interface: 70100
 ## Title: HealBot French Localization
 ## Author: Kubik
 ## Notes: HealBot Localization for frFR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 6.2.2.0
+## Version: 7.1.0.0
 
 HealBot_Localization.fr.lua

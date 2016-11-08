@@ -2063,7 +2063,7 @@
                           <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
                               <Offset>
-                                <AbsDimension x="30" y="-85" />
+                                <AbsDimension x="-50" y="-85" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -2073,15 +2073,6 @@
                             <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
                               <Offset>
                                 <AbsDimension x="358" y="-94" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                        <FontString name="HealBot_AvoidBC_ButtonText" text="HEALBOT_OPTIONS_AVOIDBLUECURSOR" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="-48" y="-85" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -2141,12 +2132,12 @@
                   </Frame>
                   <EditBox name="HealBot_Options_Click" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="185" y="-135"/>
+                          <AbsDimension x="135" y="-135"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2169,23 +2160,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Click")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_AvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_SpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2221,7 +2200,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_Shift" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="BOTTOMLEFT">
@@ -2249,23 +2228,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Shift")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_ShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Shift")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_ShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2301,7 +2268,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_Ctrl" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Shift" relativePoint="BOTTOMRIGHT">
@@ -2329,23 +2296,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Ctrl")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_CtrlAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Ctrl")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_CtrlSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2381,7 +2336,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_Alt" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="BOTTOMLEFT">
@@ -2409,23 +2364,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Alt")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_AltAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_AltSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2461,7 +2404,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_CtrlShift" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Alt" relativePoint="BOTTOMRIGHT">
@@ -2489,23 +2432,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "CtrlShift")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_CtrlShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Ctrl-Shift")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_CtrlShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2541,7 +2472,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_AltShift" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="BOTTOMLEFT">
@@ -2569,23 +2500,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "AltShift")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_AltShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt-Shift")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_AltShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2621,7 +2540,7 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_CtrlAlt" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="274" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="BOTTOMLEFT">
@@ -2649,23 +2568,11 @@
                       <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "AltCtrl")</OnClick>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_CtrlAltAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt-Ctrl")</OnClick>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_CtrlAltSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="-2"/>
+                          <AbsDimension x="-75" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4211,39 +4118,9 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealRaidFrame","HealBot_SkinsSubFrameSelectHealRaidFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealRaidFrame","HealBot_SkinsSubFrameSelectHealRaidFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealRaidFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealRaidFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealRaidFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_EMERGENCYHEALS">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealRaidFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
                   <Button name="HealBot_SkinsSubFrameSelectHealSortFrameb" inherits="UIPanelButtonTemplate">
                     <Size>
                       <AbsDimension x="95" y="18"/>
@@ -4256,39 +4133,9 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealSortFrame","HealBot_SkinsSubFrameSelectHealSortFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealSortFrame","HealBot_SkinsSubFrameSelectHealSortFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealSortFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealSortFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealSortFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_TAB_SORT">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealSortFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
                   <Button name="HealBot_SkinsSubFrameSelectHealHideFrameb" inherits="UIPanelButtonTemplate">
                     <Size>
                       <AbsDimension x="95" y="18"/>
@@ -4301,39 +4148,10 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealHideFrame","HealBot_SkinsSubFrameSelectHealHideFrame")</OnClick>
+                      <OnClick>HealBot_Options_ShowHealPanel("HealBot_Options_HealHideFrame","HealBot_SkinsSubFrameSelectHealHideFrameb")</OnClick>
                     </Scripts>
                   </Button>
-                  <StatusBar name="HealBot_SkinsSubFrameSelectHealHideFrame" toplevel="true">
-                    <Size>
-                      <AbsDimension x="98" y="18"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_SkinsSubFrameSelectHealHideFrameb"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-2" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_SkinsSubFrameSelectHealHideFramef" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_TAB_HIDE">
-                          <Anchors>
-                            <Anchor point="CENTER" relativeTo="HealBot_SkinsSubFrameSelectHealHideFrame" relativePoint="CENTER">
-                              <Offset>
-                                <AbsDimension x="0" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                    </Scripts>
-                    <BarTexture file="Interface\Addons\HealBot\Images\Tube"/>
-                    <BarColor r="0.58" g="0.08" b="0.08"/>
-                  </StatusBar>
+
 
                   <Frame name="HealBot_Options_HealRaidFrame">
                     <Size>

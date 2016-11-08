@@ -1,9 +1,9 @@
-## Interface: 60200
+## Interface: 70100
 ## Title: HealBot Spanish Localization
-## Author: Required
+## Author: Milotic
 ## Notes: HealBot Localization for esES
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 6.2.3.1
+## Version: 7.1.0.0
 
 HealBot_Localization.es.lua

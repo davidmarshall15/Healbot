@@ -41,7 +41,21 @@ local HealBot_Options_AggroIndAlertLevel_List={}
 local HealBot_Options_AggroAlertLevel_List={}
 local HealBot_Options_SkinDefault_List={}
 local HealBot_Options_Class_HoTctlAction_List={}
-local HealBot_Options_FilterHoTctl_List={}
+local HealBot_Options_FilterHoTctl_List = {
+        HEALBOT_CLASSES_ALL,
+        HEALBOT_DEATHKNIGHT,
+        HEALBOT_DEMONHUNTER,
+        HEALBOT_DRUID,
+        HEALBOT_PALADIN,
+        HEALBOT_MONK,
+        HEALBOT_PRIEST,
+        HEALBOT_SHAMAN,
+        HEALBOT_WARRIOR,
+        HEALBOT_HUNTER,
+        HEALBOT_MAGE,
+        HEALBOT_ROGUE,
+        HEALBOT_WARLOCK,
+    }
 local HealBot_Options_ManaIndicator_List={}
 local HealBot_Options_BarsGrowDirection_List={}
 local HealBot_Options_BarsOrientation_List={}
@@ -69,6 +83,33 @@ local HealBot_Options_HealGroupsFrame_List={}
 HealBot_Options_StorePrev["FramesSelFrame"]=1
 HealBot_Options_StorePrev["customDebuffPriority"]=10
 
+local HealBot_Debuff_Types = {}
+local HealBot_Buff_Items_List = {}
+
+function HealBot_Options_InitVars()
+    HealBot_Buff_Items_List = {
+        HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+        HEALBOT_EVER_BLOOMING_FROND,
+    };
+    HealBot_Debuff_Types = {
+        [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
+        [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
+        [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
+        [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
+        [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
+        [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en},
+        [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
+        [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
+        [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
+        [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+        [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en},
+        [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
+        [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
+        [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+    }
+end
 function HealBot_Options_setLists()
     
     HealBot_Options_setClassEn()
@@ -89,6 +130,7 @@ function HealBot_Options_setLists()
         HEALBOT_WARLOCK,
         HEALBOT_WARRIOR,
         HEALBOT_DEATHKNIGHT,
+        HEALBOT_DEMONHUNTER,
         HEALBOT_CLASSES_MELEE,
         HEALBOT_CLASSES_RANGES,
         HEALBOT_CLASSES_HEALERS,
@@ -296,6 +338,7 @@ function HealBot_Options_setLists()
     HealBot_Options_FilterHoTctl_List = {
         HEALBOT_CLASSES_ALL,
         HEALBOT_DEATHKNIGHT,
+        HEALBOT_DEMONHUNTER,
         HEALBOT_DRUID,
         HEALBOT_PALADIN,
         HEALBOT_MONK,
@@ -345,6 +388,7 @@ function HealBot_Options_setLists()
     HealBot_Options_EmergencyFilter_List = {
         HEALBOT_CLASSES_ALL,
         HEALBOT_DEATHKNIGHT,
+        HEALBOT_DEMONHUNTER,
         HEALBOT_DRUID,
         HEALBOT_HUNTER,
         HEALBOT_MAGE,
@@ -404,7 +448,10 @@ function HealBot_Options_setLists()
         --All
         [HEALBOT_DARKFLIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_GIFT_OF_THE_NAARU]=HEALBOT_CLASSES_ALL,
-        [HEALBOT_STONEFORM]=HEALBOT_CLASSES_ALL,                      
+        [HEALBOT_STONEFORM]=HEALBOT_CLASSES_ALL, 
+        [HEALBOT_SHROUD_OF_THE_NAGLFAR]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_SPIRIT_FRAGMENT]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_NORGANNONS_FORESIGHT]=HEALBOT_CLASSES_ALL,
         
         --Death Knight
         [HEALBOT_ICEBOUND_FORTITUDE]=HEALBOT_DEATHKNIGHT,
@@ -414,8 +461,10 @@ function HealBot_Options_setLists()
         [HEALBOT_LICHBORNE]=HEALBOT_DEATHKNIGHT,
         [HEALBOT_ANTIMAGIC_ZONE]=HEALBOT_DEATHKNIGHT,
         [HEALBOT_VAMPIRIC_BLOOD]=HEALBOT_DEATHKNIGHT,
-        [HEALBOT_BONE_SHIELD]=HEALBOT_DEATHKNIGHT,
         [HEALBOT_DANCING_RUNE_WEAPON]=HEALBOT_DEATHKNIGHT,
+        
+        --Demon Hunter
+        [HEALBOT_DEMON_SPIKES]=HEALBOT_DEMONHUNTER,
         
         --Druid
         [HEALBOT_LIFEBLOOM]=HEALBOT_DRUID,
@@ -427,19 +476,20 @@ function HealBot_Options_setLists()
         [HEALBOT_WILD_GROWTH]=HEALBOT_DRUID,
         [HEALBOT_BARKSKIN]=HEALBOT_DRUID,
         [HEALBOT_IRONBARK]=HEALBOT_DRUID,
-        [HEALBOT_HARMONY]=HEALBOT_DRUID,
-        [HEALBOT_SAVAGE_DEFENCE]=HEALBOT_DRUID,
+        [HEALBOT_IRONFUR]=HEALBOT_DRUID,
         [HEALBOT_SURVIVAL_INSTINCTS]=HEALBOT_DRUID,
         [HEALBOT_FRENZIED_REGEN]=HEALBOT_DRUID,
         [HEALBOT_DRUID_CLEARCASTING]=HEALBOT_DRUID,
         --WoD Added
-        [HEALBOT_NATURE_REJUVENATION_GERMINATION]=HEALBOT_DRUID,
-        [HEALBOT_GENESIS]=HEALBOT_DRUID,
+        [HEALBOT_NATURE_REJUVENATION_GERMINATION]=HEALBOT_DRUID, 
+		--Legion Added
+		[HEALBOT_SPRING_BLOSSOMS]=HEALBOT_DRUID,               
+		[HEALBOT_CULTIVATION]=HEALBOT_DRUID,
+        [HEALBOT_HARMONY]=HEALBOT_DRUID,
         
         --Hunter
         [HEALBOT_MENDPET]=HEALBOT_HUNTER,
         [HEALBOT_DETERRENCE]=HEALBOT_HUNTER,
-        [HEALBOT_TRAP_LAUNCHER]=HEALBOT_HUNTER,
         
         --Mage
         [HEALBOT_EVOCATION]=HEALBOT_MAGE,
@@ -453,50 +503,38 @@ function HealBot_Options_setLists()
         [HEALBOT_ZEN_SPHERE]=HEALBOT_MONK,
         [HEALBOT_LIFE_COCOON]=HEALBOT_MONK,
         [HEALBOT_THUNDER_FOCUS_TEA]=HEALBOT_MONK,
-        [HEALBOT_SERPENT_ZEAL]=HEALBOT_MONK,
-        [HEALBOT_MANA_TEA]=HEALBOT_MONK,
         [HEALBOT_ZEN_MEDITATION]=HEALBOT_MONK,
         [HEALBOT_SOOTHING_MIST]=HEALBOT_MONK,
-        [HEALBOT_ALT_RENEWING_MIST]=HEALBOT_MONK,
+        [HEALBOT_RENEWING_MIST]=HEALBOT_MONK,
         [HEALBOT_ELUSIVE_BREW]=HEALBOT_MONK,
         [HEALBOT_FORTIFYING_BREW]=HEALBOT_MONK,
         [HEALBOT_DAMPEN_HARM]=HEALBOT_MONK,
         [HEALBOT_DIFFUSE_MAGIC]=HEALBOT_MONK,
-        --[HEALBOT_AVERT_HARM]=HEALBOT_MONK,
-        [HEALBOT_GUARD]=HEALBOT_MONK,
-        [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,
-        --WoD Added                  
-        [HEALBOT_BREATH_OF_THE_SERPENT]=HEALBOT_MONK,
-        [HEALBOT_CHI_EXPLOSION]=HEALBOT_MONK,
+        [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,                 
+		--Legion Added
         
         --Paladin
-        [HEALBOT_HAND_OF_SALVATION]=HEALBOT_PALADIN,
         [HEALBOT_DIVINE_SHIELD]=HEALBOT_PALADIN,
         [HEALBOT_HAND_OF_SACRIFICE]=HEALBOT_PALADIN,
         [HEALBOT_INFUSION_OF_LIGHT]=HEALBOT_PALADIN,
         [HEALBOT_SPEED_OF_LIGHT]=HEALBOT_PALADIN,
-        [HEALBOT_DAY_BREAK]=HEALBOT_PALADIN,
-        [HEALBOT_SACRED_SHIELD]=HEALBOT_PALADIN,
-        [HEALBOT_HAND_OF_PURITY]=HEALBOT_PALADIN,
-        [HEALBOT_DIVINE_PURPOSE]=HEALBOT_PALADIN,
         [HEALBOT_ETERNAL_FLAME]=HEALBOT_PALADIN,
-        [HEALBOT_HOLY_SHIELD]=HEALBOT_PALADIN,
-        [HEALBOT_ILLUMINATED_HEALING]=HEALBOT_PALADIN,
         [HEALBOT_ARDENT_DEFENDER]=HEALBOT_PALADIN,
-        [HEALBOT_DENOUNCE]=HEALBOT_PALADIN,
         [HEALBOT_BEACON_OF_LIGHT]=HEALBOT_PALADIN,
         [HEALBOT_HAND_OF_PROTECTION]=HEALBOT_PALADIN,
         [HEALBOT_FLASH_OF_LIGHT]=HEALBOT_PALADIN,
         [HEALBOT_LIGHT_BEACON]=HEALBOT_PALADIN,
         [HEALBOT_GUARDED_BY_THE_LIGHT]=HEALBOT_PALADIN,
         [HEALBOT_GUARDIAN_ANCIENT_KINGS]=HEALBOT_PALADIN,
-        [HEALBOT_WORD_OF_GLORY]=HEALBOT_PALADIN,
         [HEALBOT_HAND_OF_FREEDOM]=HEALBOT_PALADIN,
         [HEALBOT_DIVINE_PROTECTION]=HEALBOT_PALADIN,
         --WoD Added
-        [HEALBOT_BEACON_OF_FAITH]=HEALBOT_PALADIN,                 
-        [HEALBOT_BEACON_OF_INSIGHT]=HEALBOT_PALADIN,               
-        [HEALBOT_DIVINE_SAVED_BY_THE_LIGHT]=HEALBOT_PALADIN,
+        [HEALBOT_BEACON_OF_FAITH]=HEALBOT_PALADIN,                               
+		--Legion Added
+		[HEALBOT_BLESSING_OF_SACRIFICE]=HEALBOT_PALADIN,
+		[HEALBOT_BESTOW_FAITH]=HEALBOT_PALADIN,
+        [HEALBOT_BEACON_OF_VIRTUE]=HEALBOT_PALADIN,
+        [HEALBOT_TYRS_DELIVERANCE]=HEALBOT_PALADIN,
         
         --Priest        
         [HEALBOT_PRAYER_OF_MENDING]=HEALBOT_PRIEST,
@@ -505,36 +543,34 @@ function HealBot_Options_setLists()
         [HEALBOT_SERENDIPITY]=HEALBOT_PRIEST,
         [HEALBOT_TWIST_OF_FATE]=HEALBOT_PRIEST,
         [HEALBOT_GUARDIAN_SPIRIT]=HEALBOT_PRIEST,
-        [HEALBOT_HOLY_WORD_SERENITY]=HEALBOT_PRIEST,
-        [HEALBOT_FEAR_WARD]=HEALBOT_PRIEST,
         [HEALBOT_PAIN_SUPPRESSION]=HEALBOT_PRIEST,
         [HEALBOT_POWER_INFUSION]=HEALBOT_PRIEST,
         [HEALBOT_POWER_WORD_SHIELD]=HEALBOT_PRIEST,
         [HEALBOT_SPIRIT_SHELL]=HEALBOT_PRIEST,
         [HEALBOT_POWER_WORD_BARRIER]=HEALBOT_PRIEST,
-        [HEALBOT_EVANGELISM]=HEALBOT_PRIEST,
-        [HEALBOT_ARCHANGEL]=HEALBOT_PRIEST,
-        [HEALBOT_DIVINE_INSIGHT]=HEALBOT_PRIEST,
-        [HEALBOT_DIVINE_AEGIS]=HEALBOT_PRIEST,
         [HEALBOT_ECHO_OF_LIGHT]=HEALBOT_PRIEST,
-        [HEALBOT_GRACE]=HEALBOT_PRIEST,
         [HEALBOT_LEVITATE]=HEALBOT_PRIEST,
-        [HEALBOT_LIGHTWELL_RENEW]=HEALBOT_PRIEST,
-        [HEALBOT_ANGELIC_BULWARK]=HEALBOT_PRIEST,
         [HEALBOT_DISPERSION]=HEALBOT_PRIEST,
         [HEALBOT_VAMPIRIC_EMBRACE]=HEALBOT_PRIEST,
-        --WoD Added
-        [HEALBOT_SHADOW_WORD_INSANITY]=HEALBOT_PRIEST,            
+        --WoD Added            
         [HEALBOT_SURGE_OF_DARKNESS]=HEALBOT_PRIEST,               
-        [HEALBOT_SURGE_OF_LIGHT]=HEALBOT_PRIEST,                  
-        [HEALBOT_ASCENSION]=HEALBOT_PRIEST,                       
-        [HEALBOT_WORD_OF_MENDING]=HEALBOT_PRIEST,
-        [HEALBOT_WORDS_OF_MENDING]=HEALBOT_PRIEST, 
-        [HEALBOT_CLARITY_OF_WILL]=HEALBOT_PRIEST,                 
-        [HEALBOT_SAVING_GRACE]=HEALBOT_PRIEST,                    
-        [HEALBOT_CLARITY_OF_PURPOSE]=HEALBOT_PRIEST,
-        
-        --Rogue
+        [HEALBOT_SURGE_OF_LIGHT]=HEALBOT_PRIEST,                                         	
+        [HEALBOT_CLARITY_OF_WILL]=HEALBOT_PRIEST,                                   
+		--Legion Added
+		[HEALBOT_RAPTURE]=HEALBOT_PRIEST, --Disc                        
+		[HEALBOT_ATONEMENT]=HEALBOT_PRIEST,                                
+		[HEALBOT_APOTHEOSIS]=HEALBOT_PRIEST, --Holy                      
+		[HEALBOT_DIVINITY]=HEALBOT_PRIEST,                      
+		[HEALBOT_SYMBOL_OF_HOPE]=HEALBOT_PRIEST,                  	
+		[HEALBOT_BODY_AND_MIND]=HEALBOT_PRIEST, 	
+        [HEALBOT_SUNDERING_SOUL]=HEALBOT_PRIEST,
+        [HEALBOT_FOCUSED_WILL]=HEALBOT_PRIEST,
+        [HEALBOT_LIGHT_OF_TUURE]=HEALBOT_PRIEST,
+        [HEALBOT_BLESSING_OF_TUURE]=HEALBOT_PRIEST,
+        [HEALBOT_POWER_OF_THE_NAARU]=HEALBOT_PRIEST,
+        [HEALBOT_POWER_OF_THE_DARK_SIDE]=HEALBOT_PRIEST,
+		
+		--Rogue
         [HEALBOT_VANISH]=HEALBOT_ROGUE,
         [HEALBOT_EVASION]=HEALBOT_ROGUE,
         [HEALBOT_FEINT]=HEALBOT_ROGUE,
@@ -542,30 +578,19 @@ function HealBot_Options_setLists()
         
         --Shaman
         [HEALBOT_RIPTIDE]=HEALBOT_SHAMAN,
-        [HEALBOT_HEALING_STREAM_TOTEM]=HEALBOT_SHAMAN,
-        [HEALBOT_EARTH_SHIELD]=HEALBOT_SHAMAN,
-        [HEALBOT_LIGHTNING_SHIELD]=HEALBOT_SHAMAN,
-        [HEALBOT_WATER_SHIELD]=HEALBOT_SHAMAN,
-        [HEALBOT_ANACESTRAL_SWIFTNESS]=HEALBOT_SHAMAN,
-        --[HEALBOT_EARTHLIVING]=HEALBOT_SHAMAN,
         [HEALBOT_SPIRITWALKERS_GRACE]=HEALBOT_SHAMAN,
         [HEALBOT_UNLEASH_LIFE]=HEALBOT_SHAMAN,
-        [HEALBOT_UNLEASH_FLAME]=HEALBOT_SHAMAN,
-        [HEALBOT_SHAMANISTIC_RAGE]=HEALBOT_SHAMAN,
         [HEALBOT_ASTRAL_SHIFT]=HEALBOT_SHAMAN,
         [HEALBOT_ELEMENTAL_MASTERY]=HEALBOT_SHAMAN,
         [HEALBOT_HEALING_RAIN]=HEALBOT_SHAMAN,
         [HEALBOT_ASCENDANCE]=HEALBOT_SHAMAN,
         [HEALBOT_ANACESTRAL_GUIDANCE]=HEALBOT_SHAMAN,
-        [HEALBOT_EMPOWER]=HEALBOT_SHAMAN,
-        [HEALBOT_UNLEASHED_FURY]=HEALBOT_SHAMAN,
         [HEALBOT_TIDAL_WAVES]=HEALBOT_SHAMAN,
         --WoD Added
         [HEALBOT_CLOUDBURST_TOTEM]=HEALBOT_SHAMAN,
-        [HEALBOT_ELEMENTAL_FUSION]=HEALBOT_SHAMAN,
-        --Warlock
-        [HEALBOT_DARK_INTENT]=HEALBOT_WARLOCK,
-        [HEALBOT_DARK_BARGAIN]=HEALBOT_WARLOCK,
+        --Legion Added
+		
+		--Warlock
         [HEALBOT_UNENDING_RESOLVE]=HEALBOT_WARLOCK,
         
         --Warrior
@@ -573,9 +598,6 @@ function HealBot_Options_setLists()
         [HEALBOT_LAST_STAND]=HEALBOT_WARRIOR,
         [HEALBOT_SHIELD_WALL]=HEALBOT_WARRIOR,
         [HEALBOT_SHIELD_BARRIER]=HEALBOT_WARRIOR,
-        [HEALBOT_SAFEGUARD]=HEALBOT_WARRIOR,
-        [HEALBOT_SHIELD_BLOCK]=HEALBOT_WARRIOR,
-        [HEALBOT_ENRAGED_REGEN]=HEALBOT_WARRIOR,
     }
     
     HealBot_Options_FrameAliasList()
@@ -645,8 +667,10 @@ function HealBot_Options_setClassEn()
                     [HEALBOT_WARRIOR]="WARR",
                     [HEALBOT_DEATHKNIGHT]="DEAT",
                     [HEALBOT_MONK]="MONK",
+                    [HEALBOT_DEMONHUNTER]="DEMO",
     }
 end
+HealBot_Options_setClassEn()
 
 function HealBot_Options_FrameAliasList()
     if Healbot_Config_Skins.FrameAlias and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin] then
@@ -677,8 +701,6 @@ function HealBot_Options_FrameAliasList()
         }
     end
 end
-
-HealBot_Options_setLists()
 
 local HealBot_Buff_Spells_Class_List={}
 local HealBot_Buff_Spells_List ={}
@@ -734,6 +756,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
             HEALBOT_BLESSING_OF_KINGS,
+            HEALBOT_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
             HEALBOT_HAND_OF_PROTECTION,
             HEALBOT_HAND_OF_SACRIFICE,
@@ -741,6 +764,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_RIGHTEOUS_FURY,
             HEALBOT_DEVOTION_AURA,
             HEALBOT_BEACON_OF_LIGHT,
+            HEALBOT_BEACON_OF_VIRTUE,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
             HEALBOT_SEAL_OF_INSIGHT,
             HEALBOT_SEAL_OF_COMMAND,
@@ -792,11 +816,6 @@ function HealBot_Options_InitBuffClassList()
     table.sort(HealBot_Buff_Spells_Class_List)
 end
 
-local HealBot_Buff_Items_List = {
-    HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-    HEALBOT_EVER_BLOOMING_FROND,
-};
-
 function HealBot_Options_InitBuffList()
     table.sort(HealBot_Buff_Items_List)
     HealBot_Buff_Spells_List ={}
@@ -822,8 +841,8 @@ function HealBot_Options_GetDebuffSpells_List(class)
       ["HUNT"] = {},
       ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
       ["MONK"] = {HEALBOT_DETOX,},
-      ["PALA"] = {HEALBOT_CLEANSE,},
-      ["PRIE"] = {HEALBOT_PURIFY,},
+      ["PALA"] = {HEALBOT_CLEANSE, HEALBOT_CLEANSE_TOXIN},
+      ["PRIE"] = {HEALBOT_PURIFY, HEALBOT_MASS_DISPEL, HEALBOT_PURIFY_DISEASE},
       ["ROGU"] = {},
       ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
       ["WARL"] = {},
@@ -854,21 +873,7 @@ function HealBot_Options_GetRacialDebuffSpells_List(race)
     return HealBot_Racial_Debuff_Spells[race]
 end
 
-local HealBot_Debuff_Types = {
-  [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
-  [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
-  [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
-  [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
-  [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en},
-  [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-  [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
-  [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
-  [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
-  [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-  [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en},
-  [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
-  [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-}
+
 
 function HealBot_Options_setDebuffTypes()
     if HealBot_Data["PCLASSTRIM"]=="SHAM" then
@@ -4713,22 +4718,6 @@ function HealBot_Options_ComboClass_Text()
         HealBot_CtrlShiftSpellAutoTrinket2:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
         HealBot_CtrlAltSpellAutoTrinket2:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
     end
-    if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
-        combo = HealBot_Config_Spells.EnabledAvoidBlueCursor;
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo = HealBot_Config_Spells.DisabledAvoidBlueCursor;
-    else
-        combo = HealBot_Config_Spells.EnemyAvoidBlueCursor;
-    end
-    if combo then
-        HealBot_AvoidBlueCursor:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
-        HealBot_ShiftAvoidBlueCursor:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAvoidBlueCursor:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltAvoidBlueCursor:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltShiftAvoidBlueCursor:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlShiftAvoidBlueCursor:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAltAvoidBlueCursor:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-    end
 end
 
 --------------------------------------------------------------------------------
@@ -4741,6 +4730,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
         HealBot_Options_SelectHealSpellsCombo_List = {
             HEALBOT_MINDBENDER,
             HEALBOT_SMITE,
+            HEALBOT_DISPEL_MAGIC,
+            HEALBOT_HOLY_WORD_CHASTISE,
             HEALBOT_HOLY_FIRE,
             HEALBOT_SHADOW_WORD_PAIN,
             HEALBOT_WRATH,
@@ -4771,7 +4762,6 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_BLACKOUT_KICK,
             HEALBOT_TOUCH_OF_DEATH,
             HEALBOT_CRACKLING_JADE_LIGHTNING,
-            HEALBOT_HOLY_WORD_CHASTISE,
             HEALBOT_DENOUNCE,
             HEALBOT_HAMMER_OF_WRATH,
             HEALBOT_HOLY_SHOCK,
@@ -4792,6 +4782,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_DESPERATE_PRAYER,
             HEALBOT_CHAIN_HEAL,
             HEALBOT_FLASH_HEAL,
+            HEALBOT_HOLY_WORD_SERENITY,
             HEALBOT_FLASH_OF_LIGHT,
             HEALBOT_GREATER_HEAL,
             HEALBOT_HEALING_TOUCH,
@@ -4805,12 +4796,11 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_WORD_OF_GLORY,
             HEALBOT_DIVINE_LIGHT,
             HEALBOT_LAY_ON_HANDS,
+            HEALBOT_TYRS_DELIVERANCE,
             HEALBOT_HOLY_SHOCK,
             HEALBOT_LIFEBLOOM,
-            --HEALBOT_GREATER_HEALING_WAVE,
             HEALBOT_HEALING_STREAM_TOTEM,
             HEALBOT_HEALING_TIDE_TOTEM,
-            --HEALBOT_NOURISH,
             HEALBOT_PENANCE,
             HEALBOT_PRAYER_OF_HEALING,
             HEALBOT_PRAYER_OF_MENDING,
@@ -4826,8 +4816,6 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_GIFT_OF_THE_NAARU,
             HEALBOT_MENDPET,
             HEALBOT_HEALTH_FUNNEL,
-            HEALBOT_HOLY_WORD_SERENITY,
-            HEALBOT_HOLY_WORD_SANCTUARY,
             HEALBOT_SOOTHING_MIST,
             HEALBOT_ZEN_MEDITATION,
             HEALBOT_LIFE_COCOON,
@@ -4850,7 +4838,19 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_BREATH_OF_THE_SERPENT,
             HEALBOT_CHI_EXPLOSION,
             HEALBOT_RUSHING_JADE_WIND,              
-            HEALBOT_CHI_TOROEDO,                                
+            HEALBOT_CHI_TOROEDO,
+            HEALBOT_BEACON_OF_LIGHT,
+			--Legion Added
+			HEALBOT_PLEA, --Priest                           
+			HEALBOT_POWER_WORD_RADIANCE,            
+			HEALBOT_SHADOW_COVENANT,                
+			HEALBOT_SHADOW_MEND,
+			HEALBOT_HOLY_WORD_SANCTIFY,              
+			HEALBOT_BESTOW_FAITH, --Paladin                    
+			HEALBOT_LIGHT_OF_THE_MARTYR, 
+            HEALBOT_BEACON_OF_VIRTUE,     
+            HEALBOT_HAND_OF_THE_PROTECTOR,   
+            HEALBOT_ESSENCE_FONT,            
         }
     end
     local tmpHealDDlist={}
@@ -4908,7 +4908,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_PURGE,
             HEALBOT_WIND_SHEAR,
             HEALBOT_CYCLONE,
-            HEALBOT_DISPEL_MAGIC,
             HEALBOT_DOMINATE_MIND,
             HEALBOT_SHACKLE_UNDEAD,
             HEALBOT_PROVOKE,
@@ -4928,34 +4927,35 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             end
         end
     else
-        HealBot_Options_SelectOtherSpellsCombo_List = {
+       HealBot_Options_SelectOtherSpellsCombo_List = {
             HEALBOT_STONEFORM,
             HEALBOT_DARKFLIGHT,
             HEALBOT_GIFT_OF_THE_NAARU,
             HEALBOT_POWER_WORD_SHIELD,
             HEALBOT_SPIRIT_SHELL,
-            HEALBOT_REVIVE,
+			HEALBOT_REVIVE,
             HEALBOT_GUARDIAN_SPIRIT,
             HEALBOT_PAIN_SUPPRESSION,
             HEALBOT_INTERVENE,
             HEALBOT_RESURRECTION,
             HEALBOT_REDEMPTION,
             HEALBOT_REBIRTH,
-            --HEALBOT_INNERVATE,
             HEALBOT_TREE_OF_LIFE,
             HEALBOT_ANCESTRALSPIRIT,
             HEALBOT_RESUSCITATE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
+            HEALBOT_CLEANSE_TOXIN,
             HEALBOT_REMOVE_CORRUPTION,
             HEALBOT_NATURES_CURE,
+            HEALBOT_PURIFY_DISEASE,
             HEALBOT_PURIFY,
             HEALBOT_CLEANSE_SPIRIT,
             HEALBOT_PURIFY_SPIRIT,
+            HEALBOT_MASS_DISPEL,
             HEALBOT_LIFE_TAP,
             HEALBOT_DIVINE_SHIELD,
             HEALBOT_DIVINE_PROTECTION,
-            --HEALBOT_NATURE_SWIFTNESS,
             HEALBOT_ANACESTRAL_SWIFTNESS,
             HEALBOT_LEAP_OF_FAITH,
             HEALBOT_UNLEASH_ELEMENTS,
@@ -4963,20 +4963,22 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_SPEED_OF_LIGHT,
             HEALBOT_HAND_OF_PURITY,
             HEALBOT_THUNDER_FOCUS_TEA,
-            --HEALBOT_VOID_SHIFT,
-            --HEALBOT_MANA_STREAM_TOTEM,
-            --HEALBOT_MANA_TIDE_TOTEM,
             HEALBOT_ASTRAL_SHIFT,
             HEALBOT_GUARDIAN_ANCIENT_KINGS,
             HEALBOT_UNLEASH_LIFE,
             HEALBOT_CLOUDBURST_TOTEM,
-            HEALBOT_LEVITATE,
             HEALBOT_POWER_INFUSION,
             HEALBOT_VAMPIRIC_EMBRACE,
             HEALBOT_CLARITY_OF_WILL,
             HEALBOT_DETONATE_CHI,
             HEALBOT_BEACON_OF_FAITH,
             HEALBOT_BEACON_OF_INSIGHT,
+			--Legion Added
+			HEALBOT_RAPTURE,
+			HEALBOT_APOTHEOSIS,
+			HEALBOT_SYMBOL_OF_HOPE,
+			HEALBOT_BODY_AND_MIND,
+			HEALBOT_BLESSING_OF_SACRIFICE, --Paladin
         }
         for j=1, getn(HealBot_Options_SelectOtherSpellsCombo_List), 1 do
             local spellName=HealBot_Options_SelectOtherSpellsCombo_List[j]
@@ -5712,6 +5714,7 @@ function HealBot_Options_EmergencyFilter_Reset()
     HealBot_EmergInc[HealBot_Class_En[HEALBOT_WARLOCK]] = false;
     HealBot_EmergInc[HealBot_Class_En[HEALBOT_WARRIOR]] = false;
     HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = false;
+    HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEMONHUNTER]] = false;
     if Healbot_Config_Skins.EmergIncMonitor[Healbot_Config_Skins.Current_Skin]==1 then
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_DRUID]] = true;
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_HUNTER]] = true;
@@ -5723,6 +5726,7 @@ function HealBot_Options_EmergencyFilter_Reset()
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_WARLOCK]] = true;
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_WARRIOR]] = true;
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = true;
+        HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEMONHUNTER]] = true;
     elseif Healbot_Config_Skins.EmergIncMonitor[Healbot_Config_Skins.Current_Skin]==2 then
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = true;
     elseif Healbot_Config_Skins.EmergIncMonitor[Healbot_Config_Skins.Current_Skin]==3 then
@@ -8455,17 +8459,17 @@ function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
         if autoType=="Target" then combo = HealBot_Config_Spells.EnabledSpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnabledSpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnabledSpellTrinket2; 
-        else combo = HealBot_Config_Spells.EnabledAvoidBlueCursor; end
+        end
     elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
         if autoType=="Target" then combo = HealBot_Config_Spells.DisabledSpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.DisabledSpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.DisabledSpellTrinket2;
-        else combo = HealBot_Config_Spells.DisabledAvoidBlueCursor; end
+        end
     else
         if autoType=="Target" then combo = HealBot_Config_Spells.EnemySpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnemySpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnemySpellTrinket2;
-        else combo = HealBot_Config_Spells.EnemyAvoidBlueCursor; end
+        end
     end
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
     if self:GetChecked() then
@@ -8769,12 +8773,12 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:Hide()
     g=_G["HealBot_Options_HealHideFrame"]
     g:Hide()
-    g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
-    g:SetTextColor(1,1,1,1)
-    g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
-    g:SetTextColor(1,1,0,0.92)
-    g=_G["HealBot_SkinsSubFrameSelectHealHideFramef"]
-    g:SetTextColor(1,1,0,0.92)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
+   -- g:SetTextColor(1,1,1,1)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
+   -- g:SetTextColor(1,1,0,0.92)
+   -- g=_G["HealBot_SkinsSubFrameSelectHealHideFramef"]
+   -- g:SetTextColor(1,1,0,0.92)
     
     g=_G["HealBot_Contents_ButtonT0"]
     g:SetStatusBarColor(0.2,0.2,0.2,0.55)
@@ -9728,10 +9732,6 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_COMBOAUTOTARGET)
             g=_G["HealBot_AutoTrinket_ButtonText"]
             g:SetText(HEALBOT_OPTIONS_COMBOAUTOTRINKET)
-            g=_G["HealBot_AvoidBC_ButtonText"]
-            g:SetText(HEALBOT_OPTIONS_AVOIDBLUECURSOR)
-            g=_G["HealBot_AvoidBC_ButtonText"]
-            g:SetText(HEALBOT_OPTIONS_AVOIDBLUECURSOR)
             g=_G["healbotcombobuttonfontstr"]
             g:SetText(HEALBOT_OPTIONS_COMBOBUTTON)
             g=_G["healbotcastmethodfontstr"]
@@ -10293,7 +10293,6 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_HideBars,HEALBOT_HIDE_BARS)
             HealBot_Options_HideIncFocus:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCFOCUS"])
             HealBot_Options_SetText(HealBot_Options_HideIncFocus,HEALBOT_FOCUS)
-            HealBot_SkinsSubFrameSelectHealHideFramef:SetText(HEALBOT_OPTIONS_TAB_HIDE)
             HealBot_Options_HideIncGroup:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCGROUP"])
             HealBot_Options_SetText(HealBot_Options_HideIncGroup,HEALBOT_OPTIONS_GROUPHEALS)
             HealBot_Options_HideIncTank:SetChecked(Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCTANK"])
@@ -10306,10 +10305,12 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_HEAL_BUTTONS)
             g=_G["HealBot_IncludeTargets_Text"]
             g:SetText(HEALBOT_OPTIONS_TARGETHEALS.." "..HEALBOT_WORDS_INCLUDE)
-            g=_G["HealBot_SkinsSubFrameSelectHealRaidFramef"]
+            g=_G["HealBot_SkinsSubFrameSelectHealRaidFrameb"]
             g:SetText(HEALBOT_OPTIONS_EMERGENCYHEALS)
-            g=_G["HealBot_SkinsSubFrameSelectHealSortFramef"]
+            g=_G["HealBot_SkinsSubFrameSelectHealSortFrameb"]
             g:SetText(HEALBOT_OPTIONS_TAB_SORT)
+            g=_G["HealBot_SkinsSubFrameSelectHealHideFrameb"]
+            g:SetText(HEALBOT_OPTIONS_TAB_HIDE)
             g=_G["healbotraidfilterfontstr"]
             g:SetText(HEALBOT_OPTIONS_EMERGFILTER)
             g=_G["healbotraidfiltergrpsfontstr"]
@@ -11462,22 +11463,19 @@ function HealBot_Options_ShowCurePanel(frameName)
 end
 
 HealBot_Options_StorePrev["CurrentHealPanel"]="HealBot_Options_HealRaidFrame"
-HealBot_Options_StorePrev["CurrentHealbarName"]="HealBot_SkinsSubFrameSelectHealRaidFrame"
-function HealBot_Options_ShowHealPanel(frameName,barName)
+HealBot_Options_StorePrev["CurrentHealButton"]="HealBot_SkinsSubFrameSelectHealRaidFrameb"
+
+function HealBot_Options_ShowHealPanel(frameName, buttonName)
     local g=_G[HealBot_Options_StorePrev["CurrentHealPanel"]]
     g:Hide()
-    g=_G[HealBot_Options_StorePrev["CurrentHealbarName"]]
-    g:SetStatusBarColor(0.58,0.08,0.08)
-    g=_G[HealBot_Options_StorePrev["CurrentHealbarName"].."f"]
-    g:SetTextColor(1,1,0,0.92)
     g=_G[frameName]
     g:Show()
-    g=_G[barName]
-    g:SetStatusBarColor(1,0.32,0.32)
-    g=_G[barName.."f"]
-    g:SetTextColor(1,1,1,1)
+    g=_G[HealBot_Options_StorePrev["CurrentHealButton"]]
+    g:UnlockHighlight()
+    g=_G[buttonName]
+    g:LockHighlight()
     HealBot_Options_StorePrev["CurrentHealPanel"]=frameName
-    HealBot_Options_StorePrev["CurrentHealbarName"]=barName
+    HealBot_Options_StorePrev["CurrentHealButton"]=buttonName
 end
 
 function HealBot_Options_OnMouseDown(self)
@@ -11737,7 +11735,7 @@ function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
         else
             SendAddonMessage(addon_id, msg, "PARTY" );
         end
-    elseif aType==4 and pName then
+    elseif aType==4 and pName and UnitIsPlayer(HealBot_Panel_RaidUnit(nil,pName)) then
         SendAddonMessage(addon_id, msg, "WHISPER", pName );
     elseif aType==5 then
         SendAddonMessage(addon_id, msg, "GUILD" );

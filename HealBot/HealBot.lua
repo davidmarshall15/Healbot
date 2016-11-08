@@ -37,72 +37,15 @@ local HealBot_UnitSpecial={}
 local HealBot_UnitHealthCheck={}
 local HealBot_EnemyUnits={}
 local _=nil
-local HealBot_Ignore_Class_Debuffs = {
- 	["WARR"] = { [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
-                          [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
-                          [HEALBOT_DEBUFF_VIPER_STING] = true,
-                          [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
-                          [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-                          [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["ROGU"] = { [HEALBOT_DEBUFF_SILENCE] = true,    
-                          [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
-                          [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
-                          [HEALBOT_DEBUFF_VIPER_STING] = true,
-                          [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
-                          [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-                          [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["HUNT"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["MAGE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["DRUI"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["PALA"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["PRIE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["SHAM"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["WARL"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
-                          [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-	["DEAT"] = { [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
-						  [HEALBOT_DEBUFF_TRAMPLE] = true,
-						  [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-	
-	["MONK"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-    
-    ["DEMO"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
-};
-
-local HealBot_Ignore_Movement_Debuffs = {
-                                  [HEALBOT_DEBUFF_FROSTBOLT] = true,
-                                  [HEALBOT_DEBUFF_MAGMA_SHACKLES] = true,
-                                  [HEALBOT_DEBUFF_SLOW] = true,
-                                  [HEALBOT_DEBUFF_CHILLED] = true,
-                                  [HEALBOT_DEBUFF_CONEOFCOLD] = true,
-                                  [HEALBOT_DEBUFF_FROST_SHOCK] = true,
-								  [HEALBOT_DEBUFF_EARTHBIND] = true,
-								  [HEALBOT_DEBUFF_SEAL_OF_JUSTICE] = true,
-};
-
-local HealBot_Ignore_NonHarmful_Debuffs = {
-                                  [HEALBOT_DEBUFF_MAJOR_DREAMLESS] = true,
-                                  [HEALBOT_DEBUFF_GREATER_DREAMLESS] = true,
-                                  [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,
-};
+local HealBot_Ignore_Class_Debuffs = {};
+local HealBot_Ignore_Movement_Debuffs = {};
+local HealBot_Ignore_NonHarmful_Debuffs = {};
 
 local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.04,["HB2Inc"]=0,["HB2Th"]=0.2,["HB3Inc"]=0,["HB3Th"]=0.5,["HBA1Inc"]=-2,["HBA1Th"]=2000,["HBA2Inc"]=-2,["HBA2Th"]=2000}
 local arrg = {}
 local PlayerBuffs = {}
 local PlayerBuffTypes = {}
-local HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE
+local HealBot_dSpell=nil
 local LSM = LibStub and LibStub:GetLibrary("LibSharedMedia-3.0", true)
 for i = 1, #HealBot_Default_Textures do
     LSM:Register("statusbar", HealBot_Default_Textures[i].name, HealBot_Default_Textures[i].file)
@@ -127,9 +70,7 @@ local HealBot_BuffWatch={}
 local HealBot_unitHealth={}
 local HealBot_unitHealthMax={}
 
-local CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
-                     [HEALBOT_PAIN_SUPPRESSION]=true, 
-                     [HEALBOT_POWER_INFUSION]=true,}
+local CooldownBuffs={}
 
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
 local HealBot_VehicleUnit={}
@@ -147,6 +88,8 @@ local hbShareSkins={}
 local HealBot_trackHidenFrames={}
 local calibrateHBScale, hbScale = 0,0
 local _
+local HealBot_Buff_ItemID = {};
+local HealBot_Buff_Aura2Item = {};
 
 HealBot_luVars["hbInsName"]=HEALBOT_WORD_OUTSIDE
 HealBot_luVars["TargetUnitID"]="player"
@@ -164,6 +107,64 @@ HealBot_luVars["EnemyBarsOn"]=true
 HealBot_luVars["EnemyBarsCastOn"]=0
 HealBot_luVars["UseCrashProtection"]=GetTime()+2
 HealBot_luVars["BodyAndSoul"]=0
+
+function HealBot_InitVars()
+    CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
+                   [HEALBOT_PAIN_SUPPRESSION]=true, 
+                   [HEALBOT_POWER_INFUSION]=true,}
+    HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE;
+    HealBot_Ignore_NonHarmful_Debuffs = {[HEALBOT_DEBUFF_MAJOR_DREAMLESS] = true,
+                                         [HEALBOT_DEBUFF_GREATER_DREAMLESS] = true,
+                                         [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,};
+    HealBot_Ignore_Movement_Debuffs = {[HEALBOT_DEBUFF_FROSTBOLT] = true,
+                                       [HEALBOT_DEBUFF_MAGMA_SHACKLES] = true,
+                                       [HEALBOT_DEBUFF_SLOW] = true,
+                                       [HEALBOT_DEBUFF_CHILLED] = true,
+                                       [HEALBOT_DEBUFF_CONEOFCOLD] = true,
+                                       [HEALBOT_DEBUFF_FROST_SHOCK] = true,
+                                       [HEALBOT_DEBUFF_EARTHBIND] = true,
+                                       [HEALBOT_DEBUFF_SEAL_OF_JUSTICE] = true,};
+    HealBot_Ignore_Class_Debuffs = {
+        ["WARR"] = { [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
+                     [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
+                     [HEALBOT_DEBUFF_VIPER_STING] = true,
+                     [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
+                     [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},  
+        ["ROGU"] = { [HEALBOT_DEBUFF_SILENCE] = true,    
+                     [HEALBOT_DEBUFF_IGNITE_MANA] = true, 
+                     [HEALBOT_DEBUFF_TAINTED_MIND] = true, 
+                     [HEALBOT_DEBUFF_VIPER_STING] = true,
+                     [HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE] = true,
+                     [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["HUNT"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},    
+        ["MAGE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["DRUI"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["PALA"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["PRIE"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["SHAM"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},   
+        ["WARL"] = { [HEALBOT_DEBUFF_DECAYED_STRENGHT] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["DEAT"] = { [HEALBOT_DEBUFF_DECAYED_INTELLECT] = true,
+                     [HEALBOT_DEBUFF_TRAMPLE] = true,
+                     [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+        ["MONK"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},    
+        ["DEMO"] = { [HEALBOT_DEBUFF_UNSTABLE_AFFLICTION] = true,},
+    };
+    HealBot_Buff_ItemID = {
+        [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
+        [HEALBOT_EVER_BLOOMING_FROND] = 118935,
+    };
+    HealBot_Buff_Aura2Item = {
+        [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
+        [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
+    };
+end
 
 function HealBot_retLSM()
     return LSM
@@ -893,43 +894,17 @@ function HealBot_GetSpellId(spellName)
     return HealBot_luVars[spellName];
 end
 
-function HealBot_ChakraSpells()
-    local needInit=false
-    local cSanctuary=HealBot_HasBuff(HEALBOT_CHAKRA_SANCTUARY, "player")
-    local cSerenity=HealBot_HasBuff(HEALBOT_CHAKRA_SERENITY, "player")
-    local cChastise=HealBot_HasBuff(HEALBOT_CHAKRA_CHASTISE, "player")
-    
-    if HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY] and not cSanctuary then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY]=nil
-        needInit=true
+function HealBot_GreaterBlessingSpells()
+    local i = GetSpecialization()
+    if i==3 then
+        HealBot_luVars[HEALBOT_BLESSING_OF_MIGHT]=203528
+        HealBot_luVars[HEALBOT_BLESSING_OF_WISDOM]=203539
+        HealBot_luVars[HEALBOT_BLESSING_OF_KINGS]=203538
+    else
+        HealBot_luVars[HEALBOT_BLESSING_OF_MIGHT]=nil
+        HealBot_luVars[HEALBOT_BLESSING_OF_WISDOM]=nil
+        HealBot_luVars[HEALBOT_BLESSING_OF_KINGS]=nil
     end
-    if HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY] and not cSerenity then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY]=nil
-        needInit=true
-    end
-    if HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE] and not cChastise then
-        HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE]=nil
-        needInit=true
-    end
-    
-    if cSanctuary and not HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SANCTUARY]=88685
-        needInit=true
-    end
-    if cSerenity and not HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_SERENITY]=88684
-        needInit=true
-    end
-    if cChastise and not HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE] then
-        HealBot_luVars[HEALBOT_HOLY_WORD_CHASTISE]=88625
-        needInit=true
-    end
-    
-    if needInit then
-        HealBot_Options_ResetSpellsHealperDropdown("SPELLS")
-    end
-        
-
 end
 
 function HealBot_UnitHealth(unit)
@@ -1171,7 +1146,11 @@ function HealBot_OnUpdate(self)
                         HealBot_Action_ResetSkin("init")
                     elseif HealBot_Options_Timer[5] then
                         HealBot_Options_Timer[5]=nil
-                        HealBot_Options_InitBuffList()
+                        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then 
+                            HealBot_OnEvent_ItemInfoReceived() 
+                        else
+                            HealBot_Options_InitBuffList()
+                        end
                     elseif HealBot_Options_Timer[10] then
                         HealBot_Options_Timer[10]=nil
                         if HealBot_Config_Buffs.NoAuraWhenRested and not IsResting() then HealBot_Queue_AllActiveMyBuffs() end
@@ -1231,7 +1210,7 @@ function HealBot_OnUpdate(self)
                         HealBot_Action_setRegisterForClicks()
                     elseif HealBot_Options_Timer[115] then
                         HealBot_Options_Timer[115]=nil
-                        HealBot_ChakraSpells()
+                        HealBot_GreaterBlessingSpells()
                     elseif HealBot_Options_Timer[120] then
                         HealBot_Options_Timer[120]=nil
                         HealBot_CheckZone();
@@ -1845,7 +1824,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_AURA") then
         HealBot_OnEvent_UnitAura(self,arg1);
     elseif (event=="UNIT_HEALTH") or (event=="UNIT_MAXHEALTH") then
-        HealBot_OnEvent_UnitHealth(true,arg1,UnitHealth(arg1),HealBot_UnitMaxHealth(arg1));
+        if (arg1) then HealBot_OnEvent_UnitHealth(true,arg1,UnitHealth(arg1),HealBot_UnitMaxHealth(arg1)); end
     elseif (event=="UNIT_COMBAT") then 
         if arg1 then HealBot_OnEvent_UnitCombat(arg1); end
     elseif (event=="UNIT_THREAT_SITUATION_UPDATE") or (event=="UNIT_THREAT_LIST_UPDATE") then
@@ -1949,14 +1928,21 @@ function HealBot_OnEvent_ItemInfoReceived(self)
     end
     if allInfoReceived then
         HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
+        HealBot_OnEvent_VariablesLoaded(self)
+        HealBot_AddDebug("Oralius Whispering Crystal Found")
+    else
         HealBot_Options_InitBuffList()
-        HealBot_Options_ResetDoInittab(5)
-        HealBot_Options_Init(5)
+        HealBot_AddDebug("Oralius Whispering Crystal NOT Found")
     end
 end
 
 function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_globalVars()
+    HealBot_Lang_InitVars()
+    HealBot_Data_InitVars()
+    HealBot_InitVars()
+    HealBot_Options_InitVars()
+    HealBot_Options_setLists()
     table.foreach(HealBot_ConfigDefaults, function (key,val)
         if HealBot_Config[key]==nil then
             HealBot_Config[key] = val;
@@ -2243,16 +2229,17 @@ function HealBot_OnEvent_VariablesLoaded(self)
         -- short buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
         -- short buffs
+    elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEMONHUNTER] then
+        -- short buffs
     end
 
     HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
     HealBot:RegisterEvent("PLAYER_LEAVING_WORLD");
 
     HealBot_Loaded=1;
-    
-    HealBot_SkinsSubFrameSelectHealRaidFrame:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_SkinsSubFrameSelectHealSortFrame:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_SkinsSubFrameSelectHealHideFrame:GetStatusBarTexture():SetHorizTile(false)
+
+    g=_G["HealBot_SkinsSubFrameSelectHealRaidFrameb"]
+    g:LockHighlight()
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
 end
@@ -3695,16 +3682,6 @@ function HealBot_setLowManaTrig()
         hbLowManaTrig={[1]=1,[2]=2,[3]=3}
     end
 end
-
-local HealBot_Buff_ItemID = {
-    [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
-    [HEALBOT_EVER_BLOOMING_FROND] = 118935,
-};
-
-local HealBot_Buff_Aura2Item = {
-    [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
-    [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
-};
 
 function HealBot_HasItemBuff()
     for x,_ in pairs(HealBot_Buff_ItemID) do
@@ -6120,9 +6097,6 @@ function HealBot_Update_Skins()
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledSpellTrinket2=false
             end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnabledAvoidBlueCursor=false
-            end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTarget=false
             end
@@ -6132,9 +6106,6 @@ function HealBot_Update_Skins()
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledSpellTrinket2=false
             end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].DisabledAvoidBlueCursor=false
-            end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTarget=false
             end
@@ -6143,9 +6114,6 @@ function HealBot_Update_Skins()
             end
             if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2 and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2==0 then 
                 HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemySpellTrinket2=false
-            end
-            if HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor and HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor==0 then 
-                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]].EnemyAvoidBlueCursor=false
             end
         end
         if HealBot_Data["PCLASSTRIM"] and HealBot_Class_Buffs[HealBot_Data["PCLASSTRIM"]] then
@@ -6270,15 +6238,12 @@ function HealBot_Update_Skins()
         if HealBot_Config_Spells.EnabledSpellTarget==0 then HealBot_Config_Spells.EnabledSpellTarget=false end
         if HealBot_Config_Spells.EnabledSpellTrinket1==0 then HealBot_Config_Spells.EnabledSpellTrinket1=false end
         if HealBot_Config_Spells.EnabledSpellTrinket2==0 then HealBot_Config_Spells.EnabledSpellTrinket2=false end
-        if HealBot_Config_Spells.EnabledAvoidBlueCursor==0 then HealBot_Config_Spells.EnabledAvoidBlueCursor=false end
         if HealBot_Config_Spells.DisabledSpellTarget==0 then HealBot_Config_Spells.DisabledSpellTarget=false end
         if HealBot_Config_Spells.DisabledSpellTrinket1==0 then HealBot_Config_Spells.DisabledSpellTrinket1=false end
         if HealBot_Config_Spells.DisabledSpellTrinket2==0 then HealBot_Config_Spells.DisabledSpellTrinket2=false end
-        if HealBot_Config_Spells.DisabledAvoidBlueCursor==0 then HealBot_Config_Spells.DisabledAvoidBlueCursor=false end
         if HealBot_Config_Spells.EnemySpellTarget==0 then HealBot_Config_Spells.EnemySpellTarget=false end
         if HealBot_Config_Spells.EnemySpellTrinket1==0 then HealBot_Config_Spells.EnemySpellTrinket1=false end
         if HealBot_Config_Spells.EnemySpellTrinket2==0 then HealBot_Config_Spells.EnemySpellTrinket2=false end
-        if HealBot_Config_Spells.EnemyAvoidBlueCursor==0 then HealBot_Config_Spells.EnemyAvoidBlueCursor=false end
         if HealBot_Globals.SmartCast==0 then HealBot_Globals.SmartCast=false end
         if HealBot_Globals.SmartCastDebuff==0 then HealBot_Globals.SmartCastDebuff=false end
         if HealBot_Globals.SmartCastBuff==0 then HealBot_Globals.SmartCastBuff=false end
@@ -6604,8 +6569,17 @@ function HealBot_DoReset_Buffs(pClassTrim)
             HealBot_Config_Buffs.HealBotBuffText[1]=HEALBOT_LEGACY_EMPEROR
         end
     elseif pClassTrim=="PALA" then
+        local i=1
         if HealBot_GetSpellId(HEALBOT_BLESSING_OF_KINGS) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HEALBOT_BLESSING_OF_KINGS
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_KINGS
+            i=i+1
+        end
+        if HealBot_GetSpellId(HEALBOT_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_MIGHT
+            i=i+1
+        end
+        if HealBot_GetSpellId(HEALBOT_BLESSING_OF_WISDOM) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HEALBOT_BLESSING_OF_WISDOM
         end
     elseif pClassTrim=="PRIE" then
         if HealBot_GetSpellId(HEALBOT_POWER_WORD_FORTITUDE) then
@@ -6654,7 +6628,11 @@ function HealBot_DoReset_Cures(pClassTrim)
     HealBot_Config_Cures.HealBotDebuffDropDown = {[1]=4,[2]=4,[3]=4}
     if pClassTrim=="DRUI" then
         if HealBot_GetSpellId(HEALBOT_NATURES_CURE) then
-            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
+            if HealBot_GetSpellId(HEALBOT_REMOVE_CORRUPTION) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURES_CURE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
         elseif HealBot_GetSpellId(HEALBOT_REMOVE_CORRUPTION) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
@@ -6665,10 +6643,30 @@ function HealBot_DoReset_Cures(pClassTrim)
     elseif pClassTrim=="PALA" then
         if HealBot_GetSpellId(HEALBOT_CLEANSE) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+        elseif HealBot_GetSpellId(HEALBOT_CLEANSE_TOXIN) then
+            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE_TOXIN,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="PRIE" then
         if HealBot_GetSpellId(HEALBOT_PURIFY) then
-            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            if HealBot_GetSpellId(HEALBOT_MASS_DISPEL) then
+                if HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_PURIFY_DISEASE}
+                else
+                    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_WORDS_NONE}
+                end
+            elseif HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
+        elseif HealBot_GetSpellId(HEALBOT_MASS_DISPEL) then
+            if HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
+            else
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
+        elseif HealBot_GetSpellId(HEALBOT_PURIFY_DISEASE) then
+            HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY_DISEASE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="SHAM" then
         if HealBot_GetSpellId(HEALBOT_PURIFY_SPIRIT) then
@@ -6760,8 +6758,8 @@ function HealBot_DoReset_Spells(pClassTrim)
           ["ShiftLeft"] = HEALBOT_BINDING_HEAL,
           ["CtrlLeft"] = HEALBOT_PURIFY,
           ["Right"] = HEALBOT_HEAL,
-          ["ShiftRight"] = HEALBOT_POWER_WORD_SHIELD,
-          ["CtrlRight"] = HEALBOT_PURIFY,
+          ["ShiftRight"] = HEALBOT_HOLY_WORD_SERENITY,
+          ["CtrlRight"] = HEALBOT_MASS_DISPEL,
           ["Middle"] = HEALBOT_RENEW,
           ["ShiftMiddle"] = HEALBOT_PRAYER_OF_MENDING,
           ["AltMiddle"] = HEALBOT_PRAYER_OF_HEALING,
@@ -6774,7 +6772,7 @@ function HealBot_DoReset_Spells(pClassTrim)
           ["Left"] = HEALBOT_DISABLED_TARGET,
           ["Right"] = HEALBOT_ASSIST,
           ["AltLeft"] = HEALBOT_RESURRECTION,
-          ["ShiftRight"] = HEALBOT_POWER_WORD_SHIELD,
+          ["ShiftRight"] = HEALBOT_HOLY_WORD_SERENITY,
           ["Middle"] = HEALBOT_RENEW,
           ["Ctrl-ShiftLeft"] = HEALBOT_FLASH_HEAL,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
