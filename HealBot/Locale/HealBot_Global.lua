@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.1.a2";
+HEALBOT_VERSION   = "7.1.0.1.b2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -375,7 +375,7 @@ function HealBot_globalVars()
     HEALBOT_SAVING_GRACE                    = GetSpellInfo(152116) or "--Saving Grace"
     HEALBOT_SAVING_VOID_ENTROPY             = GetSpellInfo(155361) or "--Void Entropy"
     HEALBOT_SERENDIPITY                     = GetSpellInfo(63733) or "--Serendipity";
-    HEALBOT_SHADOWFORM                      = GetSpellInfo(15473) or "--Shadowform"
+    HEALBOT_SHADOWFORM                      = GetSpellInfo(232698) or "--Shadowform"
     HEALBOT_SHADOW_WORD_INSANITY            = GetSpellInfo(132573) or "--Shadow Word: Insanity";
     HEALBOT_SPIRIT_SHELL                    = GetSpellInfo(109964) or "--Spirit Shell";
     HEALBOT_SUNDERING_SOUL                  = GetSpellInfo(212570) or "--Sundering Soul";
@@ -448,6 +448,7 @@ function HealBot_globalVars()
     HEALBOT_WINDFLURRY                      = GetSpellInfo(166916) or "--Windflurry"
     HEALBOT_EXTEND_LIFE                     = GetSpellInfo(185158) or "--Extend Life"
     HEALBOT_ESSENCE_FONT                    = GetSpellInfo(191837) or "--Essence Font"
+    HEALBOT_TOUCH_OF_KARMA                  = GetSpellInfo(122470) or "--Touch of Karma"
     
 	--Warlock
     HEALBOT_BLOOD_PACT                      = GetSpellInfo(166928) or "--Blood Pact";
@@ -729,7 +730,7 @@ function HealBot_globalVars()
     
     HEALBOT_DEBUFF_BLACKENING_SOUL      = GetSpellInfo(209158) or "--Blackening Soul"
     HEALBOT_DEBUFF_DARKENING_SOUL       = GetSpellInfo(206651) or "--Darkening Soul"
-    HEALBOT_DEBUFF_SHADOW_BURST         = GetSpellInfo(204040) or "--Shadow Burst"
+    HEALBOT_DEBUFF_SHADOW_BURST         = GetSpellInfo(204044) or "--Shadow Burst"
 end
 
 HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.

@@ -589,6 +589,7 @@ function HealBot_Data_InitVars()
                 --WoD Added                
                 [HEALBOT_EXTEND_LIFE]=2,
                 --Legion Added
+                [HEALBOT_TOUCH_OF_KARMA]=2,
             },
             ["ALL"] = {
                 [HEALBOT_GIFT_OF_THE_NAARU]=2,
