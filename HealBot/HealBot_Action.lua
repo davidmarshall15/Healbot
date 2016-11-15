@@ -1364,11 +1364,11 @@ function HealBot_Action_EnableButton(button, isTarget)
                     HealBot_UnitTextRange["og"][ebUnit]=0
                     HealBot_UnitTextRange["ob"][ebUnit]=0
                 end
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and hbGUID~=HealBot_Data["PGUID"] and UnitIsVisible(ebUnit) then
+                if not IsInInstance() and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and hbGUID~=HealBot_Data["PGUID"] and UnitIsVisible(ebUnit) then
                     HealBot_Action_ShowDirectionArrow(button, ebUnit)
                 end
             else
-                if uDirArrow and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and hbGUID~=HealBot_Data["PGUID"] then
+                if not IsInInstance() and uDirArrow and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and hbGUID~=HealBot_Data["PGUID"] then
                     HealBot_Action_ShowDirectionArrow(button, ebUnit)
                 elseif HealBot_UnitDirection[ebUnit] then
                     HealBot_Action_HideDirectionArrow(button, ebUnit)

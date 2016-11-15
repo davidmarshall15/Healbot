@@ -510,7 +510,8 @@ function HealBot_Options_setLists()
         [HEALBOT_FORTIFYING_BREW]=HEALBOT_MONK,
         [HEALBOT_DAMPEN_HARM]=HEALBOT_MONK,
         [HEALBOT_DIFFUSE_MAGIC]=HEALBOT_MONK,
-        [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,                 
+        [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,
+        [HEALBOT_TOUCH_OF_KARMA]=HEALBOT_MONK,
 		--Legion Added
         
         --Paladin
