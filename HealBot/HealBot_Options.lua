@@ -4851,7 +4851,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_LIGHT_OF_THE_MARTYR, 
             HEALBOT_BEACON_OF_VIRTUE,     
             HEALBOT_HAND_OF_THE_PROTECTOR,   
-            HEALBOT_ESSENCE_FONT,            
+            HEALBOT_ESSENCE_FONT,
+            HEALBOT_LIGHT_OF_TUURE,  --Priest          
         }
     end
     local tmpHealDDlist={}
@@ -4944,6 +4945,11 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_TREE_OF_LIFE,
             HEALBOT_ANCESTRALSPIRIT,
             HEALBOT_RESUSCITATE,
+            HEALBOT_ABSOLUTION,
+            HEALBOT_ANCESTRAL_VISION,
+            HEALBOT_MASS_RESURRECTION,
+            HEALBOT_REAWAKEN,
+            HEALBOT_REVITALIZE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
             HEALBOT_CLEANSE_TOXIN,

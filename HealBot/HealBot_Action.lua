@@ -4170,6 +4170,16 @@ function HealBot_Action_RetMyTarget(hbGUID)
     return HealBot_MyTargets[hbGUID]
 end
 
+function HealBot_Action_GetNumDead()
+    local numMembers = GetNumGroupMembers();
+    local numDead = 0;
+    for i = 1, numMembers do
+       _, _, _, _, _, _, _, _, isDead = GetRaidRosterInfo(i);
+       if isDead then numDead = numDead + 1 end
+    end
+    return numDead
+end
+
 function HealBot_Action_SmartCast(button)
     local scuSpell, scuHlth, scuMaxHlth, scuHealsIn, scuMinHlth = nil,nil,nil,nil, UnitLevel("player")*20
     local rangeSpell=HealBot_RangeSpells["HEAL"]
@@ -4177,7 +4187,16 @@ function HealBot_Action_SmartCast(button)
     
   
     if HealBot_Globals.SmartCastRes and UnitIsDead(button.unit) and not UnitIsGhost(button.unit) then
-        scuSpell=HealBot_Init_retSmartCast_Res();
+        local mrSpell = HealBot_Init_retSmartCast_MassRes();
+        -- HealBot_Action_GetNumDead() > 1 and
+        --[[if HealBot_GetSpellId(mrSpell) and (UnitInParty(button.unit) or UnitInRaid(button.unit)) then 
+            scuSpell=HealBot_Init_retSmartCast_MassRes();
+            rangeSpell=nil
+        else
+            scuSpell=HealBot_Init_retSmartCast_Res();
+            rangeSpell=HealBot_RangeSpells["RES"]
+        end--]]
+		scuSpell=HealBot_Init_retSmartCast_Res();
         rangeSpell=HealBot_RangeSpells["RES"]
     elseif button.debuff.type and HealBot_Globals.SmartCastDebuff then
         scuSpell=HealBot_Options_retDebuffCureSpell(button.debuff.type);
@@ -4193,7 +4212,7 @@ function HealBot_Action_SmartCast(button)
             scuSpell=HealBot_SmartCast(x)
         end
     end
-    if scuSpell and button.guid~=HealBot_Data["PGUID"] then
+    if rangeSpell and scuSpell and button.guid~=HealBot_Data["PGUID"] then
         if HealBot_UnitInRange(rangeSpell, button.unit)~=1 then return nil; end
     end
     return scuSpell;
