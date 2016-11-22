@@ -513,6 +513,7 @@ function HealBot_Options_setLists()
         [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,
         [HEALBOT_TOUCH_OF_KARMA]=HEALBOT_MONK,
 		--Legion Added
+        [HEALBOT_ESSENCE_FONT]=HEALBOT_MONK,
         
         --Paladin
         [HEALBOT_DIVINE_SHIELD]=HEALBOT_PALADIN,
