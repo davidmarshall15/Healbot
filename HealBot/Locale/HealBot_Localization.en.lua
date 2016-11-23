@@ -828,6 +828,7 @@ function HealBot_Lang_enALL()
                                   }
 
     HEALBOT_OPTIONS_SKINAUTHOR              = "Skin Author"
+    HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Avoid\nBlue Cursor"
     HEALBOT_PLAYER_OF_REALM                 = "of"
     
     HEALBOT_OPTIONS_LANG                    = "Language"
