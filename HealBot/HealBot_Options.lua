@@ -513,7 +513,6 @@ function HealBot_Options_setLists()
         [HEALBOT_EXTEND_LIFE]=HEALBOT_MONK,
         [HEALBOT_TOUCH_OF_KARMA]=HEALBOT_MONK,
 		--Legion Added
-        [HEALBOT_ESSENCE_FONT]=HEALBOT_MONK,
         
         --Paladin
         [HEALBOT_DIVINE_SHIELD]=HEALBOT_PALADIN,
@@ -4868,8 +4867,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_LIGHT_OF_THE_MARTYR, 
             HEALBOT_BEACON_OF_VIRTUE,     
             HEALBOT_HAND_OF_THE_PROTECTOR,   
-            HEALBOT_ESSENCE_FONT,
-            HEALBOT_LIGHT_OF_TUURE,  --Priest          
+            HEALBOT_ESSENCE_FONT,            
         }
     end
     local tmpHealDDlist={}
@@ -4962,11 +4960,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_TREE_OF_LIFE,
             HEALBOT_ANCESTRALSPIRIT,
             HEALBOT_RESUSCITATE,
-            HEALBOT_ABSOLUTION,
-            HEALBOT_ANCESTRAL_VISION,
-            HEALBOT_MASS_RESURRECTION,
-            HEALBOT_REAWAKEN,
-            HEALBOT_REVITALIZE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
             HEALBOT_CLEANSE_TOXIN,
