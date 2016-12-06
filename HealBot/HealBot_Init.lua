@@ -1,5 +1,4 @@
 local SmartCast_Res=nil;
-local SmartCast_MassRes=nil;
 local tonumber=tonumber
 local strmatch=strmatch
 local _
@@ -7,10 +6,6 @@ local MANA_COST_PATTERN = gsub(MANA_COST, "%%d", "([%%d%.,]+)")
 
 function HealBot_Init_retSmartCast_Res()
     return SmartCast_Res
-end
-
-function HealBot_Init_retSmartCast_MassRes()
-    return SmartCast_MassRes
 end
 
 function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
@@ -91,19 +86,14 @@ end
 
 function HealBot_Init_SmartCast()
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        SmartCast_MassRes=HEALBOT_MASS_RESURRECTION;
         SmartCast_Res=HEALBOT_RESURRECTION;
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        SmartCast_MassRes=HEALBOT_REVITALIZE;
         SmartCast_Res=HEALBOT_REVIVE;
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        SmartCast_MassRes=HEALBOT_REAWAKEN;
         SmartCast_Res=HEALBOT_RESUSCITATE;
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        SmartCast_MassRes=HEALBOT_ABSOLUTION;
         SmartCast_Res=HEALBOT_REDEMPTION;
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        SmartCast_MassRes=HEALBOT_ANCESTRAL_VISION;
         SmartCast_Res=HEALBOT_ANCESTRALSPIRIT;
     end
 end

@@ -4719,6 +4719,22 @@ function HealBot_Options_ComboClass_Text()
         HealBot_CtrlShiftSpellAutoTrinket2:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
         HealBot_CtrlAltSpellAutoTrinket2:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
     end
+    if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
+        combo = HealBot_Config_Spells.EnabledAvoidBlueCursor;
+    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
+        combo = HealBot_Config_Spells.DisabledAvoidBlueCursor;
+    else
+        combo = HealBot_Config_Spells.EnemyAvoidBlueCursor;
+    end
+    if combo then
+        HealBot_AvoidBlueCursor:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
+        HealBot_ShiftAvoidBlueCursor:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlAvoidBlueCursor:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltAvoidBlueCursor:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltShiftAvoidBlueCursor:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlShiftAvoidBlueCursor:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlAltAvoidBlueCursor:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+    end
 end
 
 --------------------------------------------------------------------------------
@@ -4851,8 +4867,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
 			HEALBOT_LIGHT_OF_THE_MARTYR, 
             HEALBOT_BEACON_OF_VIRTUE,     
             HEALBOT_HAND_OF_THE_PROTECTOR,   
-            HEALBOT_ESSENCE_FONT,
-            HEALBOT_LIGHT_OF_TUURE,  --Priest          
+            HEALBOT_ESSENCE_FONT,            
         }
     end
     local tmpHealDDlist={}
@@ -4945,11 +4960,6 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_TREE_OF_LIFE,
             HEALBOT_ANCESTRALSPIRIT,
             HEALBOT_RESUSCITATE,
-            HEALBOT_ABSOLUTION,
-            HEALBOT_ANCESTRAL_VISION,
-            HEALBOT_MASS_RESURRECTION,
-            HEALBOT_REAWAKEN,
-            HEALBOT_REVITALIZE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
             HEALBOT_CLEANSE_TOXIN,
@@ -8466,17 +8476,17 @@ function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
         if autoType=="Target" then combo = HealBot_Config_Spells.EnabledSpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnabledSpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnabledSpellTrinket2; 
-        end
+        else combo = HealBot_Config_Spells.EnabledAvoidBlueCursor; end
     elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
         if autoType=="Target" then combo = HealBot_Config_Spells.DisabledSpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.DisabledSpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.DisabledSpellTrinket2;
-        end
+        else combo = HealBot_Config_Spells.DisabledAvoidBlueCursor; end
     else
         if autoType=="Target" then combo = HealBot_Config_Spells.EnemySpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnemySpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnemySpellTrinket2;
-        end
+        else combo = HealBot_Config_Spells.EnemyAvoidBlueCursor; end
     end
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
     if self:GetChecked() then
@@ -9739,6 +9749,10 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_COMBOAUTOTARGET)
             g=_G["HealBot_AutoTrinket_ButtonText"]
             g:SetText(HEALBOT_OPTIONS_COMBOAUTOTRINKET)
+            g=_G["HealBot_AvoidBC_ButtonText"]
+            g:SetText(HEALBOT_OPTIONS_AVOIDBLUECURSOR)
+            g=_G["HealBot_AvoidBC_ButtonText"]
+            g:SetText(HEALBOT_OPTIONS_AVOIDBLUECURSOR)
             g=_G["healbotcombobuttonfontstr"]
             g:SetText(HEALBOT_OPTIONS_COMBOBUTTON)
             g=_G["healbotcastmethodfontstr"]
