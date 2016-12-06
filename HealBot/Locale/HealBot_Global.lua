@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.2.a1";
+HEALBOT_VERSION   = "7.1.0.2.a2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -483,7 +483,14 @@ function HealBot_globalVars()
     --Resurrection Spells
     HEALBOT_ANCESTRALSPIRIT                 = GetSpellInfo(2008) or "--Ancestral Spirit";
     HEALBOT_DEBUFF_MASS_RESURRECTED         = GetSpellInfo(95223) or "--Recently Mass Resurrected";
-    HEALBOT_MASS_RESURRECTION               = GetSpellInfo(83968) or "--Mass Resurrection";
+    --HEALBOT_MASS_RESURRECTION               = GetSpellInfo(83968) or "--Mass Resurrection";
+    
+    HEALBOT_ABSOLUTION                      = GetSpellInfo(212056) or "--Absolution";
+    HEALBOT_ANCESTRAL_VISION                = GetSpellInfo(212048) or "--Ancestral Vision";
+    HEALBOT_MASS_RESURRECTION               = GetSpellInfo(212036) or "--Mass Resurrection";
+    HEALBOT_REAWAKEN                        = GetSpellInfo(212051) or "--Reawaken";
+    HEALBOT_REVITALIZE                      = GetSpellInfo(212040) or "--Revitalize";
+    
     HEALBOT_REDEMPTION                      = GetSpellInfo(7328) or "--Redemption";
     HEALBOT_REBIRTH                         = GetSpellInfo(20484) or "--Rebirth";
     HEALBOT_RESURRECTION                    = GetSpellInfo(2006) or "--Resurrection";
