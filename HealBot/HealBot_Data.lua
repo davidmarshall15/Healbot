@@ -464,7 +464,8 @@ function HealBot_Data_InitVars()
                 --Legion Added
                 [HEALBOT_SPRING_BLOSSOMS]=2,               
                 [HEALBOT_CULTIVATION]=2,
-                [HEALBOT_INNERVATE]=4,                
+                [HEALBOT_INNERVATE]=4,
+                [HEALBOT_ESSENCE_OF_GHANIR]=2,
             },
             ["HUNT"] = {
                 [HEALBOT_MENDPET]=2,

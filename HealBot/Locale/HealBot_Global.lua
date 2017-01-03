@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.2.b1";
+HEALBOT_VERSION   = "7.1.0.2.b2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -234,6 +234,7 @@ function HealBot_globalVars()
 	HEALBOT_SPRING_BLOSSOMS                 = GetSpellInfo(207385) or "--Spring Blossoms";
     HEALBOT_CULTIVATION                     = GetSpellInfo(200390) or "--Cultivation";
     HEALBOT_INNERVATE                       = GetSpellInfo(29166) or "--Innervate";
+    HEALBOT_ESSENCE_OF_GHANIR               = GetSpellInfo(208253) or "--Essence of G'Hanir"
     
 	--Hunter
     HEALBOT_A_CHEETAH                       = GetSpellInfo(5118) or "--Aspect of the Cheetah"
@@ -411,7 +412,7 @@ function HealBot_globalVars()
     HEALBOT_ASCENDANCE                      = GetSpellInfo(114049) or "--Ascendance";
     HEALBOT_ASTRAL_SHIFT                    = GetSpellInfo(108271) or "--Astral Shift";
     HEALBOT_CLOUDBURST_TOTEM                = GetSpellInfo(157153) or "--Cloudburst Totem";
-    HEALBOT_EARTH_SHIELD                    = GetSpellInfo(974) or "--Earth Shield";
+    HEALBOT_EARTH_SHIELD                    = GetSpellInfo(204288) or "--Earth Shield";
     HEALBOT_ELEMENTAL_FUSION                = GetSpellInfo(152257) or "--Elemental Fusion";
     HEALBOT_ELEMENTAL_MASTERY               = GetSpellInfo(16166) or "--Elemental Mastery";
     HEALBOT_EMPOWER                         = GetSpellInfo(118350) or "--Empower";
