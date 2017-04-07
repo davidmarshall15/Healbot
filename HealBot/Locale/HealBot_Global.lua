@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.1.0.2";
+HEALBOT_VERSION   = "7.2.0.1.b1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -96,6 +96,7 @@ function HealBot_globalVars()
     HEALBOT_REBUKE                          = GetSpellInfo(96231) or "--Rebuke"
     HEALBOT_RECKONING                       = GetSpellInfo(62124) or "--Reckoning"
     HEALBOT_REPENTANCE                      = GetSpellInfo(20066) or "--Repentance"
+    HEALBOT_SHIELD_OF_THE_RIGHTEOUS         = GetSpellInfo(53600) or "--Shield of the Righteous";
     HEALBOT_TURN_EVIL                       = GetSpellInfo(10326) or "--Turn Evil"
     --Priest
     HEALBOT_DOMINATE_MIND                   = GetSpellInfo(605) or "--Dominate Mind"
@@ -405,6 +406,7 @@ function HealBot_globalVars()
     HEALBOT_ANGELIC_FEATHER                 = GetSpellInfo(121557) or "--Angelic Feather"
     HEALBOT_ALMAIESH_THE_CORD_OF_HOPE       = GetSpellInfo(211443) or "--Al'maiesh, the Cord of Hope";
     HEALBOT_VESTMANTS_OF_DISCIPLINE         = GetSpellInfo(197711) or "--Vestments of Discipline";
+    HEALBOT_RAMMALS_ULTERIOR_MOTIVE         = GetSpellInfo(234710) or "--Rammal's Ulterior Motive"
 
 	--Shaman
     HEALBOT_ANACESTRAL_GUIDANCE             = GetSpellInfo(108281) or "--Ancestral Guidance";
@@ -416,6 +418,8 @@ function HealBot_globalVars()
     HEALBOT_ELEMENTAL_FUSION                = GetSpellInfo(152257) or "--Elemental Fusion";
     HEALBOT_ELEMENTAL_MASTERY               = GetSpellInfo(16166) or "--Elemental Mastery";
     HEALBOT_EMPOWER                         = GetSpellInfo(118350) or "--Empower";
+    HEALBOT_FLAMETONGUE                     = GetSpellInfo(193796) or "--Flametongue";
+    HEALBOT_FROSTBRAND                      = GetSpellInfo(196834) or "--Frostbrand";
     HEALBOT_GENESIS                         = GetSpellInfo(145518) or "--Genesis";
     HEALBOT_GRACE_OF_AIR                    = GetSpellInfo(116956) or "--Grace of Air";
     HEALBOT_HIGH_TIDE                       = GetSpellInfo(157154) or "--High Tide";
@@ -488,6 +492,10 @@ function HealBot_globalVars()
     HEALBOT_FEINT                           = GetSpellInfo(1966) or "--Feint"
     HEALBOT_SWIFTBLADES_CUNNING             = GetSpellInfo(113742) or "--Swiftblade's Cunning";
     HEALBOT_VANISH                          = GetSpellInfo(1856) or "--Vanish";
+    
+    --All
+    HEALBOT_VELENS_FUTURE_SIGHT             = GetSpellInfo(235966) or "--Velen's Future Sight"
+    HEALBOT_SEPHUZS_SECRET                  = GetSpellInfo(208052) or "--Sephuz's Secret"
     
     --Resurrection Spells
     HEALBOT_ANCESTRALSPIRIT                 = GetSpellInfo(2008) or "--Ancestral Spirit";
