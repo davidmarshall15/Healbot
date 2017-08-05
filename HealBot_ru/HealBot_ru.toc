@@ -1,9 +1,9 @@
-## Interface: 70100
+## Interface: 70200
 ## Title: HealBot Russian Localization
 ## Author: Strife
 ## Notes: HealBot Localization for ruRU
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 7.1.0.0
+## Version: 7.2.0.0
 
 HealBot_Localization.ru.lua

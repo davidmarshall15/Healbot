@@ -463,7 +463,9 @@ function HealBot_Data_InitVars()
                 [HEALBOT_NATURE_REJUVENATION_GERMINATION]=2,
                 --Legion Added
                 [HEALBOT_SPRING_BLOSSOMS]=2,               
-                [HEALBOT_CULTIVATION]=2,                     
+                [HEALBOT_CULTIVATION]=2,
+                [HEALBOT_INNERVATE]=4,
+                [HEALBOT_ESSENCE_OF_GHANIR]=2,
             },
             ["HUNT"] = {
                 [HEALBOT_MENDPET]=2,
@@ -533,6 +535,10 @@ function HealBot_Data_InitVars()
                 [HEALBOT_BLESSING_OF_TUURE]=2,
                 [HEALBOT_POWER_OF_THE_NAARU]=2,
                 [HEALBOT_POWER_OF_THE_DARK_SIDE]=2,
+                [HEALBOT_ANGELIC_FEATHER]=2,
+                [HEALBOT_ALMAIESH_THE_CORD_OF_HOPE]=2,
+                [HEALBOT_VESTMANTS_OF_DISCIPLINE]=2,
+                [HEALBOT_RAMMALS_ULTERIOR_MOTIVE]=2,
             },
             ["ROGU"] = {
                 [HEALBOT_VANISH]=2,
@@ -548,6 +554,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_UNLEASH_LIFE]=2,
                 [HEALBOT_ASTRAL_SHIFT]=2,
                 [HEALBOT_ELEMENTAL_MASTERY]=2,
+                [HEALBOT_FLAMETONGUE]=2,
+                [HEALBOT_FROSTBRAND]=2,
                 [HEALBOT_HEALING_RAIN]=2,
                 [HEALBOT_SPIRITWALKERS_GRACE]=2,
                 --WoD Added
@@ -575,6 +583,9 @@ function HealBot_Data_InitVars()
             },
             ["DEMO"] = {
                 [HEALBOT_DEMON_SPIKES]=4,
+                [HEALBOT_BLUR]=4,
+                [HEALBOT_EMPOWER_WARDS]=4,
+                [HEALBOT_METAMORPHOSIS]=4,
             },
             ["MONK"] = {
                 [HEALBOT_VIGILANCE]=2,
@@ -593,6 +604,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_EXTEND_LIFE]=2,
                 --Legion Added
                 [HEALBOT_TOUCH_OF_KARMA]=2,
+                [HEALBOT_ESSENCE_FONT]=2,
             },
             ["ALL"] = {
                 [HEALBOT_GIFT_OF_THE_NAARU]=2,
@@ -601,6 +613,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_SHROUD_OF_THE_NAGLFAR]=2,
                 [HEALBOT_SPIRIT_FRAGMENT]=2,
                 [HEALBOT_NORGANNONS_FORESIGHT]=2,
+                [HEALBOT_VELENS_FUTURE_SIGHT]=2,
+                [HEALBOT_SEPHUZS_SECRET]=2,
             },
         },
     };
