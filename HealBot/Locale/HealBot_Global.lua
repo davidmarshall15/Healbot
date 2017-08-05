@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.2.0.1.b1";
+HEALBOT_VERSION   = "7.2.5.0.b1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -37,13 +37,20 @@ function HealBot_globalVars()
     HEALBOT_ELIXIR_OF_POISON_RES            = GetItemInfo(3386) or "--Potion of Curing";
 
     --Items
-    HEALBOT_BLOOM                           = GetSpellInfo(176160) or "--Bloom"
-    HEALBOT_EVER_BLOOMING_FROND             = GetItemInfo(118935) or "--Ever-Blooming Frond"
+    HEALBOT_BLOOM                           = GetSpellInfo(176160) or "--Bloom";
+    HEALBOT_EVER_BLOOMING_FROND             = GetItemInfo(118935) or "--Ever-Blooming Frond";
     HEALBOT_ORALIUS_WHISPERING_CRYSTAL      = GetItemInfo(118922) or "--Oralius' Whispering Crystal";
-    HEALBOT_WHISPERS_OF_INSANITY            = GetSpellInfo(176151) or "--Whispers of Insanity"
-    HEALBOT_SHROUD_OF_THE_NAGLFAR           = GetSpellInfo(215247) or "--Shroud of the Naglfar"
-    HEALBOT_SPIRIT_FRAGMENT                 = GetSpellInfo(221878) or "--Spirit Fragment"
+    HEALBOT_WHISPERS_OF_INSANITY            = GetSpellInfo(176151) or "--Whispers of Insanity";
+    HEALBOT_SHROUD_OF_THE_NAGLFAR           = GetSpellInfo(215247) or "--Shroud of the Naglfar";
+    HEALBOT_SPIRIT_FRAGMENT                 = GetSpellInfo(221878) or "--Spirit Fragment";
     HEALBOT_NORGANNONS_FORESIGHT            = GetSpellInfo(208215) or "--Norgannon's Foresight";
+    HEALBOT_DELICIOUS_CAKE                  = GetSpellInfo(225126) or "--Delicious Cake!";
+    HEALBOT_GUIDING_HAND                    = GetSpellInfo(242622) or "--Guiding Hand";
+    HEALBOT_FRUITFUL_MACHINATIONS           = GetSpellInfo(242623) or "--Fruitful Machinations";
+    --HEALBOT_AOF_INFUSION_OF_LIGHT               = GetSpellInfo(242621) or "--Infusion of Light";
+    HEALBOT_REPURPOSED_FEL_FOCUSER          = GetItemInfo(147707) or "--Repurposed Fel Focuser";
+    HEALBOT_FEL_FOCUS                       = GetSpellInfo(242551) or "--Fel Focus";
+    HEALBOT_OCEANS_EMBRACE                  = GetSpellInfo(242467) or "--Ocean's Embrace";
 
     --Racial Abilities
     HEALBOT_DARKFLIGHT                      = GetSpellInfo(68992) or "--Darkflight";

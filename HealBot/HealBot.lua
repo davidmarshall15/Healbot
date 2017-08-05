@@ -159,10 +159,12 @@ function HealBot_InitVars()
     HealBot_Buff_ItemID = {
         [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
         [HEALBOT_EVER_BLOOMING_FROND] = 118935,
+        [HEALBOT_REPURPOSED_FEL_FOCUSER] = 147707,
     };
     HealBot_Buff_Aura2Item = {
         [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
         [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
+        [HEALBOT_FEL_FOCUS] = HEALBOT_REPURPOSED_FEL_FOCUSER,
     };
 end
 
@@ -1146,7 +1148,7 @@ function HealBot_OnUpdate(self)
                         HealBot_Action_ResetSkin("init")
                     elseif HealBot_Options_Timer[5] then
                         HealBot_Options_Timer[5]=nil
-                        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" then 
+                        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" or HEALBOT_REPURPOSED_FEL_FOCUSER=="--Repurposed Fel Focuser" then 
                             HealBot_OnEvent_ItemInfoReceived() 
                         else
                             HealBot_Options_InitBuffList()
@@ -1926,6 +1928,10 @@ function HealBot_OnEvent_ItemInfoReceived(self)
         HEALBOT_EVER_BLOOMING_FROND = GetItemInfo(118935) or "--Ever-Blooming Frond"
         allInfoReceived = false
     end
+    if HEALBOT_REPURPOSED_FEL_FOCUSER=="--Repurposed Fel Focuser" then
+        HEALBOT_REPURPOSED_FEL_FOCUSER = GetItemInfo(147707) or "--Repurposed Fel Focuser"
+        allInfoReceived = false
+    end
     if allInfoReceived then
         HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
         HealBot_OnEvent_VariablesLoaded(self)
@@ -2336,11 +2342,14 @@ function HealBot_configClassHoT()
     for xClass,_  in pairs(hbClassHoTwatch) do
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
         for sName,x  in pairs(HealBot_configClassHoTClass) do
-            if xClass=="ALL" and x==3 then x=4; end
-            if (x==4) or (x==3 and xClass==HealBot_Data["PCLASSTRIM"]) then
+            --if xClass=="ALL" and x==3 then x=4; end -- should filter by class, need to change
+            if xClass=="ALL" and x==3 then
+                HealBot_Watch_HoT[sName]="C"
+                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="C" end
+            elseif (x==4) or (x==3 and xClass==HealBot_Data["PCLASSTRIM"]) then
                 HealBot_Watch_HoT[sName]="A"
                 if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="A" end
-            elseif x==2 and xClass==HealBot_Data["PCLASSTRIM"] then
+            elseif x==2 then --and (xClass==HealBot_Data["PCLASSTRIM"] or xClass=="ALL") then
                 HealBot_Watch_HoT[sName]="S"
                 if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="S" end
             else
@@ -3139,12 +3148,14 @@ function HealBot_HasMyBuffs(button)
             end
         else
             while true do
-                local bName,_,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL"); 
+                local bName,_,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL");
+                local _, uClassEN = UnitClass(xUnit);
+                local uClassTrim = strsub(uClassEN or "XXXX",1,4)
                 if not caster then caster=HEALBOT_WORDS_UNKNOWN end
                 if bName and caster and expirationTime then
                     if not hbExcludeSpells[spellID] then 
                         local y=HealBot_Watch_HoT[bName] or "nil"
-                        if (y=="A" or (y=="S" and caster=="player")) then
+                        if (y=="A" or (y=="S" and caster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                             if (expirationTime or 0)==0 then expirationTime=hbNoEndTime end
                             auraData[spellID]={["NAME"]=bName,["TEXTURE"]=iTexture,["COUNT"]=bCount,["TIME"]=expirationTime,["CASTER"]=caster}
                         end
@@ -6202,8 +6213,8 @@ end
 
 function HealBot_DoReset_Buffs(pClassTrim)
     HealBot_Config_Buffs.HealBotBuffText = {[1]=HEALBOT_WORDS_NONE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE,[4]=HEALBOT_WORDS_NONE,[5]=HEALBOT_WORDS_NONE,
-                                      [6]=HEALBOT_WORDS_NONE,[7]=HEALBOT_WORDS_NONE,[8]=HEALBOT_WORDS_NONE}
-    HealBot_Config_Buffs.HealBotBuffDropDown = {[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=2,[8]=2}
+                                      [6]=HEALBOT_WORDS_NONE,[7]=HEALBOT_WORDS_NONE,[8]=HEALBOT_WORDS_NONE,[9]=HEALBOT_WORDS_NONE}
+    HealBot_Config_Buffs.HealBotBuffDropDown = {[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=2,[8]=2,[9]=2}
     if pClassTrim=="DRUI" then
         if HealBot_GetSpellId(HEALBOT_MARK_OF_THE_WILD) then
             HealBot_Config_Buffs.HealBotBuffText[1]=HEALBOT_MARK_OF_THE_WILD
@@ -6266,6 +6277,9 @@ function HealBot_DoReset_Buffs(pClassTrim)
     end
     if IsUsableItem(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) or HealBot_IsItemInBag(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) then
         HealBot_Config_Buffs.HealBotBuffText[8]=HEALBOT_ORALIUS_WHISPERING_CRYSTAL
+    end
+    if IsUsableItem(HEALBOT_REPURPOSED_FEL_FOCUSER) or HealBot_IsItemInBag(HEALBOT_REPURPOSED_FEL_FOCUSER) then
+        HealBot_Config_Buffs.HealBotBuffText[9]=HEALBOT_REPURPOSED_FEL_FOCUSER
     end
 end
 

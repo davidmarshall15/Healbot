@@ -615,6 +615,11 @@ function HealBot_Data_InitVars()
                 [HEALBOT_NORGANNONS_FORESIGHT]=2,
                 [HEALBOT_VELENS_FUTURE_SIGHT]=2,
                 [HEALBOT_SEPHUZS_SECRET]=2,
+                [HEALBOT_DELICIOUS_CAKE]=2,
+                [HEALBOT_GUIDING_HAND]=2,
+                [HEALBOT_FRUITFUL_MACHINATIONS]=2,
+                [HEALBOT_OCEANS_EMBRACE]=2,
+                --[HEALBOT_AOF_INFUSION_OF_LIGHT]=2,
             },
         },
     };
