@@ -90,6 +90,7 @@ function HealBot_Options_InitVars()
     HealBot_Buff_Items_List = {
         HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
         HEALBOT_EVER_BLOOMING_FROND,
+        HEALBOT_REPURPOSED_FEL_FOCUSER,
     };
     HealBot_Debuff_Types = {
         [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
@@ -454,6 +455,12 @@ function HealBot_Options_setLists()
         [HEALBOT_NORGANNONS_FORESIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_VELENS_FUTURE_SIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_SEPHUZS_SECRET]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_DELICIOUS_CAKE]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_GUIDING_HAND]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_FRUITFUL_MACHINATIONS]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_OCEANS_EMBRACE]=HEALBOT_CLASSES_ALL,
+        --[HEALBOT_AOF_INFUSION_OF_LIGHT]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=HEALBOT_CLASSES_ALL,
         
         --Death Knight
         [HEALBOT_ICEBOUND_FORTITUDE]=HEALBOT_DEATHKNIGHT,
@@ -493,6 +500,7 @@ function HealBot_Options_setLists()
         [HEALBOT_HARMONY]=HEALBOT_DRUID,
         [HEALBOT_INNERVATE]=HEALBOT_DRUID,
         [HEALBOT_ESSENCE_OF_GHANIR]=HEALBOT_DRUID,
+		[HEALBOT_FOCUSED_GROWTH]=HEALBOT_DRUID,
         
         --Hunter
         [HEALBOT_MENDPET]=HEALBOT_HUNTER,
@@ -544,6 +552,7 @@ function HealBot_Options_setLists()
 		[HEALBOT_BESTOW_FAITH]=HEALBOT_PALADIN,
         [HEALBOT_BEACON_OF_VIRTUE]=HEALBOT_PALADIN,
         [HEALBOT_TYRS_DELIVERANCE]=HEALBOT_PALADIN,
+		[HEALBOT_SACRED_DAWN]=HEALBOT_PALADIN,
         
         --Priest        
         [HEALBOT_PRAYER_OF_MENDING]=HEALBOT_PRIEST,
@@ -582,6 +591,7 @@ function HealBot_Options_setLists()
         [HEALBOT_ALMAIESH_THE_CORD_OF_HOPE]=HEALBOT_PRIEST,
         [HEALBOT_VESTMANTS_OF_DISCIPLINE]=HEALBOT_PRIEST,
         [HEALBOT_RAMMALS_ULTERIOR_MOTIVE]=HEALBOT_PRIEST,
+		[HEALBOT_SPIRIT_OF_REDEMPTION]=HEALBOT_PRIEST,
 		
 		--Rogue
         [HEALBOT_VANISH]=HEALBOT_ROGUE,
@@ -5613,10 +5623,10 @@ function HealBot_Options_Class_HoTctlAction_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_Class_HoTctlAction_List), 1 do
         local hbText = nil
-        if HealBot_Options_StorePrev["FilterHoTctlName"]==HEALBOT_CLASSES_ALL then
-            if j==3 then
+        if HealBot_Options_StorePrev["FilterHoTctlName"]~=HEALBOT_CLASSES_ALL then
+            if j==4 then -- was 3
                 hbText=HEALBOT_WORD_ALWAYS
-            elseif j<3 then
+            elseif j<3 then -- was 3
                 hbText=HealBot_Options_Class_HoTctlAction_List[j];
             end
         else
@@ -5626,6 +5636,8 @@ function HealBot_Options_Class_HoTctlAction_DropDown()
             info.text = hbText
             info.func = function(self)
                             local y=self:GetID()
+                            if HealBot_Options_StorePrev["FilterHoTctlName"]~=HEALBOT_CLASSES_ALL and y==3 then y=4 end
+                                
                             if y>1 then 
                                 HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname]=y 
                             else
