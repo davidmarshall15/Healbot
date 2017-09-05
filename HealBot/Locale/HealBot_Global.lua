@@ -1,4 +1,4 @@
-HEALBOT_VERSION   = "7.2.5.0.b1";
+HEALBOT_VERSION   = "7.3.0.0";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()

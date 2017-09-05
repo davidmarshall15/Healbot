@@ -139,7 +139,7 @@ function HealBot_Comms_Zone()
     local HealBotAddonMsgType=HealBot_GetHealBot_AddonMsgType()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Zone="..GetRealZoneText())
     if HealBotAddonMsgType==1 then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=BATTLEGROUND")
+        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=INSTANCE_CHAT")
     elseif HealBotAddonMsgType==2 then
         HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=RAID")
     elseif HealBotAddonMsgType==3 then

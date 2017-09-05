@@ -3956,7 +3956,7 @@ end
 local HealBot_Action_Init={}
 function HealBot_Action_OnShow(self, hbCurFrame)
     if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OPENSOUND"] then
-        PlaySound("igAbilityOpen");
+        PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
     end
     HealBot_Config.ActionVisible[hbCurFrame]=1
     if not HealBot_Action_Init[hbCurFrame] then

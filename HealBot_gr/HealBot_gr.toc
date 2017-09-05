@@ -1,9 +1,9 @@
-## Interface: 70200
+## Interface: 70300
 ## Title: HealBot Greek Localization
 ## Author: Snaomi
 ## Notes: HealBot Localization for grGR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 7.2.5.0
+## Version: 7.3.0.0
 
 HealBot_Localization.gr.lua
