@@ -762,43 +762,43 @@ function HealBot_Action_BarColourPct(hlthPct)
 end
 
 function HealBot_Action_HealthBar(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar"];
 end
 
 function HealBot_Action_HealthBar2(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar2"];
 end
 
 function HealBot_Action_HealthBar3(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar3"];
 end
 
 function HealBot_Action_HealthBar4(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar4"];
 end
 
 function HealBot_Action_HealthBar5(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar5"];
 end
 
 function HealBot_Action_HealthBar6(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar6"];
 end
 
 function HealBot_Action_HealthBarDir(button)
-    if not button then return nil end
+    if not button or not button:GetName() then return nil end
     local barName = button:GetName();
     return _G[barName.."BarDir"];
 end
