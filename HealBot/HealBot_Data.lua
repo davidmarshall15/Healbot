@@ -559,6 +559,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_OCEANS_EMBRACE]=2,
                 --[HEALBOT_AOF_INFUSION_OF_LIGHT]=2,
 				[HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=2,
+                [HEALBOT_HIGHFATHERS_TIMEKEEPING]=2,
             },
         },
     };
