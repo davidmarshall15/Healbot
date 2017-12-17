@@ -167,6 +167,8 @@ function HealBot_globalVars()
     HEALBOT_UPLIFT                          = GetSpellInfo(116670) or "--Uplift"
     HEALBOT_ZEN_MEDITATION                  = GetSpellInfo(115176) or "--Zen Meditation"
     HEALBOT_ZEN_SPHERE                      = GetSpellInfo(124081) or "--Zen Sphere"
+	HEALBOT_OVYDS_WINTER_WRAP				= GetSpellInfo(217647) or "--Ovyds Winter Wrap"
+	HEALBOT_TRANQUIL_MIST				    = GetSpellInfo(253448) or "--Tranquil Mist"
     --Paladin
     HEALBOT_FLASH_OF_LIGHT                  = GetSpellInfo(19750) or "--Flash of Light";
     HEALBOT_HOLY_LIGHT                      = GetSpellInfo(82326) or "--Holy Light";
