@@ -115,7 +115,8 @@ function HealBot_InitVars()
     HealBot_dSpell=HEALBOT_HEAVY_RUNECLOTH_BANDAGE;
     HealBot_Ignore_NonHarmful_Debuffs = {[HEALBOT_DEBUFF_MAJOR_DREAMLESS] = true,
                                          [HEALBOT_DEBUFF_GREATER_DREAMLESS] = true,
-                                         [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,};
+                                         [HEALBOT_DEBUFF_DREAMLESS_SLEEP] = true,
+                                         [HEALBOT_DEBUFF_SHATTERED_DEFENSES] = true,};
     HealBot_Ignore_Movement_Debuffs = {[HEALBOT_DEBUFF_FROSTBOLT] = true,
                                        [HEALBOT_DEBUFF_MAGMA_SHACKLES] = true,
                                        [HEALBOT_DEBUFF_SLOW] = true,

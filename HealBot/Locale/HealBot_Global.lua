@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "7.3.2.0";
+﻿HEALBOT_VERSION   = "7.3.5.0.b1";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -361,6 +361,7 @@ function HealBot_globalVars()
 	HEALBOT_LIGHT_OF_THE_MARTYR             = GetSpellInfo(183998) or "--Light of the Martyr";
     HEALBOT_HAND_OF_THE_PROTECTOR           = GetSpellInfo(213652) or "--Hand of the Protector";
 	HEALBOT_SACRED_DAWN                     = GetSpellInfo(243174) or "--Sacred Dawn";
+    HEALBOT_LIGHTS_GRACE                    = GetSpellInfo(216327) or "--Light's Grace";
     
 	--Priest
     HEALBOT_ANGELIC_BULWARK                 = GetSpellInfo(108945) or "--Angelic Bulwark"
@@ -570,6 +571,7 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_DREAMLESS_SLEEP          = GetSpellInfo(15822) or "--Dreamless Sleep";
     HEALBOT_DEBUFF_GREATER_DREAMLESS        = GetSpellInfo(24360) or "--Greater Dreamless Sleep";
     HEALBOT_DEBUFF_MAJOR_DREAMLESS          = GetSpellInfo(28504) or "--Major Dreamless Sleep";
+    HEALBOT_DEBUFF_SHATTERED_DEFENSES       = GetSpellInfo(209574) or "--Shattered Defenses";
     
     --Common Buffs
     HEALBOT_ZAMAELS_PRAYER                  = GetSpellInfo(88663) or "--Zamael's Prayer";
@@ -597,25 +599,6 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(30108) or "--Unstable Affliction";
     HEALBOT_DEBUFF_VIPER_STING              = GetSpellInfo(39413) or "--Viper Sting";
 	HEALBOT_DEBUFF_VAMPIRIC_TOUCH           = GetSpellInfo(34914) or "--Vampiric Touch";	
-    --Ignore Movement Debuffs (ONLY DISPELLABLE DEBUFFS)
-    HEALBOT_DEBUFF_CHILLED                  = GetSpellInfo(6136) or "--Chilled";
-    HEALBOT_DEBUFF_CONEOFCOLD               = GetSpellInfo(64645) or "--Cone of Cold";
-    HEALBOT_DEBUFF_EARTHBIND                = GetSpellInfo(3600) or "--Earthbind";
-    HEALBOT_DEBUFF_FROST_SHOCK              = GetSpellInfo(41116) or "--Frost Shock";
-    HEALBOT_DEBUFF_FROSTBOLT                = GetSpellInfo(69573) or "--Frostbolt";
-    HEALBOT_DEBUFF_MAGMA_SHACKLES           = GetSpellInfo(19496) or "--Magma Shackles";
-    HEALBOT_DEBUFF_SEAL_OF_JUSTICE          = GetSpellInfo(20170) or "--Seal of Justice";
-    HEALBOT_DEBUFF_SLOW                     = GetSpellInfo(32922) or "--Slow";  
-    --Ignore Non-Harmful Debuffs (ONLY DISPELLABLE DEBUFFS)
-    HEALBOT_DEBUFF_DREAMLESS_SLEEP          = GetSpellInfo(15822) or "--Dreamless Sleep";
-    HEALBOT_DEBUFF_GREATER_DREAMLESS        = GetSpellInfo(24360) or "--Greater Dreamless Sleep";
-    HEALBOT_DEBUFF_MAJOR_DREAMLESS          = GetSpellInfo(28504) or "--Major Dreamless Sleep";
-    
-    --Common Buffs
-    HEALBOT_ZAMAELS_PRAYER                  = GetSpellInfo(88663) or "--Zamael's Prayer";
-        
-    --Unit Max Health Modifier Debuffs
-    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(179986) or "--Aura of Content";
     
     --Mythic+ Affixs
 	HEALBOT_DEBUFF_BURST                    = GetSpellInfo(240443) or "--Burst";

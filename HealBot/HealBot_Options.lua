@@ -553,6 +553,7 @@ function HealBot_Options_setLists()
         [HEALBOT_BEACON_OF_VIRTUE]=HEALBOT_PALADIN,
         [HEALBOT_TYRS_DELIVERANCE]=HEALBOT_PALADIN,
 		[HEALBOT_SACRED_DAWN]=HEALBOT_PALADIN,
+        [HEALBOT_LIGHTS_GRACE]=HEALBOT_PALADIN,
         
         --Priest        
         [HEALBOT_PRAYER_OF_MENDING]=HEALBOT_PRIEST,
@@ -894,6 +895,8 @@ function HealBot_Options_GetRacialDebuffSpells_List(race)
       ["Blo"] = {},
       ["Gob"] = {},
       ["Wor"] = {HEALBOT_DARKFLIGHT,},
+      ["Hig"] = {}, -- Highmountain Tauren
+      ["Voi"] = {}, -- Void Elf
     }
     return HealBot_Racial_Debuff_Spells[race]
 end
