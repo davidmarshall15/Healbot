@@ -458,7 +458,6 @@ function HealBot_Options_setLists()
         [HEALBOT_DELICIOUS_CAKE]=HEALBOT_CLASSES_ALL,
         [HEALBOT_GUIDING_HAND]=HEALBOT_CLASSES_ALL,
         [HEALBOT_FRUITFUL_MACHINATIONS]=HEALBOT_CLASSES_ALL,
-        [HEALBOT_HIGHFATHERS_TIMEKEEPING]=HEALBOT_CLASSES_ALL,
         [HEALBOT_OCEANS_EMBRACE]=HEALBOT_CLASSES_ALL,
         --[HEALBOT_AOF_INFUSION_OF_LIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=HEALBOT_CLASSES_ALL,
@@ -530,8 +529,6 @@ function HealBot_Options_setLists()
         [HEALBOT_TOUCH_OF_KARMA]=HEALBOT_MONK,
 		--Legion Added
         [HEALBOT_ESSENCE_FONT]=HEALBOT_MONK,
-		[HEALBOT_OVYDS_WINTER_WRAP]=HEALBOT_MONK,
-		[HEALBOT_TRANQUIL_MIST]=HEALBOT_MONK,
         
         --Paladin
         [HEALBOT_DIVINE_SHIELD]=HEALBOT_PALADIN,
@@ -2121,6 +2118,7 @@ function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
         HealBot_Globals.RangeCheckFreq = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
+        HealBot_Set_Timers()
     end
 end
 

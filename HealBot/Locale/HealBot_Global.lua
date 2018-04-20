@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "7.3.5.0.b1";
+﻿HEALBOT_VERSION   = "7.3.5.0.b2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -49,7 +49,6 @@ function HealBot_globalVars()
     HEALBOT_DELICIOUS_CAKE                  = GetSpellInfo(225126) or "--Delicious Cake!";
     HEALBOT_GUIDING_HAND                    = GetSpellInfo(242622) or "--Guiding Hand";
     HEALBOT_FRUITFUL_MACHINATIONS           = GetSpellInfo(242623) or "--Fruitful Machinations";
-    HEALBOT_HIGHFATHERS_TIMEKEEPING         = GetSpellInfo(253287) or "--Highfather's Timekeeping";
     --HEALBOT_AOF_INFUSION_OF_LIGHT               = GetSpellInfo(242621) or "--Infusion of Light";
     HEALBOT_OCEANS_EMBRACE                  = GetSpellInfo(242467) or "--Ocean's Embrace";
     HEALBOT_VELENS_FUTURE_SIGHT             = GetSpellInfo(235966) or "--Velen's Future Sight"
@@ -167,8 +166,6 @@ function HealBot_globalVars()
     HEALBOT_UPLIFT                          = GetSpellInfo(116670) or "--Uplift"
     HEALBOT_ZEN_MEDITATION                  = GetSpellInfo(115176) or "--Zen Meditation"
     HEALBOT_ZEN_SPHERE                      = GetSpellInfo(124081) or "--Zen Sphere"
-	HEALBOT_OVYDS_WINTER_WRAP				= GetSpellInfo(217647) or "--Ovyds Winter Wrap"
-	HEALBOT_TRANQUIL_MIST				    = GetSpellInfo(253448) or "--Tranquil Mist"
     --Paladin
     HEALBOT_FLASH_OF_LIGHT                  = GetSpellInfo(19750) or "--Flash of Light";
     HEALBOT_HOLY_LIGHT                      = GetSpellInfo(82326) or "--Holy Light";

@@ -544,8 +544,6 @@ function HealBot_Data_InitVars()
                 --Legion Added
                 [HEALBOT_TOUCH_OF_KARMA]=2,
                 [HEALBOT_ESSENCE_FONT]=2,
-				[HEALBOT_OVYDS_WINTER_WRAP]=2,
-				[HEALBOT_TRANQUIL_MIST]=2,
             },
             ["ALL"] = {
                 [HEALBOT_GIFT_OF_THE_NAARU]=2,
@@ -562,7 +560,6 @@ function HealBot_Data_InitVars()
                 [HEALBOT_OCEANS_EMBRACE]=2,
                 --[HEALBOT_AOF_INFUSION_OF_LIGHT]=2,
 				[HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=2,
-                [HEALBOT_HIGHFATHERS_TIMEKEEPING]=2,
             },
         },
     };

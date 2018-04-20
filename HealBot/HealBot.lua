@@ -34,7 +34,7 @@ local HealBot_ReCheckBuffsTimed={}
 local HealBot_cleanGUIDs={}
 local HealBot_HealsAbsorb={}
 local HealBot_UnitSpecial={}
-local HealBot_UnitHealthCheck={}
+--local HealBot_UnitHealthCheck={}
 local HealBot_EnemyUnits={}
 local _=nil
 local HealBot_Ignore_Class_Debuffs = {};
@@ -784,7 +784,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="cw") then  -- Clear Warnings
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="zzz") then
-        HealBot_AddDebug(HEALBOT_CHAT_ADDONID.."Nothing set")
+        HealBot_AddDebug(HEALBOT_CHAT_ADDONID.."No tests set")
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -955,45 +955,51 @@ local bBand = bit.band
 function HealBot_OnEvent_Combat_Log(self, timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
     if HealBot_UnitData[destGUID] and UnitExists(HealBot_UnitData[destGUID]["UNIT"]) and HealBot_unitHealth[HealBot_UnitData[destGUID]["UNIT"]] and bBand(destFlags, dFlags)>0 then
         local xUnit=HealBot_UnitData[destGUID]["UNIT"]
-        if HealBot_UnitSpecial[xUnit] and HealBot_UnitSpecial[xUnit]["noFastHealth"] then
+--        if HealBot_UnitSpecial[xUnit] and HealBot_UnitSpecial[xUnit]["noFastHealth"] then
             -- Do nothing
-        elseif not HealBot_EnemyUnits[xUnit] then
-            if HealBot_HealsAbsorb[xUnit] then HealBot_IncHeals_HealsInUpdate(xUnit) end
-            local x,y=0,0
-            if (event == "SWING_DAMAGE") then
-                x = -select(1,...)
-            elseif (event == "SPELL_PERIODIC_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SPLIT" or event == "DAMAGE_SHIELD") then
-                x = -select(4, ...)
-            elseif (event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL") then
-                x = select(4, ...)
-            elseif (event == "ENVIRONMENTAL_DAMAGE") then
-                x = -select(2, ...)
-            elseif (event == "SPELL_AURA_APPLIED") then
-                if spellID==12975 then
-                    x=floor(HealBot_unitHealthMax[xUnit]*0.3)
-                    y=x
-                elseif spellID == 469 then
-                    HealBot_CheckHealth(xUnit)
-                end
-            elseif (event == "SPELL_AURA_REMOVED") then
-                if spellID==12975 then
-                    x=floor-(HealBot_unitHealthMax[xUnit]*0.3)
-                    y=x
-                elseif spellID == 469 then
-                    HealBot_CheckHealth(xUnit)
-                end
-            end
-            if x~=0 or y~=0 then
-                HealBot_unitHealthMax[xUnit]=HealBot_unitHealthMax[xUnit]+y
-                if (HealBot_unitHealth[xUnit]+x)>HealBot_unitHealthMax[xUnit] then
-                    HealBot_unitHealth[xUnit]=HealBot_unitHealthMax[xUnit]
-                elseif (HealBot_unitHealth[xUnit]+x)<0 then
-                    HealBot_unitHealth[xUnit]=0
-                else
-                    HealBot_unitHealth[xUnit]=HealBot_unitHealth[xUnit]+x
-                end
-                HealBot_Action_ResetUnitStatus(xUnit)
-                HealBot_UnitHealthCheck[xUnit]=GetTime()+0.4
+        if not HealBot_EnemyUnits[xUnit] then
+--            local x,y=0,0
+--            if (event == "SWING_DAMAGE") then
+--                x = -select(1,...)
+--            elseif (event == "SPELL_PERIODIC_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SPLIT" or event == "DAMAGE_SHIELD") then
+--                x = -select(4, ...)
+--            elseif (event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL") then
+--                x = select(4, ...)
+--            elseif (event == "ENVIRONMENTAL_DAMAGE") then
+--                x = -select(2, ...)
+--            elseif (event == "SPELL_AURA_APPLIED") then
+--                if spellID==12975 then
+--                    x=floor(HealBot_unitHealthMax[xUnit]*0.3)
+--                    y=x
+--                elseif spellID == 469 then
+--                    HealBot_CheckHealth(xUnit)
+--                end
+--            elseif (event == "SPELL_AURA_REMOVED") then
+--                if spellID==12975 then
+--                    x=floor-(HealBot_unitHealthMax[xUnit]*0.3)
+--                    y=x
+--                elseif spellID == 469 then
+--                    HealBot_CheckHealth(xUnit)
+--                end
+--            end
+--            if x~=0 or y~=0 then
+--                if HealBot_HealsAbsorb[xUnit] then HealBot_IncHeals_HealsInUpdate(xUnit) end
+--                HealBot_unitHealthMax[xUnit]=HealBot_unitHealthMax[xUnit]+y
+--                if (HealBot_unitHealth[xUnit]+x)>HealBot_unitHealthMax[xUnit] then
+--                    HealBot_unitHealth[xUnit]=HealBot_unitHealthMax[xUnit]
+--                elseif (HealBot_unitHealth[xUnit]+x)<0 then
+--                    HealBot_unitHealth[xUnit]=0
+--                else
+--                    HealBot_unitHealth[xUnit]=HealBot_unitHealth[xUnit]+x
+--                end
+--                HealBot_Action_ResetUnitStatus(xUnit)
+--                HealBot_UnitHealthCheck[xUnit]=GetTime()+0.4
+--            end
+            if (event == "SWING_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SPLIT" or
+                event == "DAMAGE_SHIELD" or event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL" or event == "ENVIRONMENTAL_DAMAGE" or
+                event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REMOVED") then
+                if HealBot_HealsAbsorb[xUnit] then HealBot_IncHeals_HealsInUpdate(xUnit) end
+                HealBot_CheckHealth(xUnit)
             end
         end
     end
@@ -1459,7 +1465,7 @@ function HealBot_OnUpdate(self)
                         end
                     elseif HealBot_luVars["caliSwitch"]<4 then
                         for xUnit,_ in pairs(HealBot_DelayDebuffCheck) do
-                            if Ti<2 then
+                            if Ti<3 then
                                 local xButton=HealBot_Unit_Button[xUnit]
                                 if xButton then
                                     HealBot_CheckUnitDebuffs(xButton)
@@ -1470,7 +1476,7 @@ function HealBot_OnUpdate(self)
                         end
                     elseif HealBot_luVars["caliSwitch"]<5 then
                         for xUnit,_ in pairs(HealBot_DelayBuffCheck) do
-                            if Ti<2 then
+                            if Ti<5 then
                                 local xButton=HealBot_Unit_Button[xUnit]
                                 if xButton then
                                     HealBot_CheckUnitBuffs(xButton)
@@ -1484,7 +1490,7 @@ function HealBot_OnUpdate(self)
                         end
                     elseif HealBot_luVars["caliSwitch"]<6 then
                         for xGUID,xUnit in pairs(HealBot_QueueCheckBuffs) do
-                            if Ti<2 then
+                            if Ti<7 then
                                 HealBot_CheckMyBuffs(xGUID)
                                 HealBot_DelayBuffCheck[xUnit]="Q";
                                 HealBot_QueueCheckBuffs[xGUID]=nil
@@ -1493,7 +1499,7 @@ function HealBot_OnUpdate(self)
                         end
                     elseif HealBot_luVars["caliSwitch"]<7 then
                         for xGUID,xTime in pairs(HealBot_cleanGUIDs) do
-                            if Ti<2 then
+                            if Ti<9 then
                                 HealBot_ClearLocalArr(xGUID, xTime)
                                 HealBot_cleanGUIDs[xGUID]=nil
                                 Ti=Ti+1
@@ -1534,19 +1540,19 @@ function HealBot_OnUpdate(self)
                     HealBot_luVars["DelayLockdownCheck"]=nil
                 end
             end
-            for xUnit,cTime in pairs(HealBot_UnitHealthCheck) do
-                if cTime<GetTime() then
-                    if Ti<3 then
-                        if UnitExists(xUnit) then 
-                            HealBot_CheckHealth(xUnit)
-                        end
-                        HealBot_UnitHealthCheck[xUnit]=nil
-                        Ti=Ti+1
-                    end
-                end
-            end
+--            for xUnit,cTime in pairs(HealBot_UnitHealthCheck) do
+--                if cTime<GetTime() then
+--                    if Ti<9 then
+--                        if UnitExists(xUnit) then 
+--                            HealBot_CheckHealth(xUnit)
+--                        end
+--                        HealBot_UnitHealthCheck[xUnit]=nil
+--                        Ti=Ti+1
+--                    end
+--                end
+--            end
             for xUnit,bType in pairs(HealBot_BarCheck) do
-                if Ti<5 then
+                if Ti<15 then
                     if UnitExists(xUnit) then 
                         if bType=="H" then
                             HealBot_Reset_UnitHealth(xUnit) 
@@ -1579,7 +1585,7 @@ function HealBot_OnUpdate(self)
                 end
             end
             for xUnit,z in pairs(HealBot_VehicleCheck) do
-                if z<9 then
+                if z<19 then
                     HealBot_VehicleCheck[xUnit]=HealBot_VehicleCheck[xUnit]+1
                 else
                     HealBot_VehicleCheck[xUnit]=nil
@@ -2786,7 +2792,7 @@ end
 function HealBot_OnEvent_UnitHealth(isEvent,unit,health,healthMax)
     local hUnit,hGUID = HealBot_UnitID(unit)
     if hUnit and not HealBot_EnemyUnits[hUnit] then
-        if HealBot_UnitHealthCheck[hUnit] then HealBot_UnitHealthCheck[hUnit]=nil end
+--        if HealBot_UnitHealthCheck[hUnit] then HealBot_UnitHealthCheck[hUnit]=nil end
         if HealBot_VehicleUnit[hUnit] then
             if not HealBot_UnitData[hGUID] then
                 HealBot_UnitData[hGUID] = {}
