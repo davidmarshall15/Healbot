@@ -2969,7 +2969,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
     elseif status=="Disabled" then
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     elseif status=="Enemy" then
-        sName = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
         buttonType="harmbutton"
         sType="harm"
     end
