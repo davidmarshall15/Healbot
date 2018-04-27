@@ -5613,10 +5613,10 @@ end
 function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
     local hbDist = 0
     local px, py = HealBot_getUnitCoords("player")
-    if px then
+    if px and py then
         if CheckInteractDistance(trgUnit, 4) then
             local tx, ty = HealBot_getUnitCoords(trgUnit)
-            if tx then
+            if tx and ty then
                 hbDist = sqrt((px - tx)^2 + (py - ty)^2)
                 if hbDist > hbScale then 
                     HealBot_Range_newScale(hbDist)
@@ -5627,7 +5627,7 @@ function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
         end
         if CheckInteractDistance(srcUnit, 4) then
             local sx, sy = HealBot_getUnitCoords(srcUnit)
-            if sx then
+            if sx and sy then
                 hbDist = sqrt((px - sx)^2 + (py - sy)^2)
                 if hbDist > hbScale then 
                     HealBot_Range_newScale(hbDist)
