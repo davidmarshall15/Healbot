@@ -49,6 +49,7 @@ function HealBot_globalVars()
     HEALBOT_DELICIOUS_CAKE                  = GetSpellInfo(225126) or "--Delicious Cake!";
     HEALBOT_GUIDING_HAND                    = GetSpellInfo(242622) or "--Guiding Hand";
     HEALBOT_FRUITFUL_MACHINATIONS           = GetSpellInfo(242623) or "--Fruitful Machinations";
+    HEALBOT_HIGHFATHERS_TIMEKEEPING         = GetSpellInfo(253287) or "--Highfather's Timekeeping";
     --HEALBOT_AOF_INFUSION_OF_LIGHT               = GetSpellInfo(242621) or "--Infusion of Light";
     HEALBOT_OCEANS_EMBRACE                  = GetSpellInfo(242467) or "--Ocean's Embrace";
     HEALBOT_VELENS_FUTURE_SIGHT             = GetSpellInfo(235966) or "--Velen's Future Sight"
