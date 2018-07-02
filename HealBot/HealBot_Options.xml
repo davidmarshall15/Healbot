@@ -9319,10 +9319,13 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Frame name="HealBot_Options_CDCCastByCustom" inherits="UIDropDownMenuTemplate">
+                  <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CASTBY_ENEMY">
+                    <Size>
+                      <AbsDimension x="125" y="22"/>
+                    </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CustomDebuff_CastByText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_CDCCastByCustomText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
@@ -9336,14 +9339,11 @@
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="RIGHT">
                         <Offset>
-                          <AbsDimension x="-5" y="0"/>
+                          <AbsDimension x="15" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105); self:Hide()</OnLoad>
-                    </Scripts>
-                  </Frame>
+                  </Button>
                   <CheckButton name="HealBot_Options_CDCReverseDurC" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_CDCCastBy" relativePoint="RIGHT">
@@ -9468,6 +9468,31 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_CDCPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
+                    <Size>
+                      <AbsDimension x="125" y="22"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_CDCCastByCustomText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="CENTER">
+                              <Offset>
+                                <AbsDimension x="0" y="25" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="62" y="-130"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                  </Button>
                   <Button name="HealBot_CustomColorpickb">--added by Diacono
                     <Size>
                       <AbsDimension x="140" y="22"/>

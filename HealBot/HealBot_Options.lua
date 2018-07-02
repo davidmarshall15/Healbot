@@ -883,23 +883,29 @@ end
 
 function HealBot_Options_GetRacialDebuffSpells_List(race)
     local HealBot_Racial_Debuff_Spells = {
-      ["Hum"] = {},
-      ["Dwa"] = {HEALBOT_STONEFORM,},
-      ["Nig"] = {},
-      ["Gno"] = {},
-      ["Dra"] = {HEALBOT_GIFT_OF_THE_NAARU,},
-      ["Pan"] = {},
+      ["Human"] = {},
+      ["Dwarf"] = {HEALBOT_STONEFORM,},
+      ["Night Elf"] = {},
+      ["Gnome"] = {},
+      ["Draenei"] = {HEALBOT_GIFT_OF_THE_NAARU,},
+      ["Pandaren"] = {},
       ["Orc"] = {},
-      ["Sco"] = {}, -- Undead
-      ["Tau"] = {},
-      ["Tro"] = {}, 
-      ["Blo"] = {},
-      ["Gob"] = {},
-      ["Wor"] = {HEALBOT_DARKFLIGHT,},
-      ["Hig"] = {}, -- Highmountain Tauren
-      ["Voi"] = {}, -- Void Elf
+      ["Undead"] = {}, -- Undead
+      ["Tauren"] = {},
+      ["Troll"] = {}, 
+      ["Blood Elf"] = {},
+      ["Goblin"] = {},
+      ["Worgen"] = {HEALBOT_DARKFLIGHT,},
+      ["Highmountain Tauren"] = {}, -- Highmountain Tauren
+      ["Void Elf"] = {}, -- Void Elf
+      ["Lightforged Draenei"] = {}, -- Lightforged Draenei
+      ["Nightborne"] = {}, -- Nightborne
     }
-    return HealBot_Racial_Debuff_Spells[race]
+    local rArray = {}
+    if HealBot_Racial_Debuff_Spells[race] then
+        rArray = HealBot_Racial_Debuff_Spells[race]
+    end
+    return rArray
 end
 
 
@@ -6737,7 +6743,7 @@ end
 
 function HealBot_Options_CDCTxt1_DropDown()
     local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(HealBot_Data["PCLASSTRIM"])
-    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACETRIM"])
+    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACE_EN"])
     local info = UIDropDownMenu_CreateInfo()
     info.text = HEALBOT_WORDS_NONE;
     info.func = function(self)
@@ -6790,7 +6796,7 @@ end
 
 function HealBot_Options_CDCTxt2_DropDown()
     local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(HealBot_Data["PCLASSTRIM"])
-    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACETRIM"])
+    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACE_EN"])
     local info = UIDropDownMenu_CreateInfo()
     info.text = HEALBOT_WORDS_NONE;
     info.func = function(self)
@@ -6843,7 +6849,7 @@ end
 
 function HealBot_Options_CDCTxt3_DropDown()
     local DebuffSpells_List = HealBot_Options_GetDebuffSpells_List(HealBot_Data["PCLASSTRIM"])
-    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACETRIM"])
+    local RacialDebuffSpells_List = HealBot_Options_GetRacialDebuffSpells_List(HealBot_Data["PRACE_EN"])
     local info = UIDropDownMenu_CreateInfo()
     info.text = HEALBOT_WORDS_NONE;
     info.func = function(self)
@@ -7005,15 +7011,15 @@ end
 function HealBot_Options_CDCPriorityC_DropDown()
     local s,e=1,20
     local info = UIDropDownMenu_CreateInfo()
-    if HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT then
-        s,e=9,9
-    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_MISC then
-        s,e=12,12
-    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT then
-        s,e=11,11
-    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE then
-        s,e=10,10
-    end
+--    if HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT then
+--        s,e=9,9
+--    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_MISC then
+--        s,e=12,12
+--    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT then
+--        s,e=11,11
+--    elseif HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE then
+--        s,e=10,10
+--    end
     for j=s, e, 1 do
         info.text = j;
         info.func = function(self)
@@ -7197,20 +7203,27 @@ function HealBot_Options_CDebuffCatNameUpdate()
             HealBot_Options_StorePrev["customDebuffPriority"]=10
         end
         --HealBot_Options_StorePrev["CDebuffcustomName"]=nil
-        --HealBot_Options_DeleteCDebuffBtn:Disable();
+        local g=_G["HealBot_Options_CDCPriorityCustomText"]
+        g:SetText(HealBot_Options_StorePrev["customDebuffPriority"]);
+        HealBot_Options_DeleteCDebuffBtn:Disable();
         HealBot_Options_ResetCDebuffBtn:Disable();
         HealBot_Options_NewCDebuffBtn:Disable();
+        HealBot_Options_CDCReverseDurC:Hide()
         HealBot_Options_CDCCastBy:Hide();
         HealBot_Options_CDCCastByCustom:Show()
-        --HealBot_Options_CDCPriorityC:Hide()
+        HealBot_Options_CDCPriorityCustom:Show()
+        HealBot_Options_CDCPriorityC:Hide()
     else
         if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomNameDefault"]] then
             HealBot_Options_StorePrev["customDebuffPriority"]=HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomNameDefault"]]
         end
-        --HealBot_Options_DeleteCDebuffBtn:Enable();
+        HealBot_Options_DeleteCDebuffBtn:Enable();
         HealBot_Options_ResetCDebuffBtn:Enable();
+        HealBot_Options_CDCReverseDurC:Show()
         HealBot_Options_CDCCastByCustom:Hide()
+        HealBot_Options_CDCPriorityCustom:Hide()
         HealBot_Options_CDCCastBy:Show();
+        HealBot_Options_CDCPriorityC:Show();
     end
 end
 
@@ -7457,12 +7470,12 @@ function HealBot_Options_setCustomDebuffList()
     if customDefaultImportantCnt>0 then
         local customDefImpPrio=HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT] or 9
         if not customPriority[customDefImpPrio] then customPriority[customDefImpPrio]={} end
-        customPriority[customDefImpPrio][HEALBOT_CUSTOM_en.."9"]=HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT.." (x"..customDefaultImportantCnt..")"
+        customPriority[customDefImpPrio][HEALBOT_CUSTOM_en..customDefImpPrio]=HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT.." (x"..customDefaultImportantCnt..")"
     end
     if customDefaultDamageCnt>0 then
         local customDefDmgPrio=HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE] or 10
         if not customPriority[customDefDmgPrio] then customPriority[customDefDmgPrio]={} end
-        customPriority[customDefDmgPrio][HEALBOT_CUSTOM_en.."10"]=HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE.." (x"..customDefaultDamageCnt..")"
+        customPriority[customDefDmgPrio][HEALBOT_CUSTOM_en..customDefDmgPrio]=HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE.." (x"..customDefaultDamageCnt..")"
     end
     if customDefaultEffectCnt>0 then
         local customDefEffPrio=HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT] or 11
@@ -8931,6 +8944,8 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:SetTextColor(1,1,1,1);    
     g=_G["HealBot_Options_SkinAuthorName"]
     g:SetTextColor(1,1,1,1);   
+    HealBot_Options_CDCCastByCustom:Disable()
+    HealBot_Options_CDCPriorityCustom:Disable()
 end
 
 HealBot_Options_StorePrev["TabNo"] = 0;
@@ -11824,4 +11839,3 @@ function HealBot_Comms_GetChan(chan)
         return nil;
     end
 end
-

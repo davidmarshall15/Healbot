@@ -2029,7 +2029,7 @@ function HealBot_OnEvent_VariablesLoaded(self)
     end
     HealBot_Init_Spells_Defaults();
     local pRace, pRaceEN=UnitRace("player")
-    HealBot_Data["PRACETRIM"]=strsub(pRaceEN,1,3)
+    HealBot_Data["PRACE_EN"]=pRaceEN
     HealBot_Data["PNAME"]=UnitName("player")
     HealBot_Data["PLEVEL"]=UnitLevel("player")
     RegisterAddonMessagePrefix("HealBot")
@@ -2364,13 +2364,13 @@ function HealBot_configClassHoT()
             --if xClass=="ALL" and x==3 then x=4; end -- should filter by class, need to change
             if xClass=="ALL" and x==3 then
                 HealBot_Watch_HoT[sName]="C"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="C" end
+                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="C" end
             elseif (x==4) or (x==3 and xClass==HealBot_Data["PCLASSTRIM"]) then
                 HealBot_Watch_HoT[sName]="A"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="A" end
+                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="A" end
             elseif x==2 then --and (xClass==HealBot_Data["PCLASSTRIM"] or xClass=="ALL") then
                 HealBot_Watch_HoT[sName]="S"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACETRIM"]=="Dra" then HealBot_Watch_HoT[sName]="S" end
+                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="S" end
             else
                 HealBot_Watch_HoT[sName]=nil
             end
