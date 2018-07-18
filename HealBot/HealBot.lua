@@ -943,8 +943,8 @@ end
 function HealBot_UnitMana(unit)
     local x,y=nil,nil
     if unit and UnitExists(unit) and UnitPowerType(unit)==0 then
-        x=UnitMana(unit)
-        y=UnitManaMax(unit)
+        x=UnitPower(unit, 0)
+        y=UnitPowerMax(unit, 0)
     end
     return x,y;
 end
@@ -1386,10 +1386,10 @@ function HealBot_OnUpdate(self)
                         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
                             HealBot_Options_Timer[7950]=nil
                             HealBot_luVars["hbInsNameCheck"]=nil
-                            local tmpAreaId = GetCurrentMapAreaID()
-                            SetMapToCurrentZone()
-                            local mapAreaID = GetCurrentMapAreaID()
-                            SetMapByID(tmpAreaId)
+                            local tmpAreaId = 0 --GetCurrentMapAreaID()
+                            --SetMapToCurrentZone()
+                            local mapAreaID = 0 --GetCurrentMapAreaID()
+                            --SetMapByID(tmpAreaId)
                             HealBot_setOptions_Timer(30)
                             local y,z = IsInInstance()
                             local mapName=HEALBOT_WORD_OUTSIDE
@@ -1596,10 +1596,10 @@ function HealBot_OnUpdate(self)
                 HealBot_IC_PartyMembersChanged()
             elseif HealBot_luVars["mapUpdate"] and HealBot_luVars["mapUpdate"]<GetTime() then
                 HealBot_luVars["mapUpdate"]=nil
-                local tmpAreaId = GetCurrentMapAreaID()
-                SetMapToCurrentZone()
-                local mapAreaID = GetCurrentMapAreaID()
-                SetMapByID(tmpAreaId)
+                local tmpAreaId = 0 --GetCurrentMapAreaID()
+                --SetMapToCurrentZone()
+                local mapAreaID = 0 --GetCurrentMapAreaID()
+                --SetMapByID(tmpAreaId)
                 HealBot_Data["MAPID"]=mapAreaID or 0
                 local difficultyID = GetDungeonDifficultyID()
                 if HealBot_Data["MAPID"]==930 and difficultyID>1 then
@@ -2032,7 +2032,7 @@ function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Data["PRACE_EN"]=pRaceEN
     HealBot_Data["PNAME"]=UnitName("player")
     HealBot_Data["PLEVEL"]=UnitLevel("player")
-    RegisterAddonMessagePrefix("HealBot")
+    C_ChatInfo.RegisterAddonMessagePrefix("HealBot")
     HealBot_Options_InitBuffClassList()
     HealBot_setOptions_Timer(5)
     HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
@@ -2392,7 +2392,7 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("UNIT_EXITING_VEHICLE");
         HealBot:RegisterEvent("UNIT_HEALTH");
         HealBot:RegisterEvent("UNIT_MAXHEALTH");
-        HealBot:RegisterEvent("UNIT_MAXMANA")
+    --    HealBot:RegisterEvent("UNIT_MAXMANA")
         local regPower=false
         for j=1,10 do
             if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERSIZE"]>0 then 
@@ -2494,7 +2494,7 @@ function HealBot_UnRegister_ReadyCheck()
 end
 
 function HealBot_Register_Mana()
-    HealBot:RegisterEvent("UNIT_POWER")
+    HealBot:RegisterEvent("UNIT_MANA")
     HealBot:RegisterEvent("UNIT_MAXPOWER")
     for xUnit,_ in pairs(HealBot_Unit_Button) do
         HealBot_CheckPower(xUnit)
@@ -2502,7 +2502,7 @@ function HealBot_Register_Mana()
 end
 
 function HealBot_UnRegister_Mana()
-    HealBot:UnregisterEvent("UNIT_POWER")
+    HealBot:UnregisterEvent("UNIT_MANA")
     HealBot:UnregisterEvent("UNIT_MAXPOWER")
 end
 
@@ -3106,7 +3106,7 @@ function HealBot_HasUnitBuff(buffName, unit, casterUnitID)
     if UnitExists(unit) then
         local k = 1
         while true do
-            local x,_,_,_,_,_,expirationTime, caster,_,_,spellID = UnitAura(unit, k, "HELPFUL"); 
+            local x,_,_,_,_,expirationTime, caster,_,_,spellID = UnitAura(unit, k, "HELPFUL"); 
             if x then
                 if casterUnitID then
                     if x==buffName and casterUnitID==(caster or "0") and not hbExcludeSpells[spellID] then
@@ -3125,7 +3125,7 @@ function HealBot_HasUnitBuff(buffName, unit, casterUnitID)
 end
 
 function HealBot_HasBuff(buffName, unit)
-    local x,_,_,_,_,_,_,_,_ = UnitBuff(unit,buffName)
+    local x,_,_,_,_,_,_,_ = UnitBuff(unit,buffName)
     if x then
         return true;
     end
@@ -3133,7 +3133,7 @@ function HealBot_HasBuff(buffName, unit)
 end
 
 function HealBot_HasDebuff(debuffName, unit)
-    local x,_,_,_,_,_,_,_,_ = UnitDebuff(unit,debuffName)
+    local x,_,_,_,_,_,_,_ = UnitDebuff(unit,debuffName)
     if x then
         return true;
     end
@@ -3154,7 +3154,7 @@ function HealBot_HasMyBuffs(button)
         HealBot_luVars["hasPWS"]=nil
         if not UnitIsFriend("player",xUnit) then
             while true do
-                local bName,_,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HARMFUL"); 
+                local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HARMFUL"); 
                 if bName and caster and caster=="player" and expirationTime then
                     if not hbExcludeSpells[spellID] then 
                         if (expirationTime or 0)==0 then expirationTime=hbNoEndTime end
@@ -3167,7 +3167,7 @@ function HealBot_HasMyBuffs(button)
             end
         else
             while true do
-                local bName,_,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL");
+                local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL");
                 local _, uClassEN = UnitClass(xUnit);
                 local uClassTrim = strsub(uClassEN or "XXXX",1,4)
                 if not caster then caster=HEALBOT_WORDS_UNKNOWN end
@@ -3212,7 +3212,7 @@ function HealBot_HasMyBuffs(button)
             end
         end
         if HealBot_luVars["procWS"] and HealBot_luVars["hadPWS"] and not HealBot_luVars["hasPWS"] then
-            local bName,_,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitDebuff(xUnit, HEALBOT_DEBUFF_WEAKENED_SOUL); 
+            local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitDebuff(xUnit, HEALBOT_DEBUFF_WEAKENED_SOUL); 
             if bName and caster then
                 if (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="A" or (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="C" and caster=="player")) then
                     local hbHoTID=HealBot_UnitGUID(caster).."!" ..bName.."!"..spellID
@@ -3433,7 +3433,7 @@ function HealBot_CheckUnitDebuffs(button)
     DebuffPrioIn=99
     if not UnitIsDeadOrGhost(xUnit) or UnitIsFeignDeath(xUnit) then
         while true do
-            local dName,_,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(xUnit,z)
+            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(xUnit,z)
             if dName then
                 z = z +1
                 HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit)
@@ -3443,7 +3443,7 @@ function HealBot_CheckUnitDebuffs(button)
         end
         z=1
         while true do
-            local dName,_,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff  = UnitBuff(xUnit,z)
+            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff  = UnitBuff(xUnit,z)
             if dName then
                 z = z +1
                 if HealBot_Globals.HealBot_Custom_Debuffs[dName] then 
@@ -3742,7 +3742,7 @@ function HealBot_CheckUnitBuffs(button)
     end
 
     while true do
-        local bName,_,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") 
+        local bName,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") -- Done
         if bName then
             y = y + 1;
             if (HealBot_BuffNameTypes[bName]) then
@@ -5601,12 +5601,12 @@ function HealBot_Range_Check(srcUnit, trgUnit, range)
 end
 
 function HealBot_getUnitCoords(unit)
-    if UnitIsPlayer(unit) then
-        local x, y = GetPlayerMapPosition(unit);
-        if x and y and x > 0 and y > 0 then
-            return x, y
-        end
-    end
+--    if UnitIsPlayer(unit) then
+--        local x, y = GetPlayerMapPosition(unit);
+--        if x and y and x > 0 and y > 0 then
+--            return x, y
+--        end
+--    end
     return nil, nil
 end
 

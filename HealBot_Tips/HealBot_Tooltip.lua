@@ -171,7 +171,10 @@ function HealBot_Action_RefreshTooltip()
             if hlth and maxhlth then
                 local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton.frame)
                 r,g,b=HealBot_HealthColor(xUnit,hlth,maxhlth,true,false,uBuff,DebuffType,inHeal,inAbsorb,false,xButton);
-                local hPct=floor((hlth/maxhlth)*100)
+                local hPct=100
+                if maxhlth>0 then
+                    hPct=floor((hlth/maxhlth)*100)
+                end
                 hlth=HealBot_Tooltip_readNumber(hlth)
                 maxhlth=HealBot_Tooltip_readNumber(maxhlth)
                 if UnitOffline then 
@@ -211,7 +214,10 @@ function HealBot_Action_RefreshTooltip()
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..uGroup,1,1,1,1," ",0,0,0,0)
                     end
                 else
-                    local mPct=floor((mana/maxmana)*100)
+                    local mPct=100
+                    if maxmana>0 then
+                        mPct=floor((mana/maxmana)*100)
+                    end
                     mana=HealBot_Tooltip_readNumber(mana)
                     maxmana=HealBot_Tooltip_readNumber(maxmana)
                     if tp<1 then

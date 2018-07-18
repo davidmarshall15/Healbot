@@ -102,7 +102,7 @@
     <Size>
       <AbsDimension x="240" y="20"/>
     </Size>
-    <FontString inherits="GameFontHighlightSmall" bytes="256"/>
+    <FontString inherits="GameFontHighlightSmall"/>
     <Layers>
       <Layer level="ARTWORK">
         <FontString name="$parentText" text=" " inherits="GameFontNormalSmall">
@@ -9320,9 +9320,9 @@
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CASTBY_ENEMY">
-                    <Size>
-                      <AbsDimension x="125" y="22"/>
-                    </Size>
+                      <Size>
+                          <AbsDimension x="125" y="22"/>
+                      </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
                         <FontString name="HealBot_Options_CDCCastByCustomText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">

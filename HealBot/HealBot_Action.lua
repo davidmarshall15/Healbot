@@ -577,7 +577,11 @@ function HealBot_HealthColor(unit,hlth,maxhlth,tooltipcol,UnitDead,Member_Buff,M
         else
             hipct=1;
         end
-        hcpct=hlth/maxhlth
+        if maxhlth == 0 then
+            hcpct = 100;
+        else
+            hcpct=hlth/maxhlth
+        end
         if maxhlth == 0 then
             hrpct = 100;
         else
@@ -974,12 +978,12 @@ function HealBot_Action_SetBar3Value(button, sName)
             end
         end
         if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]==0 then return end
-        if UnitManaMax(button.unit)==0 then
+        if UnitPowerMax(button.unit)==0 then
             x=100
         else
-            x=UnitManaMax(button.unit)
+            x=UnitPowerMax(button.unit)
         end
-        local y=floor((UnitMana(button.unit)/x)*100)
+        local y=floor((UnitPower(button.unit)/x)*100)
         local hcr,hcg,hcb=HealBot_Action_GetManaBarCol(button.unit)
         HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_UnitBarsRange["3a"][button.unit] or Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
     end
@@ -4253,7 +4257,7 @@ function HealBot_MountsPets_InitUse()
 end
 
 function HealBot_MountsPets_InitMount()
-    SetMapToCurrentZone()
+    --SetMapToCurrentZone()
     for z,_ in pairs(HealBot_GMount) do
         HealBot_GMount[z]=nil;
     end
@@ -4284,7 +4288,7 @@ function HealBot_MountsPets_InitMount()
         end
     end
 
-    local mapC = GetCurrentMapContinent();
+    local mapC = 3 --GetCurrentMapContinent();
     if (mapC==3 or mapC==5) or (mapC == 4 and IsSpellKnown(54197)) or (mapC<3 and IsSpellKnown(90267)) 
         or (mapC == 6 and IsSpellKnown(115913)) then --or (mapC == 7 and IsSpellKnown(nnnnnn)) then
         HealBot_mountData["IncFlying"]=true

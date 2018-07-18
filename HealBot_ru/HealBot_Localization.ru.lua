@@ -268,11 +268,11 @@ function HealBot_Lang_ruRU()
     HEALBOT_OPTIONS_HOTBARRIGHT             = "Справа";
     HEALBOT_OPTIONS_HOTBARLEFT              = "Слева";
 
-    HEALBOT_ZONE_AB                         = GetMapNameByID(461) or "Низина Арати";
-    HEALBOT_ZONE_AV                         = GetMapNameByID(401) or "Альтеракская долина";
-    HEALBOT_ZONE_ES                         = GetMapNameByID(482) or "Око Бури";
-    HEALBOT_ZONE_IC                         = GetMapNameByID(540) or "Остров Завоеваний";
-    HEALBOT_ZONE_SA                         = GetMapNameByID(512) or "Берег Древних";
+    HEALBOT_ZONE_AB                         = "Низина Арати"; -- GetMapNameByID(461) or "Низина Арати";
+    HEALBOT_ZONE_AV                         = "Альтеракская долина"; -- GetMapNameByID(401) or "Альтеракская долина";
+    HEALBOT_ZONE_ES                         = "Око Бури"; -- GetMapNameByID(482) or "Око Бури";
+    HEALBOT_ZONE_IC                         = "Остров Завоеваний"; -- GetMapNameByID(540) or "Остров Завоеваний";
+    HEALBOT_ZONE_SA                         = "Берег Древних"; -- GetMapNameByID(512) or "Берег Древних";
 
     HEALBOT_OPTION_AGGROTRACK               = "Следить за угрозой";
     HEALBOT_OPTION_AGGROBAR                 = "Панель";

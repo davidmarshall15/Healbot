@@ -890,16 +890,16 @@ function HealBot_Options_GetRacialDebuffSpells_List(race)
       ["Draenei"] = {HEALBOT_GIFT_OF_THE_NAARU,},
       ["Pandaren"] = {},
       ["Orc"] = {},
-      ["Undead"] = {}, -- Undead
+      ["Undead"] = {},
       ["Tauren"] = {},
       ["Troll"] = {}, 
       ["Blood Elf"] = {},
       ["Goblin"] = {},
       ["Worgen"] = {HEALBOT_DARKFLIGHT,},
-      ["Highmountain Tauren"] = {}, -- Highmountain Tauren
-      ["Void Elf"] = {}, -- Void Elf
-      ["Lightforged Draenei"] = {}, -- Lightforged Draenei
-      ["Nightborne"] = {}, -- Nightborne
+      ["Highmountain Tauren"] = {},
+      ["Void Elf"] = {},
+      ["Lightforged Draenei"] = {},
+      ["Nightborne"] = {},
     }
     local rArray = {}
     if HealBot_Racial_Debuff_Spells[race] then
@@ -8943,8 +8943,8 @@ function HealBot_Options_OnLoad(self, panelNum)
     g=_G["HealBot_About_Desc1"]
     g:SetTextColor(1,1,1,1);    
     g=_G["HealBot_Options_SkinAuthorName"]
-    g:SetTextColor(1,1,1,1);   
-    HealBot_Options_CDCCastByCustom:Disable()
+    g:SetTextColor(1,1,1,1);  
+    HealBot_Options_CDCCastByCustom:Disable()    
     HealBot_Options_CDCPriorityCustom:Disable()
 end
 
@@ -11812,23 +11812,23 @@ end
 function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
     local inInst=IsInInstance()
     if aType==1 and inInst then
-        SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+        C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
     elseif aType==2 then
         if inInst then
-            SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
         else
-            SendAddonMessage(addon_id, msg, "RAID" );
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
         end
     elseif aType==3 then
         if inInst then
-            SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
         else
-            SendAddonMessage(addon_id, msg, "PARTY" );
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
         end
     elseif aType==4 and pName and UnitIsPlayer(HealBot_Panel_RaidUnit(nil,pName)) then
-        SendAddonMessage(addon_id, msg, "WHISPER", pName );
+        C_ChatInfo.SendAddonMessage(addon_id, msg, "WHISPER", pName );
     elseif aType==5 then
-        SendAddonMessage(addon_id, msg, "GUILD" );
+        C_ChatInfo.SendAddonMessage(addon_id, msg, "GUILD" );
     end
 end
 
@@ -11839,3 +11839,4 @@ function HealBot_Comms_GetChan(chan)
         return nil;
     end
 end
+

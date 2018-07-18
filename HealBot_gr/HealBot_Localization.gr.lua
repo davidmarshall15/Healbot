@@ -266,11 +266,11 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_HOTBARRIGHT             = "Δεξια μερια";
     HEALBOT_OPTIONS_HOTBARLEFT              = "Αριστερη μερια";
 
-    HEALBOT_ZONE_AB                         = GetMapNameByID(461) or "Arathi Basin";
-    HEALBOT_ZONE_AV                         = GetMapNameByID(401) or "Alterac Valley";
-    HEALBOT_ZONE_ES                         = GetMapNameByID(482) or "Eye of the Storm";
-    HEALBOT_ZONE_IC                         = GetMapNameByID(540) or "Isle of Conquest";
-    HEALBOT_ZONE_SA                         = GetMapNameByID(512) or "Strand of the Ancients";
+    HEALBOT_ZONE_AB                         = "Arathi Basin"; --GetMapNameByID(461) or "Arathi Basin";
+    HEALBOT_ZONE_AV                         = "Alterac Valley"; -- GetMapNameByID(401) or "Alterac Valley";
+    HEALBOT_ZONE_ES                         = "Eye of the Storm"; -- GetMapNameByID(482) or "Eye of the Storm";
+    HEALBOT_ZONE_IC                         = "Isle of Conquest"; -- GetMapNameByID(540) or "Isle of Conquest";
+    HEALBOT_ZONE_SA                         = "Strand of the Ancients"; -- GetMapNameByID(512) or "Strand of the Ancients";
 
     HEALBOT_OPTION_AGGROTRACK               = "Ελεγχος Aggro";
     HEALBOT_OPTION_AGGROBAR                 = "Bar";
