@@ -5607,6 +5607,16 @@ function HealBot_getUnitCoords(unit)
     return nil, nil
 end
 
+function HealBot_getCurrentMapContinent()
+    local mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
+
+    while mapInfo.mapType~=2 do
+        mapInfo = C_Map.GetMapInfo(mapInfo.parentMapID)
+    end
+
+    return mapInfo.mapID
+end
+
 function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
     local hbDist = 0
     local px, py = HealBot_getUnitCoords("player")
