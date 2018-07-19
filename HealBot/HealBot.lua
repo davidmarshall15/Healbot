@@ -1386,15 +1386,12 @@ function HealBot_OnUpdate(self)
                         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
                             HealBot_Options_Timer[7950]=nil
                             HealBot_luVars["hbInsNameCheck"]=nil
-                            local tmpAreaId = 0 --GetCurrentMapAreaID()
-                            --SetMapToCurrentZone()
-                            local mapAreaID = 0 --GetCurrentMapAreaID()
-                            --SetMapByID(tmpAreaId)
+                            local mapAreaID = C_Map.GetBestMapForUnit("player")
                             HealBot_setOptions_Timer(30)
                             local y,z = IsInInstance()
                             local mapName=HEALBOT_WORD_OUTSIDE
                             if mapAreaID and mapAreaID>0 then
-                                mapName=GetMapNameByID(mapAreaID)
+                                mapName=C_Map.GetMapInfo(mapAreaID).name
                             elseif z and z=="arena" then 
                                 mapName="Arena"
                             end
