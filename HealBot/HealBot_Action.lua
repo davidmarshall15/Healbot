@@ -2763,7 +2763,7 @@ function HealBot_Action_Res(resSpell, unit)
     
     if resSpell==HEALBOT_DEBUFF_MASS_RESURRECTED then
         for xUnit,_ in pairs(HealBot_Unit_Button) do
-            if UnitIsDeadOrGhost(xUnit) and not UnitIsFeignDeath(xUnit) and UnitIsVisible(xUnit) and not HealBot_HasDebuff(HEALBOT_DEBUFF_MASS_RESURRECTED, xUnit) then
+            if UnitIsDeadOrGhost(xUnit) and not UnitIsFeignDeath(xUnit) and UnitIsVisible(xUnit) and not HealBot_HasDebuff(HEALBOT_DEBUFF_MASS_RESURRECTED_ID, xUnit) then
                 HealBot_UnitHasRes[xUnit]=addResTime
                 HealBot_UnitStatus[xUnit]=1
                 HealBot_UnitRange[xUnit]=-2

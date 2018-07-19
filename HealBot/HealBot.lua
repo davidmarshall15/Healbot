@@ -1386,15 +1386,12 @@ function HealBot_OnUpdate(self)
                         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
                             HealBot_Options_Timer[7950]=nil
                             HealBot_luVars["hbInsNameCheck"]=nil
-                            local tmpAreaId = 0 --GetCurrentMapAreaID()
-                            --SetMapToCurrentZone()
-                            local mapAreaID = 0 --GetCurrentMapAreaID()
-                            --SetMapByID(tmpAreaId)
+                            local mapAreaID = C_Map.GetBestMapForUnit("player")
                             HealBot_setOptions_Timer(30)
                             local y,z = IsInInstance()
                             local mapName=HEALBOT_WORD_OUTSIDE
                             if mapAreaID and mapAreaID>0 then
-                                mapName=GetMapNameByID(mapAreaID)
+                                mapName=C_Map.GetMapInfo(mapAreaID).name
                             elseif z and z=="arena" then 
                                 mapName="Arena"
                             end
@@ -1647,7 +1644,7 @@ function HealBot_OnUpdate(self)
                             local hlth=UnitHealth(xUnit)
                             local maxhlth=HealBot_UnitMaxHealth(xUnit)
                             local xGUID=HealBot_UnitGUID(xUnit)
-                            local name, _, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(xUnit)
+                            local name, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(xUnit)
                             if xGUID~=xButton.guid then
                                 if HealBot_UnitData[xGUID] then
                                     HealBot_UnitData[xGUID]["NAME"]=HealBot_GetUnitName(xUnit)
@@ -2851,7 +2848,7 @@ function HealBot_UnitMaxHealth(unit)
 	local healthFactor = 1
     if (HealBot_Config.AdjustMaxHealth == true) then
         -- Currently on supports Hellfire Citadel raid boss Tyrant Velhari
-        local maxHealthPercent = select(15, UnitAura("boss1", HEALBOT_DEBUFF_AURA_OF_CONTEMPT))
+        local maxHealthPercent = select(15, UnitAura("boss1", HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID))
         if maxHealthPercent then
             healthFactor = maxHealthPercent / 100
         end
@@ -3124,16 +3121,16 @@ function HealBot_HasUnitBuff(buffName, unit, casterUnitID)
     return false;
 end
 
-function HealBot_HasBuff(buffName, unit)
-    local x,_,_,_,_,_,_,_ = UnitBuff(unit,buffName)
+function HealBot_HasBuff(buffSpellID, unit)
+    local x,_,_,_,_,_,_,_ = UnitBuff(unit,buffSpellID)
     if x then
         return true;
     end
     return false;
 end
 
-function HealBot_HasDebuff(debuffName, unit)
-    local x,_,_,_,_,_,_,_ = UnitDebuff(unit,debuffName)
+function HealBot_HasDebuff(debuffSpellID, unit)
+    local x,_,_,_,_,_,_,_ = UnitDebuff(unit,debuffSpellID)
     if x then
         return true;
     end
@@ -3212,7 +3209,7 @@ function HealBot_HasMyBuffs(button)
             end
         end
         if HealBot_luVars["procWS"] and HealBot_luVars["hadPWS"] and not HealBot_luVars["hasPWS"] then
-            local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitDebuff(xUnit, HEALBOT_DEBUFF_WEAKENED_SOUL); 
+            local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitDebuff(xUnit, HEALBOT_DEBUFF_WEAKENED_SOUL_ID); 
             if bName and caster then
                 if (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="A" or (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="C" and caster=="player")) then
                     local hbHoTID=HealBot_UnitGUID(caster).."!" ..bName.."!"..spellID
@@ -5601,13 +5598,23 @@ function HealBot_Range_Check(srcUnit, trgUnit, range)
 end
 
 function HealBot_getUnitCoords(unit)
---    if UnitIsPlayer(unit) then
---        local x, y = GetPlayerMapPosition(unit);
---        if x and y and x > 0 and y > 0 then
---            return x, y
---        end
---    end
+    if UnitIsPlayer(unit) then
+        local pos=C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit(unit), unit)
+        if pos.x and pos.y and pos.x > 0 and pos.y > 0 then
+            return pos.x, pos.y
+        end
+    end
     return nil, nil
+end
+
+function HealBot_getCurrentMapContinent()
+    local mapInfo = C_Map.GetMapInfo(C_Map.GetBestMapForUnit("player"))
+
+    while mapInfo.mapType~=2 do
+        mapInfo = C_Map.GetMapInfo(mapInfo.parentMapID)
+    end
+
+    return mapInfo.mapID
 end
 
 function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
@@ -5748,7 +5755,7 @@ function HealBot_Update_Skins()
     if tonumber(tMajor)<7 then
         HealBot_Options_SetDefaults();
         HealBot_ReloadUI()
-    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then
+    elseif tonumber(tMajor)<8 then
 
         if not HealBot_Globals.TestBars["PROFILE"] then HealBot_Globals.TestBars["PROFILE"]=3 end
         if not HealBot_Globals.TestBars["ENEMY"] then HealBot_Globals.TestBars["ENEMY"]=2 end
@@ -6101,6 +6108,9 @@ function HealBot_Update_Skins()
             if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Skins[x]]["FRAME"] then Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Skins[x]]["FRAME"]=nil end
         end
 
+        if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
+    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then
+        
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
     end
     

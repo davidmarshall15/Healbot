@@ -1,4 +1,4 @@
-HealBot_lastVerSkinUpdate="7.0.0.0"
+HealBot_lastVerSkinUpdate="8.0.0.0"
 
 
 HealBot_Default_Textures={

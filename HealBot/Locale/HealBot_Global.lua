@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.1.b1";
+﻿HEALBOT_VERSION   = "8.0.1.1.b2";
 HEALBOT_ABOUT_URL = "http://healbot.darktech.org/"
 
 function HealBot_globalVars()
@@ -515,7 +515,8 @@ function HealBot_globalVars()
     
     --Resurrection Spells
     HEALBOT_ANCESTRALSPIRIT                 = GetSpellInfo(2008) or "--Ancestral Spirit";
-    HEALBOT_DEBUFF_MASS_RESURRECTED         = GetSpellInfo(95223) or "--Recently Mass Resurrected";
+    HEALBOT_DEBUFF_MASS_RESURRECTED_ID      = 95223;
+    HEALBOT_DEBUFF_MASS_RESURRECTED         = GetSpellInfo(HEALBOT_DEBUFF_MASS_RESURRECTED_ID) or "--Recently Mass Resurrected";
     --HEALBOT_MASS_RESURRECTION               = GetSpellInfo(83968) or "--Mass Resurrection";
     
     HEALBOT_ABSOLUTION                      = GetSpellInfo(212056) or "--Absolution";
@@ -581,10 +582,12 @@ function HealBot_globalVars()
     --Debuffs
     HEALBOT_DEBUFF_ROCKET_FUEL_LEAK         = GetSpellInfo(94794) or "--Rocket Fuel Leak"; --Engineering 
     --HEALBOT_DEBUFF_SAVING_GRACE             = GetSpellInfo(155274) or "--Saving Grace"; --DO NOT REMOVE
-    HEALBOT_DEBUFF_WEAKENED_SOUL            = GetSpellInfo(6788) or "--Weakened Soul"; --DO NOT REMOVE
+    HEALBOT_DEBUFF_WEAKENED_SOUL_ID         = 6788;
+    HEALBOT_DEBUFF_WEAKENED_SOUL            = GetSpellInfo(HEALBOT_DEBUFF_WEAKENED_SOUL_ID) or "--Weakened Soul"; --DO NOT REMOVE
     
     --Unit Max Health Modifier Debuffs
-    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(179986) or "--Aura of Content";
+    HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID      = 179986;
+    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID) or "--Aura of Content";
     
             
     --Ignore Class Debuffs (ONLY DISPELLABLE DEBUFFS)
