@@ -1863,7 +1863,7 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_OnEvent_PlayerRegenEnabled(self);
     elseif (event=="UNIT_NAME_UPDATE") then
         HealBot_OnEvent_UnitNameUpdate(self,arg1)
-    elseif (event=="UNIT_POWER") then
+    elseif (event=="UNIT_POWER_UPDATE") then
         HealBot_OnEvent_UnitMana(self,arg1,arg2);
     elseif (event=="UNIT_MAXPOWER") then 
         HealBot_OnEvent_UnitMaxMana(self,arg1,arg2);
@@ -5598,9 +5598,12 @@ end
 
 function HealBot_getUnitCoords(unit)
     if UnitIsPlayer(unit) then
-        local pos=C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit(unit), unit)
-        if pos and pos.x and pos.y and pos.x > 0 and pos.y > 0 then
-            return pos.x, pos.y
+        local uiMapID=C_Map.GetBestMapForUnit(unit)
+        if uiMapID then
+            local pos=C_Map.GetPlayerMapPosition(uiMapID, unit)
+            if pos and pos.x and pos.y and pos.x > 0 and pos.y > 0 then
+                return pos.x, pos.y
+            end
         end
     end
     return nil, nil
@@ -5620,27 +5623,31 @@ function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
     local hbDist = 0
     local px, py = HealBot_getUnitCoords("player")
     if px and py then
-        if CheckInteractDistance(trgUnit, 4) then
-            local tx, ty = HealBot_getUnitCoords(trgUnit)
-            if tx and ty then
-                hbDist = sqrt((px - tx)^2 + (py - ty)^2)
-                if hbDist > hbScale then 
-                    HealBot_Range_newScale(hbDist)
+        if UnitIsPlayer(trgUnit) then
+            if CheckInteractDistance(trgUnit, 4) then
+                local tx, ty = HealBot_getUnitCoords(trgUnit)
+                if tx and ty then
+                    hbDist = sqrt((px - tx)^2 + (py - ty)^2)
+                    if hbDist > hbScale then 
+                        HealBot_Range_newScale(hbDist)
+                    end
                 end
+            elseif UnitIsVisible(trgUnit) then
+                calibrateHBScale=calibrateHBScale+1
             end
-        elseif UnitIsVisible(trgUnit) then
-            calibrateHBScale=calibrateHBScale+1
         end
-        if CheckInteractDistance(srcUnit, 4) then
-            local sx, sy = HealBot_getUnitCoords(srcUnit)
-            if sx and sy then
-                hbDist = sqrt((px - sx)^2 + (py - sy)^2)
-                if hbDist > hbScale then 
-                    HealBot_Range_newScale(hbDist)
+        if UnitIsPlayer(srcUnit) then
+            if CheckInteractDistance(srcUnit, 4) then
+                local sx, sy = HealBot_getUnitCoords(srcUnit)
+                if sx and sy then
+                    hbDist = sqrt((px - sx)^2 + (py - sy)^2)
+                    if hbDist > hbScale then 
+                        HealBot_Range_newScale(hbDist)
+                    end
                 end
+            elseif UnitIsVisible(srcUnit) then
+                calibrateHBScale=calibrateHBScale+1
             end
-        elseif UnitIsVisible(srcUnit) then
-            calibrateHBScale=calibrateHBScale+1
         end
     end
     if calibrateHBScale>250 then 
