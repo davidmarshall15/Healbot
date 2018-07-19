@@ -5600,7 +5600,7 @@ end
 function HealBot_getUnitCoords(unit)
     if UnitIsPlayer(unit) then
         local pos=C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit(unit), unit)
-        if pos.x and pos.y and pos.x > 0 and pos.y > 0 then
+        if pos and pos.x and pos.y and pos.x > 0 and pos.y > 0 then
             return pos.x, pos.y
         end
     end

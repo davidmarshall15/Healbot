@@ -4288,17 +4288,12 @@ function HealBot_MountsPets_InitMount()
         end
     end
 
-    local mapC = HealBot_getCurrentMapContinent();
-    if mapC==101 or -- Outland
-        mapC==948 or -- The Maelstrom
-        (mapC==113 and IsSpellKnown(54197)) or -- Northrend
-        ((mapC==12 or mapC==13) and IsSpellKnown(90267)) or -- Kalimdor/Eastern Kingdoms
-        (mapC==424 and IsSpellKnown(115913)) or -- Pandaria
-        (mapC==572 and IsSpellKnown(191645)) or -- Draenor
-        (mapC==619 and (IsSpellKnown(226342) or IsSpellKnown(233368))) then -- Broken Isles
+    local mapC = 3 --GetCurrentMapContinent();
+    if (mapC==3 or mapC==5) or (mapC == 4 and IsSpellKnown(54197)) or (mapC<3 and IsSpellKnown(90267)) 
+        or (mapC == 6 and IsSpellKnown(115913)) then --or (mapC == 7 and IsSpellKnown(nnnnnn)) then
         HealBot_mountData["IncFlying"]=true
     end
-
+    
     local x = C_MountJournal.GetNumMounts()
 	for z=1,x do
         local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
