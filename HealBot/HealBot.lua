@@ -5598,12 +5598,12 @@ function HealBot_Range_Check(srcUnit, trgUnit, range)
 end
 
 function HealBot_getUnitCoords(unit)
---    if UnitIsPlayer(unit) then
---        local x, y = GetPlayerMapPosition(unit);
---        if x and y and x > 0 and y > 0 then
---            return x, y
---        end
---    end
+    if UnitIsPlayer(unit) then
+        local pos=C_Map.GetPlayerMapPosition(C_Map.GetBestMapForUnit(unit), unit)
+        if pos.x and pos.y and pos.x > 0 and pos.y > 0 then
+            return pos.x, pos.y
+        end
+    end
     return nil, nil
 end
 
