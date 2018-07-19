@@ -2389,7 +2389,6 @@ function HealBot_Register_Events()
         HealBot:RegisterEvent("UNIT_EXITING_VEHICLE");
         HealBot:RegisterEvent("UNIT_HEALTH");
         HealBot:RegisterEvent("UNIT_MAXHEALTH");
-    --    HealBot:RegisterEvent("UNIT_MAXMANA")
         local regPower=false
         for j=1,10 do
             if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERSIZE"]>0 then 
@@ -2491,7 +2490,7 @@ function HealBot_UnRegister_ReadyCheck()
 end
 
 function HealBot_Register_Mana()
-    HealBot:RegisterEvent("UNIT_MANA")
+    HealBot:RegisterEvent("UNIT_POWER_UPDATE")
     HealBot:RegisterEvent("UNIT_MAXPOWER")
     for xUnit,_ in pairs(HealBot_Unit_Button) do
         HealBot_CheckPower(xUnit)
@@ -2499,7 +2498,7 @@ function HealBot_Register_Mana()
 end
 
 function HealBot_UnRegister_Mana()
-    HealBot:UnregisterEvent("UNIT_MANA")
+    HealBot:UnregisterEvent("UNIT_POWER_UPDATE")
     HealBot:UnregisterEvent("UNIT_MAXPOWER")
 end
 
