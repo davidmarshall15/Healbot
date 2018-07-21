@@ -497,9 +497,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_FROSTBRAND]=2,
                 [HEALBOT_HEALING_RAIN]=2,
                 [HEALBOT_SPIRITWALKERS_GRACE]=2,
-                --WoD Added
                 [HEALBOT_CLOUDBURST_TOTEM]=2,
-                --Legion Added
+                [HEALBOT_EARTH_SHIELD]=2,
             },
             ["WARL"] = {
                 [HEALBOT_UNENDING_RESOLVE]=2,
