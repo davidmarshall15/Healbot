@@ -226,7 +226,6 @@ function HealBot_Data_InitVars()
         MacroSuppressSound = 1,
         MacroSuppressError = 1,
         AcceptSkins = 1,
-        ShowIconTxt2 = {},
         HealBot_Enable_MouseWheel=true,
         PowerChargeTxtSizeMod=7,
         FocusMonitor = {},

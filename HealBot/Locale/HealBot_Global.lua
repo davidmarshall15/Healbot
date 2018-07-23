@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.2.b1";
+﻿HEALBOT_VERSION   = "8.0.1.2.b2";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -402,6 +402,7 @@ function HealBot_globalVars()
     HEALBOT_SERENDIPITY                     = GetSpellInfo(63733) or "--Serendipity";
     HEALBOT_SHADOWFORM                      = GetSpellInfo(232698) or "--Shadowform"
     HEALBOT_SHADOW_WORD_INSANITY            = GetSpellInfo(132573) or "--Shadow Word: Insanity";
+    HEALBOT_SHINING_FORCE                   = GetSpellInfo(204263) or "--Shining Force";
     HEALBOT_SPIRIT_SHELL                    = GetSpellInfo(109964) or "--Spirit Shell";
     HEALBOT_SUNDERING_SOUL                  = GetSpellInfo(212570) or "--Sundering Soul";
     HEALBOT_SURGE_OF_DARKNESS               = GetSpellInfo(162448) or "--Surge of Darkness";

@@ -20,7 +20,7 @@ function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
     local spell, _, _, msCast, _, _ = HealBot_GetSpellInfo(id);
     if ( not spell ) then return nil; end
     if not spellName then spellName=spell end
-    
+   
     local hbMana=nil
     if spellBookId then
         HealBot_TooltipInit();
@@ -29,12 +29,12 @@ function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
         if (ttText:GetText()) then
             line = ttText:GetText();
             if line then 
-                hbMana = strmatch(line, MANA_COST_PATTERN) 
-                hbMana = hbMana and tonumber((gsub(hbMana, "%D", "")))
+                hbMana = tonumber((gsub(line, "%D", "")))
             end
         end
+        
     end
-    
+
     local hbCastTime=tonumber(msCast or 0);
     if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
     

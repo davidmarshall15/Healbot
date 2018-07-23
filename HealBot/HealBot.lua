@@ -663,15 +663,6 @@ function HealBot_SlashCmd(cmd)
         else
             HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Number")
         end
-    elseif (HBcmd=="pws") then
-        if HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD] then
-            HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD]=nil
-            HealBot_luVars["keepShieldTexture"]=nil
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_POWER_WORD_SHIELD.." +  "..HEALBOT_WORD_OFF)
-        else
-            HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD]="+"
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_POWER_WORD_SHIELD.." +  "..HEALBOT_WORD_ON)
-        end
     elseif (HBcmd=="cp") then
         if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] then
             Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"]=false
@@ -2371,9 +2362,6 @@ function HealBot_configClassHoT()
             else
                 HealBot_Watch_HoT[sName]=nil
             end
-            if sName==HEALBOT_POWER_WORD_SHIELD and HealBot_Watch_HoT[sName] then
-                HealBot_luVars["procWS"]=true
-            end
         end
     end
 end
@@ -3147,7 +3135,6 @@ function HealBot_HasMyBuffs(button)
         end
         local k = 1
         local auraData={}
-        HealBot_luVars["hasPWS"]=nil
         if not UnitIsFriend("player",xUnit) then
             while true do
                 local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HARMFUL"); 
@@ -3193,43 +3180,10 @@ function HealBot_HasMyBuffs(button)
                 HealBot_UnitIcons[xUnit][hbHoTID]["COUNT"]=auraData[spellID]["COUNT"]
                 HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=auraData[spellID]["TIME"]+1
             end    
-            if auraData[spellID]["NAME"]==HEALBOT_POWER_WORD_SHIELD then HealBot_luVars["hasPWS"]=true end
             if HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]~=auraData[spellID]["TIME"] then
-                if auraData[spellID]["NAME"]==HEALBOT_POWER_WORD_SHIELD then 
-                    if HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD] then
-                        HealBot_luVars["keepShieldTexture"]=auraData[spellID]["TEXTURE"]
-                        HealBot_UnitIcons[xUnit][hbHoTID]["TEXT2"]=HealBot_Globals.ShowIconTxt2[HEALBOT_POWER_WORD_SHIELD]
-                    end
-                    HealBot_luVars["hadPWS"]=true
-                end
                 HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=auraData[spellID]["TIME"]
                 HealBot_UnitIcons[xUnit][hbHoTID]["TEXTURE"]=auraData[spellID]["TEXTURE"]
                 HealBot_HoT_Update(button, hbHoTID)
-            end
-        end
-        if HealBot_luVars["procWS"] and HealBot_luVars["hadPWS"] and not HealBot_luVars["hasPWS"] then
-            local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitDebuff(xUnit, HEALBOT_DEBUFF_WEAKENED_SOUL_ID); 
-            if bName and caster then
-                if (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="A" or (HealBot_Watch_HoT[HEALBOT_POWER_WORD_SHIELD]=="C" and caster=="player")) then
-                    local hbHoTID=HealBot_UnitGUID(caster).."!" ..bName.."!"..spellID
-                    if not HealBot_UnitIcons[xUnit] then HealBot_UnitIcons[xUnit]={} end
-                    if not HealBot_UnitIcons[xUnit][hbHoTID] then HealBot_UnitIcons[xUnit][hbHoTID]={} end
-                    if not HealBot_UnitIcons[xUnit][hbHoTID]["ICON"] then HealBot_UnitIcons[xUnit][hbHoTID]["ICON"]=0 end
-                    if not HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"] then HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=expirationTime+1 end
-                    hbFoundHoT[hbHoTID]=true
-                    if HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]~=expirationTime then
-                        if HealBot_luVars["keepShieldTexture"] then
-                            HealBot_UnitIcons[xUnit][hbHoTID]["TEXTURE"]=HealBot_luVars["keepShieldTexture"]
-                            HealBot_UnitIcons[xUnit][hbHoTID]["TEXT2"]="-"
-                        else
-                            HealBot_UnitIcons[xUnit][hbHoTID]["TEXTURE"]=iTexture
-                        end
-                        HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=expirationTime
-                        HealBot_HoT_Update(button, hbHoTID)
-                    end
-                else
-                    HealBot_luVars["hadPWS"]=nil
-                end
             end
         end
         local huIcons=HealBot_UnitIcons[xUnit]

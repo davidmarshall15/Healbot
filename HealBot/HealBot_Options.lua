@@ -4988,6 +4988,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_SPIRIT_SHELL,
 			HEALBOT_REVIVE,
             HEALBOT_GUARDIAN_SPIRIT,
+            HEALBOT_SHINING_FORCE,
             HEALBOT_PAIN_SUPPRESSION,
             HEALBOT_INTERVENE,
             HEALBOT_RESURRECTION,
