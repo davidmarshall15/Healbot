@@ -2525,7 +2525,7 @@ function HealBot_Action_ResetSkin(barType,button,numcols)
         HealBot_Panel_clearResetHeaderSkinDone()
         HealBot_Action_clearResetBarSkinDone()
         HealBot_Action_sethbNumberFormat()
-        HealBot_setOptions_Timer(85)
+        HealBot_setOptions_Timer(80)
         if HealBot_resetSkinTo~=Healbot_Config_Skins.Current_Skin then
             HealBot_resetSkinTo=Healbot_Config_Skins.Current_Skin
             HealBot_Options_RaidTargetUpdate()

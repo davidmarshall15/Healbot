@@ -486,6 +486,8 @@ function HealBot_Data_InitVars()
             },
             ["SHAM"] = {
                 [HEALBOT_RIPTIDE]=2,
+                [HEALBOT_WELLSPRING]=2,
+                [HEALBOT_DOWNPOUR]=2,
                 [HEALBOT_TIDAL_WAVES]=2,
                 [HEALBOT_ANACESTRAL_GUIDANCE]=2,
                 [HEALBOT_ASCENDANCE]=2,

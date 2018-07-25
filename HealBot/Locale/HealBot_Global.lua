@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.2";
+﻿HEALBOT_VERSION   = "8.0.1.3.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -205,6 +205,8 @@ function HealBot_globalVars()
     HEALBOT_HEALING_TIDE_TOTEM              = GetSpellInfo(108280) or "--Healing Tide Totem";
     HEALBOT_HEALING_WAVE                    = GetSpellInfo(77472) or "--Healing Wave";
     HEALBOT_RIPTIDE                         = GetSpellInfo(61295) or "--Riptide";
+    HEALBOT_WELLSPRING                      = GetSpellInfo(197995) or "--Wellspring";
+    HEALBOT_DOWNPOUR                        = GetSpellInfo(207778) or "--Downpour";
     --Warlock
     HEALBOT_HEALTH_FUNNEL                   = GetSpellInfo(755) or "--Health Funnel";
 

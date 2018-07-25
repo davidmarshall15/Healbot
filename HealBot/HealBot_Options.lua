@@ -604,6 +604,8 @@ function HealBot_Options_setLists()
         
         --Shaman
         [HEALBOT_RIPTIDE]=HEALBOT_SHAMAN,
+        [HEALBOT_WELLSPRING]=HEALBOT_SHAMAN,
+        [HEALBOT_DOWNPOUR]=HEALBOT_SHAMAN,
         [HEALBOT_SPIRITWALKERS_GRACE]=HEALBOT_SHAMAN,
         [HEALBOT_UNLEASH_LIFE]=HEALBOT_SHAMAN,
         [HEALBOT_ASTRAL_SHIFT]=HEALBOT_SHAMAN,
@@ -2547,7 +2549,7 @@ function HealBot_Options_AggroTxtPct_OnClick(self)
     else
         Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXTPCT"] = false
     end
-    HealBot_setOptions_Timer(85)
+    HealBot_setOptions_Timer(80)
 end
 
 function HealBot_Options_CPUProfiler_OnClick(self)
@@ -3833,7 +3835,7 @@ function HealBot_Options_BarHealthNumFormatAggro_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_BarHealthNumFormatAggro,nFormat) 
-                        HealBot_setOptions_Timer(85)
+                        HealBot_setOptions_Timer(80)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==i then info.checked = true end
@@ -4857,6 +4859,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_PRAYER_OF_HEALING,
             HEALBOT_PRAYER_OF_MENDING,
             HEALBOT_RIPTIDE,
+            HEALBOT_WELLSPRING,
+            HEALBOT_DOWNPOUR,
             HEALBOT_REGROWTH,
             HEALBOT_RENEW,
             HEALBOT_DIVINE_HYMN,
