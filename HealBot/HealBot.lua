@@ -1224,7 +1224,7 @@ end
 
 function HealBot_Update_Fast()
     aSwitch=aSwitch+1
-    if aSwitch<2 and (HealBot_luVars["DelayAuraBCheck"] or HealBot_luVars["DelayClearAggro"] or HealBot_luVars["DelayAuraDCheck"] or Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"]) then
+    if aSwitch<2 then
         if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
         if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
         if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
@@ -1296,7 +1296,7 @@ function HealBot_Update_Fast()
                     HealBot_EnemyUnits[xUnit]["MAXHLTH"]=0
                     if HealBot_EnemyUnits[xUnit]["STATE"]~=0 then
                         HealBot_ClearDebuff(xButton, true)
-                        HealBot_ClearAllBuffs(xButton)
+                        HealBot_ClearBuff(xButton)
                         HealBot_HoT_RemoveIconButton(xButton)
                         HealBot_Action_UpdateAggro(xUnit,false,nil,0)
                         HealBot_EnemyUnits[xUnit]["STATE"]=0
@@ -1626,21 +1626,19 @@ function HealBot_doAuraDebuffUnit(button)
 end
 
 function HealBot_doAuraBuff()
-    if HealBot_luVars["BuffCheck"] then 
-        HealBot_luVars["DelayAuraBCheck"]=nil
-        for xUnit,_ in pairs(HealBot_DelayAuraBCheck) do
-            HealBot_DelayAuraBCheck[xUnit] = nil;
-            if UnitExists(xUnit) and UnitIsFriend("player",xUnit)  then
-                local xButton=HealBot_Unit_Button[xUnit]
-                if xButton and (HealBot_Config_Buffs.BuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then
-                    HealBot_CheckUnitBuffs(xButton)
-                end
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBUFF"] then
-                    HealBot_HasMyBuffs(xButton) 
-                end
-                if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][xButton.frame]["AC"]>1 then
-                    HealBot_doAbsorbs(xButton)
-                end
+    HealBot_luVars["DelayAuraBCheck"]=nil
+    for xUnit,_ in pairs(HealBot_DelayAuraBCheck) do
+        HealBot_DelayAuraBCheck[xUnit] = nil;
+        if UnitExists(xUnit) and UnitIsFriend("player",xUnit) and HealBot_Unit_Button[xUnit] then
+            local xButton=HealBot_Unit_Button[xUnit]
+            if HealBot_luVars["BuffCheck"] and xButton and (HealBot_Config_Buffs.BuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then
+                HealBot_CheckUnitBuffs(xButton)
+            end
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBUFF"] then
+                HealBot_HasMyBuffs(xButton) 
+            end
+            if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][xButton.frame]["AC"]>1 then
+                HealBot_doAbsorbs(xButton)
             end
         end
     end
@@ -2733,11 +2731,11 @@ end
 local hbIgnoreFastHealthToTDebuff=GetSpellInfo(137633) or "Crystal Shell"
 function HealBot_OnEvent_UnitAura(self,unit)
     if HealBot_Unit_Button[unit] then
-        if HealBot_luVars["DebuffCheck"] and not HealBot_DelayAuraDCheck[unit] then
+        if not HealBot_DelayAuraDCheck[unit] then
             HealBot_DelayAuraDCheck[unit]=GetTime()
             HealBot_luVars["DelayAuraDCheck"]=true
         end
-        if HealBot_luVars["BuffCheck"] and not HealBot_DelayAuraBCheck[unit] then
+        if not HealBot_DelayAuraBCheck[unit] then
             HealBot_DelayAuraBCheck[unit]=true
             HealBot_luVars["DelayAuraBCheck"]=true
         end
@@ -2912,26 +2910,20 @@ function HealBot_HasMyBuffs(button)
 end
 
 function HealBot_CheckAllBuffs(unit)
-    if HealBot_luVars["BuffCheck"] then
-        if unit then
-            HealBot_DelayAuraBCheck[unit]=true
-        else
-            for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                HealBot_DelayAuraBCheck[xUnit]=true
-            end
+    if unit then
+        HealBot_DelayAuraBCheck[unit]=true
+    else
+        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_DelayAuraBCheck[xUnit]=true
         end
-        HealBot_luVars["DelayAuraBCheck"]=true
     end
+    HealBot_luVars["DelayAuraBCheck"]=true
 end
 
-function HealBot_ClearAllBuffs(button)
-    if button then
-        HealBot_ClearBuff(button)
-    else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.buff then
-                HealBot_ClearBuff(xButton,true)
-            end
+function HealBot_ClearAllBuffs()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.buff then
+            HealBot_ClearBuff(xButton,true)
         end
     end
 end
@@ -2954,14 +2946,10 @@ function HealBot_CheckAllDebuffs(unit)
     end
 end
 
-function HealBot_ClearAllDebuffs(button)
-    if button then 
-        HealBot_ClearDebuff(button)
-    else
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.debuff and xButton.debuff.spellId then
-                HealBot_ClearDebuff(xButton,true)
-            end
+function HealBot_ClearAllDebuffs()
+    for xUnit,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.debuff and xButton.debuff.spellId then
+            HealBot_ClearDebuff(xButton,true)
         end
     end
 end
@@ -3050,7 +3038,7 @@ end
 
 function HealBot_CheckUnitDebuffs(button)
     if not HealBot_luVars["DebuffCheck"] then 
-        HealBot_ClearAllDebuffs(button)
+        HealBot_ClearDebuff(button)
         return 
     end
     local xUnit=button.unit
@@ -3577,14 +3565,14 @@ function HealBot_OnEvent_PlayerRegenDisabled(self)
     if HealBot_Config_Buffs.BuffWatch and HealBot_Config_Buffs.BuffWatchInCombat==false then
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.buff then
-                HealBot_CheckAllBuffs(xUnit)
+                HealBot_ClearBuff(xButton)
             end
         end
     end
     if HealBot_Config_Cures.DebuffWatch and HealBot_Config_Cures.DebuffWatchInCombat==false then
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.debuff.name then 
-                HealBot_CheckAllDebuffs(xUnit)
+                HealBot_ClearDebuff(xButton)
             end
         end
     end
@@ -3606,6 +3594,12 @@ function HealBot_Not_Fighting()
         needReset=nil
     else
         HealBot_Action_ResetUnitStatus()
+        if HealBot_Config_Buffs.BuffWatch and HealBot_Config_Buffs.BuffWatchInCombat==false then
+            HealBot_CheckAllBuffs()
+        end
+        if HealBot_Config_Cures.DebuffWatch and HealBot_Config_Cures.DebuffWatchInCombat==false then
+            HealBot_CheckAllDebuffs()
+        end
     end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUSE"]=="YES" and HealBot_Data["TIPUNIT"] then
         HealBot_Action_RefreshTooltip();
@@ -3791,7 +3785,7 @@ function HealBot_UnitNameUpdate(unUnit,unGUID)
             HealBot_CheckAllDebuffs(unUnit)
             HealBot_CheckAllBuffs(unUnit)
         else
-            HealBot_ClearAllBuffs(unb)
+            HealBot_ClearBuff(unb)
             HealBot_ClearDebuff(unb)
         end
         HealBot_Action_ResetUnitStatus(unUnit) 
