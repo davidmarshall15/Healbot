@@ -93,6 +93,10 @@ function HealBot_Panel_GetMainTanks()
     return HealBot_MainTanks;
 end
 
+function HealBot_Panel_IsTank(xGUID)
+    return HealBot_MainTanks[xGUID]
+end
+
 function HealBot_Panel_SetSubSortPlayer()
     if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"]=false

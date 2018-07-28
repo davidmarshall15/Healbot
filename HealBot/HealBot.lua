@@ -3117,14 +3117,8 @@ function HealBot_CheckUnitDebuffs(button)
                         checkthis=true;
                     elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
                         checkthis=true;
-                    elseif WatchTarget["MainTanks"] then
-                    local MainTanks=HealBot_Panel_GetMainTanks();
-                    for zGUID,_ in pairs(MainTanks) do
-                        if xGUID==zGUID then
-                            checkthis=true;
-                            break;
-                        end
-                    end
+                    elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
+                        checkthis=true;
                     elseif WatchTarget["MyTargets"] then
                         local myhTargets=HealBot_GetMyHealTargets();
                         for i=1, #myhTargets do
@@ -3474,14 +3468,8 @@ function HealBot_CheckUnitBuffs(button)
 				    if xGUID==WatchGUID then checkthis=true; end
                 elseif WatchTarget["Focus"] then
 				    if UnitIsUnit(xUnit, "focus") then checkthis=true; end
-                elseif WatchTarget["MainTanks"] then
-                    local MainTanks=HealBot_Panel_GetMainTanks();
-                    for zGUID,_ in pairs(MainTanks) do
-                        if xGUID==zGUID then
-                            checkthis=true;
-                            break;
-                        end
-                    end
+                elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
+                    checkthis=true;
                 elseif WatchTarget["MyTargets"] then
                     local myhTargets=HealBot_GetMyHealTargets();
                     for i=1, #myhTargets do

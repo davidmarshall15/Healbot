@@ -500,6 +500,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_SPIRITWALKERS_GRACE]=2,
                 [HEALBOT_CLOUDBURST_TOTEM]=2,
                 [HEALBOT_EARTH_SHIELD]=2,
+                [HEALBOT_SPIRIT_LINK_TOTEM]=2,
             },
             ["WARL"] = {
                 [HEALBOT_UNENDING_RESOLVE]=2,
