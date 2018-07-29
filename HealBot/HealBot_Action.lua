@@ -2540,18 +2540,9 @@ function HealBot_Action_ResetSkin(barType,button,numcols)
     end
 end
 
-local curBucket=-25
-function HealBot_Action_RefreshButtons(button)
-    if button then
-        HealBot_Action_RefreshButton(button)
-    else
-        curBucket=curBucket+1
-        if curBucket>3 then curBucket=1 end
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.refresh==curBucket then
-                HealBot_Action_CheckRange(xButton)
-            end
-        end
+function HealBot_Action_RefreshButtons()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Action_CheckRange(xButton)
     end
 end
 
@@ -2837,9 +2828,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
         if HealBot_Unit_Button[unit]~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
             shb.unit=unit
-            if (shb.refresh or 0)<1 then
-                shb.refresh=HealBot_Action_BalanceRefresh()
-            end
             if not shb.debuff then
                 shb.buff=false
                 shb.debuff={}
@@ -3487,18 +3475,6 @@ function HealBot_Action_CreateButton(hbCurFrame)
     end
 end
 
-local ctlBuckets={[1]=0, [2]=0, [3]=0}
-function HealBot_Action_BalanceRefresh()
-    local nextBucket=1
-    if ctlBuckets[2]<ctlBuckets[1] then 
-        nextBucket=2
-    elseif ctlBuckets[3]<ctlBuckets[1] then 
-        nextBucket=3
-    end
-    ctlBuckets[nextBucket]=ctlBuckets[nextBucket]+1
-    return nextBucket
-end
-
 function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     local dbUnit=dg.unit or "N"
@@ -3520,14 +3496,12 @@ function HealBot_Action_DeleteButton(hbBarID)
     dg.unit="nil"
     HealBot_UnitStatus[dbUnit]=0
     HealBot_UnitRange[dbUnit]=0
-    if (dg.refresh or 0)>0 then ctlBuckets[dg.refresh]=ctlBuckets[dg.refresh]-1 end
     dg.buff=false
     dg.debuff={}
     dg.debuff.type=false
     dg.debuff.name=false
     dg.debuff.customPriority=99
     dg.debuff.spellId=false
-    dg.refresh=0
     dg:Hide();
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end
