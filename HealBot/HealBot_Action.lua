@@ -1945,7 +1945,7 @@ function HealBot_Action_retUnitOffline(hbGUID)
 end
 
 function HealBot_Action_RefreshButton(button)
-    if not button then return end
+    if not button or button.guid=="TestBar" then return end
 --  if type(button)~="table" then DEFAULT_CHAT_FRAME:AddMessage("***** "..type(button)) end
     HealBot_Action_EnableButton(button)
     if UnitExists("target") and HealBot_Unit_Button["target"] and button.unit~="target" and HealBot_UnitGUID("target")==button.guid then
@@ -2869,7 +2869,7 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText)
     local thb=HealBot_Action_CreateButton(hbCurFrame)
     if thb then
         thb.unit=unitText
-        thb.guid=nil
+        thb.guid="TestBar"
         thb.bar4state=0
         HealBot_Unit_Button[unitText]=thb
         if thb.frame~=hbCurFrame then
