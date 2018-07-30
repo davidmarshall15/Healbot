@@ -74,9 +74,6 @@ function HealBot_Init_Spells_Defaults()
             end
         end
     end
-    if HealBot_Data["PCLASSTRIM"]=="PALA" then
-        HealBot_GreaterBlessingSpells()
-    end
 end
 
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
