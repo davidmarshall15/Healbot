@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.3.b6";
+﻿HEALBOT_VERSION   = "8.0.1.3";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -591,7 +591,7 @@ function HealBot_globalVars()
     
     --Unit Max Health Modifier Debuffs
     HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID      = 179986;
-    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID) or "--Aura of Content";
+    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID) or "--Aura of Contempt";
     
             
     --Ignore Class Debuffs (ONLY DISPELLABLE DEBUFFS)
