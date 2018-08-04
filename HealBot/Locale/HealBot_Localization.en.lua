@@ -148,6 +148,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRIVATETANKS            = "Private main tanks";
     HEALBOT_OPTIONS_TARGETHEALS             = "Targets";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";
+    HEALBOT_OPTIONS_RAID10                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
+    HEALBOT_OPTIONS_RAID25                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 25";
+    HEALBOT_OPTIONS_RAID40                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 40";
     HEALBOT_OPTIONS_EMERGFILTER             = "Show raid bars for";
     HEALBOT_OPTIONS_EMERGFCLASS             = "Configure classes for";
     HEALBOT_OPTIONS_COMBOBUTTON             = "Button";
@@ -293,7 +296,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_AGGROIND                 = "Indicator"
     HEALBOT_OPTION_BARUPDFREQ               = "Refresh Multiplier"
     HEALBOT_OPTION_USEFLUIDBARS             = "Use fluid bars"
-    HEALBOT_OPTION_CPUPROFILE               = "Use CPU profiler (Addons CPU usage Info)"
     HEALBOT_OPTIONS_RELOADUIMSG             = "This option requires a UI Reload, Reload now?"
 
     HEALBOT_BUFF_PVP                        = "PvP"
@@ -401,6 +403,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_INCHEAL                 = "Incoming heals"
     HEALBOT_WORD_ARENA                      = "Arena"
     HEALBOT_WORD_BATTLEGROUND               = "Battle Ground"
+    HEALBOT_WORD_BG10                       = "BG 10"; 
+    HEALBOT_WORD_BG15                       = "BG 15";
+    HEALBOT_WORD_BG40                       = "BG 40";     
     HEALBOT_OPTIONS_TEXTOPTIONS             = "Text Options"
     HEALBOT_WORD_PARTY                      = "Party"
     HEALBOT_OPTIONS_COMBOAUTOTARGET         = "Auto\nTarget"
@@ -415,18 +420,12 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTONCASTPRESSED       = "Pressed"
     HEALBOT_OPTIONS_BUTTONCASTRELEASED      = "Released"
 
-    HEALBOT_INFO_ADDONCPUUSAGE              = "== Addon CPU Usage in Seconds =="
-    HEALBOT_INFO_ADDONCOMMUSAGE             = "== Addon Comms Usage =="
     HEALBOT_WORD_HEALER                     = "Healer"
     HEALBOT_WORD_DAMAGER                    = "Damager"
     HEALBOT_WORD_TANK                       = "Tank"
     HEALBOT_WORD_LEADER                     = "Leader"
     HEALBOT_WORD_VERSION                    = "Version"
     HEALBOT_WORD_CLIENT                     = "Client"
-    HEALBOT_WORD_ADDON                      = "Addon"
-    HEALBOT_INFO_CPUSECS                    = "CPU Secs"
-    HEALBOT_INFO_MEMORYMB                   = "Memory MB"
-    HEALBOT_INFO_COMMS                      = "Comms KB"
 
     HEALBOT_WORD_STAR                       = "Star"
     HEALBOT_WORD_CIRCLE                     = "Circle"

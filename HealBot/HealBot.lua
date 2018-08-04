@@ -747,7 +747,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="cw") then  -- Clear Warnings
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="zzz") then
-        HealBot_AddDebug(HEALBOT_CHAT_ADDONID.."No tests set")
+        HealBot_AddDebug("Nothing defined")
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -4023,9 +4023,9 @@ function HealBot_PartyUpdate_CheckSkin()
     HealBot_luVars["IsSolo"]=nil
     HealBot_luVars["CheckSkin"]=nil
     if z == "arena" then
-        if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=7 then
+        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_ARENA] then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==7 then
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
                     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                     break
                 end
@@ -4033,28 +4033,28 @@ function HealBot_PartyUpdate_CheckSkin()
         end
     elseif z=="pvp" then
         local y=GetRealZoneText()
-        if GetNumGroupMembers()>27 or y==HEALBOT_ZONE_AV or y==HEALBOT_ZONE_IC then
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=10 then
+        if GetNumGroupMembers()>29 or y==HEALBOT_ZONE_AV or y==HEALBOT_ZONE_IC then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG40] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==10 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG40] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
                 end
             end
-        elseif GetNumGroupMembers()>12 or y==HEALBOT_ZONE_SA or y==HEALBOT_ZONE_ES or y==HEALBOT_ZONE_AB then
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=9 then
+        elseif GetNumGroupMembers()>11 or y==HEALBOT_ZONE_SA or y==HEALBOT_ZONE_ES or y==HEALBOT_ZONE_AB then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG15] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==9 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG15] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
                 end
             end
         else
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=8 then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG10] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==8 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG10] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
@@ -4063,27 +4063,27 @@ function HealBot_PartyUpdate_CheckSkin()
         end
     elseif IsInRaid() then
         if GetNumGroupMembers()>29 then
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=6 then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID40] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==6 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID40] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
                 end
             end
-        elseif GetNumGroupMembers()>14 then
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=5 then
+        elseif GetNumGroupMembers()>15 then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID25] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==5 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
                 end
             end
         else
-            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=4 then
+            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID10] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==4 then
+                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID10] then
                         HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                         break
                     end
@@ -4091,27 +4091,27 @@ function HealBot_PartyUpdate_CheckSkin()
             end
         end
     elseif GetNumGroupMembers()>0 then
-        if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=3 then
+        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PARTY] then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==3 then
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PARTY] then
                     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                     break
                 end
             end
         end
     elseif C_PetBattles.IsInBattle() and HealBot_luVars["lastPetBattleEvent"]~="PET_BATTLE_OVER" then
-        if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=11 then
+        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PETBATTLE] then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==11 then
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PETBATTLE] then
                     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                     break
                 end
             end
         end
     else
-        if HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin]~=2 then
+        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_SOLO] then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]==2 then
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_SOLO] then
                     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
                     break
                 end
@@ -5348,7 +5348,18 @@ function HealBot_Update_Skins()
     end
     local foundSkin=false
     for x in pairs (Healbot_Config_Skins.Skins) do
-        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] then HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]]=1 end
+        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] then 
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] = {[HEALBOT_WORD_SOLO]=false, 
+                                                                         [HEALBOT_WORD_PARTY]=false, 
+                                                                         [HEALBOT_OPTIONS_RAID10]=false, 
+                                                                         [HEALBOT_OPTIONS_RAID25]=false, 
+                                                                         [HEALBOT_OPTIONS_RAID40]=false,
+                                                                         [HEALBOT_WORD_ARENA]=false, 
+                                                                         [HEALBOT_WORD_BG10]=false, 
+                                                                         [HEALBOT_WORD_BG15]=false, 
+                                                                         [HEALBOT_WORD_BG40]=false, 
+                                                                         [HEALBOT_WORD_PETBATTLE]=false}
+        end
         if Healbot_Config_Skins.Skins[x]==Healbot_Config_Skins.Current_Skin then foundSkin=true end
     end
     if not foundSkin then 
@@ -5714,8 +5725,10 @@ function HealBot_Update_Skins()
         end
 
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
-    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then
-        
+        HealBot_Update_DefaultSkins()
+    elseif tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<4 then
+        HealBot_Update_DefaultSkins()
+    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then   
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
     end
     
@@ -5727,6 +5740,44 @@ function HealBot_Update_Skins()
     
     HealBot_Config.LastVersionSkinUpdate=HEALBOT_VERSION
     HealBot_Config.Version=HEALBOT_VERSION
+end
+
+function HealBot_Update_DefaultSkins()
+    local cacheSkinDefaults=HealBot_Options_copyTable(HealBot_Config.SkinDefault)
+    HealBot_Config.SkinDefault={}
+    for x in pairs (Healbot_Config_Skins.Skins) do
+        HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]] = {[HEALBOT_WORD_SOLO]=false, 
+                                                                     [HEALBOT_WORD_PARTY]=false, 
+                                                                     [HEALBOT_OPTIONS_RAID10]=false, 
+                                                                     [HEALBOT_OPTIONS_RAID25]=false, 
+                                                                     [HEALBOT_OPTIONS_RAID40]=false,
+                                                                     [HEALBOT_WORD_ARENA]=false, 
+                                                                     [HEALBOT_WORD_BG10]=false, 
+                                                                     [HEALBOT_WORD_BG15]=false, 
+                                                                     [HEALBOT_WORD_BG40]=false, 
+                                                                     [HEALBOT_WORD_PETBATTLE]=false}
+        if cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==2 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_SOLO]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==3 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PARTY]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==4 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID10]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==5 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==6 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID40]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==7 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==8 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG10]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==9 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG15]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==10 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG40]=true;
+        elseif cacheSkinDefaults[Healbot_Config_Skins.Skins[x]]==11 then
+            HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PETBATTLE]=true;
+        end
+    end
 end
 
 function HealBot_Update_SpellCombos()
