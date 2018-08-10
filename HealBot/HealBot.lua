@@ -75,7 +75,7 @@ local hbManaPlayers={}
 local hbCurLowMana={}
 local HealBot_UnitAbsorbs={}
 local hbShareSkins={}
-local HealBot_trackHidenFrames={}
+local HealBot_trackHiddenFrames={}
 local calibrateHBScale, hbScale = 0,0
 local _
 local HealBot_Buff_ItemID = {};
@@ -575,12 +575,6 @@ function HealBot_SlashCmd(cmd)
             HealBot_Options_DisableHealBotOpt:SetChecked(0)
             HealBot_Options_DisableHealBot(0)
         end
-    elseif (HBcmd=="tinfo") then
-        if UnitExists("target") then
-            HealBot_Comms_TargetInfo()
-        else
-            HealBot_AddDebug( "No Target" );
-        end
     elseif (HBcmd=="comms") then
         HealBot_Comms_Zone()
     elseif (HBcmd=="help" or HBcmd=="h") then
@@ -604,10 +598,8 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="suppress" and x) then
         x=string.lower(x)
         HealBot_ToggleSuppressSetting(x)
-    elseif (HBcmd=="test" and x) then
-        if tonumber(x) and tonumber(x)>4 and tonumber(x)<51 then
-            HealBot_TestBars(x)
-        end
+    elseif (HBcmd=="test") then
+        HealBot_TestBars(x)
     elseif (HBcmd=="tr" and x) then
         HealBot_Panel_SethbTopRole(x)
     elseif (HBcmd=="ssp") then
@@ -669,7 +661,7 @@ function HealBot_SlashCmd(cmd)
 			HealBot_SetResetFlag("SOFT")
 		end
     elseif (HBcmd=="hrfm") then
-        HealBot_trackHidenFrames["RAID"]=true
+        HealBot_trackHiddenFrames["RAID"]=true
         if HealBot_Globals.RaidHideMethod==0 then
             HealBot_Globals.RaidHideMethod=1
             HealBot_setOptions_Timer(188)
@@ -798,12 +790,14 @@ end
 
 function HealBot_TestBars(noBars)
     local numBars=noBars or HealBot_Globals.TestBars["BARS"]
-    if numBars and tonumber(numBars) then
+    if numBars and tonumber(numBars) and tonumber(numBars)>4 and tonumber(numBars)<51 then
         numBars=tonumber(numBars)
         HealBot_Panel_SetNumBars(numBars)
         HealBot_Panel_ToggleTestBars()
-        if HealBot_Data["REFRESH"]<5 then HealBot_Data["REFRESH"]=5; end
+     elseif HealBot_Panel_retTestBars() then
+         HealBot_Panel_ToggleTestBars()
     end
+    if HealBot_Data["REFRESH"]<5 then HealBot_Data["REFRESH"]=5; end    
 end
 
 function HealBot_Reset()
@@ -1413,34 +1407,34 @@ function HealBot_Options_Update()
     elseif  HealBot_Options_Timer[180] then
         HealBot_Options_Timer[180]=nil
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
-            HealBot_trackHidenFrames["PARTY"]=true
+            HealBot_trackHiddenFrames["PARTY"]=true
             HealBot_Options_DisablePartyFrame()
             HealBot_Options_PlayerTargetFrames:Enable();
             if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] then
-                HealBot_trackHidenFrames["PLAYER"]=true
+                HealBot_trackHiddenFrames["PLAYER"]=true
                 HealBot_Options_DisablePlayerFrame()
                 HealBot_Options_DisablePetFrame()
                 HealBot_Options_DisableTargetFrame()
-            elseif HealBot_trackHidenFrames["PLAYER"] then 
+            elseif HealBot_trackHiddenFrames["PLAYER"] then 
                 HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." ("..HEALBOT_OPTIONS_HIDEPLAYERTARGET..") - "..HEALBOT_WORD_OFF)
             end
-        elseif HealBot_trackHidenFrames["PARTY"] then
+        elseif HealBot_trackHiddenFrames["PARTY"] then
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." - "..HEALBOT_WORD_OFF)
         end
     elseif  HealBot_Options_Timer[185] then
         HealBot_Options_Timer[185]=nil
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
-            HealBot_trackHidenFrames["MINIBOSS"]=true
+            HealBot_trackHiddenFrames["MINIBOSS"]=true
             HealBot_Options_DisableMiniBossFrame()
-        elseif HealBot_trackHidenFrames["MINIBOSS"] then
+        elseif HealBot_trackHiddenFrames["MINIBOSS"] then
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES.." - "..HEALBOT_WORD_OFF)
         end
     elseif  HealBot_Options_Timer[188] then
         HealBot_Options_Timer[188]=nil
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] then
-            HealBot_trackHidenFrames["RAID"]=true
+            HealBot_trackHiddenFrames["RAID"]=true
             HealBot_Options_DisableRaidFrame()
-        elseif HealBot_trackHidenFrames["RAID"] then
+        elseif HealBot_trackHiddenFrames["RAID"] then
             if HealBot_Globals.RaidHideMethod==0 then
                 HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDERAIDFRAMES.." - "..HEALBOT_WORD_OFF)
             elseif HealBot_Globals.RaidHideMethod>1 then
@@ -4521,22 +4515,22 @@ function HealBot_OnEvent_PlayerEnteringWorld(self)
 	HealBot_luVars["IsReallyFighting"]=true
     
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
-        HealBot_trackHidenFrames["PARTY"]=true
+        HealBot_trackHiddenFrames["PARTY"]=true
         HealBot_Options_DisablePartyFrame()
         HealBot_Options_PlayerTargetFrames:Enable();
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] then
-            HealBot_trackHidenFrames["PLAYER"]=true
+            HealBot_trackHiddenFrames["PLAYER"]=true
             HealBot_Options_DisablePlayerFrame()
             HealBot_Options_DisablePetFrame()
             HealBot_Options_DisableTargetFrame()
         end
     end
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
-        HealBot_trackHidenFrames["MINIBOSS"]=true
+        HealBot_trackHiddenFrames["MINIBOSS"]=true
         HealBot_Options_DisableMiniBossFrame()
     end
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] then
-        HealBot_trackHidenFrames["RAID"]=true
+        HealBot_trackHiddenFrames["RAID"]=true
         HealBot_Options_DisableRaidFrame()
     end
     HealBot_setOptions_Timer(180)

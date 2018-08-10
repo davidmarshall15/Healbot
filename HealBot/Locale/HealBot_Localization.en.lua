@@ -139,6 +139,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
+    HEALBOT_OPTIONS_WARN_CLASSCOL           = "Unable to change text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when\nCol"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is on"
 
     HEALBOT_OPTIONS_HEAL_BUTTONS            = "Healing bars";
     HEALBOT_OPTIONS_SELFHEALS               = "Self"
@@ -366,6 +367,7 @@ function HealBot_Lang_enALL()
                    [8] = "[HealBot] /hb spt -- Self Pet toggle",
                    [9] = "[HealBot] /hb flb -- Toggle frame lock bypass (frame always moves with Ctrl+Alt+Left click)",
                    [10] = "[HealBot] /hb hs -- Display additional slash commands",
+                   [11] = "[HealBot] - All commands are listed on the HealBot website "..HEALBOT_ABOUT_URL,
                   }
 
     HEALBOT_HELP2={ [1] = "[HealBot] /hb rtb -- Toggle restrict target bar to Left=SmartCast and Right=add/remove to/from My Targets",
