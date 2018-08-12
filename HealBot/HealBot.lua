@@ -1529,7 +1529,7 @@ function HealBot_Options_Update()
             HealBot_setOptions_Timer(30)
             local y,z = IsInInstance()
             local mapName=HEALBOT_WORD_OUTSIDE
-            if mapAreaID and mapAreaID>0 then
+            if mapAreaID and mapAreaID>0 and C_Map.GetMapInfo(mapAreaID).name then
                 mapName=C_Map.GetMapInfo(mapAreaID).name
             elseif z and z=="arena" then 
                 mapName="Arena"
@@ -5245,14 +5245,12 @@ function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
     end
     if calibrateHBScale>10 then 
         calibrateHBScale=nil 
-        HealBot_AddDebug("Map Scale calibrate turned off... scale: "..HealBot_luVars["hbInsName"].."="..HealBot_MapScale.zScale[HealBot_luVars["hbInsName"]])
     end
 end
 
 function HealBot_Range_newScale(sDist)
     hbScale = sDist
     HealBot_MapScale.zScale[HealBot_luVars["hbInsName"]]=hbScale
-    HealBot_AddDebug("Map Scale update "..HealBot_luVars["hbInsName"].."="..hbScale)
     calibrateHBScale=0
 end
 
