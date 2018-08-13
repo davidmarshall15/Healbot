@@ -5243,7 +5243,7 @@ function HealBot_Range_softCalibrateScale(srcUnit, trgUnit)
             end
         end
     end
-    if calibrateHBScale>10 then 
+    if calibrateHBScale>100 then 
         calibrateHBScale=nil 
     end
 end
