@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.5.b3";
+﻿HEALBOT_VERSION   = "8.0.1.5.b4";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -689,6 +689,8 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_EMBER_OF_RAGE            = GetSpellInfo(257299) or "--Ember of Rage";
 	HEALBOT_DEBUFF_DEADLY_SCYTHE            = GetSpellInfo(258039) or "--Deadly Scythe";
 	HEALBOT_DEBUFF_WITHERING_ROOTS          = GetSpellInfo(256399) or "--Withering Roots";
+    -- Shrine of the storm
+    HEALBOT_DEBUFF_WHISPERS_OF_POWER        = GetSpellInfo(267034) or "--Whispers of Power";
 	
 end
 

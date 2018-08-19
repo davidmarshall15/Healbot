@@ -967,18 +967,24 @@ function HealBot_Options_retDebuffCureSpell(debuffType)
     return HealBot_DebuffSpell[debuffType]
 end
 
-function HealBot_Options_retDebuffWatchTargetCD(debuffType)
-    if HealBot_DebuffSpell[debuffType] then
-        local z, x, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
-        if x and x>1 then 
-            z = x-(GetTime()-z)
-        else
-            z=0
+function HealBot_Options_isDebuffCureSpell(spellName)
+    for _,sName in pairs(HealBot_DebuffSpell) do
+        if sName==spellName then
+            return true
         end
-        return z
-    else
-        return 0
     end
+    return false
+end
+
+function HealBot_Options_retDebuffWatchTargetCD(debuffType)
+    local remain=0
+    if HealBot_DebuffSpell[debuffType] then
+        local start, duration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
+        if start and duration and duration>1 then 
+            remain = duration-(GetTime()-start)
+        end
+    end
+    return remain
 end
 
 function HealBot_Options_retBuffWatchTarget(buffName, hbGUID)
