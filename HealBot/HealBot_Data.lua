@@ -416,8 +416,6 @@ function HealBot_Data_InitVars()
     [HEALBOT_DEBUFF_EMBER_OF_RAGE]            = 10,
 	[HEALBOT_DEBUFF_DEADLY_SCYTHE]            = 11,
 	[HEALBOT_DEBUFF_WITHERING_ROOTS]          = 10,
-    -- Shrine of the storm
-    [HEALBOT_DEBUFF_WHISPERS_OF_POWER]        = 9,
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
         WatchHoT = {

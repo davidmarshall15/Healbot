@@ -72,7 +72,6 @@ local HealBot_endAggro={}
 local HealBot_notVisible={}
 local HealBot_CustomDebuff_RevDurLast={}
 local hbManaPlayers={}
-local hbCurLowMana={}
 local HealBot_UnitAbsorbs={}
 local hbShareSkins={}
 local HealBot_trackHiddenFrames={}
@@ -1219,10 +1218,10 @@ end
 
 function HealBot_Update_Fast()
     aSwitch=aSwitch+1
+    if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
+    if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
+    if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
     if aSwitch<2 then
-        if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
-        if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
-        if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
         if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] then HealBot_Action_CheckAggro() end
     elseif aSwitch<3 and HealBot_luVars["EnemyBarsOn"] then
         for xUnit,_ in pairs(HealBot_EnemyUnits) do
@@ -1520,7 +1519,7 @@ function HealBot_Options_Update()
         HealBot_AddChat(HEALBOT_HELP[1])
     elseif HealBot_Options_Timer[4910] then
         HealBot_Options_Timer[4910]=nil
-        HealBot_setLowManaTrig()
+        HealBot_Action_setLowManaTrig()
         HealBot_CheckLowMana()
     elseif HealBot_Options_Timer[7950] then
         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
@@ -1596,7 +1595,8 @@ function HealBot_doClearAggro()
 end
 
 function HealBot_doAuraDebuff()
-    if HealBot_luVars["DebuffCheck"] and (HealBot_Config_Cures.DebuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then
+    if HealBot_Config_Cures.DebuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO" then
+        local reCheck=nil
         HealBot_luVars["DelayAuraDCheck"]=nil
         for xUnit,aTime in pairs(HealBot_DelayAuraDCheck) do
             if aTime<=GetTime() then
@@ -1605,9 +1605,10 @@ function HealBot_doAuraDebuff()
                     HealBot_doAuraDebuffUnit(HealBot_Unit_Button[xUnit])
                 end
             else
-                HealBot_luVars["DelayAuraDCheck"]=true
+                reCheck=true
             end
         end
+        HealBot_luVars["DelayAuraDCheck"]=reCheck
     end
 end
 
@@ -2015,7 +2016,7 @@ function HealBot_Load(hbCaller)
     HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
     HealBot_setOptions_Timer(200)
     HealBot_luVars["UseCrashProtection"]=GetTime()+HealBot_Config.CrashProtStartTime
-    HealBot_setLowManaTrig()
+    HealBot_Action_setLowManaTrig()
     HealBot_Options_MonitorBuffs_Toggle()
     HealBot_Options_MonitorDebuffs_Toggle()
     --
@@ -2632,10 +2633,8 @@ function HealBot_OnEvent_UnitMana(self,unit,pType,maxpower)
             if maxpower and HealBot_Data["TIPUSE"]=="YES" then 
                 HealBot_talentSpam(xGUID,"update",1) 
             else
-                if hbCurLowMana[xUnit] then 
-                    HealBot_CheckLowMana(xUnit) 
-                elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]>1 then
-                    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] or HealBot_Data["UILOCK"]=="NO" then HealBot_CheckLowMana(xUnit) end
+                if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]>1 then
+                    HealBot_CheckLowMana(xUnit)
                 end
                 HealBot_Action_SetBar3Value(xButton)
             end
@@ -2743,12 +2742,12 @@ function HealBot_OnEvent_UnitAura(self,unit)
     if HealBot_Unit_Button[unit] then
         if not HealBot_DelayAuraDCheck[unit] then
             HealBot_DelayAuraDCheck[unit]=GetTime()
-            HealBot_luVars["DelayAuraDCheck"]=true
         end
+        HealBot_luVars["DelayAuraDCheck"]=true
         if not HealBot_DelayAuraBCheck[unit] then
             HealBot_DelayAuraBCheck[unit]=true
-            HealBot_luVars["DelayAuraBCheck"]=true
         end
+        HealBot_luVars["DelayAuraBCheck"]=true
         if HealBot_luVars["ignoreFastHealthToT"] then
             if HealBot_HasUnitBuff(hbIgnoreFastHealthToTDebuff,unit) then
                 HealBot_setUnitSpecial(unit, "noFastHealth", true)
@@ -2766,11 +2765,10 @@ end
 
 function HealBot_DebuffMask(nCheck)
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        if HealBot_DelayAuraDCheck[xUnit] and HealBot_DelayAuraDCheck[xUnit]<nCheck then
-            HealBot_DelayAuraDCheck[xUnit]=nCheck
-        end
         if xButton.debuff.type then
             HealBot_ClearDebuff(xButton)
+            HealBot_DelayAuraDCheck[xUnit]=nCheck
+        elseif HealBot_DelayAuraDCheck[xUnit] then
             HealBot_DelayAuraDCheck[xUnit]=nCheck
         end
     end
@@ -2865,7 +2863,6 @@ function HealBot_HasMyBuffs(button)
         else
             while true do
                 local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL");
-                local _, uClassEN = UnitClass(xUnit);
                 local uClassTrim = strsub(uClassEN or "XXXX",1,4)
                 if not caster then caster=HEALBOT_WORDS_UNKNOWN end
                 if bName and caster and expirationTime then
@@ -2940,16 +2937,15 @@ function HealBot_CheckAllDebuffs(unit)
         if unit then
             if not HealBot_DelayAuraDCheck[unit] then
                 HealBot_DelayAuraDCheck[unit]=GetTime()
-                HealBot_luVars["DelayAuraDCheck"]=true
             end
         else
             for xUnit,xButton in pairs(HealBot_Unit_Button) do
                 if not HealBot_DelayAuraDCheck[xUnit] then
                     HealBot_DelayAuraDCheck[xUnit]=GetTime()
-                    HealBot_luVars["DelayAuraDCheck"]=true
                 end
             end
         end
+        HealBot_luVars["DelayAuraDCheck"]=true
     end
 end
 
@@ -3007,11 +3003,11 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         if DebuffNameIn==dName then DebuffPrioIn=dNamePriority end
     else
         local checkthis=true;        
-        if HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and UnitIsFriend("player",unitCaster) then
+        if HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Movement_Debuffs[dName] then
             checkthis=false;
-        elseif HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs then
+        elseif HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 and debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreNonHarmfulDebuffs and HealBot_Ignore_NonHarmful_Debuffs[dName] then
             checkthis=false;
@@ -3317,24 +3313,6 @@ function HealBot_setHbStanceBuffs()
     end
 end
 
-local hbLowManaTrig={[1]=1,[2]=2,[3]=3,[9]=30}
-
-function HealBot_setLowManaTrig()
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]==2 then
-        hbLowManaTrig={[1]=10,[2]=20,[3]=30}
-    elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]==3 then
-        hbLowManaTrig={[1]=15,[2]=30,[3]=45}
-    elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]==4 then
-        hbLowManaTrig={[1]=20,[2]=40,[3]=60}
-    elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]==5 then
-        hbLowManaTrig={[1]=25,[2]=50,[3]=75}
-    elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]==6 then
-        hbLowManaTrig={[1]=30,[2]=60,[3]=90}
-    else
-        hbLowManaTrig={[1]=1,[2]=2,[3]=3}
-    end
-end
-
 function HealBot_HasItemBuff()
     for x,_ in pairs(HealBot_Buff_ItemID) do
         if IsUsableItem(x) or HealBot_IsItemInBag(x) then
@@ -3609,12 +3587,12 @@ end
 
 function HealBot_CheckLowMana(unit)
     if unit then
-        HealBot_CheckUnitLowMana(unit)
+        HealBot_Action_CheckUnitLowMana(unit)
     else
         for xGUID,xUnit in pairs(hbManaPlayers) do
             local xButton=HealBot_Unit_Button[xUnit]
             if xButton and xGUID==xButton.guid then
-                HealBot_CheckUnitLowMana(xUnit)
+                HealBot_Action_CheckUnitLowMana(xUnit)
             else
                 hbManaPlayers[xGUID]=nil
             end
@@ -3632,73 +3610,9 @@ function HealBot_ClearLowMana()
             iconName:SetAlpha(0)
             iconName = _G[bar:GetName().."Icontm3"];
             iconName:SetAlpha(0)
-            hbCurLowMana[xUnit]=nil
         end
     end
 end
-
-function HealBot_CheckUnitLowMana(unit)
-    local bar = HealBot_Action_HealthBar(HealBot_Unit_Button[unit]);
-    local iconName=nil
-    if bar then
-        local mana,maxmana=HealBot_UnitMana(unit)
-        if mana and maxmana then
-            if maxmana==0 then maxmana=1 end
-            local z=floor((mana/maxmana)*100)
-            local y=0
-            if z<hbLowManaTrig[1] then
-                y=1
-            elseif z<hbLowManaTrig[2] then
-                y=2
-            elseif z<hbLowManaTrig[3] then
-                y=3
-            end
-            if y==1 then
-                iconName = _G[bar:GetName().."Icontm1"];
-                iconName:SetAlpha(1)
-                iconName = _G[bar:GetName().."Icontm2"];
-                iconName:SetAlpha(0)
-                iconName = _G[bar:GetName().."Icontm3"];
-                iconName:SetAlpha(0)
-                hbCurLowMana[unit]=1
-            elseif y==2 then
-                iconName = _G[bar:GetName().."Icontm1"];
-                iconName:SetAlpha(1)
-                iconName = _G[bar:GetName().."Icontm2"];
-                iconName:SetAlpha(1)
-                iconName = _G[bar:GetName().."Icontm3"];
-                iconName:SetAlpha(0)
-                hbCurLowMana[unit]=2
-            elseif y==3 then
-                iconName = _G[bar:GetName().."Icontm1"];
-                iconName:SetAlpha(1)
-                iconName = _G[bar:GetName().."Icontm2"];
-                iconName:SetAlpha(1)
-                iconName = _G[bar:GetName().."Icontm3"];
-                iconName:SetAlpha(1)
-                hbCurLowMana[unit]=3
-            else
-                iconName = _G[bar:GetName().."Icontm1"];
-                iconName:SetAlpha(0)
-                iconName = _G[bar:GetName().."Icontm2"];
-                iconName:SetAlpha(0)
-                iconName = _G[bar:GetName().."Icontm3"];
-                iconName:SetAlpha(0)
-                hbCurLowMana[unit]=nil
-            end
-        else
-            iconName = _G[bar:GetName().."Icontm1"];
-            iconName:SetAlpha(0)
-            iconName = _G[bar:GetName().."Icontm2"];
-            iconName:SetAlpha(0)
-            iconName = _G[bar:GetName().."Icontm3"];
-            iconName:SetAlpha(0)
-            hbCurLowMana[unit]=nil
-        end
-    end
-end
-
-
 
 function HealBot_CheckPlayerMana(hbGUID, unit)
     if ((UnitPowerType(unit) or 1)==0) then
@@ -5737,11 +5651,14 @@ function HealBot_Update_Skins()
 
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
         HealBot_Update_DefaultSkins()
-    elseif tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<4 then
-        HealBot_Update_DefaultSkins()
     elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then   
+        if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<4 then
+            HealBot_Update_DefaultSkins()
+        end
+        --if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<5 then
+        --    HealBot_Options_ResetSetting("CUSTOM")
+        --end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
-        HealBot_Options_ResetSetting("CUSTOM")
     end
     
     if HealBot_Config.CurrentSpec==9 then

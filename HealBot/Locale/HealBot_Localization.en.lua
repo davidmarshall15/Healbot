@@ -1054,9 +1054,7 @@ function HealBot_Lang_InitVars()
     [HEALBOT_DEBUFF_COSMIC_SMASH]             = 3,
     [HEALBOT_DEBUFF_EMBER_OF_RAGE]            = 4,
 	[HEALBOT_DEBUFF_DEADLY_SCYTHE]            = 3,
-	[HEALBOT_DEBUFF_WITHERING_ROOTS]          = 13,
-    -- Shrine of the storm
-    [HEALBOT_DEBUFF_WHISPERS_OF_POWER]        = 13,    
+	[HEALBOT_DEBUFF_WITHERING_ROOTS]          = 13,  
 	}
 end
 
