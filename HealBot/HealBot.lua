@@ -2995,7 +2995,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             end
         end
     end
-    if dTypePriority>dNamePriority then
+    if dTypePriority>dNamePriority or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
         curDebuffs[dName]={}
         debuff_type=HEALBOT_CUSTOM_en
         curDebuffs[dName]["priority"]=dNamePriority
@@ -3021,7 +3021,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             curDebuffs[dName]={}
             curDebuffs[dName]["priority"]=dTypePriority
             if DebuffNameIn==dName then DebuffPrioIn=dTypePriority end
-        elseif dNamePriority<21 or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
+        elseif dNamePriority<21 then
             curDebuffs[dName]={}
             debuff_type=HEALBOT_CUSTOM_en
             curDebuffs[dName]["priority"]=dNamePriority
@@ -3096,21 +3096,24 @@ function HealBot_CheckUnitDebuffs(button)
             
             if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and not curDebuffs[dName]["isCustom"] then 
                 spellCD=HealBot_Options_retDebuffWatchTargetCD(curDebuffs[dName]["type"])
-                if spellCD>1.5 then DebuffNameIn="x" end
+                if spellCD>1.5 then 
+                    if spellCD>10 then 
+                        spellCD=0 
+                    else
+                        DebuffNameIn="x" 
+                    end
+                end
             end
             if curDebuffs[dName]["priority"]<dPrio then
                 if dName~=DebuffNameIn then
                     local WatchTarget, WatchGUID=nil,nil
                     if curDebuffs[dName]["isCustom"] then
                         WatchTarget={["Raid"]=true,} 
-                    elseif spellCD<=1.5 then    
+                    elseif spellCD <= 1.5 then    
                         WatchTarget, WatchGUID=HealBot_Options_retDebuffWatchTarget(curDebuffs[dName]["type"],xGUID);
-                    elseif spellCD < 12 then
+                    else
                         local nCheck=(GetTime()+spellCD)-0.2
                         HealBot_DebuffMask(nCheck)
-                        break
-                    else
-                        HealBot_DebuffMask(2)
                         break
                     end
 
@@ -4796,7 +4799,7 @@ function HealBot_HoT_UpdateIcon(button, index, secLeft, huIcons, hotID)
     local iconName = _G[bar:GetName().."Icon"..index];
     hbiconcount = _G[bar:GetName().."Count"..index];
     hbiconcount2 = _G[bar:GetName().."Count"..index.."a"];
-    local x=HealBot_HoT_AlphaValue(secLeft)
+    local x=HealBot_HoT_AlphaValue(secLeft, button.frame)
     if HealBot_debuffTargetIcon[button.unit] and HealBot_debuffTargetIcon[button.unit]==hotID then
         if x>0 then 
             x=1 
@@ -4854,11 +4857,11 @@ function HealBot_HoT_UpdateIcon(button, index, secLeft, huIcons, hotID)
     end    
 end 
 
-function HealBot_HoT_AlphaValue(secLeft)
+function HealBot_HoT_AlphaValue(secLeft, curFrame)
     if not UnitIsDeadOrGhost("player") then
-        if secLeft>=0 and secLeft<6 then
-            return (secLeft/9)+.4
-        elseif secLeft>=6 then
+        if secLeft>=0 and secLeft<7 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
+            return (secLeft/9)+.3
+        elseif secLeft>=0 then
             return 1
         end
     end
@@ -5654,6 +5657,13 @@ function HealBot_Update_Skins()
     elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then   
         if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<4 then
             HealBot_Update_DefaultSkins()
+        end
+        if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<6 then
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                for gl=1,10 do
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][gl]["FADE"]==nil then Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][gl]["FADE"]=true end
+                end
+            end
         end
         --if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<5 then
         --    HealBot_Options_ResetSetting("CUSTOM")

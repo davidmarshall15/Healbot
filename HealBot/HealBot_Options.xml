@@ -8082,7 +8082,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-95" />
+                          <AbsDimension x="80" y="-90" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8118,7 +8118,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="320" y="-95" />
+                          <AbsDimension x="320" y="-90" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8130,7 +8130,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="230" y="-150" />
+                          <AbsDimension x="230" y="-140" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8142,7 +8142,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="112" y="-195"/>
+                          <AbsDimension x="112" y="-185"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8190,7 +8190,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="112" y="-180"/>
+                          <AbsDimension x="112" y="-170"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8238,7 +8238,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="128" y="-255"/>
+                          <AbsDimension x="128" y="-240"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8327,7 +8327,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="138" y="-340"/>
+                          <AbsDimension x="138" y="-320"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8339,12 +8339,24 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonIconScale" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="50" y="-50"/>
+                          <AbsDimension x="50" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_BarButtonIconAlwaysEnabled_OnClick(self)</OnClick>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_BarButtonIconFadeOnExpire" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonIconAlwaysEnabled" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-8"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_BarButtonIconFadeOnExpire_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_FilterHoTctl" inherits="UIDropDownMenuTemplate">
@@ -8364,7 +8376,7 @@
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="30" y="30"/>
+                          <AbsDimension x="30" y="15"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

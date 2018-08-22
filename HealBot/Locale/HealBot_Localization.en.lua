@@ -122,6 +122,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHIFT                   = "Shift";
     HEALBOT_OPTIONS_CTRL                    = "Ctrl";
     HEALBOT_OPTIONS_ENABLEHEALTHY           = "Always use enabled";
+    HEALBOT_OPTIONS_FADEONEXPIRE            = "Fade on expire";
 
     HEALBOT_OPTIONS_CASTNOTIFY1             = "No messages";
     HEALBOT_OPTIONS_CASTNOTIFY2             = "Notify self";
