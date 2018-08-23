@@ -5906,6 +5906,8 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
         if HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"] then 
             HealBot_Skins = Healbot_Config_Skins.Skins
             HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"]=nil
+        else
+            HealBot_Config.LastAutoSkinChangeTime=GetTime()+60
         end
         if newSkin then
             local hbFoundSkin=nil

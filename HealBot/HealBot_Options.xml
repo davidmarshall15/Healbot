@@ -3980,7 +3980,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ManaIndicator" relativePoint="BOTTOMLEFT">>
                         <Offset>
-                          <AbsDimension x="-50" y="-75" />
+                          <AbsDimension x="-40" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>

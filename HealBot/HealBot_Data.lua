@@ -58,6 +58,8 @@ HealBot_ConfigDefaults = {
   DisableSolo=false,
   AdjustMaxHealth=false,
   DisabledNow=0,
+  LastAutoSkinChangeType="-",
+  LastAutoSkinChangeTime=0,
   SkinDefault = {[HEALBOT_SKINS_STD]              = {[HEALBOT_WORD_SOLO]=true, 
                                                      [HEALBOT_WORD_PARTY]=false, 
                                                      [HEALBOT_OPTIONS_RAID10]=false, 

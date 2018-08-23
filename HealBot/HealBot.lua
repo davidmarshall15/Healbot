@@ -3944,13 +3944,16 @@ end
 function HealBot_PartyUpdate_CheckSkin()
     local _,z = IsInInstance()
     local PrevSolo=HealBot_luVars["IsSolo"]
+    local LastAutoSkinChangeType="None"
+    local newSkinName="_-none-_"
     HealBot_luVars["IsSolo"]=nil
     HealBot_luVars["CheckSkin"]=nil
     if z == "arena" then
         if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_ARENA] then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
-                    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="Arena"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                     break
                 end
             end
@@ -3961,7 +3964,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG40] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG40] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="BG40"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -3970,7 +3974,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG15] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG15] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="BG15"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -3979,7 +3984,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG10] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG10] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="BG10"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -3990,7 +3996,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID40] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID40] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="Raid40"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -3999,7 +4006,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID25] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="Raid25"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -4008,7 +4016,8 @@ function HealBot_PartyUpdate_CheckSkin()
             if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID10] then
                 for x in pairs (Healbot_Config_Skins.Skins) do
                     if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID10] then
-                        HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                        LastAutoSkinChangeType="Raid10"
+                        newSkinName=Healbot_Config_Skins.Skins[x]
                         break
                     end
                 end
@@ -4018,7 +4027,8 @@ function HealBot_PartyUpdate_CheckSkin()
         if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PARTY] then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PARTY] then
-                    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                    LastAutoSkinChangeType="Party"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
                     break
                 end
             end
@@ -4027,7 +4037,8 @@ function HealBot_PartyUpdate_CheckSkin()
         if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PETBATTLE] then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PETBATTLE] then
-                    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                    LastAutoSkinChangeType="Pet"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
                     break
                 end
             end
@@ -4036,13 +4047,20 @@ function HealBot_PartyUpdate_CheckSkin()
         if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_SOLO] then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_SOLO] then
-                    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Skins[x])
+                    LastAutoSkinChangeType="Solo"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
                     break
                 end
             end
         end
         HealBot_luVars["IsSolo"]=true
         HealBot_Options_DisableCheck()
+    end
+    if LastAutoSkinChangeType~=HealBot_Config.LastAutoSkinChangeType or HealBot_Config.LastAutoSkinChangeTime<GetTime() then
+        if newSkinName~="_-none-_" then
+            HealBot_Options_Set_Current_Skin(newSkinName)
+        end
+        HealBot_Config.LastAutoSkinChangeType=LastAutoSkinChangeType
     end
     if (PrevSolo or "nil")~=(HealBot_luVars["IsSolo"] or "nil") then
         HealBot_SetAuraChecks()
