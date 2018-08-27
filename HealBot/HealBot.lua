@@ -28,6 +28,7 @@ local HealBot_cleanGUIDs={}
 local HealBot_HealsAbsorb={}
 local HealBot_UnitSpecial={}
 local HealBot_EnemyUnits={}
+local HealBot_AggroUnits={}
 local _=nil
 local HealBot_Ignore_Class_Debuffs = {};
 local HealBot_Ignore_Movement_Debuffs = {};
@@ -95,6 +96,7 @@ HealBot_luVars["TargetHealsOn"]=true
 HealBot_luVars["EnemyBarsOn"]=true
 HealBot_luVars["EnemyBarsCastOn"]=0
 HealBot_luVars["UseCrashProtection"]=GetTime()+2
+HealBot_luVars["MaskAuraDCheck"]=GetTime()
 
 function HealBot_InitVars()
     CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
@@ -738,8 +740,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="cw") then  -- Clear Warnings
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="zzz") then
-        HealBot_Options_isDebuffCureSpell("x")
---        HealBot_AddDebug("Nothing defined")
+        HealBot_AddDebug("HealBot_Timers['HB2Th']="..HealBot_Timers["HB2Th"])
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1188,12 +1189,6 @@ function HealBot_Update_Slow()
         HealBot_luVars["mapUpdate"]=nil
         local mapAreaID = C_Map.GetBestMapForUnit('player')
         HealBot_Data["MAPID"]=mapAreaID or 0
-        local difficultyID = GetDungeonDifficultyID()
-        if HealBot_Data["MAPID"]==930 and difficultyID>1 then
-            HealBot_luVars["ignoreFastHealthToT"]=true
-        else
-            HealBot_luVars["ignoreFastHealthToT"]=nil
-        end
         --HealBot_AddDebug("mapID="..HealBot_Data["MAPID"])
     elseif HealBot_luVars["HelpCnt1"] then
         HealBot_luVars["HelpCnt1"]=HealBot_luVars["HelpCnt1"]+1
@@ -1218,11 +1213,15 @@ end
 
 function HealBot_Update_Fast()
     aSwitch=aSwitch+1
-    if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
-    if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
-    if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
     if aSwitch<2 then
-        if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] then HealBot_Action_CheckAggro() end
+        if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
+        if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
+        if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
+        if HealBot_luVars["MaskAuraDCheck"]<GetTime() and HealBot_luVars["MaskAuraReCheck"] then
+            HealBot_luVars["MaskAuraReCheck"]=nil
+            HealBot_luVars["DelayAuraDCheck"]=true
+        end
+        HealBot_CheckAggroUnits()
     elseif aSwitch<3 and HealBot_luVars["EnemyBarsOn"] then
         for xUnit,_ in pairs(HealBot_EnemyUnits) do
             local xButton=HealBot_Unit_Button[xUnit]
@@ -1276,7 +1275,7 @@ function HealBot_Update_Fast()
                         end
                     else
                         if HealBot_EnemyUnits[xUnit]["STATE"]~=1 then
-                            HealBot_ClearDebuff(xButton, true)
+                            HealBot_ClearDebuff(xButton)
                             HealBot_Action_UpdateAggro(xUnit,false,nil,0)
                             HealBot_Action_ResetUnitStatus(xUnit)
                             HealBot_EnemyUnits[xUnit]["STATE"]=1
@@ -1289,7 +1288,7 @@ function HealBot_Update_Fast()
                     HealBot_EnemyUnits[xUnit]["HLTH"]=0
                     HealBot_EnemyUnits[xUnit]["MAXHLTH"]=0
                     if HealBot_EnemyUnits[xUnit]["STATE"]~=0 then
-                        HealBot_ClearDebuff(xButton, true)
+                        HealBot_ClearDebuff(xButton)
                         HealBot_ClearBuff(xButton)
                         HealBot_HoT_RemoveIconButton(xButton)
                         HealBot_Action_UpdateAggro(xUnit,false,nil,0)
@@ -1595,25 +1594,17 @@ function HealBot_doClearAggro()
 end
 
 function HealBot_doAuraDebuff()
-    if HealBot_Config_Cures.DebuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO" then
-        local reCheck=nil
-        HealBot_luVars["DelayAuraDCheck"]=nil
-        for xUnit,aTime in pairs(HealBot_DelayAuraDCheck) do
-            if aTime<=GetTime() then
-                HealBot_DelayAuraDCheck[xUnit] = nil;
-                if HealBot_Unit_Button[xUnit] and UnitExists(xUnit) then
-                    HealBot_doAuraDebuffUnit(HealBot_Unit_Button[xUnit])
-                end
-            else
-                reCheck=true
-            end
+    HealBot_luVars["DelayAuraDCheck"]=nil
+    for xUnit,_ in pairs(HealBot_DelayAuraDCheck) do
+        HealBot_DelayAuraDCheck[xUnit] = nil;
+        if HealBot_Unit_Button[xUnit] and UnitExists(xUnit) then
+            HealBot_doAuraDebuffUnit(HealBot_Unit_Button[xUnit])
         end
-        HealBot_luVars["DelayAuraDCheck"]=reCheck
     end
 end
 
 function HealBot_doAuraDebuffUnit(button)
-    if UnitIsFriend("player",button.unit) then
+    if HealBot_luVars["DebuffCheck"] and UnitIsFriend("player",button.unit) and (HealBot_Config_Cures.DebuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then
         HealBot_CheckUnitDebuffs(button)
     elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then
         HealBot_HasMyBuffs(button) 
@@ -1626,7 +1617,7 @@ function HealBot_doAuraBuff()
         HealBot_DelayAuraBCheck[xUnit] = nil;
         if UnitExists(xUnit) and UnitIsFriend("player",xUnit) and HealBot_Unit_Button[xUnit] then
             local xButton=HealBot_Unit_Button[xUnit]
-            if HealBot_luVars["BuffCheck"] and xButton and (HealBot_Config_Buffs.BuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then
+            if HealBot_luVars["BuffCheck"] and (HealBot_Config_Buffs.BuffWatchInCombat==true or HealBot_Data["UILOCK"]=="NO") then 
                 HealBot_CheckUnitBuffs(xButton)
             end
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBUFF"] then
@@ -1667,12 +1658,12 @@ function HealBot_OnEvent(self, event, ...)
         if arg1 then HealBot_OnEvent_UnitThreat(arg1); end
     elseif (event=="UNIT_HEAL_PREDICTION") then
         HealBot_IncHeals_updHealsIn(arg1)
-    elseif (event=="UNIT_SPELLCAST_START") then
-        HealBot_OnEvent_UnitSpellcastStart(self,arg1,arg2)
-    elseif (event=="UNIT_SPELLCAST_STOP") or (event=="UNIT_SPELLCAST_SUCCEEDED") then
-        HealBot_OnEvent_UnitSpellcastStop(self,arg1,arg2);
+    elseif (event=="UNIT_SPELLCAST_START") or (event=="UNIT_SPELLCAST_SUCCEEDED") then
+        HealBot_OnEvent_UnitSpellcastStart(self,arg1,arg3)
+    elseif (event=="UNIT_SPELLCAST_STOP") then
+        HealBot_OnEvent_UnitSpellcastStop(self,arg1,arg3);
     elseif (event=="UNIT_SPELLCAST_FAILED") or (event=="UNIT_SPELLCAST_INTERRUPTED") then
-        HealBot_OnEvent_UnitSpellcastFail(self,arg1,arg2);
+        HealBot_OnEvent_UnitSpellcastFail(self,arg1,arg3);
     elseif (event=="UNIT_SPELLCAST_SENT") then
         HealBot_OnEvent_UnitSpellcastSent(self,arg1,arg2,arg3,arg4);  
     elseif (event=="PLAYER_REGEN_DISABLED") then
@@ -2252,22 +2243,6 @@ function HealBot_UnRegister_Events()
     HealBot:UnregisterEvent("PET_BATTLE_OVER");
 end
 
-function HealBot_CheckUnitAggro(unit)
-    if UnitExists(unit) then
-        local z, y=HealBot_CalcThreat(unit)
-        local x=y+z
-        if x==0 then
-            HealBot_qClearUnitAggro(unit)
-        else
-            HealBot_Action_UpdateAggro(unit,true,y,z)
-            return true
-        end
-    else
-        HealBot_qClearUnitAggro(unit)
-    end
-    return false
-end
-
 function HealBot_CalcThreat(unit)
     local z,y=0,0
     if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then 
@@ -2303,6 +2278,7 @@ function HealBot_CalcThreat(unit)
 end
 
 function HealBot_qClearUnitAggro(unit)
+    HealBot_SetAggroUnits(unit, 0) 
     HealBot_endAggro[unit]=true
     HealBot_luVars["DelayClearAggro"]=true
 end
@@ -2312,7 +2288,7 @@ function HealBot_ClearUnitAggro(unit)
         local z, y=HealBot_CalcThreat(unit)
         local x=y+z
         if x==0 then
-            if (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "a")=="a" then
+            if (HealBot_Action_retAggro(unit) or "x")=="a" then
                 HealBot_Action_UpdateAggro(unit,false,nil,0)
             end
         else
@@ -2322,6 +2298,30 @@ function HealBot_ClearUnitAggro(unit)
         HealBot_Action_UpdateAggro(unit,false,nil,0)
     end
     if unit then HealBot_Action_SetThreatPct(unit, -5) end
+end
+
+function HealBot_SetAggroUnits(unit, threatPct) 
+    if (threatPct or 0) > 0 then
+        HealBot_AggroUnits[unit]=threatPct
+    else
+        HealBot_AggroUnits[unit]=nil
+    end
+end
+
+function HealBot_CheckAggroUnits()
+    for xUnit,tPct in pairs(HealBot_AggroUnits) do
+        if UnitExists(xUnit) then
+            local z, y=HealBot_CalcThreat(xUnit)
+            local x=y+z
+            if x==0 then
+                HealBot_qClearUnitAggro(xUnit)
+            elseif z~=tPct then
+                HealBot_Action_UpdateAggro(xUnit,true,y,z)
+            end
+        else
+            HealBot_qClearUnitAggro(xUnit)
+        end
+    end
 end
 
 function HealBot_SetAggro(unit)
@@ -2737,42 +2737,18 @@ function HealBot_SetAuraChecks()
     end
 end
 
-local hbIgnoreFastHealthToTDebuff=GetSpellInfo(137633) or "Crystal Shell"
 function HealBot_OnEvent_UnitAura(self,unit)
     if HealBot_Unit_Button[unit] then
-        if not HealBot_DelayAuraDCheck[unit] then
-            HealBot_DelayAuraDCheck[unit]=GetTime()
-        end
+        HealBot_DelayAuraDCheck[unit]=true
         HealBot_luVars["DelayAuraDCheck"]=true
-        if not HealBot_DelayAuraBCheck[unit] then
-            HealBot_DelayAuraBCheck[unit]=true
-        end
+        HealBot_DelayAuraBCheck[unit]=true
         HealBot_luVars["DelayAuraBCheck"]=true
-        if HealBot_luVars["ignoreFastHealthToT"] then
-            if HealBot_HasUnitBuff(hbIgnoreFastHealthToTDebuff,unit) then
-                HealBot_setUnitSpecial(unit, "noFastHealth", true)
-            elseif HealBot_UnitSpecial[unit] and HealBot_UnitSpecial[unit]["noFastHealth"] then
-                HealBot_UnitSpecial[unit]["noFastHealth"]=nil
-            end
-        end
     end
 end
 
 function HealBot_setUnitSpecial(unit, key, val)
     if not HealBot_UnitSpecial[unit] then HealBot_UnitSpecial[unit]={} end
     HealBot_UnitSpecial[unit][key]=val
-end
-
-function HealBot_DebuffMask(nCheck)
-    for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        if xButton.debuff.type then
-            HealBot_ClearDebuff(xButton)
-            HealBot_DelayAuraDCheck[xUnit]=nCheck
-        elseif HealBot_DelayAuraDCheck[xUnit] then
-            HealBot_DelayAuraDCheck[xUnit]=nCheck
-        end
-    end
-    HealBot_luVars["DelayAuraDCheck"]=true
 end
 
 function HealBot_SetUnitBuffTimer(hbGUID,buffName,endtime)
@@ -2935,14 +2911,10 @@ end
 function HealBot_CheckAllDebuffs(unit)
     if HealBot_luVars["DebuffCheck"] then
         if unit then
-            if not HealBot_DelayAuraDCheck[unit] then
-                HealBot_DelayAuraDCheck[unit]=GetTime()
-            end
+            HealBot_DelayAuraDCheck[unit]=true
         else
             for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                if not HealBot_DelayAuraDCheck[xUnit] then
-                    HealBot_DelayAuraDCheck[xUnit]=GetTime()
-                end
+                HealBot_DelayAuraDCheck[xUnit]=true
             end
         end
         HealBot_luVars["DelayAuraDCheck"]=true
@@ -2952,7 +2924,7 @@ end
 function HealBot_ClearAllDebuffs()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if xButton.debuff and xButton.debuff.spellId then
-            HealBot_ClearDebuff(xButton,true)
+            HealBot_ClearDebuff(xButton)
         end
     end
 end
@@ -3003,7 +2975,11 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         if DebuffNameIn==dName then DebuffPrioIn=dNamePriority end
     else
         local checkthis=true;        
-        if HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
+        if HealBot_luVars["MaskAuraDCheck"]>GetTime() then
+            checkthis=false;
+            DebuffNameIn="x"
+            HealBot_DelayAuraDCheck[unit]=true
+        elseif HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Movement_Debuffs[dName] then
             checkthis=false;
@@ -3046,246 +3022,245 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
 end
 
 function HealBot_CheckUnitDebuffs(button)
-    if HealBot_luVars["DebuffCheck"] then 
-        local xUnit=button.unit
-        local xGUID=button.guid
-        if not xUnit or not UnitExists(xUnit) then return end
-        _,DebuffClass=UnitClass(xUnit)
-        if not DebuffClass then DebuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
-        local DebuffType=nil;
-        if button.debuff.name then
-            DebuffNameIn=button.debuff.name
-        else
-            DebuffNameIn="x"
-        end
-        for x,_ in pairs(curDebuffs) do
-            curDebuffs[x]=nil;
-        end
-        local z=1
-        DebuffPrioIn=99
-        if not UnitIsDeadOrGhost(xUnit) or UnitIsFeignDeath(xUnit) then
-            while true do
-                local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(xUnit,z)
-                if dName then
-                    z = z +1
-                    HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit)
-                else
-                    break
-                end 
-            end
-            z=1
-            while true do
-                local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff  = UnitBuff(xUnit,z)
-                if dName then
-                    z = z +1
-                    if HealBot_Globals.HealBot_Custom_Debuffs[dName] then 
-                        HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit)
-                    end
-                else
-                    break
-                end 
-            end
-            for dName,_ in pairs(HealBot_CustomDebuff_RevDurLast) do
-                if not curDebuffs[dName] and HealBot_CustomDebuff_RevDurLast[dName][xUnit] then HealBot_CustomDebuff_RevDurLast[dName][xUnit]=nil end
-            end
-        end
-        local dPrio = DebuffPrioIn
-        for dName,_ in pairs(curDebuffs) do
-            local checkthis=false;
-            local spellCD=0
-            
-            if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and not curDebuffs[dName]["isCustom"] then 
-                spellCD=HealBot_Options_retDebuffWatchTargetCD(curDebuffs[dName]["type"])
-                if spellCD>1.5 then 
-                    if spellCD>10 then 
-                        spellCD=0 
-                    else
-                        DebuffNameIn="x" 
-                    end
-                end
-            end
-            if curDebuffs[dName]["priority"]<dPrio then
-                if dName~=DebuffNameIn then
-                    local WatchTarget, WatchGUID=nil,nil
-                    if curDebuffs[dName]["isCustom"] then
-                        WatchTarget={["Raid"]=true,} 
-                    elseif spellCD <= 1.5 then    
-                        WatchTarget, WatchGUID=HealBot_Options_retDebuffWatchTarget(curDebuffs[dName]["type"],xGUID);
-                    else
-                        local nCheck=(GetTime()+spellCD)-0.2
-                        HealBot_DebuffMask(nCheck)
-                        break
-                    end
-
-                    if WatchTarget then 
-                        if WatchTarget["Raid"] then
-                            checkthis=true;
-                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then
-                            checkthis=true;
-                        elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
-                            checkthis=true
-                        elseif WatchTarget[strsub(DebuffClass,1,4)] then
-                            checkthis=true;
-                        elseif WatchTarget["PvP"] and UnitIsPVP("player") then
-                            checkthis=true;
-                        elseif WatchTarget["Name"] and xGUID==WatchGUID then
-                            checkthis=true;
-                        elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
-                            checkthis=true;
-                        elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
-                            checkthis=true;
-                        elseif WatchTarget["MyTargets"] then
-                            local myhTargets=HealBot_GetMyHealTargets();
-                            for i=1, #myhTargets do
-                                if xGUID==myhTargets[i] then
-                                    checkthis=true;
-                                    break
-                                end
-                            end
-                        end
-                    end
-                else
-                    checkthis=true
-                end
-            elseif curDebuffs[dName]["priority"]==dPrio and dName==DebuffNameIn then
-                checkthis=true
+    local xUnit=button.unit
+    local xGUID=button.guid
+    if not xUnit or not UnitExists(xUnit) then return end
+    _,DebuffClass=UnitClass(xUnit)
+    if not DebuffClass then DebuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
+    local DebuffType=nil;
+    if button.debuff.name then
+        DebuffNameIn=button.debuff.name
+    else
+        DebuffNameIn="x"
+    end
+    for x,_ in pairs(curDebuffs) do
+        curDebuffs[x]=nil;
+    end
+    local z=1
+    DebuffPrioIn=99
+    if not UnitIsDeadOrGhost(xUnit) or UnitIsFeignDeath(xUnit) then
+        while true do
+            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(xUnit,z)
+            if dName then
+                z = z +1
+                HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit)
+            else
+                break
             end 
-            if checkthis then
-                button.debuff.type=curDebuffs[dName]["type"]
-                button.debuff.name=dName
-                button.debuff.spellId=curDebuffs[dName]["spellId"]
-                button.debuff.customPriority=HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[dName] or 99
-                DebuffType=curDebuffs[dName]["type"];
-                dPrio=curDebuffs[dName]["priority"]
+        end
+        z=1
+        while true do
+            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff  = UnitBuff(xUnit,z)
+            if dName then
+                z = z +1
+                if HealBot_Globals.HealBot_Custom_Debuffs[dName] then 
+                    HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit)
+                end
+            else
+                break
+            end 
+        end
+        for dName,_ in pairs(HealBot_CustomDebuff_RevDurLast) do
+            if not curDebuffs[dName] and HealBot_CustomDebuff_RevDurLast[dName][xUnit] then HealBot_CustomDebuff_RevDurLast[dName][xUnit]=nil end
+        end
+    end
+    local dPrio = DebuffPrioIn
+    for dName,_ in pairs(curDebuffs) do
+        local checkthis=false;
+        local spellCD=0
+        
+        if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and not curDebuffs[dName]["isCustom"] then 
+            spellCD=HealBot_Options_retDebuffWatchTargetCD(curDebuffs[dName]["type"])
+            if spellCD>1.5 and spellCD<12 then 
+                DebuffNameIn="x" 
+            else
+                spellCD=0 
             end
         end
-        
-        if not DebuffType then 
-            HealBot_ClearDebuff(button)
-        end
-        
-        if button.debuff.name then
-            if button.debuff.name~=DebuffNameIn then
-                DebuffNameIn=button.debuff.name
-                local inSpellRange = HealBot_UnitInRange(HealBot_dSpell, xUnit)
-                if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[DebuffNameIn]==nil) then
-                    if inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
-                        HealBot_Action_SetUnitDebuffStatus(xUnit,debuffCodes[DebuffType])
-                        HealBot_Action_UpdateAggro(xUnit,"debuff",debuffCodes[DebuffType], 0)
-                    else
-                        HealBot_Action_SetUnitDebuffStatus(xUnit)
-                    end
-                end
-                if HealBot_Config_Cures.ShowDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
-                    if HealBot_Globals.CDCBarColour[DebuffNameIn] then
-                        UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn, 
-                                                 HealBot_Globals.CDCBarColour[DebuffNameIn].R,
-                                                 HealBot_Globals.CDCBarColour[DebuffNameIn].G,
-                                                 HealBot_Globals.CDCBarColour[DebuffNameIn].B,
-                                                 1, UIERRORS_HOLD_TIME);
-                    elseif DebuffType == HEALBOT_CUSTOM_en then
-                        local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
-                        if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[DebuffNameIn] then
-                            customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[DebuffNameIn]
+        if curDebuffs[dName]["priority"]<dPrio then
+            if dName~=DebuffNameIn then
+                local WatchTarget, WatchGUID=nil,nil
+                if curDebuffs[dName]["isCustom"] then
+                    WatchTarget={["Raid"]=true,} 
+                elseif spellCD<=1.5 then
+                    WatchTarget, WatchGUID=HealBot_Options_retDebuffWatchTarget(curDebuffs[dName]["type"],xGUID);
+                else
+                    local nCheck=(GetTime()+spellCD)-0.1
+                    HealBot_luVars["MaskAuraDCheck"]=nCheck
+                    HealBot_luVars["MaskAuraReCheck"]=true
+                    for xUnit,xButton in pairs(HealBot_Unit_Button) do
+                        if xButton.unit~=xUnit and xButton.debuff.type and xButton.debuff.type~=HEALBOT_CUSTOM_en then
+                            HealBot_DelayAuraDCheck[xUnit]=true
                         end
-                        UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn,                                             
-                                                 HealBot_Globals.CDCBarColour[customDebuffPriority].R,
-                                                 HealBot_Globals.CDCBarColour[customDebuffPriority].G,
-                                                 HealBot_Globals.CDCBarColour[customDebuffPriority].B,
-                                                 1, UIERRORS_HOLD_TIME);
-                    else
-                        UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn, 
-                                                 HealBot_Config_Cures.CDCBarColour[DebuffType].R,
-                                                 HealBot_Config_Cures.CDCBarColour[DebuffType].G,
-                                                 HealBot_Config_Cures.CDCBarColour[DebuffType].B,
-                                                 1, UIERRORS_HOLD_TIME);
                     end
-                end
-                if HealBot_Config_Cures.SoundDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
-                    HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
+                    HealBot_luVars["DelayAuraDCheck"]=true
+                    WatchTarget=nil
                 end
 
-                if inSpellRange >-1 then
-                    HealBot_RecalcHeals(xUnit)
-                else
-                    HealBot_Action_ResetUnitStatus(xUnit)
-                end
-            end
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] and (HealBot_Data["PGUID"]==xGUID or UnitIsVisible(xUnit)) then
-                if DebuffNameIn then
-                    if curDebuffs[DebuffNameIn]["texture"] then
-                        local debuffID="DEBUFF!"..DebuffNameIn.."!"..button.debuff.spellId
-                        if HealBot_debuffTargetIcon[xUnit] and HealBot_debuffTargetIcon[xUnit]~=debuffID then
-                            HealBot_UnitIcons[xUnit][HealBot_debuffTargetIcon[xUnit]]["EXPIRE"]=1
-                            HealBot_HoT_Update(button, HealBot_debuffTargetIcon[xUnit])
-                        end
-                        if (curDebuffs[DebuffNameIn]["expirationTime"] or 0)==0 then curDebuffs[DebuffNameIn]["expirationTime"]=hbNoEndTime end
-                        if not curDebuffs[DebuffNameIn]["bCount"] then curDebuffs[DebuffNameIn]["bCount"]=1 end
-                        if not HealBot_UnitIcons[xUnit] then HealBot_UnitIcons[xUnit]={} end
-                        if not HealBot_UnitIcons[xUnit][debuffID] then 
-                            HealBot_UnitIcons[xUnit][debuffID]={} 
-                            HealBot_UnitIcons[xUnit][debuffID]["TEXTURE"]=curDebuffs[DebuffNameIn]["texture"]
-                            HealBot_UnitIcons[xUnit][debuffID]["DEBUFF"]=true
-                        end
-                        if (HealBot_UnitIcons[xUnit][debuffID]["COUNT"] or -1)~=curDebuffs[DebuffNameIn]["bCount"] then
-                            HealBot_UnitIcons[xUnit][debuffID]["COUNT"]=curDebuffs[DebuffNameIn]["bCount"]
-                            if not HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]+1
-                            else
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=99
-                            end
-                        elseif not HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"] then 
-                            if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=99
-                            else
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]+1 
-                            end
-                        end
-                        if not HealBot_UnitIcons[xUnit][debuffID]["ICON"] then HealBot_UnitIcons[xUnit][debuffID]["ICON"]=0 end
-                        if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
-                            if HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]==99 then
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=HealBot_CustomDebuff_RevDurLast[DebuffNameIn][xUnit]
-                                HealBot_HoT_Update(button, debuffID)
-                            end
-                        else
-                            if HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]~=curDebuffs[DebuffNameIn]["expirationTime"] then
-                                HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]
-                                HealBot_HoT_Update(button, debuffID)
+                if WatchTarget then 
+                    if WatchTarget["Raid"] then
+                        checkthis=true;
+                    elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then
+                        checkthis=true;
+                    elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
+                        checkthis=true
+                    elseif WatchTarget[strsub(DebuffClass,1,4)] then
+                        checkthis=true;
+                    elseif WatchTarget["PvP"] and UnitIsPVP("player") then
+                        checkthis=true;
+                    elseif WatchTarget["Name"] and xGUID==WatchGUID then
+                        checkthis=true;
+                    elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
+                        checkthis=true;
+                    elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
+                        checkthis=true;
+                    elseif WatchTarget["MyTargets"] then
+                        local myhTargets=HealBot_GetMyHealTargets();
+                        for i=1, #myhTargets do
+                            if xGUID==myhTargets[i] then
+                                checkthis=true;
+                                break
                             end
                         end
                     end
                 end
+            else
+                checkthis=true
             end
-            HealBot_OnEvent_UnitThreat(xUnit)
+        elseif curDebuffs[dName]["priority"]==dPrio and dName==DebuffNameIn then
+            checkthis=true
+        end 
+        if checkthis then
+            button.debuff.type=curDebuffs[dName]["type"]
+            button.debuff.name=dName
+            button.debuff.spellId=curDebuffs[dName]["spellId"]
+            button.debuff.customPriority=HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[dName] or 99
+            DebuffType=curDebuffs[dName]["type"];
+            dPrio=curDebuffs[dName]["priority"]
         end
+    end
+    
+    if not DebuffType then 
+        HealBot_ClearDebuff(button)
+    end
+    
+    if button.debuff.name then
+        if button.debuff.name~=DebuffNameIn then
+            DebuffNameIn=button.debuff.name
+            local inSpellRange = HealBot_UnitInRange(HealBot_dSpell, xUnit)
+            if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[DebuffNameIn]==nil) then
+                if inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
+                    HealBot_Action_SetUnitDebuffStatus(xUnit,debuffCodes[DebuffType])
+                    HealBot_Action_UpdateAggro(xUnit,"debuff",debuffCodes[DebuffType], 0)
+                else
+                    HealBot_Action_SetUnitDebuffStatus(xUnit)
+                end
+            end
+            if HealBot_Config_Cures.ShowDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
+                if HealBot_Globals.CDCBarColour[DebuffNameIn] then
+                    UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn, 
+                                             HealBot_Globals.CDCBarColour[DebuffNameIn].R,
+                                             HealBot_Globals.CDCBarColour[DebuffNameIn].G,
+                                             HealBot_Globals.CDCBarColour[DebuffNameIn].B,
+                                             1, UIERRORS_HOLD_TIME);
+                elseif DebuffType == HEALBOT_CUSTOM_en then
+                    local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
+                    if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[DebuffNameIn] then
+                        customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[DebuffNameIn]
+                    end
+                    UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn,                                             
+                                             HealBot_Globals.CDCBarColour[customDebuffPriority].R,
+                                             HealBot_Globals.CDCBarColour[customDebuffPriority].G,
+                                             HealBot_Globals.CDCBarColour[customDebuffPriority].B,
+                                             1, UIERRORS_HOLD_TIME);
+                else
+                    UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..DebuffNameIn, 
+                                             HealBot_Config_Cures.CDCBarColour[DebuffType].R,
+                                             HealBot_Config_Cures.CDCBarColour[DebuffType].G,
+                                             HealBot_Config_Cures.CDCBarColour[DebuffType].B,
+                                             1, UIERRORS_HOLD_TIME);
+                end
+            end
+            if HealBot_Config_Cures.SoundDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
+                HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
+            end
+
+            if inSpellRange >-1 then
+                HealBot_RecalcHeals(xUnit)
+            else
+                HealBot_Action_ResetUnitStatus(xUnit)
+            end
+        end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] and (HealBot_Data["PGUID"]==xGUID or UnitIsVisible(xUnit)) then
+            if DebuffNameIn then
+                if curDebuffs[DebuffNameIn]["texture"] then
+                    local debuffID="DEBUFF!"..DebuffNameIn.."!"..button.debuff.spellId
+                    if HealBot_debuffTargetIcon[xUnit] and HealBot_debuffTargetIcon[xUnit]~=debuffID then
+                        HealBot_UnitIcons[xUnit][HealBot_debuffTargetIcon[xUnit]]["EXPIRE"]=1
+                        HealBot_HoT_Update(button, HealBot_debuffTargetIcon[xUnit])
+                    end
+                    if (curDebuffs[DebuffNameIn]["expirationTime"] or 0)==0 then curDebuffs[DebuffNameIn]["expirationTime"]=hbNoEndTime end
+                    if not curDebuffs[DebuffNameIn]["bCount"] then curDebuffs[DebuffNameIn]["bCount"]=1 end
+                    if not HealBot_UnitIcons[xUnit] then HealBot_UnitIcons[xUnit]={} end
+                    if not HealBot_UnitIcons[xUnit][debuffID] then 
+                        HealBot_UnitIcons[xUnit][debuffID]={} 
+                        HealBot_UnitIcons[xUnit][debuffID]["TEXTURE"]=curDebuffs[DebuffNameIn]["texture"]
+                        HealBot_UnitIcons[xUnit][debuffID]["DEBUFF"]=true
+                    end
+                    if (HealBot_UnitIcons[xUnit][debuffID]["COUNT"] or -1)~=curDebuffs[DebuffNameIn]["bCount"] then
+                        HealBot_UnitIcons[xUnit][debuffID]["COUNT"]=curDebuffs[DebuffNameIn]["bCount"]
+                        if not HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]+1
+                        else
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=99
+                        end
+                    elseif not HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"] then 
+                        if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=99
+                        else
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]+1 
+                        end
+                    end
+                    if not HealBot_UnitIcons[xUnit][debuffID]["ICON"] then HealBot_UnitIcons[xUnit][debuffID]["ICON"]=0 end
+                    if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[DebuffNameIn] then
+                        if HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]==99 then
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=HealBot_CustomDebuff_RevDurLast[DebuffNameIn][xUnit]
+                            HealBot_HoT_Update(button, debuffID)
+                        end
+                    else
+                        if HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]~=curDebuffs[DebuffNameIn]["expirationTime"] then
+                            HealBot_UnitIcons[xUnit][debuffID]["EXPIRE"]=curDebuffs[DebuffNameIn]["expirationTime"]
+                            HealBot_HoT_Update(button, debuffID)
+                        end
+                    end
+                end
+            end
+        end
+        HealBot_OnEvent_UnitThreat(xUnit)
     end
 end
 
-function HealBot_ClearDebuff(button, delayed)
-    if HealBot_UnitIcons[button.unit] and button.debuff and button.debuff.spellId then
-        local dbsID="DEBUFF!"..button.debuff.name.."!"..button.debuff.spellId
-        if HealBot_UnitIcons[button.unit][dbsID] then
-            HealBot_UnitIcons[button.unit][dbsID]["EXPIRE"]=1
-            HealBot_HoT_Update(button, dbsID)
-        end
-        if (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "d")=="d" then
-            HealBot_Action_UpdateAggro(button.unit,false,nil,0)
-        end
-    end
+function HealBot_ClearDebuff(button)
 	if button.debuff then
+        if HealBot_UnitIcons[button.unit] and button.debuff.spellId then
+            local dbsID="DEBUFF!"..button.debuff.name.."!"..button.debuff.spellId
+            if HealBot_UnitIcons[button.unit][dbsID] then
+                HealBot_UnitIcons[button.unit][dbsID]["EXPIRE"]=1
+                HealBot_HoT_Update(button, dbsID)
+            end
+        end
 		button.debuff.type = false;
 		button.debuff.name = false;
 		button.debuff.customPriority = 99;
 		button.debuff.spellId = false;
-	end
-    if delayed then
+        if (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "x")=="d" then
+            HealBot_Action_UpdateAggro(button.unit,false,nil,0)
+        end
+        if HealBot_Config_Cures.CDCshownAB then
+            HealBot_Action_SetUnitDebuffStatus(button.unit)
+        end
         HealBot_Action_ResetUnitStatus(button.unit)
-    else
-        HealBot_RecalcHeals(button.unit)
-    end
-    if HealBot_Config_Cures.CDCshownAB then
-        HealBot_Action_SetUnitDebuffStatus(button.unit)
-    end
+	end
 end
 
 local hbStanceBuffs = {}
@@ -3326,173 +3301,171 @@ function HealBot_HasItemBuff()
 end
 
 function HealBot_CheckUnitBuffs(button)
-    if HealBot_luVars["BuffCheck"] then 
-        local xGUID=button.guid
-        local xUnit=button.unit
-        if not xUnit or not UnitExists(xUnit) or not UnitIsPlayer(xUnit) then return end
-        local _,BuffClass=UnitClass(xUnit)
-        if not BuffClass then BuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
-        local y = 1;
+    local xGUID=button.guid
+    local xUnit=button.unit
+    if not xUnit or not UnitExists(xUnit) or not UnitIsPlayer(xUnit) then return end
+    local _,BuffClass=UnitClass(xUnit)
+    if not BuffClass then BuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
+    local y = 1;
 
-        for x,_ in pairs(PlayerBuffs) do
-            PlayerBuffs[x]=nil;
-        end
-        for x,_ in pairs(PlayerBuffTypes) do
-            PlayerBuffTypes[x]=nil;
-        end
-
-        while true do
-            local bName,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") -- Done
-            if bName then
-                y = y + 1;
-                if (HealBot_BuffNameTypes[bName]) then
-                    for _,v in pairs(HealBot_BuffNameTypes[bName]) do
-                        PlayerBuffTypes[v]=true
-                    end
-                end
-                
-                if not hbExcludeBuffSpells[spellID] then
-                    if HealBot_Buff_Aura2Item[bName] then 
-                        bName=HealBot_Buff_Aura2Item[bName] 
-                    end
-                    PlayerBuffs[bName]=true
-                    if HealBot_CheckBuffs[bName] then
-                        if w-GetTime()>0 then
-                            HealBot_SetUnitBuffTimer(xGUID,bName,w)
-                        elseif HealBot_PlayerBuff[xGUID] and HealBot_PlayerBuff[xGUID][bName] then
-                            if HealBot_PlayerBuff[xGUID][bName]==HealBot_CheckBuffsTime then
-                                HealBot_PlayerBuff[xGUID][bName]=nil
-                                HealBot_ResetCheckBuffsTime()
-                            else
-                                HealBot_PlayerBuff[xGUID][bName]=nil
-                            end
-                        end
-                    end
-                end
-            else
-                break
-            end
-        end 
-
-        if HealBot_PlayerBuff[xGUID] then
-            PlayerBuffsGUID=HealBot_PlayerBuff[xGUID]
-            for z,_ in pairs (PlayerBuffsGUID) do
-                if not PlayerBuffs[z] then
-                    if PlayerBuffsGUID[z]==HealBot_CheckBuffsTime then
-                        PlayerBuffsGUID[z]=nil
-                        HealBot_ResetCheckBuffsTime()
-                    else
-                        PlayerBuffsGUID[z]=nil
-                    end
-                end
-            end
-            for x,_ in pairs(PlayerBuffs) do
-                if HealBot_PlayerBuff[xGUID][x] and HealBot_PlayerBuff[xGUID][x] < GetTime() then
-                    PlayerBuffs[x]=nil
-                end
-            end
-        end
-        
-        local bName=nil;
-        for k in pairs(HealBot_BuffWatch) do
-            if not PlayerBuffs[HealBot_BuffWatch[k]] then
-                local checkthis=false;
-                local WatchTarget, WatchGUID=HealBot_Options_retBuffWatchTarget(HealBot_BuffWatch[k], xGUID);
-                local z, x = nil, nil
-                if HealBot_GetSpellId(HealBot_BuffWatch[k]) then
-                    z, x = GetSpellCooldown(HealBot_BuffWatch[k]);
-                elseif HealBot_Buff_ItemID[HealBot_BuffWatch[k]] then
-                    local getCD = false
-                    if HealBot_BuffWatch[k]~=HEALBOT_EVER_BLOOMING_FROND then
-                        getCD = true
-                    elseif not IsInRaid() and not UnitAffectingCombat("player") then
-                        getCD = true
-                        local mPct, hPct = 100, 100
-                        local mana,maxmana=HealBot_UnitMana(xUnit)
-                        if mana and maxmana and maxmana>1000 then
-                            mPct=floor((mana/maxmana)*100)
-                        end
-                        local uHlth,uMaxHlth=HealBot_UnitHealth(xUnit)
-                        if uHlth and uMaxHlth and uMaxHlth>1000 then
-                            hPct=floor((uHlth/uMaxHlth)*100)
-                        end
-                        if mPct>HealBot_Globals.minManaBloom and hPct>HealBot_Globals.minHealthBloom then
-                            getCD=false
-                        else
-                            local mCheck=GetTime()+1
-                            if not HealBot_ReCheckBuffsTime or HealBot_ReCheckBuffsTime>mCheck then
-                                HealBot_ReCheckBuffsTime=mCheck
-                                HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=xGUID
-                            elseif HealBot_ReCheckBuffsTime<mCheck then
-                                HealBot_ReCheckBuffsTimed[mCheck]=xGUID
-                            end
-                        end
-                    end
-                    if getCD then
-                        z, x = GetItemCooldown(HealBot_Buff_ItemID[HealBot_BuffWatch[k]]) -- Using the name returns errors
-                    end
-                end
-                if not x then
-                    -- Spec change within that last few secs - buff outdated so do nothing
-                    -- HealBot_AddDebug("HealBot_CheckUnitBuffs spec change")
-                elseif x<2 then
-                    if hbStanceBuffs[HealBot_BuffWatch[k]] then
-                        local index = GetShapeshiftForm() or 0
-                        if hbStanceBuffs[HealBot_BuffWatch[k]]~=index then checkthis=true end
-                    elseif WatchTarget["Raid"] then
-                        checkthis=true;
-                    elseif WatchTarget["Party"] then 
-                        if (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then checkthis=true; end
-                    elseif WatchTarget["Self"] then
-                        if xGUID==HealBot_Data["PGUID"] then checkthis=true end
-                    elseif WatchTarget[strsub(BuffClass,1,4)] then
-                        checkthis=true
-                    elseif WatchTarget["PvP"] then
-                        if UnitIsPVP(xUnit) then checkthis=true; end
-                    elseif WatchTarget["PvE"] then
-                        if not UnitIsPVP(xUnit) then checkthis=true; end
-                    elseif WatchTarget["Name"] then
-                        if xGUID==WatchGUID then checkthis=true; end
-                    elseif WatchTarget["Focus"] then
-                        if UnitIsUnit(xUnit, "focus") then checkthis=true; end
-                    elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
-                        checkthis=true;
-                    elseif WatchTarget["MyTargets"] then
-                        local myhTargets=HealBot_GetMyHealTargets();
-                        for i=1, #myhTargets do
-                            if xGUID==myhTargets[i] then
-                                checkthis=true;
-                                break;
-                            end
-                        end
-                    end
-                elseif not HealBot_ReCheckBuffsTime or HealBot_ReCheckBuffsTime>z+x then
-                    HealBot_ReCheckBuffsTime=z+x
-                    HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=xGUID
-                elseif HealBot_ReCheckBuffsTime<z+x then
-                    HealBot_ReCheckBuffsTimed[z+x]=xGUID
-                end
-                if checkthis then
-                    if HealBot_HasBuffTypes(HealBot_BuffWatch[k], PlayerBuffTypes) then
-                        altActive=true
-                    else
-                        bName=HealBot_BuffWatch[k];
-                        break
-                    end
-                end
-            end
-        end
-        if bName then
-            if button.buff and button.buff==bName then
-                return
-            else
-                button.buff=bName;
-                HealBot_Action_ResetUnitStatus(xUnit)
-            end
-        elseif button.buff then 
-            HealBot_ClearBuff(button)
-        end 
+    for x,_ in pairs(PlayerBuffs) do
+        PlayerBuffs[x]=nil;
     end
+    for x,_ in pairs(PlayerBuffTypes) do
+        PlayerBuffTypes[x]=nil;
+    end
+
+    while true do
+        local bName,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") -- Done
+        if bName then
+            y = y + 1;
+            if (HealBot_BuffNameTypes[bName]) then
+                for _,v in pairs(HealBot_BuffNameTypes[bName]) do
+                    PlayerBuffTypes[v]=true
+                end
+            end
+            
+            if not hbExcludeBuffSpells[spellID] then
+                if HealBot_Buff_Aura2Item[bName] then 
+                    bName=HealBot_Buff_Aura2Item[bName] 
+                end
+                PlayerBuffs[bName]=true
+                if HealBot_CheckBuffs[bName] then
+                    if w-GetTime()>0 then
+                        HealBot_SetUnitBuffTimer(xGUID,bName,w)
+                    elseif HealBot_PlayerBuff[xGUID] and HealBot_PlayerBuff[xGUID][bName] then
+                        if HealBot_PlayerBuff[xGUID][bName]==HealBot_CheckBuffsTime then
+                            HealBot_PlayerBuff[xGUID][bName]=nil
+                            HealBot_ResetCheckBuffsTime()
+                        else
+                            HealBot_PlayerBuff[xGUID][bName]=nil
+                        end
+                    end
+                end
+            end
+        else
+            break
+        end
+    end 
+
+    if HealBot_PlayerBuff[xGUID] then
+        PlayerBuffsGUID=HealBot_PlayerBuff[xGUID]
+        for z,_ in pairs (PlayerBuffsGUID) do
+            if not PlayerBuffs[z] then
+                if PlayerBuffsGUID[z]==HealBot_CheckBuffsTime then
+                    PlayerBuffsGUID[z]=nil
+                    HealBot_ResetCheckBuffsTime()
+                else
+                    PlayerBuffsGUID[z]=nil
+                end
+            end
+        end
+        for x,_ in pairs(PlayerBuffs) do
+            if HealBot_PlayerBuff[xGUID][x] and HealBot_PlayerBuff[xGUID][x] < GetTime() then
+                PlayerBuffs[x]=nil
+            end
+        end
+    end
+    
+    local bName=nil;
+    for k in pairs(HealBot_BuffWatch) do
+        if not PlayerBuffs[HealBot_BuffWatch[k]] then
+            local checkthis=false;
+            local WatchTarget, WatchGUID=HealBot_Options_retBuffWatchTarget(HealBot_BuffWatch[k], xGUID);
+            local z, x = nil, nil
+            if HealBot_GetSpellId(HealBot_BuffWatch[k]) then
+                z, x = GetSpellCooldown(HealBot_BuffWatch[k]);
+            elseif HealBot_Buff_ItemID[HealBot_BuffWatch[k]] then
+                local getCD = false
+                if HealBot_BuffWatch[k]~=HEALBOT_EVER_BLOOMING_FROND then
+                    getCD = true
+                elseif not IsInRaid() and not UnitAffectingCombat("player") then
+                    getCD = true
+                    local mPct, hPct = 100, 100
+                    local mana,maxmana=HealBot_UnitMana(xUnit)
+                    if mana and maxmana and maxmana>1000 then
+                        mPct=floor((mana/maxmana)*100)
+                    end
+                    local uHlth,uMaxHlth=HealBot_UnitHealth(xUnit)
+                    if uHlth and uMaxHlth and uMaxHlth>1000 then
+                        hPct=floor((uHlth/uMaxHlth)*100)
+                    end
+                    if mPct>HealBot_Globals.minManaBloom and hPct>HealBot_Globals.minHealthBloom then
+                        getCD=false
+                    else
+                        local mCheck=GetTime()+1
+                        if not HealBot_ReCheckBuffsTime or HealBot_ReCheckBuffsTime>mCheck then
+                            HealBot_ReCheckBuffsTime=mCheck
+                            HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=xGUID
+                        elseif HealBot_ReCheckBuffsTime<mCheck then
+                            HealBot_ReCheckBuffsTimed[mCheck]=xGUID
+                        end
+                    end
+                end
+                if getCD then
+                    z, x = GetItemCooldown(HealBot_Buff_ItemID[HealBot_BuffWatch[k]]) -- Using the name returns errors
+                end
+            end
+            if not x then
+                -- Spec change within that last few secs - buff outdated so do nothing
+                -- HealBot_AddDebug("HealBot_CheckUnitBuffs spec change")
+            elseif x<2 then
+                if hbStanceBuffs[HealBot_BuffWatch[k]] then
+                    local index = GetShapeshiftForm() or 0
+                    if hbStanceBuffs[HealBot_BuffWatch[k]]~=index then checkthis=true end
+                elseif WatchTarget["Raid"] then
+                    checkthis=true;
+                elseif WatchTarget["Party"] then 
+                    if (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then checkthis=true; end
+                elseif WatchTarget["Self"] then
+                    if xGUID==HealBot_Data["PGUID"] then checkthis=true end
+                elseif WatchTarget[strsub(BuffClass,1,4)] then
+                    checkthis=true
+                elseif WatchTarget["PvP"] then
+                    if UnitIsPVP(xUnit) then checkthis=true; end
+                elseif WatchTarget["PvE"] then
+                    if not UnitIsPVP(xUnit) then checkthis=true; end
+                elseif WatchTarget["Name"] then
+                    if xGUID==WatchGUID then checkthis=true; end
+                elseif WatchTarget["Focus"] then
+                    if UnitIsUnit(xUnit, "focus") then checkthis=true; end
+                elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
+                    checkthis=true;
+                elseif WatchTarget["MyTargets"] then
+                    local myhTargets=HealBot_GetMyHealTargets();
+                    for i=1, #myhTargets do
+                        if xGUID==myhTargets[i] then
+                            checkthis=true;
+                            break;
+                        end
+                    end
+                end
+            elseif not HealBot_ReCheckBuffsTime or HealBot_ReCheckBuffsTime>z+x then
+                HealBot_ReCheckBuffsTime=z+x
+                HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=xGUID
+            elseif HealBot_ReCheckBuffsTime<z+x then
+                HealBot_ReCheckBuffsTimed[z+x]=xGUID
+            end
+            if checkthis then
+                if HealBot_HasBuffTypes(HealBot_BuffWatch[k], PlayerBuffTypes) then
+                    altActive=true
+                else
+                    bName=HealBot_BuffWatch[k];
+                    break
+                end
+            end
+        end
+    end
+    if bName then
+        if button.buff and button.buff==bName then
+            return
+        else
+            button.buff=bName;
+            HealBot_Action_ResetUnitStatus(xUnit)
+        end
+    elseif button.buff then 
+        HealBot_ClearBuff(button)
+    end 
 end
 
 function HealBot_HasBuffTypes(spellName, pBuffTypes)
@@ -3519,19 +3492,15 @@ function HealBot_HasBuffTypes(spellName, pBuffTypes)
     return hasBuffTypes
 end
 
-function HealBot_ClearBuff(button, delayed)
+function HealBot_ClearBuff(button)
     button.buff=false
-    if delayed then
-        HealBot_Action_ResetUnitStatus(button.unit)
-    else
-        HealBot_RecalcHeals(button.unit)
-    end
+    HealBot_Action_ResetUnitStatus(button.unit)
 end
 
 local needReset=nil
 function HealBot_OnEvent_PlayerRegenDisabled(self)
     HealBot_Data["UILOCK"]="YES"
-    HealBot_luVars["DelayLockdownCheck"]=GetTime()+25
+    HealBot_luVars["DelayLockdownCheck"]=GetTime()+10
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerRD")      
         needReset=true
@@ -3580,7 +3549,7 @@ function HealBot_Not_Fighting()
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUSE"]=="YES" and HealBot_Data["TIPUNIT"] then
         HealBot_Action_RefreshTooltip();
     end
-    HealBot_Action_EndAggro(true)
+    HealBot_Action_EndAggro()
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]>1 and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"]==false then
         HealBot_CheckLowMana()
     end
@@ -3689,7 +3658,7 @@ function HealBot_UnitNameUpdate(unUnit,unGUID)
         unb.guid=unGUID or "nk"
         HealBot_unitHealth[unUnit]=nil
         HealBot_IncHeals_HealsInUpdate(unUnit)
-        HealBot_CheckUnitAggro(unUnit)
+        HealBot_SetAggro(unUnit)
         HealBot_CheckAllUnitVehicle(unUnit)
         HealBot_BarCheck[unUnit]="A"
         if UnitExists(unUnit) then
@@ -4096,7 +4065,7 @@ function HealBot_OnEvent_PlayerTargetChanged(self)
         if HealBot_Data["UILOCK"]=="NO" or Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBARCOMBAT"] then
             if UnitExists("target") and not UnitIsEnemy("target", "player") then
                 local tUnit=HealBot_luVars["HighlightTarget"] or "nil"
-                if (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "h")=="h" then
+                if (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "x")=="h" then
                     for xUnit,xButton in pairs(HealBot_Unit_Button) do
                         if UnitIsUnit(xUnit, "target") then
                             if tUnit~=xUnit then
@@ -4111,7 +4080,7 @@ function HealBot_OnEvent_PlayerTargetChanged(self)
             end
         end
         if not HighlightTargetFound and HealBot_luVars["HighlightTarget"] and 
-          (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "h")=="h" then
+          (HealBot_Action_retAggro(HealBot_luVars["HighlightTarget"]) or "x")=="h" then
             HealBot_Action_UpdateAggro(HealBot_luVars["HighlightTarget"],"off",HealBot_Action_RetUnitThreat(HealBot_luVars["HighlightTarget"]), 0)
             HealBot_luVars["HighlightTarget"]=nil
         end    
@@ -4504,9 +4473,10 @@ function HealBot_OnEvent_PlayerLeavingWorld(self)
     HealBot_UnRegister_Events();
 end
 
-function HealBot_OnEvent_UnitSpellcastSent(self,caster,spellName,spellRank,unitName)
+function HealBot_OnEvent_UnitSpellcastSent(self,caster,unitName,spellRank,spellID)
     local xUnit=nil
     local uscName = HealBot_UnitNameOnly(unitName)
+    local spellName = GetSpellInfo(spellID)
     if uscName=="" then
         if spellName==HEALBOT_MENDPET and UnitExists("pet") then
             uscName=HealBot_GetUnitName("pet")
@@ -4540,16 +4510,6 @@ function HealBot_OnEvent_UnitSpellcastSent(self,caster,spellName,spellRank,unitN
             end
         elseif HealBot_Spells[spellName] then
             HealBot_CastingTarget = xUnit;
-            if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and HealBot_Options_isDebuffCureSpell(spellName) then
-                local start, duration, _, _ = GetSpellCooldown(spellName);
-                if duration and duration>1 then 
-                    local spellCD = duration-(GetTime()-start)
-                    if spellCD>1.5 and spellCD<12 then
-                        local nCheck=(GetTime()+spellCD)-0.2
-                        HealBot_DebuffMask(nCheck)
-                    end
-                end
-            end
             if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 and Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"]==false then
                 HealBot_CastNotify(uscName,spellName,xUnit)
             end
@@ -4641,23 +4601,19 @@ function HealBot_CastNotify(unitName,spell,unit)
     end
 end
 
-function HealBot_OnEvent_UnitSpellcastStart(self,unit,spellName)
+function HealBot_OnEvent_UnitSpellcastStart(self,unit,spellID)
     if HealBot_Unit_Button[unit] then 
-        if (spellName==HEALBOT_MASS_RESURRECTION or spellName==HEALBOT_ABSOLUTION or spellName==HEALBOT_ANCESTRAL_VISION or spellName==HEALBOT_REAWAKEN or spellName==HEALBOT_REVITALIZE or spellName==HEALBOT_ANCESTRALSPIRIT or spellName==HEALBOT_REBIRTH or spellName==HEALBOT_REDEMPTION or spellName==HEALBOT_REVIVE or spellName==HEALBOT_RESUSCITATE) then
-            HealBot_Action_Res(spellName, unit)
-        else
-            HealBot_OnEvent_UnitThreat(unit)
-        end
+        HealBot_OnEvent_UnitThreat(unit)
     end
 end
 
-function HealBot_OnEvent_UnitSpellcastStop(self,unit,spellName)
+function HealBot_OnEvent_UnitSpellcastStop(self,unit,spellID)
     if HealBot_Unit_Button[unit] then
             HealBot_OnEvent_UnitThreat(unit)
     end
 end
 
-function HealBot_OnEvent_UnitSpellcastFail(self,unit,spellName)
+function HealBot_OnEvent_UnitSpellcastFail(self,unit,spellID)
     if HealBot_Unit_Button[unit] then
         HealBot_OnEvent_UnitThreat(unit)
     end

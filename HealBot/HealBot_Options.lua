@@ -229,6 +229,8 @@ function HealBot_Options_setLists()
         HEALBOT_RANDOMMOUNT,
         HEALBOT_RANDOMGOUNDMOUNT,
         HEALBOT_RANDOMPET,
+        HEALBOT_RANDOMFAVMOUNT,
+        HEALBOT_RANDOMFAVPET,
     }
 
     HealBot_Options_hbLangs_List = {
@@ -8210,7 +8212,7 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
                 if HealBot_UnitData[uGUID] and HealBot_UnitData[uGUID]["UNIT"] then
                     xButton=HealBot_Unit_Button[HealBot_UnitData[uGUID]["UNIT"]]
                     if xButton and xButton.buff and xButton.buff==BuffWatchSpell then
-                        HealBot_ClearBuff(xButton, true)
+                        HealBot_ClearBuff(xButton)
                     end
                 end
             end
@@ -8218,7 +8220,7 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
             if HealBot_UnitData[tGUID] and HealBot_UnitData[tGUID]["UNIT"] then
                 xButton=HealBot_Unit_Button[HealBot_UnitData[tGUID]["UNIT"]]
                 if xButton and xButton.buff and xButton.buff==BuffWatchSpell then
-                    HealBot_ClearBuff(xButton, true)
+                    HealBot_ClearBuff(xButton)
                 end
             end
         end

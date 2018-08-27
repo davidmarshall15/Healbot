@@ -603,6 +603,8 @@ function HealBot_Lang_enALL()
     HEALBOT_RANDOMMOUNT                     = "Random Mount"
     HEALBOT_RANDOMGOUNDMOUNT                = "Random Ground Mount"
     HEALBOT_RANDOMPET                       = "Random Pet"
+    HEALBOT_RANDOMFAVMOUNT                  = "Random Favorite Mount"
+    HEALBOT_RANDOMFAVPET                    = "Random Favorite Pet"
     HEALBOT_ZONE_AQ40                       = "Ahn'Qiraj"
     HEALBOT_ZONE_VASHJIR1                   = "Kelp'thar Forest"
     HEALBOT_ZONE_VASHJIR2                   = "Shimmering Expanse"

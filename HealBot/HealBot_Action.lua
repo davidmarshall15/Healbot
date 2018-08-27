@@ -7,6 +7,7 @@ local HealBot_PetMaxHcnt1={};
 local HealBot_PetMaxHcnt2={};
 local HealBot_AttribStatus={};
 local HealBot_UnitRange={}
+local HealBot_UnitUpdate={}
 local HealBot_UnitRangeSpell={}
 local HealBot_UnitBarsRange={["r"]={},["g"]={},["b"]={},["a"]={},["3a"]={},["hr"]={},["hg"]={},["hb"]={},["sr"]={},["sg"]={},["sb"]={}}
 local HealBot_UnitTextRange={["ir"]={},["ig"]={},["ib"]={},["or"]={},["og"]={},["ob"]={},["oa"]={}}
@@ -43,7 +44,6 @@ local HealBot_prevUnitThreat={}
 local Healbot_tempUnitThreat=0
 local UnitDebuffStatus={}
 local HealBot_UnitThreatPct={}
-local HealBot_UnitAggro={}
 local hbprevThreatPct=-3
 local hbstringSub=nil
 local hbstringLen=nil
@@ -58,9 +58,10 @@ end
 function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
     local xButton=HealBot_Unit_Button[unit]
     if not xButton then return end
-
     local barName=HealBot_Action_HealthBar4(xButton)
-    if not barName then return end    
+    if not barName then return end  
+    HealBot_SetAggroUnits(unit, threatPct)
+    
     if UnitExists(unit) and UnitIsFriend("player",unit) then
         if UnitIsDeadOrGhost(unit) and not UnitIsFeignDeath(unit) then
             status=nil
@@ -83,12 +84,9 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
                 if not HealBot_UnitThreatPct[unit] then HealBot_UnitThreatPct[unit]=75 end
             elseif threatStatus==1 then
                 if not HealBot_UnitThreatPct[unit] then HealBot_UnitThreatPct[unit]=25 end
-            elseif threatStatus>4 then 
-                if not HealBot_UnitThreatPct[unit] then HealBot_UnitThreatPct[unit]=50 end
             else
                 HealBot_UnitThreatPct[unit]=0
             end
-            if HealBot_UnitThreatPct[unit]>0 then HealBot_UnitAggro[unit]=true end
         else
             if not threatStatus then threatStatus=0 end
             HealBot_UnitThreatPct[unit]=0
@@ -102,7 +100,6 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
                    threatStatus>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] then
                 HealBot_UnitThreat[unit]=threatStatus
                 HealBot_Aggro[unit]="a"
-                HealBot_UnitAggro[unit]=true
             elseif status=="target" and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"] then
                 HealBot_Aggro[unit]="h"
                 HealBot_UnitThreat[unit]=-2
@@ -283,22 +280,11 @@ function HealBot_Action_retAggro(unit)
     return HealBot_Aggro[unit]
 end
 
-function HealBot_Action_EndAggro(check)
-    if not check then
-        for xUnit,_ in pairs(HealBot_Unit_Button) do
-            if (HealBot_Aggro[xUnit] or "a")=="a" then
-                HealBot_Action_UpdateAggro(xUnit,false,nil,0)
-                HealBot_Action_aggroIndicatorUpd(xUnit, 0)
-            end
-        end
-    end
-    for xUnit,_ in pairs(HealBot_Aggro) do
-        if HealBot_Aggro[xUnit]=="a" then
-            if check then
-                HealBot_qClearUnitAggro(xUnit)
-            else
-                HealBot_Action_UpdateAggro(xUnit,false,nil,0)
-            end
+function HealBot_Action_EndAggro()
+    for xUnit,_ in pairs(HealBot_Unit_Button) do
+        if (HealBot_Aggro[xUnit] or "a")=="a" then
+            HealBot_Action_UpdateAggro(xUnit,false,nil,0)
+            HealBot_Action_aggroIndicatorUpd(xUnit, 0)
         end
     end
 end
@@ -2678,17 +2664,9 @@ function HealBot_Action_RefreshButtons()
     end
 end
 
-function HealBot_Action_CheckAggro()
-    for xUnit,_ in pairs(HealBot_UnitAggro) do
-        if not HealBot_CheckUnitAggro(xUnit) then
-            HealBot_UnitAggro[xUnit]=nil
-        end
-    end
-end
-
 function HealBot_Action_CheckRange(button)
     local unit=button.unit
-    if (HealBot_UnitStatus[unit] or 0)>0 and UnitExists(unit) then
+    if (HealBot_UnitUpdate[unit] or (HealBot_UnitStatus[unit] or 0)>0) and UnitExists(unit) then
         if HealBot_UnitStatus[unit]>7 then 
             if unit~="player" and (UnitHealth(unit) or 0)>1 then 
                 HealBot_Reset_UnitHealth(unit) 
@@ -2713,8 +2691,8 @@ function HealBot_Action_CheckRange(button)
                     HealBot_Action_ShowDirectionArrow(button, unit)
                 end
             end
-        elseif HealBot_UnitRange[unit]==-2 then
-            --HealBot_AddDebug("HealBot_UnitRange[unit]==-2 unit="..unit)
+        elseif HealBot_UnitUpdate[unit] then
+            HealBot_UnitUpdate[unit]=false
             HealBot_Action_RefreshButton(button)
         else
             local uRange=HealBot_UnitInRange(HealBot_UnitRangeSpell[unit] or HealBot_RangeSpells["HEAL"], unit)
@@ -2806,7 +2784,7 @@ function HealBot_Action_CheckRange(button)
     elseif not UnitExists(unit) and HealBot_UnitStatus[unit]~=3 then
         HealBot_Action_RefreshButton(button)
         HealBot_UnitStatus[unit]=3
-        HealBot_UnitRange[unit]=-2
+        HealBot_UnitUpdate[unit]=true
     end
 end
 
@@ -2842,11 +2820,11 @@ end
 function HealBot_Action_ResetUnitStatus(unit)
     if unit then
         HealBot_UnitStatus[unit]=1;
-        HealBot_UnitRange[unit]=-2
+        HealBot_UnitUpdate[unit]=true
     else
         for xUnit,_ in pairs(HealBot_Unit_Button) do
             HealBot_UnitStatus[xUnit]=1;
-            HealBot_UnitRange[xUnit]=-2
+            HealBot_UnitUpdate[xUnit]=true
         end
         --HealBot_AddDebug("HealBot_UnitRange for all")
     end
@@ -2856,7 +2834,7 @@ function HealBot_Action_ResetActiveUnitStatus()
     for xUnit,_ in pairs(HealBot_Unit_Button) do
         if HealBot_UnitStatus[xUnit]>0 or UnitHealth(xUnit)<2 then
             HealBot_UnitStatus[xUnit]=1
-            HealBot_UnitRange[xUnit]=-2
+            HealBot_UnitUpdate[xUnit]=true
         end
     end
 end
@@ -2889,14 +2867,14 @@ function HealBot_Action_Res(resSpell, unit)
             if UnitIsDeadOrGhost(xUnit) and not UnitIsFeignDeath(xUnit) and UnitIsVisible(xUnit) and not HealBot_HasDebuff(HEALBOT_DEBUFF_MASS_RESURRECTED_ID, xUnit) then
                 HealBot_UnitHasRes[xUnit]=addResTime
                 HealBot_UnitStatus[xUnit]=1
-                HealBot_UnitRange[xUnit]=-2
+                HealBot_UnitUpdate[xUnit]=true
             end
         end
     elseif unit then
         if UnitIsDeadOrGhost(unit) and not UnitIsFeignDeath(unit) and UnitIsVisible(unit) then
             HealBot_UnitHasRes[unit]=addResTime
             HealBot_UnitStatus[unit]=1
-            HealBot_UnitRange[unit]=-2
+            HealBot_UnitUpdate[unit]=true
         end
     end
 end
@@ -2955,7 +2933,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
         if shb.guid~=hbGUID then
             shb.guid=hbGUID
             HealBot_UnitStatus[unit]=7
-            HealBot_UnitRange[unit]=-2
+            HealBot_UnitRange[unit]=-1
+            HealBot_UnitUpdate[unit]=true
         end
         if HealBot_Unit_Button[unit]~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
@@ -2983,7 +2962,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
             HealBot_CheckAllDebuffs(unit)
             HealBot_CheckHealth(unit)
             HealBot_UnitStatus[unit]=7
-            HealBot_UnitRange[unit]=-2
+            HealBot_UnitRange[unit]=-1
+            HealBot_UnitUpdate[unit]=true
             if not HealBot_Enabled[unit] then HealBot_Enabled[unit]="e" end
         end
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
@@ -3906,7 +3886,11 @@ function HealBot_Action_HealUnit_Wheel(self, delta)
     elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMGOUNDMOUNT and UnitIsUnit(xUnit,"player") and not UnitAffectingCombat("player") then
         HealBot_MountsPets_ToggelMount("ground")
     elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMPET and UnitIsUnit(xUnit,"player") then
-        HealBot_MountsPets_RandomPet()   
+        HealBot_MountsPets_RandomPet(false)   
+    elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVMOUNT and UnitIsUnit(xUnit,"player") then
+        HealBot_MountsPets_FavMount()   
+    elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and UnitIsUnit(xUnit,"player") then
+        HealBot_MountsPets_RandomPet(true)   
     end
 
 end
@@ -4550,6 +4534,10 @@ function HealBot_MountsPets_Mount(mount)
     end
 end
 
-function HealBot_MountsPets_RandomPet()
-    C_PetJournal.SummonRandomPet("CRITTER");
+function HealBot_MountsPets_FavMount()
+    C_MountJournal.SummonByID(0)
+end
+
+function HealBot_MountsPets_RandomPet(isFav)
+    C_PetJournal.SummonRandomPet(isFav)
 end
