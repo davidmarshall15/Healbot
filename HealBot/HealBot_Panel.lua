@@ -1245,16 +1245,20 @@ function HealBot_Panel_tankHeals()
 end
 
 function HealBot_Panel_setTanks()
+    local hbTankUnit=nil
     if nraid>0 then
         for j=1,nraid do
             xGUID=UnitGUID("raid"..j);
             if xGUID then
                 if (HealBot_unitRole[xGUID] or "x")==hbRole[HEALBOT_MAINTANK] then
                     if xGUID==HealBot_Data["PGUID"] then
-                        HealBot_MainTanks[xGUID]="player"
+                        hbTankUnit=player
                     else
-                        HealBot_MainTanks[xGUID]="raid"..j
+                        hbTankUnit="raid"..j
                     end
+                end
+                if hbTankUnit then
+                    HealBot_MainTanks[xGUID]=hbTankUnit
                 end
             end
         end
@@ -1264,10 +1268,13 @@ function HealBot_Panel_setTanks()
             if xGUID then
                 if (HealBot_unitRole[xGUID] or "x")==hbRole[HEALBOT_MAINTANK] then
                     HealBot_MainTanks[xGUID]=xUnit
+                    hbTankUnit=xUnit
                 end
             end
         end
     end
+    HealBot_SetTankUnit(hbTankUnit)
+    
     table.foreach(HealBot_MyPrivateTanks, function (index,xGUID)
         local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
         if UnitExists(xUnit) then  

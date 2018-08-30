@@ -156,7 +156,7 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
         barName:SetStatusBarColor(1,0,0,0)
         xButton.bar4state=0
     end
-    if HealBot_UnitThreatPct[unit]~=hbprevThreatPct then HealBot_Action_ResetUnitStatus(unit) end
+    if HealBot_UnitThreatPct[unit]~=hbprevThreatPct then HealBot_RecalcHeals(unit) end
 end
 
 function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
@@ -1290,7 +1290,7 @@ function HealBot_Action_EnableButton(button, isTarget)
                 end
                 --if HealBot_Aggro[ebUnit] then
                 HealBot_Action_SetUnitDebuffStatus(ebUnit)
-                if HealBot_Aggro[xUnit] and (HealBot_Aggro[xUnit]=="a" or HealBot_Aggro[xUnit]=="d") then
+                if HealBot_Aggro[ebUnit] and (HealBot_Aggro[ebUnit]=="a" or HealBot_Aggro[ebUnit]=="d") then
                     HealBot_Action_UpdateAggro(ebUnit,false,nil,0)
                 end
                 HealBot_Aggro[ebUnit]=nil

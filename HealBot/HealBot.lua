@@ -1213,16 +1213,17 @@ end
 
 function HealBot_Update_Fast()
     aSwitch=aSwitch+1
-    if aSwitch<2 then
-        if HealBot_luVars["DelayAuraBCheck"] then HealBot_doAuraBuff() end
-        if HealBot_luVars["DelayClearAggro"] then HealBot_doClearAggro() end
-        if HealBot_luVars["DelayAuraDCheck"] then HealBot_doAuraDebuff() end
-        if HealBot_luVars["MaskAuraDCheck"]<GetTime() and HealBot_luVars["MaskAuraReCheck"] then
-            HealBot_luVars["MaskAuraReCheck"]=nil
-            HealBot_luVars["DelayAuraDCheck"]=true
+    if aSwitch<2 and HealBot_luVars["DelayAuraBCheck"] then 
+        HealBot_doAuraBuff()
+    elseif aSwitch<3 and HealBot_luVars["DelayAuraDCheck"] then 
+        HealBot_doAuraDebuff()
+    elseif aSwitch<4 and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] then
+        if HealBot_luVars["DelayClearAggro"] then 
+            HealBot_doClearAggro() 
+        else
+            HealBot_CheckAggroUnits()
         end
-        HealBot_CheckAggroUnits()
-    elseif aSwitch<3 and HealBot_luVars["EnemyBarsOn"] then
+    elseif aSwitch<5 and HealBot_luVars["EnemyBarsOn"] then
         for xUnit,_ in pairs(HealBot_EnemyUnits) do
             local xButton=HealBot_Unit_Button[xUnit]
             if xButton then
@@ -1259,7 +1260,7 @@ function HealBot_Update_Fast()
                     if hlth~=HealBot_EnemyUnits[xUnit]["HLTH"] or maxhlth~=HealBot_EnemyUnits[xUnit]["MAXHLTH"] then
                         HealBot_EnemyUnits[xUnit]["HLTH"]=hlth
                         HealBot_EnemyUnits[xUnit]["MAXHLTH"]=maxhlth
-                        HealBot_Action_ResetUnitStatus(xUnit)
+                        HealBot_RecalcHeals(xUnit)
                     end
                     if UnitIsFriend("player",xUnit) then
                         HealBot_CheckAllDebuffs(xUnit)
@@ -1302,6 +1303,10 @@ function HealBot_Update_Fast()
     else
         HealBot_Action_RefreshButtons()
         if HealBot_Data["TIPUSE"]=="YES" and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] then HealBot_Action_RefreshTooltip() end
+        if HealBot_luVars["MaskAuraDCheck"]<GetTime() and HealBot_luVars["MaskAuraReCheck"] then
+            HealBot_luVars["MaskAuraReCheck"]=nil
+            HealBot_luVars["DelayAuraDCheck"]=true
+        end
         aSwitch=0
     end
 end
@@ -2243,23 +2248,24 @@ function HealBot_UnRegister_Events()
     HealBot:UnregisterEvent("PET_BATTLE_OVER");
 end
 
+local hbTankUnit=nil
+function HealBot_SetTankUnit(unit)
+    hbTankUnit=unit
+end
+
 function HealBot_CalcThreat(unit)
     local z,y=0,0
     if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then 
-        if UnitIsUnit(unit, unit.."targettarget") then
-            z=100
-        else
-            _, _, z, _, _ = UnitDetailedThreatSituation(unit, unit.."target")
-            z=floor(z or 0)
-        end
+        _, _, z, _, _ = UnitDetailedThreatSituation(unit, unit.."target")
+        z=floor(z or 0)
         y = UnitThreatSituation(unit, unit.."target")
+    elseif hbTankUnit and UnitExists(hbTankUnit.."target") and UnitIsEnemy(hbTankUnit, hbTankUnit.."target") then 
+        _, _, z, _, _ = UnitDetailedThreatSituation(unit, hbTankUnit.."target")
+        z=floor(z or 0)
+        y = UnitThreatSituation(unit, hbTankUnit.."target")
     elseif UnitExists("playertarget") and UnitIsEnemy("player", "playertarget") then 
-        if UnitIsUnit(unit, "playertargettarget") then
-            z=100
-        else
-            _, _, z, _, _ = UnitDetailedThreatSituation(unit, "playertarget") 
-            z=floor(z or 0)
-        end
+        _, _, z, _, _ = UnitDetailedThreatSituation(unit, "playertarget") 
+        z=floor(z or 0)
         y = UnitThreatSituation(unit, "playertarget")
     else
         z=0
@@ -2983,7 +2989,8 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Movement_Debuffs[dName] then
             checkthis=false;
-        elseif HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 and debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs then
+        elseif HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 
+          and (debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs or expirationTime<GetTime()+HealBot_Config_Cures.IgnoreFastDurDebuffsSecs) then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreNonHarmfulDebuffs and HealBot_Ignore_NonHarmful_Debuffs[dName] then
             checkthis=false;
@@ -3259,7 +3266,7 @@ function HealBot_ClearDebuff(button)
         if HealBot_Config_Cures.CDCshownAB then
             HealBot_Action_SetUnitDebuffStatus(button.unit)
         end
-        HealBot_Action_ResetUnitStatus(button.unit)
+        HealBot_RecalcHeals(button.unit)
 	end
 end
 
@@ -3494,7 +3501,7 @@ end
 
 function HealBot_ClearBuff(button)
     button.buff=false
-    HealBot_Action_ResetUnitStatus(button.unit)
+    HealBot_RecalcHeals(button.unit)
 end
 
 local needReset=nil
