@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.7.b1";
+﻿HEALBOT_VERSION   = "8.0.1.7";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
