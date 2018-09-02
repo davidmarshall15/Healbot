@@ -9,8 +9,7 @@ local HealBot_AttribStatus={};
 local HealBot_UnitRange={}
 local HealBot_UnitUpdate={}
 local HealBot_UnitRangeSpell={}
-local HealBot_UnitBarsRange={["r"]={},["g"]={},["b"]={},["a"]={},["3a"]={},["hr"]={},["hg"]={},["hb"]={},["sr"]={},["sg"]={},["sb"]={}}
-local HealBot_UnitTextRange={["ir"]={},["ig"]={},["ib"]={},["or"]={},["og"]={},["ob"]={},["oa"]={}}
+local HealBot_UnitBarsRange3a={}
 local HealBot_curUnitHealth={}
 local HealBot_UnitBarUpdate={}
 local HealBot_UnitOffline={}
@@ -1014,7 +1013,7 @@ function HealBot_Action_SetBar3Value(button, sName)
         end
         local y=floor((UnitPower(unit)/x)*100)
         local hcr,hcg,hcb=HealBot_Action_GetManaBarCol(unit)
-        HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_UnitBarsRange["3a"][unit] or Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
+        HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_UnitBarsRange3a[unit] or Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
     end
 end
 
@@ -1415,16 +1414,10 @@ function HealBot_Action_EnableButton(button, isTarget)
             ebusa = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EA"];
             HealBot_Enabled[ebUnit]="e"
             ebubar:SetStatusBarColor(ebur,ebug,ebub,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
-            HealBot_UnitBarsRange["3a"][ebUnit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+            HealBot_UnitBarsRange3a[ebUnit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and not HealBot_retdebuffTargetIcon(ebUnit) then
                 ebuicon15:SetAlpha(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
             end
-            HealBot_UnitTextRange["ir"][ebUnit]=ebusr
-            HealBot_UnitTextRange["ig"][ebUnit]=ebusg
-            HealBot_UnitTextRange["ib"][ebUnit]=ebusb
-            HealBot_UnitTextRange["or"][ebUnit]=ebusr
-            HealBot_UnitTextRange["og"][ebUnit]=ebusg
-            HealBot_UnitTextRange["ob"][ebUnit]=ebusb
             if HealBot_Data["TIPUSE"]=="YES" and HealBot_Data["TIPUNIT"] and ebUnit==HealBot_Data["TIPUNIT"] then
                 if not isFriend then
                     HealBot_Data["TIPTYPE"] = "Enemy"
@@ -1452,12 +1445,6 @@ function HealBot_Action_EnableButton(button, isTarget)
                 ebusg=1.0
                 ebusb=0.2
                 ebusa=1
-                HealBot_UnitTextRange["ir"][ebUnit]=0.2
-                HealBot_UnitTextRange["ig"][ebUnit]=1
-                HealBot_UnitTextRange["ib"][ebUnit]=0.2
-                HealBot_UnitTextRange["or"][ebUnit]=0.2
-                HealBot_UnitTextRange["og"][ebUnit]=1
-                HealBot_UnitTextRange["ob"][ebUnit]=0.2
                 HealBot_UnitStatus[ebUnit]=9
             elseif ebuUnitDead and hbGUID~=HealBot_Data["PGUID"] and isFriend then
                 if HealBot_RangeSpells["RES"] then
@@ -1473,18 +1460,6 @@ function HealBot_Action_EnableButton(button, isTarget)
                         ebusb=0;
                         ebusa=1;
                     end
-                    if not UnitIsGhost(ebUnit) then
-                        HealBot_UnitTextRange["ir"][ebUnit]=1
-                        HealBot_UnitTextRange["ig"][ebUnit]=0.2
-                        HealBot_UnitTextRange["ib"][ebUnit]=0.2
-                    else
-                        HealBot_UnitTextRange["ir"][ebUnit]=0.8
-                        HealBot_UnitTextRange["ig"][ebUnit]=0
-                        HealBot_UnitTextRange["ib"][ebUnit]=0
-                    end
-                    HealBot_UnitTextRange["or"][ebUnit]=0.8
-                    HealBot_UnitTextRange["og"][ebUnit]=0
-                    HealBot_UnitTextRange["ob"][ebUnit]=0
                 end
                 if not IsInInstance() and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and hbGUID~=HealBot_Data["PGUID"] and UnitIsVisible(ebUnit) then
                     HealBot_Action_ShowDirectionArrow(button, ebUnit)
@@ -1495,12 +1470,6 @@ function HealBot_Action_EnableButton(button, isTarget)
                 elseif HealBot_UnitDirection[ebUnit] then
                     HealBot_Action_HideDirectionArrow(button, ebUnit)
                 end
-                HealBot_UnitTextRange["ir"][ebUnit]=ebusr
-                HealBot_UnitTextRange["ig"][ebUnit]=ebusg
-                HealBot_UnitTextRange["ib"][ebUnit]=ebusb
-                HealBot_UnitTextRange["or"][ebUnit]=ebusr
-                HealBot_UnitTextRange["og"][ebUnit]=ebusg
-                HealBot_UnitTextRange["ob"][ebUnit]=ebusb
                 --ebua=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
             end
             if UnitIsVisible(ebUnit) then
@@ -1532,13 +1501,8 @@ function HealBot_Action_EnableButton(button, isTarget)
                     HealBot_Action_RefreshTooltip()
                 end
             end
-            HealBot_UnitBarsRange["3a"][ebUnit]=ebua
+            HealBot_UnitBarsRange3a[ebUnit]=ebua
         end
-        HealBot_UnitBarsRange["r"][ebUnit]=ebur
-        HealBot_UnitBarsRange["g"][ebUnit]=ebug
-        HealBot_UnitBarsRange["b"][ebUnit]=ebub
-        HealBot_UnitBarsRange["a"][ebUnit]=ebua
-        HealBot_UnitTextRange["oa"][ebUnit]=ebusa
     else
         uHlth,uMaxHlth=1,1
         uHealIn = 0
@@ -1548,12 +1512,7 @@ function HealBot_Action_EnableButton(button, isTarget)
         ebubar2:SetStatusBarColor(0,0,0,0);
         ebubar5:SetStatusBarColor(0,0,0,0);
         ebubar6:SetStatusBarColor(0,0,0,0);
-        HealBot_UnitBarsRange["r"][ebUnit]=0
-        HealBot_UnitBarsRange["g"][ebUnit]=1
-        HealBot_UnitBarsRange["b"][ebUnit]=0
-        HealBot_UnitBarsRange["a"][ebUnit]=ebua or 0.1
-        HealBot_UnitBarsRange["3a"][ebUnit]=ebua or 0.1
-        HealBot_UnitTextRange["oa"][ebUnit]=ebusa or 0.01
+        HealBot_UnitBarsRange3a[ebUnit]=ebua or 0.1
         activeUnit = false
         HealBot_HoT_RemoveIconButton(button)
         if hbGUID==ebUnit then
@@ -1571,14 +1530,10 @@ function HealBot_Action_EnableButton(button, isTarget)
         if unitHRange==1 and not HealBot_PlayerDead then
             ebubar2:SetStatusBarColor(ebir,ebig,ebib,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IA"]);
         elseif unitHRange==0 then
-            ebubar2:SetStatusBarColor(ebir,ebig,ebib,HealBot_UnitBarsRange["a"][ebUnit]);
+            ebubar2:SetStatusBarColor(ebir,ebig,ebib,ebua or 0.1);
         else
             ebubar2:SetStatusBarColor(ebir,ebig,ebib,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
         end
-        --if unitHRange~=1 and UnitIsVisible(ebUnit) then HealBot_AddDebug("unitHRange="..unitHRange.." for visible unit "..ebUnit) end
-        HealBot_UnitBarsRange["hr"][ebUnit]=ebir
-        HealBot_UnitBarsRange["hg"][ebUnit]=ebig
-        HealBot_UnitBarsRange["hb"][ebUnit]=ebib
     else
         ebubar2:SetStatusBarColor(ebur,ebug,ebub,0);
     end
@@ -1586,27 +1541,26 @@ function HealBot_Action_EnableButton(button, isTarget)
         if unitHRange==1 and not HealBot_PlayerDead then
             ebubar6:SetStatusBarColor(har,hag,hab,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]);
         elseif unitHRange==0 then
-            ebubar6:SetStatusBarColor(har,hag,hab,HealBot_UnitBarsRange["a"][ebUnit]);
+            ebubar6:SetStatusBarColor(har,hag,hab,ebua or 0.1);
         else
             ebubar6:SetStatusBarColor(har,hag,hab,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
         end
-        HealBot_UnitBarsRange["sr"][ebUnit]=har
-        HealBot_UnitBarsRange["sg"][ebUnit]=hag
-        HealBot_UnitBarsRange["sb"][ebUnit]=hab
     else
         ebubar6:SetStatusBarColor(ebur,ebug,ebub,0);
     end
 
     local ebtext=uName
-    if activeUnit then
+    local textRCall=uHlth..'-'..uMaxHlth..'-'..uName..'-'..uHealIn..'-'..uAbsorbs..'-'..(HealBot_UnitThreatPct[ebUnit] or 0)..'-'..(HealBot_UnitOffline[hbGUID] or 0)
+    ebubar.txt = _G[ebubar:GetName().."_text"];
+    if activeUnit and HealBot_Action_rCalls[ebUnit]["barText"]~=textRCall then
+        HealBot_Action_rCalls[ebUnit]["barText"]=textRCall
         local hbFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"]] or 2
         local bttextlen = floor((hbFontAdj*2)+HealBot_Globals.tsadjmod+((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*1.88)
                                 /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"])
                                 -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]/hbFontAdj)))
         ebtext=HealBot_Action_HBText(uHlth,uMaxHlth,uName,ebUnit,uHealIn, uAbsorbs, hbGUID, bttextlen, button.frame)
+        ebubar.txt:SetText(ebtext);
     end
-    ebubar.txt = _G[ebubar:GetName().."_text"];
-    ebubar.txt:SetText(ebtext);
     if activeUnit and UnitIsVisible(ebUnit) then
         ebubar.txt:SetTextColor(ebusr,ebusg,ebusb,ebusa);
     else
@@ -2033,6 +1987,7 @@ end
 
 function HealBot_Action_UnitIsOffline(hbGUID,preset) -- added by Diacono of Ursin
     local x = nil;
+    local y = (HealBot_UnitOffline[hbGUID] or 0);
     if not HealBot_UnitData[hbGUID] or not UnitExists(HealBot_UnitData[hbGUID]["UNIT"]) then 
         if HealBot_UnitOffline[hbGUID] then HealBot_UnitOffline[hbGUID]=nil end
         return 
@@ -2054,8 +2009,11 @@ function HealBot_Action_UnitIsOffline(hbGUID,preset) -- added by Diacono of Ursi
         else
             HealBot_UnitOffline[hbGUID] = nil;
         end
-        return HealBot_UnitOffline[hbGUID]
     end
+    if y~=(HealBot_UnitOffline[hbGUID] or 0) then
+        HealBot_Action_ResetUnitStatus(HealBot_UnitData[hbGUID]["UNIT"])
+    end
+    return HealBot_UnitOffline[hbGUID]
 end
 
 function HealBot_Action_retUnitOffline(hbGUID)
@@ -2065,6 +2023,7 @@ end
 function HealBot_Action_RefreshButton(button)
     if not button or button.guid=="TestBar" then return end
 --  if type(button)~="table" then DEFAULT_CHAT_FRAME:AddMessage("***** "..type(button)) end
+    button.rCheck=GetTime()+0.5
     HealBot_Action_EnableButton(button)
     if UnitExists("target") and HealBot_Unit_Button["target"] and button.unit~="target" and HealBot_UnitGUID("target")==button.guid then
         HealBot_Action_EnableButton(HealBot_Unit_Button["target"], "target")
@@ -2660,125 +2619,27 @@ end
 
 function HealBot_Action_RefreshButtons()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_CheckRange(xButton)
+        if xButton.rCheck<GetTime() then
+            HealBot_Action_CheckRange(xButton)
+        end
     end
 end
 
 function HealBot_Action_CheckRange(button)
     local unit=button.unit
     if (HealBot_UnitUpdate[unit] or (HealBot_UnitStatus[unit] or 0)>0) and UnitExists(unit) then
-        if HealBot_UnitStatus[unit]>7 then 
-            if unit~="player" and (UnitHealth(unit) or 0)>1 then 
-                HealBot_Reset_UnitHealth(unit) 
-            else
-                local inRes=false
-                if UnitHasIncomingResurrection(unit) then
-                    inRes=true
-                elseif HealBot_UnitHasRes[unit] then
-                    if HealBot_UnitHasRes[unit]<GetTime() then 
-                        HealBot_UnitHasRes[unit]=nil 
-                    else
-                        inRes=true
-                    end
-                end
-                if ( inRes and HealBot_UnitStatus[unit]<9 ) or 
-                       ( not inRes and HealBot_UnitStatus[unit]>8 ) or
-                       ( not UnitIsDeadOrGhost(unit) ) then 
-                    HealBot_Action_ResetUnitStatus(unit)
-                elseif inRes and HealBot_UnitDirection[unit] then
-                    HealBot_Action_HideDirectionArrow(button, unit)
-                elseif HealBot_UnitDirection[unit] then
-                    HealBot_Action_ShowDirectionArrow(button, unit)
-                end
-            end
-        elseif HealBot_UnitUpdate[unit] then
+        if HealBot_UnitUpdate[unit] then
             HealBot_UnitUpdate[unit]=false
             HealBot_Action_RefreshButton(button)
         else
             local uRange=HealBot_UnitInRange(HealBot_UnitRangeSpell[unit] or HealBot_RangeSpells["HEAL"], unit)
             if uRange~=HealBot_UnitRange[unit] then
-                local uHealIn, uAbsorbs = HealBot_IncHeals_retHealsIn(unit, button.frame)
-                local ebubar,ebubar2,ebubar6,ebuicon15=nil,nil,nil,nil
-                ebubar = HealBot_Action_HealthBar(button)
-                ebubar2 = HealBot_Action_HealthBar2(button)
-                ebubar6 = HealBot_Action_HealthBar6(button)
-                ebubar.txt=_G[ebubar:GetName().."_text"];
-                ebuicon15 = _G[ebubar:GetName().."Icon15"];
-                HealBot_UnitRange[unit]=uRange
-                if uHealIn==0 then
-                    ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],0);
+                HealBot_Action_RefreshButton(button)
+            else
+                button.rCheck=GetTime()+0.72
+                if HealBot_UnitDirection[unit] then
+                    HealBot_Action_ShowDirectionArrow(button, unit)
                 end
-                if uAbsorbs==0 then
-                    ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],0);
-                end
-                if uRange==1 and not HealBot_PlayerDead then
-                    if HealBot_UnitDirection[unit] then
-                        HealBot_Action_RefreshButton(button)
-                    else
-                        ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"])
-                        if uHealIn>0 then 
-                            ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["hr"][unit],HealBot_UnitBarsRange["hg"][unit],HealBot_UnitBarsRange["hb"][unit],Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IA"]); 
-                        end
-                        if uAbsorbs>0 then 
-                            ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["sr"][unit],HealBot_UnitBarsRange["sg"][unit],HealBot_UnitBarsRange["sb"][unit],Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]); 
-                        end
-                        ebubar.txt:SetTextColor(HealBot_UnitTextRange["ir"][unit],HealBot_UnitTextRange["ig"][unit],HealBot_UnitTextRange["ib"][unit],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EA"]);
-                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and not HealBot_retdebuffTargetIcon(unit) then
-                            ebuicon15:SetAlpha(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
-                        end
-                        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]>0 then 
-                            HealBot_UnitBarsRange["3a"][unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
-                            HealBot_Action_SetBar3Value(button);
-                        end
-                        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"] then 
-                            HealBot_Action_ShowPanel(button.frame) 
-                        end
-                    end
-                elseif uRange==0 then
-                    if not HealBot_UnitDirection[unit] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] then
-                        HealBot_Action_RefreshButton(button)
-                    else
-                        ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"])
-                        if uHealIn>0 then 
-                            ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["hr"][unit],HealBot_UnitBarsRange["hg"][unit],HealBot_UnitBarsRange["hb"][unit],HealBot_UnitBarsRange["a"][unit]); 
-                        end
-                        if uAbsorbs>0 then 
-                            ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["sr"][unit],HealBot_UnitBarsRange["sg"][unit],HealBot_UnitBarsRange["sb"][unit],HealBot_UnitBarsRange["a"][unit]); 
-                        end
-                        ebubar.txt:SetTextColor(HealBot_UnitTextRange["ir"][unit],HealBot_UnitTextRange["ig"][unit],HealBot_UnitTextRange["ib"][unit],HealBot_UnitTextRange["oa"][unit]);
-                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and
-                           Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"]==false and not HealBot_retdebuffTargetIcon(unit) then
-                            ebuicon15:SetAlpha(HealBot_UnitBarsRange["a"][unit]);
-                        end
-                        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]>0 then 
-                            HealBot_UnitBarsRange["3a"][unit]=HealBot_UnitBarsRange["a"][unit]
-                            HealBot_Action_SetBar3Value(button);
-                        end
-                    end
-                else
-                    if not HealBot_UnitDirection[unit] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] then
-                        HealBot_Action_RefreshButton(button)
-                    else
-                        ebubar:SetStatusBarColor(HealBot_UnitBarsRange["r"][unit],HealBot_UnitBarsRange["g"][unit],HealBot_UnitBarsRange["b"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
-                        if uHealIn>0 then 
-                            ebubar2:SetStatusBarColor(HealBot_UnitBarsRange["hr"][unit],HealBot_UnitBarsRange["hg"][unit],HealBot_UnitBarsRange["hb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
-                        end
-                        if uAbsorbs>0 then 
-                            ebubar6:SetStatusBarColor(HealBot_UnitBarsRange["sr"][unit],HealBot_UnitBarsRange["sg"][unit],HealBot_UnitBarsRange["sb"][unit],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]); 
-                        end
-                        ebubar.txt:SetTextColor(HealBot_UnitTextRange["or"][unit],HealBot_UnitTextRange["og"][unit],HealBot_UnitTextRange["ob"][unit],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]);
-                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 and 
-                           Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"]==false and not HealBot_retdebuffTargetIcon(unit) then
-                            ebuicon15:SetAlpha(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
-                        end
-                        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]>0 then 
-                            HealBot_UnitBarsRange["3a"][unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
-                            HealBot_Action_SetBar3Value(button);
-                        end
-                    end
-                end
-            elseif HealBot_UnitDirection[unit] then
-                HealBot_Action_ShowDirectionArrow(button, unit)
             end
         end
     elseif not UnitExists(unit) and HealBot_UnitStatus[unit]~=3 then
@@ -2885,6 +2746,12 @@ function HealBot_Action_clearResetBarSkinDone()
     end
 end
 
+function HealBot_Action_ResetrCalls()
+    for xUnit,_ in pairs(HealBot_Unit_Button) do
+        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+    end
+end 
+
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
     local shb=nil
     if hbGUID then
@@ -2948,7 +2815,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
                 shb.debuff.spellId=false
                 shb.bar4state=0
             end
-            HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",}
+            HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
             shb:SetAttribute("unit", unit);
             --if alsoEnemy then
                 HealBot_Action_SetAllButtonAttribs(shb,"Enemy")
@@ -3567,6 +3434,7 @@ function HealBot_Action_CreateButton(hbCurFrame)
         end
         ghb.guid="nil"
         ghb.unit="nil"
+        ghb.rCheck=GetTime()
         local bar = HealBot_Action_HealthBar(ghb);
         local bar2 = HealBot_Action_HealthBar2(ghb);
         local bar3 = HealBot_Action_HealthBar3(ghb);

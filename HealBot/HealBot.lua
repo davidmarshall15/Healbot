@@ -29,6 +29,7 @@ local HealBot_HealsAbsorb={}
 local HealBot_UnitSpecial={}
 local HealBot_EnemyUnits={}
 local HealBot_AggroUnits={}
+local HealBot_AggroUnitsPct={}
 local _=nil
 local HealBot_Ignore_Class_Debuffs = {};
 local HealBot_Ignore_Movement_Debuffs = {};
@@ -97,6 +98,8 @@ HealBot_luVars["EnemyBarsOn"]=true
 HealBot_luVars["EnemyBarsCastOn"]=0
 HealBot_luVars["UseCrashProtection"]=GetTime()+2
 HealBot_luVars["MaskAuraDCheck"]=GetTime()
+HealBot_luVars["ReloadUI"]=0
+HealBot_luVars["MessageReloadUI"]=0
 
 function HealBot_InitVars()
     CooldownBuffs={[HEALBOT_FEAR_WARD]=true, 
@@ -173,6 +176,15 @@ end
 
 function HealBot_retLSM()
     return LSM
+end
+
+function HealBot_MessageReloadUI(limit)
+    if HealBot_Data["UILOCK"]=="NO" then
+        HealBot_luVars["MessageReloadUI"]=0
+        HealBot_luVars["ReloadUI"]=GetTime()+limit
+    else
+        HealBot_luVars["MessageReloadUI"]=limit
+    end
 end
 
 function HealBot_UpdTargetUnitID(unit)
@@ -740,7 +752,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="cw") then  -- Clear Warnings
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="zzz") then
-        HealBot_AddDebug("HealBot_Timers['HB2Th']="..HealBot_Timers["HB2Th"])
+        HealBot_AddDebug("HealBot_Config.LastAutoSkinChangeType="..HealBot_Config.LastAutoSkinChangeType)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1422,6 +1434,9 @@ function HealBot_Options_Update()
             elseif HealBot_trackHiddenFrames["PLAYER"] then 
                 HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." ("..HEALBOT_OPTIONS_HIDEPLAYERTARGET..") - "..HEALBOT_WORD_OFF)
             end
+            if HealBot_luVars["ReloadUI"]>GetTime() then
+                HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." - "..HEALBOT_WORD_ON)
+            end
         elseif HealBot_trackHiddenFrames["PARTY"] then
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." - "..HEALBOT_WORD_OFF)
         end
@@ -1430,6 +1445,9 @@ function HealBot_Options_Update()
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
             HealBot_trackHiddenFrames["MINIBOSS"]=true
             HealBot_Options_DisableMiniBossFrame()
+            if HealBot_luVars["ReloadUI"]>GetTime() then
+                HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES.." - "..HEALBOT_WORD_ON)
+            end
         elseif HealBot_trackHiddenFrames["MINIBOSS"] then
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES.." - "..HEALBOT_WORD_OFF)
         end
@@ -1438,6 +1456,9 @@ function HealBot_Options_Update()
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] then
             HealBot_trackHiddenFrames["RAID"]=true
             HealBot_Options_DisableRaidFrame()
+            if HealBot_luVars["ReloadUI"]>GetTime() then
+                HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDERAIDFRAMES.." - "..HEALBOT_WORD_ON)
+            end
         elseif HealBot_trackHiddenFrames["RAID"] then
             if HealBot_Globals.RaidHideMethod==0 then
                 HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDERAIDFRAMES.." - "..HEALBOT_WORD_OFF)
@@ -2291,38 +2312,38 @@ end
 
 function HealBot_ClearUnitAggro(unit)
     if UnitExists(unit) and HealBot_Unit_Button[unit] then
-        local z, y=HealBot_CalcThreat(unit)
-        local x=y+z
-        if x==0 then
-            if (HealBot_Action_retAggro(unit) or "x")=="a" then
-                HealBot_Action_UpdateAggro(unit,false,nil,0)
-            end
-        else
-            HealBot_Action_UpdateAggro(unit,true,y,z)
+        if (HealBot_Action_retAggro(unit) or "x")=="a" then
+            HealBot_Action_UpdateAggro(unit,false,nil,0)
         end
-    elseif unit then 
+    else
         HealBot_Action_UpdateAggro(unit,false,nil,0)
     end
-    if unit then HealBot_Action_SetThreatPct(unit, -5) end
+    HealBot_Action_SetThreatPct(unit, -5)
 end
 
 function HealBot_SetAggroUnits(unit, threatPct) 
     if (threatPct or 0) > 0 then
-        HealBot_AggroUnits[unit]=threatPct
+        HealBot_AggroUnits[unit]=GetTime()+0.5
+        HealBot_AggroUnitsPct[unit]=threatPct
     else
         HealBot_AggroUnits[unit]=nil
+        HealBot_AggroUnitsPct[unit]=0
     end
 end
 
 function HealBot_CheckAggroUnits()
-    for xUnit,tPct in pairs(HealBot_AggroUnits) do
+    for xUnit,cTime in pairs(HealBot_AggroUnits) do
         if UnitExists(xUnit) then
-            local z, y=HealBot_CalcThreat(xUnit)
-            local x=y+z
-            if x==0 then
-                HealBot_qClearUnitAggro(xUnit)
-            elseif z~=tPct then
-                HealBot_Action_UpdateAggro(xUnit,true,y,z)
+            if cTime<GetTime() then
+                local z, y=HealBot_CalcThreat(xUnit)
+                local x=y+z
+                if x==0 then
+                    HealBot_qClearUnitAggro(xUnit)
+                elseif z~=HealBot_AggroUnitsPct[xUnit] then
+                    HealBot_Action_UpdateAggro(xUnit,true,y,z)
+                else
+                    HealBot_AggroUnits[xUnit]=GetTime()+0.5
+                end
             end
         else
             HealBot_qClearUnitAggro(xUnit)
@@ -2331,22 +2352,9 @@ function HealBot_CheckAggroUnits()
 end
 
 function HealBot_SetAggro(unit)
-    local xUnit=nil
-    if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") and UnitExists(unit.."targettarget") and not UnitIsUnit(unit.."targettarget",unit) and UnitIsEnemy(unit.."target", unit.."targettarget") then
-        local uName=HealBot_GetUnitName(unit.."targettarget")
-        local aGUID=HealBot_RetUnitNameGUIDs(uName) or HealBot_UnitGUID(unit.."targettarget")
-        if HealBot_UnitData[aGUID] and UnitIsUnit(HealBot_UnitData[aGUID]["UNIT"],unit.."targettarget") then 
-            xUnit=HealBot_UnitData[aGUID]["UNIT"] 
-        end
-    end
     local z, y=HealBot_CalcThreat(unit)
     local x=y+z
     if x>0 then HealBot_Action_UpdateAggro(unit,true,y,z) end
-    if xUnit then
-        z, y=HealBot_CalcThreat(xUnit)
-        x=y+z
-        if x>0 then HealBot_Action_UpdateAggro(xUnit,true,y,z) end
-    end
 end
 
 local HealBotAddonSummary={}
@@ -2983,13 +2991,12 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         local checkthis=true;        
         if HealBot_luVars["MaskAuraDCheck"]>GetTime() then
             checkthis=false;
-            DebuffNameIn="x"
             HealBot_DelayAuraDCheck[unit]=true
         elseif HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Movement_Debuffs[dName] then
             checkthis=false;
-        elseif HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 
+        elseif DebuffNameIn~=dName and HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 
           and (debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs or expirationTime<GetTime()+HealBot_Config_Cures.IgnoreFastDurDebuffsSecs) then
             checkthis=false;
         elseif HealBot_Config_Cures.IgnoreNonHarmfulDebuffs and HealBot_Ignore_NonHarmful_Debuffs[dName] then
@@ -3095,9 +3102,9 @@ function HealBot_CheckUnitDebuffs(button)
                     local nCheck=(GetTime()+spellCD)-0.1
                     HealBot_luVars["MaskAuraDCheck"]=nCheck
                     HealBot_luVars["MaskAuraReCheck"]=true
-                    for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                        if xButton.unit~=xUnit and xButton.debuff.type and xButton.debuff.type~=HEALBOT_CUSTOM_en then
-                            HealBot_DelayAuraDCheck[xUnit]=true
+                    for dUnit,dButton in pairs(HealBot_Unit_Button) do
+                        if dButton.unit~=dUnit and dButton.debuff.type and dButton.debuff.type~=HEALBOT_CUSTOM_en then
+                            HealBot_DelayAuraDCheck[dUnit]=true
                         end
                     end
                     HealBot_luVars["DelayAuraDCheck"]=true
@@ -3561,6 +3568,9 @@ function HealBot_Not_Fighting()
         HealBot_CheckLowMana()
     end
     HealBot_luVars["CheckAllHealth"]=true
+    if HealBot_luVars["MessageReloadUI"]>0 then
+        HealBot_MessageReloadUI(HealBot_luVars["MessageReloadUI"])
+    end
 end
 
 
@@ -3925,115 +3935,95 @@ function HealBot_PartyUpdate_CheckSkin()
     HealBot_luVars["IsSolo"]=nil
     HealBot_luVars["CheckSkin"]=nil
     if z == "arena" then
-        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_ARENA] then
-            for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
-                        LastAutoSkinChangeType="Arena"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                    break
-                end
+        for x in pairs (Healbot_Config_Skins.Skins) do
+            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
+                    LastAutoSkinChangeType="Arena"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                break
             end
         end
     elseif z=="pvp" then
         local y=GetRealZoneText()
         if GetNumGroupMembers()>29 or y==HEALBOT_ZONE_AV or y==HEALBOT_ZONE_IC then
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG40] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG40] then
-                        LastAutoSkinChangeType="BG40"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG40] then
+                    LastAutoSkinChangeType="BG40"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                    break
                 end
             end
         elseif GetNumGroupMembers()>11 or y==HEALBOT_ZONE_SA or y==HEALBOT_ZONE_ES or y==HEALBOT_ZONE_AB then
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG15] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG15] then
-                        LastAutoSkinChangeType="BG15"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG15] then
+                    LastAutoSkinChangeType="BG15"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                    break
                 end
             end
         else
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG10] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG10] then
-                        LastAutoSkinChangeType="BG10"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_BG10] then
+                    LastAutoSkinChangeType="BG10"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                    break
                 end
             end
         end
     elseif IsInRaid() then
         if GetNumGroupMembers()>29 then
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID40] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID40] then
-                        LastAutoSkinChangeType="Raid40"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID40] then
+                    LastAutoSkinChangeType="Raid40"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                    break
                 end
             end
         elseif GetNumGroupMembers()>15 then
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID25] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25] then
-                        LastAutoSkinChangeType="Raid25"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25] then
+                    LastAutoSkinChangeType="Raid25"
+                    newSkinName=Healbot_Config_Skins.Skins[x]
+                    break
                 end
             end
         else
-            if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID10] then
-                for x in pairs (Healbot_Config_Skins.Skins) do
-                    if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID10] then
-                        LastAutoSkinChangeType="Raid10"
-                        newSkinName=Healbot_Config_Skins.Skins[x]
-                        break
-                    end
-                end
-            end
-        end
-    elseif GetNumGroupMembers()>0 then
-        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PARTY] then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PARTY] then
-                    LastAutoSkinChangeType="Party"
+                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID10] then
+                    LastAutoSkinChangeType="Raid10"
                     newSkinName=Healbot_Config_Skins.Skins[x]
                     break
                 end
+            end
+        end
+    elseif IsInGroup() and GetNumGroupMembers()>0 then
+        for x in pairs (Healbot_Config_Skins.Skins) do
+            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PARTY] then
+                LastAutoSkinChangeType="Party"
+                newSkinName=Healbot_Config_Skins.Skins[x]
+                break
             end
         end
     elseif C_PetBattles.IsInBattle() and HealBot_luVars["lastPetBattleEvent"]~="PET_BATTLE_OVER" then
-        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PETBATTLE] then
-            for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PETBATTLE] then
-                    LastAutoSkinChangeType="Pet"
-                    newSkinName=Healbot_Config_Skins.Skins[x]
-                    break
-                end
+        for x in pairs (Healbot_Config_Skins.Skins) do
+            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_PETBATTLE] then
+                LastAutoSkinChangeType="Pet"
+                newSkinName=Healbot_Config_Skins.Skins[x]
+                break
             end
         end
     else
-        if not HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_SOLO] then
-            for x in pairs (Healbot_Config_Skins.Skins) do
-                if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_SOLO] then
-                    LastAutoSkinChangeType="Solo"
-                    newSkinName=Healbot_Config_Skins.Skins[x]
-                    break
-                end
+        for x in pairs (Healbot_Config_Skins.Skins) do
+            if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_SOLO] then
+                LastAutoSkinChangeType="Solo"
+                newSkinName=Healbot_Config_Skins.Skins[x]
+                break
             end
         end
         HealBot_luVars["IsSolo"]=true
         HealBot_Options_DisableCheck()
     end
     if LastAutoSkinChangeType~=HealBot_Config.LastAutoSkinChangeType or HealBot_Config.LastAutoSkinChangeTime<GetTime() then
-        if newSkinName~="_-none-_" then
+        if newSkinName~="_-none-_" and newSkinName~=Healbot_Config_Skins.Current_Skin then
             HealBot_Options_Set_Current_Skin(newSkinName)
         end
         HealBot_Config.LastAutoSkinChangeType=LastAutoSkinChangeType

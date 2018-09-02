@@ -2433,6 +2433,7 @@ function HealBot_Options_PartyFrames_OnClick(self)
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] = false
     end
+    HealBot_MessageReloadUI(15)
     HealBot_setOptions_Timer(180)
 end
 
@@ -2442,6 +2443,7 @@ function HealBot_Options_MiniBossFrames_OnClick(self)
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] = false
     end
+    HealBot_MessageReloadUI(15)
     HealBot_setOptions_Timer(185)
 end
 
@@ -2451,6 +2453,7 @@ function HealBot_Options_RaidFrames_OnClick(self)
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] = false
     end
+    HealBot_MessageReloadUI(15)
     HealBot_setOptions_Timer(188)
 end
 
@@ -2584,6 +2587,7 @@ function HealBot_Options_PlayerTargetFrames_OnClick(self)
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] = false
     end
+    HealBot_MessageReloadUI(15)
     HealBot_setOptions_Timer(180)
 end
 
@@ -5909,7 +5913,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
             HealBot_Skins = Healbot_Config_Skins.Skins
             HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"]=nil
         else
-            HealBot_Config.LastAutoSkinChangeTime=GetTime()+60
+            HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
         end
         if newSkin then
             local hbFoundSkin=nil
@@ -5944,7 +5948,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
             HealBot_setOptions_Timer(180)
             HealBot_setOptions_Timer(185)
             HealBot_setOptions_Timer(188)
-           -- HealBot_SetResetFlag("SOFT")
+            --HealBot_SetResetFlag("SOFT")
         elseif HealBot_Config.Skin_ID>0 and HealBot_Config.Current_Skin then
             if HealBot_Config.Current_Skin then
 	            Healbot_Config_Skins.Current_Skin = HealBot_Config.Current_Skin;
@@ -5970,6 +5974,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
             DoneInitTab[319]=nil
             HealBot_Options_InitSub(319)
         end
+        HealBot_Action_ResetrCalls()
         if HealBot_Data["REFRESH"]<7 then HealBot_Data["REFRESH"]=7 end
     end
 end
