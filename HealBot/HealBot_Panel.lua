@@ -774,8 +774,7 @@ function HealBot_Panel_TestBarShow(index,button,tRole)
                 HealBot_colIndex["hctb"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EB"]
             end
         end
-        HealBot_initTestBar(bar)
-        bar:SetValue(0)
+        bar:SetValue(100)
         HealBot_setTestCols[index]=true
     end
     bar:SetStatusBarColor(HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index],Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);

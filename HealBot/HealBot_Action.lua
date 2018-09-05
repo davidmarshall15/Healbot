@@ -2,16 +2,11 @@ local HealBot_UnitStatus={};
 local HealBot_PlayerDead=false;
 local HealBot_CheckGroup=0;
 local HealBot_Enabled={};
-local HealBot_PetMaxH={};
-local HealBot_PetMaxHcnt1={};
-local HealBot_PetMaxHcnt2={};
 local HealBot_AttribStatus={};
 local HealBot_UnitRange={}
 local HealBot_UnitUpdate={}
 local HealBot_UnitRangeSpell={}
 local HealBot_UnitBarsRange3a={}
-local HealBot_curUnitHealth={}
-local HealBot_UnitBarUpdate={}
 local HealBot_UnitOffline={}
 local HealBot_ResetAttribs=nil
 local ceil=ceil;
@@ -155,7 +150,7 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
         barName:SetStatusBarColor(1,0,0,0)
         xButton.bar4state=0
     end
-    if HealBot_UnitThreatPct[unit]~=hbprevThreatPct then HealBot_RecalcHeals(unit) end
+    if HealBot_UnitThreatPct[unit]~=hbprevThreatPct then HealBot_Action_ResetUnitStatus(unit) end
 end
 
 function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
@@ -587,13 +582,10 @@ function HealBot_HealthColor(unit,hlth,maxhlth,tooltipcol,UnitDead,Member_Buff,M
             hipct=1;
         end
         if maxhlth == 0 then
-            hcpct = 100;
+            hcpct = 100
+            hrpct = 100
         else
             hcpct=hlth/maxhlth
-        end
-        if maxhlth == 0 then
-            hrpct = 100;
-        else
             hrpct=floor((hlth/maxhlth)*100)
         end
         if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 1 then
@@ -1127,74 +1119,33 @@ function HealBot_Action_GetManaBarCol(unit)
     return 1,1,0 -- Energy
 end
 
-function HealBot_CorrectPetHealth(unit,hlth,maxhlth,hbGUID)
+function HealBot_CorrectPetHealth(unit,hlth,maxhlth)
     if maxhlth==0 then maxhlth=hlth end
-    if not hbGUID then return maxhlth end
-    if not HealBot_PetMaxH[hbGUID] then
-        local hbPetLevel=UnitLevel(unit)
-        if hbPetLevel>80 then
-            if hlth<8100 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*100
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        elseif hbPetLevel>70 then
-            if hlth<5325 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*75
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        elseif hbPetLevel>60 then
-            if hlth<3050 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*50
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        elseif hbPetLevel>40 then
-            if hlth<1640 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*40
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        elseif hbPetLevel>20 then
-            if hlth<735 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*35
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        elseif hbPetLevel>5 then
-            if hlth<180 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*30
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        else
-            if hlth<25 then
-                HealBot_PetMaxH[hbGUID]=hbPetLevel*25
-            else
-                HealBot_PetMaxH[hbGUID]=hlth;
-            end
-        end
-    elseif hlth>HealBot_PetMaxH[hbGUID] then
-        HealBot_PetMaxH[hbGUID]=hlth;
-    elseif HealBot_Data["UILOCK"]=="NO" then
-        if not HealBot_PetMaxHcnt1[hbGUID] then
-            HealBot_PetMaxHcnt1[hbGUID]=1
-            HealBot_PetMaxHcnt2[hbGUID]=HealBot_PetMaxH[hbGUID];
-        else
-            if HealBot_PetMaxHcnt2[hbGUID]~=hlth then
-                HealBot_PetMaxHcnt2[hbGUID]=hlth;
-                HealBot_PetMaxHcnt1[hbGUID]=1;
-            else
-                HealBot_PetMaxHcnt1[hbGUID]=HealBot_PetMaxHcnt1[hbGUID]+1;
-                if HealBot_PetMaxHcnt1[hbGUID]>9 then
-                    HealBot_PetMaxH[hbGUID]=HealBot_PetMaxHcnt2[hbGUID];
-                    HealBot_PetMaxHcnt1[hbGUID]=1;
-                end
-            end
-        end
+    local hbPetLevel=UnitLevel(unit)
+    local targetHlth=25
+    if hbPetLevel>110 then
+        targetHlth=70000
+    elseif hbPetLevel>100 then
+        targetHlth=20000
+    elseif hbPetLevel>90 then
+        targetHlth=14000
+    elseif hbPetLevel>80 then
+        targetHlth=10000
+    elseif hbPetLevel>70 then
+        targetHlth=7000
+    elseif hbPetLevel>60 then
+        targetHlth=5000
+    elseif hbPetLevel>40 then
+        targetHlth=3000
+    elseif hbPetLevel>20 then
+        targetHlth=1000
+    elseif hbPetLevel>5 then
+        targetHlth=500
     end
-    return HealBot_PetMaxH[hbGUID]
+    if hlth>targetHlth then
+        targetHlth=hlth
+    end
+    return targetHlth
 end
 
 local hbFontVal={ ["Accidental Presidency"]=3,
@@ -1275,7 +1226,7 @@ function HealBot_Action_EnableButton(button, isTarget)
         end
         ebuHealBot_UnitBuff=button.buff
         
-        if uHlth>uMaxHlth then uMaxHlth=HealBot_CorrectPetHealth(ebUnit,uHlth,uMaxHlth,hbGUID) end
+        if uHlth>uMaxHlth then uMaxHlth=HealBot_CorrectPetHealth(ebUnit,uHlth,uMaxHlth) end
     
         if ebuUnitDead then
             if UnitIsFeignDeath(ebUnit) then
@@ -1335,9 +1286,6 @@ function HealBot_Action_EnableButton(button, isTarget)
   
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"]==false then
             ebubar:SetValue(ebpct)
-        elseif HealBot_curUnitHealth[ebubar]~=ebpct then
-            HealBot_UnitBarUpdate[ebubar]=HealBot_curUnitHealth[ebubar]
-            HealBot_curUnitHealth[ebubar]=ebpct
         end
 
         --local hBarWidth=ceil(HealBot_bWidth*(ebpct/100))
@@ -2023,7 +1971,7 @@ end
 function HealBot_Action_RefreshButton(button)
     if not button or button.guid=="TestBar" then return end
 --  if type(button)~="table" then DEFAULT_CHAT_FRAME:AddMessage("***** "..type(button)) end
-    button.rCheck=GetTime()+0.5
+    button.rCheck=GetTime()+0.28
     HealBot_Action_EnableButton(button)
     if UnitExists("target") and HealBot_Unit_Button["target"] and button.unit~="target" and HealBot_UnitGUID("target")==button.guid then
         HealBot_Action_EnableButton(HealBot_Unit_Button["target"], "target")
@@ -2251,16 +2199,12 @@ function HealBot_Action_ResetSkin(barType,button,numcols)
             bar:SetStatusBarColor(0,1,0,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["DISA"]);
             bar5:SetStatusBarColor(0,1,0,0);
             bar6:SetStatusBarColor(0,1,0,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][b.frame]["AA"]);
-            if not HealBot_curUnitHealth[bar] then
-                local uHlth,uMaxHlth=HealBot_UnitHealth(b.unit)
-                local hcpct=100
-                if uHlth>uMaxHlth then uMaxHlth=HealBot_CorrectPetHealth(b.unit,uHlth,uMaxHlth,b.guid) end
-                if uHlth<uMaxHlth then
-                    hcpct=floor(uHlth/uMaxHlth)*100
-                end
-                HealBot_curUnitHealth[bar]=hcpct
+            local uHlth,uMaxHlth=HealBot_UnitHealth(b.unit)
+            local hcpct=100
+            if uHlth<uMaxHlth and uMaxHlth>0 then
+                hcpct=floor(uHlth/uMaxHlth)*100
             end
-            bar:SetValue(HealBot_curUnitHealth[bar])
+            bar:SetValue(hcpct)
             HealBot_Panel_SetBarArrays(b.id)
             bar2:SetValue(0);
             bar5:SetValue(100);
@@ -2636,7 +2580,7 @@ function HealBot_Action_CheckRange(button)
             if uRange~=HealBot_UnitRange[unit] then
                 HealBot_Action_RefreshButton(button)
             else
-                button.rCheck=GetTime()+0.72
+                button.rCheck=GetTime()+0.5
                 if HealBot_UnitDirection[unit] then
                     HealBot_Action_ShowDirectionArrow(button, unit)
                 end
@@ -3845,27 +3789,29 @@ function HealBot_Action_SetAggroCols()
     HealBot_AggroBarColb[3]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["B"]
 end
 
-function HealBot_Action_setTestBar(b)
-    HealBot_UnitBarUpdate[b]=0
-    HealBot_curUnitHealth[b]=100
-end
-
 function HealBot_Action_UpdateFluidBars()
-    for ebubar,value in pairs(HealBot_UnitBarUpdate) do 
-        if value>HealBot_curUnitHealth[ebubar] then
-            if value-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]<=HealBot_curUnitHealth[ebubar] then
-                HealBot_UnitBarUpdate[ebubar]=HealBot_curUnitHealth[ebubar]
-            else
-                HealBot_UnitBarUpdate[ebubar]=value-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+    for xUnit,xButton in pairs(HealBot_Unit_Button) do
+        bar = HealBot_Action_HealthBar(xButton)
+        if bar then 
+            local uHlth, uMaxHlth = HealBot_UnitHealth(xUnit)
+            local hrpct=100
+            if uHlth<uMaxHlth and uMaxHlth>0 then
+                hrpct=floor((uHlth/uMaxHlth)*100)
             end
-        elseif value+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]>=HealBot_curUnitHealth[ebubar] then
-            HealBot_UnitBarUpdate[ebubar]=HealBot_curUnitHealth[ebubar]
-        else
-            HealBot_UnitBarUpdate[ebubar]=value+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
-        end
-        ebubar:SetValue(HealBot_UnitBarUpdate[ebubar])
-        if HealBot_UnitBarUpdate[ebubar]==HealBot_curUnitHealth[ebubar] then
-            HealBot_UnitBarUpdate[ebubar]=nil
+            local barValue=bar:GetValue()
+            if barValue>hrpct then
+                local setValue=barValue-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+                if setValue<hrpct then
+                    setValue=hrpct
+                end
+                bar:SetValue(setValue)
+            elseif barValue<hrpct then
+                local setValue=barValue+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+                if setValue>hrpct then
+                    setValue=hrpct
+                end
+                bar:SetValue(setValue)
+            end
         end
     end
 end
@@ -4189,9 +4135,6 @@ end
 
 function HealBot_Action_ClearLocalArr(hbGUID)
     HealBot_UnitOffline[hbGUID]=nil
-    HealBot_PetMaxH[hbGUID]=nil
-    HealBot_PetMaxHcnt1[hbGUID]=nil
-    HealBot_PetMaxHcnt2[hbGUID]=nil
 end
 
 local HealBot_GMount = {}
@@ -4248,7 +4191,7 @@ function HealBot_MountsPets_InitMount()
     end
 
     local mapC = 3 --GetCurrentMapContinent();
-    if (mapC==3 or mapC==5) or (mapC == 4 and IsSpellKnown(54197)) or (mapC<3 and IsSpellKnown(90267)) 
+    if UnitLevel("player")>59 and (mapC==3 or mapC==5) or (mapC == 4 and IsSpellKnown(54197)) or (mapC<3 and IsSpellKnown(90267)) 
         or (mapC == 6 and IsSpellKnown(115913)) then --or (mapC == 7 and IsSpellKnown(nnnnnn)) then
         HealBot_mountData["IncFlying"]=true
     end

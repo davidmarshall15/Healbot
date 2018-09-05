@@ -26,7 +26,6 @@ local HealBot_ReCheckBuffsTime=nil
 local HealBot_ReCheckBuffsTimed={}
 local HealBot_cleanGUIDs={}
 local HealBot_HealsAbsorb={}
-local HealBot_UnitSpecial={}
 local HealBot_EnemyUnits={}
 local HealBot_AggroUnits={}
 local HealBot_AggroUnitsPct={}
@@ -990,11 +989,7 @@ function HealBot_setOptions_Timer(value)
 end
 
 local HealBot_ErrorNum=0
-local HealBot_testBarInit={}
 local hbRequestTime=0
-function HealBot_initTestBar(b)
-    table.insert(HealBot_testBarInit,b)
-end
 
 HealBot_luVars["caliSwitch"]=1
 local lTimer,eTimer=0,GetTime()
@@ -1016,7 +1011,7 @@ function HealBot_OnUpdate(self)
         end
         if HealBot_Timers["HBA1Inc"]>=HealBot_Timers["HBA1Th"] then
             HealBot_Timers["HBA1Inc"]=0
-            if HealBot_Panel_retTestBars() or Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+            if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
                 HealBot_Action_UpdateFluidBars()
             end
         end
@@ -1216,10 +1211,6 @@ function HealBot_Update_Slow()
         else
             HealBot_AddChat(HEALBOT_HELP2[HealBot_luVars["HelpCnt2"]])
         end
-    end
-    if HealBot_testBarInit[1] then
-        HealBot_Action_setTestBar(HealBot_testBarInit[1])
-        table.remove(HealBot_testBarInit,1)
     end
 end
 
@@ -2758,11 +2749,6 @@ function HealBot_OnEvent_UnitAura(self,unit)
         HealBot_DelayAuraBCheck[unit]=true
         HealBot_luVars["DelayAuraBCheck"]=true
     end
-end
-
-function HealBot_setUnitSpecial(unit, key, val)
-    if not HealBot_UnitSpecial[unit] then HealBot_UnitSpecial[unit]={} end
-    HealBot_UnitSpecial[unit][key]=val
 end
 
 function HealBot_SetUnitBuffTimer(hbGUID,buffName,endtime)
@@ -5634,6 +5620,12 @@ function HealBot_Update_Skins()
                 for gl=1,10 do
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][gl]["FADE"]==nil then Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][gl]["FADE"]=true end
                 end
+            end
+        end
+        if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<8 then
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                local y=floor(Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"])
+                Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]=y
             end
         end
         --if tonumber(tMajor)==8 and tonumber(tMinor)==0 and tonumber(tPatch)==1 and tonumber(tHealbot)<5 then

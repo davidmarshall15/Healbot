@@ -68,7 +68,7 @@ function HealBot_Action_RefreshTooltip()
     local mana,maxmana=HealBot_UnitMana(xUnit)
 
     if hlth>maxhlth then
-        maxhlth=HealBot_CorrectPetHealth(xUnit,hlth,maxhlth,xGUID)
+        maxhlth=HealBot_CorrectPetHealth(xUnit,hlth,maxhlth)
     end
   
     local UnitOffline=HealBot_Action_GetTimeOffline(xGUID); --added by Diacono
