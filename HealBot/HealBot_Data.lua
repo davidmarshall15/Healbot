@@ -223,11 +223,6 @@ HealBot_HealGroupsTrans = { [HEALBOT_OPTIONS_SELFHEALS_en] = HEALBOT_OPTIONS_SEL
                             [HEALBOT_OPTIONS_TARGETHEALS_en] = HEALBOT_OPTIONS_TARGETHEALS,
                             [HEALBOT_CUSTOM_CASTBY_ENEMY_en] = HEALBOT_CUSTOM_CASTBY_ENEMY,
                             }
-
-HealBot_MapScaleDefaults = {                   
-    zScale={},
-}
-
 HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
@@ -1386,7 +1381,6 @@ HealBot_Config_Cures = {};
 HealBot_Class_Spells = {};
 HealBot_Class_Buffs = {};
 HealBot_Class_Cures = {};
-HealBot_MapScale = {};
 HealBot_customTempUserName={}
 
 HealBot_Data={  ["TIPUNIT"] = "NONE",

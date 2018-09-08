@@ -420,10 +420,9 @@ local function HealBot_Action_DoRefreshTooltip()
         HealBot_Action_RefreshTargetTooltip(xButton)
         return
     end
-  
-    local hbhlth,hbmaxhlth=HealBot_UnitHealth(xUnit)
-    local hlth=UnitHealth(xUnit)
-    local maxhlth=UnitHealthMax(xUnit)
+
+    local hlth=xButton.health.current
+    local maxhlth=xButton.health.max
     local mana,maxmana=HealBot_UnitMana(xUnit)
 
     if hlth>maxhlth then
@@ -431,8 +430,8 @@ local function HealBot_Action_DoRefreshTooltip()
     end
   
     local UnitOffline=HealBot_Action_GetTimeOffline(xGUID); --added by Diacono
-    local uBuff=xButton.buff
-    local DebuffType=xButton.debuff.type;
+    local uBuff=xButton.aura.buff.name
+    local DebuffType=xButton.aura.debuff.type;
 
     local spellLeft = HealBot_Tooltip_SpellPattern("Left");
     local spellMiddle = HealBot_Tooltip_SpellPattern("Middle");
@@ -528,7 +527,7 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             linenum=linenum+1
             if hlth and maxhlth then
-                local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton.frame)
+                local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton)
                 r,g,b=HealBot_HealthColor(xUnit,hlth,maxhlth,true,false,uBuff,DebuffType,inHeal,inAbsorb,false,xButton);
                 local hPct=100
                 if maxhlth>0 then
@@ -593,24 +592,24 @@ local function HealBot_Action_DoRefreshTooltip()
             
             if DebuffType then
                 linenum=linenum+1
-                if HealBot_Globals.CDCBarColour[xButton.debuff.name] then
-                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.debuff.name,
-                                                (HealBot_Globals.CDCBarColour[xButton.debuff.name].R or 0.4)+0.2,
-                                                (HealBot_Globals.CDCBarColour[xButton.debuff.name].G or 0.05)+0.2,
-                                                (HealBot_Globals.CDCBarColour[xButton.debuff.name].B or 0.2)+0.2,
+                if HealBot_Globals.CDCBarColour[xButton.aura.debuff.name] then
+                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.aura.debuff.name,
+                                                (HealBot_Globals.CDCBarColour[xButton.aura.debuff.name].R or 0.4)+0.2,
+                                                (HealBot_Globals.CDCBarColour[xButton.aura.debuff.name].G or 0.05)+0.2,
+                                                (HealBot_Globals.CDCBarColour[xButton.aura.debuff.name].B or 0.2)+0.2,
                                                 1," ",0,0,0,0)
                 elseif DebuffType == HEALBOT_CUSTOM_en then
                     local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
-                    if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[xButton.debuff.name] then
-                        customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[xButton.debuff.name]
+                    if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[xButton.aura.debuff.name] then
+                        customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[xButton.aura.debuff.name]
                     end
-                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.debuff.name,
+                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.aura.debuff.name,
                                                 (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
                                                 (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
                                                 (HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2,
                                                 1," ",0,0,0,0)
                 else
-                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.debuff.name,
+                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..xButton.aura.debuff.name,
                                                 (HealBot_Config_Cures.CDCBarColour[DebuffType].R or 0.5)+0.2,
                                                 (HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2,
                                                 (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,

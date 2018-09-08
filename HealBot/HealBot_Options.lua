@@ -2702,7 +2702,7 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
             HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HealBot_Options_StorePrev["CDebuffcustomName"]] = false
         end
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.debuff and xButton.debuff.spellId then
+            if xButton.aura.debuff and xButton.aura.debuff.spellId then
                 HealBot_ClearDebuff(xButton,true)
                 HealBot_CheckAllDebuffs(xUnit)
             end
@@ -7676,7 +7676,7 @@ function HealBot_Options_ComboClass_Button(bNo)
 end
 
 local FirstDebuffLoad=true
-function HealBot_Options_Debuff_Reset()
+local function HealBot_Options_DoDebuff_Reset()
     HealBot_Options_setDebuffTypes()
     HealBot_SetAuraChecks()
     HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
@@ -7898,7 +7898,7 @@ end
 
 local spells={}
 local FirstBuffLoad=true
-function HealBot_Options_Buff_Reset()
+local function HealBot_Options_DoBuff_Reset()
     HealBot_Options_setDebuffTypes()
     HealBot_SetAuraChecks()
     BuffTextClass = HealBot_Config_Buffs.HealBotBuffText
@@ -8131,6 +8131,14 @@ function HealBot_Options_Buff_Reset()
     FirstBuffLoad=nil
 end
 
+function HealBot_Options_BuffDebuff_Reset(aType)
+    if aType=="debuff" then
+        HealBot_Options_DoDebuff_Reset()
+    else
+        HealBot_Options_DoBuff_Reset()
+    end
+end
+
 local BuffWatchSpell=" "
 function HealBot_Options_BUFFNAMEDTITLE_show()
     StaticPopupDialogs["HEALBOT_OPTIONS_BUFFNAMEDTITLE"] = {
@@ -8212,7 +8220,7 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
             for uGUID,_ in pairs(tGUID) do
                 if HealBot_UnitData[uGUID] and HealBot_UnitData[uGUID]["UNIT"] then
                     xButton=HealBot_Unit_Button[HealBot_UnitData[uGUID]["UNIT"]]
-                    if xButton and xButton.buff and xButton.buff==BuffWatchSpell then
+                    if xButton and xButton.aura.buff.name==BuffWatchSpell then
                         HealBot_ClearBuff(xButton)
                     end
                 end
@@ -8220,7 +8228,7 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
         elseif tGUID then
             if HealBot_UnitData[tGUID] and HealBot_UnitData[tGUID]["UNIT"] then
                 xButton=HealBot_Unit_Button[HealBot_UnitData[tGUID]["UNIT"]]
-                if xButton and xButton.buff and xButton.buff==BuffWatchSpell then
+                if xButton and xButton.aura.buff.name==BuffWatchSpell then
                     HealBot_ClearBuff(xButton)
                 end
             end
@@ -8307,7 +8315,7 @@ function HealBot_Colorpick_OnClick(CDCType)
     end
 end
 
-function HealBot_Returned_Colours(R, G, B, A)
+local function HealBot_Returned_Colours(R, G, B, A)
   --R, G, B = ColorPickerFrame:GetColorRGB(); -- added by Diacono
   --A = OpacitySliderFrame:GetValue();
     if A then
@@ -8858,14 +8866,11 @@ function HealBot_Options_SetDefaults()
             HealBot_Config_Cures[key] = val;
         end
     end);
-    HealBot_InitNewChar()
+    
     HealBot_Config.CurrentSpec=1
-    HealBot_Update_SpellCombos()
-    HealBot_Update_BuffsForSpec()
+    HealBot_runDefaults()
     HealBot_Options_Opened=false;
     HealBot_Action_Reset();
-    HealBot_ClearAllBuffs()
-    HealBot_ClearAllDebuffs()
     HealBot_Action_SetAllAttribs()
     HideUIPanel(HealBot_Options)
     DoneInitTab={}
