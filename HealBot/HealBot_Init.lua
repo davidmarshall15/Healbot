@@ -17,7 +17,7 @@ function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
 
     if ( not id ) then return nil; end
 
-    local spell, _, _, msCast, _, _ = HealBot_GetSpellInfo(id);
+    local spell, _, _, msCast, _, _ = GetSpellInfo(id);
     if ( not spell ) then return nil; end
     if not spellName then spellName=spell end
    

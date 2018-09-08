@@ -193,7 +193,8 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_NONE                    = "none available";
     HEALBOT_TOOLTIP_CORPSE                  = "Corpse of ";
     HEALBOT_TOOLTIP_CD                      = " (CD ";
-    HEALBOT_TOOLTIP_SECS                    = "s)";
+    HEALBOT_TOOLTIP_SECS                    = " sec)";
+    HEALBOT_TOOLTIP_MINS                    = " min)";
     HEALBOT_WORDS_SEC                       = "sec";
     HEALBOT_WORDS_CAST                      = "Cast";
     HEALBOT_WORDS_UNKNOWN                   = "Unknown";

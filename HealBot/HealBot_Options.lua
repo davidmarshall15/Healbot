@@ -2123,7 +2123,6 @@ function HealBot_Options_AggroFlashFreq_OnValueChanged(self)
         Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        HealBot_Action_Set_Timers()
     end
 end
 
@@ -2467,7 +2466,6 @@ function HealBot_Options_AggroTrack_OnClick(self)
     end
     HealBot_setOptions_Timer(150)
     HealBot_setOptions_Timer(80)
-    HealBot_Action_Set_Timers()
 end
 
 function HealBot_Options_HighlightActiveBar_OnClick(self)
@@ -2511,7 +2509,6 @@ function HealBot_Options_UseFluidBars_OnClick(self)
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = false
     end
     HealBot_setOptions_Timer(80)
-    HealBot_Action_Set_Timers()
 end
 
 function HealBot_Options_EnableLibQuickHealth_OnClick(self)
@@ -2543,7 +2540,6 @@ function HealBot_Options_AggroBar_OnClick(self)
     end
     HealBot_setOptions_Timer(150)
     HealBot_setOptions_Timer(80)
-    HealBot_Action_Set_Timers()
 end
 
 function HealBot_Options_AggroTxt_OnClick(self)
@@ -7697,7 +7693,7 @@ function HealBot_Options_Debuff_Reset()
     for k=1,3 do
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local id=HealBot_GetSpellId(DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]);
-            local sName = HealBot_GetSpellInfo(id);
+            local sName = GetSpellInfo(id);
             if not sName then
                 if IsUsableItem(DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]) or HealBot_IsItemInBag(DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]) then
                     sName=DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)];

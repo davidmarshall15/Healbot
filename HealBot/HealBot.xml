@@ -4,7 +4,6 @@
 
   <Script file="HealBot_Data.lua" />
   <Script file="HealBot_Init.lua" />
-  <Script file="HealBot_IncHeals.lua" />
   <Script file="HealBot.lua" />
   
   <!-- Comment Syntax -->
