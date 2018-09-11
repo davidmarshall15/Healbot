@@ -1167,7 +1167,6 @@ local function HealBot_Panel_enemyBar(eUnit)
     HealBot_UnitName[eUnit]=uName;    
     i[hbCurrentFrame]=i[hbCurrentFrame]+1;
     table.insert(subunits,eUnit)
-    HealBot_setEnemyUnits(eUnit)
 end
 
 local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
@@ -2329,9 +2328,7 @@ local function HealBot_Panel_PanelChanged(disableHealBot)
     TempMaxH=9;
     local raidIconOn=false
     if not IsInRaid() then nraid=0 end;
-  
-    HealBot_clearEnemyUnits()
-    
+
     for x,_ in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_HealButtons[x]=nil;
     end
