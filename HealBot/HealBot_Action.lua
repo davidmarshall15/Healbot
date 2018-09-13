@@ -1792,17 +1792,17 @@ local function HealBot_Action_EnableButton(button, isTarget)
     end
 
     local ebtext=uName
-    local textRCall=hbGUID..'-'..uHlth..'-'..uMaxHlth..'-'..uName..'-'..uHealIn..'-'..uAbsorbs..'-'..(HealBot_UnitThreatPct[ebUnit] or 0)..'-'..(HealBot_UnitOffline[hbGUID] or 0)
+    --local textRCall=hbGUID..'-'..uHlth..'-'..uMaxHlth..'-'..uName..'-'..uHealIn..'-'..uAbsorbs..'-'..(HealBot_UnitThreatPct[ebUnit] or 0)..'-'..(HealBot_UnitOffline[hbGUID] or 0)
     ebubar.txt = _G[ebubar:GetName().."_text"];
-    if activeUnit and HealBot_Action_rCalls[ebUnit]["barText"]~=textRCall then
-        HealBot_Action_rCalls[ebUnit]["barText"]=textRCall
+    --if activeUnit and HealBot_Action_rCalls[ebUnit]["barText"]~=textRCall then
+        --HealBot_Action_rCalls[ebUnit]["barText"]=textRCall
         local hbFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"]] or 2
         local bttextlen = floor((hbFontAdj*2)+HealBot_Globals.tsadjmod+((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*1.88)
                                 /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"])
                                 -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]/hbFontAdj)))
         ebtext=HealBot_Action_HBText(uHlth,uMaxHlth,uName,ebUnit,uHealIn, uAbsorbs, hbGUID, bttextlen, button.frame)
         ebubar.txt:SetText(ebtext);
-    end
+    --end
     if activeUnit and UnitIsVisible(ebUnit) then
         ebubar.txt:SetTextColor(ebusr,ebusg,ebusb,ebusa);
     else
@@ -2842,6 +2842,7 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
     level = level or 1;
     if level==1 then
  
+        xButton=HealBot_Unit_Button[self.unit]
         info = UIDropDownMenu_CreateInfo();
         info.isTitle = 1
         info.text = self.name
@@ -2905,7 +2906,7 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         info.hasArrow = false; 
         info.notCheckable = true;
         info.text = HEALBOT_WORD_RESET
-        info.func = function() HealBot_Reset_Unit(self); end
+        info.func = function() HealBot_Reset_Unit(xButton); end
         UIDropDownMenu_AddButton(info, 1);
         
         info = UIDropDownMenu_CreateInfo();
@@ -3278,6 +3279,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
             shb.health.max=UnitHealthMax(unit) or 100
             shb.health.incoming=0
             shb.health.absorbs=0
+            shb.health.update=GetTime() + 1 + ((shb.id % 10) / 10)
             shb.status.update=true
             shb.status.current=7
             shb.status.range=-1
@@ -3302,7 +3304,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
             --    HealBot_Action_SetAllButtonAttribs(shb,"Enabled")
             --end
             HealBot_UnitData[hbGUID]["UNIT"]=unit
-            HealBot_CheckHealth(unit)
             if not HealBot_Enabled[unit] then HealBot_Enabled[unit]="e" end
         elseif shb.guid~=hbGUID then
             shb.guid=hbGUID
