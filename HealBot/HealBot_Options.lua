@@ -2715,7 +2715,7 @@ function HealBot_Options_CDCCol_ShowOnAggroBar_OnClick(self)
         HealBot_Config_Cures.CDCshownAB = true
     else
         HealBot_Config_Cures.CDCshownAB = false
-        HealBot_Action_ClearUnitDebuffStatus()
+        HealBot_ClearAllDebuffs()
         HealBot_SetResetFlag("SOFT")
     end
 end

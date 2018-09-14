@@ -28,7 +28,6 @@ local hbNumFormatSuffix={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[
 
 local HealBotButtonMacroAttribs={}
 local HealBot_prevUnitThreat={}
-local UnitDebuffStatus={}
 local HealBot_UnitThreatPct={}
 local HealBot_Action_luVars={}
 HealBot_Action_luVars["PlayerDead"]=false
@@ -191,9 +190,10 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
             if status and not UnitIsFriend("player",unit) then status=nil end
         end
         if status then
-            if HealBot_Config_Cures.CDCshownAB and UnitDebuffStatus[unit] then
+            if HealBot_Config_Cures.CDCshownAB and xButton.aura.debuff.type then
                 HealBot_Aggro[unit]="d"
-                HealBot_UnitThreat[unit]=UnitDebuffStatus[unit]
+                local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
+                HealBot_UnitThreat[unit]=debuffCodes[xButton.aura.debuff.type]
             elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] and 
                    threatStatus>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] then
                 HealBot_UnitThreat[unit]=threatStatus
@@ -286,24 +286,6 @@ function HealBot_Action_EndAggro()
         if (HealBot_Aggro[xUnit] or "a")=="a" then
             HealBot_Action_UpdateAggro(xUnit,false,nil,0)
             HealBot_Action_aggroIndicatorUpd(xUnit, 0)
-        end
-    end
-end
-
-function HealBot_Action_SetUnitDebuffStatus(unit,status)
-    if not status then
-        UnitDebuffStatus[unit]=nil
-    else
-        UnitDebuffStatus[unit]=status
-    end
-end
-
-function HealBot_Action_ClearUnitDebuffStatus(unit)
-    if unit then
-        UnitDebuffStatus[unit]=nil
-    else
-        for x,_ in pairs(UnitDebuffStatus) do
-            UnitDebuffStatus[x]=nil;
         end
     end
 end
@@ -776,43 +758,43 @@ function HealBot_Action_BarColourPct(hlthPct)
 end
 
 function HealBot_Action_HealthBar(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar"];
 end
 
 function HealBot_Action_HealthBar2(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar2"];
 end
 
 function HealBot_Action_HealthBar3(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar3"];
 end
 
 function HealBot_Action_HealthBar4(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar4"];
 end
 
 function HealBot_Action_HealthBar5(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar5"];
 end
 
 function HealBot_Action_HealthBar6(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."Bar6"];
 end
 
 function HealBot_Action_HealthBarDir(button)
-    if not button or not button:GetName() then return nil end
+    if not button or not button["GetName"] then return nil end
     local barName = button:GetName();
     return _G[barName.."BarDir"];
 end
@@ -1529,16 +1511,14 @@ local function HealBot_Action_EnableButton(button, isTarget)
 					uHlth=0
 					HealBot_Set_UnitHealth(ebUnit, uHlth, uMaxHlth, nil)
 				end
+				if button.aura.debuff.name then  
+					HealBot_ClearDebuff(button)
+					ebuHealBot_UnitDebuff=nil
+				end
 				if HealBot_Aggro[ebUnit] then
-					HealBot_Action_SetUnitDebuffStatus(ebUnit)
 					if (HealBot_Aggro[ebUnit]=="a" or HealBot_Aggro[ebUnit]=="d") then
 						HealBot_Action_UpdateAggro(ebUnit,false,nil,0)
 					end
-					HealBot_Aggro[ebUnit]=nil
-				end
-				if button.aura.debuff.name then  
-					HealBot_CheckAllDebuffs(ebUnit)
-					ebuHealBot_UnitDebuff=nil
 				end
 				ebuHealBot_UnitBuff=nil
 				HealBot_HoT_RemoveIconButton(button)
@@ -3412,7 +3392,6 @@ function HealBot_Action_DeleteButton(hbBarID)
     local dbUnit=dg.unit or "N"
     local dbGUID=dg.guid or "0"
     HealBot_HoT_RemoveIconButton(dg,true)
-    HealBot_Action_ClearUnitDebuffStatus(dbUnit)
     HealBot_Action_UpdateAggro(dbUnit,false,nil,0)
     HealBot_Aggro[dbUnit]=nil
     local bar4=HealBot_Action_HealthBar4(dg)
