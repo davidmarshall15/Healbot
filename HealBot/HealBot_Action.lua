@@ -57,7 +57,7 @@ local function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
     if not UnitExists(unit) or (UnitExists(unit) and not UnitIsFriend("player",unit)) then
         if HealBot_Action_rCalls[unit]["aggroIndicator"]~="notUnit" then
             HealBot_Action_rCalls[unit]["aggroIndicator"]="notUnit"
-            local mainBar=HealBot_Action_HealthBar(HealBot_Unit_Button[unit])
+            local mainBar=_G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
             local iconName=nil
             iconName = _G[mainBar:GetName().."Iconal1"];
             iconName:SetAlpha(0)
@@ -78,7 +78,7 @@ local function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
             if threatStatus==1 then
                 if HealBot_Action_rCalls[unit]["aggroIndicator"]~="a1" then
                     HealBot_Action_rCalls[unit]["aggroIndicator"]="a1"
-                    local mainBar=HealBot_Action_HealthBar(HealBot_Unit_Button[unit])
+                    local mainBar=_G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
                     local iconName=nil
                     iconName = _G[mainBar:GetName().."Iconal1"];
                     iconName:SetAlpha(1)
@@ -96,7 +96,7 @@ local function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
             elseif threatStatus==2 then
                 if HealBot_Action_rCalls[unit]["aggroIndicator"]~="a2" then
                     HealBot_Action_rCalls[unit]["aggroIndicator"]="a2"
-                    local mainBar=HealBot_Action_HealthBar(HealBot_Unit_Button[unit])
+                    local mainBar=_G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
                     local iconName=nil
                     iconName = _G[mainBar:GetName().."Iconal1"];
                     iconName:SetAlpha(1)
@@ -114,7 +114,7 @@ local function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
             elseif threatStatus==3 then
                 if HealBot_Action_rCalls[unit]["aggroIndicator"]~="a3" then
                     HealBot_Action_rCalls[unit]["aggroIndicator"]="a3"
-                    local mainBar=HealBot_Action_HealthBar(HealBot_Unit_Button[unit])
+                    local mainBar=_G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
                     local iconName=nil
                     iconName = _G[mainBar:GetName().."Iconal1"];
                     iconName:SetAlpha(1)
@@ -133,7 +133,7 @@ local function HealBot_Action_aggroIndicatorUpd(unit, threatStatus)
         elseif threatStatus>-1 and threatStatus<4 then
             if HealBot_Action_rCalls[unit]["aggroIndicator"]~="off" then
                 HealBot_Action_rCalls[unit]["aggroIndicator"]="off"
-                local mainBar=HealBot_Action_HealthBar(HealBot_Unit_Button[unit])
+                local mainBar=_G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
                 local iconName=nil
                 iconName = _G[mainBar:GetName().."Iconal1"];
                 iconName:SetAlpha(0)
@@ -155,8 +155,7 @@ end
 local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
     local xButton=HealBot_Unit_Button[unit]
     if not xButton then return end
-    local barName=HealBot_Action_HealthBar4(xButton)
-    if not barName then return end  
+    local barName=_G["HealBot_Action_HealUnit"..xButton.id.."Bar4"]
     HealBot_SetAggroUnits(unit, threatPct)
     
     if UnitExists(unit) and UnitIsFriend("player",unit) then
@@ -254,18 +253,20 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
         barName:SetStatusBarColor(1,0,0,0)
         xButton.status.bar4=0
     end
-    if HealBot_UnitThreatPct[unit]~=HealBot_Action_luVars["PrevThreatPct"] then HealBot_Action_ResetUnitStatus(unit) end
+    if HealBot_UnitThreatPct[unit]~=HealBot_Action_luVars["PrevThreatPct"] then HealBot_Action_ResetUnitStatus(xButton) end
 end
 
 function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
     HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
 end
 
-function HealBot_Action_SetThreatPct(unit, threatPct)
-    if unit then
-        HealBot_Action_luVars["PrevThreatPct"]=HealBot_UnitThreatPct[unit] or -2
-        HealBot_UnitThreatPct[unit]=threatPct
-        if HealBot_UnitThreatPct[unit]~=HealBot_Action_luVars["PrevThreatPct"] then HealBot_Action_ResetUnitStatus(unit) end
+function HealBot_Action_SetThreatPct(button, threatPct)
+    if button then
+        HealBot_Action_luVars["PrevThreatPct"]=HealBot_UnitThreatPct[button.unit] or -2
+        HealBot_UnitThreatPct[button.unit]=threatPct
+        if HealBot_UnitThreatPct[button.unit]~=HealBot_Action_luVars["PrevThreatPct"] then 
+            HealBot_Action_ResetUnitStatus(button) 
+        end
     end
 end
 
@@ -318,10 +319,10 @@ function HealBot_Action_setpcClass()
             end
         else
             HealBot_pcClass[j]=false
-            local barName = HealBot_Action_HealthBar3(HealBot_Unit_Button["player"])
-            if barName then
+            local xButton=HealBot_Unit_Button["player"]
+            if xButton then
                 for y=1,5 do
-                    local iconName = _G[barName:GetName().."Icon"..y];
+                    local iconName = _G["HealBot_Action_HealUnit"..xButton.id.."Bar3Icon"..y];
                     iconName:SetAlpha(0)
                 end
             end
@@ -757,48 +758,6 @@ function HealBot_Action_BarColourPct(hlthPct)
     return hcpr, hcpg
 end
 
-function HealBot_Action_HealthBar(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar"];
-end
-
-function HealBot_Action_HealthBar2(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar2"];
-end
-
-function HealBot_Action_HealthBar3(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar3"];
-end
-
-function HealBot_Action_HealthBar4(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar4"];
-end
-
-function HealBot_Action_HealthBar5(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar5"];
-end
-
-function HealBot_Action_HealthBar6(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."Bar6"];
-end
-
-function HealBot_Action_HealthBarDir(button)
-    if not button or not button["GetName"] then return nil end
-    local barName = button:GetName();
-    return _G[barName.."BarDir"];
-end
-
 function HealBot_Action_ShouldHealSome(unit, hbCurFrame)
     if unit and HealBot_Enabled[unit] and HealBot_Enabled[unit]=="e" then 
         return true
@@ -837,7 +796,7 @@ end
 
 function HealBot_Action_SetBar3Value(button, sName)
     if not button then return end
-    local barName = HealBot_Action_HealthBar3(button)
+    local barName = _G["HealBot_Action_HealUnit"..button.id.."Bar3"]
     local unit=button.unit
     if UnitExists(unit) and not UnitIsFriend("player",unit) then
         local cast=button.spells.castpct or -1
@@ -1033,9 +992,10 @@ function HealBot_Action_setLowManaTrig()
 end
 
 function HealBot_Action_CheckUnitLowMana(unit)
-    local bar = HealBot_Action_HealthBar(HealBot_Unit_Button[unit]);
-    local iconName=nil
-    if bar then
+    local xButton = HealBot_Unit_Button[unit]
+    if xButton then
+        local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+        local iconName=nil
         local mana,maxmana=HealBot_UnitMana(unit)
         if mana and maxmana then
             if maxmana==0 then maxmana=1 end
@@ -1471,10 +1431,10 @@ local function HealBot_Action_EnableButton(button, isTarget)
 --    if not button then return end
 --    if not uName then uName=HEALBOT_WORDS_UNKNOWN end
 
-    ebubar = HealBot_Action_HealthBar(button)
-    ebubar2 = HealBot_Action_HealthBar2(button)
-    ebubar5 = HealBot_Action_HealthBar5(button)
-    ebubar6 = HealBot_Action_HealthBar6(button)
+    ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
+    ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
+    ebubar5 = _G["HealBot_Action_HealUnit"..button.id.."Bar5"]
+    ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
     ebuicon15 = _G[ebubar:GetName().."Icon15"];
     
     if UnitExists(ebUnit) and not UnitIsFriend("player",ebUnit) then
@@ -1741,7 +1701,7 @@ local function HealBot_Action_EnableButton(button, isTarget)
             uName=HEALBOT_WORD_RESERVED..":"..ebUnit
             HealBot_Reserved[ebUnit]=true
         else
-            uName=HEALBOT_WORDS_UNKNOWN
+            uName='NK-'..(ebUnit or "no-unit") --HEALBOT_WORDS_UNKNOWN
             if HealBot_Data["REFRESH"]<1 then HealBot_Data["REFRESH"]=1 end
             button.status.current=7
         end
@@ -1800,8 +1760,8 @@ function HealBot_Action_ShowDirectionArrow(button, unit)
         if hbD then
             if not HealBot_UnitDirection[unit] then 
                 HealBot_UnitDirection[unit]=-999 
-                local barDir = HealBot_Action_HealthBarDir(button)
-                local ebuicon17 = _G[barDir:GetName().."Icon17"];
+                local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
+                local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
                 if HealBot_Data["SHOWDIR"]~="DIRECTION" then
                     HealBot_Data["SHOWDIR"]="DIRECTION"
                     ebuicon17:SetTexture("Interface\\AddOns\\HealBot\\Images\\arrow.blp")
@@ -1809,8 +1769,8 @@ function HealBot_Action_ShowDirectionArrow(button, unit)
                 ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
                 ebuicon17:Show()
             elseif HealBot_UnitDirection[unit]~=hbD then
-                local barDir = HealBot_Action_HealthBarDir(button)
-                local ebuicon17 = _G[barDir:GetName().."Icon17"];
+                local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
+                local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
                 ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
                 HealBot_UnitDirection[unit]=hbD
             end
@@ -1824,8 +1784,8 @@ end
 
 function HealBot_Action_HideDirectionArrow(button, unit)
     HealBot_UnitDirection[unit]=nil
-    local barDir = HealBot_Action_HealthBarDir(button)
-    local ebuicon17 = _G[barDir:GetName().."Icon17"];
+    local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
+    local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
     ebuicon17:Hide()
 end
 
@@ -1936,7 +1896,10 @@ function HealBot_Action_UnitIsOffline(hbGUID,preset) -- added by Diacono of Ursi
         end
     end
     if y~=(HealBot_UnitOffline[hbGUID] or 0) then
-        HealBot_Action_ResetUnitStatus(HealBot_UnitData[hbGUID]["UNIT"])
+        local xButton=HealBot_Unit_Button[HealBot_UnitData[hbGUID]["UNIT"]]
+        if xButton then
+            HealBot_Action_ResetUnitStatus(xButton)
+        end
     end
     return HealBot_UnitOffline[hbGUID]
 end
@@ -2005,13 +1968,13 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         end
          --for x=1,51 do
         HealBot_ResetBarSkinDone[b.frame][b.id]=true
-        bar = HealBot_Action_HealthBar(b);
-        bar2 = HealBot_Action_HealthBar2(b);
-        bar3 = HealBot_Action_HealthBar3(b);
-        bar4 = HealBot_Action_HealthBar4(b)
-        bar5 = HealBot_Action_HealthBar5(b)
-        bar6 = HealBot_Action_HealthBar6(b)
-        barDir = HealBot_Action_HealthBarDir(b);
+        bar = _G["HealBot_Action_HealUnit"..b.id.."Bar"]
+        bar2 = _G["HealBot_Action_HealUnit"..b.id.."Bar2"]
+        bar3 = _G["HealBot_Action_HealUnit"..b.id.."Bar3"]
+        bar4 = _G["HealBot_Action_HealUnit"..b.id.."Bar4"]
+        bar5 = _G["HealBot_Action_HealUnit"..b.id.."Bar5"]
+        bar6 = _G["HealBot_Action_HealUnit"..b.id.."Bar6"]
+        barDir = _G["HealBot_Action_HealUnit"..b.id.."BarDir"];
         bar.txt = _G[bar:GetName().."_text"];
         bar3.txt=_G[bar3:GetName().."Bar3Txt"];
         bar:SetHeight(bheight);
@@ -2474,7 +2437,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
     elseif barType=="header" then
           --for x=1,15 do
         h=button
-        bar = HealBot_Action_HealthBar(h);
+        bar = _G[h:GetName().."Bar"]
         hwidth = ceil(bWidth*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["WIDTH"])
         hheight = ceil((bheight+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][h.frame]["POWERSIZE"])*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"])
         HealBot_Panel_SetHeadArrays(h.id)
@@ -2497,7 +2460,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         bar:SetScale(barScale + 0.01);
         bar:SetScale(barScale);
     elseif barType=="hbfocus" then
-        bar = HealBot_Action_HealthBar(button);
+        bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
         bar:GetStatusBarTexture():SetHorizTile(false)
 
@@ -2600,11 +2563,10 @@ function HealBot_Action_HidePanel(hbCurFrame)
     end
 end
 
-function HealBot_Action_ResetUnitStatus(unit)
-    if unit and HealBot_Unit_Button[unit] then
-        local xButton=HealBot_Unit_Button[unit]
-        xButton.status.current=1;
-        xButton.status.update=true
+function HealBot_Action_ResetUnitStatus(button)
+    if button then
+        button.status.current=1;
+        button.status.update=true
     else
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             xButton.status.current=1;
@@ -2697,13 +2659,41 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         end
         ghb.guid="nil"
         ghb.unit="nil"
-        local bar = HealBot_Action_HealthBar(ghb);
-        local bar2 = HealBot_Action_HealthBar2(ghb);
-        local bar3 = HealBot_Action_HealthBar3(ghb);
-        local bar4 = HealBot_Action_HealthBar4(ghb)
-        local bar5 = HealBot_Action_HealthBar5(ghb)
-        local bar6 = HealBot_Action_HealthBar6(ghb)
-        local barDir = HealBot_Action_HealthBarDir(ghb);
+        if not ghb.aura then
+            ghb.aura={}
+            ghb.aura.buff={}
+            ghb.aura.debuff={}
+            ghb.status={}
+            ghb.checks={}
+            ghb.health={}
+            ghb.spells={}
+        end
+        ghb.health.current=100
+        ghb.health.max=100
+        ghb.health.incoming=0
+        ghb.health.absorbs=0
+        ghb.health.update=GetTime() + 100000000
+        ghb.status.update=true
+        ghb.status.current=7
+        ghb.status.range=-1
+        ghb.status.dead=false
+        ghb.status.enemy=0
+        ghb.checks.range=GetTime()
+        ghb.checks.buff=false
+        ghb.checks.debuff=false
+        ghb.spells.castpct=-1
+        ghb.aura.buff.name=false
+        ghb.aura.debuff.type=false
+        ghb.aura.debuff.name=false
+        ghb.aura.debuff.customPriority=99
+        ghb.aura.debuff.spellId=false
+        local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
+        local bar2 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar2"] 
+        local bar3 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar3"] 
+        local bar4 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar4"] 
+        local bar5 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar5"]
+        local bar6 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar6"]
+        local barDir = _G["HealBot_Action_HealUnit"..ghb.id.."BarDir"]
         bar:UnregisterAllEvents()
         bar2:UnregisterAllEvents()
         bar3:UnregisterAllEvents()
@@ -2836,7 +2826,7 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         else
             info.text = HEALBOT_SKIN_ENTEXT;
         end
-        info.func = function() HealBot_Action_Toggle_Enabled(self.unit); end
+        info.func = function() HealBot_Action_Toggle_Enabled(xButton); end
         UIDropDownMenu_AddButton(info, 1);
 
         info = UIDropDownMenu_CreateInfo();
@@ -3245,15 +3235,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
         if HealBot_Unit_Button[unit]~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
             shb.unit=unit
-            if not shb.aura then
-                shb.aura={}
-                shb.aura.buff={}
-                shb.aura.debuff={}
-                shb.status={}
-                shb.checks={}
-                shb.health={}
-                shb.spells={}
-            end
             HealBot_Unit_Button[unit]=shb
             shb.health.current=UnitHealth(unit) or 100
             shb.health.max=UnitHealthMax(unit) or 100
@@ -3379,7 +3360,7 @@ function HealBot_Action_PartyChanged(disableHealBot)
         
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.status.current==7 then
-                HealBot_Action_ResetUnitStatus(xUnit)
+                HealBot_Action_ResetUnitStatus(xButton)
             end
         end
     elseif HealBot_Data["REFRESH"]<2 then 
@@ -3394,7 +3375,7 @@ function HealBot_Action_DeleteButton(hbBarID)
     HealBot_HoT_RemoveIconButton(dg,true)
     HealBot_Action_UpdateAggro(dbUnit,false,nil,0)
     HealBot_Aggro[dbUnit]=nil
-    local bar4=HealBot_Action_HealthBar4(dg)
+    local bar4=_G["HealBot_Action_HealUnit"..hbBarID.."Bar4"]
     bar4:SetStatusBarColor(1,0,0,0)
     dg.status.bar4=0
     if HealBot_AggroIndicator[dbUnit] then
@@ -3514,26 +3495,25 @@ function HealBot_Action_HideTooltipFrame()
     end
 end
 
-function HealBot_Action_Refresh(unit)
-    if unit and HealBot_Unit_Button[unit] then
-        local xButton=HealBot_Unit_Button[unit]
+function HealBot_Action_Refresh(button)
+    if button then
         if HealBot_Action_luVars["PlayerDead"] then
-            if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["AUTOCLOSE"] and HealBot_Data["UILOCK"]=="NO" then
-                HealBot_Action_HidePanel(xButton.frame); 
+            if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"] and HealBot_Data["UILOCK"]=="NO" then
+                HealBot_Action_HidePanel(button.frame); 
             else
-                HealBot_Action_RefreshButton(xButton);
+                HealBot_Action_RefreshButton(button);
             end
             return;
         end
-        HealBot_Action_RefreshButton(xButton);
+        HealBot_Action_RefreshButton(button);
         if HealBot_Data["UILOCK"]=="NO" then
-            if HealBot_Config.ActionVisible[xButton.frame]==0 and HealBot_Config.DisabledNow==0 then
-                if HealBot_Action_ShouldHealSome(unit, xButton.frame) then
-                    HealBot_Action_ShowPanel(xButton.frame);
+            if HealBot_Config.ActionVisible[button.frame]==0 and HealBot_Config.DisabledNow==0 then
+                if HealBot_Action_ShouldHealSome(button.unit, button.frame) then
+                    HealBot_Action_ShowPanel(button.frame);
                 end
-            elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["AUTOCLOSE"] then 
-                if not HealBot_Action_ShouldHealSome(unit, xButton.frame) then
-                    HealBot_Action_HidePanel(xButton.frame);
+            elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"] then 
+                if not HealBot_Action_ShouldHealSome(button.unit, button.frame) then
+                    HealBot_Action_HidePanel(button.frame);
                 end
             end
         end
@@ -3545,7 +3525,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
     if not self.unit then return; end
     HealBot_Data["TIPUNIT"] = self.unit
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
-        HealBot_Action_ResetUnitStatus(self.unit)
+        HealBot_Action_ResetUnitStatus(self)
     end
     if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"]=="YES" and UnitExists(self.unit) then
         if not UnitIsFriend("player",self.unit) then
@@ -3582,7 +3562,7 @@ end
 function HealBot_Action_HealUnit_OnLeave(self)
     HealBot_Action_HideTooltip(self);
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
-        HealBot_Action_ResetUnitStatus(self.unit)
+        HealBot_Action_ResetUnitStatus(self)
     end
     local xUnit=self.unit
     if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and HealBot_Hightlight[xUnit] and HealBot_Hightlight[xUnit]=="M" then
@@ -3757,7 +3737,7 @@ local function HealBot_Action_DoHealUnit_Wheel(self, delta)
     elseif HealBot_MouseWheelCmd==HEALBOT_DEMOTE_RA then
         DemoteAssistant(xUnit)
     elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_ENABLED then
-        HealBot_Action_Toggle_Enabled(xButton.unit)
+        HealBot_Action_Toggle_Enabled(xButton)
     elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_MYTARGETS then
         HealBot_Panel_ToggelHealTarget(xButton.unit)
     elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_PRIVATETANKS then
@@ -3865,7 +3845,7 @@ local function HealBot_Action_PreClick(self,button)
                 end
             elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and (button=="LeftButton" or button=="MiddleButton" or button=="RightButton") then
                 if button=="LeftButton" then
-                    HealBot_Action_Toggle_Enabled(self.unit)
+                    HealBot_Action_Toggle_Enabled(self)
                 elseif button=="RightButton" then
                     HealBot_Panel_ToggelHealTarget(self.unit)
                 elseif not UnitIsUnit(self.unit, "player") and button=="MiddleButton" and HealBot_UnitGUID(self.unit) then
@@ -3996,7 +3976,7 @@ end
 
 local function HealBot_Action_UpdateFluidBars()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        bar = HealBot_Action_HealthBar(xButton)
+        bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
         if bar then 
             local hrpct=100
             if xButton.health.current<xButton.health.max and xButton.health.max>0 then
@@ -4023,7 +4003,7 @@ end
 local function HealBot_Action_UpdateAggroBars()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if xButton.status.bar4>0 then
-            local bar4=HealBot_Action_HealthBar4(xButton)
+            local bar4=_G["HealBot_Action_HealUnit"..xButton.id.."Bar4"]
             if UnitExists(xUnit) then
                 HealBot_AggroUnitThreat=HealBot_UnitThreat[xUnit] or 2
                 if HealBot_AggroUnitThreat==9 and xButton.aura.debuff.name then
@@ -4155,14 +4135,14 @@ function HealBot_Action_OnDragStart(self, hbCurFrame)
     end
 end
 
-function HealBot_Action_Toggle_Enabled(unit)
-    local xGUID=HealBot_UnitGUID(unit)
+function HealBot_Action_Toggle_Enabled(button)
+    local xGUID=HealBot_UnitGUID(button.unit)
     if HealBot_MyTargets[xGUID] then
         HealBot_MyTargets[xGUID]=nil
     else
         HealBot_MyTargets[xGUID]=true
     end
-    HealBot_Action_ResetUnitStatus(unit)
+    HealBot_Action_ResetUnitStatus(button)
 end
 
 function HealBot_Action_RetMyTarget(hbGUID)
