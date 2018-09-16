@@ -3197,6 +3197,42 @@ local function HealBot_Action_SetAllButtonAttribs(button,status)
     end
 end
 
+local function HealBot_Action_InitButtonAttribs(btn, unit)
+    btn.unit=unit
+    if not btn.aura then
+        btn.aura={}
+        btn.aura.buff={}
+        btn.aura.debuff={}
+        btn.status={}
+        btn.checks={}
+        btn.health={}
+        btn.spells={}
+    end
+    HealBot_Unit_Button[unit]=btn
+    btn.health.current=UnitHealth(unit) or 100
+    btn.health.max=UnitHealthMax(unit) or 100
+    btn.health.incoming=0
+    btn.health.absorbs=0
+    btn.health.update=GetTime() + 1 + ((btn.id % 10) / 10)
+    btn.status.update=true
+    btn.status.current=7
+    btn.status.range=-1
+    btn.status.bar4 = btn.status.bar4 or 0
+    btn.status.dead = btn.status.dead or false
+    btn.status.enemy = btn.status.enemy or 0  -- -1 friend - 0 unknown - 1 enemy - 2 no unit
+    btn.checks.range=GetTime()
+    btn.checks.buff=true
+    btn.checks.debuff=true
+    btn.spells.castpct = -1
+    btn.aura.buff.name = btn.aura.buff.name or false
+    btn.aura.debuff.type = btn.aura.debuff.type or false
+    btn.aura.debuff.name = btn.aura.debuff.name or false
+    btn.aura.debuff.customPriority = btn.aura.debuff.customPriority or 99
+    btn.aura.debuff.spellId = btn.aura.debuff.spellId or false
+    HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+    return btn
+end
+
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
     local shb=nil
     if hbGUID then
@@ -3244,38 +3280,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,alsoEnemy)
         end
         if HealBot_Unit_Button[unit]~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
-            shb.unit=unit
-            if not shb.aura then
-                shb.aura={}
-                shb.aura.buff={}
-                shb.aura.debuff={}
-                shb.status={}
-                shb.checks={}
-                shb.health={}
-                shb.spells={}
-            end
-            HealBot_Unit_Button[unit]=shb
-            shb.health.current=UnitHealth(unit) or 100
-            shb.health.max=UnitHealthMax(unit) or 100
-            shb.health.incoming=0
-            shb.health.absorbs=0
-            shb.health.update=GetTime() + 1 + ((shb.id % 10) / 10)
-            shb.status.update=true
-            shb.status.current=7
-            shb.status.range=-1
-            shb.status.bar4 = shb.status.bar4 or 0
-            shb.status.dead = shb.status.dead or false
-            shb.status.enemy = shb.status.enemy or 0  -- -1 friend - 0 unknown - 1 enemy - 2 no unit
-            shb.checks.range=GetTime()
-            shb.checks.buff=true
-            shb.checks.debuff=true
-            shb.spells.castpct = -1
-            shb.aura.buff.name = shb.aura.buff.name or false
-            shb.aura.debuff.type = shb.aura.debuff.type or false
-            shb.aura.debuff.name = shb.aura.debuff.name or false
-            shb.aura.debuff.customPriority = shb.aura.debuff.customPriority or 99
-            shb.aura.debuff.spellId = shb.aura.debuff.spellId or false
-            HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+            shb = HealBot_Action_InitButtonAttribs(shb, unit);
             shb:SetAttribute("unit", unit);
             --if alsoEnemy then
                 HealBot_Action_SetAllButtonAttribs(shb,"Enemy")
@@ -3306,10 +3311,9 @@ end
 function HealBot_Action_SetTestButton(hbCurFrame, unitText)
     local thb=HealBot_Action_CreateButton(hbCurFrame)
     if thb then
-        thb.unit=unitText
+        thb = HealBot_Action_InitButtonAttribs(thb, unitText);
         thb.guid="TestBar"
         thb.status.bar4=0
-        HealBot_Unit_Button[unitText]=thb
         if thb.frame~=hbCurFrame then
             local gp=_G["f"..hbCurFrame.."_HealBot_Action"]
             thb:ClearAllPoints()
