@@ -11811,7 +11811,7 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
             local hFrames=HealBot_Panel_retHealBot_Header_Frames()
             for _,h in pairs(hFrames) do
-                local bar = HealBot_Action_HealthBar(h);
+                local bar = _G[h:GetName().."Bar"]
                 if bar then
                     bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
                     bar:GetStatusBarTexture():SetHorizTile(false)
@@ -11826,10 +11826,10 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         end
         if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then 
             for _,xButton in pairs(HealBot_Unit_Button) do
-                local bar = HealBot_Action_HealthBar(xButton);
-                local bar2 = HealBot_Action_HealthBar2(xButton);
-                local bar3 = HealBot_Action_HealthBar3(xButton);
-                local bar6 = HealBot_Action_HealthBar3(xButton);
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+                local bar2 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar2"]
+                local bar3 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar3"]
+                local bar6 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar6"]
                 if bar then
                     bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
                     bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
@@ -11848,7 +11848,7 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
             local hFrames=HealBot_Panel_retHealBot_Header_Frames()
             for _,h in pairs(hFrames) do
-                local bar = HealBot_Action_HealthBar(h);
+                local bar = _G[h:GetName().."Bar"]
                 if bar then
                     bar.txt = _G[bar:GetName().."_text"];
                     bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
@@ -11861,7 +11861,7 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin] then
             for _,xButton in pairs(HealBot_Unit_Button) do
-                local bar = HealBot_Action_HealthBar(xButton);
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
                 if bar then
                     bar.txt = _G[bar:GetName().."_text"];
                     bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["FONT"]),
