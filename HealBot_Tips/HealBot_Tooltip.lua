@@ -92,15 +92,15 @@ local function HealBot_Tooltip_SpellPattern(click)
     return hbCombos[x]
 end
 
-local function HealBot_Tooltip_GetHealSpell(unit,sName,hbGUID)
+local function HealBot_Tooltip_GetHealSpell(button,sName)
     if not sName or not HealBot_GetSpellId(sName) then
         if sName then
-            local w, _ = IsUsableItem(sName, unit)
+            local w, _ = IsUsableItem(sName, button.unit)
             if not w then
                 return nil, 1, 0
             else
-                if HealBot_Data["PGUID"]==hbGUID then
-                    if IsItemInRange(sName,unit)~=1 then
+                if HealBot_Data["PGUID"]==button.guid then
+                    if IsItemInRange(sName,button.unit)~=1 then
                         return sName, 1, 0
                     else
                         return sName, 0, 1
@@ -114,14 +114,14 @@ local function HealBot_Tooltip_GetHealSpell(unit,sName,hbGUID)
         end
     end
 
-    if (HealBot_UnitInRange(sName, unit)~=1) then
+    if (HealBot_UnitInRange(button, sName)~=1) then
         return sName, 1, 0
     end
  
     return sName, 0, 1
 end
 
-local function HealBot_Tooltip_setspellName(unit, spellName, hbGUID)
+local function HealBot_Tooltip_setspellName(button, spellName)
     local validSpellName=spellName
     local spellAR,spellAG=1,0
     if spellName then
@@ -129,7 +129,7 @@ local function HealBot_Tooltip_setspellName(unit, spellName, hbGUID)
         if not hbCommands[strlower(spellName)] then
             local mIdx=GetMacroIndexByName(spellName)
             if mIdx==0 then 
-                validSpellName, spellAR, spellAG = HealBot_Tooltip_GetHealSpell(unit,spellName,hbGUID) 
+                validSpellName, spellAR, spellAG = HealBot_Tooltip_GetHealSpell(button,spellName) 
                 if validSpellName then
                     local z, x, _ = GetSpellCooldown(spellName);
                     if x and x>1 then 
@@ -370,11 +370,10 @@ local function HealBot_Tooltip_ClearLines()
     end
 end
 
-local function HealBot_Action_GetTimeOffline(hbGUID)
-    local uOffline=HealBot_Action_retUnitOffline(hbGUID)
+local function HealBot_Action_GetTimeOffline(button)
     local timeOffline=nil
-    if uOffline then
-        timeOffline = time() - uOffline;
+    if button.status.offline then
+        timeOffline = time() - button.status.offline;
         local seconds = timeOffline % 60;
         local minutes = math.floor(timeOffline / 60) % 60
         local hours = math.floor(timeOffline / 3600)
@@ -423,13 +422,14 @@ local function HealBot_Action_DoRefreshTooltip()
 
     local hlth=xButton.health.current
     local maxhlth=xButton.health.max
-    local mana,maxmana=HealBot_UnitMana(xUnit)
+    local mana=xButton.mana.current
+    local maxmana=xButton.mana.max
 
     if hlth>maxhlth then
         maxhlth=HealBot_CorrectPetHealth(xUnit,hlth,maxhlth)
     end
   
-    local UnitOffline=HealBot_Action_GetTimeOffline(xGUID); --added by Diacono
+    local UnitOffline=HealBot_Action_GetTimeOffline(xButton); --added by Diacono
     local uBuff=xButton.aura.buff.name
     local DebuffType=xButton.aura.debuff.type;
 
@@ -457,11 +457,11 @@ local function HealBot_Action_DoRefreshTooltip()
     if spellRight=="" then spellRight=nil; end
     if spellButton4=="" then spellButton4=nil; end
     if spellButton5=="" then spellButton5=nil; end
-    local LeftN, LeftR, LeftG = HealBot_Tooltip_setspellName(xUnit, spellLeft, xGUID)
-    local MiddleN, MiddleR, MiddleG = HealBot_Tooltip_setspellName(xUnit, spellMiddle, xGUID)
-    local RightN, RightR, RightG = HealBot_Tooltip_setspellName(xUnit, spellRight, xGUID)
-    local Button4N, Button4R, Button4G = HealBot_Tooltip_setspellName(xUnit, spellButton4, xGUID)
-    local Button5N, Button5R, Button5G = HealBot_Tooltip_setspellName(xUnit, spellButton5, xGUID)
+    local LeftN, LeftR, LeftG = HealBot_Tooltip_setspellName(xButton, spellLeft)
+    local MiddleN, MiddleR, MiddleG = HealBot_Tooltip_setspellName(xButton, spellMiddle)
+    local RightN, RightR, RightG = HealBot_Tooltip_setspellName(xButton, spellRight)
+    local Button4N, Button4R, Button4G = HealBot_Tooltip_setspellName(xButton, spellButton4)
+    local Button5N, Button5R, Button5G = HealBot_Tooltip_setspellName(xButton, spellButton5)
 
     HealBot_Tooltip_ClearLines();
     
@@ -538,7 +538,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 if UnitOffline then 
                     HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 elseif zone and not strfind(zone,"Level") then
-                    if zone==HB_TOOLTIP_OFFLINE then HealBot_Action_UnitIsOffline(xGUID,time()) end
+                    if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = time() end
                     HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 end
                 local vUnit=HealBot_retIsInVehicle(xUnit)

@@ -591,7 +591,7 @@ local function HealBot_Panel_SetupBars()
                     uName=HealBot_UnitName[xButton.guid];
                 elseif HealBot_cpOn and HealBot_cpName[xUnit] then -- Crash Protection 
                     uName=HealBot_cpName[xUnit];
-                elseif strsub(xButton.unit,1,4)==strsub(HEALBOT_WORD_TEST,1,4) then
+                else
                     uName=xButton.unit
                 end
             end
@@ -820,7 +820,7 @@ local function HealBot_Panel_SetupBars()
         if hbBarsPerFrame[j]>0 then
             if HealBot_Config.DisabledNow==0 then
                 HealBot_Action_SetHeightWidth(MaxOffsetX[j], MaxOffsetY[j], bwidth[j], bheight[j], j);
-                if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==false or HealBot_Data["UILOCK"]=="YES" or HealBot_Action_ShouldHealSome(nil, j)) then
+                if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==false or HealBot_Data["UILOCK"]=="YES" or HealBot_Action_ShouldHealSome(j)) then
                     HealBot_Action_ShowPanel(j)
                 end
             else
@@ -1169,7 +1169,7 @@ local function HealBot_Panel_enemyBar(eUnit)
 end
 
 local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
---    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"] then
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"] then
         if HealBot_Data["UILOCK"]=="YES" then
             if existsShow then
                 if UnitExists(eUnit) and (UnitIsUnit(eUnit, pUnit) or not UnitIsFriend(eUnit, pUnit)) then
@@ -1179,9 +1179,9 @@ local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
                 HealBot_Panel_enemyBar(eUnit)
             end
         end
---    else
---        HealBot_Panel_enemyBar(eUnit)
---    end
+    else
+        HealBot_Panel_enemyBar(eUnit)
+    end
 end
 
 local function HealBot_Panel_setTanks()
@@ -1322,10 +1322,10 @@ local function HealBot_Panel_targetHeals()
     local k=i[hbCurrentFrame]
     local xGUID=nil
     local uExists=false
-    if UnitExists(xUnit) and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"]==false or UnitIsFriend("player",xUnit)) then
+    if UnitExists(xUnit) or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] then
         uExists=true
     end
-    if uExists and UnitHealth(xUnit)>99 and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] or IsFighting==0) then
+    if uExists and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] or IsFighting==0) then
         xGUID=HealBot_UnitGUID(xUnit)
         if (not UnitInRaid(xUnit) and not UnitInParty(xUnit)) or ((UnitInRaid(xUnit) or UnitInParty(xUnit)) and xGUID and HealBot_TrackNames[xGUID]) then
             if HealBot_Data["PGUID"]==xGUID then 
@@ -1336,7 +1336,7 @@ local function HealBot_Panel_targetHeals()
                 if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCRAID"] then TargetValid=true end
             elseif UnitPlayerOrPetInParty("target") or UnitPlayerOrPetInRaid("target") then
                 if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] then TargetValid=true end
-            else
+            elseif UnitExists(xUnit) and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"]==false or UnitIsFriend("player",xUnit)) then
                 TargetValid=true
             end
             if TargetValid and not HealBot_Panel_BlackList[xGUID] then
@@ -2460,9 +2460,6 @@ local function HealBot_Panel_PanelChanged(disableHealBot)
                     if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
-                    if (not online and not HealBot_Action_retUnitOffline(xGUID)) or HealBot_Action_retUnitOffline(xGUID) then
-                        HealBot_Action_UnitIsOffline(xGUID)
-                    end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
                 end
             end
@@ -2485,9 +2482,6 @@ local function HealBot_Panel_PanelChanged(disableHealBot)
                     end
                     if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
-                    end
-                    if (not UnitIsConnected(xUnit) and not HealBot_Action_retUnitOffline(xGUID)) or HealBot_Action_retUnitOffline(xGUID) then
-                        HealBot_Action_UnitIsOffline(xGUID)
                     end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
                 end
