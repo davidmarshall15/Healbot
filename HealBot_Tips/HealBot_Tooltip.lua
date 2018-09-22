@@ -20,7 +20,7 @@ function HealBot_Tooltip_Clear_CheckBuffs()
 end
 
 function HealBot_Tooltip_CheckBuffs(buff)
-    HealBot_CheckBuffs[buff]=buff;
+    HealBot_CheckBuffs[buff]=true;
 end
 
 function HealBot_talentSpam(hbGUID,cmd,status)
@@ -405,7 +405,7 @@ end
 
 local function HealBot_Action_DoRefreshTooltip()
     if HealBot_Globals.ShowTooltip==false then return end
-    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"]=="YES" then return end
+    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
     local xUnit=HealBot_Data["TIPUNIT"]
     local xGUID=HealBot_UnitGUID(xUnit)
     if not xGUID or not HealBot_Unit_Button[xUnit] then return end
@@ -446,7 +446,7 @@ local function HealBot_Action_DoRefreshTooltip()
     if spellButton4 and strsub(strlower(spellButton4),1,4)==strlower(HEALBOT_TELL) then spellButton4=HEALBOT_TELL end
     if spellButton5 and strsub(strlower(spellButton5),1,4)==strlower(HEALBOT_TELL) then spellButton5=HEALBOT_TELL end
   
-    if not IsModifierKeyDown() and HealBot_Data["UILOCK"]=="NO" and HealBot_Globals.SmartCast and UnitExists(xUnit) and UnitIsFriend("player",xUnit) then 
+    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and UnitExists(xUnit) and UnitIsFriend("player",xUnit) then 
         local z=spellLeft;
         spellLeft=nil;
         spellLeft=HealBot_Action_SmartCast(xButton);
@@ -499,7 +499,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 local unitSpec = " "
                 if HealBot_UnitData[xGUID] then
                     if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and (doTalentRequest[xGUID] or 1)==1 then
-                        if HealBot_UnitData[xGUID]["SPEC"]==" " or HealBot_Data["UILOCK"]=="NO" then
+                        if HealBot_UnitData[xGUID]["SPEC"]==" " or not HealBot_Data["UILOCK"] then
                             HealBot_Data["INSPECT"]=true
                             HealBot_TalentQuery(xUnit)
                         end
@@ -625,14 +625,14 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             local d=false
             if HealBot_Globals.Tooltip_ShowMyBuffs then
-                for x,y in pairs(HealBot_CheckBuffs) do
+                for x,_ in pairs(HealBot_CheckBuffs) do
                     local z=HealBot_RetMyBuffTime(xGUID,x)
                     if z then
                         d=true
                         z=z-GetTime()
                         local mins,secs=HealBot_Tooltip_ReturnMinsSecs(z)
                         linenum=linenum+1
-                        local br,bg,bb=HealBot_Options_RetBuffRGB(y)
+                        local br,bg,bb=HealBot_Options_RetBuffRGB(x)
                         if mins>1 then 
                             HealBot_Tooltip_SetLine(linenum,"    "..x.."  "..mins.." mins",br,bg,bb,1," ",0,0,0,0)
                         elseif tonumber(secs)>=0 then

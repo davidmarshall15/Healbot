@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.9.b1";
+﻿HEALBOT_VERSION   = "8.0.1.9.b2";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -578,6 +578,7 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_GREATER_DREAMLESS        = GetSpellInfo(24360) or "--Greater Dreamless Sleep";
     HEALBOT_DEBUFF_MAJOR_DREAMLESS          = GetSpellInfo(28504) or "--Major Dreamless Sleep";
     HEALBOT_DEBUFF_SHATTERED_DEFENSES       = GetSpellInfo(209574) or "--Shattered Defenses";
+    HEALBOT_DEBUFF_OVERWHELMING_POWER       = GetSpellInfo(266180) or "--Overwhelming Power";
     
     --Common Buffs
     HEALBOT_ZAMAELS_PRAYER                  = GetSpellInfo(88663) or "--Zamael's Prayer";

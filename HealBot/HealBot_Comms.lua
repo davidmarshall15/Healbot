@@ -44,7 +44,7 @@ function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
 end
 
 function HealBot_Comms_Zone()
-    local HealBotAddonMsgType=HealBot_GetHealBot_AddonMsgType()
+    local HealBotAddonMsgType=HealBot_retLuVars("AddonMsgType")
     HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Zone="..GetRealZoneText())
     if HealBotAddonMsgType==1 then
         HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=INSTANCE_CHAT")

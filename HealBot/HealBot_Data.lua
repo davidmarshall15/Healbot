@@ -1385,17 +1385,15 @@ HealBot_customTempUserName={}
 
 HealBot_Data={  ["TIPUNIT"] = "NONE",
                 ["TIPTYPE"] = "NONE",
-                ["TIPUSE"] = "NO",
-                ["UILOCK"] = "NO",
+                ["TIPUSE"] = false,
+                ["UILOCK"] = false,
                 ["PCLASSTRIM"] = "",
-                ["PRACETRIM"] = "",
                 ["PNAME"] = "",
                 ["PGUID"] = false,
                 ["INSPECT"] = false,
-                ["REFRESH"] = 1,
+                ["REFRESH"] = true,
                 ["MAPID"] = 0,
-                ["UNITSLOCK"] = 0,
-                ["SHOWDIR"] = "DIRECTION",
+                ["UNITSLOCK"] = false,
 };
 HealBot_UnitData={};
 HealBot_UnitGUID={};
