@@ -2819,6 +2819,7 @@ function HealBot_Options_HealGroups_OnClick(self, id)
     elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_CUSTOM_CASTBY_ENEMY_en then
         HealBot_setEnemyBars(id)
     end
+    HealBot_nextRecalcParty(0.1)
 end
 
 function HealBot_Options_HealGroupUp_OnClick(self, id)
@@ -5888,7 +5889,7 @@ function HealBot_Options_Skins_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.Skin_ID = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_Skins,HealBot_Skins[Healbot_Config_Skins.Skin_ID])
-                        if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), "n") end
+                        if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), true) end
                     end
         info.checked = false;
         if Healbot_Config_Skins.Skin_ID==j then info.checked = true end
@@ -5965,7 +5966,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
             HealBot_Options_InitSub(319)
         end
         HealBot_Action_ResetrCalls()
-        HealBot_setLuVars("nextRecalcParty",GetTime()+0.2)
+        HealBot_nextRecalcParty(0.2)
         HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Options_Set_Current_Skin")
     end
 end
@@ -11806,7 +11807,7 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
             local hFrames=HealBot_Panel_retHealBot_Header_Frames()
             for _,h in pairs(hFrames) do
-                if h:GetName() then
+                if h["GetName"] then
                     local bar = _G[h:GetName().."Bar"]
                     if bar then
                         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
@@ -11841,7 +11842,7 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
             local hFrames=HealBot_Panel_retHealBot_Header_Frames()
             for _,h in pairs(hFrames) do
-                if h:GetName() then
+                if h["GetName"] then
                     local bar = _G[h:GetName().."Bar"]
                     if bar then
                         bar.txt = _G[bar:GetName().."_text"];

@@ -403,6 +403,35 @@ local function HealBot_Action_GetTimeOffline(button)
     return timeOffline;
 end
 
+local function HealBot_HealthColor(button)
+    local hca,hcr,hcb=0,0,0
+    local hcpct,hipct=0,0
+
+    hcr,hcg = 1, 1
+    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then -- Incoming Heal Bar Colour = "Same as Health (Future Health)"
+        if not button.status.dead then
+            hipct = button.health.current+button.health.incoming
+            if hipct<button.health.max then
+                hipct=(button.health.current+button.health.incoming)/button.health.max
+            else
+                hipct=1;
+            end
+        end
+        hcr, hcg = HealBot_Action_BarColourPct(hipct)
+    else 
+        if not button.status.dead then
+            if button.health.max == 0 then
+                hcpct=1
+            else
+                hcpct = button.health.current/button.health.max
+            end
+        end
+        hcr, hcg = HealBot_Action_BarColourPct(hcpct)
+    end
+
+    return hcr,hcg,hcb
+end
+
 local function HealBot_Action_DoRefreshTooltip()
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
@@ -528,7 +557,7 @@ local function HealBot_Action_DoRefreshTooltip()
             linenum=linenum+1
             if hlth and maxhlth then
                 local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton)
-                r,g,b=HealBot_HealthColor(xUnit,hlth,maxhlth,true,false,uBuff,DebuffType,inHeal,inAbsorb,false,xButton);
+                r,g,b=HealBot_HealthColor(xButton);
                 local hPct=100
                 if maxhlth>0 then
                     hPct=floor((hlth/maxhlth)*100)
@@ -547,7 +576,7 @@ local function HealBot_Action_DoRefreshTooltip()
                     local lr,lg,lb=HealBot_Action_ClassColour(vUnit)
                     hlth,maxhlth=HealBot_VehicleHealth(vUnit)
                     local hPct=floor((hlth/maxhlth)*100)
-                    r,g,b=HealBot_HealthColor(vUnit,hlth,maxhlth,true,false,uBuff,DebuffType,0,0,false,xButton);
+                    r,g,b=HealBot_HealthColor(xButton);
                     hlth=HealBot_Tooltip_readNumber(hlth)
                     maxhlth=HealBot_Tooltip_readNumber(maxhlth)
                     if UnitExists(vUnit) then

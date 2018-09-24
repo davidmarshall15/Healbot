@@ -764,7 +764,7 @@ local function HealBot_Panel_SetupBars()
     end
     
     if hbPanelShowhbFocus then
-        local fn="HealBot_Action_hbFocusButton"
+        local fn="HealBot_Action_HealUnit999"
         local fp=_G["f"..hbPanelShowhbFocus.."_HealBot_Action"]
         local fhb=_G[fn]
         if not fhb then
@@ -1233,7 +1233,7 @@ local function HealBot_Panel_SubSort(hbincSort,alsoEnemy)
         local sUnit=subunits[j];
         local sGUID=HealBot_UnitGUID(sUnit) or sUnit
         if not HealBot_TrackUnit[sUnit] and not HealBot_Panel_BlackList[sGUID] then
-            local setBtutton=HealBot_Action_SetHealButton(sUnit,sGUID,hbCurrentFrame,alsoEnemy);
+            local setBtutton=HealBot_Action_SetHealButton(sUnit,sGUID,hbCurrentFrame);
             if setBtutton then
                 HealBot_TrackUnit[sUnit]=true
                 HealBot_TrackGUID[sGUID]=nil
