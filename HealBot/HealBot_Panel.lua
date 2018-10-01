@@ -107,7 +107,7 @@ function HealBot_Panel_clickToFocus(status)
     else
         hbPanelShowhbFocus=nil
     end
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_clickToFocus")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_GetMyHealTargets()
@@ -127,7 +127,7 @@ function HealBot_Panel_SetSubSortPlayer()
         HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SUBSORTPLAYER1)
     end
     HealBot_Options_SubSortPlayerFirst:SetChecked(Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"])
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_SetSubSortPlayer")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_SethbTopRole(Role)
@@ -170,7 +170,7 @@ function HealBot_Panel_ClearBarArrays()
     HealBot_BarY={};
     HealBot_HeadX={};
     HealBot_HeadY={};
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_ClearBarArrays")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_SetmaxHealDiv(lvl)
@@ -196,12 +196,12 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil;
     end
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_ClearBlackList")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_AddBlackList(hbGUID)
     HealBot_Panel_BlackList[hbGUID]=true;
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_AddBlackList")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_ClearHealTargets()
@@ -224,7 +224,7 @@ function HealBot_Panel_ToggelHealTarget(unit)
     else
         table.insert(HealBot_MyHealTargets,xGUID)
     end
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_ToggelHealTarget")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit)
@@ -242,7 +242,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit)
     else
         table.insert(HealBot_MyPrivateTanks,xGUID)
     end
-    HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_ToggelPrivateTanks")
+    HealBot_Data["REFRESH"]=true;
 end
 
 function HealBot_Panel_RetMyHealTarget(unit)
@@ -307,43 +307,49 @@ local roleTextures={
     }
     
 local classTextures={
-    ["DEATHKNIGHT"]="Interface\\Addons\\HealBot\\Images\\Deathknight.tga",
-    ["DRUID"]="Interface\\Addons\\HealBot\\Images\\Druid.tga",
-    ["HUNTER"]="Interface\\Addons\\HealBot\\Images\\Hunter.tga",
-    ["MAGE"]="Interface\\Addons\\HealBot\\Images\\Mage.tga",
-    ["MONK"]="Interface\\Addons\\HealBot\\Images\\Monk.tga",
-    ["PALADIN"]="Interface\\Addons\\HealBot\\Images\\Paladin.tga",
-    ["PRIEST"]="Interface\\Addons\\HealBot\\Images\\Priest.tga",
-    ["ROGUE"]="Interface\\Addons\\HealBot\\Images\\Rogue.tga",
-    ["SHAMAN"]="Interface\\Addons\\HealBot\\Images\\Shaman.tga",
-    ["WARLOCK"]="Interface\\Addons\\HealBot\\Images\\Warlock.tga",
-    ["WARRIOR"]="Interface\\Addons\\HealBot\\Images\\Warrior.tga",
+    ["DEATHKNIGHT"]="Interface\\Addons\\HealBot\\Images\\Deathknight",
+    ["DEMONHUNTER"]="Interface\\Addons\\HealBot\\Images\\Demonhunter",
+    ["DRUID"]="Interface\\Addons\\HealBot\\Images\\Druid",
+    ["HUNTER"]="Interface\\Addons\\HealBot\\Images\\Hunter",
+    ["MAGE"]="Interface\\Addons\\HealBot\\Images\\Mage",
+    ["MONK"]="Interface\\Addons\\HealBot\\Images\\Monk",
+    ["PALADIN"]="Interface\\Addons\\HealBot\\Images\\Paladin",
+    ["PRIEST"]="Interface\\Addons\\HealBot\\Images\\Priest",
+    ["ROGUE"]="Interface\\Addons\\HealBot\\Images\\Rogue",
+    ["SHAMAN"]="Interface\\Addons\\HealBot\\Images\\Shaman",
+    ["WARLOCK"]="Interface\\Addons\\HealBot\\Images\\Warlock",
+    ["WARRIOR"]="Interface\\Addons\\HealBot\\Images\\Warrior",
     }
 
 function HealBot_Action_SetClassIconTexture(button)
-    local xUnit=button.unit
-    if not HealBot_retdebuffTargetIcon(xUnit) then
+    if not button.aura.debuff.name then
         local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         if not bar then return end
         local iconName = _G[bar:GetName().."Icon15"];   
-        local setRole=false
-        local unitRole=UnitGroupRolesAssigned(xUnit)  
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-            if unitRole=="NONE" then
-                local xGUID=HealBot_UnitGUID(xUnit)
-                if xGUID and HealBot_UnitData[xGUID] then
-                    unitRole=HealBot_UnitData[xGUID]["ROLE"]
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+            local setRole=false
+            local unitRole=UnitGroupRolesAssigned(button.unit)  
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
+                if unitRole=="NONE" then
+                    local xGUID=HealBot_UnitGUID(button.unit)
+                    if xGUID and HealBot_UnitData[xGUID] then
+                        unitRole=HealBot_UnitData[xGUID]["ROLE"]
+                    end
+                end
+                if roleTextures[unitRole] then
+                    setRole=true
                 end
             end
-            if roleTextures[unitRole] then
-                setRole=true
+            if setRole then
+                iconName:SetTexture(roleTextures[unitRole]);
+            else
+                local _,classEN = UnitClass(button.unit)
+                --local fName=classTextures[classEN].."-round.tga"
+                iconName:SetTexture(classTextures[classEN]);
             end
-        end
-        if setRole then
-            iconName:SetTexture(roleTextures[unitRole]);
+            iconName:SetAlpha(1)
         else
-            local _,classEN = UnitClass(xUnit)
-            iconName:SetTexture(classTextures[classEN]);
+            iconName:SetAlpha(0)
         end
     end
 end
@@ -595,106 +601,130 @@ local function HealBot_Panel_SetupBars()
             end
             if uName then
                 local bFrame = xButton.frame
-                if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][bFrame]["SHOW"] then 
-                    if not newHeader["H"][bFrame] then
-                        if HealBot_BottomAnchors[bFrame] then 
-                            newHeader["H"][bFrame]=1
-                        else
-                            newHeader["H"][bFrame]=0
-                        end
-                    end
-                    h[bFrame]=h[bFrame]+1
-                    if HeaderPos[bFrame][h[bFrame]] then
-                        newHeader["H"][bFrame]=newHeader["H"][bFrame]+1;
-                        if HealBot_BottomAnchors[bFrame] then 
-                            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
-                                OffsetX[bFrame], _ = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][xButton.frame]["GROW"]==1 then
+                    if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][bFrame]["SHOW"] then 
+                        if not newHeader["H"][bFrame] then
+                            if HealBot_BottomAnchors[bFrame] then 
+                                newHeader["H"][bFrame]=1
                             else
-                                _, OffsetY[bFrame] = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                                newHeader["H"][bFrame]=0
                             end
                         end
-                        if newHeader["H"][bFrame]>cols[bFrame] then
-                            newHeader["H"][bFrame]=1
-                            if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
-                            if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
-                            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
+                        h[bFrame]=h[bFrame]+1
+                        if HeaderPos[bFrame][h[bFrame]] then
+                            newHeader["H"][bFrame]=newHeader["H"][bFrame]+1;
+                            if HealBot_BottomAnchors[bFrame] then 
+                                OffsetX[bFrame], _ = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                            end
+                            if newHeader["H"][bFrame]>cols[bFrame] then
+                                newHeader["H"][bFrame]=1
+                                if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                                if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
                                 OffsetY[bFrame] = OffsetY[bFrame] + bheight[bFrame] + HealBot_AddHeight["BOTH"][bFrame] + HealBot_AddHeight["BOTTOM"][bFrame]
                                 OffsetX[bFrame] = 6 + ceil(HealBot_AddWidth["BOTH"][bFrame]/2)
-                            else
-                                OffsetY[bFrame] = 4 + ceil(HealBot_AddHeight["BOTH"][bFrame]/2)
-                                OffsetX[bFrame] = OffsetX[bFrame] + bwidth[bFrame] + HealBot_AddWidth["BOTH"][bFrame] + HealBot_AddWidth["SIDE"][bFrame]
                             end
-                        end
-                        if not HealBot_BottomAnchors[bFrame] then 
-                            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
+                            if not HealBot_BottomAnchors[bFrame] then 
                                 OffsetX[bFrame], _ = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                            end
+                            OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
+                        else
+                            OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
+                        end
+                    elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][bFrame]["GRPCOLS"] then
+                        h[bFrame]=h[bFrame]+1
+                        if not newHeader["G"][bFrame] then
+                            if HealBot_BottomAnchors[bFrame] then 
+                                newHeader["G"][bFrame]=1
                             else
-                                _, OffsetY[bFrame] = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                                newHeader["G"][bFrame]=0
                             end
                         end
-                        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
-                            OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                        else
-                            _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                        end
-                    else
-                        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
-                            OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                        else
-                            _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                        end
-                    end
-                elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][bFrame]["GRPCOLS"] then
-                    h[bFrame]=h[bFrame]+1
-                    if not newHeader["G"][bFrame] then
-                        if HealBot_BottomAnchors[bFrame] then 
-                            newHeader["G"][bFrame]=1
-                        else
-                            newHeader["G"][bFrame]=0
-                        end
-                    end
-                    if HeaderPos[bFrame][h[bFrame]] then
-                        newHeader["G"][bFrame]=newHeader["G"][bFrame]+1;
-                        if newHeader["G"][bFrame]>cols[bFrame] then
-                            if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
-                            if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
-                            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
+                        if HeaderPos[bFrame][h[bFrame]] then
+                            newHeader["G"][bFrame]=newHeader["G"][bFrame]+1;
+                            if newHeader["G"][bFrame]>cols[bFrame] then
+                                if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                                if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
                                 OffsetY[bFrame] = OffsetY[bFrame] + bheight[bFrame] + HealBot_AddHeight["BOTH"][bFrame] + HealBot_AddHeight["BOTTOM"][bFrame]
                                 OffsetX[bFrame] = 6 + ceil(HealBot_AddWidth["BOTH"][bFrame]/2)
-                            else
-                                OffsetY[bFrame] = 4 + ceil(HealBot_AddHeight["BOTH"][bFrame]/2)
-                                OffsetX[bFrame] = OffsetX[bFrame] + bwidth[bFrame] + HealBot_AddWidth["BOTH"][bFrame] + HealBot_AddWidth["SIDE"][bFrame]
+                                newHeader["G"][bFrame]=1;
                             end
-                            newHeader["G"][bFrame]=1;
                         end
-                    end
-                    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
                         OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
                     else
-                        _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                    end
-                else
-                    if not newHeader["C"][bFrame] then newHeader["C"][bFrame]=1 end
-                    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
+                        if not newHeader["C"][bFrame] then newHeader["C"][bFrame]=1 end
                         OffsetX[bFrame], _ = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                    else
-                        _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
-                    end
-                    if newHeader["C"][bFrame]==ceil((hbBarsPerFrame[bFrame])/cols[bFrame]) and z[bFrame]<hbBarsPerFrame[bFrame] then
-                        newHeader["C"][bFrame]=0;
-                        if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
-                        if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
-                        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][bFrame]["GROW"]==1 then
+                        if newHeader["C"][bFrame]==ceil((hbBarsPerFrame[bFrame])/cols[bFrame]) and z[bFrame]<hbBarsPerFrame[bFrame] then
+                            newHeader["C"][bFrame]=0;
+                            if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                            if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
                             OffsetY[bFrame] = OffsetY[bFrame] + bheight[bFrame] + HealBot_AddHeight["BOTH"][bFrame] + HealBot_AddHeight["BOTTOM"][bFrame]
                             OffsetX[bFrame] = 6 + ceil(HealBot_AddWidth["BOTH"][bFrame]/2)
+                        end
+                        z[bFrame]=z[bFrame]+1
+                        newHeader["C"][bFrame]=newHeader["C"][bFrame]+1;
+                    end
+                else
+                    if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][bFrame]["SHOW"] then 
+                        if not newHeader["H"][bFrame] then
+                            if HealBot_BottomAnchors[bFrame] then 
+                                newHeader["H"][bFrame]=1
+                            else
+                                newHeader["H"][bFrame]=0
+                            end
+                        end
+                        h[bFrame]=h[bFrame]+1
+                        if HeaderPos[bFrame][h[bFrame]] then
+                            newHeader["H"][bFrame]=newHeader["H"][bFrame]+1;
+                            if HealBot_BottomAnchors[bFrame] then 
+                                _, OffsetY[bFrame] = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                            end
+                            if newHeader["H"][bFrame]>cols[bFrame] then
+                                newHeader["H"][bFrame]=1
+                                if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                                if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
+                                OffsetY[bFrame] = 4 + ceil(HealBot_AddHeight["BOTH"][bFrame]/2)
+                                OffsetX[bFrame] = OffsetX[bFrame] + bwidth[bFrame] + HealBot_AddWidth["BOTH"][bFrame] + HealBot_AddWidth["SIDE"][bFrame]
+                            end
+                            if not HealBot_BottomAnchors[bFrame] then 
+                                _, OffsetY[bFrame] = HealBot_Action_PositionButton(nil,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],HeaderPos[bFrame][h[bFrame]],bFrame,bcspace[bFrame],brspace[bFrame])
+                            end
+                            _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
                         else
+                            _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
+                        end
+                    elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][bFrame]["GRPCOLS"] then
+                        h[bFrame]=h[bFrame]+1
+                        if not newHeader["G"][bFrame] then
+                            if HealBot_BottomAnchors[bFrame] then 
+                                newHeader["G"][bFrame]=1
+                            else
+                                newHeader["G"][bFrame]=0
+                            end
+                        end
+                        if HeaderPos[bFrame][h[bFrame]] then
+                            newHeader["G"][bFrame]=newHeader["G"][bFrame]+1;
+                            if newHeader["G"][bFrame]>cols[bFrame] then
+                                if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                                if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
+                                OffsetY[bFrame] = 4 + ceil(HealBot_AddHeight["BOTH"][bFrame]/2)
+                                OffsetX[bFrame] = OffsetX[bFrame] + bwidth[bFrame] + HealBot_AddWidth["BOTH"][bFrame] + HealBot_AddWidth["SIDE"][bFrame]
+                                newHeader["G"][bFrame]=1;
+                            end
+                        end
+                        _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
+                    else
+                        if not newHeader["C"][bFrame] then newHeader["C"][bFrame]=1 end
+                        _, OffsetY[bFrame] = HealBot_Action_PositionButton(xButton,OffsetX[bFrame],OffsetY[bFrame],bwidth[bFrame],bheight[bFrame],nil,bFrame,bcspace[bFrame],brspace[bFrame])
+                        if newHeader["C"][bFrame]==ceil((hbBarsPerFrame[bFrame])/cols[bFrame]) and z[bFrame]<hbBarsPerFrame[bFrame] then
+                            newHeader["C"][bFrame]=0;
+                            if MaxOffsetY[bFrame]<OffsetY[bFrame] then MaxOffsetY[bFrame] = OffsetY[bFrame]; end
+                            if MaxOffsetX[bFrame]<OffsetX[bFrame] then MaxOffsetX[bFrame] = OffsetX[bFrame]; end
                             OffsetY[bFrame] = 4 + ceil(HealBot_AddHeight["BOTH"][bFrame]/2)
                             OffsetX[bFrame] = OffsetX[bFrame] + bwidth[bFrame] + HealBot_AddWidth["BOTH"][bFrame] + HealBot_AddWidth["SIDE"][bFrame]
                         end
+                        z[bFrame]=z[bFrame]+1
+                        newHeader["C"][bFrame]=newHeader["C"][bFrame]+1;
                     end
-            
-                    z[bFrame]=z[bFrame]+1
-                    newHeader["C"][bFrame]=newHeader["C"][bFrame]+1;
                 end
             end
         end
@@ -1084,7 +1114,7 @@ end
 function HealBot_Panel_resetTestCols(force)
     if HealBot_setTestBars then
         if force then HealBot_setTestCols={} end
-        HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_resetTestCols")
+        HealBot_Data["REFRESH"]=true;
     end
 end
 
@@ -2517,7 +2547,7 @@ local function HealBot_Panel_PanelChanged()
             end
             
             if i[1]+i[2]+i[3]+i[4]+i[5]+i[6]+i[7]+i[8]+i[9]+i[10]==0 then 
-                HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_PanelChanged") 
+                HealBot_Data["REFRESH"]=true;
                 HealBot_AddDebug("Self not found in HealBot_Panel_PanelChanged - Retry")
             end
         end   
@@ -2535,6 +2565,7 @@ local function HealBot_Panel_PanelChanged()
             if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xGUID] then
                 if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xGUID,"insert",nil) end
                 HealBot_TrackGUID[xGUID]=xUnit;
+                HealBot_Action_UpdateBackgroundButton(xButton)
                 xButton:Show()
             else
                 --if xGUID and HealBot_TrackNames[xGUID] and not HealBot_Panel_BlackList[xGUID] then 
@@ -2740,7 +2771,7 @@ function HealBot_Panel_PartyChanged()
         else
             HealBot_Panel_TestBarsOff()
             HealBot_Panel_PanelChanged()
-            HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Panel_PartyChanged") 
+            HealBot_Data["REFRESH"]=true;
         end
     else
         HealBot_Panel_PanelChanged()

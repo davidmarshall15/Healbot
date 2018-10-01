@@ -323,6 +323,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MYTARGET                = "My Targets"
 
     HEALBOT_DISCONNECTED_TEXT               = "[ DC ]"
+    HEALBOT_DEAD_TEXT                       = "[ RIP ]"
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
     HEALBOT_OPTIONS_TOOLTIPUPDATE           = "Constantly update";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER          = "Show buff before it expires";

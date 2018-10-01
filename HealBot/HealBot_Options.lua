@@ -2406,7 +2406,7 @@ function HealBot_Options_ShowClassOnBar_OnClick(self)
     else
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] = false
     end
-    HealBot_setOptions_Timer(150)
+    HealBot_setOptions_Timer(155)
 end
 
 function HealBot_Options_ShowNameOnBar_OnClick(self)
@@ -2702,7 +2702,7 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
             HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HealBot_Options_StorePrev["CDebuffcustomName"]] = false
         end
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.aura.debuff and xButton.aura.debuff.spellId then
+            if xButton.aura.debuff and xButton.aura.debuff.name then
                 HealBot_ClearDebuff(xButton,true)
                 HealBot_CheckAllDebuffs(xUnit)
             end
@@ -5967,7 +5967,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
         end
         HealBot_Action_ResetrCalls()
         HealBot_nextRecalcParty(0.2)
-        HealBot_Data["REFRESH"]=true; HealBot_RefreshCaller("HealBot_Options_Set_Current_Skin")
+        HealBot_Data["REFRESH"]=true;
     end
 end
 
