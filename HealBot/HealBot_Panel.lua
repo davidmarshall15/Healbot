@@ -1173,7 +1173,7 @@ local function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
             hbGUID="0x"..hbGUID
             HealBot_UnitName[hbGUID] = unitName;
             local frameNo=tonumber(hbCurFrame) or 1
-            local setBtutton=HealBot_Action_SetHealButton(unit,hbGUID,frameNo);
+            local setBtutton=HealBot_Action_SetHealButton(unit,hbGUID,frameNo,false);
             if setBtutton then
                 table.insert(HealBot_Action_HealButtons,unit)
                 HealBot_cpName[unit]=unitName
@@ -1247,7 +1247,7 @@ local function HealBot_Panel_setTanks()
     end)
 end
 
-local function HealBot_Panel_SubSort(hbincSort,alsoEnemy)
+local function HealBot_Panel_SubSort(hbincSort,isEnemy)
     if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
         table.sort(subunits,function (a,b)
             if not order[a] or not order[b] then
@@ -1263,7 +1263,7 @@ local function HealBot_Panel_SubSort(hbincSort,alsoEnemy)
         local sUnit=subunits[j];
         local sGUID=HealBot_UnitGUID(sUnit) or sUnit
         if not HealBot_TrackUnit[sUnit] and not HealBot_Panel_BlackList[sGUID] then
-            local setBtutton=HealBot_Action_SetHealButton(sUnit,sGUID,hbCurrentFrame);
+            local setBtutton=HealBot_Action_SetHealButton(sUnit,sGUID,hbCurrentFrame,isEnemy);
             if setBtutton then
                 HealBot_TrackUnit[sUnit]=true
                 HealBot_TrackGUID[sGUID]=nil
@@ -1379,7 +1379,7 @@ local function HealBot_Panel_targetHeals()
         if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
             HealBot_Panel_SubSort(false)
         else
-            HealBot_Panel_SubSort(false, true)
+            HealBot_Panel_SubSort(false)
         end
         if HealBot_BottomAnchors[hbCurrentFrame] then
             HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
@@ -2091,7 +2091,7 @@ local function HealBot_Panel_focusHeals()
         if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] then
             HealBot_Panel_SubSort(false)
         else
-            HealBot_Panel_SubSort(false, true)
+            HealBot_Panel_SubSort(false)
         end
         if HealBot_BottomAnchors[hbCurrentFrame] then 
             HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_FOCUS

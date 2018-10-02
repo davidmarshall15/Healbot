@@ -4198,74 +4198,60 @@ local function HealBot_Update_Fast()
     elseif HealBot_luVars["fastSwitch"]<3 and HealBot_luVars["EnemyBarsOn"] then
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton then
-                if UnitExists(xUnit) then
-                    local hlth=UnitHealth(xUnit)
-                    local maxhlth=HealBot_UnitMaxHealth(xUnit)
-                    if UnitIsEnemy("player",xUnit) then
-                        if xButton.status.enemy < 1 then
-                            xButton.status.enemy = 1
-                            xButton.health.current=hlth
-                            xButton.health.max=maxhlth
+                if xButton.status.enemy > -1 then
+                    if UnitExists(xUnit) then
+                        if UnitIsDeadOrGhost(xUnit) then
+                            xButton.health.current=0
                             HealBot_RecalcHeals(xButton)
                         else
-                            if UnitIsDeadOrGhost(xUnit) then
-                                xButton.health.current=0
-                                HealBot_RecalcHeals(xButton)
-                            else
-                                local xGUID=UnitGUID(xUnit)
-                                if xGUID then
-                                    if xGUID~=xButton.guid then
-                                        if HealBot_UnitData[xGUID] then
-                                            HealBot_UnitData[xGUID]["NAME"]=HealBot_GetUnitName(xUnit)
-                                            HealBot_UnitData[xGUID]["UNIT"]=xUnit
+                            local hlth=UnitHealth(xUnit)
+                            local maxhlth=HealBot_UnitMaxHealth(xUnit)
+                            local xGUID=UnitGUID(xUnit)
+                            if xGUID then
+                                if xGUID~=xButton.guid then
+                                    if HealBot_UnitData[xGUID] then
+                                        HealBot_UnitData[xGUID]["NAME"]=HealBot_GetUnitName(xUnit)
+                                        HealBot_UnitData[xGUID]["UNIT"]=xUnit
+                                    end
+                                    xButton.guid=xGUID
+                                    xButton.health.current=hlth
+                                    xButton.health.max=maxhlth
+                                    HealBot_RecalcHeals(xButton)
+                                else
+                                    local name, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(xUnit) 
+                                    if name and HealBot_luVars["EnemyBarsCastOn"]==1 then
+                                        if GetTime()+0.01>endTime and xButton.spells.castpct>-1 then
+                                            xButton.spells.castpct=-1
+                                            HealBot_Action_SetBar3Value(xButton)
+                                        else
+                                            local l=endTime-startTime
+                                            local c=((GetTime()*1000)-startTime)
+                                            local pct=ceil((c/l)*100)
+                                            if xButton.spells.castpct~=pct then
+                                                xButton.spells.castpct=pct
+                                                HealBot_Action_SetBar3Value(xButton, name)
+                                            end
                                         end
-                                        xButton.guid=xGUID
-                                        xButton.status.enemy = 0
+                                    elseif xButton.spells.castpct>-1 then
+                                        xButton.spells.castpct = -1
+                                        HealBot_Action_SetBar3Value(xButton)
+                                    end
+                                    if hlth~=xButton.health.current or maxhlth~=xButton.health.max then
                                         xButton.health.current=hlth
                                         xButton.health.max=maxhlth
-                                        HealBot_RecalcHeals(xButton)
-                                    else
-                                        local name, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(xUnit) 
-                                        if name and HealBot_luVars["EnemyBarsCastOn"]==1 then
-                                            if GetTime()+0.01>endTime and xButton.spells.castpct>-1 then
-                                                xButton.spells.castpct=-1
-                                                HealBot_Action_SetBar3Value(xButton)
-                                            else
-                                                local l=endTime-startTime
-                                                local c=((GetTime()*1000)-startTime)
-                                                local pct=ceil((c/l)*100)
-                                                if xButton.spells.castpct~=pct then
-                                                    xButton.spells.castpct=pct
-                                                    HealBot_Action_SetBar3Value(xButton, name)
-                                                end
-                                            end
-                                        elseif xButton.spells.castpct>-1 then
-                                            xButton.spells.castpct = -1
-                                            HealBot_Action_SetBar3Value(xButton)
-                                        end
-                                        if hlth~=xButton.health.current or maxhlth~=xButton.health.max then
-                                            xButton.health.current=hlth
-                                            xButton.health.max=maxhlth
-                                            HealBot_Action_setHealthText(xButton)
-                                            HealBot_Action_UpdateHealthButton(xButton)
-                                        end
+                                        HealBot_Action_setHealthText(xButton)
+                                        HealBot_Action_UpdateHealthButton(xButton)
                                     end
-                                else
-                                    xButton.status.enemy = 0
-                                    HealBot_Action_ResetUnitStatus(xButton)
                                 end
+                            else
+                                xButton.status.enemy = 0
+                                HealBot_Action_ResetUnitStatus(xButton)
                             end
                         end
-                    elseif xButton.status.enemy > -1 then
-                        xButton.status.enemy = -1
-                        HealBot_CheckAllDebuffs(xUnit)
-                        xButton.health.current=hlth
-                        xButton.health.max=maxhlth
-                        HealBot_RecalcHeals(xButton)
+                    else
+                        xButton.status.enemy = 0
+                        HealBot_Action_ResetUnitStatus(xButton)
                     end
-                elseif xButton.status.enemy > 0 then
-                    xButton.status.enemy = 0
-                    HealBot_Action_ResetUnitStatus(xButton)
                 end
             end
         end
@@ -5413,14 +5399,19 @@ function HealBot_InitSpells()
             HealBot_SmartCast_Spells[HEALBOT_FLASH_OF_LIGHT]="S"
         end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_SHAMAN] then
+        if HealBot_GetSpellId(HEALBOT_HEALING_SURGE) then
+            HealBot_SmartCast_Spells[HEALBOT_HEALING_SURGE]="S"
+        end
         if HealBot_GetSpellId(HEALBOT_HEALING_WAVE) then
-            HealBot_SmartCast_Spells[HEALBOT_HEALING_WAVE]="S"
+            HealBot_SmartCast_Spells[HEALBOT_HEALING_WAVE]="L"
         end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
         if HealBot_GetSpellId(HEALBOT_ENVELOPING_MIST) then
             HealBot_SmartCast_Spells[HEALBOT_ENVELOPING_MIST]="L"
         end
-        if HealBot_GetSpellId(HEALBOT_SOOTHING_MIST) then
+        if HealBot_GetSpellId(HEALBOT_REVIVAL) then
+            HealBot_SmartCast_Spells[HEALBOT_REVIVAL]="S"
+        elseif HealBot_GetSpellId(HEALBOT_SOOTHING_MIST) then
             HealBot_SmartCast_Spells[HEALBOT_SOOTHING_MIST]="S"
         end
     end
