@@ -2279,9 +2279,7 @@ function HealBot_Action_CheckRange(button)
     if button.status.update>0 then
         if button.status.update<2 then
             button.status.update=0
-            HealBot_Action_setHealthText(button)
-            HealBot_Action_setNameText(button)
-            HealBot_Action_UpdateDebuffButton(button)
+            HealBot_Action_Refresh(button)
         else
             HealBot_Action_ResetUnitAttribs(button)
             button.status.update=1
@@ -2289,7 +2287,7 @@ function HealBot_Action_CheckRange(button)
     elseif button.status.current>4 and UnitExists(button.unit) then
         local uRange=HealBot_UnitInRange(button)
         if uRange~=button.status.range then
-            HealBot_Action_UpdateDebuffButton(button)
+            HealBot_Action_Refresh(button)
         elseif button.status.dirarrow>-998 then
             HealBot_Action_ShowDirectionArrow(button)
         end
@@ -3067,6 +3065,8 @@ function HealBot_Action_ResetUnitAttribs(button)
     button.aura.debuff.name = button.aura.debuff.name or false
     button.aura.debuff.customPriority = button.aura.debuff.customPriority or 99
     button.aura.debuff.iconId = button.aura.debuff.iconId or false
+    HealBot_Action_UpdateHealsInButton(button)
+    HealBot_Action_UpdateAbsorbsButton(button)
 end
 
 function HealBot_Action_SetTestButton(hbCurFrame, unitText)

@@ -1518,16 +1518,31 @@ local function HealBot_UnitID(unit)
     return nil,nil
 end
 
-local function HealBot_IncHeals_HealsInUpdate(button)
-    if button then
-        if UnitExists(button.unit) then
-            local x=UnitGetIncomingHeals(button.unit) or 0
-            if x~=button.health.incoming then
-                button.health.incoming=x
-                HealBot_Action_setHealthText(button)
-                HealBot_Action_UpdateHealsInButton(button)
-            end
+local function HealBot_HealsInUpdate(button)
+    if UnitExists(button.unit) then
+        if button.health.incoming~=(UnitGetIncomingHeals(button.unit) or 0) then
+            button.health.incoming=(UnitGetIncomingHeals(button.unit) or 0)
+            HealBot_Action_setHealthText(button)
+            HealBot_Action_UpdateHealsInButton(button)
         end
+    elseif button.health.incoming>0 then
+        button.health.incoming=0
+        HealBot_Action_setHealthText(button)
+        HealBot_Action_UpdateHealsInButton(button)
+    end
+end
+
+local function HealBot_AbsorbsUpdate(button)
+    if UnitExists(button.unit) then
+        if button.health.absorbs~=UnitGetTotalAbsorbs(button.unit) then
+            button.health.absorbs=UnitGetTotalAbsorbs(button.unit)
+            HealBot_Action_setHealthText(button)
+            HealBot_Action_UpdateAbsorbsButton(button)
+        end
+    elseif button.health.absorbs>0 then
+        button.health.absorbs=0
+        HealBot_Action_setHealthText(button)
+        HealBot_Action_UpdateAbsorbsButton(button)
     end
 end
 
@@ -1586,8 +1601,8 @@ local function HealBot_DoUnitNameUpdate(unUnit,unGUID)
             HealBot_UnknownUnitUpdated[unUnit]=true
         end
         unb.guid=unGUID or HealBot_UnitGUID(unUnit) or "nk"
-        HealBot_IncHeals_HealsInUpdate(unUnit)
-        HealBot_doAbsorbs(unb)
+        HealBot_HealsInUpdate(unb)
+        HealBot_AbsorbsUpdate(unb)
         HealBot_CheckAllUnitVehicle(unUnit)
         if UnitExists(unUnit) then
             HealBot_CheckAllDebuffs(unUnit)
@@ -2026,8 +2041,8 @@ local function HealBot_OnEvent_Combat_Log(self, timestamp, event, hideCaster, so
             if (event == "SWING_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SPLIT" or
                 event == "DAMAGE_SHIELD" or event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL" or event == "ENVIRONMENTAL_DAMAGE" or
                 event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REMOVED") then
-                if xButton.health.incoming>0 then HealBot_IncHeals_HealsInUpdate(xButton.unit) end
-                if xButton.health.absorbs>0 then HealBot_doAbsorbs(xButton) end
+                if xButton.health.incoming>0 then HealBot_HealsInUpdate(xButton) end
+                if xButton.health.absorbs>0 then HealBot_AbsorbsUpdate(xButton) end
                 HealBot_Reset_UnitHealth(xButton)
             end
         end
@@ -3766,6 +3781,8 @@ local function HealBot_CheckUnitDebuffs(button)
             spellCD=HealBot_Options_retDebuffWatchTargetCD(curDebuffs[dName]["type"])
             if spellCD>1.5 and spellCD<12 then 
                 DebuffNameIn="x" 
+            else
+                spellCD=0
             end
         end
         if curDebuffs[dName]["priority"]<dPrio then
@@ -3781,10 +3798,9 @@ local function HealBot_CheckUnitDebuffs(button)
                     HealBot_luVars["MaskAuraReCheck"]=true
                     for _,dButton in pairs(HealBot_Unit_Button) do
                         if dButton.unit~=xUnit and dButton.aura.debuff.name and dButton.aura.debuff.type~=HEALBOT_CUSTOM_en then
-                            dButton.checks.debuff=true
+                            dButton.aura.checks=1
                         end
                     end
-                    HealBot_luVars["DelayAuraDCheck"]=true
                 end
  
                 if WatchTarget then 
@@ -3930,14 +3946,6 @@ local function HealBot_doAuraDebuffUnit(button)
         elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then
             HealBot_HasMyBuffs(button) 
         end
-    end
-end
-
-function HealBot_doAbsorbs(button)
-    if button.health.absorbs~=UnitGetTotalAbsorbs(button.unit) then
-        button.health.absorbs=UnitGetTotalAbsorbs(button.unit)
-        HealBot_Action_setHealthText(button)
-        HealBot_Action_UpdateAbsorbsButton(button)
     end
 end
 
@@ -4216,6 +4224,8 @@ local function HealBot_Update_Fast()
                                     xButton.guid=xGUID
                                     xButton.health.current=hlth
                                     xButton.health.max=maxhlth
+                                    HealBot_AbsorbsUpdate(xButton)
+                                    HealBot_HealsInUpdate(xButton)
                                     HealBot_RecalcHeals(xButton)
                                 else
                                     local name, _, _, startTime, endTime, _, _, notInterruptible = UnitCastingInfo(xUnit) 
@@ -4236,6 +4246,16 @@ local function HealBot_Update_Fast()
                                         xButton.spells.castpct = -1
                                         HealBot_Action_SetBar3Value(xButton)
                                     end
+                                    if xButton.health.incoming~=(UnitGetIncomingHeals(xUnit) or 0) then
+                                        xButton.health.incoming=(UnitGetIncomingHeals(xUnit) or 0)
+                                        HealBot_Action_setHealthText(xButton)
+                                        HealBot_Action_UpdateHealsInButton(xButton)
+                                    end
+                                    if xButton.health.absorbs~=UnitGetTotalAbsorbs(xUnit) then
+                                        xButton.health.absorbs=UnitGetTotalAbsorbs(xUnit)
+                                        HealBot_Action_setHealthText(xButton)
+                                        HealBot_Action_UpdateAbsorbsButton(xButton)
+                                    end
                                     if hlth~=xButton.health.current or maxhlth~=xButton.health.max then
                                         xButton.health.current=hlth
                                         xButton.health.max=maxhlth
@@ -4245,11 +4265,15 @@ local function HealBot_Update_Fast()
                                 end
                             else
                                 xButton.status.enemy = 0
+                                HealBot_AbsorbsUpdate(xButton)
+                                HealBot_HealsInUpdate(xButton)
                                 HealBot_Action_ResetUnitStatus(xButton)
                             end
                         end
                     else
                         xButton.status.enemy = 0
+                        HealBot_AbsorbsUpdate(xButton)
+                        HealBot_HealsInUpdate(xButton)
                         HealBot_Action_ResetUnitStatus(xButton)
                     end
                 end
@@ -4259,7 +4283,7 @@ local function HealBot_Update_Fast()
         if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] then HealBot_Action_RefreshTooltip() end
         if HealBot_luVars["MaskAuraDCheck"]<GetTime() and HealBot_luVars["MaskAuraReCheck"] then
             HealBot_luVars["MaskAuraReCheck"]=nil
-            HealBot_luVars["DelayAuraDCheck"]=true
+            HealBot_CheckAllDebuffs()
         end
         if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] and HealBot_luVars["DelayClearAggro"] then 
             HealBot_doClearAggro() 
@@ -4306,8 +4330,8 @@ function HealBot_OnUpdate(self)
                             elseif xButton.status.dead then
                                 HealBot_Action_UpdateTheDeadButton(xButton)
                             else
-                                if xButton.health.incoming>0 then HealBot_IncHeals_HealsInUpdate(xButton) end
-                                if xButton.health.absorbs>0 then HealBot_doAbsorbs(xButton) end
+                                if xButton.health.incoming>0 then HealBot_HealsInUpdate(xButton) end
+                                if xButton.health.absorbs>0 then HealBot_AbsorbsUpdate(xButton) end
                                 HealBot_Reset_UnitHealth(xButton)
                             end
                         end
@@ -5766,7 +5790,7 @@ local function HealBot_DoOnEvent(self, event, ...)
     elseif (event=="UNIT_ABSORB_AMOUNT_CHANGED") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
-            HealBot_doAbsorbs(xButton)
+            HealBot_AbsorbsUpdate(xButton)
         end
     elseif (event=="UNIT_COMBAT") then 
         if arg1 then HealBot_OnEvent_UnitCombat(arg1); end
@@ -5775,7 +5799,7 @@ local function HealBot_DoOnEvent(self, event, ...)
     elseif (event=="UNIT_HEAL_PREDICTION") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
-            HealBot_IncHeals_HealsInUpdate(xButton) 
+            HealBot_HealsInUpdate(xButton) 
         end
     elseif (event=="UNIT_SPELLCAST_START") or (event=="UNIT_SPELLCAST_SUCCEEDED") then
         if arg1 then HealBot_OnEvent_UnitThreat(arg1) end

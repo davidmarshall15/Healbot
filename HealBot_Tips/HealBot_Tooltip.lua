@@ -138,24 +138,24 @@ local function HealBot_Tooltip_setspellName(button, spellName)
                         if HealBot_Globals.Tooltip_ShowCD then
                             z = HealBot_Comm_round(z,1)
                             if z>=10 then
-                                if z>119.99 then
-                                    z = floor(z/60)
+                                if z>59 then
+                                    z = ceil(z/60)
                                     u=HEALBOT_TOOLTIP_MINS
                                 else
                                     z = HealBot_Comm_round(z,0)
                                 end
-                            elseif floor(z)==z then
+                            elseif ceil(z)==z then
                                 u=".0"..u
                             end                            
                             validSpellName=validSpellName..HEALBOT_TOOLTIP_CD..z..u 
-                            if z>0 then spellAR,spellAG=1,0 end
+                            if z>0 then spellAR,spellAG=1,1 end
                         elseif z>0.101 then
-                            spellAR,spellAG=1,0
+                            spellAR,spellAG=1,1
                         end
                     end
                 end
             else
-                spellAR,spellAG=1,1
+                spellAR,spellAG=0.5,1
             end
         end
     end
