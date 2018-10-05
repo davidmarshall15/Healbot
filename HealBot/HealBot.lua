@@ -3705,7 +3705,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         curDebuffs[dName]={}
         debuff_type=HEALBOT_CUSTOM_en
         curDebuffs[dName]["priority"]=dNamePriority
-    elseif isBossDebuff then -- Need to add option for boss debuffs  (not isCurable and isBossDebuff) 
+    elseif isBossDebuff and HealBot_Config_Cures.AlwaysShowBoss then -- Need to add option for boss debuffs  (not isCurable and isBossDebuff) 
         curDebuffs[dName]={}
         debuff_type=HEALBOT_CUSTOM_en
         curDebuffs[dName]["priority"]=9
@@ -3851,7 +3851,7 @@ local function HealBot_CheckUnitDebuffs(button)
     end
  
     if button.aura.debuff.name then
-        if button.aura.debuff.name~=prevDebuff["name"] then
+        if button.aura.debuff.name~=prevDebuff["name"] or button.aura.debuff.type~=prevDebuff["type"] then
             local inSpellRange = HealBot_UnitInRange(button, HealBot_luVars["dSpell"])
             if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil) then
                 if inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
@@ -4325,8 +4325,10 @@ function HealBot_OnUpdate(self)
                                 xButton.status.offline = false
                                 HealBot_Action_setNameText(xButton) 
                             elseif not xButton.status.offline and not UnitIsConnected(xUnit) then
-                                xButton.status.offline = time()
-                                HealBot_NameTextUpdate[xUnit] = GetTime()+10 
+                                xButton.status.offline = GetTime()
+                                if not HealBot_NameTextUpdate[xButton.unit] then
+                                    HealBot_NameTextUpdate[xButton.unit] = GetTime()+15
+                                end
                             elseif xButton.status.dead then
                                 HealBot_Action_UpdateTheDeadButton(xButton)
                             else
@@ -5151,7 +5153,10 @@ local function HealBot_OnEvent_SystemMsg(self,msg)
                     if (string.find(msg, HB_ONLINE)) then
                         xButton.status.offline = false
                     else
-                        xButton.status.offline = time()
+                        xButton.status.offline = GetTime()
+                        if not HealBot_NameTextUpdate[xButton.unit] then
+                            HealBot_NameTextUpdate[xButton.unit] = GetTime()+15
+                        end
                     end
                     HealBot_Action_setNameText(xButton) 
                     HealBot_Action_ResetUnitStatus(xButton);
@@ -5256,8 +5261,12 @@ local function HealBot_OnEvent_UnitSpellcastSent(self,caster,unitName,spellRank,
             xUnit=HealBot_luVars["TargetUnitID"]
         end
     end
-    if caster=="player" and uscName and UnitExists(xUnit) and HealBot_Unit_Button[xUnit] then
-        if spellName==HEALBOT_MASS_RESURRECTION or spellName==HEALBOT_ABSOLUTION or spellName==HEALBOT_ANCESTRAL_VISION or spellName==HEALBOT_REAWAKEN or spellName==HEALBOT_REVITALIZE or spellName==HEALBOT_RESURRECTION or spellName==HEALBOT_ANCESTRALSPIRIT or spellName==HEALBOT_REBIRTH or spellName==HEALBOT_REDEMPTION or spellName==HEALBOT_REVIVE or spellName==HEALBOT_RESUSCITATE then
+    if (spellName==HEALBOT_MASS_RESURRECTION or spellName==HEALBOT_ABSOLUTION or spellName==HEALBOT_ANCESTRAL_VISION or spellName==HEALBOT_REAWAKEN or spellName==HEALBOT_REVITALIZE or 
+        spellName==HEALBOT_RESURRECTION or spellName==HEALBOT_ANCESTRALSPIRIT or spellName==HEALBOT_REBIRTH or spellName==HEALBOT_REDEMPTION or spellName==HEALBOT_REVIVE or spellName==HEALBOT_RESUSCITATE)
+        and UnitExists(xUnit) and HealBot_Unit_Button[xUnit]  then
+        local xButton=HealBot_Unit_Button[xUnit]
+        xButton.status.update=1
+        if caster=="player" and uscName then
             if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 and Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"] then
                 if spellName==HEALBOT_MASS_RESURRECTION or spellName==HEALBOT_ABSOLUTION or spellName==HEALBOT_ANCESTRAL_VISION or spellName==HEALBOT_REAWAKEN or spellName==HEALBOT_REVITALIZE then           
                     HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,spellName,xUnit)

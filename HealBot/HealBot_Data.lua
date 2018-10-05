@@ -154,6 +154,7 @@ HealBot_Config_CuresDefaults = {
   DebuffWatchInCombat = true,
   DebuffWatchWhenGrouped = false,
   ShowDebuffWarning = true,
+  AlwaysShowBoss = true,
   CDCshownHB=true,
   CDCshownAB=false,
   HealBot_CDCWarnRange_Bar=3,

@@ -375,8 +375,8 @@ end
 local function HealBot_Action_GetTimeOffline(button)
     local timeOffline=nil
     if button.status.offline then
-        timeOffline = time() - button.status.offline;
-        local seconds = timeOffline % 60;
+        timeOffline = GetTime() - button.status.offline;
+        local seconds = math.floor(timeOffline % 60)
         local minutes = math.floor(timeOffline / 60) % 60
         local hours = math.floor(timeOffline / 3600)
         timeOffline = "";
@@ -569,7 +569,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 if UnitOffline then 
                     HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 elseif zone and not strfind(zone,"Level") then
-                    if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = time() end
+                    if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
                     HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 end
                 local vUnit=HealBot_retIsInVehicle(xUnit)
