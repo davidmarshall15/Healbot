@@ -866,15 +866,6 @@ function HealBot_Action_UpdateHealthButton(button)
     end
 end
 
-function HealBot_Action_EnableButtonAll()
-    HealBot_Action_ResetUnitStatus()
-end
-
-function HealBot_Action_DisableButtonAll()
-    HealBot_Action_ResetUnitStatus()
-end
-
-
 function HealBot_Action_BarColourPct(hlthPct)
     local hcpr, hcpg = 1,1
     if hlthPct>=0.98 then 
@@ -2276,33 +2267,6 @@ function HealBot_Action_ResetSkin(barType,button,numcols)
     HealBot_DoAction_ResetSkin(barType,button,numcols)
 end
 
-function HealBot_Action_CheckRange(button)
-    if button.status.update>0 then
-        if button.status.update<2 then
-            button.status.update=0
-            HealBot_Action_Refresh(button)
-        else
-            HealBot_Action_ResetUnitAttribs(button)
-            button.status.update=1
-        end
-    elseif button.status.current>4 and UnitExists(button.unit) then
-        local uRange=HealBot_UnitInRange(button)
-        if uRange~=button.status.range then
-            HealBot_Action_Refresh(button)
-            HealBot_Action_UpdateHealsInButton(button)
-            HealBot_Action_UpdateAbsorbsButton(button)
-        elseif button.status.dirarrow>-998 then
-            HealBot_Action_ShowDirectionArrow(button)
-        end
-    elseif not UnitExists(button.unit) and button.status.current~=3 then
-        HealBot_Action_Refresh(button)
-        HealBot_Action_UpdateHealsInButton(button)
-        HealBot_Action_UpdateAbsorbsButton(button)
-        button.status.current=3
-    else
-    end
-end
-
 function HealBot_Action_CheckReserved()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if xButton.status.reserved and UnitExists(xUnit) then
@@ -2332,10 +2296,8 @@ function HealBot_Action_ResetUnitStatus(button)
     if button then
         button.status.update=1
     else
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if not xButton.status.reserved then
-                xButton.status.update=1;
-            end
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            xButton.status.update=1;
         end
     end
 end
@@ -2431,12 +2393,11 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.status.bar4=0
         ghb.checks.health=GetTime()+1000000
         ghb.checks.range=GetTime()+1000000
-        ghb.checks.aggro=GetTime()+1000000
         ghb.spells.castpct=-1
         ghb.aura.buff.name=false
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
-        ghb.aura.debuff.customPriority=99
+        ghb.aura.debuff.priority=99
         ghb.aura.debuff.iconId=false
         ghb.aura.checks=4
         ghb.aggro.status=0
@@ -2993,8 +2954,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,isEnemy)
             shb.reset=nil
             shb.unit=unit
             HealBot_Unit_Button[unit]=shb
-            shb.checks.health=GetTime() + 2 + (shb.id / 40)
-            shb.checks.aggro=GetTime() + 1 + (shb.id / 40)
+            shb.checks.health=GetTime() + 1 + (shb.id / 40)
             if isEnemy then
                 shb.status.enemy = 1  -- -1 friend - 0 unknown - 1 enemy
             else
@@ -3041,13 +3001,14 @@ function HealBot_Action_ResetUnitAttribs(button)
     button.status.bar4 = button.status.bar4 or 0
     button.status.dead = button.status.dead or false
     button.status.enabled = button.status.enabled or false
+    button.status.offline=false
     button.spells.castpct = button.spells.castpct or -1
     button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
     button.status.range=HealBot_UnitInRange(button)
     button.aura.buff.name = button.aura.buff.name or false
     button.aura.debuff.type = button.aura.debuff.type or false
     button.aura.debuff.name = button.aura.debuff.name or false
-    button.aura.debuff.customPriority = button.aura.debuff.customPriority or 99
+    button.aura.debuff.priority = button.aura.debuff.priority or 99
     button.aura.debuff.iconId = button.aura.debuff.iconId or false
     HealBot_Action_UpdateHealsInButton(button)
     HealBot_Action_UpdateAbsorbsButton(button)
@@ -3128,12 +3089,12 @@ function HealBot_Action_PartyChanged()
         HealBot_Data["UNITSLOCK"]=false
 
         if HealBot_PreCombat then 
-            HealBot_Action_EnableButtonAll()
+            HealBot_Action_ResetUnitStatus()
         end 
     
  --       for xUnit,xButton in pairs(HealBot_Unit_Button) do
  --           if xButton.status.current==3 then
- --               HealBot_Action_ResetUnitStatus(xButton)
+ --               HealBot_Action_Refresh(xButton)
  --           end
  --       end
     else
@@ -3329,7 +3290,7 @@ end
 function HealBot_Action_HealUnit_OnLeave(self)
     HealBot_Action_HideTooltip(self);
     if self.status and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
-        HealBot_Action_ResetUnitStatus(self)
+        HealBot_Action_Refresh(self)
     end
     local xUnit=self.unit
     if self.aggro and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and self.aggro.status==-1 then
@@ -3904,7 +3865,7 @@ function HealBot_Action_Toggle_Enabled(button)
     else
         HealBot_MyTargets[xGUID]=true
     end
-    HealBot_Action_ResetUnitStatus(button)
+    HealBot_Action_Refresh(button)
 end
 
 function HealBot_Action_RetMyTarget(hbGUID)

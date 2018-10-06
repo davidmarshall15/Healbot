@@ -1071,6 +1071,20 @@ function HealBot_Options_val2_OnLoad(self,vText,Min,Max,Step,vDiv,pageStep)
     self:SetStepsPerPage(StepsPerPage);
 end
 
+function HealBot_Options_cpuLables_OnLoad(self,vText,Min,Max,Step,pageStep)
+    self.text = vText;
+    local StepsPerPage=pageStep or HealBot_Options_getStepsPerPage(Max,Step)
+    local g=_G[self:GetName().."Text"]
+    g:SetText(vText);
+    g=_G[self:GetName().."Low"]
+    g:SetText(HEALBOT_WORDS_MORECPU);
+    g=_G[self:GetName().."High"]
+    g:SetText(HEALBOT_WORDS_LESSCPU);
+    self:SetMinMaxValues(Min,Max);
+    self:SetValueStep(Step);
+    self:SetStepsPerPage(StepsPerPage);
+end
+
 function HealBot_Options_valtime_OnLoad(self,vText,Min,Max,Step,secsOnly,pageStep)
     self.text = vText;
     local StepsPerPage=pageStep or 2 --HealBot_Options_getStepsPerPage(Max,Step)
@@ -2149,8 +2163,8 @@ function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
     else
         val=val/10;
         HealBot_Globals.RangeCheckFreq = val;
-        local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val);
+        --local g=_G[self:GetName().."Text"]
+        --g:SetText(self.text .. ": " .. val);
         HealBot_Set_Timers()
     end
 end
@@ -9751,9 +9765,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_val2_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,0.5,4.0,0.5,10)
-            HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.2)*10)
-            HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ .. ": " .. HealBot_Globals.RangeCheckFreq)
+            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,0.5,10.0,0.5,10)
+            HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
+            HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)
             g=_G["healbotcmdfontstr"]

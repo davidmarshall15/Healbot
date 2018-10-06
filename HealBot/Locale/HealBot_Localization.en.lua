@@ -332,6 +332,8 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_NOTIFY_MSG              = "Message"
     HEALBOT_WORDS_YOU                       = "you";
+    HEALBOT_WORDS_MORECPU                   = "More CPU";
+    HEALBOT_WORDS_LESSCPU                   = "Less CPU";
     HEALBOT_NOTIFYOTHERMSG                  = "Casting #s on #n";
 
     HEALBOT_OPTIONS_HOTPOSITION             = "Icon position"
