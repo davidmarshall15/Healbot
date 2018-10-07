@@ -3010,6 +3010,7 @@ function HealBot_Action_ResetUnitAttribs(button)
     button.aura.debuff.name = button.aura.debuff.name or false
     button.aura.debuff.priority = button.aura.debuff.priority or 99
     button.aura.debuff.iconId = button.aura.debuff.iconId or false
+    button.aura.checks=1
     HealBot_Action_UpdateHealsInButton(button)
     HealBot_Action_UpdateAbsorbsButton(button)
 end

@@ -792,6 +792,20 @@ local function HealBot_configClassHoT()
     end
 end
 
+local function HealBot_CheckTime_Modifier()
+    if IsInRaid() then
+        if GetNumGroupMembers() < 15 then
+            HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/8), 4) -- At 50FPS with default settings = 0.032
+        else
+            HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.016
+        end
+    elseif IsInGroup() then
+        HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/16), 4) -- At 50FPS with default settings = 0.064
+    else
+        HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/80), 4) -- At 50FPS with default settings = 0.32
+    end
+end
+
 local HealBot_UnknownUnitUpdated={}
 local function HealBot_RecalcParty()
     if HealBot_luVars["DoUpdates"] then
@@ -800,6 +814,7 @@ local function HealBot_RecalcParty()
         for xUnit,_ in pairs(HealBot_UnknownUnitUpdated) do
             HealBot_UnknownUnitUpdated[xUnit]=nil
         end
+        HealBot_CheckTime_Modifier()
     end
 end
 
@@ -1545,14 +1560,10 @@ local function HealBot_AbsorbsUpdate(button)
     end
 end
 
-local function HealBot_CheckTime_Modifier()
-    HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/10), 4) -- At 50FPS with default settings = 0.04
-end
-
 local function HealBot_Health_CheckTime(button)
-    HealBot_luVars["HealthCheckTime"]=HealBot_luVars["HealthCheckTime"]+(HealBot_Timers["CheckTimeMod"]*5)
-    if HealBot_luVars["HealthCheckTime"]<GetTime()+0.02 then
-        HealBot_luVars["HealthCheckTime"]=GetTime()+0.1
+    HealBot_luVars["HealthCheckTime"]=HealBot_luVars["HealthCheckTime"]+(HealBot_Timers["CheckTimeMod"]*4)
+    if HealBot_luVars["HealthCheckTime"]<GetTime() then
+        HealBot_luVars["HealthCheckTime"]=GetTime()+0.04
     end
     button.checks.health=HealBot_luVars["HealthCheckTime"]
 end
@@ -2052,8 +2063,8 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*8))/(HealBot_luVars["qaFR"]/5), 4) -- At 50FPS with default settings = 0.26
-        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/5), 4) -- At 50FPS with default settings = 0.02
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*4))/(HealBot_luVars["qaFR"]/5), 4) -- At 50FPS with default settings = 0.18
+        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.016
         HealBot_Timers["HBaTh"]=0.02
     else
         HealBot_Timers["HB1Th"]=1
@@ -4177,7 +4188,7 @@ local function HealBot_Update_Fast()
                 if UnitExists(xUnit) then
                     if xButton.aura.checks<2 then
                         HealBot_doAuraDebuffUnit(xButton)
-                        xButton.aura.checks=xButton.aura.checks+1
+                        xButton.aura.checks=2
                     elseif xButton.checks.range < GetTime() then 
                         HealBot_Range_CheckTime(xButton)
                         if xButton.aggro.threatpct > 0 then 
