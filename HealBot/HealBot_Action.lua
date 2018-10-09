@@ -639,7 +639,7 @@ function HealBot_Action_UpdateDebuffButton(button)
         button.spells.rangecheck=HealBot_RangeSpells["CURE"]
         button.status.range=HealBot_UnitInRange(button)
         if HealBot_Config_Cures.CDCshownHB and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3)
-           and not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name] and not button.status.dead then
+           and not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name] then
             local hcr,hcg,hcb = 0, 0, 0
             local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
             local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]

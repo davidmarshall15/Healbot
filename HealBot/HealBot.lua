@@ -3636,14 +3636,12 @@ local function HealBot_doClearAggro()
     end
 end
 
-
 local curDebuffs={}
 local prevDebuff={}
 local DebuffClass=nil
                         
-local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,unit,isBossDebuff)
+local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,unit,isBossDebuff,button)
     local dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(dName, debuff_type)
-    local isCurable=HealBot_Options_retDebuffCureSpell(debuff_type)
     if dTypePriority>dNamePriority then
         local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
         local hbCastByEveryone = castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
@@ -3675,37 +3673,41 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             end
         end
     end
-    local curableDebuff=false;
-    if dNamePriority>dTypePriority and isCurable and HealBot_luVars["MaskAuraDCheck"]<GetTime() then
-        curableDebuff=true
-        if HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
-            curableDebuff=false;
-        elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Debuffs["Movement"][dName] then
-            curableDebuff=false;
-        elseif prevDebuff["name"]~=dName and HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 
-          and (debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs or expirationTime<GetTime()+HealBot_Config_Cures.IgnoreFastDurDebuffsSecs) then
-            curableDebuff=false;
-        elseif HealBot_Config_Cures.IgnoreNonHarmfulDebuffs and HealBot_Ignore_Debuffs["NonHarmful"][dName] then
-            curableDebuff=false;
-        elseif HealBot_Config_Cures.IgnoreClassDebuffs and HealBot_Ignore_Debuffs["Class"][strsub(DebuffClass,1,4)][dName] then
-            curableDebuff=false;
-        end
-    end
-    if curableDebuff then
-        curDebuffs[dName]={}
-        curDebuffs[dName]["priority"]=dTypePriority
-    elseif dNamePriority<21 then 
+    if dTypePriority>dNamePriority or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
         curDebuffs[dName]={}
         debuff_type=HEALBOT_CUSTOM_en
         curDebuffs[dName]["priority"]=dNamePriority
-    elseif isBossDebuff and HealBot_Config_Cures.AlwaysShowBoss then -- Need to add option for boss debuffs  (not isCurable and isBossDebuff) 
-        curDebuffs[dName]={}
-        debuff_type=HEALBOT_CUSTOM_en
-        curDebuffs[dName]["priority"]=9
-    elseif HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
-        curDebuffs[dName]={}
-        debuff_type=HEALBOT_CUSTOM_en
-        curDebuffs[dName]["priority"]=12
+        curDebuffs[dName]["isCustom"]=true
+        if prevDebuff["name"]==dName then prevDebuff["priority"]=dNamePriority end
+    else
+        local checkthis=true;        
+        if HealBot_luVars["MaskAuraDCheck"]>GetTime() then
+            checkthis=false;
+            prevDebuff["name"]="x" 
+        elseif HealBot_Config_Cures.IgnoreFriendDebuffs and unitCaster and unitCaster~=unit and UnitIsFriend("player",unitCaster) then
+            checkthis=false;
+        elseif HealBot_Config_Cures.IgnoreMovementDebuffs and HealBot_Ignore_Debuffs["Movement"][dName] then
+            checkthis=false;
+        elseif prevDebuff["name"]~=dName and HealBot_Config_Cures.IgnoreFastDurDebuffs and debuffDuration and debuffDuration>0 
+          and (debuffDuration<HealBot_Config_Cures.IgnoreFastDurDebuffsSecs or expirationTime<GetTime()+HealBot_Config_Cures.IgnoreFastDurDebuffsSecs) then
+            checkthis=false;
+        elseif HealBot_Config_Cures.IgnoreNonHarmfulDebuffs and HealBot_Ignore_Debuffs["NonHarmful"][dName] then
+            checkthis=false;
+        elseif HealBot_Config_Cures.IgnoreClassDebuffs and HealBot_Ignore_Debuffs["Class"][strsub(DebuffClass,1,4)][dName] then
+            checkthis=false;
+        end
+        if checkthis then
+            curDebuffs[dName]={}
+            curDebuffs[dName]["priority"]=dTypePriority
+            curDebuffs[dName]["isCustom"]=false
+           -- if prevDebuff["name"]==dName then prevDebuff["priority"]=dTypePriority end
+        elseif dNamePriority<21 or (isBossDebuff and HealBot_Config_Cures.AlwaysShowBoss) then
+            curDebuffs[dName]={}
+            debuff_type=HEALBOT_CUSTOM_en
+            curDebuffs[dName]["priority"]=dNamePriority
+            curDebuffs[dName]["isCustom"]=true
+           -- if prevDebuff["name"]==dName then prevDebuff["priority"]=dNamePriority end
+        end
     end
     if curDebuffs[dName] then
         curDebuffs[dName]["type"]=debuff_type
@@ -3714,12 +3716,17 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         curDebuffs[dName]["bCount"]=bCount
         curDebuffs[dName]["expirationTime"]=expirationTime
         curDebuffs[dName]["spellId"]=spellId
-        if prevDebuff["name"]==dName then prevDebuff["priority"]=dNamePriority end
         if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[dName] then
             if not HealBot_CustomDebuff_RevDurLast[dName] then HealBot_CustomDebuff_RevDurLast[dName]={} end
             if not HealBot_CustomDebuff_RevDurLast[dName][unit] or HealBot_CustomDebuff_RevDurLast[dName][unit]<(expirationTime-debuffDuration) then
                 HealBot_CustomDebuff_RevDurLast[dName][unit]=GetTime()
             end
+        end
+        if prevDebuff["name"]==dName then
+            button.aura.debuff.type=curDebuffs[dName]["type"]
+            button.aura.debuff.name=dName
+            button.aura.debuff.iconId="DEBUFF!"..dName.."!"..curDebuffs[dName]["spellId"]
+            button.aura.debuff.priority=curDebuffs[dName]["priority"]
         end
     end
 end
@@ -3730,11 +3737,13 @@ local function HealBot_CheckUnitDebuffs(button)
     if not xUnit or not UnitExists(xUnit) then return end
     _,DebuffClass=UnitClass(xUnit)
     if not DebuffClass then DebuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
-    local DebuffType=nil;
+
     prevDebuff["name"]=button.aura.debuff.name or "x"
     prevDebuff["type"]=button.aura.debuff.type or "x"
     prevDebuff["iconid"]=button.aura.debuff.iconId or "x"
     prevDebuff["priority"]=button.aura.debuff.priority or 99
+    button.aura.debuff.type=false
+    button.aura.debuff.priority=99
     for x,_ in pairs(curDebuffs) do
         curDebuffs[x]=nil;
     end
@@ -3744,7 +3753,7 @@ local function HealBot_CheckUnitDebuffs(button)
             local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(xUnit,z)
             if dName then
                 z = z +1
-                HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit,isBossDebuff)
+                HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit,isBossDebuff,button)
             else
                 break
             end 
@@ -3755,7 +3764,7 @@ local function HealBot_CheckUnitDebuffs(button)
             if dName then
                 z = z +1
                 if HealBot_Globals.HealBot_Custom_Debuffs[dName] then 
-                    HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit,false)
+                    HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,xUnit,isBossDebuff,button)
                 end
             else
                 break
@@ -3765,35 +3774,33 @@ local function HealBot_CheckUnitDebuffs(button)
             if not curDebuffs[dName] and HealBot_CustomDebuff_RevDurLast[dName][xUnit] then HealBot_CustomDebuff_RevDurLast[dName][xUnit]=nil end
         end
     end
-    local dPrio = prevDebuff["priority"]
+    local dPrio = button.aura.debuff.priority
     for dName,_ in pairs(curDebuffs) do
         local checkthis=false;
         local spellCD=0
  
-        if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and curDebuffs[dName]["type"]~=HEALBOT_CUSTOM_en then 
+        if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and not curDebuffs[dName]["isCustom"] then 
             spellCD=HealBot_Options_retDebuffWatchTargetCD(curDebuffs[dName]["type"])
             if spellCD>1.5 and spellCD<12 then 
-                DebuffNameIn="x" 
-            else
-                spellCD=0
+                local nCheck=(GetTime()+spellCD)-0.1
+                HealBot_luVars["MaskAuraDCheck"]=nCheck
+                HealBot_luVars["MaskAuraReCheck"]=true
+                for _,dButton in pairs(HealBot_Unit_Button) do
+                    if dButton.unit~=xUnit and dButton.aura.debuff.name and dButton.aura.debuff.type~=HEALBOT_CUSTOM_en then
+                        dButton.aura.checks=1
+                    end
+                end
             end
         end
-        if curDebuffs[dName]["priority"]<prevDebuff["priority"] then
-            if dName~=DebuffNameIn then
+        if curDebuffs[dName]["priority"]<dPrio then
+            if dName~=prevDebuff["name"] then
                 local WatchTarget, WatchGUID=nil,nil
-                if curDebuffs[dName]["type"]==HEALBOT_CUSTOM_en then
-                    checkthis=true;
+                if curDebuffs[dName]["isCustom"] then
+                    checkthis=true --WatchTarget={["Raid"]=true,} 
                 elseif spellCD<=1.5 then
                     WatchTarget, WatchGUID=HealBot_Options_retDebuffWatchTarget(curDebuffs[dName]["type"],xGUID);
                 else
-                    local nCheck=(GetTime()+spellCD)-0.1
-                    HealBot_luVars["MaskAuraDCheck"]=nCheck
-                    HealBot_luVars["MaskAuraReCheck"]=true
-                    for _,dButton in pairs(HealBot_Unit_Button) do
-                        if dButton.unit~=xUnit and dButton.aura.debuff.name and dButton.aura.debuff.type~=HEALBOT_CUSTOM_en then
-                            dButton.aura.checks=1
-                        end
-                    end
+                    WatchTarget=nil
                 end
  
                 if WatchTarget then 
@@ -3826,19 +3833,17 @@ local function HealBot_CheckUnitDebuffs(button)
             else
                 checkthis=true
             end
-        elseif curDebuffs[dName]["priority"]==prevDebuff["priority"] and dName==DebuffNameIn then
-            checkthis=true
         end 
         if checkthis then
             button.aura.debuff.type=curDebuffs[dName]["type"]
             button.aura.debuff.name=dName
             button.aura.debuff.iconId="DEBUFF!"..dName.."!"..curDebuffs[dName]["spellId"]
             button.aura.debuff.priority=curDebuffs[dName]["priority"]
-            DebuffType=curDebuffs[dName]["type"];
+            dPrio=curDebuffs[dName]["priority"]
         end
     end
  
-    if not DebuffType then 
+    if not button.aura.debuff.type then 
         HealBot_ClearDebuff(button)
     end
  
@@ -3847,7 +3852,7 @@ local function HealBot_CheckUnitDebuffs(button)
             local inSpellRange = HealBot_UnitInRange(button, HealBot_luVars["dSpell"])
             if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil) then
                 if inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
-                    HealBot_Action_UpdateAggro(xUnit,"debuff",debuffCodes[DebuffType], 0)
+                    HealBot_Action_UpdateAggro(xUnit,"debuff",debuffCodes[button.aura.debuff.type], 0)
                 end
             end
             if HealBot_Config_Cures.ShowDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
@@ -3857,7 +3862,7 @@ local function HealBot_CheckUnitDebuffs(button)
                                              HealBot_Globals.CDCBarColour[button.aura.debuff.name].G,
                                              HealBot_Globals.CDCBarColour[button.aura.debuff.name].B,
                                              1, UIERRORS_HOLD_TIME);
-                elseif DebuffType == HEALBOT_CUSTOM_en then
+                elseif button.aura.debuff.type == HEALBOT_CUSTOM_en then
                     local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
                     if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name] then
                         customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name]
@@ -3869,9 +3874,9 @@ local function HealBot_CheckUnitDebuffs(button)
                                              1, UIERRORS_HOLD_TIME);
                 else
                     UIErrorsFrame:AddMessage(HealBot_GetUnitName(xUnit, xGUID).." suffers from "..button.aura.debuff.name, 
-                                             HealBot_Config_Cures.CDCBarColour[DebuffType].R,
-                                             HealBot_Config_Cures.CDCBarColour[DebuffType].G,
-                                             HealBot_Config_Cures.CDCBarColour[DebuffType].B,
+                                             HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R,
+                                             HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G,
+                                             HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B,
                                              1, UIERRORS_HOLD_TIME);
                 end
             end
