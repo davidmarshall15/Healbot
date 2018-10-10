@@ -634,6 +634,10 @@ function HealBot_Action_UpdateBackgroundButton(button)
     end
 end
 
+function HealBot_Action_dSpell()
+    return HealBot_RangeSpells["CURE"]
+end
+
 function HealBot_Action_UpdateDebuffButton(button)
     if button.aura.debuff.type and UnitExists(button.unit) and not button.status.dead then
         button.spells.rangecheck=HealBot_RangeSpells["CURE"]
@@ -1491,7 +1495,7 @@ local function HealBot_Action_setTextLen(curFrame)
 end
 
 function HealBot_Action_setNameText(button)
-    local uName=nil
+    local uName=""
     if UnitExists(button.unit) then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==2 and UnitClass(button.unit) then
             local clTxt=UnitClass(button.unit)
@@ -2258,8 +2262,8 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 local gaf = _G["f"..x.."_HealBot_Action"]
                 HealBot_CheckFrame(x, gaf)
             end
-            HealBot_Data["REFRESH"]=true;
         end
+        HealBot_setOptions_Timer(595)
     end
 end
 
@@ -2991,26 +2995,13 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,isEnemy)
 end
 
 function HealBot_Action_ResetUnitAttribs(button)
-    button.health.current=UnitHealth(button.unit) or 100
-    button.health.max=UnitHealthMax(button.unit) or 100
-    button.health.incoming=UnitGetIncomingHeals(button.unit) or 0
-    button.health.absorbs=UnitGetTotalAbsorbs(button.unit) or 0
     button.mana.current=UnitPower(button.unit, 0) or 0
     button.mana.max=UnitPowerMax(button.unit, 0) or 0
-    button.status.current = button.status.current or 0
-    button.status.bar4 = button.status.bar4 or 0
-    button.status.dead = button.status.dead or false
-    button.status.enabled = button.status.enabled or false
     button.status.offline=false
-    button.spells.castpct = button.spells.castpct or -1
     button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
     button.status.range=HealBot_UnitInRange(button)
-    button.aura.buff.name = button.aura.buff.name or false
-    button.aura.debuff.type = button.aura.debuff.type or false
-    button.aura.debuff.name = button.aura.debuff.name or false
-    button.aura.debuff.priority = button.aura.debuff.priority or 99
-    button.aura.debuff.iconId = button.aura.debuff.iconId or false
-    button.aura.checks=1
+    HealBot_AuraChecks(button)
+    HealBot_Reset_UnitHealth(button)
     HealBot_Action_UpdateHealsInButton(button)
     HealBot_Action_UpdateAbsorbsButton(button)
 end
@@ -3063,9 +3054,9 @@ function HealBot_Action_PartyChanged()
     end
     if not HealBot_Data["UILOCK"] and HealBot_Data["PGUID"] then
         if not HealBot_PreCombat and HealBot_Action_luVars["ResetAttribs"] then
-            --for x,xButton in pairs(HealBot_Unit_Button) do
-            --    xButton.reset="init";
-            --end
+            for x,xButton in pairs(HealBot_Unit_Button) do
+                xButton.reset="init";
+            end
             for x,_ in pairs(HealBotButtonMacroAttribs) do
                 HealBotButtonMacroAttribs[x]=nil;
             end

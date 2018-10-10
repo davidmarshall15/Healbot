@@ -969,15 +969,6 @@ function HealBot_Options_retDebuffCureSpell(debuffType)
     return HealBot_DebuffSpell[debuffType]
 end
 
-function HealBot_Options_isDebuffCureSpell(spellName)
-    for _,sName in pairs(HealBot_DebuffSpell) do
-        if sName==spellName then
-            return true
-        end
-    end
-    return false
-end
-
 function HealBot_Options_retDebuffWatchTargetCD(debuffType)
     local remain=0
     if HealBot_DebuffSpell[debuffType] then
@@ -1355,7 +1346,7 @@ function HealBot_Options_CrashProt_OnClick(self)
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"]=false
     end
     HealBot_useCrashProtection()
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_UseGeneralMacros_OnClick(self)
@@ -1372,7 +1363,7 @@ function HealBot_Options_UseGeneralMacros_OnClick(self)
     HealBot_Options_cpMacroSave:SetText(HEALBOT_CP_MACRO_SAVE)
     HealBot_Options_SetcpMacroSave(HEALBOT_CP_MACRO_SAVE)
     HealBot_useCrashProtection()
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_CombatProt_OnClick(self)
@@ -1381,7 +1372,7 @@ function HealBot_Options_CombatProt_OnClick(self)
     else
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"]=false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_CrashProt_OnTextChanged(self)
@@ -1420,7 +1411,7 @@ function HealBot_Options_ShowEnemyNumBoss_OnValueChanged(self)
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        HealBot_Data["REFRESH"]=true
+        HealBot_setOptions_Timer(595)
     end
 end
 
@@ -1432,7 +1423,7 @@ function HealBot_Options_CombatPartyNo_OnValueChanged(self)
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(val.." "..self.text);
-        HealBot_Data["REFRESH"]=true
+        HealBot_setOptions_Timer(595)
     end
 end
 
@@ -1444,7 +1435,7 @@ function HealBot_Options_CombatRaidNo_OnValueChanged(self)
         Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(val.." "..self.text);
-        HealBot_Data["REFRESH"]=true
+        HealBot_setOptions_Timer(595)
     end
 end
         
@@ -1586,9 +1577,9 @@ function HealBot_Options_HeadTextureS_OnValueChanged(self)
         end  
         if not updatingMedia then
             HealBot_setOptions_Timer(150)
-            HealBot_setOptions_Timer(160)
         end
         updatingMedia=false;
+        HealBot_setOptions_Timer(160)
     end
 end
 
@@ -1707,7 +1698,7 @@ function HealBot_Options_BarNumColsS_OnValueChanged(self)
         Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NUMCOLS"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(HealBot_Options_SetNoColsText() .. ": " .. val);
-        HealBot_Data["REFRESH"]=true
+        HealBot_setOptions_Timer(595)
     end
 end
 
@@ -2069,6 +2060,7 @@ function HealBot_Options_SetFrameCols()
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["G"],
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["B"],
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["A"]);
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SetBarsTextColour()
@@ -2421,6 +2413,7 @@ function HealBot_Options_ShowClassOnBar_OnClick(self)
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] = false
     end
     HealBot_setOptions_Timer(155)
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_ShowNameOnBar_OnClick(self)
@@ -2876,7 +2869,7 @@ function HealBot_Options_HealGroupSwap(hbId, id)
         DoneInitTab[339]=nil
         HealBot_Options_InitSub(339) 
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetIncSelf_OnClick(self)
@@ -2885,7 +2878,7 @@ function HealBot_Options_TargetIncSelf_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetIncGroup_OnClick(self)
@@ -2894,7 +2887,7 @@ function HealBot_Options_TargetIncGroup_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCGROUP"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetIncRaid_OnClick(self)
@@ -2903,7 +2896,7 @@ function HealBot_Options_TargetIncRaid_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCRAID"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetIncPet_OnClick(self)
@@ -2912,7 +2905,7 @@ function HealBot_Options_TargetIncPet_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SubSortIncGroup_OnClick(self)
@@ -2921,7 +2914,7 @@ function HealBot_Options_SubSortIncGroup_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIG"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SubSortIncPet_OnClick(self)
@@ -2930,7 +2923,7 @@ function HealBot_Options_SubSortIncPet_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIP"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SubSortIncVehicle_OnClick(self)
@@ -2939,7 +2932,7 @@ function HealBot_Options_SubSortIncVehicle_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIV"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SubSortIncTanks_OnClick(self)
@@ -2948,7 +2941,7 @@ function HealBot_Options_SubSortIncTanks_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_SubSortIncMyTargets_OnClick(self)
@@ -2957,7 +2950,7 @@ function HealBot_Options_SubSortIncMyTargets_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIMT"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HideBar_OnClick(self)
@@ -2966,7 +2959,7 @@ function HealBot_Options_HideBar_OnClick(self)
     else
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HideIncFocus_OnClick(self)
@@ -2975,7 +2968,7 @@ function HealBot_Options_HideIncFocus_OnClick(self)
     else
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HideIncGroup_OnClick(self)
@@ -2984,7 +2977,7 @@ function HealBot_Options_HideIncGroup_OnClick(self)
     else
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCGROUP"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HideIncTank_OnClick(self)
@@ -2993,7 +2986,7 @@ function HealBot_Options_HideIncTank_OnClick(self)
     else
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCTANK"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HideIncMyTargets_OnClick(self)
@@ -3002,7 +2995,7 @@ function HealBot_Options_HideIncMyTargets_OnClick(self)
     else
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCMYTARGETS"] = true
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_FocusAlwaysShow_OnClick(self)
@@ -3011,7 +3004,7 @@ function HealBot_Options_FocusAlwaysShow_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetAlwaysShow_OnClick(self)
@@ -3020,7 +3013,7 @@ function HealBot_Options_TargetAlwaysShow_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_FocusOnlyFriend_OnClick(self)
@@ -3029,7 +3022,7 @@ function HealBot_Options_FocusOnlyFriend_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_TargetOnlyFriend_OnClick(self)
@@ -3038,7 +3031,7 @@ function HealBot_Options_TargetOnlyFriend_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_GroupPetsByFive_OnClick(self)
@@ -3047,7 +3040,7 @@ function HealBot_Options_GroupPetsByFive_OnClick(self)
     else
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_EFGroup_OnClick(self,id)
@@ -3056,7 +3049,7 @@ function HealBot_Options_EFGroup_OnClick(self,id)
     else
         Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][id] = false;
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_EFClass_OnClick(self)
@@ -3285,7 +3278,7 @@ function HealBot_Options_EFClass_OnClick(self)
             HealBot_Globals.EmergIncCustom[HEALBOT_MONK] = false
         end
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 HealBot_Options_StorePrev["CastNotify"]=1
@@ -3309,7 +3302,7 @@ function HealBot_Options_HideOptions_OnClick(self)
     else
         HealBot_Globals.HideOptions = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_RightButtonOptions_OnClick(self)
@@ -3482,6 +3475,7 @@ function HealBot_Options_BarTextInClassColour_OnClick(self)
     HealBot_setLuVars("ResetAllUnitStatus", GetTime()+2)
     HealBot_Options_SetBarsTextColour()
     HealBot_Panel_resetTestCols(true)
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_BarButtonShowHoT_OnClick(self)
@@ -3579,7 +3573,7 @@ function HealBot_Options_SubSortPlayerFirst_OnClick(self)
     else
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] = false
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_ShowReadyCheck_OnClick(self)
@@ -3740,6 +3734,7 @@ function HealBot_Options_ShowClassOnBarType_OnClick(self,id)
         g:SetChecked(1);
         HealBot_setOptions_Timer(155)
     end
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_ProtectPvP_OnClick(self)
@@ -3759,6 +3754,7 @@ function HealBot_Options_ShowRoleOnBar_OnClick(self)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSTYPE"]>0 then
         HealBot_setOptions_Timer(155)
     end
+    HealBot_setOptions_Timer(595)
 end
 
 --------------------------------------------------------------------------------
@@ -3899,7 +3895,7 @@ function HealBot_Options_HealGroups1Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][1]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups1Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][1]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][1]["FRAME"]==j then info.checked = true end
@@ -3914,7 +3910,7 @@ function HealBot_Options_HealGroups2Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][2]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups2Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][2]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][2]["FRAME"]==j then info.checked = true end
@@ -3929,7 +3925,7 @@ function HealBot_Options_HealGroups3Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][3]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups3Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][3]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][3]["FRAME"]==j then info.checked = true end
@@ -3944,7 +3940,7 @@ function HealBot_Options_HealGroups4Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][4]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups4Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][4]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][4]["FRAME"]==j then info.checked = true end
@@ -3959,7 +3955,7 @@ function HealBot_Options_HealGroups5Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][5]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups5Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][5]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][5]["FRAME"]==j then info.checked = true end
@@ -3974,7 +3970,7 @@ function HealBot_Options_HealGroups6Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][6]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups6Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][6]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][6]["FRAME"]==j then info.checked = true end
@@ -3989,7 +3985,7 @@ function HealBot_Options_HealGroups7Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups7Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==j then info.checked = true end
@@ -4004,7 +4000,7 @@ function HealBot_Options_HealGroups8Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups8Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==j then info.checked = true end
@@ -4019,7 +4015,7 @@ function HealBot_Options_HealGroups9Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups9Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]==j then info.checked = true end
@@ -4034,7 +4030,7 @@ function HealBot_Options_HealGroups10Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups10Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==j then info.checked = true end
@@ -4049,7 +4045,7 @@ function HealBot_Options_HealGroups11Frame_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HealGroups11Frame,HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]==j then info.checked = true end
@@ -4681,7 +4677,7 @@ function HealBot_Options_EFClass_Reset()
         HealBot_Options_EFClassDeathKnight:SetChecked(HealBot_Globals.EmergIncCustom[HEALBOT_DEATHKNIGHT]);
         HealBot_Options_EFClassMonk:SetChecked(HealBot_Globals.EmergIncCustom[HEALBOT_MONK]);
     end
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 --------------------------------------------------------------------------------
@@ -4693,7 +4689,7 @@ function HealBot_Options_ExtraSort_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"] = self:GetID();
                         UIDropDownMenu_SetText(HealBot_Options_ExtraSort,HealBot_Options_ExtraSort_List[Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==j then info.checked = true end
@@ -4708,7 +4704,7 @@ function HealBot_Options_ExtraSubSort_DropDown()
         info.func = function(self)
                         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"] = self:GetID();
                         UIDropDownMenu_SetText(HealBot_Options_ExtraSubSort,HealBot_Options_ExtraSubSort_List[Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]]) 
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==j then info.checked = true end
@@ -5432,7 +5428,7 @@ function HealBot_Options_BarsGrowDirection_DropDown()
                         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_BarsGrowDirection,HealBot_Options_BarsGrowDirection_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"]]) 
                         HealBot_Panel_ClearBarArrays()
-                        HealBot_Data["REFRESH"]=true
+                        HealBot_setOptions_Timer(595)
                     end
         info.checked = false;
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"]==j then info.checked = true end
@@ -5887,8 +5883,7 @@ function HealBot_Options_EmergencyFilter_Reset()
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = HealBot_Globals.EmergIncCustom[HEALBOT_DEATHKNIGHT];
         HealBot_EmergInc[HealBot_Class_En[HEALBOT_MONK]] = HealBot_Globals.EmergIncCustom[HEALBOT_MONK];
     end
-
-    HealBot_Data["REFRESH"]=true
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_retEmergInc(classTrim)
@@ -8472,6 +8467,7 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame:SetColorRGB(R, G, B);
         ColorPickerFrame:Show();
     end
+    HealBot_setOptions_Timer(595)
     return ColorPickerFrame:GetColorRGB();
 end
 
@@ -11517,6 +11513,7 @@ function HealBot_Options_SetSkinBars()
     HealBot_BarIHCustomColour:SetScale(barScale);
     HealBot_BarAbsorbCustomColour:SetScale(barScale + 0.01);
     HealBot_BarAbsorbCustomColour:SetScale(barScale);
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
