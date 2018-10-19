@@ -5135,7 +5135,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6Frame"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-45" y="1"/>
+                          <AbsDimension x="-35" y="1"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5143,23 +5143,6 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 6)</OnClick>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_HealGroups6Down">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 6)</OnClick>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups7" inherits="OptionsCheckButtonTemplate">
@@ -5186,40 +5169,6 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HealGroups7Up">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 7)</OnClick>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_HealGroups7Down">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 7)</OnClick>
-                    </Scripts>
-                  </Button>
                   <CheckButton name="HealBot_Options_HealGroups8" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7" relativePoint="TOPLEFT">
@@ -5244,40 +5193,6 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HealGroups8Up">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups8Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 8)</OnClick>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_HealGroups8Down">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups8Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 8)</OnClick>
-                    </Scripts>
-                  </Button>
                   <CheckButton name="HealBot_Options_HealGroups9" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups8" relativePoint="TOPLEFT">
@@ -5302,40 +5217,6 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HealGroups9Up">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups9Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 9)</OnClick>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_HealGroups9Down">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups9Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 9)</OnClick>
-                    </Scripts>
-                  </Button>
                   <CheckButton name="HealBot_Options_HealGroups10" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups9" relativePoint="TOPLEFT">
@@ -5360,40 +5241,6 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HealGroups10Up">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups10Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 10)</OnClick>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_HealGroups10Down">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups10Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 10)</OnClick>
-                    </Scripts>
-                  </Button>
                   <CheckButton name="HealBot_Options_HealGroups11" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups10" relativePoint="TOPLEFT">
@@ -5418,23 +5265,6 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HealGroups11Up">
-                    <Size>
-                      <AbsDimension x="25" y="25"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups11Frame"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-35" y="1"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
-                    <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 11)</OnClick>
-                    </Scripts>
-                  </Button>
                 </Frames>
               </Frame>
 
@@ -5801,7 +5631,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-58" y="-40" />
+                              <AbsDimension x="-58" y="-80" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5809,36 +5639,30 @@
                           <OnClick>HealBot_Options_CombatProt_OnClick(self)</OnClick>
                         </Scripts>
                       </CheckButton>
-                      <Slider name="HealBot_Options_CombatPartyNo" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="315" y="18" />
-                        </Size>
+                      <CheckButton name="HealBot_Options_CombatPartyProt" inherits="SendMailRadioButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="125" y="-110" />
+                              <AbsDimension x="-40" y="-110" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnValueChanged>HealBot_Options_CombatPartyNo_OnValueChanged(self)</OnValueChanged>
+                          <OnClick>HealBot_Options_CombatPartyProt_OnClick(self)</OnClick>
                         </Scripts>
-                      </Slider>
-                      <Slider name="HealBot_Options_CombatRaidNo" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="315" y="18" />
-                        </Size>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CombatRaidProt" inherits="SendMailRadioButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="125" y="-170" />
+                              <AbsDimension x="-40" y="-130" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnValueChanged>HealBot_Options_CombatRaidNo_OnValueChanged(self)</OnValueChanged>
+                          <OnClick>HealBot_Options_CombatRaidProt_OnClick(self)</OnClick>
                         </Scripts>
-                      </Slider>
+                      </CheckButton>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -6220,6 +6044,15 @@
                           </Offset>
                         </Anchor>
                       </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_Options_FrameAliasFixedFrame" inherits="GameFontNormal">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="55" y="-44"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
                     </FontString>
                   </Layer>
                 </Layers>

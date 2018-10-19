@@ -95,27 +95,27 @@ end
 local function HealBot_Tooltip_GetHealSpell(button,sName)
     if not sName or not HealBot_GetSpellId(sName) then
         if sName then
-            local w, _ = IsUsableItem(sName, button.unit)
-            if not w then
-                return nil, 1, 0
+            local s = GetItemSpell(sName)
+            if not s then
+                return nil, 1,0.5
             else
-                if HealBot_Data["PGUID"]==button.guid then
-                    if IsItemInRange(sName,button.unit)~=1 then
-                        return sName, 1, 0
-                    else
+                if HealBot_Data["PGUID"]~=button.guid then
+                    if IsItemInRange(sName,button.unit) then
                         return sName, 0, 1
+                    else
+                        return sName, 1,0.5
                     end
                 else
                     return sName, 0, 1
                 end
             end
         else
-            return nil, 1, 0
+            return nil, 1,0.5
         end
     end
 
     if (HealBot_UnitInRange(button, sName)~=1) then
-        return sName, 1, 0
+        return sName, 1,0.5
     end
  
     return sName, 0, 1
@@ -123,7 +123,7 @@ end
 
 local function HealBot_Tooltip_setspellName(button, spellName)
     local validSpellName=spellName
-    local spellAR,spellAG=1,0
+    local spellAR,spellAG=1,1
     if spellName then
         spellAR,spellAG=0,1
         if not hbCommands[strlower(spellName)] then
@@ -148,9 +148,9 @@ local function HealBot_Tooltip_setspellName(button, spellName)
                                 u=".0"..u
                             end                            
                             validSpellName=validSpellName..HEALBOT_TOOLTIP_CD..z..u 
-                            if z>0 then spellAR,spellAG=1,1 end
+                            if z>0 then spellAR,spellAG=1,0.5 end
                         elseif z>0.101 then
-                            spellAR,spellAG=1,1
+                            spellAR,spellAG=1,0.5
                         end
                     end
                 end
@@ -263,7 +263,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
                 if hbTTHoTinfo[buffID]["ICON"]>0 and hbTTHoTinfo[buffID]["ICON"]<15 and linenum<44 then
                     local xGUID,buffName=string.split("!", buffID)
                     if xGUID and HealBot_UnitData[xGUID] and buffName then
-                        local ttCaster=HealBot_UnitData[xGUID]["NAME"]
+                        local ttCaster=HealBot_Panel_UnitName(xGUID)
                         if ttCaster then
                             local ttHoTd=nil
                             if hbHoTline1 then
@@ -569,7 +569,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 if UnitOffline then 
                     HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 elseif zone and not strfind(zone,"Level") then
-                    if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
+                    --if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
                     HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 end
                 local vUnit=HealBot_retIsInVehicle(xUnit)

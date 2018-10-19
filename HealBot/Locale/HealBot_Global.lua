@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.9.rc1";
+﻿HEALBOT_VERSION   = "8.0.1.10.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -446,7 +446,7 @@ function HealBot_globalVars()
     HEALBOT_GENESIS                         = GetSpellInfo(145518) or "--Genesis";
     HEALBOT_GRACE_OF_AIR                    = GetSpellInfo(116956) or "--Grace of Air";
     HEALBOT_HIGH_TIDE                       = GetSpellInfo(157154) or "--High Tide";
-    HEALBOT_LIGHTNING_SHIELD                = GetSpellInfo(324) or "--Lightning Shield";
+    HEALBOT_LIGHTNING_SHIELD                = GetSpellInfo(192106) or "--Lightning Shield";
     HEALBOT_SHAMANISTIC_RAGE                = GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = GetSpellInfo(79206) or "--Spiritwalker's Grace";
     HEALBOT_SPIRIT_LINK_TOTEM               = GetSpellInfo(98008) or "--Spirit Link Totem";
