@@ -3507,7 +3507,7 @@ function HealBot_Options_BarButtonShowRaidIcon_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconStar_OnClick(self)
@@ -3516,7 +3516,7 @@ function HealBot_Options_BarButtonShowRaidIconStar_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["STAR"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconCircle_OnClick(self)
@@ -3525,7 +3525,7 @@ function HealBot_Options_BarButtonShowRaidIconCircle_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CIRCLE"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconDiamond_OnClick(self)
@@ -3534,7 +3534,7 @@ function HealBot_Options_BarButtonShowRaidIconDiamond_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DIAMOND"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconTriangle_OnClick(self)
@@ -3543,7 +3543,7 @@ function HealBot_Options_BarButtonShowRaidIconTriangle_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TRIANGLE"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconMoon_OnClick(self)
@@ -3552,7 +3552,7 @@ function HealBot_Options_BarButtonShowRaidIconMoon_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MOON"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconSquare_OnClick(self)
@@ -3561,7 +3561,7 @@ function HealBot_Options_BarButtonShowRaidIconSquare_OnClick(self)
     else
        Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SQUARE"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconCross_OnClick(self)
@@ -3570,7 +3570,7 @@ function HealBot_Options_BarButtonShowRaidIconCross_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CROSS"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_BarButtonShowRaidIconSkull_OnClick(self)
@@ -3579,7 +3579,7 @@ function HealBot_Options_BarButtonShowRaidIconSkull_OnClick(self)
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SKULL"] = false
     end
-    HealBot_Options_RaidTargetUpdate()
+    HealBot_setOptions_Timer(800)
 end
 
 function HealBot_Options_SubSortPlayerFirst_OnClick(self)
@@ -5979,7 +5979,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
         HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
-        HealBot_nextRecalcParty(0.2, 0)
+        HealBot_nextRecalcParty(0.4, 0)
     end
 end
 
@@ -6196,7 +6196,7 @@ function HealBot_Options_ShareSkinComplete()
     HealBot_FixedFrames()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC..hbOptGetSkinFrom)
     HealBot_SetResetFlag("SOFT")
-    HealBot_nextRecalcParty(0.2, 0)
+    HealBot_nextRecalcParty(0.4, 0)
 end
 
 function HealBot_Options_checkSkinName(skinName)
@@ -7376,6 +7376,7 @@ function HealBot_Options_NewCDebuffBtn_OnClick(self)
     HealBot_Globals.Custom_Debuff_Categories[NewCDebuffTxt]=HealBot_Options_StorePrev["CDebuffCatID"]
     HealBot_Options_StorePrev["CDebuffcustomName"]=NewCDebuffTxt
     HealBot_Options_NewCDebuff:SetText("")
+    HealBot_Options_CDC_checkStatus(NewCDebuffTxt)
     HealBot_Options_InitSub(407)
     HealBot_Options_InitSub(408)
     HealBot_Options_InitSub(419)
@@ -9074,7 +9075,7 @@ function HealBot_Options_idleInit()
     else
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
-        HealBot_nextRecalcParty(0.5, 0)
+        HealBot_nextRecalcParty(1, 0)
         return nil
     end
     return true

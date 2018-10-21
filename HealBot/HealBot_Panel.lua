@@ -2052,9 +2052,8 @@ local function HealBot_Panel_focusHeals()
     if uExists then
         local uName=HealBot_GetUnitName(xUnit)
         local xGUID=HealBot_UnitGUID(xUnit)
-        if xGUID and not HealBot_TrackNames[xGUID] then 
+        if xGUID then 
             if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCFOCUS"]==false then
-                HealBot_TrackNames[xGUID]=true;
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 HealBot_UnitName[xGUID] = HealBot_GetUnitName(xUnit)
                 table.insert(subunits,xUnit)
@@ -2065,7 +2064,6 @@ local function HealBot_Panel_focusHeals()
         end
     elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] then
         local xGUID = xUnit 
-        HealBot_TrackNames[xGUID]=true;
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
         HealBot_UnitName[xGUID] = HEALBOT_WORD_RESERVED..":"..xUnit
         table.insert(subunits,xUnit)
@@ -2683,28 +2681,18 @@ local function HealBot_Panel_PlayersChanged()
             for gl=1,6 do
                 if healGroups[gl]["STATE"] then
                     hbCurrentFrame=healGroups[gl]["FRAME"]
-                    if healGroups[gl]["NAME"]==HEALBOT_OPTIONS_SELFHEALS_en then
-                        HealBot_Panel_selfHeals()
+                    if healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
+                        HealBot_Panel_raidHeals()
+                    elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_GROUPHEALS_en then
+                        HealBot_Panel_groupHeals()
                     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_TANKHEALS_en and (IsInGroup() or nraid>0) then
                         HealBot_Panel_tankHeals()
                     elseif healGroups[gl]["NAME"]==HEALBOT_CLASSES_HEALERS_en and (IsInGroup() or nraid>0) then
                         HealBot_Panel_healerHeals()
-                    elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_GROUPHEALS_en then
-                        HealBot_Panel_groupHeals()
+                    elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_SELFHEALS_en then
+                        HealBot_Panel_selfHeals()
                     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_MYTARGET_en then
                         HealBot_Panel_myHeals()
-               --     elseif healGroups[gl]["NAME"]==HEALBOT_FOCUS_en then
-               --         HealBot_Panel_focusHeals()
-                    elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
-                        HealBot_Panel_raidHeals()
-               --     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en then
-               --         HealBot_Panel_petHeals()
-               --     elseif healGroups[gl]["NAME"]==HEALBOT_VEHICLE_en then
-               --         HealBot_Panel_vehicleHeals()
-               --     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en then
-               --         HealBot_Panel_targetHeals()
-               --     elseif healGroups[gl]["NAME"]==HEALBOT_CUSTOM_CASTBY_ENEMY_en then
-               --         HealBot_Panel_enemyTargets()
                     end
                     if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SHOW"] then
                         raidIconOn=true
@@ -2932,6 +2920,8 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             if changeType>5 then
                 HealBot_Panel_PlayersChanged()
                 if preCombat then HealBot_Panel_EnemyChanged() end
+                --if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then HealBot_nextRecalcParty(0.8, 1) end
+                --if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then HealBot_nextRecalcParty(0.8, 2) end
             elseif changeType==2 then
                 HealBot_Panel_PetsChanged()
             elseif changeType==3 then
@@ -2952,11 +2942,11 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
                 HealBot_Panel_TargetChanged()
                 HealBot_Panel_FocusChanged()
             else
-                HealBot_nextRecalcParty(0, 1)
-                HealBot_nextRecalcParty(0, 2)
-                HealBot_nextRecalcParty(0, 3)
-                HealBot_nextRecalcParty(0, 4)
-                HealBot_nextRecalcParty(0, 5)
+                HealBot_nextRecalcParty(0.1, 1)
+                HealBot_nextRecalcParty(0.2, 2)
+                HealBot_nextRecalcParty(0.3, 3)
+                HealBot_nextRecalcParty(0.4, 4)
+                HealBot_nextRecalcParty(0.5, 5)
             end
         end 
     end

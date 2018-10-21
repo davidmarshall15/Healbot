@@ -411,7 +411,7 @@ local function HealBot_HealthColor(button)
 
     hcr,hcg = 1, 1
     if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then -- Incoming Heal Bar Colour = "Same as Health (Future Health)"
-        if not button.status.dead then
+        if button.status.current<9 then
             hipct = button.health.current+button.health.incoming
             if hipct<button.health.max then
                 hipct=(button.health.current+button.health.incoming)/button.health.max
@@ -421,7 +421,7 @@ local function HealBot_HealthColor(button)
         end
         hcr, hcg = HealBot_Action_BarColourPct(hipct)
     else 
-        if not button.status.dead then
+        if button.status.current<9 then
             if button.health.max == 0 then
                 hcpct=1
             else
