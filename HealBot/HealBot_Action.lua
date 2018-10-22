@@ -1553,12 +1553,6 @@ function HealBot_Action_setNameText(button)
         end
     else
         uName=HEALBOT_WORD_RESERVED..':'..button.unit
-        
-        --if button.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
-        --    HealBot_nextRecalcParty(0.8, 1)
-        --elseif button.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-        --    HealBot_nextRecalcParty(0.8, 2)
-        --end
     end
 
     local stringLen=hbstringLen(string.gsub(uName, "%s+", ""))+1

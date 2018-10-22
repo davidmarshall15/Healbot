@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.10.b2";
+﻿HEALBOT_VERSION   = "8.0.1.10";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -184,7 +184,7 @@ function HealBot_globalVars()
     HEALBOT_FLASH_HEAL                      = GetSpellInfo(2061) or "--Flash Heal";
     HEALBOT_HALO                            = GetSpellInfo(120517) or "--Halo"
     HEALBOT_HEAL                            = GetSpellInfo(2060) or "--Heal";
-   -- HEALBOT_HOLY_WORD_SANCTUARY             = GetSpellInfo(88685) or "--Holy Word: Sanctuary";
+    HEALBOT_HOLY_WORD_SALVATION             = GetSpellInfo(265202) or "--Holy Word: Salvation";
     HEALBOT_HOLY_WORD_SERENITY              = GetSpellInfo(2050) or "--Holy Word: Serenity";
     HEALBOT_PENANCE                         = GetSpellInfo(47540) or "--Penance"
     HEALBOT_PRAYER_OF_HEALING               = GetSpellInfo(596) or "--Prayer of Healing";

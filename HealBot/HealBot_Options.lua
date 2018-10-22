@@ -4856,6 +4856,8 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_SPIRIT_LINK_TOTEM,
             HEALBOT_FLASH_HEAL,
             HEALBOT_HOLY_WORD_SERENITY,
+            HEALBOT_SURGING_MIST,
+            HEALBOT_HOLY_WORD_SALVATION,
             HEALBOT_FLASH_OF_LIGHT,
             HEALBOT_GREATER_HEAL,
             HEALBOT_HEALING_TOUCH,

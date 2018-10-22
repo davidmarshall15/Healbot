@@ -1079,7 +1079,7 @@ local function HealBot_DoReset_Spells(pClassTrim)
           ["AltMiddle"] = HEALBOT_PRAYER_OF_HEALING,
           ["CtrlMiddle"] = HEALBOT_DIVINE_HYMN,
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
+          ["Alt-ShiftRight"] = HEALBOT_HOLY_WORD_SALVATION,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
         HealBot_Config_Spells.DisabledKeyCombo = {
@@ -3263,7 +3263,7 @@ end
 
 local function HealBot_OnEvent_UnitHealth(unit)
     local xUnit,xGUID,xButton = HealBot_UnitID(unit)
-    if xUnit then
+    if xButton then
         local health,healthMax=UnitHealth(xUnit),HealBot_UnitMaxHealth(xUnit)
         if HealBot_VehicleUnit[xUnit] then
             if not HealBot_UnitData[xGUID] then
@@ -3283,6 +3283,9 @@ local function HealBot_OnEvent_UnitHealth(unit)
             HealBot_Action_setHealthText(xButton)
             HealBot_Action_UpdateHealthButton(xButton)
         end
+    elseif unit and UnitExists(unit) and not UnitIsPlayer(unit) and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and 
+           (unit=="pet" or strsub(unit,1,7)=="raidpet" or strsub(unit,1,8)=="partypet") then
+        HealBot_nextRecalcParty(0.2, 2)
     end
 end
 
@@ -4355,7 +4358,7 @@ local function HealBot_Update_Fast()
                         HealBot_nextRecalcParty(0, 1)
                     elseif xButton.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
                         HealBot_nextRecalcParty(0, 2)
-                        HealBot_luVars["PetsReCheck"]=GetTime()+30
+                        HealBot_luVars["PetsReCheck"]=GetTime()+15
                     end
                 end
             elseif UnitExists(xUnit) then
