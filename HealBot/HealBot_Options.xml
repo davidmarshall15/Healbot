@@ -7692,7 +7692,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextInClassColour" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-70" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7785,6 +7785,81 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                     </Scripts>
                   </Frame>
+
+                  <EditBox name="HealBot_Options_DisconnectedTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="80" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="74" y="-110" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString  name= "HealBot_Options_DisconnectedTagTxt" inherits="GameFontNormal" text="HEALBOT_TAGS">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="-20" y="1"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_DisconnectedTag_OnTextChanged(self)</OnTextChanged>
+                    </Scripts>
+                  </EditBox>
+                  <EditBox name="HealBot_Options_UnitDeadTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="80" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="25" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_UnitDeadTag_OnTextChanged(self)</OnTextChanged>
+                    </Scripts>
+                  </EditBox>
+                  <EditBox name="HealBot_Options_OutOfRangeTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="80" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UnitDeadTag" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="25" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_OutOfRangeTag_OnTextChanged(self)</OnTextChanged>
+                    </Scripts>
+                  </EditBox>
+                  <EditBox name="HealBot_Options_ReserverTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="80" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OutOfRangeTag" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="25" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_ReserverTag_OnTextChanged(self)</OnTextChanged>
+                    </Scripts>
+                  </EditBox>
+
                   <Slider name="HealBot_Options_FontName" inherits="HealBot_Options_SliderTemplate">
                     <Size>
                       <AbsDimension x="375" y="16" />
@@ -7792,7 +7867,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-125" />
+                          <AbsDimension x="80" y="-175" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7807,7 +7882,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="55" y="-180" />
+                          <AbsDimension x="55" y="-215" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7834,7 +7909,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TextAlign" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="128" y="-55"/>
+                          <AbsDimension x="128" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

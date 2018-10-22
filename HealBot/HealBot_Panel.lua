@@ -1374,7 +1374,7 @@ local function HealBot_Panel_targetHeals()
     elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] then
         local xGUID = xUnit 
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        HealBot_UnitName[xGUID] = HEALBOT_WORD_RESERVED..":"..xUnit
+        HealBot_UnitName[xGUID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
         table.insert(subunits,xUnit)
     end
     if i[hbCurrentFrame]>k then 
@@ -1394,18 +1394,18 @@ end
 local function HealBot_Panel_insSubSort(unit, hbGUID)
     if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==1 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = "!";
+            order[unit] = "ZZZZZZ";
         elseif UnitExists(unit) then
             order[unit] = HealBot_UnitName[hbGUID];
         else
-            order[unit] = "ZZZZ"..HealBot_UnitName[hbGUID];
+            order[unit] = "ZZZZ"..unit
         end
     elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==2 then
         local _,classEN = UnitClass(unit);
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = "!";
+            order[unit] = "ZZZZZ";
         else
-            order[unit] = classEN or "ZZ"
+            order[unit] = classEN or "ZZZZ"..unit
         end
     elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==3 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
@@ -1709,15 +1709,15 @@ local function HealBot_Panel_raidHeals()
                             subgroup = 8
                         end
                         if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = HEALBOT_WORD_RESERVED..":"..xUnit
+                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
                             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 then
                                 order[xUnit] = "ZZZZ"..uName;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 then
-                                order[xUnit] = "WARRIOR"
+                                order[xUnit] = "ZZZZ"..xUnit;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 then
                                 order[xUnit] = subgroup;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 then
-                                order[xUnit] = 0-maxHealDiv;
+                                order[xUnit] = 0-(maxHealDiv+j);
                             end
                             table.insert(units,xUnit);
                             HealBot_UnitName[xGUID] = uName;
@@ -1759,11 +1759,11 @@ local function HealBot_Panel_raidHeals()
                     if not HealBot_TrackNames[xGUID] then
                         HealBot_UnitGroups[xUnit]=subgroup
                         if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = HEALBOT_WORD_RESERVED..":"..xUnit
+                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
                             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 then
                                 order[xUnit] = "ZZZZ"..uName;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 then
-                                order[xUnit] = "WARRIOR";
+                                order[xUnit] = "ZZZZ"..xUnit;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 then
                                 order[xUnit] = subgroup;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 then
@@ -1829,15 +1829,15 @@ local function HealBot_Panel_raidHeals()
                             subgroup = 8
                         end
                         if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = HEALBOT_WORD_RESERVED..":"..xUnit
+                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
                             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 then
                                 order[xUnit] = "ZZZZ"..uName;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 then
-                                order[xUnit] = "WARRIOR";
+                                order[xUnit] = "ZZZZ"..xUnit;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 then
                                 order[xUnit] = subgroup;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 then
-                                order[xUnit] = 0-maxHealDiv;
+                                order[xUnit] = 0-(maxHealDiv+j);
                             end
                             table.insert(units,xUnit);
                             HealBot_UnitName[xGUID] = uName;
@@ -1879,11 +1879,11 @@ local function HealBot_Panel_raidHeals()
                     if not HealBot_TrackNames[xGUID] then
                         HealBot_UnitGroups[xUnit]=subgroup
                         if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = HEALBOT_WORD_RESERVED..":"..xUnit
+                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
                             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 then
                                 order[xUnit] = "ZZZZ"..uName;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 then
-                                order[xUnit] = "WARRIOR";
+                                order[xUnit] = "ZZZZ"..xUnit;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 then
                                 order[xUnit] = subgroup;
                             elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 then
@@ -2065,7 +2065,7 @@ local function HealBot_Panel_focusHeals()
     elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] then
         local xGUID = xUnit 
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        HealBot_UnitName[xGUID] = HEALBOT_WORD_RESERVED..":"..xUnit
+        HealBot_UnitName[xGUID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
         table.insert(subunits,xUnit)
     end
  
@@ -2150,7 +2150,7 @@ local function HealBot_Panel_groupHeals()
         elseif nraid==0 and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then
             local xGUID = xUnit
             if not HealBot_TrackNames[xGUID] then
-                local uName = HEALBOT_WORD_RESERVED..":"..xUnit
+                local uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
                 HealBot_UnitGroups[xUnit]=1
                 i[hbCurrentFrame]=i[hbCurrentFrame]+1;
                 HealBot_UnitName[xGUID] = uName;

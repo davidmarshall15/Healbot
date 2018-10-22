@@ -512,13 +512,7 @@ function HealBot_Action_UpdateHealsInButton(button)
         else
             hir,hig,hib = ebubar:GetStatusBarColor();
         end
-        --if button.status.range==1 then
         ebubar2:SetStatusBarColor(hir,hig,hib,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IA"]);
-        --elseif unitHRange==0 then
-        --    ebubar2:SetStatusBarColor(hir,hig,hib,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
-        --else
-        --    ebubar2:SetStatusBarColor(hir,hig,hib,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
-        --end
         if ebubar2:GetValue()~=floor(hipct*100) then
             ebubar2:SetValue(floor(hipct*100));
         end
@@ -563,13 +557,7 @@ function HealBot_Action_UpdateAbsorbsButton(button)
         else
             har,hag,hab = ebubar:GetStatusBarColor();
         end
-        --if button.status.range==1 then
         ebubar6:SetStatusBarColor(har,hag,hab,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]);
-        --elseif unitHRange==0 then
-        --    ebubar6:SetStatusBarColor(har,hag,hab,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
-        --else
-        --    ebubar6:SetStatusBarColor(har,hag,hab,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]);
-        --end
         if ebubar6:GetValue()~=floor(hapct*100) then
             ebubar6:SetValue(floor(hapct*100));
         end
@@ -586,7 +574,11 @@ local function HealBot_Action_TextColours(button)
         if UnitHasIncomingResurrection(button.unit) then
             ebusr,ebusg,ebusb=0.2, 1.0, 0.2
         elseif UnitIsFriend(button.unit, "player") then
-            ebusr,ebusg,ebusb=1.0, 0.2, 0.2
+            if button.status.range < 1 then
+                ebusr,ebusg,ebusb=0.5, 0.5, 0.5
+            else
+                ebusr,ebusg,ebusb=1.0, 0.2, 0.2
+            end
         else
             ebusr,ebusg,ebusb=0.4, 0.4, 0.4
         end
@@ -638,7 +630,7 @@ end
 function HealBot_Action_UpdateDebuffButton(button)
     if button.aura.debuff.type and UnitExists(button.unit) and button.status.current<9 then
         button.spells.rangecheck=HealBot_RangeSpells["CURE"]
-        button.status.range=HealBot_UnitInRange(button)
+        HealBot_UnitInRange(button)
         if HealBot_Config_Cures.CDCshownHB then
             if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
                 local hcr,hcg,hcb = 0, 0, 0
@@ -711,7 +703,7 @@ function HealBot_Action_UpdateBuffButton(button)
             local hcr,hcg,hcb = 0, 0, 0
             local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
             local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
-            button.status.range=HealBot_UnitInRange(button)
+            HealBot_UnitInRange(button)
             hcr,hcg,hcb=HealBot_Options_RetBuffRGB(button.aura.buff.name)  
             button.status.current=7
             if button.status.range==1 then  
@@ -744,13 +736,14 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Action_setNameText(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
-            else
+            elseif button.status.update<1 then
                 button.status.update=1
             end
         else
             local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
             button.spells.rangecheck=HealBot_RangeSpells["RES"]
-            if HealBot_UnitInRange(button)==1 and not UnitIsGhost(button.unit) then
+            HealBot_UnitInRange(button)
+            if button.status.range>0 and not UnitIsGhost(button.unit) then
                 ebubar:SetValue(100)
             else
                 ebubar:SetValue(0)
@@ -776,15 +769,16 @@ function HealBot_Action_UpdateTheDeadButton(button)
         HealBot_HoT_RemoveIconButton(button)
         if UnitIsUnit(button.unit,"player") then
             HealBot_Action_ResetActiveUnitStatus() 
-        else
+        elseif button.status.update<1 then
             button.status.update=1
         end
         local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         ebubar:SetStatusBarColor(1,1,1,0.25);
         button.spells.rangecheck=HealBot_RangeSpells["RES"]
+        HealBot_UnitInRange(button)
         HealBot_Action_setHealthText(button)
         HealBot_Action_setNameText(button)
-        if HealBot_UnitInRange(button)==1 and not UnitIsGhost(button.unit) then
+        if button.status.range>0 and not UnitIsGhost(button.unit) then
             ebubar:SetValue(100)
         else
             ebubar:SetValue(0)
@@ -832,7 +826,7 @@ function HealBot_Action_UpdateHealthButton(button)
             if button.aggro.status==3 or (HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["ALERTIC"])) or
              (not HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["ALERTOC"])) then
                 button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
-                button.status.range=HealBot_UnitInRange(button)
+                HealBot_UnitInRange(button)
                 if button.status.current<5 then button.status.current=4 end
                 if button.status.range==1 then
                     button.status.enabled=true
@@ -1538,21 +1532,23 @@ function HealBot_Action_setNameText(button)
         end
         if uName then
 
-            if button.status.offline and button.status.offline<GetTime()+15 then
-                uName=HEALBOT_DISCONNECTED_TEXT.." "..uName;
-            end    -- added by Diacono of Ursin
-
-            if button.status.current==9 and UnitIsFriend("player",button.unit) then
-                uName=HEALBOT_DEAD_TEXT.." "..uName;
+            if button.status.grace<GetTime() then
+                if button.status.offline and button.status.offline<GetTime()+15 then
+                    uName=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGDC"]..uName;
+                elseif button.status.current==9 and UnitIsFriend("player",button.unit) then
+                    uName=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGRIP"]..uName;
+                elseif button.status.range<1 and UnitIsFriend("player",button.unit) then
+                    uName=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGOOR"]..uName;
+                end
             end
-            
+
             if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXT"] and button.aggro.status<4 and 
                (button.aggro.status or 0)>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] and uName then
                 uName=">> "..uName.." <<"
             end
         end
     else
-        uName=HEALBOT_WORD_RESERVED..':'..button.unit
+        uName=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGR"]..button.unit
     end
 
     local stringLen=hbstringLen(string.gsub(uName, "%s+", ""))+1
@@ -2314,18 +2310,20 @@ function HealBot_Action_HidePanel(hbCurFrame)
 end
 
 function HealBot_Action_ResetUnitStatus(button)
-    if button then
+    if button and button.status.update<1 then
         button.status.update=1
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.status.update=1;
+            if xButton.status.update<1 then
+                xButton.status.update=1;
+            end
         end
     end
 end
 
 function HealBot_Action_ResetActiveUnitStatus()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        if not xButton.status.reserved and xButton.status.current>0 then
+        if not xButton.status.reserved and xButton.status.current>3 and xButton.status.update<1 then
             xButton.status.update=1
         end
     end
@@ -2404,7 +2402,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.mana.max=0
         ghb.status.current=0
         ghb.status.update=0
-        ghb.status.range=1
+        ghb.status.range=-2
         ghb.status.unittype=1
         ghb.status.offline=false
         ghb.status.enabled=false
@@ -2955,6 +2953,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 HealBot_UnitData[hbGUID]["UNIT"]="init2"
                 HealBot_UnitData[hbGUID]["SPEC"] = " "
                 HealBot_UnitData[hbGUID]["ROLE"] = HEALBOT_WORDS_UNKNOWN
+                HealBot_UnitData[hbGUID]["GRACE"] = GetTime()+10
                 if not HealBot_UnitData[unit] then HealBot_UnitData[unit]={} end
                 if UnitExists(unit) then
                     if UnitIsFriend("player",unit) then 
@@ -2971,6 +2970,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb.checks.health=GetTime() + 1 + (shb.id / 40)
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
             shb.status.update=2
+            shb.status.grace=HealBot_UnitData[hbGUID]["GRACE"] or GetTime()+10
             shb.checks.range=GetTime() + (shb.id / 80)
             if shb.status.offline and UnitIsConnected(unit) then
                 shb.status.offline=false
@@ -2986,7 +2986,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         elseif shb.guid~=hbGUID then
             shb.guid=hbGUID
             shb.status.update=2
-        --    shb.status.range=-1
         end
         HealBot_Action_CheckUnitLowMana(unit)
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
@@ -3007,7 +3006,7 @@ function HealBot_Action_ResetUnitAttribs(button)
     button.mana.current=UnitPower(button.unit, 0) or 0
     button.mana.max=UnitPowerMax(button.unit, 0) or 0
     button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
-    button.status.range=HealBot_UnitInRange(button)
+    HealBot_UnitInRange(button)
     if UnitIsPlayer(button.unit) then
         HealBot_AuraChecks(button)
     else
@@ -3506,7 +3505,7 @@ local function HealBot_Action_UseSmartCast(bp)
     local sName=HealBot_Action_SmartCast(bp);
     if sName then
         if HealBot_GetSpellId(sName) then
-            if UnitIsUnit("player",bp.unit) or HealBot_UnitInRange(bp, sName)==1 then
+            if bp.status.range>0 then
                 bp:SetAttribute("helpbutton1", "heal1");
                 bp:SetAttribute("type-heal1", "spell");
                 bp:SetAttribute("spell-heal1", sName);
@@ -3515,7 +3514,6 @@ local function HealBot_Action_UseSmartCast(bp)
             local mId=GetMacroIndexByName(sName)
             if mId ~= 0 then
                local _,_,mText=GetMacroInfo(mId)
-     --        mUnit = bp.unit
                 if UnitExists(HealBot_UnitPet(bp.unit)) then
                     mText=string.gsub(mText,"hbtargetpet",HealBot_UnitPet(bp.unit))
                 end
@@ -3874,27 +3872,28 @@ end
 
 function HealBot_Action_SmartCast(button)
     local scuSpell = nil
-    local rangeSpell=HealBot_RangeSpells["HEAL"]
+    button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
     if button.status.current==9 and UnitIsUnit("player",button.unit) then return nil; end
     
     if HealBot_Globals.SmartCastRes and button.status.current==9 then
         local mrSpell = HealBot_Init_retSmartCast_MassRes();
 		scuSpell=HealBot_Init_retSmartCast_Res();
-        rangeSpell=HealBot_RangeSpells["RES"]
+        button.spells.rangecheck=HealBot_RangeSpells["RES"]
     elseif button.aura.debuff.type and HealBot_Globals.SmartCastDebuff then
         scuSpell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type);
-        rangeSpell=HealBot_RangeSpells["CURE"]
+        button.spells.rangecheck=HealBot_RangeSpells["CURE"]
     elseif button.aura.buff.name and HealBot_Globals.SmartCastBuff then
         scuSpell=button.aura.buff.name
-        rangeSpell=HealBot_RangeSpells["BUFF"]
+        button.spells.rangecheck=HealBot_RangeSpells["BUFF"]
     elseif HealBot_Globals.SmartCastHeal then
         local x=button.health.max-(button.health.current+button.health.incoming)
         if x>(UnitLevel("player")*20) then
             scuSpell=HealBot_SmartCast(x)
         end
     end
-    if rangeSpell and scuSpell and button.guid~=HealBot_Data["PGUID"] then
-        if HealBot_UnitInRange(button, rangeSpell)~=1 then return nil; end
+    HealBot_UnitInRange(button)
+    if button.status.range<1 then
+        return nil
     end
     return scuSpell;
 end

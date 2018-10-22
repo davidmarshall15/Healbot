@@ -700,7 +700,8 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="cw") then  -- Clear Warnings
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="zzz") then
-        HealBot_AddDebug("HealBot_Timers[CheckTimeMod]="..HealBot_Timers["CheckTimeMod"])
+        xButton=HealBot_Unit_Button["player"]
+        HealBot_AddDebug("button.spells.rangecheck="..xButton.spells.rangecheck)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -2307,6 +2308,10 @@ function HealBot_Check_Skins()
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["OUTLINE"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["OUTLINE"]=1 end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["HLTHTYPE"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["HLTHTYPE"]=1 end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["MAXCHARS"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["MAXCHARS"]=0 end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGDC"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGDC"]=HEALBOT_DISCONNECTED_TAG end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGRIP"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGRIP"]=HEALBOT_DEAD_TAG end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGOOR"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGOOR"]=HEALBOT_OUTOFRANGE_TAG end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGR"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGR"]=HEALBOT_RESERVED_TAG end
             if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IC"]==nil then Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IC"]=4 end
             if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IR"]==nil then Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IR"]=0.2 end
             if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IG"]==nil then Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IG"]=1 end
@@ -2559,6 +2564,16 @@ local function HealBot_Update_Skins()
                 Healbot_Config_Skins.Protection[Healbot_Config_Skins.Skins[x]]["COMBATRAID"]=true
             end
             HealBot_FixedFrames()
+        end
+        if tonumber(tMajor)<9 and tonumber(tMinor)<1 and tonumber(tPatch)<2 and tonumber(tHealbot)<12 then
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                for gl=1,10 do
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGDC"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGDC"]=HEALBOT_DISCONNECTED_TAG end
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGRIP"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGRIP"]=HEALBOT_DEAD_TAG end
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGOOR"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGOOR"]=HEALBOT_OUTOFRANGE_TAG end
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGR"]==nil then Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["TAGR"]=HEALBOT_RESERVED_TAG end
+                end
+            end
         end
         --if tonumber(tMajor)<9 and tonumber(tMinor)<1 and tonumber(tPatch)<2 and tonumber(tHealbot)<next-version-allow-for-beta then
         --    HealBot_Options_ResetSetting("CUSTOM")
@@ -3953,13 +3968,14 @@ local function HealBot_CheckUnitDebuffs(button)
     
     if button.aura.debuff.name then
         if button.aura.debuff.name~=prevDebuff["name"] or button.aura.debuff.type~=prevDebuff["type"] then
-            local inSpellRange = HealBot_UnitInRange(button, HealBot_Action_dSpell())
+            button.spells.rangecheck=HealBot_Action_dSpell()
+            HealBot_UnitInRange(button)
             if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil) then
-                if inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
+                if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
                     HealBot_Action_UpdateAggro(button.unit,"debuff",debuffCodes[button.aura.debuff.type], 0)
                 end
             end
-            if HealBot_Config_Cures.ShowDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
+            if HealBot_Config_Cures.ShowDebuffWarning and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
                 if HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
                     UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." suffers from "..button.aura.debuff.name, 
                                              HealBot_Globals.CDCBarColour[button.aura.debuff.name].R,
@@ -3984,11 +4000,11 @@ local function HealBot_CheckUnitDebuffs(button)
                                              1, UIERRORS_HOLD_TIME);
                 end
             end
-            if HealBot_Config_Cures.SoundDebuffWarning and inSpellRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
+            if HealBot_Config_Cures.SoundDebuffWarning and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
                 HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
             end
  
-            if inSpellRange >-1 then
+            if button.status.range >-1 then
                 HealBot_Action_UpdateDebuffButton(button)
             else
                 HealBot_Action_ResetUnitStatus(button)
@@ -4247,7 +4263,9 @@ local function HealBot_CheckUnitBuffs(button)
     if bName then
         if button.aura.buff.name~=bName then
             button.aura.buff.name=bName;
-            if HealBot_UnitInRange(button, bName) >-1 then
+            button.spells.rangecheck=bName
+            HealBot_UnitInRange(button)
+            if button.status.range >-1 then
                 HealBot_Action_UpdateBuffButton(button)
             else
                 HealBot_Action_ResetUnitStatus(button)
@@ -4312,10 +4330,10 @@ local function HealBot_Update_Fast()
                                 HealBot_Action_ResetUnitAttribs(xButton)
                                 xButton.status.update=1
                             end
-                        elseif xButton.status.current>4 then
-                            local uRange=HealBot_UnitInRange(xButton)
+                        else--if xButton.status.current>4 then
+                            local uRange=xButton.status.range
+                            HealBot_UnitInRange(xButton)
                             if uRange~=xButton.status.range then
-                                HealBot_Action_Refresh(xButton)
                                 HealBot_Action_UpdateHealsInButton(xButton)
                                 HealBot_Action_UpdateAbsorbsButton(xButton)
                             elseif xButton.status.dirarrow>-998 then
@@ -5379,7 +5397,7 @@ local function HealBot_OnEvent_UnitSpellcastSent(self,caster,unitName,spellRank,
         spellName==HEALBOT_RESURRECTION or spellName==HEALBOT_ANCESTRALSPIRIT or spellName==HEALBOT_REBIRTH or spellName==HEALBOT_REDEMPTION or spellName==HEALBOT_REVIVE or spellName==HEALBOT_RESUSCITATE)
         and UnitExists(xUnit) and HealBot_Unit_Button[xUnit]  then
         local xButton=HealBot_Unit_Button[xUnit]
-        xButton.status.update=1
+        if xButton.status.update<1 then xButton.status.update=1 end
         if caster=="player" and uscName then
             if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 and Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"] then
                 if spellName==HEALBOT_MASS_RESURRECTION or spellName==HEALBOT_ABSOLUTION or spellName==HEALBOT_ANCESTRAL_VISION or spellName==HEALBOT_REAWAKEN or spellName==HEALBOT_REVITALIZE then           
@@ -5652,18 +5670,17 @@ function HealBot_SmartCast(hlthDelta)
     return s;
 end
 
-function HealBot_UnitInRange(button, spellNameOveride) -- added by Diacono of Ursin
+function HealBot_UnitInRange(button) -- added by Diacono of Ursin
     local uRange=0
-    if UnitGUID(button.unit)==HealBot_Data["PGUID"] then
+    if UnitIsUnit("player",button.unit) then
         uRange = 1
     elseif CheckInteractDistance(button.unit,1) then
         uRange = 1
     elseif not HealBot_luVars["27YardsOnly"] then
-        local spellName = spellNameOveride or button.spells.rangecheck
-        if IsSpellInRange(spellName, button.unit) ~= nil then
-            uRange = IsSpellInRange(spellName, button.unit)
-        elseif IsItemInRange(spellName, button.unit) ~= nil then
-            uRange = IsItemInRange(spellName, button.unit)
+        if IsSpellInRange(button.spells.rangecheck, button.unit) ~= nil then
+            uRange = IsSpellInRange(button.spells.rangecheck, button.unit)
+        elseif IsItemInRange(button.spells.rangecheck, button.unit) ~= nil then
+            uRange = IsItemInRange(button.spells.rangecheck, button.unit)
         elseif UnitInRange(button.unit) then
             uRange = 1
         else
@@ -5678,7 +5695,11 @@ function HealBot_UnitInRange(button, spellNameOveride) -- added by Diacono of Ur
     if uRange==0 and not UnitIsVisible(button.unit) then 
         uRange=-1 
     end
-    return uRange
+    if button.status.range~=uRange then
+        button.status.range=uRange
+        HealBot_Action_setNameText(button)
+        HealBot_Action_Refresh(button)
+    end
 end
 
 local hbPi = math.pi

@@ -5571,6 +5571,11 @@ function HealBot_Options_ApplyTab2Frames_OnClick()
                 Healbot_Config_Skins.BarText[s][j]["NUMFORMAT2"]=Healbot_Config_Skins.BarText[s][f]["NUMFORMAT2"]
                 Healbot_Config_Skins.BarText[s][j]["OUTLINE"]=Healbot_Config_Skins.BarText[s][f]["OUTLINE"]
                 Healbot_Config_Skins.BarText[s][j]["HLTHTYPE"]=Healbot_Config_Skins.BarText[s][f]["HLTHTYPE"]
+                Healbot_Config_Skins.BarText[s][j]["TAGDC"]=Healbot_Config_Skins.BarText[s][f]["TAGDC"]
+                Healbot_Config_Skins.BarText[s][j]["TAGRIP"]=Healbot_Config_Skins.BarText[s][f]["TAGRIP"]
+                Healbot_Config_Skins.BarText[s][j]["TAGOOR"]=Healbot_Config_Skins.BarText[s][f]["TAGOOR"]
+                Healbot_Config_Skins.BarText[s][j]["TAGR"]=Healbot_Config_Skins.BarText[s][f]["TAGR"]
+                Healbot_Config_Skins.BarText[s][j]["MAXCHARS"]=Healbot_Config_Skins.BarText[s][f]["MAXCHARS"]
                 Healbot_Config_Skins.BarTextCol[s][j]["ER"]=Healbot_Config_Skins.BarTextCol[s][f]["ER"]
                 Healbot_Config_Skins.BarTextCol[s][j]["EG"]=Healbot_Config_Skins.BarTextCol[s][f]["EG"]
                 Healbot_Config_Skins.BarTextCol[s][j]["EB"]=Healbot_Config_Skins.BarTextCol[s][f]["EB"]
@@ -5594,6 +5599,7 @@ function HealBot_Options_ApplyTab2Frames_OnClick()
                 Healbot_Config_Skins.Icons[s][j]["SCALE"]=Healbot_Config_Skins.Icons[s][f]["SCALE"]
                 Healbot_Config_Skins.Icons[s][j]["I15EN"]=Healbot_Config_Skins.Icons[s][f]["I15EN"]
                 Healbot_Config_Skins.Icons[s][j]["SHOWBUFF"]=Healbot_Config_Skins.Icons[s][f]["SHOWBUFF"]
+                Healbot_Config_Skins.Icons[s][j]["FADE"]=Healbot_Config_Skins.Icons[s][f]["FADE"]
                 Healbot_Config_Skins.RaidIcon[s][j]["SHOW"]=Healbot_Config_Skins.RaidIcon[s][f]["SHOW"]
                 Healbot_Config_Skins.RaidIcon[s][j]["STAR"]=Healbot_Config_Skins.RaidIcon[s][f]["STAR"]
                 Healbot_Config_Skins.RaidIcon[s][j]["CIRCLE"]=Healbot_Config_Skins.RaidIcon[s][f]["CIRCLE"]
@@ -8774,6 +8780,22 @@ function HealBot_Options_CtrlAlt_OnTextChanged(self)
     HealBot_Options_SoftReset_flag=true
 end
 
+function HealBot_Options_DisconnectedTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGDC"] = self:GetText()
+end
+
+function HealBot_Options_UnitDeadTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGRIP"] = self:GetText()
+end
+
+function HealBot_Options_OutOfRangeTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGOOR"] = self:GetText()
+end
+
+function HealBot_Options_ReserverTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGR"] = self:GetText()
+end
+
 function HealBot_Options_EnableHealthy_OnClick(self)
     if self:GetChecked() then
         HealBot_Config.EnableHealthy = true
@@ -10136,6 +10158,14 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_TEXTOPTIONS)
             g=_G["healbotskinbarsfoutlinefStr"]
             g:SetText(HEALBOT_OPTIONS_SKINFOUTLINE)
+            HealBot_Options_SetText(HealBot_Options_DisconnectedTag,HEALBOT_DISCONNECTED_LABEL)
+            HealBot_Options_SetText(HealBot_Options_UnitDeadTag,HEALBOT_DEAD_LABEL)
+            HealBot_Options_SetText(HealBot_Options_OutOfRangeTag,HEALBOT_OUTOFRANGE_LABEL)
+            HealBot_Options_SetText(HealBot_Options_ReserverTag,HEALBOT_RESERVED_LABEL)
+            HealBot_Options_DisconnectedTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGDC"])
+            HealBot_Options_UnitDeadTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGRIP"])
+            HealBot_Options_OutOfRangeTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGOOR"])
+            HealBot_Options_ReserverTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGR"])
             DoneInitTab[327]=true
         end
     elseif subNo==328 then

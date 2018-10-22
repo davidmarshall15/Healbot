@@ -322,8 +322,16 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
     HEALBOT_OPTIONS_MYTARGET                = "My Targets"
 
-    HEALBOT_DISCONNECTED_TEXT               = "[ DC ]"
-    HEALBOT_DEAD_TEXT                       = "[ RIP ]"
+    HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
+    HEALBOT_DISCONNECTED_TAG                = "[ DC ] "
+    HEALBOT_DEAD_LABEL                      = "Dead"
+    HEALBOT_DEAD_TAG                        = "[ RIP ] "
+    HEALBOT_OUTOFRANGE_LABEL                = "Out Of Range"
+    HEALBOT_OUTOFRANGE_TAG                  = "[ OOR ] "
+    HEALBOT_RESERVED_LABEL                  = "Reserved"
+    HEALBOT_RESERVED_TAG                    = "[ R ] "
+    HEALBOT_TAGS                            = "Tags"
+    
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
     HEALBOT_OPTIONS_TOOLTIPUPDATE           = "Constantly update";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER          = "Show buff before it expires";
@@ -565,7 +573,6 @@ function HealBot_Lang_enALL()
     HEALBOT_CP_MACRO_BASE                   = "Base macro name"
     HEALBOT_CP_MACRO_SAVE                   = "Last saved at: "
     HEALBOT_CP_STARTTIME                    = "Protect duration on logon"
-    HEALBOT_WORD_RESERVED                   = "Reserved"
     HEALBOT_OPTIONS_COMBATPROT              = "Combat Protection"
     HEALBOT_COMBATPROT_PARTYNO              = "bars Reserved for Party"
     HEALBOT_COMBATPROT_RAIDNO               = "bars Reserved for Raid"
