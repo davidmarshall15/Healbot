@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.11.b1";
+﻿HEALBOT_VERSION   = "8.0.1.11.b2";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -249,13 +249,12 @@ function HealBot_globalVars()
     HEALBOT_SAVAGE_DEFENCE                  = GetSpellInfo(62606) or "--Savage Defense";
     HEALBOT_SURVIVAL_INSTINCTS              = GetSpellInfo(61336) or "--Survival Instincts";
     HEALBOT_TREE_OF_LIFE                    = GetSpellInfo(33891) or "--Tree of Life";
-	--Legion Added
 	HEALBOT_SPRING_BLOSSOMS                 = GetSpellInfo(207385) or "--Spring Blossoms";
     HEALBOT_CULTIVATION                     = GetSpellInfo(200390) or "--Cultivation";
     HEALBOT_INNERVATE                       = GetSpellInfo(29166) or "--Innervate";
     HEALBOT_ESSENCE_OF_GHANIR               = GetSpellInfo(208253) or "--Essence of G'Hanir"
 	HEALBOT_FOCUSED_GROWTH                  = GetSpellInfo(203554) or "--Focused Growth"
-    
+    HEALBOT_GROVE_TENDING					= GetSpellInfo(279793) or "--Grove Tending";
 	--Hunter
     HEALBOT_A_CHEETAH                       = GetSpellInfo(5118) or "--Aspect of the Cheetah"
     HEALBOT_A_PACK                          = GetSpellInfo(13159) or "--Aspect of the Pack"

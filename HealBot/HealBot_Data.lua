@@ -430,14 +430,13 @@ function HealBot_Data_InitVars()
                 [HEALBOT_IRONFUR]=4,
                 [HEALBOT_SURVIVAL_INSTINCTS]=2,
                 [HEALBOT_FRENZIED_REGEN]=4,
-                --WoD Added
                 [HEALBOT_NATURE_REJUVENATION_GERMINATION]=2,
-                --Legion Added
                 [HEALBOT_SPRING_BLOSSOMS]=2,               
                 [HEALBOT_CULTIVATION]=2,
                 [HEALBOT_INNERVATE]=4,
                 [HEALBOT_ESSENCE_OF_GHANIR]=2,
 				[HEALBOT_FOCUSED_GROWTH]=2,
+                [HEALBOT_GROVE_TENDING]=2,
             },
             ["HUNT"] = {
                 [HEALBOT_MENDPET]=2,
@@ -464,9 +463,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_ETERNAL_FLAME]=2,
                 [HEALBOT_ARDENT_DEFENDER]=2,
                 [HEALBOT_DIVINE_PROTECTION]=4,
-                --WoD Added
                 [HEALBOT_BEACON_OF_FAITH]=2,                                
-                --Legion Added
                 [HEALBOT_BLESSING_OF_SACRIFICE]=2,
                 [HEALBOT_BESTOW_FAITH]=2,
                 [HEALBOT_BEACON_OF_VIRTUE]=2,
@@ -490,12 +487,10 @@ function HealBot_Data_InitVars()
                 [HEALBOT_SERENDIPITY]=2,
                 [HEALBOT_TWIST_OF_FATE]=2,
                 [HEALBOT_DISPERSION]=2,
-                [HEALBOT_VAMPIRIC_EMBRACE]=1,
-                --WoD Added            
+                [HEALBOT_VAMPIRIC_EMBRACE]=1,          
                 [HEALBOT_SURGE_OF_DARKNESS]=2,               
                 [HEALBOT_SURGE_OF_LIGHT]=2,                                            
                 [HEALBOT_CLARITY_OF_WILL]=2,                                      
-                --Legion Added	
                 [HEALBOT_RAPTURE]=2, --Disc                         
                 [HEALBOT_ATONEMENT]=2,                       
                 [HEALBOT_APOTHEOSIS]=2, --Holy                      
@@ -577,10 +572,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_ELUSIVE_BREW]=2,
                 [HEALBOT_FORTIFYING_BREW]=2,
                 [HEALBOT_DAMPEN_HARM]=2,
-                [HEALBOT_DIFFUSE_MAGIC]=2,
-                --WoD Added                
+                [HEALBOT_DIFFUSE_MAGIC]=2,             
                 [HEALBOT_EXTEND_LIFE]=2,
-                --Legion Added
                 [HEALBOT_TOUCH_OF_KARMA]=2,
                 [HEALBOT_ESSENCE_FONT]=2,
             },
