@@ -759,7 +759,7 @@ function HealBot_TestBars(noBars)
      elseif HealBot_Panel_retTestBars() then
          HealBot_Panel_ToggleTestBars()
     end
-    HealBot_nextRecalcParty(0.2, 6)
+    HealBot_nextRecalcParty(0.2, 0)
 end
 
 local function HealBot_configClassHoT()
@@ -2190,11 +2190,11 @@ function HealBot_Check_Skins()
                     elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["NAME"]==HEALBOT_FOCUS_en then
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=9
                     elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en then
-                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=9
+                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=8
                     elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en then
-                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=9
+                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=7
                     elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["NAME"]==HEALBOT_VEHICLE_en then
-                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=9
+                        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=6
                     else
                         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][gl]["FRAME"]=1 
                     end
@@ -2547,8 +2547,12 @@ local function HealBot_Update_Skins()
         end
         if tonumber(tMajor)<9 and tonumber(tMinor)<1 and tonumber(tPatch)<2 and tonumber(tHealbot)<9 then
             for x in pairs (Healbot_Config_Skins.Skins) do
-                local y=floor(Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"])
-                Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]=y
+                if Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"] then
+                    local y=floor(Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"])
+                    Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]=y
+                else
+                    Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]=3
+                end
             end
         end
         if tonumber(tMajor)<9 and tonumber(tMinor)<1 and tonumber(tPatch)<2 and tonumber(tHealbot)<10 then
@@ -4336,7 +4340,8 @@ local function HealBot_Update_Fast()
                             if uRange~=xButton.status.range then
                                 HealBot_Action_UpdateHealsInButton(xButton)
                                 HealBot_Action_UpdateAbsorbsButton(xButton)
-                            elseif xButton.status.dirarrow>-998 then
+                            end
+                            if xButton.status.dirarrow>-998 or (not IsInInstance() and xButton.status.range<1) then
                                 HealBot_Action_ShowDirectionArrow(xButton)
                             end
                         end

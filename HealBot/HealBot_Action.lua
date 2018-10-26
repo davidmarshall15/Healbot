@@ -1574,28 +1574,27 @@ function HealBot_Action_HBText(button, r, g, b, a)
 end
 
 function HealBot_Action_ShowDirectionArrow(button)
-    if not IsInInstance() and button.status.range<1 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and button.guid~=HealBot_Data["PGUID"] then 
-        if (not Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"] or button.unit==HealBot_Data["TIPUNIT"]) then
-            local hbX, hbY, hbD = HealBot_Direction_Check(button.unit)
-            if hbD then
-                if button.status.dirarrow>-998 then 
-                    local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
-                    local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
-                    ebuicon17:SetTexture("Interface\\AddOns\\HealBot\\Images\\arrow.blp")
-                    ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
-                    button.status.dirarrow=hbD
-                    ebuicon17:Show()
-                elseif button.status.dirarrow~=hbD then
-                    local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
-                    local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
-                    ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
-                    button.status.dirarrow=hbD
-                end
-                return
+    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and button.guid~=HealBot_Data["PGUID"] and 
+       (not Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"] or button.unit==(HealBot_Data["TIPUNIT"] or "x")) then
+        local hbX, hbY, hbD = HealBot_Direction_Check(button.unit)
+        if hbD then
+            if button.status.dirarrow<-998 then 
+                local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
+                local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
+                ebuicon17:SetTexture("Interface\\AddOns\\HealBot\\Images\\arrow.blp")
+                ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
+                button.status.dirarrow=hbD
+                ebuicon17:Show()
+            elseif button.status.dirarrow~=hbD then
+                local barDir = _G["HealBot_Action_HealUnit"..button.id.."BarDir"]
+                local ebuicon17 = _G["HealBot_Action_HealUnit"..button.id.."BarDirIcon17"];
+                ebuicon17:SetTexCoord(hbX, hbX + 0.109375, hbY, hbY + 0.08203125)
+                button.status.dirarrow=hbD
             end
+            return
         end
     end
-    if button.status.dirarrow>-998 then
+    if button.status.dirarrow<-998 then
         HealBot_Action_HideDirectionArrow(button)
     end
 end
@@ -3257,7 +3256,7 @@ local hbLastButton=nil
 function HealBot_Action_HealUnit_OnEnter(self)
     if not self.unit then return; end
     HealBot_Data["TIPUNIT"] = self.unit
-    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then 
+    if not IsInInstance() and self.status.range<1 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then 
         HealBot_Action_ShowDirectionArrow(self)
     end
     if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] and UnitExists(self.unit) then
@@ -3294,8 +3293,8 @@ end
 
 function HealBot_Action_HealUnit_OnLeave(self)
     HealBot_Action_HideTooltip(self);
-    if self.status and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
-        HealBot_Action_Refresh(self)
+    if self.status and self.status.dirarrow>-998 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
+        HealBot_Action_HideDirectionArrow(self)
     end
     local xUnit=self.unit
     if self.aggro and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and self.aggro.status==-1 then
