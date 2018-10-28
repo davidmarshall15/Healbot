@@ -92,6 +92,11 @@ local HealBot_Action_HealButtons = {};
 local hbPanelShowhbFocus=nil
 local HealBot_Panel_luVars={}
 HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()
+HealBot_Panel_luVars["SelfPets"]=false
+
+function HealBot_Panel_retLuVars(vName)
+    return HealBot_Panel_luVars[vName]
+end
 
 local function HealBot_Panel_updGUIDstore(hbGUID,unitName,unit)
     hbTempUnitName[unitName]=unit
@@ -2307,6 +2312,7 @@ local function HealBot_Panel_selfHeals()
                 else
                     HealBot_setNotVisible(xGUID,xUnit)
                 end
+                HealBot_Panel_luVars["SelfPets"]=true
                 HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
             end
         end
@@ -2527,7 +2533,7 @@ local function HealBot_Panel_PlayersChanged()
     end
     nraid=GetNumGroupMembers();
     TempMaxH=9;
-    local raidIconOn=false
+    
     if not IsInRaid() then nraid=0 end;
 
     for x,_ in pairs(HealBot_TrackNotVisible) do
@@ -2696,9 +2702,6 @@ local function HealBot_Panel_PlayersChanged()
                     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_MYTARGET_en then
                         HealBot_Panel_myHeals()
                     end
-                    if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SHOW"] then
-                        raidIconOn=true
-                    end
                 end
             end
             
@@ -2775,7 +2778,6 @@ local function HealBot_Panel_PlayersChanged()
     --HealBot_AddDebug("Number of units="..i[1]+i[2]+i[3]+i[4]+i[5])
     HealBot_Panel_SetupBars()
 
-    if raidIconOn then HealBot_OnEvent_RaidTargetUpdate(nil) end
 end
 
 function HealBot_Panel_cpSave(mNum)

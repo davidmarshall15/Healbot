@@ -739,6 +739,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             elseif button.status.update<1 then
                 button.status.update=1
             end
+            HealBot_AuraChecks(button)
         else
             local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
             button.spells.rangecheck=HealBot_RangeSpells["RES"]
@@ -2419,7 +2420,6 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.aura.checks=4
         ghb.aggro.status=0
         ghb.aggro.threatpct=0
-        ghb.aggro.finish=false
         ghb.text.health="100"
         ghb.text.name=" "
         local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
@@ -3020,6 +3020,9 @@ function HealBot_Action_ResetUnitAttribs(button)
     HealBot_Action_UpdateHealsInButton(button)
     HealBot_Action_UpdateAbsorbsButton(button)
     HealBot_Action_SetBar3Value(button)
+    if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
+        button.status.update=3
+    end
 end
 
 function HealBot_Action_SetTestButton(hbCurFrame, unitText)
