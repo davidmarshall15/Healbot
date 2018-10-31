@@ -1,7 +1,8 @@
 HealBot Continued
 -----------------
 
-Visit the Healbot website for information on Healbot: http://healbot.darktech.org
+Visit the Healbot website for information on Healbot: https://healbot.dpm15.net
+Issues and bug reports go here:  https://healbot.dpm15.net/forum/bug
 
 Update path to retain settings
 ------------------------------
