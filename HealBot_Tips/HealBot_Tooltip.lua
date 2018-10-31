@@ -291,7 +291,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
                 if hbTTHoTinfo[buffID]["ICON"]>0 and hbTTHoTinfo[buffID]["ICON"]<15 and linenum<44 then
                     local xGUID,buffName=string.split("!", buffID)
                     if xGUID and HealBot_UnitData[xGUID] and buffName then
-                        local ttCaster=HealBot_Panel_UnitName(xGUID)
+                        local ttCaster=HealBot_Panel_UnitName(unit)
                         if ttCaster then
                             local ttHoTd=nil
                             if hbHoTline1 then

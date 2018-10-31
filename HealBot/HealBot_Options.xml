@@ -9551,7 +9551,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-150" y="30"/>
+                          <AbsDimension x="-225" y="30"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9563,7 +9563,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="50" y="30"/>
+                          <AbsDimension x="-50" y="30"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9575,7 +9575,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-150" y="4"/>
+                          <AbsDimension x="-225" y="4"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9587,12 +9587,36 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="50" y="4"/>
+                          <AbsDimension x="-50" y="4"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAll_OnClick(self, HEALBOT_CURSE_en)</OnClick>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_CDCAllBoss" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="125" y="30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CDCAllBoss_OnClick(self)</OnClick>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_CDCAllBossStrict" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="130" y="15"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CDCAllBossStrict_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
                 </Frames>

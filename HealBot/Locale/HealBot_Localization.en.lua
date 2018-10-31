@@ -517,7 +517,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TOOLTIPSHOWHOT          = "Show active monitored HoT details"
     HEALBOT_WORDS_MIN                       = "min"
     HEALBOT_WORDS_MAX                       = "max"
-    HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
+    HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on - This option increases CPU usage"
     HEALBOT_CHAT_SELFPETSOFF                = "Self Pet switched off"
     HEALBOT_WORD_PRIORITY                   = "Priority"
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
@@ -598,6 +598,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CUSTOM_ALLMAGIC         = "All Magic"
     HEALBOT_OPTIONS_CUSTOM_ALLCURSE         = "All Curse"
     HEALBOT_OPTIONS_CUSTOM_ALLPOISON        = "All Poison"
+    HEALBOT_OPTIONS_CUSTOM_ALLBOSS          = "All Boss"
+    HEALBOT_OPTIONS_CUSTOM_ALLBOSSSTRICT    = "Strict Mode"
     HEALBOT_OPTIONS_CUSTOM_CASTBY           = "Cast By"
 
     HEALBOT_BLIZZARD_MENU                   = "Blizzard menu"

@@ -2822,6 +2822,11 @@ function HealBot_Options_HealGroups_OnClick(self, id)
     else
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"] = false
     end
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_VEHICLE_en then 
+        HealBot_setVehicleHeals(id)
+    elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en then 
+        HealBot_setPetHeals(id) 
+    end
     HealBot_Options_framesChanged(id)
 end
 
@@ -3889,6 +3894,7 @@ function HealBot_Options_HealGroups1Frame_DropDown()
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][1]["FRAME"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
+    -- Call a function to set HealBot_luVars["PetsOwnFrame"] and HealBot_luVars["VehicleOwnFrame"] - add call for dropdowns 1 to 7
 end
 
 function HealBot_Options_HealGroups2Frame_DropDown()
@@ -7473,6 +7479,22 @@ function HealBot_Options_CDCAll_OnClick(self, debuffType)
     end
 end
 
+function HealBot_Options_CDCAllBoss_OnClick(self, debuffType)
+    if self:GetChecked() then
+        HealBot_Config_Cures.AlwaysShowBoss=true
+    else
+        HealBot_Config_Cures.AlwaysShowBoss=false
+    end
+end
+
+function HealBot_Options_CDCAllBossStrict_OnClick(self, debuffType)
+    if self:GetChecked() then
+        HealBot_Config_Cures.AlwaysShowBossStrict=true
+    else
+        HealBot_Config_Cures.AlwaysShowBossStrict=false
+    end
+end
+
 function HealBot_Options_ResetCDebuff()
     local dName=HealBot_Options_StorePrev["CDebuffcustomName"]
     HealBot_Globals.HealBot_Custom_Debuffs[dName]=HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[dName] or 10;
@@ -8166,9 +8188,15 @@ function HealBot_GuessName()
         for uGUID,_ in pairs(tGUID) do
             if HealBot_UnitData[uGUID] then
                 if gName then
-                    gName=gName..","..HealBot_Panel_UnitName(uGUID)
+                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
+                    if xUnit then
+                        gName=gName..","..HealBot_Panel_UnitName(xUnit)
+                    end
                 else
-                    gName=HealBot_Panel_UnitName(uGUID)
+                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
+                    if xUnit then
+                        gName=HealBot_Panel_UnitName(xUnit)
+                    end
                 end
             end
         end
@@ -8183,10 +8211,16 @@ function HealBot_GuessName()
         table.foreach(myTargets, function (i,myGUID)
             if HealBot_UnitData[myGUID] then
                 if gName and x then 
-                    gName=gName..","..HealBot_Panel_UnitName(myGUID)
+                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
+                    if xUnit then
+                        gName=gName..","..HealBot_Panel_UnitName(xUnit)
+                    end
                     x=nil
                 elseif x then
-                    gName=HealBot_Panel_UnitName(myGUID)
+                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
+                    if xUnit then
+                        gName=HealBot_Panel_UnitName(xUnit)
+                    end
                 end
             end  
         end)
@@ -10860,6 +10894,10 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_CDCAllPoison,HEALBOT_OPTIONS_CUSTOM_ALLPOISON)
             HealBot_Options_CDCAllCurse:SetChecked(HealBot_Config_Cures.HealBot_Custom_Defuffs_All[HEALBOT_CURSE_en])
             HealBot_Options_SetText(HealBot_Options_CDCAllCurse,HEALBOT_OPTIONS_CUSTOM_ALLCURSE)
+            HealBot_Options_CDCAllBoss:SetChecked(HealBot_Config_Cures.AlwaysShowBoss)
+            HealBot_Options_SetText(HealBot_Options_CDCAllBoss,HEALBOT_OPTIONS_CUSTOM_ALLBOSS)
+            HealBot_Options_CDCAllBossStrict:SetChecked(HealBot_Config_Cures.AlwaysShowBossStrict)
+            HealBot_Options_SetText(HealBot_Options_CDCAllBossStrict,HEALBOT_OPTIONS_CUSTOM_ALLBOSSSTRICT)
             HealBot_Options_SetText(HealBot_Options_CDCReverseDurC,HEALBOT_OPTIONS_CUSTOMDEBUFF_REVDUR)
             HealBot_Options_DeleteCDebuffBtn:SetText(HEALBOT_OPTIONS_DELSKIN)
             HealBot_Options_NewCDebuffBtn:SetText(HEALBOT_OPTIONS_SAVESKIN)
