@@ -420,14 +420,13 @@ function HealBot_Data_InitVars()
         WatchHoT = {
            ["DRUI"] = {
                 [HEALBOT_REJUVENATION]=2,
-                [HEALBOT_LIVING_SEED]=2,
                 [HEALBOT_CENARION_WARD]=2,
                 [HEALBOT_REGROWTH]=2,
                 [HEALBOT_LIFEBLOOM]=2,
                 [HEALBOT_WILD_GROWTH]=2,
                 [HEALBOT_TRANQUILITY]=2,
-                [HEALBOT_BARKSKIN]=2,
-                [HEALBOT_IRONBARK]=2,
+                [HEALBOT_BARKSKIN]=4,
+                [HEALBOT_IRONBARK]=4,
                 [HEALBOT_IRONFUR]=4,
                 [HEALBOT_SURVIVAL_INSTINCTS]=2,
                 [HEALBOT_FRENZIED_REGEN]=4,
@@ -445,7 +444,6 @@ function HealBot_Data_InitVars()
             }, 
             ["MAGE"] = {
                 [HEALBOT_EVOCATION]=2,
-                [HEALBOT_TEMPORAL_SHIELD]=2,
                 [HEALBOT_ICE_BARRIER]=2,
                 [HEALBOT_INCANTERS_WARD]=2,
                 [HEALBOT_ICE_BLOCK]=2,
@@ -453,7 +451,6 @@ function HealBot_Data_InitVars()
             ["PALA"] = {
                 [HEALBOT_FLASH_OF_LIGHT]=2,
                 [HEALBOT_BEACON_OF_LIGHT]=2,
-                [HEALBOT_GUARDED_BY_THE_LIGHT]=2,
                 [HEALBOT_HAND_OF_FREEDOM]=2,
                 [HEALBOT_LIGHT_BEACON]=2,
                 [HEALBOT_DIVINE_SHIELD]=4,
@@ -461,7 +458,6 @@ function HealBot_Data_InitVars()
                 [HEALBOT_INFUSION_OF_LIGHT]=2,
                 [HEALBOT_SPEED_OF_LIGHT]=2,
                 [HEALBOT_DIVINE_PURPOSE]=2,
-                [HEALBOT_ETERNAL_FLAME]=2,
                 [HEALBOT_ARDENT_DEFENDER]=2,
                 [HEALBOT_DIVINE_PROTECTION]=4,
                 [HEALBOT_BEACON_OF_FAITH]=2,                                
@@ -477,6 +473,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_PAIN_SUPPRESSION]=2,
                 [HEALBOT_POWER_INFUSION]=2,
                 [HEALBOT_RENEW]=2,
+                [HEALBOT_HOLY_WARD]=2,
                 [HEALBOT_DIVINE_HYMN]=2,
                 [HEALBOT_POWER_WORD_SHIELD]=2,
                 [HEALBOT_SPIRIT_SHELL]=2,
@@ -492,9 +489,9 @@ function HealBot_Data_InitVars()
                 [HEALBOT_SURGE_OF_DARKNESS]=2,               
                 [HEALBOT_SURGE_OF_LIGHT]=2,                                            
                 [HEALBOT_CLARITY_OF_WILL]=2,                                      
-                [HEALBOT_RAPTURE]=2, --Disc                         
+                [HEALBOT_RAPTURE]=2, --Disc
                 [HEALBOT_ATONEMENT]=2,                       
-                [HEALBOT_APOTHEOSIS]=2, --Holy                      
+                [HEALBOT_APOTHEOSIS]=2, --Holy    
                 [HEALBOT_DIVINITY]=2,                      
                 [HEALBOT_SYMBOL_OF_HOPE]=2,                  	
                 [HEALBOT_BODY_AND_MIND]=2,        
@@ -549,7 +546,6 @@ function HealBot_Data_InitVars()
                 [HEALBOT_ICEBOUND_FORTITUDE]=4,
                 [HEALBOT_ANTIMAGIC_SHELL]=4,
                 [HEALBOT_ARMY_OF_THE_DEAD]=2,
-                [HEALBOT_LICHBORNE]=2,
                 [HEALBOT_ANTIMAGIC_ZONE]=4,
                 [HEALBOT_VAMPIRIC_BLOOD]=2,
                 [HEALBOT_DANCING_RUNE_WEAPON]=2,
@@ -558,7 +554,6 @@ function HealBot_Data_InitVars()
             ["DEMO"] = {
                 [HEALBOT_DEMON_SPIKES]=4,
                 [HEALBOT_BLUR]=4,
-                [HEALBOT_EMPOWER_WARDS]=4,
                 [HEALBOT_METAMORPHOSIS]=4,
             },
             ["MONK"] = {

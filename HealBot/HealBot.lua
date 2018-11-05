@@ -85,22 +85,30 @@ HealBot_luVars["NumPlayers"]=0
 HealBot_luVars["TargetNeedReset"]=true
 HealBot_luVars["FocusNeedReset"]=true
 HealBot_luVars["PetsReCheck"]=0
-HealBot_luVars["VehicleHealsOn"]=false
-HealBot_luVars["PetHealsOn"]=false
-HealBot_luVars["PetsOwnFrame"]=true
-HealBot_luVars["VehicleOwnFrame"]=true
+HealBot_luVars["VehicleType"]=1
+HealBot_luVars["PetType"]=2
+HealBot_luVars["TargetFrameVisible"]=false
+HealBot_luVars["FocusFrameVisible"]=false
 
 function HealBot_nextRecalcParty(addTime, typeRequired)
-    if (typeRequired==1 and not HealBot_luVars["VehicleOwnFrame"]) or
-        (typeRequired==2 and not HealBot_luVars["PetsOwnFrame"]) then
-        typeRequired=6
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]<7 and HealBot_luVars["PetType"]~=6 then HealBot_Action_HidePanel(7) end
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]<6 and HealBot_luVars["VehicleType"]~=6 then HealBot_Action_HidePanel(6) end
+    if typeRequired==2 then
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]<7 then
+            typeRequired=6
+        end
+        HealBot_luVars["PetType"]=typeRequired
+    elseif typeRequired==1 then
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]<6 then
+            typeRequired=6
+        end 
+        HealBot_luVars["VehicleType"]=typeRequired
     end
     if HealBot_RefreshTypes[typeRequired]==0 then
         HealBot_RefreshTypes[typeRequired]=GetTime()+addTime
     end
     if typeRequired==2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]==1 then
         HealBot_nextRecalcParty(0.2, 6)
-        HealBot_AddDebug("SelfPets")
     end
 end
 
@@ -822,6 +830,8 @@ local function HealBot_RecalcParty(changeType)
             HealBot_UnknownUnitUpdated[xUnit]=nil
         end
         HealBot_luVars["DoUpdates"]=true
+    else
+        HealBot_nextRecalcParty(0, changeType)
     end
 end
 
@@ -1601,9 +1611,9 @@ local function HealBot_DoUnitNameUpdate(unUnit,unGUID)
         if doUpdate then
             if unb.status.unittype==1 then 
                 HealBot_nextRecalcParty(0.4, 6)
-            elseif unb.status.unittype==2 and HealBot_luVars["VehicleHealsOn"] then
+            elseif unb.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
                 HealBot_nextRecalcParty(0.4, 1)
-            elseif (unb.status.unittype==3 or unb.unit=="pet") and HealBot_luVars["PetHealsOn"] then
+            elseif unb.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
                 HealBot_nextRecalcParty(0.4, 2)
             end
         end
@@ -2592,6 +2602,7 @@ local function HealBot_Update_Skins()
         --if tonumber(tMajor)<9 and tonumber(tMinor)<1 and tonumber(tPatch)<2 and tonumber(tHealbot)<next-version-allow-for-beta then
         --    HealBot_Options_ResetSetting("CUSTOM")
         --end
+        HealBot_Check_Skins()
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
     end
     
@@ -2640,8 +2651,12 @@ function HealBot_FixedFrames()
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][11]["FRAME"]=10
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][10]["FRAME"]=9
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][9]["FRAME"]=8
-        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][8]["FRAME"]=7
-        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][7]["FRAME"]=6
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][8]["FRAME"]>7 or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][8]["FRAME"]==6 then
+            Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][8]["FRAME"]=7
+        end
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][7]["FRAME"]>6 then
+            Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Skins[x]][7]["FRAME"]=6
+        end
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Skins[x]][6]["ALIAS"]=HEALBOT_VEHICLE_en
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Skins[x]][7]["ALIAS"]=HEALBOT_OPTIONS_PETHEALS_en
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Skins[x]][8]["ALIAS"]=HEALBOT_OPTIONS_TARGETHEALS_en
@@ -2718,8 +2733,6 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Options_InitBuffClassList()
     HealBot_setOptions_Timer(5)
     HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
-    HealBot_setVehicleHeals()
-    HealBot_setPetHeals()
     
     local HEALBOT_STATS_ID = 1 --RAID_BUFF_1 --Stats
     local HEALBOT_STAMINA_ID = 2 --RAID_BUFF_2 --Stamina
@@ -3303,7 +3316,7 @@ local function HealBot_OnEvent_UnitHealth(unit)
             HealBot_Action_setHealthText(xButton)
             HealBot_Action_UpdateHealthButton(xButton)
         end
-    elseif unit and UnitExists(unit) and not UnitIsPlayer(unit) and HealBot_luVars["PetHealsOn"] and 
+    elseif unit and UnitExists(unit) and not UnitIsPlayer(unit) and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and 
            (unit=="pet" or strsub(unit,1,7)=="raidpet" or strsub(unit,1,8)=="partypet") then
         HealBot_nextRecalcParty(0.2, 2)
     end
@@ -3340,7 +3353,7 @@ local function HealBot_OnEvent_VehicleChange(self, unit, enterVehicle)
         end
         if doRefresh then
             HealBot_Action_Refresh(xButton)
-            if HealBot_luVars["VehicleHealsOn"] then
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
                 HealBot_nextRecalcParty(0.4, 1)
             end
         end
@@ -4374,9 +4387,9 @@ local function HealBot_Update_Fast()
                     HealBot_HealsInUpdate(xButton)
                     HealBot_AbsorbsUpdate(xButton)
                     xButton.status.reserved=true
-                    if xButton.status.unittype==2 and HealBot_luVars["VehicleHealsOn"] then
+                    if xButton.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
                         HealBot_nextRecalcParty(0, 1)
-                    elseif (xButton.status.unittype==3 or xButton.unit=="pet") and HealBot_luVars["PetHealsOn"] then
+                    elseif xButton.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
                         HealBot_nextRecalcParty(0, 2)
                         HealBot_luVars["PetsReCheck"]=GetTime()+15
                     end
@@ -4804,7 +4817,7 @@ local function HealBot_OnEvent_LeavingVehicle(self, unit)
     if xUnit and HealBot_UnitInVehicle[xUnit] and xButton then
         HealBot_CheckAggroUnits(xButton)
     end
-    if HealBot_luVars["VehicleHealsOn"] then
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
         HealBot_nextRecalcParty(0.2, 1)
     end
 end
@@ -4830,53 +4843,59 @@ local function HealBot_OnEvent_UnitAura(unit)
     end
 end
 
+local function HealBot_UpdateTarget(button)
+    if UnitIsPlayer("target") then
+        HealBot_AuraChecks(button)
+    else
+        if button.aura.buff.name then
+            HealBot_ClearBuff(button)
+        end
+        if button.aura.debuff.name then 
+            HealBot_ClearDebuff(button)
+        end
+    end
+    HealBot_Action_UpdateBackgroundButton(button)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][8]["CLASSONBAR"] then
+        HealBot_Action_SetClassIconTexture(button)
+    end
+    HealBot_RecalcHeals(button)
+    HealBot_Action_SetBar3Value(button)
+end
+
 function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
-        if UnitName("target") and HealBot_retHbFocus("target") then
-            if not UnitExists("focus") or not HealBot_retHbFocus("focus") then
-                HealBot_Panel_clickToFocus("Show")
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] and doRecalc then
+        if not HealBot_Data["UILOCK"] then
+            if UnitName("target") and HealBot_retHbFocus("target") then
+                if not UnitExists("focus") or not HealBot_retHbFocus("focus") then
+                    HealBot_Panel_clickToFocus("Show")
+                else
+                    HealBot_Panel_clickToFocus("hide")
+                end
             else
                 HealBot_Panel_clickToFocus("hide")
             end
-        else
-            HealBot_Panel_clickToFocus("hide")
         end
         local xButton=HealBot_Unit_Button["target"]
-        if (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"]==false or UnitIsFriend("target", "player")) and doRecalc then
-            if xButton then 
-                if not HealBot_UnitData["target"] then HealBot_UnitData["target"]={} end
-                if UnitExists("target") then 
-                    if UnitIsPlayer("target") then
-                        HealBot_AuraChecks(xButton)
-                    else
-                        if xButton.aura.buff.name then
-                            HealBot_ClearBuff(xButton)
-                        end
-                        if xButton.aura.debuff.name then 
-                            HealBot_ClearDebuff(xButton)
-                        end
+        if xButton then 
+            if HealBot_luVars["TargetNeedReset"] then
+                HealBot_RecalcParty(3)
+            elseif UnitExists("target") then
+                if HealBot_Data["UILOCK"] then
+                    if HealBot_luVars["TargetFrameVisible"] then HealBot_UpdateTarget(xButton) end
+                elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] or UnitIsFriend("target", "player")) then
+                    HealBot_UpdateTarget(xButton)
+                    if not HealBot_luVars["TargetFrameVisible"] then
+                        HealBot_Action_ShowPanel(8)
                     end
-                    HealBot_Action_UpdateBackgroundButton(xButton)
-                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][8]["CLASSONBAR"] then
-                        HealBot_Action_SetClassIconTexture(xButton)
-                    end
-                    HealBot_Reset_UnitHealth(xButton)
-                    HealBot_Action_setNameText(xButton)
-                    HealBot_RecalcHeals(xButton) 
-                    if not HealBot_Data["UILOCK"] then
-                        if HealBot_luVars["TargetNeedReset"] then
-                            HealBot_RecalcParty(3)
-                        else
-                            HealBot_Action_ShowPanel(8)
-                            HealBot_Panel_TargetChangedCheckFocus()
-                        end
-                    end
-                elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and not HealBot_Data["UILOCK"] then
+                    HealBot_Panel_TargetChangedCheckFocus()
+                elseif HealBot_luVars["TargetFrameVisible"] then
                     HealBot_Action_HidePanel(8)
                 end
-            else
-                HealBot_RecalcParty(3)
+            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_luVars["TargetFrameVisible"] and not HealBot_Data["UILOCK"] then
+                HealBot_Action_HidePanel(8)
             end
+        else
+            HealBot_RecalcParty(3)
         end
     end
     if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"] then
@@ -4950,7 +4969,7 @@ local function HealBot_OnEvent_PlayerRegenDisabled(self)
     end
     if not Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBARCOMBAT"] and HealBot_luVars["HighlightTarget"] then
         HealBot_OnEvent_PlayerTargetChanged(false)
-    end        
+    end
     if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] then HealBot_ClearLowMana() end
     --HealBot_Options_RaidTargetUpdate()
 end
@@ -5150,32 +5169,6 @@ function HealBot_UnitPet(unit)
     return vUnit
 end
 
-function HealBot_setVehicleHeals(id)
-    if id and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_VEHICLE_en then
-        HealBot_luVars["VehicleHealsOn"]=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]
-    else
-        for id=1,8 do
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_VEHICLE_en then
-                HealBot_luVars["VehicleHealsOn"]=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]
-                break
-            end
-        end
-    end
-end
-
-function HealBot_setPetHeals(id)
-    if id and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en then
-        HealBot_luVars["PetHealsOn"]=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]
-    else
-        for id=1,8 do
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en then
-                HealBot_luVars["PetHealsOn"]=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"]
-                break
-            end
-        end
-    end
-end
-
 function HealBot_OnEvent_PartyMembersChanged(self)
     if HealBot_luVars["NumPlayers"]~=GetNumGroupMembers() then
         HealBot_luVars["NumPlayers"]=GetNumGroupMembers()
@@ -5254,41 +5247,46 @@ function HealBot_RaidTargetToggle(switch)
     end
 end
 
+local function HealBot_UpdateFocus(button)
+    if UnitIsPlayer("focus") then
+        HealBot_AuraChecks(button)
+    else
+        if button.aura.buff.name then
+            HealBot_ClearBuff(button)
+        end
+        if button.aura.debuff.name then 
+            HealBot_ClearDebuff(button)
+        end
+    end
+    HealBot_Action_UpdateBackgroundButton(button)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][9]["CLASSONBAR"] then
+        HealBot_Action_SetClassIconTexture(button)
+    end
+    HealBot_RecalcHeals(button) 
+    HealBot_Action_SetBar3Value(button)
+end
+
 local function HealBot_OnEvent_FocusChanged(self)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
         local xButton=HealBot_Unit_Button["focus"]
         if xButton then
             if not HealBot_UnitData["focus"] then HealBot_UnitData["focus"]={} end
-            if UnitExists("focus") then
-                if not HealBot_Data["UILOCK"]  and (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] or UnitIsFriend("focus", "player")) then
-                    if HealBot_luVars["FocusNeedReset"] then
-                        HealBot_RecalcParty(4)
-                    else
+            if HealBot_luVars["FocusNeedReset"] then
+                HealBot_RecalcParty(4)
+            elseif UnitExists("focus") then
+                if HealBot_Data["UILOCK"] then
+                    if HealBot_luVars["FocusFrameVisible"] then HealBot_UpdateFocus(xButton) end
+                elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] or UnitIsFriend("focus", "player")) then
+                    HealBot_UpdateFocus(xButton)
+                    if not HealBot_luVars["FocusFrameVisible"] then
                         HealBot_Action_ShowPanel(9)
                     end
-                elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and not HealBot_Data["UILOCK"] then
+                elseif HealBot_luVars["FocusFrameVisible"] then
                     HealBot_Action_HidePanel(9)
                 end
-            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] then
+            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and HealBot_luVars["FocusFrameVisible"] then
                 HealBot_Action_HidePanel(9)
             end
-            if UnitIsPlayer("focus") then
-                HealBot_AuraChecks(xButton)
-            else
-                if xButton.aura.buff.name then
-                    HealBot_ClearBuff(xButton)
-                end
-                if xButton.aura.debuff.name then 
-                    HealBot_ClearDebuff(xButton)
-                end
-            end
-            HealBot_Action_UpdateBackgroundButton(xButton)
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][9]["CLASSONBAR"] then
-                HealBot_Action_SetClassIconTexture(xButton)
-            end
-            HealBot_Reset_UnitHealth(xButton)
-            HealBot_Action_setNameText(xButton)
-            HealBot_RecalcHeals(xButton) 
         else
             HealBot_RecalcParty(4)
         end
@@ -5997,7 +5995,7 @@ local function HealBot_DoOnEvent(self, event, ...)
             HealBot_CheckAllDebuffs();
         end
     elseif (event=="UNIT_PET") then
-        if HealBot_luVars["PetHealsOn"] then
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
             HealBot_nextRecalcParty(0.2, 2)
         end
     elseif (event=="ROLE_CHANGED_INFORM") then

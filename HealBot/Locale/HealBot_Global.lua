@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.12";
+﻿HEALBOT_VERSION   = "8.0.1.13.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -190,12 +190,12 @@ function HealBot_globalVars()
     HEALBOT_PRAYER_OF_HEALING               = GetSpellInfo(596) or "--Prayer of Healing";
     HEALBOT_PRAYER_OF_MENDING               = GetSpellInfo(33076) or "--Prayer of Mending";
     HEALBOT_RENEW                           = GetSpellInfo(139) or "--Renew";
-	--Legion Added
 	HEALBOT_PLEA                            = GetSpellInfo(200829) or "--Plea";	
 	HEALBOT_POWER_WORD_RADIANCE             = GetSpellInfo(194509) or "--Power Word: Radiance";
 	HEALBOT_SHADOW_MEND                     = GetSpellInfo(186263) or "--Shadow Mend;"
 	HEALBOT_HOLY_WORD_SANCTIFY              = GetSpellInfo(34861) or "--Holy Word: Sanctify";
 	HEALBOT_SPIRIT_OF_REDEMPTION            = GetSpellInfo(20711) or "--Spirit of Redemption";
+    HEALBOT_HOLY_WARD                       = GetSpellInfo(213610) or "--Holy Ward";
 	
     --Shaman
     HEALBOT_CHAIN_HEAL                      = GetSpellInfo(1064) or "--Chain Heal";
@@ -220,7 +220,7 @@ function HealBot_globalVars()
     HEALBOT_DANCING_RUNE_WEAPON             = GetSpellInfo(49028) or "--Dancing Rune Weapon"
     HEALBOT_HORN_OF_WINTER                  = GetSpellInfo(57330) or "--Horn of Winter";
     HEALBOT_ICEBOUND_FORTITUDE              = GetSpellInfo(48792) or "--Icebound Fortitude";
-    HEALBOT_LICHBORNE                       = GetSpellInfo(49039) or "--Lichborne";
+    --HEALBOT_LICHBORNE                       = GetSpellInfo(49039) or "--Lichborne";
     HEALBOT_POWER_OF_THE_GRAVE              = GetSpellInfo(155522) or "--Power of the Grave";  
     HEALBOT_SHROUD_OF_PURGATORY             = GetSpellInfo(116888) or "--Shroud of Purgatory"; 
     HEALBOT_UNHOLY_AURA                     = GetSpellInfo(55610) or "--Unholy Aura"
@@ -229,7 +229,7 @@ function HealBot_globalVars()
     --Demon Hunter
     HEALBOT_DEMON_SPIKES                    = GetSpellInfo(203720) or "--Demon Spikes";
     HEALBOT_BLUR                            = GetSpellInfo(198589) or "--Blur"
-    HEALBOT_EMPOWER_WARDS                   = GetSpellInfo(218256) or "--Empower Wards";
+    --HEALBOT_EMPOWER_WARDS                   = GetSpellInfo(218256) or "--Empower Wards";
     HEALBOT_METAMORPHOSIS                   = GetSpellInfo(187827) or "--Metamorphosis";
     
 	--Druid
@@ -240,7 +240,7 @@ function HealBot_globalVars()
     HEALBOT_IRONBARK                        = GetSpellInfo(102342) or "--Ironbark";
     HEALBOT_IRONFUR                         = GetSpellInfo(192081) or "--Ironfur";
     HEALBOT_LEADER_OF_THE_PACK              = GetSpellInfo(17007) or "--Leader of the Pack";
-    HEALBOT_LIVING_SEED                     = GetSpellInfo(48500) or "--Living Seed";
+    --HEALBOT_LIVING_SEED                     = GetSpellInfo(48500) or "--Living Seed";
     HEALBOT_MARK_OF_THE_WILD                = GetSpellInfo(1126) or "--Mark of the Wild";
     HEALBOT_MOONKIN_AURA                    = GetSpellInfo(24907) or "--Moonkin Aura";
     HEALBOT_NATURE_MOMENT_OF_CLARITY        = GetSpellInfo(155577) or "--Moment of Clarity";
@@ -315,8 +315,8 @@ function HealBot_globalVars()
     HEALBOT_ICE_BLOCK                       = GetSpellInfo(45438) or "--Ice Block"
     HEALBOT_ICE_WARD                        = GetSpellInfo(111264) or "--Ice Ward"
     HEALBOT_MAGE_WARD                       = GetSpellInfo(543) or "--Mage Ward";
-    HEALBOT_TEMPORAL_SHIELD                 = GetSpellInfo(115610) or "--Temporal Shield"
-    
+    --HEALBOT_TEMPORAL_SHIELD                 = GetSpellInfo(115610) or "--Temporal Shield"
+
 	--Paladin
     HEALBOT_ARDENT_DEFENDER                 = GetSpellInfo(31850) or "--Ardent Defender";
     HEALBOT_BEACON_OF_FAITH                 = GetSpellInfo(156910) or "--Beacon of Faith";
@@ -333,9 +333,9 @@ function HealBot_globalVars()
     HEALBOT_DIVINE_PURPOSE                  = GetSpellInfo(86172) or "--Divine Purpose";
     HEALBOT_DIVINE_SAVED_BY_THE_LIGHT       = GetSpellInfo(157047) or "--Saved by the Light";
     HEALBOT_DIVINE_SHIELD                   = GetSpellInfo(642) or "--Divine Shield";
-    HEALBOT_ETERNAL_FLAME                   = GetSpellInfo(114163) or "--Eternal Flame";
+    --HEALBOT_ETERNAL_FLAME                   = GetSpellInfo(114163) or "--Eternal Flame";
     HEALBOT_EXECUTION_SENTENCE              = GetSpellInfo(114157) or "--Execution Sentence";
-    HEALBOT_GUARDED_BY_THE_LIGHT            = GetSpellInfo(53592) or "--Guarded by the Light";
+    --HEALBOT_GUARDED_BY_THE_LIGHT            = GetSpellInfo(53592) or "--Guarded by the Light";
     HEALBOT_GUARDIAN_ANCIENT_KINGS          = GetSpellInfo(86659) or "--Guardian of Ancient Kings";
     HEALBOT_HAND_OF_FREEDOM                 = GetSpellInfo(1044) or "--Hand of Freedom";
     HEALBOT_HAND_OF_PROTECTION              = GetSpellInfo(1022) or "--Hand of Protection";

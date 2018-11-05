@@ -7724,7 +7724,21 @@
                       <OnClick>HealBot_Options_NumberTextLines_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
-
+                  <Slider name="HealBot_Options_MaxChars" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="140" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NumberTextLines" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="170" y="-15" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_MaxChars_OnValueChanged(self)</OnValueChanged>
+                    </Scripts>
+                  </Slider>
                   <CheckButton name="HealBot_Options_ShowHealthOnBar" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowNameOnBar" relativePoint="TOPLEFT">
@@ -7932,7 +7946,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-
+ 
               <Frame name="HealBot_Options_IconsSkinsFrame">
                 <Size>
                   <AbsDimension y="540"/>

@@ -354,6 +354,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Text Alignment"
+    HEALBOT_OPTIONS_MAXCHARS                = "Max Characters"
     HEALBOT_VEHICLE                         = "Vehicle"
     HEALBOT_WORDS_ERROR                     = "Error"
     HEALBOT_SPELL_NOT_FOUND	                = "Spell Not Found"
@@ -969,7 +970,7 @@ function HealBot_Lang_InitVars()
         [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
 
         --Class Profession & Harmful Debuffs
-        --[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest 
+        --[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest
         --[HEALBOT_DARK_BARGAIN]             = 3, --Warlock
         [HEALBOT_SHROUD_OF_PURGATORY]      = 11, --Death Knight
         [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering
