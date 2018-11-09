@@ -5762,7 +5762,6 @@ function HealBot_Options_FilterHoTctl_DropDown()
                         HealBot_Options_StorePrev["FilterHoTctlName"]=self.value
                         HealBot_Options_StorePrev["FilterHoTctlID"]=self:GetID()
                         HealBot_Options_StorePrev["FilterHoTctlNameTrim"]=HealBot_Class_En[HealBot_Options_StorePrev["FilterHoTctlName"]]
-                       -- HealBot_AddDebug("trim = "..HealBot_Options_StorePrev["FilterHoTctlName"])
                         UIDropDownMenu_SetText(HealBot_Options_FilterHoTctl,HealBot_Options_StorePrev["FilterHoTctlName"]) 
                         DoneInitTab[315]=nil
                         HealBot_Options_InitSub(315)
@@ -6077,7 +6076,6 @@ function HealBot_Options_rethbTempUnitNames()
     end
     hbTempShareUnitNames[HEALBOT_ABOUT_URL]="X"
     HealBot_Options_StorePrev["hbTempNumUnitNames"]=HealBot_Options_StorePrev["hbTempNumUnitNames"]+1
-  --  HealBot_AddDebug("Num ShareUnitNames="..HealBot_Options_StorePrev["hbTempNumUnitNames"])
     return hbTempShareUnitNames
 end
 
@@ -6466,7 +6464,6 @@ function HealBot_Options_BuildSkinRecMsg(skinName, cmd, parts, msg)
         if tonumber(msg) then msg=tonumber(msg) end
         Healbot_Config_Skins[varName][skinName]=msg
     end
-    --HealBot_AddDebug("ShareMsg cmd="..cmd)
 end
 
 function HealBot_Option_WarnPossibleNoSharedMedia()
@@ -8179,7 +8176,6 @@ local function HealBot_Options_DoBuff_Reset()
                     HealBot_BuffWatchTargetSpell["Name"]=true
                     if not FirstBuffLoad then HealBot_Options_Get_BuffWatchGUID(sName, "Buff") end
                 end
-                                    HealBot_AddDebug("bySpec(k)="..BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)])
                 HealBot_buffbarcolr[sName]=buffbarcolrClass[k];
                 HealBot_buffbarcolg[sName]=buffbarcolgClass[k];
                 HealBot_buffbarcolb[sName]=buffbarcolbClass[k];
@@ -10200,6 +10196,12 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_TextAlign:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["ALIGN"])
             HealBot_Options_val_OnLoad(HealBot_Options_MaxChars,HEALBOT_OPTIONS_MAXCHARS,0,20,1)
             HealBot_Options_MaxChars:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXCHARS"])
+            g=_G["HealBot_Options_MaxCharsText"]
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXCHARS"]==0 then
+                g:SetText(HEALBOT_OPTIONS_MAXCHARS .. ": "..HEALBOT_WORD_AUTO)
+            else
+                g:SetText(HEALBOT_OPTIONS_MAXCHARS .. ": ".. Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXCHARS"])
+            end
             HealBot_Options_TextAlignText:SetText(HEALBOT_OPTIONS_TEXTALIGNMENT..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["ALIGN"])
             HealBot_Options_NumberTextLines:SetChecked(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DOUBLE"])
             HealBot_Options_SetText(HealBot_Options_NumberTextLines,HEALBOT_OPTIONS_DOUBLETEXTLINES)

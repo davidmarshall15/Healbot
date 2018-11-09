@@ -92,34 +92,6 @@ local function HealBot_Tooltip_SpellPattern(click)
     return hbCombos[x]
 end
 
-local function HealBot_Tooltip_UnitInRange(button,sName)
-    local uRange=0
-    if UnitIsUnit("player",button.unit) then
-        uRange = 1
-    elseif CheckInteractDistance(button.unit,1) then
-        uRange = 1
-    elseif not HealBot_retLuVars("27YardsOnly") then
-        if IsSpellInRange(sName, button.unit) ~= nil then
-            uRange = IsSpellInRange(sName, button.unit)
-        elseif IsItemInRange(sName, button.unit) ~= nil then
-            uRange = IsItemInRange(sName, button.unit)
-        elseif UnitInRange(button.unit) then
-            uRange = 1
-        else
-            uRange = 0
-        end
-    else
-        uRange = 0
-    end
-    if uRange==1 and not UnitInPhase(button.unit) then 
-        uRange=0
-    end
-    if uRange==0 and not UnitIsVisible(button.unit) then 
-        uRange=-1 
-    end
-    return uRange
-end
-
 local function HealBot_Tooltip_GetHealSpell(button,sName)
     if not sName or not HealBot_GetSpellId(sName) then
         if sName then
@@ -142,7 +114,7 @@ local function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
 
-    if (HealBot_Tooltip_UnitInRange(button, sName)~=1) then
+    if HealBot_UnitInRange(button.unit, sName, false)<1 then
         return sName, 1,0.5
     end
  

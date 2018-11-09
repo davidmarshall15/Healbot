@@ -89,6 +89,7 @@ HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
 HealBot_luVars["TargetFrameVisible"]=false
 HealBot_luVars["FocusFrameVisible"]=false
+HealBot_luVars["Timer8000"]=0
 
 function HealBot_nextRecalcParty(addTime, typeRequired)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]<7 and HealBot_luVars["PetType"]~=6 then HealBot_Action_HidePanel(7) end
@@ -1628,6 +1629,7 @@ local function HealBot_DoUnitNameUpdate(unUnit,unGUID)
             HealBot_ClearBuff(unb)
             HealBot_ClearDebuff(unb)
         end
+        HealBot_Action_setNameTag(unb) 
         HealBot_Action_setNameText(unb) 
         HealBot_Action_Refresh(unb) 
     end
@@ -2875,10 +2877,8 @@ local function HealBot_OnEvent_ItemInfoReceived(self)
     if allInfoReceived then
         HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
         HealBot_OnEvent_VariablesLoaded(self)
-        HealBot_AddDebug("Oralius Whispering Crystal Found")
     else
         HealBot_Options_InitBuffList()
-        HealBot_AddDebug("Oralius Whispering Crystal NOT Found")
     end
 end
 
@@ -3258,8 +3258,17 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[8000] then
         HealBot_Options_Timer[8000]=HealBot_Options_idleInit()
         if HealBot_Options_Timer[8000] then
-            HealBot_luVars["Timer8000"]=(HealBot_luVars["Timer8000"] or 0)+1
-        else
+            HealBot_luVars["Timer8000"]=(HealBot_luVars["Timer8000"])+1
+            HealBot_Options_Timer[8000]=HealBot_Options_idleInit()
+            if HealBot_Options_Timer[8000] then
+                HealBot_luVars["Timer8000"]=(HealBot_luVars["Timer8000"])+1
+                HealBot_Options_Timer[8000]=HealBot_Options_idleInit()
+                if HealBot_Options_Timer[8000] then
+                    HealBot_luVars["Timer8000"]=(HealBot_luVars["Timer8000"])+1
+                end
+            end
+        end
+        if not HealBot_Options_Timer[8000] then
             HealBot_AddDebug("Timer 8000 called #"..HealBot_luVars["Timer8000"])
             HealBot_luVars["Timer8000"]=0
             HealBot_setqaFR()
@@ -3986,8 +3995,7 @@ local function HealBot_CheckUnitDebuffs(button)
     
     if button.aura.debuff.name then
         if button.aura.debuff.name~=prevDebuff["name"] or button.aura.debuff.type~=prevDebuff["type"] then
-            button.spells.rangecheck=HealBot_Action_dSpell()
-            HealBot_UnitInRange(button)
+            HealBot_UpdateUnitRange(button,HealBot_Action_dSpell(),false)
             if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil) then
                 if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
                     HealBot_Action_UpdateAggro(button.unit,"debuff",debuffCodes[button.aura.debuff.type], 0)
@@ -4022,11 +4030,7 @@ local function HealBot_CheckUnitDebuffs(button)
                 HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
             end
  
-            if button.status.range >-1 then
-                HealBot_Action_UpdateDebuffButton(button)
-            else
-                HealBot_Action_ResetUnitStatus(button)
-            end
+            HealBot_Action_UpdateDebuffButton(button)
         end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] and (HealBot_Data["PGUID"]==button.guid or UnitIsVisible(button.unit)) then
             if button.aura.debuff.name and curDebuffs[button.aura.debuff.name]["texture"] then
@@ -4229,7 +4233,6 @@ local function HealBot_CheckUnitBuffs(button)
                 end
                 if not x then
                     -- Spec change within that last few secs - buff outdated so do nothing
-                    -- HealBot_AddDebug("HealBot_CheckUnitBuffs spec change")
                 elseif x<2 then
                     if hbStanceBuffs[HealBot_BuffWatch[k]] then
                         local index = GetShapeshiftForm() or 0
@@ -4281,13 +4284,7 @@ local function HealBot_CheckUnitBuffs(button)
     if bName then
         if button.aura.buff.name~=bName then
             button.aura.buff.name=bName;
-            button.spells.rangecheck=bName
-            HealBot_UnitInRange(button)
-            if button.status.range >-1 then
-                HealBot_Action_UpdateBuffButton(button)
-            else
-                HealBot_Action_ResetUnitStatus(button)
-            end
+            HealBot_Action_UpdateBuffButton(button)
         end
     elseif button.aura.buff.name then 
         HealBot_ClearBuff(button)
@@ -4354,13 +4351,8 @@ local function HealBot_Update_Fast()
                                 HealBot_OnEvent_RaidTargetUpdate(xButton)
                             end
                         else
-                            local uRange=xButton.status.range
-                            HealBot_UnitInRange(xButton)
-                            if uRange~=xButton.status.range then
-                                HealBot_HealsInUpdate(xButton)
-                                HealBot_AbsorbsUpdate(xButton)
-                            end
-                            if xButton.status.dirarrow>-998 or (not IsInInstance() and xButton.status.range<1) then
+                            HealBot_UpdateUnitRange(xButton, xButton.spells.rangecheck, true)
+                            if xButton.status.dirarrow<99998 or (not IsInInstance() and xButton.status.range<1) then
                                 HealBot_Action_ShowDirectionArrow(xButton)
                             end
                         end
@@ -4368,11 +4360,11 @@ local function HealBot_Update_Fast()
                         HealBot_Health_CheckTime(xButton)
                         if xButton.status.offline and UnitIsConnected(xUnit) then
                             xButton.status.offline = false
-                            HealBot_Action_setNameText(xButton)
+                            HealBot_Action_setNameTag(xButton)
                             HealBot_Action_Refresh(xButton)                            
                         elseif not xButton.status.offline and not UnitIsConnected(xUnit) then
                             xButton.status.offline = GetTime()
-                            HealBot_Action_setNameText(xButton)
+                            HealBot_Action_setNameTag(xButton)
                             HealBot_Action_Refresh(xButton)
                         elseif xButton.status.current==9 then
                             HealBot_Action_UpdateTheDeadButton(xButton)
@@ -4844,22 +4836,20 @@ local function HealBot_OnEvent_UnitAura(unit)
 end
 
 local function HealBot_UpdateTarget(button)
-    if UnitIsPlayer("target") then
-        HealBot_AuraChecks(button)
-    else
-        if button.aura.buff.name then
-            HealBot_ClearBuff(button)
-        end
-        if button.aura.debuff.name then 
-            HealBot_ClearDebuff(button)
-        end
+    if button.aura.buff.name then
+        HealBot_ClearBuff(button)
+    end
+    if button.aura.debuff.name then 
+        HealBot_ClearDebuff(button)
     end
     HealBot_Action_UpdateBackgroundButton(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][8]["CLASSONBAR"] then
         HealBot_Action_SetClassIconTexture(button)
     end
-    HealBot_RecalcHeals(button)
     HealBot_Action_SetBar3Value(button)
+    HealBot_HoT_RemoveIconButton(button)
+    HealBot_RecalcHeals(button)
+    HealBot_AuraChecks(button)
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
@@ -4910,6 +4900,7 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
         end
     end
     if HealBot_Unit_Button["playertarget"] then
+        HealBot_Action_setNameTag(HealBot_Unit_Button["playertarget"])
         HealBot_Action_setNameText(HealBot_Unit_Button["playertarget"])
         HealBot_RecalcHeals(HealBot_Unit_Button["playertarget"]) 
     end
@@ -5262,8 +5253,10 @@ local function HealBot_UpdateFocus(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][9]["CLASSONBAR"] then
         HealBot_Action_SetClassIconTexture(button)
     end
-    HealBot_RecalcHeals(button) 
     HealBot_Action_SetBar3Value(button)
+    HealBot_HoT_RemoveIconButton(button)
+    HealBot_RecalcHeals(button) 
+    HealBot_AuraChecks(button)
 end
 
 local function HealBot_OnEvent_FocusChanged(self)
@@ -5304,10 +5297,10 @@ local function HealBot_OnEvent_SystemMsg(self,msg)
                 if xButton then 
                     if (string.find(msg, HB_ONLINE)) and xButton.status.offline then
                         xButton.status.offline = false
-                        HealBot_Action_setNameText(xButton)
+                        HealBot_Action_setNameTag(xButton)
                         HealBot_Action_Refresh(xButton)
                     end
-                    HealBot_Action_setNameText(xButton) 
+                    HealBot_Action_setNameTag(xButton) 
                     HealBot_Action_ResetUnitStatus(xButton);
                 end
             end
@@ -5684,18 +5677,36 @@ function HealBot_SmartCast(hlthDelta)
     return s;
 end
 
-function HealBot_UnitInRange(button) -- added by Diacono of Ursin
+function HealBot_UpdateUnitRange(button, spellName, doRefresh) 
+    local oldRange=button.status.range
+    button.spells.rangecheck=spellName
+    button.status.range=HealBot_UnitInRange(button.unit, button.spells.rangecheck)
+    if oldRange~=button.status.range then
+        HealBot_Action_setNameTag(button)
+        HealBot_HealsInUpdate(button)
+        HealBot_AbsorbsUpdate(button)
+        if doRefresh then
+            HealBot_Action_Refresh(button)
+        end
+    end
+end
+
+function HealBot_UnitInRange(unit, spellName) -- added by Diacono of Ursin
     local uRange=0
-    if UnitIsUnit("player",button.unit) then
+    if UnitIsUnit("player",unit) then
         uRange = 1
-    elseif CheckInteractDistance(button.unit,1) then
+    elseif not UnitIsVisible(unit) then 
+        uRange = -1
+    elseif not UnitInPhase(unit) then 
+        uRange = 0
+    elseif CheckInteractDistance(unit,1) then
         uRange = 1
     elseif not HealBot_luVars["27YardsOnly"] then
-        if IsSpellInRange(button.spells.rangecheck, button.unit) ~= nil then
-            uRange = IsSpellInRange(button.spells.rangecheck, button.unit)
-        elseif IsItemInRange(button.spells.rangecheck, button.unit) ~= nil then
-            uRange = IsItemInRange(button.spells.rangecheck, button.unit)
-        elseif UnitInRange(button.unit) then
+        if IsSpellInRange(spellName, unit) ~= nil then
+            uRange = IsSpellInRange(spellName, unit)
+        elseif IsItemInRange(spellName, unit) ~= nil then
+            uRange = IsItemInRange(spellName, unit)
+        elseif UnitInRange(unit) then
             uRange = 1
         else
             uRange = 0
@@ -5703,17 +5714,7 @@ function HealBot_UnitInRange(button) -- added by Diacono of Ursin
     else
         uRange = 0
     end
-    if uRange==1 and not UnitInPhase(button.unit) then 
-        uRange=0
-    end
-    if uRange==0 and not UnitIsVisible(button.unit) then 
-        uRange=-1 
-    end
-    if button.status.range~=uRange then
-        button.status.range=uRange
-        HealBot_Action_setNameText(button)
-        HealBot_Action_Refresh(button)
-    end
+    return uRange
 end
 
 local hbPi = math.pi
@@ -6022,11 +6023,11 @@ local function HealBot_DoOnEvent(self, event, ...)
         if xButton and xUnit then 
             if xButton.status.offline and UnitIsConnected(xUnit) then
                 xButton.status.offline = false
-                HealBot_Action_setNameText(xButton)
+                HealBot_Action_setNameTag(xButton)
                 HealBot_Action_Refresh(xButton)                            
             elseif not xButton.status.offline and not UnitIsConnected(xUnit) then
                 xButton.status.offline = GetTime()
-                HealBot_Action_setNameText(xButton)
+                HealBot_Action_setNameTag(xButton)
                 HealBot_Action_Refresh(xButton)
             end
         end
