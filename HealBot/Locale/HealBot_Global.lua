@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.0.1.13.b2";
+﻿HEALBOT_VERSION   = "8.0.1.13.b3";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -6,6 +6,8 @@ function HealBot_globalVars()
     --Bandages
     HEALBOT_LINEN_BANDAGE                   = GetItemInfo(1251) or "--Linen Bandage";
     HEALBOT_HEAVY_LINEN_BANDAGE             = GetItemInfo(2581) or "--Heavy Linen Bandage";
+    HEALBOT_WOOL_BANDAGE                    = GetItemInfo(3530) or "--Wool Bandage";
+    HEALBOT_HEAVY_WOOL_BANDAGE              = GetItemInfo(3531) or "--Heavy Wool Bandage";
     HEALBOT_SILK_BANDAGE                    = GetItemInfo(6450) or "--Silk Bandage";
     HEALBOT_HEAVY_SILK_BANDAGE              = GetItemInfo(6451) or "--Heavy Silk Bandage";
     HEALBOT_MAGEWEAVE_BANDAGE               = GetItemInfo(8544) or "--Mageweave Bandage";
@@ -17,9 +19,14 @@ function HealBot_globalVars()
     HEALBOT_FROSTWEAVE_BANDAGE              = GetItemInfo(34721) or "--Frostweave Bandage";
     HEALBOT_HEAVY_FROSTWEAVE_BANDAGE        = GetItemInfo(34722) or "--Heavy Frostweave Bandage";
     HEALBOT_EMBERSILK_BANDAGE               = GetItemInfo(53049) or "--Embersilk Bandage";
+    HEALBOT_HEAVY_EMBERSILK_BANDAGE         = GetItemInfo(53051) or "--Heavy Embersilk Bandage";
     HEALBOT_DENSE_EMBERSILK_BANDAGE         = GetItemInfo(53051) or "--Dense Embersilk Bandage";
     HEALBOT_WINDWOOL_BANDAGE                = GetItemInfo(72985) or "--Windwool Bandage";
     HEALBOT_HEAVY_WINDWOOL_BANDAGE          = GetItemInfo(72986) or "--Heavy Windwool Bandage";
+    HEALBOT_ASHRAN_BANDAGE                  = GetItemInfo(115497) or "--Ashran Bandage";
+    HEALBOT_SILKWEAVE_BANDAGE               = GetItemInfo(133940) or "--Silkweave Bandage";
+    HEALBOT_DEEP_SEA_BANDAGE                = GetItemInfo(158382) or "--Deep Sea Bandage";
+    HEALBOT_TIDESPRAY_LINEN_BANDAGE         = GetItemInfo(158381) or "--Tidespray Linen Bandage";
     --Potions
     HEALBOT_MAJOR_HEALING_POTION            = GetItemInfo(13446) or "--Major Healing Potion";
     HEALBOT_SUPER_HEALING_POTION            = GetItemInfo(22829) or "--Super Healing Potion";

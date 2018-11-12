@@ -1,6 +1,5 @@
 HealBot_lastVerSkinUpdate="8.0.1.11"
 
-
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
     [2]= {name="Waves", file=[[Interface\Addons\HealBot\Images\bar2.tga]]},

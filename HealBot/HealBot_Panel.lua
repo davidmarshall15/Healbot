@@ -330,7 +330,7 @@ function HealBot_Action_SetClassIconTexture(button)
         local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         if not bar then return end
         local iconName = _G[bar:GetName().."Icon15"];   
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+        if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
             local setRole=false
             local unitRole=UnitGroupRolesAssigned(button.unit)  
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then

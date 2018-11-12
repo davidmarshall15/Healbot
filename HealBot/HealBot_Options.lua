@@ -5255,6 +5255,17 @@ function HealBot_Options_SelectItemsCombo_DropDown()
             [24] = HEALBOT_ANTI_VENOM,
             [25] = HEALBOT_POWERFUL_ANTI_VENOM,
             [26] = HEALBOT_ELIXIR_OF_POISON_RES,
+            [27] = HEALBOT_HEAVY_WOOL_BANDAGE,
+            [28] = HEALBOT_WOOL_BANDAGE,
+            [29] = HEALBOT_HEAVY_LINEN_BANDAGE,
+            [30] = HEALBOT_LINEN_BANDAGE,
+            [31] = HEALBOT_HEAVY_EMBERSILK_BANDAGE,
+            [32] = HEALBOT_WINDWOOL_BANDAGE,
+            [33] = HEALBOT_HEAVY_WINDWOOL_BANDAGE,
+            [34] = HEALBOT_ASHRAN_BANDAGE,
+            [35] = HEALBOT_SILKWEAVE_BANDAGE,
+            [36] = HEALBOT_DEEP_SEA_BANDAGE,
+            [37] = HEALBOT_TIDESPRAY_LINEN_BANDAGE,
         }
         HealBot_Options_SelectItemsCombo_List=HealBot_Options_itemsByLevel()
         for j=1, getn(hbItemsIfExists), 1 do
