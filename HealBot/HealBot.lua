@@ -4382,7 +4382,7 @@ local function HealBot_Update_Fast()
                 end
             elseif UnitExists(xUnit) then
                 xButton.status.reserved=false
-                HealBot_UpdateUnit(xButton, true)
+                HealBot_UpdateUnit(xButton, false)
             end
         end
     else

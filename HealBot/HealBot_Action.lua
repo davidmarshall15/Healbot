@@ -630,17 +630,21 @@ local hbCustomDebuffCats={ [9] = HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT,
 function HealBot_Action_UpdateBackgroundButton(button)
     if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]>1 then
         local ebubar5 = _G["HealBot_Action_HealUnit"..button.id.."Bar5"]
-        local hbr,hbg,hbb = 0, 0, 0
-        if UnitExists(button.unit) and button.status.current<9 then
-            if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==2 then
-                hbr,hbg,hbb = HealBot_Action_ClassColour(button.unit)
-            else
-                hbr=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BR"]
-                hbg=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BG"]
-                hbb=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BB"]
+        if not UnitExists(button.unit) then
+            ebubar5:SetStatusBarColor(0, 0, 0, 0)
+        else
+            local hbr,hbg,hbb = 0, 0, 0
+            if button.status.current<9 then
+                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==2 then
+                    hbr,hbg,hbb = HealBot_Action_ClassColour(button.unit)
+                else
+                    hbr=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BR"]
+                    hbg=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BG"]
+                    hbb=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BB"]
+                end
             end
+            ebubar5:SetStatusBarColor(hbr,hbg,hbb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BA"]);
         end
-        ebubar5:SetStatusBarColor(hbr,hbg,hbb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BA"]);
     end
 end
 
@@ -942,17 +946,30 @@ local function HealBot_Action_SetBar3ColAlpha(barName, pct, r, g, b, a, sName)
 end
 
 local function HealBot_Action_GetManaBarCol(unit)
-    local z=UnitPowerType(unit);
-    if z==0 then
-        return 0.1,0.1,1 -- Mana
+    local x, p=UnitPowerType(unit);
+    local c=PowerBarColor[p]
+    if c then
+        return c.r, c.g, c.b
     elseif z==1 then
         return 1,0.1,0.1 -- Rage
+    elseif z==2 then
+        return 1,0.5,0.25 -- Focus
+    elseif z==3 then
+        return 1,1,0 -- Energy
     elseif z==4 then
         return 0,1,1 -- Happy
+    elseif z==5 then
+        return 0.5,0.5,0.5 -- Runes
     elseif z==6 then
-        return 0.1,0.8,1 -- Rune
+        return 0.1,0.8,1 -- Runic power
+    elseif z==7 then
+        return 0.5,0.32,0.55 -- Soul shards
+    elseif z==8 then
+        return 0.3,0.52,0.9 -- Eclipse
+    elseif z==9 then
+        return 0.95,0.9,0.6 -- Holy power
     end
-    return 1,1,0 -- Energy
+    return 0.1,0.1,1 -- Mana  - z==0
 end
 
 function HealBot_Action_SetBar3Value(button, sName)
@@ -3295,7 +3312,7 @@ end
 
 function HealBot_Action_Refresh(button)
     if button then
-        if button.text.name==button.unit and UnitExists(button.unit) then HealBot_UpdateUnit(button) end
+        if button.text.name==button.unit and UnitExists(button.unit) then HealBot_UpdateUnit(button, false) end
         HealBot_Action_UpdateDebuffButton(button)
         if UnitExists("target") and HealBot_Unit_Button["target"] and button.unit~="target" and UnitIsUnit("target",button.unit) then
             HealBot_Action_UpdateDebuffButton(HealBot_Unit_Button["target"])
