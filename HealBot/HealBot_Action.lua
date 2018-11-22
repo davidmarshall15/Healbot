@@ -887,6 +887,9 @@ function HealBot_Action_UpdateHealthButton(button)
             end
             HealBot_Action_setHealthText(button)
             HealBot_Action_HBText(button, ebusr,ebusg,ebusb,hcta)
+        else
+            HealBot_Action_setHealthText(button)
+            HealBot_Action_HBText(button)
         end
     else
         button.status.current=2
@@ -1191,13 +1194,12 @@ function HealBot_Action_setLowManaTrig()
     end
 end
 
-function HealBot_Action_CheckUnitLowMana(unit)
-    local xButton = HealBot_Unit_Button[unit]
-    if xButton then
-        local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+function HealBot_Action_CheckUnitLowMana(button)
+    if button then
+        local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         local iconName=nil
-        if UnitExists(unit) and xButton.mana.current>0 and xButton.mana.max>0 then
-            local z=floor((xButton.mana.current/xButton.mana.max)*100)
+        if UnitExists(button.unit) and button.mana.current>0 and button.mana.max>0 and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANA"]>1 then
+            local z=floor((button.mana.current/button.mana.max)*100)
             local y=0
             if z<hbLowManaTrig[1] then
                 y=1
@@ -1207,8 +1209,8 @@ function HealBot_Action_CheckUnitLowMana(unit)
                 y=3
             end
             if y==1 then
-                if HealBot_Action_rCalls[unit]["manaIndicator"]~="m1" then
-                    HealBot_Action_rCalls[unit]["manaIndicator"]="m1"
+                if HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m1" then
+                    HealBot_Action_rCalls[button.unit]["manaIndicator"]="m1"
                     iconName = _G[bar:GetName().."Icontm1"];
                     iconName:SetAlpha(1)
                     iconName = _G[bar:GetName().."Icontm2"];
@@ -1217,8 +1219,8 @@ function HealBot_Action_CheckUnitLowMana(unit)
                     iconName:SetAlpha(0)
                 end
             elseif y==2 then
-                if HealBot_Action_rCalls[unit]["manaIndicator"]~="m2" then
-                    HealBot_Action_rCalls[unit]["manaIndicator"]="m2"
+                if HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m2" then
+                    HealBot_Action_rCalls[button.unit]["manaIndicator"]="m2"
                     iconName = _G[bar:GetName().."Icontm1"];
                     iconName:SetAlpha(1)
                     iconName = _G[bar:GetName().."Icontm2"];
@@ -1227,8 +1229,8 @@ function HealBot_Action_CheckUnitLowMana(unit)
                     iconName:SetAlpha(0)
                 end
             elseif y==3 then
-                if HealBot_Action_rCalls[unit]["manaIndicator"]~="m3" then
-                    HealBot_Action_rCalls[unit]["manaIndicator"]="m3"
+                if HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m3" then
+                    HealBot_Action_rCalls[button.unit]["manaIndicator"]="m3"
                     iconName = _G[bar:GetName().."Icontm1"];
                     iconName:SetAlpha(1)
                     iconName = _G[bar:GetName().."Icontm2"];
@@ -1237,8 +1239,8 @@ function HealBot_Action_CheckUnitLowMana(unit)
                     iconName:SetAlpha(1)
                 end
             else
-                if HealBot_Action_rCalls[unit]["manaIndicator"]~="m0" then
-                    HealBot_Action_rCalls[unit]["manaIndicator"]="m0"
+                if HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m0" then
+                    HealBot_Action_rCalls[button.unit]["manaIndicator"]="m0"
                     iconName = _G[bar:GetName().."Icontm1"];
                     iconName:SetAlpha(0)
                     iconName = _G[bar:GetName().."Icontm2"];
@@ -1248,8 +1250,8 @@ function HealBot_Action_CheckUnitLowMana(unit)
                 end
             end
         else
-            if HealBot_Action_rCalls[unit]["manaIndicator"]~="m0" then
-                HealBot_Action_rCalls[unit]["manaIndicator"]="m0"
+            if HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m0" then
+                HealBot_Action_rCalls[button.unit]["manaIndicator"]="m0"
                 iconName = _G[bar:GetName().."Icontm1"];
                 iconName:SetAlpha(0)
                 iconName = _G[bar:GetName().."Icontm2"];
@@ -3072,7 +3074,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb.guid=hbGUID
             shb.status.update=2
         end
-        HealBot_Action_CheckUnitLowMana(unit)
+        HealBot_Action_CheckUnitLowMana(shb)
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
@@ -3290,6 +3292,20 @@ function HealBot_Action_HideTooltipFrame()
             GameTooltip:Hide();
         else
             HealBot_Tooltip:Hide();
+        end
+    end
+end
+
+function HealBot_Action_CheckHideFrames()
+    local hideFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.status.enabled then
+            hideFrame[xButton.frame]=false
+        end
+    end
+    for i=1, 10 do
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"] and HealBot_Config.ActionVisible[i]==1 and hideFrame[i] then
+            HealBot_Action_HidePanel(i)
         end
     end
 end
@@ -3897,7 +3913,7 @@ function HealBot_Action_SetAliasFontSize(hbCurFrame)
 end
 
 function HealBot_Action_OnHide(self, hbCurFrame)
-    HealBot_Config.ActionVisible[hbCurFrame] = 0
+    HealBot_Config.ActionVisible[hbCurFrame]=0
 end
 
 function HealBot_Action_OnMouseDown(self,button, hbCurFrame)

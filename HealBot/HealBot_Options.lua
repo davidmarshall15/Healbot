@@ -141,6 +141,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_MYTARGET,
         HEALBOT_FOCUS,
         HEALBOT_SORTBY_NAME,
+        HEALBOT_OPTIONS_SINGLETANK,
     }
     
     HealBot_Options_FontOutline_List = {
@@ -6230,12 +6231,11 @@ function HealBot_Options_ShareSkinComplete()
     end
     Healbot_Config_Skins.Current_Skin = hbOptGetSkinName
     HealBot_Config.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
-    HealBot_Check_Skins()  
+    HealBot_Check_Skin(hbOptGetSkinName)  
     HealBot_Options_SetSkins();
     HealBot_Options_NewSkin:SetText("")
     hbAccpetedSkin="none"
     hbWarnSharedMedia=false
-    HealBot_FixedFrames()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC..hbOptGetSkinFrom)
     HealBot_SetResetFlag("SOFT")
     HealBot_nextRecalcParty(0.4, 0)
@@ -8186,6 +8186,8 @@ local function HealBot_Options_DoBuff_Reset()
                 elseif BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==26 then
                     HealBot_BuffWatchTargetSpell["Name"]=true
                     if not FirstBuffLoad then HealBot_Options_Get_BuffWatchGUID(sName, "Buff") end
+                elseif BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==27 then
+                    HealBot_BuffWatchTargetSpell["SingleTank"]=true
                 end
                 HealBot_buffbarcolr[sName]=buffbarcolrClass[k];
                 HealBot_buffbarcolg[sName]=buffbarcolgClass[k];

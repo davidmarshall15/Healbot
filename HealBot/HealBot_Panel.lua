@@ -2503,6 +2503,8 @@ local function HealBot_Panel_PlayersChanged()
     table.foreach(HealBot_MyHealTargets, function (j,xGUID)
         HealBot_TrackNames[xGUID]=true
     end)
+    
+    HealBot_SetTankUnit("x")
 
     i={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0}
     local x=false
@@ -2907,11 +2909,11 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
                 HealBot_Panel_TargetChanged()
                 HealBot_Panel_FocusChanged()
             else
+                HealBot_nextRecalcParty(0.05, 3)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(0.1, 1) end
+                HealBot_nextRecalcParty(0.15, 4)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(0.2, 2) end
-                HealBot_nextRecalcParty(0.3, 3)
-                HealBot_nextRecalcParty(0.4, 4)
-                HealBot_nextRecalcParty(0.5, 5)
+                HealBot_nextRecalcParty(0.3, 5)
             end
         end 
     end
