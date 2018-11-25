@@ -86,8 +86,6 @@ HealBot_luVars["FocusNeedReset"]=true
 HealBot_luVars["PetsReCheck"]=0
 HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
-HealBot_luVars["TargetFrameVisible"]=false
-HealBot_luVars["FocusFrameVisible"]=false
 HealBot_luVars["Timer8000"]=0
 HealBot_luVars["TankUnit"]="x"
 
@@ -2541,8 +2539,8 @@ local function HealBot_Update_Skins()
     if HealBot_Globals.LastVersionSkinUpdate then
         HealBot_Globals.LastVersionSkinUpdate=nil
     end
-    if HealBot_Config.ActionVisible==0 or HealBot_Config.ActionVisible==1 then
-        HealBot_Config.ActionVisible={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
+    if HealBot_Config.ActionVisible==0 or HealBot_Config.ActionVisible==1 or HealBot_Config.ActionVisible[1]==0 or HealBot_Config.ActionVisible[1]==1 then
+        HealBot_Config.ActionVisible={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
     end
     local foundSkin=false
     for x in pairs (Healbot_Config_Skins.Skins) do
@@ -4708,39 +4706,47 @@ local function HealBot_OnEvent_UnitAura(unit)
 end
 
 function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] and doRecalc then
-        if not HealBot_Data["UILOCK"] then
-            if UnitName("target") and HealBot_retHbFocus("target") then
-                if not UnitExists("focus") or not HealBot_retHbFocus("focus") then
-                    HealBot_Panel_clickToFocus("Show")
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
+        if doRecalc then
+            if not HealBot_Data["UILOCK"] then
+                if UnitName("target") and HealBot_retHbFocus("target") then
+                    if not UnitExists("focus") or not HealBot_retHbFocus("focus") then
+                        HealBot_Panel_clickToFocus("Show")
+                    else
+                        HealBot_Panel_clickToFocus("hide")
+                    end
                 else
                     HealBot_Panel_clickToFocus("hide")
                 end
-            else
-                HealBot_Panel_clickToFocus("hide")
             end
-        end
-        local xButton=HealBot_Unit_Button["target"]
-        if xButton then 
-            if HealBot_luVars["TargetNeedReset"] then
-                HealBot_RecalcParty(3)
-            elseif UnitExists("target") then
-                if HealBot_Data["UILOCK"] then
-                    if HealBot_luVars["TargetFrameVisible"] then HealBot_UpdateUnit(xButton, true) end
-                elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] or UnitIsFriend("target", "player")) then
-                    HealBot_UpdateUnit(xButton, true)
-                    if not HealBot_luVars["TargetFrameVisible"] then
-                        HealBot_Action_ShowPanel(8)
+            local xButton=HealBot_Unit_Button["target"]
+            if xButton then 
+                if HealBot_luVars["TargetNeedReset"] then
+                    HealBot_RecalcParty(3)
+                elseif UnitExists("target") then
+                    if HealBot_Data["UILOCK"] then
+                        if HealBot_Config.ActionVisible[8] then HealBot_UpdateUnit(xButton, true) end
+                    elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] or UnitIsFriend("target", "player")) then
+                        HealBot_UpdateUnit(xButton, true)
+                        if not HealBot_Config.ActionVisible[8] then
+                            HealBot_Action_ShowPanel(8)
+                        end
+                        HealBot_Panel_TargetChangedCheckFocus()
+                    elseif HealBot_Config.ActionVisible[8] then
+                        HealBot_Action_HidePanel(8)
                     end
-                    HealBot_Panel_TargetChangedCheckFocus()
-                elseif HealBot_luVars["TargetFrameVisible"] then
+                elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_Config.ActionVisible[8] and not HealBot_Data["UILOCK"] then
                     HealBot_Action_HidePanel(8)
                 end
-            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_luVars["TargetFrameVisible"] and not HealBot_Data["UILOCK"] then
-                HealBot_Action_HidePanel(8)
+            else
+                HealBot_RecalcParty(3)
             end
-        else
+        end
+    elseif HealBot_Config.ActionVisible[8] then
+        if HealBot_Data["UILOCK"] then
             HealBot_RecalcParty(3)
+        else
+            HealBot_Action_HidePanel(8)
         end
     end
     if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"] then
@@ -4795,7 +4801,7 @@ local function HealBot_OnEvent_PlayerRegenDisabled(self)
         HealBot_RecalcParty(5);
     end
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        if HealBot_Config.ActionVisible[xButton.frame]==0 and UnitExists(xUnit) then
+        if not HealBot_Config.ActionVisible[xButton.frame] and UnitExists(xUnit) then
             HealBot_Action_ShowPanel(xButton.frame)
         end
         if xButton.aura.buff.name and not HealBot_Config_Buffs.BuffWatchInCombat then
@@ -5096,20 +5102,26 @@ local function HealBot_OnEvent_FocusChanged(self)
                 HealBot_RecalcParty(4)
             elseif UnitExists("focus") then
                 if HealBot_Data["UILOCK"] then
-                    if HealBot_luVars["FocusFrameVisible"] then HealBot_UpdateUnit(xButton, true) end
+                    if HealBot_Config.ActionVisible[9] then HealBot_UpdateUnit(xButton, true) end
                 elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] or UnitIsFriend("focus", "player")) then
                     HealBot_UpdateUnit(xButton, true)
-                    if not HealBot_luVars["FocusFrameVisible"] then
+                    if not HealBot_Config.ActionVisible[9] then
                         HealBot_Action_ShowPanel(9)
                     end
-                elseif HealBot_luVars["FocusFrameVisible"] then
+                elseif HealBot_Config.ActionVisible[9] then
                     HealBot_Action_HidePanel(9)
                 end
-            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and HealBot_luVars["FocusFrameVisible"] then
+            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and HealBot_Config.ActionVisible[9] then
                 HealBot_Action_HidePanel(9)
             end
         else
             HealBot_RecalcParty(4)
+        end
+    elseif HealBot_Config.ActionVisible[9] then
+        if HealBot_Data["UILOCK"] then
+            HealBot_RecalcParty(4)
+        else
+            HealBot_Action_HidePanel(9)
         end
     end
 end

@@ -28,14 +28,14 @@ HealBot_Action_luVars["AggroBarUp"]=false
 HealBot_Action_luVars["UnitPowerMax"]=3
 HealBot_Action_luVars["resetSkinTo"]=""
 
-local hbstringSub=nil
-local hbstringLen=nil
+local hbStringSub=nil
+local hbStringLen=nil
 if HealBot_Globals.useUTF8 then
-    hbstringSub=string.utf8sub
-    hbstringLen=string.utf8len
+    hbStringSub=string.utf8sub
+    hbStringLen=string.utf8len
 else
-    hbstringSub=string.sub
-    hbstringLen=string.len
+    hbStringSub=string.sub
+    hbStringLen=string.len
 end
 
 local function HealBot_Action_DoAggroIndicatorUpd(button)
@@ -1534,10 +1534,10 @@ function HealBot_Action_setHealthText(button)
                         hpPerc = 1
                     end
                     vInfo="  "..hpPerc --string.format("|cff%s%d%%|r", HealBot_PercentToHexColor(hpPerc), hpPerc)
-                    local stringLen=hbstringLen(string.gsub(vName, "%s+", ""))+1
+                    local stringLen=hbStringLen(string.gsub(vName, "%s+", ""))+1
                     local bttextlen=hbBarTextLen[button.frame]-stringLen
                     if bttextlen<1 then
-                        vInfo = hbstringSub(vName,1,hbBarTextLen[button.frame]) .. '.' ..vInfo
+                        vInfo = hbStringSub(vName,1,hbBarTextLen[button.frame]) .. '.' ..vInfo
                     else
                         vInfo = vName..vInfo
                     end
@@ -1640,10 +1640,10 @@ function HealBot_Action_setNameText(button)
         HealBot_Action_ResetUnitStatus(button)
     end
 
-    local stringLen=hbstringLen(string.gsub(uName, "%s+", ""))+1
+    local stringLen=hbStringLen(string.gsub(uName, "%s+", ""))+1
     local bttextlen=hbBarTextLen[button.frame]-stringLen
     if bttextlen<1 then
-        uName = hbstringSub(uName,1,hbBarTextLen[button.frame]) .. '.'
+        uName = hbStringSub(uName,1,hbBarTextLen[button.frame]) .. '.'
     end
 
     button.text.name=uName
@@ -2380,11 +2380,6 @@ function HealBot_Action_ShowPanel(hbCurFrame)
         if not g:IsVisible() then 
             ShowUIPanel(g)
         end
-        if hbCurFrame==8 then
-            HealBot_setLuVars("TargetFrameVisible", true)
-        elseif hbCurFrame==9 then
-            HealBot_setLuVars("FocusFrameVisible", true)
-        end
     end
 end
 
@@ -2392,11 +2387,6 @@ function HealBot_Action_HidePanel(hbCurFrame)
     local g = _G["f"..hbCurFrame.."_HealBot_Action"]
     if g:IsVisible() then 
         HideUIPanel(g)
-    end
-    if hbCurFrame==8 then
-        HealBot_setLuVars("TargetFrameVisible", false)
-    elseif hbCurFrame==9 then
-        HealBot_setLuVars("FocusFrameVisible", false)
     end
 end
 
@@ -3207,7 +3197,7 @@ function HealBot_Action_Reset()
         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][i]["X"]=(49+i)
         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][i]["Y"]=(49+i)
         Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]=false
-        if HealBot_Config.DisabledNow==0 and HealBot_Config.ActionVisible[i]==1 then
+        if HealBot_Config.DisabledNow==0 and HealBot_Config.ActionVisible[i] then
             HealBot_Action_setPoint(i)
             HealBot_Action_ShowPanel(i)
         end
@@ -3304,7 +3294,7 @@ function HealBot_Action_CheckHideFrames()
         end
     end
     for i=1, 10 do
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"] and HealBot_Config.ActionVisible[i]==1 and hideFrame[i] then
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"] and HealBot_Config.ActionVisible[i] and hideFrame[i] then
             HealBot_Action_HidePanel(i)
         end
     end
@@ -3313,11 +3303,11 @@ end
 function HealBot_Action_ShowHideFrames(button)
     if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"] then 
         if not HealBot_Data["UILOCK"] then
-            if HealBot_Config.ActionVisible[button.frame]==0 and HealBot_Config.DisabledNow==0 then
+            if not HealBot_Config.ActionVisible[button.frame] and HealBot_Config.DisabledNow==0 then
                 if button.status.enabled then
                     HealBot_Action_ShowPanel(button.frame);
                 end
-            elseif HealBot_Config.ActionVisible[button.frame]==1 then
+            elseif HealBot_Config.ActionVisible[button.frame] then
                 if not button.status.enabled and not HealBot_Action_ShouldHealSome(button.frame) then
                     HealBot_Action_HidePanel(button.frame);
                 end
@@ -3867,7 +3857,7 @@ function HealBot_Action_OnShow(self, hbCurFrame)
     if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OPENSOUND"] then
         PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
     end
-    HealBot_Config.ActionVisible[hbCurFrame]=1
+    HealBot_Config.ActionVisible[hbCurFrame]=true
     if not HealBot_Action_Init[hbCurFrame] then
         self:SetBackdropColor(
         Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BACKR"],
@@ -3913,7 +3903,7 @@ function HealBot_Action_SetAliasFontSize(hbCurFrame)
 end
 
 function HealBot_Action_OnHide(self, hbCurFrame)
-    HealBot_Config.ActionVisible[hbCurFrame]=0
+    HealBot_Config.ActionVisible[hbCurFrame]=false
 end
 
 function HealBot_Action_OnMouseDown(self,button, hbCurFrame)
