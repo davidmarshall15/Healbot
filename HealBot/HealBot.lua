@@ -832,6 +832,14 @@ function HealBot_UpdateUnit(button, cleanButton)
         end    
         HealBot_Action_CheckUnitLowMana(button)
         HealBot_HoT_RemoveIconButton(button)
+        button.health.incoming=0
+        button.health.absorbs=0
+        HealBot_Action_setHealthText(button)
+        HealBot_Action_UpdateHealsInButton(button)
+        HealBot_Action_UpdateAbsorbsButton(button)
+    else
+        HealBot_HealsInUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
     if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
         HealBot_OnEvent_RaidTargetUpdate(button)
@@ -847,8 +855,6 @@ function HealBot_UpdateUnit(button, cleanButton)
         HealBot_Action_UpdateHealthButton(button)
     end
     HealBot_Action_SetBar3Value(button)
-    HealBot_HealsInUpdate(button)
-    HealBot_AbsorbsUpdate(button)
     HealBot_AuraChecks(button)
 end
 
