@@ -5547,9 +5547,9 @@ function HealBot_UnitInRange(unit, spellName) -- added by Diacono of Ursin
     elseif CheckInteractDistance(unit,1) then
         uRange = 1
     elseif not HealBot_luVars["27YardsOnly"] then
-        if IsSpellInRange(spellName, unit) ~= nil then
+        if IsSpellInRange(spellName, unit) then
             uRange = IsSpellInRange(spellName, unit)
-        elseif IsItemInRange(spellName, unit) ~= nil then
+        elseif IsItemInRange(spellName, unit) then
             uRange = IsItemInRange(spellName, unit)
         elseif UnitInRange(unit) then
             uRange = 1

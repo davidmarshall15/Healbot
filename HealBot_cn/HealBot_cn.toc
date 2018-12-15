@@ -1,9 +1,9 @@
-﻿## Interface: 80000
+﻿## Interface: 80100
 ## Title: HealBot Chinese Localization
 ## Author: Required
 ## Notes: HealBot 中文语言文件
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.0.1.0
+## Version: 8.1.0.0
 
 HealBot_Localization.cn.lua

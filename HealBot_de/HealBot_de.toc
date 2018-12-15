@@ -1,9 +1,9 @@
-## Interface: 80000
+## Interface: 80100
 ## Title: HealBot German Localization
 ## Author: Snaomi
 ## Notes: HealBot Localization for deDE
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.0.1.0
+## Version: 8.1.0.0
 
 HealBot_Localization.de.lua
