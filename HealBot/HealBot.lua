@@ -3473,6 +3473,30 @@ local function HealBot_PartyUpdate_CheckSkin()
     end
 end
 
+local function HealBot_Check_Pets()
+    local nUnits=GetNumGroupMembers();
+    local RecalcParty=false
+    if IsInRaid() then 
+        for j=1,nUnits do
+            if UnitExists("raidpet"..j) and not HealBot_Unit_Button["raidpet"..j] then
+                RecalcParty=true
+                break
+            end
+        end
+    elseif nUnits>1 then
+        for j=1,4 do
+            if UnitExists("partypet"..j) and not HealBot_Unit_Button["partypet"..j] then
+                RecalcParty=true
+                break
+            end
+        end
+    end
+    if UnitExists("pet") and not HealBot_Unit_Button["pet"] then
+        RecalcParty=true
+    end
+    return RecalcParty
+end
+
 local function HealBot_Not_Fighting()
     HealBot_Data["UILOCK"]=false
     HealBot_RecalcParty(5);
@@ -3487,6 +3511,11 @@ local function HealBot_Not_Fighting()
             HealBot_CheckAllDebuffs()
         end
         HealBot_Action_CheckHideFrames()
+        HealBot_Action_ResetActiveUnitStatus()
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and HealBot_Check_Pets() then
+            HealBot_nextRecalcParty(0.2, 2)
+            HealBot_AddDebug("Exit Combat HealBot_Check_Pets RecalcParty=true")
+        end
     end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUSE"] and HealBot_Data["TIPUNIT"] then
         HealBot_Action_RefreshTooltip();
@@ -3504,7 +3533,6 @@ local function HealBot_Not_Fighting()
     if not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_Unit_Button["target"] then
         HealBot_OnEvent_PlayerTargetChanged(true)
     end
-    HealBot_Action_ResetActiveUnitStatus()
 end
 
 local function HealBot_OnEvent_ReadyCheckClear()
@@ -4799,11 +4827,16 @@ local function HealBot_OnEvent_PlayerRegenDisabled(self)
     elseif HealBot_RefreshTypes[0]>0 then
             HealBot_RecalcParty(0)
     else
-        if HealBot_RefreshTypes[6]>0  then HealBot_RecalcParty(6); end
-        if HealBot_RefreshTypes[1]>0  then HealBot_RecalcParty(1); end
-        if HealBot_RefreshTypes[2]>0  then HealBot_RecalcParty(2); end
-        if HealBot_RefreshTypes[3]>0  then HealBot_RecalcParty(3); end
-        if HealBot_RefreshTypes[4]>0  then HealBot_RecalcParty(4); end
+        if HealBot_RefreshTypes[6]>0 then HealBot_RecalcParty(6); end
+        if HealBot_RefreshTypes[1]>0 then HealBot_RecalcParty(1); end
+        if HealBot_RefreshTypes[2]>0 then 
+            HealBot_RecalcParty(2); 
+        elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and HealBot_Check_Pets() then
+            HealBot_RecalcParty(2); 
+            HealBot_AddDebug("Enter Combat HealBot_Check_Pets RecalcParty=true")
+        end
+        if HealBot_RefreshTypes[3]>0 then HealBot_RecalcParty(3); end
+        if HealBot_RefreshTypes[4]>0 then HealBot_RecalcParty(4); end
         HealBot_RecalcParty(5);
     end
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
@@ -5848,7 +5881,7 @@ local function HealBot_DoOnEvent(self, event, ...)
         end
     elseif (event=="UNIT_PET") then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-            HealBot_nextRecalcParty(0.2, 2)
+            HealBot_nextRecalcParty(0.8, 2)
         end
     elseif (event=="ROLE_CHANGED_INFORM") then
         HealBot_setOptions_Timer(420)

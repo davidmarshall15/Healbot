@@ -2760,41 +2760,53 @@ end
 local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellTrin2, spellAvoidBC, unit, status)
     local smName=""
     local scText=""
-    local sysSoundSFX = strsub(GetCVar("Sound_EnableErrorSpeech") or "nil",1,1)
     local spellType="help"
     if status=="Enemy" then spellType="harm" end
     scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
 
-    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0\n" end
-    if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Hide();\n" end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableSFX 0;\n" end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
     if spellTar then smName=smName.."/target "..unit..";\n" end
     if spellTrin1 then smName=smName.."/use 13;\n" end
     if spellTrin2 then smName=smName.."/use 14;\n" end
     if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-    if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear(); UIErrorsFrame:Show();\n" end
-    if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1\n" end
+    if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear();\n" end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableSFX 1;\n" end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
     smName=smName..scText
     if spellAvoidBC then smName=smName.."/use 4;" end
     if strlen(smName)>255 then
         smName=""
-        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 0\n" end
+        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
         if spellTar then smName=smName.."/target "..unit..";\n" end
         if spellTrin1 then smName=smName.."/use 13;\n" end
         if spellTrin2 then smName=smName.."/use 14;\n" end
         if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-        if HealBot_Globals.MacroSuppressSound==1 and sysSoundSFX=="1" then smName=smName.."/console Sound_EnableErrorSpeech 1\n" end
+        if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear();\n" end
+        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
         smName=smName..scText
         if spellAvoidBC then smName=smName.."/use 4;" end
         if strlen(smName)>255 then
             smName=""
+            if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
             if spellTar then smName=smName.."/target "..unit..";\n" end
             if spellTrin1 then smName=smName.."/use 13;\n" end
             if spellTrin2 then smName=smName.."/use 14;\n" end
             if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
+            if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
             smName=smName..scText
             if spellAvoidBC then smName=smName.."/use 4;" end
             if strlen(smName)>255 then
-                smName=spellName
+                smName=""
+                if spellTar then smName=smName.."/target "..unit..";\n" end
+                if spellTrin1 then smName=smName.."/use 13;\n" end
+                if spellTrin2 then smName=smName.."/use 14;\n" end
+                if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
+                smName=smName..scText
+                if spellAvoidBC then smName=smName.."/use 4;" end
+                if strlen(smName)>255 then
+                    smName=spellName
+                end
             end
         end
     end
