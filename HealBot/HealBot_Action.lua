@@ -508,15 +508,14 @@ function HealBot_GetBandageType()
 end
 
 function HealBot_Action_UpdateHealsInButton(button)
-    local hir, hig, hib = 0, 0, 0
     local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
     local ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
-    ebubar.txt = _G[ebubar:GetName().."_text"];
     local uInHeals=button.health.incoming
     if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"]<2 then uInHeals=0 end
     
     if uInHeals>0 and button.status.current<9 then
         local hipct = button.health.current+button.health.incoming
+        local hir, hig, hib = 0, 0, 0
         if hipct<button.health.max then 
             hipct=hipct/button.health.max  
          else
@@ -538,21 +537,20 @@ function HealBot_Action_UpdateHealsInButton(button)
         ebubar2:SetValue(floor(hipct*100));
     else
         ebubar2:SetValue(0)
-        ebubar2:SetStatusBarColor(hir,hig,hib,0);
+        ebubar2:SetStatusBarColor(0,0,0,0);
     end
     HealBot_Action_HBText(button)
 end
 
 function HealBot_Action_UpdateAbsorbsButton(button)
-    local har, hag, hab = 0, 0, 0
     local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
     local ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
-    ebubar.txt = _G[ebubar:GetName().."_text"];
     local uAbsorbs=button.health.absorbs
     if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"]<2 then uAbsorbs=0 end
     
     if uAbsorbs>0 and button.status.current<9 then
         local uInHeals=button.health.incoming
+        local har, hag, hab = 0, 0, 0
         if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"]<2 then uInHeals=0 end
         local hapct = button.health.current+uInHeals+uAbsorbs
         if hapct<button.health.max then
@@ -584,7 +582,7 @@ function HealBot_Action_UpdateAbsorbsButton(button)
         end
     else
         ebubar6:SetValue(0)
-        ebubar6:SetStatusBarColor(har,hag,hab,0);
+        ebubar6:SetStatusBarColor(0,0,0,0);
     end
     HealBot_Action_HBText(button)
 end
@@ -787,6 +785,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.status.update=1
             end
             HealBot_AuraChecks(button)
+            HealBot_OnEvent_UnitHealth(button)
             if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
                 if button.status.update<2 then button.status.update=3 end
             end

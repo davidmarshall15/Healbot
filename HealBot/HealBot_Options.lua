@@ -85,6 +85,23 @@ HealBot_Options_StorePrev["customDebuffPriority"]=10
 local HealBot_Debuff_Types = {}
 local HealBot_Buff_Items_List = {}
 
+local optionsPanel = CreateFrame("Frame")
+optionsPanel.name = HEALBOT_HEALBOT
+InterfaceOptions_AddCategory(optionsPanel)
+local optionsTitle = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+optionsTitle:SetPoint("TOPLEFT", 16, -16)
+optionsTitle:SetText(HEALBOT_HEALBOT)
+local optionsText = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+optionsText:SetPoint("TOPLEFT", optionsTitle, "BOTTOMLEFT", 0, -8)
+optionsText:SetText(HEALBOT_ABOUT_DESC1)
+local optionsButton = CreateFrame("Button", nil, optionsPanel, "UIPanelButtonTemplate")
+optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
+optionsButton:SetWidth(100)
+optionsButton:SetPoint("TOPLEFT", 14, -58)
+optionsButton:SetScript('OnClick', function()
+    HealBot_TogglePanel(HealBot_Options)
+end)
+
 function HealBot_Options_InitVars()
     HealBot_Buff_Items_List = {
         HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
@@ -6140,7 +6157,7 @@ function HealBot_Options_ShareSkinSend(status,skinName,unitName)
         local hbFoundSkin=HealBot_Options_checkSkinName(skinName)
         if hbFoundSkin then
             if status=="A" then
-                HealBot_Comms_SendAddonMsg("HealBot", "X:"..skinName, 4, unitName)
+                HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "X:"..skinName, 4, unitName)
             else
                 HealBot_Options_BuildSkinSendMsg(skinName,unitName)
             end
@@ -6253,7 +6270,7 @@ function HealBot_Options_checkSkinName(skinName)
 end
 
 function HealBot_Options_ShareSkinAccept()
-    HealBot_Comms_SendAddonMsg("HealBot", "Y:"..hbOptGetSkinName, 4, hbOptGetSkinFrom)
+    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "Y:"..hbOptGetSkinName, 4, hbOptGetSkinFrom)
     hbAccpetedSkin=hbOptGetSkinFrom
 end
 
@@ -9763,8 +9780,8 @@ function HealBot_Options_Init(tabNo)
             HealBot_Options_MonitorBuffs:SetChecked(HealBot_Config_Buffs.BuffWatch)
             DoneInitTab[11]=true
             HealBot_Options_SelectSpellsFrame:Hide()
-            LSM.RegisterCallback("HealBot", "LibSharedMedia_Registered", function(event, mediatype, key) HealBot_UpdateUsedMedia(event, mediatype, key) end)  
-            LSM.RegisterCallback("HealBot", "LibSharedMedia_SetGlobal", function(event, mediatype, key) HealBot_UpdateUsedMedia(event, mediatype, key) end)
+            LSM.RegisterCallback(HEALBOT_HEALBOT, "LibSharedMedia_Registered", function(event, mediatype, key) HealBot_UpdateUsedMedia(event, mediatype, key) end)  
+            LSM.RegisterCallback(HEALBOT_HEALBOT, "LibSharedMedia_SetGlobal", function(event, mediatype, key) HealBot_UpdateUsedMedia(event, mediatype, key) end)
         end
     elseif tabNo==10 then
         if HealBot_Options_StorePrev["ActionBarsCombo"]>2 then
