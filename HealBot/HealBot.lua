@@ -312,12 +312,8 @@ end
 function HealBot_SetResetFlag(mode)
     if mode=="HARD" then
         ReloadUI()
-    elseif mode=="SOFT" then
-        HealBot_setResetFlagCode(1)
-        HealBot_AddDebug("Calling soft reset")
     else
-        HealBot_setResetFlagCode(4)
-        HealBot_AddDebug("Calling quick reset")
+        HealBot_setResetFlagCode(1)
     end
 end
 
@@ -1413,7 +1409,7 @@ local function HealBot_Load(hbCaller)
     HealBot_Panel_SetmaxHealDiv(UnitLevel("player"))
     HealBot_setOptions_Timer(800)
     if hbCaller~="playerEW" then
-        HealBot_OnEvent_PlayerEnteringWorld("Load")
+        HealBot_OnEvent_PlayerEnteringWorld()
     end
     HealBot_setOptions_Timer(140)
     if HealBot_Globals.ShowTooltip then
@@ -1553,24 +1549,19 @@ local function HealBot_EndAggro()
     end
 end
 
-local function HealBot_Reset(rType)
-    if rType=="Full" then
-        HealBot_UnRegister_Events()
-        HealBot_Panel_ClearBlackList()
-        HealBot_Panel_ClearHealTargets()
-    end
+local function HealBot_Reset()
+    HealBot_UnRegister_Events()
+    --HealBot_Panel_ClearBlackList()
+    --HealBot_Panel_ClearHealTargets()
     HealBot_Action_ResethbInitButtons()
-    if rType=="Full" then
-        HealBot_EndAggro() 
-        HealBot_Panel_ClearBarArrays()
-        HealBot_setOptions_Timer(150)
-        HealBot_Load("hbReset") 
-        HealBot_setOptions_Timer(420)
-        HealBot_setOptions_Timer(7950)
-        HealBot_Register_Events()
-    else
-        HealBot_nextRecalcParty(0.1, 0)
-    end
+    HealBot_EndAggro() 
+    HealBot_Panel_ClearBarArrays()
+    HealBot_setOptions_Timer(150)
+    HealBot_Data["PGUID"]=false
+    HealBot_Load("hbReset") 
+    HealBot_setOptions_Timer(420)
+    HealBot_setOptions_Timer(7950)
+    HealBot_Register_Events()
 end
 
 local function HealBot_UnitID(unit)   
@@ -3510,7 +3501,7 @@ local function HealBot_Not_Fighting()
     HealBot_RecalcParty(5);
     if HealBot_luVars["SoftResetAfterCombat"] then
         HealBot_luVars["SoftResetAfterCombat"]=false
-        HealBot_SetResetFlag("QUICK")
+        HealBot_SetResetFlag("SOFT")
     else
         if HealBot_Config_Buffs.BuffWatch and not HealBot_Config_Buffs.BuffWatchInCombat then
             HealBot_CheckAllBuffs()
@@ -3564,13 +3555,11 @@ local function HealBot_Update_Slow()
     if not HealBot_Data["UILOCK"] and not InCombatLockdown() then
         if HealBot_luVars["ResetFlag"] then
             if HealBot_luVars["ResetFlag"]==1 then
-                HealBot_Reset("Full")
+                HealBot_Reset()
             elseif HealBot_luVars["ResetFlag"]==2 then
                 HealBot_ResetCustomDebuffs()
             elseif HealBot_luVars["ResetFlag"]==3 then
                 HealBot_ResetSkins()
-            elseif HealBot_luVars["ResetFlag"]==4 then
-                HealBot_Reset("Quick")
             end
             HealBot_luVars["ResetFlag"]=false
         elseif HealBot_luVars["UseCrashProtection"] and HealBot_luVars["UseCrashProtection"]<GetTime() then 
@@ -5211,7 +5200,7 @@ function HealBot_OnEvent_SpellsChanged(self, arg1)
     HealBot_setOptions_Timer(550)
 end
 
-function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
+function HealBot_OnEvent_PlayerEnteringWorld(self)
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerEW")      
     else
@@ -5223,7 +5212,6 @@ function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
     end
     HealBot_luVars["DoUpdates"]=true
 	HealBot_luVars["IsReallyFighting"]=true
-    if hbCaller=="Event" then HealBot_SetResetFlag("QUICK") end
     
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
         HealBot_trackHiddenFrames["PARTY"]=true
@@ -5906,7 +5894,7 @@ local function HealBot_DoOnEvent(self, event, ...)
     elseif (event=="UNIT_EXITING_VEHICLE") then
         HealBot_OnEvent_LeavingVehicle(self, arg1)
     elseif (event=="PLAYER_ENTERING_WORLD") then
-        HealBot_OnEvent_PlayerEnteringWorld("Event");
+        HealBot_OnEvent_PlayerEnteringWorld(self);
     elseif (event=="PLAYER_LEAVING_WORLD") then
         HealBot_OnEvent_PlayerLeavingWorld(self);
     elseif (event=="INSPECT_READY") then
