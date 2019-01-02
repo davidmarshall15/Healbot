@@ -314,7 +314,7 @@ function HealBot_SetResetFlag(mode)
         ReloadUI()
     elseif mode=="SOFT" then
         HealBot_setResetFlagCode(1)
-        HealBot_AddDebug("Calling soft reset")
+        HealBot_AddDebug("Calling soft reset") 
     else
         HealBot_setResetFlagCode(4)
         HealBot_AddDebug("Calling quick reset")
