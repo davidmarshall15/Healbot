@@ -3093,8 +3093,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
 end
 
 function HealBot_Action_ResetUnitAttribs(button)
-    button.mana.current=UnitPower(button.unit, 0) or 0
-    button.mana.max=UnitPowerMax(button.unit, 0) or 0
     HealBot_UpdateUnitRange(button, HealBot_RangeSpells["HEAL"], false)
     HealBot_UpdateUnit(button, false)
 end
