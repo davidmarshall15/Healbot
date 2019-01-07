@@ -20,7 +20,7 @@ Updating Troubles
 -----------------
 
   - Completely log off WoW
-  - Run the Reset_HealBot.bat file in the Healbot addon folder, this clears old saved Healbot settings from your WTF folder.
+  - Run the Reset_HealBot.bat file available here: https://healbot.dpm15.net/forum/bug/11-submitting-bug-reports
   - Logon to WoW on your main Healer.
   - As a priority you should open the options and configure spells, cures and buffs.
 

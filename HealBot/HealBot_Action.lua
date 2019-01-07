@@ -1382,15 +1382,17 @@ function HealBot_Action_setHealthText(button)
     local healInTxt=button.health.incoming
     if hbHealInTxt>3 then
         healInTxt=button.health.incoming+button.health.absorbs
-        if hbHealInTxt==4 then hbHealInTxt=2 end
-        if hbHealInTxt==5 then hbHealInTxt=3 end
+        if hbHealInTxt==4 or hbHealInTxt==6 then hbHealInTxt=2 end
+        if hbHealInTxt==5 or hbHealInTxt==7 then hbHealInTxt=3 end
+    end
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]<6 and button.health.current==button.health.max then 
+        healInTxt=0
     end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and button.health.max then
         local numSuffix=""
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
             if hbHealInTxt==2 then
                 bthlthdelta=button.health.current+healInTxt
-                if bthlthdelta>button.health.max then bthlthdelta=button.health.max end
             else
                 bthlthdelta=button.health.current;
             end

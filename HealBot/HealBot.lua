@@ -5210,6 +5210,13 @@ function HealBot_OnEvent_SpellsChanged(self, arg1)
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
+    if HealBot_Config.ActionVisible[8] then
+        if HealBot_Data["UILOCK"] then
+            HealBot_RecalcParty(3)
+        else
+            HealBot_Action_HidePanel(8)
+        end
+    end
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerEW")      
     else

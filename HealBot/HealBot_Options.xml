@@ -7755,24 +7755,24 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="190" y="0" />
+                          <AbsDimension x="155" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 210)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 270)</OnLoad>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_BarHealthType" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="10" y="-8" />
+                          <AbsDimension x="0" y="-8" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 130)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_BarHealthNumFormat1" inherits="UIDropDownMenuTemplate">
@@ -7796,7 +7796,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
                     </Scripts>
                   </Frame>
 

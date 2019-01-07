@@ -213,6 +213,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARHEALTHSEPHEALS       = "Separate incoming heals";
     HEALBOT_OPTIONS_BARHEALTHINCALL         = "Include incoming heals and absorbs"
     HEALBOT_OPTIONS_BARHEALTHSEPALL         = "Separate incoming heals and absorbs"
+    HEALBOT_OPTIONS_BARHEALTHALLINCALL      = "Always include incoming heals and absorbs"
+    HEALBOT_OPTIONS_BARHEALTHALLSEPALL      = "Always separate incoming heals and absorbs"
     HEALBOT_OPTIONS_BARHEALTH1              = "as delta";
     HEALBOT_OPTIONS_BARHEALTH2              = "as percentage";
     HEALBOT_OPTIONS_TIPTEXT                 = "Tooltip information";
