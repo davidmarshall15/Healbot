@@ -324,7 +324,10 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
         },
         IgnoreCustomDebuff={},
-        FilterCustomDebuff={},
+        FilterCustomDebuff={
+            [HEALBOT_DEBUFF_FORBEARANCE] = 3,
+            [HEALBOT_DEBUFF_WEAKENED_SOUL] = 4,
+        },
         HealBot_Custom_Debuffs = {
             -- Defaults
             [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]     = 9,
