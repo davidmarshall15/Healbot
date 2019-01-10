@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.2.b4";
+﻿HEALBOT_VERSION   = "8.1.0.2";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -593,14 +593,12 @@ function HealBot_globalVars()
     --Debuffs
     HEALBOT_DEBUFF_ROCKET_FUEL_LEAK         = GetSpellInfo(94794) or "--Rocket Fuel Leak"; --Engineering 
     --HEALBOT_DEBUFF_SAVING_GRACE             = GetSpellInfo(155274) or "--Saving Grace"; --DO NOT REMOVE
-    HEALBOT_DEBUFF_WEAKENED_SOUL_ID         = 6788;
-    HEALBOT_DEBUFF_WEAKENED_SOUL            = GetSpellInfo(HEALBOT_DEBUFF_WEAKENED_SOUL_ID) or "--Weakened Soul"; --DO NOT REMOVE
+
     
     --Unit Max Health Modifier Debuffs
     HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID      = 179986;
     HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID) or "--Aura of Contempt";
     
-            
     --Ignore Class Debuffs (ONLY DISPELLABLE DEBUFFS)
     HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE       = GetSpellInfo(34925) or "--Curse of Impotence";
     HEALBOT_DEBUFF_DECAYED_INTELLECT        = GetSpellInfo(31555) or "--Decayed Intellect";
@@ -614,89 +612,10 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(30108) or "--Unstable Affliction";
     HEALBOT_DEBUFF_VIPER_STING              = GetSpellInfo(39413) or "--Viper Sting";
 	HEALBOT_DEBUFF_VAMPIRIC_TOUCH           = GetSpellInfo(34914) or "--Vampiric Touch";	
-    
-    --Mythic+ Affixs
-	HEALBOT_DEBUFF_BURST                    = GetSpellInfo(240443) or "--Burst";
-    HEALBOT_DEBUFF_GRIEVOUS_WOUND           = GetSpellInfo(240559) or "--Grievous Wound";
-    HEALBOT_DEBUFF_NECROTIC_ROT             = GetSpellInfo(209858) or "--Necrotic Rot";
-    HEALBOT_DEBUFF_QUAKE                    = GetSpellInfo(240447) or "--Quake";
-	HEALBOT_DEBUFF_SANGUINE_ICHOR           = GetSpellInfo(226510) or "--Sanguine Ichor";
-	
-	--Updated Legion Expansion (Antorus, The Burning Throne) By Ariá Of Silvermoon EU
-	--Varimathras
-	HEALBOT_DEBUFF_MISERY                   = GetSpellInfo(243961) or "--Misery";
-    HEALBOT_DEBUFF_MARKED_PRAY              = GetSpellInfo(244042) or "--Marked Prey";
-    HEALBOT_DEBUFF_NECROTIC_EMBRACE         = GetSpellInfo(244094) or "--Necrotic Embrace";
-	HEALBOT_DEBUFF_ECHOES_OF_DOOM           = GetSpellInfo(248732) or "--Echoes of Doom";
-	--Aggramar  
-	HEALBOT_DEBUFF_TAESHALACHS_REACH        = GetSpellInfo(244675) or "--Taeshalach's Reach";
-    HEALBOT_DEBUFF_FOE_BREAKER              = GetSpellInfo(244291) or "--Foe Breaker";
-    HEALBOT_DEBUFF_SCORCHING_BLAZE          = GetSpellInfo(245995) or "--Scorching Blaze";
-	HEALBOT_DEBUFF_BLAZING_ERUPTION         = GetSpellInfo(244912) or "--Blazing Eruption";
-    HEALBOT_DEBUFF_WAKE_OF_FLAME            = GetSpellInfo(244736) or "--Wake of Flame";
-	HEALBOT_DEBUFF_MOLTEN_REMNANTS          = GetSpellInfo(245916) or "--Molten Remnants";
-	HEALBOT_DEBUFF_RAVENOUS_BLAZE           = GetSpellInfo(254452) or "--Ravenous Blaze";	
-	--Portal Keeper Hasabel
-	HEALBOT_DEBUFF_REALITY_TEAR             = GetSpellInfo(244016) or "--Reality Tear";
-    HEALBOT_DEBUFF_ACIDIC_WEB               = GetSpellInfo(246208) or "--Acidic Web";
-    HEALBOT_DEBUFF_FLAMES_OF_XOROTH         = GetSpellInfo(244607) or "--Flames of Xoroth";
-	HEALBOT_DEBUFF_EVERBURNING_FLAMES       = GetSpellInfo(244612) or "--Everburning Flames";
-    HEALBOT_DEBUFF_FELSILK_WRAP             = GetSpellInfo(244949) or "--Felsilk Wrap";
-	HEALBOT_DEBUFF_LEECH_ESSENCE            = GetSpellInfo(244915) or "--Leech Essence";
-	--The Coven of Shivarra
-	HEALBOT_DEBUFF_FIERY_STRIKE             = GetSpellInfo(244899) or "--Fiery Strike";
-    HEALBOT_DEBUFF_WHIRLING_SABER           = GetSpellInfo(245634) or "--Whirling Saber";
-	HEALBOT_DEBUFF_FULMINATING_PULSE        = GetSpellInfo(253520) or "--Fulminating Pulse";
-	HEALBOT_DEBUFF_FLASHFREEZE              = GetSpellInfo(245518) or "--Flashfreeze";
-    HEALBOT_DEBUFF_CHILLED_BLOOD            = GetSpellInfo(245586) or "--Chilled Blood";
-	HEALBOT_DEBUFF_ORB_OF_FROST             = GetSpellInfo(253650) or "--Orb of Frost";
-    HEALBOT_DEBUFF_COSMIC_GLARE             = GetSpellInfo(250912) or "--Cosmic Glare";	
-	--Felhounds of Sargeras 
-	HEALBOT_DEBUFF_DESOLATE_GAZE            = GetSpellInfo(244768) or "--Desolate Gaze";
-    HEALBOT_DEBUFF_SINGED                   = GetSpellInfo(244091) or "--Singed";
-	HEALBOT_DEBUFF_WEIGHT_OF_DARKNESS       = GetSpellInfo(244071) or "--Weight of Darkness";
-	HEALBOT_DEBUFF_SIPHONED                 = GetSpellInfo(248819) or "--Siphoned";
-    HEALBOT_DEBUFF_ENFLAMED                 = GetSpellInfo(248815) or "--Enflamed";
-	HEALBOT_DEBUFF_SMOULDERING              = GetSpellInfo(251445) or "--Smouldering";
-    HEALBOT_DEBUFF_DECAY                    = GetSpellInfo(245098) or "--Decay";
-	--Garothi Worldbreaker
-    HEALBOT_DEBUFF_LOCKED_ON                = GetSpellInfo(246220) or "--Locked On";
-    HEALBOT_DEBUFF_ANNIHILATION             = GetSpellInfo(244761) or "--Annihilation";
-    HEALBOT_DEBUFF_DECIMATION               = GetSpellInfo(244410) or "--Decimation";
-	--Antoran High Command 
-	HEALBOT_DEBUFF_EXPLOIT_WEAKNESS         = GetSpellInfo(244892) or "--Exploit Weakness";
-    HEALBOT_DEBUFF_ENTROPIC_BLAST           = GetSpellInfo(253290) or "--Entropic Blast";
-	HEALBOT_DEBUFF_PSYCHIC_ASSAULT          = GetSpellInfo(244172) or "--Psychic Assault";
-	--Kin'garoth 
-	HEALBOT_DEBUFF_FORGING_STRIKE           = GetSpellInfo(254919) or "--Forging Strike";
-    HEALBOT_DEBUFF_DEMOLISHED               = GetSpellInfo(249535) or "--Demolished";
-	HEALBOT_DEBUFF_DECIMATION               = GetSpellInfo(244410) or "--Decimation";
-    HEALBOT_DEBUFF_DEMOLISH                 = GetSpellInfo(246698) or "--Demolish";
-	HEALBOT_DEBUFF_ECHOES_OF_DOOM           = GetSpellInfo(248732) or "--Echoes of Doom";
-	--Imonar the Soulhunter
-    HEALBOT_DEBUFF_SHOCK_LANCE              = GetSpellInfo(247367) or "--Shock Lance";
-	HEALBOT_DEBUFF_EMPOWERED_SHOCK_LANCE    = GetSpellInfo(250255) or "--Empowered Shock Lance";
-	HEALBOT_DEBUFF_SHOCKED                  = GetSpellInfo(250224) or "--Shocked";
-    HEALBOT_DEBUFF_SEVER                    = GetSpellInfo(247687) or "--Sever";
-	HEALBOT_DEBUFF_CHARGED_BLAST            = GetSpellInfo(247716) or "--Charged Blasts";
-	HEALBOT_DEBUFF_SHRAPNEL_BLAST           = GetSpellInfo(250224) or "--Shrapnel Blast";
-    HEALBOT_DEBUFF_EMPOWERED_SHRAPNEL_BLAST = GetSpellInfo(248094) or "--Empowered Shrapnel Blast";
-	HEALBOT_DEBUFF_SEARED_SKIN              = GetSpellInfo(254181) or "--Seared Skin";
-	--Eonar the Life-Binder
-	HEALBOT_DEBUFF_RAIN_OF_FEL              = GetSpellInfo(248326) or "--Rain of Fel";
-	HEALBOT_DEBUFF_SPEAR_OF_DOOM            = GetSpellInfo(248861) or "--Spear of Doom";
-	--Argus the Unmaker
-	HEALBOT_DEBUFF_SOULBLIGHT               = GetSpellInfo(248396) or "--Soulblight";
-    HEALBOT_DEBUFF_SWEEPING_SCYTHE          = GetSpellInfo(248499) or "--Sweeping Scythe";
-	HEALBOT_DEBUFF_SOULBURST                = GetSpellInfo(250669) or "--Soulburst";
-	HEALBOT_DEBUFF_SOULBOMB                 = GetSpellInfo(251570) or "--Soulbomb";
-    HEALBOT_DEBUFF_EDGE_OF_OBILTERATION     = GetSpellInfo(251815) or "--Edge of Obliteration";
-	HEALBOT_DEBUFF_COSMIC_BEACON            = GetSpellInfo(252616) or "--Cosmic Beacon";
-    HEALBOT_DEBUFF_COSMIC_SMASH             = GetSpellInfo(252634) or "--Cosmic Smash";
-    HEALBOT_DEBUFF_EMBER_OF_RAGE            = GetSpellInfo(257299) or "--Ember of Rage";
-	HEALBOT_DEBUFF_DEADLY_SCYTHE            = GetSpellInfo(258039) or "--Deadly Scythe";
-	HEALBOT_DEBUFF_WITHERING_ROOTS          = GetSpellInfo(256399) or "--Withering Roots";
-	
+
+    -- Debuffs restricting spell casts
+    HEALBOT_DEBUFF_FORBEARANCE              = GetSpellInfo(25771) or "--Forbearance";
+    HEALBOT_DEBUFF_WEAKENED_SOUL            = GetSpellInfo(6788) or "--Weakened Soul";
 end
 
 HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.
@@ -704,6 +623,3 @@ HEALBOT_MAGIC_en                        = "Magic";  -- Do NOT localize this valu
 HEALBOT_CURSE_en                        = "Curse";  -- Do NOT localize this value.
 HEALBOT_POISON_en                       = "Poison";  -- Do NOT localize this value.
 HEALBOT_CUSTOM_en                       = "Custom";  -- Do NOT localize this value. 
-
---HealBot_globalVars()
-

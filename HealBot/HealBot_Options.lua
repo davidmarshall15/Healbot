@@ -171,6 +171,8 @@ function HealBot_Options_setLists()
         HEALBOT_WORDS_NO.." "..HEALBOT_OPTIONS_INCHEAL,
         HEALBOT_OPTIONS_BARHEALTHINCHEALS,
         HEALBOT_OPTIONS_BARHEALTHSEPHEALS,
+        HEALBOT_OPTIONS_BARHEALTHALLINCHEALS,
+        HEALBOT_OPTIONS_BARHEALTHALLSEPHEALS,
         HEALBOT_OPTIONS_BARHEALTHINCALL,
         HEALBOT_OPTIONS_BARHEALTHSEPALL,
         HEALBOT_OPTIONS_BARHEALTHALLINCALL,
@@ -8588,7 +8590,10 @@ function HealBot_SetCDCBarColours()
                                                  HealBot_Globals.CDCBarColour[HealBot_Options_StorePrev["CDebuffcustomName"]].B or 0.26,
                                                  Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HA"]);
     else
-        local customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_Options_StorePrev["customDebuffPriority"]
+        local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
+        if HealBot_Options_StorePrev["customDebuffPriority"]>8 and HealBot_Options_StorePrev["customDebuffPriority"]<13 then
+            customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_Options_StorePrev["customDebuffPriority"]
+        end
         HealBot_CustomColorpick:SetStatusBarColor(HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.45,
                                                  HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0,
                                                  HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.26,

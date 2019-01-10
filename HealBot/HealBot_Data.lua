@@ -1,4 +1,4 @@
-HealBot_lastVerSkinUpdate="8.0.1.11"
+HealBot_lastVerSkinUpdate="8.1.0.0"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -312,108 +312,31 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_en.."10"] = { R = 0.45, G = 0, B = 0.28, },
             [HEALBOT_CUSTOM_en.."11"] = { R = 0.45, G = 0.17, B = 0.14, },
             [HEALBOT_CUSTOM_en.."12"] = { R = 0.45, G = 0.34, B = 0.0, },
+            [HEALBOT_CUSTOM_en.."15"] = { R = 0.3, G = 0.5, B = 0.7, },
+            [HEALBOT_DEBUFF_FORBEARANCE] = { R = 0.3, G = 0.5, B = 0.7, },
+            [HEALBOT_DEBUFF_WEAKENED_SOUL] = { R = 0.3, G = 0.5, B = 0.7, },
         },
         HealBot_Custom_Debuffs_RevDur={},
         HealBot_Custom_Debuffs_ShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]= false,
             [HEALBOT_CUSTOM_CAT_CUSTOM_MISC] = false,
+            [HEALBOT_DEBUFF_FORBEARANCE] = false,
+            [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
         },
         IgnoreCustomDebuff={},
         FilterCustomDebuff={},
         HealBot_Custom_Debuffs = {
             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]= 9,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]= 10,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]= 11,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]  = 12,
-             
-            --Class Profession & Harmful Debuffs
-            --[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest       
-            --[HEALBOT_DARK_BARGAIN]             = 10, --Warlock
-            [HEALBOT_SHROUD_OF_PURGATORY]      = 9, --Death Knight
-            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering        
-        
-    --Mythic+ Affixs
-	[HEALBOT_DEBUFF_BURST]                    = 10,
-    [HEALBOT_DEBUFF_GRIEVOUS_WOUND]           = 10,
-    [HEALBOT_DEBUFF_NECROTIC_ROT]             = 11,
-    [HEALBOT_DEBUFF_QUAKE]                    = 11,
-	[HEALBOT_DEBUFF_SANGUINE_ICHOR]           = 10,
-	
-	--Updated Legion Expansion (Antorus, The Burning Throne) By Ariá Of Silvermoon EU
-	--Varimathras
-	[HEALBOT_DEBUFF_MISERY]                   = 11,
-    [HEALBOT_DEBUFF_MARKED_PRAY]              = 9,
-    [HEALBOT_DEBUFF_NECROTIC_EMBRACE]         = 9,
-	[HEALBOT_DEBUFF_ECHOES_OF_DOOM]           = 9,
-	--Aggramar  
-	[HEALBOT_DEBUFF_TAESHALACHS_REACH]        = 11,
-    [HEALBOT_DEBUFF_FOE_BREAKER]              = 11,
-    [HEALBOT_DEBUFF_SCORCHING_BLAZE]          = 10,
-	[HEALBOT_DEBUFF_BLAZING_ERUPTION]         = 10,
-    [HEALBOT_DEBUFF_WAKE_OF_FLAME]            = 10,
-	[HEALBOT_DEBUFF_MOLTEN_REMNANTS]          = 10,
-	[HEALBOT_DEBUFF_RAVENOUS_BLAZE]           = 10,
-	--Portal Keeper Hasabel
-	[HEALBOT_DEBUFF_REALITY_TEAR]             = 9,
-    [HEALBOT_DEBUFF_ACIDIC_WEB]               = 10,
-    [HEALBOT_DEBUFF_FLAMES_OF_XOROTH]         = 10,
-	[HEALBOT_DEBUFF_EVERBURNING_FLAMES]       = 10,
-    [HEALBOT_DEBUFF_FELSILK_WRAP]             = 9,
-	[HEALBOT_DEBUFF_LEECH_ESSENCE]            = 10,
-	--The Coven of Shivarra
-	[HEALBOT_DEBUFF_FIERY_STRIKE]             = 11,
-    [HEALBOT_DEBUFF_WHIRLING_SABER]           = 10,
-	[HEALBOT_DEBUFF_FULMINATING_PULSE]        = 9,
-	[HEALBOT_DEBUFF_FLASHFREEZE]              = 11,
-    [HEALBOT_DEBUFF_CHILLED_BLOOD]            = 9,
-	[HEALBOT_DEBUFF_ORB_OF_FROST]             = 11,
-    [HEALBOT_DEBUFF_COSMIC_GLARE]             = 9,	
-	--Felhounds of Sargeras 
-	[HEALBOT_DEBUFF_DESOLATE_GAZE]            = 9,
-    [HEALBOT_DEBUFF_SINGED]                   = 9,
-	[HEALBOT_DEBUFF_WEIGHT_OF_DARKNESS]       = 9,
-	[HEALBOT_DEBUFF_SIPHONED]                 = 9,
-    [HEALBOT_DEBUFF_ENFLAMED]                 = 9,
-	[HEALBOT_DEBUFF_SMOULDERING]              = 10,
-    [HEALBOT_DEBUFF_DECAY]                    = 10,
-	--Garothi Worldbreaker
-    [HEALBOT_DEBUFF_LOCKED_ON]                = 12,
-    [HEALBOT_DEBUFF_ANNIHILATION]             = 9,
-    [HEALBOT_DEBUFF_DECIMATION]               = 9,
-	--Antoran High Command 
-	[HEALBOT_DEBUFF_EXPLOIT_WEAKNESS]         = 11,
-    [HEALBOT_DEBUFF_ENTROPIC_BLAST]           = 10,
-	[HEALBOT_DEBUFF_PSYCHIC_ASSAULT]          = 9,
-	--Kin'garoth 
-	[HEALBOT_DEBUFF_FORGING_STRIKE]           = 11,
-    [HEALBOT_DEBUFF_DEMOLISHED]               = 11,
-	[HEALBOT_DEBUFF_DECIMATION]               = 9,
-    [HEALBOT_DEBUFF_DEMOLISH]                 = 11,
-	[HEALBOT_DEBUFF_ECHOES_OF_DOOM]           = 9,
-	--Imonar the Soulhunter
-    [HEALBOT_DEBUFF_SHOCK_LANCE]              = 11,
-	[HEALBOT_DEBUFF_EMPOWERED_SHOCK_LANCE]    = 11,
-	[HEALBOT_DEBUFF_SHOCKED]                  = 11,
-    [HEALBOT_DEBUFF_SEVER]                    = 10,
-	[HEALBOT_DEBUFF_CHARGED_BLAST]            = 9,
-	[HEALBOT_DEBUFF_SHRAPNEL_BLAST]           = 10,
-    [HEALBOT_DEBUFF_EMPOWERED_SHRAPNEL_BLAST] = 10,
-	[HEALBOT_DEBUFF_SEARED_SKIN]              = 11,
-	--Eonar the Life-Binder
-	[HEALBOT_DEBUFF_RAIN_OF_FEL]              = 10,
-	[HEALBOT_DEBUFF_SPEAR_OF_DOOM]            = 9,
-	--Argus the Unmaker
-	[HEALBOT_DEBUFF_SOULBLIGHT]               = 10,
-    [HEALBOT_DEBUFF_SWEEPING_SCYTHE]          = 11,
-	[HEALBOT_DEBUFF_SOULBURST]                = 9,
-	[HEALBOT_DEBUFF_SOULBOMB]                 = 9,
-    [HEALBOT_DEBUFF_EDGE_OF_OBILTERATION]     = 10,
-	[HEALBOT_DEBUFF_COSMIC_BEACON]            = 9,
-    [HEALBOT_DEBUFF_COSMIC_SMASH]             = 10,
-    [HEALBOT_DEBUFF_EMBER_OF_RAGE]            = 10,
-	[HEALBOT_DEBUFF_DEADLY_SCYTHE]            = 11,
-	[HEALBOT_DEBUFF_WITHERING_ROOTS]          = 10,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]     = 9,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]        = 10,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]        = 11,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]          = 12,
+            --[HEALBOT_DEBUFF_SAVING_GRACE]             = 11, --Priest       
+            --[HEALBOT_DARK_BARGAIN]                    = 10, --Warlock
+            [HEALBOT_SHROUD_OF_PURGATORY]             = 9, --Death Knight
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 10, --Engineering        
+            [HEALBOT_DEBUFF_FORBEARANCE]              = 15,
+            [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 15,
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
         WatchHoT = {

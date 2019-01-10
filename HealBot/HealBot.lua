@@ -2592,6 +2592,15 @@ local function HealBot_Update_Skins()
     elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then   
         for x in pairs (Healbot_Config_Skins.Skins) do
             HealBot_Check_Skin(Healbot_Config_Skins.Skins[x])
+            if tonumber(tMajor)==8 then
+                if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<3) then
+                    for gl=1,10 do
+                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]>3 and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]<8 then
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]+2
+                        end
+                    end
+                end
+            end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
     end

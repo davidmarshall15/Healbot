@@ -211,6 +211,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWHEALTHONBAR         = "Show health on bar";
     HEALBOT_OPTIONS_BARHEALTHINCHEALS       = "Include incoming heals";
     HEALBOT_OPTIONS_BARHEALTHSEPHEALS       = "Separate incoming heals";
+    HEALBOT_OPTIONS_BARHEALTHALLINCHEALS    = "Always Include incoming heals";
+    HEALBOT_OPTIONS_BARHEALTHALLSEPHEALS    = "Always Separate incoming heals";
     HEALBOT_OPTIONS_BARHEALTHINCALL         = "Include incoming heals and absorbs"
     HEALBOT_OPTIONS_BARHEALTHSEPALL         = "Separate incoming heals and absorbs"
     HEALBOT_OPTIONS_BARHEALTHALLINCALL      = "Always include incoming heals and absorbs"
@@ -994,87 +996,8 @@ function HealBot_Lang_InitVars()
 	Y-Z 14
 	]]
 
-    --Mythic+ Affixs
-	[HEALBOT_DEBUFF_BURST]                    = 2,
-    [HEALBOT_DEBUFF_GRIEVOUS_WOUND]           = 5,
-    [HEALBOT_DEBUFF_NECROTIC_ROT]             = 8,
-    [HEALBOT_DEBUFF_QUAKE]                    = 10,
-	[HEALBOT_DEBUFF_SANGUINE_ICHOR]           = 11,	
-
-	--Updated Legion Expansion (Antorus, The Burning Throne) By Ariá Of Silvermoon EU
-	--Varimathras
-	[HEALBOT_DEBUFF_MISERY]                   = 8,
-    [HEALBOT_DEBUFF_MARKED_PRAY]              = 8,
-    [HEALBOT_DEBUFF_NECROTIC_EMBRACE]         = 8,
-	[HEALBOT_DEBUFF_ECHOES_OF_DOOM]           = 4,
-	--Aggramar  
-	[HEALBOT_DEBUFF_TAESHALACHS_REACH]        = 11,
-    [HEALBOT_DEBUFF_FOE_BREAKER]              = 4,
-    [HEALBOT_DEBUFF_SCORCHING_BLAZE]          = 11,
-	[HEALBOT_DEBUFF_BLAZING_ERUPTION]         = 2,
-    [HEALBOT_DEBUFF_WAKE_OF_FLAME]            = 13,
-	[HEALBOT_DEBUFF_MOLTEN_REMNANTS]          = 8,
-	[HEALBOT_DEBUFF_RAVENOUS_BLAZE]           = 10,
-	--Portal Keeper Hasabel
-	[HEALBOT_DEBUFF_REALITY_TEAR]             = 10,
-    [HEALBOT_DEBUFF_ACIDIC_WEB]               = 2,
-    [HEALBOT_DEBUFF_FLAMES_OF_XOROTH]         = 4,
-	[HEALBOT_DEBUFF_EVERBURNING_FLAMES]       = 4,
-    [HEALBOT_DEBUFF_FELSILK_WRAP]             = 4,
-	[HEALBOT_DEBUFF_LEECH_ESSENCE]            = 7,
-	--The Coven of Shivarra
-	[HEALBOT_DEBUFF_FIERY_STRIKE]             = 4,
-    [HEALBOT_DEBUFF_WHIRLING_SABER]           = 13,
-	[HEALBOT_DEBUFF_FULMINATING_PULSE]        = 4,
-	[HEALBOT_DEBUFF_FLASHFREEZE]              = 4,
-    [HEALBOT_DEBUFF_CHILLED_BLOOD]            = 3,
-	[HEALBOT_DEBUFF_ORB_OF_FROST]             = 9,
-    [HEALBOT_DEBUFF_COSMIC_GLARE]             = 3,	
-	--Felhounds of Sargeras 
-	[HEALBOT_DEBUFF_DESOLATE_GAZE]            = 3,
-    [HEALBOT_DEBUFF_SINGED]                   = 11,
-	[HEALBOT_DEBUFF_WEIGHT_OF_DARKNESS]       = 13,
-	[HEALBOT_DEBUFF_SIPHONED]                 = 11,
-    [HEALBOT_DEBUFF_ENFLAMED]                 = 4,
-	[HEALBOT_DEBUFF_SMOULDERING]              = 11,
-    [HEALBOT_DEBUFF_DECAY]                    = 3,
-	--Garothi Worldbreaker
-    [HEALBOT_DEBUFF_LOCKED_ON]                = 7,
-    [HEALBOT_DEBUFF_ANNIHILATION]             = 2,
-    [HEALBOT_DEBUFF_DECIMATION]               = 3,
-	--Antoran High Command 
-	[HEALBOT_DEBUFF_EXPLOIT_WEAKNESS]         = 4,
-    [HEALBOT_DEBUFF_ENTROPIC_BLAST]           = 4,
-	[HEALBOT_DEBUFF_PSYCHIC_ASSAULT]          = 9,
-	--Kin'garoth 
-	[HEALBOT_DEBUFF_FORGING_STRIKE]           = 4,
-    [HEALBOT_DEBUFF_DEMOLISHED]               = 3,
-	[HEALBOT_DEBUFF_DECIMATION]               = 3,
-    [HEALBOT_DEBUFF_DEMOLISH]                 = 3,
-	[HEALBOT_DEBUFF_ECHOES_OF_DOOM]           = 4,
-	--Imonar the Soulhunter
-	[HEALBOT_DEBUFF_SHOCK_LANCE]              = 11,
-	[HEALBOT_DEBUFF_EMPOWERED_SHOCK_LANCE]    = 4,
-	[HEALBOT_DEBUFF_SHOCKED]                  = 11,
-    [HEALBOT_DEBUFF_SEVER]                    = 11,
-	[HEALBOT_DEBUFF_CHARGED_BLAST]            = 3,
-	[HEALBOT_DEBUFF_SHRAPNEL_BLAST]           = 11,
-    [HEALBOT_DEBUFF_EMPOWERED_SHRAPNEL_BLAST] = 4,
-	[HEALBOT_DEBUFF_SEARED_SKIN]              = 11,
-	--Eonar the Life-Binder
-	[HEALBOT_DEBUFF_RAIN_OF_FEL]              = 10,
-	[HEALBOT_DEBUFF_SPEAR_OF_DOOM]            = 11,
-	--Argus the Unmaker
-	[HEALBOT_DEBUFF_SOULBLIGHT]               = 11,
-    [HEALBOT_DEBUFF_SWEEPING_SCYTHE]          = 11,
-	[HEALBOT_DEBUFF_SOULBURST]                = 11,
-	[HEALBOT_DEBUFF_SOULBOMB]                 = 11,
-    [HEALBOT_DEBUFF_EDGE_OF_OBILTERATION]     = 4,
-	[HEALBOT_DEBUFF_COSMIC_BEACON]            = 3,
-    [HEALBOT_DEBUFF_COSMIC_SMASH]             = 3,
-    [HEALBOT_DEBUFF_EMBER_OF_RAGE]            = 4,
-	[HEALBOT_DEBUFF_DEADLY_SCYTHE]            = 3,
-	[HEALBOT_DEBUFF_WITHERING_ROOTS]          = 13,  
+    [HEALBOT_DEBUFF_FORBEARANCE]              = 4,
+    [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 13,
 	}
 end
 
