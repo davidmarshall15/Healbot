@@ -1,6 +1,8 @@
 --[[ HealBot Continued ]]
 
 local HealBot_UnitIcons={};
+local HealBot_UnitBuffIcons={}
+local HealBot_UnitDebuffIcons={};
 local HealBot_Watch_HoT={};
 local HealBot_SmartCast_Spells={};
 local HealBot_DebugMsg={};
@@ -177,11 +179,13 @@ local function HealBot_InitVars()
         [HEALBOT_ORALIUS_WHISPERING_CRYSTAL] = 118922,
         [HEALBOT_EVER_BLOOMING_FROND] = 118935,
         [HEALBOT_REPURPOSED_FEL_FOCUSER] = 147707,
+        [HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE] = 160053,
     };
     HealBot_Buff_Aura2Item = {
         [HEALBOT_WHISPERS_OF_INSANITY] = HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
         [HEALBOT_BLOOM] = HEALBOT_EVER_BLOOMING_FROND,
         [HEALBOT_FEL_FOCUS] = HEALBOT_REPURPOSED_FEL_FOCUSER,
+        [HEALBOT_BATTLE_SCARRED_AUGMENT] = HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE,
     };
 end
 
@@ -1362,10 +1366,13 @@ local function HealBot_DoReset_Buffs(pClassTrim)
         HealBot_Config_Buffs.HealBotBuffText[7]=HEALBOT_EVER_BLOOMING_FROND
     end
     if IsUsableItem(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) or HealBot_IsItemInBag(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) then
-        HealBot_Config_Buffs.HealBotBuffText[8]=HEALBOT_ORALIUS_WHISPERING_CRYSTAL
+        HealBot_Config_Buffs.HealBotBuffText[6]=HEALBOT_ORALIUS_WHISPERING_CRYSTAL
     end
     if IsUsableItem(HEALBOT_REPURPOSED_FEL_FOCUSER) or HealBot_IsItemInBag(HEALBOT_REPURPOSED_FEL_FOCUSER) then
-        HealBot_Config_Buffs.HealBotBuffText[9]=HEALBOT_REPURPOSED_FEL_FOCUSER
+        HealBot_Config_Buffs.HealBotBuffText[8]=HEALBOT_REPURPOSED_FEL_FOCUSER
+    end
+    if IsUsableItem(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) or HealBot_IsItemInBag(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) then
+        HealBot_Config_Buffs.HealBotBuffText[5]=HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE
     end
 end
 
@@ -1715,7 +1722,7 @@ end
 
 local function HealBot_UnitMaxHealth(unit)
 	local healthFactor = 1
-    if (HealBot_Config.AdjustMaxHealth == true) then
+    if (HealBot_Config.AdjustMaxHealth == true) and UnitExists("boss1") then
         local maxHealthPercent = select(15, UnitAura("boss1", HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID))
         if maxHealthPercent then
             healthFactor = maxHealthPercent / 100
@@ -1729,7 +1736,7 @@ end
 local temp_caster={}
 local temp_HoT={}
 local temp_sID={}
-local function HealBot_HoT_AlphaValue(secLeft, curFrame)
+local function HealBot_IconText_AlphaValue(secLeft, curFrame)
     if not UnitIsDeadOrGhost("player") then
         if secLeft>=0 and secLeft<7 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
             return (secLeft/9)+.3
@@ -1740,211 +1747,75 @@ local function HealBot_HoT_AlphaValue(secLeft, curFrame)
     return 0
 end
 
-local function HealBot_HoT_UpdateIcon(button, index, secLeft, huIcons, hotID)
+local function HealBot_RemoveIcon(button, index)
     if not button then return; end;
     local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
     local iconName = _G[bar:GetName().."Icon"..index];
-    local hbiconcount = _G[bar:GetName().."Count"..index];
-    local hbiconcount2 = _G[bar:GetName().."Count"..index.."a"];
-    local iconTxt=nil
-    local x=HealBot_HoT_AlphaValue(secLeft, button.frame)
-    if button.aura.debuff.iconId and button.aura.debuff.iconId==hotID and x>0 then 
-        x=1
-    end
-    iconName:SetAlpha(x)
-    if x==0 then 
-        hbiconcount:SetTextColor(1,1,1,0);
-        hbiconcount2:SetTextColor(1,1,1,0)
-        hbiconcount:SetText(" ");
-        hbiconcount2:SetText(" ");
-    elseif huIcons then
-        local xGUID, sName, sID=string.split("!", hotID or "H!B!C")
-        if (Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SSCNT"] and xGUID~=HealBot_Data["PGUID"]) or 
-            Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SCNT"]==false then
-            iconTxt=nil
-        else
-            if huIcons[hotID]["COUNT"] and huIcons[hotID]["COUNT"]>1 then
-                iconTxt=huIcons[hotID]["COUNT"]
-            else
-                iconTxt=huIcons[hotID]["TEXT2"]
-            end
-        end
-        if huIcons[hotID]["TEXTURE"] then iconName:SetTexture(huIcons[hotID]["TEXTURE"]); end
-        if iconTxt then
-            hbiconcount2:SetText(iconTxt);
-            hbiconcount2:SetTextColor(1,1,1,1);
-        else
-            hbiconcount2:SetText(" ");
-            hbiconcount2:SetTextColor(1,1,1,0);
-        end
-        if (Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SSDUR"] and xGUID~=HealBot_Data["PGUID"]) or 
-            Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SDUR"]==false then
-            iconTxt=nil
-        else
-            iconTxt=secLeft
-        end
-        hbiconcount:SetText(iconTxt or " ");
-        if not iconTxt or (iconTxt<0) or (iconTxt>Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURTHRH"]) then
-            hbiconcount:SetTextColor(1,1,1,0);
-        elseif iconTxt<=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURWARN"] and index<15 then
-            if (sName==HEALBOT_REJUVENATION or sName==HEALBOT_REGROWTH) then
-                y, x, _ = GetSpellCooldown(HEALBOT_SWIFTMEND);
-                if x and y and (x+y)==0 then
-                    hbiconcount:SetTextColor(0,1,0,1);
-                else
-                    hbiconcount:SetTextColor(1,0,0,1);        
-                end
-            else
-                hbiconcount:SetTextColor(1,0,0,1);           
-            end
-        else
-            hbiconcount:SetTextColor(1,1,1,1);
-        end   
-    end    
-end 
+    local iconExpire = _G[bar:GetName().."Expire"..index];
+    local iconCount = _G[bar:GetName().."Count"..index];
+    iconName:SetAlpha(0)
+    iconExpire:SetTextColor(1,1,1,0);
+    iconCount:SetTextColor(1,1,1,0)
+    iconExpire:SetText(" ");
+    iconCount:SetText(" ");
+end
 
-local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.tga]],
-                                     [2]=[[Interface\Addons\HealBot\Images\Circle.tga]],
-                                     [3]=[[Interface\Addons\HealBot\Images\Diamond.tga]],
-                                     [4]=[[Interface\Addons\HealBot\Images\Triangle.tga]],
-                                     [5]=[[Interface\Addons\HealBot\Images\Moon.tga]],
-                                     [6]=[[Interface\Addons\HealBot\Images\Square.tga]],
-                                     [7]=[[Interface\Addons\HealBot\Images\Cross.tga]],
-                                     [8]=[[Interface\Addons\HealBot\Images\Skull.tga]],}
-                                     
-local function HealBot_RaidTargetUpdate(button, iconID)
+local function HealBot_UpdateIcon(button, iconData)
+    if not button then return; end;
     local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
-    if not bar then return end
-    local iconName=nil
-    if (Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and 
-        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1) or 
-        button.aura.debuff.iconId then
-        iconName = _G[bar:GetName().."Icon16"];
-    else
-        iconName = _G[bar:GetName().."Icon16"];
-        iconName:SetAlpha(0);
-        iconName = _G[bar:GetName().."Icon15"];
-    end
-    if iconID then
-        iconName:SetTexture(HealBot_TargetIconsTextures[iconID])
-        iconName:SetAlpha(1);
-    else
-        iconName:SetAlpha(0);
-    end
-end
-
-local function HealBot_HoT_UpdateNoIcon(button, huIcons, hotID, sID, secLeft)
-    local i=0
-    if huIcons[hotID]["DEBUFF"] then
-        i=15
-        if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and HealBot_TargetIcons[button.unit] then
-            HealBot_RaidTargetUpdate(button, HealBot_TargetIcons[button.unit])
-        end
-    else
-        i=1
-        for buffID,_ in pairs(huIcons) do 
-            if huIcons[buffID]["ICON"]>0 and not huIcons[buffID]["DEBUFF"] then 
-                i=i+1
-            end 
-        end  
-    end
-    if huIcons[hotID]["DEBUFF"] or i<15 then 
-        huIcons[hotID]["ICON"]=i
-        HealBot_HoT_UpdateIcon(button, i, secLeft, huIcons, hotID)
-    end
-end
-
-local temp_icons={}
-local tmpIcons={}
-local tmpIndex={}
-local delIndex={}
-local function HealBot_HoT_RefreshIcons(button)
-    local huIcons=HealBot_UnitIcons[button.unit]
-    local hotCount=0
-    local maxIcon=0
-    if huIcons then
-        for i=1,14 do
-            tmpIndex[i]=nil
-            tmpIcons[i]=nil
-            delIndex[i]=nil
-        end
-        for hotID,_ in pairs(huIcons) do
-            if huIcons[hotID]["ICON"]>0 and huIcons[hotID]["ICON"]<15 then 
-                tmpIndex[huIcons[hotID]["ICON"]]=hotID
-                hotCount=hotCount+1
-                if huIcons[hotID]["ICON"]>maxIcon then maxIcon=huIcons[hotID]["ICON"] end
-            end
-        end
-        for i=1,maxIcon do
-            if tmpIndex[i] then
-                table.insert(tmpIcons,huIcons[tmpIndex[i]]);
-                if i>hotCount then
-                    delIndex[i]=true
-                end
-            end
-        end
-        for i=1,#tmpIcons do
-            local o=tmpIcons[i]["ICON"]
-            if o~=i then
-                local secLeft=10
-                if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[hotName] then
-                    secLeft=ceil(GetTime()-huIcons[tmpIndex[o]]["EXPIRE"])
+    local iconName = _G[bar:GetName().."Icon"..iconData.index];
+    local iconExpire = _G[bar:GetName().."Expire"..iconData.index];
+    local iconCount = _G[bar:GetName().."Count"..iconData.index];
+    if Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SDUR"] and iconData.expirationTime>0 then
+        local secLeft=floor(iconData.expirationTime-GetTime())
+        if secLeft>-1 and secLeft<Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURTHRH"] then
+            iconExpire:SetText(secLeft);
+            if secLeft<=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURWARN"] then
+                if iconData.index > 50 then
+                    iconExpire:SetTextColor(0,1,0,1);
                 else
-                    secLeft=floor(huIcons[tmpIndex[o]]["EXPIRE"]-GetTime())
+                    iconExpire:SetTextColor(1,0,0,1);
                 end
-                huIcons[tmpIndex[o]]["ICON"]=i
-                HealBot_HoT_UpdateIcon(button, i, secLeft, huIcons, tmpIndex[o])
-            end
-        end
-        for i=hotCount+1,maxIcon do
-            if delIndex[i] then
-                HealBot_HoT_UpdateIcon(button, i, -1)
-            end
-        end
-    end
-end
-
-local function HealBot_HoT_RemoveIcon(button, huIcons, hotID)
-    if huIcons[hotID] and huIcons[hotID]["ICON"]>0 then
-        HealBot_HoT_UpdateIcon(button, huIcons[hotID]["ICON"], -1, huIcons, hotID)
-        huIcons[hotID]=nil
-        if button.aura.debuff.iconId and button.aura.debuff.iconId==hotID then
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 then
-                HealBot_Action_SetClassIconTexture(button)
-            elseif Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and HealBot_TargetIcons[button.unit] then 
-                HealBot_RaidTargetUpdate(button, nil)
-                HealBot_RaidTargetUpdate(button, HealBot_TargetIcons[button.unit])
-            end
-        else
-            HealBot_HoT_RefreshIcons(button) 
-        end
-    end
-end
-
-local function HealBot_HoT_Update(button, hotID)
-    local huIcons=HealBot_UnitIcons[button.unit]
-    if huIcons[hotID] then
-        local _, hotName, sID=string.split("!", hotID)
-        local secLeft=-1
-        if huIcons[hotID]["EXPIRE"]>10 then
-            if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[hotName] then
-                secLeft=ceil(GetTime()-huIcons[hotID]["EXPIRE"])
             else
-                secLeft=floor(huIcons[hotID]["EXPIRE"]-GetTime())
-            end
-        end
-        if secLeft<0 then
-            HealBot_HoT_RemoveIcon(button, huIcons, hotID)
-        elseif huIcons[hotID]["ICON"]>0 then
-            HealBot_HoT_UpdateIcon(button, huIcons[hotID]["ICON"], secLeft, huIcons, hotID)
+                iconExpire:SetTextColor(1,1,1,1);
+            end  
         else
-            HealBot_HoT_UpdateNoIcon(button, huIcons, hotID, sID, secLeft)
+            iconExpire:SetTextColor(1,1,1,0)
+            iconExpire:SetText(" ");
         end
+    else
+        iconExpire:SetTextColor(1,1,1,0)
+        iconExpire:SetText(" ");
+    end
+    if iconData.count > 1 then
+        iconCount:SetText(iconData.count);
+        iconCount:SetTextColor(1,1,1,1);
+    else
+        iconCount:SetTextColor(1,1,1,0)
+        iconCount:SetText(" ");
+    end
+end
+
+local function HealBot_AddIcon(button, iconData)
+    if not button then return; end;
+    local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
+    local iconName = _G[bar:GetName().."Icon"..iconData.index];
+    iconName:SetTexture(iconData.texture)
+    iconName:SetAlpha(1)
+    HealBot_UpdateIcon(button, iconData)
+end
+
+local function HealBot_RaidTargetUpdate(button, iconID)
+    local prevId=button.icon.debuff.targeticon
+    button.icon.debuff.targeticon=iconID
+    if button.icon.debuff.targeticon~=prevId then
+        HealBot_AuraChecks(button)
     end
 end
 
 function HealBot_setUnitIcons(unit)
-    if not HealBot_UnitIcons[unit] then HealBot_UnitIcons[unit]={} end
+    if not HealBot_UnitDebuffIcons[unit] then HealBot_UnitDebuffIcons[unit]={} end
+    if not HealBot_UnitBuffIcons[unit] then HealBot_UnitBuffIcons[unit]={} end
 end
 
 local hbExcludeSpells = { [67358]="Rejuvenating",
@@ -1954,81 +1825,76 @@ local hbExcludeSpells = { [67358]="Rejuvenating",
                         
 local hbExcludeBuffSpells = { [65148]="Sacred Shield",
                         }
-                        
-local hbHoTcaster="!";
-local hbFoundHoT={}
-local hbNoEndTime=GetTime()+604800
-local function HealBot_HasMyBuffs(button)
-    local xUnit=button.unit
-    if UnitExists(xUnit) then
-        for x,_ in pairs(hbFoundHoT) do
-            hbFoundHoT[x]=nil;
+
+local function HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
+    if button.icon.buff.count<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["MAXBICONS"] then
+        button.icon.buff.count=button.icon.buff.count+1
+        if not UnitBuffIcons[name] then 
+            UnitBuffIcons[name]={}
+            UnitBuffIcons[name].texture=texture
         end
-        local k = 1
-        local auraData={}
-        if not UnitIsFriend("player",xUnit) then
-            while true do
-                local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HARMFUL"); 
-                if bName and caster and caster=="player" and expirationTime then
-                    if not hbExcludeSpells[spellID] then 
-                        if (expirationTime or 0)==0 then expirationTime=hbNoEndTime end
-                        auraData[spellID]={["NAME"]=bName,["TEXTURE"]=iTexture,["COUNT"]=bCount,["TIME"]=expirationTime,["CASTER"]=caster}
-                    end
-                    k=k+1
-                else
-                    break
-                end
-            end
+        UnitBuffIcons[name].count=count
+        UnitBuffIcons[name].expirationTime=expirationTime
+        UnitBuffIcons[name].unitCaster=unitCaster
+        UnitBuffIcons[name].current=true
+        if (UnitBuffIcons[name].index or 0)~=button.icon.buff.count then
+            UnitBuffIcons[name].index=button.icon.buff.count
+            HealBot_AddIcon(button, UnitBuffIcons[name])
+        end
+        if expirationTime>0 then
+            UnitBuffIcons[name].nextUpdate=floor(GetTime()-1) + expirationTime%3 + 0.002
         else
-            while true do
-                local bName,iTexture,bCount,_,_,expirationTime, caster,_,_,spellID = UnitAura(xUnit, k, "HELPFUL");
-                local uClassTrim = strsub(uClassEN or "XXXX",1,4)
-                if not caster then caster=HEALBOT_WORDS_UNKNOWN end
-                if bName and caster and expirationTime then
-                    if not hbExcludeSpells[spellID] then 
-                        local y=HealBot_Watch_HoT[bName] or "nil"
-                        if (y=="A" or (y=="S" and caster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
-                            if (expirationTime or 0)==0 then expirationTime=hbNoEndTime end
-                            auraData[spellID]={["NAME"]=bName,["TEXTURE"]=iTexture,["COUNT"]=bCount,["TIME"]=expirationTime,["CASTER"]=caster}
-                        end
-                    end
-                    k=k+1
-                else
-                    break
-                end
-            end
-        end
-        for spellID, _ in pairs(auraData) do
-            local xGUID=HealBot_UnitGUID(auraData[spellID]["CASTER"]) or "0"
-            local hbHoTID=xGUID.."!" ..auraData[spellID]["NAME"].."!"..spellID
-            hbFoundHoT[hbHoTID]=true
-            if not HealBot_UnitIcons[xUnit][hbHoTID] then HealBot_UnitIcons[xUnit][hbHoTID]={} end
-            if not HealBot_UnitIcons[xUnit][hbHoTID]["ICON"] then HealBot_UnitIcons[xUnit][hbHoTID]["ICON"]=0 end
-            if not HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"] then HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=auraData[spellID]["TIME"]+1 end
-            if auraData[spellID]["COUNT"] and auraData[spellID]["COUNT"]~=(HealBot_UnitIcons[xUnit][hbHoTID]["COUNT"] or -1) then
-                HealBot_UnitIcons[xUnit][hbHoTID]["COUNT"]=auraData[spellID]["COUNT"]
-                HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=auraData[spellID]["TIME"]+1
-            end    
-            if HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]~=auraData[spellID]["TIME"] then
-                HealBot_UnitIcons[xUnit][hbHoTID]["EXPIRE"]=auraData[spellID]["TIME"]
-                HealBot_UnitIcons[xUnit][hbHoTID]["TEXTURE"]=auraData[spellID]["TEXTURE"]
-                HealBot_HoT_Update(button, hbHoTID)
-            end
-        end
-        local huIcons=HealBot_UnitIcons[xUnit]
-        if huIcons then
-            for buffID, _ in pairs(huIcons) do
-                if not hbFoundHoT[buffID] and not huIcons[buffID]["DEBUFF"] then
-                    huIcons[buffID]["EXPIRE"]=1
-                    if huIcons[buffID]["ICON"]>0 then
-                        HealBot_HoT_Update(button, buffID)
-                    else
-                        huIcons[buffID]=nil
-                    end
-                end
-            end
+            UnitBuffIcons[name].nextUpdate=GetTime()+1000000
         end
     end
+end
+
+local function HealBot_CheckUnitBuffIcons(button)
+    local prevIconCount = button.icon.buff.count
+    button.icon.buff.count=0
+    local UnitBuffIcons=HealBot_UnitBuffIcons[button.unit]
+    for dName,_ in pairs(UnitBuffIcons) do
+        UnitBuffIcons[dName].current=false
+    end
+    if UnitExists(button.unit) then
+        local z=1
+        while true do
+            local name, texture, count, _, _, expirationTime, unitCaster, _, _, _, _, _ = UnitDebuff(button.unit,z)
+            if name then 
+                z = z +1
+                if button.status.unittype == 9 and unitCaster and unitCaster=="player" and expirationTime then
+                    HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
+                end
+            else
+                break
+            end 
+        end
+        z=1
+        while true do
+            local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
+            if name then
+                z = z +1
+                if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
+                    local y=HealBot_Watch_HoT[name] or "nil"
+                    if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
+                        HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
+                    end
+                end
+            else
+                break
+            end 
+        end
+    end
+    if button.icon.buff.count<prevIconCount then 
+        for i = prevIconCount, button.icon.buff.count+1, -1 do
+            HealBot_RemoveIcon(button, i)
+        end
+    end    
+    for bName,_ in pairs(UnitBuffIcons) do
+        if not UnitBuffIcons[bName].current then
+            UnitBuffIcons[bName]=nil
+        end
+    end  
 end
 
 function HealBot_RecalcHeals(button)
@@ -2320,6 +2186,8 @@ function HealBot_Check_Skin(SkinName)
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWBUFF"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWBUFF"]=true end
         if Healbot_Config_Skins.Icons[SkinName][gl]["POSITION"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["POSITION"]=2 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]=true end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]=3 end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]=8 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["ER"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["ER"]=1 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["EG"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["EG"]=1 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["EB"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["EB"]=0 end
@@ -2593,7 +2461,7 @@ local function HealBot_Update_Skins()
         for x in pairs (Healbot_Config_Skins.Skins) do
             HealBot_Check_Skin(Healbot_Config_Skins.Skins[x])
             if tonumber(tMajor)==8 then
-                if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<3) then
+                if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<2) then
                     for gl=1,10 do
                         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]>3 and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]<8 then
                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][gl]["INCHEALS"]+2
@@ -2603,6 +2471,8 @@ local function HealBot_Update_Skins()
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
+        if HealBot_Globals.RangeCheckFreq>0.4 then HealBot_Globals.RangeCheckFreq=0.4 end
+        if HealBot_Globals.RangeCheckFreq<0.1 then HealBot_Globals.RangeCheckFreq=0.1 end
     end
     
     if HealBot_Config.CurrentSpec==9 then
@@ -2817,6 +2687,10 @@ local function HealBot_OnEvent_ItemInfoReceived(self)
         HEALBOT_REPURPOSED_FEL_FOCUSER = GetItemInfo(147707) or "--Repurposed Fel Focuser"
         allInfoReceived = false
     end
+    if HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE=="--Battle-Scarred Augment Rune" then
+        HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE     = GetSpellInfo(160053) or "--Battle-Scarred Augment Rune"
+        allInfoReceived = false
+    end
     if allInfoReceived then
         HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
         HealBot_OnEvent_VariablesLoaded(self)
@@ -2906,7 +2780,7 @@ local function HealBot_Options_Update()
         HealBot_Action_ResetSkin("init")
     elseif HealBot_Options_Timer[5] then
         HealBot_Options_Timer[5]=nil
-        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" or HEALBOT_REPURPOSED_FEL_FOCUSER=="--Repurposed Fel Focuser" then 
+        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" or HEALBOT_REPURPOSED_FEL_FOCUSER=="--Repurposed Fel Focuser" or HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE=="--Battle-Scarred Augment Rune" then 
             HealBot_OnEvent_ItemInfoReceived() 
         else
             HealBot_Options_InitBuffList()
@@ -3278,7 +3152,7 @@ local function HealBot_OnEvent_VehicleChange(self, unit, enterVehicle)
                 if vButton then HealBot_OnEvent_UnitHealth(vButton) end
                 doRefresh=true
             elseif self then
-                HealBot_VehicleCheck[xUnit]=1
+                HealBot_VehicleCheck[xUnit]=true
             end
         elseif HealBot_UnitInVehicle[xUnit] then
             local vUnit=HealBot_UnitInVehicle[xUnit]
@@ -3320,15 +3194,12 @@ function HealBot_OnEvent_RaidTargetUpdate(button)
     if UnitExists(button.unit) then 
         local x=GetRaidTargetIndex(button.unit)
         if x and HealBot_RaidTargetChecked(x, button.frame) then
-            HealBot_TargetIcons[button.unit]=x
             HealBot_RaidTargetUpdate(button, x)
-        elseif HealBot_TargetIcons[button.unit] then
-            HealBot_TargetIcons[button.unit]=nil
-            HealBot_RaidTargetUpdate(button, nil)
+        else
+            HealBot_RaidTargetUpdate(button, 0)
         end
-    elseif HealBot_TargetIcons[button.unit] then
-        HealBot_TargetIcons[button.unit]=nil
-        HealBot_RaidTargetUpdate(button, nil)
+    else
+        HealBot_RaidTargetUpdate(button, 0)
     end
 end
 
@@ -3552,13 +3423,9 @@ end
 
 local function HealBot_OnEvent_ReadyCheckClear()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
-        if bar then
-            local iconName = _G[bar:GetName().."Icon16"];
-            iconName:SetAlpha(0);
-            if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOW"] then
-                if xButton.status.update<2 then xButton.status.update=3 end
-            end
+        if xButton.icon.debuff.readycheck then
+            xButton.icon.debuff.readycheck=false
+            HealBot_AuraChecks(xButton)
         end
     end
 end
@@ -3705,25 +3572,9 @@ local function HealBot_Update_Slow()
             end
         end
     end
-    for xUnit, huIcons in pairs(HealBot_UnitIcons) do
-        local xButton=HealBot_Unit_Button[xUnit]
-        if xButton then
-            for buffID in pairs(huIcons) do
-                if floor(huIcons[buffID]["EXPIRE"]-GetTime())<=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][xButton.frame]["DURTHRH"] then
-                    HealBot_HoT_Update(HealBot_Unit_Button[xUnit], buffID)
-                end
-            end
-        else
-            HealBot_UnitIcons[xUnit]={}
-        end
-    end
     for xUnit,z in pairs(HealBot_VehicleCheck) do
-        if z<9 then
-            HealBot_VehicleCheck[xUnit]=HealBot_VehicleCheck[xUnit]+1
-        else
-            HealBot_VehicleCheck[xUnit]=nil
-        end
         HealBot_OnEvent_VehicleChange(nil, xUnit, true)
+        HealBot_VehicleCheck[xUnit]=nil
     end
     if HealBot_luVars["InCombatUpdate"] then
         HealBot_IC_PartyMembersChanged()
@@ -3877,7 +3728,30 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
        -- end
     end
 end
- 
+
+local debuffIcons = {}
+local function HealBot_BumpDebuffIcon(button,id)
+    local iconcount=button.icon.debuff.count
+    if iconcount>4 then iconcount=4 end
+    for x=iconcount,id,-1 do
+        debuffIcons[x+1]["name"]=debuffIcons[x]["name"]
+        debuffIcons[x+1]["priority"]=debuffIcons[x]["priority"]
+        debuffIcons[x+1]["texture"]=debuffIcons[x]["texture"]
+        debuffIcons[x+1]["count"]=debuffIcons[x]["count"]
+        debuffIcons[x+1]["expirationTime"]=debuffIcons[x]["expirationTime"]
+        debuffIcons[x+1]["index"]=x+51
+    end
+end
+
+local function HealBot_SetDebuffIcon(button, id, dName)
+    debuffIcons[id]["name"]=dName
+    debuffIcons[id]["priority"]=curDebuffs[dName]["priority"]
+    debuffIcons[id]["texture"]=curDebuffs[dName]["texture"]
+    debuffIcons[id]["count"]=curDebuffs[dName]["bCount"]
+    debuffIcons[id]["expirationTime"]=curDebuffs[dName]["expirationTime"]
+    debuffIcons[id]["index"]=50+id
+end
+
 local function HealBot_CheckUnitDebuffs(button)
     local spellCD=0
     if not button or not UnitExists(button.unit) then return end
@@ -3886,30 +3760,29 @@ local function HealBot_CheckUnitDebuffs(button)
 
     prevDebuff["name"]=button.aura.debuff.name or "x"
     prevDebuff["type"]=button.aura.debuff.type or "x"
-    prevDebuff["iconid"]=button.aura.debuff.iconId or "x"
     button.aura.debuff.type=false
     button.aura.debuff.priority=99
     for x,_ in pairs(curDebuffs) do
         curDebuffs[x]=nil;
     end
-    local z=1
     if not UnitIsDeadOrGhost(button.unit) or UnitIsFeignDeath(button.unit) then
+        local z=1
         while true do
-            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff = UnitDebuff(button.unit,z)
-            if dName then
+            local name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitDebuff(button.unit,z)
+            if name then
                 z = z +1
-                HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,isBossDebuff,button)
+                HealBot_addCurDebuffs(name, texture, count, debuffType, duration, expirationTime, spellId, unitCaster, isBossDebuff, button)
             else
                 break
             end 
         end
         z=1
         while true do
-            local dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,unitCaster,_,_,spellId,_,isBossDebuff  = UnitBuff(button.unit,z)
-            if dName then
+            local name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitBuff(button.unit,z)
+            if name then
                 z = z +1
-                if HealBot_Globals.HealBot_Custom_Debuffs[dName] then 
-                    HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,isBossDebuff,button)
+                if HealBot_Globals.HealBot_Custom_Debuffs[name] then 
+                    HealBot_addCurDebuffs(name, texture, count, debuffType, duration, expirationTime, spellId, unitCaster, isBossDebuff, button)
                 end
             else
                 break
@@ -3921,16 +3794,107 @@ local function HealBot_CheckUnitDebuffs(button)
     end
     
     local dPrio = 99    
+    local prevIconCount = button.icon.debuff.count
+    debuffIcons = {[1]={},[2]={},[3]={},[4]={},[5]={}}
+    button.icon.debuff.count=0
+    
     for dName,_ in pairs(curDebuffs) do
         if curDebuffs[dName]["priority"]<dPrio then
             button.aura.debuff.type=curDebuffs[dName]["type"]
             button.aura.debuff.name=dName
-            button.aura.debuff.iconId="DEBUFF!"..dName.."!"..curDebuffs[dName]["spellId"]
             button.aura.debuff.priority=curDebuffs[dName]["priority"]
             dPrio=curDebuffs[dName]["priority"]
         end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] and (HealBot_Data["PGUID"]==button.guid or UnitIsVisible(button.unit)) and curDebuffs[dName]["texture"] then
+          --  HealBot_CheckUnitDebuffIcons(button, curDebuffs[dName])
+            local iconset=false
+            if button.icon.debuff.count>0 then
+                for x=1, button.icon.debuff.count do
+                    if debuffIcons[x]["priority"]>curDebuffs[dName]["priority"] then
+                        if x<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["MAXDICONS"] then 
+                            HealBot_BumpDebuffIcon(button,x) 
+                            button.icon.debuff.count=button.icon.debuff.count+1
+                        end
+                        HealBot_SetDebuffIcon(button, x, dName)
+                        iconset=true
+                        break
+                    end
+                end
+            end
+            if not iconset and button.icon.debuff.count < Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["MAXDICONS"] then
+                button.icon.debuff.count=button.icon.debuff.count+1
+                HealBot_SetDebuffIcon(button, button.icon.debuff.count, dName)
+            end
+        end
     end
- 
+    if button.icon.debuff.classtexture and button.icon.debuff.count<5 then
+        button.icon.debuff.count=button.icon.debuff.count+1
+        debuffIcons[button.icon.debuff.count]["name"]="ClassIcon"
+        debuffIcons[button.icon.debuff.count]["texture"]=button.icon.debuff.classtexture
+        debuffIcons[button.icon.debuff.count]["count"]=0
+        debuffIcons[button.icon.debuff.count]["expirationTime"]=0
+        debuffIcons[button.icon.debuff.count]["index"]=50+button.icon.debuff.count
+    end
+    if button.icon.debuff.targeticon>0 and button.icon.debuff.count<5 then
+        local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.tga]],
+                                             [2]=[[Interface\Addons\HealBot\Images\Circle.tga]],
+                                             [3]=[[Interface\Addons\HealBot\Images\Diamond.tga]],
+                                             [4]=[[Interface\Addons\HealBot\Images\Triangle.tga]],
+                                             [5]=[[Interface\Addons\HealBot\Images\Moon.tga]],
+                                             [6]=[[Interface\Addons\HealBot\Images\Square.tga]],
+                                             [7]=[[Interface\Addons\HealBot\Images\Cross.tga]],
+                                             [8]=[[Interface\Addons\HealBot\Images\Skull.tga]],}
+        button.icon.debuff.count=button.icon.debuff.count+1
+        debuffIcons[button.icon.debuff.count]["name"]="TargetIcon"
+        debuffIcons[button.icon.debuff.count]["texture"]=HealBot_TargetIconsTextures[button.icon.debuff.targeticon]
+        debuffIcons[button.icon.debuff.count]["count"]=0
+        debuffIcons[button.icon.debuff.count]["expirationTime"]=0
+        debuffIcons[button.icon.debuff.count]["index"]=50+button.icon.debuff.count
+    end
+    if button.icon.debuff.readycheck and button.icon.debuff.count<5 then
+        button.icon.debuff.count=button.icon.debuff.count+1
+        debuffIcons[button.icon.debuff.count]["name"]="RedyCheckIcon"
+        debuffIcons[button.icon.debuff.count]["texture"]=button.icon.debuff.readycheck
+        debuffIcons[button.icon.debuff.count]["count"]=0
+        debuffIcons[button.icon.debuff.count]["expirationTime"]=0
+        debuffIcons[button.icon.debuff.count]["index"]=50+button.icon.debuff.count
+    end
+    
+    if button.icon.debuff.count<prevIconCount then 
+        for i = prevIconCount, button.icon.debuff.count+1, -1 do
+            HealBot_RemoveIcon(button, 50+i)
+        end
+    end    
+    local UnitDebuffIcons=HealBot_UnitDebuffIcons[button.unit]
+    for dName,_ in pairs(UnitDebuffIcons) do
+        UnitDebuffIcons[dName].current=false
+    end
+    if button.icon.debuff.count>0 then
+        for i = 1, button.icon.debuff.count do
+            if not UnitDebuffIcons[debuffIcons[i]["name"]] then 
+                UnitDebuffIcons[debuffIcons[i]["name"]]={}
+                UnitDebuffIcons[debuffIcons[i]["name"]].texture=debuffIcons[i]["texture"]
+            end
+            UnitDebuffIcons[debuffIcons[i]["name"]].count=debuffIcons[i]["count"]
+            UnitDebuffIcons[debuffIcons[i]["name"]].expirationTime=debuffIcons[i]["expirationTime"]
+            UnitDebuffIcons[debuffIcons[i]["name"]].current=true
+            if (UnitDebuffIcons[debuffIcons[i]["name"]].index or 0)~=debuffIcons[i]["index"] then
+                UnitDebuffIcons[debuffIcons[i]["name"]].index = debuffIcons[i]["index"]
+                HealBot_AddIcon(button, debuffIcons[i])
+            end
+            if debuffIcons[i]["expirationTime"]>0 then
+                UnitDebuffIcons[debuffIcons[i]["name"]].nextUpdate=floor(GetTime()-1) + debuffIcons[i]["expirationTime"]%3 + 0.002
+            else
+                UnitDebuffIcons[debuffIcons[i]["name"]].nextUpdate=GetTime()+1000000
+            end
+        end
+    end
+    for dName,_ in pairs(UnitDebuffIcons) do
+        if not UnitDebuffIcons[dName].current then
+            UnitDebuffIcons[dName]=nil
+        end
+    end
+    
     if not button.aura.debuff.type then 
         HealBot_ClearDebuff(button)
         if HealBot_Config_Cures.IgnoreOnCooldownDebuffs and prevDebuff["type"]~="x" and prevDebuff["type"]~=HEALBOT_CUSTOM_en and HealBot_luVars["MaskAuraDCheck"]<GetTime() and spellCD==0 then 
@@ -3985,50 +3949,7 @@ local function HealBot_CheckUnitDebuffs(button)
             if HealBot_Config_Cures.SoundDebuffWarning and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
                 HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
             end
- 
             HealBot_Action_UpdateDebuffButton(button)
-        end
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] and (HealBot_Data["PGUID"]==button.guid or UnitIsVisible(button.unit)) then
-            if button.aura.debuff.name and curDebuffs[button.aura.debuff.name]["texture"] then
-                local debuffID=button.aura.debuff.iconId
-                if button.aura.debuff.iconId and HealBot_UnitIcons[button.unit][prevDebuff["iconid"]] and button.aura.debuff.iconId~=prevDebuff["iconid"] then
-                    HealBot_UnitIcons[button.unit][prevDebuff["iconid"]]["EXPIRE"]=1
-                    HealBot_HoT_Update(button, prevDebuff["iconid"])
-                end
-                if (curDebuffs[button.aura.debuff.name]["expirationTime"] or 0)==0 then curDebuffs[button.aura.debuff.name]["expirationTime"]=hbNoEndTime end
-                if not curDebuffs[button.aura.debuff.name]["bCount"] then curDebuffs[button.aura.debuff.name]["bCount"]=1 end
-                if not HealBot_UnitIcons[button.unit][debuffID] then 
-                    HealBot_UnitIcons[button.unit][debuffID]={} 
-                    HealBot_UnitIcons[button.unit][debuffID]["TEXTURE"]=curDebuffs[button.aura.debuff.name]["texture"]
-                    HealBot_UnitIcons[button.unit][debuffID]["DEBUFF"]=true
-                end
-                if (HealBot_UnitIcons[button.unit][debuffID]["COUNT"] or -1)~=curDebuffs[button.aura.debuff.name]["bCount"] then
-                    HealBot_UnitIcons[button.unit][debuffID]["COUNT"]=curDebuffs[button.aura.debuff.name]["bCount"]
-                    if not HealBot_Globals.HealBot_Custom_Debuffs_RevDur[button.aura.debuff.name] then
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=curDebuffs[button.aura.debuff.name]["expirationTime"]+1
-                    else
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=99
-                    end
-                elseif not HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"] then 
-                    if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[button.aura.debuff.name] then
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=99
-                    else
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=curDebuffs[button.aura.debuff.name]["expirationTime"]+1 
-                    end
-                end
-                if not HealBot_UnitIcons[button.unit][debuffID]["ICON"] then HealBot_UnitIcons[button.unit][debuffID]["ICON"]=0 end
-                if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[button.aura.debuff.name] then
-                    if HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]==99 then
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=HealBot_CustomDebuff_RevDurLast[button.aura.debuff.name][button.unit]
-                        HealBot_HoT_Update(button, debuffID)
-                    end
-                else
-                    if HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]~=curDebuffs[button.aura.debuff.name]["expirationTime"] then
-                        HealBot_UnitIcons[button.unit][debuffID]["EXPIRE"]=curDebuffs[button.aura.debuff.name]["expirationTime"]
-                        HealBot_HoT_Update(button, debuffID)
-                    end
-                end
-            end
         end
         HealBot_OnEvent_UnitThreat(button.unit)
     end
@@ -4039,7 +3960,7 @@ local function HealBot_doAuraDebuffUnit(button)
         if UnitIsFriend("player",button.unit) then
             HealBot_CheckUnitDebuffs(button)
         elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then
-            HealBot_HasMyBuffs(button) 
+            HealBot_CheckUnitBuffIcons(button)
         end
     end
 end
@@ -4088,8 +4009,7 @@ local function HealBot_CheckUnitBuffs(button)
     local xUnit=button.unit
     if not xUnit or not UnitExists(xUnit) or not UnitIsPlayer(xUnit) then return end
     local _,BuffClass=UnitClass(xUnit)
-    if not BuffClass then BuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end
-    local y = 1;    
+    if not BuffClass then BuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end   
     local bName=nil;
     for x,_ in pairs(PlayerBuffs) do
         PlayerBuffs[x]=nil;
@@ -4099,24 +4019,22 @@ local function HealBot_CheckUnitBuffs(button)
     end
 
     if UnitIsPlayer(xUnit) then
+        local z=1
         while true do
-            local buffName,_,_,_,_,w,_,_,_, spellID, canApplyAura = UnitAura(xUnit,y,"HELPFUL") -- Done
-            if buffName then
-                y = y + 1;
+            local name, _, _, _, _, expirationTime, _, _, _, spellId, _, _ = UnitBuff(xUnit,z)
+            if name then
+                z = z +1
+                local buffName=HealBot_Buff_Aura2Item[name] or name
                 if (HealBot_BuffNameTypes[buffName]) then
                     for _,v in pairs(HealBot_BuffNameTypes[buffName]) do
                         PlayerBuffTypes[v]=true
                     end
                 end
-                
-                if not hbExcludeBuffSpells[spellID] then
-                    if HealBot_Buff_Aura2Item[buffName] then 
-                        buffName=HealBot_Buff_Aura2Item[buffName] 
-                    end
+                if not hbExcludeBuffSpells[spellId] then
                     PlayerBuffs[buffName]=true
                     if HealBot_CheckBuffs[buffName] then
-                        if w-GetTime()>0 then
-                            HealBot_SetUnitBuffTimer(xGUID,buffName,w)
+                        if expirationTime-GetTime()>0 then
+                            HealBot_SetUnitBuffTimer(xGUID,buffName,expirationTime)
                         elseif HealBot_PlayerBuff[xGUID] and HealBot_PlayerBuff[xGUID][buffName] then
                             if HealBot_PlayerBuff[xGUID][buffName]==HealBot_luVars["CheckPlayerBuffsTime"] then
                                 HealBot_PlayerBuff[xGUID][buffName]=nil
@@ -4129,8 +4047,8 @@ local function HealBot_CheckUnitBuffs(button)
                 end
             else
                 break
-            end
-        end 
+            end 
+        end
 
         if HealBot_PlayerBuff[xGUID] then
             local PlayerBuffsGUID=HealBot_PlayerBuff[xGUID]
@@ -4257,7 +4175,7 @@ end
 
 local function HealBot_doAuraHoT(button)
     if UnitExists(button.unit) then
-        HealBot_HasMyBuffs(button) 
+        HealBot_CheckUnitBuffIcons(button)
     end
 end
 
@@ -4280,9 +4198,16 @@ local function HealBot_Update_Fast()
     
     if HealBot_luVars["fastSwitch"]<2 and not HealBot_Panel_retTestBars() then
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.status.unittype < 9 then
-                if not xButton.status.reserved then
-                    if UnitExists(xUnit) then
+            if not xButton.status.reserved then
+                if UnitExists(xUnit) then
+                    local UnitDebuffIcons=HealBot_UnitDebuffIcons[xUnit]
+                    for dName,_ in pairs(UnitDebuffIcons) do
+                        if UnitDebuffIcons[dName].nextUpdate<GetTime() then
+                            UnitDebuffIcons[dName].nextUpdate=GetTime()+1
+                            HealBot_UpdateIcon(xButton, UnitDebuffIcons[dName])
+                        end
+                    end
+                    if xButton.status.unittype < 9 then
                         if xButton.aura.checks<4 then
                             if xButton.aura.checks<2 then 
                                 HealBot_doAuraDebuffUnit(xButton) 
@@ -4348,10 +4273,17 @@ local function HealBot_Update_Fast()
             end
         end
     else
-        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
-            for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                if xButton and xButton.status.unittype == 9 then
-                    if UnitExists(xUnit) then
+        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+            if not xButton.status.reserved then
+                if UnitExists(xUnit) then
+                    local UnitBuffIcons=HealBot_UnitBuffIcons[xUnit]
+                    for bName,_ in pairs(UnitBuffIcons) do
+                        if UnitBuffIcons[bName].nextUpdate<GetTime() then
+                            UnitBuffIcons[bName].nextUpdate=GetTime()+1
+                            HealBot_UpdateIcon(xButton, UnitBuffIcons[bName])
+                        end
+                    end
+                    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and xButton.status.unittype == 9 then
                         if UnitIsDeadOrGhost(xUnit) then
                             xButton.health.current=0
                             HealBot_RecalcHeals(xButton)
@@ -4387,10 +4319,14 @@ local function HealBot_Update_Fast()
                                 HealBot_AbsorbsUpdate(xButton)
                             end
                         end
-                    else
-                        HealBot_UpdateUnit(xButton, true)
                     end
+                else
+                    HealBot_UpdateUnit(xButton, true)
+                    xButton.status.reserved=true
                 end
+            elseif UnitExists(xUnit) then
+                xButton.status.reserved=false
+                HealBot_UpdateUnit(xButton, false)
             end
         end
         if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] then HealBot_Action_RefreshTooltip() end
@@ -4550,17 +4486,16 @@ end
 local function HealBot_OnEvent_ReadyCheckUpdate(unit,response)
     local xButton=HealBot_Unit_Button[unit]
     if HealBot_luVars["rcEnd"] and xButton and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then 
-        local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
-        if bar then
-            local iconName = _G[bar:GetName().."Icon16"];
-            if response=="Y" then
-                iconName:SetTexture("Interface\\RAIDFRAME\\ReadyCheck-Ready")
-            elseif response=="W" then
-                iconName:SetTexture("Interface\\RAIDFRAME\\ReadyCheck-Waiting")
-            else
-                iconName:SetTexture("Interface\\RAIDFRAME\\ReadyCheck-NotReady")
-            end
-            iconName:SetAlpha(1);
+        local prevRedyCheck=xButton.icon.debuff.readycheck
+        if response=="Y" then
+            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-Ready"
+        elseif response=="W" then
+            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
+        else
+            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
+        end
+        if xButton.icon.debuff.readycheck~=prevRedyCheck then
+            HealBot_AuraChecks(xButton)
         end
     end
 end
@@ -4741,10 +4676,10 @@ end
 
 function HealBot_CheckAllUnitVehicle(unit)
     if unit then
-        HealBot_VehicleCheck[unit]=2
+        HealBot_VehicleCheck[unit]=true
     else
         for xUnit,_ in pairs(HealBot_Unit_Button) do
-            HealBot_VehicleCheck[xUnit]=1
+            HealBot_VehicleCheck[xUnit]=true
         end
     end
 end
@@ -4954,21 +4889,8 @@ function HealBot_ClearDebuff(button)
 		button.aura.debuff.type = false;
 		button.aura.debuff.name = false;
 		button.aura.debuff.priority = 99;
-        if HealBot_UnitIcons[button.unit] and button.aura.debuff.iconId then
-            if HealBot_UnitIcons[button.unit][button.aura.debuff.iconId] then
-                HealBot_UnitIcons[button.unit][button.aura.debuff.iconId]["EXPIRE"]=1
-                HealBot_HoT_Update(button, button.aura.debuff.iconId)
-            end
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
-                HealBot_Action_SetClassIconTexture(button)
-            end
-        end
-		button.aura.debuff.iconId = false;
         if button.aggro.status>4 then
             HealBot_Action_UpdateAggro(button.unit,false,nil,0)
-        end
-        if HealBot_TargetIcons[button.unit] then
-            HealBot_RaidTargetUpdate(button, HealBot_TargetIcons[button.unit])
         end
         HealBot_Action_UpdateDebuffButton(button)
 	end
@@ -5143,10 +5065,7 @@ function HealBot_RaidTargetToggle(switch)
     else
         HealBot:UnregisterEvent("RAID_TARGET_UPDATE")
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if HealBot_TargetIcons[xUnit] then
-                HealBot_TargetIcons[xUnit]=nil
-                HealBot_RaidTargetUpdate(xButton,nil)
-            end
+            HealBot_RaidTargetUpdate(xButton,0)
         end
     end
 end
@@ -5170,7 +5089,11 @@ local function HealBot_OnEvent_FocusChanged(self)
                     HealBot_Action_HidePanel(9)
                 end
             elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and HealBot_Config.ActionVisible[9] then
-                HealBot_Action_HidePanel(9)
+                if HealBot_Data["UILOCK"] then
+                    HealBot_RecalcParty(4)
+                else
+                    HealBot_Action_HidePanel(9)
+                end
             end
         else
             HealBot_RecalcParty(4)
@@ -5408,26 +5331,26 @@ function HealBot_CastNotify(unitName,spell,unit)
 end
 
 function HealBot_retHoTdetails(unit)
-    return HealBot_UnitIcons[unit]
+    return HealBot_UnitBuffIcons[unit]
 end
 
 function HealBot_HoT_RemoveIconButton(button,removeAll)
-    local huIcons=HealBot_UnitIcons[button.unit]
-    if huIcons then
-        for hotID,_ in pairs(huIcons) do
-            HealBot_HoT_RemoveIcon(button, huIcons, hotID)
-        end
+    local UnitBuffIcons=HealBot_UnitBuffIcons[button.unit]
+    for bName,_ in pairs(UnitBuffIcons) do
+        UnitBuffIcons[bName]=nil
     end
-    for i=1,15 do
-        HealBot_HoT_UpdateIcon(button, i, -1)
+    for i=1,10 do
+        HealBot_RemoveIcon(button, i)
+    end
+    local UnitDebuffIcons=HealBot_UnitDebuffIcons[button.unit]
+    for dName,_ in pairs(UnitDebuffIcons) do
+        UnitDebuffIcons[dName]=nil
+    end
+    for i=51,55 do
+        HealBot_RemoveIcon(button, i)
     end
     if removeAll then
-        if button.aura.debuff.iconId then
-            if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and HealBot_TargetIcons[button.unit] then HealBot_RaidTargetUpdate(button, nil) end
-        end
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==1 then
-            if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and HealBot_TargetIcons[button.unit] then HealBot_RaidTargetUpdate(button, nil) end
-        end
+        HealBot_RaidTargetUpdate(button, 0)
     end
 end
 
@@ -5815,11 +5738,13 @@ function HealBot_Reset_Cures()
 end
 
 function HealBot_IsItemInBag(itemName)
-    for bag = 0,4 do
-        for slot = 1,GetContainerNumSlots(bag) do
-            local item = GetContainerItemLink(bag,slot)
-            if item and item:find(itemName) then
-                return true
+    if itemName then
+        for bag = 0,4 do
+            for slot = 1,GetContainerNumSlots(bag) do
+                local item = GetContainerItemLink(bag,slot)
+                if item and item:find(itemName) then
+                    return true
+                end
             end
         end
     end

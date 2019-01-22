@@ -107,6 +107,7 @@ function HealBot_Options_InitVars()
         HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
         HEALBOT_EVER_BLOOMING_FROND,
         HEALBOT_REPURPOSED_FEL_FOCUSER,
+        HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE,
     };
     HealBot_Debuff_Types = {
         [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
@@ -785,6 +786,10 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_ARCANE_BRILLIANCE,
             HEALBOT_DALARAN_BRILLIANCE,
             HEALBOT_MAGE_WARD,
+            HEALBOT_BLAZING_BARRIER,
+            HEALBOT_PRISMATIC_BARRIER,
+            HEALBOT_ARCANE_POWER,
+            HEALBOT_SLOW_FALL,
             HEALBOT_FOCUS_MAGIC,
             HEALBOT_ICE_WARD,
         }
@@ -1531,6 +1536,28 @@ function HealBot_FrameScale_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_setOptions_Timer(150)
+    end
+end
+
+function HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    else
+        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXDICONS"] = val;
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+    end
+end
+
+function HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    else
+        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXBICONS"] = val;
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
     end
 end
 
@@ -9882,7 +9909,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,0.5,10.0,0.5,10)
+            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,4.0,0.5,10)
             HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
@@ -10367,6 +10394,12 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_ShowDirection,HEALBOT_OPTIONS_SHOWDIRECTION)
             HealBot_Options_ShowDirectionMouseOver:SetChecked(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWDIRMOUSE"])
             HealBot_Options_SetText(HealBot_Options_ShowDirectionMouseOver,HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE)
+            HealBot_Options_val_OnLoad(HealBot_BarButtonMaxDeuffIcons,HEALBOT_OPTIONS_MAXICONS,1,5,1)
+            HealBot_BarButtonMaxDeuffIcons:SetValue(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXDICONS"] or 3)
+            HealBot_BarButtonMaxDeuffIconsText:SetText(HEALBOT_OPTIONS_MAXICONS..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXDICONS"])
+            HealBot_Options_val_OnLoad(HealBot_BarButtonMaxBuffIcons,HEALBOT_OPTIONS_MAXICONS,1,10,1)
+            HealBot_BarButtonMaxBuffIcons:SetValue(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXBICONS"] or 8)
+            HealBot_BarButtonMaxBuffIconsText:SetText(HEALBOT_OPTIONS_MAXICONS..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXBICONS"])
             HealBot_Options_val2_OnLoad(HealBot_BarButtonIconScale,HEALBOT_OPTIONS_ICONSCALE,2.5,10,0.5,10)
             HealBot_BarButtonIconScale:SetValue((Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"] or 7.5)*10)
             HealBot_BarButtonIconScaleText:SetText(HEALBOT_OPTIONS_ICONSCALE..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])

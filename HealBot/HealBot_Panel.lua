@@ -326,35 +326,32 @@ local classTextures={
     }
 
 function HealBot_Action_SetClassIconTexture(button)
-    if not button.aura.debuff.name then
-        local bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
-        if not bar then return end
-        local iconName = _G[bar:GetName().."Icon15"];   
-        if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
-            local setRole=false
-            local unitRole=UnitGroupRolesAssigned(button.unit)  
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-                if unitRole=="NONE" then
-                    local xGUID=HealBot_UnitGUID(button.unit)
-                    if xGUID and HealBot_UnitData[xGUID] then
-                        unitRole=HealBot_UnitData[xGUID]["ROLE"]
-                    end
-                end
-                if roleTextures[unitRole] then
-                    setRole=true
+    local prevTexture=button.icon.debuff.classtexture
+    if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+        local setRole=false
+        local unitRole=UnitGroupRolesAssigned(button.unit)  
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
+            if unitRole=="NONE" then
+                local xGUID=HealBot_UnitGUID(button.unit)
+                if xGUID and HealBot_UnitData[xGUID] then
+                    unitRole=HealBot_UnitData[xGUID]["ROLE"]
                 end
             end
-            if setRole then
-                iconName:SetTexture(roleTextures[unitRole]);
-            else
-                local _,classEN = UnitClass(button.unit)
-                --local fName=classTextures[classEN].."-round.tga"
-                iconName:SetTexture(classTextures[classEN]);
+            if roleTextures[unitRole] then
+                setRole=true
             end
-            iconName:SetAlpha(1)
-        else
-            iconName:SetAlpha(0)
         end
+        if setRole then
+            button.icon.debuff.classtexture=roleTextures[unitRole];
+        else
+            local _,classEN = UnitClass(button.unit)
+            button.icon.debuff.classtexture=classTextures[classEN];
+        end
+    else
+        button.icon.debuff.classtexture=false
+    end
+    if button.icon.debuff.classtexture~=prevTexture then
+        HealBot_AuraChecks(button)
     end
 end
 

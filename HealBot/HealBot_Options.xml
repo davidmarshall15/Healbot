@@ -7992,7 +7992,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-40" />
+                          <AbsDimension x="35" y="-40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8000,11 +8000,26 @@
                       <OnClick>HealBot_Options_BarButtonShowHoT_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
+                  <Slider name="HealBot_BarButtonMaxBuffIcons" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="120" y="18" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarButtonShowHoT" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="-15" y="-25"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)</OnValueChanged>
+                    </Scripts>
+                  </Slider>
                   <CheckButton name="HealBot_Options_ShowDebuffIcon" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-90" />
+                          <AbsDimension x="210" y="-40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8012,11 +8027,26 @@
                       <OnClick>HealBot_Options_ShowDebuffIcon_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
+                  <Slider name="HealBot_BarButtonMaxDeuffIcons" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="120" y="18" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffIcon" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="-8" y="-25"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)</OnValueChanged>
+                    </Scripts>
+                  </Slider>
                   <CheckButton name="HealBot_Options_ShowDirection" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="320" y="-40" />
+                          <AbsDimension x="370" y="-40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8040,7 +8070,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="320" y="-90" />
+                          <AbsDimension x="370" y="-105" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8052,7 +8082,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="230" y="-140" />
+                          <AbsDimension x="230" y="-170" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8064,7 +8094,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="112" y="-185"/>
+                          <AbsDimension x="112" y="-210"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8112,7 +8142,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="112" y="-170"/>
+                          <AbsDimension x="112" y="-195"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8160,7 +8190,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="128" y="-240"/>
+                          <AbsDimension x="128" y="-250"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

@@ -1822,7 +1822,8 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         btextheight=ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]*frameScale);
         btextoutline=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OUTLINE"];
     end
-    local b,bar,bar2,bar3,bar4,icon,txt,icon1,icon15,icon16,icon17,icon1t,icon15t,icon1ta,icon15ta,pIcon,icont,iconta=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
+    local b,bar,bar2,bar3,bar4,icon,txt,icon17,pIcon,expire,count=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
+    local icon1,expire1,count1,icon51,expire51,count51=nil,nil,nil,nil,nil,nil
     local barScale,h,hwidth,hheight,iScale,itScale,x,hcpct,bar5,bar6,barDir=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
     local abtSize = {[0]=1,[1]=1,[2]=1,[3]=2,[4]=2,[5]=2,[6]=3,[7]=3,[8]=3,[9]=3,[10]=4,[11]=4,[12]=4,[13]=4,[14]=4,[15]=5}
   
@@ -1929,26 +1930,34 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         barDir:SetHeight(iScale);
         barDir:SetWidth(iScale);
         icon17:Hide()
+        icon1=_G[bar:GetName().."Icon1"];
+        expire1=_G[bar:GetName().."Expire1"];
+        count1=_G[bar:GetName().."Count1"];
+        icon51=_G[bar:GetName().."Icon51"];
+        expire51=_G[bar:GetName().."Expire51"];
+        count51=_G[bar:GetName().."Count51"];
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
             iScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["SCALE"])-2)*0.485)
         end
         itScale=ceil(iScale*Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["SCALE"])
-        for x=2,14 do
+        for x=1,10 do
             icon=_G[bar:GetName().."Icon"..x];
-            icont=_G[bar:GetName().."Count"..x];
-            iconta=_G[bar:GetName().."Count"..x.."a"];
+            expire=_G[bar:GetName().."Expire"..x];
+            count=_G[bar:GetName().."Count"..x];
             icon:SetHeight(iScale);
             icon:SetWidth(iScale);
-            icont:SetTextHeight(itScale)
-            iconta:SetTextHeight(itScale)
+            expire:SetTextHeight(itScale)
+            count:SetTextHeight(itScale)
         end
-        icon1 = _G[bar:GetName().."Icon1"];
-        icon1t = _G[bar:GetName().."Count1"];
-        icon1ta = _G[bar:GetName().."Count1a"];
-        icon15 = _G[bar:GetName().."Icon15"];
-        icon16 = _G[bar:GetName().."Icon16"];
-        icon15t = _G[bar:GetName().."Count15"]; 
-        icon15ta = _G[bar:GetName().."Count15a"];   
+        for x=51,55 do
+            icon=_G[bar:GetName().."Icon"..x];
+            expire=_G[bar:GetName().."Expire"..x];
+            count=_G[bar:GetName().."Count"..x];
+            icon:SetHeight(iScale);
+            icon:SetWidth(iScale);
+            expire:SetTextHeight(itScale)
+            count:SetTextHeight(itScale)
+        end
         for x=1,3 do
             pIcon = _G[bar:GetName().."Iconal"..x];
             pIcon:SetAlpha(0);
@@ -1989,16 +1998,6 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             pIcon = _G[bar3:GetName().."Icon5"];
             pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","14","0");
         end
-        icon1:SetHeight(iScale);
-        icon1:SetWidth(iScale);
-        icon1t:SetTextHeight(itScale)
-        icon1ta:SetTextHeight(itScale)        
-        icon15:SetHeight(iScale);
-        icon15:SetWidth(iScale);
-        icon15t:SetTextHeight(itScale)
-        icon15ta:SetTextHeight(itScale)
-        icon16:SetHeight(iScale);
-        icon16:SetWidth(iScale);
         if not HealBot_initSkin[b.frame][b.id] then
             HealBot_initSkin[b.frame][b.id]=true
             b:Enable();
@@ -2022,9 +2021,6 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             bar2:SetStatusBarColor(0,1,0,0);
             if b.guid then HealBot_RecalcHeals(b) end
         end
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSONBAR"]==false or Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSTYPE"]==0 then
-            icon15:SetAlpha(0);
-        end
         barDir:ClearAllPoints();
         barDir:SetPoint("TOP",b,"TOP",-1,0);
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["ONBAR"]==1 then
@@ -2033,14 +2029,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",1,0);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2051,34 +2047,47 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,0);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"TOPRIGHT",0,1);
-                else
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMLEFT",-1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",1,0);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",-1,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",5,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"TOPRIGHT",0,1);
+                        else
+                            icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-2,"BOTTOMLEFT",1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMLEFT",icon15,"BOTTOMLEFT",-1,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPRIGHT",icon15,"TOPRIGHT",5,0);
             else
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,0);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2089,23 +2098,36 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",1,0);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("BOTTOMLEFT",icon15,"TOPLEFT",0,1);
-                else
-                    icon16:SetPoint("BOTTOMLEFT",icon15,"BOTTOMRIGHT",1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",-1,0);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",5,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",-1,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"TOPLEFT",0,1);
+                        else
+                            icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-2,"BOTTOMRIGHT",-1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMRIGHT",5,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPLEFT",icon15,"TOPLEFT",-1,0);
             end
         elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["ONBAR"]==2 then
             HealBot_Panel_SetMultiColHoToffset((iScale+1)*5)
@@ -2113,14 +2135,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,0);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2131,34 +2153,47 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",1,0);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("BOTTOMLEFT",icon15,"TOPLEFT",0,1);
-                else
-                    icon16:SetPoint("BOTTOMLEFT",icon15,"BOTTOMRIGHT",1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",-1,0);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",5,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",-1,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"TOPLEFT",0,1);
+                        else
+                            icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-2,"BOTTOMRIGHT",-1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMRIGHT",5,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPLEFT",icon15,"TOPLEFT",-1,0);
             else
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",2,0);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2169,23 +2204,36 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,0);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"TOPRIGHT",0,1);
-                else
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMLEFT",-1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",2,0);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",-1,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",5,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"TOPRIGHT",0,1);
+                        else
+                            icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-2,"BOTTOMLEFT",1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMLEFT",icon15,"BOTTOMLEFT",-1,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPRIGHT",icon15,"TOPRIGHT",5,0);
             end
         else
             HealBot_Panel_SetMultiColHoToffset(0)
@@ -2197,14 +2245,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
                 icon1:ClearAllPoints();
                 icon1:SetPoint("TOPLEFT",b,"BOTTOMLEFT",1,-1);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",-1,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",5,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2215,34 +2263,47 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("TOPRIGHT",b,"BOTTOMRIGHT",-1,-1);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"TOPRIGHT",0,-1);
-                else
-                    icon16:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMLEFT",-1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("TOPRIGHT",b,"BOTTOMRIGHT",-1,-1);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",-1,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",5,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("TOPRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",0,-1);
+                        else
+                            icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-2,"BOTTOMLEFT",1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",-1,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",5,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMLEFT",icon15,"BOTTOMLEFT",-1,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPRIGHT",icon15,"TOPRIGHT",5,0);
             else
                 icon1:ClearAllPoints();
                 icon1:SetPoint("TOPRIGHT",b,"BOTTOMRIGHT",-1,-1);
-                icon1t:ClearAllPoints();
-                icon1t:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
-                icon1ta:ClearAllPoints();
-                icon1ta:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
-                for x=2,14 do
+                expire1:ClearAllPoints();
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",5,0);
+                count1:ClearAllPoints();
+                count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",-1,0);
+                for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
-                    icont=_G[bar:GetName().."Count"..x];
-                    iconta=_G[bar:GetName().."Count"..x.."a"];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
                     icon:ClearAllPoints();
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
                         if (x/2)==floor(x/2) then
@@ -2253,23 +2314,36 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     else
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
-                    icont:ClearAllPoints();
-                    icont:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
-                    iconta:ClearAllPoints();
-                    iconta:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15:ClearAllPoints();
-                icon15:SetPoint("TOPLEFT",b,"BOTTOMLEFT",1,-1);
-                icon16:ClearAllPoints();
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
-                    icon16:SetPoint("TOPLEFT",icon15,"BOTTOMRIGHT",0,-1);
-                else
-                    icon16:SetPoint("BOTTOMLEFT",icon15,"BOTTOMRIGHT",1,0);
+                icon51:ClearAllPoints();
+                icon51:SetPoint("TOPLEFT",b,"BOTTOMLEFT",-1,-1);
+                expire51:ClearAllPoints();
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",5,0);
+                count51:ClearAllPoints();
+                count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",-1,0);
+                for x=52,55 do
+                    icon=_G[bar:GetName().."Icon"..x];
+                    expire=_G[bar:GetName().."Expire"..x];
+                    count=_G[bar:GetName().."Count"..x];
+                    icon:ClearAllPoints();
+                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+                        if (x/2)==floor(x/2) then
+                            icon:SetPoint("TOPLEFT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",0,-1);
+                        else
+                            icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-2,"BOTTOMRIGHT",-1,0);
+                        end
+                    else
+                        icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
+                    end
+                    expire:ClearAllPoints();
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",5,0);
+                    count:ClearAllPoints();
+                    count:SetPoint("TOPLEFT",icon,"TOPLEFT",-1,0);
                 end
-                icon15t:ClearAllPoints();
-                icon15t:SetPoint("BOTTOMRIGHT",icon15,"BOTTOMRIGHT",5,0); 
-                icon15ta:ClearAllPoints();
-                icon15ta:SetPoint("TOPLEFT",icon15,"TOPLEFT",-1,0);
             end
         end
 
@@ -2482,6 +2556,9 @@ local function HealBot_Action_CreateButton(hbCurFrame)
             ghb.aggro={}
             ghb.mana={}
             ghb.text={}
+            ghb.icon={}
+            ghb.icon.debuff={}
+            ghb.icon.buff={}
         end
         ghb.health.current=0
         ghb.health.max=100
@@ -2501,10 +2578,14 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.checks.range=GetTime()+1000000
         ghb.spells.castpct=-1
         ghb.aura.buff.name=false
+        ghb.icon.buff.count=0
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
+        ghb.icon.debuff.count=0
+        ghb.icon.debuff.targeticon=0
+        ghb.icon.debuff.classtexture=false
+        ghb.icon.debuff.readycheck=false
         ghb.aura.debuff.priority=99
-        ghb.aura.debuff.iconId=false
         ghb.aura.checks=4
         ghb.aggro.status=0
         ghb.aggro.threatpct=0
@@ -3406,16 +3487,22 @@ local HealBot_mountData = {}
 local HealBot_MountIndex = {}
 
 local function HealBot_MountsPets_FavMount()
-    C_MountJournal.SummonByID(0)
+    if not InCombatLockdown() then
+        C_MountJournal.SummonByID(0)
+    end
 end
 
 local function HealBot_MountsPets_RandomPet(isFav)
-    C_PetJournal.SummonRandomPet(isFav)
+    if not InCombatLockdown() then
+        C_PetJournal.SummonRandomPet(isFav)
+    end
 end
 
 local function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
-        C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
+        if not InCombatLockdown() then
+            C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
+        end
     else
         HealBot_setOptions_Timer(405)
         HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_ON.." "..mount)

@@ -257,13 +257,12 @@ end
 local function HealBot_ToolTip_ShowHoT(unit)
     if HealBot_Globals.Tooltip_ShowHoT then
         local hbHoTline1=true
-        local hbTTHoTinfo=HealBot_retHoTdetails(unit)
-        if hbTTHoTinfo then
-            for buffID,_ in pairs(hbTTHoTinfo) do  -- x=buff  y=time
-                if hbTTHoTinfo[buffID]["ICON"]>0 and hbTTHoTinfo[buffID]["ICON"]<15 and linenum<44 then
-                    local xGUID,buffName=string.split("!", buffID)
-                    if xGUID and HealBot_UnitData[xGUID] and buffName then
-                        local ttCaster=HealBot_Panel_UnitName(unit)
+        local UnitBuffIcons=HealBot_retHoTdetails(unit)
+        if UnitBuffIcons then
+            for name,_ in pairs(UnitBuffIcons) do
+                if linenum<44 then
+                    if UnitBuffIcons[name].unitCaster then
+                        local ttCaster=UnitName(UnitBuffIcons[name].unitCaster)
                         if ttCaster then
                             local ttHoTd=nil
                             if hbHoTline1 then
@@ -271,10 +270,10 @@ local function HealBot_ToolTip_ShowHoT(unit)
                                 linenum=linenum+1
                             end
                             linenum=linenum+1
-                            if hbTTHoTinfo[buffID]["EXPIRE"] then
-                                ttHoTd=floor(hbTTHoTinfo[buffID]["EXPIRE"]-GetTime())
+                            if UnitBuffIcons[name].expirationTime then
+                                ttHoTd=floor(UnitBuffIcons[name].expirationTime-GetTime())
                             end
-                            local ttHoTc=hbTTHoTinfo[buffID]["COUNT"] or 0
+                            local ttHoTc=UnitBuffIcons[name].count or 0
                             local ttHoTright=nil
                             if ttHoTd and ttHoTd>60 then
                                 local ttHoTdt=floor(ttHoTd/60)
@@ -297,9 +296,9 @@ local function HealBot_ToolTip_ShowHoT(unit)
                                 ttHoTright=ttHoTright.."   " 
                             end
                             if ttHoTright then 
-                                HealBot_Tooltip_SetLine(linenum,"   "..ttCaster.." "..strlower(HEALBOT_WORDS_CAST).." "..buffName.." ",0.4,1,1,1,ttHoTright,0.7,1,0.7,1)
+                                HealBot_Tooltip_SetLine(linenum,"   "..ttCaster.." "..strlower(HEALBOT_WORDS_CAST).." "..name.." ",0.4,1,1,1,ttHoTright,0.7,1,0.7,1)
                             else
-                                HealBot_Tooltip_SetLine(linenum,"   "..ttCaster.." "..strlower(HEALBOT_WORDS_CAST).." "..buffName.." ",0.4,1,1,1)
+                                HealBot_Tooltip_SetLine(linenum,"   "..ttCaster.." "..strlower(HEALBOT_WORDS_CAST).." "..name.." ",0.4,1,1,1)
                             end
                         end
                     end

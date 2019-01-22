@@ -355,6 +355,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
     HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
     HEALBOT_OPTIONS_ICONTEXTSCALE           = "Icon Text Scale"
+    HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
+    
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"

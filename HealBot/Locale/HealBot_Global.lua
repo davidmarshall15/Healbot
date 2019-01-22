@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.2";
+﻿HEALBOT_VERSION   = "8.1.0.3.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -61,7 +61,8 @@ function HealBot_globalVars()
     HEALBOT_OCEANS_EMBRACE                  = GetSpellInfo(242467) or "--Ocean's Embrace";
     HEALBOT_VELENS_FUTURE_SIGHT             = GetSpellInfo(235966) or "--Velen's Future Sight"
     HEALBOT_SEPHUZS_SECRET                  = GetSpellInfo(208052) or "--Sephuz's Secret"
-    
+    HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE     = GetItemInfo(160053) or "--Battle-Scarred Augment Rune"
+    HEALBOT_BATTLE_SCARRED_AUGMENT          = GetSpellInfo(270058) or "--Battle-Scarred Augment"
     
 
     --Procs
@@ -322,7 +323,10 @@ function HealBot_globalVars()
     HEALBOT_ICE_BLOCK                       = GetSpellInfo(45438) or "--Ice Block"
     HEALBOT_ICE_WARD                        = GetSpellInfo(111264) or "--Ice Ward"
     HEALBOT_MAGE_WARD                       = GetSpellInfo(543) or "--Mage Ward";
-    --HEALBOT_TEMPORAL_SHIELD                 = GetSpellInfo(115610) or "--Temporal Shield"
+    HEALBOT_BLAZING_BARRIER                 = GetSpellInfo(235313) or "--Blazing Barrier"
+    HEALBOT_PRISMATIC_BARRIER               = GetSpellInfo(235450) or "--Prismatic Barrier"
+    HEALBOT_ARCANE_POWER                    = GetSpellInfo(12042) or "--Arcane Power"
+    HEALBOT_SLOW_FALL                       = GetSpellInfo(130) or "--Slow Fall"
 
 	--Paladin
     HEALBOT_ARDENT_DEFENDER                 = GetSpellInfo(31850) or "--Ardent Defender";
