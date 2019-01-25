@@ -12,7 +12,9 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                      [strlower(HEALBOT_STOP)]=true,
                      [strlower(HEALBOT_TELL)]=true,
                     }  
-                    
+local HealBot_Tooltip_luVars={}
+HealBot_Tooltip_luVars["uGroup"]=false
+
 function HealBot_Tooltip_Clear_CheckBuffs()
     for x,_ in pairs(HealBot_CheckBuffs) do
         HealBot_CheckBuffs[x]=nil;
@@ -589,17 +591,17 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             local tp=0
             if UnitIsPlayer(xUnit) then tp=HealBot_CalcThreat(xUnit) end
-            local uGroup=nil
+            HealBot_Tooltip_luVars["uGroup"]=false
             if IsInRaid() then 
-                uGroup=HealBot_RetUnitGroups(xUnit)
+                HealBot_Tooltip_luVars["uGroup"]=HealBot_RetUnitGroups(xUnit)
             end
-            if tp>0 or mana or uGroup then
+            if tp>0 or mana or HealBot_Tooltip_luVars["uGroup"] then
                 linenum=linenum+1
                 if not mana then
                     if tp>0 then
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..tp.."%",1,0.1,0.1,1," ",0,0,0,0)
                     else
-                        HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..uGroup,1,1,1,1," ",0,0,0,0)
+                        HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1," ",0,0,0,0)
                     end
                 else
                     local mPct=100
@@ -609,8 +611,8 @@ local function HealBot_Action_DoRefreshTooltip()
                     mana=HealBot_Tooltip_readNumber(mana)
                     maxmana=HealBot_Tooltip_readNumber(maxmana)
                     if tp<1 then
-                        if uGroup then
-                            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..uGroup,1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
+                        if HealBot_Tooltip_luVars["uGroup"] then
+                            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                         else
                             HealBot_Tooltip_SetLine(linenum," ",0,0,0,0,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                         end

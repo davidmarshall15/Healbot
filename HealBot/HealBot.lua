@@ -1607,12 +1607,13 @@ local function HealBot_UnitID(unit)
     return nil,nil
 end
 
+local ebubar2=nil
 function HealBot_HealsInUpdate(button)
-    local ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
+    ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
     if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>-1 then
-        local healin=(UnitGetIncomingHeals(button.unit) or 0)
-        if button.health.incoming~=healin or (healin==0 and ebubar2:GetValue()>0) then
-            button.health.incoming=healin
+        HealBot_luVars["healin"]=(UnitGetIncomingHeals(button.unit) or 0)
+        if button.health.incoming~=HealBot_luVars["healin"] or (HealBot_luVars["healin"]==0 and ebubar2:GetValue()>0) then
+            button.health.incoming=HealBot_luVars["healin"]
             HealBot_Action_setHealthText(button)
             HealBot_Action_UpdateHealsInButton(button)
         end
@@ -1625,12 +1626,13 @@ function HealBot_HealsInUpdate(button)
     end
 end
 
+local ebubar6=nil
 function HealBot_AbsorbsUpdate(button)
-    local ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
+    ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
     if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>-1 then
-        local absorb=(UnitGetTotalAbsorbs(button.unit) or 0)
-        if button.health.absorbs~=absorb or (absorb==0 and ebubar6:GetValue()>0) then
-            button.health.absorbs=absorb
+        HealBot_luVars["absorb"]=(UnitGetTotalAbsorbs(button.unit) or 0)
+        if button.health.absorbs~=HealBot_luVars["absorb"] or (HealBot_luVars["absorb"]==0 and ebubar6:GetValue()>0) then
+            button.health.absorbs=HealBot_luVars["absorb"]
             HealBot_Action_setHealthText(button)
             HealBot_Action_UpdateAbsorbsButton(button)
         end
@@ -1895,10 +1897,11 @@ local function HealBot_CheckUnitBuffIcons(button)
         end
     end    
     for bName,_ in pairs(UnitBuffIcons) do
-        if not UnitBuffIcons[bName].current then
-            UnitBuffIcons[bName]=nil
+        if not UnitBuffIcons[bName].current and UnitBuffIcons[bName].index>0 then
+            UnitBuffIcons[bName].index=0
+            UnitBuffIcons[bName].nextUpdate=GetTime()+1000000
         end
-    end  
+    end   
 end
 
 function HealBot_RecalcHeals(button)
@@ -3108,23 +3111,24 @@ local function HealBot_OnEvent_UnitThreat(unit)
     end
 end
 
+local ebubar=nil
 function HealBot_OnEvent_UnitHealth(button)
     if UnitExists(button.unit) then
-        local health,healthMax=UnitHealth(button.unit),HealBot_UnitMaxHealth(button.unit)
-        if (health~=button.health.current) or (healthMax~=button.health.max) then
-            if health<button.health.current then HealBot_OnEvent_UnitThreat(button.unit) end
-            button.health.current=health
-            button.health.max=healthMax
+        HealBot_luVars["health"],HealBot_luVars["healthMax"]=UnitHealth(button.unit),HealBot_UnitMaxHealth(button.unit)
+        if (HealBot_luVars["health"]~=button.health.current) or (HealBot_luVars["healthMax"]~=button.health.max) then
+            if HealBot_luVars["health"]<button.health.current then HealBot_OnEvent_UnitThreat(button.unit) end
+            button.health.current=HealBot_luVars["health"]
+            button.health.max=HealBot_luVars["healthMax"]
             HealBot_Action_setHealthText(button)
             HealBot_Action_UpdateHealthButton(button)
         elseif not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
-            local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
-            local bptc=floor((button.health.current/button.health.max)*100)
+            ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
+            HealBot_luVars["bptc"]=floor((button.health.current/button.health.max)*100)
             if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then
-                bptc=floor(((button.health.current+button.health.incoming)/button.health.max)*100)
-                if bptc>100 then bptc=100 end
+                HealBot_luVars["bptc"]=floor(((button.health.current+button.health.incoming)/button.health.max)*100)
+                if HealBot_luVars["bptc"]>100 then HealBot_luVars["bptc"]=100 end
             end
-            if ebubar:GetValue()~=bptc then 
+            if ebubar:GetValue()~=HealBot_luVars["bptc"] then 
                 HealBot_Action_setHealthText(button)
                 HealBot_Action_UpdateHealthButton(button)
             end
@@ -3733,7 +3737,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
     end
 end
 
-local debuffIcons = {}
+local debuffIcons = {[1]={},[2]={},[3]={},[4]={},[5]={}}
 local function HealBot_BumpDebuffIcon(button,id)
     local iconcount=button.icon.debuff.count
     if iconcount>4 then iconcount=4 end
@@ -3822,15 +3826,15 @@ local function HealBot_CheckUnitDebuffIcons(button)
         end
     end
     for dName,_ in pairs(UnitDebuffIcons) do
-        if not UnitDebuffIcons[dName].current then
-            UnitDebuffIcons[dName]=nil
+        if not UnitDebuffIcons[dName].current and UnitDebuffIcons[dName].index>0 then
+            UnitDebuffIcons[dName].index=0
+            UnitDebuffIcons[dName].nextUpdate=GetTime()+1000000
         end
     end
 end
 
 local function HealBot_CheckUnitDebuffIconsExtras(button)
     HealBot_luVars["prevIconCount"]=button.icon.debuff.count
-    debuffIcons = {[1]={},[2]={},[3]={},[4]={},[5]={}}
     button.icon.debuff.count=0
     HealBot_CheckUnitDebuffIcons(button)
 end
@@ -3878,7 +3882,6 @@ local function HealBot_CheckUnitDebuffs(button)
     
     local dPrio = 99    
     HealBot_luVars["prevIconCount"]=button.icon.debuff.count
-    debuffIcons = {[1]={},[2]={},[3]={},[4]={},[5]={}}
     button.icon.debuff.count=0
     
     for dName,_ in pairs(curDebuffs) do
@@ -5164,9 +5167,21 @@ function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerEW")      
     else
-        for _,xButton in pairs(HealBot_Unit_Button) do
+        for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if not xButton.status.reserved then
                 if xButton.checks.range < GetTime() then HealBot_Range_CheckTime(xButton) end
+            end
+            local UnitBuffIcons=HealBot_UnitBuffIcons[xUnit]
+            for bName,_ in pairs(UnitBuffIcons) do
+                if not UnitBuffIcons[bName].current then
+                    UnitBuffIcons[bName]=nil
+                end
+            end  
+            local UnitDebuffIcons=HealBot_UnitDebuffIcons[xUnit]
+            for dName,_ in pairs(UnitDebuffIcons) do
+                if not UnitDebuffIcons[dName].current then
+                    UnitDebuffIcons[dName]=nil
+                end
             end
         end
     end
