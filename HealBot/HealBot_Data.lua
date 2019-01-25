@@ -255,7 +255,7 @@ function HealBot_Data_InitVars()
         SmartCastBuff = true,
         SmartCastHeal = false,
         SmartCastRes = true,
-        RangeCheckFreq=0.2,
+        RangeCheckFreq=0.4,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},

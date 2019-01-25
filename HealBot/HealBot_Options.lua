@@ -282,10 +282,7 @@ function HealBot_Options_setLists()
         HEALBOT_WORDS_NONE,
         HEALBOT_CMD_CLEARBLACKLIST,
         HEALBOT_CMD_COPYSPELLS,
-        HEALBOT_CMD_DELCUSTOMDEBUFF9,
-        HEALBOT_CMD_DELCUSTOMDEBUFF10,
-        HEALBOT_CMD_DELCUSTOMDEBUFF11,
-        HEALBOT_CMD_DELCUSTOMDEBUFF12,
+        HEALBOT_CMD_RESETICONS,
         HEALBOT_CMD_RESETBARS,
         HEALBOT_CMD_RESETBUFFS,
         HEALBOT_CMD_RESETCURES,
@@ -4536,36 +4533,30 @@ function HealBot_Options_CommandsButton_OnClick(self)
     elseif HealBot_Options_StorePrev["hbCommands"]==3 then
         HealBot_Copy_SpellCombos()
     elseif HealBot_Options_StorePrev["hbCommands"]==4 then
-        HealBot_Options_delCustomPrio(9)
+        HealBot_Reset_Icons()
     elseif HealBot_Options_StorePrev["hbCommands"]==5 then
-        HealBot_Options_delCustomPrio(10)
-    elseif HealBot_Options_StorePrev["hbCommands"]==6 then
-        HealBot_Options_delCustomPrio(11)
-    elseif HealBot_Options_StorePrev["hbCommands"]==7 then
-        HealBot_Options_delCustomPrio(12)
-    elseif HealBot_Options_StorePrev["hbCommands"]==8 then
         HealBot_Action_Reset()
-    elseif HealBot_Options_StorePrev["hbCommands"]==9 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==6 then
         HealBot_Reset_Buffs()
-    elseif HealBot_Options_StorePrev["hbCommands"]==10 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==7 then
         HealBot_Reset_Cures()
-    elseif HealBot_Options_StorePrev["hbCommands"]==11 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==8 then
         HealBot_setResetFlagCode(2)
-    elseif HealBot_Options_StorePrev["hbCommands"]==12 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==9 then
         HealBot_setResetFlagCode(3)
-    elseif HealBot_Options_StorePrev["hbCommands"]==13 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==10 then
         HealBot_Reset_Spells()
-    elseif HealBot_Options_StorePrev["hbCommands"]==14 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==11 then
         HealBot_ToggleAcceptSkins()
-    elseif HealBot_Options_StorePrev["hbCommands"]==15 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==12 then
         HealBot_MountsPets_DislikeMount("Dislike")
-    elseif HealBot_Options_StorePrev["hbCommands"]==16 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==13 then
         HealBot_MountsPets_DislikeMount("Exclude")
-    elseif HealBot_Options_StorePrev["hbCommands"]==17 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==14 then
         HealBot_ToggleSuppressSetting("error")
-    elseif HealBot_Options_StorePrev["hbCommands"]==18 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==15 then
         HealBot_ToggleSuppressSetting("sound")
-    elseif HealBot_Options_StorePrev["hbCommands"]==19 then
+    elseif HealBot_Options_StorePrev["hbCommands"]==16 then
         HealBot_Options_ToggleCustomCuresCastBy()
     end
 end
@@ -9909,7 +9900,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,4.0,0.5,10)
+            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,2.0,8.0,0.5,10)
             HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
