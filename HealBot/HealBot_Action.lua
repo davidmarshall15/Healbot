@@ -531,6 +531,7 @@ function HealBot_Action_UpdateHealsInButton(button)
             hir,hig,hib = ebubar:GetStatusBarColor();
         end
         ebubar2:SetStatusBarColor(hir,hig,hib,Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IA"]);
+
         if ebubar2:GetValue()~=floor(hipct*100) then
             ebubar2:SetValue(floor(hipct*100));
         end

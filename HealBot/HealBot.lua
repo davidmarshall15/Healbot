@@ -1,6 +1,5 @@
 --[[ HealBot Continued ]]
 
-local HealBot_UnitIcons={};
 local HealBot_UnitBuffIcons={}
 local HealBot_UnitDebuffIcons={};
 local HealBot_Watch_HoT={};
@@ -1610,7 +1609,7 @@ end
 local ebubar2=nil
 function HealBot_HealsInUpdate(button)
     ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
-    if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>-1 then
+    if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>0 then
         HealBot_luVars["healin"]=(UnitGetIncomingHeals(button.unit) or 0)
         if button.health.incoming~=HealBot_luVars["healin"] or (HealBot_luVars["healin"]==0 and ebubar2:GetValue()>0) then
             button.health.incoming=HealBot_luVars["healin"]
@@ -1629,7 +1628,7 @@ end
 local ebubar6=nil
 function HealBot_AbsorbsUpdate(button)
     ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
-    if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>-1 then
+    if UnitExists(button.unit) and button.status.current>3 and button.status.current<9 and button.status.range>0 then
         HealBot_luVars["absorb"]=(UnitGetTotalAbsorbs(button.unit) or 0)
         if button.health.absorbs~=HealBot_luVars["absorb"] or (HealBot_luVars["absorb"]==0 and ebubar6:GetValue()>0) then
             button.health.absorbs=HealBot_luVars["absorb"]
@@ -3636,6 +3635,9 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
         if hbCasterID~=hbCastByEveryone then
             if unitCaster and unitCaster=="player" then
                 unitCasterID=hbCastBySelf --4
+                if hbCasterID==3 then 
+                    hbCasterID=hbCastBySelf 
+                end
             elseif unitCaster and not UnitIsEnemy("player",unitCaster) then
                 unitCasterID=hbCastByFriend --3
             else
