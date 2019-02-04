@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.3";
+﻿HEALBOT_VERSION   = "8.1.0.4.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -63,6 +63,10 @@ function HealBot_globalVars()
     HEALBOT_SEPHUZS_SECRET                  = GetSpellInfo(208052) or "--Sephuz's Secret"
     HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE     = GetItemInfo(160053) or "--Battle-Scarred Augment Rune"
     HEALBOT_BATTLE_SCARRED_AUGMENT          = GetSpellInfo(270058) or "--Battle-Scarred Augment"
+    HEALBOT_TAILWIND_SAPPHIRE               = GetItemInfo(284567) or "--Tailwind Sapphire"
+    HEALBOT_TAILWIND                        = GetSpellInfo(284573) or "--Tailwind"
+    HEALBOT_AMETHYST_OF_THE_SHADOW_KING     = GetItemInfo(284558) or "--Amethyst of the Shadow King"
+    HEALBOT_SHADOW_TOUCHED                  = GetSpellInfo(284556) or "--Shadow-Touched"
     
 
     --Procs

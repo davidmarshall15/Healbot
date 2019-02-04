@@ -108,6 +108,8 @@ function HealBot_Options_InitVars()
         HEALBOT_EVER_BLOOMING_FROND,
         HEALBOT_REPURPOSED_FEL_FOCUSER,
         HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE,
+        HEALBOT_TAILWIND_SAPPHIRE,
+        HEALBOT_AMETHYST_OF_THE_SHADOW_KING,
     };
     HealBot_Debuff_Types = {
         [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
@@ -469,6 +471,8 @@ function HealBot_Options_setLists()
         [HEALBOT_OCEANS_EMBRACE]=HEALBOT_CLASSES_ALL,
         --[HEALBOT_AOF_INFUSION_OF_LIGHT]=HEALBOT_CLASSES_ALL,
         [HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_SHADOW_TOUCHED]=HEALBOT_CLASSES_ALL,
+        [HEALBOT_TAILWIND]=HEALBOT_CLASSES_ALL,
         
         --Death Knight
         [HEALBOT_ICEBOUND_FORTITUDE]=HEALBOT_DEATHKNIGHT,
@@ -1088,6 +1092,20 @@ function HealBot_Options_val2_OnLoad(self,vText,Min,Max,Step,vDiv,pageStep)
     g:SetText(Min/vDiv);
     g=_G[self:GetName().."High"]
     g:SetText(Max/vDiv);
+    self:SetMinMaxValues(Min,Max);
+    self:SetValueStep(Step);
+    self:SetStepsPerPage(StepsPerPage);
+end
+
+function HealBot_Options_speedLables_OnLoad(self,vText,Min,Max,Step,pageStep)
+    self.text = vText;
+    local StepsPerPage=pageStep or HealBot_Options_getStepsPerPage(Max,Step)
+    local g=_G[self:GetName().."Text"]
+    g:SetText(vText);
+    g=_G[self:GetName().."Low"]
+    g:SetText(HEALBOT_OPTIONS_WORD_SLOWER);
+    g=_G[self:GetName().."High"]
+    g:SetText(HEALBOT_OPTIONS_WORD_FASTER);
     self:SetMinMaxValues(Min,Max);
     self:SetValueStep(Step);
     self:SetStepsPerPage(StepsPerPage);
@@ -2193,8 +2211,6 @@ function HealBot_Options_AggroFlashFreq_OnValueChanged(self)
     else
         val=val/100;
         Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"] = val;
-        local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val);
     end
 end
 
@@ -2267,8 +2283,6 @@ function HealBot_Options_BarFreq_OnValueChanged(self)
     else
         val=val/10;
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] = val;
-        local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val);
     end
 end
 
@@ -2281,7 +2295,7 @@ function HealBot_Options_NumTestBars_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
         HealBot_Panel_SetNumBars(HealBot_Globals.TestBars["BARS"])
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -2293,7 +2307,7 @@ function HealBot_Options_NumTestTanks_OnValueChanged(self)
         HealBot_Globals.TestBars["TANKS"] = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -2305,7 +2319,7 @@ function HealBot_Options_NumberTestHealers_OnValueChanged(self)
         HealBot_Globals.TestBars["HEALERS"] = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -2317,7 +2331,7 @@ function HealBot_Options_NumTestMyTargets_OnValueChanged(self)
         HealBot_Globals.TestBars["TARGETS"] = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -2329,7 +2343,7 @@ function HealBot_Options_NumTestPets_OnValueChanged(self)
         HealBot_Globals.TestBars["PETS"] = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -2342,7 +2356,7 @@ function HealBot_Options_NumberTestEnemy_OnValueChanged(self)
         HealBot_Globals.TestBars["ENEMY"] = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v);
-        HealBot_nextRecalcParty(0, 6)
+        HealBot_nextRecalcParty(6)
     end
 end
 
@@ -6062,7 +6076,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
         HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
-        HealBot_nextRecalcParty(0.4, 0)
+        HealBot_nextRecalcParty(0)
     end
 end
 
@@ -6277,7 +6291,7 @@ function HealBot_Options_ShareSkinComplete()
     hbWarnSharedMedia=false
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC..hbOptGetSkinFrom)
     HealBot_SetResetFlag("SOFT")
-    HealBot_nextRecalcParty(0.4, 0)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Options_checkSkinName(skinName)
@@ -9203,7 +9217,7 @@ function HealBot_Options_idleInit()
     else
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
-        HealBot_nextRecalcParty(1, 0)
+        HealBot_nextRecalcParty(0)
         return nil
     end
     return true
@@ -9642,7 +9656,6 @@ function HealBot_Options_ResetDoInittab(tabNo)
     if HealBot_Options:IsVisible() then
         HealBot_Options_Init(tabNo)
     end
-    HealBot_Set_Timers()
 end
 
 HealBot_Options_StorePrev["selSpellsType"]=1
@@ -9900,7 +9913,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,2.0,8.0,0.5,10)
+            HealBot_Options_cpuLables_OnLoad(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,2.0,8.0,0.5,4)
             HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
@@ -10334,9 +10347,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AggroFlashAlphaMin,HEALBOT_WORDS_MIN,0,0.8,0.05,2)
             HealBot_Options_AggroFlashAlphaMin:SetValue(Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["MINA"])
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_AggroFlashAlphaMin)
-            HealBot_Options_val2_OnLoad(HealBot_Options_AggroFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,0.5,10,0.5,100)
+            HealBot_Options_speedLables_OnLoad(HealBot_Options_AggroFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,0.5,10,0.5,5)
             HealBot_Options_AggroFlashFreq:SetValue(Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"]*100)
-            HealBot_Options_AggroFlashFreqText:SetText(HEALBOT_OPTIONS_AGGROFLASHFREQ..": "..Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"])
+            HealBot_Options_AggroFlashFreqText:SetText(HEALBOT_OPTIONS_AGGROFLASHFREQ) --..": "..Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"])
             g=_G["HealBot_AggroBars_FontStr"]
             g:SetText(HEALBOT_OPTIONS_TAB_AGGRO)
             g=_G["HealBot_SkinsAggroAlphaText"]
@@ -10698,9 +10711,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_ManaIndicatorInCombat,HEALBOT_OPTIONS_MONITORBUFFSC)
             HealBot_Options_UseFluidBars:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"])
             HealBot_Options_SetText(HealBot_Options_UseFluidBars,HEALBOT_OPTION_USEFLUIDBARS)
-            HealBot_Options_val2_OnLoad(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,10,100,10,10)
+            HealBot_Options_speedLables_OnLoad(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,10,100,10,2)
             HealBot_Options_BarUpdateFreq:SetValue((Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 2)*10)
-            HealBot_Options_BarUpdateFreqText:SetText(HEALBOT_OPTION_BARUPDFREQ..": "..Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"])
+            HealBot_Options_BarUpdateFreqText:SetText(HEALBOT_OPTION_BARUPDFREQ) --..": "..Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"])
             g=_G["HealBot_GeneralSkin_FontStr"]
             g:SetText(HEALBOT_OPTIONS_TAB_GENERAL)
             g=_G["healbotlowmanaindfontstr"]

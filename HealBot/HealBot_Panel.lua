@@ -131,7 +131,7 @@ function HealBot_Panel_SetSubSortPlayer()
         HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SUBSORTPLAYER1)
     end
     HealBot_Options_SubSortPlayerFirst:SetChecked(Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"])
-    HealBot_nextRecalcParty(0.2, 0)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_SethbTopRole(Role)
@@ -174,7 +174,7 @@ function HealBot_Panel_ClearBarArrays()
     HealBot_BarY={};
     HealBot_HeadX={};
     HealBot_HeadY={};
-    HealBot_nextRecalcParty(0.2, 0)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_SetmaxHealDiv(lvl)
@@ -200,12 +200,12 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil;
     end
-    HealBot_nextRecalcParty(0.2, 0)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_AddBlackList(hbGUID)
     HealBot_Panel_BlackList[hbGUID]=true;
-    HealBot_nextRecalcParty(0.2, 0)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ClearHealTargets()
@@ -228,7 +228,7 @@ function HealBot_Panel_ToggelHealTarget(unit)
     else
         table.insert(HealBot_MyHealTargets,xGUID)
     end
-    HealBot_nextRecalcParty(0.2, 6)
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit)
@@ -246,7 +246,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit)
     else
         table.insert(HealBot_MyPrivateTanks,xGUID)
     end
-    HealBot_nextRecalcParty(0.2, 6)
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Panel_RetMyHealTarget(unit)
@@ -1140,7 +1140,7 @@ end
 function HealBot_Panel_resetTestCols(force)
     if HealBot_setTestBars then
         if force then HealBot_setTestCols={} end
-        HealBot_nextRecalcParty(0, 0)
+        HealBot_nextRecalcParty(0)
     end
 end
 
@@ -2664,7 +2664,7 @@ local function HealBot_Panel_PlayersChanged()
             end
             
             if i[1]+i[2]+i[3]+i[4]+i[5]==0 then 
-                HealBot_nextRecalcParty(2, 0)
+                HealBot_nextRecalcParty(0)
                 HealBot_AddDebug("Self not found in HealBot_Panel_PlayersChanged - Retry")
             end
         end   
@@ -2740,7 +2740,7 @@ local function HealBot_Panel_PlayersChanged()
 end
 
 function HealBot_Panel_cpSave(mNum)
-    HealBot_cpQueue(mNum, HealBot_cpData["mName"].."_"..mNum, HealBot_cpData["body"..mNum])
+    HealBot_cpSave(HealBot_cpData["mName"].."_"..mNum, HealBot_cpData["body"..mNum])
 end
 
 function HealBot_RetUnitNameGUIDs(unitName)
@@ -2906,11 +2906,11 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
                 HealBot_Panel_TargetChanged()
                 HealBot_Panel_FocusChanged()
             else
-                HealBot_nextRecalcParty(0.05, 3)
-                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(0.1, 1) end
-                HealBot_nextRecalcParty(0.15, 4)
-                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(0.2, 2) end
-                HealBot_nextRecalcParty(0.3, 5)
+                HealBot_nextRecalcParty(3)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
+                HealBot_nextRecalcParty(4)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end
+                HealBot_nextRecalcParty(5)
             end
         end 
     end

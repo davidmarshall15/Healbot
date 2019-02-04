@@ -2,6 +2,9 @@ local linenum=1
 local HealBot_CheckBuffs = {}
 local HealBot_Tooltip_DirtyLines={}
 local doTalentRequest={}
+local xUnit=nil
+local xGUID=nil
+local xButton=nil
 local hbGameTooltip = CreateFrame("GameTooltip", "hbGameTooltip", nil, "GameTooltipTemplate")
 local _
 local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
@@ -256,13 +259,14 @@ local function HealBot_Tooltip_Show()
     end
 end
 
+local UnitBuffIcons=nil
 local function HealBot_ToolTip_ShowHoT(unit)
     if HealBot_Globals.Tooltip_ShowHoT then
         local hbHoTline1=true
-        local UnitBuffIcons=HealBot_retHoTdetails(unit)
+        UnitBuffIcons=HealBot_retHoTdetails(unit)
         if UnitBuffIcons then
             for name,_ in pairs(UnitBuffIcons) do
-                if linenum<44 then
+                if linenum<44 and UnitBuffIcons[name].current then
                     if UnitBuffIcons[name].unitCaster then
                         local ttCaster=UnitName(UnitBuffIcons[name].unitCaster)
                         if ttCaster then
@@ -272,7 +276,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
                                 linenum=linenum+1
                             end
                             linenum=linenum+1
-                            if UnitBuffIcons[name].expirationTime then
+                            if UnitBuffIcons[name].expirationTime and UnitBuffIcons[name].expirationTime>0 then
                                 ttHoTd=floor(UnitBuffIcons[name].expirationTime-GetTime())
                             end
                             local ttHoTc=UnitBuffIcons[name].count or 0
@@ -311,7 +315,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
 end
 
 local function HealBot_ToolTip_SetTooltipPos()
-    local xButton=HealBot_Unit_Button[HealBot_Data["TIPUNIT"]]
+    xButton=HealBot_Unit_Button[HealBot_Data["TIPUNIT"]]
     if xButton then
         local g = _G["f"..xButton.frame.."_HealBot_Action"]
         local top = g:GetTop();
@@ -435,13 +439,182 @@ local function HealBot_HealthColor(button)
     return hcr,hcg,hcb
 end
 
+function HealBot_DebugTooltip()
+    HealBot_Tooltip_ClearLines();
+    local msgs=HealBot_retCalls()
+    linenum = 1
+    local leftname=false
+    local leftcount=0
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count>=100000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end      
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<100000 and msgs[name].count>=50000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end      
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<50000 and msgs[name].count>=20000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<20000 and msgs[name].count>=10000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end      
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<10000 and msgs[name].count>=7500 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<7500 and msgs[name].count>=5000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<5000 and msgs[name].count>=2500 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end     
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<2500 and msgs[name].count>=1000 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<1000 and msgs[name].count>=500 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<500 and msgs[name].count>=100 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<100 and msgs[name].count>=50 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<50 and msgs[name].count>=10 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    for name,_ in pairs(msgs) do
+        if linenum<45 and msgs[name].count<10 then
+            if leftname then
+                linenum = linenum + 1
+                HealBot_Tooltip_SetLine(linenum,leftname.." count="..leftcount,1,1,1,1,name.." count="..msgs[name].count,1,1,1,1)    
+                leftname=false
+            else
+                leftname=name
+                leftcount=msgs[name].count
+            end    
+        end
+    end
+    HealBot_Tooltip_Show()
+end
+
 local function HealBot_Action_DoRefreshTooltip()
+    if IsAltKeyDown() and HealBot_retCalls() then 
+        HealBot_DebugTooltip() 
+        return
+    end
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
-    local xUnit=HealBot_Data["TIPUNIT"]
-    local xGUID=HealBot_UnitGUID(xUnit)
+    xUnit=HealBot_Data["TIPUNIT"]
+    xGUID=HealBot_UnitGUID(xUnit)
     if not xGUID or not HealBot_Unit_Button[xUnit] then return end
-    local xButton=HealBot_Unit_Button[xUnit]
+    xButton=HealBot_Unit_Button[xUnit]
     local uName=HealBot_GetUnitName(xUnit, xGUID)
     if not uName then return end;
     
