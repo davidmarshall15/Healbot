@@ -1398,5 +1398,6 @@ HealBot_Data={  ["TIPUNIT"] = "NONE",
 HealBot_UnitData={};
 HealBot_UnitGUID={};
 HealBot_Spells = {};
-HealBot_Unit_Button={};                          
+HealBot_Unit_Button={};
+HealBot_Enemy_Button={};
                                                                    

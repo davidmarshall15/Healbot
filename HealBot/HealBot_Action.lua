@@ -2488,6 +2488,12 @@ function HealBot_Action_CheckReserved()
             HealBot_UnitNameUpdate(xUnit)
         end
     end
+    for xUnit,xButton in pairs(HealBot_Enemy_Button) do
+        if xButton.status.reserved and UnitExists(xUnit) then
+            xButton.status.reserved=false
+            HealBot_UnitNameUpdate(xUnit)
+        end
+    end
     HealBot_setCall("HealBot_Action_CheckReserved")
 end
 
@@ -3145,7 +3151,7 @@ end
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
     local shb=nil
     if hbGUID then
-        if not HealBot_Unit_Button[unit] then
+        if not HealBot_Unit_Button[unit] and not HealBot_Enemy_Button[unit] then
             shb=HealBot_Action_CreateButton(hbCurFrame)
             if not shb then
                 return nil
@@ -3153,7 +3159,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 shb.reset=true
             end
         else
-            shb=HealBot_Unit_Button[unit]
+            shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit]
         end
         if shb.frame~=hbCurFrame then
             local gp=_G["f"..hbCurFrame.."_HealBot_Action"]
@@ -3181,10 +3187,14 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             end
             shb.reset=true
         end
-        if HealBot_Unit_Button[unit]~=shb or shb.unit~=unit or shb.reset then
+        if (HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit])~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
             shb.unit=unit
-            HealBot_Unit_Button[unit]=shb
+            if unitType==9 then
+                HealBot_Enemy_Button[unit]=shb
+            else
+                HealBot_Unit_Button[unit]=shb
+            end
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
             shb.status.update=2
             shb.checks.range=GetTime() + (shb.id / 40)
@@ -3274,6 +3284,9 @@ function HealBot_Action_PartyChanged(changeType)
             for x,xButton in pairs(HealBot_Unit_Button) do
                 xButton.reset="init";
             end
+            for x,xButton in pairs(HealBot_Enemy_Button) do
+                xButton.reset="init";
+            end
             for x,_ in pairs(HealBotButtonMacroAttribs) do
                 HealBotButtonMacroAttribs[x]=nil;
             end
@@ -3284,6 +3297,9 @@ function HealBot_Action_PartyChanged(changeType)
         end
         if not hbInitButtons then
             for _,xButton in pairs(HealBot_Unit_Button) do
+                HealBot_Action_DeleteButton(xButton.id)
+            end 
+            for _,xButton in pairs(HealBot_Enemy_Button) do
                 HealBot_Action_DeleteButton(xButton.id)
             end 
             hbInitButtons=true
@@ -3321,7 +3337,8 @@ function HealBot_Action_DeleteButton(hbBarID)
     bar4:SetStatusBarColor(1,0,0,0)
     dg.status.bar4=0
     if HealBot_UnitData[dbGUID] then HealBot_UnitData[dbGUID]["SPEC"] = " " end
-    HealBot_Unit_Button[dbUnit]=nil
+    if HealBot_Unit_Button[dbUnit] then HealBot_Unit_Button[dbUnit]=nil end
+    if HealBot_Enemy_Button[dbUnit] then HealBot_Enemy_Button[dbUnit]=nil end
     dg:Hide();
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end
@@ -3861,8 +3878,19 @@ function HealBot_Action_setRegisterForClicks(button)
                                         "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
                                        "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
             end
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
+                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
+                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+            end
         else
             for _,xButton in pairs(HealBot_Unit_Button) do
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
+                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
+                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+            end
+
+            for _,xButton in pairs(HealBot_Enemy_Button) do
                 xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
                                     "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
                                     "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
@@ -3915,35 +3943,45 @@ function HealBot_Action_SetAggroCols()
     HealBot_AggroBarColb[3]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["B"]
 end
 
+local function HealBot_Action_UpdateFluidBar(button,barName)
+    local hrpct=100
+    if button.status.current==9 or (UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit)) then
+        barName:SetValue(0)
+    else
+        if button.health.current<button.health.max then
+            hrpct=floor((button.health.current/button.health.max)*100)
+        end
+        local barValue=barName:GetValue()
+        if barValue>hrpct then
+            local setValue=barValue-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+            if setValue<hrpct then
+                setValue=hrpct
+            end
+            barName:SetValue(setValue)
+            HealBot_Action_luVars["UpdateFluidBars"]=true
+        elseif barValue<hrpct then
+            local setValue=barValue+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+            if setValue>hrpct then
+                setValue=hrpct
+            end
+            barName:SetValue(setValue)
+            HealBot_Action_luVars["UpdateFluidBars"]=true
+        end
+    end
+end
+
 local function HealBot_Action_UpdateFluidBars()
     HealBot_Action_luVars["UpdateFluidBars"]=false
-    for xUnit,xButton in pairs(HealBot_Unit_Button) do
+    for _,xButton in pairs(HealBot_Unit_Button) do
         bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
         if bar then 
-            local hrpct=100
-            if xButton.status.current==9 or (UnitIsDeadOrGhost(xUnit) and not UnitIsFeignDeath(xUnit)) then
-                bar:SetValue(0)
-            else
-                if xButton.health.current<xButton.health.max then
-                    hrpct=floor((xButton.health.current/xButton.health.max)*100)
-                end
-                local barValue=bar:GetValue()
-                if barValue>hrpct then
-                    local setValue=barValue-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
-                    if setValue<hrpct then
-                        setValue=hrpct
-                    end
-                    bar:SetValue(setValue)
-                    HealBot_Action_luVars["UpdateFluidBars"]=true
-                elseif barValue<hrpct then
-                    local setValue=barValue+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
-                    if setValue>hrpct then
-                        setValue=hrpct
-                    end
-                    bar:SetValue(setValue)
-                    HealBot_Action_luVars["UpdateFluidBars"]=true
-                end
-            end
+            HealBot_Action_UpdateFluidBar(xButton,bar)
+        end
+    end
+    for _,xButton in pairs(HealBot_Enemy_Button) do
+        bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+        if bar then 
+            HealBot_Action_UpdateFluidBar(xButton,bar)
         end
     end
     HealBot_setCall("HealBot_Action_UpdateFluidBars")
