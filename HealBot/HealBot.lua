@@ -1708,11 +1708,7 @@ function HealBot_Range_CheckTime(button)
 end
 
 function HealBot_Other_CheckTime(button)
-    if HealBot_Data["UILOCK"] then
-        HealBot_luVars["OtherCheckTime"]=HealBot_luVars["OtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 2.5)
-    else
-        HealBot_luVars["OtherCheckTime"]=HealBot_luVars["OtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 5)
-    end
+    HealBot_luVars["OtherCheckTime"]=HealBot_luVars["OtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 2)
     if HealBot_luVars["OtherCheckTime"]<TimeNow then
         HealBot_luVars["OtherCheckTime"]=TimeNow+0.1
     end
@@ -1730,11 +1726,7 @@ function HealBot_Enemy_CheckTime(button)
 end
 
 function HealBot_PetRange_CheckTime(button)
-    if HealBot_Data["UILOCK"] then
-        HealBot_luVars["PetRangeCheckTime"]=HealBot_luVars["PetRangeCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 2)
-    else
-        HealBot_luVars["PetRangeCheckTime"]=HealBot_luVars["PetRangeCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 4)
-    end
+    HealBot_luVars["PetRangeCheckTime"]=HealBot_luVars["PetRangeCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 2)
     if HealBot_luVars["PetRangeCheckTime"]<TimeNow then
         HealBot_luVars["PetRangeCheckTime"]=TimeNow+0.04
     end
@@ -1743,11 +1735,7 @@ function HealBot_PetRange_CheckTime(button)
 end
 
 function HealBot_PetOther_CheckTime(button)
-    if HealBot_Data["UILOCK"] then
-        HealBot_luVars["PetOtherCheckTime"]=HealBot_luVars["PetOtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 4)
-    else
-        HealBot_luVars["PetOtherCheckTime"]=HealBot_luVars["PetOtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 8)
-    end
+    HealBot_luVars["PetOtherCheckTime"]=HealBot_luVars["PetOtherCheckTime"]+(HealBot_Timers["CheckTimeMod"] * 4)
     if HealBot_luVars["PetOtherCheckTime"]<TimeNow then
         HealBot_luVars["PetOtherCheckTime"]=TimeNow+0.2
     end
