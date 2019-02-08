@@ -316,7 +316,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
 end
 
 local function HealBot_ToolTip_SetTooltipPos()
-    xButton=HealBot_Unit_Button[HealBot_Data["TIPUNIT"]] or HealBot_Enemy_Button[HealBot_Data["TIPUNIT"]]
+    xButton=HealBot_Unit_Button[HealBot_Data["TIPUNIT"]] or HealBot_Enemy_Button[HealBot_Data["TIPUNIT"]] or HealBot_Pet_Button[HealBot_Data["TIPUNIT"]]
     if xButton then
         local g = _G["f"..xButton.frame.."_HealBot_Action"]
         local top = g:GetTop();
@@ -606,15 +606,15 @@ function HealBot_DebugTooltip()
 end
 
 local function HealBot_Action_DoRefreshTooltip()
-    if IsAltKeyDown() and HealBot_retCalls() then 
-        HealBot_DebugTooltip() 
-        return
-    end
+    --if IsAltKeyDown() and HealBot_retCalls() then 
+    --    HealBot_DebugTooltip() 
+    --    return
+    --end
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
     xUnit=HealBot_Data["TIPUNIT"]
     xGUID=HealBot_UnitGUID(xUnit)
-    xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit]
+    xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit] or HealBot_Pet_Button[xUnit]
     if not xGUID or not xButton then return end
     local uName=HealBot_GetUnitName(xUnit, xGUID)
     if not uName then return end;

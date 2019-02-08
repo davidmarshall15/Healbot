@@ -1400,4 +1400,5 @@ HealBot_UnitGUID={};
 HealBot_Spells = {};
 HealBot_Unit_Button={};
 HealBot_Enemy_Button={};
+HealBot_Pet_Button={};
                                                                    

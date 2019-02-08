@@ -582,7 +582,7 @@ end
 
 local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader, cFrame)
     table.foreach(HealBot_Action_HealButtons, function (x,xUnit)
-        local xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit]
+        local xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit] or HealBot_Pet_Button[xUnit]
         if xButton then
             local bFrame = xButton.frame
             local uName=HealBot_GetUnitName(xUnit);
@@ -2289,10 +2289,9 @@ local function HealBot_Panel_VehicleChanged()
         HeaderPos[hbCurrentFrame]={};
         i={[hbCurrentFrame]=0}
         HealBot_Panel_vehicleHeals()
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+        for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==2 then
-                if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
-                    if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xButton.guid,"insert",nil) end
+                if HealBot_TrackUnit[xUnit] then
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
@@ -2319,10 +2318,9 @@ local function HealBot_Panel_PetsChanged()
         HeaderPos[hbCurrentFrame]={};
         i={[hbCurrentFrame]=0}
         HealBot_Panel_petHeals()
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+        for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==3 then
-                if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
-                    if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xButton.guid,"insert",nil) end
+                if HealBot_TrackUnit[xUnit] then
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
@@ -2633,6 +2631,7 @@ local function HealBot_Panel_PlayersChanged()
             end
         end)
 
+        local PetsWithPlayers=false
         if HealBot_Config.DisabledNow==1 then
             hbCurrentFrame=1
             HealBot_Panel_selfHeals()
@@ -2658,8 +2657,10 @@ local function HealBot_Panel_PlayersChanged()
                         HealBot_Panel_myHeals()
                     elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en and hbCurrentFrame<6 then
                         HealBot_Panel_petHeals()
+                        PetsWithPlayers=true
                     elseif healGroups[gl]["NAME"]==HEALBOT_VEHICLE_en and hbCurrentFrame<6 then
                         HealBot_Panel_vehicleHeals()
+                        PetsWithPlayers=true
                     end
                 end
             end
@@ -2671,12 +2672,21 @@ local function HealBot_Panel_PlayersChanged()
         end   
         
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xButton.status.unittype==1 or (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]==1 and xButton.unit=="pet") or
-               (xButton.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]<6) or
-               (xButton.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]<6) then
+            if xButton.status.unittype==1 then
                 local xGUID=xButton.guid
                 if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xGUID] then
                     if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xGUID,"insert",nil) end
+                    HealBot_Action_UpdateBackgroundButton(xButton)
+                    xButton:Show()
+                else
+                    HealBot_Action_DeleteButton(xButton.id)
+                    HealBot_UnitGroups[xUnit]=nil
+                end
+            end
+        end
+        if PetsWithPlayers then
+            for xUnit,xButton in pairs(HealBot_Pet_Button) do
+                if HealBot_TrackUnit[xUnit] then
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
