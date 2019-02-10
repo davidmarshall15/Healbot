@@ -627,6 +627,7 @@ function HealBot_Options_setLists()
         [HEALBOT_VIGILANCE]=HEALBOT_WARRIOR,
         [HEALBOT_LAST_STAND]=HEALBOT_WARRIOR,
         [HEALBOT_SHIELD_WALL]=HEALBOT_WARRIOR,
+        [HEALBOT_SHIELD_BLOCK]=HEALBOT_WARRIOR,
     }
     
     HealBot_Options_FrameAliasList()

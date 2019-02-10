@@ -148,6 +148,7 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
     local xButton=HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit]
     if not xButton then return end
     local barName=_G["HealBot_Action_HealUnit"..xButton.id.."Bar4"]
+    HealBot_Action_luVars["PrevThreatPct"]=xButton.aggro.threatpct
     
     if UnitExists(unit) and UnitIsFriend("player",unit) then
         if UnitIsDeadOrGhost(unit) and not UnitIsFeignDeath(unit) then
@@ -155,7 +156,6 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
             threatPct=0
             if threatStatus then threatStatus=0 end
         end
-        HealBot_Action_luVars["PrevThreatPct"]=xButton.aggro.threatpct
         if threatStatus and (Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARSPCT"] or Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXTPCT"]) then
             if not threatPct then threatPct,_=HealBot_CalcThreat(unit) end
             if threatPct>0 then
@@ -221,12 +221,7 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
     end
     if xButton.aggro.threatpct~=HealBot_Action_luVars["PrevThreatPct"] then 
         HealBot_Action_setNameText(xButton) 
-        if xButton.status.current<4 then 
-            HealBot_Action_UpdateHealthButton(xButton) 
-        else
-            HealBot_Action_setHealthText(xButton)
-            HealBot_Action_HBText(xButton) 
-        end
+        HealBot_Action_UpdateHealthButton(xButton) 
     end
   --HealBot_setCall("HealBot_Action_DoUpdateAggro")
 end
@@ -789,6 +784,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
      if button.status.current==9 then
         if not UnitIsDeadOrGhost(button.unit) then
             button.status.current=2
+            HealBot_UpdateUnitRange(button,HealBot_RangeSpells["HEAL"],false)
             HealBot_Action_UpdateBackgroundButton(button)
             HealBot_Action_setNameTag(button)
             if UnitIsUnit(button.unit,"player") then 
@@ -797,7 +793,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.status.update=1
             end
             HealBot_AuraChecks(button)
-            HealBot_OnEvent_UnitHealth(button)
+            button.health.updhealth=true
+            button.health.update=true
             if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
                 if button.status.update<2 then button.status.update=3 end
             end
@@ -806,8 +803,9 @@ function HealBot_Action_UpdateTheDeadButton(button)
         end
     elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
         button.status.current=9
-        HealBot_HealsInUpdate(button)
-        HealBot_AbsorbsUpdate(button)
+        button.health.updincoming=true
+        button.health.updabsorbs=true
+        button.health.update=true
         HealBot_Action_UpdateBackgroundButton(button)
         if button.aura.debuff.name then  
             HealBot_ClearDebuff(button)
@@ -900,7 +898,6 @@ function HealBot_Action_UpdateHealthButton(button)
                 HealBot_Action_SetBar3Value(button)
             end
             HealBot_Action_setHealthText(button)
-                                                         
             HealBot_Action_HBText(button, ebusr,ebusg,ebusb,hcta)
             if prevEnabled~=button.status.enabled then HealBot_Action_ShowHideFrames(button) end
         else
@@ -919,8 +916,6 @@ function HealBot_Action_UpdateHealthButton(button)
     
                                 
     if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] and ebubar:GetValue()~=bptc then
-                                                         
-            
         ebubar:SetValue(bptc)
         if button.status.current>3 and button.status.current<9 and button.status.range==1 then
             if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
@@ -932,8 +927,9 @@ function HealBot_Action_UpdateHealthButton(button)
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
     if button.status.range<1 or button.status.current<4 or button.status.current>8 then 
-        HealBot_HealsInUpdate(button)
-        HealBot_AbsorbsUpdate(button)
+        button.health.updincoming=true
+        button.health.updabsorbs=true
+        button.health.update=true
     end
   --HealBot_setCall("HealBot_Action_UpdateHealthButton")
 end
@@ -2630,6 +2626,10 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.health.max=100
         ghb.health.incoming=0
         ghb.health.absorbs=0
+        ghb.health.update=false
+        ghb.health.updhealth=false
+        ghb.health.updincoming=false
+        ghb.health.updabsorbs=false
         ghb.mana.current=0
         ghb.mana.max=0
         ghb.status.current=0
@@ -3222,8 +3222,15 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             end
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
             shb.status.update=2
-            shb.checks.range=GetTime() + (shb.id / 80)
-            shb.checks.other=GetTime() + (shb.id / 40)
+            shb.health.updhealth=true
+            shb.health.update=true
+            shb.checks.range=GetTime() + HealBot_Action_luVars["updateDelay"]
+            if unitType>1 and unitType<4 then
+                shb.checks.other=GetTime() + 1000000
+            else
+                shb.checks.other=GetTime() + 0.3 + (HealBot_Action_luVars["updateDelay"] * 2)
+            end
+            HealBot_Action_luVars["updateDelay"]=HealBot_Action_luVars["updateDelay"]+0.02
             if shb.status.offline and UnitIsConnected(unit) then
                 shb.status.offline=false
             end
@@ -3341,6 +3348,7 @@ function HealBot_Action_PartyChanged(changeType)
         end
   
         HealBot_Data["UNITSLOCK"]=true
+        HealBot_Action_luVars["updateDelay"]=0
         HealBot_Panel_PartyChanged(HealBot_PreCombat, changeType)
         HealBot_Data["UNITSLOCK"]=false
 
