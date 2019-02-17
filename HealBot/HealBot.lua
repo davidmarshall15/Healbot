@@ -875,9 +875,6 @@ function HealBot_UpdateUnit(button, cleanButton)
         if button.aura.debuff.name then 
             HealBot_ClearDebuff(button)
         end
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][8]["CLASSONBAR"] then
-            HealBot_Action_SetClassIconTexture(button)
-        end    
         HealBot_ClearUnitAggro(button)
         HealBot_Action_CheckUnitLowMana(button)
         HealBot_HoT_RemoveIconButton(button)
@@ -891,6 +888,9 @@ function HealBot_UpdateUnit(button, cleanButton)
         button.health.updabsorbs=true
         button.health.update=true
     end
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+        HealBot_Action_SetClassIconTexture(button)
+    end    
     if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
         HealBot_OnEvent_RaidTargetUpdate(button)
     end
@@ -911,14 +911,10 @@ function HealBot_UpdateUnit(button, cleanButton)
   --HealBot_setCall("HealBot_UpdateUnit")
 end
 
-local HealBot_UnknownUnitUpdated={}
 local function HealBot_RecalcParty(changeType)
     if HealBot_luVars["DoUpdates"] then
         HealBot_RefreshTypes[changeType]=false
         HealBot_Action_PartyChanged(changeType);
-        for xUnit,_ in pairs(HealBot_UnknownUnitUpdated) do
-            HealBot_UnknownUnitUpdated[xUnit]=nil
-        end
     else
         HealBot_nextRecalcParty(changeType)
     end
