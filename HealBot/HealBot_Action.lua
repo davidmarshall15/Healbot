@@ -917,22 +917,17 @@ function HealBot_Action_UpdateHealthButton(button)
                                 
     if ebubar:GetValue()~=bptc then
         if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
-        ebubar:SetValue(bptc)
-            if button.status.current>3 and button.status.current<9 and button.status.range==1 then
-                if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-                if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
-            end
+            ebubar:SetValue(bptc)
         else
             HealBot_Action_luVars["UpdateFluidBars"]=true
         end
-    elseif button.status.current>3 and button.status.current<9 and button.status.range==1 then
+    end
+    if button.status.current>3 and button.status.current<9 and button.status.range==1 then
         if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
-    end
-    if button.status.range<1 or button.status.current<4 or button.status.current>8 then 
-        button.health.updincoming=true
-        button.health.updabsorbs=true
-        button.health.update=true
+    else
+        HealBot_HealsInUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
   --HealBot_setCall("HealBot_Action_UpdateHealthButton")
 end

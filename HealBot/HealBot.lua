@@ -1932,19 +1932,33 @@ local function HealBot_CheckUnitBuffIcons(button)
     end
     if UnitExists(button.unit) then
         local z=1
-        while true do
-            local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
-            if name then
-                z = z +1
-                if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
-                    local y=HealBot_Watch_HoT[name] or "nil"
-                    if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
+        if not UnitIsFriend("player",button.unit) then
+            while true do
+                local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitDebuff(button.unit, z); 
+                if name then
+                    z=z+1
+                    if unitCaster and unitCaster=="player" and expirationTime and not hbExcludeSpells[spellID] then
                         HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
                     end
+                else
+                    break
                 end
-            else
-                break
-            end 
+            end
+        else
+            while true do
+                local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
+                if name then
+                    z = z +1
+                    if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
+                        local y=HealBot_Watch_HoT[name] or "nil"
+                        if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
+                            HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
+                        end
+                    end
+                else
+                    break
+                end 
+            end
         end
     end
     if button.icon.buff.count<prevIconCount then 
@@ -4403,12 +4417,12 @@ local function HealBot_UnitUpdateFriendly(button)
             HealBot_doAuraDebuffUnit(button) 
         elseif button.aura.checks<3 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then 
             HealBot_doAuraHoT(button)
-        elseif button.status.unittype>1 and button.status.unittype<4 then
-            button.aura.checks=button.aura.checks+1
-        elseif HealBot_Config_Buffs.BuffWatch and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) then 
+        elseif (button.status.unittype<2 or button.status.unittype>3) and HealBot_Config_Buffs.BuffWatch and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) then 
             HealBot_doAuraBuff(button) 
         end
         button.aura.checks=button.aura.checks+1
+    elseif button.health.update then
+        HealBot_UnitUpdateCommon(button)
     elseif button.checks.range < TimeNow then
         if button.status.unittype>1 and button.status.unittype<4 then
             HealBot_PetRange_CheckTime(button)
@@ -4502,7 +4516,8 @@ local function HealBot_UnitUpdateEnemy(button)
                 button.health.updincoming=true
                 button.health.updabsorbs=true
                 button.health.update=true
-                HealBot_Update_UnitIcons(button)
+                HealBot_doAuraHoT(button)
+                --HealBot_Update_UnitIcons(button)
             end
         end
     end
@@ -4514,7 +4529,6 @@ local function HealBot_Update_Fast()
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if not xButton.status.reserved then
                 if UnitExists(xUnit) then
-                    HealBot_UnitUpdateCommon(xButton)
                     HealBot_UnitUpdateFriendly(xButton)
                 else
                     HealBot_UpdateUnit(xButton, true)
@@ -4544,7 +4558,6 @@ local function HealBot_Update_Fast()
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if not xButton.status.reserved then
                 if UnitExists(xUnit) then
-                    HealBot_UnitUpdateCommon(xButton)
                     HealBot_UnitUpdateFriendly(xButton)
                 else
                     HealBot_UpdateUnit(xButton, true)
@@ -6163,8 +6176,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_HEALTH") or (event=="UNIT_MAXHEALTH") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
-            xButton.health.updhealth=true
-            xButton.health.update=true
+            HealBot_OnEvent_UnitHealth(xButton)
         end
     elseif (event=="UNIT_THREAT_SITUATION_UPDATE") or (event=="UNIT_THREAT_LIST_UPDATE") or (event=="UNIT_COMBAT") then
         local _,_,xButton = HealBot_UnitID(arg1)
@@ -6174,14 +6186,12 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_HEAL_PREDICTION") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
-            xButton.health.updincoming=true
-            xButton.health.update=true
+            HealBot_HealsInUpdate(xButton)
         end
     elseif (event=="UNIT_ABSORB_AMOUNT_CHANGED") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
-            xButton.health.updabsorbs=true
-            xButton.health.update=true
+            HealBot_AbsorbsUpdate(xButton)
         end
     elseif (event=="UNIT_SPELLCAST_START") or (event=="UNIT_SPELLCAST_SUCCEEDED") or (event=="UNIT_SPELLCAST_FAILED") or (event=="UNIT_SPELLCAST_INTERRUPTED") or (event=="UNIT_SPELLCAST_STOP") then
         local _,_,xButton = HealBot_UnitID(arg1)
