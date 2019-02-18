@@ -315,6 +315,7 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_en.."15"] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_FORBEARANCE] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = { R = 0.3, G = 0.5, B = 0.7, },
+            [HEALBOT_SHADOW_TOUCHED] = { R = 0.3, G = 0.5, B = 0.7, },
         },
         HealBot_Custom_Debuffs_RevDur={},
         HealBot_Custom_Debuffs_ShowBarCol={  
@@ -322,11 +323,13 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_CAT_CUSTOM_MISC] = false,
             [HEALBOT_DEBUFF_FORBEARANCE] = false,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
+            [HEALBOT_SHADOW_TOUCHED] = false,
         },
         IgnoreCustomDebuff={},
         FilterCustomDebuff={
             [HEALBOT_DEBUFF_FORBEARANCE] = 3,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = 4,
+            [HEALBOT_SHADOW_TOUCHED] = 3,
         },
         HealBot_Custom_Debuffs = {
             -- Defaults
@@ -340,6 +343,7 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 10, --Engineering        
             [HEALBOT_DEBUFF_FORBEARANCE]              = 15,
             [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 15,
+            [HEALBOT_SHADOW_TOUCHED]                  = 4.
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
         WatchHoT = {

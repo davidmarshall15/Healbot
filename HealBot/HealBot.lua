@@ -1775,6 +1775,7 @@ local function HealBot_ResetCustomDebuffs()
     HealBot_Globals.Custom_Debuff_Categories=HealBot_Options_copyTable(HealBot_GlobalsDefaults.Custom_Debuff_Categories)
     HealBot_Globals.FilterCustomDebuff=HealBot_Options_copyTable(HealBot_GlobalsDefaults.FilterCustomDebuff)
     HealBot_Globals.CDCBarColour=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCBarColour)
+    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs_ShowBarCol)
     HealBot_Options_NewCDebuff:SetText("")
     HealBot_Options_InitSub(407)
     HealBot_Options_InitSub(408)
@@ -4439,6 +4440,9 @@ local function HealBot_UnitUpdateFriendly(button)
             if not UnitIsUnit("player",button.unit) and (button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit)) then
                 HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
             end
+            if button.status.current==9 then 
+                HealBot_Action_UpdateTheDeadButton(button)
+            end
         end
     elseif button.checks.other < TimeNow then
         if button.status.unittype<2 or button.status.unittype>3 then
@@ -4454,8 +4458,6 @@ local function HealBot_UnitUpdateFriendly(button)
                 button.status.offline = TimeNow
                 HealBot_Action_setNameTag(button)
                 if button.status.update<1 then button.status.update=1 end
-            elseif button.status.current==9 then 
-                HealBot_Action_UpdateTheDeadButton(button)
             end
         end
     else

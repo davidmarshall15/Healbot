@@ -1004,6 +1004,7 @@ function HealBot_Lang_InitVars()
 
     [HEALBOT_DEBUFF_FORBEARANCE]              = 4,
     [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 13,
+    [HEALBOT_SHADOW_TOUCHED]                  = 11,
 	}
 end
 

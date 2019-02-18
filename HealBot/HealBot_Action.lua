@@ -915,12 +915,15 @@ function HealBot_Action_UpdateHealthButton(button)
     end
     
                                 
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] and ebubar:GetValue()~=bptc then
+    if ebubar:GetValue()~=bptc then
+        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
         ebubar:SetValue(bptc)
-        if button.status.current>3 and button.status.current<9 and button.status.range==1 then
-            if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-            if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
-               
+            if button.status.current>3 and button.status.current<9 and button.status.range==1 then
+                if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+                if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+            end
+        else
+            HealBot_Action_luVars["UpdateFluidBars"]=true
         end
     elseif button.status.current>3 and button.status.current<9 and button.status.range==1 then
         if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
@@ -4022,6 +4025,10 @@ local function HealBot_Action_UpdateFluidBar(button)
             local setValue=barValue-Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
             if setValue<hrpct then
                 setValue=hrpct
+                if button.status.current>3 and button.status.current<9 and button.status.range==1 then
+                    if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+                    if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+                end
             end
             barName:SetValue(setValue)
             HealBot_Action_luVars["UpdateFluidBars"]=true
@@ -4029,6 +4036,10 @@ local function HealBot_Action_UpdateFluidBar(button)
             local setValue=barValue+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
             if setValue>hrpct then
                 setValue=hrpct
+                if button.status.current>3 and button.status.current<9 and button.status.range==1 then
+                    if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+                    if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+                end
             end
             barName:SetValue(setValue)
             HealBot_Action_luVars["UpdateFluidBars"]=true
