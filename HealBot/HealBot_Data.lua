@@ -468,6 +468,7 @@ function HealBot_Data_InitVars()
             },
             ["WARL"] = {
                 [HEALBOT_UNENDING_RESOLVE]=2,
+                [HEALBOT_SOUL_LEECH]=2,
             }, 
             ["WARR"] = {
                 [HEALBOT_VIGILANCE]=2,

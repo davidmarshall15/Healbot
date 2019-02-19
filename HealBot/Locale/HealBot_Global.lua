@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.6.b1";
+﻿HEALBOT_VERSION   = "8.1.0.6.rc1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -510,6 +510,7 @@ function HealBot_globalVars()
     HEALBOT_SOUL_LINK                       = GetSpellInfo(19028) or "--Soul Link";
     HEALBOT_UNENDING_BREATH                 = GetSpellInfo(5697) or "--Unending Breath"
     HEALBOT_UNENDING_RESOLVE                = GetSpellInfo(104773) or "--Unending Resolve"
+    HEALBOT_SOUL_LEECH                      = GetSpellInfo(108370) or "--Soul Leech"
     
     --Warrior
     HEALBOT_BATTLE_SHOUT                    = GetSpellInfo(6673) or "--Battle Shout";

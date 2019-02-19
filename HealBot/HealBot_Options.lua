@@ -622,6 +622,7 @@ function HealBot_Options_setLists()
 		
 		--Warlock
         [HEALBOT_UNENDING_RESOLVE]=HEALBOT_WARLOCK,
+        [HEALBOT_SOUL_LEECH]=HEALBOT_WARLOCK,
         
         --Warrior
         [HEALBOT_VIGILANCE]=HEALBOT_WARRIOR,

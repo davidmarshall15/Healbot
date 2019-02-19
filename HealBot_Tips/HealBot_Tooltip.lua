@@ -655,7 +655,7 @@ local function HealBot_Action_DoRefreshTooltip()
             UnitDebuffIcons=HealBot_retDebuffdetails(xUnit)
             if UnitDebuffIcons then
                 for name,_ in pairs(UnitDebuffIcons) do
-                    if UnitDebuffIcons[name].current then
+                    if name~="ExtraIcon" and UnitDebuffIcons[name].current then
                         linenum=linenum+1
                         if HealBot_Globals.CDCBarColour[name] then
                             HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
