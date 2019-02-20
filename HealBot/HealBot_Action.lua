@@ -2651,7 +2651,8 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.icon.debuff.classtexture=false
         ghb.icon.debuff.readycheck=false
         ghb.aura.debuff.priority=99
-        ghb.aura.checks=4
+        ghb.aura.buff.check=3
+        ghb.aura.debuff.check=false
         ghb.aggro.status=0
         ghb.aggro.threatpct=0
         ghb.text.health="100"
