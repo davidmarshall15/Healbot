@@ -3249,10 +3249,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
-        if UnitExists(unit) then
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
-                HealBot_Action_SetClassIconTexture(shb)
-            end
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
+            HealBot_Action_SetClassIconTexture(shb)
         end
     else
         return nil

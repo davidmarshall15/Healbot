@@ -328,20 +328,8 @@ local classTextures={
 function HealBot_Action_SetClassIconTexture(button)
     local prevTexture=button.icon.debuff.classtexture
     if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
-        local setRole=false
         local unitRole=UnitGroupRolesAssigned(button.unit)  
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-            if unitRole=="NONE" then
-                local xGUID=HealBot_UnitGUID(button.unit)
-                if xGUID and HealBot_UnitData[xGUID] then
-                    unitRole=HealBot_UnitData[xGUID]["ROLE"]
-                end
-            end
-            if roleTextures[unitRole] then
-                setRole=true
-            end
-        end
-        if setRole then
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] and roleTextures[unitRole] then
             button.icon.debuff.classtexture=roleTextures[unitRole];
         else
             local _,classEN = UnitClass(button.unit)
