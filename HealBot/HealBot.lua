@@ -1514,6 +1514,7 @@ local function HealBot_Register_Events()
         HealBot:RegisterEvent("PLAYER_TALENT_UPDATE");
         HealBot:RegisterEvent("UNIT_AURA");
         HealBot:RegisterEvent("CHARACTER_POINTS_CHANGED");
+        HealBot:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
 		HealBot:RegisterEvent("INSPECT_READY");
         HealBot:RegisterEvent("CHAT_MSG_SYSTEM");
         HealBot:RegisterEvent("MODIFIER_STATE_CHANGED");
@@ -1594,6 +1595,7 @@ local function HealBot_UnRegister_Events()
     HealBot:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED");
 	HealBot:UnregisterEvent("INSPECT_READY");
     HealBot:UnregisterEvent("CHARACTER_POINTS_CHANGED");
+    HealBot:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED");
     HealBot:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED");
     HealBot:UnregisterEvent("PET_BATTLE_OPENING_START");
     HealBot:UnregisterEvent("PET_BATTLE_OVER");
@@ -1869,7 +1871,7 @@ local function HealBot_RaidTargetUpdate(button, iconID)
     local prevId=button.icon.debuff.targeticon
     button.icon.debuff.targeticon=iconID
     if button.icon.debuff.targeticon~=prevId then
-        HealBot_AuraChecks(button)
+        HealBot_DebuffChecks(button)
     end
   --HealBot_setCall("HealBot_RaidTargetUpdate")
 end
@@ -2627,6 +2629,8 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Data["PRACE_EN"]=pRaceEN
     HealBot_Data["PNAME"]=UnitName("player")
     HealBot_Data["PLEVEL"]=UnitLevel("player")
+    HealBot_UnitData["target"]={}
+    HealBot_UnitData["target"]["SPEC"] = " "
     C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
     HealBot_Options_InitBuffClassList()
     HealBot_setOptions_Timer(5)
@@ -2809,9 +2813,20 @@ local function HealBot_CheckLowMana()
   --HealBot_setCall("HealBot_CheckLowMana")
 end
 
+local function HealBot_GetSpec(unit)
+    local s,r,i=nil,nil,nil
+    if UnitExists(unit) then
+        i = GetInspectSpecialization(unit)
+        if i then
+            _, s, _, _, _, r = GetSpecializationInfoByID(i) 
+        end
+    end
+    return i,s,r
+end
+
 local function HealBot_GetTalentInfo(hbGUID, unit)
+    local s,r,i=nil,nil,nil
     if HealBot_UnitData[hbGUID] then
-        local s,r,i=nil,nil,nil
         if hbGUID==HealBot_Data["PGUID"] then
             i = GetSpecialization()
             if i then
@@ -2839,19 +2854,22 @@ local function HealBot_GetTalentInfo(hbGUID, unit)
                 end
             end
         else
-            i = GetInspectSpecialization(unit)
-            if i then
-                _, s, _, _, _, r = GetSpecializationInfoByID(i) 
+            i,s,r = HealBot_GetSpec(unit)
+        end
+        if s then
+            if HealBot_UnitData[hbGUID] then
+                HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
+                HealBot_UnitData[hbGUID]["ROLE"] = r or HEALBOT_WORDS_UNKNOWN
             end
         end
-        if s and HealBot_UnitData[hbGUID] then
-            HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
-            if r and r=="TANK" or r=="HEALER" or r=="DAMAGER" then
-                HealBot_UnitData[hbGUID]["ROLE"] = r
-            end
-            if HealBot_Data["TIPUSE"] then HealBot_talentSpam(hbGUID,"update",0) end
+    elseif unit=="target" then
+        i,s,r = HealBot_GetSpec(unit)
+        if s then
+            HealBot_UnitData["target"]["SPEC"] = s.." " 
         end
     end
+    local _,_,xButton = HealBot_UnitID(unit)
+    if xButton then HealBot_Action_SetClassIconTexture(xButton) end
   --HealBot_setCall("HealBot_GetTalentInfo")
 end
 
@@ -3511,7 +3529,7 @@ local function HealBot_OnEvent_ReadyCheckClear()
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.icon.debuff.readycheck then
             xButton.icon.debuff.readycheck=false
-            HealBot_AuraChecks(xButton)
+            HealBot_DebuffChecks(xButton)
         end
     end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheckClear")
@@ -4882,7 +4900,7 @@ local function HealBot_OnEvent_ReadyCheckUpdate(unit,response)
             xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
         end
         if xButton.icon.debuff.readycheck~=prevRedyCheck then
-            HealBot_AuraChecks(xButton)
+            HealBot_DebuffChecks(xButton)
         end
     end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheckUpdate")
@@ -5090,6 +5108,7 @@ end
 
 function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
+        HealBot_UnitData["target"]["SPEC"] = " "
         if doRecalc then
             if not HealBot_Data["UILOCK"] then
                 if UnitName("target") and HealBot_retHbFocus("target") then
@@ -5274,27 +5293,30 @@ function HealBot_CheckAllBuffs(unit)
   --HealBot_setCall("HealBot_CheckAllBuffs")
 end
 
+function HealBot_DebuffChecks(button)
+    button.aura.debuff.check=true
+  --HealBot_setCall("HealBot_DebuffChecks")
+end
+
 function HealBot_AuraChecks(button)
-    if UnitExists(button.unit) then
-        button.aura.buff.check=1
-        button.aura.debuff.check=true
-    end
+    HealBot_DebuffChecks(button)
+    button.aura.buff.check=1
   --HealBot_setCall("HealBot_AuraChecks")
 end
 
 function HealBot_CheckAllDebuffs(unit)
     if unit then
         if HealBot_Unit_Button[unit] then
-            HealBot_AuraChecks(HealBot_Unit_Button[unit])
+            HealBot_DebuffChecks(HealBot_Unit_Button[unit])
         elseif HealBot_Pet_Button[unit] then
-            HealBot_AuraChecks(HealBot_Pet_Button[unit])
+            HealBot_DebuffChecks(HealBot_Pet_Button[unit])
         end
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
-            HealBot_AuraChecks(xButton)
+            HealBot_DebuffChecks(xButton)
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
-            HealBot_AuraChecks(xButton)
+            HealBot_DebuffChecks(xButton)
         end
     end
   --HealBot_setCall("HealBot_CheckAllDebuffs")
@@ -6089,7 +6111,6 @@ function HealBot_ClearGUIDs(hbGUID, unit)
             HealBot_luVars["Checks"]=true
         end
         if hbManaPlayers[hbGUID] then hbManaPlayers[hbGUID]=nil end
-        if HealBot_Data["TIPUSE"] then HealBot_talentSpam(hbGUID,"remove",nil) end
         HealBot_UnitData[hbGUID]=nil
     end
   --HealBot_setCall("HealBot_ClearGUIDs")
@@ -6333,15 +6354,10 @@ function HealBot_OnEvent(self, event, ...)
         if xButton then
             HealBot_OnEvent_UnitNameUpdate(xButton)
         end
-    elseif (event=="UNIT_POWER_UPDATE") then
+    elseif (event=="UNIT_POWER_UPDATE") or (event=="UNIT_MAXPOWER") then
         local _,_,xButton = HealBot_UnitID(arg1)
         if xButton then
             HealBot_OnEvent_UnitMana(xButton)
-        end
-    elseif (event=="UNIT_MAXPOWER") then 
-        local xUnit,xGUID,xButton = HealBot_UnitID(arg1)
-        if xUnit and HealBot_Data["TIPUSE"] then
-            HealBot_talentSpam(xGUID,"update",1) 
         end
     elseif (event=="CHAT_MSG_SYSTEM") then
         HealBot_OnEvent_SystemMsg(self,arg1);
@@ -6383,11 +6399,16 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="PLAYER_LEAVING_WORLD") then
         HealBot_OnEvent_PlayerLeavingWorld(self);
     elseif (event=="INSPECT_READY") then
-        local xUnit=nil
+        local xUnit = nil
         if HealBot_UnitData[arg1] then
             xUnit=HealBot_UnitData[arg1]["UNIT"]
+        elseif UnitExists("target") and UnitGUID("target")==arg1 then
+            xUnit="target"
         end
-        if xUnit and UnitExists(xUnit) and arg1==HealBot_UnitGUID(xUnit) then HealBot_GetTalentInfo(arg1, xUnit) end
+        if xUnit and UnitExists(xUnit) then HealBot_GetTalentInfo(arg1, xUnit) end
+    elseif (event=="PLAYER_SPECIALIZATION_CHANGED") then
+        local xUnit,xGUID,_ = HealBot_UnitID(arg1)
+        if xUnit then HealBot_GetTalentInfo(xGUID, xUnit) end
     elseif (event=="UNIT_CONNECTION") then
         local xUnit,_,xButton = HealBot_UnitID(arg1)
         if xButton and xUnit then 

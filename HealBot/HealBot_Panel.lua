@@ -328,8 +328,18 @@ local classTextures={
 function HealBot_Action_SetClassIconTexture(button)
     local prevTexture=button.icon.debuff.classtexture
     if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
-        local unitRole=UnitGroupRolesAssigned(button.unit)  
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] and roleTextures[unitRole] then
+        local setRole=false
+        local unitRole=HEALBOT_WORDS_UNKNOWN
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
+            local xGUID=HealBot_UnitGUID(button.unit)
+            if xGUID and HealBot_UnitData[xGUID] then
+                unitRole=HealBot_UnitData[xGUID]["ROLE"]
+            end
+            if not roleTextures[unitRole] then
+                unitRole=UnitGroupRolesAssigned(button.unit) 
+            end
+        end
+        if roleTextures[unitRole] then
             button.icon.debuff.classtexture=roleTextures[unitRole];
         else
             local _,classEN = UnitClass(button.unit)
@@ -339,7 +349,7 @@ function HealBot_Action_SetClassIconTexture(button)
         button.icon.debuff.classtexture=false
     end
     if button.icon.debuff.classtexture~=prevTexture then
-        HealBot_AuraChecks(button)
+        HealBot_DebuffChecks(button)
     end
 end
 
@@ -568,7 +578,7 @@ function HealBot_Panel_retTestBars()
     return HealBot_setTestBars
 end
 
-local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader, cFrame)
+local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
     table.foreach(HealBot_Action_HealButtons, function (x,xUnit)
         local xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit] or HealBot_Pet_Button[xUnit]
         if xButton then
@@ -724,7 +734,13 @@ local function HealBot_Panel_SetupExtraBars(frame)
     local z={[frame]=1}
     local newHeader={["H"]={},["G"]={},["C"]={}}
     
-    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader, frame)
+    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
+
+    for xHeader,xButton in pairs(HealBot_Header_Frames) do
+        if xButton.frame==frame and not HealBot_Track_Headers[xHeader] then
+            HealBot_Panel_DeleteHeader(xButton.id, xHeader)
+        end
+    end
     
     if hbBarsPerFrame[frame]>0 then
         if MaxOffsetY[frame]<OffsetY[frame] then MaxOffsetY[frame] = OffsetY[frame]; end
@@ -763,7 +779,7 @@ local function HealBot_Panel_SetupBars()
     HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
     
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
-        if not HealBot_Track_Headers[xHeader] then
+        if xButton.frame<6 and not HealBot_Track_Headers[xHeader] then
             HealBot_Panel_DeleteHeader(xButton.id, xHeader)
         end
     end
@@ -2338,7 +2354,6 @@ local function HealBot_Panel_TargetChanged()
         local xButton = HealBot_Unit_Button["target"]
         if xButton then
             if HealBot_TrackUnit[xButton.unit] and not HealBot_Panel_BlackList[xButton.guid] then
-                if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xButton.guid,"insert",nil) end
                 HealBot_setLuVars("TargetNeedReset", false)
                 HealBot_Action_UpdateBackgroundButton(xButton)
                 xButton:Show()
@@ -2351,6 +2366,7 @@ local function HealBot_Panel_TargetChanged()
     else
         HealBot_Action_HidePanel(hbCurrentFrame)
     end
+    HealBot_setCall("HealBot_Panel_TargetChanged")
 end
 
 function HealBot_Panel_TargetChangedCheckFocus()
@@ -2405,7 +2421,6 @@ local function HealBot_Panel_FocusChanged()
         local xButton = HealBot_Unit_Button["focus"]
         if xButton then
             if HealBot_TrackUnit[xButton.unit] and not HealBot_Panel_BlackList[xButton.guid] then
-                if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xButton.guid,"insert",nil) end
                 HealBot_setLuVars("FocusNeedReset", false)
                 HealBot_Action_UpdateBackgroundButton(xButton)
                 xButton:Show()
@@ -2577,9 +2592,8 @@ local function HealBot_Panel_PlayersChanged()
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
                     else
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
-                        aRole=nil
                     end
-                    if aRole and HealBot_UnitData[xGUID] then
+                    if HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
@@ -2603,9 +2617,8 @@ local function HealBot_Panel_PlayersChanged()
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
                     else
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
-                        aRole=nil
                     end
-                    if aRole and HealBot_UnitData[xGUID] then
+                    if HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
@@ -2663,7 +2676,6 @@ local function HealBot_Panel_PlayersChanged()
             if xButton.status.unittype==1 then
                 local xGUID=xButton.guid
                 if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xGUID] then
-                    if HealBot_Data["TIPUSE"] then HealBot_talentSpam(xGUID,"insert",nil) end
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else

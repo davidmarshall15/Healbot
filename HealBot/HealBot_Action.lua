@@ -2398,24 +2398,24 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             bar4:SetValue(0)
             bar4:SetStatusBarColor(0,0,0,0)
         end
-        barScale = bar:GetScale();
-        bar:SetScale(barScale + 0.01);
-        bar:SetScale(barScale);
-        barScale = bar2:GetScale();
-        bar2:SetScale(barScale + 0.01);
-        bar2:SetScale(barScale);
-        barScale = bar3:GetScale();
-        bar3:SetScale(barScale + 0.01);
-        bar3:SetScale(barScale);
-        barScale = bar4:GetScale();
-        bar4:SetScale(barScale + 0.01);
-        bar4:SetScale(barScale);
-        barScale = bar5:GetScale();
-        bar5:SetScale(barScale + 0.01);
-        bar5:SetScale(barScale);
-        barScale = bar6:GetScale();
-        bar6:SetScale(barScale + 0.01);
-        bar6:SetScale(barScale);
+        --barScale = bar:GetScale();
+        --bar:SetScale(barScale + 0.01);
+        --bar:SetScale(barScale);
+        --barScale = bar2:GetScale();
+        --bar2:SetScale(barScale + 0.01);
+        --bar2:SetScale(barScale);
+        --barScale = bar3:GetScale();
+        --bar3:SetScale(barScale + 0.01);
+        --bar3:SetScale(barScale);
+        --barScale = bar4:GetScale();
+        --bar4:SetScale(barScale + 0.01);
+        --bar4:SetScale(barScale);
+        --barScale = bar5:GetScale();
+        --bar5:SetScale(barScale + 0.01);
+        --bar5:SetScale(barScale);
+        --barScale = bar6:GetScale();
+        --bar6:SetScale(barScale + 0.01);
+        --bar6:SetScale(barScale);
     elseif barType=="header" then
           --for x=1,15 do
         h=button
@@ -2438,9 +2438,9 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                                 HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
         bar.txt:SetTextColor(sr,sg,sb,sa);
         h:Disable();
-        barScale = bar:GetScale();
-        bar:SetScale(barScale + 0.01);
-        bar:SetScale(barScale);
+        --barScale = bar:GetScale();
+        --bar:SetScale(barScale + 0.01);
+        --bar:SetScale(barScale);
     elseif barType=="hbfocus" then
         bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
@@ -2459,14 +2459,13 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         bar:SetHeight(bheight); 
         button:SetHeight(bheight); 
         bar.txt:SetText(HEALBOT_ACTION_HBFOCUS)
-        barScale = bar:GetScale();
-        bar:SetScale(barScale + 0.01);
-        bar:SetScale(barScale);
+        --barScale = bar:GetScale();
+        --bar:SetScale(barScale + 0.01);
+        --bar:SetScale(barScale);
     else
         HealBot_Action_SetAddHeightWidth()
         HealBot_Panel_clearResetHeaderSkinDone()
         HealBot_Action_clearResetBarSkinDone()
-        HealBot_Action_sethbNumberFormat()
         HealBot_setOptions_Timer(80)
         if HealBot_Action_luVars["resetSkinTo"]~=Healbot_Config_Skins.Current_Skin then
             HealBot_Action_luVars["resetSkinTo"]=Healbot_Config_Skins.Current_Skin
@@ -3192,19 +3191,15 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_ResetBarSkinDone[shb.frame][shb.id] = nil
             HealBot_initSkin[shb.frame][shb.id]=nil
         end
-        if not HealBot_UnitData[hbGUID] or HealBot_UnitData[hbGUID]["SPEC"]==" " then
-            if HealBot_UnitData[hbGUID] then 
-                HealBot_delClearLocalArr(hbGUID)
-            else
-                HealBot_UnitData[hbGUID]={}
-                HealBot_UnitData[hbGUID]["UNIT"]="init2"
-                HealBot_UnitData[hbGUID]["SPEC"] = " "
-                HealBot_UnitData[hbGUID]["ROLE"] = HEALBOT_WORDS_UNKNOWN
-                if not HealBot_UnitData[unit] then HealBot_UnitData[unit]={} end
-                if UnitExists(unit) then
-                    if UnitIsFriend("player",unit) then 
-                        HealBot_CheckPlayerMana(hbGUID, unit) 
-                    end
+        if not HealBot_UnitData[hbGUID] then
+            HealBot_UnitData[hbGUID]={}
+            HealBot_UnitData[hbGUID]["UNIT"]="init2"
+            HealBot_UnitData[hbGUID]["SPEC"] = " "
+            HealBot_UnitData[hbGUID]["ROLE"] = HEALBOT_WORDS_UNKNOWN
+            if not HealBot_UnitData[unit] then HealBot_UnitData[unit]={} end
+            if UnitExists(unit) then
+                if UnitIsFriend("player",unit) then 
+                    HealBot_CheckPlayerMana(hbGUID, unit) 
                 end
             end
             shb.reset=true
@@ -3212,6 +3207,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         if (HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit])~=shb or shb.unit~=unit or shb.reset then
             shb.reset=nil
             shb.unit=unit
+            shb.guid=hbGUID
             if unitType==9 then
                 HealBot_Enemy_Button[unit]=shb
             elseif unitType>1 and unitType<4 then

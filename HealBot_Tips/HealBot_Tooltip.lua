@@ -1,7 +1,6 @@
 local linenum=1
 local HealBot_CheckBuffs = {}
 local HealBot_Tooltip_DirtyLines={}
-local doTalentRequest={}
 local xUnit=nil
 local xGUID=nil
 local xButton=nil
@@ -26,20 +25,6 @@ end
 
 function HealBot_Tooltip_CheckBuffs(buff)
     HealBot_CheckBuffs[buff]=true;
-end
-
-function HealBot_talentSpam(hbGUID,cmd,status)
-    if cmd=="insert" then
-        if not doTalentRequest[hbGUID] then doTalentRequest[hbGUID]=1 end
-    elseif cmd=="remove" then
-        doTalentRequest[hbGUID]=nil
-    else
-        if not doTalentRequest[hbGUID] then 
-            doTalentRequest[hbGUID]=1 
-        else
-            doTalentRequest[hbGUID]=status
-        end
-    end
 end
 
 local function HealBot_Tooltip_ReturnMinsSecs(s)
@@ -560,13 +545,17 @@ local function HealBot_Action_DoRefreshTooltip()
             if UnitClass(xUnit) and UnitIsPlayer(xUnit) then
                 local unitSpec = " "
                 if HealBot_UnitData[xGUID] then
-                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and (doTalentRequest[xGUID] or 1)==1 then
-                        if HealBot_UnitData[xGUID]["SPEC"]==" " or not HealBot_Data["UILOCK"] then
-                            HealBot_Data["INSPECT"]=true
-                            HealBot_TalentQuery(xUnit)
-                        end
+                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
+                        HealBot_Data["INSPECT"]=true
+                        HealBot_TalentQuery(xUnit)
                     end
                     unitSpec=HealBot_UnitData[xGUID]["SPEC"]
+                elseif xUnit=="target" then
+                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData["target"]["SPEC"]==" " then
+                        HealBot_Data["INSPECT"]=true
+                        HealBot_TalentQuery(xUnit)
+                    end
+                    unitSpec=HealBot_UnitData["target"]["SPEC"]
                 end
                 HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl.." "..unitSpec..UnitClass(xUnit),r,g,b,1)                
             else
