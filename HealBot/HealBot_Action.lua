@@ -3361,14 +3361,15 @@ function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     local dbUnit=dg.unit or "N"
     local dbGUID=dg.guid or "0"
-    HealBot_setClearGUIDs(dbGUID, dbUnit)
+    if not UnitExists(dbUnit) or dbGUID~=HealBot_UnitGUID(dbUnit) then
+        HealBot_ClearGUIDs(dbGUID, dbUnit)
+    end
     HealBot_HoT_RemoveIconButton(dg,true)
     HealBot_Action_UpdateAggro(dbUnit,false,nil,0)
     HealBot_Action_SetBar3Value(dg)
     local bar4=_G["HealBot_Action_HealUnit"..hbBarID.."Bar4"]
     bar4:SetStatusBarColor(1,0,0,0)
     dg.status.bar4=0
-    if HealBot_UnitData[dbGUID] then HealBot_UnitData[dbGUID]["SPEC"] = " " end
     if HealBot_Unit_Button[dbUnit] then HealBot_Unit_Button[dbUnit]=nil end
     if HealBot_Enemy_Button[dbUnit] then HealBot_Enemy_Button[dbUnit]=nil end
     if HealBot_Pet_Button[dbUnit] then HealBot_Pet_Button[dbUnit]=nil end
@@ -3462,7 +3463,7 @@ function HealBot_Action_HideTooltip(self)
         HealBot_Data["TIPTYPE"] = "NONE";
         HealBot_Action_HideTooltipFrame()
     end
-    HealBot_Data["INSPECT"]=false
+    HealBot_Tooltip_setLuVars("inspectActive", false)
 end
 
 function HealBot_Action_HideTooltipFrame()

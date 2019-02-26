@@ -12,7 +12,6 @@ local strsub=strsub
 local gsub=gsub
 local HealBot_ReCheckBuffsTime=nil
 local HealBot_ReCheckBuffsTimed={}
-local HealBot_cleanGUIDs={}
 local HealBot_Ignore_Debuffs = {["Class"]={},["Movement"]={},["NonHarmful"]={},};
 local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.01,["HB2Inc"]=0,["HB2Th"]=0.1,["HBaInc"]=0,["HBaTh"]=0.05,["CheckTimeMod"]=0.1}
 local arrg = {}
@@ -89,6 +88,7 @@ HealBot_luVars["Timer8000"]=0
 HealBot_luVars["TankUnit"]="x"
 HealBot_luVars["HealBot_Refresh"]=true
 HealBot_luVars["healthFactor"]=1
+HealBot_luVars["targetSpec"]=" "
     
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -2629,8 +2629,6 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Data["PRACE_EN"]=pRaceEN
     HealBot_Data["PNAME"]=UnitName("player")
     HealBot_Data["PLEVEL"]=UnitLevel("player")
-    HealBot_UnitData["target"]={}
-    HealBot_UnitData["target"]["SPEC"] = " "
     C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
     HealBot_Options_InitBuffClassList()
     HealBot_setOptions_Timer(5)
@@ -2856,16 +2854,14 @@ local function HealBot_GetTalentInfo(hbGUID, unit)
         else
             i,s,r = HealBot_GetSpec(unit)
         end
-        if s then
-            if HealBot_UnitData[hbGUID] then
-                HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
-                HealBot_UnitData[hbGUID]["ROLE"] = r or HEALBOT_WORDS_UNKNOWN
-            end
+        if s and HealBot_UnitData[hbGUID] then
+            HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
+            HealBot_UnitData[hbGUID]["ROLE"] = r or HEALBOT_WORDS_UNKNOWN
         end
     elseif unit=="target" then
         i,s,r = HealBot_GetSpec(unit)
         if s then
-            HealBot_UnitData["target"]["SPEC"] = s.." " 
+            HealBot_luVars["targetSpec"] = s.." " 
         end
     end
     local _,_,xButton = HealBot_UnitID(unit)
@@ -3121,15 +3117,20 @@ local function HealBot_Options_Update()
         HealBot_nextRecalcParty(5)
     elseif HealBot_Options_Timer[590] then
         HealBot_Options_Timer[590]=nil
+        local needReset=false
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if UnitExists(xUnit) then 
                 if xButton.guid~=HealBot_UnitGUID(xUnit) then
-                    HealBot_nextRecalcParty(6)
+                    needReset=true
                 end 
             end
         end
         HealBot_Action_CheckReserved()
-        HealBot_Panel_ResetClassIconTexture()
+        if needReset then
+            HealBot_nextRecalcParty(6)
+        else
+            HealBot_setOptions_Timer(155)
+        end
     elseif HealBot_Options_Timer[595] then
         HealBot_Options_Timer[595]=nil
         if not HealBot_Options_Timer[8000] then
@@ -3640,11 +3641,6 @@ local function HealBot_Update_Slow()
                     end
                 end
             elseif HealBot_luVars["slowSwitch"]<3 then
-                for xGUID,xUnit in pairs(HealBot_cleanGUIDs) do
-                    HealBot_ClearGUIDs(xGUID, xUnit)
-                    HealBot_cleanGUIDs[xGUID]=nil
-                end
-            elseif HealBot_luVars["slowSwitch"]<4 then
                 if HealBot_luVars["VersionRequest"] then
                     HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "S:"..HEALBOT_VERSION, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
                     HealBot_luVars["VersionRequest"]=false;
@@ -5108,7 +5104,7 @@ end
 
 function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
-        HealBot_UnitData["target"]["SPEC"] = " "
+        HealBot_luVars["targetSpec"] = " "
         if doRecalc then
             if not HealBot_Data["UILOCK"] then
                 if UnitName("target") and HealBot_retHbFocus("target") then
@@ -6116,18 +6112,6 @@ function HealBot_ClearGUIDs(hbGUID, unit)
   --HealBot_setCall("HealBot_ClearGUIDs")
 end
 
-function HealBot_setClearGUIDs(hbGUID, unit)
-    if HealBot_UnitData[hbGUID] then
-        HealBot_cleanGUIDs[hbGUID]=unit
-    end
-  --HealBot_setCall("HealBot_setClearGUIDs")
-end
-
-function HealBot_delClearLocalArr(hbGUID)
-    HealBot_cleanGUIDs[hbGUID]=nil
-  --HealBot_setCall("HealBot_delClearLocalArr")
-end
-
 function HealBot_ReloadUI()
     local msg="HealBot Requires UI Reload\n\nDue to updating from a very old version"
     StaticPopupDialogs["HEALBOT_OPTIONS_RELOADUI"] = {
@@ -6409,6 +6393,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="PLAYER_SPECIALIZATION_CHANGED") then
         local xUnit,xGUID,_ = HealBot_UnitID(arg1)
         if xUnit then HealBot_GetTalentInfo(xGUID, xUnit) end
+        HealBot_setOptions_Timer(155)
     elseif (event=="UNIT_CONNECTION") then
         local xUnit,_,xButton = HealBot_UnitID(arg1)
         if xButton and xUnit then 

@@ -16,6 +16,12 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                     }  
 local HealBot_Tooltip_luVars={}
 HealBot_Tooltip_luVars["uGroup"]=false
+HealBot_Tooltip_luVars["inspectActive"]=false
+
+function HealBot_Tooltip_setLuVars(vName, vValue)
+    HealBot_Tooltip_luVars[vName]=vValue
+  --HealBot_setCall("HealBot_Tooltip_setLuVars")
+end
 
 function HealBot_Tooltip_Clear_CheckBuffs()
     for x,_ in pairs(HealBot_CheckBuffs) do
@@ -545,17 +551,17 @@ local function HealBot_Action_DoRefreshTooltip()
             if UnitClass(xUnit) and UnitIsPlayer(xUnit) then
                 local unitSpec = " "
                 if HealBot_UnitData[xGUID] then
-                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
-                        HealBot_Data["INSPECT"]=true
+                    if HealBot_Globals.QueryTalents and not HealBot_Tooltip_luVars["inspectActive"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
+                        HealBot_Tooltip_luVars["inspectActive"]=true
                         HealBot_TalentQuery(xUnit)
                     end
                     unitSpec=HealBot_UnitData[xGUID]["SPEC"]
                 elseif xUnit=="target" then
-                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData["target"]["SPEC"]==" " then
-                        HealBot_Data["INSPECT"]=true
+                    unitSpec=HealBot_retLuVars("targetSpec")
+                    if HealBot_Globals.QueryTalents and not HealBot_Tooltip_luVars["inspectActive"] and unitSpec==" " then
+                        HealBot_Tooltip_luVars["inspectActive"]=true
                         HealBot_TalentQuery(xUnit)
                     end
-                    unitSpec=HealBot_UnitData["target"]["SPEC"]
                 end
                 HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl.." "..unitSpec..UnitClass(xUnit),r,g,b,1)                
             else
