@@ -1389,7 +1389,7 @@ HealBot_Class_Buffs = {};
 HealBot_Class_Cures = {};
 HealBot_customTempUserName={}
 
-HealBot_Data={  ["TIPUNIT"] = "NONE",
+HealBot_Data={  ["TIPUNIT"] = false,
                 ["TIPTYPE"] = "NONE",
                 ["TIPUSE"] = false,
                 ["UILOCK"] = false,

@@ -332,8 +332,12 @@ function HealBot_Action_SetClassIconTexture(button)
         local unitRole=HEALBOT_WORDS_UNKNOWN
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
             local xGUID=HealBot_UnitGUID(button.unit)
-            if xGUID and HealBot_UnitData[xGUID] then
-                unitRole=HealBot_UnitData[xGUID]["ROLE"]
+            if xGUID then
+                if HealBot_UnitData[xGUID] then
+                    unitRole=HealBot_UnitData[xGUID]["ROLE"]
+                else
+                    HealBot_Action_SetUnitData(xGUID, button.unit)
+                end
             end
             if not roleTextures[unitRole] then
                 unitRole=UnitGroupRolesAssigned(button.unit) 
@@ -352,13 +356,6 @@ function HealBot_Action_SetClassIconTexture(button)
         HealBot_DebuffChecks(button)
     end
 end
-
-function HealBot_Panel_ResetClassIconTexture()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_SetClassIconTexture(xButton)
-    end
-end
-
 
 local HealBot_ResetHeaderSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}};
 function HealBot_Panel_clearResetHeaderSkinDone()
@@ -1151,8 +1148,8 @@ function HealBot_Panel_resetTestCols(force)
     end
 end
 
-function HealBot_Panel_RemoveMember(hbGUID, unit)
-    local uName=HealBot_UnitName[hbGUID] or HealBot_GetUnitName(unit) or "NONE"
+function HealBot_Panel_RemoveMember(hbGUID)
+    local uName=HealBot_UnitName[hbGUID] or HealBot_GetUnitName(HealBot_UnitData[hbGUID]["UNIT"]) or "NONE"
     if hbTempUnitName[uName] then hbTempUnitName[uName]=nil end
     if hbTempUnitGUID[hbGUID] then hbTempUnitGUID[hbGUID]=nil end
     if HealBot_unitRole[hbGUID] then HealBot_unitRole[hbGUID]=nil end
@@ -2592,8 +2589,9 @@ local function HealBot_Panel_PlayersChanged()
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
                     else
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
+                        aRole=nil
                     end
-                    if HealBot_UnitData[xGUID] then
+                    if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
@@ -2617,8 +2615,9 @@ local function HealBot_Panel_PlayersChanged()
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
                     else
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
+                        aRole=nil
                     end
-                    if HealBot_UnitData[xGUID] then
+                    if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
                     if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
