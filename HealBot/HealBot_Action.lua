@@ -176,7 +176,6 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
         else
             if not threatStatus then threatStatus=0 end
             xButton.aggro.threatpct=0
-            if status and not UnitIsFriend("player",unit) then status=nil end
         end
         if status then
             if HealBot_Config_Cures.CDCshownAB and xButton.aura.debuff.type then
@@ -790,10 +789,10 @@ function HealBot_Action_UpdateTheDeadButton(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
             else
+                button.update.buff=true
                 button.update.state=true
                 button.status.update=true
             end
-            HealBot_AuraChecks(button)
             button.health.updhealth=true
             button.health.update=true
             if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
@@ -2640,6 +2639,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.update.reset=false
         ghb.update.unit=false
         ghb.update.state=false
+        ghb.update.buff=false
         ghb.update.roleicon=false
         ghb.update.targeticon=false
         ghb.status.range=-2
@@ -3309,14 +3309,7 @@ function HealBot_Action_ResethbInitButtons()
 end
 
 function HealBot_Action_PartyChanged(changeType)
-    local HealBot_PreCombat=nil
-    if InCombatLockdown() then 
-        HealBot_Data["UILOCK"]=true
-    elseif HealBot_Data["UILOCK"] then 
-        HealBot_PreCombat=true
-        HealBot_Data["UILOCK"]=false
-    end
-    if not HealBot_Data["UILOCK"] and HealBot_Data["PGUID"] then
+    if not InCombatLockdown() and HealBot_Data["PGUID"] then
         if not HealBot_PreCombat and HealBot_Action_luVars["ResetAttribs"] then
             for x,xButton in pairs(HealBot_Unit_Button) do
                 xButton.reset="init";
@@ -3347,19 +3340,12 @@ function HealBot_Action_PartyChanged(changeType)
             end 
             hbInitButtons=true
         end
-        
-        if HealBot_PreCombat then 
-            HealBot_EnteringCombat()
-        end
-  
+
         HealBot_Data["UNITSLOCK"]=true
         HealBot_Action_luVars["updateDelay"]=0
-        HealBot_Panel_PartyChanged(HealBot_PreCombat, changeType)
+        HealBot_Panel_PartyChanged(HealBot_Data["UILOCK"], changeType)
         HealBot_Data["UNITSLOCK"]=false
 
-        if HealBot_PreCombat then 
-            HealBot_Action_ResetUnitStatus()
-        end 
     else
         HealBot_nextRecalcParty(changeType)
     end

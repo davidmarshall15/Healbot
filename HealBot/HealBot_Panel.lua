@@ -2899,12 +2899,13 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
                 HealBot_Panel_PetsChanged()
             elseif changeType==3 then
                 HealBot_Panel_TargetChanged()
+            elseif changeType==5 then
+                HealBot_Panel_EnemyChanged()
             elseif changeType==4 then
                 HealBot_Panel_FocusChanged()
             elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
                 HealBot_Panel_VehicleChanged()
             end
-            if preCombat or changeType==5 then HealBot_Panel_EnemyChanged() end
         else
             HealBot_Panel_PlayersChanged()
             if preCombat then

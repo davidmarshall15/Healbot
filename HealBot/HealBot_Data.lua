@@ -399,7 +399,10 @@ function HealBot_Data_InitVars()
                 [HEALBOT_BEACON_OF_VIRTUE]=2,
                 [HEALBOT_TYRS_DELIVERANCE]=2,
 				[HEALBOT_SACRED_DAWN]=2,   
-                [HEALBOT_LIGHTS_GRACE]=2,               
+                [HEALBOT_LIGHTS_GRACE]=2,
+                [HEALBOT_GLIMMER_OF_LIGHT]=2,
+                [HEALBOT_BLESSING_OF_SANCTUARY]=2,
+                [HEALBOT_BLESSING_OF_SPELLWARDING]=2,
             },
             ["PRIE"] = {
                 [HEALBOT_GUARDIAN_SPIRIT]=2,

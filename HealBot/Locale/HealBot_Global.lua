@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.6";
+﻿HEALBOT_VERSION   = "8.1.0.7.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -379,6 +379,9 @@ function HealBot_globalVars()
     HEALBOT_HAND_OF_THE_PROTECTOR           = GetSpellInfo(213652) or "--Hand of the Protector";
 	HEALBOT_SACRED_DAWN                     = GetSpellInfo(243174) or "--Sacred Dawn";
     HEALBOT_LIGHTS_GRACE                    = GetSpellInfo(216327) or "--Light's Grace";
+    HEALBOT_GLIMMER_OF_LIGHT                = GetSpellInfo(287268) or "--Glimmer of Light";
+    HEALBOT_BLESSING_OF_SANCTUARY           = GetSpellInfo(210256) or "--Blessing of Sanctuary";
+    HEALBOT_BLESSING_OF_SPELLWARDING        = GetSpellInfo(204018) or "--Blessing of Spellwarding";
     
 	--Priest
     HEALBOT_ANGELIC_BULWARK                 = GetSpellInfo(108945) or "--Angelic Bulwark"
