@@ -353,7 +353,7 @@ function HealBot_Action_SetClassIconTexture(button)
         button.icon.debuff.classtexture=false
     end
     if button.icon.debuff.classtexture~=prevTexture then
-        HealBot_DebuffChecks(button)
+        button.aura.debuff.check=true
     end
 end
 

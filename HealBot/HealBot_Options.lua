@@ -2795,7 +2795,8 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.aura.debuff and xButton.aura.debuff.name then
                 HealBot_ClearDebuff(xButton,true)
-                HealBot_CheckAllDebuffs(xUnit)
+                xButton.update.debuff=true
+                xButton.status.update=true
             end
         end
     end

@@ -917,6 +917,7 @@ function HealBot_UpdateUnit(button)
     end
     HealBot_Action_SetBar3Value(button)
     button.update.buff=true
+    button.update.debuff=true
     button.status.update=true
   --HealBot_setCall("HealBot_UpdateUnit")
 end
@@ -1886,7 +1887,7 @@ local function HealBot_RaidTargetUpdate(button, iconID)
     local prevId=button.icon.debuff.targeticon
     button.icon.debuff.targeticon=iconID
     if button.icon.debuff.targeticon~=prevId then
-        HealBot_DebuffChecks(button)
+        button.aura.debuff.check=true
     end
   --HealBot_setCall("HealBot_RaidTargetUpdate")
 end
@@ -3499,7 +3500,7 @@ local function HealBot_OnEvent_ReadyCheckClear()
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.icon.debuff.readycheck then
             xButton.icon.debuff.readycheck=false
-            HealBot_DebuffChecks(xButton)
+            xButton.aura.debuff.check=true
         end
     end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheckClear")
@@ -4157,7 +4158,7 @@ local function HealBot_CheckUnitBuffs(button)
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then 
         cIcons=true
     end
-    if HealBot_Config_Buffs.BuffWatch and UnitIsPlayer(xUnit) and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) then
+    if HealBot_luVars["BuffCheck"] and UnitIsPlayer(xUnit) and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) then
         cBuffs=true
     end
     
@@ -4452,9 +4453,12 @@ local function HealBot_UnitUpdateFriendly(button)
             elseif button.update.state then
                 button.update.state=false
                 HealBot_RecalcHeals(button)
+            elseif button.update.debuff then
+                button.update.debuff=false
+                button.aura.debuff.check=true    
             elseif button.update.buff then
                 button.update.buff=false
-                HealBot_AuraChecks(button)
+                button.aura.buff.check=true
             else
                 button.status.update=false
             end
@@ -4737,7 +4741,7 @@ local function HealBot_Update_Fast()
         if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] then HealBot_Action_RefreshTooltip() end
         if HealBot_luVars["MaskAuraDCheck"]<TimeNow and HealBot_luVars["MaskAuraReCheck"] then
             HealBot_luVars["MaskAuraReCheck"]=nil
-            HealBot_CheckAllDebuffs()
+            HealBot_CheckAllActiveDebuffs()
         end
         HealBot_luVars["fastSwitch"]=0
     end
@@ -4933,7 +4937,7 @@ local function HealBot_OnEvent_ReadyCheckUpdate(unit,response)
             xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
         end
         if xButton.icon.debuff.readycheck~=prevRedyCheck then
-            HealBot_DebuffChecks(xButton)
+            xButton.aura.debuff.check=true
         end
     end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheckUpdate")
@@ -5314,17 +5318,12 @@ function HealBot_HasUnitBuff(buffName, unit, casterUnitID)
     return false;
 end
 
-function HealBot_BuffsCheck(button)
-    if HealBot_luVars["BuffCheck"] and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and UnitIsFriend("player",button.unit) then
-        button.aura.buff.check=true
-    end
-  --HealBot_setCall("HealBot_BuffsCheck")
-end
-
 function HealBot_CheckAllBuffs(unit)
     if unit then
-        if HealBot_Unit_Button[unit] then
-            HealBot_BuffsCheck(HealBot_Unit_Button[unit])
+        local xButton = HealBot_Unit_Button[unit]
+        if xButton then
+            xButton.update.buff=true
+            xButton.status.update=true
         end
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
@@ -5335,31 +5334,33 @@ function HealBot_CheckAllBuffs(unit)
   --HealBot_setCall("HealBot_CheckAllBuffs")
 end
 
-function HealBot_DebuffChecks(button)
-    button.aura.debuff.check=true
-  --HealBot_setCall("HealBot_DebuffChecks")
-end
-
 function HealBot_AuraChecks(button)
-    HealBot_DebuffChecks(button)
+    button.aura.debuff.check=true
     button.aura.buff.check=true
   --HealBot_setCall("HealBot_AuraChecks")
 end
 
-function HealBot_CheckAllDebuffs(unit)
-    if unit then
-        if HealBot_Unit_Button[unit] then
-            HealBot_DebuffChecks(HealBot_Unit_Button[unit])
-        elseif HealBot_Pet_Button[unit] then
-            HealBot_DebuffChecks(HealBot_Pet_Button[unit])
+function HealBot_CheckAllActiveDebuffs()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.aura.debuff.name then
+            xButton.aura.debuff.check=true
         end
-    else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            HealBot_DebuffChecks(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        if xButton.aura.debuff.name then
+            xButton.aura.debuff.check=true
         end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            HealBot_DebuffChecks(xButton)
-        end
+    end
+end
+
+function HealBot_CheckAllDebuffs()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        xButton.update.debuff=true
+        xButton.status.update=true
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        xButton.update.debuff=true
+        xButton.status.update=true
     end
   --HealBot_setCall("HealBot_CheckAllDebuffs")
 end
@@ -6067,7 +6068,8 @@ function HealBot_UpdateUnitRange(button, spellName, doRefresh)
             HealBot_RecalcHeals(button)
         end
         if button.status.range==1 then
-            HealBot_BuffsCheck(button)
+            button.update.buff=true
+            button.status.update=true
         end
     end
   --HealBot_setCall("HealBot_UpdateUnitRange")

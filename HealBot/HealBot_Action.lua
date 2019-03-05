@@ -2640,6 +2640,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.update.unit=false
         ghb.update.state=false
         ghb.update.buff=false
+        ghb.update.debuff=false
         ghb.update.roleicon=false
         ghb.update.targeticon=false
         ghb.status.range=-2
