@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.0.7.b2";
+﻿HEALBOT_VERSION   = "8.1.0.7.rc1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -71,6 +71,8 @@ function HealBot_globalVars()
 
     --Procs
 	HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL   = GetSpellInfo(242586) or "--Concordance of the Legionfall";
+    HEALBOT_BRACING_CHILL                   = GetSpellInfo(267884) or "--Bracing Chill";
+    HEALBOT_BLESSED_PORTENTS                = GetSpellInfo(267889) or "--Blessed Portents";
 	
 	--Racial Abilities
     HEALBOT_DARKFLIGHT                      = GetSpellInfo(68992) or "--Darkflight";
@@ -447,6 +449,7 @@ function HealBot_globalVars()
     HEALBOT_VESTMANTS_OF_DISCIPLINE         = GetSpellInfo(197711) or "--Vestments of Discipline";
 	HEALBOT_RAMMALS_ULTERIOR_MOTIVE         = GetSpellInfo(234711) or "--Rammal's Ulterior Motive";
 	HEALBOT_RAY_OF_HOPE                     = GetSpellInfo(197268) or "--Ray of Hope";
+    HEALBOT_PERMEATING_GLOW                 = GetSpellInfo(272780) or "--Permeating Glow";
 
 	--Shaman
     HEALBOT_ANACESTRAL_GUIDANCE             = GetSpellInfo(108281) or "--Ancestral Guidance";

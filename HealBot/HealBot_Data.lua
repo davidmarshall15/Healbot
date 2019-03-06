@@ -444,6 +444,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_RAMMALS_ULTERIOR_MOTIVE]=2,
 				[HEALBOT_SPIRIT_OF_REDEMPTION]=2,
 				[HEALBOT_RAY_OF_HOPE]=2,
+                [HEALBOT_PERMEATING_GLOW]=2,
             },
             ["ROGU"] = {
                 [HEALBOT_VANISH]=4,
@@ -528,6 +529,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_HIGHFATHERS_TIMEKEEPING]=2,
                 [HEALBOT_SHADOW_TOUCHED]=2,
                 [HEALBOT_TAILWIND]=2,
+                [HEALBOT_BRACING_CHILL]=2,
+                [HEALBOT_BLESSED_PORTENTS]=2,
             },
         },
     };
