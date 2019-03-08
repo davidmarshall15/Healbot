@@ -1,4 +1,3 @@
-local HealBot_UnitBarsRange3a={}
 local ceil=ceil;
 local floor=floor
 local hbBarTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
@@ -701,16 +700,16 @@ function HealBot_Action_UpdateDebuffButton(button)
                 if button.status.range==1 then  
                     ebubar:SetStatusBarColor(hcr,hcg,hcb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
                     HealBot_Action_HBText(button,ebusr,ebusg,ebusb,Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EA"])
-                    if HealBot_UnitBarsRange3a[button.unit]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
-                        HealBot_UnitBarsRange3a[button.unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                    if HealBot_Action_rCalls[button.unit]["hca"]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
+                        HealBot_Action_rCalls[button.unit]["hca"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
                         HealBot_Action_SetBar3Value(button)
                     end
                     button.status.enabled=true
                 else
                     ebubar:SetStatusBarColor(hcr,hcg,hcb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
                     HealBot_Action_HBText(button,ebusr,ebusg,ebusb,Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"])
-                    if HealBot_UnitBarsRange3a[button.unit]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"] then
-                        HealBot_UnitBarsRange3a[button.unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                    if HealBot_Action_rCalls[button.unit]["hca"]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"] then
+                        HealBot_Action_rCalls[button.unit]["hca"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
                         HealBot_Action_SetBar3Value(button)
                     end
                     button.status.enabled=false
@@ -737,7 +736,7 @@ end
 
 function HealBot_Action_UpdateBuffButton(button)
     if button.aura.buff.name and button.status.current<8 and UnitExists(button.unit) then
-        if UnitIsVisible(button.unit) then
+        if button.status.range>-1 then
             HealBot_UpdateUnitRange(button,HealBot_RangeSpells["BUFF"],false)
             local hcr,hcg,hcb = 0, 0, 0
             local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
@@ -749,16 +748,16 @@ function HealBot_Action_UpdateBuffButton(button)
             if button.status.range==1 then  
                 ebubar:SetStatusBarColor(hcr,hcg,hcb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
                 HealBot_Action_HBText(button,ebusr,ebusg,ebusb,Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EA"])
-                if HealBot_UnitBarsRange3a[button.unit]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
-                    HealBot_UnitBarsRange3a[button.unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                if HealBot_Action_rCalls[button.unit]["hca"]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
+                    HealBot_Action_rCalls[button.unit]["hca"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
                     HealBot_Action_SetBar3Value(button)
                 end
                 button.status.enabled=true
             else
                 ebubar:SetStatusBarColor(hcr,hcg,hcb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
                 HealBot_Action_HBText(button,ebusr,ebusg,ebusb,Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"])
-                if HealBot_UnitBarsRange3a[button.unit]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"] then
-                    HealBot_UnitBarsRange3a[button.unit]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                if HealBot_Action_rCalls[button.unit]["hca"]~=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"] then
+                    HealBot_Action_rCalls[button.unit]["hca"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
                     HealBot_Action_SetBar3Value(button)
                 end
                 button.status.enabled=false
@@ -865,11 +864,7 @@ function HealBot_Action_UpdateHealthButton(button)
                     hcb=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HB"]
                 end
             else
-                if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then
-                    hcr, hcg = HealBot_Action_BarColourPct(hpct)
-                else
-                    hcr, hcg = HealBot_Action_BarColourPct(hpct)
-                end
+                hcr, hcg = HealBot_Action_BarColourPct(hpct)
             end
 
             if button.aggro.status==3 or (HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["ALERTIC"])) or
@@ -896,8 +891,8 @@ function HealBot_Action_UpdateHealthButton(button)
                 local ebubar5 = _G["HealBot_Action_HealUnit"..button.id.."Bar5"]
                 ebubar5:SetStatusBarColor(hcr,hcg,hcb,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BA"]);
             end
-            if HealBot_UnitBarsRange3a[button.unit]~=hca then
-                HealBot_UnitBarsRange3a[button.unit]=hca
+            if HealBot_Action_rCalls[button.unit]["hca"]~=hca then
+                HealBot_Action_rCalls[button.unit]["hca"]=hca
                 HealBot_Action_SetBar3Value(button)
             end
             HealBot_Action_setHealthText(button)
@@ -1187,7 +1182,7 @@ function HealBot_Action_SetBar3Value(button, sName)
             end
             local y=floor((UnitPower(unit)/x)*100)
             local hcr,hcg,hcb=HealBot_Action_GetManaBarCol(unit)
-            HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_UnitBarsRange3a[unit] or Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"])
+            HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_Action_rCalls[unit]["hca"])
         end
     else
         if HealBot_Action_rCalls[unit]["powerIndicator"]~="p0" then
@@ -2059,7 +2054,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             bar5:SetValue(100);
             bar6:SetValue(0);
             bar2:SetStatusBarColor(0,1,0,0);
-            if b.guid then HealBot_RecalcHeals(b) end
+            if b.guid then HealBot_Action_Refresh(b) end
         end
         barDir:ClearAllPoints();
         barDir:SetPoint("TOP",b,"TOP",-1,0);
@@ -2573,10 +2568,13 @@ end
 
 function HealBot_Action_ResetrCalls()
     for xUnit,_ in pairs(HealBot_Unit_Button) do
-        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",["hca"]=0,}
     end
     for xUnit,_ in pairs(HealBot_Pet_Button) do
-        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",["hca"]=0,}
+    end
+    for xUnit,_ in pairs(HealBot_Enemy_Button) do
+        HealBot_Action_rCalls[xUnit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",["hca"]=0,}
     end
 end 
 
@@ -3246,7 +3244,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 shb.status.offline=false
             end
             shb:SetAttribute("unit", unit);
-            HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+            HealBot_Action_rCalls[unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",["hca"]=0,}
             HealBot_Action_SetAllButtonAttribs(shb,"Enemy")
             HealBot_Action_SetAllButtonAttribs(shb,"Enabled")
             HealBot_setUnitIcons(unit)
@@ -3265,7 +3263,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         end
         shb.health.updhealth=true
         shb.health.update=true
-        HealBot_UpdateUnitRange(shb, HealBot_RangeSpells["HEAL"], false)
+        HealBot_UpdateUnitRange(shb, HealBot_RangeSpells["HEAL"], true)
     else
         return nil
     end
@@ -3277,7 +3275,7 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText)
     if thb then
         thb.unit=unitText
         thb.guid="TestBar"
-        HealBot_Action_rCalls[thb.unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",}
+        HealBot_Action_rCalls[thb.unit]={["aggroIndicator"]="notSet",["powerIndicator"]="notSet",["manaIndicator"]="notSet",["barText"]="notSet",["hca"]=0,}
         thb.status.bar4=0
         HealBot_Unit_Button[unitText]=thb
         if thb.frame~=hbCurFrame then

@@ -918,6 +918,7 @@ function HealBot_UpdateUnit(button)
     HealBot_Action_SetBar3Value(button)
     button.update.buff=true
     button.update.debuff=true
+    button.update.state=true
     button.status.update=true
   --HealBot_setCall("HealBot_UpdateUnit")
 end
@@ -1931,11 +1932,6 @@ local function HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, 
   --HealBot_setCall("HealBot_SetBuffIcon")
 end
 
-function HealBot_RecalcHeals(button)
-    HealBot_Action_Refresh(button);
-  --HealBot_setCall("HealBot_RecalcHeals")
-end
-
 function HealBot_Reset_Unit(button)
     xButton.update.reset=true
     xButton.status.update=true
@@ -2516,6 +2512,11 @@ local function HealBot_Update_Skins()
                         end
                     end
                 end
+            end
+        end
+        if tonumber(tMajor)==8 then
+            if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<8) then
+                HealBot_Options_ResetSetting("ICON")
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -3269,7 +3270,7 @@ local function HealBot_OnEvent_VehicleChange(self, unit, enterVehicle)
             doRefresh=true
         end
         if doRefresh then
-            HealBot_RecalcHeals(xButton)
+            HealBot_Action_Refresh(xButton)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
                 HealBot_nextRecalcParty(1)
             end
@@ -4442,6 +4443,9 @@ local function HealBot_UnitUpdateFriendly(button)
         else
             HealBot_Range_CheckTime(button)
         end
+        if not UnitIsUnit("player",button.unit) and (button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit)) then
+            HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
+        end
         if button.status.update then
             if button.update.reset then
                 button.update.reset=false
@@ -4452,7 +4456,7 @@ local function HealBot_UnitUpdateFriendly(button)
                 HealBot_UpdateUnit(button)
             elseif button.update.state then
                 button.update.state=false
-                HealBot_RecalcHeals(button)
+                HealBot_Action_Refresh(button)
             elseif button.update.debuff then
                 button.update.debuff=false
                 button.aura.debuff.check=true    
@@ -4476,9 +4480,6 @@ local function HealBot_UnitUpdateFriendly(button)
             elseif button.status.current==9 then 
                 HealBot_Action_UpdateTheDeadButton(button)
             end
-        end
-        if not UnitIsUnit("player",button.unit) and (button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit)) then
-            HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
         end
     elseif button.checks.other < TimeNow then
         if button.status.unittype<2 or button.status.unittype>3 then
@@ -4529,7 +4530,7 @@ local function HealBot_UnitUpdateEnemy(button)
         HealBot_Enemy_CheckTime(button)
         if UnitIsDeadOrGhost(button.unit) then
             button.health.current=0
-            HealBot_RecalcHeals(button)
+            HealBot_Action_Refresh(button)
         else
             local xGUID=UnitGUID(button.unit) or button.unit
             if xGUID~=button.guid then
@@ -5609,7 +5610,7 @@ local function HealBot_OnEvent_SystemMsg(self,msg)
                     if (string.find(msg, HB_ONLINE)) and xButton.status.offline then
                         xButton.status.offline = false
                         HealBot_Action_setNameTag(xButton)
-                        HealBot_RecalcHeals(xButton)
+                        HealBot_Action_Refresh(xButton)
                     end
                     HealBot_Action_setNameTag(xButton) 
                     HealBot_Action_ResetUnitStatus(xButton);
@@ -6065,10 +6066,7 @@ function HealBot_UpdateUnitRange(button, spellName, doRefresh)
         button.health.updabsorbs=true
         button.health.update=true
         if doRefresh then
-            HealBot_RecalcHeals(button)
-        end
-        if button.status.range==1 then
-            button.update.buff=true
+            button.update.state=true
             button.status.update=true
         end
     end
@@ -6218,6 +6216,19 @@ function HealBot_Options_ResetSetting(resetTab)
             button2 = HEALBOT_WORDS_NO,
             OnAccept = function()
                 HealBot_ResetCustomDebuffs()
+            end,
+            timeout = 0,
+            whileDead = 1,
+            hideOnEscape = 1
+        };
+    elseif resetTab=="ICON" then
+        local msg="Healbot recommends resetting HoT/buff icons\n\n Continue?"
+        StaticPopupDialogs["HEALBOT_OPTIONS_RESETSETTING"] = {
+            text = msg,
+            button1 = HEALBOT_WORDS_YES,
+            button2 = HEALBOT_WORDS_NO,
+            OnAccept = function()
+                HealBot_Reset_Icons()
             end,
             timeout = 0,
             whileDead = 1,
@@ -6466,11 +6477,11 @@ function HealBot_OnEvent(self, event, ...)
             if xButton.status.offline and UnitIsConnected(xUnit) then
                 xButton.status.offline = false
                 HealBot_Action_setNameTag(xButton)
-                HealBot_RecalcHeals(xButton)                            
+                HealBot_Action_Refresh(xButton)                            
             elseif not xButton.status.offline and not UnitIsConnected(xUnit) then
                 xButton.status.offline = GetTime()
                 HealBot_Action_setNameTag(xButton)
-                HealBot_RecalcHeals(xButton)
+                HealBot_Action_Refresh(xButton)
             end
         end
     elseif (event=="ZONE_CHANGED_NEW_AREA") or (event=="ZONE_CHANGED")  or (event=="ZONE_CHANGED_INDOORS") then
