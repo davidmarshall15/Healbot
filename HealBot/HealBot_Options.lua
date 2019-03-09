@@ -3791,6 +3791,7 @@ function HealBot_BarButtonIconFadeOnExpire_OnClick(self)
     else
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FADE"] = false
     end
+    HealBot_setIconUpdateInterval()
     HealBot_setOptions_Timer(150)
 end
 

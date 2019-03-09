@@ -2648,8 +2648,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.status.dirarrow=99999 
         ghb.status.reserved=false
         ghb.status.bar4=0
-        ghb.checks.range=GetTime()+1000000
-        ghb.checks.other=GetTime()+1000000
+        ghb.checks.timed=GetTime()+1000000
         ghb.spells.castpct=-1
         ghb.aura.buff.name=false
         ghb.icon.buff.count=0
@@ -3233,12 +3232,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 HealBot_Unit_Button[unit]=shb
             end
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
-            shb.checks.range=GetTime() + HealBot_Action_luVars["updateDelay"]
-            if unitType>1 and unitType<4 then
-                shb.checks.other=GetTime() + 1000000
-            else
-                shb.checks.other=GetTime() + 0.3 + (HealBot_Action_luVars["updateDelay"] * 2)
-            end
+            shb.checks.timed=GetTime() + HealBot_Action_luVars["updateDelay"]
             HealBot_Action_luVars["updateDelay"]=HealBot_Action_luVars["updateDelay"]+0.02
             if shb.status.offline and UnitIsConnected(unit) then
                 shb.status.offline=false
