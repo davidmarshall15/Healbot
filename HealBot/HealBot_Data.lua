@@ -1,4 +1,4 @@
-HealBot_lastVerSkinUpdate="8.1.0.0"
+HealBot_lastVerSkinUpdate="8.1.0.7"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -228,6 +228,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
+        VersionResetDone={},
         HoTindex=1,
         HoTname=HEALBOT_GUARDIAN_SPIRIT,
         CureCustomDefaultCastBy="ALL",

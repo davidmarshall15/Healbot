@@ -787,17 +787,15 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Action_setNameTag(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
-            else
-                button.update.buff=true
-                button.update.state=true
-                button.status.update=true
             end
-            button.health.updhealth=true
-            button.health.update=true
             if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
                 button.update.targeticon=true
-                button.status.update=true
             end
+            button.update.buff=true
+            button.update.state=true
+            button.status.update=true
+            button.health.updhealth=true
+            button.health.update=true
         else
             HealBot_UpdateUnitRange(button,HealBot_RangeSpells["RES"],false)
         end
@@ -3221,8 +3219,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb.reset=nil
             shb.unit=unit
             shb.guid=hbGUID
-            shb.update.unit=true
-            shb.status.update=true
             HealBot_UnitData[hbGUID]["UNIT"]=unit
             if unitType==9 then
                 HealBot_Enemy_Button[unit]=shb
@@ -3253,11 +3249,10 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         end
         if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
             shb.update.roleicon=true
-            shb.status.update=true
         end
-        shb.health.updhealth=true
-        shb.health.update=true
-        HealBot_UpdateUnitRange(shb, HealBot_RangeSpells["HEAL"], true)
+        shb.update.unit=true
+        shb.status.update=true
+        shb.status.range=-2
     else
         return nil
     end

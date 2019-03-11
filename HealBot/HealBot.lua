@@ -893,9 +893,6 @@ function HealBot_UpdateUnitReset(button)
 end
 
 function HealBot_UpdateUnit(button)
-    button.health.updincoming=true
-    button.health.updabsorbs=true
-    button.health.update=true
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
         button.update.roleicon=true
     end    
@@ -909,12 +906,14 @@ function HealBot_UpdateUnit(button)
     HealBot_Action_HBText(button)
     if UnitExists(button.unit) then
         button.health.updhealth=true
-        button.health.update=true
         HealBot_OnEvent_UnitMana(button);
         button.guid=HealBot_UnitGUID(button.unit)
     else
         HealBot_Action_UpdateHealthButton(button)
     end
+    button.health.updincoming=true
+    button.health.updabsorbs=true
+    button.health.update=true
     HealBot_Action_SetBar3Value(button)
     button.update.buff=true
     button.update.debuff=true
@@ -2507,7 +2506,9 @@ local function HealBot_Update_Skins()
         end
         if tonumber(tMajor)==8 then
             if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<8) then
-                HealBot_Options_ResetSetting("ICON")
+                if not HealBot_Globals.VersionResetDone["8.1.0.7"] then
+                    HealBot_Options_ResetSetting("ICON")
+                end
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -4430,7 +4431,7 @@ local function HealBot_UnitUpdateHealth(button)
 end
 
 local function HealBot_UnitUpdateFriendly(button)
-    if not UnitIsUnit("player",button.unit) and (button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit)) then
+    if button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit) then
         HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
     end
     if button.status.update then
@@ -6138,6 +6139,7 @@ function HealBot_Options_ResetSetting(resetTab)
             button1 = HEALBOT_WORDS_YES,
             button2 = HEALBOT_WORDS_NO,
             OnAccept = function()
+                HealBot_Globals.VersionResetDone["8.1.0.7"]=true
                 HealBot_Reset_Icons()
             end,
             timeout = 0,
