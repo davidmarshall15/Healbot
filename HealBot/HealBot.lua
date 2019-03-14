@@ -3507,7 +3507,18 @@ local function HealBot_Update_Slow()
         HealBot_OnEvent_ReadyCheckClear()
     end
     if not HealBot_Data["UILOCK"] and not InCombatLockdown() then
-        if HealBot_luVars["HealBot_Refresh"] then
+        if HealBot_luVars["ResetFlag"] then
+            if HealBot_luVars["ResetFlag"]==1 then
+                HealBot_Reset("Full")
+            elseif HealBot_luVars["ResetFlag"]==2 then
+                HealBot_ResetCustomDebuffs()
+            elseif HealBot_luVars["ResetFlag"]==3 then
+                HealBot_ResetSkins()
+            elseif HealBot_luVars["ResetFlag"]==4 then
+                HealBot_Reset("Quick")
+            end
+            HealBot_luVars["ResetFlag"]=false
+        elseif HealBot_luVars["HealBot_Refresh"] then
             if HealBot_RefreshTypes[0] then
                 HealBot_RefreshTypes[1]=false
                 HealBot_RefreshTypes[2]=false
@@ -3560,18 +3571,7 @@ local function HealBot_Update_Slow()
                     z=Time
                     HealBot_ReCheckBuffsTime=Time
                 end
-            end
-        elseif HealBot_luVars["ResetFlag"] then
-            if HealBot_luVars["ResetFlag"]==1 then
-                HealBot_Reset("Full")
-            elseif HealBot_luVars["ResetFlag"]==2 then
-                HealBot_ResetCustomDebuffs()
-            elseif HealBot_luVars["ResetFlag"]==3 then
-                HealBot_ResetSkins()
-            elseif HealBot_luVars["ResetFlag"]==4 then
-                HealBot_Reset("Quick")
-            end
-            HealBot_luVars["ResetFlag"]=false 
+            end 
         elseif HealBot_luVars["HealBot_Options_Timer"] then
             HealBot_Options_Update()
         elseif hbShareSkins[1] then
@@ -5379,8 +5379,7 @@ end
 function HealBot_OnEvent_PartyMembersChanged(self)
     if HealBot_luVars["NumPlayers"]~=GetNumGroupMembers() then
         HealBot_luVars["NumPlayers"]=GetNumGroupMembers()
-        HealBot_luVars["CheckSkin"]=true
-        HealBot_luVars["Checks"]=true
+        HealBot_PartyUpdate_CheckSkin()
         if HealBot_luVars["IsSolo"] and HealBot_Config.DisableSolo then
             HealBot_Options_DisableCheck()
         end
