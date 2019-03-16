@@ -3480,6 +3480,7 @@ function HealBot_Options_ShowTooltipSpellCoolDown_OnClick(self)
     else
         HealBot_Globals.Tooltip_ShowCD = false
     end
+    HealBot_setTooltipUpdateInterval()
 end
 
 function HealBot_Options_ShowTooltipInstant_OnClick(self)

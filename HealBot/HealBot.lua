@@ -87,10 +87,12 @@ HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
 HealBot_luVars["Timer8000"]=0
 HealBot_luVars["TankUnit"]="x"
-HealBot_luVars["HealBot_Refresh"]=true
+HealBot_luVars["HealBot_Refresh"]=TimeNow
 HealBot_luVars["healthFactor"]=1
 HealBot_luVars["targetSpec"]=" "
 HealBot_luVars["clearGUID"]=false
+HealBot_luVars["PrevTipTime"]=TimeNow
+HealBot_luVars["TipTimeInterval"]=0.098
     
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -118,7 +120,7 @@ function HealBot_needRecalcParty()
     HealBot_luVars["HealBot_Refresh"]=false
     for r=0,5 do
         if HealBot_RefreshTypes[r] then
-            HealBot_luVars["HealBot_Refresh"]=true
+            HealBot_luVars["HealBot_Refresh"]=GetTime()+HealBot_Globals.RangeCheckFreq
             break
         end
     end
@@ -143,7 +145,9 @@ function HealBot_nextRecalcParty(typeRequired)
         HealBot_nextRecalcParty(6)
     end
     HealBot_RefreshTypes[typeRequired]=true
-    HealBot_luVars["HealBot_Refresh"]=true
+    if not HealBot_luVars["HealBot_Refresh"] then
+        HealBot_luVars["HealBot_Refresh"]=GetTime()+(HealBot_Globals.RangeCheckFreq*2)
+    end
   --HealBot_setCall("HealBot_nextRecalcParty")
 end
 
@@ -850,6 +854,7 @@ local function HealBot_CheckTime_Modifier()
     else
         HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/70), 4) -- At 50FPS with default settings = 0.56
     end
+    HealBot_setTooltipUpdateInterval()
   --HealBot_setCall("HealBot_CheckTime_Modifier")
 end
 
@@ -1998,8 +2003,8 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*4))/(HealBot_luVars["qaFR"]/10), 4) -- At 50FPS with default settings = 0.36
-        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.016
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*2))/(HealBot_luVars["qaFR"]/10), 4) -- At 50FPS with default settings = 0.16
+        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.032
         HealBot_Timers["HBaTh"]=0.01+(HealBot_Globals.RangeCheckFreq/20)
     else
         HealBot_Timers["HB1Th"]=1
@@ -2527,6 +2532,15 @@ local function HealBot_Update_Skins()
   --HealBot_setCall("HealBot_Update_Skins")
 end
 
+function HealBot_setTooltipUpdateInterval()
+    if HealBot_Globals.Tooltip_ShowCD then
+        HealBot_luVars["TipTimeInterval"]=0.098
+    else
+        HealBot_luVars["TipTimeInterval"]=HealBot_Globals.RangeCheckFreq
+    end
+  --HealBot_setCall("HealBot_setTooltipUpdateInterval")
+end
+
 local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_globalVars()
     HealBot_Lang_InitVars()
@@ -2714,6 +2728,7 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
     HealBot_setIconUpdateInterval()
+    HealBot_setTooltipUpdateInterval()
   --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
 
@@ -3518,7 +3533,7 @@ local function HealBot_Update_Slow()
                 HealBot_Reset("Quick")
             end
             HealBot_luVars["ResetFlag"]=false
-        elseif HealBot_luVars["HealBot_Refresh"] then
+        elseif HealBot_luVars["HealBot_Refresh"] and HealBot_luVars["HealBot_Refresh"]<TimeNow then
             if HealBot_RefreshTypes[0] then
                 HealBot_RefreshTypes[1]=false
                 HealBot_RefreshTypes[2]=false
@@ -4651,7 +4666,10 @@ local function HealBot_Update_Fast()
                 xButton.status.update=true
             end
         end
-        if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] then HealBot_Action_RefreshTooltip() end
+        if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
+            HealBot_luVars["PrevTipTime"]=TimeNow+HealBot_luVars["TipTimeInterval"]
+            HealBot_Action_RefreshTooltip() 
+        end
         if HealBot_luVars["MaskAuraDCheck"]<TimeNow and HealBot_luVars["MaskAuraReCheck"] then
             HealBot_luVars["MaskAuraReCheck"]=nil
             HealBot_CheckAllActiveDebuffs()
@@ -5379,7 +5397,8 @@ end
 function HealBot_OnEvent_PartyMembersChanged(self)
     if HealBot_luVars["NumPlayers"]~=GetNumGroupMembers() then
         HealBot_luVars["NumPlayers"]=GetNumGroupMembers()
-        HealBot_PartyUpdate_CheckSkin()
+        HealBot_luVars["CheckSkin"]=true
+        HealBot_luVars["Checks"]=true
         if HealBot_luVars["IsSolo"] and HealBot_Config.DisableSolo then
             HealBot_Options_DisableCheck()
         end

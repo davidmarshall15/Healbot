@@ -3215,7 +3215,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             end
             shb.reset=true
         end
-        if (HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit])~=shb or shb.unit~=unit or shb.reset then
+        if (HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit])~=shb or shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
             shb.reset=nil
             shb.unit=unit
             shb.guid=hbGUID
@@ -3240,19 +3240,17 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_setUnitIcons(unit)
             HealBot_Action_setNameText(shb)
             HealBot_Action_HBText(shb)
-        elseif shb.guid~=hbGUID then
-            shb.guid=hbGUID
+            HealBot_Action_CheckUnitLowMana(shb)
+            if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
+                shb.update.roleicon=true
+            end
+            shb.update.unit=true
+            shb.status.update=true
+            shb.status.range=-2
         end
-        HealBot_Action_CheckUnitLowMana(shb)
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
-        if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
-            shb.update.roleicon=true
-        end
-        shb.update.unit=true
-        shb.status.update=true
-        shb.status.range=-2
     else
         return nil
     end
@@ -3540,9 +3538,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
         elseif UnitIsUnit(self.unit,"player") and self.status.current<9 then
             HealBot_Data["TIPTYPE"] = "Disabled"
         end
-        if HealBot_Data["UILOCK"] or HealBot_Globals.DisableToolTipInCombat then
-            HealBot_Action_RefreshTooltip();
-        end
+        HealBot_Action_RefreshTooltip();
     end
     if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and not UnitIsDeadOrGhost(self.unit) and HealBot_retHighlightTarget()~=self.unit then
         local z=false
