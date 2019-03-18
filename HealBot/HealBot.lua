@@ -854,7 +854,6 @@ local function HealBot_CheckTime_Modifier()
     else
         HealBot_Timers["CheckTimeMod"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/70), 4) -- At 50FPS with default settings = 0.56
     end
-    HealBot_setTooltipUpdateInterval()
   --HealBot_setCall("HealBot_CheckTime_Modifier")
 end
 
@@ -1641,15 +1640,13 @@ local function HealBot_Reset(rType)
         HealBot_Load("hbReset") 
         HealBot_setOptions_Timer(7950)
         HealBot_Register_Events()
+        HealBot_nextRecalcParty(0)
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.reset=true
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.reset=true
+            xButton.update.reset=true
+            xButton.status.update=true
         end
     end
-    HealBot_nextRecalcParty(0)
   --HealBot_setCall("HealBot_Reset")
 end
 
@@ -2011,6 +2008,7 @@ function HealBot_Set_Timers()
         HealBot_Timers["HB2Th"]=1
         HealBot_Timers["HBaTh"]=10
     end
+    HealBot_setTooltipUpdateInterval()
     HealBot_CheckTime_Modifier()
   --HealBot_setCall("HealBot_Set_Timers")
 end
