@@ -78,6 +78,7 @@ local HealBot_Options_BarHealthIncHeal_List={}
 local HealBot_Options_FontOutline_List={}
 local HealBot_Options_BuffTxt_List={}
 local HealBot_Options_HealGroupsFrame_List={}
+local HealBot_Options_TargetFocusInCombat_List={}
 
 HealBot_Options_StorePrev["FramesSelFrame"]=1
 HealBot_Options_StorePrev["customDebuffPriority"]=10
@@ -164,6 +165,12 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_SINGLETANK,
     }
     
+    HealBot_Options_TargetFocusInCombat_List = {
+        HEALBOT_OPTIONS_ALWAYSHIDE,
+        HEALBOT_OPTIONS_NOCHANGE,
+        HEALBOT_OPTIONS_ALWAYSSHOW,
+    }
+
     HealBot_Options_FontOutline_List = {
         HEALBOT_WORDS_NONE,
         HEALBOT_WORDS_THIN,
@@ -2982,6 +2989,16 @@ function HealBot_Options_TargetIncPet_OnClick(self)
     HealBot_Options_framesChanged(7)
 end
 
+function HealBot_Options_SortOutOfRangeLast_OnClick(self)
+    if self:GetChecked() then
+        Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] = true
+    else
+        Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] = false
+    end
+    HealBot_nextRecalcParty(6)
+    HealBot_nextRecalcParty(2)
+end
+
 function HealBot_Options_SubSortIncGroup_OnClick(self)
     if self:GetChecked() then
         Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIG"] = true
@@ -3070,24 +3087,6 @@ function HealBot_Options_HideIncMyTargets_OnClick(self)
         Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCMYTARGETS"] = true
     end
     HealBot_Options_framesChanged(1)
-end
-
-function HealBot_Options_FocusAlwaysShow_OnClick(self)
-    if self:GetChecked() then
-        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] = true
-    else
-        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] = false
-    end
-    HealBot_Options_framesChanged(9)
-end
-
-function HealBot_Options_TargetAlwaysShow_OnClick(self)
-    if self:GetChecked() then
-        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] = true
-    else
-        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] = false
-    end
-    HealBot_Options_framesChanged(8)
 end
 
 function HealBot_Options_FocusOnlyFriend_OnClick(self)
@@ -3832,6 +3831,38 @@ function HealBot_Options_ShowRoleOnBar_OnClick(self)
         HealBot_ResetClassIconTexture()
     end
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
+end
+
+--------------------------------------------------------------------------------
+
+function HealBot_Options_TargetInCombat_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
+        info.text = HealBot_Options_TargetFocusInCombat_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
+                        HealBot_Options_framesChanged(8)
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_FocusInCombat_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
+        info.text = HealBot_Options_TargetFocusInCombat_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
+                        HealBot_Options_framesChanged(8)
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
 end
 
 --------------------------------------------------------------------------------
@@ -6425,9 +6456,9 @@ end
 local tmpRecParts={}
 local lFrame=1
 local skinBoolean ={["Chat"]       = {["RESONLY"]=true},
-                    ["Sort"]       = {["SUBIG"]=true,["SUBIP"]=true,["SUBIV"]=true,["SUBIT"]=true,["SUBIMT"]=true,["SUBPF"]=true},
+                    ["Sort"]       = {["OORLAST"]=true,["SUBIG"]=true,["SUBIP"]=true,["SUBIV"]=true,["SUBIT"]=true,["SUBIMT"]=true,["SUBPF"]=true},
                     ["General"]    = {["HIDEPARTYF"]=true,["HIDEPTF"]=true,["HIDEBOSSF"]=true,["HIDERAIDF"]=true,["FLUIDBARS"]=true,["LOWMANACOMBAT"]=true},
-                    ["Healing"]    = {["GROUPPETS"]=true,["TINCSELF"]=true,["TINCGROUP"]=true,["TINCRAID"]=true,["TINCPET"]=true,["TALWAYSSHOW"]=true,["FALWAYSSHOW"]=true,["TONLYFRIEND"]=true,["FONLYFRIEND"]=true},
+                    ["Healing"]    = {["GROUPPETS"]=true,["TINCSELF"]=true,["TINCGROUP"]=true,["TINCRAID"]=true,["TINCPET"]=true,["TONLYFRIEND"]=true,["FONLYFRIEND"]=true},
                     ["Highlight"]  = {["CBAR"]=true,["CBARCOMBAT"]=true,["TBAR"]=true,["TBARCOMBAT"]=true},
                     ["Aggro"]      = {["SHOW"]=true,["SHOWIND"]=true,["SHOWBARS"]=true,["SHOWTEXT"]=true,["SHOWBARSPCT"]=true,["SHOWTEXTPCT"]=true},
                     ["Protection"] = {["CRASH"]=true,["COMBAT"]=true},
@@ -10568,15 +10599,14 @@ function HealBot_Options_InitSub1(subNo)
         end
     elseif subNo==337 then
         if not DoneInitTab[337] then
-            HealBot_Options_FocusAlwaysShow:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"])
-            HealBot_Options_SetText(HealBot_Options_FocusAlwaysShow,HEALBOT_OPTIONS_ALWAYS_SHOW_FOCUS)
-            HealBot_Options_TargetAlwaysShow:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"])
-            HealBot_Options_SetText(HealBot_Options_TargetAlwaysShow,HEALBOT_OPTIONS_ALWAYS_SHOW_TARGET)
             HealBot_Options_TargetOnlyFriend:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"])
             HealBot_Options_SetText(HealBot_Options_TargetOnlyFriend,HEALBOT_OPTIONS_TARGET_ONLY_FRIEND)
             HealBot_Options_FocusOnlyFriend:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"])
             HealBot_Options_SetText(HealBot_Options_FocusOnlyFriend,HEALBOT_OPTIONS_FOCUS_ONLY_FRIEND)
-            
+            HealBot_Options_TargetInCombat.initialize = HealBot_Options_TargetInCombat_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
+            HealBot_Options_FocusInCombat.initialize = HealBot_Options_FocusInCombat_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
             HealBot_Options_GroupPetsByFive:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"])
             HealBot_Options_SetText(HealBot_Options_GroupPetsByFive,HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE)
             HealBot_Options_Pct_OnLoad(HealBot_Options_AlertLevelIC,HEALBOT_OPTIONS_INCOMBATALERTLEVEL)
@@ -10595,6 +10625,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_SubSortIncMainTanks,HEALBOT_OPTIONS_TANKHEALS)
             HealBot_Options_SubSortIncMyTargets:SetChecked(Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIMT"])
             HealBot_Options_SetText(HealBot_Options_SubSortIncMyTargets,HEALBOT_OPTIONS_MYTARGET)
+            HealBot_Options_SortOutOfRangeLast:SetChecked(Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"])
+            HealBot_Options_SetText(HealBot_Options_SortOutOfRangeLast,HEALBOT_OPTIONS_SORTOORLAST)
             HealBot_Options_TargetIncSelf:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"])
             HealBot_Options_SetText(HealBot_Options_TargetIncSelf,HEALBOT_OPTIONS_SELFHEALS)
             HealBot_Options_TargetIncGroup:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCGROUP"])
@@ -10627,6 +10659,10 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_TAB_HIDE)
             g=_G["healbotraidfilterfontstr"]
             g:SetText(HEALBOT_OPTIONS_EMERGFILTER)
+            g=_G["healbottargetincombatfontstr"]
+            g:SetText(HEALBOT_DISABLED_TARGET)
+            g=_G["healbotfocusincombatfontstr"]
+            g:SetText(HEALBOT_FOCUS)
             g=_G["healbotraidfiltergrpsfontstr"]
             g:SetText(HEALBOT_OPTIONS_EMERGFILTERGROUPS)
             g=_G["healbotextrasorttopfontstr"]

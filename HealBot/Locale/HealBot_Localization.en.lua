@@ -597,8 +597,6 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar";
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
-    HEALBOT_OPTIONS_ALWAYS_SHOW_TARGET      = "Target: Always show"
-    HEALBOT_OPTIONS_ALWAYS_SHOW_FOCUS       = "Focus: Always show"
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
     HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use Game Tooltip"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
@@ -951,6 +949,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PROFILE_CLASS           = "Class"
     HEALBOT_OPTIONS_INCOMBATALERTLEVEL      = "Alert Level - In Combat";
     HEALBOT_OPTIONS_OUTCOMBATALERTLEVEL     = "Alert Level - Out of Combat";
+    HEALBOT_OPTIONS_SORTOORLAST             = "Sort out of range last"
     HEALBOT_OPTION_NUMENEMYS                = "Number of Enemies"
     HEALBOT_WORD_AUTO                       = "Auto"
 	HEALBOT_OPTIONS_ENABLEAUTOCOMBAT        = "Enable HealBot autoCombat"
@@ -970,6 +969,10 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Including Pets"
     HEALBOT_ENEMY_EXISTS_SHOW_ARENA         = "Arena opponent bars"
     HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Toggle Custom Cures - Default Cast By"
+    HEALBOT_OPTIONS_ENTERINGCOMBAT          = "When entering combat"
+    HEALBOT_OPTIONS_ALWAYSHIDE              = "Always Hide"
+    HEALBOT_OPTIONS_NOCHANGE                = "No Change"
+    HEALBOT_OPTIONS_ALWAYSSHOW              = "Always Show"
 end
 
 function HealBot_Lang_InitVars()

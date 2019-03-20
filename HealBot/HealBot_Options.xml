@@ -4144,7 +4144,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AlertLevelOC" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4200,34 +4200,10 @@
                     <Scripts>
                       <OnClick>HealBot_Options_TargetIncPet_OnClick(self)</OnClick>
                     </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_TargetAlwaysShow" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetIncRaid" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="120" y="35"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_TargetAlwaysShow_OnClick(self)</OnClick>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_FocusAlwaysShow" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetAlwaysShow" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-4"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_FocusAlwaysShow_OnClick(self)</OnClick>
-                    </Scripts>
-                  </CheckButton>
+                  </CheckButton>                  
                   <CheckButton name="HealBot_Options_TargetOnlyFriend" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FocusAlwaysShow" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetIncGroup" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-10"/>
                         </Offset>
@@ -4249,11 +4225,70 @@
                       <OnClick>HealBot_Options_FocusOnlyFriend_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_TargetInCombat" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetIncRaid" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="150" y="-5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotincombatfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ENTERINGCOMBAT">
+                          <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetInCombat" relativePoint="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="20" y="22"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="healbottargetincombatfontstr" inherits="GameFontNormalSmall" text="HEALBOT_DISABLED_TARGET">
+                          <Anchors>
+                            <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_TargetInCombat" relativePoint="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="0" y="-8"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_FocusInCombat" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TargetInCombat" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-2"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotfocusincombatfontstr" inherits="GameFontNormalSmall" text="HEALBOT_FOCUS">
+                          <Anchors>
+                            <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_FocusInCombat" relativePoint="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="0" y="-8"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                    </Scripts>
+                  </Frame>
                   <CheckButton name="HealBot_Options_GroupPetsByFive" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FocusOnlyFriend" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FocusInCombat" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-12"/>
+                          <AbsDimension x="10" y="-18"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4525,7 +4560,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="75" y="-48" />
+                              <AbsDimension x="75" y="-35" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -4575,7 +4610,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSort" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="22" y="-78"/>
+                              <AbsDimension x="22" y="-94"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -4636,7 +4671,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SubSortIncGroup" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="40" y="-22"/>
+                              <AbsDimension x="40" y="-20"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -4654,6 +4689,18 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_SubSortIncMyTargets_OnClick(self)</OnClick>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSort" relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="122" y="-38"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_SortOutOfRangeLast_OnClick(self)</OnClick>
                         </Scripts>
                       </CheckButton>
                     </Frames>

@@ -2373,8 +2373,16 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["TINCPET"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCPET"]=false end
-    if Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"]==nil then Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"]=false end
-    if Healbot_Config_Skins.Healing[SkinName]["FALWAYSSHOW"]==nil then Healbot_Config_Skins.Healing[SkinName]["FALWAYSSHOW"]=false end
+    if Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"] then 
+        Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"]=3
+        Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"]=nil
+    end
+    if Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"]==nil then Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"]=2 end
+    if Healbot_Config_Skins.Healing[SkinName]["FALWAYSSHOW"] then 
+        Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=3
+        Healbot_Config_Skins.Healing[SkinName]["FALWAYSSHOW"]=nil
+    end
+    if Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]==nil then Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=2 end
     if Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]=false end
@@ -2387,6 +2395,7 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"]==nil then Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"]=true end
     if Healbot_Config_Skins.Sort[SkinName]["RAIDORDER"]==nil then Healbot_Config_Skins.Sort[SkinName]["RAIDORDER"]=3 end
     if Healbot_Config_Skins.Sort[SkinName]["SUBORDER"]==nil then Healbot_Config_Skins.Sort[SkinName]["SUBORDER"]=5 end
+    if Healbot_Config_Skins.Sort[SkinName]["OORLAST"]==nil then Healbot_Config_Skins.Sort[SkinName]["OORLAST"]=false end
     if Healbot_Config_Skins.Sort[SkinName]["SUBIG"]==nil then Healbot_Config_Skins.Sort[SkinName]["SUBIG"]=true end
     if Healbot_Config_Skins.Sort[SkinName]["SUBIP"]==nil then Healbot_Config_Skins.Sort[SkinName]["SUBIP"]=true end
     if Healbot_Config_Skins.Sort[SkinName]["SUBIV"]==nil then Healbot_Config_Skins.Sort[SkinName]["SUBIV"]=true end
@@ -3496,7 +3505,7 @@ local function HealBot_Not_Fighting()
     if HealBot_luVars["MessageReloadUI"]>0 then
         HealBot_MessageReloadUI(HealBot_luVars["MessageReloadUI"])
     end
-    if not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_Unit_Button["target"] then
+    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 and UnitExists("target") then
         HealBot_OnEvent_PlayerTargetChanged(true)
     end
     HealBot_EndInstanceEncounter()
@@ -5107,7 +5116,7 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
                     elseif HealBot_Config.ActionVisible[8] then
                         HealBot_Action_HidePanel(8)
                     end
-                elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TALWAYSSHOW"] and HealBot_Config.ActionVisible[8] and not HealBot_Data["UILOCK"] then
+                elseif not HealBot_Data["UILOCK"] and HealBot_Config.ActionVisible[8] then
                     HealBot_Action_HidePanel(8)
                 end
             else
@@ -5115,11 +5124,7 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
             end
         end
     elseif HealBot_Config.ActionVisible[8] then
-        if HealBot_Data["UILOCK"] then
-            HealBot_RecalcParty(3)
-        else
-            HealBot_Action_HidePanel(8)
-        end
+        HealBot_RecalcParty(3)
     end
     if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"] then
         if not HealBot_Data["UILOCK"] or Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBARCOMBAT"] then
@@ -5174,8 +5179,6 @@ function HealBot_OnEvent_PlayerRegenDisabled()
             HealBot_RecalcParty(2); 
             HealBot_AddDebug("Enter Combat HealBot_Check_Pets RecalcParty=true")
         end
-        if HealBot_RefreshTypes[3] then HealBot_RecalcParty(3); end
-        if HealBot_RefreshTypes[4] then HealBot_RecalcParty(4); end
         HealBot_RecalcParty(5);
     end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUNIT"] then
@@ -5198,6 +5201,24 @@ function HealBot_OnEvent_PlayerRegenDisabled()
         end
         if xButton.aura.debuff.name and not HealBot_Config_Cures.DebuffWatchInCombat then
             HealBot_ClearDebuff(xButton)
+        end
+    end
+    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
+        HealBot_Action_HidePanel(9)
+    elseif HealBot_RefreshTypes[4] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
+        if HealBot_RefreshTypes[4] or not HealBot_UnitData["focus"] then
+            HealBot_RecalcParty(4)
+        else
+            HealBot_Action_ShowPanel(9)
+        end
+    end
+    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
+        HealBot_Action_HidePanel(8)
+    elseif HealBot_RefreshTypes[3] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
+        if HealBot_RefreshTypes[3] or not HealBot_Unit_Button["target"] then
+            HealBot_RecalcParty(3)
+        else
+            HealBot_Action_ShowPanel(8)
         end
     end
     if not Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBARCOMBAT"] and HealBot_luVars["HighlightTarget"] then
@@ -5506,12 +5527,8 @@ local function HealBot_OnEvent_FocusChanged(self)
                 elseif HealBot_Config.ActionVisible[9] then
                     HealBot_Action_HidePanel(9)
                 end
-            elseif not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FALWAYSSHOW"] and HealBot_Config.ActionVisible[9] then
-                if HealBot_Data["UILOCK"] then
-                    HealBot_RecalcParty(4)
-                else
-                    HealBot_Action_HidePanel(9)
-                end
+            elseif not HealBot_Data["UILOCK"] and HealBot_Config.ActionVisible[9] then 
+                HealBot_Action_HidePanel(9)
             end
         else
             HealBot_RecalcParty(4)
@@ -5983,8 +6000,9 @@ function HealBot_SmartCast(hlthDelta)
     return s;
 end
 
+local oldRange=0
 function HealBot_UpdateUnitRange(button, spellName, doRefresh) 
-    local oldRange=button.status.range
+    oldRange=button.status.range
     button.spells.rangecheck=spellName
     button.status.range=HealBot_UnitInRange(button.unit, button.spells.rangecheck)
     if oldRange~=button.status.range then
@@ -5996,12 +6014,20 @@ function HealBot_UpdateUnitRange(button, spellName, doRefresh)
             button.update.state=true
             button.status.update=true
         end
+        if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and (oldRange==1 or button.status.range==1) then
+            if button.status.unittype==1 then 
+                HealBot_nextRecalcParty(6)
+            elseif button.status.unittype<4 then
+                HealBot_nextRecalcParty(2)
+            end
+        end
     end
   --HealBot_setCall("HealBot_UpdateUnitRange")
 end
 
+local uRange=0
 function HealBot_UnitInRange(unit, spellName) -- added by Diacono of Ursin
-    local uRange=0
+    uRange=0
     if UnitIsUnit("player",unit) then
         uRange = 1
     elseif not UnitIsVisible(unit) then 
