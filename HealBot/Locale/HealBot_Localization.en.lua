@@ -149,6 +149,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TANKHEALS               = "Main tanks";
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";
     HEALBOT_OPTIONS_PRIVATETANKS            = "Private main tanks";
+    HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private main healers";
     HEALBOT_OPTIONS_TARGETHEALS             = "Targets";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";
     HEALBOT_OPTIONS_RAID10                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
@@ -621,6 +622,7 @@ function HealBot_Lang_enALL()
     HEALBOT_TOGGLE_ENABLED                  = "Toggle enabled"
     HEALBOT_TOGGLE_MYTARGETS                = "Toggle My Targets"
     HEALBOT_TOGGLE_PRIVATETANKS             = "Toggle private tanks"
+    HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
     HEALBOT_RESET_BAR                       = "Reset bar"
     HEALBOT_HIDE_BARS                       = "Hide bars over 100 yards"
     HEALBOT_RANDOMMOUNT                     = "Random Mount"

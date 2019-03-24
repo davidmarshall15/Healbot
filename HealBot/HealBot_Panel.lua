@@ -37,6 +37,7 @@ local HealBot_AddWidth={  ["BOTH"]={[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8
                           ["SIDE"]={[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8]=4,[9]=4,[10]=4}};
 local HealBot_MyHealTargets={}
 local HealBot_MyPrivateTanks={}
+local HealBot_MyPrivateHealers={}
 local HealBot_MainTanks={};
 local HealBot_MainHealers={};
 local HealBot_UnitGroups={}
@@ -260,6 +261,23 @@ function HealBot_Panel_ToggelPrivateTanks(unit)
     end
     HealBot_nextRecalcParty(6)
 end
+function HealBot_Panel_ToggelPrivateHealers(unit)
+    if unit=="target" then return end
+    local xGUID=HealBot_UnitGUID(unit)
+    local mti=0
+    for j=1, #HealBot_MyPrivateHealers do
+        if xGUID==HealBot_MyPrivateHealers[j] then
+            mti=j
+            break;
+        end
+    end
+    if mti>0 then
+        table.remove(HealBot_MyPrivateHealers,mti)
+    else
+        table.insert(HealBot_MyPrivateHealers,xGUID)
+    end
+    HealBot_nextRecalcParty(6)
+end
 
 function HealBot_Panel_RetMyHealTarget(unit)
     local xGUID=HealBot_UnitGUID(unit)
@@ -282,6 +300,21 @@ function HealBot_Panel_RetPrivateTanks(unit)
     local mti=0
     for j=1, #HealBot_MyPrivateTanks do
         if xGUID==HealBot_MyPrivateTanks[j] then
+            mti=j
+            break;
+        end
+    end
+    if mti>0 then
+        return true
+    else
+        return false
+    end
+end
+function HealBot_Panel_RetPrivateHealers(unit)
+    local xGUID=HealBot_UnitGUID(unit)
+    local mti=0
+    for j=1, #HealBot_MyPrivateHealers do
+        if xGUID==HealBot_MyPrivateHealers[j] then
             mti=j
             break;
         end
@@ -2598,6 +2631,12 @@ local function HealBot_Panel_PlayersChanged()
             end
         end)
 
+        table.foreach(HealBot_MyPrivateHealers, function (index,xGUID)
+            local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
+            if UnitExists(xUnit) then  
+                HealBot_MainHealers[xGUID]=xUnit
+            end
+        end)
         local PetsWithPlayers=false
         if HealBot_Config.DisabledNow==1 then
             hbCurrentFrame=1

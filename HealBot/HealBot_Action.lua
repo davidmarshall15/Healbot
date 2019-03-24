@@ -2835,6 +2835,16 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         end
         info.func = function() HealBot_Panel_ToggelPrivateTanks(self.unit); end;
         UIDropDownMenu_AddButton(info, 1);
+		info = UIDropDownMenu_CreateInfo();
+		info.hasArrow = false; 
+        info.notCheckable = true;
+        if HealBot_Panel_RetPrivateHealers(self.unit) then
+            info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_PRIVATEHEALERS;
+        else
+            info.text = HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_PRIVATEHEALERS
+        end
+        info.func = function() HealBot_Panel_ToggelPrivateHealers(self.unit); end;
+        UIDropDownMenu_AddButton(info, 1);
 
         info = UIDropDownMenu_CreateInfo();
         info.notCheckable = true;
@@ -3742,6 +3752,8 @@ local function HealBot_Action_DoHealUnit_Wheel(self, delta)
         HealBot_Panel_ToggelHealTarget(xButton.unit)
     elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_PRIVATETANKS then
         HealBot_Panel_ToggelPrivateTanks(xButton.unit)
+    elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_PRIVATEHEALERS then
+        HealBot_Panel_ToggelPrivateHealers(xButton.unit)
     elseif HealBot_MouseWheelCmd==HEALBOT_RESET_BAR then
         HealBot_Reset_Unit(xButton)
     elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMMOUNT and UnitIsUnit(xUnit,"player") and not UnitAffectingCombat("player") then
