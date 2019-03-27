@@ -1284,8 +1284,8 @@ local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
     end
 end
 
-local function HealBot_Panel_SubSort(hbincSort,unitType)
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+local function HealBot_Panel_SubSort(doSubSort,unitType)
+    if doSubSort then
         table.sort(subunits,function (a,b)
             if not order[a] or not order[b] then
                 return false
@@ -1422,7 +1422,9 @@ local function HealBot_Panel_targetHeals(preCombat)
 end
 
 local function HealBot_Panel_insSort(unit, hbGUID, sortType)
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==1 then
+    local barOrder = Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]
+    if sortType=="Main" then barOrder = Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"] end
+    if barOrder==1 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = "!";
         elseif UnitExists(unit) then
@@ -1434,11 +1436,11 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
         else
             order[unit] = "ÿÿÿÿ"..unit
         end
-    elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==2 then
+    elseif barOrder==2 then
         local _,classEN = UnitClass(unit);
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = "!";
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and classEN then
             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
                 order[unit] = "ÿÿÿþ"..classEN
             else
@@ -1447,7 +1449,7 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
         else
             order[unit] = "ÿÿÿÿ"..unit
         end
-    elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==3 then
+    elseif barOrder==3 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = -1
         elseif UnitExists(unit) then
@@ -1459,7 +1461,7 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
         else
             order[unit] = 19+(HealBot_UnitGroups[unit] or 1)
         end
-    elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]==4 then
+    elseif barOrder==4 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = -99999999
         elseif UnitExists(unit) then
@@ -1493,8 +1495,8 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
 end
 
 local function HealBot_Panel_vehicleHeals()
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIV"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIV"] then 
         hbincSort=true
     end
     local k=i[hbCurrentFrame]
@@ -1509,7 +1511,7 @@ local function HealBot_Panel_vehicleHeals()
             if not HealBot_TrackNotVisible[xGUID] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                if hbincSort then
                     HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                 else
                     table.insert(subunits,xUnit)
@@ -1532,7 +1534,7 @@ local function HealBot_Panel_vehicleHeals()
                     if not HealBot_TrackNotVisible[xGUID] then
                         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                         HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                        if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                        if hbincSort then
                             HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                         else
                             table.insert(subunits,xUnit)
@@ -1554,7 +1556,7 @@ local function HealBot_Panel_vehicleHeals()
                 if not HealBot_TrackNotVisible[xGUID] then
                     i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                     HealBot_UnitGroups[xUnit]=1
-                    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                    if hbincSort then
                         HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                     else
                         table.insert(subunits,xUnit)
@@ -1582,8 +1584,8 @@ local function HealBot_Panel_petHeals()
     local uName=HealBot_GetUnitName(xUnit)
     local pUnit="player"
     local xGUID=HealBot_UnitGUID(xUnit)
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIP"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIP"] then 
         hbincSort=true
     end
     if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] and not UnitUsingVehicle(pUnit) then
@@ -1593,7 +1595,7 @@ local function HealBot_Panel_petHeals()
             if not HealBot_TrackNotVisible[xGUID] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                if hbincSort then
                     HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                 else
                     table.insert(subunits,xUnit)
@@ -1616,7 +1618,7 @@ local function HealBot_Panel_petHeals()
                     if not HealBot_TrackNotVisible[xGUID] then
                         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                         HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                        if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                        if hbincSort then
                             HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                         else
                             table.insert(subunits,xUnit)
@@ -1648,7 +1650,7 @@ local function HealBot_Panel_petHeals()
                 if not HealBot_TrackNotVisible[xGUID] then
                     i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                     HealBot_UnitGroups[xUnit]=1
-                    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                    if hbincSort then
                         HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                     else
                         table.insert(subunits,xUnit)
@@ -1901,6 +1903,10 @@ local function HealBot_Panel_raidHeals()
     local TempSort,TempGrp,TempUnitMaxH="init",99,1
     local class,classEN=HEALBOT_WARRIOR,"WARRIOR"
     local PrevSort,SubSort=nil,nil
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 then 
+        hbincSort=true
+    end
     for x,_ in pairs(order) do
         order[x]=nil;
     end
@@ -1944,7 +1950,7 @@ local function HealBot_Panel_raidHeals()
                 PrevSort=class
             end
             if TempSort~=SubSort then
-                HealBot_Panel_SubSort(true, 1)
+                HealBot_Panel_SubSort(hbincSort, 1)
                 SubSort=TempSort
             end
         elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 and TempSort~=TempGrp then
@@ -1971,7 +1977,7 @@ local function HealBot_Panel_raidHeals()
                 PrevSort=HEALBOT_OPTIONS_GROUPHEALS.." "..TempSort
             end
             if TempSort~=SubSort then
-                HealBot_Panel_SubSort(true, 1)
+                HealBot_Panel_SubSort(hbincSort, 1)
                 SubSort=TempSort
             end
         elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 and TempMaxH>TempUnitMaxH then
@@ -2007,12 +2013,12 @@ local function HealBot_Panel_raidHeals()
                 PrevSort=">"..format("%s",(TempMaxH/1000)).."k"
             end
             if TempMaxH~=SubSort then
-                HealBot_Panel_SubSort(true, 1)
+                HealBot_Panel_SubSort(hbincSort, 1)
                 SubSort=TempMaxH
             end
         end
         if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==5 and not units[j] then
-            HealBot_Panel_SubSort(true, 1)
+            HealBot_Panel_SubSort(hbincSort, 1)
         elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 and units[j] then
             table.insert(subunits,xUnit)
             HealBot_Panel_SubSort(false, 1)
@@ -2076,8 +2082,8 @@ end
 
 local function HealBot_Panel_myHeals()
     local k=i[hbCurrentFrame]
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIMT"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIMT"] then 
         hbincSort=true
     end
     local uName,xUnit=nil,nil
@@ -2088,7 +2094,7 @@ local function HealBot_Panel_myHeals()
             HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
             if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCMYTARGETS"]==false then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                if hbincSort then
                     HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                 else
                     table.insert(subunits,xUnit)
@@ -2112,8 +2118,8 @@ end
 
 local function HealBot_Panel_groupHeals()
     local k=i[hbCurrentFrame]
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIG"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIG"] then 
         hbincSort=true
     end
     for _,xUnit in ipairs(HealBot_Action_HealGroup) do
@@ -2128,7 +2134,7 @@ local function HealBot_Panel_groupHeals()
                     end
                     i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                     HealBot_TrackNames[xGUID]=true;
-                    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                    if hbincSort then
                         HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                     else
                         table.insert(subunits,xUnit)
@@ -2145,7 +2151,7 @@ local function HealBot_Panel_groupHeals()
                 i[hbCurrentFrame]=i[hbCurrentFrame]+1;
                 HealBot_UnitName[xGUID] = uName;
                 HealBot_TrackNames[xGUID]=true;
-                if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                if hbincSort then
                     HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                 else
                     table.insert(subunits,xUnit)
@@ -2171,8 +2177,8 @@ end
 local function HealBot_Panel_healerHeals()
     local k=i[hbCurrentFrame]
     local xGUID=nil
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
         hbincSort=true
     end
     for xGUID,xUnit in pairs(HealBot_MainHealers) do
@@ -2183,7 +2189,7 @@ local function HealBot_Panel_healerHeals()
             if not HealBot_TrackNotVisible[xGUID] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 HealBot_TrackNames[xGUID]=true;
-                if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                if hbincSort then
                     HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                 else
                     table.insert(subunits,xUnit)
@@ -2206,8 +2212,8 @@ end
 local function HealBot_Panel_tankHeals()
     local k=i[hbCurrentFrame]
     local xGUID=nil
-    local hbincSort=nil
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
+    local hbincSort=false
+    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
         hbincSort=true
     end
     for xGUID,xUnit in pairs(HealBot_MainTanks) do
@@ -2220,7 +2226,7 @@ local function HealBot_Panel_tankHeals()
                     i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                     HealBot_TrackNames[xGUID]=true;
                     HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
-                    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and hbincSort then
+                    if hbincSort then
                         HealBot_Panel_insSort(xUnit, xGUID, "Sub")
                     else
                         table.insert(subunits,xUnit)
