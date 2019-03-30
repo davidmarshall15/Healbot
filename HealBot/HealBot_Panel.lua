@@ -1429,9 +1429,9 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
             order[unit] = "!";
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = "ÿÿÿþ"..HealBot_UnitName[hbGUID]
+                order[unit] = "ÿÿÿþ"..HealBot_UnitName[hbGUID] or unit
             else
-                order[unit] = HealBot_UnitName[hbGUID];
+                order[unit] = HealBot_UnitName[hbGUID] or unit
             end
         else
             order[unit] = "ÿÿÿÿ"..unit
@@ -1450,16 +1450,17 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
             order[unit] = "ÿÿÿÿ"..unit
         end
     elseif barOrder==3 then
+        local uGroup=HealBot_UnitGroups[unit] or 1
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = -1
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = 9+HealBot_UnitGroups[unit]
+                order[unit] = 9+uGroup
             else
-                order[unit] = HealBot_UnitGroups[unit]
+                order[unit] = uGroup
             end
         else
-            order[unit] = 19+(HealBot_UnitGroups[unit] or 1)
+            order[unit] = 19+uGroup
         end
     elseif barOrder==4 then
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
@@ -1475,16 +1476,17 @@ local function HealBot_Panel_insSort(unit, hbGUID, sortType)
         end
         if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
     else
+        local uRole=HealBot_unitRole[hbGUID] or 9
         if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
             order[unit] = -1
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = HealBot_unitRole[hbGUID]
+                order[unit] = uRole
             else
-                order[unit] = 59+HealBot_unitRole[hbGUID]
+                order[unit] = 59+uRole
             end
         else
-            order[unit] = 99+HealBot_unitRole[hbGUID]
+            order[unit] = 99+uRole
         end
     end
     if sortType=="Main" then
