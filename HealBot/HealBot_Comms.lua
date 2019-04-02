@@ -31,7 +31,6 @@ function HealBot_Comms_About()
         HealBot_Error_Versionx:SetText(HEALBOT_OPTIONS_LANG.."="..GetLocale())
     end
     HealBot_Error_Classx:SetText(HEALBOT_SORTBY_CLASS.."="..UnitClass("player"))
-    HealBot_Comms_AcceptSkins()
     HealBot_Comms_MacroSuppressError()
     HealBot_Comms_MacroSuppressSound()
 end
@@ -93,16 +92,6 @@ function HealBot_Comms_CheckVer(userName, version)
             HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
         end
         HealBot_setOptions_Timer(195)
-    end
-end
-
-function HealBot_Comms_AcceptSkins()
-    if HealBot_Globals.AcceptSkins==1 then
-        HealBot_Info_AcceptSkinsVal:SetText("ON")
-        HealBot_Info_AcceptSkinsVal:SetTextColor(0.1,1,0.1)
-    else
-        HealBot_Info_AcceptSkinsVal:SetText("OFF")
-        HealBot_Info_AcceptSkinsVal:SetTextColor(0.88,0.1,0.1)
     end
 end
 

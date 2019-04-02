@@ -18,11 +18,8 @@ local hbNumFormats = {["Places"]        = {[1]=-1, [2]=-1, [3]=-1, [4]=-1, [5]=-
 local HealBotButtonMacroAttribs={}
 local HealBot_Action_luVars={}
 HealBot_Action_luVars["PrevThreatPct"]=-3
-HealBot_Action_luVars["NumFormatSurLa"]="["
-HealBot_Action_luVars["NumFormatSurRa"]="]"
 HealBot_Action_luVars["FrameMoving"]=false
 HealBot_Action_luVars["ResetAttribs"]=false
-HealBot_Action_luVars["AggroBarAlpha"]=0.8
 HealBot_Action_luVars["AggroBarUp"]=false
 HealBot_Action_luVars["UnitPowerMax"]=3
 HealBot_Action_luVars["resetSkinTo"]=""
@@ -59,7 +56,7 @@ local function HealBot_Action_DoAggroIndicatorUpd(button)
             iconName:SetAlpha(0)
         end
     else
-        if button.aggro.status>=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERTIND"] then
+        if button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
             if button.aggro.status==1 then
                 if HealBot_Action_rCalls[button.unit]["aggroIndicator"]~="a1" then
                     HealBot_Action_rCalls[button.unit]["aggroIndicator"]="a1"
@@ -155,7 +152,8 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
             threatPct=0
             if threatStatus then threatStatus=0 end
         end
-        if threatStatus and (Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARSPCT"] or Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXTPCT"]) then
+        if threatStatus and (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARSPCT"] or 
+                             Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWTEXTPCT"]) then
             if not threatPct then threatPct,_=HealBot_CalcThreat(unit) end
             if threatPct>0 then
                 xButton.aggro.threatpct=threatPct
@@ -179,29 +177,32 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
         if status then
             if HealBot_Config_Cures.CDCshownAB and xButton.aura.debuff.type then
                 xButton.aggro.status=debuffCodes[xButton.aura.debuff.type]
-            elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] and 
-                   threatStatus>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] then
+            elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOW"] and 
+                   threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERT"] then
                 xButton.aggro.status=threatStatus
-            elseif status=="target" and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"] then
+            elseif status=="target" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][xButton.frame]["TBAR"] then
                 xButton.aggro.status=-2
-            elseif status=="highlight" and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] then
+            elseif status=="highlight" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][xButton.frame]["CBAR"] then
                 xButton.aggro.status=-1
             elseif xButton.aggro.status<0 and status=="off" then
                 xButton.aggro.status=0
             else
                 xButton.aggro.status=threatStatus or 0
             end
-            if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"] and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWIND"] then
+            if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOW"] and 
+               Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWIND"] then
                 HealBot_Action_aggroIndicatorUpd(xButton)
             end
         else
             xButton.aggro.status=0
             HealBot_Action_aggroIndicatorUpd(xButton)
         end
-        if status and (xButton.aggro.status<0 or xButton.aggro.status>4 or (xButton.aggro.status>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] and 
-                                                                            xButton.aggro.status<4 and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARS"])) then
-            if xButton.aggro.status>0 and xButton.aggro.status<4 and Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARSPCT"] then
-                if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARS"] and threatStatus>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] then
+        if status and (xButton.aggro.status<0 or xButton.aggro.status>4 or 
+                      (xButton.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERT"] and 
+                       xButton.aggro.status<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARS"])) then
+            if xButton.aggro.status>0 and xButton.aggro.status<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARSPCT"] then
+                if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARS"] and 
+                   threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERT"] then
                     barName:SetValue(xButton.aggro.threatpct)
                 end
             else
@@ -865,8 +866,9 @@ function HealBot_Action_UpdateHealthButton(button)
                 hcr, hcg = HealBot_Action_BarColourPct(hpct)
             end
 
-            if button.aggro.status==3 or (HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["ALERTIC"])) or
-             (not HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["ALERTOC"])) then
+            if button.aggro.status==3 or 
+              (HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIC"])) or
+             (not HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTOC"])) then
                 if button.status.current<5 then button.status.current=4 end
                 if button.status.range==1 then
                     button.status.enabled=true
@@ -1405,6 +1407,8 @@ local function HealBot_PercentToHexColor(percent)
     return string.format("%02x%02x%02x",r*255,g*255,b*255)
 end
 
+local aggroNumFormatSurLa={[1]="[",[2]="[",[3]="[",[4]="[",[5]="[",[6]="[",[7]="[",[8]="[",[9]="[",}
+local aggroNumFormatSurRa={[1]="]",[2]="]",[3]="]",[4]="]",[5]="]",[6]="]",[7]="]",[8]="]",[9]="]",}
 function HealBot_Action_setHealthText(button)
     local btHBbarText,bthlthdelta=" ",0
     local hbHealInTxt=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]
@@ -1581,8 +1585,8 @@ function HealBot_Action_setHealthText(button)
                 end
             end
         end
-        if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXTPCT"] and button.aggro.threatpct>0 then 
-            btHBbarText=btHBbarText.."  "..HealBot_Action_luVars["NumFormatSurLa"]..button.aggro.threatpct.."%"..HealBot_Action_luVars["NumFormatSurRa"]
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] and button.aggro.threatpct>0 then 
+            btHBbarText=btHBbarText.."  "..aggroNumFormatSurLa[button.frame]..button.aggro.threatpct.."%"..aggroNumFormatSurRa[button.frame]
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["DOUBLE"] then
             if vUnit then
@@ -1669,8 +1673,8 @@ function HealBot_Action_setNameText(button)
         end
         if uName then
 
-            if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWTEXT"] and button.aggro.status<4 and 
-               (button.aggro.status or 0)>Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["ALERT"] and uName then
+            if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"] and button.aggro.status<4 and 
+               (button.aggro.status or 0)>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] and uName then
                 uName=">> "..uName.." <<"
             end
         end
@@ -1792,30 +1796,32 @@ function HealBot_Action_sethbNumberFormat()
 end
 
 function HealBot_Action_sethbAggroNumberFormat()
-    if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==2 then
-        HealBot_Action_luVars["NumFormatSurLa"]="("
-        HealBot_Action_luVars["NumFormatSurRa"]=")"
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==3 then
-        HealBot_Action_luVars["NumFormatSurLa"]="["
-        HealBot_Action_luVars["NumFormatSurRa"]="]"
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==4 then
-        HealBot_Action_luVars["NumFormatSurLa"]="{"
-        HealBot_Action_luVars["NumFormatSurRa"]="}"
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==5 then
-        HealBot_Action_luVars["NumFormatSurLa"]="<"
-        HealBot_Action_luVars["NumFormatSurRa"]=">"
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==6 then
-        HealBot_Action_luVars["NumFormatSurLa"]="~"
-        HealBot_Action_luVars["NumFormatSurRa"]=""
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==7 then
-        HealBot_Action_luVars["NumFormatSurLa"]=":"
-        HealBot_Action_luVars["NumFormatSurRa"]=":"
-    elseif Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["TEXTFORMAT"]==8 then
-        HealBot_Action_luVars["NumFormatSurLa"]="*"
-        HealBot_Action_luVars["NumFormatSurRa"]="*"
-    else
-        HealBot_Action_luVars["NumFormatSurLa"]=""
-        HealBot_Action_luVars["NumFormatSurRa"]=""
+    for j=1,9 do
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==2 then
+            aggroNumFormatSurLa[j]="("
+            aggroNumFormatSurRa[j]=")"
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==3 then
+            aggroNumFormatSurLa[j]="["
+            aggroNumFormatSurRa[j]="]"
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==4 then
+            aggroNumFormatSurLa[j]="{"
+            aggroNumFormatSurRa[j]="}"
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==5 then
+            aggroNumFormatSurLa[j]="<"
+            aggroNumFormatSurRa[j]=">"
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==6 then
+            aggroNumFormatSurLa[j]="~"
+            aggroNumFormatSurRa[j]=""
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==7 then
+            aggroNumFormatSurLa[j]=":"
+            aggroNumFormatSurRa[j]=":"
+        elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==8 then
+            aggroNumFormatSurLa[j]="*"
+            aggroNumFormatSurRa[j]="*"
+        else
+            aggroNumFormatSurLa[j]=""
+            aggroNumFormatSurRa[j]=""
+        end
     end
 end
 
@@ -1862,9 +1868,9 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
   
     if barType=="bar" then
         b=button;
-        if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"]==false and 
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"]==false and
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"]==false then 
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][b.frame]["SHOW"]==false and 
+           Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][b.frame]["CBAR"]==false and
+           Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][b.frame]["TBAR"]==false then 
             abSize=0 
         end
          --for x=1,51 do
@@ -2387,9 +2393,9 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         elseif b.guid then 
             HealBot_Action_SetBar3Value(b)
         end
-        if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOWBARS"]==false and 
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"]==false and
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"]==false then
+        if not Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][b.frame]["SHOWBARS"] and 
+           not Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][b.frame]["CBAR"] and
+           not Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][b.frame]["TBAR"] then
             bar4:SetMinMaxValues(0,100)
             bar4:SetValue(0)
             bar4:SetStatusBarColor(0,0,0,0)
@@ -2472,6 +2478,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             end
         end
         HealBot_setOptions_Timer(595)
+        HealBot_setHighlightTargetBar()
     end
   --HealBot_setCall("HealBot_DoAction_ResetSkin")
 end
@@ -3225,7 +3232,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             end
             shb.reset=true
         end
-        if (HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit])~=shb or shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
+        if shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
             shb.reset=nil
             shb.unit=unit
             shb.guid=hbGUID
@@ -3248,6 +3255,10 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_Action_SetAllButtonAttribs(shb,"Enemy")
             HealBot_Action_SetAllButtonAttribs(shb,"Enabled")
             HealBot_setUnitIcons(unit)
+            HealBot_OnEvent_UnitHealth(shb)
+            HealBot_HealsInUpdate(shb)
+            HealBot_AbsorbsUpdate(shb)
+            HealBot_Action_setHealthText(shb)
             HealBot_Action_setNameText(shb)
             HealBot_Action_HBText(shb)
             HealBot_Action_CheckUnitLowMana(shb)
@@ -3550,10 +3561,10 @@ function HealBot_Action_HealUnit_OnEnter(self)
         end
         HealBot_Action_RefreshTooltip();
     end
-    if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and not UnitIsDeadOrGhost(self.unit) and HealBot_retHighlightTarget()~=self.unit then
+    if Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][self.frame]["CBAR"] and not UnitIsDeadOrGhost(self.unit) and HealBot_retHighlightTarget()~=self.unit then
         local z=false
         if HealBot_Data["UILOCK"] then
-            if Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBARCOMBAT"] then z=true end
+            if Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][self.frame]["CBARCOMBAT"] then z=true end
         else
             z=true
         end
@@ -3571,7 +3582,7 @@ function HealBot_Action_HealUnit_OnLeave(self)
     if self.status and self.status.dirarrow<99998 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
         HealBot_Action_HideDirectionArrow(self)
     end
-    if self.aggro and Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"] and self.aggro.status==-1 then
+    if self.aggro and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][self.frame]["CBAR"] and self.aggro.status==-1 then
         HealBot_Action_UpdateAggro(self.unit,"off",self.aggro.status or 0, 0)
     end
     hbLastButton=nil
@@ -3955,48 +3966,80 @@ function HealBot_Action_setRegisterForClicks(button)
     end
 end
 
-local HealBot_AggroBarColr = {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1}
-local HealBot_AggroBarColg = {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1}
-local HealBot_AggroBarColb = {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1}
+local HealBot_AggroBarColr = {[1]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [2]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [3]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [4]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [5]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [6]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [7]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [8]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [9]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=1, [3]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},}
+local HealBot_AggroBarColg = {[1]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [2]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [3]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [4]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [5]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [6]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [7]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [8]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [9]= {[-2]=0.7, [-1]=1, [0]=1, [1]=1, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},}
+local HealBot_AggroBarColb = {[1]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [2]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [3]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [4]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [5]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [6]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [7]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [8]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},
+                              [9]= {[-2]=1, [-1]=1, [0]=0.4, [1]=0.2, [2]=0.1, [3]=0.1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1},}
 local HealBot_AggroUnitThreat=1
 
 function HealBot_Action_SetDebuffAggroCols()
-    HealBot_AggroBarColr[5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].R
-    HealBot_AggroBarColg[5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].G
-    HealBot_AggroBarColb[5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].B 
-    HealBot_AggroBarColr[6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].R
-    HealBot_AggroBarColg[6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].G
-    HealBot_AggroBarColb[6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].B 
-    HealBot_AggroBarColr[7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].R
-    HealBot_AggroBarColg[7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].G
-    HealBot_AggroBarColb[7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].B 
-    HealBot_AggroBarColr[8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].R
-    HealBot_AggroBarColg[8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].G
-    HealBot_AggroBarColb[8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].B 
-    HealBot_AggroBarColr[9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].R
-    HealBot_AggroBarColg[9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].G
-    HealBot_AggroBarColb[9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].B
+    for j=1,9 do
+        HealBot_AggroBarColr[j][5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].R
+        HealBot_AggroBarColg[j][5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].G
+        HealBot_AggroBarColb[j][5]=HealBot_Config_Cures.CDCBarColour[HEALBOT_DISEASE_en].B 
+        HealBot_AggroBarColr[j][6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].R
+        HealBot_AggroBarColg[j][6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].G
+        HealBot_AggroBarColb[j][6]=HealBot_Config_Cures.CDCBarColour[HEALBOT_MAGIC_en].B 
+        HealBot_AggroBarColr[j][7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].R
+        HealBot_AggroBarColg[j][7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].G
+        HealBot_AggroBarColb[j][7]=HealBot_Config_Cures.CDCBarColour[HEALBOT_POISON_en].B 
+        HealBot_AggroBarColr[j][8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].R
+        HealBot_AggroBarColg[j][8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].G
+        HealBot_AggroBarColb[j][8]=HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].B 
+        HealBot_AggroBarColr[j][9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].R
+        HealBot_AggroBarColg[j][9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].G
+        HealBot_AggroBarColb[j][9]=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."10"].B
+    end
 end
 
 function HealBot_Action_SetHightlightAggroCols()
-    HealBot_AggroBarColr[-1]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CR"]
-    HealBot_AggroBarColg[-1]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CG"]
-    HealBot_AggroBarColb[-1]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CB"]
+    for j=1,9 do
+        HealBot_AggroBarColr[j][-1]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["CR"]
+        HealBot_AggroBarColg[j][-1]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["CG"]
+        HealBot_AggroBarColb[j][-1]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["CB"]
+    end
 end
 
 function HealBot_Action_SetHightlightTargetAggroCols()
-    HealBot_AggroBarColr[-2]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TR"]
-    HealBot_AggroBarColg[-2]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TG"]
-    HealBot_AggroBarColb[-2]=Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TB"]
+    for j=1,9 do
+        HealBot_AggroBarColr[j][-2]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["TR"]
+        HealBot_AggroBarColg[j][-2]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["TG"]
+        HealBot_AggroBarColb[j][-2]=Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["TB"]
+    end
 end
 
 function HealBot_Action_SetAggroCols()
-    HealBot_AggroBarColr[2]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["R"]
-    HealBot_AggroBarColg[2]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["G"]
-    HealBot_AggroBarColb[2]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["B"]
-    HealBot_AggroBarColr[3]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["R"]
-    HealBot_AggroBarColg[3]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["G"]
-    HealBot_AggroBarColb[3]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["B"]
+    for j=1,9 do
+        HealBot_AggroBarColr[j][2]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["R"]
+        HealBot_AggroBarColg[j][2]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["G"]
+        HealBot_AggroBarColb[j][2]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["B"]
+        HealBot_AggroBarColr[j][3]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["R"]
+        HealBot_AggroBarColg[j][3]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["G"]
+        HealBot_AggroBarColb[j][3]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["B"]
+    end
 end
 
 local function HealBot_Action_UpdateFluidBar(button)
@@ -4046,6 +4089,8 @@ local function HealBot_Action_UpdateFluidBars()
   --HealBot_setCall("HealBot_Action_UpdateFluidBars")
 end
 
+local aFrameUpd={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false}
+local aAlpha={[1]=0.5,[2]=0.5,[3]=0.5,[4]=0.5,[5]=0.5,[6]=0.5,[7]=0.5,[8]=0.5,[9]=0.5}
 local function HealBot_Action_UpdateAggroBar(button)
     local bar4=_G["HealBot_Action_HealUnit"..button.id.."Bar4"]
     if UnitExists(button.unit) then
@@ -4054,7 +4099,7 @@ local function HealBot_Action_UpdateAggroBar(button)
             if HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
                 bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[button.aura.debuff.name].R,
                                        HealBot_Globals.CDCBarColour[button.aura.debuff.name].G,
-                                       HealBot_Globals.CDCBarColour[button.aura.debuff.name].B,HealBot_Action_luVars["AggroBarAlpha"])
+                                       HealBot_Globals.CDCBarColour[button.aura.debuff.name].B,aAlpha[button.frame])
             else
                 local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
                 if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name] then
@@ -4062,12 +4107,16 @@ local function HealBot_Action_UpdateAggroBar(button)
                 end
                 bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[customDebuffPriority].R,
                                        HealBot_Globals.CDCBarColour[customDebuffPriority].G,
-                                       HealBot_Globals.CDCBarColour[customDebuffPriority].B,HealBot_Action_luVars["AggroBarAlpha"])
+                                       HealBot_Globals.CDCBarColour[customDebuffPriority].B,aAlpha[button.frame])
             end
         else
-            bar4:SetStatusBarColor(HealBot_AggroBarColr[HealBot_AggroUnitThreat],HealBot_AggroBarColg[HealBot_AggroUnitThreat],HealBot_AggroBarColb[HealBot_AggroUnitThreat],HealBot_Action_luVars["AggroBarAlpha"])
+            bar4:SetStatusBarColor(HealBot_AggroBarColr[button.frame][HealBot_AggroUnitThreat],
+                                   HealBot_AggroBarColg[button.frame][HealBot_AggroUnitThreat],
+                                   HealBot_AggroBarColb[button.frame][HealBot_AggroUnitThreat],
+                                   aAlpha[button.frame])
         end
         HealBot_Action_luVars["UpdatedAggroBars"]=true
+        aFrameUpd[button.frame]=true
     else
         bar4:SetStatusBarColor(1,0,0,0)
         button.status.bar4=0
@@ -4075,6 +4124,7 @@ local function HealBot_Action_UpdateAggroBar(button)
 end
 
 local function HealBot_Action_UpdateAggroBars()
+    aFrameUpd={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false}
     HealBot_Action_luVars["UpdatedAggroBars"]=false
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.status.bar4>0 then
@@ -4086,17 +4136,21 @@ local function HealBot_Action_UpdateAggroBars()
             HealBot_Action_UpdateAggroBar(xButton)
         end
     end
-    if HealBot_Action_luVars["AggroBarUp"] then
-        HealBot_Action_luVars["AggroBarAlpha"]=HealBot_Action_luVars["AggroBarAlpha"]+0.04+Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"]
-        if HealBot_Action_luVars["AggroBarAlpha"]>=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["MAXA"] then
-            HealBot_Action_luVars["AggroBarUp"]=false
-            HealBot_Action_luVars["AggroBarAlpha"]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["MAXA"]
-        end
-    else
-        HealBot_Action_luVars["AggroBarAlpha"]=HealBot_Action_luVars["AggroBarAlpha"]-0.04-Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["FREQ"]
-        if HealBot_Action_luVars["AggroBarAlpha"]<=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["MINA"] then
-            HealBot_Action_luVars["AggroBarUp"]=true
-            HealBot_Action_luVars["AggroBarAlpha"]=Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["MINA"]
+    for j=1,9 do
+        if aFrameUpd[j] then
+            if HealBot_Action_luVars["AggroBarUp"] then
+                aAlpha[j]=aAlpha[j]+0.04+Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
+                if aAlpha[j]>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MAXA"] then
+                    HealBot_Action_luVars["AggroBarUp"]=false
+                    aAlpha[j]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MAXA"]
+                end
+            else
+                aAlpha[j]=aAlpha[j]-0.04-Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
+                if aAlpha[j]<=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MINA"] then
+                    HealBot_Action_luVars["AggroBarUp"]=true
+                    aAlpha[j]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MINA"]
+                end
+            end
         end
     end
   --HealBot_setCall("HealBot_Action_UpdateAggroBars")

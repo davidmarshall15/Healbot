@@ -6,10 +6,10 @@ local bcspace={}
 local brspace={}
 local cols={}
 local HealBot_TrackNames={};
-local HealBot_TrackNotVisible={};
 local i={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local order = {};
 local units = {};
+local suborder = {};
 local subunits = {};
 local MyGroup={["GROUP"]=0,["FRAME"]=1}
 local HeaderPos={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
@@ -41,8 +41,6 @@ local HealBot_MyPrivateHealers={}
 local HealBot_MainTanks={};
 local HealBot_MainHealers={};
 local HealBot_UnitGroups={}
-local HealBot_UnitNameGUID={}
-local maxHealDiv=2500
 local HealBot_TestBars={}
 local hbBarsPerFrame={}
 local hbCurrentFrame=1
@@ -53,14 +51,13 @@ local HealBot_cpData={}
 local HealBot_cpOn=false
 local _
 local nraid=0
-local HealBot_UnitName={}
 local hbOptionOn=nil
 local hbFocusOn=nil
 local HealBot_Header_Frames={}
 local HealBot_Track_Headers={}
 local HealBot_PanelVars={}
-local hbTempUnitName={}
-local hbTempUnitGUID={}
+local hbPanel_dataNames={}
+local hbPanel_dataGUIDs={}
 local grpNo=1
 local tHeader={}
 local hbRole={ [HEALBOT_MAINTANK]=3,
@@ -101,10 +98,12 @@ function HealBot_Panel_retLuVars(vName)
 end
 
 local function HealBot_Panel_updGUIDstore(hbGUID,unitName,unit)
-    hbTempUnitName[unitName]=unit
-    hbTempUnitGUID[hbGUID]=unit
-    HealBot_UnitNameGUID[unitName]=hbGUID
-    HealBot_UnitName[hbGUID]=unitName
+    if not hbPanel_dataNames[unitName] then hbPanel_dataNames[unitName]={} end
+    if not hbPanel_dataGUIDs[hbGUID] then hbPanel_dataGUIDs[hbGUID]={} end
+    hbPanel_dataNames[unitName]["UNIT"]=unit
+    hbPanel_dataGUIDs[hbGUID]["UNIT"]=unit
+    hbPanel_dataNames[unitName]["GUID"]=hbGUID
+    hbPanel_dataGUIDs[hbGUID]["NAME"]=unitName
 end
 
 function HealBot_Panel_clickToFocus(status)
@@ -121,18 +120,6 @@ end
 
 function HealBot_Panel_IsTank(xGUID)
     return HealBot_MainTanks[xGUID]
-end
-
-function HealBot_Panel_SetSubSortPlayer()
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-        Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"]=false
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SUBSORTPLAYER2)
-    else
-        Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"]=true
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SUBSORTPLAYER1)
-    end
-    HealBot_Options_SubSortPlayerFirst:SetChecked(Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"])
-    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_SethbTopRole(Role)
@@ -176,37 +163,6 @@ function HealBot_Panel_ClearBarArrays()
     HealBot_HeadX={};
     HealBot_HeadY={};
     HealBot_nextRecalcParty(0)
-end
-
-function HealBot_Panel_SetmaxHealDiv(lvl)
-    maxHealDiv=500
-    if lvl>116 then
-        maxHealDiv=40000
-    elseif lvl>111 then
-        maxHealDiv=30000
-    elseif lvl>106 then
-        maxHealDiv=20000
-    elseif lvl>101 then
-        maxHealDiv=15000
-    elseif lvl>96 then
-        maxHealDiv=10000
-    elseif lvl>91 then
-        maxHealDiv=8000
-    elseif lvl>86 then
-        maxHealDiv=6000
-    elseif lvl>81 then
-        maxHealDiv=5000
-    elseif lvl>76 then
-        maxHealDiv=4000
-    elseif lvl>70 then
-        maxHealDiv=3000
-    elseif lvl>60 then
-        maxHealDiv=2500
-    elseif lvl>45 then
-        maxHealDiv=2000
-    elseif lvl>30 then
-        maxHealDiv=1000
-    end
 end
 
 function HealBot_Panel_ClearBlackList()
@@ -356,19 +312,28 @@ local roleTextures={
     }
     
 local classTextures={
-    ["DEATHKNIGHT"]="Interface\\Addons\\HealBot\\Images\\Deathknight",
-    ["DEMONHUNTER"]="Interface\\Addons\\HealBot\\Images\\Demonhunter",
-    ["DRUID"]="Interface\\Addons\\HealBot\\Images\\Druid",
-    ["HUNTER"]="Interface\\Addons\\HealBot\\Images\\Hunter",
+    ["DEAT"]="Interface\\Addons\\HealBot\\Images\\Deathknight",
+    ["DEMO"]="Interface\\Addons\\HealBot\\Images\\Demonhunter",
+    ["DRUI"]="Interface\\Addons\\HealBot\\Images\\Druid",
+    ["HUNT"]="Interface\\Addons\\HealBot\\Images\\Hunter",
     ["MAGE"]="Interface\\Addons\\HealBot\\Images\\Mage",
     ["MONK"]="Interface\\Addons\\HealBot\\Images\\Monk",
-    ["PALADIN"]="Interface\\Addons\\HealBot\\Images\\Paladin",
-    ["PRIEST"]="Interface\\Addons\\HealBot\\Images\\Priest",
-    ["ROGUE"]="Interface\\Addons\\HealBot\\Images\\Rogue",
-    ["SHAMAN"]="Interface\\Addons\\HealBot\\Images\\Shaman",
-    ["WARLOCK"]="Interface\\Addons\\HealBot\\Images\\Warlock",
-    ["WARRIOR"]="Interface\\Addons\\HealBot\\Images\\Warrior",
+    ["PALA"]="Interface\\Addons\\HealBot\\Images\\Paladin",
+    ["PRIE"]="Interface\\Addons\\HealBot\\Images\\Priest",
+    ["ROGU"]="Interface\\Addons\\HealBot\\Images\\Rogue",
+    ["SHAM"]="Interface\\Addons\\HealBot\\Images\\Shaman",
+    ["WARL"]="Interface\\Addons\\HealBot\\Images\\Warlock",
+    ["WARR"]="Interface\\Addons\\HealBot\\Images\\Warrior",
     }
+
+function HealBot_Panel_classEN(unit)
+    local _,classEN = UnitClass(unit)
+    if classEN then 
+        return strsub(classEN,1,4)
+    else
+        return HealBot_Class_En[HEALBOT_WARRIOR]
+    end
+end
 
 function HealBot_Action_SetClassIconTexture(button)
     local prevTexture=button.icon.debuff.classtexture
@@ -391,8 +356,7 @@ function HealBot_Action_SetClassIconTexture(button)
         if roleTextures[unitRole] then
             button.icon.debuff.classtexture=roleTextures[unitRole];
         else
-            local _,classEN = UnitClass(button.unit)
-            button.icon.debuff.classtexture=classTextures[classEN];
+            button.icon.debuff.classtexture=classTextures[HealBot_Panel_classEN(button.unit)];
         end
     else
         button.icon.debuff.classtexture=false
@@ -539,9 +503,9 @@ function HealBot_Action_SetAddHeightWidth()
     local addsHeightSize={}
     for j=1,10 do
         addsHeight[j]=0
-        if Healbot_Config_Skins.Aggro[Healbot_Config_Skins.Current_Skin]["SHOW"]==false and 
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["CBAR"]==false and
-           Healbot_Config_Skins.Highlight[Healbot_Config_Skins.Current_Skin]["TBAR"]==false then        
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOW"]==false and 
+           Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["CBAR"]==false and
+           Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][j]["TBAR"]==false then        
             addsHeight[j]=0
         else
             addsHeight[j]=Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["AGGROSIZE"]
@@ -627,8 +591,8 @@ local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffse
             local bFrame = xButton.frame
             local uName=HealBot_GetUnitName(xUnit);
             if not uName then
-                if HealBot_UnitName[xButton.unit] then
-                    uName=HealBot_UnitName[xButton.unit];
+                if hbPanel_dataGUIDs[xButton.unit] then
+                    uName=hbPanel_dataGUIDs[xButton.unit]["NAME"];
                 elseif HealBot_cpOn and HealBot_cpName[xUnit] then -- Crash Protection 
                     uName=HealBot_cpName[xUnit];
                 elseif strsub(xButton.unit,1,4) == "Test" then
@@ -1194,12 +1158,15 @@ function HealBot_Panel_resetTestCols(force)
 end
 
 function HealBot_Panel_RemoveMember(hbGUID)
-    local uName=HealBot_UnitName[hbGUID] or HealBot_GetUnitName(HealBot_UnitData[hbGUID]["UNIT"]) or "NONE"
-    if hbTempUnitName[uName] then hbTempUnitName[uName]=nil end
-    if hbTempUnitGUID[hbGUID] then hbTempUnitGUID[hbGUID]=nil end
+    local uName="unknown"
+    if hbPanel_dataGUIDs[hbGUID] then 
+        uName=hbPanel_dataGUIDs[hbGUID]["NAME"]
+    else
+        uName=HealBot_GetUnitName(HealBot_UnitData[hbGUID]["UNIT"]) or "NONE"
+    end
+    if hbPanel_dataNames[uName] then hbPanel_dataNames[uName]=nil end
+    if hbPanel_dataGUIDs[hbGUID] then hbPanel_dataGUIDs[hbGUID]=nil end
     if HealBot_unitRole[hbGUID] then HealBot_unitRole[hbGUID]=nil end
-    if HealBot_UnitNameGUID[uName] then HealBot_UnitNameGUID[uName]=nil end
-    if HealBot_UnitName[hbGUID] then HealBot_UnitName[hbGUID]=nil end
 end
 
 local function HealBot_cpsUnit(unit,sUnit)
@@ -1245,7 +1212,7 @@ local function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
         unit=HealBot_cpsUnit(nil,unit)
         if not HealBot_TrackUnit[unit] then
             hbGUID="0x"..hbGUID
-            HealBot_UnitName[hbGUID] = unitName;
+            HealBot_Panel_updGUIDstore(hbGUID,unitName,unit)
             local frameNo=tonumber(hbCurFrame) or 1
             local setButton=HealBot_Action_SetHealButton(unit,hbGUID,frameNo,1);
             if setButton then
@@ -1263,9 +1230,9 @@ local function HealBot_Panel_enemyBar(eUnit)
     if UnitExists(eUnit) and UnitHealth(eUnit)>99 then
         uName=HealBot_GetUnitName(eUnit)
     end
-    HealBot_UnitName[eUnit]=uName;    
+    HealBot_Panel_updGUIDstore(eUnit,uName,eUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1;
-    table.insert(subunits,eUnit)
+    table.insert(units,eUnit)
 end
 
 local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
@@ -1287,11 +1254,11 @@ end
 local function HealBot_Panel_SubSort(doSubSort,unitType)
     if doSubSort then
         table.sort(subunits,function (a,b)
-            if not order[a] or not order[b] then
+            if not suborder[a] or not suborder[b] then
                 return false
             else
-                if order[a]<order[b] then return true end
-                if order[a]>order[b] then return false end
+                if suborder[a]<suborder[b] then return true end
+                if suborder[a]>suborder[b] then return false end
                 return a<b
             end
         end)
@@ -1308,11 +1275,173 @@ local function HealBot_Panel_SubSort(doSubSort,unitType)
             end
         end
     end
-    for x,_ in pairs(order) do
-        order[x]=nil;
+    for x,_ in pairs(suborder) do
+        suborder[x]=nil;
     end
     for x,_ in pairs(subunits) do
         subunits[x]=nil;
+    end
+end
+
+local function HealBot_Panel_sortOrder(unit, hbGUID, barOrder)
+    local sortValue=99
+    if barOrder==1 then
+        local uName=unit
+        if hbPanel_dataGUIDs[hbGUID] then uName=hbPanel_dataGUIDs[hbGUID]["NAME"] end
+        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+            sortValue = "!";
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                sortValue = "ÿÿÿþ"..uName
+            else
+                sortValue = uName
+            end
+        else
+            sortValue = "ÿÿÿÿ"..unit
+        end
+    elseif barOrder==2 then
+        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+            sortValue = "!";
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                sortValue = "ÿÿÿþ"..HealBot_Panel_classEN(unit)
+            else
+                sortValue = HealBot_Panel_classEN(unit)
+            end
+        else
+            sortValue = "ÿÿÿÿ"..unit
+        end
+    elseif barOrder==3 then
+        local uGroup = HealBot_UnitGroups[unit] or 1
+        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+            sortValue = -1
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                sortValue = 9+uGroup
+            else
+                sortValue = uGroup
+            end
+        else
+            sortValue = 19+uGroup
+        end
+    elseif barOrder==4 then
+        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+            sortValue = -99999999
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                sortValue = 9999999-UnitHealthMax(unit)
+            else
+                sortValue = 0-UnitHealthMax(unit)
+            end
+        else
+            sortValue = 99999999
+        end
+        if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
+    else
+        local uRole=HealBot_unitRole[hbGUID] or 9
+        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+            sortValue = -1
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                sortValue = 59+uRole
+            else
+                sortValue = uRole
+            end
+        else
+            sortValue = 99+uRole
+        end
+    end
+    return sortValue
+end
+
+
+local function HealBot_Panel_insSort(unit, hbGUID, mainSort)
+    if unit then
+        if mainSort then 
+            order[unit] = HealBot_Panel_sortOrder(unit, hbGUID, Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"])
+            table.insert(units,unit)
+        else
+            suborder[unit] = HealBot_Panel_sortOrder(unit, hbGUID, Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"])
+            table.insert(subunits,unit)
+        end
+    end
+end
+
+local function HealBot_Panel_addUnit(unit, hbGUID, hbincSort, isRaidGroup)
+    local subgroup=HealBot_UnitGroups[unit] or 1;
+    if Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][subgroup] and HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame) then
+        if not HealBot_TrackNames[hbGUID] then
+            local uName=HealBot_GetUnitName(unit) or unit
+            HealBot_Panel_updGUIDstore(hbGUID,uName,unit)
+            if not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+                if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
+                HealBot_TrackNames[hbGUID]=true;
+                if hbincSort then
+                    HealBot_Panel_insSort(unit, hbGUID, true)
+                else
+                    table.insert(units,unit)
+                end
+            else
+                HealBot_setNotVisible(hbGUID,unit)
+            end
+        end
+    end
+end
+
+local function HealBot_Panel_MainSort(doMainSort,unitType)
+    if #units>0 then
+        local incSubSort=false
+        if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then 
+            incSubSort=true
+        end
+        if doMainSort then
+            local k=0
+            table.sort(units,function (a,b)
+                if order[a]<order[b] then return true end
+                if order[a]>order[b] then return false end
+                return a<b
+            end)
+            local SubSort=order[units[j]]
+            for j=1,#units do
+                if SubSort~=order[units[j]] then
+                    HealBot_Panel_SubSort(incSubSort, unitType)
+                    k=j
+                    SubSort=order[units[j]]
+                end
+                if incSubSort then
+                    HealBot_Panel_insSort(units[j], HealBot_UnitGUID(units[j]), false)
+                else
+                    table.insert(subunits,units[j])
+                end
+            end
+            if not j or k<j then
+                HealBot_Panel_SubSort(incSubSort, unitType)
+            end
+        else
+            for j=1,#units do
+                if incSubSort then
+                    HealBot_Panel_insSort(units[j], HealBot_UnitGUID(units[j]), false)
+                else
+                    table.insert(subunits,units[j])
+                end
+            end
+            HealBot_Panel_SubSort(incSubSort, unitType)
+        end
+    end
+    for x,_ in pairs(order) do
+        order[x]=nil;
+    end
+    for x,_ in pairs(units) do
+        units[x]=nil;
+    end
+end
+
+local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
+    HealBot_Panel_MainSort(doMainSort,unitType)
+    if HealBot_BottomAnchors[hbCurrentFrame] then 
+        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = hText
+    else
+        HeaderPos[hbCurrentFrame][k+1] = hText 
     end
 end
 
@@ -1365,23 +1494,18 @@ local function HealBot_Panel_enemyTargets()
     end
 
     if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(true,9)
-        if HealBot_BottomAnchors[hbCurrentFrame] then 
-            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_CUSTOM_CASTBY_ENEMY 
-        else
-            HeaderPos[hbCurrentFrame][k+1] = HEALBOT_CUSTOM_CASTBY_ENEMY 
-        end
+        HealBot_Panel_addUnits(false,9,HEALBOT_CUSTOM_CASTBY_ENEMY,k)
     end
 end
 
 local function HealBot_Panel_targetHeals(preCombat)
     local xUnit="target";
     local k=i[hbCurrentFrame]
+    local uName=HealBot_GetUnitName(xUnit) or xUnit
+    local xGUID=HealBot_UnitGUID(xUnit) or xUnit
     if UnitExists(xUnit) then
-        local uName=HealBot_GetUnitName(xUnit)
         local TargetValid=false
-        local xGUID=HealBot_UnitGUID(xUnit)
-        if xGUID then
+        if xGUID and not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
             if HealBot_Data["PGUID"]==xGUID then 
                 if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"] then TargetValid=true end
             elseif UnitInParty("target") then
@@ -1396,23 +1520,17 @@ local function HealBot_Panel_targetHeals(preCombat)
                 TargetValid=true
             end
             if TargetValid and not HealBot_Panel_BlackList[xGUID] then
-                HealBot_UnitName[xGUID] = uName; 
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,xUnit)
             end
         end
     elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
-        local xGUID = xUnit 
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        HealBot_UnitName[xGUID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
         table.insert(subunits,xUnit)
     end
     if i[hbCurrentFrame]>k then 
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
-            HealBot_Panel_SubSort(false,4)
-        else
-            HealBot_Panel_SubSort(false,4)
-        end
+        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
+        HealBot_Panel_SubSort(false,4)
         if HealBot_BottomAnchors[hbCurrentFrame] then
             HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
         else
@@ -1421,84 +1539,9 @@ local function HealBot_Panel_targetHeals(preCombat)
     end
 end
 
-local function HealBot_Panel_insSort(unit, hbGUID, sortType)
-    local barOrder = Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]
-    if sortType=="Main" then barOrder = Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"] end
-    if barOrder==1 then
-        if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = "!";
-        elseif UnitExists(unit) then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = "ÿÿÿþ"..HealBot_UnitName[hbGUID] or unit
-            else
-                order[unit] = HealBot_UnitName[hbGUID] or unit
-            end
-        else
-            order[unit] = "ÿÿÿÿ"..unit
-        end
-    elseif barOrder==2 then
-        local _,classEN = UnitClass(unit);
-        if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = "!";
-        elseif UnitExists(unit) and classEN then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = "ÿÿÿþ"..classEN
-            else
-                order[unit] = classEN
-            end
-        else
-            order[unit] = "ÿÿÿÿ"..unit
-        end
-    elseif barOrder==3 then
-        local uGroup=HealBot_UnitGroups[unit] or 1
-        if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = -1
-        elseif UnitExists(unit) then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = 9+uGroup
-            else
-                order[unit] = uGroup
-            end
-        else
-            order[unit] = 19+uGroup
-        end
-    elseif barOrder==4 then
-        if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = -99999999
-        elseif UnitExists(unit) then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = 0-maxHealDiv
-            else
-                order[unit] = 0-UnitHealthMax(unit)
-            end
-        else
-            order[unit] = 0-maxHealDiv
-        end
-        if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
-    else
-        local uRole=HealBot_unitRole[hbGUID] or 9
-        if unit == "player" and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBPF"] then
-            order[unit] = -1
-        elseif UnitExists(unit) then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["OORLAST"] and not UnitInRange(unit) then
-                order[unit] = uRole
-            else
-                order[unit] = 59+uRole
-            end
-        else
-            order[unit] = 99+uRole
-        end
-    end
-    if sortType=="Main" then
-        table.insert(units,unit);
-    else
-        table.insert(subunits,unit)
-    end
-end
-
 local function HealBot_Panel_vehicleHeals()
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIV"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
     local k=i[hbCurrentFrame]
@@ -1506,22 +1549,8 @@ local function HealBot_Panel_vehicleHeals()
     local pUnit="player"
     local xGUID=HealBot_UnitGUID(xUnit)
     local uName=HealBot_GetUnitName(xUnit)
-    if xGUID and not HealBot_TrackNames[xGUID] and UnitUsingVehicle(pUnit) and uName then
-        local subgroup=HealBot_UnitGroups[pUnit] or 1;
-        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-            HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-            if not HealBot_TrackNotVisible[xGUID] then
-                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                if hbincSort then
-                    HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                else
-                    table.insert(subunits,xUnit)
-                end
-            else
-                HealBot_setNotVisible(xGUID,xUnit)
-            end
-        end
+    if xGUID and UnitUsingVehicle(pUnit) and uName then
+        HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
     end
     if nraid>0 then
         for j=1,nraid do
@@ -1529,22 +1558,8 @@ local function HealBot_Panel_vehicleHeals()
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="raid"..j;
             uName=HealBot_GetUnitName(xUnit)
-            if xGUID and not HealBot_TrackNames[xGUID] and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
-                local subgroup=HealBot_UnitGroups[pUnit] or 1;
-                if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                    HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                    if not HealBot_TrackNotVisible[xGUID] then
-                        i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                        HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                        if hbincSort then
-                            HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                        else
-                            table.insert(subunits,xUnit)
-                        end
-                    else
-                        HealBot_setNotVisible(xGUID,xUnit)
-                    end
-                end
+            if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
         end
     else
@@ -1553,29 +1568,13 @@ local function HealBot_Panel_vehicleHeals()
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="party"..j;
             uName=HealBot_GetUnitName(xUnit)
-            if xGUID and not HealBot_TrackNames[xGUID] and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
-                HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                if not HealBot_TrackNotVisible[xGUID] then
-                    i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                    HealBot_UnitGroups[xUnit]=1
-                    if hbincSort then
-                        HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                    else
-                        table.insert(subunits,xUnit)
-                    end
-                else
-                    HealBot_setNotVisible(xGUID,xUnit)
-                end
+            if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
         end
     end
     if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(hbincSort,2)    
-        if HealBot_BottomAnchors[hbCurrentFrame] then 
-            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_VEHICLE
-        else
-            HeaderPos[hbCurrentFrame][k+1] = HEALBOT_VEHICLE 
-        end
+        HealBot_Panel_addUnits(hbincSort, 2,HEALBOT_VEHICLE,k)
     end
 end
 
@@ -1583,57 +1582,27 @@ local function HealBot_Panel_petHeals()
     if not HealBot_BottomAnchors[hbCurrentFrame] then HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_PETHEALS end
     local k=i[hbCurrentFrame]
     local xUnit="pet"
-    local uName=HealBot_GetUnitName(xUnit)
     local pUnit="player"
     local xGUID=HealBot_UnitGUID(xUnit)
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIP"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
-    if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] and not UnitUsingVehicle(pUnit) then
-        local subgroup=HealBot_UnitGroups[pUnit] or 1;
-        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-            HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-            if not HealBot_TrackNotVisible[xGUID] then
-                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                if hbincSort then
-                    HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                else
-                    table.insert(subunits,xUnit)
-                end
-            else
-                HealBot_setNotVisible(xGUID,xUnit)
-            end
-        end
+    if UnitExists(xUnit) and not UnitUsingVehicle(pUnit) then
+        HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
     end
     if nraid>0 then
         for j=1,nraid do
             xUnit="raidpet"..j;
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="raid"..j;
-            if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] and UnitExists(pUnit) and not UnitUsingVehicle(pUnit) then
-                local subgroup=HealBot_UnitGroups[pUnit] or 1;
-                if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                    uName=HealBot_GetUnitName(xUnit)
-                    HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                    if not HealBot_TrackNotVisible[xGUID] then
-                        i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                        HealBot_UnitGroups[xUnit]=HealBot_UnitGroups[pUnit]
-                        if hbincSort then
-                            HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                        else
-                            table.insert(subunits,xUnit)
-                        end
-                    else
-                        HealBot_setNotVisible(xGUID,xUnit)
-                    end
-                end
+            if UnitExists(xUnit) and UnitExists(pUnit) and not UnitUsingVehicle(pUnit) then
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
             if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] then
                 if not HealBot_BottomAnchors[hbCurrentFrame] and i[hbCurrentFrame]-k == 6 then HeaderPos[hbCurrentFrame][i[hbCurrentFrame]-5] = HEALBOT_OPTIONS_PETHEALS.." 1" end
                 if i[hbCurrentFrame]>k and ((i[hbCurrentFrame]-k)%5 == 0) then                           
-                    HealBot_Panel_SubSort(hbincSort,3)        
+                    HealBot_Panel_MainSort(hbincSort,3)        
                     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_PETHEALS.." "..((i[hbCurrentFrame]-k)/5)+(HealBot_BottomAnchors[hbCurrentFrame] and 0 or 1)
                 end
             end
@@ -1646,25 +1615,13 @@ local function HealBot_Panel_petHeals()
             xUnit="partypet"..j;
             xGUID=HealBot_UnitGUID(xUnit) or xUnit
             pUnit="party"..j;
-            if UnitExists(pUnit) and not UnitUsingVehicle(pUnit) and UnitExists(xUnit) and not HealBot_TrackNames[xGUID] then --   
-                uName=HealBot_GetUnitName(xUnit) or xUnit
-                HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                if not HealBot_TrackNotVisible[xGUID] then
-                    i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                    HealBot_UnitGroups[xUnit]=1
-                    if hbincSort then
-                        HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                    else
-                        table.insert(subunits,xUnit)
-                    end
-                else
-                    HealBot_setNotVisible(xGUID,xUnit)
-                end
+            if UnitExists(pUnit) and not UnitUsingVehicle(pUnit) and UnitExists(xUnit) then 
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
         end
     end
     if i[hbCurrentFrame]>k then
-        HealBot_Panel_SubSort(hbincSort,3)        
+        HealBot_Panel_MainSort(hbincSort,3)        
         --if HealBot_BottomAnchors[hbCurrentFrame] then HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_PETHEALS end
         if HealBot_BottomAnchors[hbCurrentFrame] then
             if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] == false then
@@ -1676,40 +1633,18 @@ local function HealBot_Panel_petHeals()
     end
 end
 
-local function HealBot_GetFirstAvailGroupNum(numGroupMembers)
-    local groupNum = 8
-    for j=1,#numGroupMembers do
-        if numGroupMembers[j] < 5 then
-            groupNum = j
-            break
-        end
-    end
-    return groupNum
-end
-
 local function HealBot_Panel_raidHeals()
-    for x,_ in pairs(order) do
-        order[x]=nil;
-    end
-    for x,_ in pairs(units) do
-        units[x]=nil;
-    end
-    for x,_ in pairs(subunits) do
-        subunits[x]=nil;
-    end
     local k=i[hbCurrentFrame]
     local xUnit=nil
     local xGUID=nil
-    local uName=nil
     local subgroup=1;
-    local classEN=nil
     local playerSubgroup = 1
     local hbShowHeaders = Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SHOW"] --HealBot_Options_ShowHeaders:GetChecked()
     local hbUseGroupsPerCol = Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["GRPCOLS"] --HealBot_Options_BarNumGroupPerCol:GetChecked()
     if nraid > 0 then 
         _, _, playerSubgroup = GetRaidRosterInfo(UnitInRaid("player"));
     end
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 or Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==5 then
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==1 or Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
         if not HealBot_BottomAnchors[hbCurrentFrame] then HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_EMERGENCYHEALS end
     end
     
@@ -1726,314 +1661,111 @@ local function HealBot_Panel_raidHeals()
         end
     end
     
-    local numGroupMembers = {[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0}
+    local hbincSort=false
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then 
+        hbincSort=true
+    end
 
-    if Healbot_Config_Skins.EmergIncMonitor[Healbot_Config_Skins.Current_Skin]==1 then
-        if nraid>0 then
-            local z=0
-            for j=1,traid do
-                xUnit = "raid"..j;
-                xGUID=UnitGUID(xUnit)
-                _, _, subgroup, _, _, _, _, _, _, _, _ = GetRaidRosterInfo(j);
-                if xGUID then
-                    if xGUID==HealBot_Data["PGUID"] then
-                        xUnit="player"
-                        if MyGroup["GROUP"]>0 then
-                            HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS.." "..subgroup;
-                        end
-                    end
-                end
-                if UnitExists(xUnit) then
-                    HealBot_UnitGroups[xUnit]=subgroup
-                    numGroupMembers[subgroup] = numGroupMembers[subgroup] + 1
-                    if not HealBot_TrackNames[xGUID] then
-                        uName=HealBot_GetUnitName(xUnit)
-                        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                        if not HealBot_TrackNotVisible[xGUID] then
-                            _,classEN=UnitClass(xUnit)
-                            if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] and classEN then
-                                HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                                HealBot_TrackNames[xGUID]=true;
-                            end
-                        else
-                            HealBot_setNotVisible(xGUID,xUnit)
-                        end
-                    end
-                elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] then 
-                    xGUID = xUnit
-                    if not HealBot_TrackNames[xGUID] then
-                        if hbShowHeaders or (not hbShowHeaders and hbUseGroupsPerCol) then
-                            subgroup = HealBot_GetFirstAvailGroupNum(numGroupMembers)
-                            HealBot_UnitGroups[xUnit]=subgroup
-                            numGroupMembers[subgroup] = numGroupMembers[subgroup] + 1
-                        else 
-                            subgroup = 8
-                        end
-                        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
-                            HealBot_UnitName[xGUID] = uName;
-                            HealBot_TrackNames[xGUID]=true;
-                            HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                        end
-                    end
+    if nraid>0 then
+        local z=0
+        for j=1,traid do
+            xUnit = "raid"..j;
+            xGUID=UnitGUID(xUnit)
+            _, _, subgroup, _, _, _, _, _, _, _, _ = GetRaidRosterInfo(j);
+            if xGUID and xGUID==HealBot_Data["PGUID"] then
+                xUnit="player"
+                if MyGroup["GROUP"]>0 then
+                    HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS.." "..subgroup;
                 end
             end
-        else
-            local z=0
-            for _,xUnit in ipairs(HealBot_Action_HealGroup) do
-                xGUID=HealBot_UnitGUID(xUnit)
-                if UnitExists(xUnit) then
-                    if not HealBot_TrackNames[xGUID] then
-                        uName=HealBot_GetUnitName(xUnit)
-                        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                        if not HealBot_TrackNotVisible[xGUID] then
-                            _,classEN=UnitClass(xUnit)
-                            if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] and classEN then
-                                HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                                HealBot_TrackNames[xGUID]=true;
-                            end
-                        else
-                            HealBot_setNotVisible(xGUID,xUnit)
-                        end
-                    end
-                elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then 
-                    xGUID = xUnit
-                    if not HealBot_TrackNames[xGUID] then
-                        HealBot_UnitGroups[xUnit]=subgroup
-                        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
-                            HealBot_UnitName[xGUID] = uName;
-                            HealBot_TrackNames[xGUID]=true;
-                            HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                        end
-                    end
-                end
+            if UnitExists(xUnit) then
+                HealBot_UnitGroups[xUnit]=subgroup
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, true)
+            elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] then 
+                xGUID = xUnit
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, true)
             end
         end
     else
-        if nraid>0 then
-            local z=0
-            for j=1,traid do
-                xUnit = "raid"..j;
-                xGUID=UnitGUID(xUnit)
-                _, _, subgroup, _, _, _, _, _, _, _, _ = GetRaidRosterInfo(j);
-                if xGUID then
-                    if xGUID==HealBot_Data["PGUID"] then
-                        xUnit="player"
-                        if MyGroup["GROUP"]>0 then
-                            HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS.." "..subgroup;
-                        end
-                    end
-                end
-                if UnitExists(xUnit) and xGUID then
-                    HealBot_UnitGroups[xUnit]=subgroup
-                    numGroupMembers[subgroup] = numGroupMembers[subgroup] + 1
-                    if not HealBot_TrackNames[xGUID] then
-                        uName=HealBot_GetUnitName(xUnit)
-                        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                        if not HealBot_TrackNotVisible[xGUID] then
-                            _,classEN=UnitClass(xUnit)
-                            if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] and classEN and HealBot_Options_retEmergInc(strsub(classEN,1,4)) then
-                                HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                                HealBot_TrackNames[xGUID]=true;
-                            end
-                        else
-                            HealBot_setNotVisible(xGUID,xUnit)
-                        end
-                    end
-                elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] then 
-                    xGUID = xUnit
-                    if not HealBot_TrackNames[xGUID] then
-                        if hbShowHeaders or (not hbShowHeaders and hbUseGroupsPerCol) then
-                            subgroup = HealBot_GetFirstAvailGroupNum(numGroupMembers)
-                            HealBot_UnitGroups[xUnit]=subgroup
-                            numGroupMembers[subgroup] = numGroupMembers[subgroup] + 1
-                        else 
-                            subgroup = 8
-                        end
-                        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
-                            HealBot_UnitName[xGUID] = uName;
-                            HealBot_TrackNames[xGUID]=true;
-                            HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                        end
-                    end
-                end
-            end
-        else
-            for _,xUnit in ipairs(HealBot_Action_HealGroup) do
-                _,classEN = UnitClass(xUnit);
-                xGUID=HealBot_UnitGUID(xUnit)
-                if UnitExists(xUnit) then
-                    HealBot_UnitGroups[xUnit]=subgroup
-                    if not HealBot_TrackNames[xGUID] then
-                        uName=HealBot_GetUnitName(xUnit)
-                        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                        if not HealBot_TrackNotVisible[xGUID] then
-                            if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] and HealBot_Options_retEmergInc(strsub(classEN,1,4)) then
-                                HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                                HealBot_TrackNames[xGUID]=true;
-                            end
-                        else
-                            HealBot_setNotVisible(xGUID,xUnit)
-                        end
-                    end
-                elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then
-                    xGUID = xUnit
-                    if not HealBot_TrackNames[xGUID] then
-                        HealBot_UnitGroups[xUnit]=subgroup
-                        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-                            uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
-                            HealBot_UnitName[xGUID] = uName;
-                            HealBot_TrackNames[xGUID]=true;
-                            HealBot_Panel_insSort(xUnit, xGUID, "Main")
-                        end
-                    end
-                end
+        local z=0
+        for _,xUnit in ipairs(HealBot_Action_HealGroup) do
+            xGUID=HealBot_UnitGUID(xUnit)
+            if UnitExists(xUnit) then
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, true)
+            elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then 
+                xGUID = xUnit
+                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, true)
             end
         end
     end
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]<5 then
+
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<5 then
         table.sort(units,function (a,b)
             if order[a]<order[b] then return true end
             if order[a]>order[b] then return false end
             return a<b
         end)
     end
-    local TempMaxH=ceil(TempMaxH/maxHealDiv)*maxHealDiv;
-    local TempMaxHinit=TempMaxH
-    local TempSort,TempGrp,TempUnitMaxH="init",99,1
-    local class,classEN=HEALBOT_WARRIOR,"WARRIOR"
-    local PrevSort,SubSort=nil,nil
-    local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 then 
-        hbincSort=true
-    end
-    for x,_ in pairs(order) do
-        order[x]=nil;
-    end
+    local PrevSort,HeadSort,SubSort=nil,nil,"init"
 
     for j=1,41 do
         if not units[j] then
-            classEN="end"
-            TempGrp=99
-            TempUnitMaxH=1
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 or
+               Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 or
+               Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
+                if HealBot_BottomAnchors[hbCurrentFrame] then
+                    HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = PrevSort
+                end                
+            end
+            HealBot_Panel_SubSort(hbincSort, 1)
+            break
         else
             xUnit=units[j];
             if UnitExists(xUnit) then
-                class,classEN = UnitClass(xUnit)
                 xGUID=HealBot_UnitGUID(xUnit)
-                TempUnitMaxH=UnitHealthMax(xUnit)
             else
-                classEN = "WARRIOR";
-                class = HEALBOT_WARRIOR
                 xGUID = xUnit
-                TempUnitMaxH = maxHealDiv
             end
-            TempGrp=HealBot_UnitGroups[xUnit] or 8
-            i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        end
-        if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==2 and TempSort~=classEN then 
-            if TempSort=="init" then 
-                SubSort=classEN
-            else
-                if HealBot_BottomAnchors[hbCurrentFrame] then 
-                    if units[j] then 
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = PrevSort
-                    else
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = PrevSort
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 or
+               Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 or
+               Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
+                if SubSort~=order[xUnit] then
+                    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 then
+                        HeadSort=UnitClass(xUnit) or HEALBOT_WARRIOR
+                    elseif Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 then
+                        HeadSort=HEALBOT_OPTIONS_GROUPHEALS.." "..order[xUnit]
+                    elseif Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
+                        HeadSort=HealBot_unitRole[xGUID] or hbRole[HEALBOT_WORD_DPS]
                     end
-                end
-            end
-            TempSort=classEN
-            if units[j] and not HealBot_BottomAnchors[hbCurrentFrame] then 
-                HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = class
-            else
-                PrevSort=class
-            end
-            if TempSort~=SubSort then
-                HealBot_Panel_SubSort(hbincSort, 1)
-                SubSort=TempSort
-            end
-        elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==3 and TempSort~=TempGrp then
-            if TempSort=="init" then 
-                SubSort=TempGrp
-            else
-                if HealBot_BottomAnchors[hbCurrentFrame] then 
-                    if units[j] then 
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = PrevSort
+                    if HealBot_BottomAnchors[hbCurrentFrame] then 
+                        if SubSort~="init" then
+                            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = PrevSort
+                        end
                     else
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = PrevSort
+                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = HeadSort
                     end
+                    HealBot_Panel_SubSort(hbincSort, 1)
+                    SubSort=order[xUnit]
+                    PrevSort=HeadSort
                 end
-            end
-            TempSort=TempGrp
-            if units[j] and not HealBot_BottomAnchors[hbCurrentFrame] then
-                --print("unit:"..units[j].." hbCurrentFrame:"..hbCurrentFrame.." i.hbCurrentFrame:"..i[hbCurrentFrame])
-                --print("tempsort:"..TempSort.." group: "..HEALBOT_OPTIONS_GROUPHEALS.." "..TempSort.." playersub: "..playerSubgroup)--.." prev:"..PrevSort)
-                if UnitExists(units[j]) or (TempSort ~= playerSubgroup) then -- or (not UnitExists(units[j]) and (Tempsort ~= playerSubgroup)) then 
-                    HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = HEALBOT_OPTIONS_GROUPHEALS.." "..TempSort
-                    --print("added: "..units[j])
+                if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then
+                    HealBot_Panel_insSort(xUnit, xGUID, false)
+                else
+                    table.insert(subunits,xUnit)
                 end
-            else
-                PrevSort=HEALBOT_OPTIONS_GROUPHEALS.." "..TempSort
-            end
-            if TempSort~=SubSort then
-                HealBot_Panel_SubSort(hbincSort, 1)
-                SubSort=TempSort
-            end
-        elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==4 and TempMaxH>TempUnitMaxH then
-            if TempMaxHinit==TempMaxH then 
-                SubSort=TempMaxH-maxHealDiv
-            else
-                if HealBot_BottomAnchors[hbCurrentFrame] then 
-                    if units[j] then 
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = PrevSort
-                    else
-                        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = PrevSort
-                    end
-                end
-            end
-            TempMaxH=TempMaxH-maxHealDiv
-            if TempMaxH>TempUnitMaxH and TempMaxH>0 then 
-                TempMaxH=TempMaxH-maxHealDiv
-                if TempMaxH>TempUnitMaxH and TempMaxH>0 then 
-                    TempMaxH=TempMaxH-maxHealDiv
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                    if TempMaxH>TempUnitMaxH and TempMaxH>0 then TempMaxH=TempMaxH-maxHealDiv end
-                end
-            end
-            if units[j] and not HealBot_BottomAnchors[hbCurrentFrame] then 
-                HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = ">"..format("%s",(TempMaxH/1000)).."k"
-            else
-                PrevSort=">"..format("%s",(TempMaxH/1000)).."k"
-            end
-            if TempMaxH~=SubSort then
-                HealBot_Panel_SubSort(hbincSort, 1)
-                SubSort=TempMaxH
-            end
-        end
-        if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==5 and not units[j] then
-            HealBot_Panel_SubSort(hbincSort, 1)
-        elseif Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["RAIDORDER"]==1 and units[j] then
-            table.insert(subunits,xUnit)
-            HealBot_Panel_SubSort(false, 1)
-        elseif units[j] then
-            if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 then
-                HealBot_Panel_insSort(xUnit, xGUID, "Sub")
             else
                 table.insert(subunits,xUnit)
             end
-        else
-            break
         end
     end
+
+    for x,_ in pairs(order) do
+        order[x]=nil;
+    end
+    for x,_ in pairs(units) do
+        units[x]=nil;
+    end
+    
     if i[hbCurrentFrame]==k+1 and not HealBot_BottomAnchors[hbCurrentFrame] then
         HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = nil 
  --   else
@@ -2045,35 +1777,28 @@ local function HealBot_Panel_focusHeals(preCombat)
     local k=i[hbCurrentFrame]
     local xUnit="focus"
     local uExists=false
+    local uName=HealBot_GetUnitName(xUnit) or xUnit
+    local xGUID=HealBot_UnitGUID(xUnit) or xUnit
     if UnitExists(xUnit) and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"]==false or UnitIsFriend("player",xUnit)) then
         uExists=true
     end
     if uExists then
-        local uName=HealBot_GetUnitName(xUnit)
-        local xGUID=HealBot_UnitGUID(xUnit)
         if xGUID then 
-            if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCFOCUS"]==false then
+            if not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                HealBot_UnitName[xGUID] = HealBot_GetUnitName(xUnit)
                 table.insert(subunits,xUnit)
             else
                 HealBot_setNotVisible(xGUID,xUnit)
             end
-            HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
         end
-    elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
-        local xGUID = xUnit 
+    elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then 
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        HealBot_UnitName[xGUID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
         table.insert(subunits,xUnit)
     end
  
     if i[hbCurrentFrame]>k then 
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] then
-            HealBot_Panel_SubSort(false, 5)
-        else
-            HealBot_Panel_SubSort(false, 5)
-        end
+        HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
+        HealBot_Panel_SubSort(false, 5)
         if HealBot_BottomAnchors[hbCurrentFrame] then 
             HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_FOCUS
         else
@@ -2085,90 +1810,48 @@ end
 local function HealBot_Panel_myHeals()
     local k=i[hbCurrentFrame]
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIMT"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
-    local uName,xUnit=nil,nil
+    local xUnit=nil
     table.foreach(HealBot_MyHealTargets, function (index,xGUID)
         xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
         if UnitExists(xUnit) then
-            uName=HealBot_GetUnitName(xUnit)
-            HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-            if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCMYTARGETS"]==false then
-                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                if hbincSort then
-                    HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                else
-                    table.insert(subunits,xUnit)
-                end
-            else
-                HealBot_setNotVisible(xGUID,xUnit)
-            end
+            HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
         elseif HealBot_Unit_Button[xUnit] then
             HealBot_Panel_ToggelHealTarget(xUnit)
         end
     end)
     if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(hbincSort, 1)
-        if HealBot_BottomAnchors[hbCurrentFrame] then 
-            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_MYTARGET 
-        else
-            HeaderPos[hbCurrentFrame][k+1] = HEALBOT_OPTIONS_MYTARGET 
-        end
+        HealBot_Panel_addUnits(hbincSort, 1,HEALBOT_OPTIONS_MYTARGET,k)
     end
 end
 
 local function HealBot_Panel_groupHeals()
     local k=i[hbCurrentFrame]
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIG"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
     for _,xUnit in ipairs(HealBot_Action_HealGroup) do
         if UnitExists(xUnit) then
             local xGUID=HealBot_UnitGUID(xUnit)
-            if not HealBot_TrackNames[xGUID] then
-                local uName=HealBot_GetUnitName(xUnit)
-                HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCGROUP"]==false then
-                    if nraid>0 and HealBot_Data["PGUID"]~=xGUID then 
-                        xUnit=HealBot_Panel_RaidUnit(xGUID) or xUnit
-                    end
-                    i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                    HealBot_TrackNames[xGUID]=true;
-                    if hbincSort then
-                        HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                    else
-                        table.insert(subunits,xUnit)
-                    end
-                else
-                    HealBot_setNotVisible(xGUID,xUnit)
-                end
+            if nraid>0 and HealBot_Data["PGUID"]~=xGUID then 
+                xUnit=HealBot_Panel_RaidUnit(xGUID) or xUnit
             end
+            HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
         elseif nraid==0 and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then
             local xGUID = xUnit
-            if not HealBot_TrackNames[xGUID] then
-                local uName = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["TAGR"]..":"..xUnit
-                HealBot_UnitGroups[xUnit]=1
-                i[hbCurrentFrame]=i[hbCurrentFrame]+1;
-                HealBot_UnitName[xGUID] = uName;
-                HealBot_TrackNames[xGUID]=true;
-                if hbincSort then
-                    HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                else
-                    table.insert(subunits,xUnit)
-                end
-            end
+            HealBot_UnitGroups[xUnit]=1
+            HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
         end
     end
     if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(hbincSort, 1)
+        HealBot_Panel_addUnits(hbincSort, 1,HEALBOT_OPTIONS_GROUPHEALS,k)
         if HealBot_BottomAnchors[hbCurrentFrame] then 
             MyGroup["GROUP"]=i[hbCurrentFrame]+1
-            HeaderPos[hbCurrentFrame][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS 
         else
             MyGroup["GROUP"]=k+1
-            HeaderPos[hbCurrentFrame][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS 
         end
         MyGroup["FRAME"]=hbCurrentFrame
     else
@@ -2180,34 +1863,15 @@ local function HealBot_Panel_healerHeals()
     local k=i[hbCurrentFrame]
     local xGUID=nil
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
     for xGUID,xUnit in pairs(HealBot_MainHealers) do
-        local subgroup=HealBot_UnitGroups[xUnit] or 1;
-        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-            local uName=HealBot_GetUnitName(xUnit)
-            HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-            if not HealBot_TrackNotVisible[xGUID] then
-                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                HealBot_TrackNames[xGUID]=true;
-                if hbincSort then
-                    HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                else
-                    table.insert(subunits,xUnit)
-                end
-            else
-                HealBot_setNotVisible(xGUID,xUnit)
-            end
-        end
+        HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_HEALER]
     end
     if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(hbincSort, 1)
-        if HealBot_BottomAnchors[hbCurrentFrame] then 
-            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_CLASSES_HEALERS 
-        else
-            HeaderPos[hbCurrentFrame][k+1] = HEALBOT_CLASSES_HEALERS 
-        end
+        HealBot_Panel_addUnits(hbincSort, 1,HEALBOT_CLASSES_HEALERS,k)
     end
 end
 
@@ -2215,37 +1879,15 @@ local function HealBot_Panel_tankHeals()
     local k=i[hbCurrentFrame]
     local xGUID=nil
     local hbincSort=false
-    if Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBORDER"]<6 and Healbot_Config_Skins.Sort[Healbot_Config_Skins.Current_Skin]["SUBIT"] then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
     for xGUID,xUnit in pairs(HealBot_MainTanks) do
-        local subgroup=HealBot_UnitGroups[xUnit] or 1;
-        if Healbot_Config_Skins.ExtraIncGroup[Healbot_Config_Skins.Current_Skin][subgroup] then
-            if not HealBot_TrackNames[xGUID] then
-                local uName=HealBot_GetUnitName(xUnit)
-                HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
-                if not HealBot_TrackNotVisible[xGUID] or Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["INCTANK"]==false then
-                    i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                    HealBot_TrackNames[xGUID]=true;
-                    HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
-                    if hbincSort then
-                        HealBot_Panel_insSort(xUnit, xGUID, "Sub")
-                    else
-                        table.insert(subunits,xUnit)
-                    end
-                else
-                    HealBot_setNotVisible(xGUID,xUnit)
-                end
-            end
-        end
+        HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+        HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
     end
-    if i[hbCurrentFrame]>k then 
-        HealBot_Panel_SubSort(hbincSort, 1)
-        if HealBot_BottomAnchors[hbCurrentFrame] then 
-            HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TANKHEALS
-        else
-            HeaderPos[hbCurrentFrame][k+1] = HEALBOT_OPTIONS_TANKHEALS 
-        end
+    if i[hbCurrentFrame]>k then
+        HealBot_Panel_addUnits(hbincSort, 1, HEALBOT_OPTIONS_TANKHEALS,k)
     end
 end
 
@@ -2263,7 +1905,7 @@ local function HealBot_Panel_selfHeals()
             xUnit="pet";
             local xGUID=HealBot_UnitGUID(xUnit)
             if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] then
-                if not HealBot_TrackNotVisible[xGUID] then
+                if not UnitIsVisible(xUnit) then
                     i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                     uName=UnitName(xUnit);
                     HealBot_TrackNames[xGUID]=true;
@@ -2481,10 +2123,6 @@ local function HealBot_Panel_PlayersChanged()
     
     if not IsInRaid() then nraid=0 end;
 
-    for x,_ in pairs(HealBot_TrackNotVisible) do
-        HealBot_TrackNotVisible[x]=nil;
-    end
-
     for x,_ in pairs(HealBot_MainTanks) do
         HealBot_MainTanks[x]=nil;
     end
@@ -2602,7 +2240,6 @@ local function HealBot_Panel_PlayersChanged()
                     if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
-                    if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
                 end
             end
         else
@@ -2628,7 +2265,6 @@ local function HealBot_Panel_PlayersChanged()
                     if aRole and HealBot_UnitData[xGUID] then
                         HealBot_UnitData[xGUID]["ROLE"]=aRole
                     end
-                    if Healbot_Config_Skins.BarsHide[Healbot_Config_Skins.Current_Skin]["STATE"] and not UnitIsVisible(xUnit) then HealBot_TrackNotVisible[xGUID]=true end
                 end
             end
         end
@@ -2677,11 +2313,6 @@ local function HealBot_Panel_PlayersChanged()
                         PetsWithPlayers=true
                     end
                 end
-            end
-            
-            if i[1]+i[2]+i[3]+i[4]+i[5]==0 then 
-                HealBot_nextRecalcParty(0)
-                HealBot_AddDebug("Self not found in HealBot_Panel_PlayersChanged - Retry")
             end
         end   
         
@@ -2768,11 +2399,19 @@ function HealBot_Panel_cpSave(mNum)
 end
 
 function HealBot_RetUnitNameGUIDs(unitName)
-    return HealBot_UnitNameGUID[unitName]
+    if hbPanel_dataNames[unitName] then
+        return hbPanel_dataNames[unitName]["GUID"]
+    else
+        return nil
+    end
 end
 
 function HealBot_Panel_UnitName(hbGUID)
-    return HealBot_UnitName[hbGUID]
+    if hbPanel_dataGUIDs[hbGUID] then
+        return hbPanel_dataGUIDs[hbGUID]["NAME"]
+    else
+        return nil
+    end
 end
 
 function HealBot_RetUnitGroups(unit)
@@ -2788,7 +2427,7 @@ function HealBot_Panel_RaidUnit(hbGUID,unitName)
     local rUnit,xUnit=nil,nil
     local hbInRaid=IsInRaid()
     if unitName then
-        rUnit=hbTempUnitName[unitName]
+        if hbPanel_dataNames[unitName] then rUnit=hbPanel_dataNames[unitName]["UNIT"] end
         if not rUnit or not UnitExists(rUnit) or (hbInRaid and strsub(rUnit,1,4)~="raid") or (not hbInRaid and strsub(rUnit,1,4)=="raid") or HealBot_GetUnitName(rUnit)~=unitName then
             rUnit=nil
             local nGroupMembers=GetNumGroupMembers()
@@ -2834,10 +2473,10 @@ function HealBot_Panel_RaidUnit(hbGUID,unitName)
                     rUnit="target"
                 end
             end
-            if rUnit then hbTempUnitName[unitName]=rUnit end
+            if rUnit then hbPanel_dataNames[unitName]["UNIT"]=rUnit end
         end
     else
-        rUnit=hbTempUnitGUID[hbGUID]
+        if hbPanel_dataGUIDs[hbGUID] then rUnit=hbPanel_dataGUIDs[hbGUID]["UNIT"] end
         if not rUnit or (hbInRaid and strsub(rUnit,1,4)~="raid") or (not hbInRaid and strsub(rUnit,1,4)=="raid") or HealBot_UnitGUID(rUnit)~=hbGUID then
             rUnit=nil
             local nGroupMembers=GetNumGroupMembers()
@@ -2880,7 +2519,7 @@ function HealBot_Panel_RaidUnit(hbGUID,unitName)
                     end
                 end
             end
-            if rUnit then hbTempUnitGUID[hbGUID]=rUnit end
+            if rUnit and hbPanel_dataGUIDs[hbGUID] then hbPanel_dataGUIDs[hbGUID]["UNIT"]=rUnit end
         end
     end
     return rUnit
