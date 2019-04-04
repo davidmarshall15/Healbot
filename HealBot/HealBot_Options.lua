@@ -8640,12 +8640,12 @@ function HealBot_Options_FrameAlias_OnTextChanged(self)
     HealBot_setOptions_Timer(404)
 end
 function HealBot_Options_FrameAlias_initFrameSel()
-    HealBot_Options_InitSub(106)
+    HealBot_Options_InitSub(102)
 end
 
 function HealBot_Options_Frame_initCurFrame()
     DoneInitTab[301]=nil
-    DoneInitTab[106]=nil
+    DoneInitTab[102]=nil
     DoneInitTab[303]=nil
     DoneInitTab[309]=nil
     DoneInitTab[302]=nil
@@ -9434,7 +9434,7 @@ function HealBot_Options_ResetDoInittab(tabNo)
         HealBot_setOptions_Timer(8000)
     elseif tabNo==3 then
         DoneInitTab[3]=nil
-        DoneInitTab[106]=nil
+        DoneInitTab[102]=nil
         DoneInitTab[301]=nil
         DoneInitTab[302]=nil
         DoneInitTab[303]=nil
@@ -10862,7 +10862,7 @@ function HealBot_Options_SetSkins(force)
     if hbCurSkin~=Healbot_Config_Skins.Current_Skin or force then
         if hbCurSkin~=Healbot_Config_Skins.Current_Skin then 
             HealBot_Options_ResetDoInittab(3) 
-            HealBot_Options_InitSub(106)
+            HealBot_Options_InitSub(102)
         end
         HealBot_SetSkinColours()
         HealBot_Action_SetHightlightAggroCols()
@@ -11157,7 +11157,7 @@ function HealBot_Options_ShowSkinsPanel(frameName, hbFrameID)
     HealBot_Options_SetSkins()
     g=_G["HealBot_Options_FramesSelFrame"]
     if hbCurSkinSubFrameID==1008 or hbCurSkinSubFrameID>1009 then
-        HealBot_Options_InitSub(106)
+        HealBot_Options_InitSub(102)
         g:Show()
         g=_G["HealBot_Options_ApplyTab2Frames"]
         g:Show()
