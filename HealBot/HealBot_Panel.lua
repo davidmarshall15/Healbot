@@ -1369,7 +1369,8 @@ end
 
 local function HealBot_Panel_addUnit(unit, hbGUID, hbincSort, isRaidGroup)
     local subgroup=HealBot_UnitGroups[unit] or 1;
-    if Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][subgroup] and HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame) then
+    if Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][subgroup] and 
+       (Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["INCCLASSES"]==1 or HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame)) then
         if not HealBot_TrackNames[hbGUID] then
             local uName=HealBot_GetUnitName(unit) or unit
             HealBot_Panel_updGUIDstore(hbGUID,uName,unit)

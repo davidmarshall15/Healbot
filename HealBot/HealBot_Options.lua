@@ -5954,6 +5954,7 @@ function HealBot_Options_EmergencyFilter_Reset()
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_WARRIOR]] = true;
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = true;
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_DEMONHUNTER]] = true;
+            HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_MONK]] = true;
         elseif Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][j]["INCCLASSES"]==2 then
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_DEATHKNIGHT]] = true;
         elseif Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][j]["INCCLASSES"]==3 then
