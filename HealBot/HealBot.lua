@@ -1909,7 +1909,7 @@ function HealBot_Reset_Unit(button)
     xButton.update.reset=true
     xButton.status.update=true
     HealBot_Action_ResetUnitStatus(button)
-    if HealBot_Action_RetMyTarget(button.guid) then HealBot_Action_Toggle_Enabled(button); end
+    if HealBot_Action_AlwaysEnabled(button.guid) then HealBot_Action_Toggle_Enabled(button); end
   --HealBot_setCall("HealBot_Reset_Unit")
 end
 
@@ -5257,9 +5257,10 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
             end
             local xButton=HealBot_Unit_Button["target"]
             if xButton then 
+                local xGUID=HealBot_UnitGUID("target") or "target"
                 if HealBot_luVars["TargetNeedReset"] then
                     HealBot_RecalcParty(3)
-                elseif UnitExists("target") then
+                elseif UnitExists("target") and HealBot_Panel_validTarget(xGUID) then
                     if HealBot_Data["UILOCK"] then
                         if HealBot_Config.ActionVisible[8] then
                             HealBot_UpdateUnitReset(xButton)

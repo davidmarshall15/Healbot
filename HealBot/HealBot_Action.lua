@@ -4,7 +4,7 @@ local hbBarTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=
 local strsub=strsub
 local HealBot_ActiveButtons={[0]=1}
 local HealBot_RangeSpells={}
-local HealBot_MyTargets={}
+local HealBot_AlwaysEnabled={}
 local HealBot_pcClass={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local LSM = HealBot_retLSM() --LibStub("LibSharedMedia-3.0") 
 local HealBot_ResetBarSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
@@ -866,7 +866,7 @@ function HealBot_Action_UpdateHealthButton(button)
                 hcr, hcg = HealBot_Action_BarColourPct(hpct)
             end
 
-            if button.aggro.status==3 or 
+            if button.aggro.status==3 or HealBot_AlwaysEnabled[button.guid] or
               (HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIC"])) or
              (not HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTOC"])) then
                 if button.status.current<5 then button.status.current=4 end
@@ -1585,7 +1585,7 @@ function HealBot_Action_setHealthText(button)
                 end
             end
         end
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] and button.aggro.threatpct>0 then 
+        if button.frame<10 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] and button.aggro.threatpct>0 then 
             btHBbarText=btHBbarText.."  "..aggroNumFormatSurLa[button.frame]..button.aggro.threatpct.."%"..aggroNumFormatSurRa[button.frame]
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["DOUBLE"] then
@@ -2805,7 +2805,7 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         info = UIDropDownMenu_CreateInfo();
         info.hasArrow = false; 
         info.notCheckable = true;
-        if HealBot_Action_RetMyTarget(HealBot_UnitGUID(self.unit)) then
+        if HealBot_AlwaysEnabled[self.guid] then
             info.text = HEALBOT_SKIN_DISTEXT;
         else
             info.text = HEALBOT_SKIN_ENTEXT;
@@ -3055,36 +3055,7 @@ local function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             hbAttribsMinReset[button.frame..button.id..HB_prefix..status..j]=true
         elseif strlower(sName)==strlower(HEALBOT_MENU) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
-            button:SetAttribute(HB_prefix.."type"..j, "showmenu")
-            showmenu = function()
-                local setDropdown=nil
-                if button.unit=="player" then
-                    setDropdown=PlayerFrameDropDown
-                elseif button.unit=="target" then
-                    setDropdown=TargetFrameDropDown
-                elseif button.unit=="pet" then
-                    setDropdown=PetFrameDropDown
-                else
-                    local xUnit=HealBot_Action_UnitID(button.unit)
-                    local partyNo = tonumber(xUnit:match('party(%d+)')) or 0
-                    if partyNo > 0 then
-                        setDropdown = _G['PartyMemberFrame' .. partyNo .. 'DropDown']
-                    else
-                        partyNo = tonumber(xUnit:match('raid(%d+)')) or 0
-                        if partyNo == 0 then
-                            partyNo=button.id
-                        end
-                        FriendsDropDown.name = HealBot_GetUnitName(xUnit, button.guid);    
-                        FriendsDropDown.id = partyNo;    
-                        FriendsDropDown.unit = xUnit;    
-                        FriendsDropDown.initialize = RaidFrameDropDown_Initialize;    
-                        FriendsDropDown.displayMode = "MENU";    
-                        setDropdown=FriendsDropDown
-                    end
-                end
-                ToggleDropDownMenu(1, nil, setDropdown, "cursor", 10, -8)  
-            end
-            button.showmenu = showmenu 
+            button:SetAttribute(HB_prefix.."type"..j, "togglemenu")
         elseif strlower(sName)==strlower(HEALBOT_HBMENU) and HealBot_UnitGUID(button.unit) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "showhbmenu")
@@ -3825,71 +3796,69 @@ local function HealBot_Action_UseSmartCast(bp)
 end
 
 local function HealBot_Action_PreClick(self,button)
-    if self.id<999 and UnitExists(self.unit) then
-        if UnitIsFriend("player",self.unit) then
-            HealBot_setLuVars("TargetUnitID", self.unit)
-            usedSmartCast=false;
-            ModKey=""
-            if IsShiftKeyDown() then 
-                if IsControlKeyDown() then 
-                    ModKey="Ctrl-Shift"
-                elseif IsAltKeyDown() then 
-                    ModKey="Alt-Shift"
-                else
-                    ModKey="Shift" 
-                end
-            elseif IsControlKeyDown() then 
-                ModKey="Ctrl"
+    if self.id<999 and UnitExists(self.unit) and UnitIsFriend("player",self.unit) then
+        HealBot_setLuVars("TargetUnitID", self.unit)
+        usedSmartCast=false;
+        ModKey=""
+        if IsShiftKeyDown() then 
+            if IsControlKeyDown() then 
+                ModKey="Ctrl-Shift"
             elseif IsAltKeyDown() then 
-                ModKey="Alt"
-            end
-            if button=="LeftButton" then 
-                abutton="Left"
-                aj=1
-            elseif button=="RightButton" then 
-                abutton="Right"
-                aj=2
-            elseif button=="MiddleButton" then 
-                abutton="Middle"
-                aj=3
+                ModKey="Alt-Shift"
             else
-                abutton=button
-                aj=tonumber(strmatch(button, "(%d+)"))
+                ModKey="Shift" 
             end
-            if self.unit=="target" and HealBot_Globals.TargetBarRestricted==1 then
-                if button=="RightButton" then
-                    HealBot_Panel_ToggelHealTarget(self.unit)
-                    if HealBot_Data["TIPUSE"] and HealBot_Globals.ShowTooltip then 
-                        HealBot_Action_RefreshTargetTooltip(self) 
-                    end
-                elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
-                    HealBot_Action_UseSmartCast(self)
+        elseif IsControlKeyDown() then 
+            ModKey="Ctrl"
+        elseif IsAltKeyDown() then 
+            ModKey="Alt"
+        end
+        if button=="LeftButton" then 
+            abutton="Left"
+            aj=1
+        elseif button=="RightButton" then 
+            abutton="Right"
+            aj=2
+        elseif button=="MiddleButton" then 
+            abutton="Middle"
+            aj=3
+        else
+            abutton=button
+            aj=tonumber(strmatch(button, "(%d+)"))
+        end
+        if self.unit=="target" and HealBot_Globals.TargetBarRestricted==1 then
+            if button=="RightButton" then
+                HealBot_Panel_ToggelHealTarget(self.unit)
+                if HealBot_Data["TIPUSE"] and HealBot_Globals.ShowTooltip then 
+                    HealBot_Action_RefreshTargetTooltip(self) 
                 end
-            elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and (button=="LeftButton" or button=="MiddleButton" or button=="RightButton") then
-                if button=="LeftButton" then
-                    HealBot_Action_Toggle_Enabled(self)
-                elseif button=="RightButton" then
-                    HealBot_Panel_ToggelHealTarget(self.unit)
-                elseif not UnitIsUnit(self.unit, "player") and button=="MiddleButton" and HealBot_UnitGUID(self.unit) then
-                    HealBot_Panel_AddBlackList(HealBot_UnitGUID(self.unit))
-                end
-            elseif not HealBot_Data["UILOCK"] then
-                if UnitAffectingCombat(self.unit)==1 then 
-                    return
-                end
-                if HealBot_Globals.ProtectPvP then
-                    if UnitIsPVP(self.unit) and not UnitIsPVP("player") then 
-                        HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"nil",aj)
-                        usedSmartCast=true;
-                    end
-                end
-                if button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
-                    HealBot_Action_UseSmartCast(self)
-                end
-                if not self.status.enabled and HealBot_Config.EnableHealthy==false and not usedSmartCast then
-                    HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Disabled",aj)
+            elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
+                HealBot_Action_UseSmartCast(self)
+            end
+        elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and (button=="LeftButton" or button=="MiddleButton" or button=="RightButton") then
+            if button=="LeftButton" then
+                HealBot_Action_Toggle_Enabled(self)
+            elseif button=="RightButton" then
+                HealBot_Panel_ToggelHealTarget(self.unit)
+            elseif not UnitIsUnit(self.unit, "player") and button=="MiddleButton" and HealBot_UnitGUID(self.unit) then
+                HealBot_Panel_AddBlackList(HealBot_UnitGUID(self.unit))
+            end
+        elseif not HealBot_Data["UILOCK"] then
+            if UnitAffectingCombat(self.unit)==1 then 
+                return
+            end
+            if HealBot_Globals.ProtectPvP then
+                if UnitIsPVP(self.unit) and not UnitIsPVP("player") then 
+                    HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"nil",aj)
                     usedSmartCast=true;
                 end
+            end
+            if button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
+                HealBot_Action_UseSmartCast(self)
+            end
+            if not self.status.enabled and HealBot_Config.EnableHealthy==false and not usedSmartCast then
+                HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Disabled",aj)
+                usedSmartCast=true;
             end
         end
     end
@@ -4246,16 +4215,16 @@ end
 
 function HealBot_Action_Toggle_Enabled(button)
     local xGUID=HealBot_UnitGUID(button.unit)
-    if HealBot_MyTargets[xGUID] then
-        HealBot_MyTargets[xGUID]=nil
+    if HealBot_AlwaysEnabled[button.guid] then
+        HealBot_AlwaysEnabled[button.guid]=nil
     else
-        HealBot_MyTargets[xGUID]=true
+        HealBot_AlwaysEnabled[button.guid]=true
     end
-    HealBot_RecalcHeals(button)
+    HealBot_Action_ResetUnitStatus(button)
 end
 
-function HealBot_Action_RetMyTarget(hbGUID)
-    return HealBot_MyTargets[hbGUID]
+function HealBot_Action_AlwaysEnabled(hbGUID)
+    return HealBot_AlwaysEnabled[hbGUID]
 end
 
 function HealBot_Action_SmartCast(button)

@@ -52,34 +52,51 @@ local function HealBot_Tooltip_readNumber(n)
     return n
 end
 
-local function HealBot_Tooltip_SpellPattern(click)
-    local hbCombos = HealBot_Config_Spells.EnabledKeyCombo
-    if HealBot_Data["TIPTYPE"]=="Disabled" then
-        hbCombos = HealBot_Config_Spells.DisabledKeyCombo
-    elseif HealBot_Data["TIPTYPE"]=="Enemy" then
-        hbCombos = HealBot_Config_Spells.EnemyKeyCombo
-    end
-    if not hbCombos then return nil end
-    local x = click;
-    if IsShiftKeyDown() then 
-        if IsAltKeyDown() then 
-            x = "Alt-Shift"..x
+local function HealBot_Tooltip_SpellPattern(button, click)
+    local sPattern=nil
+    if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
+        if click=="Left" then
+            sPattern=HEALBOT_TOGGLE_ENABLED
+        elseif click=="Right" then
+            if HealBot_Panel_RetMyHealTarget(button.unit) then
+                sPattern=HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_MYTARGET
+            else
+                sPattern=HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET
+            end
+            --HealBot_Panel_ToggelHealTarget(self.unit)
+        elseif not UnitIsUnit(button.unit, "player") and click=="Middle" then
+            sPattern=HEALBOT_WORDS_ADDTO.." "..HEALBOT_PANEL_BLACKLIST
+        end
+    else    
+        local hbCombos = HealBot_Config_Spells.EnabledKeyCombo
+        if HealBot_Data["TIPTYPE"]=="Disabled" then
+            hbCombos = HealBot_Config_Spells.DisabledKeyCombo
+        elseif HealBot_Data["TIPTYPE"]=="Enemy" then
+            hbCombos = HealBot_Config_Spells.EnemyKeyCombo
+        end
+        if not hbCombos then return nil end
+        local x = click;
+        if IsShiftKeyDown() then 
+            if IsAltKeyDown() then 
+                x = "Alt-Shift"..x
+            elseif IsControlKeyDown() then 
+                x = "Ctrl-Shift"..x
+            else
+                x = "Shift"..x
+            end
+        elseif IsAltKeyDown() then 
+            if IsControlKeyDown() then 
+                 x = "Alt-Ctrl"..x
+            else
+                x = "Alt"..x
+            end
         elseif IsControlKeyDown() then 
-            x = "Ctrl-Shift"..x
-        else
-            x = "Shift"..x
+            x = "Ctrl"..x 
         end
-    elseif IsAltKeyDown() then 
-        if IsControlKeyDown() then 
-             x = "Alt-Ctrl"..x
-        else
-            x = "Alt"..x
-        end
-    elseif IsControlKeyDown() then 
-        x = "Ctrl"..x 
+        x=x..HealBot_Config.CurrentSpec
+        sPattern=hbCombos[x]
     end
-    x=x..HealBot_Config.CurrentSpec
-    return hbCombos[x]
+    return sPattern
 end
 
 local function HealBot_Tooltip_GetHealSpell(button,sName)
@@ -480,13 +497,13 @@ local function HealBot_Action_DoRefreshTooltip()
     local uBuff=xButton.aura.buff.name
     local DebuffType=xButton.aura.debuff.type;
 
-    local spellLeft = HealBot_Tooltip_SpellPattern("Left");
-    local spellMiddle = HealBot_Tooltip_SpellPattern("Middle");
-    local spellRight = HealBot_Tooltip_SpellPattern("Right");
-    local spellButton4 = HealBot_Tooltip_SpellPattern("Button4");
-    local spellButton5 = HealBot_Tooltip_SpellPattern("Button5");
+    local spellLeft = HealBot_Tooltip_SpellPattern(xButton, "Left");
+    local spellMiddle = HealBot_Tooltip_SpellPattern(xButton, "Middle");
+    local spellRight = HealBot_Tooltip_SpellPattern(xButton, "Right");
+    local spellButton4 = HealBot_Tooltip_SpellPattern(xButton, "Button4");
+    local spellButton5 = HealBot_Tooltip_SpellPattern(xButton, "Button5");
     linenum = 1
-    
+
     if spellLeft and strsub(strlower(spellLeft),1,4)==strlower(HEALBOT_TELL) then spellLeft=HEALBOT_TELL end
     if spellMiddle and strsub(strlower(spellMiddle),1,4)==strlower(HEALBOT_TELL) then spellMiddle=HEALBOT_TELL end
     if spellRight and strsub(strlower(spellRight),1,4)==strlower(HEALBOT_TELL) then spellRight=HEALBOT_TELL end
@@ -616,7 +633,7 @@ local function HealBot_Action_DoRefreshTooltip()
             if IsInRaid() then 
                 HealBot_Tooltip_luVars["uGroup"]=HealBot_RetUnitGroups(xUnit)
             end
-            if tp>0 or mana or HealBot_Tooltip_luVars["uGroup"] then
+            if tp>0 or mana or (HealBot_Tooltip_luVars["uGroup"] and HealBot_Tooltip_luVars["uGroup"]>0) then
                 linenum=linenum+1
                 if not mana then
                     if tp>0 then
@@ -717,14 +734,21 @@ local function HealBot_Action_DoRefreshTooltip()
     else
         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_TAB_SPELLS,1,1,1,1," ",0,0,0,0)
     end
-  
-    local spellLeftRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,LeftN);
-    local spellMiddleRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,MiddleN)
-    local spellRightRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,RightN)
-    local spellButton4RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button4N)
-    local spellButton5RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button5N);
     
-    if HealBot_Globals.Tooltip_ShowSpellDetail then
+    if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
+        if spellLeft then 
+            linenum=linenum+1
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONLEFT..": "..spellLeft,1,1,0,1)
+        end
+        if spellMiddle then
+            linenum=linenum+1
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONMIDDLE..": "..spellMiddle,1,1,0,1)
+        end
+        if spellRight then
+            linenum=linenum+1
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONRIGHT..": "..spellRight,1,1,0,1)
+        end
+    elseif HealBot_Globals.Tooltip_ShowSpellDetail then
 
         if LeftN then
             linenum=linenum+1
@@ -778,7 +802,12 @@ local function HealBot_Action_DoRefreshTooltip()
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTON5..": "..Button5N,Button5R,Button5G,0,1,HealBot_Tooltip_SpellSummary(spellButton5),0.5,0.5,1,1)
         end
     end      
-    if HealBot_Globals.Tooltip_Recommend then
+    if HealBot_Globals.Tooltip_Recommend then    
+        local spellLeftRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,LeftN);
+        local spellMiddleRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,MiddleN)
+        local spellRightRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,RightN)
+        local spellButton4RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button4N)
+        local spellButton5RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button5N);
         local Instant_check=false;
         if HealBot_Globals.Tooltip_ShowSpellDetail==false then linenum=linenum+1; end
         linenum=linenum+1

@@ -1368,8 +1368,8 @@ local function HealBot_Panel_insSort(unit, hbGUID, mainSort)
 end
 
 local function HealBot_Panel_addUnit(unit, hbGUID, hbincSort, isRaidGroup)
-    local subgroup=HealBot_UnitGroups[unit] or 1;
-    if Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][subgroup] and 
+    local subgroup=HealBot_UnitGroups[unit] or 0;
+    if (subgroup==0 or Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][subgroup]) and 
        (Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["INCCLASSES"]==1 or HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame)) then
         if not HealBot_TrackNames[hbGUID] then
             local uName=HealBot_GetUnitName(unit) or unit
@@ -1499,28 +1499,34 @@ local function HealBot_Panel_enemyTargets()
     end
 end
 
+function HealBot_Panel_validTarget(hbGUID)
+    local TargetValid=false
+    if not HealBot_Panel_BlackList[hbGUID] then
+        if HealBot_Data["PGUID"]==hbGUID then 
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"] then TargetValid=true end
+        elseif UnitInParty("target") then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCGROUP"] then TargetValid=true end
+        elseif UnitInRaid("target") then 
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCRAID"] then TargetValid=true end
+        elseif UnitPlayerOrPetInParty("target") or UnitPlayerOrPetInRaid("target") then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] then TargetValid=true end
+        elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
+            if UnitIsFriend("player",xUnit) then TargetValid=true end
+        else
+            TargetValid=true
+        end
+    end
+    return TargetValid
+end
+
 local function HealBot_Panel_targetHeals(preCombat)
     local xUnit="target";
     local k=i[hbCurrentFrame]
     local uName=HealBot_GetUnitName(xUnit) or xUnit
     local xGUID=HealBot_UnitGUID(xUnit) or xUnit
-    if UnitExists(xUnit) then
-        local TargetValid=false
-        if xGUID and not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
-            if HealBot_Data["PGUID"]==xGUID then 
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"] then TargetValid=true end
-            elseif UnitInParty("target") then
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCGROUP"] then TargetValid=true end
-            elseif UnitInRaid("target") then 
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCRAID"] then TargetValid=true end
-            elseif UnitPlayerOrPetInParty("target") or UnitPlayerOrPetInRaid("target") then
-                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] then TargetValid=true end
-            elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
-                if UnitIsFriend("player",xUnit) then TargetValid=true end
-            else
-                TargetValid=true
-            end
-            if TargetValid and not HealBot_Panel_BlackList[xGUID] then
+    if UnitExists(xUnit) and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
+        if xGUID and (not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"]) then
+            if HealBot_Panel_validTarget(xGUID) then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,xUnit)
             end
@@ -1783,7 +1789,7 @@ local function HealBot_Panel_focusHeals(preCombat)
     if UnitExists(xUnit) and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"]==false or UnitIsFriend("player",xUnit)) then
         uExists=true
     end
-    if uExists then
+    if uExists  and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]>1) then
         if xGUID then 
             if not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
@@ -1936,10 +1942,10 @@ local function HealBot_Panel_VehicleChanged()
     else
         HealBot_BottomAnchors[hbCurrentFrame]=false
     end
-    hbBarsPerFrame={[hbCurrentFrame]=0}
+    hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"]then
         HeaderPos[hbCurrentFrame]={};
-        i={[hbCurrentFrame]=0}
+        i[hbCurrentFrame]=0
         HealBot_Panel_vehicleHeals()
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==2 then
@@ -1965,10 +1971,10 @@ local function HealBot_Panel_PetsChanged()
     else
         HealBot_BottomAnchors[hbCurrentFrame]=false
     end
-    hbBarsPerFrame={[hbCurrentFrame]=0}
+    hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
         HeaderPos[hbCurrentFrame]={};
-        i={[hbCurrentFrame]=0}
+        i[hbCurrentFrame]=0
         HealBot_Panel_petHeals()
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==3 then
@@ -1994,10 +2000,10 @@ local function HealBot_Panel_TargetChanged(preCombat)
     else
         HealBot_BottomAnchors[hbCurrentFrame]=false
     end
-    hbBarsPerFrame={[hbCurrentFrame]=0}
+    hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
         HeaderPos[hbCurrentFrame]={};
-        i={[hbCurrentFrame]=0}
+        i[hbCurrentFrame]=0
         HealBot_Panel_targetHeals(preCombat)        
         local xButton = HealBot_Unit_Button["target"]
         if xButton then
@@ -2061,10 +2067,10 @@ local function HealBot_Panel_FocusChanged(preCombat)
     else
         HealBot_BottomAnchors[hbCurrentFrame]=false
     end
-    hbBarsPerFrame={[hbCurrentFrame]=0}
+    hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
         HeaderPos[hbCurrentFrame]={};
-        i={[hbCurrentFrame]=0}
+        i[hbCurrentFrame]=0
         HealBot_Panel_focusHeals(preCombat)
         local xButton = HealBot_Unit_Button["focus"]
         if xButton then
@@ -2089,10 +2095,10 @@ local function HealBot_Panel_EnemyChanged()
     else
         HealBot_BottomAnchors[hbCurrentFrame]=false
     end
-    hbBarsPerFrame={[hbCurrentFrame]=0}
+    hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
         HeaderPos[hbCurrentFrame]={};
-        i={[hbCurrentFrame]=0}
+        i[hbCurrentFrame]=0
         HealBot_Panel_enemyTargets()
         for xUnit,xButton in pairs(HealBot_Enemy_Button) do
             local xGUID=xButton.guid
@@ -2111,7 +2117,11 @@ local function HealBot_Panel_EnemyChanged()
 end
 
 local function HealBot_Panel_PlayersChanged()
-    hbBarsPerFrame={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0}
+    hbBarsPerFrame[1]=0
+    hbBarsPerFrame[2]=0
+    hbBarsPerFrame[3]=0
+    hbBarsPerFrame[4]=0
+    hbBarsPerFrame[5]=0
     for j=1,7 do
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==4 then
             HealBot_BottomAnchors[j]=true
@@ -2143,13 +2153,13 @@ local function HealBot_Panel_PlayersChanged()
         HealBot_cpName[x]=nil
     end 
 
-    table.foreach(HealBot_MyHealTargets, function (j,xGUID)
-        HealBot_TrackNames[xGUID]=true
-    end)
-    
     HealBot_SetTankUnit("x")
 
-    i={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0}
+    i[1]=0
+    i[2]=0
+    i[3]=0
+    i[4]=0
+    i[5]=0
     local x=false
     if HealBot_retLuVars("UseCrashProtection") and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] then
         if nraid==0 and not UnitExists("player") then
