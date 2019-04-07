@@ -3691,29 +3691,7 @@ local function HealBot_Action_DoHealUnit_Wheel(self, delta)
         HealBot_MouseWheelCmd=HEALBOT_WORDS_NONE
     end
     
-    if HealBot_MouseWheelCmd==HEALBOT_BLIZZARD_MENU then
-        if xUnit=="player" then
-            setDropdown=PlayerFrameDropDown
-        elseif xUnit=="target" then
-            setDropdown=TargetFrameDropDown
-        elseif xUnit=="pet" then
-            setDropdown=PetFrameDropDown
-        else
-            partyNo = tonumber(xUnit:match('party(%d+)')) or 0
-            if partyNo > 0 then
-                setDropdown = _G['PartyMemberFrame' .. partyNo .. 'DropDown']
-            else
-                partyNo = tonumber(strmatch(xUnit, "(%d+)"))
-                FriendsDropDown.name = HealBot_GetUnitName(xUnit, xButton.guid)   
-                FriendsDropDown.id = partyNo;    
-                FriendsDropDown.unit = xUnit;    
-                FriendsDropDown.initialize = RaidFrameDropDown_Initialize;    
-                FriendsDropDown.displayMode = "MENU";    
-                setDropdown=FriendsDropDown
-            end
-        end
-        ToggleDropDownMenu(1, nil, setDropdown, "cursor", 10, -8)  
-    elseif HealBot_MouseWheelCmd==HEALBOT_HB_MENU then
+    if HealBot_MouseWheelCmd==HEALBOT_HB_MENU then
         local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
         HBFriendsDropDown.unit = xUnit
         HBFriendsDropDown.name = HealBot_GetUnitName(xUnit, xButton.guid)

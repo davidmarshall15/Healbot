@@ -247,7 +247,6 @@ function HealBot_Options_setLists()
 
     HealBot_Options_MouseWheel_List = {
         HEALBOT_WORDS_NONE,
-        HEALBOT_BLIZZARD_MENU,
         HEALBOT_HB_MENU,
         HEALBOT_FOLLOW,
         HEALBOT_TRADE,
