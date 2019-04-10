@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.5.2.rc1";
+﻿HEALBOT_VERSION   = "8.1.5.2";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -585,6 +585,7 @@ function HealBot_globalVars()
     --HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(156954) or "--Unstable Affliction";
     HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(30108) or "--Unstable Affliction";
     HEALBOT_DEBUFF_VIPER_STING              = GetSpellInfo(39413) or "--Viper Sting";   
+	HEALBOT_DEBUFF_VAMPIRIC_TOUCH           = GetSpellInfo(34914) or "--Vampiric Touch";	
     --Ignore Movement Debuffs (ONLY DISPELLABLE DEBUFFS)
     HEALBOT_DEBUFF_CHILLED                  = GetSpellInfo(6136) or "--Chilled";
     HEALBOT_DEBUFF_CONEOFCOLD               = GetSpellInfo(64645) or "--Cone of Cold";
@@ -613,20 +614,6 @@ function HealBot_globalVars()
     --Unit Max Health Modifier Debuffs
     HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID      = 179986;
     HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = GetSpellInfo(HEALBOT_DEBUFF_AURA_OF_CONTEMPT_ID) or "--Aura of Contempt";
-    
-    --Ignore Class Debuffs (ONLY DISPELLABLE DEBUFFS)
-    HEALBOT_DEBUFF_CURSE_OF_IMPOTENCE       = GetSpellInfo(34925) or "--Curse of Impotence";
-    HEALBOT_DEBUFF_DECAYED_INTELLECT        = GetSpellInfo(31555) or "--Decayed Intellect";
-    HEALBOT_DEBUFF_DECAYED_STRENGHT         = GetSpellInfo(6951) or "--Decayed Strength";
-    HEALBOT_DEBUFF_IGNITE_MANA              = GetSpellInfo(19659) or "--Ignite Mana";
-    HEALBOT_DEBUFF_SILENCE                  = GetSpellInfo(38913) or "--Silence";
-    HEALBOT_DEBUFF_TAINTED_MIND             = GetSpellInfo(16567) or "--Tainted Mind";
-    HEALBOT_DEBUFF_TRAMPLE                  = GetSpellInfo(126406) or "--Trample";
-    HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(35183) or "--Unstable Affliction";
-    HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(156954) or "--Unstable Affliction";
-    HEALBOT_DEBUFF_UNSTABLE_AFFLICTION      = GetSpellInfo(30108) or "--Unstable Affliction";
-    HEALBOT_DEBUFF_VIPER_STING              = GetSpellInfo(39413) or "--Viper Sting";
-	HEALBOT_DEBUFF_VAMPIRIC_TOUCH           = GetSpellInfo(34914) or "--Vampiric Touch";	
 
     -- Debuffs restricting spell casts
     HEALBOT_DEBUFF_FORBEARANCE              = GetSpellInfo(25771) or "--Forbearance";
