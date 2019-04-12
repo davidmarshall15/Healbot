@@ -2059,9 +2059,9 @@ local function HealBot_Update_DefaultSkins()
 end
 
 function HealBot_Check_Skin(SkinName)
-    if Healbot_Config_Skins.ExtraIncGroup[SkinName] then Healbot_Config_Skins.ExtraIncGroup[SkinName]=nil end
-    if Healbot_Config_Skins.EmergIncMonitor[SkinName] then Healbot_Config_Skins.EmergIncMonitor[SkinName]=nil end
-    if Healbot_Config_Skins.BarsHide[SkinName] then Healbot_Config_Skins.BarsHide[SkinName]=nil end
+    if Healbot_Config_Skins.ExtraIncGroup then Healbot_Config_Skins.ExtraIncGroup=nil end
+    if Healbot_Config_Skins.EmergIncMonitor then Healbot_Config_Skins.EmergIncMonitor=nil end
+    if Healbot_Config_Skins.BarsHide then Healbot_Config_Skins.BarsHide=nil end
     
     if not HealBot_Config.SkinDefault[SkinName] then HealBot_Config.SkinDefault[SkinName]={} end
     if HealBot_Config.SkinDefault[SkinName][HEALBOT_WORD_SOLO]==nil then HealBot_Config.SkinDefault[SkinName][HEALBOT_WORD_SOLO]=false end
@@ -2538,9 +2538,9 @@ function HealBot_Check_Skin(SkinName)
 
     if Healbot_Config_Skins.Healing[SkinName]["ALERTIC"] then Healbot_Config_Skins.Healing[SkinName]["ALERTIC"]=nil end
     if Healbot_Config_Skins.Healing[SkinName]["ALERTOC"] then Healbot_Config_Skins.Healing[SkinName]["ALERTOC"]=nil end
-    if Healbot_Config_Skins.Sort[SkinName] then Healbot_Config_Skins.Sort[SkinName]=nil end
-    if Healbot_Config_Skins.Aggro[SkinName] then Healbot_Config_Skins.Aggro[SkinName]=nil end
-    if Healbot_Config_Skins.Highlight[SkinName] then Healbot_Config_Skins.Highlight[SkinName]=nil end
+    if Healbot_Config_Skins.Sort then Healbot_Config_Skins.Sort=nil end
+    if Healbot_Config_Skins.Aggro then Healbot_Config_Skins.Aggro=nil end
+    if Healbot_Config_Skins.Highlight then Healbot_Config_Skins.Highlight=nil end
     
     if Healbot_Config_Skins.Author[SkinName]==nil then Healbot_Config_Skins.Author[SkinName] = HEALBOT_WORDS_UNKNOWN end
     if Healbot_Config_Skins.Protection[SkinName]["CRASH"]==nil then Healbot_Config_Skins.Protection[SkinName]["CRASH"]=false end
