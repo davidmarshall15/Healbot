@@ -1592,7 +1592,8 @@ HealBot_Data={  ["TIPUNIT"] = false,
 };
 HealBot_UnitData={};
 HealBot_UnitGUID={};
-HealBot_Spells = {};
+HealBot_Spell_IDs = {};
+HealBot_Spell_Names = {};
 HealBot_Unit_Button={};
 HealBot_Enemy_Button={};
 HealBot_Pet_Button={};

@@ -38,9 +38,9 @@ local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
     local hbCastTime=tonumber(msCast or 0);
     if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
     
-    HealBot_Spells[spellName]={}
-    HealBot_Spells[spellName].CastTime=hbCastTime;
-    HealBot_Spells[spellName].Mana=hbMana or 0
+    HealBot_Spell_IDs[id]={}
+    HealBot_Spell_IDs[id].CastTime=hbCastTime;
+    HealBot_Spell_IDs[id].Mana=hbMana or 0
 
     return true
 end
@@ -49,8 +49,9 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
     if not skipSpells[spellName] then
         if HealBot_FindSpellRangeCast(spellId, spellName, spellBookId) then
-            HealBot_Spells[spellName].id=spellId
-            HealBot_Spells[spellName].known=IsSpellKnown(spellId)
+            HealBot_Spell_IDs[spellId].name=spellName
+            HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
+            HealBot_Spell_Names[spellName]=spellId
         end
     end
 end
@@ -59,7 +60,8 @@ function HealBot_Init_Spells_Defaults()
     local i = GetSpecialization()
     local specID = 0
     if i then specID = GetSpecializationInfo(i,false,false) end
-    HealBot_Spells={}
+    HealBot_Spell_IDs={}
+    HealBot_Spell_Names={}
     
     local nTabs=GetNumSpellTabs()
     for j=1,nTabs do

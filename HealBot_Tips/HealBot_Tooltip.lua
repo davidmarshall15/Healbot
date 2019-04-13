@@ -100,7 +100,7 @@ local function HealBot_Tooltip_SpellPattern(button, click)
 end
 
 local function HealBot_Tooltip_GetHealSpell(button,sName)
-    if not sName or not HealBot_GetSpellId(sName) then
+    if not sName or not HealBot_Spell_Names[sName] then
         if sName then
             local s = GetItemSpell(sName)
             if not s then
@@ -206,13 +206,13 @@ end
 
 local HealBot_Tooltip_Power = 9
 local function HealBot_Tooltip_SpellInfo(spellName)
-    if HealBot_Spells[spellName] then
-        if HealBot_Spells[spellName].Mana>0 then
+    if HealBot_Spell_IDs[spellName] then
+        if HealBot_Spell_IDs[spellName].Mana>0 then
             linenum=linenum+1
-            if HealBot_Spells[spellName].Mana<HealBot_Tooltip_Power then
-                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spells[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Power: "..HealBot_Spells[spellName].Mana,0.4,0.4,1,1)
+            if HealBot_Spell_IDs[spellName].Mana<HealBot_Tooltip_Power then
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Power: "..HealBot_Spell_IDs[spellName].Mana,0.4,0.4,1,1)
             else
-                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spells[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Mana: "..HealBot_Spells[spellName].Mana,0.4,0.4,1,1)
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Mana: "..HealBot_Spell_IDs[spellName].Mana,0.4,0.4,1,1)
             end
         end
     end
@@ -220,11 +220,11 @@ end
 
 local function HealBot_Tooltip_SpellSummary(spellName)
     local ret_val = "  "
-    if HealBot_Spells[spellName] then
-        if HealBot_Spells[spellName].Mana<HealBot_Tooltip_Power then
-            ret_val = " -  "..HealBot_Spells[spellName].Mana.." Power"
+    if HealBot_Spell_IDs[spellName] then
+        if HealBot_Spell_IDs[spellName].Mana<HealBot_Tooltip_Power then
+            ret_val = " -  "..HealBot_Spell_IDs[spellName].Mana.." Power"
         else
-            ret_val = " -  "..HealBot_Spells[spellName].Mana.." Mana"
+            ret_val = " -  "..HealBot_Spell_IDs[spellName].Mana.." Mana"
         end
     end
     if strlen(ret_val)<5 then ret_val = " - "..spellName; end
@@ -232,9 +232,9 @@ local function HealBot_Tooltip_SpellSummary(spellName)
 end
 
 local function HealBot_Tooltip_CheckForInstant(unit,spellName)
-    if spellName and HealBot_Spells[spellName] then
-        if HealBot_Spells[spellName].HoT then
-            if HealBot_HasUnitBuff(HealBot_Spells[spellName].HoT,unit,"player") then return false end;  
+    if spellName and HealBot_Spell_IDs[spellName] then
+        if HealBot_Spell_IDs[spellName].HoT then
+            if HealBot_HasUnitBuff(HealBot_Spell_IDs[spellName].HoT,unit,"player") then return false end;  
             return true;
         end
     end
