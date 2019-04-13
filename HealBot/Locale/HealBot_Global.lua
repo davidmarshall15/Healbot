@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.5.4.p1";
+﻿HEALBOT_VERSION   = "8.1.5.5.a4";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -202,7 +202,7 @@ function HealBot_globalVars()
     HEALBOT_HOLY_WORD_SERENITY              = 2050 --GetSpellInfo(2050) or "--Holy Word: Serenity";
     HEALBOT_PENANCE                         = 47540 --GetSpellInfo(47540) or "--Penance"
     HEALBOT_PRAYER_OF_HEALING               = 596 --GetSpellInfo(596) or "--Prayer of Healing";
-    HEALBOT_PRAYER_OF_MENDING               = 33076 --GetSpellInfo(33076) or "--Prayer of Mending";
+    HEALBOT_PRAYER_OF_MENDING               = 41635 --GetSpellInfo(33076) or "--Prayer of Mending";
     HEALBOT_RENEW                           = 139 --GetSpellInfo(139) or "--Renew";
 	HEALBOT_PLEA                            = 200829 --GetSpellInfo(200829) or "--Plea";	
 	HEALBOT_POWER_WORD_RADIANCE             = 194509 --GetSpellInfo(194509) or "--Power Word: Radiance";

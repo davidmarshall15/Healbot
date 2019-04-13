@@ -5786,27 +5786,30 @@ end
 HealBot_Options_StorePrev["FilterHoTctlName"]=HealBot_Options_FilterHoTctl_List[1]
 HealBot_Options_StorePrev["FilterHoTctlNameTrim"]=HealBot_Class_En[HealBot_Options_StorePrev["FilterHoTctlName"]]
 HealBot_Options_StorePrev["FilterHoTctlID"]=1
+HealBot_Options_StorePrev["HoTindex"]=1
+HealBot_Options_StorePrev["HoTname"]=""
 
 function HealBot_Options_Class_HoTctlName_genList()
     local class=nil
     local tmpHoTctlName_List={}
 
-    for bName,class in pairs(HealBot_Options_Class_HoTctlName_List) do
+    for bId,class in pairs(HealBot_Options_Class_HoTctlName_List) do
         if HealBot_Options_StorePrev["FilterHoTctlName"]==class then
+            local bName=HealBot_Options_CDebuffTextID(bId)
             table.insert(tmpHoTctlName_List, bName)
         end
     end
     table.sort(tmpHoTctlName_List)
     local x=nil
     for j=1, getn(tmpHoTctlName_List), 1 do
-        if tmpHoTctlName_List[j]==HealBot_Globals.HoTname then
-            HealBot_Globals.HoTindex=j
+        if tmpHoTctlName_List[j]==HealBot_Options_StorePrev["HoTname"] then
+            HealBot_Options_StorePrev["HoTindex"]=j
             x=true
             break
         end
     end
-    if not x then HealBot_Globals.HoTindex=1 end
-    HealBot_Globals.HoTname=tmpHoTctlName_List[HealBot_Globals.HoTindex]
+    if not x then HealBot_Options_StorePrev["HoTindex"]=1 end
+    HealBot_Options_StorePrev["HoTname"]=tmpHoTctlName_List[HealBot_Options_StorePrev["HoTindex"]]
     return tmpHoTctlName_List
 end
 
@@ -5816,14 +5819,14 @@ function HealBot_Options_Class_HoTctlName_DropDown()
     for j=1, getn(HoTctlName_List), 1 do
         info.text = HoTctlName_List[j];
         info.func = function(self)
-                        HealBot_Globals.HoTindex = self:GetID()
-                        HealBot_Globals.HoTname = self:GetText()
-                        UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlName, HealBot_Globals.HoTname)
+                        HealBot_Options_StorePrev["HoTindex"] = self:GetID()
+                        HealBot_Options_StorePrev["HoTname"] = self:GetText()
+                        UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlName, HealBot_Options_StorePrev["HoTname"])
                         DoneInitTab[501]=nil
                         HealBot_Options_InitSub(501)
                     end
         info.checked = false;
-        if HealBot_Globals.HoTname==HoTctlName_List[j] then info.checked = true; end
+        if HealBot_Options_StorePrev["HoTname"]==HoTctlName_List[j] then info.checked = true; end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -5848,18 +5851,20 @@ function HealBot_Options_Class_HoTctlAction_DropDown()
             info.func = function(self)
                             local y=self:GetID()
                             if HealBot_Options_StorePrev["FilterHoTctlName"]~=HEALBOT_CLASSES_ALL and y==3 then y=4 end
-                                
+                            
+                            local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
                             if y>1 then 
-                                HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname]=y 
+                                HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId]=y 
                             else
-                                HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname]=nil
+                                HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId]=nil
                             end
                             UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlAction,hbText) 
                             HealBot_setOptions_Timer(170)
                         end
             info.checked = false;
             if HealBot_Options_StorePrev["FilterHoTctlNameTrim"] and HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]] then
-                local x=HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname] or 1
+                local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
+                local x=HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId] or 1
                 if x==j then info.checked = true; end 
             end
             UIDropDownMenu_AddButton(info);
@@ -7838,7 +7843,6 @@ local function HealBot_Options_DoDebuff_Reset()
                         HealBot_DebuffWatchTargetSpell["Party"]=true;
                     elseif DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==4 then
                         HealBot_DebuffWatchTargetSpell["Raid"]=true;
-                        HealBot_AddDebug("Is Raid")
                     elseif DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==5 then
                         HealBot_DebuffWatchTargetSpell[HealBot_Class_En[HEALBOT_DRUID]]=true;
                     elseif DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]==6 then
@@ -10635,12 +10639,13 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_FilterHoTctl.initialize = HealBot_Options_FilterHoTctl_DropDown
             UIDropDownMenu_SetText(HealBot_Options_FilterHoTctl, HealBot_Options_StorePrev["FilterHoTctlName"])
             local HoTctlName_List = HealBot_Options_Class_HoTctlName_genList()
+            local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
             if HealBot_Options_StorePrev["FilterHoTctlNameTrim"] and HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]] and not
-               HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname] then HealBot_Globals.HoTname=HoTctlName_List[1] end
+               HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId] then HealBot_Options_StorePrev["HoTname"]=HoTctlName_List[1] end
             HealBot_Options_Class_HoTctlName.initialize = HealBot_Options_Class_HoTctlName_DropDown
-            UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlName, HealBot_Globals.HoTname)
+            UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlName, HealBot_Options_StorePrev["HoTname"])
             HealBot_Options_Class_HoTctlAction.initialize = HealBot_Options_Class_HoTctlAction_DropDown
-            local x=HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][HealBot_Globals.HoTname] or 1
+            local x=HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId] or 1
             UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlAction, HealBot_Options_Class_HoTctlAction_List[x])
             local BuffTextClass = HealBot_Config_Buffs.HealBotBuffText
             if not BuffTextClass[HealBot_Options_getDropDownId_bySpec(1)] then BuffTextClass[HealBot_Options_getDropDownId_bySpec(1)]=HEALBOT_WORDS_NONE  end;

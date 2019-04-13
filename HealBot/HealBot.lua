@@ -2681,11 +2681,6 @@ local function HealBot_Update_Skins()
             end
         end
         if tonumber(tMajor)==8 then
-            if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0 and tonumber(tHealbot)<8) then
-                if not HealBot_Globals.VersionResetDone["8.1.0.7"] then
-                    HealBot_Options_ResetSetting("ICON")
-                end
-            end
             if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0) or (tonumber(tMinor)==1 and tonumber(tPatch)==5 and tonumber(tHealbot)<4) then
                 for dName, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
                     if dName~=HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT and
@@ -2713,6 +2708,22 @@ local function HealBot_Update_Skins()
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_SHADOW_TOUCHED]=x;
                         end
                     end
+                end
+            end
+            if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0) or (tonumber(tMinor)==1 and tonumber(tPatch)==5 and tonumber(tHealbot)<6) then
+                local hbClassHoTwatch=HealBot_Globals.WatchHoT
+                for xClass,_  in pairs(hbClassHoTwatch) do
+                    local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
+                    for sName,x  in pairs(HealBot_configClassHoTClass) do
+                        local name, _, _, _, _, _, spellId = GetSpellInfo(sName)
+                        if name==sName and spellId then
+                            HealBot_Globals.WatchHoT[xClass][sName]=nil
+                            HealBot_Globals.WatchHoT[xClass][spellId]=x
+                        end
+                    end
+                end
+                if not HealBot_Globals.VersionResetDone["8.1.5.5"] then
+                    HealBot_Options_ResetSetting("ICON")
                 end
             end
         end
@@ -4398,7 +4409,9 @@ local function HealBot_CheckUnitBuffs(button)
                 z = z +1
                 if cIcons then 
                     if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
-                        local y=HealBot_Watch_HoT[name] or "nil"
+                        local y=HealBot_Watch_HoT[spellId] or "nil"
+                        if spellId==33076 then HealBot_AddDebug(name.."-"..y) end
+                        if name=="Prayer of Mending" then HealBot_AddDebug(spellId.."-"..y) end
                         if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                             HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
                         end
@@ -6346,8 +6359,9 @@ function HealBot_Options_ResetSetting(resetTab)
             button1 = HEALBOT_WORDS_YES,
             button2 = HEALBOT_WORDS_NO,
             OnAccept = function()
-                HealBot_Globals.VersionResetDone["8.1.0.7"]=true
+                HealBot_Globals.VersionResetDone["8.1.5.5"]=true
                 HealBot_Reset_Icons()
+                HealBot_SetResetFlag("HARD")
             end,
             timeout = 0,
             whileDead = 1,
