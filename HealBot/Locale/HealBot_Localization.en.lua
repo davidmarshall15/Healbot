@@ -990,6 +990,18 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ALWAYSHIDE              = "Always Hide"
     HEALBOT_OPTIONS_NOCHANGE                = "No Change"
     HEALBOT_OPTIONS_ALWAYSSHOW              = "Always Show"
+    
+    HEALBOT_THANKS_TO_TAB                   = "Thanks To"
+    HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy of the great land Down Under",
+                               [02] = "Mythagos of Draenor",
+                               [03] = "Diacono of Ursin",
+                               [04] = "Slayybelle",
+                               [05] = "Noobrak",
+                               [06] = "EpicMouse",
+                               [07] = "Hermis",
+                               [08] = "kubik",
+                            }
+                               
 end
 
 function HealBot_Lang_InitVars()
