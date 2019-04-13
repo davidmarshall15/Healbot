@@ -1107,11 +1107,11 @@ local function HealBot_DoReset_Spells(pClassTrim)
     local x=""
     if pClassTrim=="DRUI" then
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_REGROWTH,
-          ["CtrlLeft"] =  HEALBOT_REMOVE_CORRUPTION,
-          ["Right"] = HEALBOT_HEALING_TOUCH,
-          ["CtrlRight"] =  HEALBOT_NATURES_CURE,
-          ["Middle"] = HEALBOT_REJUVENATION,
+          ["Left"] = GetSpellInfo(HEALBOT_REGROWTH),
+          ["CtrlLeft"] =  GetSpellInfo(HEALBOT_REMOVE_CORRUPTION),
+          ["Right"] = GetSpellInfo(HEALBOT_HEALING_TOUCH),
+          ["CtrlRight"] =  GetSpellInfo(HEALBOT_NATURES_CURE),
+          ["Middle"] = GetSpellInfo(HEALBOT_REJUVENATION),
           ["ShiftMiddle"] = bandage,
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
           ["Alt-ShiftRight"] = HEALBOT_ASSIST,
@@ -1120,23 +1120,23 @@ local function HealBot_DoReset_Spells(pClassTrim)
                                          }
         HealBot_Config_Spells.DisabledKeyCombo = {
           ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["ShiftLeft"] = HEALBOT_MARK_OF_THE_WILD,
+          ["ShiftLeft"] = GetSpellInfo(HEALBOT_MARK_OF_THE_WILD),
           ["Right"] = HEALBOT_ASSIST,
-          ["Middle"] = HEALBOT_REJUVENATION,
+          ["Middle"] = GetSpellInfo(HEALBOT_REJUVENATION),
           ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
     elseif pClassTrim=="MONK" then
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_SOOTHING_MIST,
-          ["ShiftLeft"] = HEALBOT_SURGING_MIST,
-          ["ShiftRight"] = HEALBOT_REVIVAL,
-          ["CtrlLeft"] =  HEALBOT_DETOX,
-          ["Right"] = HEALBOT_ENVELOPING_MIST,
-          ["Middle"] =  HEALBOT_RENEWING_MIST,
-          ["ShiftMiddle"] = HEALBOT_UPLIFT,
-          ["CtrlMiddle"] = HEALBOT_LIFE_COCOON,
-          ["AltMiddle"] = HEALBOT_ZEN_MEDITATION,
+          ["Left"] = GetSpellInfo(HEALBOT_SOOTHING_MIST),
+          ["ShiftLeft"] = GetSpellInfo(HEALBOT_SURGING_MIST),
+          ["ShiftRight"] = GetSpellInfo(HEALBOT_REVIVAL),
+          ["CtrlLeft"] = GetSpellInfo(HEALBOT_DETOX),
+          ["Right"] = GetSpellInfo(HEALBOT_ENVELOPING_MIST),
+          ["Middle"] =  GetSpellInfo(HEALBOT_RENEWING_MIST),
+          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_UPLIFT),
+          ["CtrlMiddle"] = GetSpellInfo(HEALBOT_LIFE_COCOON),
+          ["AltMiddle"] = GetSpellInfo(HEALBOT_ZEN_MEDITATION),
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
           ["Alt-ShiftRight"] = HEALBOT_ASSIST,
           ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
@@ -1144,20 +1144,20 @@ local function HealBot_DoReset_Spells(pClassTrim)
                                          }
         HealBot_Config_Spells.DisabledKeyCombo = {
           ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Middle"] =  HEALBOT_RENEWING_MIST,
+          ["Middle"] =  GetSpellInfo(HEALBOT_RENEWING_MIST),
           ["Right"] = HEALBOT_ASSIST,
           ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
     elseif pClassTrim=="PALA" then
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_FLASH_OF_LIGHT,
+          ["Left"] = GetSpellInfo(HEALBOT_FLASH_OF_LIGHT),
           ["ShiftLeft"] = x,
-          ["ShiftRight"] = HEALBOT_LIGHT_OF_DAWN,
-          ["CtrlLeft"] =  HEALBOT_CLEANSE,
-          ["Right"] = HEALBOT_HOLY_LIGHT,
-          ["Middle"] =  HEALBOT_WORD_OF_GLORY,
-          ["ShiftMiddle"] = HEALBOT_HOLY_RADIANCE,
+          ["ShiftRight"] = GetSpellInfo(HEALBOT_LIGHT_OF_DAWN),
+          ["CtrlLeft"] =  GetSpellInfo(HEALBOT_CLEANSE),
+          ["Right"] = GetSpellInfo(HEALBOT_HOLY_LIGHT),
+          ["Middle"] =  GetSpellInfo(HEALBOT_WORD_OF_GLORY),
+          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_HOLY_RADIANCE),
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
           ["Alt-ShiftRight"] = HEALBOT_ASSIST,
           ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
@@ -1165,51 +1165,51 @@ local function HealBot_DoReset_Spells(pClassTrim)
                                          }
         HealBot_Config_Spells.DisabledKeyCombo = {
           ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Middle"] =  HEALBOT_HAND_OF_SALVATION,
+          ["Middle"] =  GetSpellInfo(HEALBOT_HAND_OF_SALVATION),
           ["Right"] = HEALBOT_ASSIST,
           ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
     elseif pClassTrim=="PRIE" then
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_FLASH_HEAL,
-          ["ShiftLeft"] = HEALBOT_BINDING_HEAL,
-          ["CtrlLeft"] = HEALBOT_PURIFY,
-          ["Right"] = HEALBOT_HEAL,
-          ["ShiftRight"] = HEALBOT_HOLY_WORD_SERENITY,
-          ["CtrlRight"] = HEALBOT_MASS_DISPEL,
-          ["Middle"] = HEALBOT_RENEW,
-          ["ShiftMiddle"] = HEALBOT_PRAYER_OF_MENDING,
-          ["AltMiddle"] = HEALBOT_PRAYER_OF_HEALING,
-          ["CtrlMiddle"] = HEALBOT_DIVINE_HYMN,
+          ["Left"] = GetSpellInfo(HEALBOT_FLASH_HEAL),
+          ["ShiftLeft"] = GetSpellInfo(HEALBOT_BINDING_HEAL),
+          ["CtrlLeft"] = GetSpellInfo(HEALBOT_PURIFY),
+          ["Right"] = GetSpellInfo(HEALBOT_HEAL),
+          ["ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY),
+          ["CtrlRight"] = GetSpellInfo(HEALBOT_MASS_DISPEL),
+          ["Middle"] = GetSpellInfo(HEALBOT_RENEW),
+          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_PRAYER_OF_MENDING),
+          ["AltMiddle"] = GetSpellInfo(HEALBOT_PRAYER_OF_HEALING),
+          ["CtrlMiddle"] = GetSpellInfo(HEALBOT_DIVINE_HYMN),
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_HOLY_WORD_SALVATION,
+          ["Alt-ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SALVATION),
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
         HealBot_Config_Spells.DisabledKeyCombo = {
           ["Left"] = HEALBOT_DISABLED_TARGET,
           ["Right"] = HEALBOT_ASSIST,
-          ["AltLeft"] = HEALBOT_RESURRECTION,
-          ["ShiftRight"] = HEALBOT_HOLY_WORD_SERENITY,
-          ["Middle"] = HEALBOT_RENEW,
+          ["AltLeft"] = GetSpellInfo(HEALBOT_RESURRECTION),
+          ["ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY),
+          ["Middle"] = GetSpellInfo(HEALBOT_RENEW),
           ["Ctrl-ShiftLeft"] = HEALBOT_FLASH_HEAL,
           ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
                                          }
     elseif pClassTrim=="SHAM" then
         if HealBot_Config.CurrentSpec==3 then
-            x=HEALBOT_PURIFY_SPIRIT;
+            x=GetSpellInfo(HEALBOT_PURIFY_SPIRIT);
         else
-            x=HEALBOT_CLEANSE_SPIRIT;
+            x=GetSpellInfo(HEALBOT_CLEANSE_SPIRIT);
         end
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_HEALING_WAVE,
+          ["Left"] = GetSpellInfo(HEALBOT_HEALING_WAVE),
           ["CtrlLeft"] = x,
           ["Right"] = x,
           ["CtrlRight"] = x,
-          ["ShiftLeft"] = HEALBOT_CHAIN_HEAL,
-		  ["Middle"] = HEALBOT_HEALING_RAIN,
-          ["ShiftMiddle"] = HEALBOT_HEALING_SURGE,
-          ["AltLeft"] = HEALBOT_HEALING_STREAM_TOTEM,
+          ["ShiftLeft"] = GetSpellInfo(HEALBOT_CHAIN_HEAL),
+		  ["Middle"] = GetSpellInfo(HEALBOT_HEALING_RAIN),
+          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_HEALING_SURGE),
+          ["AltLeft"] = GetSpellInfo(HEALBOT_HEALING_STREAM_TOTEM),
           ["AltRight"] = x,
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
           ["Alt-ShiftRight"] = HEALBOT_ASSIST,
@@ -1224,7 +1224,7 @@ local function HealBot_DoReset_Spells(pClassTrim)
                                          }
     elseif pClassTrim=="MAGE" then
         HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = HEALBOT_REMOVE_CURSE,
+          ["Left"] = GetSpellInfo(HEALBOT_REMOVE_CURSE),
           ["ShiftLeft"] = bandage,
           ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
           ["Alt-ShiftRight"] = HEALBOT_ASSIST,
