@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.5.5.b1";
+﻿HEALBOT_VERSION   = "8.1.5.5";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -438,7 +438,7 @@ function HealBot_globalVars()
 	HEALBOT_SYMBOL_OF_HOPE                  = 64901 --GetSpellInfo(64901) or "--Symbol of Hope";	
 	HEALBOT_BODY_AND_MIND                   = 214121 --GetSpellInfo(214121) or "--Body and Mind";
 	HEALBOT_RAPTURE                         = 47536 --GetSpellInfo(47536) or "--Rapture"; --Disc
-	HEALBOT_ATONEMENT                       = 81749 --GetSpellInfo(81749) or "--Atonement";
+	HEALBOT_ATONEMENT                       = 194384 --GetSpellInfo(81749) or "--Atonement";
 	HEALBOT_SHADOW_COVENANT                 = 204065 --GetSpellInfo(204065) or "--Shadow Covenant";
     HEALBOT_LIGHT_OF_TUURE                  = 208065 --GetSpellInfo(208065) or "--Light of T'uure";
     HEALBOT_BLESSING_OF_TUURE               = 196644 --GetSpellInfo(196644) or "--Blessing of T'uure";

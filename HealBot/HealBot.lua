@@ -4429,8 +4429,7 @@ local function HealBot_CheckUnitBuffs(button)
                 if cIcons then 
                     if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
                         local y=HealBot_Watch_HoT[spellId] or "nil"
-                        if spellId==1706 then HealBot_AddDebug(name.."-"..y) end
-                        if name=="Levitate" then HealBot_AddDebug(spellId.."-"..y) end
+                       -- if name=="Atonement" then HealBot_AddDebug(spellId.."-"..y) end
                         if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                             HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
                         end
