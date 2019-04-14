@@ -342,7 +342,25 @@ function HealBot_TogglePanel(HBpanel)
     if ( HBpanel:IsVisible() ) then
         HideUIPanel(HBpanel);
     else
+        local fTop=HealBot_Comm_round(((HBpanel:GetTop()/GetScreenHeight())*100),2)
+        local fLeft=HealBot_Comm_round(((HBpanel:GetLeft()/GetScreenWidth())*100),2)
+        local fBottom=HealBot_Comm_round(((HBpanel:GetBottom()/GetScreenHeight())*100),2)
+        local fRight=HealBot_Comm_round(((HBpanel:GetRight()/GetScreenWidth())*100),2)
+        if fLeft<0 or fTop>100 or fBottom<0 or fRight>100 then 
+            HBpanel:ClearAllPoints(); 
+        end
+        if fLeft<0 then 
+            HBpanel:SetPoint("LEFT","UIParent","LEFT",0,0);
+        elseif fTop>100 then 
+            HBpanel:SetPoint("TOP","UIParent","TOP",0,0);
+        elseif fBottom<0 then 
+            HBpanel:SetPoint("BOTTOM","UIParent","BOTTOM",0,0);
+        elseif fRight>100 then 
+            HBpanel:SetPoint("RIGHT","UIParent","RIGHT",0,0); 
+        end
         ShowUIPanel(HBpanel);
+       -- HBpanel:ClearAllPoints();
+       -- HBpanel:SetPoint("CENTER","UIParent","CENTER",0,0);
     end
   --HealBot_setCall("HealBot_TogglePanel")
 end
@@ -2689,23 +2707,23 @@ local function HealBot_Update_Skins()
                        dName~=HEALBOT_CUSTOM_CAT_CUSTOM_MISC then
                         local name, _, _, _, _, _, spellId = GetSpellInfo(dName)
                         if name==dName and spellId then
-                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                             HealBot_Globals.HealBot_Custom_Debuffs[spellId]=x;
+                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                         elseif dName==GetSpellInfo(HEALBOT_SHROUD_OF_PURGATORY) then
-                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_SHROUD_OF_PURGATORY]=x;
+                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                         elseif dName==GetSpellInfo(HEALBOT_DEBUFF_ROCKET_FUEL_LEAK) then
-                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]=x;
+                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                         elseif dName==GetSpellInfo(HEALBOT_DEBUFF_FORBEARANCE) then
-                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_DEBUFF_FORBEARANCE]=x;
+                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                         elseif dName==GetSpellInfo(HEALBOT_DEBUFF_WEAKENED_SOUL) then
-                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_DEBUFF_WEAKENED_SOUL]=x;
-                        elseif dName==GetSpellInfo(HEALBOT_SHADOW_TOUCHED) then
                             HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
+                        elseif dName==GetSpellInfo(HEALBOT_SHADOW_TOUCHED) then
                             HealBot_Globals.HealBot_Custom_Debuffs[HEALBOT_SHADOW_TOUCHED]=x;
+                            HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
                         end
                     end
                 end
@@ -2717,8 +2735,8 @@ local function HealBot_Update_Skins()
                     for sName,x  in pairs(HealBot_configClassHoTClass) do
                         local name, _, _, _, _, _, spellId = GetSpellInfo(sName)
                         if name==sName and spellId then
-                            HealBot_Globals.WatchHoT[xClass][sName]=nil
                             HealBot_Globals.WatchHoT[xClass][spellId]=x
+                            HealBot_Globals.WatchHoT[xClass][sName]=nil
                         end
                     end
                 end
@@ -4208,6 +4226,7 @@ local function HealBot_CheckUnitDebuffs(button)
             if curDebuffs[dName]["priority"]<dPrio then
                 button.aura.debuff.type=curDebuffs[dName]["type"]
                 button.aura.debuff.name=dName
+                button.aura.debuff.id=curDebuffs[dName]["spellId"]
                 button.aura.debuff.priority=curDebuffs[dName]["priority"]
                 dPrio=curDebuffs[dName]["priority"]
             end
@@ -4261,17 +4280,17 @@ local function HealBot_CheckUnitDebuffs(button)
     if button.aura.debuff.name then
         if button.aura.debuff.name~=prevDebuff["name"] or button.aura.debuff.type~=prevDebuff["type"] then
             HealBot_UpdateUnitRange(button,HealBot_Action_dSpell(),false)
-            if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil) then
+            if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id]==nil) then
                 if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
                     HealBot_Action_UpdateAggro(button.unit,"debuff",debuffCodes[button.aura.debuff.type], 0)
                 end
             end
             if HealBot_Config_Cures.ShowDebuffWarning and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
-                if HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
+                if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
                     UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." suffers from "..button.aura.debuff.name, 
-                                             HealBot_Globals.CDCBarColour[button.aura.debuff.name].R,
-                                             HealBot_Globals.CDCBarColour[button.aura.debuff.name].G,
-                                             HealBot_Globals.CDCBarColour[button.aura.debuff.name].B,
+                                             HealBot_Globals.CDCBarColour[button.aura.debuff.id].R,
+                                             HealBot_Globals.CDCBarColour[button.aura.debuff.id].G,
+                                             HealBot_Globals.CDCBarColour[button.aura.debuff.id].B,
                                              1, UIERRORS_HOLD_TIME);
                 elseif button.aura.debuff.type == HEALBOT_CUSTOM_en then
                     local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
@@ -4410,8 +4429,8 @@ local function HealBot_CheckUnitBuffs(button)
                 if cIcons then 
                     if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
                         local y=HealBot_Watch_HoT[spellId] or "nil"
-                        if spellId==33076 then HealBot_AddDebug(name.."-"..y) end
-                        if name=="Prayer of Mending" then HealBot_AddDebug(spellId.."-"..y) end
+                        if spellId==1706 then HealBot_AddDebug(name.."-"..y) end
+                        if name=="Levitate" then HealBot_AddDebug(spellId.."-"..y) end
                         if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                             HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
                         end
@@ -5492,6 +5511,7 @@ function HealBot_ClearDebuff(button)
 	if button.aura.debuff.name then
 		button.aura.debuff.type = false;
 		button.aura.debuff.name = false;
+        button.aura.debuff.id=0
 		button.aura.debuff.priority = 99;
         if button.aggro.status>4 then
             HealBot_Action_UpdateAggro(button.unit,false,nil,0)

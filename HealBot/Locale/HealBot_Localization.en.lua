@@ -992,11 +992,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ALWAYSSHOW              = "Always Show"
     
     HEALBOT_THANKS_TO_TAB                   = "Thanks To"
-    HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy of the great land Down Under",
-                               [02] = "Mythagos of Draenor",
-                               [03] = "Diacono of Ursin",
-                               [04] = "Slayybelle",
-                               [05] = "Noobrak",
+    HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy from the great land Down Under",
+                               [02] = "Mythagos from Draenor",
+                               [03] = "Diacono from Ursin",
+                               [04] = "Nerak from Cenarion Circle",
+                               [05] = "Slayybelle",
                                [06] = "EpicMouse",
                                [07] = "Hermis",
                                [08] = "kubik",

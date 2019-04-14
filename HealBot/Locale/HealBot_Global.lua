@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.5.5.a4";
+﻿HEALBOT_VERSION   = "8.1.5.5.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -357,7 +357,7 @@ function HealBot_globalVars()
     HEALBOT_HAND_OF_FREEDOM                 = 1044 --GetSpellInfo(1044) or "--Hand of Freedom";
     HEALBOT_HAND_OF_PROTECTION              = 1022 --GetSpellInfo(1022) or "--Hand of Protection";
     HEALBOT_HAND_OF_PURITY                  = 114039 --GetSpellInfo(114039) or "--Hand of Purity";
-    HEALBOT_HAND_OF_SACRIFICE               = 6940 --GetSpellInfo(6940) or "--Hand of Sacrifice";
+   -- HEALBOT_HAND_OF_SACRIFICE               = 6940 --GetSpellInfo(6940) or "--Hand of Sacrifice";
     HEALBOT_HAND_OF_SALVATION               = 1038 --GetSpellInfo(1038) or "--Hand of Salvation";
     HEALBOT_HOLY_SHIELD                     = 20925 --GetSpellInfo(20925) or "--Holy Shield"
     HEALBOT_HOLY_SHOCK                      = 20473 --GetSpellInfo(20473) or "--Holy Shock";
@@ -409,7 +409,7 @@ function HealBot_globalVars()
     HEALBOT_GRACE                           = 47517 --GetSpellInfo(47517) or "--Grace";
     HEALBOT_HOLY_NOVA                       = 132157 --GetSpellInfo(132157) or "--Holy Nova";
     HEALBOT_LEAP_OF_FAITH                   = 73325 --GetSpellInfo(73325) or "--Leap of Faith";
-    HEALBOT_LEVITATE                        = 1706 --GetSpellInfo(1706) or "--Levitate";
+    HEALBOT_LEVITATE                        = 111759 --GetSpellInfo(1706) or "--Levitate";
     HEALBOT_LIGHTWELL_RENEW                 = 7001 --GetSpellInfo(7001) or "--Lightwell Renew";
     HEALBOT_MIND_QUICKENING                 = 49868 --GetSpellInfo(49868) or "--Mind Quickening"
     HEALBOT_PAIN_SUPPRESSION                = 33206 --GetSpellInfo(33206) or "--Pain Suppression";

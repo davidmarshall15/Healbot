@@ -90,19 +90,19 @@ end
 
 function HealBot_Init_SmartCast()
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        SmartCast_MassRes=HEALBOT_MASS_RESURRECTION;
-        SmartCast_Res=HEALBOT_RESURRECTION;
+        if HealBot_Spell_IDs[HEALBOT_MASS_RESURRECTION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_MASS_RESURRECTION].name end
+        if HealBot_Spell_IDs[HEALBOT_RESURRECTION] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        SmartCast_MassRes=HEALBOT_REVITALIZE;
-        SmartCast_Res=HEALBOT_REVIVE;
+        if HealBot_Spell_IDs[HEALBOT_REVITALIZE] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REVITALIZE].name end
+        if HealBot_Spell_IDs[HEALBOT_REVIVE] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REVIVE].name end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        SmartCast_MassRes=HEALBOT_REAWAKEN;
-        SmartCast_Res=HEALBOT_RESUSCITATE;
+        if HealBot_Spell_IDs[HEALBOT_REAWAKEN] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REAWAKEN].name end
+        if HealBot_Spell_IDs[HEALBOT_RESUSCITATE] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESUSCITATE].name end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        SmartCast_MassRes=HEALBOT_ABSOLUTION;
-        SmartCast_Res=HEALBOT_REDEMPTION;
+        if HealBot_Spell_IDs[HEALBOT_ABSOLUTION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_ABSOLUTION].name end
+        if HealBot_Spell_IDs[HEALBOT_REDEMPTION] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        SmartCast_MassRes=HEALBOT_ANCESTRAL_VISION;
-        SmartCast_Res=HEALBOT_ANCESTRALSPIRIT;
+        if HealBot_Spell_IDs[HEALBOT_ANCESTRAL_VISION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_ANCESTRAL_VISION].name end
+        if HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT].name end
     end
 end

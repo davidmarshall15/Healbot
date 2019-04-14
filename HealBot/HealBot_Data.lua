@@ -229,7 +229,6 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         VersionResetDone={},
-        HoTname=HEALBOT_GUARDIAN_SPIRIT,
         CureCustomDefaultCastBy="ALL",
         TopRole="TANK",
         TargetBarRestricted=0,
@@ -387,7 +386,6 @@ function HealBot_Data_InitVars()
                 [HEALBOT_HAND_OF_FREEDOM]=2,
                 [HEALBOT_LIGHT_BEACON]=2,
                 [HEALBOT_DIVINE_SHIELD]=4,
-                [HEALBOT_HAND_OF_SACRIFICE]=2,
                 [HEALBOT_INFUSION_OF_LIGHT]=2,
                 [HEALBOT_SPEED_OF_LIGHT]=2,
                 [HEALBOT_DIVINE_PURPOSE]=2,

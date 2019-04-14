@@ -357,6 +357,7 @@ function HealBot_Action_SetrSpell()
 		if HealBot_KnownSpell(HEALBOT_RESURRECTION) then 
 			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name
 			x=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name
+            HealBot_AddDebug("rSpell="..x)
 		end
 		if HealBot_KnownSpell(HEALBOT_FLASH_HEAL) then 
 			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_FLASH_HEAL].name
@@ -665,11 +666,11 @@ function HealBot_Action_UpdateDebuffButton(button)
                 local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
 
                 if button.aura.debuff.type == HEALBOT_CUSTOM_en then
-                    if HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
-                        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name]==nil then
-                            hcr = HealBot_Globals.CDCBarColour[button.aura.debuff.name].R
-                            hcg = HealBot_Globals.CDCBarColour[button.aura.debuff.name].G
-                            hcb = HealBot_Globals.CDCBarColour[button.aura.debuff.name].B
+                    if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
+                        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id]==nil then
+                            hcr = HealBot_Globals.CDCBarColour[button.aura.debuff.id].R
+                            hcg = HealBot_Globals.CDCBarColour[button.aura.debuff.id].G
+                            hcb = HealBot_Globals.CDCBarColour[button.aura.debuff.id].B
                         else
                             button.status.current=6
                             HealBot_Action_UpdateBuffButton(button)
@@ -2659,6 +2660,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.icon.buff.count=0
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
+        ghb.aura.debuff.id=0
         ghb.icon.debuff.count=0
         ghb.icon.debuff.targeticon=0
         ghb.icon.debuff.classtexture=false
@@ -4043,10 +4045,10 @@ local function HealBot_Action_UpdateAggroBar(button)
     if UnitExists(button.unit) then
         HealBot_AggroUnitThreat=button.aggro.status or 2
         if HealBot_AggroUnitThreat==9 and button.aura.debuff.name then
-            if HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
-                bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[button.aura.debuff.name].R,
-                                       HealBot_Globals.CDCBarColour[button.aura.debuff.name].G,
-                                       HealBot_Globals.CDCBarColour[button.aura.debuff.name].B,aAlpha[button.frame])
+            if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
+                bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[button.aura.debuff.id].R,
+                                       HealBot_Globals.CDCBarColour[button.aura.debuff.id].G,
+                                       HealBot_Globals.CDCBarColour[button.aura.debuff.id].B,aAlpha[button.frame])
             else
                 local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
                 if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name] then
