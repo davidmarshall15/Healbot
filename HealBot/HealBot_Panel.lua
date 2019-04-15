@@ -1174,14 +1174,8 @@ local function HealBot_cpsUnit(unit,sUnit)
     if unit then
         if unit=="player" then
             xUnit="p"
-    --    elseif unit=="pet" then
-    --        xUnit="t"
-        elseif strsub(unit,6,3)=="pet" then
-    --        xUnit="t"..strsub(unit,10)
         elseif strsub(unit,1,5)=="party" then
             xUnit="g"..strsub(unit,6)
-        elseif strsub(unit,5,3)=="pet" then
---            xUnit="z"..strsub(unit,8)
         elseif strsub(unit,1,4)=="raid" then
             xUnit=strsub(unit,5)
         elseif unit=="focus" then
@@ -1190,14 +1184,8 @@ local function HealBot_cpsUnit(unit,sUnit)
     elseif sUnit then
         if sUnit=="p" then
             xUnit="player"
-    --    elseif sUnit=="t" then
-    --        xUnit="pet"
-    --    elseif strsub(sUnit,1,1)=="t" then
-    --        xUnit="partypet"..strsub(sUnit,2)
         elseif strsub(sUnit,1,1)=="g" then
             xUnit="party"..strsub(sUnit,2)
-    --    elseif strsub(sUnit,1,1)=="z" then
-    --        xUnit="raidpet"..strsub(sUnit,2)
         elseif sUnit=="f" then
             xUnit="focus"
         else
@@ -1909,19 +1897,15 @@ local function HealBot_Panel_selfHeals()
         HealBot_TrackNames[HealBot_Data["PGUID"]]=true;
         table.insert(subunits,xUnit)
         HealBot_Panel_SubSort(false, 1)
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]==1 and HealBot_Config.DisabledNow==0 then
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] and HealBot_Config.DisabledNow==0 then
             xUnit="pet";
             local xGUID=HealBot_UnitGUID(xUnit)
             if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] then
-                if not UnitIsVisible(xUnit) then
-                    i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                    uName=UnitName(xUnit);
-                    HealBot_TrackNames[xGUID]=true;
-                    table.insert(subunits,xUnit)
-                    HealBot_Panel_SubSort(false, 3)
-                else
-                    HealBot_setNotVisible(xGUID,xUnit)
-                end
+                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
+                uName=UnitName(xUnit);
+                HealBot_TrackNames[xGUID]=true;
+                table.insert(subunits,xUnit)
+                HealBot_Panel_SubSort(false, 1)
                 HealBot_Panel_luVars["SelfPets"]=true
                 HealBot_Panel_updGUIDstore(xGUID,uName,xUnit)
             end

@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.1.5.6.b1";
+﻿HEALBOT_VERSION   = "8.1.5.6";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 function HealBot_globalVars()
@@ -71,8 +71,8 @@ function HealBot_globalVars()
 
     --Procs
 	HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL   = 242586 --GetSpellInfo(242586) or "--Concordance of the Legionfall";
-    HEALBOT_BRACING_CHILL                   = 267884 --GetSpellInfo(267884) or "--Bracing Chill";
-    HEALBOT_BLESSED_PORTENTS                = 267889 --GetSpellInfo(267889) or "--Blessed Portents";
+    HEALBOT_BRACING_CHILL                   = 272276 --GetSpellInfo(267884) or "--Bracing Chill";
+    HEALBOT_BLESSED_PORTENTS                = 271843 --GetSpellInfo(267889) or "--Blessed Portents";
 	
 	--Racial Abilities
     HEALBOT_DARKFLIGHT                      = 68992 --GetSpellInfo(68992) or "--Darkflight";
@@ -202,7 +202,7 @@ function HealBot_globalVars()
     HEALBOT_HOLY_WORD_SERENITY              = 2050 --GetSpellInfo(2050) or "--Holy Word: Serenity";
     HEALBOT_PENANCE                         = 47540 --GetSpellInfo(47540) or "--Penance"
     HEALBOT_PRAYER_OF_HEALING               = 596 --GetSpellInfo(596) or "--Prayer of Healing";
-    HEALBOT_PRAYER_OF_MENDING               = 41635 --GetSpellInfo(33076) or "--Prayer of Mending";
+    HEALBOT_PRAYER_OF_MENDING               = 33076 --GetSpellInfo(33076) or "--Prayer of Mending";  41635=buff icon - 33076=known spell
     HEALBOT_RENEW                           = 139 --GetSpellInfo(139) or "--Renew";
 	HEALBOT_PLEA                            = 200829 --GetSpellInfo(200829) or "--Plea";	
 	HEALBOT_POWER_WORD_RADIANCE             = 194509 --GetSpellInfo(194509) or "--Power Word: Radiance";
@@ -231,7 +231,7 @@ function HealBot_globalVars()
     HEALBOT_ANTIMAGIC_ZONE                  = 51052 --GetSpellInfo(51052) or "--Antimagic Zone";
     HEALBOT_ARMY_OF_THE_DEAD                = 42650 --GetSpellInfo(42650) or "--Army of the Dead";
     HEALBOT_BONE_SHIELD                     = 49222 --GetSpellInfo(49222) or "--Bone Shield";
-    HEALBOT_DANCING_RUNE_WEAPON             = 49028 --GetSpellInfo(49028) or "--Dancing Rune Weapon"
+    HEALBOT_DANCING_RUNE_WEAPON             = 81256 --GetSpellInfo(49028) or "--Dancing Rune Weapon"
     HEALBOT_HORN_OF_WINTER                  = 57330 --GetSpellInfo(57330) or "--Horn of Winter";
     HEALBOT_ICEBOUND_FORTITUDE              = 48792 --GetSpellInfo(48792) or "--Icebound Fortitude";
     --HEALBOT_LICHBORNE                       = 49039 --GetSpellInfo(49039) or "--Lichborne";
@@ -257,14 +257,14 @@ function HealBot_globalVars()
     --HEALBOT_LIVING_SEED                     = 48500 --GetSpellInfo(48500) or "--Living Seed";
     HEALBOT_MARK_OF_THE_WILD                = 1126 --GetSpellInfo(1126) or "--Mark of the Wild";
     HEALBOT_MOONKIN_AURA                    = 24907 --GetSpellInfo(24907) or "--Moonkin Aura";
-    HEALBOT_NATURE_MOMENT_OF_CLARITY        = 155577 --GetSpellInfo(155577) or "--Moment of Clarity";
+    HEALBOT_NATURE_MOMENT_OF_CLARITY        = 236068 --GetSpellInfo(236068) or "--Moment of Clarity";
     HEALBOT_NATURE_REJUVENATION_GERMINATION = 155777 --GetSpellInfo(155777) or "--Rejuvenation (Germination)";
     HEALBOT_NATURE_RAMPANT_GROWTH           = 155834 --GetSpellInfo(155834) or "--Rampant Growth";
     HEALBOT_SAVAGE_DEFENCE                  = 62606 --GetSpellInfo(62606) or "--Savage Defense";
     HEALBOT_SURVIVAL_INSTINCTS              = 61336 --GetSpellInfo(61336) or "--Survival Instincts";
     HEALBOT_TREE_OF_LIFE                    = 33891 --GetSpellInfo(33891) or "--Tree of Life";
 	HEALBOT_SPRING_BLOSSOMS                 = 207386 --GetSpellInfo(207385) or "--Spring Blossoms";
-    HEALBOT_CULTIVATION                     = 200390 --GetSpellInfo(200390) or "--Cultivation";
+    HEALBOT_CULTIVATION                     = 200389 --GetSpellInfo(200390) or "--Cultivation";
     HEALBOT_INNERVATE                       = 29166 --GetSpellInfo(29166) or "--Innervate";
     HEALBOT_ESSENCE_OF_GHANIR               = 208253 --GetSpellInfo(208253) or "--Essence of G'Hanir"
 	HEALBOT_FOCUSED_GROWTH                  = 203554 --GetSpellInfo(203554) or "--Focused Growth"

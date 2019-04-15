@@ -10141,8 +10141,6 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
-                
-                
                   <EditBox name="HealBot_Options_NewBuffHoT" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="180" y="20"/>
@@ -10187,12 +10185,6 @@
                       <OnClick>HealBot_Options_ConfirmNewHoTBuff()</OnClick>
                     </Scripts>
                   </Button>
-                
-                
-                
-                
-                
-                
                   <Frame name="HealBot_Options_FilterHoTctl" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">

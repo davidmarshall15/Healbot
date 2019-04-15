@@ -138,7 +138,7 @@ function HealBot_nextRecalcParty(typeRequired)
         end 
         HealBot_luVars["VehicleType"]=typeRequired
     end
-    if typeRequired==2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]==1 then
+    if typeRequired==2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
         HealBot_nextRecalcParty(6)
     end
     HealBot_RefreshTypes[typeRequired]=true
@@ -611,11 +611,11 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="tr" and x) then
         HealBot_Panel_SethbTopRole(x)
     elseif (HBcmd=="spt") then
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]==1 then
-            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=0
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
+            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=false
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSOFF)
         else
-            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=1
+            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=true
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSON)
         end
         HealBot_nextRecalcParty(6)
@@ -2559,7 +2559,7 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.Protection[SkinName]["COMBATPARTY"]==nil then Healbot_Config_Skins.Protection[SkinName]["COMBATPARTY"]=true end
     if Healbot_Config_Skins.Protection[SkinName]["COMBATRAID"]==nil then Healbot_Config_Skins.Protection[SkinName]["COMBATRAID"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["GROUPPETS"]==nil then Healbot_Config_Skins.Healing[SkinName]["GROUPPETS"]=true end
-    if Healbot_Config_Skins.Healing[SkinName]["SELFPET"]==nil then Healbot_Config_Skins.Healing[SkinName]["SELFPET"]=0 end
+    if Healbot_Config_Skins.Healing[SkinName]["SELFPET"]==nil then Healbot_Config_Skins.Healing[SkinName]["SELFPET"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["TINCSELF"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCSELF"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]=true end
