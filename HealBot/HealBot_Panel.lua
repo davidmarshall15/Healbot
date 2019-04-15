@@ -1741,7 +1741,7 @@ local function HealBot_Panel_raidHeals()
                     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 then
                         HeadSort=UnitClass(xUnit) or HEALBOT_WARRIOR
                     elseif Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 then
-                        HeadSort=HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_UnitGroups[xUnit]
+                        HeadSort=HEALBOT_OPTIONS_GROUPHEALS.." "..order[xUnit]
                     elseif Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
                         HeadSort=HealBot_unitRole[xGUID] or hbRole[HEALBOT_WORD_DPS]
                     end

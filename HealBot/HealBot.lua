@@ -818,15 +818,15 @@ local function HealBot_configClassHoT()
         for sName,x  in pairs(HealBot_configClassHoTClass) do
             if xClass=="ALL" and x==3 then
                 HealBot_Watch_HoT[sName]="C"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="C" end
+                if sName==HealBot_Spell_IDs[HEALBOT_GIFT_OF_THE_NAARU] and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="C" end
             elseif (x==4) or (x==3 and xClass==HealBot_Data["PCLASSTRIM"]) then
                 HealBot_Watch_HoT[sName]="A"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="A" end
+                if sName==HealBot_Spell_IDs[HEALBOT_GIFT_OF_THE_NAARU] and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="A" end
             elseif x==2 then 
                 HealBot_Watch_HoT[sName]="S"
-                if sName==HEALBOT_GIFT_OF_THE_NAARU and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="S" end
+                if sName==HealBot_Spell_IDs[HEALBOT_GIFT_OF_THE_NAARU] and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="S" end
             else
-                HealBot_Watch_HoT[sName]=nil
+                HealBot_Watch_HoT[sName]="H"
             end
         end
     end
@@ -3911,8 +3911,16 @@ end
 local curDebuffs={}
 local prevDebuff={}
 local DebuffClass=nil
-
+local hbCatchAltDebuffIDs={}
 local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debuffDuration,expirationTime,spellId,unitCaster,isBossDebuff,button)
+    if not HealBot_Globals.HealBot_Custom_Debuffs[spellId] and not hbCatchAltDebuffIDs[spellId] then
+        hbCatchAltDebuffIDs[spellId]=true
+        for dID, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
+            if GetSpellInfo(dID)==dName then
+                HealBot_Globals.HealBot_Custom_Debuffs[spellId]=x
+            end
+        end
+    end
     local dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(spellId, debuff_type)
     if dTypePriority>dNamePriority and dNamePriority<21 then
         local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
@@ -4374,6 +4382,7 @@ local function HealBot_HasBuffTypes(spellName, pBuffTypes)
     return hasBuffTypes
 end
 
+local hbCatchAltBuffIDs={}
 local function HealBot_CheckUnitBuffs(button)
     local xGUID=button.guid
     local xUnit=button.unit   
@@ -4414,7 +4423,7 @@ local function HealBot_CheckUnitBuffs(button)
             local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitDebuff(button.unit, z); 
             if name then
                 z=z+1
-                if unitCaster and unitCaster=="player" and expirationTime and not hbExcludeSpells[spellID] then
+                if unitCaster and unitCaster=="player" and expirationTime and not hbExcludeSpells[spellId] then
                     HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
                 end
             else
@@ -4427,11 +4436,23 @@ local function HealBot_CheckUnitBuffs(button)
             if name then
                 z = z +1
                 if cIcons then 
-                    if unitCaster and expirationTime and not hbExcludeSpells[spellID] then
+                    if unitCaster and expirationTime and not hbExcludeSpells[spellId] then
                         local y=HealBot_Watch_HoT[spellId] or "nil"
                        -- if name=="Atonement" then HealBot_AddDebug(spellId.."-"..y) end
                         if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                             HealBot_SetBuffIcon(button, UnitBuffIcons, name, texture, count, expirationTime, unitCaster)
+                        elseif y=="nil" and not hbCatchAltBuffIDs[spellId] then
+                            hbCatchAltBuffIDs[spellId]=true
+                            local hbClassHoTwatch=HealBot_Globals.WatchHoT
+                            for xClass,_  in pairs(hbClassHoTwatch) do
+                                local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
+                                for bID,x  in pairs(HealBot_configClassHoTClass) do
+                                    if GetSpellInfo(bID)==name then
+                                        HealBot_Globals.WatchHoT[xClass][spellId]=x
+                                        HealBot_setOptions_Timer(170)
+                                    end
+                                end
+                            end
                         end
                     end
                 end

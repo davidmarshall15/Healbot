@@ -9087,7 +9087,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnEnterPressed>HealBot_Options_GetSpellInfo_OnEnterPressed(self)</OnEnterPressed>
+                      <OnEnterPressed>HealBot_Options_ConfirmNewCDebuff()</OnEnterPressed>
                       <OnTextChanged>HealBot_Options_NewCDebuff_OnTextChanged(self)</OnTextChanged>
                     </Scripts>
                   </EditBox>
@@ -10141,6 +10141,58 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
+                
+                
+                  <EditBox name="HealBot_Options_NewBuffHoT" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="180" y="20"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_CDebuffText2" text="HEALBOT_OPTIONS_NEWHOTBUFFTEXT" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="-20" y="-1" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="-28" y="-80" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnEnterPressed>HealBot_Options_ConfirmNewHoTBuff()</OnEnterPressed>
+                      <OnTextChanged>HealBot_Options_NewHoTBuff_OnTextChanged(self)</OnTextChanged>
+                    </Scripts>
+                  </EditBox>
+                  <Button name="HealBot_Options_NewBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
+                    <Size>
+                      <AbsDimension x="120" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="20" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ConfirmNewHoTBuff()</OnClick>
+                    </Scripts>
+                  </Button>
+                
+                
+                
+                
+                
+                
                   <Frame name="HealBot_Options_FilterHoTctl" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -10158,7 +10210,7 @@
                     <Anchors>
                       <Anchor point="LEFT">
                         <Offset>
-                          <AbsDimension x="30" y="175"/>
+                          <AbsDimension x="30" y="125"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -10200,6 +10252,21 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
+                    <Size>
+                      <AbsDimension x="125" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="58" y="-8"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_Class_HoTctlAction" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">

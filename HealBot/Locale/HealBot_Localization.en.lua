@@ -100,6 +100,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SORTBY_GROUP                    = "Group"
     HEALBOT_SORTBY_MAXHEALTH                = "Max health"
     HEALBOT_OPTIONS_NEWDEBUFFTEXT           = "New debuff"
+    HEALBOT_OPTIONS_NEWHOTBUFFTEXT          = "New Buff/HoT"
     HEALBOT_OPTIONS_DELSKIN                 = "Delete"
     HEALBOT_OPTIONS_NEWSKINTEXT             = "New skin"
     HEALBOT_OPTIONS_SAVESKIN                = "Save"

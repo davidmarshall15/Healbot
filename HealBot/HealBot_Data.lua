@@ -414,7 +414,6 @@ function HealBot_Data_InitVars()
                 [HEALBOT_POWER_WORD_BARRIER]=4,
                 [HEALBOT_PRAYER_OF_MENDING]=2,
                 [HEALBOT_ECHO_OF_LIGHT]=2,               		
-                [HEALBOT_DIVINE_INSIGHT]=2,
                 [HEALBOT_BLESSED_HEALING]=2,
                 [HEALBOT_SERENDIPITY]=2,
                 [HEALBOT_TWIST_OF_FATE]=2,
