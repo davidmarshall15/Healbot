@@ -1499,7 +1499,7 @@ function HealBot_Panel_validTarget(hbGUID)
         elseif UnitPlayerOrPetInParty("target") or UnitPlayerOrPetInRaid("target") then
             if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] then TargetValid=true end
         elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
-            if UnitIsFriend("player",xUnit) then TargetValid=true end
+            if UnitIsFriend("player","target") then TargetValid=true end
         else
             TargetValid=true
         end

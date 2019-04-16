@@ -1776,7 +1776,7 @@ local function HealBot_ResetCustomDebuffs()
     HealBot_Globals.Custom_Debuff_Categories=HealBot_Options_copyTable(HealBot_GlobalsDefaults.Custom_Debuff_Categories)
     HealBot_Globals.FilterCustomDebuff=HealBot_Options_copyTable(HealBot_GlobalsDefaults.FilterCustomDebuff)
     HealBot_Globals.CDCBarColour=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCBarColour)
-    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs_ShowBarCol)
+    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=HealBot_Options_copyTable(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs_ShowBarCol)
     HealBot_Options_NewCDebuff:SetText("")
     HealBot_Options_InitSub(407)
     HealBot_Options_InitSub(408)
@@ -2701,10 +2701,7 @@ local function HealBot_Update_Skins()
         if tonumber(tMajor)==8 then
             if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0) or (tonumber(tMinor)==1 and tonumber(tPatch)==5 and tonumber(tHealbot)<4) then
                 for dName, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
-                    if dName~=HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT and
-                       dName~=HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE and
-                       dName~=HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT and
-                       dName~=HEALBOT_CUSTOM_CAT_CUSTOM_MISC then
+                    if dName~=HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC then
                         local name, _, _, _, _, _, spellId = GetSpellInfo(dName)
                         if name==dName and spellId then
                             HealBot_Globals.HealBot_Custom_Debuffs[spellId]=x;
@@ -2742,6 +2739,14 @@ local function HealBot_Update_Skins()
                 end
                 if not HealBot_Globals.VersionResetDone["8.1.5.5"] then
                     HealBot_Options_ResetSetting("ICON")
+                end
+            end
+            if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0) or (tonumber(tMinor)==1 and tonumber(tPatch)==5 and tonumber(tHealbot)<8) then
+                for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
+                    if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==nil then HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=true end
+                end
+                if not HealBot_Globals.VersionResetDone["8.1.5.7"] then
+                    HealBot_Options_ResetSetting("CUSTOM")
                 end
             end
         end
@@ -4288,7 +4293,7 @@ local function HealBot_CheckUnitDebuffs(button)
     if button.aura.debuff.name then
         if button.aura.debuff.name~=prevDebuff["name"] or button.aura.debuff.type~=prevDebuff["type"] then
             HealBot_UpdateUnitRange(button,HealBot_Action_dSpell(),false)
-            if HealBot_Config_Cures.CDCshownAB and (HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id]==nil) then
+            if HealBot_Config_Cures.CDCshownAB and HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id] then
                 if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Aggro-3) then
                     HealBot_Action_UpdateAggro(button.unit,"debuff",debuffCodes[button.aura.debuff.type], 0)
                 end
@@ -6386,6 +6391,7 @@ function HealBot_Options_ResetSetting(resetTab)
             button1 = HEALBOT_WORDS_YES,
             button2 = HEALBOT_WORDS_NO,
             OnAccept = function()
+                HealBot_Globals.VersionResetDone["8.1.5.7"]=true
                 HealBot_ResetCustomDebuffs()
             end,
             timeout = 0,

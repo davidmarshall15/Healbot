@@ -1,4 +1,4 @@
-HealBot_lastVerSkinUpdate="8.1.5.4"
+HealBot_lastVerSkinUpdate="8.1.5.7"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -307,19 +307,15 @@ function HealBot_Data_InitVars()
             [HEALBOT_MONK]     = true,   [HEALBOT_DEATHKNIGHT] = false,  [HEALBOT_MONK]     = false, [HEALBOT_DEMONHUNTER] = false,
         },
         CDCBarColour = {
-            [HEALBOT_CUSTOM_en.."9"] = { R = 0.45, G = 0, B = 0.45, },
             [HEALBOT_CUSTOM_en.."10"] = { R = 0.45, G = 0, B = 0.28, },
-            [HEALBOT_CUSTOM_en.."11"] = { R = 0.45, G = 0.17, B = 0.14, },
-            [HEALBOT_CUSTOM_en.."12"] = { R = 0.45, G = 0.34, B = 0.0, },
-            [HEALBOT_CUSTOM_en.."15"] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_FORBEARANCE] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_SHADOW_TOUCHED] = { R = 0.3, G = 0.5, B = 0.7, },
+            [HEALBOT_SHROUD_OF_PURGATORY] = { R = 0.45, G = 0.34, B = 0.0, },
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = { R = 0.45, G = 0.34, B = 0.0, },
         },
         HealBot_Custom_Debuffs_RevDur={},
         HealBot_Custom_Debuffs_ShowBarCol={  
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]= false,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC] = false,
             [HEALBOT_DEBUFF_FORBEARANCE] = false,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
             [HEALBOT_SHADOW_TOUCHED] = false,
@@ -332,14 +328,9 @@ function HealBot_Data_InitVars()
         },
         HealBot_Custom_Debuffs = {
             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]     = 9,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]        = 10,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]        = 11,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]          = 12,
-            --[HEALBOT_DEBUFF_SAVING_GRACE]             = 11, --Priest       
-            --[HEALBOT_DARK_BARGAIN]                    = 10, --Warlock
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 10,
             [HEALBOT_SHROUD_OF_PURGATORY]             = 9, --Death Knight
-            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 10, --Engineering        
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 9, --Engineering        
             [HEALBOT_DEBUFF_FORBEARANCE]              = 15,
             [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 15,
             [HEALBOT_SHADOW_TOUCHED]                  = 4.

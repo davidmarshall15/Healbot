@@ -72,6 +72,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_SKIN                = "Skins";
     HEALBOT_OPTIONS_TAB_TIPS                = "Tips";
     HEALBOT_OPTIONS_TAB_DEBUFFS             = "Debuffs"
+    HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS      = "Custom Debuffs";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Buffs"
 
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
@@ -474,6 +475,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_EXPORTSKIN              = "Select Skin"
     HEALBOT_OPTIONS_BUTTONEXPORT            = "Export"
     HEALBOT_OPTIONS_BUTTONIMPORT            = "Import"
+    HEALBOT_OPTIONS_BUTTONIMPORTMETHOD      = "Import Method"
+    HEALBOT_IMPORT_OVERWRITEALL             = "Overwrite All (Delete existing then insert all)"
+    HEALBOT_IMPORT_MERGEALL                 = "Merge All (Update existing and insert new)"
+    HEALBOT_IMPORT_MERGENEW                 = "Merge New (Only insert new)"
 
     HEALBOT_CHAT_ADDONID                    = "[HealBot]  "
     HEALBOT_CHAT_NEWVERSION1                = "A newer version is available"
@@ -708,10 +713,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Friend"
     
-    HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT     = "Important Debuffs"
-	HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Damaging Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Effect Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Other Debuffs"
+    HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC     = "Automatic Debuffs"
     HEALBOT_CUSTOM_DEBUFF_CATS = {}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
@@ -915,6 +917,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_BUFFS_HOTS      = "    " .. HEALBOT_OPTIONS_TAB_ICONS
 
     HEALBOT_OPTIONS_CONTENT_INOUT_SKINS     = "    " .. HEALBOT_OPTIONS_TAB_SKIN
+    HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
     
     HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
     HEALBOT_OPTIONS_BARALPHAABSORB          = "Absorb effects opacity";
@@ -944,6 +947,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SHARE_SCREENSHOT                = "ScreenShot taken"
     HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing with "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
+    HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
     HEALBOT_ENEMY_INCLUDE_SELF              = "Include my target"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include tanks targets"
@@ -1008,16 +1012,17 @@ end
 function HealBot_Lang_InitVars()
     HEALBOT_CUSTOM_DEBUFF_CATS = {
          -- Defaults
-        [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-        [HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-        [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-        [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
+        [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1,
 
         --Class Profession & Harmful Debuffs
         --[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest
         --[HEALBOT_DARK_BARGAIN]             = 3, --Warlock
         [HEALBOT_SHROUD_OF_PURGATORY]      = 11, --Death Knight
         [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering
+        
+        [HEALBOT_DEBUFF_FORBEARANCE]              = 4,
+        [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 13,
+        [HEALBOT_SHADOW_TOUCHED]                  = 11,
 
     --[[
 	A-B 2
@@ -1035,9 +1040,6 @@ function HealBot_Lang_InitVars()
 	Y-Z 14
 	]]
 
-    [HEALBOT_DEBUFF_FORBEARANCE]              = 4,
-    [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 13,
-    [HEALBOT_SHADOW_TOUCHED]                  = 11,
 	}
 end
 

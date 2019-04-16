@@ -622,12 +622,6 @@ local function HealBot_Action_TextColours(button)
   --HealBot_setCall("HealBot_Action_TextColours")
     return ebusr,ebusg,ebusb
 end
-
-local hbCustomDebuffCats={ [9] = HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT, 
-                          [10] = HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE, 
-                          [11] = HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT, 
-                          [12] = HEALBOT_CUSTOM_CAT_CUSTOM_MISC,
-                         }
                          
 function HealBot_Action_UpdateBackgroundButton(button)
     if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]>1 then
@@ -667,7 +661,7 @@ function HealBot_Action_UpdateDebuffButton(button)
 
                 if button.aura.debuff.type == HEALBOT_CUSTOM_en then
                     if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
-                        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id]==nil then
+                        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id] then
                             hcr = HealBot_Globals.CDCBarColour[button.aura.debuff.id].R
                             hcg = HealBot_Globals.CDCBarColour[button.aura.debuff.id].G
                             hcb = HealBot_Globals.CDCBarColour[button.aura.debuff.id].B
@@ -677,12 +671,9 @@ function HealBot_Action_UpdateDebuffButton(button)
                             return
                         end
                     else
-                        local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
-                        if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name] then
-                            customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name]
-                        end
-                        if not hbCustomDebuffCats[HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name]] or 
-                           HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[hbCustomDebuffCats[HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name]]]==nil then
+                        if not HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[button.aura.debuff.name] and 
+                               HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] then
+                            local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
                             hcr = HealBot_Globals.CDCBarColour[customDebuffPriority].R
                             hcg = HealBot_Globals.CDCBarColour[customDebuffPriority].G
                             hcb = HealBot_Globals.CDCBarColour[customDebuffPriority].B
