@@ -229,6 +229,8 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         VersionResetDone={},
+        CatchAltBuffIDs={},
+        CatchAltDebuffIDs={},
         CureCustomDefaultCastBy="ALL",
         TopRole="TANK",
         TargetBarRestricted=0,
@@ -307,7 +309,7 @@ function HealBot_Data_InitVars()
             [HEALBOT_MONK]     = true,   [HEALBOT_DEATHKNIGHT] = false,  [HEALBOT_MONK]     = false, [HEALBOT_DEMONHUNTER] = false,
         },
         CDCBarColour = {
-            [HEALBOT_CUSTOM_en.."10"] = { R = 0.45, G = 0, B = 0.28, },
+            [HEALBOT_CUSTOM_en.."15"] = { R = 0.45, G = 0, B = 0.28, },
             [HEALBOT_DEBUFF_FORBEARANCE] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_SHADOW_TOUCHED] = { R = 0.3, G = 0.5, B = 0.7, },
@@ -316,6 +318,9 @@ function HealBot_Data_InitVars()
         },
         HealBot_Custom_Debuffs_RevDur={},
         HealBot_Custom_Debuffs_ShowBarCol={  
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = true,
+            [HEALBOT_SHROUD_OF_PURGATORY] = true,
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = true,
             [HEALBOT_DEBUFF_FORBEARANCE] = false,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
             [HEALBOT_SHADOW_TOUCHED] = false,
@@ -328,12 +333,12 @@ function HealBot_Data_InitVars()
         },
         HealBot_Custom_Debuffs = {
             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 10,
-            [HEALBOT_SHROUD_OF_PURGATORY]             = 9, --Death Knight
-            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 9, --Engineering        
-            [HEALBOT_DEBUFF_FORBEARANCE]              = 15,
-            [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 15,
-            [HEALBOT_SHADOW_TOUCHED]                  = 4.
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15,
+            [HEALBOT_SHROUD_OF_PURGATORY]             = 14, --Death Knight
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 14, --Engineering        
+            [HEALBOT_DEBUFF_FORBEARANCE]              = 18,
+            [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 18,
+            [HEALBOT_SHADOW_TOUCHED]                  = 4,
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
         WatchHoT = {

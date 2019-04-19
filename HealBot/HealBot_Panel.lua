@@ -1301,8 +1301,12 @@ local function HealBot_Panel_sortOrder(unit, hbGUID, barOrder, mainSort)
         end
     elseif barOrder==3 then
         local uGroup = HealBot_UnitGroups[unit] or 1
-        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
-            sortValue = -1
+        if unit == "player" then 
+            if not mainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+                sortValue = -1
+            else
+                sortValue = uGroup
+            end 
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 sortValue = 9+uGroup
@@ -1325,10 +1329,14 @@ local function HealBot_Panel_sortOrder(unit, hbGUID, barOrder, mainSort)
             sortValue = 99999999
         end
         if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
-    else
+    elseif barOrder==5 then
         local uRole=HealBot_unitRole[hbGUID] or 9
-        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
-            sortValue = -1
+        if unit == "player" then 
+            if not mainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+                sortValue = -1
+            else 
+                sortValue = uRole
+            end
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 sortValue = 59+uRole
@@ -1341,7 +1349,6 @@ local function HealBot_Panel_sortOrder(unit, hbGUID, barOrder, mainSort)
     end
     return sortValue
 end
-
 
 local function HealBot_Panel_insSort(unit, hbGUID, mainSort)
     if unit then
@@ -1657,7 +1664,7 @@ local function HealBot_Panel_raidHeals()
     end
     
     local hbincSort=false
-    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then 
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
 
@@ -1694,7 +1701,7 @@ local function HealBot_Panel_raidHeals()
         end
     end
 
-    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<5 then
+    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
         table.sort(units,function (a,b)
             if order[a]<order[b] then return true end
             if order[a]>order[b] then return false end

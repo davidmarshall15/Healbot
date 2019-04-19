@@ -674,7 +674,7 @@ local function HealBot_Action_DoRefreshTooltip()
                         else
                             local DebuffType=HealBot_retDebufftype(name)
                             if DebuffType == HEALBOT_CUSTOM_en then
-                                local customDebuffPriority=HEALBOT_CUSTOM_en.."10"
+                                local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
                                 if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[name] then
                                     customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[name]
                                 end
