@@ -312,7 +312,6 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_en.."15"] = { R = 0.45, G = 0, B = 0.28, },
             [HEALBOT_DEBUFF_FORBEARANCE] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = { R = 0.3, G = 0.5, B = 0.7, },
-            [HEALBOT_SHADOW_TOUCHED] = { R = 0.3, G = 0.5, B = 0.7, },
             [HEALBOT_SHROUD_OF_PURGATORY] = { R = 0.45, G = 0.34, B = 0.0, },
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = { R = 0.45, G = 0.34, B = 0.0, },
         },
@@ -323,13 +322,11 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = true,
             [HEALBOT_DEBUFF_FORBEARANCE] = false,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
-            [HEALBOT_SHADOW_TOUCHED] = false,
         },
         IgnoreCustomDebuff={},
         FilterCustomDebuff={
             [HEALBOT_DEBUFF_FORBEARANCE] = 3,
             [HEALBOT_DEBUFF_WEAKENED_SOUL] = 4,
-            [HEALBOT_SHADOW_TOUCHED] = 3,
         },
         HealBot_Custom_Debuffs = {
             -- Defaults
@@ -338,7 +335,6 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]         = 14, --Engineering        
             [HEALBOT_DEBUFF_FORBEARANCE]              = 18,
             [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 18,
-            [HEALBOT_SHADOW_TOUCHED]                  = 4,
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
         WatchHoT = {
@@ -521,7 +517,6 @@ function HealBot_Data_InitVars()
                 --[HEALBOT_AOF_INFUSION_OF_LIGHT]=2,
 				[HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=2,
                 [HEALBOT_HIGHFATHERS_TIMEKEEPING]=2,
-                [HEALBOT_SHADOW_TOUCHED]=2,
                 [HEALBOT_TAILWIND]=2,
                 [HEALBOT_BRACING_CHILL]=2,
                 [HEALBOT_BLESSED_PORTENTS]=2,

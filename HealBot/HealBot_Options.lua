@@ -6063,7 +6063,8 @@ function HealBot_Options_ShareCDebuffb_OnClick()
     local ssStr=""
     for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
         if HealBot_Globals.Custom_Debuff_Categories[dId]>1 then
-            ssStr=ssStr..(HealBot_Globals.Custom_Debuff_Categories[dId] or 10).."!"
+            ssStr=ssStr..(GetSpellInfo(dId) or HEALBOT_WORDS_UNKNOWN).."~"
+            ssStr=ssStr..(HealBot_Globals.Custom_Debuff_Categories[dId] or 10).."~"
             ssStr=ssStr..dId..","..x..","..(HealBot_Globals.FilterCustomDebuff[dId] or "")..","
             if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
                 ssStr=ssStr.."true,"
@@ -6122,7 +6123,7 @@ function HealBot_Options_LoadCDebuffb_OnClick()
         end
         for e=1,#ssTab do 
         -- 10!94794,10,,"true",0.529,0,0.325,"false",,
-            local c,d = string.split("!", ssTab[e])
+            local _,c,d = string.split("~", ssTab[e])
             local dId,prio,filter,show,r,g,b,revdur,i1,i2,i3,i4=string.split(",", d)
             c=tonumber(c)
             dId=tonumber(dId)

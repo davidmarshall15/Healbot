@@ -2337,28 +2337,28 @@ function HealBot_Check_Skin(SkinName)
                 Healbot_Config_Skins.BarAggro[SkinName][gl]["TEXTFORMAT"]=3
             end
         end
-        if not Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"] then 
+        if Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"]==nil then 
             if Healbot_Config_Skins.Highlight and Healbot_Config_Skins.Highlight[SkinName] then 
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"]=Healbot_Config_Skins.Highlight[SkinName]["CBAR"] or true
             else
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"]=true
             end
         end
-        if not Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBARCOMBAT"] then 
+        if Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBARCOMBAT"]==nil then 
             if Healbot_Config_Skins.Highlight and Healbot_Config_Skins.Highlight[SkinName] then 
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBARCOMBAT"]=Healbot_Config_Skins.Highlight[SkinName]["CBARCOMBAT"] or false
             else
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBARCOMBAT"]=false
             end
         end
-        if not Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBAR"] then 
+        if Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBAR"]==nil then 
             if Healbot_Config_Skins.Highlight and Healbot_Config_Skins.Highlight[SkinName] then 
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBAR"]=Healbot_Config_Skins.Highlight[SkinName]["TBAR"] or false
             else
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBAR"]=false
             end
         end
-        if not Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBARCOMBAT"] then 
+        if Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBARCOMBAT"]==nil then 
             if Healbot_Config_Skins.Highlight and Healbot_Config_Skins.Highlight[SkinName] then 
                 Healbot_Config_Skins.BarHighlight[SkinName][gl]["TBARCOMBAT"]=Healbot_Config_Skins.Highlight[SkinName]["TBARCOMBAT"] or false
             else
