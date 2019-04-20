@@ -657,19 +657,6 @@ function HealBot_Lang_ruRU()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Враг";
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Друг";
 
-    HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT     = "Важные дебаффы";
-    HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Наносящие урон дебаффы";
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Дебаффы эффектов";
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Другие дебаффы";
-
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                     = "Добавляет окно со стилизуемыми панелями для исцеления, рассеивания, наложения баффов и отслеживания угрозы.";
     HEALBOT_ABOUT_WEBSITE                   = "Сайт:";
     HEALBOT_ABOUT_AUTHORH                   = "Автор:";

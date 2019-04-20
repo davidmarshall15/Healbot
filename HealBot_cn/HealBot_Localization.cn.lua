@@ -656,14 +656,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "任何人"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "敌方"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "友方"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "一个可定制样式的治疗、驱散、Buff、绷带、随机座骑、范围检查和仇恨框架的插件."
 HEALBOT_ABOUT_WEBSITE                  = "网址:"
 HEALBOT_ABOUT_AUTHORH                  = "作者:"

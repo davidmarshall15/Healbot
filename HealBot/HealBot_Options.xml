@@ -889,7 +889,34 @@
                       <OnClick>HealBot_Options_ShowPanel(self, 5, 52);HealBot_Options_ShowBuffPanel("HealBot_Options_BuffIconFrame")</OnClick>
                     </Scripts>
                   </Button>
-
+            <!--  <Button name="HealBot_Contents_Button53">
+                    <Size>
+                      <AbsDimension x="168" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button52"  relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString  name= "HealBot_Contents_ButtonT53Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_CURE_WARNING">
+                          <Anchors>
+                            <Anchor point="LEFT" relativeTo="HealBot_Contents_Button53" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="28" y="1"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowPanel(self, 5, 53);HealBot_Options_ShowBuffPanel("HealBot_Options_BuffWarningFrame")</OnClick>
+                    </Scripts>  
+                  </Button>-->
           <Button name="HealBot_Contents_Button6">
             <Size>
               <AbsDimension x="168" y="20"/>

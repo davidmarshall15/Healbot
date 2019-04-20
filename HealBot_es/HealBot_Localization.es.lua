@@ -661,14 +661,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Cualquiera"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemigo"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amigo"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "Agrega un panel con barras personalizables para curar, limpiar, buffear, revivir y vigilar agro"
 HEALBOT_ABOUT_WEBSITE                  = "Pagina web:"
 HEALBOT_ABOUT_AUTHORH                  = "Autor:"

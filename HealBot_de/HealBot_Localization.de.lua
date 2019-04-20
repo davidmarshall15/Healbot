@@ -653,14 +653,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Alle"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "Feind"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "Freund"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "Add a panel with skinable bars for healing, decursive, buffing, ressing and aggro tracking"
 HEALBOT_ABOUT_WEBSITE                  = "Webseite:"
 HEALBOT_ABOUT_AUTHORH                  = "Autor:"

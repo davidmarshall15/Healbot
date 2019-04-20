@@ -9062,6 +9062,8 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:SetTextColor(1,1,0,0.9)
     g=_G["HealBot_Contents_ButtonT52Txt"]
     g:SetTextColor(1,1,0,0.9)
+    --g=_G["HealBot_Contents_ButtonT53Txt"]
+    --g:SetTextColor(1,1,0,0.9)
     g=_G["HealBot_Contents_ButtonT6"]
     g:SetStatusBarColor(0.2,0.2,0.2,0)
     g=_G["HealBot_Contents_ButtonT6Txt"]
@@ -9352,6 +9354,8 @@ function HealBot_Options_Lang(region)
         g:SetText(HEALBOT_OPTIONS_CONTENT_BUFFS_GENERAL)
         g=_G["HealBot_Contents_ButtonT52Txt"] 
         g:SetText(HEALBOT_OPTIONS_CONTENT_BUFFS_HOTS)
+        --g=_G["HealBot_Contents_ButtonT53Txt"] 
+        --g:SetText(HEALBOT_OPTIONS_CONTENT_CURE_WARNING)
         g=_G["HealBot_Contents_ButtonT6Txt"] 
         g:SetText(HEALBOT_OPTIONS_CONTENT_TIPS)
         g=_G["HealBot_Contents_ButtonT7Txt"] 

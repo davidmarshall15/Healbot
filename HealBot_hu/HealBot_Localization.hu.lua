@@ -653,14 +653,6 @@ function HealBot_Lang_huHU()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "ellenség"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "barát"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                    = "panel Hozzáadása skinable bárok gyogyulás, decursive buffing, újraélesztö és aggro nyomon követése"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "szerzö:"

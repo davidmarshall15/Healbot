@@ -669,14 +669,6 @@ function HealBot_Lang_ptBR()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Inimigos"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amigos"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                    = "Adiciona um painel com barras de cura, remo\195\167\195\163o de maldi\195\167\195\181es, buffs e rastreamento de aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "Autor:"

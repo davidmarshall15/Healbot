@@ -659,17 +659,6 @@ HEALBOT_CUSTOM_CAT_14                   = "Y - Z"   -- *************************
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Tous"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Ennemi"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Ami"
-    HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Debuffs de dommages"
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Debuffs \195\160 effets"
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Debuffs divers"
-
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
 
     HEALBOT_ABOUT_DESC1                    = "Ajoute un panneau param\195\169trable de barres pour soigner, buff, debuff, rez et suivi d\'aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Site Web :"

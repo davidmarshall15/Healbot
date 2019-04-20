@@ -652,18 +652,6 @@ function HealBot_Lang_grGR()
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Ολοι"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Friend"
-    
-    HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT     = "Σημαντικα Debuffs"
-	HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Damaging Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Effect Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Υπολοιπα Debuffs"
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
     HEALBOT_ABOUT_WEBSITE                  = "Ιστοσελιδα:"

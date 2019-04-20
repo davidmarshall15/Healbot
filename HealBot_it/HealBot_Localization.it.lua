@@ -651,14 +651,6 @@ function HealBot_Lang_itIT()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Nemico"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amico"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                    = "Aggiunge un pannello con barre skinnabili per curare, decursare, buffare, ressare e trackare aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "Autore:"

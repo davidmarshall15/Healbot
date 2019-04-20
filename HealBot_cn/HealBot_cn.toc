@@ -4,6 +4,6 @@
 ## Notes: HealBot 中文语言文件
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.1.0.0
+## Version: 8.1.5.8
 
 HealBot_Localization.cn.lua
