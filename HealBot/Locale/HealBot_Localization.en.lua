@@ -62,7 +62,6 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_TITLE                   = HEALBOT_ADDON;
     HEALBOT_OPTIONS_DEFAULTS                = "Defaults";
-    HEALBOT_OPTIONS_GLOBALOPTIONS           = "Global Options";
     HEALBOT_OPTIONS_CLOSE                   = "Close";
     HEALBOT_OPTIONS_HARDRESET               = "ReloadUI"
     HEALBOT_OPTIONS_SOFTRESET               = "ResetHB"
@@ -138,9 +137,16 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
+    HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
+    HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
+    HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"
+    HEALBOT_OPTIONS_BUFFMISSING             = "Missing buffs";
+    HEALBOT_OPTIONS_DEBUFFDISPELL           = "Dispellable debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFICON          = "Show debuff";
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
+    HEALBOT_OPTIONS_SHOWBUFFWARNING       = "Display warning on buff";
+    HEALBOT_OPTIONS_SOUNDBUFFWARNING      = "Play sound on buff";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
     HEALBOT_OPTIONS_WARN_CLASSCOL           = "Unable to change text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when\nCol"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is on"
 
@@ -258,7 +264,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSELF                = "on self";
     HEALBOT_OPTIONS_BUFFPARTY               = "on party";
     HEALBOT_OPTIONS_BUFFRAID                = "on raid";
-    HEALBOT_OPTIONS_MONITORBUFFS            = "Monitor for missing buffs";
+    HEALBOT_OPTIONS_MONITORBUFFS            = "Monitor for buffs";
     HEALBOT_OPTIONS_MONITORBUFFSC           = "also in combat";
     HEALBOT_OPTIONS_ENABLESMARTCAST         = "SmartCast out of combat";
     HEALBOT_OPTIONS_SMARTCASTSPELLS         = "Include spells";
@@ -269,7 +275,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SETSPELLS               = "Set spells for";
     HEALBOT_OPTIONS_ENABLEDBARS             = "Enabled bars at all times";
     HEALBOT_OPTIONS_DISABLEDBARS            = "Disabled bars when out of combat";
-    HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor to remove debuffs";
+    HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
 
     HEALBOT_OPTIONS_IGNOREDEBUFF            = "Ignore debuffs:";
@@ -531,7 +537,6 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_SUBSORTPLAYER2             = "Player will be sorted normally in SubSort"
     HEALBOT_OPTIONS_SHOWREADYCHECK          = "Show Ready Check";
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Self First"
-    HEALBOT_WORD_FILTER                     = "Filter"
     HEALBOT_OPTION_AGGROPCTBAR              = "Move bar"
     HEALBOT_OPTION_AGGROPCTTXT              = "Show text"
     HEALBOT_OPTION_AGGROPCTTRACK            = "Track percentage" 
@@ -580,7 +585,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_RESETSPELLS                 = "Reset spells"
     HEALBOT_CMD_RESETCURES                  = "Reset cures"
     HEALBOT_CMD_RESETBUFFS                  = "Reset buffs"
-    HEALBOT_CMD_RESETICONS                  = "Reset icons"
+    HEALBOT_CMD_RESETICONS                  = "Reset custom buffs"
     HEALBOT_CMD_RESETBARS                   = "Reset bar position"
     HEALBOT_CMD_SUPPRESSSOUND               = "Toggle suppress sound when using auto trinkets"
     HEALBOT_CMD_SUPPRESSERRORS              = "Toggle suppress errors when using auto trinkets"
@@ -875,20 +880,20 @@ function HealBot_Lang_enALL()
     
     HEALBOT_OPTIONS_LANG                    = "Language"
     
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - translator required)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)"
-    HEALBOT_OPTIONS_LANG_ESMX               = "Mexican (esMX - by milotic)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE)"
+    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)"
+    HEALBOT_OPTIONS_LANG_ESMX               = "Mexican (esMX)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Failed to load addon for localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Reason for failure is:"
@@ -914,7 +919,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_CURE_WARNING    = "    " .. HEALBOT_OPTIONS_TAB_WARNING
 
     HEALBOT_OPTIONS_CONTENT_BUFFS_GENERAL   = "    " .. HEALBOT_OPTIONS_TAB_GENERAL
-    HEALBOT_OPTIONS_CONTENT_BUFFS_HOTS      = "    " .. HEALBOT_OPTIONS_TAB_ICONS
+    HEALBOT_OPTIONS_CONTENT_BUFFS_HOTS      = "    " .. HEALBOT_CLASSES_CUSTOM
 
     HEALBOT_OPTIONS_CONTENT_INOUT_SKINS     = "    " .. HEALBOT_OPTIONS_TAB_SKIN
     HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
@@ -995,6 +1000,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ALWAYSHIDE              = "Always Hide"
     HEALBOT_OPTIONS_NOCHANGE                = "No Change"
     HEALBOT_OPTIONS_ALWAYSSHOW              = "Always Show"
+    HEALBOT_OPTIONS_PAGE                    = "Page"
+    HEALBOT_OPTIONS_PREV                    = "<<"
+    HEALBOT_OPTIONS_NEXT                    = ">>"
     
     HEALBOT_THANKS_TO_TAB                   = "Thanks To"
     HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy from the great land Down Under",

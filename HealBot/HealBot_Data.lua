@@ -137,6 +137,15 @@ HealBot_Config_BuffsDefaults = {
   HealBotBuffColR={},
   HealBotBuffColG={},
   HealBotBuffColB={},
+  CBshownHB=true,
+  CBshownAB=false,
+  ShowBuffWarning = false,
+  SoundBuffWarning = false,
+  SoundBuffPlay = HealBot_Default_Sounds[1].name,
+  HealBot_CBWarnRange_Bar=3,
+  HealBot_CBWarnRange_Aggro=2,
+  HealBot_CBWarnRange_Screen=2,
+  HealBot_CBWarnRange_Sound=3,
 };
 
 HealBot_Config_CuresDefaults = {
@@ -336,7 +345,13 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_FORBEARANCE]              = 18,
             [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 18,
         },
-        Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS;
+        Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS,
+        IgnoreCustomBuff={},
+        HealBot_Custom_Buffs={},
+        CustomBuffBarColour = {
+            [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
+        },
+        HealBot_Custom_Buffs_ShowBarCol={},
         WatchHoT = {
            ["DRUI"] = {
                 [HEALBOT_REJUVENATION]=2,

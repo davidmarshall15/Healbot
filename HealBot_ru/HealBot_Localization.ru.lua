@@ -818,19 +818,19 @@ function HealBot_Lang_ruRU()
 
     HEALBOT_OPTIONS_LANG                    = "Язык";
 
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN - by Ydzzs)";
-    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK - by Strife)";
-    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS - by Strife)";
-    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR - by Kubik)";
-    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE - by Snaomi)";
-    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR - by Snaomi)";
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU - by Von)";
-    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR - translator required)";
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)";
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by Aldetal)";
-    HEALBOT_OPTIONS_LANG_RURU               = "Русский (ruRU - by Justice)";
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - translator required)";
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)";
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN)";
+    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK)";
+    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS)";
+    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR)";
+    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE)";
+    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR)";
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU)";
+    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR)";
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT)";
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR)";
+    HEALBOT_OPTIONS_LANG_RURU               = "Русский (ruRU)";
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES)";
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)";
 
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Не удалось загрузить аддон для локализации";
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Причина ошибки:";

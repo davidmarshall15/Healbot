@@ -494,7 +494,6 @@ local function HealBot_Action_DoRefreshTooltip()
     end
   
     local UnitOffline=HealBot_Action_GetTimeOffline(xButton); --added by Diacono
-    local uBuff=xButton.aura.buff.name
     local DebuffType=xButton.aura.debuff.type;
 
     local spellLeft = HealBot_Tooltip_SpellPattern(xButton, "Left");
@@ -696,10 +695,10 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             linenum=linenum+1
             --if HealBot_Globals.UseGameTooltip then HealBot_Tooltip_SetLine(linenum,"  ",0,0,0,0) end
-            if uBuff then
+            if xButton.aura.buff.name then
                 linenum=linenum+1
-                local br,bg,bb=HealBot_Options_RetBuffRGB(uBuff)
-                HealBot_Tooltip_SetLine(linenum,"  Requires "..uBuff,br,bg,bb,1," ",0,0,0,0)
+                local br,bg,bb=HealBot_Options_RetBuffRGB(xButton)
+                HealBot_Tooltip_SetLine(linenum,"  Requires "..xButton.aura.buff.name,br,bg,bb,1," ",0,0,0,0)
             end
             local d=false
             if HealBot_Globals.Tooltip_ShowMyBuffs then
@@ -710,7 +709,7 @@ local function HealBot_Action_DoRefreshTooltip()
                         z=z-GetTime()
                         local mins,secs=HealBot_Tooltip_ReturnMinsSecs(z)
                         linenum=linenum+1
-                        local br,bg,bb=HealBot_Options_RetBuffRGB(x)
+                        local br,bg,bb=HealBot_Options_RetBuffRGBName(x)
                         if mins>1 then 
                             HealBot_Tooltip_SetLine(linenum,"    "..x.."  "..mins.." mins",br,bg,bb,1," ",0,0,0,0)
                         elseif tonumber(secs)>=0 then

@@ -177,6 +177,8 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
         if status then
             if HealBot_Config_Cures.CDCshownAB and xButton.aura.debuff.type then
                 xButton.aggro.status=debuffCodes[xButton.aura.debuff.type]
+            elseif HealBot_Config_Buffs.CBshownAB and xButton.aura.buff.name then
+                xButton.aggro.status=4
             elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOW"] and 
                    threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERT"] then
                 xButton.aggro.status=threatStatus
@@ -197,7 +199,7 @@ local function HealBot_Action_DoUpdateAggro(unit,status,threatStatus,threatPct)
             xButton.aggro.status=0
             HealBot_Action_aggroIndicatorUpd(xButton)
         end
-        if status and (xButton.aggro.status<0 or xButton.aggro.status>4 or 
+        if status and (xButton.aggro.status<0 or xButton.aggro.status>3 or 
                       (xButton.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERT"] and 
                        xButton.aggro.status<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARS"])) then
             if xButton.aggro.status>0 and xButton.aggro.status<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWBARSPCT"] then
@@ -654,7 +656,13 @@ function HealBot_Action_UpdateDebuffButton(button)
         if HealBot_Config_Cures.CDCshownHB then
             HealBot_UpdateUnitRange(button,HealBot_RangeSpells["CURE"],false)
             local prevEnabled=button.status.enabled
-            if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
+            local isDebuff=true
+            if button.aura.buff.priority<button.aura.debuff.priority then
+                if button.aura.buff.name and HealBot_Config_Buffs.CBshownHB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro-3) then
+                    isDebuff=false
+                end
+            end
+            if isDebuff and button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then 
                 local hcr,hcg,hcb = 0, 0, 0
                 local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
                 local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
@@ -729,13 +737,13 @@ end
 
 function HealBot_Action_UpdateBuffButton(button)
     if button.aura.buff.name and button.status.current<8 and UnitExists(button.unit) then
-        if button.status.range>-1 then
+        if HealBot_Config_Buffs.CBshownHB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro-3) then
             HealBot_UpdateUnitRange(button,HealBot_RangeSpells["BUFF"],false)
             local hcr,hcg,hcb = 0, 0, 0
             local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
             local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
             local prevEnabled=button.status.enabled
-            hcr,hcg,hcb=HealBot_Options_RetBuffRGB(button.aura.buff.name)  
+            hcr,hcg,hcb=HealBot_Options_RetBuffRGB(button)  
             button.status.current=7
             HealBot_Action_setHealthText(button)
             if button.status.range==1 then  
@@ -2648,7 +2656,9 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.checks.timed=GetTime()+1000000
         ghb.spells.castpct=-1
         ghb.aura.buff.name=false
+        ghb.aura.buff.id=0
         ghb.icon.buff.count=0
+        ghb.aura.buff.priority=99
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
         ghb.aura.debuff.id=0
@@ -4035,7 +4045,7 @@ local function HealBot_Action_UpdateAggroBar(button)
     local bar4=_G["HealBot_Action_HealUnit"..button.id.."Bar4"]
     if UnitExists(button.unit) then
         HealBot_AggroUnitThreat=button.aggro.status or 2
-        if HealBot_AggroUnitThreat==9 and button.aura.debuff.name then
+        if HealBot_AggroUnitThreat>4 and button.aura.debuff.name then
             if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
                 bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[button.aura.debuff.id].R,
                                        HealBot_Globals.CDCBarColour[button.aura.debuff.id].G,
@@ -4045,6 +4055,23 @@ local function HealBot_Action_UpdateAggroBar(button)
                 bar4:SetStatusBarColor(HealBot_Globals.CDCBarColour[customDebuffPriority].R,
                                        HealBot_Globals.CDCBarColour[customDebuffPriority].G,
                                        HealBot_Globals.CDCBarColour[customDebuffPriority].B,aAlpha[button.frame])
+            end
+        elseif HealBot_AggroUnitThreat==4 and button.aura.buff.name then
+            local bWatch=HealBot_retBuffWatch(button.aura.buff.name)
+            if bWatch and HealBot_Config_Buffs.HealBotBuffColR[bWatch] then
+                bar4:SetStatusBarColor(HealBot_Config_Buffs.HealBotBuffColR[bWatch],
+                                       HealBot_Config_Buffs.HealBotBuffColG[bWatch],
+                                       HealBot_Config_Buffs.HealBotBuffColB[bWatch],aAlpha[button.frame])
+            elseif HealBot_Globals.CustomBuffBarColour[button.aura.buff.id] then
+                bar4:SetStatusBarColor(HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].R,
+                                       HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].G,
+                                       HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].B,aAlpha[button.frame])
+            
+            else
+                local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
+                bar4:SetStatusBarColor(HealBot_Globals.CustomBuffBarColour[customBuffPriority].R,
+                                       HealBot_Globals.CustomBuffBarColour[customBuffPriority].G,
+                                       HealBot_Globals.CustomBuffBarColour[customBuffPriority].B,aAlpha[button.frame])
             end
         else
             bar4:SetStatusBarColor(HealBot_AggroBarColr[button.frame][HealBot_AggroUnitThreat],
