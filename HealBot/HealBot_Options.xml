@@ -9264,7 +9264,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-83"/>
+                          <AbsDimension x="205" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -10726,9 +10726,9 @@
                       <AbsDimension x="95" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_DeleteBuffHoTBtn" relativePoint="RIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="120" y="-8"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -10768,7 +10768,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="270" y="-83"/>
+                          <AbsDimension x="270" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
