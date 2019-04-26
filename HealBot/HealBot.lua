@@ -2717,9 +2717,6 @@ local function HealBot_Update_Skins()
                         end
                     end
                 end
-                if not HealBot_Globals.VersionResetDone["8.1.5.5"] then
-                    HealBot_Options_ResetSetting("ICON")
-                end
             end
             if tonumber(tMinor)==0 or (tonumber(tMinor)==1 and tonumber(tPatch)==0) or (tonumber(tMinor)==1 and tonumber(tPatch)==5 and tonumber(tHealbot)<8) then
                 for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
@@ -2729,9 +2726,6 @@ local function HealBot_Update_Skins()
                         HealBot_Globals.HealBot_Custom_Debuffs[dId]=nil
                     end
                     if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==nil then HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=true end
-                end
-                if not HealBot_Globals.VersionResetDone["8.1.5.7.2"] then
-                    HealBot_Options_ResetSetting("CUSTOM")
                 end
             end
         end
@@ -3739,7 +3733,11 @@ end
 local function HealBot_OnEvent_ReadyCheckClear()
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.icon.debuff.readycheck then
-            xButton.icon.debuff.readycheck=false
+            if xButton.icon.debuff.readycheck == READY_CHECK_WAITING_TEXTURE then
+                xButton.icon.debuff.readycheck = READY_CHECK_AFK_TEXTURE
+            else
+                xButton.icon.debuff.readycheck=false
+            end
             xButton.aura.debuff.check=true
         end
     end
@@ -4843,6 +4841,10 @@ function HealBot_CheckAggroUnits(button)
             HealBot_ClearUnitAggro(button)
         elseif z~=button.aggro.threatpct then
             HealBot_Action_UpdateAggro(button.unit,true,y,z)
+            if button.icon.debuff.readycheck == READY_CHECK_AFK_TEXTURE then
+                button.icon.debuff.readycheck=false
+                button.aura.debuff.check=true
+            end
         end
     else
         HealBot_ClearUnitAggro(button)
@@ -5323,14 +5325,12 @@ end
 local function HealBot_OnEvent_hbReadyCheck(unitName,timer)
     local uName=HealBot_UnitNameOnly(unitName)
     local lUnit=HealBot_Panel_RaidUnit(nil,unitName)
-    if not HealBot_luVars["rcEnd"] or HealBot_luVars["rcEnd"]<GetTime()+timer then
-        if lUnit then
-            HealBot_luVars["rcEnd"]=GetTime()+timer
-            if HealBot_Unit_Button[lUnit] then HealBot_OnEvent_ReadyCheckUpdate(lUnit,"Y") end
-            for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                if xUnit~=lUnit and UnitIsPlayer(xUnit) then
-                    HealBot_OnEvent_ReadyCheckUpdate(xUnit,"W")
-                end
+    if lUnit then
+        HealBot_luVars["rcEnd"]=GetTime()+timer
+        if HealBot_Unit_Button[lUnit] then HealBot_OnEvent_ReadyCheckUpdate(lUnit,"Y") end
+        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+            if xUnit~=lUnit and UnitIsPlayer(xUnit) then
+                HealBot_OnEvent_ReadyCheckUpdate(xUnit,"W")
             end
         end
     end
@@ -5389,18 +5389,10 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
             HealBot_Options_setMyFriends(sender_id)
             HealBot_Comms_CheckVer(sender_id, datamsg)
         elseif datatype=="RC" then
-            local doRC=false
-            for j=1,10 do
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["SHOWRC"] then
-                    doRC=true
-                end
-            end
-            if doRC then
-                if datamsg=="I" then
-                    HealBot_OnEvent_hbReadyCheck(hbExtra1,hbExtra2)
-                else
-                    HealBot_OnEvent_hbReadyCheckConfirmed(hbExtra1,hbExtra2)
-                end
+            if datamsg=="I" then
+                HealBot_OnEvent_hbReadyCheck(hbExtra1,hbExtra2)
+            else
+                HealBot_OnEvent_hbReadyCheckConfirmed(hbExtra1,hbExtra2)
             end
         end
     end
@@ -5884,14 +5876,8 @@ function HealBot_retHbFocus(unit)
 end
 
 local function HealBot_OnEvent_ReadyCheck(self,unitName,timer)
-    local isLeader = UnitIsGroupAssistant("player") or UnitIsGroupLeader("player")
-    if isLeader then
-        HealBot_luVars["rcEnd"]=nil
-        HealBot_luVars["isLeader"]=true
-        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "RC:I:"..unitName..":"..timer, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
-    else
-        HealBot_luVars["isLeader"]=false
-    end
+    HealBot_luVars["rcEnd"]=nil
+    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "RC:I:"..unitName..":"..timer, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
   --HealBot_setCall("HealBot_OnEvent_ReadyCheck")
 end
 

@@ -373,10 +373,10 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Options_Class_HoTctlAction_List = {
-        HEALBOT_WORD_NEVER,
-        HEALBOT_OPTIONS_SELFCASTS,
+        HEALBOT_WORDS_NONE,
+        HEALBOT_OPTIONS_SELFHEALS,
         HEALBOT_OPTIONS_MYCLASS,
-        HEALBOT_WORD_ALWAYS,
+        HEALBOT_CUSTOM_CASTBY_FRIEND,
     }
 
     HealBot_Options_AggroAlertLevel_List = {
@@ -6285,6 +6285,7 @@ function HealBot_Options_LoadCDebuffb_OnClick()
     end
     if i>0 then
         if HealBot_Options_StorePrev["InMethodCDbuff"]==1 then
+            HealBot_Options_StorePrev["customdebufftextpage"]=1
             HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
             HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
             HealBot_Globals.FilterCustomDebuff={}
@@ -7539,14 +7540,14 @@ function HealBot_Options_CDebuffCat_DropDown()
         info.func = function(self)
                         HealBot_Options_StorePrev["CDebuffCatID"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_CDebuffCat,HealBot_CDebuffCat_List[HealBot_Options_StorePrev["CDebuffCatID"]]) 
-                        HealBot_Options_InitSub(402)
-                        HealBot_Options_InitSub(403)
-                        HealBot_Options_InitSub(404)
                         HealBot_Options_StorePrev["CDebuffcustomNameDefault"]=HealBot_Options_StorePrev["CDebuffcustomName"]       
                         local CDebuffCat_List = HealBot_Options_CDebuffCat_genList()
                         HealBot_Options_StorePrev["numCustomDebuffs"]=#CDebuffCat_List
                         HealBot_Options_CDebuffCatNameUpdate()
                         HealBot_SetCDCBarColours();
+                        HealBot_Options_InitSub(402)
+                        HealBot_Options_InitSub(403)
+                        HealBot_Options_InitSub(404)
                         --if HealBot_Options_StorePrev["CDebuffCatID"]==1 then
                         --    HealBot_Options_NewCDebuffBtn:Disable();
                         --end
@@ -7592,8 +7593,7 @@ function HealBot_Options_CDebuffTxt1_DropDown() -- added by Diacono
                         dText=HealBot_Options_CDebuffGetId(cdText)
                         HealBot_Options_StorePrev["CDebuffcustomName"] = dText
                         HealBot_Options_StorePrev["CDebuffcustomNameDefault"]=dText
-                        UIDropDownMenu_SetSelectedID(HealBot_Options_CDebuffTxt1,HealBot_Options_StorePrev["CDebuffcustomID"]) 
-                       -- UIDropDownMenu_SetText(HealBot_Options_CDebuffTxt1,cdText) 
+                        UIDropDownMenu_SetText(HealBot_Options_CDebuffTxt1,cdText) 
                         HealBot_Options_CDebuffCatNameUpdate()
                         HealBot_Options_InitSub(403)
                         HealBot_Options_InitSub(404)
@@ -10694,7 +10694,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_BarButtonShowHoTposBar1,HEALBOT_OPTIONS_HOTBARLEFT)
             HealBot_Options_SetText(HealBot_BarButtonShowHoTposBar2,HEALBOT_OPTIONS_HOTBARRIGHT)
             HealBot_Options_Class_HoTctlNameTxt:SetText(HEALBOT_OPTIONS_ALLSPELLS);
-            HealBot_Options_Class_HoTctlActionTxt:SetText(HEALBOT_OPTIONS_HOTSHOWICON);
+            HealBot_Options_Class_HoTctlActionTxt:SetText(HEALBOT_OPTIONS_CUSTOM_CASTBY);
             g=_G["HealBot_Options_Skins_HoTs2Txt"]
             g:SetText(HEALBOT_OPTIONS_ICONOPTTEXT)
             g=_G["HealBot_Options_Skins_HoTs2Text3"]

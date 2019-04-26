@@ -664,38 +664,33 @@ local function HealBot_Action_DoRefreshTooltip()
                 for name,_ in pairs(UnitDebuffIcons) do
                     if name~="ExtraIcon" and UnitDebuffIcons[name].current then
                         linenum=linenum+1
+                        local DebuffType=HealBot_retDebufftype(name)
                         if HealBot_Globals.CDCBarColour[name] then
                             HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
                                                         (HealBot_Globals.CDCBarColour[name].R or 0.4)+0.2,
                                                         (HealBot_Globals.CDCBarColour[name].G or 0.05)+0.2,
                                                         (HealBot_Globals.CDCBarColour[name].B or 0.2)+0.2,
                                                         1," ",0,0,0,0)
+                        elseif HealBot_Config_Cures.CDCBarColour[DebuffType] then
+                            HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
+                                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].R or 0.5)+0.2,
+                                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2,
+                                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,
+                                                        1," ",0,0,0,0)
                         else
-                            local DebuffType=HealBot_retDebufftype(name)
-                            if DebuffType == HEALBOT_CUSTOM_en then
-                                local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
-                                if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[name] then
-                                    customDebuffPriority=HEALBOT_CUSTOM_en..HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[name]
-                                end
-                                HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
-                                                            (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
-                                                            (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
-                                                            (HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2,
-                                                            1," ",0,0,0,0)
-                            else
-                                HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
-                                                            (HealBot_Config_Cures.CDCBarColour[DebuffType].R or 0.5)+0.2,
-                                                            (HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2,
-                                                            (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,
-                                                            1," ",0,0,0,0)
-                            end
+                            local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
+                            HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..name,
+                                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
+                                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
+                                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2,
+                                                        1," ",0,0,0,0)
                         end
                     end
                 end
             end
             linenum=linenum+1
             --if HealBot_Globals.UseGameTooltip then HealBot_Tooltip_SetLine(linenum,"  ",0,0,0,0) end
-            if xButton.aura.buff.name then
+            if xButton.aura.buff.name and xButton.aura.buff.name~=HEALBOT_CUSTOM_en then
                 linenum=linenum+1
                 local br,bg,bb=HealBot_Options_RetBuffRGB(xButton)
                 HealBot_Tooltip_SetLine(linenum,"  Requires "..xButton.aura.buff.name,br,bg,bb,1," ",0,0,0,0)

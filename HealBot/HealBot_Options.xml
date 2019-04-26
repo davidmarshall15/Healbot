@@ -9015,7 +9015,7 @@
                           <Anchors>
                             <Anchor point="RIGHT" relativeTo="HealBot_Options_CDebuffCat" relativePoint="LEFT">>
                               <Offset>
-                                <AbsDimension x="5" y="2" />
+                                <AbsDimension x="10" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -9063,9 +9063,9 @@
                       <Layer level="BACKGROUND">
                         <FontString name="HealBot_Options_CustomDebuff_CastByText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
                           <Anchors>
-                            <Anchor point="CENTER">
+                            <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="0" y="25" />
+                                <AbsDimension x="0" y="14" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -9145,7 +9145,7 @@
                           <Anchors>
                             <Anchor point="RIGHT" relativeTo="HealBot_Options_NewCDebuff" relativePoint="LEFT">
                               <Offset>
-                                <AbsDimension x="-20" y="-1" />
+                                <AbsDimension x="-14" y="0" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -10581,7 +10581,7 @@
                           <Anchors>
                             <Anchor point="RIGHT" relativeTo="HealBot_Options_FilterHoTctl" relativePoint="LEFT">>
                               <Offset>
-                                <AbsDimension x="5" y="2" />
+                                <AbsDimension x="10" y="5" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -10609,7 +10609,7 @@
                           <Anchors>
                             <Anchor point="RIGHT" relativeTo="HealBot_Options_NewBuffHoT" relativePoint="LEFT">
                               <Offset>
-                                <AbsDimension x="-20" y="-1" />
+                                <AbsDimension x="-14" y="0" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -10671,11 +10671,11 @@
                   <Frame name="HealBot_Options_Class_HoTctlAction" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_Class_HoTctlActionTxt" text="HEALBOT_OPTIONS_HOTSHOWICON" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_Class_HoTctlActionTxt" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="0" y="12" />
+                                <AbsDimension x="0" y="14" />
                               </Offset>
                             </Anchor>
                           </Anchors>
