@@ -273,203 +273,281 @@ function HealBot_Action_SetrSpell()
 	HealBot_RangeSpells["RES"]=nil
     HealBot_RangeSpells["HARM"]=nil
 	local x=HealBot_GetBandageType() or HEALBOT_WORDS_UNKNOWN
+    local sName=nil
     if HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        if HealBot_KnownSpell(HEALBOT_WRATH) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_WRATH].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_WRATH].name
-        elseif HealBot_KnownSpell(HEALBOT_HURRICANE) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_HURRICANE].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_HURRICANE].name
+        sName=HealBot_KnownSpell(HEALBOT_WRATH)
+        if sName then 
+            HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_HURRICANE)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            end
         end
-        if HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_MARK_OF_THE_WILD].name
-			x=HealBot_Spell_IDs[HEALBOT_MARK_OF_THE_WILD].name
+        sName=HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD)
+        if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-        if HealBot_KnownSpell(HEALBOT_REMOVE_CORRUPTION) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_REMOVE_CORRUPTION].name
-			x=HealBot_Spell_IDs[HEALBOT_REMOVE_CORRUPTION].name
+        sName=HealBot_KnownSpell(HEALBOT_REMOVE_CORRUPTION)
+        if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
 		end
-        if HealBot_KnownSpell(HEALBOT_REVIVE) then 
-			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_REVIVE].name
-			x=HealBot_Spell_IDs[HEALBOT_REVIVE].name
+        sName=HealBot_KnownSpell(HEALBOT_REVIVE)
+        if sName then 
+			HealBot_RangeSpells["RES"]=sName
+			x=sName
 		end
-        if HealBot_KnownSpell(HEALBOT_REJUVENATION) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_REJUVENATION].name
-			x=HealBot_Spell_IDs[HEALBOT_REJUVENATION].name
+        sName=HealBot_KnownSpell(HEALBOT_REJUVENATION)
+        if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="MAGE" then
-        if HealBot_KnownSpell(HEALBOT_FROSTFIRE_BOLT) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_FROSTFIRE_BOLT].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_FROSTFIRE_BOLT].name
-        elseif HealBot_KnownSpell(HEALBOT_FIRE_BLAST) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_FIRE_BLAST].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_FIRE_BLAST].name
+        sName=HealBot_KnownSpell(HEALBOT_FROSTFIRE_BOLT)
+        if sName then 
+            HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_FIRE_BLAST)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            end
         end
-		if HealBot_KnownSpell(HEALBOT_ARCANE_BRILLIANCE) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_ARCANE_BRILLIANCE].name
-			x=HealBot_Spell_IDs[HEALBOT_ARCANE_BRILLIANCE].name
+        sName=HealBot_KnownSpell(HEALBOT_ARCANE_BRILLIANCE)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_REMOVE_CURSE) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_REMOVE_CURSE].name
-			x=HealBot_Spell_IDs[HEALBOT_REMOVE_CURSE].name
+        sName=HealBot_KnownSpell(HEALBOT_REMOVE_CURSE)
+		if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        if HealBot_KnownSpell(HEALBOT_HOLY_SHOCK) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_HOLY_SHOCK].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_HOLY_SHOCK].name
-        elseif HealBot_KnownSpell(HEALBOT_JUDGMENT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_JUDGMENT].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_JUDGMENT].name
+        sName=HealBot_KnownSpell(HEALBOT_HOLY_SHOCK)
+        if sName then 
+            HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_JUDGMENT)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            end
 		end
-		if HealBot_KnownSpell(HEALBOT_REDEMPTION) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name
-			x=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name
+        sName=HealBot_KnownSpell(HEALBOT_REDEMPTION)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_CLEANSE) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_CLEANSE].name
-			x=HealBot_Spell_IDs[HEALBOT_CLEANSE].name
+        sName=HealBot_KnownSpell(HEALBOT_CLEANSE)
+		if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_REDEMPTION) then 
-			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name
-			x=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name
+        sName=HealBot_KnownSpell(HEALBOT_REDEMPTION)
+		if sName then 
+			HealBot_RangeSpells["RES"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_FLASH_OF_LIGHT) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_FLASH_OF_LIGHT].name
-			x=HealBot_Spell_IDs[HEALBOT_FLASH_OF_LIGHT].name
+        sName=HealBot_KnownSpell(HEALBOT_FLASH_OF_LIGHT)
+		if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        if HealBot_KnownSpell(HEALBOT_SHADOW_WORD_PAIN) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_SHADOW_WORD_PAIN].name
-            x=HealBot_Spell_IDs[HEALBOT_SHADOW_WORD_PAIN].name
-        elseif HealBot_KnownSpell(HEALBOT_PENANCE) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_PENANCE].name
-            x=HealBot_Spell_IDs[HEALBOT_PENANCE].name
-        elseif HealBot_KnownSpell(HEALBOT_SMITE) then 
-            HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_SMITE].name
-            x=HealBot_Spell_IDs[HEALBOT_SMITE].name
+        sName=HealBot_KnownSpell(HEALBOT_SHADOW_WORD_PAIN)
+        if sName then 
+            HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_PENANCE)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            else
+                sName=HealBot_KnownSpell(HEALBOT_SMITE)
+                if sName then 
+                    HealBot_RangeSpells["HARM"]=sName
+                    x=sName
+                end
+            end
         end
-		if HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_POWER_WORD_FORTITUDE].name
-			x=HealBot_Spell_IDs[HEALBOT_POWER_WORD_FORTITUDE].name
+        sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_PURIFY) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_PURIFY].name
-			x=HealBot_Spell_IDs[HEALBOT_PURIFY].name
+        sName=HealBot_KnownSpell(HEALBOT_PURIFY)
+		if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_RESURRECTION) then 
-			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name
-			x=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name
-            HealBot_AddDebug("rSpell="..x)
+        sName=HealBot_KnownSpell(HEALBOT_RESURRECTION)
+		if sName then 
+			HealBot_RangeSpells["RES"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_FLASH_HEAL) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_FLASH_HEAL].name
-			x=HealBot_Spell_IDs[HEALBOT_FLASH_HEAL].name
-        elseif HealBot_KnownSpell(HEALBOT_PENANCE) then 
-            HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_PENANCE].name
-            x=HealBot_Spell_IDs[HEALBOT_PENANCE].name
+        sName=HealBot_KnownSpell(HEALBOT_FLASH_HEAL)
+		if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_PENANCE)
+            if sName then 
+                HealBot_RangeSpells["HEAL"]=sName
+                x=sName
+            end
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        if HealBot_KnownSpell(HEALBOT_LIGHTNING_BOLT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_LIGHTNING_BOLT].name -- 30 or 40 depending on Spec
-            x=HealBot_Spell_IDs[HEALBOT_LIGHTNING_BOLT].name
+        sName=HealBot_KnownSpell(HEALBOT_LIGHTNING_BOLT)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_EARTH_SHIELD) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_EARTH_SHIELD].name
-			x=HealBot_Spell_IDs[HEALBOT_EARTH_SHIELD].name
+        sName=HealBot_KnownSpell(HEALBOT_EARTH_SHIELD)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_PURIFY_SPIRIT) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_PURIFY_SPIRIT].name
-			x=HealBot_Spell_IDs[HEALBOT_PURIFY_SPIRIT].name
-        elseif HealBot_KnownSpell(HEALBOT_CLEANSE_SPIRIT) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_CLEANSE_SPIRIT].name
-			x=HealBot_Spell_IDs[HEALBOT_CLEANSE_SPIRIT].name
-		elseif HealBot_KnownSpell(HEALBOT_HEALING_SURGE) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_HEALING_SURGE].name
-			x=HealBot_Spell_IDs[HEALBOT_HEALING_SURGE].name
+        sName=HealBot_KnownSpell(HEALBOT_PURIFY_SPIRIT)
+		if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_CLEANSE_SPIRIT)
+            if sName then 
+                HealBot_RangeSpells["CURE"]=sName
+                x=sName
+            else
+                sName=HealBot_KnownSpell(HEALBOT_HEALING_SURGE)
+                if sName then 
+                    HealBot_RangeSpells["CURE"]=sName
+                    x=sName
+                end
+            end
 		end
-		if HealBot_KnownSpell(HEALBOT_ANCESTRALSPIRIT) then 
-			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT].name
-			x=HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT].name
+        sName=HealBot_KnownSpell(HEALBOT_ANCESTRALSPIRIT)
+		if sName then 
+			HealBot_RangeSpells["RES"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_HEALING_SURGE) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_HEALING_SURGE].name
-			x=HealBot_Spell_IDs[HEALBOT_HEALING_SURGE].name
+        sName=HealBot_KnownSpell(HEALBOT_HEALING_SURGE)
+		if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        if HealBot_KnownSpell(HEALBOT_CRACKLING_JADE_LIGHTNING) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_CRACKLING_JADE_LIGHTNING].name  -- 40
-            x=HealBot_Spell_IDs[HEALBOT_CRACKLING_JADE_LIGHTNING].name
+        sName=HealBot_KnownSpell(HEALBOT_CRACKLING_JADE_LIGHTNING)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_LEGACY_EMPEROR) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_LEGACY_EMPEROR].name
-			x=HealBot_Spell_IDs[HEALBOT_LEGACY_EMPEROR].name
+        sName=HealBot_KnownSpell(HEALBOT_LEGACY_EMPEROR)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_DETOX) then 
-			HealBot_RangeSpells["CURE"]=HealBot_Spell_IDs[HEALBOT_DETOX].name
-			x=HealBot_Spell_IDs[HEALBOT_DETOX].name
+        sName=HealBot_KnownSpell(HEALBOT_DETOX)
+		if sName then 
+			HealBot_RangeSpells["CURE"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_RESUSCITATE) then 
-			HealBot_RangeSpells["RES"]=HealBot_Spell_IDs[HEALBOT_RESUSCITATE].name
-			x=HealBot_Spell_IDs[HEALBOT_RESUSCITATE].name
+        sName=HealBot_KnownSpell(HEALBOT_RESUSCITATE)
+		if sName then 
+			HealBot_RangeSpells["RES"]=sName
+			x=sName
 		end
-		if HealBot_KnownSpell(HEALBOT_SOOTHING_MIST) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_SOOTHING_MIST].name
-			x=HealBot_Spell_IDs[HEALBOT_SOOTHING_MIST].name
+        sName=HealBot_KnownSpell(HEALBOT_SOOTHING_MIST)
+		if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="WARL" then
-        if HealBot_KnownSpell(HEALBOT_CORRUPTION) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_CORRUPTION].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_CORRUPTION].name
-        elseif HealBot_KnownSpell(HEALBOT_FEAR) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_FEAR].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_FEAR].name
+        sName=HealBot_KnownSpell(HEALBOT_CORRUPTION)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_FEAR)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            end
 		end
-		if HealBot_KnownSpell(HEALBOT_UNENDING_BREATH) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_UNENDING_BREATH].name
-			x=HealBot_Spell_IDs[HEALBOT_UNENDING_BREATH].name
+        sName=HealBot_KnownSpell(HEALBOT_UNENDING_BREATH)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="WARR" then
-        if HealBot_KnownSpell(HEALBOT_TAUNT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_TAUNT].name -- 30 
-            x=HealBot_Spell_IDs[HEALBOT_TAUNT].name
+        sName=HealBot_KnownSpell(HEALBOT_TAUNT)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
 		end
-        if HealBot_KnownSpell(HEALBOT_VIGILANCE) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_VIGILANCE].name
-			x=HealBot_Spell_IDs[HEALBOT_VIGILANCE].name
-        elseif HealBot_KnownSpell(HEALBOT_BATTLE_SHOUT) then 
-			HealBot_RangeSpells["BUFF"]=HealBot_Spell_IDs[HEALBOT_BATTLE_SHOUT].name
-			x=HealBot_Spell_IDs[HEALBOT_BATTLE_SHOUT].name
+        sName=HealBot_KnownSpell(HEALBOT_VIGILANCE)
+        if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_BATTLE_SHOUT)
+            if sName then 
+                HealBot_RangeSpells["BUFF"]=sName
+                x=sName
+            end
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="HUNT" then
-        if HealBot_KnownSpell(HEALBOT_ARCANE_SHOT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_ARCANE_SHOT].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_ARCANE_SHOT].name
-        elseif HealBot_KnownSpell(HEALBOT_CONCUSSIVE_SHOT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_CONCUSSIVE_SHOT].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_CONCUSSIVE_SHOT].name
-        elseif HealBot_KnownSpell(HEALBOT_AIMED_SHOT) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_AIMED_SHOT].name -- 40
-            x=HealBot_Spell_IDs[HEALBOT_AIMED_SHOT].name
+        sName=HealBot_KnownSpell(HEALBOT_ARCANE_SHOT)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_CONCUSSIVE_SHOT)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            else
+                sName=HealBot_KnownSpell(HEALBOT_AIMED_SHOT)
+                if sName then 
+                    HealBot_RangeSpells["HARM"]=sName
+                    x=sName
+                end
+            end
 		end
-		if HealBot_KnownSpell(HEALBOT_MENDPET) then 
-			HealBot_RangeSpells["HEAL"]=HealBot_Spell_IDs[HEALBOT_MENDPET].name
-			x=HealBot_Spell_IDs[HEALBOT_MENDPET].name
+        sName=HealBot_KnownSpell(HEALBOT_MENDPET)
+		if sName then 
+			HealBot_RangeSpells["HEAL"]=sName
+			x=sName
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="ROGU" then
-        if HealBot_KnownSpell(HEALBOT_THROW) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_THROW].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_THROW].name
-        elseif HealBot_KnownSpell(HEALBOT_GOUGE) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_GOUGE].name -- 30
-            x=HealBot_Spell_IDs[HEALBOT_GOUGE].name
+        sName=HealBot_KnownSpell(HEALBOT_THROW)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_GOUGE)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=sName
+            end
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="DEAT" then
-        if HealBot_KnownSpell(HEALBOT_DEATH_COIL) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_DEATH_COIL].name -- 30 
-            x=HealBot_Spell_IDs[HEALBOT_DEATH_COIL].name
-        elseif HealBot_KnownSpell(HEALBOT_PLAGUE_STRIKE) then 
-			HealBot_RangeSpells["HARM"]=HealBot_Spell_IDs[HEALBOT_PLAGUE_STRIKE].name -- 30 
-            x=HealBot_Spell_IDs[HEALBOT_PLAGUE_STRIKE].name
+        sName=HealBot_KnownSpell(HEALBOT_DEATH_COIL)
+        if sName then 
+			HealBot_RangeSpells["HARM"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_PLAGUE_STRIKE)
+            if sName then 
+                HealBot_RangeSpells["HARM"]=sName
+                x=HsName
+            end
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="DEMO" then
     end

@@ -7601,7 +7601,7 @@ function HealBot_Options_CDebuffTxt1_DropDown() -- added by Diacono
                     end
         info.checked = false;
         dText=HealBot_Options_CDebuffGetId(CDebuffCat_List[j])
-        if HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==dText then info.checked = true end
+        if HealBot_Options_StorePrev["CDebuffcustomName"]==dText then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
     HealBot_Options_StorePrev["numCustomDebuffs"]=#CDebuffCat_List
@@ -7610,9 +7610,7 @@ end
 
 function HealBot_Options_CDebuffCatNameUpdate()
     if HealBot_Options_StorePrev["CDebuffCatID"]==1 then
-        if HealBot_Options_StorePrev["CDebuffcustomNameDefault"]==HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC then
-            HealBot_Options_StorePrev["customDebuffPriority"]=15
-        end
+        HealBot_Options_StorePrev["customDebuffPriority"]=15
         --HealBot_Options_StorePrev["CDebuffcustomName"]=nil
         local g=_G["HealBot_Options_CDCPriorityCustomText"]
         g:SetText(HealBot_Options_StorePrev["customDebuffPriority"]);
@@ -7741,6 +7739,7 @@ function HealBot_Options_NewHoTBuffBtn_OnClick(NewHoTBuffTxt)
         HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][useId]=4
     end
     HealBot_Options_NewBuffHoT:SetText("")
+    HealBot_Options_StorePrev["HoTname"]=HealBot_Options_CDebuffTextID(useId)
     HealBot_setOptions_Timer(170)
     DoneInitTab[501]=false
     HealBot_Options_InitSub(501)
@@ -8754,6 +8753,41 @@ function HealBot_Options_RetBuffRGBName(spellName)
     return HealBot_buffbarcolr[spellName],HealBot_buffbarcolg[spellName],HealBot_buffbarcolb[spellName];
 end
 
+function HealBot_Options_PresetColours_AliasSave(self,id)
+    HealBot_Globals.PresetColoursAlias[id]=self:GetText()
+end
+
+function HealBot_Options_PresetColourClick(self)
+    HealBot_Options_StorePrev["PresetColourCaller"]=self:GetName()
+    if HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_BuffHoTPresetColour" then
+        HealBot_Options_Panel5:Hide()
+        HealBot_Options_PresetColours:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,20)=="HealBot_Options_Buff" then
+        local id=tonumber(strsub(HealBot_Options_StorePrev["PresetColourCaller"] ,33));
+        HealBot_Options_StorePrev["PresetColourCaller"]="Buff"..id
+        HealBot_Options_Panel5:Hide()
+        HealBot_Options_PresetColours:Show()
+    elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_CustomDebuffPresetColour" then
+        HealBot_Options_Panel4:Hide()
+        HealBot_Options_PresetColours:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,22)=="HealBot_Options_Debuff" then
+        HealBot_Options_Panel4:Hide()
+        HealBot_Options_PresetColours:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,20)=="HealBot_Options_Skin" then
+        if strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,27)=="HealBot_Options_SkinBarText" then
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSCOL"] then
+                HealBot_Options_ClassColours()
+            else
+                HealBot_Options_Panel3:Hide()
+                HealBot_Options_PresetColours:Show()
+            end
+        else
+            HealBot_Options_Panel3:Hide()
+            HealBot_Options_PresetColours:Show()
+        end
+    end
+end
+
 function HealBot_Colorpick_OnClick(CDCType)
     if CDCType==HEALBOT_CUSTOM_en then
         local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
@@ -8792,6 +8826,12 @@ function HealBot_Colorpick_OnClick(CDCType)
         HealBot_ColourObjWaiting=CDCType;
         HealBot_UseColourPick(HealBot_Config_Cures.CDCBarColour[CDCType].R,HealBot_Config_Cures.CDCBarColour[CDCType].G,HealBot_Config_Cures.CDCBarColour[CDCType].B, nil)
     end
+end
+
+function HealBot_PresetColorpick_OnClick(id)
+    HealBot_Options_StorePrev["PresetColoursID"]=id
+    HealBot_ColourObjWaiting="Preset"
+    HealBot_UseColourPick(HealBot_Globals.PresetColours[id].R,HealBot_Globals.PresetColours[id].G,HealBot_Globals.PresetColours[id].B, HealBot_Globals.PresetColours[id].A)
 end
 
 local function HealBot_Returned_Colours(R, G, B, A)
@@ -8910,9 +8950,95 @@ local function HealBot_Returned_Colours(R, G, B, A)
         HealBot_Config_Cures.CDCBarColour[HealBot_ColourObjWaiting].B = R, G, B;
         HealBot_SetCDCBarColours();
         setskincols=false;
+    elseif HealBot_ColourObjWaiting=="Preset" then
+        HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].R,
+        HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].G,
+        HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].B,
+        HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].A = R, G, B, A;
+        g=_G["HealBot_PresetColourpick"..HealBot_Options_StorePrev["PresetColoursID"]]
+        g:SetStatusBarColor(HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].R, 
+                            HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].G, 
+                            HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].B, 
+                            HealBot_Globals.PresetColours[HealBot_Options_StorePrev["PresetColoursID"]].A) 
+        setskincols=false;
     end
     if setskincols then
         HealBot_setOptions_Timer(90)
+    end
+end
+
+function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
+    if HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_BuffHoTPresetColour" then
+        local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
+        if sId and HealBot_Globals.CustomBuffBarColour[sId] then
+            HealBot_ColourObjWaiting=sId
+        else
+            HealBot_ColourObjWaiting=HEALBOT_CUSTOM_en.."Buff"
+        end
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel5:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"] ,1,4)=="Buff" then
+        HealBot_ColourObjWaiting=HealBot_Options_StorePrev["PresetColourCaller"]
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel5:Show()
+    elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_CustomDebuffPresetColour" then
+        if HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Globals.CDCBarColour[HealBot_Options_StorePrev["CDebuffcustomName"]] then
+            HealBot_ColourObjWaiting=HealBot_Options_StorePrev["CDebuffcustomName"]
+        else
+            HealBot_ColourObjWaiting=HEALBOT_CUSTOM_en.."15"
+        end
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel4:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,22)=="HealBot_Options_Debuff" then
+        if HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_DebuffCursePresetColour" then
+            HealBot_ColourObjWaiting=HEALBOT_CURSE_en
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_DebuffPoisonPresetColour" then
+            HealBot_ColourObjWaiting=HEALBOT_POISON_en
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_DebuffMagicPresetColour" then
+            HealBot_ColourObjWaiting=HEALBOT_MAGIC_en
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_DebuffDiseasePresetColour" then
+            HealBot_ColourObjWaiting=HEALBOT_DISEASE_en
+        end
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel4:Show()
+    elseif strsub(HealBot_Options_StorePrev["PresetColourCaller"],1,20)=="HealBot_Options_Skin" then
+        if HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarAbsorbPresetColour" then
+            HealBot_ColourObjWaiting="CustomAbsorbBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarIncomingPresetColour" then
+            HealBot_ColourObjWaiting="CustomIHBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarBackPresetColour" then
+            HealBot_ColourObjWaiting="CustomBackBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarHealthPresetColour" then
+            HealBot_ColourObjWaiting="CustomBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarTextDebPresetColour" then
+            HealBot_ColourObjWaiting="Debuff"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarTextDisPresetColour" then
+            HealBot_ColourObjWaiting="Dis"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarTextEnPresetColour" then
+            HealBot_ColourObjWaiting="En"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarAggroPresetColour" then
+            HealBot_ColourObjWaiting="Aggro"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarHighlightPresetColour" then
+            HealBot_ColourObjWaiting="HighlightBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinBarTargetPresetColour" then
+            HealBot_ColourObjWaiting="HighlightTargetBar"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinHeaderBarPresetColour" then
+            HealBot_ColourObjWaiting="HeadB"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinHeaderTextPresetColour" then
+            HealBot_ColourObjWaiting="HeadT"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinFrameAliasPresetColour" then
+            HealBot_ColourObjWaiting="Alias"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinFrameBackPresetColour" then
+            HealBot_ColourObjWaiting="Back"
+        elseif HealBot_Options_StorePrev["PresetColourCaller"]=="HealBot_Options_SkinFrameBorderPresetColour" then
+            HealBot_ColourObjWaiting="Bor"
+        end
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel3:Show()
+    end
+    if not cancel then
+        HealBot_Returned_Colours(HealBot_Globals.PresetColours[id].R, HealBot_Globals.PresetColours[id].G, 
+                                 HealBot_Globals.PresetColours[id].B, HealBot_Globals.PresetColours[id].A)
     end
 end
 
@@ -9516,7 +9642,7 @@ function HealBot_Options_idleInit()
     elseif DoneInitTab[0]>0 then
         if not UIDROPDOWNMENU_OPEN_MENU then
             DoneInitTab[0]=DoneInitTab[0]+1
-            if DoneInitTab[0]>102 and DoneInitTab[0]<199 then
+            if DoneInitTab[0]>103 and DoneInitTab[0]<199 then
                 DoneInitTab[0]=200
             elseif DoneInitTab[0]>201 and DoneInitTab[0]<299 then
                 DoneInitTab[0]=300
@@ -10127,6 +10253,19 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_FramesSelFrame, HealBot_Options_HealGroupsFrame_List[HealBot_Options_StorePrev["FramesSelFrame"]])
             --DoneInitTab[102]=true
         --end
+    elseif subNo==103 then
+        if not DoneInitTab[103] then
+            for id=1,10 do
+                g=_G["HealBot_PresetColourAlias"..id]
+                g:SetText(HealBot_Globals.PresetColoursAlias[id])
+                g=_G["HealBot_PresetColourpick"..id]
+                g:SetStatusBarColor(HealBot_Globals.PresetColours[id].R, 
+                                    HealBot_Globals.PresetColours[id].G, 
+                                    HealBot_Globals.PresetColours[id].B, 
+                                    HealBot_Globals.PresetColours[id].A) 
+            end
+            DoneInitTab[103]=true
+        end
     elseif subNo==201 then
         if not DoneInitTab[201] then
             HealBot_Options_CastButton.initialize = HealBot_Options_CastButton_DropDown
@@ -11415,6 +11554,16 @@ function HealBot_Options_SetSkinBars()
     HealBot_CurseColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
     HealBot_CustomColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
     HealBot_BuffCustomColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick1:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick3:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick4:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick5:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick6:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick7:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick8:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick9:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_PresetColourpick10:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
     HealBot_BarOptTextColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
     HealBot_BarOptTextColorpickin:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
     HealBot_EnTextColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]));
@@ -11443,6 +11592,16 @@ function HealBot_Options_SetSkinBars()
     HealBot_CurseColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_CustomColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BuffCustomColorpick:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick1:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick2:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick3:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick4:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick5:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick6:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick7:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick8:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick9:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_PresetColourpick10:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarOptTextColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarOptTextColorpickin:GetStatusBarTexture():SetHorizTile(false)
     HealBot_EnTextColorpick:GetStatusBarTexture():SetHorizTile(false)
@@ -11488,6 +11647,7 @@ end
 
 function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
     local g=nil
+    HealBot_Options_PresetColours:Hide()
     if HealBot_Options_StorePrev["PrevTabNo"] and HealBot_Options_StorePrev["PrevTabNo"]~=tabNo then
         g=_G["HealBot_Options_Panel"..HealBot_Options_StorePrev["PrevTabNo"]]
         g:Hide();
@@ -11529,16 +11689,15 @@ function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
             HealBot_Options_StorePrev["subTabNo9"]=subTabNo
         end
     end;
-    if (HealBot_Options_StorePrev["PrevTabNo"] or -1)~=tabNo then
-        HealBot_Options_Init(tabNo)
-        g=_G["HealBot_Options_Panel"..tabNo]
-        g:Show();
-        g=_G["HealBot_Contents_ButtonT"..tabNo]
-        g:SetStatusBarColor(0.2,0.2,0.2,0.55)
-        g=_G["HealBot_Contents_ButtonT"..tabNo.."Txt"]
-        g:SetTextColor(1,1,1,1)
 
-    end        
+    HealBot_Options_Init(tabNo)
+    g=_G["HealBot_Options_Panel"..tabNo]
+    g:Show();
+    g=_G["HealBot_Contents_ButtonT"..tabNo]
+    g:SetStatusBarColor(0.2,0.2,0.2,0.55)
+    g=_G["HealBot_Contents_ButtonT"..tabNo.."Txt"]
+    g:SetTextColor(1,1,1,1)
+    
     if subTabNo and subTabNo>308 and subTabNo<399 then
         g=_G["HealBot_Contents_ButtonT308Txt"]
         g:SetTextColor(1,1,1,1)

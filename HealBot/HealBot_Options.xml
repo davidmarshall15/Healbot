@@ -1186,6 +1186,667 @@
           </BackgroundInsets>
         </Backdrop>
         <Frames>
+          <Frame name="HealBot_Options_PresetColours" hidden="true" setAllPoints="true">
+            <Layers>
+              <Layer level="BACKGROUND">
+                <FontString name="HealBot_PresetColours_AliasHeader" text="HEALBOT_OPTIONS_FRAME_ALIAS" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOPLEFT">
+                      <Offset>
+                        <AbsDimension x="124" y="-40" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="HealBot_PresetColours_BarHeader" text="HEALBOT_OPTIONS_PRESET_COLOUR" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOP">
+                      <Offset>
+                        <AbsDimension x="0" y="-40" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+              </Layer>
+            </Layers>
+            <Frames>
+              <EditBox name="HealBot_PresetColourAlias1" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="70" y="-70" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,1)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick1b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias1" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(1)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick1">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias1" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect1" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick1b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(1)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias2" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias1" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,2)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick2b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias2" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(2)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick2">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias2" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect2" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick2b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(2)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias3" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias2" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,3)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick3b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias3" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(3)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick3">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias3" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect3" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick3b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(3)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias4" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias3" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,4)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick4b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias4" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(4)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick4">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias4" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect4" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick4b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(4)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias5" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias4" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,5)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick5b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias5" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(5)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick5">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias5" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect5" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick5b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(5)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias6" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias5" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,6)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick6b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias6" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(6)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick6">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias6" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect6" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick6b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(6)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias7" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias6" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,7)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick7b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias7" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(7)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick7">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias7" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect7" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick7b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(7)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias8" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias7" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,8)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick8b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias8" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(8)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick8">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias8" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect8" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick8b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(8)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias9" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias8" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,9)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick9b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias9" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(9)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick9">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias9" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect9" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick9b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(9)</OnClick>
+                </Scripts>
+              </Button>
+              <EditBox name="HealBot_PresetColourAlias10" inherits="HealBot_Options_EditBoxTemplate">
+                <Size>
+                  <AbsDimension x="140" y="20"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOP" relativeTo="HealBot_PresetColourAlias9" relativePoint="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="-35" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnTextChanged>HealBot_Options_PresetColours_AliasSave(self,10)</OnTextChanged>
+                </Scripts>
+              </EditBox>
+              <Button name="HealBot_PresetColourpick10b">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias10" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_PresetColorpick_OnClick(10)</OnClick>
+                </Scripts>
+              </Button>
+              <StatusBar name="HealBot_PresetColourpick10">
+                <Size>
+                  <AbsDimension x="150" y="22"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourAlias10" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                </Scripts>
+                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarColor r="0" g="1" b="0"/>
+              </StatusBar>
+              <Button name="HealBot_PresetColourSelect10" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                <Size>
+                  <AbsDimension x="140" y="27"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_PresetColourpick10b" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="30" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(10)</OnClick>
+                </Scripts>
+              </Button>
+              <Button name="HealBot_Options_CancelPresetColourSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_CANCEL">
+                <Size>
+                  <AbsDimension x="175" y="24"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="0" y="25"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_PresetColourSelect_OnClick(self,true)</OnClick>
+                </Scripts>
+              </Button>
+            </Frames>
+          </Frame>
           <Frame name="HealBot_Options_Panel0" hidden="true" setAllPoints="true">
               <Layers>
                 <Layer level="OVERLAY">
@@ -4706,11 +5367,26 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_SkinFrameAliasPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="22" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_FrameAliasColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_AliasFontOutline" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_FrameAliasColorpickb" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="7" y="3"/>
+                          <AbsDimension x="27" y="3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4791,7 +5467,7 @@
 
                   <Button name="HealBot_BackgroundColorpickb">
                     <Size>
-                      <AbsDimension x="255" y="25"/>
+                      <AbsDimension x="230" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -4806,7 +5482,7 @@
                   </Button>
                   <StatusBar name="HealBot_BackgroundColorpick">
                     <Size>
-                      <AbsDimension x="255" y="25"/>
+                      <AbsDimension x="230" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpickb" relativePoint="TOPLEFT">
@@ -4834,14 +5510,29 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_SkinFrameBackPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_BackgroundColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_BorderColorpickb">
                     <Size>
-                      <AbsDimension x="255" y="25"/>
+                      <AbsDimension x="230" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="15" y="0"/>
+                          <AbsDimension x="40" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4851,12 +5542,12 @@
                   </Button>
                   <StatusBar name="HealBot_BorderColorpick">
                     <Size>
-                      <AbsDimension x="255" y="25"/>
+                      <AbsDimension x="230" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_BackgroundColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="15" y="0"/>
+                          <AbsDimension x="40" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4879,6 +5570,21 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_SkinFrameBorderPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_BorderColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                 </Frames>
               </Frame>
 
@@ -4937,7 +5643,7 @@
                   </CheckButton>
                   <Button name="HealBot_HeadBarColorpickb">
                     <Size>
-                      <AbsDimension x="250" y="25"/>
+                      <AbsDimension x="225" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -4952,7 +5658,7 @@
                   </Button>
                   <StatusBar name="HealBot_HeadBarColorpick" inherits="TextStatusBar">
                     <Size>
-                      <AbsDimension x="250" y="25"/>
+                      <AbsDimension x="225" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -4980,14 +5686,29 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_SkinHeaderBarPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_HeadBarColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_HeadTextColorpickb">
                     <Size>
-                      <AbsDimension x="250" y="25"/>
+                      <AbsDimension x="225" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_HeadBarColorpickb" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="20" y="0"/>
+                          <AbsDimension x="45" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4997,12 +5718,12 @@
                   </Button>
                   <StatusBar name="HealBot_HeadTextColorpick" inherits="TextStatusBar">
                     <Size>
-                      <AbsDimension x="250" y="25"/>
+                      <AbsDimension x="225" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_HeadBarColorpickb" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="20" y="0"/>
+                          <AbsDimension x="45" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5025,6 +5746,21 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_SkinHeaderTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_HeadTextColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Slider name="HealBot_Options_HeadTextureS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
                       <AbsDimension x="345" y="16" />
@@ -5607,14 +6343,29 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarHealthPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="205" y="16" />
+                          <AbsDimension x="200" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="0" />
+                              <AbsDimension x="35" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5694,14 +6445,29 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarBackPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_BarOutlineBackGround" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="65" y="16" />
+                          <AbsDimension x="60" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="0" />
+                              <AbsDimension x="35" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5795,14 +6561,29 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarIncomingPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarIHCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_BarAlphaInHeal" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="205" y="16" />
+                          <AbsDimension x="200" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarIHCustomColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="0" />
+                              <AbsDimension x="35" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5881,14 +6662,29 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarAbsorbPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_BarAlphaAbsorb" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="205" y="16" />
+                          <AbsDimension x="200" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="0" />
+                              <AbsDimension x="35" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5972,7 +6768,7 @@
                     <Frames>
                       <Button name="HealBot_EnTextColorpickb">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
@@ -5987,7 +6783,7 @@
                       </Button>
                       <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpickb" relativePoint="TOPLEFT">
@@ -6017,7 +6813,7 @@
                       </StatusBar>
                       <StatusBar name="HealBot_EnTextColorpickin" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpickb" relativePoint="TOPLEFT">
@@ -6032,9 +6828,24 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarTextEnPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_EnTextColorpickb" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Button name="HealBot_DisTextColorpickb">
                         <Size>
-                          <AbsDimension x="190" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
@@ -6049,12 +6860,12 @@
                       </Button>
                       <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_EnTextColorpick"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="15" y="0"/>
+                              <AbsDimension x="40" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6077,9 +6888,24 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarTextDisPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_DisTextColorpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Button name="HealBot_DebTextColorpickb">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
@@ -6094,12 +6920,12 @@
                       </Button>
                       <StatusBar name="HealBot_DebTextColorpick">
                         <Size>
-                          <AbsDimension x="175" y="25"/>
+                          <AbsDimension x="150" y="25"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_DisTextColorpick"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="15" y="0"/>
+                              <AbsDimension x="40" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6122,6 +6948,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarTextDebPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_DebTextColorpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <CheckButton name="HealBot_Options_BarTextInClassColour" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT">
@@ -7374,6 +8215,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarAggroPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Aggro3Colorpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_AggroFlashFreq" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="345" y="16" />
@@ -7450,7 +8306,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HighlightActiveBar"  relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="-10" y="-4"/>
+                              <AbsDimension x="-30" y="-4"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7465,7 +8321,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HighlightActiveBar"  relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="-10" y="-4"/>
+                              <AbsDimension x="-30" y="-4"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7475,6 +8331,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarHighlightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_HighlightActiveBarColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <CheckButton name="HealBot_Options_HighlightTargetBar" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT">
@@ -7506,7 +8377,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HighlightTargetBar"  relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="-10" y="-4"/>
+                              <AbsDimension x="-30" y="-4"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7521,7 +8392,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HighlightTargetBar"  relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="-10" y="-4"/>
+                              <AbsDimension x="-30" y="-4"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7531,6 +8402,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_SkinBarTargetPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_HighlightTargetBarColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -8517,7 +9403,7 @@
                   </Frame>
                   <Button name="HealBot_DiseaseColorpickb">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -8532,7 +9418,7 @@
                   </Button>
                   <StatusBar name="HealBot_DiseaseColorpick" inherits="TextStatusBar">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_DiseaseColorpickb" relativePoint="TOPLEFT">
@@ -8560,14 +9446,29 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_DebuffDiseasePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_DiseaseColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_MagicColorpickb">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8577,12 +9478,12 @@
                   </Button>
                   <StatusBar name="HealBot_MagicColorpick" inherits="TextStatusBar">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_DiseaseColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8605,14 +9506,29 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_DebuffMagicPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_MagicColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_PoisonColorpickb">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_MagicColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8622,12 +9538,12 @@
                   </Button>
                   <StatusBar name="HealBot_PoisonColorpick">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_MagicColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8650,14 +9566,29 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_DebuffPoisonPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_PoisonColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_CurseColorpickb">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_PoisonColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8667,12 +9598,12 @@
                   </Button>
                   <StatusBar name="HealBot_CurseColorpick">
                     <Size>
-                      <AbsDimension x="120" y="25"/>
+                      <AbsDimension x="100" y="25"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_PoisonColorpick"  relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="30" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8695,6 +9626,21 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_DebuffCursePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="25" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_CurseColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                 </Frames>
               </Frame>
               <Frame name="HealBot_Options_CustomCureFrame">
@@ -9302,6 +10248,21 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_CustomDebuffPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="22" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_CustomColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <CheckButton name="HealBot_Options_CDCCol_OnOff" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="CENTER" relativeTo="HealBot_CustomColorpick" relativePoint="CENTER">
@@ -9321,7 +10282,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="350" y="-73"/>
+                          <AbsDimension x="375" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9744,7 +10705,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="24" y="-58"/>
+                              <AbsDimension x="14" y="-58"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9835,6 +10796,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour1" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff1Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt2" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt1" relativePoint="BOTTOMLEFT">
@@ -9891,6 +10867,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour2" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff2Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt3" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt2" relativePoint="BOTTOMLEFT">
@@ -9947,6 +10938,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour3" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff3Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt4" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt3" relativePoint="BOTTOMLEFT">
@@ -10003,6 +11009,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour4" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff4Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt5" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt4" relativePoint="BOTTOMLEFT">
@@ -10059,6 +11080,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour5" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff5Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt6" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt5" relativePoint="BOTTOMLEFT">
@@ -10115,6 +11151,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour6" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff6Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt7" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt6" relativePoint="BOTTOMLEFT">
@@ -10171,6 +11222,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour7" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff7Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Frame name="HealBot_Options_BuffTxt8" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt7" relativePoint="BOTTOMLEFT">
@@ -10227,7 +11293,21 @@
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
-                      
+                      <Button name="HealBot_Options_BuffPresetColour8" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff8Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_ShortBuffTimer" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="240" y="16" />
@@ -10806,6 +11886,21 @@
                     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
+                  <Button name="HealBot_Options_BuffHoTPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                    <Size>
+                      <AbsDimension x="22" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_BuffCustomColorpick" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="2" y="1"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
                   <CheckButton name="HealBot_Options_CustomBuffCol_OnOff" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="CENTER" relativeTo="HealBot_BuffCustomColorpick" relativePoint="CENTER">

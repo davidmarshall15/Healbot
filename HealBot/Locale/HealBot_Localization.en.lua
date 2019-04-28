@@ -115,6 +115,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SKINFOUTLINE            = "Font Outline"
     HEALBOT_OPTIONS_BARALPHADIS             = "Disabled opacity"
     HEALBOT_OPTIONS_SHOWHEADERS             = "Show headers"
+    HEALBOT_OPTIONS_PRESETCOLOURBTN         = "*"
 
     HEALBOT_OPTIONS_ITEMS                   = "Items";
 
@@ -1003,6 +1004,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PAGE                    = "Page"
     HEALBOT_OPTIONS_PREV                    = "<<"
     HEALBOT_OPTIONS_NEXT                    = ">>"
+    HEALBOT_OPTIONS_PRESET_COLOUR           = "Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_OPTIONS_PRESET                  = "Preset"
     
     HEALBOT_THANKS_TO_TAB                   = "Thanks To"
     HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy from the great land Down Under",

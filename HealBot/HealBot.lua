@@ -760,15 +760,7 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
     elseif (HBcmd=="zzz") then
-        HealBot_UnitData[HealBot_Data["PGUID"]]["ROLE"] = "HEALER"
-        local xButton = HealBot_Unit_Button["player"]
-        xButton.update.roleicon=true
-        xButton.status.update=true
-    elseif (HBcmd=="xxx") then
-        HealBot_UnitData[HealBot_Data["PGUID"]]["ROLE"] = HEALBOT_WORDS_UNKNOWN
-        local xButton = HealBot_Unit_Button["player"]
-        xButton.update.roleicon=true
-        xButton.status.update=true
+        HealBot_OnEvent_ReadyCheck(nil,"Ivanhoof",10)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1906,9 +1898,14 @@ function HealBot_Reset_Unit(button)
 end
 
 function HealBot_KnownSpell(spellID)
-    if (not spellID) then return nil end
+    if not spellID then return nil end
     if HealBot_Spell_IDs[spellID] and HealBot_Spell_IDs[spellID].known then   
         return HealBot_Spell_IDs[spellID].name; 
+    else
+        local sName=GetSpellInfo(spellID)
+        if sName and HealBot_Spell_Names[sName] then
+            return sName
+        end
     end
   --HealBot_setCall("HealBot_KnownSpell")
     return nil;
@@ -5304,50 +5301,6 @@ local function HealBot_UnitNameOnly(unitName)
     return uName
 end
 
-local function HealBot_OnEvent_ReadyCheckUpdate(unit,response)
-    local xButton=HealBot_Unit_Button[unit]
-    if HealBot_luVars["rcEnd"] and xButton and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then 
-        local prevRedyCheck=xButton.icon.debuff.readycheck
-        if response=="Y" then
-            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-Ready"
-        elseif response=="W" then
-            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
-        else
-            xButton.icon.debuff.readycheck="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
-        end
-        if xButton.icon.debuff.readycheck~=prevRedyCheck then
-            xButton.aura.debuff.check=true
-        end
-    end
-  --HealBot_setCall("HealBot_OnEvent_ReadyCheckUpdate")
-end
-
-local function HealBot_OnEvent_hbReadyCheck(unitName,timer)
-    local uName=HealBot_UnitNameOnly(unitName)
-    local lUnit=HealBot_Panel_RaidUnit(nil,unitName)
-    if lUnit then
-        HealBot_luVars["rcEnd"]=GetTime()+timer
-        if HealBot_Unit_Button[lUnit] then HealBot_OnEvent_ReadyCheckUpdate(lUnit,"Y") end
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if xUnit~=lUnit and UnitIsPlayer(xUnit) then
-                HealBot_OnEvent_ReadyCheckUpdate(xUnit,"W")
-            end
-        end
-    end
-  --HealBot_setCall("HealBot_OnEvent_hbReadyCheck")
-end
-
-local function HealBot_OnEvent_hbReadyCheckConfirmed(hbGUID,response)
-    local xUnit=hbGUID
-    if HealBot_UnitData[hbGUID] then 
-        xUnit=HealBot_UnitData[hbGUID]["UNIT"]
-    end
-    if HealBot_Unit_Button[xUnit] then
-        HealBot_OnEvent_ReadyCheckUpdate(xUnit,response)
-    end
-  --HealBot_setCall("HealBot_OnEvent_hbReadyCheckConfirmed")
-end
-
 local HealBotAddonSummary={}
 local HealBotAddonIncHeals={}
 local hbExtra1, hbExtra2=nil, nil
@@ -5388,12 +5341,6 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
             HealBot_AddDebug(sender_id..":  "..datamsg);
             HealBot_Options_setMyFriends(sender_id)
             HealBot_Comms_CheckVer(sender_id, datamsg)
-        elseif datatype=="RC" then
-            if datamsg=="I" then
-                HealBot_OnEvent_hbReadyCheck(hbExtra1,hbExtra2)
-            else
-                HealBot_OnEvent_hbReadyCheckConfirmed(hbExtra1,hbExtra2)
-            end
         end
     end
   --HealBot_setCall("HealBot_OnEvent_AddonMsg")
@@ -5875,19 +5822,38 @@ function HealBot_retHbFocus(unit)
     return false
 end
 
-local function HealBot_OnEvent_ReadyCheck(self,unitName,timer)
-    HealBot_luVars["rcEnd"]=nil
-    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "RC:I:"..unitName..":"..timer, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
+local function HealBot_OnEvent_ReadyCheckUpdate(unit,response)
+    local xButton=HealBot_Unit_Button[unit]
+    if HealBot_luVars["rcEnd"] and xButton and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then 
+        local prevRedyCheck=xButton.icon.debuff.readycheck
+        if response then
+            xButton.icon.debuff.readycheck=READY_CHECK_READY_TEXTURE --"Interface\\RAIDFRAME\\ReadyCheck-Ready"
+        else
+            xButton.icon.debuff.readycheck=READY_CHECK_NOT_READY_TEXTURE --"Interface\\RAIDFRAME\\ReadyCheck-NotReady"
+        end
+        if xButton.icon.debuff.readycheck~=prevRedyCheck then
+            xButton.aura.debuff.check=true
+        end
+    end
+  --HealBot_setCall("HealBot_OnEvent_ReadyCheckUpdate")
+end
+
+function HealBot_OnEvent_ReadyCheck(self,unitName,timer)
+    local lUnit=HealBot_Panel_RaidUnit(nil,HealBot_UnitNameOnly(unitName))
+    HealBot_luVars["rcEnd"]=GetTime()+timer
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then 
+            xButton.icon.debuff.readycheck=READY_CHECK_WAITING_TEXTURE
+            xButton.aura.debuff.check=true
+        end
+    end
+    if lUnit and HealBot_Unit_Button[lUnit] then HealBot_OnEvent_ReadyCheckUpdate(lUnit,true) end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheck")
 end
 
 local function HealBot_OnEvent_ReadyCheckConfirmed(self,unit,response)
-    local xUnit,xGUID = HealBot_UnitID(unit)
-    if xUnit then 
-		local hbResponse="N"
-        if response then hbResponse="Y" end
-        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "RC:U:"..xGUID..":"..hbResponse, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
-    end
+    local xUnit = HealBot_UnitID(unit)
+    if HealBot_Unit_Button[xUnit] then HealBot_OnEvent_ReadyCheckUpdate(xUnit,response) end
   --HealBot_setCall("HealBot_OnEvent_ReadyCheckConfirmed")
 end
 
