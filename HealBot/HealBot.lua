@@ -2731,7 +2731,7 @@ local function HealBot_Update_Skins()
         if HealBot_Globals.RangeCheckFreq<0.2 then HealBot_Globals.RangeCheckFreq=0.2 end
         if not HealBot_Globals.VersionResetDone["Reset_AutoUpdateSpellIDs"] then
             HealBot_Reset_AutoUpdateSpellIDs()
---            HealBot_Globals.VersionResetDone["Reset_AutoUpdateSpellIDs"]=true
+            HealBot_Globals.VersionResetDone["Reset_AutoUpdateSpellIDs"]=true
         end
         local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
         if not HealBot_Globals.CDCBarColour[customDebuffPriority] then

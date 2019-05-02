@@ -499,21 +499,7 @@ function HealBot_Options_setCDebuffCasyBy()
 end
 
 function HealBot_Options_framesChanged(frame)
-    if frame==0 then
-        HealBot_setOptions_Timer(595)
-    elseif frame<6 then
-        HealBot_setOptions_Timer(580) 
-    elseif frame==6 then
-        HealBot_setOptions_Timer(581) 
-    elseif frame==7 then
-        HealBot_setOptions_Timer(582) 
-    elseif frame==8 then
-        HealBot_setOptions_Timer(583) 
-    elseif frame==9 then
-        HealBot_setOptions_Timer(584) 
-    else
-        HealBot_setOptions_Timer(585) 
-    end
+    HealBot_setOptions_Timer(150) 
 end
 
 function HealBot_Options_setCDebuffCasyByIndexed()
@@ -6311,7 +6297,7 @@ function HealBot_Options_LoadCDebuffb_OnClick()
             b=tonumber(b)
             if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Options_StorePrev["InMethodCDbuff"]<3 then
                 local dName=GetSpellInfo(dId) or "nil"
-                HealBot_Globals.CatchAltDebuffIDs[dName]=nil
+                --HealBot_Globals.CatchAltDebuffIDs[dName]=nil
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
                 HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
                 if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
