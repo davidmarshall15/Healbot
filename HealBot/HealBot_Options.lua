@@ -9347,9 +9347,15 @@ function HealBot_Options_NotifyChan_OnTextChanged(self)
     Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["CHAN"] = self:GetText()
 end
 
+function HealBot_Options_FrameAlias_AfterTextChange()
+    HealBot_Options_InitSub(102)
+    DoneInitTab[310]=nil
+    HealBot_Options_InitSub(310)
+end
+
 function HealBot_Options_FrameAlias_OnTextChanged(self)
     Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["ALIAS"] = self:GetText()
-    HealBot_setOptions_Timer(404)
+    HealBot_setOptions_Timer(4920)
 end
 function HealBot_Options_FrameAlias_initFrameSel()
     HealBot_Options_InitSub(102)
@@ -11902,8 +11908,15 @@ function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
         elseif tabNo==9 then
             HealBot_Options_StorePrev["subTabNo9"]=subTabNo
         end
+        if subTabNo==51 then
+            HealBot_Options_MonitorBuffsInCombat:Show()
+            HealBot_Options_MonitorBuffsWhenGrouped:Show()
+        elseif subTabNo>51 and subTabNo<54 then
+            HealBot_Options_MonitorBuffsInCombat:Hide()
+            HealBot_Options_MonitorBuffsWhenGrouped:Hide()
+        end
     end;
-
+    
     HealBot_Options_Init(tabNo)
     g=_G["HealBot_Options_Panel"..tabNo]
     g:Show();
