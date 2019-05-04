@@ -238,8 +238,8 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         VersionResetDone={},
-        CatchAltBuffIDs={},
-        CatchAltDebuffIDs={},
+        CatchAltBuffIDs={["init"]=true},
+        CatchAltDebuffIDs={["init"]=true},
         CureCustomDefaultCastBy="ALL",
         TopRole="TANK",
         TargetBarRestricted=0,

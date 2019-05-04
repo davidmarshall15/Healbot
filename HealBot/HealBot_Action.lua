@@ -758,7 +758,9 @@ function HealBot_Action_UpdateDebuffButton(button)
                         end
                     else
                         if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id] or 
-                           (not HealBot_Globals.HealBot_Custom_Debuffs[button.aura.debuff.id] and button.aura.debuff.priority==15) then
+                          (not HealBot_Globals.HealBot_Custom_Debuffs[button.aura.debuff.id]
+                           and button.aura.debuff.priority==15
+                           and HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]) then
                             local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
                             hcr = HealBot_Globals.CDCBarColour[customDebuffPriority].R
                             hcg = HealBot_Globals.CDCBarColour[customDebuffPriority].G
@@ -4121,7 +4123,7 @@ local aFrameUpd={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]
 local aAlpha={[1]=0.5,[2]=0.5,[3]=0.5,[4]=0.5,[5]=0.5,[6]=0.5,[7]=0.5,[8]=0.5,[9]=0.5}
 local function HealBot_Action_UpdateAggroBar(button)
     local bar4=_G["HealBot_Action_HealUnit"..button.id.."Bar4"]
-    if UnitExists(button.unit) then
+    if UnitExists(button.unit) and button.frame<10 then
         HealBot_AggroUnitThreat=button.aggro.status or 2
         if HealBot_AggroUnitThreat>4 and button.aura.debuff.name then
             if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then

@@ -72,6 +72,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_TIPS                = "Tips";
     HEALBOT_OPTIONS_TAB_DEBUFFS             = "Debuffs"
     HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS      = "Custom Debuffs";
+    HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS        = "Custom Buffs";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Buffs"
 
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
@@ -898,7 +899,9 @@ function HealBot_Lang_enALL()
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Failed to load addon for localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Reason for failure is:"
-    HEALBOT_OPTIONS_LANG_ADDON_FAIL3        = "Note in the current verison, this is the only warning for"
+    HEALBOT_OPTIONS_LANG_ADDON_FAIL3        = "Note in the current version, this is the only warning for"
+    HEALBOT_OPTIONS_IMPORT_FAIL1            = "Failed to Import"
+    HEALBOT_OPTIONS_IMPORT_FAIL2            = "Reason for failure is:"
     
     HEALBOT_OPTIONS_ADDON_FAIL              = "Failed to load headbot addon"
     
@@ -924,6 +927,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_CONTENT_INOUT_SKINS     = "    " .. HEALBOT_OPTIONS_TAB_SKIN
     HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
+    HEALBOT_OPTIONS_CONTENT_INOUT_BUFF      = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS
     
     HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
     HEALBOT_OPTIONS_BARALPHAABSORB          = "Absorb effects opacity";
@@ -954,6 +958,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing with "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
+    HEALBOT_INOUT_STATUS_BUFFINIT           = "Custom Buffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
     HEALBOT_ENEMY_INCLUDE_SELF              = "Include my target"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include tanks targets"

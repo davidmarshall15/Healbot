@@ -1156,6 +1156,34 @@
                       <OnClick>HealBot_Options_ShowPanel(self, 9, 92); HealBot_Options_ShowInOutPanel("HealBot_Options_InOut_CDbuffsFrame", 92)</OnClick>
                     </Scripts>
                   </Button>
+                  <Button name="HealBot_Contents_Button93">
+                    <Size>
+                      <AbsDimension x="168" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button92"  relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Contents_ButtonT93Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_INOUT_BUFF">
+                          <Anchors>
+                            <Anchor point="LEFT" relativeTo="HealBot_Contents_Button93" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="28" y="1"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowPanel(self, 9, 93); HealBot_Options_ShowInOutPanel("HealBot_Options_InOut_BuffsFrame", 93)</OnClick>
+                    </Scripts>
+                  </Button>
         </Frames>
       </Frame>
       <Frame name="HealBot_Options_MainFrame">
@@ -10078,7 +10106,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_DeleteCDebuffBtn_OnClick(self)</OnClick>
+                      <OnClick>HealBot_Options_DeleteCDebuffBtn_OnClick()</OnClick>
                     </Scripts>
                   </Button>
                   <EditBox name="HealBot_Options_NewCDebuff" inherits="HealBot_Options_EditBoxTemplate">
@@ -11773,6 +11801,31 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 135)</OnLoad>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_HoTctlActionCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                      <Size>
+                          <AbsDimension x="125" y="22"/>
+                      </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_HoTctlActionCustomText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="CENTER">
+                              <Offset>
+                                <AbsDimension x="0" y="25" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="15" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                  </Button>
                   <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
                     <Size>
                       <AbsDimension x="95" y="22"/>
@@ -11785,7 +11838,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick(self)</OnClick>
+                      <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick()</OnClick>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_EnableDisableBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_ENABLE">
@@ -11833,7 +11886,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="115" y="-70"/>
+                          <AbsDimension x="50" y="-70"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11841,6 +11894,31 @@
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_BuffPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
+                    <Size>
+                      <AbsDimension x="125" y="22"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffPriorityCustomText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="CENTER">
+                              <Offset>
+                                <AbsDimension x="0" y="25" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="62" y="-73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                  </Button>
                   <Button name="HealBot_BuffCustomColorpickb">
                     <Size>
                       <AbsDimension x="140" y="22"/>
@@ -11848,7 +11926,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="270" y="-73"/>
+                          <AbsDimension x="205" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11863,7 +11941,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="270" y="-73"/>
+                          <AbsDimension x="205" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11899,6 +11977,21 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Button name="HealBot_Options_ResetBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                    <Size>
+                      <AbsDimension x="110" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="375" y="-73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ResetBuff()</OnClick>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_CustomBuffCol_OnOff" inherits="OptionsCheckButtonTemplate">
@@ -12897,6 +12990,142 @@
                     </EditBox>
                 </Frames>
               </Frame>
+
+              <Frame name="HealBot_Options_InOut_BuffsFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="670"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="0"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="0" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name="HealBot_Options_ShareBuffsStatusf" inherits="GameFontNormalSmall">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="20"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <Button name="HealBot_Options_ShareBuffsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONEXPORT">
+                    <Size>
+                      <AbsDimension x="170" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="105" y="-60" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShareBuffsb_OnClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Frame name="HealBot_Options_ImportMethodBuffs" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-80" y="-25" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Options_ImportMethodBuffst" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONIMPORTMETHOD">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="12"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                    </Scripts>
+                  </Frame>
+                  <Button name="HealBot_Options_LoadBuffsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
+                    <Size>
+                      <AbsDimension x="170" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-105" y="-60" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_LoadBuffsb_OnClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Frame name="HealBot_Options_ShareBuffsExternalEditBoxFrame">
+                    <Size>
+                      <AbsDimension y="532"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="25" y="-100"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-25" y="-100"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Backdrop edgeFile="Interface/DialogFrame/UI-DialogBox-Border" tile="true">
+                      <EdgeSize>
+                        <AbsValue val="22"/>
+                      </EdgeSize>
+                      <TileSize>
+                        <AbsValue val="26"/>
+                      </TileSize>
+                      <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="5" bottom="5"/>
+                      </BackgroundInsets>
+                    </Backdrop>
+                    <Frames>
+                      <ScrollFrame name="HealBot_Options_ShareBuffsExternalScroll" inherits="HealBotUIPanelScrollFrameTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="10" y="-8"/>
+                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-30" y="8"/>
+                        </Anchors>
+                      </ScrollFrame>
+                    </Frames>
+                  </Frame>
+                    <EditBox name="HealBot_Options_ShareBuffsExternalEditBox" multiLine="true" letters="20000" parent="HealBot_Options_ShareBuffsExternalScroll">
+                        <Scripts>
+                            <OnLoad>
+                                HealBot_Options_ShareBuffsExternalScroll:SetScrollChild(HealBot_Options_ShareBuffsExternalEditBox)
+                                self:SetWidth(500)
+                                self:EnableMouse(true)
+                            </OnLoad>
+                        </Scripts>
+                        <FontString inherits="GameFontNormalSmall" />
+                    </EditBox>
+                </Frames>
+              </Frame>
+              
+              
             </Frames>
           </Frame>
         </Frames>
