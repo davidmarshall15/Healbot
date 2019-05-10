@@ -2557,7 +2557,6 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 HealBot_CheckFrame(x, gaf)
             end
         end
-        HealBot_setOptions_Timer(595)
         HealBot_setHighlightTargetBar()
     end
   --HealBot_setCall("HealBot_DoAction_ResetSkin")
@@ -3104,6 +3103,12 @@ local function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
         buttonType="harmbutton"
         sType="harm"
+    elseif status=="Fixed" then
+        if j==1 then
+            sName=strlower(HEALBOT_MENU)
+        elseif j==2 then
+            sName=strlower(HEALBOT_HBMENU)
+        end
     end
     if sName then
         hbAttribsMinReset[button.frame..button.id..HB_prefix..status..j]=false
@@ -3244,6 +3249,8 @@ local function HealBot_Action_SetAllButtonAttribs(button,status)
                 HealBot_Action_SetButtonAttrib(button,HB_button,HealBot_Keys_List[y],status,x)
             end
         end
+        HealBot_Action_SetButtonAttrib(button,"Left","Alt-Ctrl-Shift","Fixed",1)
+        HealBot_Action_SetButtonAttrib(button,"Right","Alt-Ctrl-Shift","Fixed",2)
     end
 end
 
@@ -3897,12 +3904,8 @@ local function HealBot_Action_PreClick(self,button)
                 HealBot_Action_UseSmartCast(self)
             end
         elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and (button=="LeftButton" or button=="MiddleButton" or button=="RightButton") then
-            if button=="LeftButton" then
+            if button=="MiddleButton" then
                 HealBot_Action_Toggle_Enabled(self)
-            elseif button=="RightButton" then
-                HealBot_Panel_ToggelHealTarget(self.unit)
-            elseif not UnitIsUnit(self.unit, "player") and button=="MiddleButton" and HealBot_UnitGUID(self.unit) then
-                HealBot_Panel_AddBlackList(HealBot_UnitGUID(self.unit))
             end
         elseif not HealBot_Data["UILOCK"] then
             if UnitAffectingCombat(self.unit)==1 then 

@@ -56,16 +56,12 @@ local function HealBot_Tooltip_SpellPattern(button, click)
     local sPattern=nil
     if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
         if click=="Left" then
-            sPattern=HEALBOT_TOGGLE_ENABLED
+            sPattern=HEALBOT_MENU
         elseif click=="Right" then
-            if HealBot_Panel_RetMyHealTarget(button.unit) then
-                sPattern=HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_MYTARGET
-            else
-                sPattern=HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET
-            end
+            sPattern=HEALBOT_HBMENU
             --HealBot_Panel_ToggelHealTarget(self.unit)
-        elseif not UnitIsUnit(button.unit, "player") and click=="Middle" then
-            sPattern=HEALBOT_WORDS_ADDTO.." "..HEALBOT_PANEL_BLACKLIST
+        elseif click=="Middle" then
+            sPattern=HEALBOT_TOGGLE_ENABLED
         end
     else    
         local hbCombos = HealBot_Config_Spells.EnabledKeyCombo

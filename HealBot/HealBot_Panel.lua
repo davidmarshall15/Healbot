@@ -1288,8 +1288,12 @@ local function HealBot_Panel_sortOrder(unit, hbGUID, barOrder, mainSort)
             sortValue = "ÿÿÿÿ"..unit
         end
     elseif barOrder==2 then
-        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
-            sortValue = "!";
+        if unit == "player" then
+            if not mainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+                sortValue = "!";
+            else
+                sortValue = HealBot_Panel_classEN(unit)
+            end
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 sortValue = "ÿÿÿþ"..HealBot_Panel_classEN(unit)

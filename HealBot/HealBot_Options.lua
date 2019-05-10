@@ -1055,7 +1055,9 @@ function HealBot_Options_NewSkin_OnTextChanged(self)
 end
 
 function HealBot_Options_NewSkinb_OnClick(self)
-    HealBot_Options_setNewSkin(HealBot_Options_NewSkin:GetText())
+    local skinName = HealBot_Options_NewSkin:GetText()
+    if tonumber(skinName) then skinName='#'..skinName end
+    HealBot_Options_setNewSkin(skinName)
 end
 
 function HealBot_Options_setNewSkin(newSkinName)
@@ -6166,8 +6168,8 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh)
         end
         HealBot_useCrashProtection()
         if not ddRefresh then
-            DoneInitTab[306]=nil
-            HealBot_Options_InitSub(306)
+            DoneInitTab[305]=nil
+            HealBot_Options_InitSub(305)
         end
         HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)
@@ -6539,6 +6541,7 @@ function HealBot_Options_ShareSkinLoad()
             HealBot_Options_ImportFail("Skin", "Header is incorrect - expecting Skin")
         else
             hbOptGetSkinName=ssTab[2]
+            if tonumber(hbOptGetSkinName) then hbOptGetSkinName='#'..hbOptGetSkinName end
             for e=3,#ssTab do 
                 local c,m = string.split("!", ssTab[e])
                 HealBot_Options_BuildSkinRecMsg(hbOptGetSkinName, c, 0, m)
@@ -6583,7 +6586,7 @@ function HealBot_Options_ShareSkinComplete()
     HealBot_Options_NewSkin:SetText("")
     hbWarnSharedMedia=false
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC..hbOptGetSkinFrom)
-    HealBot_SetResetFlag("HARD")
+    HealBot_SetResetFlag("SOFT")
     --HealBot_nextRecalcParty(0)
 end
 
@@ -7918,7 +7921,7 @@ function HealBot_Options_NewHoTBuffBtn_OnClick(NewHoTBuffTxt)
         end
     end
     if unique then
-        HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][useId]=4
+        HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][useId]=2
     end
     HealBot_Options_NewBuffHoT:SetText("")
     HealBot_Options_StorePrev["HoTname"]=HealBot_Options_CDebuffTextID(useId)
@@ -11496,7 +11499,7 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_Class_HoTctlAction.initialize = HealBot_Options_Class_HoTctlAction_DropDown
             local x=HealBot_Globals.WatchHoT[HealBot_Options_StorePrev["FilterHoTctlNameTrim"]][sId] or 1
             UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlAction, HealBot_Options_Class_HoTctlAction_List[x])
-            x=HealBot_Globals.HealBot_Custom_Buffs[sId] or HealBot_Options_StorePrev["customBuffPriority"]
+            x=HealBot_Globals.HealBot_Custom_Buffs[sId] or 10
             HealBot_Options_BuffPriorityC.initialize = HealBot_Options_BuffPriorityC_DropDown
             UIDropDownMenu_SetSelectedID(HealBot_Options_BuffPriorityC, x)
             UIDropDownMenu_SetText(HealBot_Options_BuffPriorityC, x)

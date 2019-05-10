@@ -538,7 +538,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_SUBSORTPLAYER1             = "Player will be set to first in SubSort"
     HEALBOT_CHAT_SUBSORTPLAYER2             = "Player will be sorted normally in SubSort"
     HEALBOT_OPTIONS_SHOWREADYCHECK          = "Show Ready Check";
-    HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Self First"
+    HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
     HEALBOT_OPTION_AGGROPCTBAR              = "Move bar"
     HEALBOT_OPTION_AGGROPCTTXT              = "Show text"
     HEALBOT_OPTION_AGGROPCTTRACK            = "Track percentage" 
