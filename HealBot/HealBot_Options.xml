@@ -1184,6 +1184,34 @@
                       <OnClick>HealBot_Options_ShowPanel(self, 9, 93); HealBot_Options_ShowInOutPanel("HealBot_Options_InOut_BuffsFrame", 93)</OnClick>
                     </Scripts>
                   </Button>
+                  <Button name="HealBot_Contents_Button94">
+                    <Size>
+                      <AbsDimension x="168" y="20"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button93"  relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Contents_ButtonT94Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_INOUT_SPELLS">
+                          <Anchors>
+                            <Anchor point="LEFT" relativeTo="HealBot_Contents_Button94" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="28" y="1"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowPanel(self, 9, 94); HealBot_Options_ShowInOutPanel("HealBot_Options_InOut_SpellsFrame", 94)</OnClick>
+                    </Scripts>
+                  </Button>
         </Frames>
       </Frame>
       <Frame name="HealBot_Options_MainFrame">
@@ -7239,12 +7267,12 @@
 
                       <Slider name="HealBot_Options_FontName" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="375" y="16" />
+                          <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="80" y="-175" />
+                              <AbsDimension x="10" y="-175" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7252,27 +7280,12 @@
                           <OnValueChanged>HealBot_Options_FontName_OnValueChanged(self)</OnValueChanged>
                         </Scripts>
                       </Slider>
-                      <Slider name="HealBot_Options_TextAlign" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="194" y="16" />
-                        </Size>
-                        <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
-                            <Offset>
-                              <AbsDimension x="55" y="-215" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnValueChanged>HealBot_Options_TextAlign_OnValueChanged(self)</OnValueChanged>
-                        </Scripts>
-                      </Slider>
                       <Slider name="HealBot_Options_FontHeight" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="194" y="16" />
+                          <AbsDimension x="170" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TextAlign" relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontName" relativePoint="TOPRIGHT">
                             <Offset>
                               <AbsDimension x="28" y="0" />
                             </Offset>
@@ -7282,11 +7295,41 @@
                           <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(self)</OnValueChanged>
                         </Scripts>
                       </Slider>
+                      <Slider name="HealBot_Options_FontOffset" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="320" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowHealthOnBar" relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="10" y="-225" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_FontOffset_OnValueChanged(self)</OnValueChanged>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_TextAlign" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="170" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontOffset" relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="28" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_TextAlign_OnValueChanged(self)</OnValueChanged>
+                        </Scripts>
+                      </Slider>
                       <Frame name="HealBot_Options_FontOutline" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TextAlign" relativePoint="TOPLEFT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FontOffset" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="128" y="-45"/>
+                              <AbsDimension x="220" y="-44"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13116,6 +13159,140 @@
                         <Scripts>
                             <OnLoad>
                                 HealBot_Options_ShareBuffsExternalScroll:SetScrollChild(HealBot_Options_ShareBuffsExternalEditBox)
+                                self:SetWidth(500)
+                                self:EnableMouse(true)
+                            </OnLoad>
+                        </Scripts>
+                        <FontString inherits="GameFontNormalSmall" />
+                    </EditBox>
+                </Frames>
+              </Frame>
+              
+              <Frame name="HealBot_Options_InOut_SpellsFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="670"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="0"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="0" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name="HealBot_Options_ShareSpellsStatusf" inherits="GameFontNormalSmall">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="20"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <Button name="HealBot_Options_ShareSpellsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONEXPORT">
+                    <Size>
+                      <AbsDimension x="170" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="105" y="-60" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShareSpellsb_OnClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Frame name="HealBot_Options_ImportMethodSpells" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-80" y="-25" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Options_ImportMethodSpellst" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONIMPORTMETHOD">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="12"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                    </Scripts>
+                  </Frame>
+                  <Button name="HealBot_Options_LoadSpellsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
+                    <Size>
+                      <AbsDimension x="170" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-105" y="-60" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_LoadSpellsb_OnClick(self)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Frame name="HealBot_Options_ShareSpellsExternalEditBoxFrame">
+                    <Size>
+                      <AbsDimension y="532"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="25" y="-100"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-25" y="-100"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Backdrop edgeFile="Interface/DialogFrame/UI-DialogBox-Border" tile="true">
+                      <EdgeSize>
+                        <AbsValue val="22"/>
+                      </EdgeSize>
+                      <TileSize>
+                        <AbsValue val="26"/>
+                      </TileSize>
+                      <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="5" bottom="5"/>
+                      </BackgroundInsets>
+                    </Backdrop>
+                    <Frames>
+                      <ScrollFrame name="HealBot_Options_ShareSpellsExternalScroll" inherits="HealBotUIPanelScrollFrameTemplate">
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="10" y="-8"/>
+                            <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-30" y="8"/>
+                        </Anchors>
+                      </ScrollFrame>
+                    </Frames>
+                  </Frame>
+                    <EditBox name="HealBot_Options_ShareSpellsExternalEditBox" multiLine="true" letters="20000" parent="HealBot_Options_ShareSpellsExternalScroll">
+                        <Scripts>
+                            <OnLoad>
+                                HealBot_Options_ShareSpellsExternalScroll:SetScrollChild(HealBot_Options_ShareSpellsExternalEditBox)
                                 self:SetWidth(500)
                                 self:EnableMouse(true)
                             </OnLoad>

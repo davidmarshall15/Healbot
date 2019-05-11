@@ -1690,6 +1690,19 @@ function HealBot_Options_FontName_OnValueChanged(self)
     end
 end
 
+function HealBot_Options_FontOffset_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    else
+        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"] = val;
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_setOptions_Timer(150)
+        HealBot_setOptions_Timer(160)
+    end
+end
+
 function HealBot_Options_FontHeight_OnValueChanged(self)
     local val=floor(self:GetValue()+0.5)
     if val~=self:GetValue() then
@@ -6257,6 +6270,21 @@ function HealBot_Options_InOutSkin_DropDown()
     end
 end
 
+HealBot_Options_StorePrev["InMethodSpell"]=2
+function HealBot_Options_ImportMethodSpells_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Import_Methods_List), 1 do
+        info.text = HealBot_Import_Methods_List[j];
+        info.func = function(self)
+                        HealBot_Options_StorePrev["InMethodSpell"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_ImportMethodSpells,HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodSpell"]])
+                    end
+        info.checked = false;
+        if HealBot_Options_StorePrev["InMethodSpell"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
 HealBot_Options_StorePrev["InMethodBuff"]=2
 function HealBot_Options_ImportMethodBuffs_DropDown()
     local info = UIDropDownMenu_CreateInfo()
@@ -6297,6 +6325,188 @@ end
 
 local hbWarnSharedMedia=false
 
+local hbInOut_SpellCmds={[HEALBOT_DISABLED_TARGET]=1,
+                         [HEALBOT_ASSIST]=2,
+                         [HEALBOT_FOCUS]=3,
+                         [HEALBOT_MENU]=4,
+                         [HEALBOT_HBMENU]=5,
+                         [HEALBOT_STOP]=6,
+                         [HEALBOT_TELL.." ..."]=7,}
+local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl"}
+
+function HealBot_Options_ShareSpellsb_OnClick()
+    local ssStr="Spells\n"
+    local sName, sTar, sTrin1, sTrin2, AvoidBC, HB_button, HB_combo_prefix, sType, sId=nil,nil,nil,nil,nil,nil,nil,nil,nil
+    for z=1,3 do
+        for x=1,15 do
+            if x==1 then 
+                HB_button="Left";
+            elseif x==2 then 
+                HB_button="Middle";
+            elseif x==3 then 
+                HB_button="Right";
+            elseif x==4 then 
+                HB_button="Button4";
+            elseif x==5 then 
+                HB_button="Button5";
+            elseif x==6 then 
+                HB_button="Button6";
+            elseif x==7 then 
+                HB_button="Button7";
+            elseif x==8 then 
+                HB_button="Button8";
+            elseif x==9 then 
+                HB_button="Button9";
+            elseif x==10 then 
+                HB_button="Button10";
+            elseif x==11 then
+                HB_button="Button11";
+            elseif x==12 then
+                HB_button="Button12";
+            elseif x==13 then
+                HB_button="Button13";
+            elseif x==14 then
+                HB_button="Button14";
+            elseif x==15 then
+                HB_button="Button15";
+            end
+            for y=1, getn(HealBot_Keys_List), 1 do
+                HB_combo_prefix = HealBot_Keys_List[y]..HB_button..HealBot_Config.CurrentSpec;
+                if z==1 then
+                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+                elseif z==2 then
+                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+                else
+                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+                end
+                if sName and strlen(sName)>1 then
+                    if HealBot_Spell_Names[sName] then
+                        sType=1
+                        sId=HealBot_Spell_Names[sName]
+                    elseif hbInOut_SpellCmds[sName] then
+                        sType=2
+                        sId=hbInOut_SpellCmds[sName]
+                    else
+                        sType=3
+                        sId=sName
+                    end
+                    ssStr=ssStr..sName.."~"..z..","..x..","..y.."~"..sType..","..sId..","
+                    if sTar then
+                        ssStr=ssStr.."true,"
+                    else
+                        ssStr=ssStr.."false,"
+                    end
+                    if sTrin1 then
+                        ssStr=ssStr.."true,"
+                    else
+                        ssStr=ssStr.."false,"
+                    end
+                    if sTrin2 then
+                        ssStr=ssStr.."true,"
+                    else
+                        ssStr=ssStr.."false,"
+                    end
+                    if AvoidBC then
+                        ssStr=ssStr.."true,"
+                    else
+                        ssStr=ssStr.."false,"
+                    end
+                    ssStr=ssStr.."\n"
+                end
+            end
+        end
+    end
+    HealBot_Options_ShareSpellsExternalEditBox:SetText(ssStr)
+end
+
+function HealBot_SpellAutoButton_Update(autoType, autoMod, ActionBarsCombo, Buttons_Button, isTrue)
+    local combo=nil
+    if ActionBarsCombo==1 then
+        if autoType=="Target" then combo = HealBot_Config_Spells.EnabledSpellTarget;
+        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnabledSpellTrinket1;
+        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnabledSpellTrinket2; 
+        else combo = HealBot_Config_Spells.EnabledAvoidBlueCursor; end
+    elseif ActionBarsCombo==2 then
+        if autoType=="Target" then combo = HealBot_Config_Spells.DisabledSpellTarget;
+        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.DisabledSpellTrinket1;
+        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.DisabledSpellTrinket2;
+        else combo = HealBot_Config_Spells.DisabledAvoidBlueCursor; end
+    else
+        if autoType=="Target" then combo = HealBot_Config_Spells.EnemySpellTarget;
+        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnemySpellTrinket1;
+        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnemySpellTrinket2;
+        else combo = HealBot_Config_Spells.EnemyAvoidBlueCursor; end
+    end
+    local button = HealBot_Options_ComboClass_Button(Buttons_Button)
+    if isTrue=="true" then
+        combo[autoMod..button..HealBot_Config.CurrentSpec] = true
+    else
+        combo[autoMod..button..HealBot_Config.CurrentSpec] = false
+    end
+end
+
+function HealBot_Options_LoadSpellsb_OnClick()
+    local sStr=HealBot_Options_ShareSpellsExternalEditBox:GetText()
+    local ssTab={}
+    local i=0
+    for l in string.gmatch(sStr, "[^\n]+") do
+        local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
+        if string.len(t)>1 then
+            i=i+1
+            ssTab[i]=t
+        end
+    end
+    if i>0 then
+        if ssTab[1]~="Spells" then
+            HealBot_Options_ImportFail("Spells", "Header is incorrect - expecting Spells")
+        else
+            if HealBot_Options_StorePrev["InMethodSpell"]==1 then
+                HealBot_Config_Spells.EnabledKeyCombo = {}
+                HealBot_Config_Spells.DisabledKeyCombo = {}
+                HealBot_Config_Spells.EnemyKeyCombo = {}
+            end
+            -- Flash Heal~1,1,1~1,2061,false,true,true,false,
+            for e=2,#ssTab do 
+                local _,c,d = string.split("~", ssTab[e])
+                local ActionBarsCombo,Buttons_Button,KeyPress=string.split(",", c)
+                local sType,sId,sTar,sTrin1,sTrin2,AvoidBC=string.split(",", d)
+                sId=tonumber(sId) or sId
+                ActionBarsCombo=tonumber(ActionBarsCombo)
+                Buttons_Button=tonumber(Buttons_Button)
+                KeyPress=tonumber(KeyPress)
+                sType=tonumber(sType)
+                local sName=GetSpellInfo(sId) or sId
+                local combo=nil
+                if ActionBarsCombo==1 then
+                    combo = HealBot_Config_Spells.EnabledKeyCombo;
+                elseif ActionBarsCombo==2 then
+                    combo = HealBot_Config_Spells.DisabledKeyCombo;
+                else
+                    combo=HealBot_Config_Spells.EnemyKeyCombo;
+                end
+                local button = HealBot_Options_ComboClass_Button(Buttons_Button)
+                local cText=combo[HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec]
+                if not cText or (cText and strlen(cText)<2) or HealBot_Options_StorePrev["InMethodSpell"]<3 then
+                    combo[HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec]=sName
+                    HealBot_Options_KnownSpellCheck(sName)
+                    HealBot_SpellAutoButton_Update("Target", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTar)
+                    HealBot_SpellAutoButton_Update("Trinket1", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin1)
+                    HealBot_SpellAutoButton_Update("Trinket2", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin2)
+                    HealBot_SpellAutoButton_Update("AvoidBC", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, AvoidBC)
+                end
+            end
+            if HealBot_Config.Profile==2 then 
+                HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]]=nil 
+                HealBot_Options_hbProfile_setClass()
+            end
+            HealBot_Options_ResetDoInittab(2)
+            HealBot_Options_Init(2)
+            HealBot_Options_ComboClass_Text()
+            HealBot_setOptions_Timer(400)
+        end
+    end
+end
+
 function HealBot_Options_ShareBuffsb_OnClick()
     local ssStr="CustomBuffs\n"
     local hbClassHoTwatch=HealBot_Globals.WatchHoT
@@ -6330,10 +6540,10 @@ function HealBot_Options_ShareBuffsb_OnClick()
 end
 
 function HealBot_Options_LoadBuffsb_OnClick()
-    local scdStr=HealBot_Options_ShareBuffsExternalEditBox:GetText()
+    local scbStr=HealBot_Options_ShareBuffsExternalEditBox:GetText()
     local ssTab={}
     local i=0
-    for l in string.gmatch(scdStr, "[^\n]+") do
+    for l in string.gmatch(scbStr, "[^\n]+") do
         local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
         if string.len(t)>1 then
             i=i+1
@@ -6341,22 +6551,22 @@ function HealBot_Options_LoadBuffsb_OnClick()
         end
     end
     if i>0 then
-        if HealBot_Options_StorePrev["InMethodBuff"]==1 then
-            HealBot_Options_StorePrev["custombufftextpage"]=1
-            HealBot_Globals.WatchHoT={ ["DRUI"]={}, ["HUNT"]={}, ["MAGE"]={}, ["PALA"]={}, ["PRIE"]={}, ["ROGU"]={}, ["SHAM"]={},
-                                       ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["ALL"]={} }
-            HealBot_Globals.HealBot_Custom_Buffs={}
-            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
-            local r=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["R"]
-            local g=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["G"]
-            local b=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["B"]
-            HealBot_Globals.CustomBuffBarColour={ [HEALBOT_CUSTOM_en.."Buff"] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
-            HealBot_Globals.IgnoreCustomBuff={}
-            HealBot_Globals.CatchAltBuffIDs={}
-        end
         if ssTab[1]~="CustomBuffs" then
             HealBot_Options_ImportFail("Buffs", "Header is incorrect - expecting CustomBuffs")
         else
+            if HealBot_Options_StorePrev["InMethodBuff"]==1 then
+                HealBot_Options_StorePrev["custombufftextpage"]=1
+                HealBot_Globals.WatchHoT={ ["DRUI"]={}, ["HUNT"]={}, ["MAGE"]={}, ["PALA"]={}, ["PRIE"]={}, ["ROGU"]={}, ["SHAM"]={},
+                                           ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["ALL"]={} }
+                HealBot_Globals.HealBot_Custom_Buffs={}
+                HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
+                local r=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["R"]
+                local g=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["G"]
+                local b=HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_en.."Buff"]["B"]
+                HealBot_Globals.CustomBuffBarColour={ [HEALBOT_CUSTOM_en.."Buff"] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
+                HealBot_Globals.IgnoreCustomBuff={}
+                HealBot_Globals.CatchAltBuffIDs={}
+            end
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
                 local bId,prio,filter,show,r,g,b,i1,i2,i3,i4=string.split(",", d)
@@ -6399,10 +6609,10 @@ function HealBot_Options_LoadBuffsb_OnClick()
                     end
                 end
             end
+            HealBot_Options_InitSub(502)
+            HealBot_Options_setCustomBuffList()
         end
     end
-    HealBot_Options_InitSub(502)
-    HealBot_Options_setCustomBuffList()
 end
 
 function HealBot_Options_ShareCDebuffb_OnClick()
@@ -6452,24 +6662,24 @@ function HealBot_Options_LoadCDebuffb_OnClick()
         end
     end
     if i>0 then
-        if HealBot_Options_StorePrev["InMethodCDbuff"]==1 then
-            HealBot_Options_StorePrev["customdebufftextpage"]=1
-            HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
-            HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
-            HealBot_Globals.FilterCustomDebuff={}
-            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol={}
-            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=true
-            local r=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["R"]
-            local g=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["G"]
-            local b=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["B"]
-            HealBot_Globals.CDCBarColour={ [HEALBOT_CUSTOM_en.."15"] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
-            HealBot_Globals.HealBot_Custom_Debuffs_RevDur={}
-            HealBot_Globals.IgnoreCustomDebuff={}
-            HealBot_Globals.CatchAltDebuffIDs={}
-        end
         if ssTab[1]~="CustomDebuffs" then
             HealBot_Options_ImportFail("Debuffs", "Header is incorrect - expecting CustomDebuffs")
         else
+            if HealBot_Options_StorePrev["InMethodCDbuff"]==1 then
+                HealBot_Options_StorePrev["customdebufftextpage"]=1
+                HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
+                HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
+                HealBot_Globals.FilterCustomDebuff={}
+                HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol={}
+                HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=true
+                local r=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["R"]
+                local g=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["G"]
+                local b=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["B"]
+                HealBot_Globals.CDCBarColour={ [HEALBOT_CUSTOM_en.."15"] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
+                HealBot_Globals.HealBot_Custom_Debuffs_RevDur={}
+                HealBot_Globals.IgnoreCustomDebuff={}
+                HealBot_Globals.CatchAltDebuffIDs={}
+            end
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
                 local dId,prio,filter,show,r,g,b,revdur,i1,i2,i3,i4=string.split(",", d)
@@ -6517,12 +6727,12 @@ function HealBot_Options_LoadCDebuffb_OnClick()
                     end
                 end
             end
+            HealBot_Options_InitSub(402)
+            HealBot_Options_InitSub(403)
+            HealBot_Options_InitSub(404)
+            HealBot_Options_setCustomDebuffList()
         end
     end
-    HealBot_Options_InitSub(402)
-    HealBot_Options_InitSub(403)
-    HealBot_Options_InitSub(404)
-    HealBot_Options_setCustomDebuffList()
 end
 
 function HealBot_Options_ShareSkinLoad()
@@ -9416,33 +9626,15 @@ function HealBot_Options_FrameAlias_retUpdates()
 end
 
 function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
-    local combo=nil
-    if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
-        if autoType=="Target" then combo = HealBot_Config_Spells.EnabledSpellTarget;
-        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnabledSpellTrinket1;
-        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnabledSpellTrinket2; 
-        else combo = HealBot_Config_Spells.EnabledAvoidBlueCursor; end
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        if autoType=="Target" then combo = HealBot_Config_Spells.DisabledSpellTarget;
-        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.DisabledSpellTrinket1;
-        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.DisabledSpellTrinket2;
-        else combo = HealBot_Config_Spells.DisabledAvoidBlueCursor; end
-    else
-        if autoType=="Target" then combo = HealBot_Config_Spells.EnemySpellTarget;
-        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnemySpellTrinket1;
-        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnemySpellTrinket2;
-        else combo = HealBot_Config_Spells.EnemyAvoidBlueCursor; end
-    end
-    local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
     if self:GetChecked() then
-        combo[autoMod..button..HealBot_Config.CurrentSpec] = true
+        HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "true")
     else
-        combo[autoMod..button..HealBot_Config.CurrentSpec] = false
+        HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "false")
     end
     HealBot_setOptions_Timer(400)
 end
 
-local function HealBot_Options_KnownSpellCheck(sName)
+function HealBot_Options_KnownSpellCheck(sName)
     if HealBot_Spell_Names[sName] or GetMacroIndexByName(sName) or IsUsableItem(sName) then
         HealBot_setOptions_Timer(400)
     end
@@ -9805,6 +9997,8 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:SetTextColor(1,1,0,0.9)
     g=_G["HealBot_Contents_ButtonT93Txt"]
     g:SetTextColor(1,1,0,0.9)
+    g=_G["HealBot_Contents_ButtonT94Txt"]
+    g:SetTextColor(1,1,0,0.9)
     g=_G["HealBot_SkinsAggroAlphaText"]
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_Options_Contents"]
@@ -10091,6 +10285,8 @@ function HealBot_Options_Lang(region)
         g:SetText(HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF)
         g=_G["HealBot_Contents_ButtonT93Txt"] 
         g:SetText(HEALBOT_OPTIONS_CONTENT_INOUT_BUFF)
+        g=_G["HealBot_Contents_ButtonT94Txt"] 
+        g:SetText(HEALBOT_OPTIONS_CONTENT_INOUT_SPELLS)
         g=_G["HealBot_Options_CloseButton"] 
         g:SetText(HEALBOT_OPTIONS_CLOSE)
         g=_G["HealBot_Options_Defaults"] 
@@ -10769,6 +10965,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val_OnLoad(HealBot_Options_FontHeight,HEALBOT_OPTIONS_SKINFHEIGHT,7,18,1)
             HealBot_Options_FontHeight:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HEIGHT"])
             HealBot_Options_FontHeightText:SetText(HEALBOT_OPTIONS_SKINFHEIGHT..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HEIGHT"])
+            HealBot_Options_val_OnLoad(HealBot_Options_FontOffset,HEALBOT_OPTIONS_TEXTOFFSET,-20,20,1)
+            HealBot_Options_FontOffset:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"])
+            HealBot_Options_FontOffsetText:SetText(HEALBOT_OPTIONS_TEXTOFFSET..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"])
             HealBot_Options_ShowClassOnBarType_OnClick(nil,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSTYPE"] or 2)
             HealBot_Options_ShowRoleOnBar:SetChecked(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWROLE"])
             HealBot_Options_SetText(HealBot_Options_ShowRoleOnBar,HEALBOT_SHOW_ROLE)
@@ -11632,6 +11831,9 @@ function HealBot_Options_InitSub2(subNo)
             UIDropDownMenu_SetText(HealBot_Options_ImportMethodCDebuff, HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodCDbuff"]])
             HealBot_Options_ImportMethodBuffs.initialize = HealBot_Options_ImportMethodBuffs_DropDown
             UIDropDownMenu_SetText(HealBot_Options_ImportMethodBuffs, HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodBuff"]])
+            HealBot_Options_ImportMethodSpells.initialize = HealBot_Options_ImportMethodSpells_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_ImportMethodSpells, HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodSpell"]])
+            
         end
     end
 end
@@ -11990,6 +12192,9 @@ function HealBot_Options_ShowInOutPanel(frameName, hbFrameID)
     elseif frameName=="HealBot_Options_InOut_BuffsFrame" then
         HealBot_Options_ShareBuffsStatusf:SetText(HEALBOT_INOUT_STATUS_BUFFINIT)
         HealBot_Options_ShareBuffsStatusf:SetTextColor(1,1,1,1)
+    elseif frameName=="HealBot_Options_InOut_SpellsFrame" then
+        HealBot_Options_ShareSpellsStatusf:SetText(HEALBOT_INOUT_STATUS_SPELLINIT)
+        HealBot_Options_ShareSpellsStatusf:SetTextColor(1,1,1,1)
     end
 end
 

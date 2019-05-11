@@ -377,7 +377,8 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
-    HEALBOT_OPTIONS_TEXTALIGNMENT           = "Text Alignment"
+    HEALBOT_OPTIONS_TEXTALIGNMENT           = "Horizontal Alignment"
+    HEALBOT_OPTIONS_TEXTOFFSET              = "Vertical Offset"
     HEALBOT_OPTIONS_MAXCHARS                = "Max Characters"
     HEALBOT_VEHICLE                         = "Vehicle"
     HEALBOT_WORDS_ERROR                     = "Error"
@@ -928,6 +929,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_INOUT_SKINS     = "    " .. HEALBOT_OPTIONS_TAB_SKIN
     HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
     HEALBOT_OPTIONS_CONTENT_INOUT_BUFF      = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS
+    HEALBOT_OPTIONS_CONTENT_INOUT_SPELLS    = "    " .. HEALBOT_OPTIONS_TAB_SPELLS
     
     HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
     HEALBOT_OPTIONS_BARALPHAABSORB          = "Absorb effects opacity";
@@ -959,6 +961,7 @@ function HealBot_Lang_enALL()
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_BUFFINIT           = "Custom Buffs can be shared at "..HEALBOT_ABOUT_URL
+    HEALBOT_INOUT_STATUS_SPELLINIT          = "Spells can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
     HEALBOT_ENEMY_INCLUDE_SELF              = "Include my target"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include tanks targets"

@@ -2016,11 +2016,11 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         bar6:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar6:GetStatusBarTexture():SetHorizTile(false)
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==1 then
-            bar.txt:SetPoint("LEFT",bar,"LEFT",4,0)
+            bar.txt:SetPoint("LEFT",bar,"LEFT",4,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==2 then
-            bar.txt:SetPoint("CENTER",bar,"CENTER")
+            bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
         else
-            bar.txt:SetPoint("RIGHT",bar,"RIGHT",-4,0)
+            bar.txt:SetPoint("RIGHT",bar,"RIGHT",-4,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
         end
         bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar2:GetStatusBarTexture():SetHorizTile(false)
@@ -2785,7 +2785,7 @@ local showHBmenu=nil
 local setDropdown=nil
 local partyNo=nil
 
-local function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     local hbCombos = HealBot_Config_Spells.EnabledKeyCombo
     local hbTarget = HealBot_Config_Spells.EnabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnabledSpellTrinket1
@@ -2797,7 +2797,7 @@ local function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
 end
 
-local function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
+function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     local hbCombos = HealBot_Config_Spells.DisabledKeyCombo
     local hbTarget = HealBot_Config_Spells.DisabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.DisabledSpellTrinket1
@@ -2809,7 +2809,7 @@ local function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
     return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
 end
 
-local function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
+function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
     local hbCombos = HealBot_Config_Spells.EnemyKeyCombo
     local hbTarget = HealBot_Config_Spells.EnemySpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnemySpellTrinket1
