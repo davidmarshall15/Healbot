@@ -9242,10 +9242,10 @@ function HealBot_PresetColorpick_OnClick(id)
     HealBot_UseColourPick(HealBot_Globals.PresetColours[id].R,HealBot_Globals.PresetColours[id].G,HealBot_Globals.PresetColours[id].B, HealBot_Globals.PresetColours[id].A)
 end
 
-local function HealBot_Returned_Colours(R, G, B, A)
+local function HealBot_Returned_Colours(R, G, B, A, preset)
   --R, G, B = ColorPickerFrame:GetColorRGB(); -- added by Diacono
   --A = OpacitySliderFrame:GetValue();
-    if A then
+    if A and not preset then
         A = ((0-A)+1);
         A=HealBot_Comm_round(A,2)
     end
@@ -9446,7 +9446,7 @@ function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
     end
     if not cancel then
         HealBot_Returned_Colours(HealBot_Globals.PresetColours[id].R, HealBot_Globals.PresetColours[id].G, 
-                                 HealBot_Globals.PresetColours[id].B, HealBot_Globals.PresetColours[id].A)
+                                 HealBot_Globals.PresetColours[id].B, HealBot_Globals.PresetColours[id].A, true)
     end
 end
 

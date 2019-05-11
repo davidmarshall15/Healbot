@@ -1015,16 +1015,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESET_COLOUR           = "Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_OPTIONS_PRESET                  = "Preset"
     
-    HEALBOT_THANKS_TO_TAB                   = "Thanks To"
-    HEALBOT_THANKS_PEOPLE = {  [01] = "ctshammy from the great land Down Under",
-                               [02] = "Mythagos from Draenor",
-                               [03] = "Diacono from Ursin",
-                               [04] = "Nerak from Cenarion Circle",
-                               [05] = "Slayybelle",
-                               [06] = "EpicMouse",
-                               [07] = "Hermis",
-                               [08] = "kubik",
-                            }
+    HEALBOT_WORD_SUPPORTERS                 = "Supporters"
+    HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",
+                                   [02] = "Nerak - Cenarion Circle",
+                                   [03] = "Slayybelle",
+                                   [04] = "EpicMouse",
+                                   [05] = "SUNET",
+                                   [06] = "Daskills",
+                                   [07] = "mUbh",
+                                }
                                
 end
 

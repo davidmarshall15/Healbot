@@ -2108,14 +2108,29 @@
               <Layers>
                 <Layer level="OVERLAY">
 
+                    <FontString name="HBIncHealsColHeader3" inherits="ChatFontNormal" text="HEALBOT_WORD_SUPPORTERS">
+                        <Anchors><Anchor point="TOP" relativePoint="TOP"><Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+                    </FontString>
+                    
+                    <FontString name="HBIncH1Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativePoint="TOP"><Offset><AbsDimension x="0" y="-28"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH2Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH1Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH3Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH2Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH4Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH3Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH5Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH4Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH6Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH5Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH7Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH6Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH8Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH7Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH9Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH8Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    <FontString name="HBIncH10Supporter" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOP" relativeTo="HBIncH9Supporter" relativePoint="BOTTOM"><Offset><AbsDimension x="0" y="-2"/></Offset></Anchor></Anchors></FontString>
+                    
+                    
                     <FontString name="HBIncHealsColHeader1" inherits="ChatFontNormal" text="HEALBOT_WORD_HEALER">
-                        <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT"><Offset><AbsDimension x="-95" y="-15"/></Offset></Anchor></Anchors>
+                        <Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT"><Offset><AbsDimension x="-95" y="-170"/></Offset></Anchor></Anchors>
                     </FontString>
                     <FontString name="HBIncHealsColHeader2" inherits="ChatFontNormal" text="HEALBOT_WORD_VERSION">
                         <Anchors><Anchor point="LEFT" relativeTo="HBIncHealsColHeader1" relativePoint="RIGHT"><Offset><AbsDimension x="32" y="0"/></Offset></Anchor></Anchors>
                     </FontString>
-
-                                        
+       
                     <FontString name="HBIncH1Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncHealsColHeader1" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH1Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncHealsColHeader2" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH2Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH1Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
@@ -2156,30 +2171,7 @@
                     <FontString name="HBIncH19Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH18Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH20Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH19Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH20Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH19Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString> 
-                    <FontString name="HBIncH21Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH20Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH21Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH20Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH22Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH21Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH22Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH21Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>  
-                    <FontString name="HBIncH23Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH22Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH23Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH22Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH24Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH23Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH24Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH23Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString> 
-                    <FontString name="HBIncH25Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH24Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH25Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH24Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH26Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH25Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH26Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH25Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString> 
-                    <FontString name="HBIncH27Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH26Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH27Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH26Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH28Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH27Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH28Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH27Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH29Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH28Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH29Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH28Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH30Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH29Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH30Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH29Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH31Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH30Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH31Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH30Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH32Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH31Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="HBIncH32Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH31Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
+
                 </Layer>
               </Layers>     
               </Frame>

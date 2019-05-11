@@ -349,6 +349,7 @@ function HealBot_TogglePanel(HBpanel)
     if ( HBpanel:IsVisible() ) then
         HideUIPanel(HBpanel);
     else
+        HealBot_Comms_Print_Supports()
         local fTop=HealBot_Comm_round(((HBpanel:GetTop()/GetScreenHeight())*100),2)
         local fLeft=HealBot_Comm_round(((HBpanel:GetLeft()/GetScreenWidth())*100),2)
         local fBottom=HealBot_Comm_round(((HBpanel:GetBottom()/GetScreenHeight())*100),2)

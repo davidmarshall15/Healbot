@@ -4,7 +4,10 @@ local HealBotAddonSummaryNoCommsMem={}
 local HealBotAddonSummaryNoCommsSort={}
 local sortorder={}
 local hbtmpver={}
+local HealBot_Comms_luVars={}
 local _
+
+HealBot_Comms_luVars["LastSupport"]=0
 
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
@@ -18,7 +21,7 @@ function HealBot_Comms_About()
 
     linenum=1
     for x,v in pairs(hbcommver) do
-        if not hbtmpver[x] and linenum<33 then
+        if not hbtmpver[x] and linenum<21 then
             HealBot_Comms_Print_IncHealsSum(x,v,0,linenum)
             linenum=linenum+1
         end
@@ -40,6 +43,32 @@ function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
     g:SetText(sender_id);
     g=_G["HBIncH"..linenum.."Ver"]
     g:SetText(addon_id);
+end
+
+function HealBot_Comms_Print_Supports()
+    if not HEALBOT_SUPPORTERS_PEOPLE[1] then return end
+    local b=0
+    local d={}
+    for x=1,10 do
+        local g=_G["HBIncH"..x.."Supporter"]
+        local s=HealBot_Comms_luVars["LastSupport"]+x
+        if not HEALBOT_SUPPORTERS_PEOPLE[s] then
+            b=b+1
+            s=b
+            if not HEALBOT_SUPPORTERS_PEOPLE[s] then s=1 end
+        end
+        if not d[HEALBOT_SUPPORTERS_PEOPLE[s]] then
+            g:SetText(HEALBOT_SUPPORTERS_PEOPLE[s]);
+            d[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
+        end
+    end
+    if HEALBOT_SUPPORTERS_PEOPLE[11] then
+        HealBot_Comms_luVars["LastSupport"]=HealBot_Comms_luVars["LastSupport"]+1
+        local s=HealBot_Comms_luVars["LastSupport"]+1
+        if not HEALBOT_SUPPORTERS_PEOPLE[s] then
+            HealBot_Comms_luVars["LastSupport"]=0
+        end
+    end
 end
 
 function HealBot_Comms_Zone()

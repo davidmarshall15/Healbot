@@ -2475,7 +2475,7 @@ function HealBot_Panel_RaidUnit(hbGUID,unitName)
                     rUnit="target"
                 end
             end
-            if rUnit then hbPanel_dataNames[unitName]["UNIT"]=rUnit end
+            if rUnit and hbPanel_dataNames[unitName] then hbPanel_dataNames[unitName]["UNIT"]=rUnit end
         end
     else
         if hbPanel_dataGUIDs[hbGUID] then rUnit=hbPanel_dataGUIDs[hbGUID]["UNIT"] end
