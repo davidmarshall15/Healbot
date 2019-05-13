@@ -2001,8 +2001,8 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*2))/(HealBot_luVars["qaFR"]/10), 4) -- At 50FPS with default settings = 0.16
-        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.032
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*2))/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.144
+        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/2), 4) -- At 50FPS with default settings = 0.016
         HealBot_Timers["HBaTh"]=0.01+(HealBot_Globals.RangeCheckFreq/20)
     else
         HealBot_Timers["HB1Th"]=1

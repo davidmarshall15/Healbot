@@ -5317,12 +5317,12 @@
                   </Frame>
                   <Slider name="HealBot_FrameScale" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="350" y="16" />
+                      <AbsDimension x="450" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PanelSounds" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="75" y="-75" />
+                          <AbsDimension x="25" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5334,7 +5334,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_FrameScale" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="115" y="-50" />
+                          <AbsDimension x="165" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5811,12 +5811,12 @@
                   </Button>
                   <Slider name="HealBot_Options_HeadTextureS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="345" y="16" />
+                      <AbsDimension x="500" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT">
+                      <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="120" y="-175" />
+                          <AbsDimension x="0" y="-175" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5826,7 +5826,7 @@
                   </Slider>
                   <Slider name="HealBot_Options_HeadHightS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="345" y="16" />
+                      <AbsDimension x="500" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HeadTextureS" relativePoint="BOTTOMLEFT">
@@ -5841,7 +5841,7 @@
                   </Slider>
                   <Slider name="HealBot_Options_HeadWidthS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="345" y="16" />
+                      <AbsDimension x="500" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HeadHightS" relativePoint="BOTTOMLEFT">
@@ -5856,7 +5856,7 @@
                   </Slider>
                   <Slider name="HealBot_Options_HeadFontNameS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="345" y="16" />
+                      <AbsDimension x="500" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HeadWidthS"  relativePoint="BOTTOMLEFT">
@@ -5871,7 +5871,7 @@
                   </Slider>
                   <Slider name="HealBot_Options_HeadFontHeightS" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="345" y="16" />
+                      <AbsDimension x="500" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HeadFontNameS" relativePoint="BOTTOMLEFT">
@@ -6073,12 +6073,12 @@
                       <Frames>
                           <Slider name="HealBot_Options_BarTextureS" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="16" />
+                              <AbsDimension x="520" y="16" />
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="34" y="-75" />
+                                  <AbsDimension x="34" y="-50" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6088,12 +6088,12 @@
                           </Slider>
                           <Slider name="HealBot_Options_BarNumColsS" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="16" />
+                              <AbsDimension x="520" y="16" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="34" y="0" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6104,9 +6104,9 @@
                           </Slider>
                           <CheckButton name="HealBot_Options_BarNumGroupPerCol" inherits="SendMailRadioButtonTemplate" id="7">
                             <Anchors>
-                              <Anchor point="BOTTOMLEFT" relativeTo="HealBot_Options_BarNumColsS" relativePoint="TOPLEFT">
+                              <Anchor point="TOP" relativeTo="HealBot_Options_BarNumColsS" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="45" y="14"/>
+                                  <AbsDimension x="-80" y="-2"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6116,12 +6116,12 @@
                           </CheckButton>
                           <Slider name="HealBot_Options_BarHeightS" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="16" />
+                              <AbsDimension x="520" y="16" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPLEFT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarNumColsS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-95" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6131,12 +6131,12 @@
                           </Slider>
                           <Slider name="HealBot_Options_BarWidthS" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="16" />
+                              <AbsDimension x="520" y="16" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="34" y="0" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6149,9 +6149,9 @@
                               <AbsDimension x="245" y="16" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPLEFT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarWidthS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-95" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6181,7 +6181,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-95" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6221,9 +6221,9 @@
                               <AbsDimension x="175" y="25"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="BOTTOMLEFT">
+                              <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="210" y="25"/>
+                                  <AbsDimension x="0" y="10"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -6325,7 +6325,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="120" y="-55" />
+                              <AbsDimension x="5" y="-55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6336,9 +6336,9 @@
                           <Layer level="OVERLAY">
                             <FontString name="HealBot_BarHealthColourt" inherits="GameFontNormal" text="HEALBOT_SKIN_HEALTHBARCOL_TEXT">
                               <Anchors>
-                                <Anchor point="RIGHT" relativeTo="HealBot_Options_BarHealthColour" relativePoint="LEFT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_BarHealthColour" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="10" y="2"/>
+                                    <AbsDimension x="0" y="0"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -6408,7 +6408,7 @@
                       </Button>
                       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="200" y="16" />
+                          <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomColour" relativePoint="TOPRIGHT">
@@ -6427,7 +6427,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthColour" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-95" />
+                              <AbsDimension x="0" y="-85" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6438,9 +6438,9 @@
                           <Layer level="OVERLAY">
                             <FontString name="HealBot_Options_BarHealthBackColourt" inherits="GameFontNormal" text="HEALBOT_SKIN_HEALTHBACKCOL_TEXT">
                               <Anchors>
-                                <Anchor point="RIGHT" relativeTo="HealBot_Options_BarHealthBackColour" relativePoint="LEFT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_BarHealthBackColour" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="10" y="2"/>
+                                    <AbsDimension x="0" y="0"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -6510,7 +6510,7 @@
                       </Button>
                       <Slider name="HealBot_Options_BarOutlineBackGround" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="60" y="16" />
+                          <AbsDimension x="90" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="TOPRIGHT">
@@ -6525,7 +6525,7 @@
                       </Slider>
                       <Slider name="HealBot_Options_BarAlphaBackGround" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="120" y="16" />
+                          <AbsDimension x="208" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarOutlineBackGround" relativePoint="TOPRIGHT">
@@ -6543,7 +6543,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColour" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-95" />
+                              <AbsDimension x="0" y="-85" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6554,9 +6554,9 @@
                           <Layer level="OVERLAY">
                             <FontString name="HealBot_BarIncHealColourt" inherits="GameFontNormal" text="HEALBOT_SKIN_INCHEALBARCOL_TEXT">
                               <Anchors>
-                                <Anchor point="RIGHT" relativeTo="HealBot_Options_BarIncHealColour" relativePoint="LEFT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_BarIncHealColour" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="10" y="2"/>
+                                    <AbsDimension x="0" y="0"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -6626,7 +6626,7 @@
                       </Button>
                       <Slider name="HealBot_Options_BarAlphaInHeal" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="200" y="16" />
+                          <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarIHCustomColour" relativePoint="TOPRIGHT">
@@ -6644,7 +6644,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarIncHealColour" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-95" />
+                              <AbsDimension x="0" y="-85" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6655,9 +6655,9 @@
                           <Layer level="OVERLAY">
                             <FontString name="HealBot_AbsorbColourt" inherits="GameFontNormal" text="HEALBOT_SKIN_ABSORBCOL_TEXT">
                               <Anchors>
-                                <Anchor point="RIGHT" relativeTo="HealBot_Options_AbsorbColour" relativePoint="LEFT">
+                                <Anchor point="BOTTOM" relativeTo="HealBot_Options_AbsorbColour" relativePoint="TOP">
                                   <Offset>
-                                    <AbsDimension x="10" y="2"/>
+                                    <AbsDimension x="0" y="0"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -6727,7 +6727,7 @@
                       </Button>
                       <Slider name="HealBot_Options_BarAlphaAbsorb" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="200" y="16" />
+                          <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="TOPRIGHT">
@@ -6743,12 +6743,12 @@
                       
                       <Slider name="HealBot_Options_BarAlphaEor" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="245" y="16" />
+                          <AbsDimension x="500" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AbsorbColour" relativePoint="TOPLEFT">
+                          <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="-75" y="-105" />
+                              <AbsDimension x="0" y="80" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6758,12 +6758,12 @@
                       </Slider>
                       <Slider name="HealBot_Options_BarAlphaDis" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="245" y="16" />
+                          <AbsDimension x="500" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarAlphaEor" relativePoint="TOPRIGHT">
+                          <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="34" y="0" />
+                              <AbsDimension x="0" y="25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -7516,7 +7516,7 @@
                     <Frames>
                       <Slider name="HealBot_Options_AlertLevelIC" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="425" y="18" />
+                          <AbsDimension x="500" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
@@ -7531,7 +7531,7 @@
                       </Slider>
                       <Slider name="HealBot_Options_AlertLevelOC" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="425" y="18" />
+                          <AbsDimension x="500" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
@@ -8310,12 +8310,12 @@
                       </Slider>
                       <Slider name="HealBot_Options_AggroFlashAlphaMin" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="245" y="16" />
+                          <AbsDimension x="270" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="40" y="-320" />
+                              <AbsDimension x="15" y="-320" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8325,7 +8325,7 @@
                       </Slider>
                       <Slider name="HealBot_Options_AggroFlashAlphaMax" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="245" y="16" />
+                          <AbsDimension x="270" y="16" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroFlashAlphaMin"  relativePoint="TOPRIGHT">
@@ -8598,7 +8598,7 @@
                       </CheckButton>
                       <Slider name="HealBot_BarButtonMaxBuffIcons" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="120" y="18" />
+                          <AbsDimension x="125" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarButtonShowHoT" relativePoint="BOTTOMLEFT">
@@ -8625,7 +8625,7 @@
                       </CheckButton>
                       <Slider name="HealBot_BarButtonMaxDeuffIcons" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="120" y="18" />
+                          <AbsDimension x="125" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffIcon" relativePoint="BOTTOMLEFT">
@@ -8870,12 +8870,12 @@
 
                       <Slider name="HealBot_BarButtonIconScale" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="340" y="18" />
+                          <AbsDimension x="425" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="138" y="-345"/>
+                              <AbsDimension x="90" y="-345"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9015,7 +9015,7 @@
                       </CheckButton>
                       <Slider name="HealBot_BarButtonIconTextDurationTime" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="325" y="18" />
+                          <AbsDimension x="425" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
@@ -9030,7 +9030,7 @@
                       </Slider>
                       <Slider name="HealBot_BarButtonIconTextDurationWarn" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="325" y="18" />
+                          <AbsDimension x="425" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
@@ -9045,7 +9045,7 @@
                       </Slider>
                       <Slider name="HealBot_BarButtonIconTextScale" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="325" y="18" />
+                          <AbsDimension x="425" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
@@ -10622,12 +10622,12 @@
                   </Frame>
                   <Slider name="HealBot_Options_WarningSound" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="310" y="16" />
+                      <AbsDimension x="410" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundDebuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="85" y="-70" />
+                          <AbsDimension x="35" y="-70" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -12226,12 +12226,12 @@
                   </Frame>
                   <Slider name="HealBot_Options_BuffWarningSound" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="310" y="16" />
+                      <AbsDimension x="410" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundBuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="85" y="-70" />
+                          <AbsDimension x="35" y="-70" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -12418,12 +12418,12 @@
                   </Button>
                   <Slider name="HealBot_Options_TTAlpha" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="340" y="16" />
+                      <AbsDimension x="540" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipPosSettings" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-24" y="-85" />
+                          <AbsDimension x="-120" y="-85" />
                         </Offset>
                       </Anchor>
                     </Anchors>
