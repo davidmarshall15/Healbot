@@ -1908,14 +1908,6 @@ end
 local HealBot_initSkin={[0]={},[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local function HealBot_DoAction_ResetSkin(barType,button,numcols)
     local frameScale = 1
-    local sa = 0.8
-    local sb=0.1
-    local sg=1
-    local sr=1
-    local br=0.1
-    local bg=0.7
-    local bb=0.1
-    local ba=0.4
     local b2Size = 0
     local abSize = 2
     local bheight= 20
@@ -1925,14 +1917,6 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
     local btextoutline=1
     if button and button.frame then 
         frameScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]
-        sr=Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["R"];
-        sg=Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["G"];
-        sb=Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["B"];
-        sa=Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["A"];
-        br=Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["R"];
-        bg=Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["G"];
-        bb=Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["B"];
-        ba=Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["A"];
         b2Size = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["POWERSIZE"]*frameScale)
         abSize = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["AGGROSIZE"]*frameScale)
         bheight= ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]*frameScale);
@@ -2499,27 +2483,55 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         --bar6:SetScale(barScale + 0.01);
         --bar6:SetScale(barScale);
     elseif barType=="header" then
-          --for x=1,15 do
         h=button
         bar = _G[h:GetName().."Bar"]
         hwidth = ceil(bWidth*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["WIDTH"])
-        hheight = ceil((bheight+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][h.frame]["POWERSIZE"])*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"])
         HealBot_Panel_SetHeadArrays(h.id)
-        h:SetHeight(hheight);
+        h:SetHeight(ceil(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"]*frameScale));
         h:SetWidth(hwidth);
         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
         bar:GetStatusBarTexture():SetHorizTile(false)
         bar:SetMinMaxValues(0,100);
         bar:SetValue(100);
-        bar:SetStatusBarColor(br,bg,bb,ba);
-        bar:SetHeight(hheight);
+        bar:SetStatusBarColor(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["R"],
+                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["G"],
+                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["B"],
+                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][button.frame]["A"]);
+        bar:SetHeight(ceil(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"]*frameScale));
         bar:SetWidth(hwidth);
         bar.txt = _G[bar:GetName().."_text"];
         bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
                                 Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"],
                                 HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
-        bar.txt:SetTextColor(sr,sg,sb,sa);
+        bar.txt:SetTextColor(Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["R"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["G"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["B"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["A"]);
+        bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
         h:Disable();
+    elseif barType=="frameheader" then
+        local g=_G["f"..numcols.."_HealBot_Action"]
+        if g:IsVisible() then
+            bar=_G["f"..numcols.."_HealBot_Action_HeaderBar"]
+            if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][numcols]["SHOW"] then
+                local fWidth=g:GetRight()-g:GetLeft()
+                --bar = _G[h:GetName().."Bar"]
+                hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["WIDTH"])
+                --HealBot_Panel_SetHeadArrays(h.id)
+                bar:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["HEIGHT"]*frameScale));
+                bar:SetWidth(hwidth);
+                bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["TEXTURE"]));
+                bar:GetStatusBarTexture():SetHorizTile(false)
+                bar:SetMinMaxValues(0,100);
+                bar:SetValue(100);
+                bar:SetStatusBarColor(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["R"],
+                                      Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["G"],
+                                      Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["B"],
+                                      Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][numcols]["A"]);
+            else
+                bar:SetStatusBarColor(0,0,0,0);
+            end
+        end
         --barScale = bar:GetScale();
         --bar:SetScale(barScale + 0.01);
         --bar:SetScale(barScale);
@@ -2588,6 +2600,7 @@ function HealBot_Action_ShowPanel(hbCurFrame)
         if not g:IsVisible() then 
             ShowUIPanel(g)
         end
+        HealBot_DoAction_ResetSkin("frameheader",nil,hbCurFrame)
     end
 end
 
@@ -4244,6 +4257,7 @@ function HealBot_Action_SetAlias(hbCurFrame)
     else
         g:SetText("")
     end
+    HealBot_DoAction_ResetSkin("frameheader",nil,hbCurFrame)
 end
 
 function HealBot_Action_SetAliasFontSize(hbCurFrame)
@@ -4258,7 +4272,7 @@ function HealBot_Action_SetAliasFontSize(hbCurFrame)
                                            HealBot_Font_Outline[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OUTLINE"]]);
         g:SetTextHeight(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"])
         g:ClearAllPoints();
-        g:SetPoint("TOP",0,Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OFFSET"]);
+        g:SetPoint("CENTER",0,Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OFFSET"]);
     end
 end
 

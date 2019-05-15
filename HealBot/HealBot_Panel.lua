@@ -422,7 +422,7 @@ end
 local function HealBot_Action_PositionButton(button,OsetX,OsetY,bWidth,bHeight,xHeader,hbCurFrame,bcSpace,brSpace)
     if xHeader then
         local thisX,thisY=nil,nil
-        local hheight = ceil((bHeight+HealBot_AddHeight["BAR2"][hbCurFrame])*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["HEIGHT"])
+        local hheight = ceil(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"])
         local hdr=HealBot_Header_Frames[xHeader]
         if not hdr then
             hdr=HealBot_Panel_CreateHeader(hbCurFrame)

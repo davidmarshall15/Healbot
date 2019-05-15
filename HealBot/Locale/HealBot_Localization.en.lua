@@ -67,6 +67,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SOFTRESET               = "ResetHB"
     HEALBOT_OPTIONS_TAB_GENERAL             = "General";
     HEALBOT_OPTIONS_TAB_SPELLS              = "Spells";
+    HEALBOT_OPTIONS_TAB_FRAMES              = "Frames";
     HEALBOT_OPTIONS_TAB_HEALING             = "Healing";
     HEALBOT_OPTIONS_TAB_SKIN                = "Skins";
     HEALBOT_OPTIONS_TAB_TIPS                = "Tips";
@@ -255,7 +256,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SETDEFAULTSMSG          = "Reset all options to default values";
     HEALBOT_OPTIONS_RIGHTBOPTIONS           = "Right click opens options";
 
-    HEALBOT_OPTIONS_HEADEROPTTEXT           = "Header options";
+    HEALBOT_OPTIONS_BARHEADEROPTTEXT        = "Bar Header options";
+    HEALBOT_OPTIONS_FRAMEHEADEROPTTEXT      = "Frame Header options";
     HEALBOT_OPTIONS_ICONOPTTEXT             = "Icon options";
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
@@ -930,16 +932,16 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
     HEALBOT_OPTIONS_CONTENT_INOUT_BUFF      = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS
     HEALBOT_OPTIONS_CONTENT_INOUT_SPELLS    = "    " .. HEALBOT_OPTIONS_TAB_SPELLS
+    HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. HEALBOT_OPTIONS_TAB_FRAMES
     
     HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
     HEALBOT_OPTIONS_BARALPHAABSORB          = "Absorb effects opacity";
     HEALBOT_OPTIONS_OUTLINE                 = "Outline"
     HEALBOT_OPTIONS_FRAME                   = "Frame"
-    HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. "Frames"
     HEALBOT_OPTIONS_FRAMESOPTTEXT           = "Frames options"
     HEALBOT_OPTIONS_SETTOOLTIP_POSITION     = "Set Tooltip Position"
     HEALBOT_OPTIONS_FRAME_TITLE             = "Frame Title"
-    HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Show Title"
+    HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Show Header"
     HEALBOT_OPTIONS_GROW_DIRECTION          = "Grow Direction"
     HEALBOT_OPTIONS_BARSORIENTATION         = "Bar Orientation"
     HEALBOT_OPTIONS_GROW_HORIZONTAL         = "Horizontal"
