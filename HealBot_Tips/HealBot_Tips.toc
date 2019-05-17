@@ -4,6 +4,6 @@
 ## Notes: HealBot Tooltips, only loads if Tooltips are used
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.1.5.12
+## Version: 8.1.5.13
 
 HealBot_Tooltip.lua
