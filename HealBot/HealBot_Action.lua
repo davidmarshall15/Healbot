@@ -3482,25 +3482,27 @@ function HealBot_Action_setPoint(hbCurFrame)
     if not hbCurFrame then return end
     if not InCombatLockdown() then  -- not HealBot_Data["UILOCK"]
         local gaf=_G["f"..hbCurFrame.."_HealBot_Action"]
-        gaf:ClearAllPoints();
-        local Y=GetScreenHeight()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"]/100)
-        local X=GetScreenWidth()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"]/100)
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==1 then
-            gaf:SetPoint("TOPLEFT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==2 then
-            gaf:SetPoint("BOTTOMLEFT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==3 then
-            gaf:SetPoint("TOPRIGHT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==4 then
-            gaf:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==5 then
-            gaf:SetPoint("TOP","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==6 then
-            gaf:SetPoint("LEFT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==7 then
-            gaf:SetPoint("RIGHT","UIParent","BOTTOMLEFT",X,Y);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==8 then
-            gaf:SetPoint("BOTTOM","UIParent","BOTTOMLEFT",X,Y);
+        if not HealBot_Action_StickyFrame(hbCurFrame,gaf) then
+            gaf:ClearAllPoints();
+            local Y=GetScreenHeight()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"]/100)
+            local X=GetScreenWidth()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"]/100)
+            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==1 then
+                gaf:SetPoint("TOPLEFT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==2 then
+                gaf:SetPoint("BOTTOMLEFT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==3 then
+                gaf:SetPoint("TOPRIGHT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==4 then
+                gaf:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==5 then
+                gaf:SetPoint("TOP","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==6 then
+                gaf:SetPoint("LEFT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==7 then
+                gaf:SetPoint("RIGHT","UIParent","BOTTOMLEFT",X,Y);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==8 then
+                gaf:SetPoint("BOTTOM","UIParent","BOTTOMLEFT",X,Y);
+            end
         end
     else
         HealBot_setOptions_Timer(2000+hbCurFrame)
@@ -4227,6 +4229,7 @@ end
 
 local HealBot_Action_Init={}
 function HealBot_Action_OnShow(self, hbCurFrame)
+    HealBot_Action_luVars["RecheckCoords"..hbCurFrame]=false
     if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OPENSOUND"] then
         PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
     end
@@ -4473,4 +4476,18 @@ function HealBot_MountsPets_DislikeMount(action)
             end
         end
     end
+end
+
+function HealBot_Action_StickyFrame(hbCurFrame,gaf)
+    local isSticky=false
+    if 1==1 then
+        if gaf:GetLeft() then
+            -- Magic will happen here
+        elseif not HealBot_Action_luVars["RecheckCoords"..hbCurFrame] then
+            HealBot_Action_luVars["RecheckCoords"..hbCurFrame]=true
+            HealBot_setOptions_Timer(2000+hbCurFrame) -- Came back with coords
+            HealBot_AddDebug("StickyFrame: no coords for "..hbCurFrame)
+        end
+    end
+    return isSticky
 end

@@ -251,6 +251,7 @@ function HealBot_Data_InitVars()
         Tooltip_ShowTarget = true,
         Tooltip_ShowMyBuffs = false,
         Tooltip_Recommend = false,
+        Tooltip_MouseWheel = false,
         UseGameTooltip=false,
         Tooltip_ShowHoT=false,
         Tooltip_ShowCD=false,

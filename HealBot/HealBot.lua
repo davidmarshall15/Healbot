@@ -91,6 +91,8 @@ HealBot_luVars["clearGUID"]=false
 HealBot_luVars["PrevTipTime"]=TimeNow
 HealBot_luVars["TipTimeInterval"]=0.098
 HealBot_luVars["lastBuffMsg"]="nil"
+HealBot_luVars["Timer2001"]=0
+HealBot_luVars["Timer2002"]=0
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -337,7 +339,7 @@ end
 
 function HealBot_AddDebug(HBmsg)
     if HBmsg and (HealBot_SpamCut[HBmsg] or 0)<GetTime() then
-        HealBot_SpamCut[HBmsg]=GetTime()+1        
+        HealBot_SpamCut[HBmsg]=GetTime()+2
         HBmsg="["..date("%H:%M", time()).."] DEBUG: "..HBmsg;
         table.insert(HealBot_DebugMsg,HBmsg)
     end
@@ -789,7 +791,7 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
     elseif (HBcmd=="zzz") then
-        HealBot_AddDebug("qaFR="..HealBot_luVars["qaFR"])
+        HealBot_AddChat("StickyFrame - 2001="..HealBot_luVars["Timer2001"].." - 2002="..HealBot_luVars["Timer2002"])
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1470,10 +1472,6 @@ local function HealBot_InitNewChar()
         HealBot_Config_Buffs.HealBotBuffColB = {[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1}
         HealBot_Update_SpellCombos()
         HealBot_Update_BuffsForSpec()
-        for i=1, 10 do
-            HealBot_Action_setPoint(i)
-            HealBot_Action_unlockFrame(i)
-        end
     end
   --HealBot_setCall("HealBot_InitNewChar")
 end
@@ -3407,11 +3405,44 @@ local function HealBot_Options_Update()
         HealBot_Options_Timer[990]=nil
         HealBot_AddChat("  "..HEALBOT_ADDON .. HEALBOT_LOADED);
         HealBot_AddChat(HEALBOT_HELP[1])
+    elseif HealBot_Options_Timer[2001] then
+        HealBot_Options_Timer[2001]=nil
+        HealBot_Action_setPoint(1)
+        HealBot_luVars["Timer2001"]=HealBot_luVars["Timer2001"]+1
+    elseif HealBot_Options_Timer[2002] then
+        HealBot_Options_Timer[2002]=nil
+        HealBot_Action_setPoint(2)
+        HealBot_luVars["Timer2002"]=HealBot_luVars["Timer2002"]+1
+    elseif HealBot_Options_Timer[2003] then
+        HealBot_Options_Timer[2003]=nil
+        HealBot_Action_setPoint(3)
+    elseif HealBot_Options_Timer[2004] then
+        HealBot_Options_Timer[2004]=nil
+        HealBot_Action_setPoint(4)
+    elseif HealBot_Options_Timer[2005] then
+        HealBot_Options_Timer[2005]=nil
+        HealBot_Action_setPoint(5)
+    elseif HealBot_Options_Timer[2006] then
+        HealBot_Options_Timer[2006]=nil
+        HealBot_Action_setPoint(6)
+    elseif HealBot_Options_Timer[2007] then
+        HealBot_Options_Timer[2007]=nil
+        HealBot_Action_setPoint(7)
+    elseif HealBot_Options_Timer[2008] then
+        HealBot_Options_Timer[2008]=nil
+        HealBot_Action_setPoint(8)
+    elseif HealBot_Options_Timer[2009] then
+        HealBot_Options_Timer[2009]=nil
+        HealBot_Action_setPoint(9)
+    elseif HealBot_Options_Timer[2010] then
+        HealBot_Options_Timer[2010]=nil
+        HealBot_Action_setPoint(10)
     elseif HealBot_Options_Timer[4910] then
         HealBot_Options_Timer[4910]=nil
         HealBot_Action_setLowManaTrig()
         HealBot_CheckLowMana()
     elseif HealBot_Options_Timer[4920] then
+        HealBot_Options_Timer[4920]=nil
         HealBot_Options_FrameAlias_AfterTextChange()
     elseif HealBot_Options_Timer[7950] then
         if GetTime()>HealBot_luVars["hbInsNameCheck"] then
@@ -4990,9 +5021,6 @@ local function HealBot_UnitUpdateHealth(button)
 end
 
 local function HealBot_UnitUpdateFriendly(button)
-    if button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit) then
-        HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
-    end
     if button.status.update then
         if button.update.reset then
             button.update.reset=false
@@ -5059,6 +5087,9 @@ local function HealBot_UnitUpdateCheckDebuff(button)
 end
 
 local function HealBot_UnitUpdateCheckBuff(button)
+    if button.status.current>0 or button.status.range<1 or not UnitInRange(button.unit) then
+        HealBot_UpdateUnitRange(button, button.spells.rangecheck, true)
+    end
     if button.aura.buff.check then
         button.aura.buff.check=false
         HealBot_doAuraBuff(button)
@@ -5114,6 +5145,7 @@ local function HealBot_UnitUpdateEnemy(button)
     end
 end
 
+HealBot_luVars["petSwitch"]=0
 local function HealBot_Update_Fast()
     HealBot_luVars["fastSwitch"]=HealBot_luVars["fastSwitch"]+1
     if HealBot_luVars["fastSwitch"]<2 then
@@ -5176,23 +5208,14 @@ local function HealBot_Update_Fast()
             end
         end
     else
+        HealBot_luVars["petSwitch"]=HealBot_luVars["petSwitch"]+1
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if not xButton.status.reserved then
                 if UnitExists(xUnit) then
-                    if xButton.aura.debuff.check then
-                        xButton.aura.debuff.check=false
-                        HealBot_doAuraDebuffUnit(xButton) 
-                    elseif xButton.aura.buff.check then
-                        xButton.aura.buff.check=false
-                        HealBot_doAuraBuff(xButton)
-                    elseif xButton.health.update then
-                        xButton.health.update=false
-                        HealBot_UnitUpdateHealth(xButton)
-                    elseif xButton.checks.timed < TimeNow then
-                        HealBot_Pet_CheckTime(xButton)
-                        HealBot_UnitUpdateFriendly(xButton)
+                    if not (HealBot_luVars["petSwitch"] == 1) then
+                        HealBot_UnitUpdateCheckDebuff(xButton)
                     else
-                        HealBot_Update_UnitIcons(xButton)
+                        HealBot_UnitUpdateCheckBuff(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -5210,6 +5233,7 @@ local function HealBot_Update_Fast()
                 xButton.status.update=true
             end
         end
+        if HealBot_luVars["petSwitch"]>1 then HealBot_luVars["petSwitch"]=0 end
         if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
             HealBot_luVars["PrevTipTime"]=TimeNow+HealBot_luVars["TipTimeInterval"]
             HealBot_Action_RefreshTooltip() 
@@ -6136,9 +6160,6 @@ function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
     HealBot_setOptions_Timer(190)
     HealBot_Register_Events()
     HealBot_setOptions_Timer(120)
-    for x=1,10 do
-        HealBot_Action_setPoint(x)
-    end
   --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
 end
 
@@ -6496,6 +6517,7 @@ function HealBot_UpdateUnitRange(button, spellName, doRefresh)
         button.health.updabsorbs=true
         button.health.update=true
         if doRefresh then
+            button.checks.timed=1
             button.update.state=true
             button.status.update=true
         end

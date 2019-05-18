@@ -1598,7 +1598,7 @@ local function HealBot_Panel_petHeals()
     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
-    if UnitExists(xUnit) and not UnitUsingVehicle(pUnit) then
+    if UnitExists(xUnit) and not UnitUsingVehicle(pUnit) and not HealBot_Panel_luVars["SelfPets"] then
         HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
     end
     if nraid>0 then
@@ -1905,6 +1905,7 @@ end
 local function HealBot_Panel_selfHeals()
     local k=i[hbCurrentFrame]
     local xUnit="player";
+    HealBot_Panel_luVars["SelfPets"]=false
     if not HealBot_TrackNames[HealBot_Data["PGUID"]] then
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
         local uName=HealBot_GetUnitName(xUnit)
@@ -1980,7 +1981,7 @@ local function HealBot_Panel_PetsChanged()
                 if HealBot_TrackUnit[xUnit] then
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
-                else
+                elseif xButton.unit~="pet" or not HealBot_Panel_luVars["SelfPets"] then
                     HealBot_Action_DeleteButton(xButton.id)
                 end
             end

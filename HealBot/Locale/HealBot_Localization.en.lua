@@ -118,6 +118,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARALPHADIS             = "Disabled opacity"
     HEALBOT_OPTIONS_SHOWHEADERS             = "Show headers"
     HEALBOT_OPTIONS_PRESETCOLOURBTN         = "*"
+    HEALBOT_OPTIONS_PRESET                  = "Preset"
 
     HEALBOT_OPTIONS_ITEMS                   = "Items";
 
@@ -200,6 +201,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Show tooltips";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
+    HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP   = "Show mouse wheel commands"
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Show target information";
     HEALBOT_OPTIONS_SHOWRECTOOLTIP          = "Show heal over time recommendation";
     HEALBOT_TOOLTIP_POSDEFAULT              = "Default location";
@@ -553,7 +555,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TOOLTIPSHOWHOT          = "Show active monitored HoT details"
     HEALBOT_WORDS_MIN                       = "min"
     HEALBOT_WORDS_MAX                       = "max"
-    HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on - This option increases CPU usage"
+    HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
     HEALBOT_CHAT_SELFPETSOFF                = "Self Pet switched off"
     HEALBOT_WORD_PRIORITY                   = "Priority"
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
@@ -625,6 +627,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
+    HEALBOT_OPTIONS_OWN_PET_WITH_SELF       = "Own pet: with self"
     HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use Game Tooltip"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
@@ -932,6 +935,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_INOUT_CDEBUFF   = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS
     HEALBOT_OPTIONS_CONTENT_INOUT_BUFF      = "    " .. HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS
     HEALBOT_OPTIONS_CONTENT_INOUT_SPELLS    = "    " .. HEALBOT_OPTIONS_TAB_SPELLS
+    HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL = "    " .. HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. HEALBOT_OPTIONS_TAB_FRAMES
     
     HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
@@ -964,6 +968,7 @@ function HealBot_Lang_enALL()
     HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_BUFFINIT           = "Custom Buffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_SPELLINIT          = "Spells can be shared at "..HEALBOT_ABOUT_URL
+    HEALBOT_INOUT_STATUS_PRESETCOLINIT      = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
     HEALBOT_ENEMY_INCLUDE_SELF              = "Include my target"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include tanks targets"
@@ -1014,8 +1019,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PAGE                    = "Page"
     HEALBOT_OPTIONS_PREV                    = "<<"
     HEALBOT_OPTIONS_NEXT                    = ">>"
-    HEALBOT_OPTIONS_PRESET_COLOUR           = "Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX
-    HEALBOT_OPTIONS_PRESET                  = "Preset"
+    HEALBOT_OPTIONS_PRESET_COLOUR           = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
     HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",

@@ -202,13 +202,13 @@ end
 
 local HealBot_Tooltip_Power = 9
 local function HealBot_Tooltip_SpellInfo(spellName)
-    if HealBot_Spell_IDs[spellName] then
-        if HealBot_Spell_IDs[spellName].Mana>0 then
+    if HealBot_Spell_Names[spellName] then
+        if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana>0 then
             linenum=linenum+1
-            if HealBot_Spell_IDs[spellName].Mana<HealBot_Tooltip_Power then
-                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Power: "..HealBot_Spell_IDs[spellName].Mana,0.4,0.4,1,1)
+            if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Power: "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana,0.4,0.4,1,1)
             else
-                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[spellName].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Mana: "..HealBot_Spell_IDs[spellName].Mana,0.4,0.4,1,1)
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Mana: "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana,0.4,0.4,1,1)
             end
         end
     end
@@ -216,11 +216,11 @@ end
 
 local function HealBot_Tooltip_SpellSummary(spellName)
     local ret_val = "  "
-    if HealBot_Spell_IDs[spellName] then
-        if HealBot_Spell_IDs[spellName].Mana<HealBot_Tooltip_Power then
-            ret_val = " -  "..HealBot_Spell_IDs[spellName].Mana.." Power"
+    if HealBot_Spell_Names[spellName] then
+        if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
+            ret_val = " -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
         else
-            ret_val = " -  "..HealBot_Spell_IDs[spellName].Mana.." Mana"
+            ret_val = " -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Mana"
         end
     end
     if strlen(ret_val)<5 then ret_val = " - "..spellName; end
@@ -263,16 +263,17 @@ local function HealBot_ToolTip_ShowHoT(unit)
     if HealBot_Globals.Tooltip_ShowHoT then
         local hbHoTline1=true
         UnitBuffIcons=HealBot_retHoTdetails(unit)
-        if UnitBuffIcons then
+        if linenum<43 and UnitBuffIcons then
             for name,_ in pairs(UnitBuffIcons) do
-                if linenum<44 and UnitBuffIcons[name].current then
+                if UnitBuffIcons[name].current then
                     if UnitBuffIcons[name].unitCaster then
                         local ttCaster=UnitName(UnitBuffIcons[name].unitCaster)
-                        if ttCaster then
+                        if ttCaster and linenum<44 then
                             local ttHoTd=nil
                             if hbHoTline1 then
-                                hbHoTline1=nil
+                                hbHoTline1=false
                                 linenum=linenum+1
+                                HealBot_Tooltip_SetLine(linenum," ",0,0,0,0)
                             end
                             linenum=linenum+1
                             if UnitBuffIcons[name].expirationTime and UnitBuffIcons[name].expirationTime>0 then
@@ -728,15 +729,15 @@ local function HealBot_Action_DoRefreshTooltip()
     if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
         if spellLeft then 
             linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONLEFT..": "..spellLeft,1,1,0,1)
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONLEFT,1,1,0,1,spellLeft,0.5,0.5,1,1)
         end
         if spellMiddle then
             linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONMIDDLE..": "..spellMiddle,1,1,0,1)
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONMIDDLE,1,1,0,1,spellMiddle,0.5,0.5,1,1)
         end
         if spellRight then
             linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONRIGHT..": "..spellRight,1,1,0,1)
+            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONRIGHT,1,1,0,1,spellRight,0.5,0.5,1,1)
         end
     elseif HealBot_Globals.Tooltip_ShowSpellDetail then
 
@@ -744,31 +745,26 @@ local function HealBot_Action_DoRefreshTooltip()
             linenum=linenum+1
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONLEFT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..LeftN,LeftR,LeftG,0,1) 
             HealBot_Tooltip_SpellInfo(LeftN);
-            linenum=linenum+1;
         end
         if MiddleN then
             linenum=linenum+1;
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONMIDDLE.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..MiddleN,MiddleR,MiddleG,0,1) 
             HealBot_Tooltip_SpellInfo(MiddleN);
-            linenum=linenum+1;
         end
         if RightN then
             linenum=linenum+1;
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONRIGHT.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..RightN,RightR,RightG,0,1) 
             HealBot_Tooltip_SpellInfo(RightN);
-            linenum=linenum+1;
         end
         if Button4N then
             linenum=linenum+1;
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTON4.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..Button4N,Button4R,Button4G,0,1) 
             HealBot_Tooltip_SpellInfo(Button4N);
-            linenum=linenum+1;
         end
         if Button5N then
             linenum=linenum+1;
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTON5.." "..HEALBOT_OPTIONS_COMBOBUTTON..": "..Button5N,Button5R,Button5G,0,1) 
             HealBot_Tooltip_SpellInfo(Button5N);
-            linenum=linenum+1;
         end
     else
         if LeftN then 
@@ -792,47 +788,63 @@ local function HealBot_Action_DoRefreshTooltip()
             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTON5..": "..Button5N,Button5R,Button5G,0,1,HealBot_Tooltip_SpellSummary(spellButton5),0.5,0.5,1,1)
         end
     end      
+    if HealBot_Globals.Tooltip_MouseWheel then
+        local nCommands=0
+        local keyDown="None"
+        if IsShiftKeyDown() then
+            keyDown="Shift"
+        elseif IsControlKeyDown() then
+            keyDown="Ctrl"
+        elseif IsAltKeyDown() then
+            keyDown="Alt"
+        end
+        local wheelUp=HealBot_Globals.HealBot_MouseWheelTxt[keyDown.."Up"]
+        local wheelDown=HealBot_Globals.HealBot_MouseWheelTxt[keyDown.."Down"]
+        if (wheelUp and wheelUp~=HEALBOT_WORDS_NONE) or (wheelDown and wheelDown~=HEALBOT_WORDS_NONE) then
+            linenum=linenum+1
+            HealBot_Tooltip_SetLine(linenum," ",0,0,0,0)
+            if wheelUp and wheelUp~=HEALBOT_WORDS_NONE then 
+                linenum=linenum+1
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_MOUSEUP,1,1,0,1,wheelUp,0.5,0.5,1,1)
+            end
+            if wheelDown and wheelDown~=HEALBOT_WORDS_NONE then
+                linenum=linenum+1
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_MOUSEDOWN,1,1,0,1,wheelDown,0.5,0.5,1,1)
+            end
+        end
+    end
     if HealBot_Globals.Tooltip_Recommend then    
         local spellLeftRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,LeftN);
         local spellMiddleRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,MiddleN)
         local spellRightRecInstant=HealBot_Tooltip_CheckForInstant(xUnit,RightN)
         local spellButton4RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button4N)
         local spellButton5RecInstant=HealBot_Tooltip_CheckForInstant(xUnit,Button5N);
-        local Instant_check=false;
-        if HealBot_Globals.Tooltip_ShowSpellDetail==false then linenum=linenum+1; end
-        linenum=linenum+1
-        HealBot_Tooltip_SetLine(linenum,HEALBOT_TOOLTIP_RECOMMENDTEXT,0.8,0.8,0,1) 
-        if spellLeftRecInstant then
-            linenum=linenum+1;
-            HealBot_Tooltip_SetLine(linenum,"   "..HEALBOT_OPTIONS_BUTTONLEFT..":",1,1,0.2,1,LeftN.."    ",1,1,1,1)
-            Instant_check=true;
-        end
-        if spellMiddleRecInstant then
-            linenum=linenum+1;
-            HealBot_Tooltip_SetLine(linenum,"   "..HEALBOT_OPTIONS_BUTTONMIDDLE..":",1,1,0.2,1,MiddleN.."    ",1,1,1,1)
-            Instant_check=true;
-        end
-        if spellRightRecInstant then
-            linenum=linenum+1;
-            HealBot_Tooltip_SetLine(linenum,"   "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,RightN.."    ",1,1,1,1)
-            Instant_check=true;
-        end
-        if spellButton4RecInstant then
-            linenum=linenum+1;
-            HealBot_Tooltip_SetLine(linenum,"   "..HEALBOT_OPTIONS_BUTTON4..":",1,1,0.2,1,Button4N.."    ",1,1,1,1)
-            Instant_check=true;
-        end
-        if spellButton5RecInstant then
-            linenum=linenum+1;
-            HealBot_Tooltip_SetLine(linenum,"   "..HEALBOT_OPTIONS_BUTTON5..":",1,1,0.2,1,Button5N.."    ",1,1,1,1)
-            Instant_check=true;
-        end
-        if not Instant_check then
+        if spellLeftRecInstant or spellMiddleRecInstant or spellRightRecInstant or spellButton4RecInstant or spellButton5RecInstant then
             linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,"  None",0.4,0.4,0.4,1) 
+            HealBot_Tooltip_SetLine(linenum," ",0,0,0,0)
+            linenum=linenum+1
+            HealBot_Tooltip_SetLine(linenum,"  "..HEALBOT_TOOLTIP_RECOMMENDTEXT,1,1,1,1) 
+            if spellLeftRecInstant then
+                linenum=linenum+1;
+                HealBot_Tooltip_SetLine(linenum,"       "..HEALBOT_OPTIONS_BUTTONLEFT..":",1,1,0.2,1,LeftN.."    ",1,1,1,1)
+            end
+            if spellMiddleRecInstant then
+                linenum=linenum+1;
+                HealBot_Tooltip_SetLine(linenum,"       "..HEALBOT_OPTIONS_BUTTONMIDDLE..":",1,1,0.2,1,MiddleN.."    ",1,1,1,1)
+            end
+            if spellRightRecInstant then
+                linenum=linenum+1;
+                HealBot_Tooltip_SetLine(linenum,"       "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,RightN.."    ",1,1,1,1)
+            end
+            if spellButton4RecInstant then
+                linenum=linenum+1;
+                HealBot_Tooltip_SetLine(linenum,"       "..HEALBOT_OPTIONS_BUTTON4..":",1,1,0.2,1,Button4N.."    ",1,1,1,1)
+            end
+            if spellButton5RecInstant then
+                linenum=linenum+1;
+                HealBot_Tooltip_SetLine(linenum,"       "..HEALBOT_OPTIONS_BUTTON5..":",1,1,0.2,1,Button5N.."    ",1,1,1,1)
+            end
         end
-    else
-        if HealBot_Globals.Tooltip_ShowSpellDetail then linenum=linenum-1; end
     end
   
     HealBot_ToolTip_ShowHoT(xUnit)
