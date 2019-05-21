@@ -3478,11 +3478,61 @@ function HealBot_Action_unlockFrame(hbCurFrame)
     HealBot_Options_ActionLocked:SetChecked(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["LOCKED"])
 end
 
+
+function HealBot_Action_CheckFrame(hbCurFrame, HBframe)
+    if HBframe:IsVisible() and HBframe:GetTop() then
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==1 then
+            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
+            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==2 then
+            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
+            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==3 then
+            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
+            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==4 then
+            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
+            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==5 then
+            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
+            local fHcenter=HealBot_Comm_round(((HBframe:GetCenter()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fHcenter
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==6 then
+            local fVcenter=HealBot_Comm_round(((((HBframe:GetTop()+HBframe:GetBottom())/2)/GetScreenHeight())*100),2)
+            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fVcenter
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==7 then
+            local fVcenter=HealBot_Comm_round(((((HBframe:GetTop()+HBframe:GetBottom())/2)/GetScreenHeight())*100),2)
+            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fVcenter
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
+        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==8 then
+            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
+            local fHcenter=HealBot_Comm_round(((HBframe:GetCenter()/GetScreenWidth())*100),2)
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
+            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fHcenter
+        end
+        HealBot_CheckFrame(hbCurFrame, HBframe) 
+    end
+  --HealBot_setCall("HealBot_CheckActionFrame")
+end
+
 function HealBot_Action_setPoint(hbCurFrame)
     if not hbCurFrame then return end
     if not InCombatLockdown() then  -- not HealBot_Data["UILOCK"]
         local gaf=_G["f"..hbCurFrame.."_HealBot_Action"]
-        if not HealBot_Action_StickyFrame(hbCurFrame,gaf) then
+        HealBot_Action_CheckFrame(hbCurFrame, gaf)
+        if not HealBot_Action_StickyFrame(hbCurFrame, gaf) then
             gaf:ClearAllPoints();
             local Y=GetScreenHeight()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"]/100)
             local X=GetScreenWidth()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"]/100)
@@ -4229,7 +4279,6 @@ end
 
 local HealBot_Action_Init={}
 function HealBot_Action_OnShow(self, hbCurFrame)
-    HealBot_Action_luVars["RecheckCoords"..hbCurFrame]=false
     if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OPENSOUND"] then
         PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
     end
@@ -4478,13 +4527,12 @@ function HealBot_MountsPets_DislikeMount(action)
     end
 end
 
-function HealBot_Action_StickyFrame(hbCurFrame,gaf)
+function HealBot_Action_StickyFrame(hbCurFrame, HBframe)
     local isSticky=false
     if 1==1 then
-        if gaf:GetLeft() then
+        if HBframe:GetLeft() then
             -- Magic will happen here
-        elseif not HealBot_Action_luVars["RecheckCoords"..hbCurFrame] then
-            HealBot_Action_luVars["RecheckCoords"..hbCurFrame]=true
+        else
             HealBot_setOptions_Timer(2000+hbCurFrame) -- Came back with coords
             HealBot_AddDebug("StickyFrame: no coords for "..hbCurFrame)
         end

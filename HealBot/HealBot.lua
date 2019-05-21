@@ -91,8 +91,6 @@ HealBot_luVars["clearGUID"]=false
 HealBot_luVars["PrevTipTime"]=TimeNow
 HealBot_luVars["TipTimeInterval"]=0.098
 HealBot_luVars["lastBuffMsg"]="nil"
-HealBot_luVars["Timer2001"]=0
-HealBot_luVars["Timer2002"]=0
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -389,59 +387,9 @@ function HealBot_StopMoving(HBframe,hbCurFrame)
         HBframe.isMoving = false;
     end
     if hbCurFrame then
-        HealBot_CheckActionFrame(HBframe,hbCurFrame)
-    end
-  --HealBot_setCall("HealBot_StopMoving")
-end
-
-function HealBot_CheckActionFrame(HBframe,hbCurFrame)
-    if HealBot_Config.DisabledNow==1 then return end
-    if HBframe:IsVisible() and HBframe:GetTop() then
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==1 then
-            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
-            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==2 then
-            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
-            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==3 then
-            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
-            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==4 then
-            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
-            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==5 then
-            local fTop=HealBot_Comm_round(((HBframe:GetTop()/GetScreenHeight())*100),2)
-            local fHcenter=HealBot_Comm_round(((HBframe:GetCenter()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fTop
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fHcenter
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==6 then
-            local fVcenter=HealBot_Comm_round(((((HBframe:GetTop()+HBframe:GetBottom())/2)/GetScreenHeight())*100),2)
-            local fLeft=HealBot_Comm_round(((HBframe:GetLeft()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fVcenter
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fLeft
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==7 then
-            local fVcenter=HealBot_Comm_round(((((HBframe:GetTop()+HBframe:GetBottom())/2)/GetScreenHeight())*100),2)
-            local fRight=HealBot_Comm_round(((HBframe:GetRight()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fVcenter
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fRight
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FRAME"]==8 then
-            local fBottom=HealBot_Comm_round(((HBframe:GetBottom()/GetScreenHeight())*100),2)
-            local fHcenter=HealBot_Comm_round(((HBframe:GetCenter()/GetScreenWidth())*100),2)
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] = fBottom
-            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] = fHcenter
-        end
-        HealBot_CheckFrame(hbCurFrame, HBframe) 
         HealBot_Action_setPoint(hbCurFrame)
     end
-  --HealBot_setCall("HealBot_CheckActionFrame")
+  --HealBot_setCall("HealBot_StopMoving")
 end
 
 function HealBot_CheckFrame(hbCurFrame, HBframe)
@@ -791,7 +739,7 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
     elseif (HBcmd=="zzz") then
-        HealBot_AddChat("StickyFrame - 2001="..HealBot_luVars["Timer2001"].." - 2002="..HealBot_luVars["Timer2002"])
+        HealBot_AddChat("nothing set")
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -3407,36 +3355,54 @@ local function HealBot_Options_Update()
         HealBot_AddChat(HEALBOT_HELP[1])
     elseif HealBot_Options_Timer[2001] then
         HealBot_Options_Timer[2001]=nil
-        HealBot_Action_setPoint(1)
-        HealBot_luVars["Timer2001"]=HealBot_luVars["Timer2001"]+1
+        if HealBot_Config.ActionVisible[1] then
+            HealBot_Action_setPoint(1)
+        end
     elseif HealBot_Options_Timer[2002] then
         HealBot_Options_Timer[2002]=nil
-        HealBot_Action_setPoint(2)
-        HealBot_luVars["Timer2002"]=HealBot_luVars["Timer2002"]+1
+        if HealBot_Config.ActionVisible[2] then
+            HealBot_Action_setPoint(2)
+        end
     elseif HealBot_Options_Timer[2003] then
         HealBot_Options_Timer[2003]=nil
-        HealBot_Action_setPoint(3)
+        if HealBot_Config.ActionVisible[3] then
+            HealBot_Action_setPoint(3)
+        end
     elseif HealBot_Options_Timer[2004] then
         HealBot_Options_Timer[2004]=nil
-        HealBot_Action_setPoint(4)
+        if HealBot_Config.ActionVisible[4] then
+            HealBot_Action_setPoint(4)
+        end
     elseif HealBot_Options_Timer[2005] then
         HealBot_Options_Timer[2005]=nil
-        HealBot_Action_setPoint(5)
+        if HealBot_Config.ActionVisible[5] then
+            HealBot_Action_setPoint(5)
+        end
     elseif HealBot_Options_Timer[2006] then
         HealBot_Options_Timer[2006]=nil
-        HealBot_Action_setPoint(6)
+        if HealBot_Config.ActionVisible[6] then
+            HealBot_Action_setPoint(6)
+        end
     elseif HealBot_Options_Timer[2007] then
         HealBot_Options_Timer[2007]=nil
-        HealBot_Action_setPoint(7)
+        if HealBot_Config.ActionVisible[7] then
+            HealBot_Action_setPoint(7)
+        end
     elseif HealBot_Options_Timer[2008] then
         HealBot_Options_Timer[2008]=nil
-        HealBot_Action_setPoint(8)
+        if HealBot_Config.ActionVisible[8] then
+            HealBot_Action_setPoint(8)
+        end
     elseif HealBot_Options_Timer[2009] then
         HealBot_Options_Timer[2009]=nil
-        HealBot_Action_setPoint(9)
+        if HealBot_Config.ActionVisible[9] then
+            HealBot_Action_setPoint(9)
+        end
     elseif HealBot_Options_Timer[2010] then
         HealBot_Options_Timer[2010]=nil
-        HealBot_Action_setPoint(10)
+        if HealBot_Config.ActionVisible[10] then
+            HealBot_Action_setPoint(10)
+        end
     elseif HealBot_Options_Timer[4910] then
         HealBot_Options_Timer[4910]=nil
         HealBot_Action_setLowManaTrig()

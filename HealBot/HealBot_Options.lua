@@ -5458,7 +5458,7 @@ function HealBot_Options_ActionAnchor_DropDown()
                         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_ActionAnchor,HealBot_Options_ActionAnchor_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FRAME"]]) 
                         local g=_G["f"..HealBot_Options_StorePrev["FramesSelFrame"].."_HealBot_Action"]
-                        HealBot_CheckActionFrame(g,HealBot_Options_StorePrev["FramesSelFrame"])
+                        HealBot_Action_setPoint(HealBot_Options_StorePrev["FramesSelFrame"])
                         HealBot_Panel_ClearBarArrays()
                     end
         info.checked = false;
@@ -5475,7 +5475,7 @@ function HealBot_Options_ActionBarsAnchor_DropDown()
                         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["BARS"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_ActionBarsAnchor,HealBot_Options_ActionAnchor_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["BARS"]]) 
                         local g=_G["f"..HealBot_Options_StorePrev["FramesSelFrame"].."_HealBot_Action"]
-                        HealBot_CheckActionFrame(g,HealBot_Options_StorePrev["FramesSelFrame"])
+                        HealBot_Action_setPoint(HealBot_Options_StorePrev["FramesSelFrame"])
                         HealBot_Panel_ClearBarArrays()
                     end
         info.checked = false;
