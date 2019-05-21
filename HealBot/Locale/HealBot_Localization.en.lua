@@ -17,12 +17,14 @@ function HealBot_Lang_enUK()
     HEALBOT_enWORD_COLOUR_SUFFIX = "our"
     HealBot_Lang_enALL()
     HEALBOT_WORDS_CUSTOMNAME                = "Customise name"
+    HealBot_Lang_Options_enALL()
 end
 
 function HealBot_Lang_enUS()
     HEALBOT_enWORD_COLOUR_SUFFIX = "or"
     HealBot_Lang_enALL()
     HEALBOT_WORDS_CUSTOMNAME                = "Customize name"
+    HealBot_Lang_Options_enALL()
 end
 
 function HealBot_Lang_enALL()
@@ -297,6 +299,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HIDEPARTYFRAMES         = "Hide party frames";
     HEALBOT_OPTIONS_HIDEPLAYERTARGET        = "Include player and target";
     HEALBOT_OPTIONS_DISABLEHEALBOT          = "Disable HealBot";
+    
+    HEALBOT_OPTIONS_STICKYFRAMES            = "Sticky Frames"
+    HEALBOT_OPTIONS_STICKYSENSITIVITY       = "Sticky Sensitivity"
+    HEALBOT_WORD_LOW                        = "Low"
+    HEALBOT_WORK_HIGH                       = "High"
 
     HEALBOT_ASSIST                          = "Assist";
     HEALBOT_FOCUS                           = "Focus";
@@ -1065,6 +1072,45 @@ function HealBot_Lang_InitVars()
 	]]
 
 	}
+end
+
+function HealBot_Lang_Options_enALL()
+    HEALBOT_OPTIONS_HELP_TITLES={["STICKFRAMES"]=HEALBOT_OPTIONS_STICKYFRAMES,
+                                 ["STICKSENSITIVITY"]=HEALBOT_OPTIONS_STICKYFRAMES.." Sensitivity",
+                                 ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["PRESETCOLALIAS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Alias",
+                                 ["PRESETCOLSET"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["PRESETCOLSELECT"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Select",
+                                 ["PRESETCOLCANCEL"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Cancel",
+                                 ["HIDEOPTIONBUTTON"]=HEALBOT_OPTIONS_HIDEOPTIONS,
+                                 ["RIGHTTOOPENOPTIONS"]=HEALBOT_OPTIONS_RIGHTBOPTIONS,
+                                 ["SHOWMINIMAPBUTTON"]=HEALBOT_OPTIONS_SHOWMINIMAPBUTTON,
+                                 ["QUERYTALENTS"]=HEALBOT_OPTIONS_QUERYTALENTS,
+                                 ["ENABLEFASTHEALTH"]=HEALBOT_OPTIONS_ENABLELIBQH,
+                                 ["ENABLEAUTOCOMBAT"]=HEALBOT_OPTIONS_ENABLEAUTOCOMBAT,
+                                 ["IGNOREAURAEVENTS"]=HEALBOT_OPTION_IGNORE_AURA_RESTED,
+                                 ["DISABLEHEALBOT"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
+                                 ["ADJUSTMAXHLTH"]=HEALBOT_OPTION_ADJUST_MAX_HEALTH,
+                                 ["INTERNALTIMERS"]=HEALBOT_OPTIONS_RANGECHECKFREQ,
+                              }
+    HEALBOT_OPTIONS_HELP_TEXT={["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
+                               ["STICKSENSITIVITY"]="The higher the sensitivity\nthe closer you need to get\nto stick the frame to another frame.\n--\nTIP: When your frames are setup set\nsensitivity to high to avoid frames\nsticking to others the next time you logon",
+                               ["PRESETCOLS"]="Select a Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\nUp to 10 Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be defined",
+                               ["PRESETCOLALIAS"]="Set a meaningful name for the Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                               ["PRESETCOLSET"]="Click to set the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                               ["PRESETCOLSELECT"]="Click to select the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                               ["PRESETCOLCANCEL"]="Click to leave without selecting a Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                               ["HIDEOPTIONBUTTON"]="Hide the options button that is\nshown at the bottom of the 1st frame",
+                               ["RIGHTTOOPENOPTIONS"]="Right click on the edge of\na frame will open options",
+                               ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options",
+                               ["QUERYTALENTS"]="Query talent information when\nthe mouse moves over a bar.\nNOTE: This is only used by tooltips",
+                               ["ENABLEFASTHEALTH"]="Monitor combat log and\nupdate health when required",
+                               ["ENABLEAUTOCOMBAT"]="Put healbot into lockdown combat mode when\nanyone in the group/raid goes into combat",
+                               ["IGNOREAURAEVENTS"]="Ignore required buffs when resting",
+                               ["DISABLEHEALBOT"]="Put Healbot into a deep sleep",
+                               ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect",
+                               ["INTERNALTIMERS"]="This combined with your FPS sets how\nquickly the following are updated:\n- Range checking\n- Buff checking\n- Debuff checking\n- fastHealth updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates",
+                              }
 end
 
 if (GetLocale() == "enUK") then

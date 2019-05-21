@@ -532,6 +532,10 @@ function HealBot_Action_SetAddHeightWidth()
     end
 end
 
+local HealBot_Panel_initFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
+function HealBot_Panel_resetInitFrames()
+    HealBot_Panel_initFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
+end
 
 local function HealBot_Action_SetHeightWidth(width,height,bWidth,bHeight,hbCurFrame)
     local g = _G["f"..hbCurFrame.."_HealBot_Action"]
@@ -542,7 +546,13 @@ local function HealBot_Action_SetHeightWidth(width,height,bWidth,bHeight,hbCurFr
         g:SetHeight(height);
         g:SetWidth(width+bWidth+HealBot_OutlineOffset[hbCurFrame]) --+HealBot_AddWidth["BOTH"][hbCurFrame])
     end
-    HealBot_Action_setPoint(hbCurFrame)
+    if HealBot_Panel_initFrame[hbCurFrame] then
+        HealBot_Panel_initFrame[hbCurFrame]=false
+        HealBot_Action_FrameSetPoint(hbCurFrame, g)
+        HealBot_setOptions_Timer(2000+hbCurFrame)
+    else
+        HealBot_Action_setPoint(hbCurFrame)
+    end
     --g:Show()
 end
 

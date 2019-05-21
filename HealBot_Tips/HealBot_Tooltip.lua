@@ -370,7 +370,7 @@ local function HealBot_Tooltip_ClearLines()
         for x,_ in pairs(HealBot_Tooltip_DirtyLines) do
             local txt = _G["HealBot_TooltipTextR" .. x]
             txt:SetText(" ")
-            txt = _G["HealBot_TooltipTextL" .. x]
+            local txt = _G["HealBot_TooltipTextL" .. x]
             txt:SetText(" ")
             HealBot_Tooltip_DirtyLines[x]=nil
         end
@@ -889,4 +889,48 @@ end
 
 function HealBot_Action_RefreshTargetTooltip(button)
     HealBot_Action_DoRefreshTargetTooltip(button)
+end
+
+local function HealBot_Tooltip_Options_Show(noLines)
+    local height = 20 
+    local width = 0
+    for x = 1, noLines do
+        local txtL = _G["HealBot_TooltipTextL" .. x]
+        height = height + txtL:GetHeight() + 2
+        if (txtL:GetWidth() + 25 > width) then
+            width = txtL:GetWidth() + 25
+        end
+    end
+    HealBot_Tooltip:SetWidth(width)
+    HealBot_Tooltip:SetHeight(height)
+    HealBot_Tooltip:Show();
+end
+
+function HealBot_Tooltip_OptionsHelp(title,text)
+    HealBot_Tooltip_ClearLines();
+    local tLine={}
+    local i=0
+    for l in string.gmatch(text, "[^\n]+") do
+        local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
+        if string.len(t)>1 then
+            i=i+1
+            tLine[i]=t
+        end
+    end
+    local linenum=1
+    HealBot_Tooltip_SetLineLeft("     "..title,1,1,1,linenum,1)
+    linenum=linenum+1
+    HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
+    for l=1,#tLine do 
+        linenum=linenum+1
+        HealBot_Tooltip_SetLineLeft(tLine[l],0.8,0.8,0.8,linenum,1)
+    end
+    local g=_G["HealBot_Options"]
+    HealBot_Tooltip:ClearAllPoints();
+    HealBot_Tooltip:SetPoint("TOPLEFT",g,"TOPRIGHT");
+    HealBot_Tooltip_Options_Show(linenum)
+end
+
+function HealBot_Tooltip_OptionsHide()
+    HealBot_Tooltip:Hide()
 end
