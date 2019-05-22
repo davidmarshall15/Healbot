@@ -2419,6 +2419,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_DisableHealBotSolo_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_AdjustMaxHealth" inherits="OptionsCheckButtonTemplate">
@@ -2478,6 +2480,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 250)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("LANG",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("LANG",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Button name="HealBot_Options_LangsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SET">
@@ -2493,6 +2497,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_LangsButton_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("SETLANG",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("SETLANG",false)</OnLeave>
                 </Scripts>
               </Button>
               
@@ -2520,6 +2526,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 250)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("CMDS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("CMDS",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Button name="HealBot_Options_CommandsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RUN">
@@ -2535,6 +2543,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_CommandsButton_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("RUNCMDS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("RUNCMDS",false)</OnLeave>
                 </Scripts>
               </Button>
               
@@ -2562,6 +2572,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 250)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("PROFILE",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("PROFILE",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Button name="HealBot_Options_hbProfileButton" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SET">
@@ -2577,6 +2589,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_hbProfile_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("SETPROFILE",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("SETPROFILE",false)</OnLeave>
                 </Scripts>
               </Button>
               
@@ -2632,6 +2646,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_EFClassDeathKnight" inherits="SendMailRadioButtonTemplate" id="10">
@@ -2644,6 +2660,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassDruid" inherits="SendMailRadioButtonTemplate" id="1">
@@ -2656,6 +2674,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassHunter" inherits="SendMailRadioButtonTemplate" id="2">
@@ -2668,6 +2688,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassMage" inherits="SendMailRadioButtonTemplate" id="3">
@@ -2680,6 +2702,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassMonk" inherits="SendMailRadioButtonTemplate" id="11">
@@ -2692,6 +2716,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassPaladin" inherits="SendMailRadioButtonTemplate" id="4">
@@ -2704,6 +2730,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassPriest" inherits="SendMailRadioButtonTemplate" id="5">
@@ -2716,6 +2744,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassRogue" inherits="SendMailRadioButtonTemplate" id="6">
@@ -2728,6 +2758,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassShaman" inherits="SendMailRadioButtonTemplate" id="7">
@@ -2740,6 +2772,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassWarlock" inherits="SendMailRadioButtonTemplate" id="8">
@@ -2752,6 +2786,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassWarrior" inherits="SendMailRadioButtonTemplate" id="9">
@@ -2764,6 +2800,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                 </Frames>
@@ -5422,7 +5460,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PanelSounds" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="25" y="-95" />
+                          <AbsDimension x="25" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5430,11 +5468,45 @@
                       <OnValueChanged>HealBot_FrameScale_OnValueChanged(self)</OnValueChanged>
                     </Scripts>
                   </Slider>
+                  <Slider name="HealBot_FrameStickyOffsetHorizontal" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="210" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_FrameScale" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-58" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_FrameStickyOffsetHorizontal_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("SFOFFSETH",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SFOFFSETH",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Slider name="HealBot_FrameStickyOffsetVertical" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="210" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_FrameScale" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="0" y="-58" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_FrameStickyOffsetVertical_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("SFOFFSETV",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SFOFFSETV",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
                   <Frame name="HealBot_Options_TooltipPos" inherits="UIDropDownMenuTemplate" id="1">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_FrameScale" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="165" y="-70" />
+                          <AbsDimension x="165" y="-112" />
                         </Offset>
                       </Anchor>
                     </Anchors>

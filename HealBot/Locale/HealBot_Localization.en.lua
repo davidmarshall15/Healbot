@@ -89,7 +89,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
     HEALBOT_OPTIONS_HEAL_CHATOPT            = "Chat Options";
 
-    HEALBOT_OPTIONS_FRAMESCALE              = "Frame Scale"
+    HEALBOT_OPTIONS_FRAMESCALE              = "Frame scale"
+    HEALBOT_OPTIONS_STICKFRAMEOFFSETH       = "Sticky frame horizontal offset"
+    HEALBOT_OPTIONS_STICKFRAMEOFFSETV       = "Sticky frame vertical offset"
     HEALBOT_OPTIONS_SKINTEXT                = "Use skin"
     HEALBOT_SKINS_STD                       = "Standard"
     HEALBOT_OPTIONS_SKINTEXTURE             = "Texture"
@@ -993,7 +995,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_EXISTS_SHOW_PTARGETS      = "Player target bars"
     HEALBOT_ENEMY_EXISTS_SHOW_BOSSES        = "Boss bars"
     HEALBOT_OPTIONS_SHOW_ONLY_FRIEND        = "Only show Friendly"
-    HEALBOT_OPTIONS_PROFILE                 = "Profile for".."\n".."Spells/Buffs/Cures"
+    HEALBOT_OPTIONS_PROFILE                 = "Profile for".."\n".."Spells/Buffs/Debuffs"
     HEALBOT_OPTIONS_PROFILE_CHARACTER       = "Character"
     HEALBOT_OPTIONS_PROFILE_CLASS           = "Class"
     HEALBOT_OPTIONS_INCOMBATALERTLEVEL      = "Alert Level - In Combat";
@@ -1090,26 +1092,46 @@ function HealBot_Lang_Options_enALL()
                                  ["ENABLEAUTOCOMBAT"]=HEALBOT_OPTIONS_ENABLEAUTOCOMBAT,
                                  ["IGNOREAURAEVENTS"]=HEALBOT_OPTION_IGNORE_AURA_RESTED,
                                  ["DISABLEHEALBOT"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
+                                 ["DISABLEHEALBOTSOLO"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
                                  ["ADJUSTMAXHLTH"]=HEALBOT_OPTION_ADJUST_MAX_HEALTH,
                                  ["INTERNALTIMERS"]=HEALBOT_OPTIONS_RANGECHECKFREQ,
+                                 ["SFOFFSETH"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETH,
+                                 ["SFOFFSETV"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETV,
+                                 ["LANG"]=HEALBOT_OPTIONS_LANG,
+                                 ["SETLANG"]=HEALBOT_OPTIONS_LANG,
+                                 ["CMDS"]=HEALBOT_OPTIONS_COMMANDS,
+                                 ["RUNCMDS"]=HEALBOT_OPTIONS_COMMANDS,
+                                 ["PROFILE"]="Profile",
+                                 ["SETPROFILE"]="Profile",
+                                 ["CLASSTYPES"]="Class type configuration",
                               }
     HEALBOT_OPTIONS_HELP_TEXT={["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
-                               ["STICKSENSITIVITY"]="The higher the sensitivity\nthe closer you need to get\nto stick the frame to another frame.\n--\nTIP: When your frames are setup set\nsensitivity to high to avoid frames\nsticking to others the next time you logon",
-                               ["PRESETCOLS"]="Select a Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\nUp to 10 Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be defined",
-                               ["PRESETCOLALIAS"]="Set a meaningful name for the Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
-                               ["PRESETCOLSET"]="Click to set the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
-                               ["PRESETCOLSELECT"]="Click to select the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
-                               ["PRESETCOLCANCEL"]="Click to leave without selecting a Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
-                               ["HIDEOPTIONBUTTON"]="Hide the options button that is\nshown at the bottom of the 1st frame",
-                               ["RIGHTTOOPENOPTIONS"]="Right click on the edge of\na frame will open options",
-                               ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options",
-                               ["QUERYTALENTS"]="Query talent information when\nthe mouse moves over a bar.\nNOTE: This is only used by tooltips",
-                               ["ENABLEFASTHEALTH"]="Monitor combat log and\nupdate health when required",
-                               ["ENABLEAUTOCOMBAT"]="Put healbot into lockdown combat mode when\nanyone in the group/raid goes into combat",
-                               ["IGNOREAURAEVENTS"]="Ignore required buffs when resting",
-                               ["DISABLEHEALBOT"]="Put Healbot into a deep sleep",
-                               ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect",
+                               ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
+                               ["PRESETCOLS"]="Select a Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".\nUp to 10 Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be defined.",
+                               ["PRESETCOLALIAS"]="Set a meaningful name for the Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["PRESETCOLSET"]="Click to set the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["PRESETCOLSELECT"]="Click to select the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["PRESETCOLCANCEL"]="Click to leave without selecting a Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["HIDEOPTIONBUTTON"]="Hide the options button that is\nshown at the bottom of the 1st frame.",
+                               ["RIGHTTOOPENOPTIONS"]="Right click on the edge of\na frame will open options.",
+                               ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options.",
+                               ["QUERYTALENTS"]="Query talent information when\nthe mouse moves over a bar.\nNOTE: This is only used by tooltips.",
+                               ["ENABLEFASTHEALTH"]="Monitor combat log and\nupdate health when required.",
+                               ["ENABLEAUTOCOMBAT"]="Put healbot into lockdown combat mode when\nanyone in the group/raid goes into combat.",
+                               ["IGNOREAURAEVENTS"]="Ignore required buffs when resting.",
+                               ["DISABLEHEALBOT"]="Put Healbot into a deep sleep.",
+                               ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
+                               ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect.",
                                ["INTERNALTIMERS"]="This combined with your FPS sets how\nquickly the following are updated:\n- Range checking\n- Buff checking\n- Debuff checking\n- fastHealth updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates",
+                               ["SFOFFSETH"]="Set the horizontal offset of this frame\nwhen this frame is stuck to another frame.",
+                               ["SFOFFSETV"]="Set the vertical offset of this frame\nwhen this frame is stuck to another frame.",
+                               ["LANG"]="Select the language used by healbot options.\nThis can be independent to the UI.",
+                               ["SETLANG"]="Set the language selected.",
+                               ["CMDS"]="Select a command to run.\nMany commands allow for resetting parts of\nhealbot without the need to reset to defaults.",
+                               ["RUNCMDS"]="Run the command selected.",
+                               ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
+                               ["SETPROFILE"]="Set the profile selected.",
+                               ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
                               }
 end
 

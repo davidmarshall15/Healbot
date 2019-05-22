@@ -4589,6 +4589,8 @@ function HealBot_Action_StickyFrameSetPoint(hbCurFrame,stuckTo,stuckPoint,stuckT
                 y=0-Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["HEIGHT"]
             end
         end
+        x=x+Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SFOFFSETH"]
+        y=y+Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SFOFFSETV"]
         HBframe:ClearAllPoints();
         HBframe:SetPoint(stuckPoint,cf,stuckToPoint,x,y)
     --end
