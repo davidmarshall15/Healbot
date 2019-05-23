@@ -1053,6 +1053,7 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.BarCol[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.BarIACol[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Frame[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin])
+    Healbot_Config_Skins.StickyFrames[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.HeadBar[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.HeadText[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.General[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin])
@@ -1120,6 +1121,7 @@ function HealBot_Options_DeleteSkin_OnClick(self)
         Healbot_Config_Skins.BarCol[hbDelSkinName] = nil
         Healbot_Config_Skins.BarIACol[hbDelSkinName] = nil
         Healbot_Config_Skins.Frame[hbDelSkinName] = nil
+        Healbot_Config_Skins.StickyFrames[hbDelSkinName] = nil
         Healbot_Config_Skins.HeadBar[hbDelSkinName] = nil
         Healbot_Config_Skins.HeadText[hbDelSkinName] = nil
         Healbot_Config_Skins.General[hbDelSkinName] = nil
@@ -5557,6 +5559,13 @@ function HealBot_Options_FramesSelFrame_DropDown()
                             HealBot_Options_SetText(HealBot_Options_FrameAlias,HEALBOT_OPTIONS_FRAME_ALIAS)
                             g=_G["HealBot_Options_FrameAlias"] 
                             g:Show()
+                        end
+                        if HealBot_Options_StorePrev["FramesSelFrame"]>1 then
+                            HealBot_FrameStickyOffsetHorizontal:Show()
+                            HealBot_FrameStickyOffsetVertical:Show()
+                        else
+                            HealBot_FrameStickyOffsetHorizontal:Hide()
+                            HealBot_FrameStickyOffsetVertical:Hide()
                         end
                         if HealBot_Options_StorePrev["CurrentSkinsBarsPanelButton"]=="HealBot_Options_SkinsFramesBarsVisibilityb" then
                             HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsVisibility", "HealBot_Options_SkinsFramesBarsVisibilityb")

@@ -2983,6 +2983,8 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     g:LockHighlight()
     g=_G["HealBot_Options_SkinsFrameHeadersBarb"]
     g:LockHighlight()
+    HealBot_FrameStickyOffsetHorizontal:Hide()
+    HealBot_FrameStickyOffsetVertical:Hide()
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
     HealBot_setIconUpdateInterval()
