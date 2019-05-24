@@ -2382,13 +2382,14 @@ function HealBot_Check_Skin(SkinName)
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTO"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTO"]=0 end
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKPOINT"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKPOINT"]="NONE" end
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTOPOINT"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTOPOINT"]="NONE" end
-        if Healbot_Config_Skins.IconText[SkinName][gl]["SCALE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SCALE"]=0.7 end
         if Healbot_Config_Skins.IconText[SkinName][gl]["DURTHRH"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["DURTHRH"]=9 end
         if Healbot_Config_Skins.IconText[SkinName][gl]["DURWARN"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["DURWARN"]=3 end
         if Healbot_Config_Skins.IconText[SkinName][gl]["SCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SCNT"]=true end
         if Healbot_Config_Skins.IconText[SkinName][gl]["SSCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SSCNT"]=false end
         if Healbot_Config_Skins.IconText[SkinName][gl]["SDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SDUR"]=true end
         if Healbot_Config_Skins.IconText[SkinName][gl]["SSDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SSDUR"]=true end
+        if Healbot_Config_Skins.IconText[SkinName][gl]["FONT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["FONT"]=HealBot_Default_Font end
+        if Healbot_Config_Skins.IconText[SkinName][gl]["OUTLINE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["OUTLINE"]=2 end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["SHOW"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["SHOW"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["STAR"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["STAR"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["CIRCLE"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["CIRCLE"]=true end
@@ -2540,6 +2541,17 @@ function HealBot_Check_Skin(SkinName)
             Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]=HealBot_Comm_round(((Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]/GetScreenHeight())*100),2)
             Healbot_Config_Skins.Anchors[SkinName][gl]["X"]=HealBot_Comm_round(((Healbot_Config_Skins.Anchors[SkinName][gl]["X"]/GetScreenWidth())*100),2)
         end
+        if Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]==nil then 
+            if Healbot_Config_Skins.IconText[SkinName][gl]["SCALE"] then
+                local iScale=Healbot_Config_Skins.HealBar[SkinName][gl]["HEIGHT"]*(Healbot_Config_Skins.Icons[SkinName][gl]["SCALE"]*0.7)
+                Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]=floor(iScale*Healbot_Config_Skins.IconText[SkinName][gl]["SCALE"])
+                Healbot_Config_Skins.IconText[SkinName][gl]["SCALE"]=nil
+                if Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]>12 then Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]=12 end
+                if Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]<8 then Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]=8 end
+            else
+                Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]=10
+            end
+        end
     end
 
     if Healbot_Config_Skins.Healing[SkinName]["ALERTIC"] then Healbot_Config_Skins.Healing[SkinName]["ALERTIC"]=nil end
@@ -2646,6 +2658,12 @@ function HealBot_Check_Skin(SkinName)
     for id=1,6 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]>5 then
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1
+        end
+    end
+    for id=1,11 do
+        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=="Targets" then
+            Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_TARGETHEALS
+            break
         end
     end
   --HealBot_setCall("HealBot_Check_Skin")
@@ -2983,8 +3001,10 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     g:LockHighlight()
     g=_G["HealBot_Options_SkinsFrameHeadersBarb"]
     g:LockHighlight()
-    HealBot_FrameStickyOffsetHorizontal:Hide()
-    HealBot_FrameStickyOffsetVertical:Hide()
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
     HealBot_setIconUpdateInterval()
@@ -3441,6 +3461,9 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[4920] then
         HealBot_Options_Timer[4920]=nil
         HealBot_Options_FrameAlias_AfterTextChange()
+    elseif HealBot_Options_Timer[5000] then
+        HealBot_Options_Timer[5000]=nil
+        HealBot_Options_DoManaIndicator_DropDown()
     elseif HealBot_Options_Timer[7000] then
         HealBot_Options_Timer[7000]=nil
         for x=1,10 do

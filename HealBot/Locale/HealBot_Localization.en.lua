@@ -172,7 +172,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";
     HEALBOT_OPTIONS_PRIVATETANKS            = "Private main tanks";
     HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private main healers";
-    HEALBOT_OPTIONS_TARGETHEALS             = "Targets";
+    HEALBOT_OPTIONS_TARGETHEALS             = "Target";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";
     HEALBOT_OPTIONS_RAID10                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
     HEALBOT_OPTIONS_RAID25                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 25";
@@ -374,6 +374,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LONGBUFFTIMER           = "Long buffs"
 
     HEALBOT_OPTIONS_NOTIFY_MSG              = "Message"
+    HEALBOT_OPTIONS_CASTNOTIFYTAGS          = "#s=spell  #n=name"
     HEALBOT_WORDS_YOU                       = "you";
     HEALBOT_WORDS_MORECPU                   = "More CPU";
     HEALBOT_WORDS_LESSCPU                   = "Less CPU";
@@ -384,7 +385,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTTEXTCOUNT            = "Count"
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
     HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
-    HEALBOT_OPTIONS_ICONTEXTSCALE           = "Icon Text Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
     
 
@@ -1104,6 +1104,32 @@ function HealBot_Lang_Options_enALL()
                                  ["PROFILE"]="Profile",
                                  ["SETPROFILE"]="Profile",
                                  ["CLASSTYPES"]="Class type configuration",
+                                 ["SETSPELLSFOR"]=HEALBOT_OPTIONS_SETSPELLS,
+                                 ["ALWAYSUSEENABLED"]=HEALBOT_OPTIONS_ENABLEHEALTHY,
+                                 ["SPELLSBUTTON"]=HEALBOT_OPTIONS_COMBOBUTTON,
+                                 ["SPELLSBUTTONCAST"]=HEALBOT_OPTIONS_BUTTONCASTMETHOD,
+                                 ["SPELLSAVOIDBLUE"]="Avoid Blue Cursor",
+                                 ["SPELLSAUTOTARGET"]="Auto Target",
+                                 ["SPELLSAUTOTRINKET"]=HEALBOT_OPTIONS_COMBOAUTOTRINKET,
+                                 ["SPELLSBUTTONCLICK"]=HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONSHIFTCLICK"]=HEALBOT_OPTIONS_SHIFT.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONCTRLCLICK"]=HEALBOT_OPTIONS_CTRL.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONALTCLICK"]=HEALBOT_OPTIONS_ALT.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONSHIFTCTRLCLICK"]=HEALBOT_OPTIONS_SHIFT.." "..HEALBOT_OPTIONS_CTRL.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONSHIFTALTCLICK"]=HEALBOT_OPTIONS_SHIFT.." "..HEALBOT_OPTIONS_ALT.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSBUTTONCTRLALTCLICK"]=HEALBOT_OPTIONS_CTRL.." "..HEALBOT_OPTIONS_ALT.." "..HEALBOT_OPTIONS_CLICK,
+                                 ["SPELLSHELPSELECT"]="Spell Selector",
+                                 ["SPELLSSELECTSPELL"]=HEALBOT_OPTIONS_TAB_SPELLS,
+                                 ["SPELLSSELECTMACRO"]=HEALBOT_WORD_MACROS,
+                                 ["SPELLSSELECTITEMS"]=HEALBOT_OPTIONS_ITEMS,
+                                 ["SPELLSSELECTCMDS"]=HEALBOT_WORD_COMMANDS,
+                                 ["SPELLSSELECTCANCEL"]=HEALBOT_WORD_CANCEL,
+                                 ["SMARTCAST"]=HEALBOT_OPTIONS_ENABLESMARTCAST,
+                                 ["SMARTCASTAVOIDPVP"]=HEALBOT_OPTIONS_PROTECTPVP,
+                                 ["SMARTCASTDEBUFF"]=HEALBOT_OPTIONS_SMARTCASTDISPELL,
+                                 ["SMARTCASTBUFF"]=HEALBOT_OPTIONS_SMARTCASTBUFF,
+                                 ["SMARTCASTHEAL"]=HEALBOT_OPTIONS_SMARTCASTHEAL,
+                                 ["SMARTCASTRES"]="Cast resurrection",
                               }
     HEALBOT_OPTIONS_HELP_TEXT={["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
                                ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
@@ -1132,6 +1158,32 @@ function HealBot_Lang_Options_enALL()
                                ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
                                ["SETPROFILE"]="Set the profile selected.",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
+                               ["SETSPELLSFOR"]="Set spells that can be used in different states:\n* Enabled - Always when in combat and any time the bar is in an enabled state.\n* Disabled - Only when out of combat and the bar is in a disabled state.\n* Enemy - Allows for harmful spells to be set and used on enemy bars.",
+                               ["ALWAYSUSEENABLED"]="Use this option to always cast enabled\nspells regardless of the bar state.",
+                               ["SPELLSBUTTON"]="The button press to cast a spell.",
+                               ["SPELLSBUTTONCAST"]="Timing of the spell cast\nCast when the button is Pressed or Released.",
+                               ["SPELLSAVOIDBLUE"]="Cast Binding Heal on yourself and ended up\nwith a blue cursor? this option is your friend.",
+                               ["SPELLSAUTOTARGET"]="Set the healers target to the player/npc\nreceiving the current spell cast.",
+                               ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells.",
+                               ["SPELLSBUTTONCLICK"]="Spell to cast on button click.",
+                               ["SPELLSBUTTONSHIFTCLICK"]="Spell to cast on button click\nwith the SHIFT key held down.",
+                               ["SPELLSBUTTONCTRLCLICK"]="Spell to cast on button click\nwith the CTRL key held down.",
+                               ["SPELLSBUTTONALTCLICK"]="Spell to cast on button click\nwith the ALT key held down.",
+                               ["SPELLSBUTTONSHIFTCTRLCLICK"]="Spell to cast on button click with\nthe SHIFT and CTRL key held down.",
+                               ["SPELLSBUTTONSHIFTALTCLICK"]="Spell to cast on button click with\nthe SHIFT and ALT key held down.",
+                               ["SPELLSBUTTONCTRLALTCLICK"]="Spell to cast on button click with\nthe CTRL and ALT key held down.",
+                               ["SPELLSHELPSELECT"]="Displays dropdowns for selecting various\nspells, macros and other commands.",
+                               ["SPELLSSELECTSPELL"]="Select a spell for the spells tab.",
+                               ["SPELLSSELECTMACRO"]="Select a macro for the spells tab.",
+                               ["SPELLSSELECTITEMS"]="Select an item for the spells tab.",
+                               ["SPELLSSELECTCMDS"]="Select a command for the spells tab.",
+                               ["SPELLSSELECTCANCEL"]="Do not select anything and\nreturn to the spells tab.",
+                               ["SMARTCAST"]="Select and cast an appropriate spell for the situation.\nThis only works out of combat.",
+                               ["SMARTCASTAVOIDPVP"]="Do not use SmartCast\non PVP flagged players.",
+                               ["SMARTCASTDEBUFF"]="Use SmartCast to remove debuffs.",
+                               ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
+                               ["SMARTCASTHEAL"]="Use SmartCast to cast healing type spells.",
+                               ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
                               }
 end
 
