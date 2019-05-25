@@ -740,7 +740,7 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
     elseif (HBcmd=="zzz") then
-        HealBot_AddChat("nothing set")
+        HealBot_AddChat("Current Skin="..Healbot_Config_Skins.Current_Skin)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1453,7 +1453,7 @@ local function HealBot_Load(hbCaller)
     HealBot_setHbStanceBuffs()
     HealBot_InitSpells()
     HealBot_useCrashProtection()
-    HealBot_Options_Set_Current_Skin()
+    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Current_Skin)
     HealBot_Action_ResetSkin("init")
     HealBot_InitNewChar()
     HealBot_Options_SetSkins();
@@ -2568,10 +2568,6 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.Protection[SkinName]["COMBATRAID"]==nil then Healbot_Config_Skins.Protection[SkinName]["COMBATRAID"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["GROUPPETS"]==nil then Healbot_Config_Skins.Healing[SkinName]["GROUPPETS"]=true end
     if Healbot_Config_Skins.Healing[SkinName]["SELFPET"]==nil then Healbot_Config_Skins.Healing[SkinName]["SELFPET"]=false end
-    if Healbot_Config_Skins.Healing[SkinName]["TINCSELF"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCSELF"]=false end
-    if Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCGROUP"]=true end
-    if Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCRAID"]=true end
-    if Healbot_Config_Skins.Healing[SkinName]["TINCPET"]==nil then Healbot_Config_Skins.Healing[SkinName]["TINCPET"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"] then 
         Healbot_Config_Skins.Healing[SkinName]["TARGETINCOMBAT"]=3
         Healbot_Config_Skins.Healing[SkinName]["TALWAYSSHOW"]=nil
@@ -2693,8 +2689,8 @@ local function HealBot_Update_Skins()
         if Healbot_Config_Skins.Skins[x]==Healbot_Config_Skins.Current_Skin then foundSkin=true end
     end
     if not foundSkin then 
-        Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD 
-        Healbot_Config_Skins.Skin_ID = 1;
+        local retryWithSkin = HealBot_getDefaultSkin()
+        HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
     end
 
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionSkinUpdate)
@@ -3005,6 +3001,8 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
     HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+    HealBot_Options_ShowBarsPanelVisibilityFocus(false)
+    HealBot_Options_ShowBarsPanelVisibilityTargets(false)
     HealBot_Options_Init(11)
     HealBot_Action_SetResSpells()
     HealBot_setIconUpdateInterval()
@@ -3464,6 +3462,7 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[5000] then
         HealBot_Options_Timer[5000]=nil
         HealBot_Options_DoManaIndicator_DropDown()
+        HealBot_Options_DoVisibility_DropDowns()
     elseif HealBot_Options_Timer[7000] then
         HealBot_Options_Timer[7000]=nil
         for x=1,10 do
@@ -3678,13 +3677,10 @@ function HealBot_OnEvent_RaidTargetUpdateAll()
   --HealBot_setCall("HealBot_OnEvent_RaidTargetUpdateAll")
 end
 
-local function HealBot_PartyUpdate_CheckSkin()
+function HealBot_getDefaultSkin()
     local _,z = IsInInstance()
-    local PrevSolo=HealBot_luVars["IsSolo"]
     local LastAutoSkinChangeType="None"
     local newSkinName="_-none-_"
-    HealBot_luVars["IsSolo"]=nil
-    HealBot_luVars["CheckSkin"]=false
     if z == "arena" then
         for x in pairs (Healbot_Config_Skins.Skins) do
             if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
@@ -3773,6 +3769,15 @@ local function HealBot_PartyUpdate_CheckSkin()
         HealBot_luVars["IsSolo"]=true
         HealBot_Options_DisableCheck()
     end
+    return newSkinName,LastAutoSkinChangeType
+end
+
+local function HealBot_PartyUpdate_CheckSkin()
+    local PrevSolo=HealBot_luVars["IsSolo"]
+    HealBot_luVars["IsSolo"]=nil
+    HealBot_luVars["CheckSkin"]=false
+    local newSkinName,LastAutoSkinChangeType=HealBot_getDefaultSkin()
+
     if LastAutoSkinChangeType~=HealBot_Config.LastAutoSkinChangeType or HealBot_Config.LastAutoSkinChangeTime<GetTime() then
         if newSkinName~="_-none-_" and newSkinName~=Healbot_Config_Skins.Current_Skin then
             HealBot_Options_Set_Current_Skin(newSkinName)

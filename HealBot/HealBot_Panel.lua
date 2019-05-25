@@ -1515,15 +1515,7 @@ end
 function HealBot_Panel_validTarget(hbGUID)
     local TargetValid=false
     if not HealBot_Panel_BlackList[hbGUID] then
-        if HealBot_Data["PGUID"]==hbGUID then 
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCSELF"] then TargetValid=true end
-        elseif UnitInParty("target") then
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCGROUP"] then TargetValid=true end
-        elseif UnitInRaid("target") then 
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCRAID"] then TargetValid=true end
-        elseif UnitPlayerOrPetInParty("target") or UnitPlayerOrPetInRaid("target") then
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TINCPET"] then TargetValid=true end
-        elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
             if UnitIsFriend("player","target") then TargetValid=true end
         else
             TargetValid=true

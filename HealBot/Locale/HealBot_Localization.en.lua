@@ -248,6 +248,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWNAMEONBAR           = "Show name on bar";
     HEALBOT_OPTIONS_BARTEXTCLASSCOLOUR1     = "Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class";
     HEALBOT_OPTIONS_EMERGFILTERGROUPS       = "Include groups";
+    HEALBOT_OPTIONS_PLAYERPET               = "Players and Pets"
 
     HEALBOT_ONE                             = "1";
     HEALBOT_TWO                             = "2";
@@ -374,7 +375,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LONGBUFFTIMER           = "Long buffs"
 
     HEALBOT_OPTIONS_NOTIFY_MSG              = "Message"
-    HEALBOT_OPTIONS_CASTNOTIFYTAGS          = "#s=spell  #n=name"
+    HEALBOT_OPTIONS_CASTNOTIFYTAGS          = " #s=spell name  -  #n=players name "
     HEALBOT_WORDS_YOU                       = "you";
     HEALBOT_WORDS_MORECPU                   = "More CPU";
     HEALBOT_WORDS_LESSCPU                   = "Less CPU";
