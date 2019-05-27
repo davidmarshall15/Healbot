@@ -1945,7 +1945,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
     end
     local b,bar,bar2,bar3,bar4,icon,txt,icon17,pIcon,expire,count=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
     local icon1,expire1,count1,icon51,expire51,count51=nil,nil,nil,nil,nil,nil
-    local barScale,h,hwidth,hheight,iScale,itScale,x,hcpct,bar5,bar6,barDir=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
+    local barScale,h,hwidth,hheight,iScale,diScale,itScale,x,hcpct,bar5,bar6,barDir=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
     local abtSize = {[0]=1,[1]=1,[2]=1,[3]=2,[4]=2,[5]=2,[6]=3,[7]=3,[8]=3,[9]=3,[10]=4,[11]=4,[12]=4,[13]=4,[14]=4,[15]=5}
   
     if barType=="bar" then
@@ -2073,12 +2073,17 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                                             Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"],
                                             HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["OUTLINE"]]);
         end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DOUBLE"] then
+            diScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DSCALE"])-2)*0.485)
+        else
+            diScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DSCALE"])-2
+        end
         for x=51,55 do
             icon=_G[bar:GetName().."Icon"..x];
             expire=_G[bar:GetName().."Expire"..x];
             count=_G[bar:GetName().."Count"..x];
-            icon:SetHeight(iScale);
-            icon:SetWidth(iScale);
+            icon:SetHeight(diScale);
+            icon:SetWidth(diScale);
             expire:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
                                             Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"],
                                             HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["OUTLINE"]]);
@@ -2086,6 +2091,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                                             Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"],
                                             HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["OUTLINE"]]);
         end
+        if diScale>iScale then iScale=diScale end
         for x=1,3 do
             pIcon = _G[bar:GetName().."Iconal"..x];
             pIcon:SetAlpha(0);
@@ -2160,7 +2166,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",0,0);
                 count1:ClearAllPoints();
-                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",4,0);
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",2,0);
                 for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2178,14 +2184,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",1,0);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",0,0);
                 count51:ClearAllPoints();
-                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",4,0);
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",2,0);
                 for x=52,55 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2203,13 +2209,13 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
             else
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,0);
                 expire1:ClearAllPoints();
-                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",4,0);
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",2,0);
                 count1:ClearAllPoints();
                 count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",0,0);
                 for x=2,10 do
@@ -2227,14 +2233,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",-1,0);
                 expire51:ClearAllPoints();
-                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",4,0);
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
                 count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",0,0);
                 for x=52,55 do
@@ -2252,7 +2258,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
@@ -2264,7 +2270,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 icon1:ClearAllPoints();
                 icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,0);
                 expire1:ClearAllPoints();
-                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",4,0);
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",2,0);
                 count1:ClearAllPoints();
                 count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",0,0);
                 for x=2,10 do
@@ -2282,14 +2288,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",-1,0);
                 expire51:ClearAllPoints();
-                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",4,0);
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
                 count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",0,0);
                 for x=52,55 do
@@ -2307,7 +2313,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
@@ -2317,7 +2323,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",0,0);
                 count1:ClearAllPoints();
-                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",4,0);
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",2,0);
                 for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2335,14 +2341,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",2,0);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",0,0);
                 count51:ClearAllPoints();
-                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",4,0);
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",2,0);
                 for x=52,55 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2360,7 +2366,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
             end
         else
@@ -2376,7 +2382,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",0,0);
                 count1:ClearAllPoints();
-                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",4,0);
+                count1:SetPoint("TOPRIGHT",icon1,"TOPRIGHT",2,0);
                 for x=2,10 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2394,14 +2400,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("TOPRIGHT",b,"BOTTOMRIGHT",-1,-1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",0,0);
                 count51:ClearAllPoints();
-                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",4,0);
+                count51:SetPoint("TOPRIGHT",icon51,"TOPRIGHT",2,0);
                 for x=52,55 do
                     icon=_G[bar:GetName().."Icon"..x];
                     expire=_G[bar:GetName().."Expire"..x];
@@ -2419,13 +2425,13 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                     expire:ClearAllPoints();
                     expire:SetPoint("BOTTOMLEFT",icon,"BOTTOMLEFT",0,0);
                     count:ClearAllPoints();
-                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",4,0);
+                    count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
             else
                 icon1:ClearAllPoints();
                 icon1:SetPoint("TOPRIGHT",b,"BOTTOMRIGHT",-1,-1);
                 expire1:ClearAllPoints();
-                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",4,0);
+                expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",2,0);
                 count1:ClearAllPoints();
                 count1:SetPoint("TOPLEFT",icon1,"TOPLEFT",0,0);
                 for x=2,10 do
@@ -2443,14 +2449,14 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMRIGHT",bar:GetName().."Icon"..x-1,"BOTTOMLEFT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
                 icon51:SetPoint("TOPLEFT",b,"BOTTOMLEFT",-1,-1);
                 expire51:ClearAllPoints();
-                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",4,0);
+                expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
                 count51:SetPoint("TOPLEFT",icon51,"TOPLEFT",0,0);
                 for x=52,55 do
@@ -2468,7 +2474,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                         icon:SetPoint("BOTTOMLEFT",bar:GetName().."Icon"..x-1,"BOTTOMRIGHT",-1,0);
                     end
                     expire:ClearAllPoints();
-                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",4,0);
+                    expire:SetPoint("BOTTOMRIGHT",icon,"BOTTOMRIGHT",2,0);
                     count:ClearAllPoints();
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
@@ -2489,24 +2495,24 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             bar4:SetValue(0)
             bar4:SetStatusBarColor(0,0,0,0)
         end
-        --barScale = bar:GetScale();
-        --bar:SetScale(barScale + 0.01);
-        --bar:SetScale(barScale);
-        --barScale = bar2:GetScale();
-        --bar2:SetScale(barScale + 0.01);
-        --bar2:SetScale(barScale);
-        --barScale = bar3:GetScale();
-        --bar3:SetScale(barScale + 0.01);
-        --bar3:SetScale(barScale);
-        --barScale = bar4:GetScale();
-        --bar4:SetScale(barScale + 0.01);
-        --bar4:SetScale(barScale);
-        --barScale = bar5:GetScale();
-        --bar5:SetScale(barScale + 0.01);
-        --bar5:SetScale(barScale);
-        --barScale = bar6:GetScale();
-        --bar6:SetScale(barScale + 0.01);
-        --bar6:SetScale(barScale);
+        barScale = bar:GetScale();
+        bar:SetScale(barScale + 0.01);
+        bar:SetScale(barScale);
+        barScale = bar2:GetScale();
+        bar2:SetScale(barScale + 0.01);
+        bar2:SetScale(barScale);
+        barScale = bar3:GetScale();
+        bar3:SetScale(barScale + 0.01);
+        bar3:SetScale(barScale);
+        barScale = bar4:GetScale();
+        bar4:SetScale(barScale + 0.01);
+        bar4:SetScale(barScale);
+        barScale = bar5:GetScale();
+        bar5:SetScale(barScale + 0.01);
+        bar5:SetScale(barScale);
+        barScale = bar6:GetScale();
+        bar6:SetScale(barScale + 0.01);
+        bar6:SetScale(barScale);
     elseif barType=="header" then
         h=button
         bar = _G[h:GetName().."Bar"]
@@ -2533,6 +2539,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
                              Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["B"],
                              Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["A"]);
         bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
+        bar:EnableMouse(false)
         h:Disable();
     elseif barType=="frameheader" then
         local g=_G["f"..numcols.."_HealBot_Action"]
@@ -2556,10 +2563,11 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             else
                 bar:SetStatusBarColor(0,0,0,0);
             end
+            bar:EnableMouse(false)
+            barScale = bar:GetScale();
+            bar:SetScale(barScale + 0.01);
+            bar:SetScale(barScale);
         end
-        --barScale = bar:GetScale();
-        --bar:SetScale(barScale + 0.01);
-        --bar:SetScale(barScale);
     elseif barType=="hbfocus" then
         bar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
@@ -2578,9 +2586,9 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         bar:SetHeight(bheight); 
         button:SetHeight(bheight); 
         bar.txt:SetText(HEALBOT_ACTION_HBFOCUS)
-        --barScale = bar:GetScale();
-        --bar:SetScale(barScale + 0.01);
-        --bar:SetScale(barScale);
+        barScale = bar:GetScale();
+        bar:SetScale(barScale + 0.01);
+        bar:SetScale(barScale);
     else
         HealBot_Action_SetAddHeightWidth()
         HealBot_Panel_clearResetHeaderSkinDone()

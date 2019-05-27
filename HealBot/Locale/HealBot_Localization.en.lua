@@ -385,7 +385,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTSHOWTEXT             = "Show icon text"
     HEALBOT_OPTIONS_HOTTEXTCOUNT            = "Count"
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
-    HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
+    HEALBOT_OPTIONS_ICONSCALE               = "Buff Icon Scale"
+    HEALBOT_OPTIONS_DEBUFFICONSCALE         = "Debuff Icon Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
     
 
@@ -1131,6 +1132,27 @@ function HealBot_Lang_Options_enALL()
                                  ["SMARTCASTBUFF"]=HEALBOT_OPTIONS_SMARTCASTBUFF,
                                  ["SMARTCASTHEAL"]=HEALBOT_OPTIONS_SMARTCASTHEAL,
                                  ["SMARTCASTRES"]="Cast resurrection",
+                                 ["SKINDEFAULTFOR"]=HEALBOT_OPTIONS_SKINDEFAULTFOR,
+                                 ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
+                                 ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
+                                 ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
+                                 ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
+                                 ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
+                                 ["USECRASHPROT"]=HEALBOT_OPTIONS_CRASHPROT,
+                                 ["USECRASHPROTGENERALMACRO"]=HEALBOT_OPTIONS_USEGENERALMACRO,
+                                 ["USECRASHPROTBASEMACRO"]=HEALBOT_CP_MACRO_BASE,
+                                 ["USECRASHPROTLOGONDURATION"]=HEALBOT_CP_STARTTIME,
+                                 ["USECOMBATPROT"]=HEALBOT_OPTIONS_COMBATPROT,
+                                 ["USECOMBATPROTGROUP"]=HEALBOT_OPTIONS_COMBATPROT,
+                                 ["USECOMBATPROTRAID"]=HEALBOT_OPTIONS_COMBATPROT,
+                                 ["CHATNONE"]=HEALBOT_OPTIONS_CASTNOTIFY1,
+                                 ["CHATSELF"]=HEALBOT_OPTIONS_CASTNOTIFY2,
+                                 ["CHATTARGET"]=HEALBOT_OPTIONS_CASTNOTIFY3,
+                                 ["CHATPARTY"]=HEALBOT_OPTIONS_CASTNOTIFY4,
+                                 ["CHATRAID"]=HEALBOT_OPTIONS_CASTNOTIFY5,
+                                 ["CHATCHAN"]=HEALBOT_OPTIONS_CASTNOTIFY6,
+                                 ["CHATRESONLY"]=HEALBOT_OPTIONS_CASTNOTIFYRESONLY,
+                                 ["CHATMSG"]=HEALBOT_OPTIONS_NOTIFY_MSG,
                               }
     HEALBOT_OPTIONS_HELP_TEXT={["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
                                ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
@@ -1185,6 +1207,27 @@ function HealBot_Lang_Options_enALL()
                                ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
                                ["SMARTCASTHEAL"]="Use SmartCast to cast healing type spells.",
                                ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
+                               ["SKINDEFAULTFOR"]="Set when the skin is displayed.\nNote: This setting is Per Character.",
+                               ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player and pet frames.\nNote: Changing this setting requires a UI Reload.",
+                               ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\nNote: Changing this setting requires a UI Reload.",
+                               ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\nNote: Changing this setting requires a UI Reload.",
+                               ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
+                               ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\nSlower is smoother as Faster skips steps.\nTIP: For a smooth yet fast fluid update:\nFirst increse Internal Timers and Updates on the General tab.",
+                               ["USECRASHPROT"]="Crash protection guards against the negative\neffects of a healbot user disconnecting during combat.\nA small number of macro slots will store current\ngroup/raid data that can be used on logon during combat.",
+                               ["USECRASHPROTGENERALMACRO"]="Use global macro slots rather than per character.\nTo reduce overall usage this option is recommended\nwhen using Healbot on multiple characters.",
+                               ["USECRASHPROTBASEMACRO"]="Set a common text string to be\nused at the start of the macro names.",
+                               ["USECRASHPROTLOGONDURATION"]="Set how long protection data is valid after logon.",
+                               ["USECOMBATPROT"]="Combat protection reserves bars to guard against random\nmembers leaving/joining the group/raid during combat.\nThis option will reserve bars to make up\nthe numbers to standard group or raid sizes.",
+                               ["USECOMBATPROTGROUP"]="Use Combat Protection in Groups.",
+                               ["USECOMBATPROTRAID"]="Use Combat Protection in Raids.",
+                               ["CHATNONE"]="Do not send chat messages.",
+                               ["CHATSELF"]="Send chat messages only to yourself, good for testing.",
+                               ["CHATTARGET"]="Send whisper to the target.",
+                               ["CHATPARTY"]="Send chat message to the group channel.",
+                               ["CHATRAID"]="Send chat message to the raid channel.",
+                               ["CHATCHAN"]="Send chat message to a pre-defined channel.",
+                               ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
+                               ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
                               }
 end
 
