@@ -14,7 +14,7 @@
 	  <AbsDimension y="18"/>
 	</Size>
     <Layers>
-    <Layer level="OVERLAY">
+    <Layer level="ARTWORK">
       <FontString name="$parent_text" inherits="GameFontNormalSmall">
         <Anchors>
         <Anchor point="CENTER">

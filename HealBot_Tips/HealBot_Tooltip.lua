@@ -16,6 +16,12 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                     }  
 local HealBot_Tooltip_luVars={}
 HealBot_Tooltip_luVars["uGroup"]=false
+HealBot_Tooltip_luVars["doInit"]=true
+
+function HealBot_Tooltip_setLuVars(vName, vValue)
+    HealBot_Tooltip_luVars[vName]=vValue
+  --HealBot_setCall("HealBot_Tooltip_setLuVars")
+end
 
 function HealBot_Tooltip_Clear_CheckBuffs()
     for x,_ in pairs(HealBot_CheckBuffs) do
@@ -168,6 +174,9 @@ end
 local function HealBot_Tooltip_SetLineLeft(Text,R,G,B,lNo,a)
     if lNo>40 then return end
     local txtL = _G["HealBot_TooltipTextL" .. lNo]
+    hbGameTooltip:AddFontStrings(
+        hbGameTooltip:CreateFontString( "$parentTextLeft" .. lNo, nil, "GameTooltipText" ),
+        hbGameTooltip:CreateFontString( "$parentTextRight" .. lNo, nil, "GameTooltipText" ) );
     txtL:SetTextColor(R,G,B,a)
     txtL:SetText(Text)
     txtL:Show()
@@ -181,6 +190,22 @@ local function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
     txtR:SetText(Text)
     txtR:Show()
     HealBot_Tooltip_DirtyLines[lNo]=true
+end
+
+local function HealBot_Tooltip_InitFont()
+    local fontType=GameFontNormal
+    if HealBot_Globals.Tooltip_TextSize==1 then
+        fontType=GameFontNormalSmall
+    elseif HealBot_Globals.Tooltip_TextSize==3 then
+        fontType=GameFontNormalLarge
+    end
+    for x=1,40 do
+        local txtR = _G["HealBot_TooltipTextR" .. x]
+        txtR:SetFontObject(fontType)
+        local txtL = _G["HealBot_TooltipTextL" .. x]
+        txtL:SetFontObject(fontType)
+        HealBot_Tooltip_DirtyLines[x]=nil
+    end
 end
 
 local function HealBot_Tooltip_SetLine(lNo,lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
@@ -253,6 +278,8 @@ local function HealBot_Tooltip_Show()
         end
         HealBot_Tooltip:SetWidth(width)
         HealBot_Tooltip:SetHeight(height)
+        HealBot_Tooltip:SetScale(1.01);
+        HealBot_Tooltip:SetScale(1);
         HealBot_Tooltip:Show();
     end
 end
@@ -368,10 +395,10 @@ local function HealBot_Tooltip_ClearLines()
         GameTooltip:ClearLines()
     else
         for x,_ in pairs(HealBot_Tooltip_DirtyLines) do
-            local txt = _G["HealBot_TooltipTextR" .. x]
-            txt:SetText(" ")
-            local txt = _G["HealBot_TooltipTextL" .. x]
-            txt:SetText(" ")
+            local txtR = _G["HealBot_TooltipTextR" .. x]
+            txtR:SetText(" ")
+            local txtL = _G["HealBot_TooltipTextL" .. x]
+            txtL:SetText(" ")
             HealBot_Tooltip_DirtyLines[x]=nil
         end
     end
@@ -884,6 +911,10 @@ local function HealBot_Action_DoRefreshTargetTooltip(button)
 end
 
 function HealBot_Action_RefreshTooltip()
+    if HealBot_Tooltip_luVars["doInit"] then
+        HealBot_Tooltip_luVars["doInit"]=false
+        HealBot_Tooltip_InitFont()
+    end
     HealBot_Action_DoRefreshTooltip()
 end
 
@@ -892,6 +923,10 @@ function HealBot_Action_RefreshTargetTooltip(button)
 end
 
 local function HealBot_Tooltip_Options_Show(noLines)
+    if HealBot_Tooltip_luVars["doInit"] then
+        HealBot_Tooltip_luVars["doInit"]=false
+        HealBot_Tooltip_InitFont()
+    end
     local height = 20 
     local width = 0
     for x = 1, noLines do
@@ -902,7 +937,9 @@ local function HealBot_Tooltip_Options_Show(noLines)
         end
     end
     HealBot_Tooltip:SetWidth(width)
-    HealBot_Tooltip:SetHeight(height)
+    HealBot_Tooltip:SetHeight(height)        
+    HealBot_Tooltip:SetScale(1.01);
+    HealBot_Tooltip:SetScale(1);
     HealBot_Tooltip:Show();
 end
 
@@ -918,7 +955,7 @@ function HealBot_Tooltip_OptionsHelp(title,text)
         end
     end
     local linenum=1
-    HealBot_Tooltip_SetLineLeft("     "..title,1,1,1,linenum,1)
+    HealBot_Tooltip_SetLineLeft(title,1,1,1,linenum,1)
     linenum=linenum+1
     HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
     for l=1,#tLine do 

@@ -91,6 +91,7 @@ HealBot_luVars["clearGUID"]=false
 HealBot_luVars["PrevTipTime"]=TimeNow
 HealBot_luVars["TipTimeInterval"]=0.098
 HealBot_luVars["lastBuffMsg"]="nil"
+HealBot_luVars["reCheckActionFrames"]=false
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -2056,6 +2057,12 @@ function HealBot_Check_Skin(SkinName)
        [10] = {["NAME"]=HEALBOT_FOCUS_en,["STATE"]=false,["FRAME"]=9}, 
        [11] = {["NAME"]=HEALBOT_CUSTOM_CASTBY_ENEMY_en,["STATE"]=false,["FRAME"]=10},}
     else
+        for id=1,11 do
+            if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=="Targets" then
+                Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_TARGETHEALS
+                break
+            end
+        end
         local freeHealGroups={}
         table.insert(freeHealGroups,HEALBOT_OPTIONS_SELFHEALS_en)
         table.insert(freeHealGroups,HEALBOT_OPTIONS_TANKHEALS_en)
@@ -2580,7 +2587,7 @@ function HealBot_Check_Skin(SkinName)
         Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=3
         Healbot_Config_Skins.Healing[SkinName]["FALWAYSSHOW"]=nil
     end
-    if Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]==nil then Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=2 end
+    if not Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"] then Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=2 end
     if Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]=false end
@@ -2657,12 +2664,6 @@ function HealBot_Check_Skin(SkinName)
     for id=1,6 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]>5 then
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1
-        end
-    end
-    for id=1,11 do
-        if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=="Targets" then
-            Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_TARGETHEALS
-            break
         end
     end
   --HealBot_setCall("HealBot_Check_Skin")
@@ -3536,7 +3537,7 @@ end
 local function HealBot_OnEvent_UnitThreat(button)
     if not UnitIsDeadOrGhost("player") then
         if UnitAffectingCombat(button.unit) then
-            if not HealBot_Data["UILOCK"] and HealBot_Globals.EnAutoCombat then
+            if not HealBot_Data["UILOCK"] and HealBot_Globals.EnAutoCombat and UnitIsVisible(button.unit) then
                 local z, y=HealBot_CalcThreat(button.unit)
                 local x=y+z
                 if x>0 then 
@@ -5309,6 +5310,10 @@ function HealBot_OnUpdate(self)
                 HealBot_Action_UpdateBars()
             end
         end
+        if HealBot_luVars["reCheckActionFrames"] then
+            HealBot_luVars["reCheckActionFrames"]=false
+            HealBot_Action_CheckFrameSetPoint()
+        end
     end
     --HealBot_setCall("HealBot_OnUpdate")
 end
@@ -6832,16 +6837,16 @@ end
 function HealBot_Reset_Icons()
     Healbot_Config_Skins.Icons[HEALBOT_SKINS_STD]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_SKINS_STD]
     Healbot_Config_Skins.Icons[HEALBOT_OPTIONS_GROUPHEALS]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_OPTIONS_GROUPHEALS]
-    Healbot_Config_Skins.Icons[HEALBOT_OPTIONS_EMERGENCYHEALS]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_OPTIONS_EMERGENCYHEALS]
-    Healbot_Config_Skins.Icons[HEALBOT_ZONE_AV]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_ZONE_AV]
+    Healbot_Config_Skins.Icons[HEALBOT_OPTIONS_RAID25]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_OPTIONS_RAID25]
+    Healbot_Config_Skins.Icons[HEALBOT_OPTIONS_RAID40]=HealBot_Config_SkinsDefaults.Icons[HEALBOT_OPTIONS_RAID40]
     Healbot_Config_Skins.RaidIcon[HEALBOT_SKINS_STD]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_SKINS_STD]
     Healbot_Config_Skins.RaidIcon[HEALBOT_OPTIONS_GROUPHEALS]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_OPTIONS_GROUPHEALS]
-    Healbot_Config_Skins.RaidIcon[HEALBOT_OPTIONS_EMERGENCYHEALS]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_OPTIONS_EMERGENCYHEALS]
-    Healbot_Config_Skins.RaidIcon[HEALBOT_ZONE_AV]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_ZONE_AV]
+    Healbot_Config_Skins.RaidIcon[HEALBOT_OPTIONS_RAID25]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_OPTIONS_RAID25]
+    Healbot_Config_Skins.RaidIcon[HEALBOT_OPTIONS_RAID40]=HealBot_Config_SkinsDefaults.RaidIcon[HEALBOT_OPTIONS_RAID40]
     Healbot_Config_Skins.IconText[HEALBOT_SKINS_STD]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_SKINS_STD]
     Healbot_Config_Skins.IconText[HEALBOT_OPTIONS_GROUPHEALS]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_OPTIONS_GROUPHEALS]
-    Healbot_Config_Skins.IconText[HEALBOT_OPTIONS_EMERGENCYHEALS]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_OPTIONS_EMERGENCYHEALS]
-    Healbot_Config_Skins.IconText[HEALBOT_ZONE_AV]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_ZONE_AV]
+    Healbot_Config_Skins.IconText[HEALBOT_OPTIONS_RAID25]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_OPTIONS_RAID25]
+    Healbot_Config_Skins.IconText[HEALBOT_OPTIONS_RAID40]=HealBot_Config_SkinsDefaults.IconText[HEALBOT_OPTIONS_RAID40]
     HealBot_Globals.IgnoreCustomBuff={}
     HealBot_Globals.HealBot_Custom_Buffs={}
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}

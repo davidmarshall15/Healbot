@@ -64,6 +64,7 @@ local HealBot_Options_EmergencyFClass_List={}
 local HealBot_Options_hbCommands_List={}
 local HealBot_Options_hbProfile_List={}
 local HealBot_Options_hbLangs_List={}
+local HealBot_Options_TooltipFontSize_List={}
 local HealBot_Options_MouseWheel_List={}
 local HealBot_Options_TestBarsProfile_List={}
 local HealBot_Options_ButtonCastMethod_List={}
@@ -239,13 +240,19 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_BUTTONCASTRELEASED,
     }
     
-    HealBot_Options_TestBarsProfile_List ={
+    HealBot_Options_TestBarsProfile_List = {
         HEALBOT_WORD_PARTY,
         HEALBOT_OPTIONS_EMERGENCYHEALS.." 10",
         HEALBOT_OPTIONS_EMERGENCYHEALS.." 25",
         HEALBOT_OPTIONS_EMERGENCYHEALS.." 40",
     }
 
+    HealBot_Options_TooltipFontSize_List = {
+        HEALBOT_WORDS_SMALL,
+        HEALBOT_WORDS_MEDIUM,
+        HEALBOT_WORDS_LARGE,
+    }
+    
     HealBot_Options_MouseWheel_List = {
         HEALBOT_WORDS_NONE,
         HEALBOT_HB_MENU,
@@ -2535,6 +2542,7 @@ function HealBot_Options_UseStickyFrames_OnClick(self)
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"] = false
         HealBot_Action_StickyFrameClearStuck()
+        HealBot_Options_ActionAnchor_SetAlpha(HealBot_Options_StorePrev["FramesSelFrame"])
     end
     HealBot_setOptions_Timer(7000)
 end
@@ -4386,6 +4394,23 @@ end
 
 --------------------------------------------------------------------------------
 
+function HealBot_Options_TooltipTextSize_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_TooltipFontSize_List), 1 do
+        info.text = HealBot_Options_TooltipFontSize_List[j];
+        info.func = function(self)
+                        HealBot_Globals.Tooltip_TextSize = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_TooltipTextSize, HealBot_Options_TooltipFontSize_List[HealBot_Globals.Tooltip_TextSize])
+                        HealBot_Tooltip_setLuVars("doInit", true)
+                    end
+        info.checked = false;
+        if HealBot_Globals.Tooltip_TextSize == j then info.checked = true; end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+--------------------------------------------------------------------------------
+
 function HealBot_Options_MouseWheelUp_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_MouseWheel_List), 1 do
@@ -5504,6 +5529,20 @@ function HealBot_Options_HelpSpellsSelect_OnClick(self, sLoc)
 end
 
 --------------------------------------------------------------------------------
+function HealBot_Options_ActionAnchor_UpdateDropDown()
+    HealBot_Options_ActionAnchor.initialize = HealBot_Options_ActionAnchor_DropDown
+    UIDropDownMenu_SetText(HealBot_Options_ActionAnchor, HealBot_Options_ActionAnchor_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FRAME"]])
+end
+
+function HealBot_Options_ActionAnchor_SetAlpha(hbCurFrame)
+    if hbCurFrame==HealBot_Options_StorePrev["FramesSelFrame"] then
+        if HealBot_Action_hbStickyFrameGetCoords(hbCurFrame) then
+            HealBot_Options_ActionAnchor:SetAlpha(0.4)
+        else
+            HealBot_Options_ActionAnchor:SetAlpha(1)
+        end
+    end
+end
 
 function HealBot_Options_ActionAnchor_DropDown()
     local info = UIDropDownMenu_CreateInfo()
@@ -5820,6 +5859,7 @@ function HealBot_Options_ApplyTab2Frames_OnClick()
                     Healbot_Config_Skins.BarText[s][j]["TAGOOR"]=Healbot_Config_Skins.BarText[s][f]["TAGOOR"]
                     Healbot_Config_Skins.BarText[s][j]["TAGR"]=Healbot_Config_Skins.BarText[s][f]["TAGR"]
                     Healbot_Config_Skins.BarText[s][j]["MAXCHARS"]=Healbot_Config_Skins.BarText[s][f]["MAXCHARS"]
+                    Healbot_Config_Skins.BarText[s][j]["OFFSET"]=Healbot_Config_Skins.BarText[s][f]["OFFSET"]
                     Healbot_Config_Skins.BarTextCol[s][j]["ER"]=Healbot_Config_Skins.BarTextCol[s][f]["ER"]
                     Healbot_Config_Skins.BarTextCol[s][j]["EG"]=Healbot_Config_Skins.BarTextCol[s][f]["EG"]
                     Healbot_Config_Skins.BarTextCol[s][j]["EB"]=Healbot_Config_Skins.BarTextCol[s][f]["EB"]
@@ -11140,6 +11180,7 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_BarsGrowDirection, HealBot_Options_BarsGrowDirection_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GROW"]])
             HealBot_Options_BarsOrientation.initialize = HealBot_Options_BarsOrientation_DropDown
             UIDropDownMenu_SetText(HealBot_Options_BarsOrientation, HealBot_Options_BarsOrientation_List[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFIX"]])
+            HealBot_Options_ActionAnchor_SetAlpha(HealBot_Options_StorePrev["FramesSelFrame"])
             DoneInitTab[301]=true
         end
     elseif subNo==302 then
@@ -12090,6 +12131,8 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipShowHoT,HEALBOT_OPTIONS_TOOLTIPSHOWHOT)
             HealBot_Options_Pct_OnLoad(HealBot_Options_TTAlpha,HEALBOT_OPTIONS_TTALPHA)
             HealBot_Options_TTAlpha:SetValue(HealBot_Globals.ttalpha)
+            HealBot_Options_TooltipTextSize.initialize = HealBot_Options_TooltipTextSize_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_TooltipTextSize, HealBot_Options_TooltipFontSize_List[HealBot_Globals.Tooltip_TextSize])
             g=_G["HealBot_Options_Panel6_1"]
             g:SetText(HEALBOT_OPTIONS_TIPTEXT)
             DoneInitTab[601]=true

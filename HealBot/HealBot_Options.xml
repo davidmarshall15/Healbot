@@ -4093,6 +4093,8 @@
                 </Anchors>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("SELECTSKIN",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("SELECTSKIN",false)</OnLeave>
                 </Scripts>
                 <Frames>
                   <Button name="HealBot_Options_DeleteSkin" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
@@ -4108,6 +4110,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_DeleteSkin_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DELSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DELSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <EditBox name="HealBot_Options_NewSkin" inherits="HealBot_Options_EditBoxTemplate">
@@ -4136,6 +4140,8 @@
                     </Anchors>
                     <Scripts>
                       <OnTextChanged>HealBot_Options_NewSkin_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("NEWSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("NEWSKIN",false)</OnLeave>
                     </Scripts>
                   </EditBox>
                   <Button name="HealBot_Options_NewSkinb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
@@ -4151,6 +4157,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_NewSkinb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SAVENEWSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SAVENEWSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_FramesSelFrame" inherits="UIDropDownMenuTemplate">
@@ -4176,6 +4184,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAME",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAME",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_ApplyTab2Frames" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SET_ALL_FRAMES">
@@ -4191,6 +4201,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ApplyTab2Frames_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEAPPLYTAB",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEAPPLYTAB",false)</OnLeave>
                     </Scripts>
                   </Button>
                 </Frames>
@@ -4559,6 +4571,8 @@
                     </Layers>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 1)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups1Frame" inherits="UIDropDownMenuTemplate">
@@ -4584,6 +4598,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups1Down">
@@ -4601,6 +4617,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 1)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups2" inherits="OptionsCheckButtonTemplate">
@@ -4613,6 +4631,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 2)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups2Frame" inherits="UIDropDownMenuTemplate">
@@ -4625,6 +4645,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups2Up">
@@ -4642,6 +4664,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 2)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_HealGroups2Down">
@@ -4659,6 +4683,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 2)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups3" inherits="OptionsCheckButtonTemplate">
@@ -4671,6 +4697,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 3)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups3Frame" inherits="UIDropDownMenuTemplate">
@@ -4683,6 +4711,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups3Up">
@@ -4700,6 +4730,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 3)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_HealGroups3Down">
@@ -4717,6 +4749,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 3)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups4" inherits="OptionsCheckButtonTemplate">
@@ -4729,6 +4763,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 4)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups4Frame" inherits="UIDropDownMenuTemplate">
@@ -4741,6 +4777,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups4Up">
@@ -4758,6 +4796,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 4)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_HealGroups4Down">
@@ -4775,6 +4815,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 4)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups5" inherits="OptionsCheckButtonTemplate">
@@ -4787,6 +4829,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 5)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups5Frame" inherits="UIDropDownMenuTemplate">
@@ -4799,6 +4843,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups5Up">
@@ -4816,6 +4862,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 5)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_HealGroups5Down">
@@ -4833,6 +4881,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupDown_OnClick(self, 5)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPDOWN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups6" inherits="OptionsCheckButtonTemplate">
@@ -4845,6 +4895,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 6)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups6Frame" inherits="UIDropDownMenuTemplate">
@@ -4857,6 +4909,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HealGroups6Up">
@@ -4874,6 +4928,8 @@
                     <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroupUp_OnClick(self, 6)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_HealGroups7" inherits="OptionsCheckButtonTemplate">
@@ -4886,6 +4942,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 7)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups7Frame" inherits="UIDropDownMenuTemplate">
@@ -4898,6 +4956,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups8" inherits="OptionsCheckButtonTemplate">
@@ -4910,6 +4970,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 8)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups8Frame" inherits="UIDropDownMenuTemplate">
@@ -4922,6 +4984,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups9" inherits="OptionsCheckButtonTemplate">
@@ -4934,6 +4998,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 9)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups9Frame" inherits="UIDropDownMenuTemplate">
@@ -4946,6 +5012,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups10" inherits="OptionsCheckButtonTemplate">
@@ -4958,6 +5026,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 10)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups10Frame" inherits="UIDropDownMenuTemplate">
@@ -4970,6 +5040,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups11" inherits="OptionsCheckButtonTemplate">
@@ -4982,6 +5054,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HealGroups_OnClick(self, 11)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEHEALGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_HealGroups11Frame" inherits="UIDropDownMenuTemplate">
@@ -4994,6 +5068,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
                 </Frames>
@@ -5490,6 +5566,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 310); HealBot_Options_ShowSkinsPanel("HealBot_Options_HealGroupsSkinsFrame", 1009)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("GOTOHEALGROUPS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("GOTOHEALGROUPS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <EditBox name="HealBot_Options_FrameAlias" inherits="HealBot_Options_EditBoxTemplate">
@@ -5505,6 +5583,8 @@
                     </Anchors>
                     <Scripts>
                       <OnTextChanged>HealBot_Options_FrameAlias_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEALIAS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEALIAS",false)</OnLeave>
                     </Scripts>
                   </EditBox>
                   <CheckButton name="HealBot_Options_ActionLocked" inherits="OptionsCheckButtonTemplate">
@@ -5517,6 +5597,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ActionLocked_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMELOCKED",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMELOCKED",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_AutoShow" inherits="OptionsCheckButtonTemplate">
@@ -5529,6 +5611,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_AutoShow_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEAUTOSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEAUTOSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_PanelSounds" inherits="OptionsCheckButtonTemplate">
@@ -5541,6 +5625,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PanelSounds_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEAUTOSHOWSOUND",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEAUTOSHOWSOUND",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_ActionAnchor" inherits="UIDropDownMenuTemplate" id="1">
@@ -5566,6 +5652,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEANCHOR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEANCHOR",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_ActionBarsAnchor" inherits="UIDropDownMenuTemplate">
@@ -5591,6 +5679,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BARANCHOR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARANCHOR",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_BarsGrowDirection" inherits="UIDropDownMenuTemplate">
@@ -5616,6 +5706,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BARGROWDIRECTION",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARGROWDIRECTION",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_BarsOrientation" inherits="UIDropDownMenuTemplate">
@@ -5641,6 +5733,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BARORIENTATION",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARORIENTATION",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Slider name="HealBot_FrameScale" inherits="HealBot_Options_SliderTemplate">
@@ -5656,6 +5750,8 @@
                     </Anchors>
                     <Scripts>
                       <OnValueChanged>HealBot_FrameScale_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMESCALE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMESCALE",false)</OnLeave>
                     </Scripts>
                   </Slider>
                   <Slider name="HealBot_FrameStickyOffsetHorizontal" inherits="HealBot_Options_SliderTemplate">
@@ -5715,6 +5811,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPPOSITION",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITION",false)</OnLeave>
                     </Scripts>
                   </Frame>
 
@@ -5732,6 +5830,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_SkinColorpick_OnClick("Back")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEBACKCOL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEBACKCOL",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_BackgroundColorpick">
@@ -5794,6 +5894,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_SkinColorpick_OnClick("Bor")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEBORDERCOL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEBORDERCOL",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_BorderColorpick">
@@ -5955,6 +6057,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowHeaders_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSSHOW",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSSHOW",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Button name="HealBot_HeadBarColorpickb">
@@ -5970,6 +6074,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("HeadB")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSBARCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSBARCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_HeadBarColorpick" inherits="TextStatusBar">
@@ -6032,6 +6138,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("HeadT")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSTEXTCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSTEXTCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_HeadTextColorpick" inherits="TextStatusBar">
@@ -6094,6 +6202,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadTextureS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSTEXTURE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSTEXTURE",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_HeadHightS" inherits="HealBot_Options_SliderTemplate">
@@ -6109,6 +6219,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadHightS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSHEIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSHEIGHT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_HeadWidthS" inherits="HealBot_Options_SliderTemplate">
@@ -6124,6 +6236,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadWidthS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSWIDTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSWIDTH",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_HeadFontNameS" inherits="HealBot_Options_SliderTemplate">
@@ -6139,6 +6253,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadFontNameS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSFONTNAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSFONTNAME",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_HeadFontHeightS" inherits="HealBot_Options_SliderTemplate">
@@ -6154,6 +6270,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadFontHeightS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSFONTHEIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSFONTHEIGHT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Frame name="HealBot_Options_HeadFontOutline" inherits="UIDropDownMenuTemplate">
@@ -6179,6 +6297,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSFONTOUTLINE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSFONTOUTLINE",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Slider name="HealBot_Options_HeadFontOffset" inherits="HealBot_Options_SliderTemplate">
@@ -6194,6 +6314,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_HeadFontOffset_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERBARSFONTOFFSET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERBARSFONTOFFSET",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>
@@ -6253,6 +6375,8 @@
                         </Anchors>
                         <Scripts>
                           <OnTextChanged>HealBot_Options_FrameTitle_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESTITLE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESTITLE",false)</OnLeave>
                         </Scripts>
                       </EditBox>
                       <CheckButton name="HealBot_Options_FrameAliasShow" inherits="OptionsCheckButtonTemplate">
@@ -6265,6 +6389,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_FrameAliasShow_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESSHOW",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESSHOW",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Button name="HealBot_FrameAliasColorpickb">
@@ -6280,6 +6406,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("Alias")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESBARCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESBARCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_FrameAliasColorpick" inherits="TextStatusBar">
@@ -6342,6 +6470,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("AliasT")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESTEXTCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESTEXTCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_FrameAliasTextColorpick" inherits="TextStatusBar">
@@ -6404,6 +6534,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_SkinFrameAliasTextureS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESTEXTURE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESTEXTURE",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_SkinFrameAliasHeightS" inherits="HealBot_Options_SliderTemplate">
@@ -6419,6 +6551,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_SkinFrameAliasHeightS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESHEIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESHEIGHT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_SkinFrameAliasWidthS" inherits="HealBot_Options_SliderTemplate">
@@ -6434,6 +6568,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_SkinFrameAliasWidthS_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESWIDTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESWIDTH",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_AliasFontName" inherits="HealBot_Options_SliderTemplate">
@@ -6449,6 +6585,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AliasFontName_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESFONTNAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESFONTNAME",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_AliasFontHeight" inherits="HealBot_Options_SliderTemplate">
@@ -6464,6 +6602,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AliasFontHeight_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESFONTHEIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESFONTHEIGHT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Frame name="HealBot_Options_AliasFontOutline" inherits="UIDropDownMenuTemplate">
@@ -6489,6 +6629,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESFONTOUTLINE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESFONTOUTLINE",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Slider name="HealBot_Options_AliasFontOffset" inherits="HealBot_Options_SliderTemplate">
@@ -6504,6 +6646,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AliasFontOffset_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEADERFRAMESFONTOFFSET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESFONTOFFSET",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>
@@ -13005,7 +13149,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13017,7 +13161,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellDetail" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13029,7 +13173,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13041,7 +13185,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMouseWheel" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13053,7 +13197,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipInstant" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13065,7 +13209,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13073,6 +13217,31 @@
                       <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_TooltipTextSize" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-65" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbottooltiptextsizefontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_SKINFHEIGHT">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                    </Scripts>
+                  </Frame>
                   <Button name="HealBot_Options_TooltipPosSettings" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_POSITION">
                     <Size>
                       <AbsDimension x="285" y="24"/>
@@ -13080,7 +13249,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="5" y="-65" />
+                          <AbsDimension x="-10" y="-120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13095,7 +13264,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipPosSettings" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-120" y="-75" />
+                          <AbsDimension x="-120" y="-70" />
                         </Offset>
                       </Anchor>
                     </Anchors>

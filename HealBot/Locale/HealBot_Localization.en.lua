@@ -220,6 +220,9 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_CD                      = " (CD ";
     HEALBOT_TOOLTIP_SECS                    = " sec)";
     HEALBOT_TOOLTIP_MINS                    = " min)";
+    HEALBOT_WORDS_SMALL                     = "Small"
+    HEALBOT_WORDS_MEDIUM                    = "Medium"
+    HEALBOT_WORDS_LARGE                     = "Large"
     HEALBOT_WORDS_SEC                       = "sec";
     HEALBOT_WORDS_CAST                      = "Cast";
     HEALBOT_WORDS_UNKNOWN                   = "Unknown";
@@ -1079,13 +1082,14 @@ function HealBot_Lang_InitVars()
 end
 
 function HealBot_Lang_Options_enALL()
-    HEALBOT_OPTIONS_HELP_TITLES={["STICKFRAMES"]=HEALBOT_OPTIONS_STICKYFRAMES,
-                                 ["STICKSENSITIVITY"]=HEALBOT_OPTIONS_STICKYFRAMES.." Sensitivity",
+    HEALBOT_OPTIONS_HELP_TITLES={
+                        -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["PRESETCOLALIAS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Alias",
                                  ["PRESETCOLSET"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["PRESETCOLSELECT"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Select",
                                  ["PRESETCOLCANCEL"]="Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Cancel",
+                        -- General tab
                                  ["HIDEOPTIONBUTTON"]=HEALBOT_OPTIONS_HIDEOPTIONS,
                                  ["RIGHTTOOPENOPTIONS"]=HEALBOT_OPTIONS_RIGHTBOPTIONS,
                                  ["SHOWMINIMAPBUTTON"]=HEALBOT_OPTIONS_SHOWMINIMAPBUTTON,
@@ -1097,8 +1101,6 @@ function HealBot_Lang_Options_enALL()
                                  ["DISABLEHEALBOTSOLO"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
                                  ["ADJUSTMAXHLTH"]=HEALBOT_OPTION_ADJUST_MAX_HEALTH,
                                  ["INTERNALTIMERS"]=HEALBOT_OPTIONS_RANGECHECKFREQ,
-                                 ["SFOFFSETH"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETH,
-                                 ["SFOFFSETV"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETV,
                                  ["LANG"]=HEALBOT_OPTIONS_LANG,
                                  ["SETLANG"]=HEALBOT_OPTIONS_LANG,
                                  ["CMDS"]=HEALBOT_OPTIONS_COMMANDS,
@@ -1106,6 +1108,7 @@ function HealBot_Lang_Options_enALL()
                                  ["PROFILE"]="Profile",
                                  ["SETPROFILE"]="Profile",
                                  ["CLASSTYPES"]="Class type configuration",
+                        -- Spells tab
                                  ["SETSPELLSFOR"]=HEALBOT_OPTIONS_SETSPELLS,
                                  ["ALWAYSUSEENABLED"]=HEALBOT_OPTIONS_ENABLEHEALTHY,
                                  ["SPELLSBUTTON"]=HEALBOT_OPTIONS_COMBOBUTTON,
@@ -1132,12 +1135,23 @@ function HealBot_Lang_Options_enALL()
                                  ["SMARTCASTBUFF"]=HEALBOT_OPTIONS_SMARTCASTBUFF,
                                  ["SMARTCASTHEAL"]=HEALBOT_OPTIONS_SMARTCASTHEAL,
                                  ["SMARTCASTRES"]="Cast resurrection",
+                        -- Skins top
+                                 ["SELECTSKIN"]=HEALBOT_OPTIONS_EXPORTSKIN,
+                                 ["DELSKIN"]="Delete Skin",
+                                 ["NEWSKIN"]=HEALBOT_OPTIONS_NEWSKINTEXT,
+                                 ["SAVENEWSKIN"]="Save new skin",
+                                 ["SELECTFRAME"]="Select Frame",
+                                 ["FRAMEAPPLYTAB"]=HEALBOT_OPTIONS_SET_ALL_FRAMES,
+                        -- Skins General tab
                                  ["SKINDEFAULTFOR"]=HEALBOT_OPTIONS_SKINDEFAULTFOR,
+                                 ["STICKFRAMES"]=HEALBOT_OPTIONS_STICKYFRAMES,
+                                 ["STICKSENSITIVITY"]=HEALBOT_OPTIONS_STICKYFRAMES.." Sensitivity",
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
                                  ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
                                  ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
+                        -- Skins Protection tab
                                  ["USECRASHPROT"]=HEALBOT_OPTIONS_CRASHPROT,
                                  ["USECRASHPROTGENERALMACRO"]=HEALBOT_OPTIONS_USEGENERALMACRO,
                                  ["USECRASHPROTBASEMACRO"]=HEALBOT_CP_MACRO_BASE,
@@ -1145,6 +1159,7 @@ function HealBot_Lang_Options_enALL()
                                  ["USECOMBATPROT"]=HEALBOT_OPTIONS_COMBATPROT,
                                  ["USECOMBATPROTGROUP"]=HEALBOT_OPTIONS_COMBATPROT,
                                  ["USECOMBATPROTRAID"]=HEALBOT_OPTIONS_COMBATPROT,
+                        -- Skins Chat tab
                                  ["CHATNONE"]=HEALBOT_OPTIONS_CASTNOTIFY1,
                                  ["CHATSELF"]=HEALBOT_OPTIONS_CASTNOTIFY2,
                                  ["CHATTARGET"]=HEALBOT_OPTIONS_CASTNOTIFY3,
@@ -1153,14 +1168,82 @@ function HealBot_Lang_Options_enALL()
                                  ["CHATCHAN"]=HEALBOT_OPTIONS_CASTNOTIFY6,
                                  ["CHATRESONLY"]=HEALBOT_OPTIONS_CASTNOTIFYRESONLY,
                                  ["CHATMSG"]=HEALBOT_OPTIONS_NOTIFY_MSG,
+                        -- Skins Frames General tab
+                                 ["GOTOHEALGROUPS"]=HEALBOT_OPTIONS_SET_FRAME_HEALGROUPS,
+                                 ["FRAMEALIAS"]=HEALBOT_OPTIONS_FRAME_ALIAS,
+                                 ["FRAMELOCKED"]="Lock Frame",
+                                 ["FRAMELOCKED"]="Lock Frame",
+                                 ["FRAMEAUTOSHOW"]=HEALBOT_OPTIONS_AUTOSHOW,
+                                 ["FRAMEAUTOSHOWSOUND"]=HEALBOT_OPTIONS_PANELSOUNDS,
+                                 ["FRAMEANCHOR"]=HEALBOT_OPTIONS_ANCHOR,
+                                 ["BARANCHOR"]=HEALBOT_OPTIONS_BARSANCHOR,
+                                 ["BARGROWDIRECTION"]=HEALBOT_OPTIONS_GROW_DIRECTION,
+                                 ["BARORIENTATION"]=HEALBOT_OPTIONS_BARSORIENTATION,
+                                 ["FRAMESCALE"]=HEALBOT_OPTIONS_FRAMESCALE,
+                                 ["SFOFFSETH"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETH,
+                                 ["SFOFFSETV"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETV,
+                                 ["FRAMEBACKCOL"]="Frame Background",
+                                 ["FRAMEBORDERCOL"]="Frame Border",
+                                 ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
+                        -- Skins Frames Heal Groups tab
+                                 ["SELECTFRAMEFORGROUP"]=HEALBOT_OPTIONS_FRAME,
+                                 ["ENABLEHEALGROUP"]=HEALBOT_OPTIONS_FRAME,
+                                 ["HEALGROUPDOWN"]="Heal Group Down",
+                                 ["HEALGROUPUP"]="Heal Group Up",
+                        -- Skins Frames Headers Bars tab
+                                 ["HEADERBARSSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
+                                 ["HEADERBARSBARCOL"]="Header Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                                 ["HEADERBARSTEXTCOL"]="Header Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                                 ["HEADERBARSTEXTURE"]=HEALBOT_OPTIONS_SKINTEXTURE,
+                                 ["HEADERBARSHEIGHT"]=HEALBOT_OPTION_AGGROBAR.." "..HEALBOT_OPTIONS_SKINHEIGHT,
+                                 ["HEADERBARSWIDTH"]=HEALBOT_OPTIONS_SKINWIDTH,
+                                 ["HEADERBARSFONTNAME"]=HEALBOT_OPTIONS_SKINFONT,
+                                 ["HEADERBARSFONTHEIGHT"]=HEALBOT_OPTIONS_SKINFHEIGHT,
+                                 ["HEADERBARSFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
+                                 ["HEADERBARSFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
+                        -- Skins Frames Headers Frames tab
+                                 ["HEADERFRAMESTITLE"]=HEALBOT_OPTIONS_FRAME_TITLE,
+                                 ["HEADERFRAMESSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
+                                 ["HEADERFRAMESBARCOL"]="Header Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                                 ["HEADERFRAMESTEXTCOL"]="Header Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                                 ["HEADERFRAMESTEXTURE"]=HEALBOT_OPTIONS_SKINTEXTURE,
+                                 ["HEADERFRAMESHEIGHT"]=HEALBOT_OPTION_AGGROBAR.." "..HEALBOT_OPTIONS_SKINHEIGHT,
+                                 ["HEADERFRAMESWIDTH"]=HEALBOT_OPTIONS_SKINWIDTH,
+                                 ["HEADERFRAMESFONTNAME"]=HEALBOT_OPTIONS_SKINFONT,
+                                 ["HEADERFRAMESFONTHEIGHT"]=HEALBOT_OPTIONS_SKINFHEIGHT,
+                                 ["HEADERFRAMESFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
+                                 ["HEADERFRAMESFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
+                        -- Skins Frames Bars General tab
+                        -- Skins Frames Bars Colours tab
+                        -- Skins Frames Bars Text tab
+                        -- Skins Frames Bars Sort tab
+                        -- Skins Frames Bars Visibility tab
+                        -- Skins Frames Bars Aggro tab
+                        -- Skins Frames Icons General tab
+                        -- Skins Frames Icons Text tab
+                        -- Debuffs General tab
+                        -- Debuffs Custom tab
+                        -- Debuffs Warning tab
+                        -- Buffs General tab
+                        -- Buffs Custom tab
+                        -- Buffs Warning tab
+                        -- Tips tab
+                        -- Mouse Wheel tab
+                        -- Test tab
+                        -- Import/Export Skins tab
+                        -- Import/Export Custom Debuffs tab
+                        -- Import/Export Custom Buffs tab
+                        -- Import/Export Spells tab
+                        -- Import/Export Preset Colours tab
                               }
-    HEALBOT_OPTIONS_HELP_TEXT={["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
-                               ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
+    HEALBOT_OPTIONS_HELP_TEXT={
+                        -- Preset Colours
                                ["PRESETCOLS"]="Select a Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".\nUp to 10 Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be defined.",
                                ["PRESETCOLALIAS"]="Set a meaningful name for the Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["PRESETCOLSET"]="Click to set the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["PRESETCOLSELECT"]="Click to select the Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["PRESETCOLCANCEL"]="Click to leave without selecting a Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                        -- General tab
                                ["HIDEOPTIONBUTTON"]="Hide the options button that is\nshown at the bottom of the 1st frame.",
                                ["RIGHTTOOPENOPTIONS"]="Right click on the edge of\na frame will open options.",
                                ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options.",
@@ -1172,8 +1255,6 @@ function HealBot_Lang_Options_enALL()
                                ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
                                ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect.",
                                ["INTERNALTIMERS"]="This combined with your FPS sets how\nquickly the following are updated:\n- Range checking\n- Buff checking\n- Debuff checking\n- fastHealth updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates",
-                               ["SFOFFSETH"]="Set the horizontal offset of this frame\nwhen this frame is stuck to another frame.",
-                               ["SFOFFSETV"]="Set the vertical offset of this frame\nwhen this frame is stuck to another frame.",
                                ["LANG"]="Select the language used by healbot options.\nThis can be independent to the UI.",
                                ["SETLANG"]="Set the language selected.",
                                ["CMDS"]="Select a command to run.\nMany commands allow for resetting parts of\nhealbot without the need to reset to defaults.",
@@ -1181,6 +1262,7 @@ function HealBot_Lang_Options_enALL()
                                ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
                                ["SETPROFILE"]="Set the profile selected.",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
+                        -- Spells tab
                                ["SETSPELLSFOR"]="Set spells that can be used in different states:\n* Enabled - Always when in combat and any time the bar is in an enabled state.\n* Disabled - Only when out of combat and the bar is in a disabled state.\n* Enemy - Allows for harmful spells to be set and used on enemy bars.",
                                ["ALWAYSUSEENABLED"]="Use this option to always cast enabled\nspells regardless of the bar state.",
                                ["SPELLSBUTTON"]="The button press to cast a spell.",
@@ -1207,12 +1289,23 @@ function HealBot_Lang_Options_enALL()
                                ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
                                ["SMARTCASTHEAL"]="Use SmartCast to cast healing type spells.",
                                ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
+                        -- Skins top
+                               ["SELECTSKIN"]="Select the skin you want to use.",
+                               ["DELSKIN"]="Delete the current skin.\nNote: The standard skin cannot be deleted.",
+                               ["NEWSKIN"]="Enter a name for a new skin that will\nbe based on the currently selected skin.",
+                               ["SAVENEWSKIN"]="Create a new skin based on the currently selected skin.",
+                               ["SELECTFRAME"]="Select from a list of 10 frames.\nFrame options will be displayed and\ncan be updated for the current selected frame",
+                               ["FRAMEAPPLYTAB"]="An easy way to set the current tab options to all frames.",
+                        -- Skins General tab
                                ["SKINDEFAULTFOR"]="Set when the skin is displayed.\nNote: This setting is Per Character.",
+                               ["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
+                               ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
                                ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player and pet frames.\nNote: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\nNote: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\nNote: Changing this setting requires a UI Reload.",
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\nSlower is smoother as Faster skips steps.\nTIP: For a smooth yet fast fluid update:\nFirst increse Internal Timers and Updates on the General tab.",
+                        -- Skins Protection tab
                                ["USECRASHPROT"]="Crash protection guards against the negative\neffects of a healbot user disconnecting during combat.\nA small number of macro slots will store current\ngroup/raid data that can be used on logon during combat.",
                                ["USECRASHPROTGENERALMACRO"]="Use global macro slots rather than per character.\nTo reduce overall usage this option is recommended\nwhen using Healbot on multiple characters.",
                                ["USECRASHPROTBASEMACRO"]="Set a common text string to be\nused at the start of the macro names.",
@@ -1220,6 +1313,7 @@ function HealBot_Lang_Options_enALL()
                                ["USECOMBATPROT"]="Combat protection reserves bars to guard against random\nmembers leaving/joining the group/raid during combat.\nThis option will reserve bars to make up\nthe numbers to standard group or raid sizes.",
                                ["USECOMBATPROTGROUP"]="Use Combat Protection in Groups.",
                                ["USECOMBATPROTRAID"]="Use Combat Protection in Raids.",
+                        -- Skins Chat tab
                                ["CHATNONE"]="Do not send chat messages.",
                                ["CHATSELF"]="Send chat messages only to yourself, good for testing.",
                                ["CHATTARGET"]="Send whisper to the target.",
@@ -1228,6 +1322,72 @@ function HealBot_Lang_Options_enALL()
                                ["CHATCHAN"]="Send chat message to a pre-defined channel.",
                                ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
                                ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
+                        -- Skins Frames General tab
+                               ["GOTOHEALGROUPS"]="Go to the Heal Groups tab.",
+                               ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
+                               ["FRAMELOCKED"]="Lock the frame at the current position.\nNote: If the frame is stuck to another frame\nthe frame will remain stuck and cannot be unstuck.",
+                               ["FRAMEAUTOSHOW"]="Hide the frame when out of combat and\nnone of the bars are in an enabled state.",
+                               ["FRAMEAUTOSHOWSOUND"]="Play a bell sound when opening the frame.",
+                               ["FRAMEANCHOR"]="The position of the frame anchor relative to the screen.\nNote: When the frame is stuck to another frame\nthis setting is automatically updated\nand used to store the frames location.",
+                               ["BARANCHOR"]="The position of the bars anchor relative to the frame.",
+                               ["BARGROWDIRECTION"]="The direction the bars grow away from the bars anchor.",
+                               ["BARORIENTATION"]="The direction each bar will shrink/grow depending on the players health.",
+                               ["FRAMESCALE"]="The scale of the current frame.",
+                               ["SFOFFSETH"]="Set the horizontal offset of this frame\nwhen this frame is stuck to another frame.",
+                               ["SFOFFSETV"]="Set the vertical offset of this frame\nwhen this frame is stuck to another frame.",
+                               ["FRAMEBACKCOL"]="Set the background col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the frame.",
+                               ["FRAMEBORDERCOL"]="Set the border for the frame.",
+                               ["TOOLTIPPOSITION"]="The location of the tooltip relative to the frame.",
+                        -- Skins Frames Heal Groups tab
+                               ["SELECTFRAMEFORGROUP"]="Select a frame for the group.",
+                               ["ENABLEHEALGROUP"]="Include/Exclude the heal group.",
+                               ["HEALGROUPDOWN"]="Move the heal group down.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
+                               ["HEALGROUPUP"]="Move the heal group up.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
+                        -- Skins Frames Headers Bars tab
+                               ["HEADERBARSSHOW"]="Turn On/Off displaying the bars headers.\n- For the raid heal group the header is based on main sort.\n- For other heal groups the header is the heal group name.",
+                               ["HEADERBARSBARCOL"]="Set the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the header bars.",
+                               ["HEADERBARSTEXTCOL"]="Set the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." shown on the header bars.",
+                               ["HEADERBARSTEXTURE"]="Set the texture for the header bars.",
+                               ["HEADERBARSHEIGHT"]="Set the height for the header bars.",
+                               ["HEADERBARSWIDTH"]="Set the width for the header bars.\nThis is based on the bars width.",
+                               ["HEADERBARSFONTNAME"]="Set the font for the text\ndisplayed on the header bars.",
+                               ["HEADERBARSFONTHEIGHT"]="Set the font size for the text\ndisplayed on the header bars.",
+                               ["HEADERBARSFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the header bars.",
+                               ["HEADERBARSFONTOFFSET"]="Vertically offset the header text.",
+                        -- Skins Frames Headers Frames tab
+                               ["HEADERFRAMESTITLE"]="Set the text to be displayed for the frame.",
+                               ["HEADERFRAMESSHOW"]="Turn On/Off displaying the frames headers.",
+                               ["HEADERFRAMESBARCOL"]="Set the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the frames header.",
+                               ["HEADERFRAMESTEXTCOL"]="Set the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." shown on the frames header.",
+                               ["HEADERFRAMESTEXTURE"]="Set the texture for the frames header.",
+                               ["HEADERFRAMESHEIGHT"]="Set the height for the frames header.",
+                               ["HEADERFRAMESWIDTH"]="Set the width for the frames header.\nThis is based on the frames width.",
+                               ["HEADERFRAMESFONTNAME"]="Set the font for the text\ndisplayed on the frames header.",
+                               ["HEADERFRAMESFONTHEIGHT"]="Set the font size for the text\ndisplayed on the frames header.",
+                               ["HEADERFRAMESFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the frames header.",
+                               ["HEADERFRAMESFONTOFFSET"]="Vertically offset the header text.",
+                        -- Skins Frames Bars General tab
+                        -- Skins Frames Bars Colours tab
+                        -- Skins Frames Bars Text tab
+                        -- Skins Frames Bars Sort tab
+                        -- Skins Frames Bars Visibility tab
+                        -- Skins Frames Bars Aggro tab
+                        -- Skins Frames Icons General tab
+                        -- Skins Frames Icons Text tab
+                        -- Debuffs General tab
+                        -- Debuffs Custom tab
+                        -- Debuffs Warning tab
+                        -- Buffs General tab
+                        -- Buffs Custom tab
+                        -- Buffs Warning tab
+                        -- Tips tab
+                        -- Mouse Wheel tab
+                        -- Test tab
+                        -- Import/Export Skins tab
+                        -- Import/Export Custom Debuffs tab
+                        -- Import/Export Custom Buffs tab
+                        -- Import/Export Spells tab
+                        -- Import/Export Preset Colours tab
                               }
 end
 

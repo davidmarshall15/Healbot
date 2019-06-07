@@ -549,7 +549,7 @@ local function HealBot_Action_SetHeightWidth(width,height,bWidth,bHeight,hbCurFr
     if HealBot_Panel_initFrame[hbCurFrame] then
         HealBot_Panel_initFrame[hbCurFrame]=false
         HealBot_Action_FrameSetPoint(hbCurFrame, g)
-        HealBot_setOptions_Timer(2000+hbCurFrame)
+        HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true)
     else
         HealBot_Action_setPoint(hbCurFrame)
     end
