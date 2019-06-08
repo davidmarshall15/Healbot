@@ -6827,6 +6827,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_BarTextureS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTEXTURE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTEXTURE",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_BarNumColsS" inherits="HealBot_Options_SliderTemplate">
@@ -6843,6 +6845,8 @@
                             <Scripts>
                               <OnLoad>HealBot_Options_valNoCols_OnLoad(self,1,12);</OnLoad>
                               <OnValueChanged>HealBot_Options_BarNumColsS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSNUMCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSNUMCOLS",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <CheckButton name="HealBot_Options_BarNumGroupPerCol" inherits="SendMailRadioButtonTemplate" id="7">
@@ -6855,6 +6859,8 @@
                             </Anchors>
                             <Scripts>
                               <OnClick>HealBot_Options_BarNumGroupPerCol_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSGRPSPERCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSGRPSPERCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           <Slider name="HealBot_Options_BarHeightS" inherits="HealBot_Options_SliderTemplate">
@@ -6870,6 +6876,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_BarHeightS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSHEIGHT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSHEIGHT",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_BarWidthS" inherits="HealBot_Options_SliderTemplate">
@@ -6885,6 +6893,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_BarWidthS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSWIDTH",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSWIDTH",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_BarBRSpaceS" inherits="HealBot_Options_SliderTemplate">
@@ -6900,6 +6910,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_BarBRSpaceS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSBRSPACE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSBRSPACE",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_BarBCSpaceS" inherits="HealBot_Options_SliderTemplate">
@@ -6915,6 +6927,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_BarBCSpaceS_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSBCSPACE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSBCSPACE",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_AggroBarSize" inherits="HealBot_Options_SliderTemplate">
@@ -6930,6 +6944,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_AggroBarSize_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROSIZE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROSIZE",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <Slider name="HealBot_Options_Bar2Size" inherits="HealBot_Options_SliderTemplate">
@@ -6945,6 +6961,8 @@
                             </Anchors>
                             <Scripts>
                               <OnValueChanged>HealBot_Options_Bar2Size_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSPOWERSIZE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSPOWERSIZE",false)</OnLeave>
                             </Scripts>
                           </Slider>
                           <CheckButton name="HealBot_Options_ShowPowerCounter" inherits="SendMailRadioButtonTemplate" id="7">
@@ -6957,6 +6975,8 @@
                             </Anchors>
                             <Scripts>
                               <OnClick>HealBot_Options_ShowPowerCounter_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSPOWERCOUNT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSPOWERCOUNT",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           <Frame name="HealBot_Options_ManaIndicator" inherits="UIDropDownMenuTemplate">
@@ -6982,6 +7002,8 @@
                             </Layers>
                             <Scripts>
                               <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSLOWMANA",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSLOWMANA",false)</OnLeave>
                             </Scripts>
                           </Frame>
                           <CheckButton name="HealBot_Options_ManaIndicatorInCombat" inherits="SendMailRadioButtonTemplate">
@@ -6994,6 +7016,8 @@
                             </Anchors>
                             <Scripts>
                               <OnClick>HealBot_Options_ManaIndicatorInCombat_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSLOWMANAIC",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSLOWMANAIC",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           
@@ -7050,6 +7074,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 95)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTHTYPE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTHTYPE",false)</OnLeave>
                         </Scripts>
                         <Layers>
                           <Layer level="OVERLAY">
@@ -7078,6 +7104,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("CustomBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_BarCustomColour" inherits="TextStatusBar">
@@ -7140,6 +7168,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlpha_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLALPHA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLALPHA",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       
@@ -7154,6 +7184,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 95)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSBACKCOLTYPE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSBACKCOLTYPE",false)</OnLeave>
                         </Scripts>
                         <Layers>
                           <Layer level="OVERLAY">
@@ -7182,6 +7214,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("CustomBackBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSBACKCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSBACKCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Options_BarHealthBackColourS" inherits="TextStatusBar">
@@ -7244,6 +7278,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarOutlineBackGround_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSBACKOUTLINE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSBACKOUTLINE",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_BarAlphaBackGround" inherits="HealBot_Options_SliderTemplate">
@@ -7259,6 +7295,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlphaBackGround_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSBACKALPHA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSBACKALPHA",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       
@@ -7272,6 +7310,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 95)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSICCOLTYPE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSICCOLTYPE",false)</OnLeave>
                         </Scripts>
                         <Layers>
                           <Layer level="OVERLAY">
@@ -7300,6 +7340,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("CustomIHBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSICCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSICCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_BarIHCustomColour" inherits="TextStatusBar">
@@ -7362,6 +7404,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlphaInHeal_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSICALPHA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSICALPHA",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       
@@ -7375,6 +7419,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 95)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAECOLTYPE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAECOLTYPE",false)</OnLeave>
                         </Scripts>
                         <Layers>
                           <Layer level="OVERLAY">
@@ -7403,6 +7449,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("CustomAbsorbBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAECOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAECOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_BarAbsorbCustomColour" inherits="TextStatusBar">
@@ -7465,6 +7513,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlphaAbsorb_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAECOLALPHA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAECOLALPHA",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       
@@ -7481,6 +7531,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlphaEor_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSALPHAOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSALPHAOOR",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_BarAlphaDis" inherits="HealBot_Options_SliderTemplate">
@@ -7496,6 +7548,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BarAlphaDis_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSALPHADIS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSALPHADIS",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>
@@ -7554,6 +7608,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("En")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTENCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTENCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_EnTextColorpick" inherits="TextStatusBar">
@@ -7633,6 +7689,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("Dis")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTDISCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTDISCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_DisTextColorpick" inherits="TextStatusBar">
@@ -7695,6 +7753,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("Debuff")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTDEBUFFCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTDEBUFFCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_DebTextColorpick">
@@ -7754,6 +7814,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarTextInClassColour_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTCLASSCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTCLASSCOL",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowClassOnBar" inherits="OptionsCheckButtonTemplate">
@@ -7766,6 +7828,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowClassOnBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowRoleOnBar" inherits="SendMailRadioButtonTemplate" id="1">
@@ -7778,6 +7842,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowRoleOnBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowClassOnBarType1" inherits="SendMailRadioButtonTemplate" id="1">
@@ -7790,6 +7856,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowClassOnBarType_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASSICON",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASSICON",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowClassOnBarType2" inherits="SendMailRadioButtonTemplate" id="2">
@@ -7802,6 +7870,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowClassOnBarType_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASSTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWCLASSTEXT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowNameOnBar" inherits="OptionsCheckButtonTemplate">
@@ -7814,6 +7884,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowNameOnBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWNAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWNAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_TextlibUTF8" inherits="SendMailRadioButtonTemplate">
@@ -7826,6 +7898,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_libUTF8_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTUTF8",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTUTF8",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_NumberTextLines" inherits="OptionsCheckButtonTemplate">
@@ -7838,6 +7912,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_NumberTextLines_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTLINES",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTLINES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Slider name="HealBot_Options_MaxChars" inherits="HealBot_Options_SliderTemplate">
@@ -7853,6 +7929,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_MaxChars_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTMAXCHARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTMAXCHARS",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_ShowHealthOnBar" inherits="OptionsCheckButtonTemplate">
@@ -7865,6 +7943,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowHealthOnBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSHOWHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWHEALTH",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_BarHealthIncHeal" inherits="UIDropDownMenuTemplate">
@@ -7877,6 +7957,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 270)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHEALTHICOPTION",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHICOPTION",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BarHealthType" inherits="UIDropDownMenuTemplate">
@@ -7889,6 +7971,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHEALTHTYPE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHTYPE",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BarHealthNumFormat1" inherits="UIDropDownMenuTemplate">
@@ -7901,6 +7985,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHEALTHFORMAT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHFORMAT",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BarHealthNumFormat2" inherits="UIDropDownMenuTemplate">
@@ -7913,6 +7999,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHEALTHFORMAT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHFORMAT",false)</OnLeave>
                         </Scripts>
                       </Frame>
 
@@ -7942,6 +8030,8 @@
                         </Layers>
                         <Scripts>
                           <OnTextChanged>HealBot_Options_DisconnectedTag_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGDC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGDC",false)</OnLeave>
                         </Scripts>
                       </EditBox>
                       <EditBox name="HealBot_Options_UnitDeadTag" inherits="HealBot_Options_EditBoxTemplate">
@@ -7957,6 +8047,8 @@
                         </Anchors>
                         <Scripts>
                           <OnTextChanged>HealBot_Options_UnitDeadTag_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGRIP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGRIP",false)</OnLeave>
                         </Scripts>
                       </EditBox>
                       <EditBox name="HealBot_Options_OutOfRangeTag" inherits="HealBot_Options_EditBoxTemplate">
@@ -7972,6 +8064,8 @@
                         </Anchors>
                         <Scripts>
                           <OnTextChanged>HealBot_Options_OutOfRangeTag_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGOOR",false)</OnLeave>
                         </Scripts>
                       </EditBox>
                       <EditBox name="HealBot_Options_ReserverTag" inherits="HealBot_Options_EditBoxTemplate">
@@ -7987,6 +8081,8 @@
                         </Anchors>
                         <Scripts>
                           <OnTextChanged>HealBot_Options_ReserverTag_OnTextChanged(self)</OnTextChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGR",false)</OnLeave>
                         </Scripts>
                       </EditBox>
 
@@ -8003,6 +8099,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_FontName_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_FontHeight" inherits="HealBot_Options_SliderTemplate">
@@ -8018,6 +8116,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_FontHeight_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTHEIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTHEIGHT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_FontOffset" inherits="HealBot_Options_SliderTemplate">
@@ -8033,6 +8133,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_FontOffset_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTOFFSET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTOFFSET",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_TextAlign" inherits="HealBot_Options_SliderTemplate">
@@ -8048,6 +8150,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_TextAlign_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTALIGN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTALIGN",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Frame name="HealBot_Options_FontOutline" inherits="UIDropDownMenuTemplate">
@@ -8073,6 +8177,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTOUTLINE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTOUTLINE",false)</OnLeave>
                         </Scripts>
                       </Frame>
                     </Frames>
@@ -8128,6 +8234,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_SubSortPlayerFirst_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSELF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="OptionsCheckButtonTemplate">
@@ -8140,6 +8248,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_SortOutOfRangeLast_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTOOR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_ExtraSort" inherits="UIDropDownMenuTemplate" id="1">
@@ -8165,6 +8275,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTMAIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTMAIN",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_ExtraSubSort" inherits="UIDropDownMenuTemplate" id="1">
@@ -8190,6 +8302,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTSUB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSUB",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <CheckButton name="HealBot_Options_SelfPet" inherits="OptionsCheckButtonTemplate">
@@ -8202,6 +8316,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_SelfPet_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSELFPET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSELFPET",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_GroupPetsByFive" inherits="OptionsCheckButtonTemplate">
@@ -8214,6 +8330,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_GroupPetsByFive_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSPETGROUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSPETGROUP",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                     </Frames>
@@ -8272,6 +8390,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AlertLevelIC_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISALERTIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISALERTIC",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_AlertLevelOC" inherits="HealBot_Options_SliderTemplate">
@@ -8287,6 +8407,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AlertLevelOC_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISALERTOC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISALERTOC",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_HideBars" inherits="OptionsCheckButtonTemplate">
@@ -8299,6 +8421,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HideBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISHIDE100",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISHIDE100",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_TargetInCombat" inherits="UIDropDownMenuTemplate" id="1">
@@ -8333,6 +8457,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISTARGETIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISTARGETIC",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_FocusInCombat" inherits="UIDropDownMenuTemplate" id="1">
@@ -8367,6 +8493,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 145)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFOCUSIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFOCUSIC",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <CheckButton name="HealBot_Options_TargetOnlyFriend" inherits="SendMailRadioButtonTemplate">
@@ -8392,6 +8520,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_Options_TargetOnlyFriend_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISTARGETFRIEND",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISTARGETFRIEND",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_FocusOnlyFriend" inherits="SendMailRadioButtonTemplate">
@@ -8417,6 +8547,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_Options_FocusOnlyFriend_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFOCUSFRIEND",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFOCUSFRIEND",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_EmergencyFilter" inherits="UIDropDownMenuTemplate" id="1">
@@ -8451,6 +8583,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTER",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTER",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <CheckButton name="HealBot_Options_EFGroup1" inherits="SendMailRadioButtonTemplate" id="1">
@@ -8477,6 +8611,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_ONE)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup2" inherits="SendMailRadioButtonTemplate" id="2">
@@ -8490,6 +8626,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_TWO)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup3" inherits="SendMailRadioButtonTemplate" id="3">
@@ -8503,6 +8641,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_THREE)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup4" inherits="SendMailRadioButtonTemplate" id="4">
@@ -8516,6 +8656,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_FOUR)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup5" inherits="SendMailRadioButtonTemplate" id="5">
@@ -8529,6 +8671,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_FIVE)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup6" inherits="SendMailRadioButtonTemplate" id="6">
@@ -8542,6 +8686,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_SIX)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup7" inherits="SendMailRadioButtonTemplate" id="7">
@@ -8555,6 +8701,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_SEVEN)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EFGroup8" inherits="SendMailRadioButtonTemplate" id="8">
@@ -8568,6 +8716,8 @@
                         <Scripts>
                           <OnLoad>HealBot_Options_SetText(self,HEALBOT_EIGHT)</OnLoad>
                           <OnClick>HealBot_Options_EFGroup_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISFILTERGROUPS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                     </Frames>
@@ -8623,6 +8773,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowEnemyIncSelf_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCSELF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="OptionsCheckButtonTemplate">
@@ -8635,6 +8787,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowEnemyIncTanks_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCTANKS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCTANKS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowEnemyIncArena" inherits="OptionsCheckButtonTemplate">
@@ -8647,6 +8801,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowEnemyIncArena_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENA",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowEnemyIncArenaPets" inherits="SendMailRadioButtonTemplate">
@@ -8659,6 +8815,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowEnemyIncArenaPets_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENAPETS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENAPETS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="OptionsCheckButtonTemplate">
@@ -8671,6 +8829,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowEnemyIncMyTargets_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Slider name="HealBot_Options_ShowEnemyNumBoss" inherits="HealBot_Options_SliderTemplate">
@@ -8686,6 +8846,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_ShowEnemyNumBoss_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYNUMBOSSES",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYNUMBOSSES",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_HideEnemyOutOfCombat" inherits="OptionsCheckButtonTemplate">
@@ -8698,6 +8860,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HideEnemyOutOfCombat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYHIDEOC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYHIDEOC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EnemyExistsPlayerTargets" inherits="SendMailRadioButtonTemplate">
@@ -8710,6 +8874,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_EnemyExistsPlayerTargets_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWSELF",false)</OnLeave>
                         </Scripts>
                         <Layers>
                           <Layer level="BACKGROUND">
@@ -8735,6 +8901,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_EnemyExistsArena_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWARENA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWARENA",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_EnemyExistsBosses" inherits="SendMailRadioButtonTemplate">
@@ -8747,6 +8915,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_EnemyExistsBosses_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWBOSSES",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWBOSSES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                     </Frames>
@@ -8811,6 +8981,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroTrack_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROSHOW",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROSHOW",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_AggroBar" inherits="SendMailRadioButtonTemplate">
@@ -8823,6 +8995,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROSHOWBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROSHOWBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_AggroTxt" inherits="SendMailRadioButtonTemplate">
@@ -8835,6 +9009,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroTxt_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROSHOWTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROSHOWTEXT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_AggroInd" inherits="SendMailRadioButtonTemplate">
@@ -8847,6 +9023,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroInd_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROSHOWIND",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROSHOWIND",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_AggroBarPct" inherits="SendMailRadioButtonTemplate">
@@ -8872,6 +9050,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroBarPct_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROPCTBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROPCTBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_AggroTxtPct" inherits="SendMailRadioButtonTemplate">
@@ -8884,6 +9064,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_AggroTxtPct_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_BarHealthNumFormatAggro" inherits="UIDropDownMenuTemplate">
@@ -8896,6 +9078,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_AggroIndAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
@@ -8921,6 +9105,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROINDALERT",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_AggroAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
@@ -8946,6 +9132,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROBARALERT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARALERT",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Aggro3Colorpickb">
@@ -8961,6 +9149,8 @@
                             </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("Aggro")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROBARCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Aggro3Colorpick">
@@ -9023,6 +9213,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AggroFlashFreq_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHFREQ",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHFREQ",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_AggroFlashAlphaMin" inherits="HealBot_Options_SliderTemplate">
@@ -9038,6 +9230,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AggroFlashAlphaMin_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMIN",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_AggroFlashAlphaMax" inherits="HealBot_Options_SliderTemplate">
@@ -9053,6 +9247,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_AggroFlashAlphaMax_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMAX",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMAX",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_HighlightActiveBar" inherits="OptionsCheckButtonTemplate">
@@ -9065,6 +9261,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HighlightActiveBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_HighlightActiveBarInCombat" inherits="SendMailRadioButtonTemplate">
@@ -9077,6 +9275,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HighlightActiveBarInCombat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBARIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBARIC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Button name="HealBot_HighlightActiveBarColourb">
@@ -9092,6 +9292,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("HighlightBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBARCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROHIGHBARCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_HighlightActiveBarColour" inherits="TextStatusBar">
@@ -9138,6 +9340,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HighlightTargetBar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_HighlightTargetBarInCombat" inherits="SendMailRadioButtonTemplate">
@@ -9150,6 +9354,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_HighlightTargetBarInCombat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBARIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBARIC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Button name="HealBot_HighlightTargetBarColourb">
@@ -9165,6 +9371,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_SkinColorpick_OnClick("HighlightTargetBar")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBARCOL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROTARGETBARCOL",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_HighlightTargetBarColour" inherits="TextStatusBar">
@@ -9315,6 +9523,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowHoT_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWHOT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWHOT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Slider name="HealBot_BarButtonMaxBuffIcons" inherits="HealBot_Options_SliderTemplate">
@@ -9330,6 +9540,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONNUMHOT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONNUMHOT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_ShowDebuffIcon" inherits="OptionsCheckButtonTemplate">
@@ -9342,6 +9554,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowDebuffIcon_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWDEBUFF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Slider name="HealBot_BarButtonMaxDeuffIcons" inherits="HealBot_Options_SliderTemplate">
@@ -9357,6 +9571,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONNUMDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONNUMDEBUFF",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_Options_ShowDirection" inherits="OptionsCheckButtonTemplate">
@@ -9369,6 +9585,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowDirection_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWDIR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWDIR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowDirectionMouseOver" inherits="SendMailRadioButtonTemplate">
@@ -9381,6 +9599,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowDirectionMouseOver_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWDIRMO",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWDIRMO",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_ShowReadyCheck" inherits="OptionsCheckButtonTemplate">
@@ -9393,6 +9613,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_ShowReadyCheck_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIcon" inherits="OptionsCheckButtonTemplate">
@@ -9405,6 +9627,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIcon_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconStar" inherits="SendMailRadioButtonTemplate">
@@ -9417,6 +9641,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconStar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconCircle" inherits="SendMailRadioButtonTemplate">
@@ -9429,6 +9655,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconCircle_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconDiamond" inherits="SendMailRadioButtonTemplate">
@@ -9441,6 +9669,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconDiamond_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconTriangle" inherits="SendMailRadioButtonTemplate">
@@ -9453,6 +9683,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconTriangle_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconMoon" inherits="SendMailRadioButtonTemplate">
@@ -9465,6 +9697,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconMoon_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconSquare" inherits="SendMailRadioButtonTemplate">
@@ -9477,6 +9711,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconSquare_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconCross" inherits="SendMailRadioButtonTemplate">
@@ -9489,6 +9725,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconCross_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_Options_BarButtonShowRaidIconSkull" inherits="SendMailRadioButtonTemplate">
@@ -9501,6 +9739,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_Options_BarButtonShowRaidIconSkull_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSHOWRT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSHOWRT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTonBar1" inherits="SendMailRadioButtonTemplate" id="1">
@@ -9526,6 +9766,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_HoTonBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONONBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONONBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTonBar2" inherits="SendMailRadioButtonTemplate" id="2">
@@ -9538,6 +9780,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_HoTonBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONOFFBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONOFFBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTonBar3" inherits="SendMailRadioButtonTemplate" id="3">
@@ -9550,6 +9794,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_HoTonBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONBELOWBAR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONBELOWBAR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTposBar1" inherits="SendMailRadioButtonTemplate" id="1">
@@ -9562,6 +9808,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_HoTposBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONLEFTSIDE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONLEFTSIDE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTposBar2" inherits="SendMailRadioButtonTemplate" id="2">
@@ -9574,6 +9822,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_HoTposBar_OnClick(self,self:GetID())</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONRIGHTSIDE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONRIGHTSIDE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTx2Bar" inherits="SendMailRadioButtonTemplate">
@@ -9586,6 +9836,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_HoTx2Bar_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONDOUBLE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
 
@@ -9602,6 +9854,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonIconScale_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSCALEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSCALEBUFF",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_BarButtonDebuffIconScale" inherits="HealBot_Options_SliderTemplate">
@@ -9617,6 +9871,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarDebuffButtonIconScale_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONSCALEDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONSCALEDEBUFF",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_BarButtonIconAlwaysEnabled" inherits="OptionsCheckButtonTemplate">
@@ -9629,6 +9885,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BarButtonIconAlwaysEnabled_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONALWAYSEN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONALWAYSEN",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonIconFadeOnExpire" inherits="OptionsCheckButtonTemplate">
@@ -9641,6 +9899,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BarButtonIconFadeOnExpire_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONFADE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONFADE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                     </Frames>
@@ -9711,6 +9971,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_BarButtonShowHoTTextCount_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTSHOWCOUNT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTSHOWCOUNT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTTextCountSelfCast" inherits="SendMailRadioButtonTemplate">
@@ -9723,6 +9985,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BarButtonShowHoTTextCountSelfCast_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTSHOWCOUNT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTSHOWCOUNT",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTTextDuration" inherits="SendMailRadioButtonTemplate">
@@ -9735,6 +9999,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BarButtonShowHoTTextDuration_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTSHOWDUR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTSHOWDUR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <CheckButton name="HealBot_BarButtonShowHoTTextDurationSelfCast" inherits="SendMailRadioButtonTemplate">
@@ -9747,6 +10013,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BarButtonShowHoTTextDurationSelfCast_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTSHOWDUR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTSHOWDUR",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Slider name="HealBot_BarButtonIconTextDurationTime" inherits="HealBot_Options_SliderTemplate">
@@ -9762,6 +10030,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonIconTextDurationTime_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTDURTIME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTDURTIME",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_BarButtonIconTextDurationWarn" inherits="HealBot_Options_SliderTemplate">
@@ -9777,6 +10047,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonIconTextDurationWarn_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTDURWARNTIME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTDURWARNTIME",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_BarButtonIconFont" inherits="HealBot_Options_SliderTemplate">
@@ -9792,6 +10064,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonIconFont_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTFONT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTFONT",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_BarButtonIconTextScale" inherits="HealBot_Options_SliderTemplate">
@@ -9807,6 +10081,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_BarButtonIconTextScale_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTSIZE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTSIZE",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Frame name="HealBot_Options_IconFontOutline" inherits="UIDropDownMenuTemplate">
@@ -9832,6 +10108,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",false)</OnLeave>
                         </Scripts>
                       </Frame>
                     </Frames>

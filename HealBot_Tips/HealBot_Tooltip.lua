@@ -964,7 +964,11 @@ function HealBot_Tooltip_OptionsHelp(title,text)
     end
     local g=_G["HealBot_Options"]
     HealBot_Tooltip:ClearAllPoints();
-    HealBot_Tooltip:SetPoint("TOPLEFT",g,"TOPRIGHT");
+--    HealBot_Tooltip:SetPoint("TOPLEFT",g,"TOPRIGHT");
+    local x, y = GetCursorPosition();
+    x=x/UIParent:GetScale();
+    y=y/UIParent:GetScale();
+    HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
     HealBot_Tooltip_Options_Show(linenum)
 end
 
