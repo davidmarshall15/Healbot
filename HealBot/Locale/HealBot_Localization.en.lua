@@ -105,7 +105,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SORTBY_CLASS                    = "Class"
     HEALBOT_SORTBY_GROUP                    = "Group"
     HEALBOT_SORTBY_MAXHEALTH                = "Max health"
-    HEALBOT_OPTIONS_NEWDEBUFFTEXT           = "New debuff"
+    HEALBOT_OPTIONS_NEWDEBUFFTEXT           = "New Bebuff"
     HEALBOT_OPTIONS_NEWHOTBUFFTEXT          = "New Buff/HoT"
     HEALBOT_OPTIONS_DELSKIN                 = "Delete"
     HEALBOT_OPTIONS_NEWSKINTEXT             = "New skin"
@@ -1190,6 +1190,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALGROUPDOWN"]="Heal Group Down",
                                  ["HEALGROUPUP"]="Heal Group Up",
                         -- Skins Frames Headers Bars tab
+                                 ["BARHEADERS"]="Bar Headers",
                                  ["HEADERBARSSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
                                  ["HEADERBARSBARCOL"]="Header Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                  ["HEADERBARSTEXTCOL"]="Header Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
@@ -1201,6 +1202,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEADERBARSFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                                  ["HEADERBARSFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
                         -- Skins Frames Headers Frames tab
+                                 ["FRAMEHEADERS"]="Frame Headers",
                                  ["HEADERFRAMESTITLE"]=HEALBOT_OPTIONS_FRAME_TITLE,
                                  ["HEADERFRAMESSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
                                  ["HEADERFRAMESBARCOL"]="Header Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -1213,6 +1215,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEADERFRAMESFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                                  ["HEADERFRAMESFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
                         -- Skins Frames Bars General tab
+                                 ["BARSGENERAL"]="Bars General",
                                  ["HEALBARSTEXTURE"]=HEALBOT_OPTIONS_SKINTEXTURE,
                                  ["HEALBARSNUMCOLS"]=HEALBOT_OPTIONS_SKINNUMCOLS,
                                  ["HEALBARSGRPSPERCOLS"]=HEALBOT_OPTIONS_GROUPSPERCOLUMN,
@@ -1226,6 +1229,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSLOWMANA"]=HEALBOT_OPTIONS_LOWMANAINDICATOR,
                                  ["HEALBARSLOWMANAIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                         -- Skins Frames Bars Colours tab
+                                 ["BARSCOLOUR"]="Bars Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s",
                                  ["HEALBARSCOLHEALTHTYPE"]=HEALBOT_SKIN_HEALTHBARCOL_TEXT,
                                  ["HEALBARSCOLHEALTH"]="Heal Bar Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSCOLALPHA"]=HEALBOT_OPTIONS_BARALPHA,
@@ -1242,6 +1246,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSALPHAOOR"]=HEALBOT_OPTIONS_BARALPHAEOR,
                                  ["HEALBARSALPHADIS"]=HEALBOT_OPTIONS_BARALPHADIS,
                         -- Skins Frames Bars Text tab
+                                 ["BARSTEXT"]="Bars Text",
                                  ["HEALBARSTXTENCOL"]=HEALBOT_SKIN_ENTEXT,
                                  ["HEALBARSTXTDISCOL"]=HEALBOT_SKIN_DISTEXT,
                                  ["HEALBARSTXTDEBUFFCOL"]=HEALBOT_SKIN_DEBTEXT,
@@ -1268,6 +1273,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTFONTALIGN"]=HEALBOT_OPTIONS_TEXTALIGNMENT,
                                  ["HEALBARSTXTFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                         -- Skins Frames Bars Sort tab
+                                 ["BARSSORT"]="Bars Sort",
                                  ["HEALBARSSORTSELF"]=HEALBOT_OPTIONS_SUBSORTSELFFIRST,
                                  ["HEALBARSSORTOOR"]=HEALBOT_OPTIONS_SORTOORLAST,
                                  ["HEALBARSSORTMAIN"]=HEALBOT_OPTIONS_MAINSORT,
@@ -1275,6 +1281,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSSELFPET"]=HEALBOT_OPTIONS_OWN_PET_WITH_SELF,
                                  ["HEALBARSPETGROUP"]=HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE,
                         -- Skins Frames Bars Visibility tab
+                                 ["BARSVISIBILITY"]="Bars Visibility",
                                  ["HEALBARSVISALERTIC"]=HEALBOT_OPTIONS_INCOMBATALERTLEVEL,
                                  ["HEALBARSVISALERTOC"]=HEALBOT_OPTIONS_OUTCOMBATALERTLEVEL,
                                  ["HEALBARSVISHIDE100"]=HEALBOT_HIDE_BARS,
@@ -1295,6 +1302,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSVISENEMYSHOWARENA"]=HEALBOT_ENEMY_EXISTS_SHOW_ARENA,
                                  ["HEALBARSVISENEMYSHOWBOSSES"]=HEALBOT_ENEMY_EXISTS_SHOW_BOSSES,
                         -- Skins Frames Bars Aggro tab
+                                 ["BARSAGGRO"]="Bars Aggro",
                                  ["HEALBARSAGGROSHOW"]=HEALBOT_OPTION_AGGROTRACK,
                                  ["HEALBARSAGGROSHOWBAR"]=HEALBOT_OPTION_AGGROBAR,
                                  ["HEALBARSAGGROSHOWTEXT"]=HEALBOT_OPTION_AGGROTXT,
@@ -1314,6 +1322,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROTARGETBARIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                                  ["HEALBARSAGGROTARGETBARCOL"]=HEALBOT_SKIN_HEADERBARCOL,
                         -- Skins Frames Icons General tab
+                                 ["ICONSGENERAL"]="Icons General",
                                  ["ICONSHOWHOT"]=HEALBOT_OPTIONS_BARBUTTONSHOWHOT,
                                  ["ICONNUMHOT"]=HEALBOT_OPTIONS_ALLSPELLS.." "..HEALBOT_OPTIONS_MAXICONS,
                                  ["ICONSHOWDEBUFF"]=HEALBOT_OPTIONS_SHOWDEBUFFICON,
@@ -1333,6 +1342,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONALWAYSEN"]=HEALBOT_OPTIONS_TTALPHA.." "..HEALBOT_OPTIONS_ENABLEHEALTHY,
                                  ["ICONFADE"]=HEALBOT_OPTIONS_FADEONEXPIRE,
                         -- Skins Frames Icons Text tab
+                                 ["ICONSTEXT"]="Icons Text",
                                  ["ICONTXTSHOWCOUNT"]=HEALBOT_OPTIONS_HOTSHOWTEXT.." "..HEALBOT_OPTIONS_HOTTEXTCOUNT,
                                  ["ICONTXTSHOWDUR"]=HEALBOT_OPTIONS_HOTSHOWTEXT.." "..HEALBOT_OPTIONS_HOTTEXTDURATION,
                                  ["ICONTXTDURTIME"]=HEALBOT_OPTIONS_SHOWDURATIONFROM,
@@ -1341,19 +1351,123 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONTXTFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
                                  ["ICONTXTFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                         -- Debuffs General tab
+                                 ["MONITORDEBUFFS"]=HEALBOT_OPTIONS_MONITORDEBUFFS,
+                                 ["MONITORDEBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
+                                 ["MONITORDEBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
+                                 ["DEBUFFSSPELLTOCURE"]=HEALBOT_OPTIONS_DEBUFFTEXT1,
+                                 ["DEBUFFSSPELLCHECKMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
+                                 ["DEBUFFSIGNOREDEBUFFS"]="Ignore Debuffs",
+                                 ["DEBUFFSTYPEPRIORITY"]=HEALBOT_WORD_PRIORITY,
+                                 ["DEBUFFSTYPECOLOUR"]=HEALBOT_OPTIONS_BUFFSTEXT3,
                         -- Debuffs Custom tab
+                                 ["DEBUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
+                                 ["DEBUFFSCUSTOMDEBUFF"]=HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS,
+                                 ["DEBUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
+                                 ["DEBUFFSCUSTOMREVDUR"]=HEALBOT_OPTIONS_CUSTOMDEBUFF_REVDUR,
+                                 ["DEBUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
+                                 ["DEBUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWDEBUFFTEXT,
+                                 ["DEBUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
+                                 ["DEBUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
+                                 ["DEBUFFSCUSTOMPRIORITY"]=HEALBOT_WORD_PRIORITY,
+                                 ["DEBUFFSCUSTOMCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["DEBUFFSCUSTOMCOLOURSHOW"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["DEBUFFSCUSTOMRESET"]=HEALBOT_WORD_RESET,
+                                 ["DEBUFFSCUSTOMPAGE"]="Page",
+                                 ["DEBUFFSCUSTOMALLDISEASE"]=HEALBOT_OPTIONS_CUSTOM_ALLDISEASE,
+                                 ["DEBUFFSCUSTOMALLMAGIC"]=HEALBOT_OPTIONS_CUSTOM_ALLMAGIC,
+                                 ["DEBUFFSCUSTOMALLPOISON"]=HEALBOT_OPTIONS_CUSTOM_ALLPOISON,
+                                 ["DEBUFFSCUSTOMALLCURSE"]=HEALBOT_OPTIONS_CUSTOM_ALLCURSE,
+                                 ["DEBUFFSCUSTOMALLBOSS"]=HEALBOT_OPTIONS_CUSTOM_ALLBOSS,
+                                 ["DEBUFFSCUSTOMALLBOSSSTRICT"]=HEALBOT_OPTIONS_CUSTOM_ALLBOSSSTRICT,
                         -- Debuffs Warning tab
+                                 ["DEBUFFSWARNINGBAR"]=HEALBOT_OPTIONS_CDCSHOWHBARS,
+                                 ["DEBUFFSWARNINGBARRANGE"]="Range",
+                                 ["DEBUFFSWARNINGAGGRO"]=HEALBOT_OPTIONS_CDCSHOWABARS,
+                                 ["DEBUFFSWARNINGAGGRORANGE"]="Range",
+                                 ["DEBUFFSWARNINGSHOW"]=HEALBOT_OPTIONS_SHOWDEBUFFWARNING,
+                                 ["DEBUFFSWARNINGSHOWRANGE"]="Range",
+                                 ["DEBUFFSWARNINGSOUND"]=HEALBOT_OPTIONS_SOUNDDEBUFFWARNING,
+                                 ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
+                                 ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
+                                 ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
                         -- Buffs General tab
+                                 ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
+                                 ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
+                                 ["MONITORBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
+                                 ["BUFFSSPELL"]=HEALBOT_OPTIONS_BUFFSTEXT1,
+                                 ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
+                                 ["BUFFSBARS"]=HEALBOT_OPTIONS_CDCBARS,
+                                 ["BUFFSTIMER"]=HEALBOT_OPTIONS_BUFFSTEXTTIMER,
                         -- Buffs Custom tab
+                                 ["BUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
+                                 ["BUFFSCUSTOMBUFF"]=HEALBOT_OPTIONS_ALLSPELLS,
+                                 ["BUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
+                                 ["BUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
+                                 ["BUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWHOTBUFFTEXT,
+                                 ["BUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
+                                 ["BUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
+                                 ["BUFFSCUSTOMPRIORITY"]=HEALBOT_WORD_PRIORITY,
+                                 ["BUFFSCUSTOMCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["BUFFSCUSTOMCOLOURSHOW"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["BUFFSCUSTOMRESET"]=HEALBOT_WORD_RESET,
+                                 ["BUFFSCUSTOMPAGE"]="Page",
                         -- Buffs Warning tab
+                                 ["BUFFSWARNINGBAR"]=HEALBOT_OPTIONS_CDCSHOWHBARS,
+                                 ["BUFFSWARNINGBARRANGE"]="Range",
+                                 ["BUFFSWARNINGAGGRO"]=HEALBOT_OPTIONS_CDCSHOWABARS,
+                                 ["BUFFSWARNINGAGGRORANGE"]="Range",
+                                 ["BUFFSWARNINGSHOW"]=HEALBOT_OPTIONS_SHOWBUFFWARNING,
+                                 ["BUFFSWARNINGSHOWRANGE"]="Range",
+                                 ["BUFFSWARNINGSOUND"]=HEALBOT_OPTIONS_SOUNDBUFFWARNING,
+                                 ["BUFFSWARNINGSOUNDRANGE"]="Range",
+                                 ["BUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
+                                 ["BUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
                         -- Tips tab
+                                 ["TOOLTIPSHOW"]=HEALBOT_OPTIONS_SHOWTOOLTIP,
+                                 ["TOOLTIPUPDATE"]=HEALBOT_OPTIONS_TOOLTIPUPDATE,
+                                 ["TOOLTIPHIDEIC"]=HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT,
+                                 ["TOOLTIPTARGETINFO"]=HEALBOT_OPTIONS_SHOWUNITTOOLTIP,
+                                 ["TOOLTIPMYBUFFS"]=HEALBOT_OPTIONS_SHOWUNITBUFFTIME,
+                                 ["TOOLTIPSPELLDETAIL"]=HEALBOT_OPTIONS_SHOWDETTOOLTIP,
+                                 ["TOOLTIPSPELLCD"]=HEALBOT_OPTIONS_SHOWCDTOOLTIP,
+                                 ["TOOLTIPWHEELCMD"]=HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP,
+                                 ["TOOLTIPHOTREC"]=HEALBOT_OPTIONS_SHOWRECTOOLTIP,
+                                 ["TOOLTIPGAMETIP"]=HEALBOT_OPTIONS_USEGAMETOOLTIP,
+                                 ["TOOLTIPMONBUFFS"]=HEALBOT_OPTIONS_TOOLTIPSHOWHOT,
+                                 ["TOOLTIPFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
+                                 ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
+                                 ["TOOLTIPALPHA"]=HEALBOT_OPTIONS_TTALPHA,
                         -- Mouse Wheel tab
+                                 ["BUFFSMOUSEWHEELUSE"]=HEALBOT_OPTIONS_MOUSEWHEEL,
+                                 ["BUFFSMOUSEWHEELCMD"]="Mouse Wheel Commands",
                         -- Test tab
+                                 ["TESTUSE"]=HEALBOT_OPTIONS_TESTBARS,
+                                 ["TESTPROFILE"]=HEALBOT_WORDS_PROFILE,
+                                 ["TESTNUMTOTAL"]=HEALBOT_OPTION_NUMBARS,
+                                 ["TESTNUMTANKS"]=HEALBOT_OPTION_NUMTANKS,
+                                 ["TESTNUMHEALS"]=HEALBOT_OPTION_NUMHEALERS,
+                                 ["TESTNUMMYTARGETS"]=HEALBOT_OPTION_NUMMYTARGETS,
+                                 ["TESTNUMPETS"]=HEALBOT_OPTION_NUMPETS,
+                                 ["TESTNUMENEMY"]=HEALBOT_OPTION_NUMENEMYS,
                         -- Import/Export Skins tab
+                                 ["INOUTSELECTSKIN"]=HEALBOT_OPTIONS_EXPORTSKIN,
+                                 ["INOUTEXPORTSKIN"]=HEALBOT_OPTIONS_BUTTONEXPORT,
+                                 ["INOUTIMPORTSKIN"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                         -- Import/Export Custom Debuffs tab
+                                 ["INOUTEXPORTCDEBUFF"]=HEALBOT_OPTIONS_BUTTONEXPORT,
+                                 ["INOUTIMPORTCDEBUFFMETHOD"]=HEALBOT_OPTIONS_BUTTONIMPORTMETHOD,
+                                 ["INOUTIMPORTCDEBUFF"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                         -- Import/Export Custom Buffs tab
+                                 ["INOUTEXPORTCBUFF"]=HEALBOT_OPTIONS_BUTTONEXPORT,
+                                 ["INOUTIMPORTCBUFFMETHOD"]=HEALBOT_OPTIONS_BUTTONIMPORTMETHOD,
+                                 ["INOUTIMPORTCBUFF"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                         -- Import/Export Spells tab
+                                 ["INOUTEXPORTSPELLS"]=HEALBOT_OPTIONS_BUTTONEXPORT,
+                                 ["INOUTIMPORTSPELLSMETHOD"]=HEALBOT_OPTIONS_BUTTONIMPORTMETHOD,
+                                 ["INOUTIMPORTSPELLS"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                         -- Import/Export Preset Colours tab
+                                 ["INOUTEXPORTPRESETCOLS"]=HEALBOT_OPTIONS_BUTTONEXPORT,
+                                 ["INOUTIMPORTPRESETCOLS"]=HEALBOT_OPTIONS_BUTTONIMPORT,
                               }
     HEALBOT_OPTIONS_HELP_TEXT={
                         -- Preset Colours
@@ -1463,6 +1577,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALGROUPDOWN"]="Move the heal group down.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                                ["HEALGROUPUP"]="Move the heal group up.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                         -- Skins Frames Headers Bars tab
+                               ["BARHEADERS"]="Show the Skins Frames Headers Bars tab.",
                                ["HEADERBARSSHOW"]="Turn On/Off displaying the bars headers.\n- For the raid heal group the header is based on main sort.\n- For other heal groups the header is the heal group name.",
                                ["HEADERBARSBARCOL"]="Set the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the header bars.",
                                ["HEADERBARSTEXTCOL"]="Set the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." shown on the header bars.",
@@ -1474,6 +1589,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEADERBARSFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the header bars.",
                                ["HEADERBARSFONTOFFSET"]="Vertically offset the header text.",
                         -- Skins Frames Headers Frames tab
+                               ["FRAMEHEADERS"]="Show the Skins Frames Headers Frames tab.",
                                ["HEADERFRAMESTITLE"]="Set the text to be displayed for the frame.",
                                ["HEADERFRAMESSHOW"]="Turn On/Off displaying the frames headers.",
                                ["HEADERFRAMESBARCOL"]="Set the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the frames header.",
@@ -1486,6 +1602,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEADERFRAMESFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the frames header.",
                                ["HEADERFRAMESFONTOFFSET"]="Vertically offset the header text.",
                         -- Skins Frames Bars General tab
+                               ["BARSGENERAL"]="Show the Skins Frames Bars General tab.\nNote: Some options are dependant on the frame selected.\n- Low mana indicator settings are not available when the Enemy frame is selected.",
                                ["HEALBARSTEXTURE"]="Set the texture for the heal bars.",
                                ["HEALBARSNUMCOLS"]="Controls how many columns will be displayed.",
                                ["HEALBARSGRPSPERCOLS"]="Sets using the number of groups for each column.",
@@ -1499,6 +1616,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSLOWMANA"]="Set if and when indicators are\ndisplayed to show a player is low on mana.",
                                ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.",
                         -- Skins Frames Bars Colours tab
+                               ["BARSCOLOUR"]="Show the Skins Frames Bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
                                ["HEALBARSCOLHEALTHTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the heal bar.\nWhen custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["HEALBARSCOLHEALTH"]="Set the custom bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the heal bars.",
                                ["HEALBARSCOLALPHA"]="Set the transparency of the\nheal bar when in an enabled state.",
@@ -1515,6 +1633,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSALPHAOOR"]="Set the transparency of the heal bars when the bar\nis in an enabled state and the player is out of range.",
                                ["HEALBARSALPHADIS"]="Set the transparency of the heal bar\nwhen the bar is in an disabled state.",
                         -- Skins Frames Bars Text tab
+                               ["BARSTEXT"]="Show the Skins Frames Bars Text tab.",
                                ["HEALBARSTXTENCOL"]="Set the font col"..HEALBOT_enWORD_COLOUR_SUFFIX.." on enabled bars.\nNote: this option is not available when Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is selected.",
                                ["HEALBARSTXTDISCOL"]="Set the font col"..HEALBOT_enWORD_COLOUR_SUFFIX.." on disabled bars.\nNote: this option is not available when Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is selected.",
                                ["HEALBARSTXTDEBUFFCOL"]="Set the font col"..HEALBOT_enWORD_COLOUR_SUFFIX.." on debuff bars.\nNote: this option is not available when Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is selected.",
@@ -1541,6 +1660,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSTXTFONTALIGN"]="Horizontally set the bar text.",
                                ["HEALBARSTXTFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the heal bars.",
                         -- Skins Frames Bars Sort tab
+                               ["BARSSORT"]="Show the Skins Frames Bars Sort tab.\nNote: Some options are dependant on the frame selected.\n- Sub sort - self first is only available when one of the User frames is selected.\n- Own pet: with self and Pets: Groups of five are only available when the Pets frame is selected.\n- This tab is not available when the Target frame or Focus frame is selected.",
                                ["HEALBARSSORTSELF"]="Sub sort self to the top of the list.\nNote: also applies to Main sort when sorting by Name or Max health.",
                                ["HEALBARSSORTOOR"]="This option is good for raids that split players, by sorting the out of range last.",
                                ["HEALBARSSORTMAIN"]="Organise how bars are sorted in the Heal Groups.",
@@ -1548,6 +1668,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSSELFPET"]="Place your own pet in the Self heal group.\nEnsure Self is turned on and high up in the Heal Groups list.",
                                ["HEALBARSPETGROUP"]="Treat pets as being in groups of five.",
                         -- Skins Frames Bars Visibility tab
+                               ["BARSVISIBILITY"]="Show the Skins Frames Bars Visibility tab.\nNote: Some options are dependant on the frame selected.\n- Target settings are only available when the Target frame is selected.\n- Focus settings are only available when the Focus frame is selected.\n- Enemy settings are only displayed when the Enemy frame is selected.",
                                ["HEALBARSVISALERTIC"]="While in combat and when health is at or\nbelow this setting, the bar will become enabled.",
                                ["HEALBARSVISALERTOC"]="While out of combat and when health is at or\nbelow this setting, the bar will become enabled.",
                                ["HEALBARSVISHIDE100"]="Hide bars for players who are over 100 yards\ngenerally when not in visible in plain sight.",
@@ -1568,6 +1689,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISENEMYSHOWARENA"]="On entering combat only display bars when an enemy exists.\nAllows filtering of bars that will not likely turn up during combat.\n--\nArena opponent bars - Only display bars for existing opponents at the start of combat.",
                                ["HEALBARSVISENEMYSHOWBOSSES"]="On entering combat only display bars when an enemy exists.\nAllows filtering of bars that will not likely turn up during combat.\n--\nBoss bars - Only display bars for existing bosses at the start of combat.",
                         -- Skins Frames Bars Aggro tab
+                               ["BARSAGGRO"]="Show the Skins Frames Aggro Sort tab.\nNote: This tab is not available when the Enemy frame is selected.",
                                ["HEALBARSAGGROSHOW"]="Turn On/Off monitoring aggro.",
                                ["HEALBARSAGGROSHOWBAR"]="Display aggro bars when a player has aggro.",
                                ["HEALBARSAGGROSHOWTEXT"]="Display » text « when a player has aggro.",
@@ -1587,6 +1709,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROTARGETBARIC"]="Turn On/Off highlighting the current target when in combat.",
                                ["HEALBARSAGGROTARGETBARCOL"]="Set the colour of the aggro bars for target.",
                         -- Skins Frames Icons General tab
+                               ["ICONSGENERAL"]="Show the Skins Frames Icons General tab.",
                                ["ICONSHOWHOT"]="Show heal over time icons that\nare defined on the Buffs Custom tab.",
                                ["ICONNUMHOT"]="Select the maximum number\nof buff and HoT icons to show.",
                                ["ICONSHOWDEBUFF"]="Show debuff icons that are\ndefined on the Debuff Custom tab.",
@@ -1606,6 +1729,7 @@ function HealBot_Lang_Options_enALL()
                                ["ICONALWAYSEN"]="Always use enabled bar opacity setting even\nwhen the bar is using a different setting.",
                                ["ICONFADE"]="Fade the icon as it begins to expire.",
                         -- Skins Frames Icons Text tab
+                               ["ICONSTEXT"]="Show the Skins Frames Icons Text tab.",
                                ["ICONTXTSHOWCOUNT"]="Set the type of text and conditions met to show text on the icon.\nCount - Show the number of stacks, for all casters or own casts if Self casts only is on.",
                                ["ICONTXTSHOWDUR"]="Set the type of text and conditions met to show text on the icon.\nDuration - Show the duration remaining, for all casters or own casts if Self casts only is on.",
                                ["ICONTXTDURTIME"]="Only show the duration when the remaining\nduration is under the slider amount.",
@@ -1614,19 +1738,123 @@ function HealBot_Lang_Options_enALL()
                                ["ICONTXTFONTSIZE"]="Set the font size for the\ntext displayed on the icons.",
                                ["ICONTXTFONTOUTLINE"]="Set the font outline for the\ntext displayed on the icons.",
                         -- Debuffs General tab
+                               ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
+                               ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",
+                               ["MONITORDEBUFFSGROUPED"]="Do not monitor debuffs when solo.",
+                               ["DEBUFFSSPELLTOCURE"]="The spell to use.\nDebuffs displayed will only be those that the spell can remove.",
+                               ["DEBUFFSSPELLCHECKMEMBERS"]="The members to monitor.",
+                               ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n- By class - Ignore debuffs that have no effect to the class\n- Non harmful - Ignore all non harmful debuff\n- Slow movement - Ignore debuffs that slows movement\n- Short duration - Ignore debuffs that last for less time than the Duration slider\n- When cure spell CoolDown > 1.5secs (GCD) - Ignore debuffs when its not possible to cast while the spell is on cooldown\n- When caster is known as friend - When the caster of the debuff is friendly",
+                               ["DEBUFFSTYPEPRIORITY"]="Priority by debuff types.\nHighest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["DEBUFFSTYPECOLOUR"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s by debuff types. Click to change.\nWhen the player has a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
+                               ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
+                               ["DEBUFFSCUSTOMDEBUFF"]="Lists custom default settings or individual\ndebuffs depending on the Category selected.",
+                               ["DEBUFFSCUSTOMCASTBY"]="Sets a filter on debuffs displayed\nby checking the caster of the debuff.",
+                               ["DEBUFFSCUSTOMREVDUR"]="Debuff duration count starts at 0 and increases.",
+                               ["DEBUFFSCUSTOMDELETE"]="Delete the selected custom debuff.",
+                               ["DEBUFFSCUSTOMNEWNAME"]="Add a new debuff to the current category.\nNote: The Spell Name or Spell ID can be used.\nUsing Spell ID is recommended.",
+                               ["DEBUFFSCUSTOMNEWSAVE"]="Save the new custom debuff.",
+                               ["DEBUFFSCUSTOMENDIS"]="Disable the selected custom debuff in the current zone.",
+                               ["DEBUFFSCUSTOMPRIORITY"]="Priority of the selected custom debuff.\nHighest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["DEBUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["DEBUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom debuff.",
+                               ["DEBUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom debuff.",
+                               ["DEBUFFSCUSTOMPAGE"]="Page though the custom debuffs.",
+                               ["DEBUFFSCUSTOMALLDISEASE"]="Always show disease type debuffs.",
+                               ["DEBUFFSCUSTOMALLMAGIC"]="Always show magic type debuffs.",
+                               ["DEBUFFSCUSTOMALLPOISON"]="Always show poison type debuffs.",
+                               ["DEBUFFSCUSTOMALLCURSE"]="Always show curse type debuffs.",
+                               ["DEBUFFSCUSTOMALLBOSS"]="Always show debuffs cast by bosses.",
+                               ["DEBUFFSCUSTOMALLBOSSSTRICT"]="A boss must exist.\nAvoid bizzard api reporting boss debuffs from lesser mobs.",
                         -- Debuffs Warning tab
+                               ["DEBUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom debuffs.",
+                               ["DEBUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
+                               ["DEBUFFSWARNINGAGGRO"]="Change the aggro bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom debuffs.",
+                               ["DEBUFFSWARNINGAGGRORANGE"]="Set the range when the aggro bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
+                               ["DEBUFFSWARNINGSHOW"]="Display a text warning on screen.\nThis applies to all General and Custom debuffs.",
+                               ["DEBUFFSWARNINGSHOWRANGE"]="Set the range when the on screen text is displayed.",
+                               ["DEBUFFSWARNINGSOUND"]="Play a sound.\nThis applies to all General and Custom debuffs.",
+                               ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
+                               ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
+                               ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
                         -- Buffs General tab
+                               ["MONITORBUFFS"]="Turn on/off buff monitoring.",
+                               ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
+                               ["MONITORBUFFSGROUPED"]="Do not monitor buffs when solo.",
+                               ["BUFFSSPELL"]="Select the spell to monitor and cast.",
+                               ["BUFFSMEMBERS"]="The members to monitor.",
+                               ["BUFFSBARS"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX..". Click to change.\nWhen the player is missing a buff and settings on the Buff Warning tab apply.",
+                               ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n- Show buffs - These are buffs with a duration of a few minutes or less.\n- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
+                               ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the category dropdown.",
+                               ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
+                               ["BUFFSCUSTOMCASTBY"]="Sets a filter on buffs displayed\nby checking the caster of the buff.",
+                               ["BUFFSCUSTOMDELETE"]="Delete the selected custom buff.",
+                               ["BUFFSCUSTOMNEWNAME"]="Add a new buff to the current category.\nNote: The Spell Name or Spell ID can be used.\nUsing Spell ID is recommended.",
+                               ["BUFFSCUSTOMNEWSAVE"]="Save the new custom buff.",
+                               ["BUFFSCUSTOMENDIS"]="Disable the selected custom buff in the current zone.",
+                               ["BUFFSCUSTOMPRIORITY"]="Priority of the selected custom buff.\nHighest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["BUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["BUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom buff.",
+                               ["BUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom buff.",
+                               ["BUFFSCUSTOMPAGE"]="Page though the custom buffs.",
                         -- Buffs Warning tab
+                               ["BUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom buffs.",
+                               ["BUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
+                               ["BUFFSWARNINGAGGRO"]="Change the aggro bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom buffs.",
+                               ["BUFFSWARNINGAGGRORANGE"]="Set the range when the aggro bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
+                               ["BUFFSWARNINGSHOW"]="Display a text warning on screen.\nThis applies to all General and Custom buffs.",
+                               ["BUFFSWARNINGSHOWRANGE"]="Set the range when the on screen text is displayed.",
+                               ["BUFFSWARNINGSOUND"]="Play a sound.\nThis applies to all General and Custom buffs.",
+                               ["BUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
+                               ["BUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
+                               ["BUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
                         -- Tips tab
+                               ["TOOLTIPSHOW"]="Show tooltip information on the\ncurrent bar the mouse is over.",
+                               ["TOOLTIPUPDATE"]="Keep updating the tooltip while\nthe mouse in stationary over a bar.",
+                               ["TOOLTIPHIDEIC"]="Hide the tooltip when in combat.",
+                               ["TOOLTIPTARGETINFO"]="Show the name, class and spec if relevant,\nlocation, health and mana/power.",
+                               ["TOOLTIPMYBUFFS"]="Show buffs and duration cast by you.",
+                               ["TOOLTIPSPELLDETAIL"]="Show the cast time of the spell.",
+                               ["TOOLTIPSPELLCD"]="Show the cooldown remaining on the spell.",
+                               ["TOOLTIPWHEELCMD"]="Show the commands defined on the Mouse Wheel tab.",
+                               ["TOOLTIPHOTREC"]="Show best HoT depending on current circumstances.",
+                               ["TOOLTIPGAMETIP"]="Use the game tooltip, this includes tooltip addons.",
+                               ["TOOLTIPMONBUFFS"]="On all monitored Buffs / HoT's\nshow who cast the spell and duration left.",
+                               ["TOOLTIPFONTSIZE"]="Set the size using Blizzards standard font sizes.",
+                               ["TOOLTIPPOSITION"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
+                               ["TOOLTIPALPHA"]="Set the transparency of the tooltip.",
                         -- Mouse Wheel tab
+                               ["BUFFSMOUSEWHEELUSE"]="Turn On/Off usage of the mouse wheel.\nNote: When this is on mouse over macros will not work on HealBot bars",
+                               ["BUFFSMOUSEWHEELCMD"]="Set a command to run with an optional key press\nand mouse wheel up or down combination.",
                         -- Test tab
+                               ["TESTUSE"]="The button shows the current state of test bars, click on it to change the state.",
+                               ["TESTPROFILE"]="Profile limits the total number of bars for Groups or Raids.",
+                               ["TESTNUMTOTAL"]="Fine tune the total number of bars for selected profile.",
+                               ["TESTNUMTANKS"]="Set the number of bars to represent Tanks.",
+                               ["TESTNUMHEALS"]="Set the number of bars to represent Healers.",
+                               ["TESTNUMMYTARGETS"]="Set the number of bars to represent your Private Targets.",
+                               ["TESTNUMPETS"]="Set the number of bars to represent Pets.",
+                               ["TESTNUMENEMY"]="Set the number of bars to represent the Enemy.",
                         -- Import/Export Skins tab
+                               ["INOUTSELECTSKIN"]="Select the skin to be exported.",
+                               ["INOUTEXPORTSKIN"]="Export populates the large text box with data for the selected skin.\nThis can then be copied and saved outside the game.",
+                               ["INOUTIMPORTSKIN"]="Import reads the text from the large text box and sets the skin.\nNote: This will overwrite any existing skin with the same name.",
                         -- Import/Export Custom Debuffs tab
+                               ["INOUTEXPORTCDEBUFF"]="Export populates the large text box with data of all current custom debuffs.\nThis can then be copied and saved outside the game.",
+                               ["INOUTIMPORTCDEBUFFMETHOD"]="On Import the following methods can be used.\n- Overwrite All - Delete all existing custom debuffs, then load and insert custom debuffs.\n- Merge All - Insert missing custom debuffs and update existing custom debuffs.\n- Merge New - Only insert missing custom debuffs, no updates to existing custom debuffs.",
+                               ["INOUTIMPORTCDEBUFF"]="Import loads in the data from the large text box\nusing the import method selected above.",
                         -- Import/Export Custom Buffs tab
+                               ["INOUTEXPORTCBUFF"]="Export populates the large text box with data of all current custom buffs.\nThis can then be copied and saved outside the game.",
+                               ["INOUTIMPORTCBUFFMETHOD"]="On Import the following methods can be used.\n- Overwrite All - Delete all existing custom buffs, then load and insert custom buffs.\n- Merge All - Insert missing custom buffs and update existing custom buffs.\n- Merge New - Only insert missing custom buffs, no updates to existing custom buffs.",
+                               ["INOUTIMPORTCBUFF"]="Import loads in the data from the large text box\nusing the import method selected above.",
                         -- Import/Export Spells tab
+                               ["INOUTEXPORTSPELLS"]="Export populates the large text box with data of all current spells.\nThis can then be copied and saved outside the game.",
+                               ["INOUTIMPORTSPELLSMETHOD"]="On Import the following methods can be used.\n- Overwrite All - Delete all existing spells, then load and insert spells.\n- Merge All - Insert missing spells and update existing spells.\n- Merge New - Only insert missing spells, no updates to existing spells.",
+                               ["INOUTIMPORTSPELLS"]="Import loads in the data from the large text box\nusing the import method selected above.",
                         -- Import/Export Preset Colours tab
+                               ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
+                               ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                               }
 end
 

@@ -5989,6 +5989,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 311); HealBot_Options_ShowHeaderPanel("HealBot_Options_SkinsFrameHeadersBar", "HealBot_Options_SkinsFrameHeadersBarb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARHEADERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARHEADERS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFrameHeadersFrameb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_FRAMES">
@@ -6004,6 +6006,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 311); HealBot_Options_ShowHeaderPanel("HealBot_Options_SkinsFrameHeadersFrame", "HealBot_Options_SkinsFrameHeadersFrameb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEHEADERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEHEADERS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_SkinsFrameHeadersBar">
@@ -6696,6 +6700,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsGeneral", "HealBot_Options_SkinsFramesBarsGeneralb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSGENERAL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSGENERAL",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFramesBarsColoursb" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_COLOUR">
@@ -6711,6 +6717,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsColours", "HealBot_Options_SkinsFramesBarsColoursb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSCOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSCOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFramesBarsTextb" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_TEXT">
@@ -6726,6 +6734,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsText", "HealBot_Options_SkinsFramesBarsTextb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSTEXT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSTEXT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFramesBarsSortb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_SORT">
@@ -6741,6 +6751,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsSort", "HealBot_Options_SkinsFramesBarsSortb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSSORT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSSORT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFramesBarsVisibilityb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_VISIBILITY">
@@ -6756,6 +6768,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsVisibility", "HealBot_Options_SkinsFramesBarsVisibilityb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSVISIBILITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSVISIBILITY",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFramesBarsAggrob" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_AGGRO">
@@ -6771,6 +6785,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAggro", "HealBot_Options_SkinsFramesBarsAggrob")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BARSAGGRO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BARSAGGRO",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_SkinsFramesBarsGeneral">
@@ -9455,6 +9471,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 314); HealBot_Options_ShowIconPanel("HealBot_Options_SkinsFrameIconsGeneral", "HealBot_Options_SkinsFrameIconsGeneralb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ICONSGENERAL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ICONSGENERAL",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_SkinsFrameIconsTextb" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_TEXT">
@@ -9470,6 +9488,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 314); HealBot_Options_ShowIconPanel("HealBot_Options_SkinsFrameIconsText", "HealBot_Options_SkinsFrameIconsTextb")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ICONSTEXT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ICONSTEXT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_SkinsFrameIconsGeneral">
@@ -10134,6 +10154,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_MonitorDebuffs_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("MONITORDEBUFFS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("MONITORDEBUFFS",false)</OnLeave>
                 </Scripts>
               </CheckButton>
               <CheckButton name="HealBot_Options_MonitorDebuffsInCombat" inherits="SendMailRadioButtonTemplate">
@@ -10146,6 +10168,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_MonitorDebuffsInCombat_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("MONITORDEBUFFSIC",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("MONITORDEBUFFSIC",false)</OnLeave>
                 </Scripts>
               </CheckButton>
               <CheckButton name="HealBot_Options_MonitorDebuffsWhenGrouped" inherits="SendMailRadioButtonTemplate">
@@ -10158,6 +10182,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_MonitorDebuffsWhenGrouped_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("MONITORDEBUFFSGROUPED",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("MONITORDEBUFFSGROUPED",false)</OnLeave>
                 </Scripts>
               </CheckButton>
 
@@ -10243,6 +10269,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCGroups1" inherits="UIDropDownMenuTemplate">
@@ -10268,6 +10296,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCTxt2" inherits="UIDropDownMenuTemplate" id="1">
@@ -10280,6 +10310,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCGroups2" inherits="UIDropDownMenuTemplate">
@@ -10292,6 +10324,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCTxt3" inherits="UIDropDownMenuTemplate" id="1">
@@ -10304,6 +10338,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCGroups3" inherits="UIDropDownMenuTemplate">
@@ -10316,6 +10352,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsClass" inherits="SendMailRadioButtonTemplate">
@@ -10328,6 +10366,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsNoHarm" inherits="SendMailRadioButtonTemplate">
@@ -10340,6 +10380,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsNoHarm_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsMovement" inherits="SendMailRadioButtonTemplate">
@@ -10352,6 +10394,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsMovement_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsDuration" inherits="SendMailRadioButtonTemplate">
@@ -10377,6 +10421,8 @@
                     </Layers>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsDuration_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Slider name="HealBot_Options_IgnoreDebuffsDurationSecs" inherits="HealBot_Options_SliderTemplate">
@@ -10392,6 +10438,8 @@
                     </Anchors>
                     <Scripts>
                       <OnValueChanged>HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </Slider>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsCoolDown" inherits="SendMailRadioButtonTemplate">
@@ -10404,6 +10452,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsCoolDown_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsFriend" inherits="SendMailRadioButtonTemplate">
@@ -10416,6 +10466,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsFriend_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_CDCPriority1" inherits="UIDropDownMenuTemplate">
@@ -10441,6 +10493,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCPriority2" inherits="UIDropDownMenuTemplate">
@@ -10466,6 +10520,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCPriority3" inherits="UIDropDownMenuTemplate">
@@ -10491,6 +10547,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCPriority4" inherits="UIDropDownMenuTemplate">
@@ -10516,6 +10574,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPEPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_DiseaseColorpickb">
@@ -10531,6 +10591,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick(HEALBOT_DISEASE_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_DiseaseColorpick" inherits="TextStatusBar">
@@ -10593,6 +10655,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick(HEALBOT_MAGIC_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_MagicColorpick" inherits="TextStatusBar">
@@ -10655,6 +10719,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick(HEALBOT_POISON_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_PoisonColorpick">
@@ -10717,6 +10783,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick(HEALBOT_CURSE_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSTYPECOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_CurseColorpick">
@@ -11102,6 +11170,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMCAT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCAT",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDebuffTxt1" inherits="UIDropDownMenuTemplate" id="1">
@@ -11127,6 +11197,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFF",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_CDCCastBy" inherits="UIDropDownMenuTemplate">
@@ -11152,6 +11224,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMCASTBY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCASTBY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CASTBY_ENEMY">
@@ -11189,6 +11263,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_RevDurCDebuffBtn_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMREVDUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMREVDUR",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Button name="HealBot_Options_DeleteCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
@@ -11204,6 +11280,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_DeleteCDebuffBtn_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <EditBox name="HealBot_Options_NewCDebuff" inherits="HealBot_Options_EditBoxTemplate">
@@ -11233,6 +11311,8 @@
                     <Scripts>
                       <OnEnterPressed>HealBot_Options_ConfirmNewCDebuff()</OnEnterPressed>
                       <OnTextChanged>HealBot_Options_NewCDebuff_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",false)</OnLeave>
                     </Scripts>
                   </EditBox>
                   <Button name="HealBot_Options_NewCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
@@ -11248,6 +11328,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ConfirmNewCDebuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWSAVE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_EnableDisableCDBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_ENABLE">
@@ -11276,6 +11358,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EnableDisableCDBtn_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMENDIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMENDIS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_CDCPriorityC" inherits="UIDropDownMenuTemplate">
@@ -11301,6 +11385,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_CDCPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
@@ -11341,6 +11427,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick(HEALBOT_CUSTOM_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMCOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_CustomColorpick">
@@ -11400,6 +11488,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCCol_OnOff_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMCOLOURSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCOLOURSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Button name="HealBot_Options_ResetCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
@@ -11415,6 +11505,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ResetCDebuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMRESET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMRESET",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_PagePrevCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PREV">
@@ -11443,6 +11535,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PagePrevCDebuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_PageNextCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_NEXT">
@@ -11458,6 +11552,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PageNextCDebuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_CDCAllDisease" inherits="OptionsCheckButtonTemplate">
@@ -11470,6 +11566,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAll_OnClick(self, HEALBOT_DISEASE_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLDISEASE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLDISEASE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_CDCAllMagic" inherits="OptionsCheckButtonTemplate">
@@ -11495,6 +11593,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAll_OnClick(self, HEALBOT_MAGIC_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLMAGIC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLMAGIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_CDCAllPoison" inherits="OptionsCheckButtonTemplate">
@@ -11507,6 +11607,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAll_OnClick(self, HEALBOT_POISON_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLPOISON",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLPOISON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_CDCAllCurse" inherits="OptionsCheckButtonTemplate">
@@ -11519,6 +11621,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAll_OnClick(self, HEALBOT_CURSE_en)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLCURSE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLCURSE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_CDCAllBoss" inherits="OptionsCheckButtonTemplate">
@@ -11531,6 +11635,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAllBoss_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLBOSS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLBOSS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_CDCAllBossStrict" inherits="SendMailRadioButtonTemplate">
@@ -11543,6 +11649,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCAllBossStrict_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLBOSSSTRICT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLBOSSSTRICT",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                 </Frames>
@@ -11598,6 +11706,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCCol_ShowOnHealthBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGBAR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGBAR",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_CDCWarnRange1" inherits="UIDropDownMenuTemplate">
@@ -11610,6 +11720,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGBARRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGBARRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_CDCCol_ShowOnAggroBar" inherits="OptionsCheckButtonTemplate">
@@ -11622,6 +11734,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CDCCol_ShowOnAggroBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGAGGRO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGAGGRO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_CDCWarnRange2" inherits="UIDropDownMenuTemplate">
@@ -11634,6 +11748,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGAGGRORANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGAGGRORANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="OptionsCheckButtonTemplate">
@@ -11646,6 +11762,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowDebuffWarning_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_CDCWarnRange3" inherits="UIDropDownMenuTemplate">
@@ -11658,6 +11776,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSHOWRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSHOWRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_SoundDebuffWarning" inherits="OptionsCheckButtonTemplate">
@@ -11670,6 +11790,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_SoundDebuffWarning_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUND",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUND",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_CDCWarnRange4" inherits="UIDropDownMenuTemplate">
@@ -11682,6 +11804,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Slider name="HealBot_Options_WarningSound" inherits="HealBot_Options_SliderTemplate">
@@ -11697,6 +11821,8 @@
                     </Anchors>
                     <Scripts>
                       <OnValueChanged>HealBot_Options_WarningSound_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDSELECT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDSELECT",false)</OnLeave>
                     </Scripts>
                   </Slider>
                   <Button name="HealBot_Options_PlaySound" text="">
@@ -11712,6 +11838,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PlaySound_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDPREVIEW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSOUNDPREVIEW",false)</OnLeave>
                     </Scripts>
                     <NormalTexture file="Interface\Common\VoiceChat-Speaker"/>
                     <DisabledTexture file="Interface\Common\VoiceChat-Speaker"/>
@@ -11752,6 +11880,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_MonitorBuffs_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_MonitorBuffsInCombat" inherits="SendMailRadioButtonTemplate">
@@ -11764,6 +11894,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_MonitorBuffsInCombat_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSIC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_MonitorBuffsWhenGrouped" inherits="SendMailRadioButtonTemplate">
@@ -11776,6 +11908,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_MonitorBuffsWhenGrouped_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffsPanel">
@@ -11851,6 +11985,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups1" inherits="UIDropDownMenuTemplate">
@@ -11876,6 +12012,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff1Colourb">
@@ -11904,6 +12042,8 @@
                         </Layers>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff1",1)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff1Colour" inherits="TextStatusBar">
@@ -11950,6 +12090,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups2" inherits="UIDropDownMenuTemplate">
@@ -11962,6 +12104,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff2Colourb">
@@ -11977,6 +12121,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff2",2)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff2Colour" inherits="TextStatusBar">
@@ -12023,6 +12169,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups3" inherits="UIDropDownMenuTemplate">
@@ -12035,6 +12183,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff3Colourb">
@@ -12050,6 +12200,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff3",3)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff3Colour" inherits="TextStatusBar">
@@ -12096,6 +12248,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups4" inherits="UIDropDownMenuTemplate">
@@ -12108,6 +12262,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff4Colourb">
@@ -12123,6 +12279,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff4",4)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff4Colour" inherits="TextStatusBar">
@@ -12169,6 +12327,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups5" inherits="UIDropDownMenuTemplate">
@@ -12181,6 +12341,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff5Colourb">
@@ -12196,6 +12358,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff5",5)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff5Colour" inherits="TextStatusBar">
@@ -12242,6 +12406,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups6" inherits="UIDropDownMenuTemplate">
@@ -12254,6 +12420,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff6Colourb">
@@ -12269,6 +12437,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff6",6)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff6Colour" inherits="TextStatusBar">
@@ -12315,6 +12485,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups7" inherits="UIDropDownMenuTemplate">
@@ -12327,6 +12499,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff7Colourb">
@@ -12342,6 +12516,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff7",7)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff7Colour" inherits="TextStatusBar">
@@ -12388,6 +12564,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELL",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_BuffGroups8" inherits="UIDropDownMenuTemplate">
@@ -12400,6 +12578,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 115)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSMEMBERS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSMEMBERS",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff8Colourb">
@@ -12415,6 +12595,8 @@
                         </Anchors>
                         <Scripts>
                           <OnClick>HealBot_BuffColorpick_OnClick("Buff8",8)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
                         </Scripts>
                       </Button>
                       <StatusBar name="HealBot_Buff8Colour" inherits="TextStatusBar">
@@ -12464,6 +12646,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BuffTimer_OnValueChanged(self,"SHORT")</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSTIMER",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSTIMER",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_LongBuffTimer" inherits="HealBot_Options_SliderTemplate">
@@ -12479,6 +12663,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_Options_BuffTimer_OnValueChanged(self,"LONG")</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSTIMER",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSTIMER",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>
@@ -12820,6 +13006,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMCAT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCAT",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <EditBox name="HealBot_Options_NewBuffHoT" inherits="HealBot_Options_EditBoxTemplate">
@@ -12849,6 +13037,8 @@
                     <Scripts>
                       <OnEnterPressed>HealBot_Options_ConfirmNewHoTBuff()</OnEnterPressed>
                       <OnTextChanged>HealBot_Options_NewHoTBuff_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",false)</OnLeave>
                     </Scripts>
                   </EditBox>
                   <Button name="HealBot_Options_NewBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
@@ -12864,6 +13054,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ConfirmNewHoTBuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWSAVE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_Class_HoTctlName" inherits="UIDropDownMenuTemplate">
@@ -12889,6 +13081,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFF",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Frame name="HealBot_Options_Class_HoTctlAction" inherits="UIDropDownMenuTemplate">
@@ -12914,6 +13108,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 135)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMCASTBY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCASTBY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_HoTctlActionCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
@@ -12954,6 +13150,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_EnableDisableBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_ENABLE">
@@ -12982,6 +13180,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_EnableDisableBuffBtn_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_BuffPriorityC" inherits="UIDropDownMenuTemplate">
@@ -13007,6 +13207,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMPRIORITY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_BuffPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
@@ -13047,6 +13249,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Colorpick_OnClick("CustomBuff")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMCOLOUR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCOLOUR",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <StatusBar name="HealBot_BuffCustomColorpick">
@@ -13109,6 +13313,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ResetBuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMRESET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMRESET",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_Options_CustomBuffCol_OnOff" inherits="OptionsCheckButtonTemplate">
@@ -13121,6 +13327,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_CustomBuffCol_OnOff_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMCOLOURSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCOLOURSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Button name="HealBot_Options_PagePrevCBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PREV">
@@ -13149,6 +13357,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PagePrevCBuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_PageNextCBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_NEXT">
@@ -13164,6 +13374,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PageNextCBuff()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
                 </Frames>
@@ -13220,6 +13432,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGBAR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGBAR",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffWarnRange1" inherits="UIDropDownMenuTemplate">
@@ -13232,6 +13446,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGBARRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGBARRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_BuffCol_ShowOnAggroBar" inherits="OptionsCheckButtonTemplate">
@@ -13244,6 +13460,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_BuffCol_ShowOnAggroBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGAGGRO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGAGGRO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffWarnRange2" inherits="UIDropDownMenuTemplate">
@@ -13256,6 +13474,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGAGGRORANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGAGGRORANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_ShowBuffWarning" inherits="OptionsCheckButtonTemplate">
@@ -13268,6 +13488,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowBuffWarning_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffWarnRange3" inherits="UIDropDownMenuTemplate">
@@ -13280,6 +13502,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSHOWRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSHOWRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_SoundBuffWarning" inherits="OptionsCheckButtonTemplate">
@@ -13292,6 +13516,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_SoundBuffWarning_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSOUND",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSOUND",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffWarnRange4" inherits="UIDropDownMenuTemplate">
@@ -13304,6 +13530,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDRANGE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Slider name="HealBot_Options_BuffWarningSound" inherits="HealBot_Options_SliderTemplate">
@@ -13319,6 +13547,8 @@
                     </Anchors>
                     <Scripts>
                       <OnValueChanged>HealBot_Options_BuffWarningSound_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDSELECT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDSELECT",false)</OnLeave>
                     </Scripts>
                   </Slider>
                   <Button name="HealBot_Options_PlayBuffSound" text="">
@@ -13334,6 +13564,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_PlayBuffSound_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDPREVIEW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSOUNDPREVIEW",false)</OnLeave>
                     </Scripts>
                     <NormalTexture file="Interface\Common\VoiceChat-Speaker"/>
                     <DisabledTexture file="Interface\Common\VoiceChat-Speaker"/>
@@ -13373,6 +13605,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltip_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipUpdate" inherits="SendMailRadioButtonTemplate" id="1">
@@ -13385,6 +13619,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipUpdate_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPUPDATE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPUPDATE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_HideTooltipInCombat" inherits="SendMailRadioButtonTemplate" id="1">
@@ -13397,6 +13633,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_HideTooltipInCombat_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHIDEIC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="OptionsCheckButtonTemplate">
@@ -13409,6 +13647,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipTarget_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipMyBuffs" inherits="SendMailRadioButtonTemplate" id="1">
@@ -13421,6 +13661,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipMyBuffs_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipSpellDetail" inherits="OptionsCheckButtonTemplate">
@@ -13433,6 +13675,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipSpellDetail_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSPELLDETAIL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLDETAIL",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipSpellCoolDown" inherits="OptionsCheckButtonTemplate">
@@ -13445,6 +13689,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipSpellCoolDown_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSPELLCD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipMouseWheel" inherits="OptionsCheckButtonTemplate">
@@ -13457,6 +13703,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipMouseWheel_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPWHEELCMD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPWHEELCMD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipInstant" inherits="OptionsCheckButtonTemplate">
@@ -13469,6 +13717,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipInstant_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHOTREC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHOTREC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="OptionsCheckButtonTemplate">
@@ -13481,6 +13731,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipUseGameTip_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPGAMETIP",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPGAMETIP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="OptionsCheckButtonTemplate">
@@ -13493,6 +13745,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_TooltipTextSize" inherits="UIDropDownMenuTemplate">
@@ -13518,6 +13772,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_TooltipPosSettings" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_POSITION">
@@ -13533,6 +13789,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShowPanel(self, 3, 309); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPPOSITION",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITION",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Slider name="HealBot_Options_TTAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -13548,6 +13806,8 @@
                     </Anchors>
                     <Scripts>
                       <OnValueChanged>HealBot_Options_TTAlpha_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPALPHA",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPALPHA",false)</OnLeave>
                     </Scripts>
                   </Slider>
                 </Frames>
@@ -13565,6 +13825,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_Options_EnableMouseWheel_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELUSE",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELUSE",false)</OnLeave>
                 </Scripts>
               </CheckButton>
               <Frame name="HealBot_Options_MouseWheelUp" inherits="UIDropDownMenuTemplate">
@@ -13599,6 +13861,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelDown" inherits="UIDropDownMenuTemplate">
@@ -13624,6 +13888,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelShiftUp" inherits="UIDropDownMenuTemplate">
@@ -13649,6 +13915,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelShiftDown" inherits="UIDropDownMenuTemplate">
@@ -13661,6 +13929,8 @@
                 </Anchors>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelCtrlUp" inherits="UIDropDownMenuTemplate">
@@ -13686,6 +13956,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelCtrlDown" inherits="UIDropDownMenuTemplate">
@@ -13698,6 +13970,8 @@
                 </Anchors>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelAltUp" inherits="UIDropDownMenuTemplate">
@@ -13723,6 +13997,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Frame name="HealBot_Options_MouseWheelAltDown" inherits="UIDropDownMenuTemplate">
@@ -13735,6 +14011,8 @@
                 </Anchors>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
                 </Scripts>
               </Frame>
             </Frames>
@@ -13755,6 +14033,8 @@
                 </Anchors>
                 <Scripts>
                   <OnClick>HealBot_TestBars()</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("TESTUSE",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTUSE",false)</OnLeave>
                 </Scripts>
               </Button>
               <Frame name="HealBot_Options_TestBarsProfile" inherits="UIDropDownMenuTemplate">
@@ -13780,6 +14060,8 @@
                 </Layers>
                 <Scripts>
                   <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("TESTPROFILE",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTPROFILE",false)</OnLeave>
                 </Scripts>
               </Frame>
               <Slider name="HealBot_Options_NumberTestBars" inherits="HealBot_Options_SliderTemplate">
@@ -13795,6 +14077,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMTOTAL",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMTOTAL",false)</OnLeave>
                 </Scripts>
               </Slider>
               <Slider name="HealBot_Options_NumberTestTanks" inherits="HealBot_Options_SliderTemplate">
@@ -13810,6 +14094,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumTestTanks_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMTANKS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMTANKS",false)</OnLeave>
                 </Scripts>
               </Slider>
               <Slider name="HealBot_Options_NumberTestHealers" inherits="HealBot_Options_SliderTemplate">
@@ -13825,6 +14111,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumberTestHealers_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMHEALS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMHEALS",false)</OnLeave>
                 </Scripts>
               </Slider>
               <Slider name="HealBot_Options_NumberTestMyTargets" inherits="HealBot_Options_SliderTemplate">
@@ -13840,6 +14128,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumTestMyTargets_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMMYTARGETS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMMYTARGETS",false)</OnLeave>
                 </Scripts>
               </Slider>
               <Slider name="HealBot_Options_NumberTestPets" inherits="HealBot_Options_SliderTemplate">
@@ -13855,6 +14145,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumTestPets_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMPETS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMPETS",false)</OnLeave>
                 </Scripts>
               </Slider>
               <Slider name="HealBot_Options_NumberTestEnemy" inherits="HealBot_Options_SliderTemplate">
@@ -13870,6 +14162,8 @@
                 </Anchors>
                 <Scripts>
                   <OnValueChanged>HealBot_Options_NumberTestEnemy_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("TESTNUMENEMY",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTNUMENEMY",false)</OnLeave>
                 </Scripts>
               </Slider>
             </Frames>
@@ -13930,6 +14224,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTSELECTSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTSELECTSKIN",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_ShareSkinb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONEXPORT">
@@ -13945,6 +14241,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShareSkinb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTEXPORTSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTEXPORTSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_LoadSkinb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
@@ -13960,6 +14258,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_LoadSkinb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ShareExternalEditBoxFrame">
@@ -14054,6 +14354,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShareCDebuffb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTEXPORTCDEBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTEXPORTCDEBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ImportMethodCDebuff" inherits="UIDropDownMenuTemplate">
@@ -14079,6 +14381,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTCDEBUFFMETHOD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCDEBUFFMETHOD",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_LoadCDebuffb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
@@ -14094,6 +14398,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_LoadCDebuffb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTCDEBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCDEBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ShareCDebuffExternalEditBoxFrame">
@@ -14188,6 +14494,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShareBuffsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTEXPORTCBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTEXPORTCBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ImportMethodBuffs" inherits="UIDropDownMenuTemplate">
@@ -14213,6 +14521,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTCBUFFMETHOD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCBUFFMETHOD",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_LoadBuffsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
@@ -14228,6 +14538,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_LoadBuffsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTCBUFF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ShareBuffsExternalEditBoxFrame">
@@ -14322,6 +14634,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_ShareSpellsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTEXPORTSPELLS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTEXPORTSPELLS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ImportMethodSpells" inherits="UIDropDownMenuTemplate">
@@ -14347,6 +14661,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTSPELLSMETHOD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTSPELLSMETHOD",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_LoadSpellsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
@@ -14362,6 +14678,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_LoadSpellsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTSPELLS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTSPELLS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_ShareSpellsExternalEditBoxFrame">
@@ -14456,6 +14774,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_SharePresetColsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTEXPORTPRESETCOLS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTEXPORTPRESETCOLS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Options_LoadPresetColsb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">
@@ -14471,6 +14791,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_LoadPresetColsb_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("INOUTIMPORTPRESETCOLS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTPRESETCOLS",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_SharePresetColsExternalEditBoxFrame">
