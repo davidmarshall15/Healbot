@@ -4043,17 +4043,13 @@ local function HealBot_Action_PreClick(self,button)
                 if HealBot_Data["TIPUSE"] and HealBot_Globals.ShowTooltip then 
                     HealBot_Action_RefreshTargetTooltip(self) 
                 end
-            elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
+            elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() and 
+                   not HealBot_Data["UILOCK"] and not UnitAffectingCombat(self.unit) then
                 HealBot_Action_UseSmartCast(self)
             end
-        elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and (button=="LeftButton" or button=="MiddleButton" or button=="RightButton") then
-            if button=="MiddleButton" then
-                HealBot_Action_Toggle_Enabled(self)
-            end
-        elseif not HealBot_Data["UILOCK"] then
-            if UnitAffectingCombat(self.unit)==1 then 
-                return
-            end
+        elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and button=="MiddleButton" then
+            HealBot_Action_Toggle_Enabled(self)
+        elseif not HealBot_Data["UILOCK"] and not UnitAffectingCombat(self.unit) then
             if HealBot_Globals.ProtectPvP then
                 if UnitIsPVP(self.unit) and not UnitIsPVP("player") then 
                     HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"nil",aj)

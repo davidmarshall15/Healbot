@@ -4,7 +4,6 @@ local HealBot_Options_SoftReset_flag=false;
 local HealBot_buffbarcolr = {};
 local HealBot_buffbarcolg = {};
 local HealBot_buffbarcolb = {};
-local HealBot_Skins = {};
 local HealBot_DebuffWatchTarget={}
 local HealBot_BuffWatchTarget={}
 local BuffTextClass=nil
@@ -1104,13 +1103,12 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.BarSort[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Author[newSkinName] = HealBot_GetUnitName("Player").." "..HEALBOT_PLAYER_OF_REALM.." "..GetRealmName()
     local unique=true;
-    table.foreach(HealBot_Skins, function (index,skin)
+    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
         if skin==newSkinName then unique=false; end
     end)
     if unique then
-        table.insert(HealBot_Skins,2,newSkinName)
+        table.insert(Healbot_Config_Skins.Skins,2,newSkinName)
         Healbot_Config_Skins.Skin_ID = 2;
-        Healbot_Config_Skins.Skins = HealBot_Skins
     end
     HealBot_Options_Set_Current_Skin(newSkinName)
     HealBot_Options_NewSkin:SetText("")
@@ -1161,8 +1159,7 @@ function HealBot_Options_DeleteSkin_OnClick(self)
         Healbot_Config_Skins.FrameAliasBar[hbDelSkinName] = nil
         Healbot_Config_Skins.IncludeGroup[hbDelSkinName] = nil
         Healbot_Config_Skins.Enemy[hbDelSkinName] = nil
-        table.remove(HealBot_Skins,Healbot_Config_Skins.Skin_ID)
-        Healbot_Config_Skins.Skins = HealBot_Skins;  
+        table.remove(Healbot_Config_Skins.Skins,Healbot_Config_Skins.Skin_ID)
         local retryWithSkin = HealBot_getDefaultSkin()
         HealBot_Options_Set_Current_Skin(retryWithSkin)
         HealBot_Options_SetSkins();
@@ -6418,11 +6415,11 @@ end
 
 function HealBot_Options_Skins_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    for j=1, getn(HealBot_Skins), 1 do
-        info.text = HealBot_Skins[j];
+    for j=1, getn(Healbot_Config_Skins.Skins), 1 do
+        info.text = Healbot_Config_Skins.Skins[j];
         info.func = function(self)
                         Healbot_Config_Skins.Skin_ID = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_Skins,HealBot_Skins[Healbot_Config_Skins.Skin_ID])
+                        UIDropDownMenu_SetText(HealBot_Options_Skins,Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
                         if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), true) end
                     end
         info.checked = false;
@@ -6431,24 +6428,18 @@ function HealBot_Options_Skins_DropDown()
     end
 end
 
-HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"] = true
 function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
-    if HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"] or newSkin then
+    if newSkin then
         HealBot_Panel_resetInitFrames()
-        if HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"] then 
-            HealBot_Skins = Healbot_Config_Skins.Skins
-            HealBot_Options_StorePrev["HealBot_Options_notSet_Current_Skin"]=nil
-        else
-            HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
-        end
+        HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
         if newSkin then
             local hbFoundSkin=nil
             local hbValidSkins=nil
-            for j=1, getn(HealBot_Skins), 1 do
-                if newSkin==HealBot_Skins[j] then
+            for j=1, getn(Healbot_Config_Skins.Skins), 1 do
+                if newSkin==Healbot_Config_Skins.Skins[j] then
                     hbFoundSkin=true
                     Healbot_Config_Skins.Skin_ID = j
-                    Healbot_Config_Skins.Current_Skin = HealBot_Skins[j]
+                    Healbot_Config_Skins.Current_Skin = Healbot_Config_Skins.Skins[j]
                     HealBot_RaidTargetToggle(nil) 
                     HealBot_Panel_ClearBarArrays()
                     HealBot_Action_ResetSkin("init")
@@ -6462,9 +6453,9 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
                     if doRaidTargetToggle then HealBot_RaidTargetToggle(true) end
                 end
                 if hbValidSkins then
-                    hbValidSkins=hbValidSkins.."  +  "..HealBot_Skins[j]
+                    hbValidSkins=hbValidSkins.."  +  "..Healbot_Config_Skins.Skins[j]
                 else
-                    hbValidSkins=HealBot_Skins[j]
+                    hbValidSkins=Healbot_Config_Skins.Skins[j]
                 end
             end
             if not hbFoundSkin then
@@ -6578,11 +6569,11 @@ end
 HealBot_Options_StorePrev["InOutSkin"]=1
 function HealBot_Options_InOutSkin_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    for j=1, getn(HealBot_Skins), 1 do
-        info.text = HealBot_Skins[j];
+    for j=1, getn(Healbot_Config_Skins.Skins), 1 do
+        info.text = Healbot_Config_Skins.Skins[j];
         info.func = function(self)
                         HealBot_Options_StorePrev["InOutSkin"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_InOutSkin,HealBot_Skins[HealBot_Options_StorePrev["InOutSkin"]])
+                        UIDropDownMenu_SetText(HealBot_Options_InOutSkin,Healbot_Config_Skins.Skins[HealBot_Options_StorePrev["InOutSkin"]])
                     end
         info.checked = false;
         if HealBot_Options_StorePrev["InOutSkin"]==j then info.checked = true end
@@ -6636,7 +6627,7 @@ function HealBot_Options_ImportMethodCDebuff_DropDown()
 end
 
 function HealBot_Options_ShareSkinb_OnClick()
-    HealBot_Options_BuildSkinSendMsg(HealBot_Skins[HealBot_Options_StorePrev["InOutSkin"]])
+    HealBot_Options_BuildSkinSendMsg(Healbot_Config_Skins.Skins[HealBot_Options_StorePrev["InOutSkin"]])
 end
 
 function HealBot_Options_LoadSkinb_OnClick()
@@ -7148,13 +7139,12 @@ function HealBot_Options_ShareSkinComplete()
         end
     end
     local unique=true;
-    table.foreach(HealBot_Skins, function (index,skin)
+    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
         if skin==hbOptGetSkinName then unique=false; end
     end)
     if unique then
-        table.insert(HealBot_Skins,2,hbOptGetSkinName)
+        table.insert(Healbot_Config_Skins.Skins,2,hbOptGetSkinName)
         Healbot_Config_Skins.Skin_ID = 2;
-        Healbot_Config_Skins.Skins = HealBot_Skins
     end
     Healbot_Config_Skins.Current_Skin = hbOptGetSkinName
     HealBot_Config.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
@@ -7171,12 +7161,9 @@ end
 
 function HealBot_Options_checkSkinName(skinName)
     local hbFoundSkin=nil
-    for j=1, getn(HealBot_Skins), 1 do
-        if skinName==HealBot_Skins[j] then
-            hbFoundSkin=true
-            break
-        end
-    end
+    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
+        if skin==skinName then hbFoundSkin=true; end
+    end)
     return hbFoundSkin
 end
 
@@ -11517,11 +11504,11 @@ function HealBot_Options_InitSub1(subNo)
         end
     elseif subNo==304 then -- Always run
         HealBot_Options_InOutSkin.initialize = HealBot_Options_InOutSkin_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_InOutSkin, HealBot_Skins[HealBot_Options_StorePrev["InOutSkin"]])
+        UIDropDownMenu_SetText(HealBot_Options_InOutSkin, Healbot_Config_Skins.Skins[HealBot_Options_StorePrev["InOutSkin"]])
     elseif subNo==305 then
         if not DoneInitTab[305] then
             HealBot_Options_Skins.initialize = HealBot_Options_Skins_DropDown
-            UIDropDownMenu_SetText(HealBot_Options_Skins, HealBot_Skins[Healbot_Config_Skins.Skin_ID])
+            UIDropDownMenu_SetText(HealBot_Options_Skins, Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
             DoneInitTab[305]=true
         end
     elseif subNo==306 then

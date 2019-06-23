@@ -1454,7 +1454,6 @@ local function HealBot_Load(hbCaller)
     HealBot_setHbStanceBuffs()
     HealBot_InitSpells()
     HealBot_useCrashProtection()
-    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Current_Skin)
     HealBot_Action_ResetSkin("init")
     HealBot_InitNewChar()
     HealBot_Options_SetSkins();
@@ -2669,6 +2668,48 @@ function HealBot_Check_Skin(SkinName)
   --HealBot_setCall("HealBot_Check_Skin")
 end
 
+local function HealBot_Include_Skin(skinName)
+    local skinExists=false;
+    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
+        if skin==skinName then skinExists=true; end
+    end)
+    local defaultExists=false;
+    table.foreach(HealBot_Config_SkinsDefaults.Skins, function (index,skin)
+        if skin==skinName then defaultExists=true; end
+    end)
+    if not skinExists and defaultExists then
+        Healbot_Config_Skins.Author[skinName]=HealBot_Config_SkinsDefaults.Author[skinName]
+        Healbot_Config_Skins.Chat[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Chat[skinName])
+        Healbot_Config_Skins.General[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.General[skinName])
+        Healbot_Config_Skins.Healing[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Healing[skinName])
+        Healbot_Config_Skins.Protection[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Protection[skinName])
+        Healbot_Config_Skins.BarHighlight[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarHighlight[skinName])
+        Healbot_Config_Skins.BarAggro[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarAggro[skinName])
+        Healbot_Config_Skins.BarSort[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarSort[skinName])
+        Healbot_Config_Skins.BarVisibility[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarVisibility[skinName])
+        Healbot_Config_Skins.IncludeGroup[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.IncludeGroup[skinName])
+        Healbot_Config_Skins.FrameAlias[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.FrameAlias[skinName])
+        Healbot_Config_Skins.FrameAliasBar[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.FrameAliasBar[skinName])
+        Healbot_Config_Skins.Frame[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Frame[skinName])
+        Healbot_Config_Skins.StickyFrames[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.StickyFrames[skinName])
+        Healbot_Config_Skins.HealGroups[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.HealGroups[skinName])
+        Healbot_Config_Skins.Anchors[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Anchors[skinName])
+        Healbot_Config_Skins.HeadBar[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.HeadBar[skinName])
+        Healbot_Config_Skins.HeadText[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.HeadText[skinName])
+        Healbot_Config_Skins.HealBar[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.HealBar[skinName])
+        Healbot_Config_Skins.BarCol[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarCol[skinName])
+        Healbot_Config_Skins.BarIACol[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarIACol[skinName])
+        Healbot_Config_Skins.BarText[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarText[skinName])
+        Healbot_Config_Skins.BarTextCol[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.BarTextCol[skinName])
+        Healbot_Config_Skins.Icons[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Icons[skinName])
+        Healbot_Config_Skins.RaidIcon[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.RaidIcon[skinName])
+        Healbot_Config_Skins.IconText[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.IconText[skinName])
+        Healbot_Config_Skins.Enemy[skinName]=HealBot_Options_copyTable(HealBot_Config_SkinsDefaults.Enemy[skinName])
+        table.insert(Healbot_Config_Skins.Skins,skinName)
+        HealBot_Check_Skin(skinName)
+    end
+end
+
 local function HealBot_Update_Skins()
     if HealBot_Globals.LastVersionSkinUpdate then
         HealBot_Globals.LastVersionSkinUpdate=nil
@@ -2777,6 +2818,10 @@ local function HealBot_Update_Skins()
                 HealBot_Globals.VersionResetDone["Reset_AutoUpdateSpellIDs"]=nil
                 HealBot_Reset_AutoUpdateSpellIDs()
             end
+            if tonumber(tMinor)<3 then
+                HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25)
+                HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40)
+            end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
         if HealBot_Globals.RangeCheckFreq>0.8 then HealBot_Globals.RangeCheckFreq=0.8 end
@@ -2789,7 +2834,6 @@ local function HealBot_Update_Skins()
             HealBot_Globals.CDCBarColour[customDebuffPriority]["B"] = 0.28
         end
     end
-    
     if HealBot_Config.CurrentSpec==9 then
         HealBot_Config.CurrentSpec=1
         HealBot_Update_SpellCombos()
@@ -3018,6 +3062,8 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     if HealBot_Globals.CatchAltDebuffIDs["init"] then
         HealBot_Reset_AutoUpdateDebuffIDs()
     end
+    HealBot_Load("VarsLoaded")
+    HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Current_Skin)
   --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
 
