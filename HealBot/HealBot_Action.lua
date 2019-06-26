@@ -3756,11 +3756,11 @@ function HealBot_Action_HealUnit_OnEnter(self)
             HealBot_Data["TIPTYPE"] = "Enemy"
         elseif HealBot_Data["UILOCK"] and HealBot_Globals.DisableToolTipInCombat==false then
             HealBot_Data["TIPTYPE"] = "Enabled"
-        elseif UnitAffectingCombat(self.unit)==1 then
+        elseif UnitAffectingCombat(self.unit) then
             HealBot_Data["TIPTYPE"] = "Enabled"
         elseif self.status.enabled or HealBot_Config.EnableHealthy then 
             HealBot_Data["TIPTYPE"] = "Enabled"
-        elseif UnitIsUnit(self.unit,"player") and self.status.current<9 then
+        elseif self.status.current<9 then
             HealBot_Data["TIPTYPE"] = "Disabled"
         end
         HealBot_Action_RefreshTooltip();
