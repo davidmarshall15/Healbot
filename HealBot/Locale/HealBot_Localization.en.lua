@@ -604,7 +604,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_DISLIKEMOUNT_OFF         = "No longer Dislike Mount"
     HEALBOT_CMD_COPYSPELLS                  = "Copy current spells to all specs"
     HEALBOT_CMD_RESETSPELLS                 = "Reset spells"
-    HEALBOT_CMD_RESETCURES                  = "Reset cures"
+    HEALBOT_CMD_RESETCURES                  = "Reset debuffs"
     HEALBOT_CMD_RESETBUFFS                  = "Reset buffs"
     HEALBOT_CMD_RESETICONS                  = "Reset custom buffs"
     HEALBOT_CMD_RESETBARS                   = "Reset bar position"
@@ -1043,6 +1043,9 @@ function HealBot_Lang_enALL()
                                    [05] = "SUNET",
                                    [06] = "Daskills",
                                    [07] = "mUbh",
+                                   [08] = "XitMaG",
+                                   [09] = "killerdavy",
+                                   [10] = "zathrain",
                                 }
                                
 end

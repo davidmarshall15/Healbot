@@ -350,7 +350,6 @@ function HealBot_TogglePanel(HBpanel)
     if ( HBpanel:IsVisible() ) then
         HideUIPanel(HBpanel);
     else
-        HealBot_Comms_Print_Supports()
         local fTop=HealBot_Comm_round(((HBpanel:GetTop()/GetScreenHeight())*100),2)
         local fLeft=HealBot_Comm_round(((HBpanel:GetLeft()/GetScreenWidth())*100),2)
         local fBottom=HealBot_Comm_round(((HBpanel:GetBottom()/GetScreenHeight())*100),2)
@@ -2818,7 +2817,7 @@ local function HealBot_Update_Skins()
                 HealBot_Globals.VersionResetDone["Reset_AutoUpdateSpellIDs"]=nil
                 HealBot_Reset_AutoUpdateSpellIDs()
             end
-            if tonumber(tMinor)<3 then
+            if tonumber(tMinor)<2 then
                 HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25)
                 HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40)
             end

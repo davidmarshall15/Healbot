@@ -434,6 +434,11 @@ function HealBot_Options_setLists()
         HEALBOT_ANTI_VENOM,
         HEALBOT_POWERFUL_ANTI_VENOM,
     }
+    
+    local iName = GetItemInfo(HEALBOT_PURIFICATION_POTION)
+    iName = GetItemInfo(HEALBOT_ELIXIR_OF_POISON_RES)
+    iName = GetItemInfo(HEALBOT_ANTI_VENOM)
+    iName = GetItemInfo(HEALBOT_POWERFUL_ANTI_VENOM)
 
     HealBot_Debuff_RangeWarning_List = {
         HEALBOT_WORD_ALWAYS,
@@ -12459,6 +12464,9 @@ end
 function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
     local g=nil
     HealBot_Options_PresetColours:Hide()
+    if tabNo==0 then
+        HealBot_Comms_Print_Supports()
+    end
     if HealBot_Options_StorePrev["PrevTabNo"] and HealBot_Options_StorePrev["PrevTabNo"]~=tabNo then
         g=_G["HealBot_Options_Panel"..HealBot_Options_StorePrev["PrevTabNo"]]
         g:Hide();

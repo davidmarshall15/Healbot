@@ -1,6 +1,5 @@
 local linenum=1
 local HealBot_CheckBuffs = {}
-local HealBot_Tooltip_DirtyLines={}
 local xUnit=nil
 local xGUID=nil
 local xButton=nil
@@ -180,7 +179,6 @@ local function HealBot_Tooltip_SetLineLeft(Text,R,G,B,lNo,a)
     txtL:SetTextColor(R,G,B,a)
     txtL:SetText(Text)
     txtL:Show()
-    HealBot_Tooltip_DirtyLines[lNo]=true
 end
 
 local function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
@@ -189,7 +187,6 @@ local function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
     txtR:SetTextColor(R,G,B,a)
     txtR:SetText(Text)
     txtR:Show()
-    HealBot_Tooltip_DirtyLines[lNo]=true
 end
 
 local function HealBot_Tooltip_InitFont()
@@ -199,12 +196,11 @@ local function HealBot_Tooltip_InitFont()
     elseif HealBot_Globals.Tooltip_TextSize==3 then
         fontType=GameFontNormalLarge
     end
-    for x=1,40 do
+    for x=1,44 do
         local txtR = _G["HealBot_TooltipTextR" .. x]
         txtR:SetFontObject(fontType)
         local txtL = _G["HealBot_TooltipTextL" .. x]
         txtL:SetFontObject(fontType)
-        HealBot_Tooltip_DirtyLines[x]=nil
     end
 end
 
@@ -390,16 +386,15 @@ local function HealBot_ToolTip_SetTooltipPos()
     end
 end
 
-local function HealBot_Tooltip_ClearLines()
+local function HealBot_Tooltip_ClearLines(allLines)
     if HealBot_Globals.UseGameTooltip then
         GameTooltip:ClearLines()
     else
-        for x,_ in pairs(HealBot_Tooltip_DirtyLines) do
+        for x=1,44 do
             local txtR = _G["HealBot_TooltipTextR" .. x]
             txtR:SetText(" ")
             local txtL = _G["HealBot_TooltipTextL" .. x]
             txtL:SetText(" ")
-            HealBot_Tooltip_DirtyLines[x]=nil
         end
     end
 end
