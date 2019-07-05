@@ -1046,6 +1046,7 @@ function HealBot_Lang_enALL()
                                    [08] = "XitMaG",
                                    [09] = "killerdavy",
                                    [10] = "zathrain",
+                                   [11] = "Saelem",
                                 }
                                
 end

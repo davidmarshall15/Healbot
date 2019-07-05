@@ -4,10 +4,7 @@ local HealBotAddonSummaryNoCommsMem={}
 local HealBotAddonSummaryNoCommsSort={}
 local sortorder={}
 local hbtmpver={}
-local HealBot_Comms_luVars={}
 local _
-
-HealBot_Comms_luVars["LastSupport"]=0
 
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
@@ -51,7 +48,7 @@ function HealBot_Comms_Print_Supports()
     local d={}
     for x=1,10 do
         local g=_G["HBIncH"..x.."Supporter"]
-        local s=HealBot_Comms_luVars["LastSupport"]+x
+        local s=HealBot_Globals.LastSupporter+x
         if not HEALBOT_SUPPORTERS_PEOPLE[s] then
             b=b+1
             s=b
@@ -63,10 +60,10 @@ function HealBot_Comms_Print_Supports()
         end
     end
     if HEALBOT_SUPPORTERS_PEOPLE[11] then
-        HealBot_Comms_luVars["LastSupport"]=HealBot_Comms_luVars["LastSupport"]+1
-        local s=HealBot_Comms_luVars["LastSupport"]+1
+        HealBot_Globals.LastSupporter=HealBot_Globals.LastSupporter+1
+        local s=HealBot_Globals.LastSupporter+1
         if not HEALBOT_SUPPORTERS_PEOPLE[s] then
-            HealBot_Comms_luVars["LastSupport"]=0
+            HealBot_Globals.LastSupporter=0
         end
     end
 end

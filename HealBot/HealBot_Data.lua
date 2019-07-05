@@ -291,6 +291,7 @@ function HealBot_Data_InitVars()
         minHealthBloom=40,
         minManaBloom=40,
         CustomCuresReset="6.0.0",
+        LastSupporter=0,
         PresetColoursAlias={[1]=HEALBOT_OPTIONS_PRESET.." 1",[2]=HEALBOT_OPTIONS_PRESET.." 2",
                             [3]=HEALBOT_OPTIONS_PRESET.." 3",[4]=HEALBOT_OPTIONS_PRESET.." 4",
                             [5]=HEALBOT_OPTIONS_PRESET.." 5",[6]=HEALBOT_OPTIONS_PRESET.." 6",

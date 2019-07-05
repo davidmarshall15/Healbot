@@ -14,7 +14,7 @@ local gsub=gsub
 local HealBot_ReCheckBuffsTime=nil
 local HealBot_ReCheckBuffsTimed={}
 local HealBot_Ignore_Debuffs = {["Class"]={},["Movement"]={},["NonHarmful"]={},};
-local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.01,["HB2Inc"]=0,["HB2Th"]=0.1,["HBaInc"]=0,["HBaTh"]=0.05,["CheckTimeMod"]=0.1}
+local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.2,["HB2Inc"]=0,["HB2Th"]=0.1,["HBaInc"]=0,["HBaTh"]=0.05,["CheckTimeMod"]=0.1}
 local arrg = {}
 local PlayerBuffs = {}
 local PlayerBuffTypes = {}
@@ -3196,11 +3196,14 @@ function HealBot_setHighlightTargetBar()
 end
 
 local function HealBot_Options_Update()
-    HealBot_Timers["HB1Th"]=HealBot_Globals.RangeCheckFreq/25
+    --HealBot_Timers["HB1Th"]=HealBot_Globals.RangeCheckFreq/25
     if HealBot_Options_Timer[150] then
         HealBot_Options_Timer[150]=nil
         HealBot_Action_ResetSkin("init")
        -- HealBot_setOptions_Timer(595)
+    elseif HealBot_Options_Timer[5] then
+        HealBot_Options_Timer[5]=nil
+        HealBot_Options_InitBuffList()
     elseif HealBot_Options_Timer[10] then
         HealBot_Options_Timer[10]=nil
         if HealBot_Config_Buffs.NoAuraWhenRested and not IsResting() then HealBot_CheckAllBuffs() end
@@ -3389,14 +3392,6 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[550] then
         HealBot_Options_Timer[550]=nil
         HealBot_InitSpells()
-    elseif HealBot_Options_Timer[5] then
-        HealBot_Options_Timer[5]=nil
-        if HEALBOT_ORALIUS_WHISPERING_CRYSTAL=="--Oralius' Whispering Crystal" or HEALBOT_REPURPOSED_FEL_FOCUSER=="--Repurposed Fel Focuser" or HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE=="--Battle-Scarred Augment Rune" or
-           HEALBOT_TAILWIND_SAPPHIRE=="--Tailwind Sapphire" or HEALBOT_AMETHYST_OF_THE_SHADOW_KING=="--Amethyst of the Shadow King" then 
-            HealBot_OnEvent_ItemInfoReceived() 
-        else
-            HealBot_Options_InitBuffList()
-        end
     elseif not HealBot_Options_Timer[8000] and HealBot_Options_Timer[580] then
         HealBot_Options_Timer[580]=nil
         HealBot_nextRecalcParty(6)
@@ -6582,7 +6577,7 @@ local sSwitch=UnitLevel("player")*50
 function HealBot_SmartCast(hlthDelta)
     local s=nil
     for sID,sType in pairs(HealBot_SmartCast_Spells) do
-        local sName=HealBot_KnownSpell[sID]
+        local sName=HealBot_KnownSpell(sID)
         if sName then
             if sType=="L" then
                 if hlthDelta>sSwitch then s=sName end
