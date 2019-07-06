@@ -14,7 +14,7 @@ local gsub=gsub
 local HealBot_ReCheckBuffsTime=nil
 local HealBot_ReCheckBuffsTimed={}
 local HealBot_Ignore_Debuffs = {["Class"]={},["Movement"]={},["NonHarmful"]={},};
-local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.2,["HB2Inc"]=0,["HB2Th"]=0.1,["HBaInc"]=0,["HBaTh"]=0.05,["CheckTimeMod"]=0.1}
+local HealBot_Timers={["HB1Inc"]=0,["HB1Th"]=0.1,["HB2Inc"]=0,["HB2Th"]=0.1,["HBaInc"]=0,["HBaTh"]=0.05,["CheckTimeMod"]=0.1}
 local arrg = {}
 local PlayerBuffs = {}
 local PlayerBuffTypes = {}
@@ -3037,7 +3037,6 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Action_sethbAggroNumberFormat()
     HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
     HealBot:RegisterEvent("PLAYER_LEAVING_WORLD");
-    HealBot_luVars["hbLoaded"]=true
     g=_G["HealBot_Options_SkinsFrameIconsGeneralb"]
     g:LockHighlight()
     g=_G["HealBot_Options_SkinsFramesBarsGeneralb"]
@@ -3063,12 +3062,13 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     end
     HealBot_Load("VarsLoaded")
     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Current_Skin)
+    HealBot_luVars["hbLoaded"]=true
   --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
 
 local function HealBot_OnEvent_ItemInfoReceived(self)
     HealBot:UnregisterEvent("GET_ITEM_INFO_RECEIVED");
-    HealBot_OnEvent_VariablesLoaded(self)
+    HealBot_setOptions_Timer(6)
   --HealBot_setCall("HealBot_OnEvent_ItemInfoReceived")
 end
 
@@ -3196,7 +3196,7 @@ function HealBot_setHighlightTargetBar()
 end
 
 local function HealBot_Options_Update()
-    --HealBot_Timers["HB1Th"]=HealBot_Globals.RangeCheckFreq/25
+    HealBot_Timers["HB1Th"]=HealBot_Globals.RangeCheckFreq/25
     if HealBot_Options_Timer[150] then
         HealBot_Options_Timer[150]=nil
         HealBot_Action_ResetSkin("init")
@@ -3204,6 +3204,9 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[5] then
         HealBot_Options_Timer[5]=nil
         HealBot_Options_InitBuffList()
+    elseif HealBot_Options_Timer[6] then
+        HealBot_Options_Timer[6]=nil
+        HealBot_OnEvent_VariablesLoaded()
     elseif HealBot_Options_Timer[10] then
         HealBot_Options_Timer[10]=nil
         if HealBot_Config_Buffs.NoAuraWhenRested and not IsResting() then HealBot_CheckAllBuffs() end
