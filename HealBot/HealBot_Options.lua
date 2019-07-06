@@ -2721,11 +2721,7 @@ function HealBot_Options_MonitorBuffs_OnClick(self)
 end
 
 function HealBot_Options_MonitorBuffs_Toggle()
-    if HealBot_Config_Buffs.BuffWatch then
-        HealBot_setOptions_Timer(40)
-    else
-        HealBot_SetAuraChecks()
-    end
+    HealBot_setOptions_Timer(40)
 end
 
 function HealBot_Options_MonitorDebuffs_OnClick(self)
@@ -2738,11 +2734,7 @@ function HealBot_Options_MonitorDebuffs_OnClick(self)
 end
 
 function HealBot_Options_MonitorDebuffs_Toggle()
-    if HealBot_Config_Cures.DebuffWatch then
-        HealBot_setOptions_Timer(50)
-    else
-        HealBot_SetAuraChecks()
-    end
+    HealBot_CheckAllDebuffs()
 end
 
 function HealBot_Options_MonitorBuffsInCombat_OnClick(self)
@@ -2760,11 +2752,7 @@ function HealBot_Options_MonitorBuffsWhenGrouped_OnClick(self)
     else
         HealBot_Config_Buffs.BuffWatchWhenGrouped = false
     end
-    if HealBot_Config_Buffs.BuffWatchWhenGrouped and GetNumGroupMembers()==0 then
-        HealBot_SetAuraChecks()
-    else
-        HealBot_setOptions_Timer(40)
-    end
+    HealBot_setOptions_Timer(40)
 end
 
 function HealBot_Options_SkinDefault_OnClick(self, gType)
@@ -2803,11 +2791,7 @@ function HealBot_Options_MonitorDebuffsWhenGrouped_OnClick(self)
     else
         HealBot_Config_Cures.DebuffWatchWhenGrouped = false
     end
-    if HealBot_Config_Cures.DebuffWatchWhenGrouped and GetNumGroupMembers()==0 then
-        HealBot_SetAuraChecks()
-    else
-        HealBot_setOptions_Timer(50)
-    end
+    HealBot_setOptions_Timer(50)
 end
 
 function HealBot_Options_CDCCol_ShowOnHealthBar_OnClick(self)
@@ -2908,11 +2892,10 @@ end
 function HealBot_Options_NoAuraWhenRested_OnClick(self)
     if self:GetChecked() then
         HealBot_Config_Buffs.NoAuraWhenRested=true
-        HealBot_SetResetFlag("SOFT")
     else
         HealBot_Config_Buffs.NoAuraWhenRested=false
-        HealBot_setOptions_Timer(30) 
     end
+    HealBot_SetResetFlag("SOFT")
 end
 
 function HealBot_Options_AdjustMaxHealth_OnClick(self)
@@ -8890,7 +8873,7 @@ end
 local FirstDebuffLoad=true
 local function HealBot_Options_DoDebuff_Reset()
     HealBot_Options_setDebuffTypes()
-    HealBot_SetAuraChecks()
+    HealBot_CheckAllDebuffs()
     HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {HEALBOT_POISON_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_MAGIC_en] = {HEALBOT_MAGIC_en = {}};
@@ -9106,7 +9089,7 @@ local spells={}
 local FirstBuffLoad=true
 local function HealBot_Options_DoBuff_Reset()
     HealBot_Options_setDebuffTypes()
-    HealBot_SetAuraChecks()
+    HealBot_CheckAllBuffs()
     BuffTextClass = HealBot_Config_Buffs.HealBotBuffText
     local BuffDropDownClass = HealBot_Config_Buffs.HealBotBuffDropDown
     local buffbarcolrClass = HealBot_Config_Buffs.HealBotBuffColR
