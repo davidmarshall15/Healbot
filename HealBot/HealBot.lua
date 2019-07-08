@@ -862,19 +862,18 @@ local function HealBot_ClearUnitAggro(button)
 end
 
 function HealBot_UpdateUnitReset(button)
-    if button.aura.buff.name then
-        HealBot_ClearBuff(button)
-    end
-    if button.aura.debuff.name then 
-        HealBot_ClearDebuff(button)
-    end
+    button.update.buff=true
+    button.update.debuff=true
     HealBot_ClearUnitAggro(button)
     HealBot_Action_CheckUnitLowMana(button)
-    HealBot_HoT_RemoveIconButton(button)
-    button.health.incoming=0
-    button.health.absorbs=0
-    HealBot_Action_UpdateHealsInButton(button)
-    HealBot_Action_UpdateAbsorbsButton(button)
+    --HealBot_HoT_RemoveIconButton(button)
+    button.health.updincoming=true
+    button.health.updabsorbs=true
+    button.health.update=true
+    --button.health.incoming=0
+    --button.health.absorbs=0
+    --HealBot_Action_UpdateHealsInButton(button)
+    --HealBot_Action_UpdateAbsorbsButton(button)
 end
 
 function HealBot_UpdateUnit(button)
