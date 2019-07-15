@@ -95,6 +95,8 @@ HealBot_luVars["lastBuffMsg"]="nil"
 HealBot_luVars["reCheckActionFrames"]=false
 HealBot_luVars["debuffExists"]=false
 HealBot_luVars["buffExists"]=false
+HealBot_luVars["EnableErrorSpeech"]=false
+HealBot_luVars["EnableErrorText"]=false
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -533,11 +535,28 @@ local function HealBot_Reset_AutoUpdateSpellIDs()
     HealBot_AddChat("Automatic Spell ID's Turned On")
 end
 
+local function HealBot_UIMessage(msg)
+    local hbDebugChan=HealBot_Comms_GetChan("HBmsg");
+    if hbDebugChan then
+        SendChatMessage(msg , "CHANNEL", nil, hbDebugChan);
+    else
+        HealBot_AddChat(msg)
+    end
+end
+
 local function HealBot_SlashCmd(cmd)
     if not cmd then cmd="" end
     local HBcmd, x, y, z = string.split(" ", cmd)
     HBcmd=string.lower(HBcmd) 
-    if (HBcmd=="" or HBcmd=="o" or HBcmd=="options" or HBcmd=="opt" or HBcmd=="config" or HBcmd=="cfg") then
+    if (HBcmd=="se1") then
+        SetCVar("Sound_EnableErrorSpeech", "0");
+    elseif (HBcmd=="se2") then
+        HealBot_luVars["EnableErrorSpeech"]=true
+    elseif (HBcmd=="se3") then
+        UIErrorsFrame:Hide()
+    elseif (HBcmd=="se4") then
+        HealBot_luVars["EnableErrorText"]=true
+    elseif (HBcmd=="" or HBcmd=="o" or HBcmd=="options" or HBcmd=="opt" or HBcmd=="config" or HBcmd=="cfg") then
         HealBot_TogglePanel(HealBot_Options);
     elseif (HBcmd=="d" or HBcmd=="defaults") then
         HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults);
@@ -743,7 +762,10 @@ local function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
     elseif (HBcmd=="zzz") then
-        HealBot_AddChat("Current Skin="..Healbot_Config_Skins.Current_Skin)
+        if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] then
+            --DoEmote(HEALBOT_EMOTE_OOM)
+            HealBot_AddDebug(HEALBOT_EMOTE_OOM.." - mPct="..((UnitPower("player", 0)/UnitPowerMax("player", 0))*100))
+        end
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -866,14 +888,9 @@ function HealBot_UpdateUnitReset(button)
     button.update.debuff=true
     HealBot_ClearUnitAggro(button)
     HealBot_Action_CheckUnitLowMana(button)
-    --HealBot_HoT_RemoveIconButton(button)
     button.health.updincoming=true
     button.health.updabsorbs=true
     button.health.update=true
-    --button.health.incoming=0
-    --button.health.absorbs=0
-    --HealBot_Action_UpdateHealsInButton(button)
-    --HealBot_Action_UpdateAbsorbsButton(button)
 end
 
 function HealBot_UpdateUnit(button)
@@ -1067,154 +1084,79 @@ local function HealBot_DoReset_Spells(pClassTrim)
     local bandage=HealBot_GetBandageType() or ""
     local x=""
     if pClassTrim=="DRUI" then
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_REGROWTH),
-          ["CtrlLeft"] =  GetSpellInfo(HEALBOT_REMOVE_CORRUPTION),
-          ["Right"] = GetSpellInfo(HEALBOT_HEALING_TOUCH),
-          ["CtrlRight"] =  GetSpellInfo(HEALBOT_NATURES_CURE),
-          ["Middle"] = GetSpellInfo(HEALBOT_REJUVENATION),
-          ["ShiftMiddle"] = bandage,
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["ShiftLeft"] = GetSpellInfo(HEALBOT_MARK_OF_THE_WILD),
-          ["Right"] = HEALBOT_ASSIST,
-          ["Middle"] = GetSpellInfo(HEALBOT_REJUVENATION),
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_REGROWTH))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_REMOVE_CORRUPTION))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HEALING_TOUCH))
+        HealBot_Action_SetSpell("ENABLED", "CtrlRight", GetSpellInfo(HEALBOT_NATURES_CURE))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_REJUVENATION))
+        HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_REGROWTH))
+        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HEALING_TOUCH))
+        HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_REJUVENATION))
     elseif pClassTrim=="MONK" then
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_SOOTHING_MIST),
-          ["ShiftLeft"] = GetSpellInfo(HEALBOT_SURGING_MIST),
-          ["ShiftRight"] = GetSpellInfo(HEALBOT_REVIVAL),
-          ["CtrlLeft"] = GetSpellInfo(HEALBOT_DETOX),
-          ["Right"] = GetSpellInfo(HEALBOT_ENVELOPING_MIST),
-          ["Middle"] =  GetSpellInfo(HEALBOT_RENEWING_MIST),
-          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_UPLIFT),
-          ["CtrlMiddle"] = GetSpellInfo(HEALBOT_LIFE_COCOON),
-          ["AltMiddle"] = GetSpellInfo(HEALBOT_ZEN_MEDITATION),
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Middle"] =  GetSpellInfo(HEALBOT_RENEWING_MIST),
-          ["Right"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_SOOTHING_MIST))
+        HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_SURGING_MIST))
+        HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_REVIVAL))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_DETOX))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_SOOTHING_MIST))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_RENEWING_MIST))
+        HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_UPLIFT))
+        HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", GetSpellInfo(HEALBOT_LIFE_COCOON))
+        HealBot_Action_SetSpell("ENABLED", "AltMiddle", GetSpellInfo(HEALBOT_ZEN_MEDITATION))
+        HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_SOOTHING_MIST))
+        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_SOOTHING_MIST))
+        HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_RENEWING_MIST))
     elseif pClassTrim=="PALA" then
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_FLASH_OF_LIGHT),
-          ["ShiftLeft"] = x,
-          ["ShiftRight"] = GetSpellInfo(HEALBOT_LIGHT_OF_DAWN),
-          ["CtrlLeft"] =  GetSpellInfo(HEALBOT_CLEANSE),
-          ["Right"] = GetSpellInfo(HEALBOT_HOLY_LIGHT),
-          ["Middle"] =  GetSpellInfo(HEALBOT_WORD_OF_GLORY),
-          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_HOLY_RADIANCE),
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Middle"] =  GetSpellInfo(HEALBOT_HAND_OF_SALVATION),
-          ["Right"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_OF_LIGHT))
+        HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_LIGHT_OF_DAWN))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_CLEANSE))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_WORD_OF_GLORY))
+        HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_HOLY_RADIANCE))
+        HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_FLASH_OF_LIGHT))
+        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
+        HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_WORD_OF_GLORY))
     elseif pClassTrim=="PRIE" then
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_FLASH_HEAL),
-          ["ShiftLeft"] = GetSpellInfo(HEALBOT_BINDING_HEAL),
-          ["CtrlLeft"] = GetSpellInfo(HEALBOT_PURIFY),
-          ["Right"] = GetSpellInfo(HEALBOT_HEAL),
-          ["ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY),
-          ["CtrlRight"] = GetSpellInfo(HEALBOT_MASS_DISPEL),
-          ["Middle"] = GetSpellInfo(HEALBOT_RENEW),
-          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_PRAYER_OF_MENDING),
-          ["AltMiddle"] = GetSpellInfo(HEALBOT_PRAYER_OF_HEALING),
-          ["CtrlMiddle"] = GetSpellInfo(HEALBOT_DIVINE_HYMN),
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SALVATION),
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Right"] = HEALBOT_ASSIST,
-          ["AltLeft"] = GetSpellInfo(HEALBOT_RESURRECTION),
-          ["ShiftRight"] = GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY),
-          ["Middle"] = GetSpellInfo(HEALBOT_RENEW),
-          ["Ctrl-ShiftLeft"] = HEALBOT_FLASH_HEAL,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_HEAL))
+        HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_BINDING_HEAL))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_PURIFY))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
+        HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY))
+        HealBot_Action_SetSpell("ENABLED", "CtrlRight", GetSpellInfo(HEALBOT_MASS_DISPEL))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_RENEW))
+        HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_PRAYER_OF_MENDING))
+        HealBot_Action_SetSpell("ENABLED", "AltMiddle", GetSpellInfo(HEALBOT_PRAYER_OF_HEALING))
+        HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", GetSpellInfo(HEALBOT_DIVINE_HYMN))
+        HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_FLASH_HEAL))
+        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
+        HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_RENEW))
     elseif pClassTrim=="SHAM" then
         if HealBot_Config.CurrentSpec==3 then
             x=GetSpellInfo(HEALBOT_PURIFY_SPIRIT);
         else
             x=GetSpellInfo(HEALBOT_CLEANSE_SPIRIT);
         end
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_HEALING_WAVE),
-          ["CtrlLeft"] = x,
-          ["Right"] = x,
-          ["CtrlRight"] = x,
-          ["ShiftLeft"] = GetSpellInfo(HEALBOT_CHAIN_HEAL),
-		  ["Middle"] = GetSpellInfo(HEALBOT_HEALING_RAIN),
-          ["ShiftMiddle"] = GetSpellInfo(HEALBOT_HEALING_SURGE),
-          ["AltLeft"] = GetSpellInfo(HEALBOT_HEALING_STREAM_TOTEM),
-          ["AltRight"] = x,
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["Right"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_HEALING_WAVE))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HEALING_SURGE))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_HEALING_RAIN))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", x)
+        HealBot_Action_SetSpell("ENABLED", "CtrlRight", x)
+        HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_CHAIN_HEAL))
+        HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_HEALING_STREAM_TOTEM))
+        HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_HEALING_WAVE))
+        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HEALING_SURGE))
+        HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_HEALING_RAIN))
     elseif pClassTrim=="MAGE" then
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = GetSpellInfo(HEALBOT_REMOVE_CURSE),
-          ["ShiftLeft"] = bandage,
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["ShiftLeft"] = bandage,
-          ["Right"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-    else
-        HealBot_Config_Spells.EnabledKeyCombo = {
-          ["Left"] = bandage,
-          ["Alt-ShiftLeft"] = HEALBOT_DISABLED_TARGET,
-          ["Alt-ShiftRight"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
-        HealBot_Config_Spells.DisabledKeyCombo = {
-          ["Left"] = HEALBOT_DISABLED_TARGET,
-          ["ShiftLeft"] = bandage,
-          ["Right"] = HEALBOT_ASSIST,
-          ["Ctrl-ShiftLeft"] = HEALBOT_MENU,
-          ["Ctrl-ShiftRight"] = HEALBOT_HBMENU,
-                                         }
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_REMOVE_CURSE))
     end
+    HealBot_Action_SetSpell("ENABLED", "Alt-ShiftMiddle", bandage)
+    HealBot_Action_SetSpell("ENABLED", "Alt-ShiftLeft", HEALBOT_DISABLED_TARGET)
+    HealBot_Action_SetSpell("ENABLED", "Alt-ShiftRight", HEALBOT_ASSIST)
+    HealBot_Action_SetSpell("ENABLED", "Ctrl-ShiftLeft", HEALBOT_MENU)
+    HealBot_Action_SetSpell("ENABLED", "Ctrl-ShiftRight", HEALBOT_HBMENU)
+    HealBot_Action_SetSpell("DISABLED", "Alt-ShiftLeft", HEALBOT_DISABLED_TARGET)
+    HealBot_Action_SetSpell("DISABLED", "Alt-ShiftRight", HEALBOT_ASSIST)
+    HealBot_Action_SetSpell("DISABLED", "Ctrl-ShiftLeft", HEALBOT_MENU)
+    HealBot_Action_SetSpell("DISABLED", "Ctrl-ShiftRight", HEALBOT_HBMENU)
   --HealBot_setCall("HealBot_DoReset_Spells")
 end
 
@@ -2545,6 +2487,8 @@ function HealBot_Check_Skin(SkinName)
     if not Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"] then Healbot_Config_Skins.Healing[SkinName]["FOCUSINCOMBAT"]=2 end
     if Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["TONLYFRIEND"]=false end
     if Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]==nil then Healbot_Config_Skins.Healing[SkinName]["FONLYFRIEND"]=false end
+    if Healbot_Config_Skins.Healing[SkinName]["TEXRAID"]==nil then Healbot_Config_Skins.Healing[SkinName]["TEXRAID"]=false end
+    if Healbot_Config_Skins.Healing[SkinName]["FEXRAID"]==nil then Healbot_Config_Skins.Healing[SkinName]["FEXRAID"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEPARTYF"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDEPTF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEPTF"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]=false end
@@ -2557,6 +2501,8 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.Chat[SkinName]["CHAN"]==nil then Healbot_Config_Skins.Chat[SkinName]["CHAN"]="" end
     if Healbot_Config_Skins.Chat[SkinName]["MSG"]==nil then Healbot_Config_Skins.Chat[SkinName]["MSG"]=HEALBOT_NOTIFYOTHERMSG end
     if Healbot_Config_Skins.Chat[SkinName]["RESONLY"]==nil then Healbot_Config_Skins.Chat[SkinName]["RESONLY"]=true end
+    if Healbot_Config_Skins.Chat[SkinName]["EOCOOM"]==nil then Healbot_Config_Skins.Chat[SkinName]["EOCOOM"]=false end
+    if not Healbot_Config_Skins.Chat[SkinName]["EOCOOMV"] then Healbot_Config_Skins.Chat[SkinName]["EOCOOMV"]=20 end
     if Healbot_Config_Skins.Enemy[SkinName]["INCSELF"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCSELF"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]=false end
@@ -2777,6 +2723,10 @@ local function HealBot_Update_Skins()
             if tonumber(tMinor)<2 then
                 HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25)
                 HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40)
+            elseif tonumber(tPatch)==0 then
+                if tonumber(tHealbot)<3 then
+                    HealBot_setOptions_Timer(7990)
+                end
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -2789,6 +2739,10 @@ local function HealBot_Update_Skins()
             HealBot_Globals.CDCBarColour[customDebuffPriority]["G"] = 0
             HealBot_Globals.CDCBarColour[customDebuffPriority]["B"] = 0.28
         end
+    
+        HealBot_AddDebug("Version change - "..HealBot_Config.LastVersionSkinUpdate)
+    else
+        HealBot_AddDebug("No version change - "..HealBot_Config.LastVersionSkinUpdate)
     end
     if HealBot_Config.CurrentSpec==9 then
         HealBot_Config.CurrentSpec=1
@@ -2799,6 +2753,64 @@ local function HealBot_Update_Skins()
     HealBot_Config.LastVersionSkinUpdate=HEALBOT_VERSION
     HealBot_Config.Version=HEALBOT_VERSION
   --HealBot_setCall("HealBot_Update_Skins")
+end
+
+local function HealBot_VersionUpdate_Spells()
+    local combo,button,sText,cType=nil,nil,nil,nil
+    for x=1,3 do
+        cType="ENEMY"
+        if x==1 then
+            cType="ENABLED"
+        elseif x==2 then
+            cType="DISABLED"
+        end
+        for y=1,15 do
+            button = HealBot_Options_ComboClass_Button(y)
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Shift"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Shift"..button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Ctrl"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Ctrl"..button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Alt"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Alt"..button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Ctrl-Shift"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Ctrl-Shift"..button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Alt-Shift"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Alt-Shift"..button..z, sText)
+                end
+            end
+            for z=1,4 do
+                sText=HealBot_Action_GetSpell(cType, "Alt-Ctrl"..button..z)
+                if sText then
+                    HealBot_Action_SetSpell(cType, "Alt-Ctrl"..button..z, sText)
+                end
+            end
+        end
+    end
+    HealBot_AddDebug("Updated Spells")
 end
 
 function HealBot_setTooltipUpdateInterval()
@@ -3501,6 +3513,9 @@ local function HealBot_Options_Update()
             HealBot_SetAddonComms()
             HealBot_setOptions_Timer(9000)
         end
+    elseif HealBot_Options_Timer[7990] then
+        HealBot_Options_Timer[7990]=nil
+        HealBot_VersionUpdate_Spells()
     elseif HealBot_Options_Timer[8000] then
         HealBot_Options_Timer[8000]=HealBot_Options_idleInit()
         if HealBot_Options_Timer[8000] then
@@ -3862,6 +3877,12 @@ local function HealBot_Not_Fighting()
     end
     HealBot_EndInstanceEncounter()
     HealBot_setOptions_Timer(9000)
+    if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] then
+        if ((UnitPower("player", 0)/UnitPowerMax("player", 0))*100) < Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"] then
+            DoEmote(HEALBOT_EMOTE_OOM)
+            HealBot_AddDebug(HEALBOT_EMOTE_OOM.." - mPct="..((UnitPower("player", 0)/UnitPowerMax("player", 0))*100))
+        end
+    end
   --HealBot_setCall("HealBot_Not_Fighting")
 end
 
@@ -5308,6 +5329,14 @@ local function HealBot_Update_Fast()
         end
         HealBot_luVars["fastSwitch"]=0
     end
+    if HealBot_luVars["EnableErrorSpeech"] then
+        HealBot_luVars["EnableErrorSpeech"]=false
+        SetCVar("Sound_EnableErrorSpeech", "1");
+    elseif HealBot_luVars["EnableErrorText"] then
+        HealBot_luVars["EnableErrorText"]=false
+        UIErrorsFrame:Clear()
+        UIErrorsFrame:Show()
+    end
     --HealBot_setCall("HealBot_Update_Fast")
 end
 
@@ -5650,15 +5679,13 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
                             HealBot_UpdateUnitReset(xButton)
                             HealBot_UpdateUnit(xButton)
                         end
-                    elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] or UnitIsFriend("target", "player")) then
+                    else
                         HealBot_UpdateUnitReset(xButton)
                         HealBot_UpdateUnit(xButton)
                         if not HealBot_FrameVisible[8] then
                             HealBot_Action_ShowPanel(8)
                         end
                         HealBot_Panel_TargetChangedCheckFocus()
-                    elseif HealBot_FrameVisible[8] then
-                        HealBot_Action_HidePanel(8)
                     end
                 elseif not HealBot_Data["UILOCK"] and HealBot_FrameVisible[8] then
                     HealBot_Action_HidePanel(8)
@@ -6090,20 +6117,18 @@ local function HealBot_OnEvent_FocusChanged(self)
             if not HealBot_UnitData["focus"] then HealBot_UnitData["focus"]={} end
             if HealBot_luVars["FocusNeedReset"] then
                 HealBot_RecalcParty(4)
-            elseif UnitExists("focus") then
+            elseif UnitExists("focus") and HealBot_Panel_validFocus(xButton.guid, xButton.unit) then
                 if HealBot_Data["UILOCK"] then
                     if HealBot_FrameVisible[9] then 
                         HealBot_UpdateUnitReset(xButton)
                         HealBot_UpdateUnit(xButton)
                     end
-                elseif (not Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] or UnitIsFriend("focus", "player")) then
+                else
                     HealBot_UpdateUnitReset(xButton)
                     HealBot_UpdateUnit(xButton)
                     if not HealBot_FrameVisible[9] then
                         HealBot_Action_ShowPanel(9)
                     end
-                elseif HealBot_FrameVisible[9] then
-                    HealBot_Action_HidePanel(9)
                 end
             elseif not HealBot_Data["UILOCK"] and HealBot_FrameVisible[9] then 
                 HealBot_Action_HidePanel(9)

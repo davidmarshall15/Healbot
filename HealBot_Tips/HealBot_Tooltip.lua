@@ -69,13 +69,6 @@ local function HealBot_Tooltip_SpellPattern(button, click)
             sPattern=HEALBOT_TOGGLE_ENABLED
         end
     else    
-        local hbCombos = HealBot_Config_Spells.EnabledKeyCombo
-        if HealBot_Data["TIPTYPE"]=="Disabled" then
-            hbCombos = HealBot_Config_Spells.DisabledKeyCombo
-        elseif HealBot_Data["TIPTYPE"]=="Enemy" then
-            hbCombos = HealBot_Config_Spells.EnemyKeyCombo
-        end
-        if not hbCombos then return nil end
         local x = click;
         if IsShiftKeyDown() then 
             if IsAltKeyDown() then 
@@ -95,7 +88,7 @@ local function HealBot_Tooltip_SpellPattern(button, click)
             x = "Ctrl"..x 
         end
         x=x..HealBot_Config.CurrentSpec
-        sPattern=hbCombos[x]
+        sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
     end
     return sPattern
 end
@@ -826,10 +819,12 @@ local function HealBot_Action_DoRefreshTooltip()
             linenum=linenum+1
             HealBot_Tooltip_SetLine(linenum," ",0,0,0,0)
             if wheelUp and wheelUp~=HEALBOT_WORDS_NONE then 
+                if wheelUp==HEALBOT_EMOTE then wheelUp=wheelUp..": "..HealBot_Globals.HealBot_Emotes[keyDown.."Up"] end
                 linenum=linenum+1
                 HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_MOUSEUP,1,1,0,1,wheelUp,0.5,0.5,1,1)
             end
             if wheelDown and wheelDown~=HEALBOT_WORDS_NONE then
+                if wheelDown==HEALBOT_EMOTE then wheelDown=wheelDown..": "..HealBot_Globals.HealBot_Emotes[keyDown.."Down"] end
                 linenum=linenum+1
                 HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_MOUSEDOWN,1,1,0,1,wheelDown,0.5,0.5,1,1)
             end

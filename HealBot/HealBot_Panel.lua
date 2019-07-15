@@ -1513,13 +1513,14 @@ local function HealBot_Panel_enemyTargets()
 end
 
 function HealBot_Panel_validTarget(hbGUID)
-    local TargetValid=false
-    if not HealBot_Panel_BlackList[hbGUID] then
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] then
-            if UnitIsFriend("player","target") then TargetValid=true end
-        else
-            TargetValid=true
-        end
+    local TargetValid=true
+    if HealBot_Panel_BlackList[hbGUID] then 
+        TargetValid=false
+    elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] and not UnitIsFriend("player","target") then 
+        TargetValid=false
+    elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TEXRAID"] and 
+          (UnitIsUnit("target", "player") or UnitInParty("target") or UnitInRaid("target")) then
+        TargetValid=false
     end
     return TargetValid
 end
@@ -1786,13 +1787,26 @@ local function HealBot_Panel_raidHeals()
     end
 end
 
+function HealBot_Panel_validFocus(hbGUID, unit)
+    local FocusValid=true
+    if HealBot_Panel_BlackList[hbGUID] then 
+        FocusValid=false
+    elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"] and not UnitIsFriend("player",unit) then 
+        FocusValid=false
+    elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FEXRAID"] and 
+           (UnitIsUnit(unit, "player") or UnitInParty(unit) or UnitInRaid(unit)) then
+        FocusValid=false
+    end
+    return FocusValid
+end
+
 local function HealBot_Panel_focusHeals(preCombat)
     local k=i[hbCurrentFrame]
     local xUnit="focus"
     local uExists=false
     local uName=HealBot_GetUnitName(xUnit) or xUnit
     local xGUID=HealBot_UnitGUID(xUnit) or xUnit
-    if UnitExists(xUnit) and (Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"]==false or UnitIsFriend("player",xUnit)) then
+    if UnitExists(xUnit) and HealBot_Panel_validFocus(xGUID, xUnit) then
         uExists=true
     end
     if uExists  and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]>1) then

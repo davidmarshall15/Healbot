@@ -140,6 +140,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CASTNOTIFY5             = "Notify raid";
     HEALBOT_OPTIONS_CASTNOTIFY6             = "Notify chan";
     HEALBOT_OPTIONS_CASTNOTIFYRESONLY       = "Notify for resurrection only";
+    HEALBOT_OPTIONS_EOC_OOM                 = "After combat warn when out of mana"
+    HEALBOT_OPTIONS_EOC_OOM_VALUE           = "When mana below"
 
     HEALBOT_OPTIONS_CDCBARS                 = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
@@ -673,6 +675,93 @@ function HealBot_Lang_enALL()
     HEALBOT_RANDOMPET                       = "Random Pet"
     HEALBOT_RANDOMFAVMOUNT                  = "Random Favorite Mount"
     HEALBOT_RANDOMFAVPET                    = "Random Favorite Pet"
+    HEALBOT_EMOTE                           = "Emote"
+    HEALBOT_EMOTE_CAT_COMBAT                = "Combat"
+    HEALBOT_EMOTE_CAT_EMOTION               = "Emotion"
+    HEALBOT_EMOTE_CAT_HAPPY                 = "Happy"
+    HEALBOT_EMOTE_CAT_GREET                 = "Greeting"
+    HEALBOT_EMOTE_CAT_OTHER                 = "Other"
+    HEALBOT_EMOTE_CAT_RESPECT               = "Respect"
+    HEALBOT_EMOTE_CAT_UNHAPPY               = "Unhappy"
+    HEALBOT_EMOTE_ANGRY                     = "Angry"
+    HEALBOT_EMOTE_APPLAUD                   = "Applaud"
+    HEALBOT_EMOTE_ATTACKTARGET              = "AttackTarget"
+    HEALBOT_EMOTE_BASHFUL                   = "Bashful"
+    HEALBOT_EMOTE_BEG                       = "Beg"
+    HEALBOT_EMOTE_BLOW                      = "Blow"
+    HEALBOT_EMOTE_BLUSH                     = "Blush"
+    HEALBOT_EMOTE_BOGGLE                    = "Boggle"
+    HEALBOT_EMOTE_BORED                     = "Bored"
+    HEALBOT_EMOTE_BOW                       = "Bow"
+    HEALBOT_EMOTE_BYE                       = "Bye"
+    HEALBOT_EMOTE_CACKLE                    = "Cackle"
+    HEALBOT_EMOTE_CHARGE                    = "Charge"
+    HEALBOT_EMOTE_CHEER                     = "Cheer"
+    HEALBOT_EMOTE_CHUCKLE                   = "Chuckle"
+    HEALBOT_EMOTE_CLAP                      = "Clap"
+    HEALBOT_EMOTE_COMMEND                   = "Commend"
+    HEALBOT_EMOTE_CONFUSED                  = "Confused"
+    HEALBOT_EMOTE_CONGRATS                  = "Congrats"
+    HEALBOT_EMOTE_COWER                     = "Cower"
+    HEALBOT_EMOTE_CRY                       = "Cry"
+    HEALBOT_EMOTE_CURIOUS                   = "Curious"
+    HEALBOT_EMOTE_CURTSEY                   = "Curtsey"
+    HEALBOT_EMOTE_DANCE                     = "Dance"
+    HEALBOT_EMOTE_DOOM                      = "Doom"
+    HEALBOT_EMOTE_DRINK                     = "Drink"
+    HEALBOT_EMOTE_EAT                       = "Eat"
+    HEALBOT_EMOTE_EXCITED                   = "Excited"
+    HEALBOT_EMOTE_FLEE                      = "Flee"
+    HEALBOT_EMOTE_FLEX                      = "Flex"
+    HEALBOT_EMOTE_FLIRT                     = "Flirt"
+    HEALBOT_EMOTE_FOLLOWME                  = "FollowMe"
+    HEALBOT_EMOTE_GASP                      = "Gasp"
+    HEALBOT_EMOTE_GIGGLE                    = "Giggle"
+    HEALBOT_EMOTE_GLOAT                     = "Gloat"
+    HEALBOT_EMOTE_GOLFCLAP                  = "GolfClap"
+    HEALBOT_EMOTE_GREET                     = "Greet"
+    HEALBOT_EMOTE_GROVEL                    = "Grovel"
+    HEALBOT_EMOTE_GROWL                     = "Growl"
+    HEALBOT_EMOTE_GUFFAW                    = "Guffaw"
+    HEALBOT_EMOTE_HAIL                      = "Hail"
+    HEALBOT_EMOTE_HEALME                    = "HealMe"
+    HEALBOT_EMOTE_HELLO                     = "Hello"
+    HEALBOT_EMOTE_INCOMING                  = "Incoming"
+    HEALBOT_EMOTE_INSULT                    = "Insult"
+    HEALBOT_EMOTE_KISS                      = "Kiss"
+    HEALBOT_EMOTE_KNEEL                     = "Kneel"
+    HEALBOT_EMOTE_LAUGH                     = "Laugh"
+    HEALBOT_EMOTE_LAY                       = "Lay"
+    HEALBOT_EMOTE_LOST                      = "Lost"
+    HEALBOT_EMOTE_MOURN                     = "Mourn"
+    HEALBOT_EMOTE_NO                        = "No"
+    HEALBOT_EMOTE_NOD                       = "Nod"
+    HEALBOT_EMOTE_OOM                       = "oom"
+    HEALBOT_EMOTE_OPENFIRE                  = "OpenFire"
+    HEALBOT_EMOTE_POINT                     = "Point"
+    HEALBOT_EMOTE_PRAY                      = "Pray"
+    HEALBOT_EMOTE_PUZZLED                   = "Puzzled"
+    HEALBOT_EMOTE_RASP                      = "Rasp"
+    HEALBOT_EMOTE_ROAR                      = "Roar"
+    HEALBOT_EMOTE_ROFL                      = "rofl"
+    HEALBOT_EMOTE_ROLLEYES                  = "RollEyes"
+    HEALBOT_EMOTE_RUDE                      = "Rude"
+    HEALBOT_EMOTE_SALUTE                    = "Salute"
+    HEALBOT_EMOTE_SHRUG                     = "Shrug"
+    HEALBOT_EMOTE_SHY                       = "Shy"
+    HEALBOT_EMOTE_SIGH                      = "Sigh"
+    HEALBOT_EMOTE_SILLY                     = "Silly"
+    HEALBOT_EMOTE_SLEEP                     = "Sleep"
+    HEALBOT_EMOTE_SURRENDER                 = "Surrender"
+    HEALBOT_EMOTE_TALK                      = "Talk"
+    HEALBOT_EMOTE_TAUNT                     = "Taunt"
+    HEALBOT_EMOTE_THANK                     = "Thank"
+    HEALBOT_EMOTE_TRAIN                     = "Train"
+    HEALBOT_EMOTE_VICTORY                   = "Victory"
+    HEALBOT_EMOTE_VIOLIN                    = "Violin"
+    HEALBOT_EMOTE_WAIT                      = "Wait"
+    HEALBOT_EMOTE_WAVE                      = "Wave"
+    HEALBOT_EMOTE_WELCOME                   = "Welcome"
     HEALBOT_ZONE_AQ40                       = "Ahn'Qiraj"
     HEALBOT_ZONE_VASHJIR1                   = "Kelp'thar Forest"
     HEALBOT_ZONE_VASHJIR2                   = "Shimmering Expanse"
@@ -1000,6 +1089,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_EXISTS_SHOW_PTARGETS      = "Player target bars"
     HEALBOT_ENEMY_EXISTS_SHOW_BOSSES        = "Boss bars"
     HEALBOT_OPTIONS_SHOW_ONLY_FRIEND        = "Only show Friendly"
+    HEALBOT_OPTIONS_EXCLUDE_RAID            = "Exclude Self, Group and Raid"
     HEALBOT_OPTIONS_PROFILE                 = "Profile for".."\n".."Spells/Buffs/Debuffs"
     HEALBOT_OPTIONS_PROFILE_CHARACTER       = "Character"
     HEALBOT_OPTIONS_PROFILE_CLASS           = "Class"
@@ -1042,11 +1132,11 @@ function HealBot_Lang_enALL()
                                    [04] = "EpicMouse",
                                    [05] = "SUNET",
                                    [06] = "Daskills",
-                                   [07] = "mUbh",
-                                   [08] = "XitMaG",
-                                   [09] = "killerdavy",
-                                   [10] = "zathrain",
-                                   [11] = "Saelem",
+                                   [07] = "XitMaG",
+                                   [08] = "killerdavy",
+                                   [09] = "zathrain",
+                                   [10] = "Saelem",
+                                   [11] = "pyshkash",
                                 }
                                
 end
@@ -1172,6 +1262,7 @@ function HealBot_Lang_Options_enALL()
                                  ["CHATCHAN"]=HEALBOT_OPTIONS_CASTNOTIFY6,
                                  ["CHATRESONLY"]=HEALBOT_OPTIONS_CASTNOTIFYRESONLY,
                                  ["CHATMSG"]=HEALBOT_OPTIONS_NOTIFY_MSG,
+                                 ["EOCOOM"]=HEALBOT_OPTIONS_EOC_OOM,
                         -- Skins Frames General tab
                                  ["GOTOHEALGROUPS"]=HEALBOT_OPTIONS_SET_FRAME_HEALGROUPS,
                                  ["FRAMEALIAS"]=HEALBOT_OPTIONS_FRAME_ALIAS,
@@ -1292,6 +1383,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSVISTARGETIC"]=HEALBOT_DISABLED_TARGET.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
                                  ["HEALBARSVISFOCUSIC"]=HEALBOT_FOCUS.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT,
                                  ["HEALBARSVISTARGETFRIEND"]=HEALBOT_OPTIONS_SHOW_ONLY_FRIEND,
+                                 ["HEALBARSVISEXCLUDERAID"]=HEALBOT_OPTIONS_EXCLUDE_RAID,
                                  ["HEALBARSVISFOCUSFRIEND"]=HEALBOT_OPTIONS_SHOW_ONLY_FRIEND,
                                  ["HEALBARSVISFILTER"]=HEALBOT_OPTIONS_EMERGFILTER,
                                  ["HEALBARSVISFILTERGROUPS"]=HEALBOT_OPTIONS_EMERGFILTERGROUPS,
@@ -1444,6 +1536,7 @@ function HealBot_Lang_Options_enALL()
                         -- Mouse Wheel tab
                                  ["BUFFSMOUSEWHEELUSE"]=HEALBOT_OPTIONS_MOUSEWHEEL,
                                  ["BUFFSMOUSEWHEELCMD"]="Mouse Wheel Commands",
+                                 ["BUFFSMOUSEWHEELEMOTE"]="Mouse Wheel Emotes",
                         -- Test tab
                                  ["TESTUSE"]=HEALBOT_OPTIONS_TESTBARS,
                                  ["TESTPROFILE"]=HEALBOT_WORDS_PROFILE,
@@ -1559,6 +1652,7 @@ function HealBot_Lang_Options_enALL()
                                ["CHATCHAN"]="Send chat message to a pre-defined channel.",
                                ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
                                ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
+                               ["EOCOOM"]="When enabled and mana drops below the select amount.\nAt the end of combat emote Out of Mana.",
                         -- Skins Frames General tab
                                ["GOTOHEALGROUPS"]="Go to the Heal Groups tab.",
                                ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
@@ -1679,6 +1773,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISTARGETIC"]="Always Show/No Change/Always Hide\nthe target frame when entering combat.\nNote: select the target frame to enable these settings.",
                                ["HEALBARSVISFOCUSIC"]="Always Show/No Change/Always Hide\nthe focus frame when entering combat.\nNote: select the focus frame to enable these settings.",
                                ["HEALBARSVISTARGETFRIEND"]="Do not show hostile targets when out of combat.",
+                               ["HEALBARSVISEXCLUDERAID"]="Do not show yourself or members of your group/raid when out of combat.",
                                ["HEALBARSVISFOCUSFRIEND"]="Do not show hostile focus when out of combat.",
                                ["HEALBARSVISFILTER"]="Various classes and types can be filtered out using the dropdown.",
                                ["HEALBARSVISFILTERGROUPS"]="Groups can be filtered out using these check boxes.",
@@ -1831,6 +1926,7 @@ function HealBot_Lang_Options_enALL()
                         -- Mouse Wheel tab
                                ["BUFFSMOUSEWHEELUSE"]="Turn On/Off usage of the mouse wheel.\nNote: When this is on mouse over macros will not work on HealBot bars",
                                ["BUFFSMOUSEWHEELCMD"]="Set a command to run with an optional key press\nand mouse wheel up or down combination.",
+                               ["BUFFSMOUSEWHEELEMOTE"]="Select the emote to be used on mouse wheel scroll.",
                         -- Test tab
                                ["TESTUSE"]="The button shows the current state of test bars, click on it to change the state.",
                                ["TESTPROFILE"]="Profile limits the total number of bars for Groups or Raids.",

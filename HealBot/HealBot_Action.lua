@@ -2822,48 +2822,148 @@ end
 local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl"}
 local hbAttribsMinReset = {}
 local HB_button,HB_prefix=nil,nil
-
---local mUnit=nil
-local mText=nil
-local showmenu=nil
 local showHBmenu=nil
-local setDropdown=nil
-local partyNo=nil
+
+local function HealBot_Action_SpellCmdCodes(cType, cText)
+    local cID=nil
+    if cType == "ENEMY" then
+        if cText == HEALBOT_DISABLED_TARGET then
+            cID="A"
+        elseif cText == HEALBOT_FOCUS then
+            cID="B"
+        end
+    else
+        if cText == HEALBOT_DISABLED_TARGET then
+            cID="A"
+        elseif cText == HEALBOT_ASSIST then
+            cID="B"
+        elseif cText == HEALBOT_FOCUS then
+            cID="C"
+        elseif cText == HEALBOT_MENU then
+            cID="D"
+        elseif cText == HEALBOT_HBMENU then
+            cID="E"
+        elseif cText == HEALBOT_STOP then
+            cID="F"
+        elseif cText == HEALBOT_TELL.." ..." then
+            cID="G"
+        end
+    end
+    return cID
+end
+
+local function HealBot_Action_SpellCmdText(cType, cID)
+    local cText=nil
+    if cType == "ENEMY" then
+        if cID == "A" then
+            cText=HEALBOT_DISABLED_TARGET
+        elseif cID == "B" then
+            cText=HEALBOT_FOCUS
+        end
+    else
+        if cID == "A" then
+            cText=HEALBOT_DISABLED_TARGET
+        elseif cID == "B" then
+            cText=HEALBOT_ASSIST
+        elseif cID == "C" then
+            cText=HEALBOT_FOCUS
+        elseif cID == "D" then
+            cText=HEALBOT_MENU
+        elseif cID == "E" then
+            cText=HEALBOT_HBMENU
+        elseif cID == "F" then
+            cText=HEALBOT_STOP
+        elseif cID == "G" then
+            cText=HEALBOT_TELL.." ..."
+        end
+    end
+    return cText
+end
+
+function HealBot_Action_SetSpell(cType, cKey, sText)
+    local combo=nil
+    if cType == "ENABLED" then
+        combo = HealBot_Config_Spells.EnabledKeyCombo;
+    elseif cType == "DISABLED" then
+        combo = HealBot_Config_Spells.DisabledKeyCombo;
+    else
+        combo=HealBot_Config_Spells.EnemyKeyCombo;
+    end
+    if sText and hbStringLen(sText)>0 then
+        local cID = HealBot_Action_SpellCmdCodes(cType, sText)
+        if cID then 
+            sText = "C:"..cID 
+        else
+            local _, _, _, _, _, _, spellId = GetSpellInfo(sText)
+            if spellId then 
+                sText = "S:"..spellId
+            else
+                local itemID = GetItemInfoInstant(sText)
+                if itemID then sText = "I:"..itemID end
+            end
+        end
+    end
+    combo[cKey] = sText
+end
+
+function HealBot_Action_GetSpell(cType, cKey)
+    local sVar=nil
+    if cType == "ENABLED" then
+        sVar=HealBot_Config_Spells.EnabledKeyCombo[cKey]
+    elseif cType == "DISABLED" then
+        sVar=HealBot_Config_Spells.DisabledKeyCombo[cKey]
+    else
+        sVar=HealBot_Config_Spells.EnemyKeyCombo[cKey]
+    end
+    if sVar and hbStringLen(sVar)>2 then
+        local sType,sID = string.split(":", sVar)
+        if sType and sID then
+            if sType == "C" then
+                sVar=HealBot_Action_SpellCmdText(cType, sID)
+            elseif sType == "I" then
+                sVar=GetItemInfo(sID)
+            else
+                sVar=GetSpellInfo(sID)
+            end
+        end
+    end
+    return sVar
+end
 
 function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
-    local hbCombos = HealBot_Config_Spells.EnabledKeyCombo
+    local sName = HealBot_Action_GetSpell("ENABLED", HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.EnabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnabledSpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.EnabledSpellTrinket2
     local hbAvoidBC  = HealBot_Config_Spells.EnabledAvoidBlueCursor
-    if not hbCombos then 
+    if not sName then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return sName, hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
 end
 
 function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
-    local hbCombos = HealBot_Config_Spells.DisabledKeyCombo
+    local sName = HealBot_Action_GetSpell("DISABLED", HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.DisabledSpellTarget
     local hbTrinket1 = HealBot_Config_Spells.DisabledSpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.DisabledSpellTrinket2
     local hbAvoidBC  = HealBot_Config_Spells.DisabledAvoidBlueCursor
-    if not hbCombos then 
+    if not sName then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return sName, hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
 end
 
 function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
-    local hbCombos = HealBot_Config_Spells.EnemyKeyCombo
+    local sName = HealBot_Action_GetSpell("ENEMY", HB_combo_prefix)
     local hbTarget = HealBot_Config_Spells.EnemySpellTarget
     local hbTrinket1 = HealBot_Config_Spells.EnemySpellTrinket1
     local hbTrinket2 = HealBot_Config_Spells.EnemySpellTrinket2
     local hbAvoidBC  = HealBot_Config_Spells.EnemyAvoidBlueCursor
-    if not hbCombos then 
+    if not sName then 
         return nil 
     end
-    return hbCombos[HB_combo_prefix], hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
+    return sName, hbTarget[HB_combo_prefix] or false, hbTrinket1[HB_combo_prefix] or false, hbTrinket2[HB_combo_prefix] or false, hbAvoidBC[HB_combo_prefix] or false
 end
 
 local hbCustomName={}
@@ -3067,44 +3167,38 @@ local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, 
     if status=="Enemy" then spellType="harm" end
     scText="/cast [@"..unit..","..spellType.."] "..spellName..";\n"
 
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableSFX 0;\n" end
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
+    if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se3\n' end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName..'/hb se1\n' end
     if spellTar then smName=smName.."/target "..unit..";\n" end
     if spellTrin1 then smName=smName.."/use 13;\n" end
     if spellTrin2 then smName=smName.."/use 14;\n" end
     if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-    if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear();\n" end
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableSFX 1;\n" end
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
+    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
+    if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se4\n' end
     smName=smName..scText
     if spellAvoidBC then smName=smName.."/use 4;" end
     if strlen(smName)>255 then
         smName=""
-        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
+        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se1\n" end
         if spellTar then smName=smName.."/target "..unit..";\n" end
         if spellTrin1 then smName=smName.."/use 13;\n" end
         if spellTrin2 then smName=smName.."/use 14;\n" end
         if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-        if HealBot_Globals.MacroSuppressError==1 then smName=smName.."/script UIErrorsFrame:Clear();\n" end
-        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
+        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
         smName=smName..scText
         if spellAvoidBC then smName=smName.."/use 4;" end
         if strlen(smName)>255 then
             smName=""
-            if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 0;\n" end
             if spellTar then smName=smName.."/target "..unit..";\n" end
             if spellTrin1 then smName=smName.."/use 13;\n" end
             if spellTrin2 then smName=smName.."/use 14;\n" end
             if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
-            if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/console Sound_EnableErrorSpeech 1;\n" end
             smName=smName..scText
             if spellAvoidBC then smName=smName.."/use 4;" end
             if strlen(smName)>255 then
                 smName=""
-                if spellTar then smName=smName.."/target "..unit..";\n" end
                 if spellTrin1 then smName=smName.."/use 13;\n" end
                 if spellTrin2 then smName=smName.."/use 14;\n" end
-                if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10;\n" end
                 smName=smName..scText
                 if spellAvoidBC then smName=smName.."/use 4;" end
                 if strlen(smName)>255 then
@@ -3959,9 +4053,12 @@ local function HealBot_Action_DoHealUnit_Wheel(self, delta)
         HealBot_MountsPets_FavMount()   
     elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and UnitIsUnit(xUnit,"player") then
         HealBot_MountsPets_RandomPet(true)   
+    elseif HealBot_MouseWheelCmd==HEALBOT_EMOTE then
+        DoEmote(HealBot_Globals.HealBot_Emotes[y], xUnit)
     end
 end
 
+                                  
 function HealBot_Action_HealUnit_Wheel(self, delta)
     HealBot_Action_DoHealUnit_Wheel(self, delta)
 end
