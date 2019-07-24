@@ -5163,11 +5163,10 @@ local function HealBot_UnitUpdateCheckDebuff(button)
     if button.aura.debuff.check then
         button.aura.debuff.check=false
         HealBot_doAuraDebuffUnit(button) 
-    elseif button.health.update then
+    end
+    if button.health.update then
         button.health.update=false
         HealBot_UnitUpdateHealth(button)
-    else
-        HealBot_Update_UnitIcons(button)
     end
 end
 
@@ -5178,11 +5177,10 @@ local function HealBot_UnitUpdateCheckBuff(button)
     if button.aura.buff.check then
         button.aura.buff.check=false
         HealBot_doAuraBuff(button)
-    elseif button.checks.timed < TimeNow then
+    end
+    if button.checks.timed < TimeNow then
         HealBot_Player_CheckTime(button)
         HealBot_UnitUpdateFriendly(button)
-    else
-        HealBot_Update_UnitIcons(button)
     end
 end
 
@@ -5241,6 +5239,7 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
+                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -5280,6 +5279,7 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
+                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -5301,6 +5301,7 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
+                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
