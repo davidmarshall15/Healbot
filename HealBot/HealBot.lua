@@ -73,8 +73,6 @@ HealBot_luVars["ResetFlag"]=false
 HealBot_luVars["CheckPlayerBuffsGUID"]=false
 HealBot_luVars["CheckPlayerBuffsTime"]=false
 HealBot_luVars["AddonMsgType"]=3
-HealBot_luVars["CheckTalents"]=true
-HealBot_luVars["Checks"]=true
 HealBot_luVars["CastingTarget"]="player"
 HealBot_luVars["27YardsOnly"]=false
 HealBot_luVars["NumPlayers"]=0
@@ -1862,9 +1860,9 @@ end
 
 local HealBot_Options_Timer={}
 function HealBot_setOptions_Timer(value)
-    HealBot_luVars["HealBot_Options_Timer"]=value
+    HealBot_luVars["HealBot_Options_Timer"]=true
     HealBot_Options_Timer[value]=true
-    if value==500 then HealBot_Timers["HB1Th"]=0.01 end
+    HealBot_Timers["HB1Th"]=(HealBot_Globals.RangeCheckFreq*0.01)
   --HealBot_setCall("HealBot_setOptions_Timer")
   --HealBot_setCall("HealBot_setOptions_Timer-"..value)
 end
@@ -3324,8 +3322,7 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[190] then
         HealBot_Options_Timer[190]=nil
         HealBot_setOptions_Timer(195)
-        HealBot_luVars["CheckSkin"]=true
-        HealBot_luVars["Checks"]=true
+        HealBot_PartyUpdate_CheckSkin()
     elseif HealBot_Options_Timer[195] then
         HealBot_Options_InitSub(318)
         HealBot_Options_Timer[195]=nil
@@ -3362,7 +3359,6 @@ local function HealBot_Options_Update()
                 HealBot_Action_HidePanel(j)
             end
             HealBot_Options_Timer[502]=nil
-            HealBot_setOptions_Timer(9000)
         end
     elseif HealBot_Options_Timer[550] then
         HealBot_Options_Timer[550]=nil
@@ -3408,6 +3404,9 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[800] then
         HealBot_Options_Timer[800]=nil
         HealBot_Options_RaidTargetUpdate()
+    elseif HealBot_Options_Timer[810] then
+        HealBot_Options_Timer[810]=nil
+        HealBot_ResetCheckBuffsTime()
     elseif  HealBot_Options_Timer[950] then
         HealBot_Options_Timer[950]=nil
         local _,z = GetNumMacros()
@@ -3511,7 +3510,6 @@ local function HealBot_Options_Update()
             HealBot_Options_SetEnableDisableCDBtn()
             HealBot_Options_SetEnableDisableBuffBtn()
             HealBot_SetAddonComms()
-            HealBot_setOptions_Timer(9000)
         end
     elseif HealBot_Options_Timer[7990] then
         HealBot_Options_Timer[7990]=nil
@@ -3525,15 +3523,15 @@ local function HealBot_Options_Update()
             HealBot_AddDebug("Timer 8000 called #"..HealBot_luVars["Timer8000"])
             HealBot_luVars["Timer8000"]=0
             HealBot_setqaFR()
-            HealBot_setOptions_Timer(9000)
             HealBot_CheckAllBuffs("player")
             HealBot_nextRecalcParty(0)
         end
     elseif HealBot_Options_Timer[9000] then
         HealBot_Options_Timer[9000]=nil
-        HealBot_Set_Timers()
+        -- For set timers only
     else
-        HealBot_luVars["HealBot_Options_Timer"]=nil
+        HealBot_Set_Timers()
+        HealBot_luVars["HealBot_Options_Timer"]=false
         --HealBot_AddDebug("Leaving HealBot_Options_Timer")
     end
   --HealBot_setCall("HealBot_Options_Update")
@@ -3794,10 +3792,9 @@ function HealBot_getDefaultSkin()
     return newSkinName,LastAutoSkinChangeType
 end
 
-local function HealBot_PartyUpdate_CheckSkin()
+function HealBot_PartyUpdate_CheckSkin()
     local PrevSolo=HealBot_luVars["IsSolo"]
     HealBot_luVars["IsSolo"]=nil
-    HealBot_luVars["CheckSkin"]=false
     local newSkinName,LastAutoSkinChangeType=HealBot_getDefaultSkin()
 
     if LastAutoSkinChangeType~=HealBot_Config.LastAutoSkinChangeType or HealBot_Config.LastAutoSkinChangeTime<GetTime() then
@@ -3940,38 +3937,6 @@ local function HealBot_Update_Slow()
                 HealBot_RecalcParty(5)
             end
             HealBot_needRecalcParty()
-        elseif HealBot_luVars["Checks"] then
-            if HealBot_luVars["CheckSkin"] then
-                HealBot_PartyUpdate_CheckSkin()
-            elseif HealBot_luVars["CheckTalents"] then
-                HealBot_luVars["CheckTalents"]=false; 
-                HealBot_GetTalentInfo(HealBot_Data["PGUID"], "player")
-            elseif HealBot_luVars["ResetCheckBuffsTime"] then
-                HealBot_luVars["ResetCheckBuffsTime"]=false
-                HealBot_ResetCheckBuffsTime()
-            else
-                HealBot_luVars["Checks"]=false
-            end
-        elseif HealBot_luVars["CheckPlayerBuffsGUID"] and HealBot_luVars["CheckPlayerBuffsTime"]<TimeNow then
-            local PlayerBuffsGUID=HealBot_PlayerBuff[HealBot_luVars["CheckPlayerBuffsGUID"]]
-            if PlayerBuffsGUID then
-                HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_luVars["CheckPlayerBuffsGUID"]))
-            else
-                HealBot_luVars["ResetCheckBuffsTime"]=true
-                HealBot_luVars["Checks"]=true
-            end
-            HealBot_luVars["CheckPlayerBuffsGUID"]=false
-        elseif HealBot_ReCheckBuffsTime and HealBot_ReCheckBuffsTime<TimeNow then
-            HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]))
-            HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=nil
-            local z=HealBot_ReCheckBuffsTime+1000000
-            HealBot_ReCheckBuffsTime=nil 
-            for Time,_ in pairs (HealBot_ReCheckBuffsTimed) do
-                if Time < z then
-                    z=Time
-                    HealBot_ReCheckBuffsTime=Time
-                end
-            end 
         elseif HealBot_luVars["HealBot_Options_Timer"] then
             HealBot_Options_Update()
         else
@@ -3982,6 +3947,26 @@ local function HealBot_Update_Slow()
                         HealBot_nextRecalcParty(0)
                         HealBot_notVisible[xGUID]=nil
                     end
+                end
+                if HealBot_luVars["CheckPlayerBuffsGUID"] and HealBot_luVars["CheckPlayerBuffsTime"]<TimeNow then
+                    local PlayerBuffsGUID=HealBot_PlayerBuff[HealBot_luVars["CheckPlayerBuffsGUID"]]
+                    if PlayerBuffsGUID then
+                        HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_luVars["CheckPlayerBuffsGUID"]))
+                    else
+                        HealBot_setOptions_Timer(810)
+                    end
+                    HealBot_luVars["CheckPlayerBuffsGUID"]=false
+                elseif HealBot_ReCheckBuffsTime and HealBot_ReCheckBuffsTime<TimeNow then
+                    HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]))
+                    HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=nil
+                    local z=HealBot_ReCheckBuffsTime+1000000
+                    HealBot_ReCheckBuffsTime=nil 
+                    for Time,_ in pairs (HealBot_ReCheckBuffsTimed) do
+                        if Time < z then
+                            z=Time
+                            HealBot_ReCheckBuffsTime=Time
+                        end
+                    end 
                 end
             elseif HealBot_luVars["slowSwitch"]<3 then
                 if HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
@@ -4859,8 +4844,7 @@ local function HealBot_CheckUnitBuffs(button)
                                 elseif HealBot_PlayerBuff[xGUID] and HealBot_PlayerBuff[xGUID][buffName] then
                                     if HealBot_PlayerBuff[xGUID][buffName]==HealBot_luVars["CheckPlayerBuffsTime"] then
                                         HealBot_PlayerBuff[xGUID][buffName]=nil
-                                        HealBot_luVars["ResetCheckBuffsTime"]=true
-                                        HealBot_luVars["Checks"]=true
+                                        HealBot_setOptions_Timer(810)
                                     else
                                         HealBot_PlayerBuff[xGUID][buffName]=nil
                                     end
@@ -4885,8 +4869,7 @@ local function HealBot_CheckUnitBuffs(button)
                     if not PlayerBuffs[z] then
                         if PlayerBuffsGUID[z]==HealBot_luVars["CheckPlayerBuffsTime"] then
                             PlayerBuffsGUID[z]=nil
-                            HealBot_luVars["ResetCheckBuffsTime"]=true
-                            HealBot_luVars["Checks"]=true
+                            HealBot_setOptions_Timer(810)
                         else
                             PlayerBuffsGUID[z]=nil
                         end
@@ -5163,8 +5146,7 @@ local function HealBot_UnitUpdateCheckDebuff(button)
     if button.aura.debuff.check then
         button.aura.debuff.check=false
         HealBot_doAuraDebuffUnit(button) 
-    end
-    if button.health.update then
+    elseif button.health.update then
         button.health.update=false
         HealBot_UnitUpdateHealth(button)
     end
@@ -5181,6 +5163,8 @@ local function HealBot_UnitUpdateCheckBuff(button)
     if button.checks.timed < TimeNow then
         HealBot_Player_CheckTime(button)
         HealBot_UnitUpdateFriendly(button)
+    else
+        HealBot_Update_UnitIcons(button)
     end
 end
 
@@ -5239,7 +5223,6 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
-                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -5279,7 +5262,6 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
-                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -5301,7 +5283,6 @@ local function HealBot_Update_Fast()
                         HealBot_UnitUpdateCheckDebuff(xButton)
                     else
                         HealBot_UnitUpdateCheckBuff(xButton)
-                        HealBot_Update_UnitIcons(xButton)
                     end
                 else
                     HealBot_UpdateUnitReset(xButton)
@@ -6009,8 +5990,7 @@ end
 function HealBot_OnEvent_PartyMembersChanged(self)
     if HealBot_luVars["NumPlayers"]~=GetNumGroupMembers() then
         HealBot_luVars["NumPlayers"]=GetNumGroupMembers()
-        HealBot_luVars["CheckSkin"]=true
-        HealBot_luVars["Checks"]=true
+        HealBot_setOptions_Timer(190)
         if HealBot_luVars["IsSolo"] and HealBot_Config.DisableSolo then
             HealBot_Options_DisableCheck()
         end
@@ -6172,8 +6152,7 @@ end
 
 function HealBot_OnEvent_TalentsChanged(self)
     if HealBot_UnitData[HealBot_Data["PGUID"]] then HealBot_UnitData[HealBot_Data["PGUID"]]["SPEC"] = " " end
-    HealBot_luVars["CheckTalents"]=true
-    HealBot_luVars["Checks"]=true
+    HealBot_setOptions_Timer(200)
   --HealBot_setCall("HealBot_OnEvent_TalentsChanged")
 end
 
@@ -6735,8 +6714,7 @@ function HealBot_clearGUID(hbGUID)
         HealBot_Panel_RemoveMember(hbGUID)
         if HealBot_PlayerBuff[hbGUID] then HealBot_PlayerBuff[hbGUID]=nil end
         if HealBot_luVars["CheckPlayerBuffsGUID"]==hbGUID then 
-            HealBot_luVars["ResetCheckBuffsTime"]=true
-            HealBot_luVars["Checks"]=true
+            HealBot_setOptions_Timer(810)
         end
         if hbManaPlayers[hbGUID] then hbManaPlayers[hbGUID]=nil end
         HealBot_UnitData[hbGUID]=nil
@@ -7073,8 +7051,7 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_OnEvent_AddonMsg(self,arg1,arg2,arg3,arg4);
     elseif (event=="PET_BATTLE_OPENING_START") or (event=="PET_BATTLE_OVER") then
         HealBot_luVars["lastPetBattleEvent"]=event
-        HealBot_luVars["CheckSkin"]=true
-        HealBot_luVars["Checks"]=true
+        HealBot_setOptions_Timer(190)
         HealBot_nextRecalcParty(0)
     elseif (event=="READY_CHECK") then
         HealBot_OnEvent_ReadyCheck(self,arg1,arg2);
