@@ -3948,26 +3948,6 @@ local function HealBot_Update_Slow()
                         HealBot_notVisible[xGUID]=nil
                     end
                 end
-                if HealBot_luVars["CheckPlayerBuffsGUID"] and HealBot_luVars["CheckPlayerBuffsTime"]<TimeNow then
-                    local PlayerBuffsGUID=HealBot_PlayerBuff[HealBot_luVars["CheckPlayerBuffsGUID"]]
-                    if PlayerBuffsGUID then
-                        HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_luVars["CheckPlayerBuffsGUID"]))
-                    else
-                        HealBot_setOptions_Timer(810)
-                    end
-                    HealBot_luVars["CheckPlayerBuffsGUID"]=false
-                elseif HealBot_ReCheckBuffsTime and HealBot_ReCheckBuffsTime<TimeNow then
-                    HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]))
-                    HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=nil
-                    local z=HealBot_ReCheckBuffsTime+1000000
-                    HealBot_ReCheckBuffsTime=nil 
-                    for Time,_ in pairs (HealBot_ReCheckBuffsTimed) do
-                        if Time < z then
-                            z=Time
-                            HealBot_ReCheckBuffsTime=Time
-                        end
-                    end 
-                end
             elseif HealBot_luVars["slowSwitch"]<3 then
                 if HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
                     HealBot_luVars["nextDebugMsg"]=TimeNow+1
@@ -3989,6 +3969,29 @@ local function HealBot_Update_Slow()
                 elseif HealBot_markedGUIDs[1] then
                     HealBot_luVars["clearGUID"]=HealBot_markedGUIDs[1]
                     table.remove(HealBot_markedGUIDs,1)
+                end
+            elseif HealBot_luVars["slowSwitch"]<6 then
+                if HealBot_luVars["CheckPlayerBuffsGUID"] and HealBot_luVars["CheckPlayerBuffsTime"]<TimeNow then
+                    local PlayerBuffsGUID=HealBot_PlayerBuff[HealBot_luVars["CheckPlayerBuffsGUID"]]
+                    if PlayerBuffsGUID then
+                        HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_luVars["CheckPlayerBuffsGUID"]))
+                    else
+                        HealBot_setOptions_Timer(810)
+                    end
+                    HealBot_luVars["CheckPlayerBuffsGUID"]=false
+                end
+            elseif HealBot_luVars["slowSwitch"]<7 then
+                if HealBot_ReCheckBuffsTime and HealBot_ReCheckBuffsTime<TimeNow then
+                    HealBot_CheckAllBuffs(HealBot_Panel_RaidUnit(HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]))
+                    HealBot_ReCheckBuffsTimed[HealBot_ReCheckBuffsTime]=nil
+                    local z=HealBot_ReCheckBuffsTime+1000000
+                    HealBot_ReCheckBuffsTime=nil 
+                    for Time,_ in pairs (HealBot_ReCheckBuffsTimed) do
+                        if Time < z then
+                            z=Time
+                            HealBot_ReCheckBuffsTime=Time
+                        end
+                    end 
                 end
             else
                 HealBot_setqaFR()

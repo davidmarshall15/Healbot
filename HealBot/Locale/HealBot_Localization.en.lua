@@ -1137,6 +1137,7 @@ function HealBot_Lang_enALL()
                                    [09] = "zathrain",
                                    [10] = "Saelem",
                                    [11] = "pyshkash",
+                                   [12] = "warhead0",
                                 }
                                
 end
