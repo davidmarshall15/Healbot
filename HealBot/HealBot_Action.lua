@@ -2763,7 +2763,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.mana.max=0
         ghb.status.current=0
         ghb.status.update=0
-        ghb.update.reset=false
+        ghb.update.reset=true
         ghb.update.unit=false
         ghb.update.state=false
         ghb.update.buff=false
@@ -3433,7 +3433,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb.reset=true
         end
         if shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
-            shb.reset=nil
+            shb.reset=false
             shb.unit=unit
             shb.guid=hbGUID
             HealBot_UnitData[hbGUID]["UNIT"]=unit
@@ -3518,14 +3518,14 @@ end
 function HealBot_Action_PartyChanged(changeType)
     if not InCombatLockdown() and HealBot_Data["PGUID"] then
         if not HealBot_PreCombat and HealBot_Action_luVars["ResetAttribs"] then
-            for x,xButton in pairs(HealBot_Unit_Button) do
-                xButton.reset="init";
+            for _,xButton in pairs(HealBot_Unit_Button) do
+                xButton.reset=true
             end
-            for x,xButton in pairs(HealBot_Enemy_Button) do
-                xButton.reset="init";
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                xButton.reset=true
             end
-            for x,xButton in pairs(HealBot_Pet_Button) do
-                xButton.reset="init";
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                xButton.reset=true
             end
             for x,_ in pairs(HealBotButtonMacroAttribs) do
                 HealBotButtonMacroAttribs[x]=nil;

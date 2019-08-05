@@ -759,6 +759,14 @@ local function HealBot_SlashCmd(cmd)
         HealBot_Globals.OneTimeMsg={}
     elseif (HBcmd=="rau") then
         HealBot_Reset_AutoUpdateSpellIDs()
+    elseif (HBcmd=="trtc") then
+        if HealBot_Globals.Debug01 then
+            HealBot_Globals.Debug01=false
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Soft Reset turned OFF on talent change")
+        else
+            HealBot_Globals.Debug01=true
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Soft Reset turned ON on talent change")
+        end
     elseif (HBcmd=="zzz") then
         if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] then
             --DoEmote(HEALBOT_EMOTE_OOM)
@@ -3064,48 +3072,51 @@ end
 
 local function HealBot_GetTalentInfo(hbGUID, unit)
     local s,r,i=nil,nil,nil
-    if HealBot_UnitData[hbGUID] then
-        if hbGUID==HealBot_Data["PGUID"] then
-            i = GetSpecialization()
-            if i then
-                _, s, _, _, _, r = GetSpecializationInfo(i,false,false) 
-                if HealBot_Config.CurrentSpec~=i or HealBot_Data["PLEVEL"]~=UnitLevel("player") then 
-                    HealBot_Config.CurrentSpec=i 
-                    HealBot_Data["PLEVEL"]=UnitLevel("player")
-                    HealBot_InitSpells()
-                    HealBot_Options_ResetDoInittab(50)
-                    HealBot_Options_ResetDoInittab(40)
-                    HealBot_Options_ResetDoInittab(10)
-                    HealBot_Options_ResetDoInittab(5)
-                    HealBot_Options_ResetDoInittab(4)
-                    HealBot_setHbStanceBuffs()
-                    HealBot_Options_setDebuffTypes()
-                    HealBot_setOptions_Timer(5)
-                    HealBot_setOptions_Timer(15)
-                    HealBot_setOptions_Timer(40)
-                    HealBot_setOptions_Timer(50)
-                    HealBot_ClearAllBuffs()
-                    HealBot_ClearAllDebuffs()
-                    HealBot_setOptions_Timer(400)
-                    HealBot_setOptions_Timer(10)
-                    HealBot_Action_setpcClass()
+    if UnitIsUnit(unit, "player") then
+        i = GetSpecialization()
+        if i then
+            _, s, _, _, _, r = GetSpecializationInfo(i,false,false) 
+            if HealBot_Config.CurrentSpec~=i or HealBot_Data["PLEVEL"]~=UnitLevel("player") then 
+                HealBot_Config.CurrentSpec=i 
+                HealBot_Data["PLEVEL"]=UnitLevel("player")
+                HealBot_InitSpells()
+                HealBot_Options_ResetDoInittab(50)
+                HealBot_Options_ResetDoInittab(40)
+                HealBot_Options_ResetDoInittab(10)
+                HealBot_Options_ResetDoInittab(5)
+                HealBot_Options_ResetDoInittab(4)
+                HealBot_setHbStanceBuffs()
+                HealBot_Options_setDebuffTypes()
+                HealBot_setOptions_Timer(5)
+                HealBot_setOptions_Timer(15)
+                HealBot_setOptions_Timer(40)
+                HealBot_setOptions_Timer(50)
+                HealBot_ClearAllBuffs()
+                HealBot_ClearAllDebuffs()
+                HealBot_setOptions_Timer(400)
+                HealBot_setOptions_Timer(10)
+                HealBot_Action_setpcClass()
+                if HealBot_Globals.Debug01 then
+                    HealBot_SetResetFlag("SOFT")
+                    HealBot_AddDebug("Reset via Talent Change")
                 end
             end
-        else
-            i,s,r = HealBot_GetSpec(unit)
         end
-        if s and HealBot_UnitData[hbGUID] then
-            HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
-            local _,_,xButton = HealBot_UnitID(unit)
-            if xButton then 
-                if r=="DAMAGER" or r=="TANK" or r=="HEALER" then
-                    HealBot_UnitData[hbGUID]["ROLE"] = r
-                else
-                    HealBot_UnitData[hbGUID]["ROLE"] = UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
-                end
-                xButton.update.roleicon=true
-                xButton.status.update=true
+    elseif HealBot_Unit_Button[unit] then
+        i,s,r = HealBot_GetSpec(unit)
+    end
+    if s then
+        if not HealBot_UnitData[hbGUID] then HealBot_Action_SetUnitData(hbGUID, unit) end
+        HealBot_UnitData[hbGUID]["SPEC"] = s.." " 
+        local _,_,xButton = HealBot_UnitID(unit)
+        if xButton then 
+            if r=="DAMAGER" or r=="TANK" or r=="HEALER" then
+                HealBot_UnitData[hbGUID]["ROLE"] = r
+            else
+                HealBot_UnitData[hbGUID]["ROLE"] = UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
             end
+            xButton.update.roleicon=true
+            xButton.status.update=true
         end
     elseif unit=="target" then
         i,s,r = HealBot_GetSpec(unit)
@@ -3253,7 +3264,7 @@ local function HealBot_Options_Update()
                 if z then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, uName) end
             end
         end
-        HealBot_GetTalentInfo(HealBot_Data["PGUID"], "player")
+        HealBot_setOptions_Timer(200)
         hbRequestTime=GetTime()+8
     elseif HealBot_Options_Timer[160] then
         HealBot_Options_Timer[160]=nil
