@@ -72,7 +72,7 @@ function HealBot_Init_Spells_Defaults()
                 local sType, sId = GetSpellBookItemInfo(s, BOOKTYPE_SPELL)
                 if sType == "SPELL" and not IsPassiveSpell(sId) then
                     HealBot_Init_Spells_addSpell(sId, sName, s)
-                elseif spellType == "FLYOUT" then
+                elseif sType == "FLYOUT" then
                     local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
                     if flyoutKnown then
                         for f=1,numFlyoutSlots do

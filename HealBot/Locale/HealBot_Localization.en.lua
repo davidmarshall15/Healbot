@@ -1138,6 +1138,7 @@ function HealBot_Lang_enALL()
                                    [10] = "Saelem",
                                    [11] = "pyshkash",
                                    [12] = "warhead0",
+                                   [13] = "Droodibaby",
                                 }
                                
 end
