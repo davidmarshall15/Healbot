@@ -75,7 +75,6 @@ HealBot_luVars["CheckPlayerBuffsTime"]=false
 HealBot_luVars["AddonMsgType"]=3
 HealBot_luVars["CastingTarget"]="player"
 HealBot_luVars["27YardsOnly"]=false
-HealBot_luVars["NumPlayers"]=0
 HealBot_luVars["TargetNeedReset"]=true
 HealBot_luVars["FocusNeedReset"]=true
 HealBot_luVars["SoftResetAfterCombat"]=false
@@ -3392,23 +3391,6 @@ local function HealBot_Options_Update()
     elseif not HealBot_Options_Timer[8000] and HealBot_Options_Timer[585] then
         HealBot_Options_Timer[585]=nil
         HealBot_nextRecalcParty(5)
-    elseif HealBot_Options_Timer[590] then
-        HealBot_Options_Timer[590]=nil
-        local needReset=false
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if UnitExists(xUnit) then 
-                if xButton.guid~=HealBot_UnitGUID(xUnit) then
-                    needReset=true
-                    break
-                end 
-            end
-        end
-        HealBot_Action_CheckReserved()
-        if needReset then
-            HealBot_nextRecalcParty(6)
-        else
-            HealBot_ResetClassIconTexture()
-        end
     elseif HealBot_Options_Timer[595] then
         HealBot_Options_Timer[595]=nil
         HealBot_nextRecalcParty(0)
@@ -6002,17 +5984,9 @@ local function HealBot_IC_PartyMembersChanged()
 end
 
 function HealBot_OnEvent_PartyMembersChanged(self)
-    if HealBot_luVars["NumPlayers"]~=GetNumGroupMembers() then
-        HealBot_luVars["NumPlayers"]=GetNumGroupMembers()
-        HealBot_setOptions_Timer(190)
-        if HealBot_luVars["IsSolo"] and HealBot_Config.DisableSolo then
-            HealBot_Options_DisableCheck()
-        end
-        HealBot_nextRecalcParty(6)
-        HealBot_Action_CheckReserved()
-    else
-        HealBot_setOptions_Timer(590)
-    end
+    HealBot_setOptions_Timer(190)
+    HealBot_nextRecalcParty(6)
+    HealBot_Action_CheckReserved()
     if HealBot_Data["UILOCK"] then 
         HealBot_IC_PartyMembersChanged()
         HealBot_luVars["SoftResetAfterCombat"]=true 
@@ -6832,12 +6806,6 @@ end
 
 function HealBot_Reset_Spells()
     HealBot_DoReset_Spells(HealBot_Data["PCLASSTRIM"])
-    HealBot_Globals.SmartCast=HealBot_GlobalsDefaults.SmartCast
-    HealBot_Globals.SmartCastDebuff=HealBot_GlobalsDefaults.SmartCastDebuff
-    HealBot_Globals.SmartCastBuff=HealBot_GlobalsDefaults.SmartCastBuff
-    HealBot_Globals.SmartCastHeal=HealBot_GlobalsDefaults.SmartCastHeal
-    HealBot_Globals.SmartCastRes=HealBot_GlobalsDefaults.SmartCastRes
-    HealBot_Config.EnableHealthy=HealBot_ConfigDefaults.EnableHealthy
     HealBot_Update_SpellCombos()
     HealBot_Options_ResetDoInittab(2)
     HealBot_Options_Init(2)
