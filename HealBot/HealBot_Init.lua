@@ -57,12 +57,8 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
 end
 
 function HealBot_Init_Spells_Defaults()
-    local i = GetSpecialization()
-    local specID = 0
-    if i then specID = GetSpecializationInfo(i,false,false) end
     HealBot_Spell_IDs={}
     HealBot_Spell_Names={}
-    
     local nTabs=GetNumSpellTabs()
     for j=1,nTabs do
         local _, _, offset, numEntries, _, offspecID = GetSpellTabInfo(j)

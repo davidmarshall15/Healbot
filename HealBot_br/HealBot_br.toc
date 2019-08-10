@@ -4,6 +4,6 @@
 ## Notes: HealBot Localization for ptBR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.2.0.0
+## Version: 8.2.0.3
 
 HealBot_Localization.br.lua

@@ -378,7 +378,11 @@ function HealBot_Action_SetrSpell()
                 end
             end
         end
-        sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
+        if HEALBOT_GAME_VERSION>7 then
+            sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
+        else
+            sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE_CLASSIC)
+        end
 		if sName then 
 			HealBot_RangeSpells["BUFF"]=sName
 			x=sName
@@ -1656,7 +1660,7 @@ function HealBot_Action_setHealthText(button)
         end
 
         local vInfo=""
-        if UnitInVehicle(button.unit) then
+        if HEALBOT_GAME_VERSION>7 and UnitInVehicle(button.unit) then
             local vUnit=HealBot_UnitPet(button.unit)
             if vUnit then
                 local vName=UnitName(vUnit)
@@ -3397,7 +3401,11 @@ function HealBot_Action_SetUnitData(hbGUID, unit)
     HealBot_UnitData[hbGUID]={}
     HealBot_UnitData[hbGUID]["SPEC"] = " "
     HealBot_UnitData[hbGUID]["UNIT"]=unit
-    HealBot_UnitData[hbGUID]["ROLE"] = UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
+    if HEALBOT_GAME_VERSION>7 then
+        HealBot_UnitData[hbGUID]["ROLE"] = UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
+    else
+        HealBot_UnitData[hbGUID]["ROLE"] = HEALBOT_WORDS_UNKNOWN
+    end
 end
 
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
@@ -3547,12 +3555,8 @@ function HealBot_Action_PartyChanged(changeType)
             end 
             hbInitButtons=true
         end
-
-        HealBot_Data["UNITSLOCK"]=true
         HealBot_Action_luVars["updateDelay"]=0
         HealBot_Panel_PartyChanged(HealBot_Data["UILOCK"], changeType)
-        HealBot_Data["UNITSLOCK"]=false
-
     else
         HealBot_nextRecalcParty(changeType)
     end

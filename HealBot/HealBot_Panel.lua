@@ -2273,7 +2273,10 @@ local function HealBot_Panel_PlayersChanged()
                 if UnitExists(xUnit) then
                     local xGUID=HealBot_UnitGUID(xUnit)
                     HealBot_UnitGroups[xUnit]=1
-                    local aRole = UnitGroupRolesAssigned(xUnit) or HEALBOT_WORDS_UNKNOWN
+                    local aRole = HEALBOT_WORDS_UNKNOWN
+                    if HEALBOT_GAME_VERSION>7 then
+                        aRole = UnitGroupRolesAssigned(xUnit) or HEALBOT_WORDS_UNKNOWN
+                    end
                     if aRole=="TANK" then
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
                         HealBot_MainTanks[xGUID]=xUnit

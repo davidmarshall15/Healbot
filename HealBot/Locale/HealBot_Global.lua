@@ -1,5 +1,9 @@
-﻿HEALBOT_VERSION   = "8.2.0.3.b5";
+﻿HEALBOT_VERSION   = "8.2.0.3.b6";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
+
+local version = GetBuildInfo()
+local vMajor = string.split(".", version)
+HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_globalVars()
     --Consumables
@@ -415,6 +419,7 @@ function HealBot_globalVars()
     HEALBOT_POWER_INFUSION                  = 10060 --GetSpellInfo(10060) or "--Power Infusion";
     HEALBOT_POWER_WORD_BARRIER              = 81782 --GetSpellInfo(62618) or "--Power Word:Barrier";
     HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word:Fortitude";
+    HEALBOT_POWER_WORD_FORTITUDE_CLASSIC    = 1243
     HEALBOT_POWER_WORD_SHIELD               = 17 --GetSpellInfo(17) or "--Power Word:Shield";
     HEALBOT_REVELATIONS                     = 88627 --GetSpellInfo(88627) or "--Revelations";
     --HEALBOT_SAVING_GRACE                    = 152116 --GetSpellInfo(152116) or "--Saving Grace"

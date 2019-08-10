@@ -236,7 +236,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
-        Debug01=false, -- Currently used to test soft reset on talent change
+        Debug01=false, -- Currently not used
         VersionResetDone={},
         CatchAltBuffIDs={["init"]=true},
         CatchAltDebuffIDs={["init"]=true},

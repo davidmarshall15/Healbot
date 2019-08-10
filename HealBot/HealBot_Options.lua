@@ -804,6 +804,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="PRIE" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_POWER_WORD_FORTITUDE,
+            HEALBOT_POWER_WORD_FORTITUDE_CLASSIC,
             HEALBOT_FEAR_WARD,
             HEALBOT_SHADOWFORM,
             HEALBOT_LEVITATE,
@@ -7772,7 +7773,7 @@ function HealBot_Options_LoadSpellsb_OnClick()
             HealBot_Options_ResetDoInittab(2)
             HealBot_Options_Init(2)
             HealBot_Options_ComboClass_Text()
-            HealBot_setOptions_Timer(400)
+            HealBot_Action_SetAllAttribs()
         end
     end
 end
@@ -10923,12 +10924,12 @@ function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
     else
         HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "false")
     end
-    HealBot_setOptions_Timer(400)
+    HealBot_Action_SetAllAttribs()
 end
 
 function HealBot_Options_KnownSpellCheck(sName)
     if HealBot_Spell_Names[sName] or GetMacroIndexByName(sName) or IsUsableItem(sName) then
-        HealBot_setOptions_Timer(400)
+        HealBot_Action_SetAllAttribs()
     end
 end
 
@@ -11258,7 +11259,7 @@ end
 function HealBot_Options_Close()
     if HealBot_Options_SoftReset_flag then
         HealBot_Options_SoftReset_flag=false
-        HealBot_setOptions_Timer(400)
+        HealBot_Action_SetAllAttribs()
     end
 end
 
