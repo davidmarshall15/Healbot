@@ -2399,7 +2399,7 @@ function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
         HealBot_Globals.RangeCheckFreq = val;
         --local g=_G[self:GetName().."Text"]
         --g:SetText(self.text .. ": " .. val);
-        HealBot_setOptions_Timer(9000)
+        HealBot_setOptions_Timer(9999)
     end
 end
 
@@ -3081,7 +3081,7 @@ function HealBot_Options_DisableCheck()
     if HealBot_Config.DisabledNow~=z then
         if z==0 then 
             HealBot_Config.DisabledNow=0
-            HealBot_setOptions_Timer(9000)
+            HealBot_setOptions_Timer(9999)
             HealBot_OnEvent_TalentsChanged(nil)
         end
         HealBot_setOptions_Timer(500+z)
@@ -7889,7 +7889,7 @@ end
 function HealBot_Options_ShareCDebuffb_OnClick()
     local ssStr="CustomDebuffs\n"
     for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
-        if HealBot_Globals.Custom_Debuff_Categories[dId]>1 then
+        if (HealBot_Globals.Custom_Debuff_Categories[dId] or 10)>1 then
             ssStr=ssStr..(GetSpellInfo(dId) or HEALBOT_WORDS_UNKNOWN).."~"
             ssStr=ssStr..(HealBot_Globals.Custom_Debuff_Categories[dId] or 10).."~"
             ssStr=ssStr..dId..","..x..","..(HealBot_Globals.FilterCustomDebuff[dId] or "")..","
@@ -12411,7 +12411,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_AfterCombatOOM:SetChecked(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"])
             HealBot_Options_SetText(HealBot_Options_AfterCombatOOM,HEALBOT_OPTIONS_EOC_OOM)
             HealBot_Options_val_OnLoad(HealBot_Options_AfterCombatOOMValue,HEALBOT_OPTIONS_EOC_OOM_VALUE,1,50,1,5)
-            HealBot_Options_AfterCombatOOMValue:SetValue(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"])
+            HealBot_Options_AfterCombatOOMValue:SetValue(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"] or 20)
             HealBot_Options_AfterCombatOOMValueText:SetText(HEALBOT_OPTIONS_EOC_OOM_VALUE..": "..Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"].."%")
             DoneInitTab[306]=true
         end

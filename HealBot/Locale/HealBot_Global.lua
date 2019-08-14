@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.2.0.3.b6";
+﻿HEALBOT_VERSION   = "8.2.0.3.rc1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
