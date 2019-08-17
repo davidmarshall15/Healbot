@@ -7386,73 +7386,71 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
     if newSkin then
         HealBot_Panel_resetInitFrames()
         HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
-        if newSkin then
-            local hbFoundSkin=nil
-            local hbValidSkins=nil
-            for j=1, getn(Healbot_Config_Skins.Skins), 1 do
-                if newSkin==Healbot_Config_Skins.Skins[j] then
-                    hbFoundSkin=true
-                    Healbot_Config_Skins.Skin_ID = j
-                    Healbot_Config_Skins.Current_Skin = Healbot_Config_Skins.Skins[j]
-                    HealBot_RaidTargetToggle(nil) 
-                    HealBot_Panel_ClearBarArrays()
-                    HealBot_Action_ResetSkin("init")
-                    HealBot_Options_Frame_initCurFrame()
-                    local doRaidTargetToggle=false
-                    for gl=1,10 do
-                        if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][gl]["SHOW"] then 
-                            doRaidTargetToggle=true
-                        end
+        local hbFoundSkin=nil
+        local hbValidSkins=nil
+        for j=1, getn(Healbot_Config_Skins.Skins), 1 do
+            if newSkin==Healbot_Config_Skins.Skins[j] then
+                hbFoundSkin=true
+                Healbot_Config_Skins.Skin_ID = j
+                Healbot_Config_Skins.Current_Skin = Healbot_Config_Skins.Skins[j]
+                HealBot_RaidTargetToggle(nil) 
+                HealBot_Panel_ClearBarArrays()
+                HealBot_Action_ResetSkin("init")
+                HealBot_Options_Frame_initCurFrame()
+                local doRaidTargetToggle=false
+                for gl=1,10 do
+                    if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][gl]["SHOW"] then 
+                        doRaidTargetToggle=true
                     end
-                    if doRaidTargetToggle then HealBot_RaidTargetToggle(true) end
                 end
-                if hbValidSkins then
-                    hbValidSkins=hbValidSkins.."  +  "..Healbot_Config_Skins.Skins[j]
-                else
-                    hbValidSkins=Healbot_Config_Skins.Skins[j]
-                end
+                if doRaidTargetToggle then HealBot_RaidTargetToggle(true) end
             end
-            if not hbFoundSkin then
-                if newSkin~="_-none-_" then
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR1..newSkin)
-                    if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
-                end
-                if not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
-                    local retryWithSkin = HealBot_getDefaultSkin()
-                    if not noCallback then
-                        HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
-                    elseif newSkin~=HEALBOT_SKINS_STD then
-                        HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
-                    end
-                end
+            if hbValidSkins then
+                hbValidSkins=hbValidSkins.."  +  "..Healbot_Config_Skins.Skins[j]
             else
-                HealBot_setOptions_Timer(180)
-                HealBot_setOptions_Timer(185)
-                HealBot_setOptions_Timer(188)
-                --HealBot_SetResetFlag("SOFT")
-            end
-        elseif not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
-            local retryWithSkin = HealBot_getDefaultSkin()
-            if not noCallback then
-                HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
-            elseif newSkin~=HEALBOT_SKINS_STD then
-                HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
+                hbValidSkins=Healbot_Config_Skins.Skins[j]
             end
         end
-        if Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then
-            HealBot_useCrashProtection()
-            if not ddRefresh then
-                DoneInitTab[305]=nil
-                HealBot_Options_InitSub(305)
+        if not hbFoundSkin then
+            if newSkin~="_-none-_" then
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR1..newSkin)
+                if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
             end
-            HealBot_Action_ResetrCalls()
-            HealBot_setLuVars("TargetNeedReset", true)
-            HealBot_setLuVars("FocusNeedReset", true)
-            HealBot_nextRecalcParty(0)
-            HealBot_AddDebug("Set_Current_Skin")
+            if not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
+                local retryWithSkin = HealBot_getDefaultSkin()
+                if not noCallback then
+                    HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
+                elseif newSkin~=HEALBOT_SKINS_STD then
+                    HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
+                end
+            end
         else
-            HealBot_setResetFlagCode(3)
+            HealBot_setOptions_Timer(180)
+            HealBot_setOptions_Timer(185)
+            HealBot_setOptions_Timer(188)
+            --HealBot_SetResetFlag("SOFT")
         end
+    elseif not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
+        local retryWithSkin = HealBot_getDefaultSkin()
+        if not noCallback then
+            HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
+        elseif newSkin~=HEALBOT_SKINS_STD then
+            HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
+        end
+    end
+    if Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then
+        HealBot_useCrashProtection()
+        if not ddRefresh then
+            DoneInitTab[305]=nil
+            HealBot_Options_InitSub(305)
+        end
+        HealBot_Action_ResetrCalls()
+        HealBot_setLuVars("TargetNeedReset", true)
+        HealBot_setLuVars("FocusNeedReset", true)
+        HealBot_nextRecalcParty(0)
+        HealBot_AddDebug("Set_Current_Skin")
+    else
+        HealBot_setResetFlagCode(3)
     end
 end
 
@@ -13857,37 +13855,6 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
                 end
             end 
         end
-    end
-end
-
-function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
-    local inInst=IsInInstance()
-    if aType==1 and inInst then
-        C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-    elseif aType==2 then
-        if inInst then
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-        else
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
-        end
-    elseif aType==3 then
-        if inInst then
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-        else
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
-        end
-    elseif aType==4 and pName and UnitIsPlayer(HealBot_Panel_RaidUnit(nil,pName)) then
-        C_ChatInfo.SendAddonMessage(addon_id, msg, "WHISPER", pName );
-    elseif aType==5 then
-        C_ChatInfo.SendAddonMessage(addon_id, msg, "GUILD" );
-    end
-end
-
-function HealBot_Comms_GetChan(chan)
-    if GetChannelName(chan)>0 then
-        return GetChannelName(chan);
-    else
-        return nil;
     end
 end
 

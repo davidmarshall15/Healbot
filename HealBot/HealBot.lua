@@ -95,6 +95,7 @@ HealBot_luVars["buffExists"]=false
 HealBot_luVars["EnableErrorSpeech"]=false
 HealBot_luVars["EnableErrorText"]=false
 HealBot_luVars["DelayLockdownCheck"]=TimeNow
+HealBot_luVars["addonMsgTh"]=TimeNow+20
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -342,7 +343,13 @@ function HealBot_AddDebug(HBmsg)
     if HBmsg and (HealBot_SpamCut[HBmsg] or 0)<GetTime() then
         HealBot_SpamCut[HBmsg]=GetTime()+2
         HBmsg="["..date("%H:%M", time()).."] DEBUG: "..HBmsg;
-        table.insert(HealBot_DebugMsg,HBmsg)
+        local unique=true;
+        table.foreach(HealBot_DebugMsg, function (index,msg)
+            if msg==HBmsg then unique=false; end
+        end)
+        if unique then
+            table.insert(HealBot_DebugMsg,HBmsg)
+        end
     end
   --HealBot_setCall("HealBot_AddDebug")
 end
@@ -767,6 +774,7 @@ local function HealBot_SlashCmd(cmd)
             HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned ON")
         end
     elseif (HBcmd=="zzz") then
+        HealBot_AddDebug("Game Version="..HEALBOT_GAME_VERSION)
         HealBot_AddDebug("Game Version="..HEALBOT_GAME_VERSION)
     else
         if x then HBcmd=HBcmd.." "..x end
@@ -1366,7 +1374,6 @@ local function HealBot_Load(hbCaller)
         HealBot_setOptions_Timer(990)
         HealBot_luVars["HelpNotice"]=true
     end
-    HealBot_setOptions_Timer(800)
     if hbCaller~="playerEW" then
         HealBot_OnEvent_PlayerEnteringWorld("Load")
     end
@@ -1869,6 +1876,7 @@ function HealBot_Set_Timers()
     end
     HealBot_setTooltipUpdateInterval()
     HealBot_CheckTime_Modifier()
+ --   HealBot_AddDebug("HB1Th="..HealBot_Timers["HB1Th"])
   --HealBot_setCall("HealBot_Set_Timers")
 end
 
@@ -1876,7 +1884,7 @@ local HealBot_Options_Timer={}
 function HealBot_setOptions_Timer(value)
     HealBot_luVars["HealBot_Options_Timer"]=true
     HealBot_Options_Timer[value]=true
-    HealBot_Timers["HB1Th"]=(HealBot_Globals.RangeCheckFreq*0.01)
+    HealBot_Timers["HB1Th"]=(HealBot_Globals.RangeCheckFreq*0.5)
   --HealBot_setCall("HealBot_setOptions_Timer")
   --HealBot_setCall("HealBot_setOptions_Timer-"..value)
 end
@@ -3270,22 +3278,6 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[125] then
         HealBot_setOptions_Timer(130)
         HealBot_Options_Timer[125]=nil
-    elseif HealBot_Options_Timer[130] then
-        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "R", HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
-        HealBot_Options_Timer[130]=nil
-    elseif HealBot_Options_Timer[140] then
-        if GetGuildInfo("player") then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "G", 5, HealBot_Data["PNAME"]) end
-        if HEALBOT_GAME_VERSION>7 then
-            local x=GetNumFriends()
-            if x>0 then
-                for y=1,x do
-                    local uName, _, _, _, z = GetFriendInfo(y)
-                    if z then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, uName) end
-                end
-            end
-        end
-        HealBot_setOptions_Timer(200)
-        HealBot_Options_Timer[140]=nil
     elseif HealBot_Options_Timer[160] then
         HealBot_Options_SetSkinBars()
         HealBot_Options_Timer[160]=nil
@@ -3537,6 +3529,26 @@ local function HealBot_Options_Update()
             HealBot_CheckAllBuffs("player")
             HealBot_nextRecalcParty(0)
         end
+    elseif HealBot_Options_Timer[130] then
+        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "R", HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
+        HealBot_Options_Timer[130]=nil
+    elseif HealBot_Options_Timer[140] then
+        if GetGuildInfo("player") then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "G", 5, HealBot_Data["PNAME"]) end
+        HealBot_setOptions_Timer(200)
+        HealBot_setOptions_Timer(800)
+        HealBot_setOptions_Timer(145)
+        HealBot_Options_Timer[140]=nil
+    elseif HealBot_Options_Timer[145] then
+        if HEALBOT_GAME_VERSION>7 then
+            local x=GetNumFriends()
+            if x>0 then
+                for y=1,x do
+                    local uName, _, _, _, z = GetFriendInfo(y)
+                    if z then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, uName) end
+                end
+            end
+        end
+        HealBot_Options_Timer[145]=nil
     else -- 9999 will drop in here - for set timers only
         HealBot_Set_Timers()
         HealBot_luVars["HealBot_Options_Timer"]=false
@@ -4002,6 +4014,11 @@ local function HealBot_Update_Slow()
                             HealBot_ReCheckBuffsTime=Time
                         end
                     end 
+                end
+            elseif HealBot_luVars["slowSwitch"]<8 then
+                if HealBot_luVars["addonMsgTh"]<TimeNow then
+                    HealBot_Comms_SendAddonMessage()
+                    HealBot_luVars["addonMsgTh"]=TimeNow+2
                 end
             else
                 HealBot_setqaFR()

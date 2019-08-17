@@ -6,6 +6,57 @@ local sortorder={}
 local hbtmpver={}
 local _
 
+local qAddonMsg={}
+function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
+    local aMsg=addon_id..":"..msg..":"..aType..":"..pName
+    local unique=true;
+    table.foreach(qAddonMsg, function (index,msg)
+        if msg==aMsg then unique=false; end
+    end)
+    if unique then
+        table.insert(qAddonMsg,aMsg)
+    end
+end
+
+function HealBot_Comms_SendAddonMessage()
+    if #qAddonMsg>0 then
+        local aMsg=qAddonMsg[1]
+        table.remove(qAddonMsg,1)
+        
+        local addon_id, msg, aType, pName=string.split(":", aMsg)
+        
+        local inInst=IsInInstance()
+        if aType==1 and inInst then
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+        elseif aType==2 then
+            if inInst then
+                C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+            else
+                C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
+            end
+        elseif aType==3 then
+            if inInst then
+                C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
+            else
+                C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
+            end
+        elseif aType==4 and pName and UnitIsPlayer(HealBot_Panel_RaidUnit(nil,pName)) then
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "WHISPER", pName );
+        elseif aType==5 then
+            C_ChatInfo.SendAddonMessage(addon_id, msg, "GUILD" );
+        end
+        HealBot_AddDebug("comms="..aMsg)
+    end
+end
+
+function HealBot_Comms_GetChan(chan)
+    if GetChannelName(chan)>0 then
+        return GetChannelName(chan);
+    else
+        return nil;
+    end
+end
+
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
 
