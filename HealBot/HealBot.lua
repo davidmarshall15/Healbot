@@ -588,6 +588,9 @@ local function HealBot_SlashCmd(cmd)
         HealBot_Reset_Buffs()
     elseif (HBcmd=="ricons") then
         HealBot_Reset_Icons()
+    elseif (HBcmd=="cs") then
+        HealBot_CheckAllSkins()
+        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_SKIN_CHECK_DONE)
     elseif (HBcmd=="disable") then
         HealBot_Options_DisableHealBotOpt:SetChecked(1)
         HealBot_Options_DisableHealBot(1)
@@ -972,20 +975,22 @@ local hbStanceBuffs = {}
 local function HealBot_setHbStanceBuffs()
     if HealBot_Data["PCLASSTRIM"]=="PALA" then
         hbStanceBuffs = {}
-        local i = GetSpecialization()
-        local specID = 0
-        if i then specID = GetSpecializationInfo(i,false,false) end
-        if specID==65 then
-            hbStanceBuffs[HEALBOT_SEAL_OF_COMMAND]=1
-            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
-        elseif specID==66 then
-            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1
-            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
-        else
-            hbStanceBuffs[HEALBOT_SEAL_OF_TRUTH]=1
-            hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=2
-            hbStanceBuffs[HEALBOT_SEAL_OF_JUSTICE]=3
-            hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=4
+        if HEALBOT_GAME_VERSION>7 then
+            local i = GetSpecialization()
+            local specID = 0
+            if i then specID = GetSpecializationInfo(i,false,false) end
+            if specID==65 then
+                hbStanceBuffs[HEALBOT_SEAL_OF_COMMAND]=1
+                hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+            elseif specID==66 then
+                hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=1
+                hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=2
+            else
+                hbStanceBuffs[HEALBOT_SEAL_OF_TRUTH]=1
+                hbStanceBuffs[HEALBOT_SEAL_OF_RIGHTEOUSNESS]=2
+                hbStanceBuffs[HEALBOT_SEAL_OF_JUSTICE]=3
+                hbStanceBuffs[HEALBOT_SEAL_OF_INSIGHT]=4
+            end
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         hbStanceBuffs = {
@@ -1118,12 +1123,17 @@ local function HealBot_DoReset_Spells(pClassTrim)
         HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_OF_LIGHT))
         HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_LIGHT_OF_DAWN))
         HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_CLEANSE))
-        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
         HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_WORD_OF_GLORY))
         HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_HOLY_RADIANCE))
         HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_FLASH_OF_LIGHT))
-        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
         HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_WORD_OF_GLORY))
+        if HEALBOT_GAME_VERSION>7 then
+            HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
+            HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HOLY_LIGHT))
+        else
+            HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_CLASSIC_HOLY_LIGHT))
+            HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_CLASSIC_HOLY_LIGHT))
+        end
     elseif pClassTrim=="PRIE" then
         HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_HEAL))
         HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_BINDING_HEAL))
@@ -1252,6 +1262,9 @@ local function HealBot_DoReset_Buffs(pClassTrim)
         end
         if HealBot_KnownSpell(HEALBOT_BLESSING_OF_MIGHT) then
             HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HEALBOT_BLESSING_OF_MIGHT].name
+            i=i+1
+        elseif HealBot_KnownSpell(HEALBOT_CLASSIC_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HEALBOT_CLASSIC_BLESSING_OF_MIGHT].name
             i=i+1
         end
         if HealBot_KnownSpell(HEALBOT_BLESSING_OF_WISDOM) then
@@ -2631,7 +2644,7 @@ local function HealBot_Include_Skin(skinName)
     end
 end
 
-local function HealBot_Update_Skins()
+local function HealBot_Update_Skins(forceCheck)
     if HealBot_Globals.LastVersionSkinUpdate then
         HealBot_Globals.LastVersionSkinUpdate=nil
     end
@@ -2663,7 +2676,7 @@ local function HealBot_Update_Skins()
     if tonumber(tMajor)<8 then
         HealBot_Options_SetDefaults();
         HealBot_ReloadUI()
-    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION then   
+    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION or forceCheck then   
         for x in pairs (Healbot_Config_Skins.Skins) do
             HealBot_Check_Skin(Healbot_Config_Skins.Skins[x])
             if tonumber(tMajor)==8 then
@@ -2772,6 +2785,10 @@ local function HealBot_Update_Skins()
     HealBot_Config.LastVersionSkinUpdate=HEALBOT_VERSION
     HealBot_Config.Version=HEALBOT_VERSION
   --HealBot_setCall("HealBot_Update_Skins")
+end
+
+function HealBot_CheckAllSkins()
+    HealBot_Update_Skins(true)
 end
 
 local function HealBot_VersionUpdate_Spells()
@@ -6485,6 +6502,8 @@ function HealBot_InitSpells()
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
         if HealBot_KnownSpell(HEALBOT_HOLY_LIGHT) then
             HealBot_SmartCast_Spells[HEALBOT_HOLY_LIGHT]="L"
+        elseif HealBot_KnownSpell(HEALBOT_CLASSIC_HOLY_LIGHT) then
+            HealBot_SmartCast_Spells[HEALBOT_CLASSIC_HOLY_LIGHT]="L"
         end
         if HealBot_KnownSpell(HEALBOT_FLASH_OF_LIGHT) then
             HealBot_SmartCast_Spells[HEALBOT_FLASH_OF_LIGHT]="S"

@@ -780,6 +780,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="PALA" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
+            HEALBOT_CLASSIC_BLESSING_OF_MIGHT,
             HEALBOT_BLESSING_OF_KINGS,
             HEALBOT_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
@@ -795,11 +796,13 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_SEAL_OF_TRUTH,
             HEALBOT_SACRED_SHIELD,
         }
-        local i = GetSpecialization()
-        local specID = 0
-        if i then specID = GetSpecializationInfo(i,false,false) end
-        if specID==70 then
-            table.insert(HealBot_Buff_Spells_Class_List,HEALBOT_SEAL_OF_JUSTICE)
+        if HEALBOT_GAME_VERSION>7 then
+            local i = GetSpecialization()
+            local specID = 0
+            if i then specID = GetSpecializationInfo(i,false,false) end
+            if specID==70 then
+                table.insert(HealBot_Buff_Spells_Class_List,HEALBOT_SEAL_OF_JUSTICE)
+            end
         end
     elseif tClass=="PRIE" then
         HealBot_Buff_Spells_Class_List = {
@@ -5930,6 +5933,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_HEALING_SURGE,
             HEALBOT_LIGHT_OF_DAWN,
             HEALBOT_HOLY_LIGHT,
+            HEALBOT_CLASSIC_HOLY_LIGHT,
             HEALBOT_HOLY_RADIANCE,
             HEALBOT_HOLY_PRISM,
             HEALBOT_WORD_OF_GLORY,

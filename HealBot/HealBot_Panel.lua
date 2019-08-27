@@ -1553,41 +1553,43 @@ local function HealBot_Panel_targetHeals(preCombat)
 end
 
 local function HealBot_Panel_vehicleHeals()
-    local hbincSort=false
-    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
-        hbincSort=true
-    end
-    local k=i[hbCurrentFrame]
-    local xUnit="pet"
-    local pUnit="player"
-    local xGUID=HealBot_UnitGUID(xUnit)
-    local uName=HealBot_GetUnitName(xUnit)
-    if xGUID and UnitUsingVehicle(pUnit) and uName then
-        HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
-    end
-    if nraid>0 then
-        for j=1,nraid do
-            xUnit="raidpet"..j;
-            xGUID=HealBot_UnitGUID(xUnit)
-            pUnit="raid"..j;
-            uName=HealBot_GetUnitName(xUnit)
-            if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
-                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+    if HEALBOT_GAME_VERSION>7 then
+        local hbincSort=false
+        if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
+            hbincSort=true
+        end
+        local k=i[hbCurrentFrame]
+        local xUnit="pet"
+        local pUnit="player"
+        local xGUID=HealBot_UnitGUID(xUnit)
+        local uName=HealBot_GetUnitName(xUnit)
+        if xGUID and UnitUsingVehicle(pUnit) and uName then
+            HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+        end
+        if nraid>0 then
+            for j=1,nraid do
+                xUnit="raidpet"..j;
+                xGUID=HealBot_UnitGUID(xUnit)
+                pUnit="raid"..j;
+                uName=HealBot_GetUnitName(xUnit)
+                if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
+                    HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+                end
+            end
+        else
+            for j=1,4 do
+                xUnit="partypet"..j;
+                xGUID=HealBot_UnitGUID(xUnit)
+                pUnit="party"..j;
+                uName=HealBot_GetUnitName(xUnit)
+                if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
+                    HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+                end
             end
         end
-    else
-        for j=1,4 do
-            xUnit="partypet"..j;
-            xGUID=HealBot_UnitGUID(xUnit)
-            pUnit="party"..j;
-            uName=HealBot_GetUnitName(xUnit)
-            if xGUID and UnitExists(pUnit) and UnitUsingVehicle(pUnit) and uName then
-                HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
-            end
+        if i[hbCurrentFrame]>k then 
+            HealBot_Panel_addUnits(hbincSort, 2,HEALBOT_VEHICLE,k)
         end
-    end
-    if i[hbCurrentFrame]>k then 
-        HealBot_Panel_addUnits(hbincSort, 2,HEALBOT_VEHICLE,k)
     end
 end
 
@@ -1598,10 +1600,12 @@ local function HealBot_Panel_petHeals()
     local pUnit="player"
     local xGUID=HealBot_UnitGUID(xUnit)
     local hbincSort=false
+    local pInVehicle=false
+    if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
-    if UnitExists(xUnit) and not UnitUsingVehicle(pUnit) and not HealBot_Panel_luVars["SelfPets"] then
+    if UnitExists(xUnit) and not pInVehicle and not HealBot_Panel_luVars["SelfPets"] then
         HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
     end
     if nraid>0 then
@@ -1609,7 +1613,8 @@ local function HealBot_Panel_petHeals()
             xUnit="raidpet"..j;
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="raid"..j;
-            if UnitExists(xUnit) and UnitExists(pUnit) and not UnitUsingVehicle(pUnit) then
+            if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if UnitExists(xUnit) and UnitExists(pUnit) and not pInVehicle then
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
             if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] then
@@ -1628,7 +1633,8 @@ local function HealBot_Panel_petHeals()
             xUnit="partypet"..j;
             xGUID=HealBot_UnitGUID(xUnit) or xUnit
             pUnit="party"..j;
-            if UnitExists(pUnit) and not UnitUsingVehicle(pUnit) and UnitExists(xUnit) then 
+            if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if UnitExists(pUnit) and not pInVehicle and UnitExists(xUnit) then 
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
         end

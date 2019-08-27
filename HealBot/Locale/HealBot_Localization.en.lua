@@ -641,6 +641,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_COMBATPROT              = "Combat Protection"
     HEALBOT_COMBATPROT_PARTYNO              = "bars Reserved for Party"
     HEALBOT_COMBATPROT_RAIDNO               = "bars Reserved for Raid"
+    HEALBOT_SKIN_CHECK_DONE                 = "Integrity check of skins complete"
 
     HEALBOT_WORD_HEALTH                     = "Health"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"

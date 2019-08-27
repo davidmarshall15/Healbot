@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION   = "8.2.0.3";
+﻿HEALBOT_VERSION   = "8.2.0.4.b1";
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
@@ -188,6 +188,7 @@ function HealBot_globalVars()
     --Paladin
     HEALBOT_FLASH_OF_LIGHT                  = 19750 --GetSpellInfo(19750) or "--Flash of Light";
     HEALBOT_HOLY_LIGHT                      = 82326 --GetSpellInfo(82326) or "--Holy Light";
+    HEALBOT_CLASSIC_HOLY_LIGHT              = 635 --GetSpellInfo(635) or "--Holy Light";
     HEALBOT_HOLY_PRISM                      = 114165 --GetSpellInfo(114165) or "--Holy Prism";
     HEALBOT_HOLY_RADIANCE                   = 82327 --GetSpellInfo(82327) or "--Holy Radiance";
     HEALBOT_LIGHT_OF_DAWN                   = 85222 --GetSpellInfo(85222) or "--Light of Dawn";
@@ -347,6 +348,7 @@ function HealBot_globalVars()
     HEALBOT_TYRS_DELIVERANCE                = 200654 --GetSpellInfo(200654) or "--Tyr's Deliverance";
     HEALBOT_BLESSING_OF_KINGS               = 203538 --GetSpellInfo(203538) or "--Greater Blessing of Kings";
     HEALBOT_BLESSING_OF_MIGHT               = 203528 --GetSpellInfo(203528) or "--Greater Blessing of Might";
+    HEALBOT_CLASSIC_BLESSING_OF_MIGHT       = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
     HEALBOT_BLESSING_OF_WISDOM              = 203539 --GetSpellInfo(203539) or "--Greater Blessing of Wisdom";
     HEALBOT_DAY_BREAK                       = 88821 --GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = 465 --GetSpellInfo(465) or "--Devotion Aura";

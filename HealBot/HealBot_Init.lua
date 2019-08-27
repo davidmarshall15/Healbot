@@ -13,11 +13,20 @@ function HealBot_Init_retSmartCast_MassRes()
     return SmartCast_MassRes
 end
 
+local cRank=false
 local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
 
     if ( not id ) then return nil; end
 
     local spell, _, _, msCast, _, _ = GetSpellInfo(id);
+    if HEALBOT_GAME_VERSION==1 then 
+        local rank = GetSpellSubtext(id)
+        if rank and string.sub(rank,1,4)=="Rank" then
+            cRank=rank
+        else
+            cRank=false
+        end
+    end
     if ( not spell ) then return nil; end
     if not spellName then spellName=spell end
    
@@ -49,6 +58,7 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
     if not skipSpells[spellName] then
         if HealBot_FindSpellRangeCast(spellId, spellName, spellBookId) then
+            --if cRank then spellName=strtrim(spellName).."("..cRank..")" end
             HealBot_Spell_IDs[spellId].name=spellName
             HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
             HealBot_Spell_Names[spellName]=spellId
