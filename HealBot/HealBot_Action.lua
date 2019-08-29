@@ -381,7 +381,7 @@ function HealBot_Action_SetrSpell()
         if HEALBOT_GAME_VERSION>7 then
             sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
         else
-            sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE_CLASSIC)
+            sName=HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE)
         end
 		if sName then 
 			HealBot_RangeSpells["BUFF"]=sName

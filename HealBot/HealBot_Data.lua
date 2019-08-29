@@ -45,7 +45,6 @@ HealBot_Font_Outline={
 };
 
 HealBot_ConfigDefaults = {
-  Version = HEALBOT_VERSION,
   LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
   CurrentSpec=9,
   HealBot_BuffWatchGUID={},

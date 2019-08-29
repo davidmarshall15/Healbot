@@ -2082,30 +2082,32 @@ function HealBot_Panel_TargetChangedCheckFocus()
 end
 
 local function HealBot_Panel_FocusChanged(preCombat)
-    hbCurrentFrame=9
-    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==4 then
-        HealBot_BottomAnchors[hbCurrentFrame]=true
-    else
-        HealBot_BottomAnchors[hbCurrentFrame]=false
-    end
-    hbBarsPerFrame[hbCurrentFrame]=0
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
-        HeaderPos[hbCurrentFrame]={};
-        i[hbCurrentFrame]=0
-        HealBot_Panel_focusHeals(preCombat)
-        local xButton = HealBot_Unit_Button["focus"]
-        if xButton then
-            if HealBot_TrackUnit[xButton.unit] and not HealBot_Panel_BlackList[xButton.guid] then
-                HealBot_setLuVars("FocusNeedReset", false)
-                HealBot_Action_UpdateBackgroundButton(xButton)
-                xButton:Show()
-            else
-                HealBot_Action_HidePanel(hbCurrentFrame)
-            end
+    if HEALBOT_GAME_VERSION>7 then 
+        hbCurrentFrame=9
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==4 then
+            HealBot_BottomAnchors[hbCurrentFrame]=true
+        else
+            HealBot_BottomAnchors[hbCurrentFrame]=false
         end
-        HealBot_Panel_SetupExtraBars(hbCurrentFrame)
-    else
-        HealBot_Action_HidePanel(hbCurrentFrame)
+        hbBarsPerFrame[hbCurrentFrame]=0
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
+            HeaderPos[hbCurrentFrame]={};
+            i[hbCurrentFrame]=0
+            HealBot_Panel_focusHeals(preCombat)
+            local xButton = HealBot_Unit_Button["focus"]
+            if xButton then
+                if HealBot_TrackUnit[xButton.unit] and not HealBot_Panel_BlackList[xButton.guid] then
+                    HealBot_setLuVars("FocusNeedReset", false)
+                    HealBot_Action_UpdateBackgroundButton(xButton)
+                    xButton:Show()
+                else
+                    HealBot_Action_HidePanel(hbCurrentFrame)
+                end
+            end
+            HealBot_Panel_SetupExtraBars(hbCurrentFrame)
+        else
+            HealBot_Action_HidePanel(hbCurrentFrame)
+        end
     end
 end
 

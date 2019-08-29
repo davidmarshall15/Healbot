@@ -7,7 +7,13 @@
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
 ## Version: 8.2.0.3
 
-embeds.xml
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\LibSharedMedia-3.0\lib.xml
+Libs\libdatabroker-1-1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\lib.xml
+Libs\UTF8\utf8data.lua
+Libs\UTF8\utf8.lua
 
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua

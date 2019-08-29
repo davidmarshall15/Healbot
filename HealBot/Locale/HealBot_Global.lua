@@ -1,9 +1,11 @@
-﻿HEALBOT_VERSION   = "8.2.0.4.b1";
+﻿HEALBOT_VERSION    = "8.2.0.4.b2";
+HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0.b2" end
 
 function HealBot_globalVars()
     --Consumables
@@ -188,7 +190,7 @@ function HealBot_globalVars()
     --Paladin
     HEALBOT_FLASH_OF_LIGHT                  = 19750 --GetSpellInfo(19750) or "--Flash of Light";
     HEALBOT_HOLY_LIGHT                      = 82326 --GetSpellInfo(82326) or "--Holy Light";
-    HEALBOT_CLASSIC_HOLY_LIGHT              = 635 --GetSpellInfo(635) or "--Holy Light";
+    HBC_HOLY_LIGHT                          = 635 --GetSpellInfo(635) or "--Holy Light";
     HEALBOT_HOLY_PRISM                      = 114165 --GetSpellInfo(114165) or "--Holy Prism";
     HEALBOT_HOLY_RADIANCE                   = 82327 --GetSpellInfo(82327) or "--Holy Radiance";
     HEALBOT_LIGHT_OF_DAWN                   = 85222 --GetSpellInfo(85222) or "--Light of Dawn";
@@ -348,7 +350,7 @@ function HealBot_globalVars()
     HEALBOT_TYRS_DELIVERANCE                = 200654 --GetSpellInfo(200654) or "--Tyr's Deliverance";
     HEALBOT_BLESSING_OF_KINGS               = 203538 --GetSpellInfo(203538) or "--Greater Blessing of Kings";
     HEALBOT_BLESSING_OF_MIGHT               = 203528 --GetSpellInfo(203528) or "--Greater Blessing of Might";
-    HEALBOT_CLASSIC_BLESSING_OF_MIGHT       = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
+    HBC_BLESSING_OF_MIGHT                   = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
     HEALBOT_BLESSING_OF_WISDOM              = 203539 --GetSpellInfo(203539) or "--Greater Blessing of Wisdom";
     HEALBOT_DAY_BREAK                       = 88821 --GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = 465 --GetSpellInfo(465) or "--Devotion Aura";
@@ -371,6 +373,7 @@ function HealBot_globalVars()
     HEALBOT_INFUSION_OF_LIGHT               = 54149 --GetSpellInfo(53576) or "--Infusion of Light";
     HEALBOT_LAY_ON_HANDS                    = 633 --GetSpellInfo(633) or "--Lay on Hands";
     HEALBOT_LIGHT_BEACON                    = 53651 --GetSpellInfo(53651) or "--Light's Beacon";
+    HBC_RETRIBUTION_AURA                    = 7294
     HEALBOT_RIGHTEOUS_FURY                  = 25780 --GetSpellInfo(25780) or "--Righteous Fury";
     HEALBOT_SACRED_SHIELD                   = 20925 --GetSpellInfo(20925) or "--Sacred Shield";
     HEALBOT_SANCTITY_AURA                   = 167187 --GetSpellInfo(167187) or "--Sanctity Aura";
@@ -421,7 +424,7 @@ function HealBot_globalVars()
     HEALBOT_POWER_INFUSION                  = 10060 --GetSpellInfo(10060) or "--Power Infusion";
     HEALBOT_POWER_WORD_BARRIER              = 81782 --GetSpellInfo(62618) or "--Power Word:Barrier";
     HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word:Fortitude";
-    HEALBOT_POWER_WORD_FORTITUDE_CLASSIC    = 1243
+    HBC_POWER_WORD_FORTITUDE                = 1243
     HEALBOT_POWER_WORD_SHIELD               = 17 --GetSpellInfo(17) or "--Power Word:Shield";
     HEALBOT_REVELATIONS                     = 88627 --GetSpellInfo(88627) or "--Revelations";
     --HEALBOT_SAVING_GRACE                    = 152116 --GetSpellInfo(152116) or "--Saving Grace"

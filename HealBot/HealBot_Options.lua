@@ -780,7 +780,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="PALA" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
-            HEALBOT_CLASSIC_BLESSING_OF_MIGHT,
+            HBC_BLESSING_OF_MIGHT,
             HEALBOT_BLESSING_OF_KINGS,
             HEALBOT_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
@@ -788,6 +788,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_HAND_OF_SALVATION,
             HEALBOT_RIGHTEOUS_FURY,
             HEALBOT_DEVOTION_AURA,
+            HBC_RETRIBUTION_AURA,
             HEALBOT_BEACON_OF_LIGHT,
             HEALBOT_BEACON_OF_VIRTUE,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
@@ -807,7 +808,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="PRIE" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_POWER_WORD_FORTITUDE,
-            HEALBOT_POWER_WORD_FORTITUDE_CLASSIC,
+            HBC_POWER_WORD_FORTITUDE,
             HEALBOT_FEAR_WARD,
             HEALBOT_SHADOWFORM,
             HEALBOT_LEVITATE,
@@ -5933,7 +5934,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist()
             HEALBOT_HEALING_SURGE,
             HEALBOT_LIGHT_OF_DAWN,
             HEALBOT_HOLY_LIGHT,
-            HEALBOT_CLASSIC_HOLY_LIGHT,
+            HBC_HOLY_LIGHT,
             HEALBOT_HOLY_RADIANCE,
             HEALBOT_HOLY_PRISM,
             HEALBOT_WORD_OF_GLORY,
