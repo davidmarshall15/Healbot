@@ -2,6 +2,8 @@ local SmartCast_Res=nil;
 local SmartCast_MassRes=nil;
 local tonumber=tonumber
 local strmatch=strmatch
+local HealBot_Heal_Names={}
+local HealBot_KnownHeal_Names={}
 local _
 local MANA_COST_PATTERN = gsub(MANA_COST, "%%d", "([%%d%.,]+)")
 
@@ -13,6 +15,10 @@ function HealBot_Init_retSmartCast_MassRes()
     return SmartCast_MassRes
 end
 
+function HealBot_Init_retFoundHealSpells()
+    return HealBot_KnownHeal_Names
+end
+
 local cRank=false
 local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
 
@@ -20,12 +26,7 @@ local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
 
     local spell, _, _, msCast, _, _ = GetSpellInfo(id);
     if HEALBOT_GAME_VERSION==1 then 
-        local rank = GetSpellSubtext(id)
-        if rank and string.sub(rank,1,4)=="Rank" then
-            cRank=rank
-        else
-            cRank=false
-        end
+        cRank = GetSpellSubtext(id)
     end
     if ( not spell ) then return nil; end
     if not spellName then spellName=spell end
@@ -41,7 +42,6 @@ local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
                 hbMana = tonumber((gsub(line, "%D", "")))
             end
         end
-        
     end
 
     local hbCastTime=tonumber(msCast or 0);
@@ -58,7 +58,10 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
     if not skipSpells[spellName] then
         if HealBot_FindSpellRangeCast(spellId, spellName, spellBookId) then
-            --if cRank then spellName=strtrim(spellName).."("..cRank..")" end
+            if HealBot_Heal_Names[spellName] and cRank then 
+                HealBot_KnownHeal_Names[spellName]=true
+                spellName=strtrim(spellName).."("..cRank..")"
+            end
             HealBot_Spell_IDs[spellId].name=spellName
             HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
             HealBot_Spell_Names[spellName]=spellId
@@ -69,7 +72,14 @@ end
 function HealBot_Init_Spells_Defaults()
     HealBot_Spell_IDs={}
     HealBot_Spell_Names={}
+    HealBot_Heal_Names={}
     local nTabs=GetNumSpellTabs()
+    local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
+    for j=1, getn(hbHeallist), 1 do
+        if hbHeallist[j] and GetSpellInfo(hbHeallist[j]) then
+            HealBot_Heal_Names[GetSpellInfo(hbHeallist[j])]=true
+        end
+    end
     for j=1,nTabs do
         local _, _, offset, numEntries, _, offspecID = GetSpellTabInfo(j)
         if offspecID==0 then
@@ -91,7 +101,7 @@ function HealBot_Init_Spells_Defaults()
                 end
             end
         end
-    end
+    end    
 end
 
 function HealBot_Init_SmartCast()

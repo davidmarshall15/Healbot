@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.4.b2";
+﻿HEALBOT_VERSION    = "8.2.0.4.b3";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0.b2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0.b3" end
 
 function HealBot_globalVars()
     --Consumables
@@ -206,7 +206,7 @@ function HealBot_globalVars()
     HEALBOT_HALO                            = 120517 --GetSpellInfo(120517) or "--Halo"
     HEALBOT_HEAL                            = 2060 --GetSpellInfo(2060) or "--Heal";
     HEALBOT_HOLY_WORD_SALVATION             = 265202 --GetSpellInfo(265202) or "--Holy Word: Salvation";
-    HEALBOT_HOLY_WORD_SERENITY              = 2050 --GetSpellInfo(2050) or "--Holy Word: Serenity";
+    HEALBOT_HOLY_WORD_SERENITY              = 2050 --Lesser Heal in Classic
     HEALBOT_PENANCE                         = 47540 --GetSpellInfo(47540) or "--Penance"
     HEALBOT_PRAYER_OF_HEALING               = 596 --GetSpellInfo(596) or "--Prayer of Healing";
     HEALBOT_PRAYER_OF_MENDING               = 33076 --GetSpellInfo(33076) or "--Prayer of Mending";  41635=buff icon - 33076=known spell
@@ -225,6 +225,8 @@ function HealBot_globalVars()
     HEALBOT_HEALING_SURGE                   = 8004 --GetSpellInfo(8004) or "--Healing Surge";
     HEALBOT_HEALING_TIDE_TOTEM              = 108280 --GetSpellInfo(108280) or "--Healing Tide Totem";
     HEALBOT_HEALING_WAVE                    = 77472 --GetSpellInfo(77472) or "--Healing Wave";
+    HBC_LESSER_HEALING_WAVE                 = 8004
+    HBC_HEALING_WAVE                        = 331
     HEALBOT_RIPTIDE                         = 61295 --GetSpellInfo(61295) or "--Riptide";
     HEALBOT_WELLSPRING                      = 197995 --GetSpellInfo(197995) or "--Wellspring";
     HEALBOT_DOWNPOUR                        = 207778 --GetSpellInfo(207778) or "--Downpour";
@@ -276,6 +278,7 @@ function HealBot_globalVars()
     HEALBOT_ESSENCE_OF_GHANIR               = 208253 --GetSpellInfo(208253) or "--Essence of G'Hanir"
 	HEALBOT_FOCUSED_GROWTH                  = 203554 --GetSpellInfo(203554) or "--Focused Growth"
     HEALBOT_GROVE_TENDING					= 279793 --GetSpellInfo(279793) or "--Grove Tending";
+    HBC_THORNS                              = 467
 	--Hunter
     HEALBOT_A_CHEETAH                       = 5118 --GetSpellInfo(5118) or "--Aspect of the Cheetah"
     HEALBOT_A_PACK                          = 13159 --GetSpellInfo(13159) or "--Aspect of the Pack"
@@ -352,6 +355,7 @@ function HealBot_globalVars()
     HEALBOT_BLESSING_OF_MIGHT               = 203528 --GetSpellInfo(203528) or "--Greater Blessing of Might";
     HBC_BLESSING_OF_MIGHT                   = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
     HEALBOT_BLESSING_OF_WISDOM              = 203539 --GetSpellInfo(203539) or "--Greater Blessing of Wisdom";
+	HBC_BLESSING_OF_WISDOM                  = 19742
     HEALBOT_DAY_BREAK                       = 88821 --GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = 465 --GetSpellInfo(465) or "--Devotion Aura";
     HEALBOT_DIVINE_PROTECTION               = 498 --GetSpellInfo(498) or "--Divine Protection";
@@ -381,6 +385,7 @@ function HealBot_globalVars()
     HEALBOT_SEAL_OF_JUSTICE                 = 20164 --GetSpellInfo(20164) or "--Seal of Justice";
     HEALBOT_SEAL_OF_INSIGHT                 = 20165 --GetSpellInfo(20165) or "--Seal of Insight";
     HEALBOT_SEAL_OF_RIGHTEOUSNESS           = 20154 --GetSpellInfo(20154) or "--Seal of Righteousness";
+	HBC_SEAL_OF_THE_CRUSADER                = 21082
     HEALBOT_SEAL_OF_TRUTH                   = 31801 --GetSpellInfo(31801) or "--Seal of Truth";
     HEALBOT_SPEED_OF_LIGHT                  = 85499 --GetSpellInfo(85499) or "--Speed of Light";
 	--Legion Added
@@ -459,6 +464,7 @@ function HealBot_globalVars()
 	HEALBOT_RAMMALS_ULTERIOR_MOTIVE         = 234711 --GetSpellInfo(234711) or "--Rammal's Ulterior Motive";
 	HEALBOT_RAY_OF_HOPE                     = 197268 --GetSpellInfo(197268) or "--Ray of Hope";
     HEALBOT_PERMEATING_GLOW                 = 272780 --GetSpellInfo(272780) or "--Permeating Glow";
+    HBC_INNER_FIRE                          = 588
 
 	--Shaman
     HEALBOT_ANACESTRAL_GUIDANCE             = 108281 --GetSpellInfo(108281) or "--Ancestral Guidance";

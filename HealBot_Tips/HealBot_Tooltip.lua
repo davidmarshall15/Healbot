@@ -572,15 +572,17 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             if UnitClass(xUnit) and UnitIsPlayer(xUnit) then
                 local unitSpec = " "
+                local inRange=true
+                if HEALBOT_GAME_VERSION==1 then inRange=CheckInteractDistance(xUnit,1) end
                 if HealBot_UnitData[xGUID] then
-                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
+                    if inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
                         HealBot_Data["INSPECT"]=true
                         HealBot_TalentQuery(xUnit)
                     end
                     unitSpec=HealBot_UnitData[xGUID]["SPEC"]
                 elseif xUnit=="target" then
                     unitSpec=HealBot_retLuVars("targetSpec")
-                    if HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and unitSpec==" " then
+                    if inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and unitSpec==" " then
                         HealBot_Data["INSPECT"]=true
                         HealBot_TalentQuery(xUnit)
                     end

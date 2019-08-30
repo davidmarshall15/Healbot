@@ -349,7 +349,7 @@ function HealBot_Action_SetClassIconTexture(button)
                     HealBot_Action_SetUnitData(xGUID, button.unit)
                 end
             end
-            if not roleTextures[unitRole] then
+            if not roleTextures[unitRole] and HEALBOT_GAME_VERSION>7 then 
                 unitRole=UnitGroupRolesAssigned(button.unit) 
             end
         end
@@ -2239,11 +2239,12 @@ local function HealBot_Panel_PlayersChanged()
     else
         HealBot_cpOn=false
         if nraid>0 then
-            local xUnit,xGUID,combatRole,role,online,subgroup,aRole=nil,nil,nil,nil,nil,nil,nil
+            local xUnit,xGUID,combatRole,role,online,subgroup=nil,nil,nil,nil,nil,nil
             for j=1,nraid do
                 xUnit = "raid"..j;
                 if UnitExists(xUnit) then
-                    aRole = UnitGroupRolesAssigned(xUnit)
+					local aRole=nil
+					if HEALBOT_GAME_VERSION>7 then aRole = UnitGroupRolesAssigned(xUnit) end
                     xGUID=UnitGUID(xUnit)
                     if xGUID==HealBot_Data["PGUID"] then xUnit="player" end
                     _, _, subgroup, _, _, _, _, online, _, role, _, combatRole = GetRaidRosterInfo(j);
@@ -2276,7 +2277,7 @@ local function HealBot_Panel_PlayersChanged()
                 end
             end
         else
-            local xGUID,aRole=nil,nil
+            local xGUID=nil
             for _,xUnit in ipairs(HealBot_Action_HealGroup) do
                 if UnitExists(xUnit) then
                     local xGUID=HealBot_UnitGUID(xUnit)
