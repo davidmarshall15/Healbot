@@ -3327,6 +3327,9 @@ local function HealBot_Options_Update()
     elseif HealBot_Options_Timer[160] then
         HealBot_Options_SetSkinBars()
         HealBot_Options_Timer[160]=nil
+    elseif HealBot_Options_Timer[169] then
+        HealBot_Options_BuffResetList()
+        HealBot_Options_Timer[169]=nil
     elseif HealBot_Options_Timer[170] then
         HealBot_configClassHoT()
         HealBot_Options_Timer[170]=nil
@@ -3903,6 +3906,9 @@ end
 
 local function HealBot_Not_Fighting()
     HealBot_Data["UILOCK"]=false
+    if HEALBOT_GAME_VERSION==1 then
+        HealBot_RecalcParty(0)
+    end
     HealBot_RecalcParty(5);
     if HealBot_luVars["SoftResetAfterCombat"] then
         HealBot_luVars["SoftResetAfterCombat"]=false
@@ -5392,8 +5398,10 @@ end
 
 function HealBot_UnRegister_Aggro()
     HealBot:UnregisterEvent("UNIT_COMBAT")
-    HealBot:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
-    HealBot:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
+    if HEALBOT_GAME_VERSION>7 then
+        HealBot:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+        HealBot:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
+    end
     HealBot_EndAggro() 
   --HealBot_setCall("HealBot_UnRegister_Aggro")
 end

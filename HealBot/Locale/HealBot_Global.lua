@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.4.b3";
+﻿HEALBOT_VERSION    = "8.2.0.4";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0.b3" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0" end
 
 function HealBot_globalVars()
     --Consumables
@@ -482,6 +482,7 @@ function HealBot_globalVars()
     HEALBOT_GRACE_OF_AIR                    = 116956 --GetSpellInfo(116956) or "--Grace of Air";
     HEALBOT_HIGH_TIDE                       = 157154 --GetSpellInfo(157154) or "--High Tide";
     HEALBOT_LIGHTNING_SHIELD                = 192106 --GetSpellInfo(192106) or "--Lightning Shield";
+    HBC_ROCKBITER_WEAPON                    = 8017
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";
     HEALBOT_SPIRIT_LINK_TOTEM               = 98008 --GetSpellInfo(98008) or "--Spirit Link Totem";
@@ -578,6 +579,7 @@ function HealBot_globalVars()
     HEALBOT_DETOX                           = 115450 --GetSpellInfo(115450) or "--Detox";
     HEALBOT_NATURES_CURE                    = 88423 --GetSpellInfo(88423) or "--Nature's Cure";
     HEALBOT_PURIFY                          = 527 --GetSpellInfo(527) or "--Purify";
+    HBC_PURIFY                              = 1152
     HEALBOT_PURIFY_SPIRIT                   = 77130 --GetSpellInfo(77130) or "--Purify Spirit";
     HEALBOT_PURIFY_DISEASE                  = 213634 --GetSpellInfo(213634) or "--Purify Disease";
     HEALBOT_MASS_DISPEL                     = 32375 --GetSpellInfo(32375) or "--Mass Dispel";

@@ -1148,6 +1148,7 @@ function HealBot_Lang_enALL()
                                    [11] = "pyshkash",
                                    [12] = "warhead0",
                                    [13] = "Droodibaby",
+                                   [14] = "Byset",
                                 }
                                
 end
