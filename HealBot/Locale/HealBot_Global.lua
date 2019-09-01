@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.4";
+﻿HEALBOT_VERSION    = "8.2.0.5.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.0" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.1.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -205,6 +205,7 @@ function HealBot_globalVars()
     HEALBOT_FLASH_HEAL                      = 2061 --GetSpellInfo(2061) or "--Flash Heal";
     HEALBOT_HALO                            = 120517 --GetSpellInfo(120517) or "--Halo"
     HEALBOT_HEAL                            = 2060 --GetSpellInfo(2060) or "--Heal";
+    HBC_HEAL                                = 2054 
     HEALBOT_HOLY_WORD_SALVATION             = 265202 --GetSpellInfo(265202) or "--Holy Word: Salvation";
     HEALBOT_HOLY_WORD_SERENITY              = 2050 --Lesser Heal in Classic
     HEALBOT_PENANCE                         = 47540 --GetSpellInfo(47540) or "--Penance"
@@ -482,6 +483,7 @@ function HealBot_globalVars()
     HEALBOT_GRACE_OF_AIR                    = 116956 --GetSpellInfo(116956) or "--Grace of Air";
     HEALBOT_HIGH_TIDE                       = 157154 --GetSpellInfo(157154) or "--High Tide";
     HEALBOT_LIGHTNING_SHIELD                = 192106 --GetSpellInfo(192106) or "--Lightning Shield";
+    HBC_LIGHTNING_SHIELD                    = 324
     HBC_ROCKBITER_WEAPON                    = 8017
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";

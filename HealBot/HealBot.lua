@@ -1129,7 +1129,6 @@ local function HealBot_DoReset_Spells(pClassTrim)
         HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_HEAL))
         HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_BINDING_HEAL))
         HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_PURIFY))
-        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
         HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_HOLY_WORD_SERENITY))
         HealBot_Action_SetSpell("ENABLED", "CtrlRight", GetSpellInfo(HEALBOT_MASS_DISPEL))
         HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_RENEW))
@@ -1137,8 +1136,14 @@ local function HealBot_DoReset_Spells(pClassTrim)
         HealBot_Action_SetSpell("ENABLED", "AltMiddle", GetSpellInfo(HEALBOT_PRAYER_OF_HEALING))
         HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", GetSpellInfo(HEALBOT_DIVINE_HYMN))
         HealBot_Action_SetSpell("DISABLED", "Left", GetSpellInfo(HEALBOT_FLASH_HEAL))
-        HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
         HealBot_Action_SetSpell("DISABLED", "Middle", GetSpellInfo(HEALBOT_RENEW))
+        if HEALBOT_GAME_VERSION>7 then
+            HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
+            HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HEALBOT_HEAL))
+        else
+            HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HBC_HEAL))
+            HealBot_Action_SetSpell("DISABLED", "Right", GetSpellInfo(HBC_HEAL))
+        end
     elseif pClassTrim=="SHAM" then
         if HealBot_Config.CurrentSpec==3 then
             x=GetSpellInfo(HEALBOT_PURIFY_SPIRIT);
@@ -6492,6 +6497,8 @@ function HealBot_InitSpells()
     if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
         if HealBot_KnownSpell(HEALBOT_HEAL) then
             HealBot_SmartCast_Spells[HEALBOT_HEAL]="L"
+        elseif HealBot_KnownSpell(HBC_HEAL) then
+            HealBot_SmartCast_Spells[HBC_HEAL]="L"
         end
         if HealBot_KnownSpell(HEALBOT_FLASH_HEAL) then
             HealBot_SmartCast_Spells[HEALBOT_FLASH_HEAL]="S"

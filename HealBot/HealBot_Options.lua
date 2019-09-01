@@ -865,6 +865,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="SHAM" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_LIGHTNING_SHIELD,
+            HBC_LIGHTNING_SHIELD,
             HEALBOT_EARTH_SHIELD,
             HEALBOT_WATER_SHIELD,
             HEALBOT_WATER_WALKING,
@@ -5995,6 +5996,7 @@ function HealBot_Options_FullHealSpellsCombo_list (sType)
             HEALBOT_GREATER_HEAL,
             HEALBOT_HEALING_TOUCH,
             HEALBOT_HEAL,
+            HBC_HEAL,
             HEALBOT_HEALING_WAVE,
             HBC_HEALING_WAVE,
             HBC_LESSER_HEALING_WAVE,
@@ -7015,7 +7017,11 @@ function HealBot_Options_Class_HoTctlName_genList()
             local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
             for bId,_  in pairs(HealBot_configClassHoTClass) do
                 local bName=HealBot_Options_CDebuffTextID(bId) or " "
-                table.insert(tmpHoTctlName_List, bName)
+                if tonumber(bName) == nil then
+                    table.insert(tmpHoTctlName_List, bName)
+                else
+                    HealBot_Options_DeleteBuffHoT(xClass, bId)
+                end
             end
         end
     end    
@@ -9253,11 +9259,15 @@ function HealBot_Options_CDebuffCat_genList()
     local tmpCDebuffCatID_List={}
     local j=0
     local dText=""
-    for dName,x in pairs(HealBot_Globals.Custom_Debuff_Categories) do
-        if HealBot_Options_StorePrev["CDebuffCatID"]==x and HealBot_Globals.HealBot_Custom_Debuffs[dName] then
-            local cdName=HealBot_Options_CDebuffTextID(dName)
-            table.insert(tmpCDebuffCat_List, cdName)
-            j=j+1
+    for dID,x in pairs(HealBot_Globals.Custom_Debuff_Categories) do
+        if HealBot_Options_StorePrev["CDebuffCatID"]==x and HealBot_Globals.HealBot_Custom_Debuffs[dID] then
+            local dName=HealBot_Options_CDebuffTextID(dID)
+            if tonumber(dName) == nil then
+                table.insert(tmpCDebuffCat_List, dName)
+                j=j+1
+            else
+                HealBot_Options_DeleteCDebuff(dID)
+            end
         end
     end
     local x=nil

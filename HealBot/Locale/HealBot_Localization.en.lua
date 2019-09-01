@@ -1149,6 +1149,7 @@ function HealBot_Lang_enALL()
                                    [12] = "warhead0",
                                    [13] = "Droodibaby",
                                    [14] = "Byset",
+                                   [15] = "Redemption",
                                 }
                                
 end
