@@ -3861,7 +3861,6 @@ function HealBot_getDefaultSkin()
             end
         end
         HealBot_luVars["IsSolo"]=true
-        HealBot_Options_DisableCheck()
     end
     return newSkinName,LastAutoSkinChangeType
 end
@@ -3880,6 +3879,7 @@ function HealBot_PartyUpdate_CheckSkin()
     if (PrevSolo or "nil")~=(HealBot_luVars["IsSolo"] or "nil") then
         HealBot_CheckAllDebuffs()
         HealBot_CheckAllBuffs()
+        HealBot_Options_DisableCheck()
     end
   --HealBot_setCall("HealBot_PartyUpdate_CheckSkin")
 end

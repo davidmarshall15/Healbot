@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.5.b1";
+﻿HEALBOT_VERSION    = "8.2.0.5.b2";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.1.b1" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.1.b2" end
 
 function HealBot_globalVars()
     --Consumables
@@ -578,6 +578,9 @@ function HealBot_globalVars()
     HEALBOT_CLEANSE                         = 4987 --GetSpellInfo(4987) or "--Cleanse";
     HEALBOT_CLEANSE_SPIRIT                  = 51886 --GetSpellInfo(51886) or "--Cleanse Spirit";
     HEALBOT_CLEANSE_TOXIN                   = 213644 --GetSpellInfo(213644) or "--Cleanse Toxins";
+    HBC_SHAMAN_CURE_DISEASE                 = 2870
+    HBC_PRIEST_CURE_DISEASE                 = 528
+    HBC_CURE_POISON                         = 526
     HEALBOT_DETOX                           = 115450 --GetSpellInfo(115450) or "--Detox";
     HEALBOT_NATURES_CURE                    = 88423 --GetSpellInfo(88423) or "--Nature's Cure";
     HEALBOT_PURIFY                          = 527 --GetSpellInfo(527) or "--Purify";

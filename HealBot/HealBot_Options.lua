@@ -121,6 +121,9 @@ function HealBot_Options_InitVars()
             [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [HBC_CURE_POISON] = {HEALBOT_POISON_en},
+            [HBC_SHAMAN_CURE_DISEASE] = {HEALBOT_DISEASE_en},
+            [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
         }
     else
         HealBot_Buff_Items_List = {
@@ -929,9 +932,9 @@ function HealBot_Options_GetDebuffSpells_List(class)
           ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
           ["MONK"] = {HEALBOT_DETOX,},
           ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
-          ["PRIE"] = {HEALBOT_MASS_DISPEL, HEALBOT_PURIFY_DISEASE},
+          ["PRIE"] = {HEALBOT_MASS_DISPEL, HBC_PRIEST_CURE_DISEASE},
           ["ROGU"] = {},
-          ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
+          ["SHAM"] = {HBC_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
           ["WARL"] = {},
           ["WARR"] = {},
         }
@@ -3141,9 +3144,9 @@ end
 
 function HealBot_Options_DisableCheck()
     local z=0
-    if HealBot_Config.DisableHealBot==false then
+    if not HealBot_Config.DisableHealBot then
         z=0
-    elseif HealBot_Config.DisableSolo==false then
+    elseif not HealBot_Config.DisableSolo then
         z=1
     elseif GetNumGroupMembers()==0 then
         z=1
@@ -6189,6 +6192,9 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_PURIFY_DISEASE,
             HEALBOT_PURIFY,
             HBC_PURIFY,
+            HBC_SHAMAN_CURE_DISEASE,
+            HBC_PRIEST_CURE_DISEASE,
+            HBC_CURE_POISON,
             HEALBOT_CLEANSE_SPIRIT,
             HEALBOT_PURIFY_SPIRIT,
             HEALBOT_MASS_DISPEL,
