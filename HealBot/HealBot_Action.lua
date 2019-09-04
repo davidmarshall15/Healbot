@@ -1269,7 +1269,7 @@ function HealBot_Action_SetBar3Value(button, sName)
             HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_Action_rCalls[unit]["hca"])
         end
     else
-        if HealBot_Action_rCalls[unit]["powerIndicator"]~="p0" then
+        if HealBot_Action_rCalls[unit] and HealBot_Action_rCalls[unit]["powerIndicator"]~="p0" then
             HealBot_Action_rCalls[unit]["powerIndicator"]="p0"
             iconName = _G[barName:GetName().."Icon"..1];
             iconName:SetAlpha(0)

@@ -1590,6 +1590,8 @@ local function HealBot_Panel_vehicleHeals()
         if i[hbCurrentFrame]>k then 
             HealBot_Panel_addUnits(hbincSort, 2,HEALBOT_VEHICLE,k)
         end
+    elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
+        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"]=false
     end
 end
 
@@ -2108,6 +2110,8 @@ local function HealBot_Panel_FocusChanged(preCombat)
         else
             HealBot_Action_HidePanel(hbCurrentFrame)
         end
+    elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
+        Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"]=false
     end
 end
 

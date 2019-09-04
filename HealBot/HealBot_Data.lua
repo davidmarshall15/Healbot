@@ -419,6 +419,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_DIVINE_PURPOSE]=2,
                 [HEALBOT_ARDENT_DEFENDER]=2,
                 [HEALBOT_DIVINE_PROTECTION]=4,
+                [HBC_DIVINE_INTERVENTION]=4,
                 [HEALBOT_BEACON_OF_FAITH]=2,                                
                 [HEALBOT_BLESSING_OF_SACRIFICE]=2,
                 [HEALBOT_BESTOW_FAITH]=2,

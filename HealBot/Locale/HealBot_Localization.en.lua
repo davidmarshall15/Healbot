@@ -1150,6 +1150,7 @@ function HealBot_Lang_enALL()
                                    [13] = "Droodibaby",
                                    [14] = "Byset",
                                    [15] = "Redemption",
+                                   [16] = "Jaiseck",
                                 }
                                
 end

@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.5.b2";
+﻿HEALBOT_VERSION    = "8.2.0.6.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.1.b2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.2.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -359,6 +359,7 @@ function HealBot_globalVars()
 	HBC_BLESSING_OF_WISDOM                  = 19742
     HEALBOT_DAY_BREAK                       = 88821 --GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = 465 --GetSpellInfo(465) or "--Devotion Aura";
+    HBC_DIVINE_INTERVENTION                 = 19752
     HEALBOT_DIVINE_PROTECTION               = 498 --GetSpellInfo(498) or "--Divine Protection";
     HEALBOT_DIVINE_PURPOSE                  = 223817 --GetSpellInfo(86172) or "--Divine Purpose";
     HEALBOT_DIVINE_SAVED_BY_THE_LIGHT       = 157047 --GetSpellInfo(157047) or "--Saved by the Light";
@@ -379,6 +380,9 @@ function HealBot_globalVars()
     HEALBOT_LAY_ON_HANDS                    = 633 --GetSpellInfo(633) or "--Lay on Hands";
     HEALBOT_LIGHT_BEACON                    = 53651 --GetSpellInfo(53651) or "--Light's Beacon";
     HBC_RETRIBUTION_AURA                    = 7294
+    HBC_FIRE_RESISTANCE_AURA                = 19891
+    HBC_FROST_RESISTANCE_AURA               = 19888
+    HBC_SHADOW_RESISTANCE_AURA              = 19876
     HEALBOT_RIGHTEOUS_FURY                  = 25780 --GetSpellInfo(25780) or "--Righteous Fury";
     HEALBOT_SACRED_SHIELD                   = 20925 --GetSpellInfo(20925) or "--Sacred Shield";
     HEALBOT_SANCTITY_AURA                   = 167187 --GetSpellInfo(167187) or "--Sanctity Aura";
@@ -580,6 +584,7 @@ function HealBot_globalVars()
     HEALBOT_CLEANSE_TOXIN                   = 213644 --GetSpellInfo(213644) or "--Cleanse Toxins";
     HBC_SHAMAN_CURE_DISEASE                 = 2870
     HBC_PRIEST_CURE_DISEASE                 = 528
+    HBC_DISPELL_MAGIC                       = 527
     HBC_CURE_POISON                         = 526
     HEALBOT_DETOX                           = 115450 --GetSpellInfo(115450) or "--Detox";
     HEALBOT_NATURES_CURE                    = 88423 --GetSpellInfo(88423) or "--Nature's Cure";
