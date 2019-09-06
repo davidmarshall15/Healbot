@@ -125,6 +125,7 @@ function HealBot_Options_InitVars()
             [HBC_DISPELL_MAGIC] = {HEALBOT_MAGIC_en},
             [HBC_SHAMAN_CURE_DISEASE] = {HEALBOT_DISEASE_en},
             [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
+            [HBC_PRIEST_ABOLISH_DISEASE] = {HEALBOT_DISEASE_en},
         }
     else
         HealBot_Buff_Items_List = {
@@ -829,6 +830,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_BLESSING_OF_MIGHT,
             HBC_BLESSING_OF_MIGHT,
             HEALBOT_BLESSING_OF_KINGS,
+            HBC_BLESSING_OF_KINGS,
             HEALBOT_BLESSING_OF_WISDOM,
             HBC_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
@@ -861,6 +863,9 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_POWER_WORD_FORTITUDE,
             HBC_POWER_WORD_FORTITUDE,
+            HBC_SHADOW_PROTECTION,
+            HBC_DIVINE_SPIRIT,
+            HBC_PRAYER_OF_SHADOW_PROTECTION,
             HBC_INNER_FIRE,
             HEALBOT_FEAR_WARD,
             HEALBOT_SHADOWFORM,
@@ -936,7 +941,7 @@ function HealBot_Options_GetDebuffSpells_List(class)
           ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
           ["MONK"] = {HEALBOT_DETOX,},
           ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
-          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE},
+          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
           ["ROGU"] = {},
           ["SHAM"] = {HBC_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
           ["WARL"] = {},
@@ -2955,7 +2960,7 @@ function HealBot_Options_MonitorDebuffs_OnClick(self)
 end
 
 function HealBot_Options_MonitorDebuffs_Toggle()
-    HealBot_CheckAllDebuffs()
+    HealBot_setOptions_Timer(20)
 end
 
 function HealBot_Options_MonitorBuffsInCombat_OnClick(self)
@@ -3030,7 +3035,7 @@ function HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)
         HealBot_Config_Buffs.CBshownHB = false
     end
     HealBot_ClearAllBuffs()
-    HealBot_CheckAllBuffs()
+    HealBot_setOptions_Timer(30)
 end
 
 
@@ -3043,8 +3048,7 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
         end
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.aura.debuff and xButton.aura.debuff.name then
-                xButton.update.debuff=true
-                xButton.status.update=true
+                xButton.aura.debuff.check=true
             end
         end
     end
@@ -3060,8 +3064,7 @@ function HealBot_Options_CustomBuffCol_OnOff_OnClick(self)
         end
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.aura.buff and xButton.aura.buff.name then
-                xButton.update.buff=true
-                xButton.status.update=true
+                xButton.aura.buff.check=true
             end
         end
     end
@@ -3085,7 +3088,7 @@ function HealBot_Options_BuffCol_ShowOnAggroBar_OnClick(self)
         HealBot_SetResetFlag("SOFT")
     end
     HealBot_ClearAllBuffs()
-    HealBot_CheckAllBuffs()
+    HealBot_setOptions_Timer(30)
 end
 
 function HealBot_Options_PanelSounds_OnClick(self)
@@ -6198,6 +6201,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HBC_PURIFY,
             HBC_SHAMAN_CURE_DISEASE,
             HBC_PRIEST_CURE_DISEASE,
+            HBC_PRIEST_ABOLISH_DISEASE,
             HBC_CURE_POISON,
             HBC_DISPELL_MAGIC,
             HEALBOT_CLEANSE_SPIRIT,
@@ -9469,6 +9473,7 @@ function HealBot_Options_CDCCastBy_DropDown()
                             HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]=nil
                         end
                         UIDropDownMenu_SetText(HealBot_Options_CDCCastBy,HealBot_Options_StorePrev["CDebuffcustomCastBy"]) 
+                        HealBot_setOptions_Timer(20)
                     end
         info.checked = false;
         if HealBot_Options_StorePrev["CDebuffcustomName"] then
@@ -9531,7 +9536,7 @@ function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
     HealBot_Options_NewCDebuff:SetText("")
     HealBot_Options_CDC_checkStatus(useId)
   --  UIDropDownMenu_SetSelectedValue(HealBot_Options_CDebuffTxt1, useId);
-    HealBot_CheckAllDebuffs() 
+    HealBot_setOptions_Timer(20) 
     HealBot_Options_CDebuffResetList()
     HealBot_Globals.CatchAltDebuffIDs[name]=true
 end
@@ -9672,7 +9677,7 @@ function HealBot_Options_EnableDisableCDBtn_OnClick(self)
     end
     HealBot_Options_SetEnableDisableCDBtn()
     HealBot_ClearDebuffCache(HealBot_Options_StorePrev["CDebuffcustomName"])
-    HealBot_CheckAllDebuffs()
+    HealBot_setOptions_Timer(20)
 end
 
 function HealBot_Options_SetEnableDisableCDBtn()
@@ -9950,7 +9955,6 @@ end
 local FirstDebuffLoad=true
 local function HealBot_Options_DoDebuff_Reset()
     HealBot_Options_setDebuffTypes()
-    HealBot_CheckAllDebuffs()
     HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {HEALBOT_POISON_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_MAGIC_en] = {HEALBOT_MAGIC_en = {}};
@@ -10156,8 +10160,8 @@ local function HealBot_Options_DoDebuff_Reset()
                 end)
             end
         end
-        HealBot_setOptions_Timer(20)
     end
+    HealBot_setOptions_Timer(20)
     FirstDebuffLoad=nil
 end
 
@@ -10166,7 +10170,6 @@ local spells={}
 local FirstBuffLoad=true
 local function HealBot_Options_DoBuff_Reset()
     HealBot_Options_setDebuffTypes()
-    HealBot_CheckAllBuffs()
     BuffTextClass = HealBot_Config_Buffs.HealBotBuffText
     local BuffDropDownClass = HealBot_Config_Buffs.HealBotBuffDropDown
     local buffbarcolrClass = HealBot_Config_Buffs.HealBotBuffColR
@@ -10392,9 +10395,9 @@ local function HealBot_Options_DoBuff_Reset()
                 HealBot_buffbarcolg[sName]=buffbarcolgClass[k];
                 HealBot_buffbarcolb[sName]=buffbarcolbClass[k];
             end
-            HealBot_setOptions_Timer(30)
         end
     end
+    HealBot_setOptions_Timer(30)
     FirstBuffLoad=nil
 end
 

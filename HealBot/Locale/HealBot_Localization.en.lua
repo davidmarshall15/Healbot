@@ -1135,8 +1135,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESET_COLOUR           = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
-    HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",
-                                   [02] = "Nerak - Cenarion Circle",
+    HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",  -- Mythago
+                                   [02] = "Nerak - Cenarion Circle",  -- Noobrak
                                    [03] = "Slayybelle",
                                    [04] = "EpicMouse",
                                    [05] = "SUNET",
@@ -1151,6 +1151,7 @@ function HealBot_Lang_enALL()
                                    [14] = "Byset",
                                    [15] = "Redemption",
                                    [16] = "Jaiseck",
+                                   [17] = "xtacie",
                                 }
                                
 end

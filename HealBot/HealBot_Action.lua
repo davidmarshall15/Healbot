@@ -876,7 +876,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
                 button.update.targeticon=true
             end
-            button.update.buff=true
+            button.aura.buff.check=true
             button.update.state=true
             button.status.update=true
             button.health.updhealth=true
@@ -2770,8 +2770,6 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.update.reset=true
         ghb.update.unit=false
         ghb.update.state=false
-        ghb.update.buff=false
-        ghb.update.debuff=false
         ghb.update.roleicon=false
         ghb.update.targeticon=false
         ghb.status.range=-2

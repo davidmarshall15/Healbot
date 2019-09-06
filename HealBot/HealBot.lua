@@ -888,8 +888,8 @@ local function HealBot_ClearUnitAggro(button)
 end
 
 function HealBot_UpdateUnitReset(button)
-    button.update.buff=true
-    button.update.debuff=true
+    button.aura.buff.check=true
+    button.aura.debuff.check=true
     HealBot_ClearUnitAggro(button)
     HealBot_Action_CheckUnitLowMana(button)
     button.health.updincoming=true
@@ -920,8 +920,8 @@ function HealBot_UpdateUnit(button)
     button.health.updabsorbs=true
     button.health.update=true
     HealBot_Action_SetBar3Value(button)
-    button.update.buff=true
-    button.update.debuff=true
+    button.aura.debuff.check=true    
+    button.aura.buff.check=true
     button.update.state=true
     button.status.update=true
   --HealBot_setCall("HealBot_UpdateUnit")
@@ -954,8 +954,8 @@ end
 
 local function HealBot_CheckZone()
     HealBot_setOptions_Timer(405)
-    HealBot_CheckAllDebuffs()
-    HealBot_CheckAllBuffs()
+    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(595)
     HealBot_setOptions_Timer(10)
     HealBot_setOptions_Timer(7950)
@@ -1260,6 +1260,9 @@ local function HealBot_DoReset_Buffs(pClassTrim)
         if HealBot_KnownSpell(HEALBOT_BLESSING_OF_KINGS) then
             HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HEALBOT_BLESSING_OF_KINGS].name
             i=i+1
+        elseif HealBot_KnownSpell(HBC_BLESSING_OF_KINGS) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HBC_BLESSING_OF_KINGS].name
+            i=i+1
         end
         if HealBot_KnownSpell(HEALBOT_BLESSING_OF_MIGHT) then
             HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HEALBOT_BLESSING_OF_MIGHT].name
@@ -1279,9 +1282,15 @@ local function HealBot_DoReset_Buffs(pClassTrim)
         elseif HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) then
             HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spell_IDs[HBC_POWER_WORD_FORTITUDE].name
         end
+        local i=2
         if HealBot_KnownSpell(HEALBOT_FEAR_WARD) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spell_IDs[HEALBOT_FEAR_WARD].name
-            HealBot_Config_Buffs.HealBotBuffDropDown[2]=24
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HEALBOT_FEAR_WARD].name
+            HealBot_Config_Buffs.HealBotBuffDropDown[i]=24
+            i=i+1
+        end
+        if HealBot_KnownSpell(HBC_DIVINE_SPIRIT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spell_IDs[HBC_DIVINE_SPIRIT].name
+            i=i+1
         end
     elseif pClassTrim=="SHAM" then
         if HealBot_KnownSpell(HEALBOT_WATER_SHIELD) then
@@ -3337,6 +3346,7 @@ local function HealBot_Options_Update()
         HealBot_Options_Timer[169]=nil
     elseif HealBot_Options_Timer[170] then
         HealBot_configClassHoT()
+        HealBot_setOptions_Timer(30)
         HealBot_Options_Timer[170]=nil
     elseif  HealBot_Options_Timer[180] then
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
@@ -3877,8 +3887,8 @@ function HealBot_PartyUpdate_CheckSkin()
         HealBot_Config.LastAutoSkinChangeType=LastAutoSkinChangeType
     end
     if (PrevSolo or "nil")~=(HealBot_luVars["IsSolo"] or "nil") then
-        HealBot_CheckAllDebuffs()
-        HealBot_CheckAllBuffs()
+        HealBot_setOptions_Timer(20)
+        HealBot_setOptions_Timer(30)
         HealBot_Options_DisableCheck()
     end
   --HealBot_setCall("HealBot_PartyUpdate_CheckSkin")
@@ -3920,10 +3930,10 @@ local function HealBot_Not_Fighting()
         HealBot_SetResetFlag("QUICK")
     else
         if HealBot_Config_Buffs.BuffWatch and not HealBot_Config_Buffs.BuffWatchInCombat then
-            HealBot_CheckAllBuffs()
+            HealBot_setOptions_Timer(30)
         end
         if HealBot_Config_Cures.DebuffWatch and not HealBot_Config_Cures.DebuffWatchInCombat then
-            HealBot_CheckAllDebuffs()
+            HealBot_setOptions_Timer(20)
         end
         HealBot_Action_CheckHideFrames()
         HealBot_Action_ResetActiveUnitStatus()
@@ -4829,7 +4839,9 @@ local function HealBot_CheckUnitBuffs(button)
                     z = z +1
                     if cBuffs then 
                         if unitCaster and expirationTime and not hbExcludeSpells[spellId] then
-                            local y=HealBot_Watch_HoT[spellId] or HealBot_Watch_HoT[name] or "nil"
+                            local y=HealBot_Watch_HoT[name] or HealBot_Watch_HoT[spellId] or "nil"
+                            local _, uClassEN = UnitClass(xUnit);
+                            local uClassTrim = strsub(uClassEN or "XXXX",1,4)
                            -- HealBot_AddDebug("y="..y.." - name="..name)
                             if (y=="A" or (y=="S" and unitCaster=="player") or (y=="C" and HealBot_Data["PCLASSTRIM"]==uClassTrim)) then
                                 if HealBot_SetBuffIcon(button, name, texture, count, expirationTime, unitCaster, spellId, cIcons) then
@@ -5112,13 +5124,7 @@ local function HealBot_UnitUpdateFriendly(button)
             HealBot_UpdateUnit(button)
         elseif button.update.state then
             button.update.state=false
-            HealBot_Action_Refresh(button)
-        elseif button.update.debuff then
-            button.update.debuff=false
-            button.aura.debuff.check=true    
-        elseif button.update.buff then
-            button.update.buff=false
-            button.aura.buff.check=true
+            HealBot_Action_Refresh(button) 
         else
             button.status.update=false
         end
@@ -5876,8 +5882,7 @@ function HealBot_CheckPlayerBuffs()
         if HealBot_CheckPlayerUnitBuff[xUnit] then
             if UnitIsVisible(xUnit) then
                 HealBot_CheckPlayerUnitBuff[xUnit]=false
-                xButton.update.buff=true
-                xButton.status.update=true
+                xButton.aura.buff.check=true
             end
         end
     end
@@ -5887,13 +5892,11 @@ function HealBot_CheckAllBuffs(unit)
     if unit then
         local xButton = HealBot_Unit_Button[unit]
         if xButton then
-            xButton.update.buff=true
-            xButton.status.update=true
+            xButton.aura.buff.check=true
         end
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.update.buff=true
-            xButton.status.update=true
+            xButton.aura.buff.check=true
         end
     end
   --HealBot_setCall("HealBot_CheckAllBuffs")
@@ -5920,12 +5923,10 @@ end
 
 function HealBot_CheckAllDebuffs()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        xButton.update.debuff=true
-        xButton.status.update=true
+        xButton.aura.debuff.check=true
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-        xButton.update.debuff=true
-        xButton.status.update=true
+        xButton.aura.debuff.check=true
     end
   --HealBot_setCall("HealBot_CheckAllDebuffs")
 end
@@ -6652,8 +6653,7 @@ function HealBot_UpdateUnitRange(button, spellName, doRefresh)
             button.status.update=true
         end
         if HealBot_CheckPlayerUnitBuff[button.unit] and button.status.range>-1 then
-            button.update.buff=true
-            button.status.update=true      
+            button.aura.buff.check=true  
             HealBot_CheckPlayerUnitBuff[button.unit]=false
         end
         if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][button.frame]["OORLAST"] and (oldRange==1 or button.status.range==1) then
