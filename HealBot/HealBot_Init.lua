@@ -25,7 +25,7 @@ local function HealBot_FindSpellRangeCast(id, spellName, spellBookId)
     if ( not id ) then return nil; end
 
     local spell, _, _, msCast, _, _ = GetSpellInfo(id);
-    if HEALBOT_GAME_VERSION==1 then 
+    if HEALBOT_GAME_VERSION<4 then 
         cRank = GetSpellSubtext(id)
     end
     if ( not spell ) then return nil; end

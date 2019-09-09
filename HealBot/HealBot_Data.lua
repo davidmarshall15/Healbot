@@ -236,6 +236,7 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         Debug01=false, -- Currently not used
+        v1BuffExpireTimes={},
         VersionResetDone={},
         CatchAltDebuffIDs={["init"]=true},
         CureCustomDefaultCastBy="ALL",
@@ -307,6 +308,9 @@ function HealBot_Data_InitVars()
                        [9]={R = 1, G = 1, B = 1, A = 1 },
                        [10]={R = 0.7, G = 0.7, B = 0.7, A = 1 },},
         HealBot_customPermUserName={},
+        HealBot_PermMyTargets={},
+        HealBot_PermPrivateTanks={},
+        HealBot_PermPrivateHealers={},
         HealBot_MouseWheelIndex={ ["AltUp"]=2, ["AltDown"]=3 },
         HealBot_MouseWheelTxt={ ["AltUp"]=HEALBOT_BLIZZARD_MENU, ["AltDown"]=HEALBOT_HB_MENU },
         HealBot_Emotes={ ["NoneUp"]=HEALBOT_EMOTE_HELLO,  ["NoneDown"]=HEALBOT_EMOTE_HELLO,

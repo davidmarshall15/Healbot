@@ -172,8 +172,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_GROUPHEALS              = "Group";
     HEALBOT_OPTIONS_TANKHEALS               = "Main tanks";
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";
-    HEALBOT_OPTIONS_PRIVATETANKS            = "Private main tanks";
-    HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private main healers";
+    HEALBOT_OPTIONS_PRIVATETANKS            = "Private tanks";
+    HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private healers";
     HEALBOT_OPTIONS_TARGETHEALS             = "Target";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";
     HEALBOT_OPTIONS_RAID10                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
@@ -675,6 +675,7 @@ function HealBot_Lang_enALL()
     HEALBOT_DEMOTE_RA                       = "Demote raid assistant"
     HEALBOT_TOGGLE_ENABLED                  = "Toggle enabled"
     HEALBOT_TOGGLE_MYTARGETS                = "Toggle My Targets"
+    HEALBOT_WORD_PERMANENT                  = "Permanent"
     HEALBOT_TOGGLE_PRIVATETANKS             = "Toggle private tanks"
     HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
     HEALBOT_RESET_BAR                       = "Reset bar"
@@ -1152,6 +1153,7 @@ function HealBot_Lang_enALL()
                                    [15] = "Redemption",
                                    [16] = "Jaiseck",
                                    [17] = "xtacie",
+                                   [18] = "bkwildlifecntrl",
                                 }
                                
 end

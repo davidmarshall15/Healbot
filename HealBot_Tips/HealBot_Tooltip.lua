@@ -573,7 +573,7 @@ local function HealBot_Action_DoRefreshTooltip()
             if UnitClass(xUnit) and UnitIsPlayer(xUnit) then
                 local unitSpec = " "
                 local inRange=true
-                if HEALBOT_GAME_VERSION==1 then inRange=CheckInteractDistance(xUnit,1) end
+                if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end
                 if HealBot_UnitData[xGUID] then
                     if inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] and HealBot_UnitData[xGUID]["SPEC"]==" " then
                         HealBot_Data["INSPECT"]=true
@@ -895,9 +895,9 @@ local function HealBot_Action_DoRefreshTargetTooltip(button)
     linenum=linenum+1
     HealBot_Tooltip_SetLineLeft(" "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,linenum,1)
     if HealBot_Panel_RetMyHealTarget(button.guid) then
-        HealBot_Tooltip_SetLine(linenum," "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_TARGETHEALS.." ",1,1,1,1)
+        HealBot_Tooltip_SetLine(linenum," "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_MYTARGET.." ",1,1,1,1)
     else
-        HealBot_Tooltip_SetLine(linenum," "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_TARGETHEALS.." ",1,1,1,1)
+        HealBot_Tooltip_SetLine(linenum," "..HEALBOT_OPTIONS_BUTTONRIGHT..":",1,1,0.2,1,HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET.." ",1,1,1,1)
     end
     HealBot_Tooltip_Show()
 end

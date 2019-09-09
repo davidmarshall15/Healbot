@@ -182,66 +182,97 @@ function HealBot_Panel_ClearHealTargets()
 end
 
 local myGUID=nil
-function HealBot_Panel_ToggelHealTarget(unit)
+function HealBot_Panel_ToggelHealTarget(unit, perm)
     if unit=="target" then return end
     local xGUID=HealBot_UnitGUID(unit)
-    local mti=0
-    for j=1, #HealBot_MyHealTargets do
-        if xGUID==HealBot_MyHealTargets[j] then
-            mti=j
-            break;
+    if perm then
+        if HealBot_Globals.HealBot_PermMyTargets[xGUID] then
+            HealBot_Globals.HealBot_PermMyTargets[xGUID]=nil
+        else
+            HealBot_Globals.HealBot_PermMyTargets[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
         end
-    end
-    if mti>0 then
-        table.remove(HealBot_MyHealTargets,mti)
     else
-        table.insert(HealBot_MyHealTargets,xGUID)
+        local mti=0
+        for j=1, #HealBot_MyHealTargets do
+            if xGUID==HealBot_MyHealTargets[j] then
+                mti=j
+                break;
+            end
+        end
+        if mti>0 then
+            table.remove(HealBot_MyHealTargets,mti)
+        else
+            table.insert(HealBot_MyHealTargets,xGUID)
+        end
     end
     HealBot_nextRecalcParty(6)
 end
 
-function HealBot_Panel_ToggelPrivateTanks(unit)
+function HealBot_Panel_ToggelPrivateTanks(unit, perm)
     if unit=="target" then return end
     local xGUID=HealBot_UnitGUID(unit)
-    local mti=0
-    for j=1, #HealBot_MyPrivateTanks do
-        if xGUID==HealBot_MyPrivateTanks[j] then
-            mti=j
-            break;
+    if perm then
+        if HealBot_Globals.HealBot_PermPrivateTanks[xGUID] then
+            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=nil
+        else
+            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
         end
-    end
-    if mti>0 then
-        table.remove(HealBot_MyPrivateTanks,mti)
     else
-        table.insert(HealBot_MyPrivateTanks,xGUID)
-    end
-    HealBot_nextRecalcParty(6)
-end
-function HealBot_Panel_ToggelPrivateHealers(unit)
-    if unit=="target" then return end
-    local xGUID=HealBot_UnitGUID(unit)
-    local mti=0
-    for j=1, #HealBot_MyPrivateHealers do
-        if xGUID==HealBot_MyPrivateHealers[j] then
-            mti=j
-            break;
+        local mti=0
+        for j=1, #HealBot_MyPrivateTanks do
+            if xGUID==HealBot_MyPrivateTanks[j] then
+                mti=j
+                break;
+            end
         end
-    end
-    if mti>0 then
-        table.remove(HealBot_MyPrivateHealers,mti)
-    else
-        table.insert(HealBot_MyPrivateHealers,xGUID)
+        if mti>0 then
+            table.remove(HealBot_MyPrivateTanks,mti)
+        else
+            table.insert(HealBot_MyPrivateTanks,xGUID)
+        end
     end
     HealBot_nextRecalcParty(6)
 end
 
-function HealBot_Panel_RetMyHealTarget(unit)
+function HealBot_Panel_ToggelPrivateHealers(unit, perm)
+    if unit=="target" then return end
+    local xGUID=HealBot_UnitGUID(unit)
+    if perm then
+        if HealBot_Globals.HealBot_PermPrivateHealers[xGUID] then
+            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=nil
+        else
+            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
+        end
+    else
+        local mti=0
+        for j=1, #HealBot_MyPrivateHealers do
+            if xGUID==HealBot_MyPrivateHealers[j] then
+                mti=j
+                break;
+            end
+        end
+        if mti>0 then
+            table.remove(HealBot_MyPrivateHealers,mti)
+        else
+            table.insert(HealBot_MyPrivateHealers,xGUID)
+        end
+    end
+    HealBot_nextRecalcParty(6)
+end
+
+function HealBot_Panel_RetMyHealTarget(unit, perm)
     local xGUID=HealBot_UnitGUID(unit)
     local mti=0
-    for j=1, #HealBot_MyHealTargets do
-        if xGUID==HealBot_MyHealTargets[j] then
-            mti=j
-            break;
+    if perm then
+        if HealBot_Globals.HealBot_PermMyTargets[xGUID] then
+            mti=1
+        end
+    else
+        for j=1, #HealBot_MyHealTargets do
+            if xGUID==HealBot_MyHealTargets[j] then
+                mti=j
+                break;
+            end
         end
     end
     if mti>0 then
@@ -251,13 +282,19 @@ function HealBot_Panel_RetMyHealTarget(unit)
     end
 end
 
-function HealBot_Panel_RetPrivateTanks(unit)
+function HealBot_Panel_RetPrivateTanks(unit, perm)
     local xGUID=HealBot_UnitGUID(unit)
     local mti=0
-    for j=1, #HealBot_MyPrivateTanks do
-        if xGUID==HealBot_MyPrivateTanks[j] then
-            mti=j
-            break;
+    if perm then
+        if HealBot_Globals.HealBot_PermPrivateTanks[xGUID] then
+            mti=1
+        end
+    else
+        for j=1, #HealBot_MyPrivateTanks do
+            if xGUID==HealBot_MyPrivateTanks[j] then
+                mti=j
+                break;
+            end
         end
     end
     if mti>0 then
@@ -266,13 +303,20 @@ function HealBot_Panel_RetPrivateTanks(unit)
         return false
     end
 end
-function HealBot_Panel_RetPrivateHealers(unit)
+
+function HealBot_Panel_RetPrivateHealers(unit, perm)
     local xGUID=HealBot_UnitGUID(unit)
     local mti=0
-    for j=1, #HealBot_MyPrivateHealers do
-        if xGUID==HealBot_MyPrivateHealers[j] then
-            mti=j
-            break;
+    if perm then
+        if HealBot_Globals.HealBot_PermPrivateHealers[xGUID] then
+            mti=1
+        end
+    else
+        for j=1, #HealBot_MyPrivateHealers do
+            if xGUID==HealBot_MyPrivateHealers[j] then
+                mti=j
+                break;
+            end
         end
     end
     if mti>0 then
@@ -349,7 +393,7 @@ function HealBot_Action_SetClassIconTexture(button)
                     HealBot_Action_SetUnitData(xGUID, button.unit)
                 end
             end
-            if not roleTextures[unitRole] and HEALBOT_GAME_VERSION>7 then 
+            if not roleTextures[unitRole] and HEALBOT_GAME_VERSION>3 then 
                 unitRole=UnitGroupRolesAssigned(button.unit) 
             end
         end
@@ -1553,7 +1597,7 @@ local function HealBot_Panel_targetHeals(preCombat)
 end
 
 local function HealBot_Panel_vehicleHeals()
-    if HEALBOT_GAME_VERSION>7 then
+    if HEALBOT_GAME_VERSION>3 then
         local hbincSort=false
         if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
             hbincSort=true
@@ -1603,7 +1647,7 @@ local function HealBot_Panel_petHeals()
     local xGUID=HealBot_UnitGUID(xUnit)
     local hbincSort=false
     local pInVehicle=false
-    if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
+    if HEALBOT_GAME_VERSION>3 then pInVehicle=UnitUsingVehicle(pUnit) end
     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then 
         hbincSort=true
     end
@@ -1615,7 +1659,7 @@ local function HealBot_Panel_petHeals()
             xUnit="raidpet"..j;
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="raid"..j;
-            if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if HEALBOT_GAME_VERSION>3 then pInVehicle=UnitUsingVehicle(pUnit) end
             if UnitExists(xUnit) and UnitExists(pUnit) and not pInVehicle then
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
@@ -1635,7 +1679,7 @@ local function HealBot_Panel_petHeals()
             xUnit="partypet"..j;
             xGUID=HealBot_UnitGUID(xUnit) or xUnit
             pUnit="party"..j;
-            if HEALBOT_GAME_VERSION>7 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if HEALBOT_GAME_VERSION>3 then pInVehicle=UnitUsingVehicle(pUnit) end
             if UnitExists(pUnit) and not pInVehicle and UnitExists(xUnit) then 
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
@@ -1857,6 +1901,12 @@ local function HealBot_Panel_myHeals()
             HealBot_Panel_ToggelHealTarget(xUnit)
         end
     end)
+    for xGUID,_ in pairs(HealBot_Globals.HealBot_PermMyTargets) do
+        local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
+        if UnitExists(xUnit) then  
+            HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
+        end
+    end
     if i[hbCurrentFrame]>k then 
         HealBot_Panel_addUnits(hbincSort, 1,HEALBOT_OPTIONS_MYTARGET,k)
     end
@@ -2084,7 +2134,7 @@ function HealBot_Panel_TargetChangedCheckFocus()
 end
 
 local function HealBot_Panel_FocusChanged(preCombat)
-    if HEALBOT_GAME_VERSION>7 then 
+    if HEALBOT_GAME_VERSION>3 then 
         hbCurrentFrame=9
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARS"]==4 then
             HealBot_BottomAnchors[hbCurrentFrame]=true
@@ -2248,7 +2298,7 @@ local function HealBot_Panel_PlayersChanged()
                 xUnit = "raid"..j;
                 if UnitExists(xUnit) then
 					local aRole=nil
-					if HEALBOT_GAME_VERSION>7 then aRole = UnitGroupRolesAssigned(xUnit) end
+					if HEALBOT_GAME_VERSION>3 then aRole = UnitGroupRolesAssigned(xUnit) end
                     xGUID=UnitGUID(xUnit)
                     if xGUID==HealBot_Data["PGUID"] then xUnit="player" end
                     _, _, subgroup, _, _, _, _, online, _, role, _, combatRole = GetRaidRosterInfo(j);
@@ -2287,7 +2337,7 @@ local function HealBot_Panel_PlayersChanged()
                     local xGUID=HealBot_UnitGUID(xUnit)
                     HealBot_UnitGroups[xUnit]=1
                     local aRole = HEALBOT_WORDS_UNKNOWN
-                    if HEALBOT_GAME_VERSION>7 then
+                    if HEALBOT_GAME_VERSION>3 then
                         aRole = UnitGroupRolesAssigned(xUnit) or HEALBOT_WORDS_UNKNOWN
                     end
                     if aRole=="TANK" then
@@ -2315,13 +2365,24 @@ local function HealBot_Panel_PlayersChanged()
                 HealBot_MainTanks[xGUID]=xUnit
             end
         end)
-
+        for xGUID,_ in pairs(HealBot_Globals.HealBot_PermPrivateTanks) do
+            local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
+            if UnitExists(xUnit) then  
+                HealBot_MainTanks[xGUID]=xUnit
+            end
+        end
         table.foreach(HealBot_MyPrivateHealers, function (index,xGUID)
             local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
             if UnitExists(xUnit) then  
                 HealBot_MainHealers[xGUID]=xUnit
             end
         end)
+        for xGUID,_ in pairs(HealBot_Globals.HealBot_PermPrivateHealers) do
+            local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
+            if UnitExists(xUnit) then  
+                HealBot_MainHealers[xGUID]=xUnit
+            end
+        end
         local PetsWithPlayers=false
         if HealBot_Config.DisabledNow==1 then
             hbCurrentFrame=1

@@ -112,7 +112,7 @@ optionsButton:SetScript('OnClick', function()
 end)
 
 function HealBot_Options_InitVars()
-    if HEALBOT_GAME_VERSION==1 then 
+    if HEALBOT_GAME_VERSION<4 then 
         HealBot_Debuff_Types = {
             [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
@@ -121,7 +121,9 @@ function HealBot_Options_InitVars()
             [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HBC_CURE_POISON] = {HEALBOT_POISON_en},
+            [HBC_SHAMAN_CURE_POISON] = {HEALBOT_POISON_en},
+            [HBC_DRUID_CURE_POISON] = {HEALBOT_POISON_en},
+            [HBC_DRUID_ABOLISH_POISON] = {HEALBOT_POISON_en},
             [HBC_DISPELL_MAGIC] = {HEALBOT_MAGIC_en},
             [HBC_SHAMAN_CURE_DISEASE] = {HEALBOT_DISEASE_en},
             [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
@@ -711,7 +713,7 @@ end
 HealBot_Options_setClassEn()
 
 function HealBot_Options_FrameAliasList()
-    if HEALBOT_GAME_VERSION==1 then 
+    if HEALBOT_GAME_VERSION<4 then 
         if Healbot_Config_Skins.FrameAlias and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin] then
             HealBot_Options_HealGroupsFrame_List = {
                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][1]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 1",
@@ -851,7 +853,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HBC_SEAL_OF_THE_CRUSADER,
             HEALBOT_SACRED_SHIELD,
         }
-        if HEALBOT_GAME_VERSION>7 then
+        if HEALBOT_GAME_VERSION>3 then
             local i = GetSpecialization()
             local specID = 0
             if i then specID = GetSpecializationInfo(i,false,false) end
@@ -864,10 +866,12 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_POWER_WORD_FORTITUDE,
             HBC_POWER_WORD_FORTITUDE,
             HBC_SHADOW_PROTECTION,
+            HBC_TOUCH_OF_WEAKNESS,
             HBC_DIVINE_SPIRIT,
             HBC_PRAYER_OF_SHADOW_PROTECTION,
             HBC_INNER_FIRE,
             HEALBOT_FEAR_WARD,
+            HBC_SHADOWGUARD,
             HEALBOT_SHADOWFORM,
             HEALBOT_LEVITATE,
         }
@@ -932,18 +936,18 @@ end
 
 function HealBot_Options_GetDebuffSpells_List(class)
     local HealBot_Debuff_Spells = {}
-    if HEALBOT_GAME_VERSION==1 then 
+    if HEALBOT_GAME_VERSION<4 then 
         HealBot_Debuff_Spells = {
           ["DEAT"] = {},
           ["DEMO"] = {}, -- Demon Hunter
-          ["DRUI"] = {HEALBOT_REMOVE_CORRUPTION, HEALBOT_NATURES_CURE,},
+          ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON,},
           ["HUNT"] = {},
           ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
-          ["MONK"] = {HEALBOT_DETOX,},
+          ["MONK"] = {},
           ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
           ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
           ["ROGU"] = {},
-          ["SHAM"] = {HBC_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
+          ["SHAM"] = {HBC_SHAMAN_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
           ["WARL"] = {},
           ["WARR"] = {},
         }
@@ -6083,7 +6087,7 @@ end
 
 function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     local tmpHealDDlist={}
-    if HEALBOT_GAME_VERSION>7 then
+    if HEALBOT_GAME_VERSION>3 then
         local fullHealDDlist=HealBot_Options_FullHealSpellsCombo_list(sType)
         for j=1, getn(fullHealDDlist), 1 do
             local spellName=HealBot_KnownSpell(fullHealDDlist[j])
@@ -6184,6 +6188,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_REDEMPTION,
             HEALBOT_REBIRTH,
             HEALBOT_TREE_OF_LIFE,
+            HEALBOT_INNERVATE,
             HEALBOT_ANCESTRALSPIRIT,
             HEALBOT_RESUSCITATE,
             HEALBOT_ABSOLUTION,
@@ -6201,8 +6206,10 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HBC_PURIFY,
             HBC_SHAMAN_CURE_DISEASE,
             HBC_PRIEST_CURE_DISEASE,
+            HBC_DRUID_ABOLISH_POISON,
             HBC_PRIEST_ABOLISH_DISEASE,
-            HBC_CURE_POISON,
+            HBC_DRUID_CURE_POISON,
+            HBC_SHAMAN_CURE_POISON,
             HBC_DISPELL_MAGIC,
             HEALBOT_CLEANSE_SPIRIT,
             HEALBOT_PURIFY_SPIRIT,
@@ -6683,7 +6690,7 @@ function HealBot_Options_FramesSelFrame_DropDown()
         info.text = HealBot_Options_HealGroupsFrame_List[j];
         info.func = function(self)
                         HealBot_Options_StorePrev["FramesSelFrame"]=self:GetID()
-                        if HEALBOT_GAME_VERSION==1 then 
+                        if HEALBOT_GAME_VERSION<4 then 
                             if HealBot_Options_StorePrev["FramesSelFrame"]==6 then HealBot_Options_StorePrev["FramesSelFrame"]=7 end
                             if HealBot_Options_StorePrev["FramesSelFrame"]==9 then HealBot_Options_StorePrev["FramesSelFrame"]=10 end
                         end
@@ -12716,7 +12723,7 @@ function HealBot_Options_InitSub1(subNo)
                 g=_G["HealBot_Options_HealGroups"..id]
                 g:SetChecked(Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"])
                 local n=id
-                if HEALBOT_GAME_VERSION==1 then 
+                if HEALBOT_GAME_VERSION<4 then 
                     if n>9 then n=n-1 end
                     if n>6 then n=n-1 end
                 end
@@ -12749,7 +12756,7 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_HealGroups11Frame, HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]])
             g=_G["HealBot_HealButtonsFrames1_Text"]
             g:SetText(HEALBOT_OPTIONS_FRAME)
-            if HEALBOT_GAME_VERSION==1 then 
+            if HEALBOT_GAME_VERSION<4 then 
                 HealBot_Options_HealGroups7:Hide()
                 HealBot_Options_HealGroups7Frame:Hide()
                 HealBot_Options_HealGroups8:ClearAllPoints()

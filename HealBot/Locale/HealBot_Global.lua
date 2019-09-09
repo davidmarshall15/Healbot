@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.6.b2";
+﻿HEALBOT_VERSION    = "8.2.0.6.b3";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.2.b2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.2.b3" end
 
 function HealBot_globalVars()
     --Consumables
@@ -258,9 +258,11 @@ function HealBot_globalVars()
     
 	--Druid
     HEALBOT_BARKSKIN                        = 22812 --GetSpellInfo(22812) or "--Barkskin";
+    HEALBOT_CULTIVATION                     = 200389 --GetSpellInfo(200390) or "--Cultivation";
     HEALBOT_DRUID_CLEARCASTING              = 16870 --GetSpellInfo(16870) or "--Clearcasting";
     HEALBOT_FRENZIED_REGEN                  = 22842 --GetSpellInfo(22842) or "--Frenzied Regeneration";
     HEALBOT_HARMONY                         = 77495 --GetSpellInfo(77495) or "--Mastery Harmony";
+    HEALBOT_INNERVATE                       = 29166 --GetSpellInfo(29166) or "--Innervate";
     HEALBOT_IRONBARK                        = 102342 --GetSpellInfo(102342) or "--Ironbark";
     HEALBOT_IRONFUR                         = 192081 --GetSpellInfo(192081) or "--Ironfur";
     HEALBOT_LEADER_OF_THE_PACK              = 17007 --GetSpellInfo(17007) or "--Leader of the Pack";
@@ -274,8 +276,6 @@ function HealBot_globalVars()
     HEALBOT_SURVIVAL_INSTINCTS              = 61336 --GetSpellInfo(61336) or "--Survival Instincts";
     HEALBOT_TREE_OF_LIFE                    = 33891 --GetSpellInfo(33891) or "--Tree of Life";
 	HEALBOT_SPRING_BLOSSOMS                 = 207386 --GetSpellInfo(207385) or "--Spring Blossoms";
-    HEALBOT_CULTIVATION                     = 200389 --GetSpellInfo(200390) or "--Cultivation";
-    HEALBOT_INNERVATE                       = 29166 --GetSpellInfo(29166) or "--Innervate";
     HEALBOT_ESSENCE_OF_GHANIR               = 208253 --GetSpellInfo(208253) or "--Essence of G'Hanir"
 	HEALBOT_FOCUSED_GROWTH                  = 203554 --GetSpellInfo(203554) or "--Focused Growth"
     HEALBOT_GROVE_TENDING					= 279793 --GetSpellInfo(279793) or "--Grove Tending";
@@ -459,6 +459,7 @@ function HealBot_globalVars()
     HEALBOT_SAVING_VOID_ENTROPY             = 155361 --GetSpellInfo(155361) or "--Void Entropy"
     HEALBOT_SERENDIPITY                     = 63733 --GetSpellInfo(63733) or "--Serendipity";
     HEALBOT_SHADOWFORM                      = 232698 --GetSpellInfo(232698) or "--Shadowform"
+    HBC_SHADOWGUARD                         = 18137
 	HEALBOT_SHADOW_COVENANT                 = 204065 --GetSpellInfo(204065) or "--Shadow Covenant";
     HBC_SHADOW_PROTECTION                   = 976
     HEALBOT_SHADOW_WORD_INSANITY            = 132573 --GetSpellInfo(132573) or "--Shadow Word: Insanity";
@@ -468,6 +469,7 @@ function HealBot_globalVars()
     HEALBOT_SURGE_OF_DARKNESS               = 162448 --GetSpellInfo(162448) or "--Surge of Darkness";
     HEALBOT_SURGE_OF_LIGHT                  = 114255 --GetSpellInfo(114255) or "--Surge of Light";
 	HEALBOT_SYMBOL_OF_HOPE                  = 64901 --GetSpellInfo(64901) or "--Symbol of Hope";	
+    HBC_TOUCH_OF_WEAKNESS                   = 2652
     HEALBOT_TWIST_OF_FATE                   = 265258 --GetSpellInfo(109142) or "--Twist of Fate";
 --    HEALBOT_TRIAL_OF_LIGHT                  = 200128 --GetSpellInfo(200128) or "--Trial of light";
     HEALBOT_VAMPIRIC_EMBRACE                = 15286 --GetSpellInfo(15286) or "--Vampiric Embrace";
@@ -589,7 +591,9 @@ function HealBot_globalVars()
     HBC_PRIEST_CURE_DISEASE                 = 528
     HBC_PRIEST_ABOLISH_DISEASE              = 552
     HBC_DISPELL_MAGIC                       = 527
-    HBC_CURE_POISON                         = 526
+    HBC_SHAMAN_CURE_POISON                  = 526
+    HBC_DRUID_CURE_POISON                   = 8946
+    HBC_DRUID_ABOLISH_POISON                = 2893
     HEALBOT_DETOX                           = 115450 --GetSpellInfo(115450) or "--Detox";
     HEALBOT_NATURES_CURE                    = 88423 --GetSpellInfo(88423) or "--Nature's Cure";
     HEALBOT_PURIFY                          = 527 --GetSpellInfo(527) or "--Purify";
