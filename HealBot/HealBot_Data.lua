@@ -236,7 +236,6 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         Debug01=false, -- Currently not used
-        v1BuffExpireTimes={},
         VersionResetDone={},
         CatchAltDebuffIDs={["init"]=true},
         CureCustomDefaultCastBy="ALL",
@@ -266,7 +265,7 @@ function HealBot_Data_InitVars()
         SmartCastBuff = true,
         SmartCastHeal = false,
         SmartCastRes = true,
-        RangeCheckFreq=0.4,
+        RangeCheckFreq=0.2,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},

@@ -1440,7 +1440,7 @@ local function HealBot_Panel_addUnit(unit, hbGUID, hbincSort, isRaidGroup)
                     table.insert(units,unit)
                 end
             else
-                HealBot_setNotVisible(hbGUID,unit)
+                HealBot_setNotVisible(unit,0)
             end
         end
     end
@@ -1659,7 +1659,12 @@ local function HealBot_Panel_petHeals()
             xUnit="raidpet"..j;
             xGUID=HealBot_UnitGUID(xUnit)
             pUnit="raid"..j;
-            if HEALBOT_GAME_VERSION>3 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if HEALBOT_GAME_VERSION>3 then 
+                pInVehicle=UnitUsingVehicle(pUnit) 
+            elseif not UnitIsVisible(pUnit) then
+                pInVehicle=true
+                HealBot_setNotVisible(pUnit,2)
+            end
             if UnitExists(xUnit) and UnitExists(pUnit) and not pInVehicle then
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
@@ -1679,7 +1684,12 @@ local function HealBot_Panel_petHeals()
             xUnit="partypet"..j;
             xGUID=HealBot_UnitGUID(xUnit) or xUnit
             pUnit="party"..j;
-            if HEALBOT_GAME_VERSION>3 then pInVehicle=UnitUsingVehicle(pUnit) end
+            if HEALBOT_GAME_VERSION>3 then 
+                pInVehicle=UnitUsingVehicle(pUnit) 
+            elseif not UnitIsVisible(pUnit) then
+                pInVehicle=true
+                HealBot_setNotVisible(pUnit,2)
+            end
             if UnitExists(pUnit) and not pInVehicle and UnitExists(xUnit) then 
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
             end
@@ -1867,7 +1877,7 @@ local function HealBot_Panel_focusHeals(preCombat)
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,xUnit)
             else
-                HealBot_setNotVisible(xGUID,xUnit)
+                HealBot_setNotVisible(xUnit,4)
             end
         end
     elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then 

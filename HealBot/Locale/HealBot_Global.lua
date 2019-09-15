@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.6.b3";
+﻿HEALBOT_VERSION    = "8.2.0.7.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.2.b3" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.3.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -204,7 +204,7 @@ function HealBot_globalVars()
     HEALBOT_DIVINE_STAR                     = 110744 --GetSpellInfo(110744) or "--Divine Star"
     HEALBOT_FLASH_HEAL                      = 2061 --GetSpellInfo(2061) or "--Flash Heal";
     HEALBOT_HALO                            = 120517 --GetSpellInfo(120517) or "--Halo"
-    HEALBOT_HEAL                            = 2060 --GetSpellInfo(2060) or "--Heal";
+    HEALBOT_HEAL                            = 2060 --GetSpellInfo(2060) or "--Heal"; -- Greater Heal in Classic
     HBC_HEAL                                = 2054 
     HEALBOT_HOLY_WORD_SALVATION             = 265202 --GetSpellInfo(265202) or "--Holy Word: Salvation";
     HEALBOT_HOLY_WORD_SERENITY              = 2050 --Lesser Heal in Classic

@@ -911,6 +911,11 @@ function HealBot_Action_UpdateTheDeadButton(button)
         HealBot_UpdateUnitRange(button,HealBot_RangeSpells["RES"],false)
         HealBot_Action_setHealthText(button)
         HealBot_Action_setNameTag(button)
+        local PlayerBuffsList=button.aura.buff.recheck
+        button.aura.buff.nextcheck=false
+        for name,_ in pairs (PlayerBuffsList) do
+            PlayerBuffsList[name]=nil
+        end
         ebubar:SetValue(0)
     end
     local ebusr,ebusg,ebusb = HealBot_Action_TextColours(button)
@@ -2742,6 +2747,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         if not ghb.aura then
             ghb.aura={}
             ghb.aura.buff={}
+            ghb.aura.buff.recheck={}
             ghb.aura.debuff={}
             ghb.status={}
             ghb.update={}
@@ -2785,6 +2791,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.aura.buff.id=0
         ghb.icon.buff.count=0
         ghb.aura.buff.priority=99
+        ghb.aura.buff.nextcheck=false
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
         ghb.aura.debuff.id=0

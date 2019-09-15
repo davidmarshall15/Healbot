@@ -6205,12 +6205,12 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_PURIFY,
             HBC_PURIFY,
             HBC_SHAMAN_CURE_DISEASE,
-            HBC_PRIEST_CURE_DISEASE,
+            --HBC_PRIEST_CURE_DISEASE,
             HBC_DRUID_ABOLISH_POISON,
             HBC_PRIEST_ABOLISH_DISEASE,
             HBC_DRUID_CURE_POISON,
             HBC_SHAMAN_CURE_POISON,
-            HBC_DISPELL_MAGIC,
+            --HBC_DISPELL_MAGIC,
             HEALBOT_CLEANSE_SPIRIT,
             HEALBOT_PURIFY_SPIRIT,
             HEALBOT_MASS_DISPEL,
@@ -11975,7 +11975,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,2.0,8.0,0.5,4,HEALBOT_WORDS_MORECPU,HEALBOT_WORDS_LESSCPU)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,5.0,0.5,2,HEALBOT_WORDS_MORECPU,HEALBOT_WORDS_LESSCPU)
             HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
