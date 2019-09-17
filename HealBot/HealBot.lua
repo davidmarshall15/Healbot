@@ -79,7 +79,7 @@ HealBot_luVars["SoftResetAfterCombat"]=false
 HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
 HealBot_luVars["Timer8000"]=0
-HealBot_luVars["TankUnit"]="x"
+HealBot_luVars["TankUnit"]=nil
 HealBot_luVars["HealBot_Refresh"]=TimeNow
 HealBot_luVars["healthFactor"]=1
 HealBot_luVars["targetSpec"]=" "
@@ -4811,7 +4811,7 @@ local function HealBot_SetBuffIcon(button, name, texture, count, expirationTime,
   --HealBot_setCall("HealBot_SetBuffIcon")
 end
 
-local function HealBot_setAuraExpireTime(button, name, expirationTime, unitCaster)
+local function HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
     if HealBot_classicSpellCasts[unitCaster] and HealBot_classicSpellCasts[unitCaster][button.unit] and HealBot_classicSpellCasts[unitCaster][button.unit]==name then
         HealBot_classicSpellCasts[unitCaster][button.unit]=nil
         if HealBot_classicBuffDuration[name] then
@@ -4879,9 +4879,9 @@ local function HealBot_CheckUnitBuffs(button)
         if not UnitIsFriend("player",button.unit) and cIcons then 
             while true do
                 local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitDebuff(button.unit, z); 
-                if HEALBOT_GAME_VERSION<4 then
-                    HealBot_setAuraExpireTime(button, name, expirationTime, unitCaster)
-                end
+                --if HEALBOT_GAME_VERSION<4 then
+                --    HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
+                --end
                 if name then
                     z=z+1
                     if unitCaster and unitCaster=="player" and expirationTime and not hbExcludeSpells[spellId] then
@@ -4898,7 +4898,7 @@ local function HealBot_CheckUnitBuffs(button)
             while true do
                 local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
                 if HEALBOT_GAME_VERSION<4 then
-                    expirationTime=HealBot_setAuraExpireTime(button, name, expirationTime, unitCaster)
+                    expirationTime=HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
                 end
                 if name then
                     z = z +1
@@ -5191,6 +5191,9 @@ local function HealBot_UnitUpdateFriendly(button)
             HealBot_Action_setNameTag(button)
             button.update.state=true
             button.status.update=true
+        elseif button.health.current<button.health.max then
+            button.health.updhealth=true
+            button.health.update=true
         elseif button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
             if button.aura.buff.nextcheck==1 then
                 HealBot_ResetCheckBuffsTime(button)
@@ -5198,9 +5201,6 @@ local function HealBot_UnitUpdateFriendly(button)
                 button.aura.buff.check=true
                 button.aura.buff.nextcheck=false
             end
-        elseif button.health.current<button.health.max then
-            button.health.updhealth=true
-            button.health.update=true
         end
     end
 end
@@ -5449,6 +5449,8 @@ function HealBot_Register_Aggro()
     if HEALBOT_GAME_VERSION>3 then
         HealBot:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
         HealBot:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
+    else
+        libCTM = LibStub("ThreatClassic-1.0", true)
     end
   --HealBot_setCall("HealBot_Register_Aggro")
 end
@@ -5467,7 +5469,7 @@ function HealBot_Register_IncHeals()
     if HEALBOT_GAME_VERSION>3 then
         HealBot:RegisterEvent("UNIT_HEAL_PREDICTION")
     else
-        libCHC = LibStub("LibClassicHealComm-1.0", true)
+        libCHC = libCHC or LibStub("LibClassicHealComm-1.0", true)
         
         libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted", 
             function(event, casterGUID, spellID, healType, endTime, ...) 
@@ -5495,6 +5497,12 @@ end
 function HealBot_UnRegister_IncHeals()
     if HEALBOT_GAME_VERSION>3 then
         HealBot:UnregisterEvent("UNIT_HEAL_PREDICTION")
+    else
+        libCHC.UnregisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted")
+        libCHC.UnregisterCallback(HEALBOT_HEALBOT, "HealComm_HealUpdated")
+        libCHC.UnregisterCallback(HEALBOT_HEALBOT, "HealComm_HealDelayed")
+        libCHC.UnregisterCallback(HEALBOT_HEALBOT, "HealComm_HealStopped")
+        --libCHC.UnregisterCallback(HEALBOT_HEALBOT, "HealComm_ABSORB-EVENT")
     end
     HealBot_IncHeals_ClearAll()
   --HealBot_setCall("HealBot_UnRegister_IncHeals")
@@ -5529,7 +5537,7 @@ function HealBot_UnRegister_Mana()
 end
 
 function HealBot_SetTankUnit(unit)
-    if not UnitExists(HealBot_luVars["TankUnit"]) or (not UnitIsUnit(unit, HealBot_luVars["TankUnit"]) and UnitGroupRolesAssigned(HealBot_luVars["TankUnit"])~="TANK") then
+    if not HealBot_luVars["TankUnit"] or not UnitIsUnit(unit, HealBot_luVars["TankUnit"]) then
         HealBot_luVars["TankUnit"]=unit
     end
   --HealBot_setCall("HealBot_SetTankUnit")
@@ -5569,13 +5577,20 @@ function HealBot_CalcThreat(unit)
             eUnit="boss2"
         end
     end
-    if HEALBOT_GAME_VERSION>3 then
-        if eUnit then
+    if eUnit then
+        if HEALBOT_GAME_VERSION>3 then
             _, _, z, _, _ = UnitDetailedThreatSituation(unit, eUnit)
-            z=floor(z or 0)
             y = UnitThreatSituation(unit, eUnit)
-        elseif z==0 then
+        else
+            _, _, z, _, _ = libCTM:UnitDetailedThreatSituation(unit, eUnit)
+            y = libCTM:UnitThreatSituation(unit, eUnit)
+        end
+        z=floor(z or 0)
+    elseif z==0 then
+        if HEALBOT_GAME_VERSION>3 then
             y = UnitThreatSituation(unit)
+        else
+            y = libCTM:UnitThreatSituation(unit, eUnit)
         end
     end
     if not y then y=0 end
@@ -5819,7 +5834,7 @@ end
 
 function HealBot_OnEvent_PlayerRegenDisabled()
     HealBot_Data["UILOCK"]=true
-    HealBot_luVars["DelayLockdownCheck"]=GetTime()+3
+    HealBot_luVars["DelayLockdownCheck"]=TimeNow+15
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerRD")      
         HealBot_luVars["SoftResetAfterCombat"]=true
@@ -5856,6 +5871,9 @@ function HealBot_OnEvent_PlayerRegenDisabled()
         end
         if xButton.aura.debuff.name and not HealBot_Config_Cures.DebuffWatchInCombat then
             HealBot_ClearDebuff(xButton)
+        end
+        if xButton.aura.buff.name and not HealBot_Config_Buffs.BuffWatchInCombat then
+            HealBot_ClearBuff(xButton)
         end
     end
     if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
