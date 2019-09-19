@@ -2239,8 +2239,6 @@ local function HealBot_Panel_PlayersChanged()
         HealBot_cpName[x]=nil
     end 
 
-    HealBot_SetTankUnit("x")
-
     i[1]=0
     i[2]=0
     i[3]=0
@@ -2302,6 +2300,7 @@ local function HealBot_Panel_PlayersChanged()
         HealBot_cpOn=true
     else
         HealBot_cpOn=false
+        local tUnit="x"
         if nraid>0 then
             local xUnit,xGUID,combatRole,role,online,subgroup=nil,nil,nil,nil,nil,nil
             for j=1,nraid do
@@ -2325,7 +2324,7 @@ local function HealBot_Panel_PlayersChanged()
                     if aRole=="TANK" then
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
                         HealBot_MainTanks[xGUID]=xUnit
-                        HealBot_SetTankUnit(xUnit)
+                        tUnit=xUnit
                     elseif aRole=="HEALER" then
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_HEALER]
                         HealBot_MainHealers[xGUID]=xUnit
@@ -2353,7 +2352,7 @@ local function HealBot_Panel_PlayersChanged()
                     if aRole=="TANK" then
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
                         HealBot_MainTanks[xGUID]=xUnit
-                        HealBot_SetTankUnit(xUnit)
+                        tUnit=xUnit
                     elseif aRole=="HEALER" then
                         HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_HEALER]
                         HealBot_MainHealers[xGUID]=xUnit
@@ -2373,14 +2372,17 @@ local function HealBot_Panel_PlayersChanged()
             local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
             if UnitExists(xUnit) then  
                 HealBot_MainTanks[xGUID]=xUnit
+                tUnit=xUnit
             end
         end)
         for xGUID,_ in pairs(HealBot_Globals.HealBot_PermPrivateTanks) do
             local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
             if UnitExists(xUnit) then  
                 HealBot_MainTanks[xGUID]=xUnit
+                tUnit=xUnit
             end
         end
+        HealBot_SetTankUnit(tUnit)
         table.foreach(HealBot_MyPrivateHealers, function (index,xGUID)
             local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
             if UnitExists(xUnit) then  

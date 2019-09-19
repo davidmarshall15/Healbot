@@ -79,7 +79,7 @@ HealBot_luVars["SoftResetAfterCombat"]=false
 HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
 HealBot_luVars["Timer8000"]=0
-HealBot_luVars["TankUnit"]=nil
+HealBot_luVars["TankUnit"]="x"
 HealBot_luVars["HealBot_Refresh"]=TimeNow
 HealBot_luVars["healthFactor"]=1
 HealBot_luVars["targetSpec"]=" "
@@ -5537,9 +5537,7 @@ function HealBot_UnRegister_Mana()
 end
 
 function HealBot_SetTankUnit(unit)
-    if not HealBot_luVars["TankUnit"] or not UnitIsUnit(unit, HealBot_luVars["TankUnit"]) then
-        HealBot_luVars["TankUnit"]=unit
-    end
+    HealBot_luVars["TankUnit"]=unit
   --HealBot_setCall("HealBot_SetTankUnit")
 end
 
