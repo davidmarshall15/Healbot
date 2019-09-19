@@ -3166,7 +3166,7 @@ function HealBot_Options_DisableCheck()
         if z==0 then 
             HealBot_Config.DisabledNow=0
             HealBot_setOptions_Timer(9999)
-            HealBot_OnEvent_TalentsChanged(nil)
+            HealBot_setOptions_Timer(200)
         end
         HealBot_setOptions_Timer(500+z)
         if z==1 then 
@@ -10450,17 +10450,12 @@ function HealBot_GuessName()
     if HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell] and (type(HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]) == "table") then
         local tGUID=HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]
         for uGUID,_ in pairs(tGUID) do
-            if HealBot_UnitData[uGUID] then
+            local xUnit=HealBot_Panel_RaidUnit(myGUID)
+            if xUnit then
                 if gName then
-                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
-                    if xUnit then
-                        gName=gName..","..HealBot_Panel_UnitName(xUnit)
-                    end
+                    gName=gName..","..HealBot_Panel_UnitName(xUnit)
                 else
-                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
-                    if xUnit then
-                        gName=HealBot_Panel_UnitName(xUnit)
-                    end
+                    gName=HealBot_Panel_UnitName(xUnit)
                 end
             end
         end
@@ -10473,18 +10468,13 @@ function HealBot_GuessName()
         local myTargets=HealBot_GetMyHealTargets()
         local x=true
         table.foreach(myTargets, function (i,myGUID)
-            if HealBot_UnitData[myGUID] then
+            local xUnit=HealBot_Panel_RaidUnit(myGUID)
+            if xUnit then
                 if gName and x then 
-                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
-                    if xUnit then
-                        gName=gName..","..HealBot_Panel_UnitName(xUnit)
-                    end
+                    gName=gName..","..HealBot_Panel_UnitName(xUnit)
                     x=nil
                 elseif x then
-                    local xUnit=HealBot_Panel_RaidUnit(myGUID)
-                    if xUnit then
-                        gName=HealBot_Panel_UnitName(xUnit)
-                    end
+                    gName=HealBot_Panel_UnitName(xUnit)
                 end
             end  
         end)
@@ -10507,16 +10497,18 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
         local tGUID=HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]
         if tGUID and type(tGUID)=="table" then
             for uGUID,_ in pairs(tGUID) do
-                if HealBot_UnitData[uGUID] and HealBot_UnitData[uGUID]["UNIT"] then
-                    xButton=HealBot_Unit_Button[HealBot_UnitData[uGUID]["UNIT"]]
+                local xUnit=HealBot_Panel_RaidUnit(uGUID)
+                if xUnit then
+                    xButton=HealBot_Unit_Button[xUnit]
                     if xButton and xButton.aura.buff.name==BuffWatchSpell then
                         HealBot_ClearBuff(xButton)
                     end
                 end
             end
         elseif tGUID then
-            if HealBot_UnitData[tGUID] and HealBot_UnitData[tGUID]["UNIT"] then
-                xButton=HealBot_Unit_Button[HealBot_UnitData[tGUID]["UNIT"]]
+            local xUnit=HealBot_Panel_RaidUnit(uGUID)
+            if xUnit then
+                xButton=HealBot_Unit_Button[xUnit]
                 if xButton and xButton.aura.buff.name==BuffWatchSpell then
                     HealBot_ClearBuff(xButton)
                 end
@@ -10547,7 +10539,8 @@ function HealBot_Options_Set_BuffWatchGUID(unitName)
     HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]={}
     
     for _,uGUID in pairs(tGUID) do
-        if HealBot_UnitData[uGUID] then
+        local xUnit=HealBot_Panel_RaidUnit(uGUID)
+        if xUnit then
             HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell][uGUID]=uGUID 
             HealBot_Queue_MyBuffsCheck(uGUID)
         end

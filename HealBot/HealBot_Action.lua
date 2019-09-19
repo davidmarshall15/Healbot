@@ -1749,18 +1749,13 @@ function HealBot_Action_setNameText(button)
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==2 and UnitClass(button.unit) then
             local clTxt=UnitClass(button.unit)
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-                local hbRole=UnitGroupRolesAssigned(button.unit)
-                if hbRole=="NONE" and HealBot_UnitData[button.guid] then
-                    hbRole=HealBot_UnitData[button.guid]["ROLE"]
-                end
+                local hbRole=HealBot_Panel_UnitRole(button.unit)
                 if hbRole=="DAMAGER" then
                     clTxt=HEALBOT_WORD_DAMAGER
                 elseif hbRole=="HEALER" then
                     clTxt=HEALBOT_WORD_HEALER
                 elseif hbRole=="TANK" then
                     clTxt=HEALBOT_WORD_TANK
-                elseif hbRole=="LEADER" then
-                    clTxt=HEALBOT_WORD_LEADER
                 else
                     clTxt=UnitClass(button.unit)
                 end
@@ -2807,6 +2802,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.text.health="100"
         ghb.text.name=" "
         ghb.text.tag=""
+        ghb.spec=" "
         local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
         local bar2 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar2"] 
         local bar3 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar3"] 
@@ -3467,17 +3463,6 @@ local function HealBot_Action_SetAllButtonAttribs(button,status)
     end
 end
 
-function HealBot_Action_SetUnitData(hbGUID, unit)
-    HealBot_UnitData[hbGUID]={}
-    HealBot_UnitData[hbGUID]["SPEC"] = " "
-    HealBot_UnitData[hbGUID]["UNIT"]=unit
-    if HEALBOT_GAME_VERSION>3 then
-        HealBot_UnitData[hbGUID]["ROLE"] = UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
-    else
-        HealBot_UnitData[hbGUID]["ROLE"] = HEALBOT_WORDS_UNKNOWN
-    end
-end
-
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
     local shb=nil
     if hbGUID then
@@ -3500,27 +3485,18 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_ResetBarSkinDone[shb.frame][shb.id] = nil
             HealBot_initSkin[shb.frame][shb.id]=nil
         end
-        if not HealBot_UnitData[hbGUID] then
-            HealBot_Action_SetUnitData(hbGUID, unit)
-            if not HealBot_UnitData[unit] then HealBot_UnitData[unit]={} end
-            if UnitExists(unit) then
-                if UnitIsFriend("player",unit) then 
-                    HealBot_CheckPlayerMana(hbGUID, unit) 
-                end
-            end
-            shb.reset=true
-        end
         if shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
             shb.reset=false
             shb.unit=unit
             shb.guid=hbGUID
-            HealBot_UnitData[hbGUID]["UNIT"]=unit
             if unitType==9 then
                 HealBot_Enemy_Button[unit]=shb
             elseif unitType>1 and unitType<4 then
                 HealBot_Pet_Button[unit]=shb
+                HealBot_setUnitGUID(hbGUID, unit)
             else
                 HealBot_Unit_Button[unit]=shb
+                if unitType==1 then HealBot_setUnitGUID(hbGUID, unit) end
             end
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
             shb.checks.timed=GetTime() + HealBot_Action_luVars["updateDelay"]
@@ -3540,12 +3516,18 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_Action_setNameText(shb)
             HealBot_Action_HBText(shb)
             HealBot_Action_CheckUnitLowMana(shb)
-            if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
-                shb.update.roleicon=true
-            end
             shb.update.unit=true
             shb.status.update=true
             shb.status.range=-2
+            if UnitExists(unit) then
+                if UnitIsFriend("player",unit) then 
+                    HealBot_CheckPlayerMana(shb) 
+                end
+            end
+        end
+        if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
+            shb.update.roleicon=true
+            shb.status.update=true
         end
         if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
