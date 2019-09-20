@@ -5554,6 +5554,9 @@ function HealBot_UnRegister_Mana()
 end
 
 function HealBot_SetTankUnit(unit)
+    if HealBot_luVars["TankUnit"]~=unit then
+        HealBot_AddDebug("Set tank to "..unit)
+    end
     HealBot_luVars["TankUnit"]=unit
   --HealBot_setCall("HealBot_SetTankUnit")
 end

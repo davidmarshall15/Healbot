@@ -2204,6 +2204,22 @@ local function HealBot_Panel_EnemyChanged()
     end
 end
 
+local function HealBot_Panel_Role(unit,guid)
+    local aRole = HealBot_Panel_UnitRole(unit)
+    if aRole=="TANK" then
+        HealBot_unitRole[guid]=hbRole[HEALBOT_MAINTANK]
+        HealBot_MainTanks[guid]=unit
+        HealBot_SetTankUnit(unit)
+    elseif aRole=="HEALER" then
+        HealBot_unitRole[guid]=hbRole[HEALBOT_WORD_HEALER]
+        HealBot_MainHealers[guid]=unit
+    elseif aRole=="DAMAGER" then
+        HealBot_unitRole[guid]=hbRole[HEALBOT_WORD_DPS]
+    else
+        HealBot_unitRole[guid]=hbRole[HEALBOT_WORDS_UNKNOWN]
+    end
+end
+
 local function HealBot_Panel_PlayersChanged()
     hbBarsPerFrame[1]=0
     hbBarsPerFrame[2]=0
@@ -2330,38 +2346,27 @@ local function HealBot_Panel_PlayersChanged()
         HealBot_cpOn=true
     else
         HealBot_cpOn=false
-        local tUnit="x"
-        if nraid>0 then
+        if HealBot_Config.DisabledNow==1 then
+            local xUnit="player"
+            local xGUID=HealBot_UnitGUID(xUnit)
+            HealBot_Panel_Role(xUnit,xGUID)
+        elseif nraid>0 then
             local xUnit,xGUID,combatRole,role,online,subgroup=nil,nil,nil,nil,nil,nil
             for j=1,nraid do
                 xUnit = "raid"..j;
                 if UnitExists(xUnit) then
-					local aRole=HealBot_Panel_UnitRole(xUnit)
+					local aRole=nil
                     xGUID=UnitGUID(xUnit)
                     if xGUID==HealBot_Data["PGUID"] then xUnit="player" end
                     _, _, subgroup, _, _, _, _, online, _, role, _, combatRole = GetRaidRosterInfo(j);
                     HealBot_UnitGroups[xUnit]=subgroup
-                    if not aRole then
-                        if combatRole and (combatRole=="DAMAGER" or combatRole=="HEALER" or combatRole=="TANK") then
-                            aRole = combatRole
-                        elseif role and (string.lower(role)=="mainassist" or string.lower(role)=="maintank") then
-                            aRole="TANK"
-                        else
-                            aRole=HEALBOT_WORDS_UNKNOWN
-                        end
+                    if combatRole and (combatRole=="DAMAGER" or combatRole=="HEALER" or combatRole=="TANK") then
+                        aRole = combatRole
+                    elseif role and (string.lower(role)=="mainassist" or string.lower(role)=="maintank") then
+                        aRole="TANK"
                     end
-                    if aRole=="TANK" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
-                        HealBot_MainTanks[xGUID]=xUnit
-                        tUnit=xUnit
-                    elseif aRole=="HEALER" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_HEALER]
-                        HealBot_MainHealers[xGUID]=xUnit
-                    elseif aRole=="DAMAGER" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
-                    else
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
-                        aRole=nil
+                    if not aRole then
+                        HealBot_Panel_Role(xUnit,xGUID)
                     end
                 end
             end
@@ -2371,50 +2376,11 @@ local function HealBot_Panel_PlayersChanged()
                 if UnitExists(xUnit) then
                     local xGUID=HealBot_UnitGUID(xUnit)
                     HealBot_UnitGroups[xUnit]=1
-                    local aRole = HealBot_Panel_UnitRole(xUnit)
-                    if aRole=="TANK" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_MAINTANK]
-                        HealBot_MainTanks[xGUID]=xUnit
-                        tUnit=xUnit
-                    elseif aRole=="HEALER" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_HEALER]
-                        HealBot_MainHealers[xGUID]=xUnit
-                    elseif aRole=="DAMAGER" then
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORD_DPS]
-                    else
-                        HealBot_unitRole[xGUID]=hbRole[HEALBOT_WORDS_UNKNOWN]
-                        aRole=nil
-                    end
+                    HealBot_Panel_Role(xUnit,xGUID)
                 end
             end
         end
-      --  table.foreach(HealBot_MyPrivateTanks, function (index,xGUID)
-      --      local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
-      --      if UnitExists(xUnit) then  
-      --          HealBot_MainTanks[xGUID]=xUnit
-      --          tUnit=xUnit
-      --      end
-      --  end)
-      --  for xGUID,_ in pairs(HealBot_Globals.HealBot_PermPrivateTanks) do
-      --      local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
-      --      if UnitExists(xUnit) then  
-      --          HealBot_MainTanks[xGUID]=xUnit
-      --          tUnit=xUnit
-      --      end
-      --  end
-        HealBot_SetTankUnit(tUnit)
-        table.foreach(HealBot_MyPrivateHealers, function (index,xGUID)
-            local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
-            if UnitExists(xUnit) then  
-                HealBot_MainHealers[xGUID]=xUnit
-            end
-        end)
-        for xGUID,_ in pairs(HealBot_Globals.HealBot_PermPrivateHealers) do
-            local xUnit=HealBot_Panel_RaidUnit(xGUID) or "unknown"
-            if UnitExists(xUnit) then  
-                HealBot_MainHealers[xGUID]=xUnit
-            end
-        end
+
         local PetsWithPlayers=false
         if HealBot_Config.DisabledNow==1 then
             hbCurrentFrame=1
