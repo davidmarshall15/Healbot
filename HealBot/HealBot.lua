@@ -3713,7 +3713,7 @@ end
 local function HealBot_OnEvent_UnitThreat(button)
     if not UnitIsDeadOrGhost("player") then
         if UnitAffectingCombat(button.unit) then
-            if not HealBot_Data["UILOCK"] and HealBot_Globals.EnAutoCombat and UnitIsVisible(button.unit) then
+            if not HealBot_Data["UILOCK"] and HealBot_knownUnitGUID[button.guid] and HealBot_Globals.EnAutoCombat and UnitIsVisible(button.unit) then
                 local z, y=HealBot_CalcThreat(button.unit)
                 local x=y+z
                 if x>0 then 
@@ -5554,9 +5554,6 @@ function HealBot_UnRegister_Mana()
 end
 
 function HealBot_SetTankUnit(unit)
-    if HealBot_luVars["TankUnit"]~=unit then
-        HealBot_AddDebug("Set tank to "..unit)
-    end
     HealBot_luVars["TankUnit"]=unit
   --HealBot_setCall("HealBot_SetTankUnit")
 end

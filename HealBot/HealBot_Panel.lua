@@ -2346,6 +2346,7 @@ local function HealBot_Panel_PlayersChanged()
         HealBot_cpOn=true
     else
         HealBot_cpOn=false
+        HealBot_SetTankUnit("x")
         if HealBot_Config.DisabledNow==1 then
             local xUnit="player"
             local xGUID=HealBot_UnitGUID(xUnit)

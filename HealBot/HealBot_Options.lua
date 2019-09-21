@@ -9975,7 +9975,7 @@ local function HealBot_Options_DoDebuff_Reset()
     
     for k=1,3 do
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
-            local sName = HealBot_Spell_Names[DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]];
+            local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
             if HealBot_Debuff_Types[sName] then
                 table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
 

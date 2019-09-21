@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.8.b2";
+﻿HEALBOT_VERSION    = "8.2.0.8.b3";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.4.b2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.4.b3" end
 
 function HealBot_globalVars()
     --Consumables
@@ -583,27 +583,27 @@ function HealBot_globalVars()
     HEALBOT_REVIVE                          = 50769 --GetSpellInfo(50769) or "--Revive";
     
     --Cure Spells
-    HEALBOT_BODY_AND_SOUL                   = 64127 --GetSpellInfo(64127) or "--Body and Soul";
-    HEALBOT_CLEANSE                         = 4987 --GetSpellInfo(4987) or "--Cleanse";
-    HEALBOT_CLEANSE_SPIRIT                  = 51886 --GetSpellInfo(51886) or "--Cleanse Spirit";
-    HEALBOT_CLEANSE_TOXIN                   = 213644 --GetSpellInfo(213644) or "--Cleanse Toxins";
-    HBC_SHAMAN_CURE_DISEASE                 = 2870
-    HBC_PRIEST_CURE_DISEASE                 = 528
-    HBC_PRIEST_ABOLISH_DISEASE              = 552
-    HBC_DISPELL_MAGIC                       = 527
-    HBC_SHAMAN_CURE_POISON                  = 526
-    HBC_DRUID_CURE_POISON                   = 8946
-    HBC_DRUID_ABOLISH_POISON                = 2893
-    HEALBOT_DETOX                           = 115450 --GetSpellInfo(115450) or "--Detox";
-    HEALBOT_NATURES_CURE                    = 88423 --GetSpellInfo(88423) or "--Nature's Cure";
-    HEALBOT_PURIFY                          = 527 --GetSpellInfo(527) or "--Purify";
-    HBC_PURIFY                              = 1152
-    HEALBOT_PURIFY_SPIRIT                   = 77130 --GetSpellInfo(77130) or "--Purify Spirit";
-    HEALBOT_PURIFY_DISEASE                  = 213634 --GetSpellInfo(213634) or "--Purify Disease";
-    HEALBOT_MASS_DISPEL                     = 32375 --GetSpellInfo(32375) or "--Mass Dispel";
-    HEALBOT_REMOVE_CURSE                    = 475 --GetSpellInfo(475) or "--Remove Curse";
-    HEALBOT_REMOVE_CORRUPTION               = 2782 --GetSpellInfo(2782) or "--Remove Corruption";
-    HEALBOT_SACRED_CLEANSING                = 53551 --GetSpellInfo(53551) or "--Sacred Cleansing";
+    HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or 64127
+    HEALBOT_CLEANSE                         = GetSpellInfo(4987) or 4987
+    HEALBOT_CLEANSE_SPIRIT                  = GetSpellInfo(51886) or 51886
+    HEALBOT_CLEANSE_TOXIN                   = GetSpellInfo(213644) or 213644
+    HBC_SHAMAN_CURE_DISEASE                 = GetSpellInfo(2870) or 2870
+    HBC_PRIEST_CURE_DISEASE                 = GetSpellInfo(528) or 528
+    HBC_PRIEST_ABOLISH_DISEASE              = GetSpellInfo(552) or 552
+    HBC_DISPELL_MAGIC                       = GetSpellInfo(527) or 527
+    HBC_SHAMAN_CURE_POISON                  = GetSpellInfo(526) or 526
+    HBC_DRUID_CURE_POISON                   = GetSpellInfo(8946) or 8946
+    HBC_DRUID_ABOLISH_POISON                = GetSpellInfo(2893) or 2893
+    HEALBOT_DETOX                           = GetSpellInfo(115450) or 115450
+    HEALBOT_NATURES_CURE                    = GetSpellInfo(88423) or 88423
+    HEALBOT_PURIFY                          = GetSpellInfo(527) or 527
+    HBC_PURIFY                              = GetSpellInfo(1152) or 1152
+    HEALBOT_PURIFY_SPIRIT                   = GetSpellInfo(77130) or 77130
+    HEALBOT_PURIFY_DISEASE                  = GetSpellInfo(213634) or 213634
+    HEALBOT_MASS_DISPEL                     = GetSpellInfo(32375) or 32375
+    HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or 475
+    HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or 2782
+    HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or 53551
     
     --[[END OF SPELL LIST]]--
 
