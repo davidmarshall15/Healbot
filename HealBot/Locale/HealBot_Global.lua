@@ -591,6 +591,7 @@ function HealBot_globalVars()
     HBC_PRIEST_CURE_DISEASE                 = 528
     HBC_PRIEST_ABOLISH_DISEASE              = 552
     HBC_DISPELL_MAGIC                       = 527
+    HBC_DISPELL_MAGIC_RANK_2                = 988
     HBC_SHAMAN_CURE_POISON                  = 526
     HBC_DRUID_CURE_POISON                   = 8946
     HBC_DRUID_ABOLISH_POISON                = 2893

@@ -945,7 +945,7 @@ function HealBot_Options_GetDebuffSpells_List(class)
           ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
           ["MONK"] = {},
           ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
-          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
+          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_DISPELL_MAGIC_RANK_2, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
           ["ROGU"] = {},
           ["SHAM"] = {HBC_SHAMAN_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
           ["WARL"] = {},
