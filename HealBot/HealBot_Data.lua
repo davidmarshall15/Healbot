@@ -404,6 +404,8 @@ function HealBot_Data_InitVars()
             ["MAGE"] = {
                 [HEALBOT_EVOCATION]=2,
                 [HEALBOT_ICE_BARRIER]=4,
+                [HBC_DAMPEN_MAGIC]=4,
+                [HBC_FROST_ARMOR]=4,
                 [HEALBOT_INCANTERS_WARD]=2,
                 [HEALBOT_ICE_BLOCK]=4,
                 [HEALBOT_BLAZING_BARRIER]=4,

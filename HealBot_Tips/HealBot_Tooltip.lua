@@ -483,7 +483,7 @@ local function HealBot_Action_DoRefreshTooltip()
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
     xUnit=HealBot_Data["TIPUNIT"]
-    xGUID=HealBot_UnitGUID(xUnit)
+    xGUID=UnitGUID(xUnit)
     xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit] or HealBot_Pet_Button[xUnit]
     if not xGUID or not xButton then return end
     local uName=HealBot_GetUnitName(xUnit, xGUID)

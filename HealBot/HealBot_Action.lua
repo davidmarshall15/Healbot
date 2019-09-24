@@ -3108,7 +3108,7 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         info.hasArrow = false; 
         info.notCheckable = true;
         info.text = HEALBOT_PANEL_BLACKLIST
-        info.func = function() HealBot_Panel_AddBlackList(HealBot_UnitGUID(self.unit)); end
+        info.func = function() HealBot_Panel_AddBlackList(self.unit); end
         UIDropDownMenu_AddButton(info, 1);
         
         info = UIDropDownMenu_CreateInfo();
@@ -3120,24 +3120,24 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         info = UIDropDownMenu_CreateInfo();
         info.hasArrow = false; 
         info.notCheckable = true;
-        if HealBot_Globals.HealBot_customPermUserName[HealBot_UnitGUID(self.unit)] then
+        if HealBot_Globals.HealBot_customPermUserName[UnitGUID(self.unit)] then
             info.text = HEALBOT_WORDS_REMOVEPERMCUSTOMNAME
-            info.func = function() HealBot_Action_DelCustomName(HealBot_UnitGUID(self.unit), false, true); end;
+            info.func = function() HealBot_Action_DelCustomName(UnitGUID(self.unit), false, true); end;
         else
             info.text = HEALBOT_WORDS_ADDPERMCUSTOMNAME
-            info.func = function() HealBot_Action_GetCustomNameDialog(HealBot_UnitGUID(self.unit), true, true); end;
+            info.func = function() HealBot_Action_GetCustomNameDialog(UnitGUID(self.unit), true, true); end;
         end
         UIDropDownMenu_AddButton(info, 2);
     
         info = UIDropDownMenu_CreateInfo();
         info.hasArrow = false; 
         info.notCheckable = true;
-        if HealBot_customTempUserName[HealBot_UnitGUID(self.unit)] then
+        if HealBot_customTempUserName[UnitGUID(self.unit)] then
             info.text = HEALBOT_WORDS_REMOVETEMPCUSTOMNAME
-            info.func = function() HealBot_Action_DelCustomName(HealBot_UnitGUID(self.unit), false, false); end;
+            info.func = function() HealBot_Action_DelCustomName(UnitGUID(self.unit), false, false); end;
         else
             info.text = HEALBOT_WORDS_ADDTEMPCUSTOMNAME
-            info.func = function() HealBot_Action_GetCustomNameDialog(HealBot_UnitGUID(self.unit), true, false); end;
+            info.func = function() HealBot_Action_GetCustomNameDialog(UnitGUID(self.unit), true, false); end;
         end
         UIDropDownMenu_AddButton(info, 2);
     elseif menuList=="myHeals" then        
@@ -3353,7 +3353,7 @@ local function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
         elseif strlower(sName)==strlower(HEALBOT_MENU) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "togglemenu")
-        elseif strlower(sName)==strlower(HEALBOT_HBMENU) and HealBot_UnitGUID(button.unit) then
+        elseif strlower(sName)==strlower(HEALBOT_HBMENU) and UnitGUID(button.unit) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "showhbmenu")
             showHBmenu = function()
@@ -3622,7 +3622,7 @@ function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     local dbUnit=dg.unit or "N"
     local dbGUID=dg.guid or "0"
-    if not UnitExists(dbUnit) or dbGUID~=HealBot_UnitGUID(dbUnit) then
+    if not UnitExists(dbUnit) or dbGUID~=UnitGUID(dbUnit) then
         HealBot_mark2clearGUID(dbGUID)
     end
     HealBot_HoT_RemoveIconButton(dg,true)
@@ -4585,7 +4585,7 @@ function HealBot_Action_OnDragStart(self, hbCurFrame)
 end
 
 function HealBot_Action_Toggle_Enabled(button)
-    local xGUID=HealBot_UnitGUID(button.unit)
+    local xGUID=UnitGUID(button.unit)
     if HealBot_AlwaysEnabled[button.guid] then
         HealBot_AlwaysEnabled[button.guid]=nil
     else

@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.0.8.b3";
+﻿HEALBOT_VERSION    = "8.2.0.9.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.4.b3" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.5.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -332,17 +332,19 @@ function HealBot_globalVars()
     
 	--Mage
     HEALBOT_ARCANE_BRILLIANCE               = 1459 --GetSpellInfo(1459) or "--Arcane Brilliance";
+    HEALBOT_ARCANE_POWER                    = 12042 --GetSpellInfo(12042) or "--Arcane Power"
+    HEALBOT_BLAZING_BARRIER                 = 235313 --GetSpellInfo(235313) or "--Blazing Barrier"
     HEALBOT_DALARAN_BRILLIANCE              = 61316 --GetSpellInfo(61316) or "--Dalaran Brilliance";
+    HBC_DAMPEN_MAGIC                        = 604
     HEALBOT_EVOCATION                       = 12051 --GetSpellInfo(12051) or "--Evocation";
     HEALBOT_FOCUS_MAGIC                     = 54646 --GetSpellInfo(54646) or "--Focus Magic";
+    HBC_FROST_ARMOR                         = 168
     HEALBOT_ICE_BARRIER                     = 11426 --GetSpellInfo(11426) or "--Ice Barrier"
-    HEALBOT_INCANTERS_WARD                  = 116267 --GetSpellInfo(1463) or "--Incanter's Ward"
     HEALBOT_ICE_BLOCK                       = 45438 --GetSpellInfo(45438) or "--Ice Block"
     HEALBOT_ICE_WARD                        = 111264 --GetSpellInfo(111264) or "--Ice Ward"
+    HEALBOT_INCANTERS_WARD                  = 116267 --GetSpellInfo(1463) or "--Incanter's Ward"
     HEALBOT_MAGE_WARD                       = 543 --GetSpellInfo(543) or "--Mage Ward";
-    HEALBOT_BLAZING_BARRIER                 = 235313 --GetSpellInfo(235313) or "--Blazing Barrier"
     HEALBOT_PRISMATIC_BARRIER               = 235450 --GetSpellInfo(235450) or "--Prismatic Barrier"
-    HEALBOT_ARCANE_POWER                    = 12042 --GetSpellInfo(12042) or "--Arcane Power"
     HEALBOT_SLOW_FALL                       = 130 --GetSpellInfo(130) or "--Slow Fall"
 
 	--Paladin
@@ -354,6 +356,7 @@ function HealBot_globalVars()
     HEALBOT_TYRS_DELIVERANCE                = 200654 --GetSpellInfo(200654) or "--Tyr's Deliverance";
     HEALBOT_BLESSING_OF_KINGS               = 203538 --GetSpellInfo(203538) or "--Greater Blessing of Kings";
     HBC_BLESSING_OF_KINGS                   = 20217
+    HBC_BLESSING_OF_LIGHT                   = 19977
     HEALBOT_BLESSING_OF_MIGHT               = 203528 --GetSpellInfo(203528) or "--Greater Blessing of Might";
     HBC_BLESSING_OF_MIGHT                   = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
     HEALBOT_BLESSING_OF_WISDOM              = 203539 --GetSpellInfo(203539) or "--Greater Blessing of Wisdom";

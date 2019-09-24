@@ -527,7 +527,7 @@
                     </Anchors>
                     <Layers>
                       <Layer level="OVERLAY">
-                        <FontString name="HealBot_Contents_ButtonT309Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_SKINS_GENERAL">
+                        <FontString name="HealBot_Contents_ButtonT309Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_SKINSF_GENERAL">
                           <Anchors>
                             <Anchor point="LEFT" relativeTo="HealBot_Contents_Button309" relativePoint="LEFT">
                               <Offset>
@@ -2664,9 +2664,23 @@
                       <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_EFClassDruid" inherits="SendMailRadioButtonTemplate" id="1">
+                  <CheckButton name="HealBot_Options_EFClassDemonHunter" inherits="SendMailRadioButtonTemplate" id="1">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDeathKnight" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="120" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_EFClassDruid" inherits="SendMailRadioButtonTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDemonHunter" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="120" y="0"/>
                         </Offset>
@@ -2694,20 +2708,6 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassMage" inherits="SendMailRadioButtonTemplate" id="3">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassHunter" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="120" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_EFClassMonk" inherits="SendMailRadioButtonTemplate" id="11">
-                    <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDeathKnight" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-7"/>
@@ -2720,11 +2720,25 @@
                       <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_EFClassPaladin" inherits="SendMailRadioButtonTemplate" id="4">
+                  <CheckButton name="HealBot_Options_EFClassMonk" inherits="SendMailRadioButtonTemplate" id="11">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassMonk" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassMage" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="120" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_EFClass_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("CLASSTYPES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("CLASSTYPES",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_EFClassPaladin" inherits="SendMailRadioButtonTemplate" id="4">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassDruid" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-7"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2750,9 +2764,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_EFClassRogue" inherits="SendMailRadioButtonTemplate" id="6">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassPriest" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EFClassMage" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="120" y="0"/>
+                          <AbsDimension x="0" y="-7"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
