@@ -124,6 +124,7 @@ function HealBot_Options_InitVars()
             [HBC_SHAMAN_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_ABOLISH_POISON] = {HEALBOT_POISON_en},
+            [HBC_DRUID_REMOVE_CURSE] = {HEALBOT_CURSE_en},
             [HBC_DISPELL_MAGIC] = {HEALBOT_MAGIC_en},
             [HBC_SHAMAN_CURE_DISEASE] = {HEALBOT_DISEASE_en},
             [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
@@ -845,6 +846,8 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="DRUI" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_MARK_OF_THE_WILD,
+            HBC_GIFT_OF_THE_WILD,
+            HBC_OMEN_OF_CLARITY,
             HEALBOT_BARKSKIN,
             HEALBOT_IRONBARK,
             HBC_THORNS,
@@ -867,8 +870,10 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
     elseif tClass=="MAGE" then
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_ARCANE_BRILLIANCE,
+            HBC_ARCANE_BRILLIANCE,
             HEALBOT_DALARAN_BRILLIANCE,
             HEALBOT_MAGE_WARD,
+            HBC_MAGE_ARMOR,
             HEALBOT_BLAZING_BARRIER,
             HEALBOT_PRISMATIC_BARRIER,
             HEALBOT_ARCANE_POWER,
@@ -892,6 +897,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
             HBC_BLESSING_OF_MIGHT,
+            HBC_BLESSING_OF_SANCTUARY,
             HEALBOT_BLESSING_OF_KINGS,
             HBC_BLESSING_OF_KINGS,
             HBC_BLESSING_OF_LIGHT,
@@ -931,6 +937,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HBC_TOUCH_OF_WEAKNESS,
             HBC_DIVINE_SPIRIT,
             HBC_PRAYER_OF_SHADOW_PROTECTION,
+            HBC_PRAYER_OF_SPIRIT,
             HBC_INNER_FIRE,
             HEALBOT_FEAR_WARD,
             HBC_SHADOWGUARD,
@@ -1002,7 +1009,7 @@ function HealBot_Options_GetDebuffSpells_List(class)
         HealBot_Debuff_Spells = {
           ["DEAT"] = {},
           ["DEMO"] = {}, -- Demon Hunter
-          ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON,},
+          ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON, HBC_DRUID_REMOVE_CURSE, },
           ["HUNT"] = {},
           ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
           ["MONK"] = {},
@@ -11053,10 +11060,6 @@ function HealBot_SetBuffBarColours()
 end
 --------------------------------------------------------------------------------
 
-function HealBot_Options_NotifyChan_OnTextChanged(self)
-    Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["CHAN"] = self:GetText()
-end
-
 function HealBot_Options_FrameAlias_AfterTextChange()
     HealBot_Options_InitSub(102)
     DoneInitTab[310]=nil
@@ -12606,7 +12609,6 @@ function HealBot_Options_InitSub1(subNo)
     elseif subNo==306 then
         if not DoneInitTab[306] then
             HealBot_Options_CastNotify_OnClick(nil,Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"])
-            HealBot_Options_NotifyChan:SetText(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["CHAN"])
             HealBot_Options_NotifyOtherMsg:SetText(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["MSG"])   
             HealBot_Options_CastNotifyResOnly:SetChecked(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"])
             HealBot_Options_SetText(HealBot_Options_CastNotifyResOnly,HEALBOT_OPTIONS_CASTNOTIFYRESONLY)

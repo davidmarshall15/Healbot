@@ -286,11 +286,17 @@ function HealBot_Action_SetrSpell()
                 x=sName
             end
         end
-        sName=HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD)
+        sName=HealBot_KnownSpell(HBC_GIFT_OF_THE_WILD)
         if sName then 
 			HealBot_RangeSpells["BUFF"]=sName
 			x=sName
-		end
+		else
+            sName=HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD)
+            if sName then 
+                HealBot_RangeSpells["BUFF"]=sName
+                x=sName
+            end
+        end
         sName=HealBot_KnownSpell(HEALBOT_REMOVE_CORRUPTION)
         if sName then 
 			HealBot_RangeSpells["CURE"]=sName
@@ -2786,7 +2792,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.aura.buff.id=0
         ghb.icon.buff.count=0
         ghb.aura.buff.priority=99
-        ghb.aura.buff.nextcheck=false
+        ghb.aura.buff.nextcheck=GetTime()+5
         ghb.aura.debuff.type=false
         ghb.aura.debuff.name=false
         ghb.aura.debuff.id=0

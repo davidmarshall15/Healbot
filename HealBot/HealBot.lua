@@ -337,7 +337,7 @@ function HealBot_AddChat(HBmsg)
 end
 
 function HealBot_AddDebug(HBmsg)
-    if HBmsg and (HealBot_SpamCut[HBmsg] or 0)<GetTime() then
+    if HealBot_Globals.DebugOut and HBmsg and (HealBot_SpamCut[HBmsg] or 0)<GetTime() then
         HealBot_SpamCut[HBmsg]=GetTime()+2
         HBmsg="["..date("%H:%M", time()).."] DEBUG: "..HBmsg;
         local unique=true;
@@ -522,7 +522,7 @@ end
 local function HealBot_UIMessage(msg)
     local hbDebugChan=HealBot_Comms_GetChan("HBmsg");
     if hbDebugChan then
-        SendChatMessage(msg , "CHANNEL", nil, hbDebugChan);
+        --SendChatMessage(msg , "CHANNEL", nil, hbDebugChan);
     else
         HealBot_AddChat(msg)
     end
@@ -688,8 +688,6 @@ local function HealBot_SlashCmd(cmd)
         else
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_OPTIONS_HIDERAIDFRAMES.." "..HEALBOT_WORD_DISABLE.." "..HEALBOT_WORD_ALWAYS)
         end
-	elseif (HBcmd=="debug") then
-		if CanInspect("target") then HealBot_TalentQuery("target") end
     elseif (HBcmd=="rld" and x) then
         if tonumber(x) and tonumber(x)>0 and tonumber(x)<=30 then
             HealBot_Globals.ResLagDuration=ceil(x)
@@ -755,6 +753,14 @@ local function HealBot_SlashCmd(cmd)
         else
             HealBot_Globals.Debug01=true
             HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned ON")
+        end
+    elseif (HBcmd=="debug") then
+        if HealBot_Globals.DebugOut then
+            HealBot_Globals.DebugOut=false
+            HealBot_AddChat("Debug OFF")
+        else
+            HealBot_Globals.DebugOut=true
+            HealBot_AddChat("Debug ON")
         end
     elseif (HBcmd=="zzz") then
         HealBot_AddDebug("heal in="..HealBot_Spell_IDs[HBC_HEAL].HealsIn)
@@ -2614,7 +2620,6 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]=30 end
     if Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]==nil then Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]=1 end
-    if Healbot_Config_Skins.Chat[SkinName]["CHAN"]==nil then Healbot_Config_Skins.Chat[SkinName]["CHAN"]="" end
     if Healbot_Config_Skins.Chat[SkinName]["MSG"]==nil then Healbot_Config_Skins.Chat[SkinName]["MSG"]=HEALBOT_NOTIFYOTHERMSG end
     if Healbot_Config_Skins.Chat[SkinName]["RESONLY"]==nil then Healbot_Config_Skins.Chat[SkinName]["RESONLY"]=true end
     if Healbot_Config_Skins.Chat[SkinName]["EOCOOM"]==nil then Healbot_Config_Skins.Chat[SkinName]["EOCOOM"]=false end
@@ -3001,6 +3006,12 @@ local function HealBot_OnEvent_VariablesLoaded(self)
         if HealBot_Data["PCLASSTRIM"]=="PRIE" then
             sName=GetSpellInfo(HBC_POWER_WORD_FORTITUDE)
             if sName then HealBot_classicBuffDuration[sName]=1800 end
+            sName=GetSpellInfo(HBC_DIVINE_SPIRIT)
+            if sName then HealBot_classicBuffDuration[sName]=1800 end
+            sName=GetSpellInfo(HBC_PRAYER_OF_SPIRIT)
+            if sName then HealBot_classicBuffDuration[sName]=3600 end
+            sName=GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION)
+            if sName then HealBot_classicBuffDuration[sName]=1200 end
             sName=GetSpellInfo(HBC_SHADOW_PROTECTION)
             if sName then 
                 HealBot_classicBuffDuration[sName]=600 
@@ -3019,6 +3030,11 @@ local function HealBot_OnEvent_VariablesLoaded(self)
             sName=GetSpellInfo(HEALBOT_MARK_OF_THE_WILD)
             if sName then HealBot_classicBuffDuration[sName]=1800 end
             sName=GetSpellInfo(HBC_THORNS)
+            if sName then 
+                HealBot_classicBuffDuration[sName]=600 
+                HealBot_ShortBuffs[sName]=true
+            end
+            sName=GetSpellInfo(HBC_OMEN_OF_CLARITY)
             if sName then 
                 HealBot_classicBuffDuration[sName]=600 
                 HealBot_ShortBuffs[sName]=true
@@ -3044,12 +3060,19 @@ local function HealBot_OnEvent_VariablesLoaded(self)
                 HealBot_classicBuffDuration[sName]=300 
                 HealBot_ShortBuffs[sName]=true
             end
+            sName=GetSpellInfo(HBC_BLESSING_OF_SANCTUARY)
+            if sName then 
+                HealBot_classicBuffDuration[sName]=300 
+                HealBot_ShortBuffs[sName]=true
+            end
         elseif HealBot_Data["PCLASSTRIM"]=="MAGE" then
             sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
             if sName then 
                 HealBot_classicBuffDuration[sName]=600 
                 HealBot_ShortBuffs[sName]=true
             end
+            sName=GetSpellInfo(HBC_ARCANE_BRILLIANCE)
+            if sName then HealBot_classicBuffDuration[sName]=3600 end
         end
     end
     
@@ -4150,10 +4173,7 @@ local function HealBot_Update_Slow()
             elseif HealBot_luVars["slowSwitch"]<3 then
                 if HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
                     HealBot_luVars["nextDebugMsg"]=TimeNow+1
-                    local hbDebugChan=HealBot_Comms_GetChan("HBmsg");
-                    if hbDebugChan then
-                        SendChatMessage(HealBot_DebugMsg[1] , "CHANNEL", nil, hbDebugChan);
-                    end
+                    HealBot_AddChat(HealBot_DebugMsg[1])
                     table.remove(HealBot_DebugMsg,1)
                 end
             elseif HealBot_luVars["slowSwitch"]<4 then
@@ -6460,10 +6480,6 @@ function HealBot_CastNotify(unitName,spell,unit)
     s = gsub(s,"#l",GetSpellLink(spell, ""))
     s = gsub(s,"#n",unitName)
     local w=nil;
-    if z==6 then
-        w=HealBot_Comms_GetChan(Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["CHAN"]) 
-        if not w then z=2 end
-    end
     if z==5 and not IsInRaid() then z = 4 end
     if z==4 and GetNumGroupMembers()==0 then z = 2 end
     if z==3 and UnitIsPlayer(unit) and UnitPlayerControlled(unit) and unit~="player" then
@@ -6499,8 +6515,6 @@ function HealBot_CastNotify(unitName,spell,unit)
                 SendChatMessage(s,"RAID",nil,nil);
             end
         end
-    elseif z==6 then
-        SendChatMessage(s,"CHANNEL",nil,w);
     else
         HealBot_AddChat(s);
     end
@@ -6784,10 +6798,12 @@ function HealBot_Direction_Check(unit)
         local tx, ty = HealBot_getUnitCoords(unit)
         if tx then
             local pFacing = GetPlayerFacing();
-            pFacing = pFacing < 0 and pFacing + hbPi * 2 or pFacing;
-            direction = hbPi - hbaTan2(px - tx, ty - py) - pFacing;
-            direction = floor(direction * hbdMod + 0.5) % 108
-            hbX, hbY = (direction % 9) * 0.109375, floor(direction / 9) * 0.08203125;
+            if pFacing then
+                pFacing = pFacing < 0 and pFacing + hbPi * 2 or pFacing;
+                direction = hbPi - hbaTan2(px - tx, ty - py) - pFacing;
+                direction = floor(direction * hbdMod + 0.5) % 108
+                hbX, hbY = (direction % 9) * 0.109375, floor(direction / 9) * 0.08203125;
+            end
         end
     elseif not HealBot_luVars["mapUpdate"] then
         HealBot_luVars["mapUpdate"]=GetTime()+5

@@ -1286,7 +1286,7 @@ end
 local function HealBot_Panel_enemyBar(eUnit)
     local uName=HEALBOT_ENEMY_NO_TARGET
     if UnitExists(eUnit) and UnitHealth(eUnit)>99 then
-        uName=HealBot_GetUnitName(eUnit)
+        uName=HealBot_GetUnitName(eUnit) or HEALBOT_ENEMY_NO_TARGET
     end
     HealBot_Panel_updGUIDstore(eUnit,uName,eUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1;
@@ -2004,7 +2004,7 @@ local function HealBot_Panel_selfHeals()
     HealBot_Panel_luVars["SelfPets"]=false
     if not HealBot_TrackNames[HealBot_Data["PGUID"]] then
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        local uName=HealBot_GetUnitName(xUnit)
+        local uName=HealBot_Data["PNAME"] or UnitName(xUnit) or xUnit
         HealBot_Panel_updGUIDstore(HealBot_Data["PGUID"],uName,xUnit)
         HealBot_TrackNames[HealBot_Data["PGUID"]]=true;
         table.insert(subunits,xUnit)
@@ -2014,7 +2014,7 @@ local function HealBot_Panel_selfHeals()
             local xGUID=UnitGUID(xUnit)
             if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                uName=UnitName(xUnit);
+                uName=UnitName(xUnit) or xUnit
                 HealBot_TrackNames[xGUID]=true;
                 table.insert(subunits,xUnit)
                 HealBot_Panel_SubSort(false, 1)

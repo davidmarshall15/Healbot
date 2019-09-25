@@ -235,6 +235,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
+        DebugOut=false,
         Debug01=false, -- Currently not used
         VersionResetDone={},
         CatchAltDebuffIDs={["init"]=true},
@@ -406,6 +407,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_ICE_BARRIER]=4,
                 [HBC_DAMPEN_MAGIC]=4,
                 [HBC_FROST_ARMOR]=4,
+                [HBC_MAGE_ARMOR]=4,
                 [HEALBOT_INCANTERS_WARD]=2,
                 [HEALBOT_ICE_BLOCK]=4,
                 [HEALBOT_BLAZING_BARRIER]=4,
@@ -573,10 +575,10 @@ HealBot_Config_SkinsDefaults = {
   Skins = {HEALBOT_SKINS_STD, HEALBOT_OPTIONS_GROUPHEALS, HEALBOT_OPTIONS_RAID25, HEALBOT_OPTIONS_RAID40},
   Author = {[HEALBOT_SKINS_STD] = defaultAuthor, [HEALBOT_OPTIONS_GROUPHEALS] = defaultAuthor, 
               [HEALBOT_OPTIONS_RAID25] = defaultAuthor, [HEALBOT_OPTIONS_RAID40] = defaultAuthor,},
-  Chat =    {[HEALBOT_SKINS_STD]          = {["NOTIFY"]=1,["CHAN"]="",["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
-             [HEALBOT_OPTIONS_GROUPHEALS] = {["NOTIFY"]=1,["CHAN"]="",["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
-             [HEALBOT_OPTIONS_RAID25]     = {["NOTIFY"]=1,["CHAN"]="",["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
-             [HEALBOT_OPTIONS_RAID40]     = {["NOTIFY"]=1,["CHAN"]="",["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},},
+  Chat =    {[HEALBOT_SKINS_STD]          = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
+             [HEALBOT_OPTIONS_GROUPHEALS] = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
+             [HEALBOT_OPTIONS_RAID25]     = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
+             [HEALBOT_OPTIONS_RAID40]     = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},},
   General = {[HEALBOT_SKINS_STD]          = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,
                                              ["FLUIDBARS"]=false,["FLUIDFREQ"]=3,["STICKYFRAME"]=true,["STICKYSENSITIVITY"]=20},
              [HEALBOT_OPTIONS_GROUPHEALS] = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,

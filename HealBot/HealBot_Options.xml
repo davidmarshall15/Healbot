@@ -5453,23 +5453,6 @@
                       <OnLeave>HealBot_Options_Show_Help("CHATCHAN",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <EditBox name="HealBot_Options_NotifyChan" inherits="HealBot_Options_EditBoxTemplate">
-                    <Size>
-                      <AbsDimension x="158" y="22"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CastNotify6" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="125" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnTextChanged>HealBot_Options_NotifyChan_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("CHATCHAN",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATCHAN",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
                   <CheckButton name="HealBot_Options_CastNotifyResOnly" inherits="SendMailRadioButtonTemplate" id="7">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CastNotify6" relativePoint="BOTTOMLEFT">

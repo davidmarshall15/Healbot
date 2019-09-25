@@ -138,7 +138,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CASTNOTIFY3             = "Notify target";
     HEALBOT_OPTIONS_CASTNOTIFY4             = "Notify party";
     HEALBOT_OPTIONS_CASTNOTIFY5             = "Notify raid";
-    HEALBOT_OPTIONS_CASTNOTIFY6             = "Notify chan";
+    HEALBOT_OPTIONS_CASTNOTIFY6             = "General channel";
     HEALBOT_OPTIONS_CASTNOTIFYRESONLY       = "Notify for resurrection only";
     HEALBOT_OPTIONS_EOC_OOM                 = "After combat warn when out of mana"
     HEALBOT_OPTIONS_EOC_OOM_VALUE           = "When mana below"
@@ -1667,7 +1667,7 @@ function HealBot_Lang_Options_enALL()
                                ["CHATTARGET"]="Send whisper to the target.",
                                ["CHATPARTY"]="Send chat message to the group channel.",
                                ["CHATRAID"]="Send chat message to the raid channel.",
-                               ["CHATCHAN"]="Send chat message to a pre-defined channel.",
+                               ["CHATCHAN"]="Send chat message to your own general channel.",
                                ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
                                ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
                                ["EOCOOM"]="When enabled and mana drops below the select amount.\nAt the end of combat emote Out of Mana.",
