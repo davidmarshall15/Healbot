@@ -166,26 +166,14 @@ function HealBot_Panel_ClearBarArrays()
     HealBot_nextRecalcParty(0)
 end
 
-function HealBot_Panel_Clear()
-    for x,_ in pairs(HealBot_Panel_BlackList) do
-        HealBot_Panel_BlackList[x]=nil;
-    end
-    HealBot_nextRecalcParty(0)
-end
-
 function HealBot_Panel_ClearBlackList()
-    for x,_ in pairs(HealBot_Panel_BlackList) do
-        HealBot_Panel_BlackList[x]=nil;
-    end
+    HealBot_Panel_BlackList={}
     HealBot_nextRecalcParty(0)
 end
 
-function HealBot_Panel_AddBlackList(unit)
-    local xGUID=UnitGUID(unit)
-    if xGUID then
-        HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_nextRecalcParty(0)
-    end
+function HealBot_Panel_AddBlackList(button)
+    HealBot_Panel_BlackList[button.guid]=true;
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ClearHealTargets()
@@ -2013,8 +2001,8 @@ local function HealBot_Panel_selfHeals()
             xUnit="pet";
             local xGUID=UnitGUID(xUnit)
             if UnitExists(xUnit) and not HealBot_TrackNames[xGUID] then
-                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 uName=UnitName(xUnit) or xUnit
+                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 HealBot_TrackNames[xGUID]=true;
                 table.insert(subunits,xUnit)
                 HealBot_Panel_SubSort(false, 1)
@@ -2380,7 +2368,7 @@ local function HealBot_Panel_PlayersChanged()
                     _, _, subgroup, _, _, _, _, online, _, role, _, combatRole = GetRaidRosterInfo(j);
                     HealBot_UnitGroups[xUnit]=subgroup
                     if not hbPanel_dataRoles[xUnit] then
-                        if combatRole and (combatRole=="DAMAGER" or combatRole=="HEALER" or combatRole=="TANK") then
+                        if combatRole and (combatRole=="HEALER" or combatRole=="TANK") then
                             aRole = combatRole
                         elseif role and (string.lower(role)=="mainassist" or string.lower(role)=="maintank") then
                             aRole="TANK"
@@ -2446,8 +2434,7 @@ local function HealBot_Panel_PlayersChanged()
         
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.status.unittype==1 then
-                local xGUID=xButton.guid
-                if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xGUID] then
+                if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else

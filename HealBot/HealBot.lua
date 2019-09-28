@@ -1,9 +1,7 @@
 --[[ HealBot Continued ]]
 
 local HealBot_UnitBuffIcons={}
-local HealBot_classicExpireTimes={}
-local HealBot_classicSpellCasts={}
-local HealBot_classicBuffDuration={}
+local HealBot_BuffNameTypes = {}
 local HealBot_UnitDebuffIcons={};
 local HealBot_Watch_HoT={};
 local HealBot_SmartCast_Spells={};
@@ -30,6 +28,8 @@ for i = 1, #HealBot_Default_Fonts do
     LSM:Register("font", HealBot_Default_Fonts[i].name, HealBot_Default_Fonts[i].file)
 end
 local libCHC = nil
+local libCTM = nil
+local libCD = nil
 local LDB11 = LibStub("LibDataBroker-1.1", true)
 local LDBIcon = LibStub("LibDBIcon-1.0", true)
 local HealBot_CheckBuffs = {}
@@ -906,7 +906,6 @@ function HealBot_UpdateUnit(button)
         else
             HealBot_nextRecalcParty(2)
         end
-        HealBot_AddDebug("Found GUID mismatch u="..button.unit)
     end
     button.guid=UnitGUID(button.unit)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
@@ -1289,6 +1288,8 @@ local function HealBot_DoReset_Buffs(pClassTrim)
     elseif pClassTrim=="PRIE" then
         if HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE) then
             HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spell_IDs[HEALBOT_POWER_WORD_FORTITUDE].name
+        elseif HealBot_KnownSpell(HBC_PRAYER_OF_FORTITUDE) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spell_IDs[HBC_PRAYER_OF_FORTITUDE].name
         elseif HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) then
             HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spell_IDs[HBC_POWER_WORD_FORTITUDE].name
         end
@@ -1427,6 +1428,9 @@ local function HealBot_Register_Events()
             HealBot:RegisterEvent("COMPANION_LEARNED");
             HealBot:RegisterEvent("PET_BATTLE_OPENING_START");
             HealBot:RegisterEvent("PET_BATTLE_OVER");
+        else
+            libCD = libCD or LibStub("LibClassicDurations")
+            if libCD then libCD:Register(HEALBOT_HEALBOT) end
         end
         HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
         HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
@@ -1879,19 +1883,17 @@ local function HealBot_RaidTargetUpdate(button, iconID)
   --HealBot_setCall("HealBot_RaidTargetUpdate")
 end
 
-function HealBot_setUnitIcons(unit)
+function HealBot_setUnitIcons(unit, guid)
     if not HealBot_UnitDebuffIcons[unit] then HealBot_UnitDebuffIcons[unit]={} end
     if not HealBot_UnitBuffIcons[unit] then HealBot_UnitBuffIcons[unit]={} end
-    if not HealBot_classicExpireTimes[unit] then HealBot_classicExpireTimes[unit]={} end
-    if not HealBot_classicSpellCasts[unit] then HealBot_classicSpellCasts[unit]={} end
     HealBot_CheckPlayerUnitBuff[unit]=true
     HealBot_setOptions_Timer(35)
   --HealBot_setCall("HealBot_setUnitIcons")
 end
 
 function HealBot_Reset_Unit(button)
-    xButton.update.reset=true
-    xButton.status.update=true
+    button.update.reset=true
+    button.status.update=true
     HealBot_Action_ResetUnitStatus(button)
     if HealBot_Action_AlwaysEnabled(button.guid) then HealBot_Action_Toggle_Enabled(button); end
   --HealBot_setCall("HealBot_Reset_Unit")
@@ -1940,13 +1942,13 @@ local function HealBot_OnEvent_Combat_Log(self, timestamp, event, hideCaster, so
     if HealBot_knownUnitGUID[destGUID] and UnitExists(HealBot_knownUnitGUID[destGUID]) then
         local xButton=HealBot_Unit_Button[HealBot_knownUnitGUID[destGUID]]
         if xButton then
-            if (event == "SWING_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SPLIT" or
-                event == "DAMAGE_SHIELD" or event == "ENVIRONMENTAL_DAMAGE") and xButton.health.current > 0 then
+            if (event == "UNIT_DIED") then
+                HealBot_Action_UpdateTheDeadButton(button)
+            elseif (event=="SWING_DAMAGE" or event=="SPELL_PERIODIC_DAMAGE" or event=="SPELL_DAMAGE" or event=="DAMAGE_SPLIT" or
+                event=="DAMAGE_SHIELD" or event=="ENVIRONMENTAL_DAMAGE") and xButton.health.current > 0 then
                 xButton.health.updhealth=true
                 xButton.health.update=true
-            elseif (event == "SPELL_HEAL" or event == "SPELL_PERIODIC_HEAL") and xButton.health.current < xButton.health.max then
-                xButton.health.updincoming=true
-                xButton.health.updabsorbs=true
+            elseif (event=="SPELL_HEAL" or event=="SPELL_PERIODIC_HEAL") and xButton.health.current < xButton.health.max then
                 xButton.health.updhealth=true
                 xButton.health.update=true
             end
@@ -2994,124 +2996,51 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     local pClass, pClassEN=UnitClass("player")
     HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
     local sName=nil
-    if HEALBOT_GAME_VERSION<4 then
-        sName=GetSpellInfo(HEALBOT_RENEW)
-        if sName then HealBot_classicBuffDuration[sName]=15 end
-        sName=GetSpellInfo(HEALBOT_POWER_WORD_SHIELD)
-        if sName then HealBot_classicBuffDuration[sName]=30 end
-        sName=GetSpellInfo(HEALBOT_REJUVENATION)
-        if sName then HealBot_classicBuffDuration[sName]=12 end
-        sName=GetSpellInfo(HEALBOT_REGROWTH)
-        if sName then HealBot_classicBuffDuration[sName]=21 end
-        if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-            sName=GetSpellInfo(HBC_POWER_WORD_FORTITUDE)
-            if sName then HealBot_classicBuffDuration[sName]=1800 end
-            sName=GetSpellInfo(HBC_DIVINE_SPIRIT)
-            if sName then HealBot_classicBuffDuration[sName]=1800 end
-            sName=GetSpellInfo(HBC_PRAYER_OF_SPIRIT)
-            if sName then HealBot_classicBuffDuration[sName]=3600 end
-            sName=GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION)
-            if sName then HealBot_classicBuffDuration[sName]=1200 end
-            sName=GetSpellInfo(HBC_SHADOW_PROTECTION)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=600 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HEALBOT_FEAR_WARD)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=600 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_INNER_FIRE)
-            if sName then 
-                HealBot_ShortBuffs[sName]=true
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-            sName=GetSpellInfo(HEALBOT_MARK_OF_THE_WILD)
-            if sName then HealBot_classicBuffDuration[sName]=1800 end
-            sName=GetSpellInfo(HBC_THORNS)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=600 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_OMEN_OF_CLARITY)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=600 
-                HealBot_ShortBuffs[sName]=true
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-            sName=GetSpellInfo(HBC_BLESSING_OF_KINGS)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=300 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_BLESSING_OF_MIGHT)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=300 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_BLESSING_OF_WISDOM)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=300 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_BLESSING_OF_LIGHT)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=300 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_BLESSING_OF_SANCTUARY)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=300 
-                HealBot_ShortBuffs[sName]=true
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="MAGE" then
-            sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
-            if sName then 
-                HealBot_classicBuffDuration[sName]=600 
-                HealBot_ShortBuffs[sName]=true
-            end
-            sName=GetSpellInfo(HBC_ARCANE_BRILLIANCE)
-            if sName then HealBot_classicBuffDuration[sName]=3600 end
-        end
-    end
-    
     if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
         sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_SHADOW_PROTECTION)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HEALBOT_FEAR_WARD)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_INNER_FIRE)
+        if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
-        -- short buffs
+        sName=GetSpellInfo(HBC_THORNS)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_OMEN_OF_CLARITY)
+        if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
         sName=GetSpellInfo(HEALBOT_BEACON_OF_LIGHT)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
         sName=GetSpellInfo(HEALBOT_SACRED_SHIELD)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_BLESSING_OF_KINGS)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_BLESSING_OF_MIGHT)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_BLESSING_OF_WISDOM)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_BLESSING_OF_LIGHT)
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_BLESSING_OF_SANCTUARY)
+        if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
         -- short buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARRIOR] then
         -- short buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
         sName=GetSpellInfo(HEALBOT_ICE_WARD)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
         sName=GetSpellInfo(HEALBOT_ICE_BARRIER)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
+        sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
+        if sName then HealBot_ShortBuffs[sName]=true end
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
         -- short buffs
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
         sName=GetSpellInfo(HEALBOT_HORN_OF_WINTER)
-        if sName then 
-            HealBot_ShortBuffs[sName]=true
-        end
+        if sName then HealBot_ShortBuffs[sName]=true end
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_HUNTER] then
         -- short buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_SHAMAN] then
@@ -3145,93 +3074,134 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_setOptions_Timer(5)
     HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
     
-    local HEALBOT_STATS_ID = 1 --RAID_BUFF_1 --Stats
-    local HEALBOT_STAMINA_ID = 2 --RAID_BUFF_2 --Stamina
-    local HEALBOT_ATTACK_POWER_ID = 3 --RAID_BUFF_3 --Attack Power
-    local HEALBOT_HASTE_ID = 4 --RAID_BUFF_4 --Haste
-    local HEALBOT_SPELL_POWER_ID = 5 --RAID_BUFF_5 --Spell Power
-    local HEALBOT_CRITICAL_STRIKE_ID = 6 --RAID_BUFF_6 --Critical Strike
-    local HEALBOT_MASTERY_ID = 7 --RAID_BUFF_7 --Mastery
-    local HEALBOT_MULTISTRIKE_ID = 8 --RAID_BUFF_8 --Multistrike
-    local HEALBOT_VERSATILITY_ID = 9 --RAID_BUFF_9 --Versatility
-    
-    HealBot_BuffNameTypes = {
-        -- Death Knight
-        [HEALBOT_HORN_OF_WINTER] = {HEALBOT_ATTACK_POWER_ID},
-        [HEALBOT_POWER_OF_THE_GRAVE] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_UNHOLY_AURA] = {HEALBOT_HASTE_ID, HEALBOT_VERSATILITY_ID},
-        -- Druid
-        [HEALBOT_MARK_OF_THE_WILD] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
-        [HEALBOT_MOONKIN_AURA] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_LEADER_OF_THE_PACK] = {HEALBOT_CRITICAL_STRIKE_ID},
-        -- Hunter
-        [HEALBOT_TRUESHOT_AURA] = {HEALBOT_ATTACK_POWER_ID},
-        [HEALBOT_LW_FORTITUDE_OF_THE_BEAR] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_LW_POWER_OF_THE_PRIMATES] = {HEALBOT_STATS_ID},
-        [HEALBOT_LW_WISDOM_OF_THE_SERPENT] = {HEALBOT_SPELL_POWER_ID},
-        [HEALBOT_LW_GRACE_OF_THE_CAT] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_LW_HASTE_OF_THE_HYENA] = {HEALBOT_HASTE_ID},
-        [HEALBOT_LW_FEROCITY_OF_THE_RAPTOR] = {HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_LW_QUICKNESS_OF_THE_DRAGONHAWK] = {HEALBOT_MULTISTRIKE_ID},
-        [HEALBOT_LW_VERSATILITY_OF_THE_RAVAGER] = {HEALBOT_VERSATILITY_ID},
-        -- Hunter Pets
-        [HEALBOT_BARK_OF_THE_WILD] = {HEALBOT_STATS_ID},
-        [HEALBOT_BLESSING_OF_KONGS] = {HEALBOT_STATS_ID},
-        [HEALBOT_EMBRACE_OF_THE_SHALE_SPIDER] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_STRENGTH_OF_THE_EARTH] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
-        [HEALBOT_INVIGORATING_ROAR] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_STURDINESS] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_SAVAGE_VIGOR] = {HEALBOT_STAMINA_ID, HEALBOT_HASTE_ID},
-        [HEALBOT_QIRAJI_FORTITUDE] = {HEALBOT_STAMINA_ID, HEALBOT_SPELL_POWER_ID},
-        [HEALBOT_SERPENTS_CUNNING] = {HEALBOT_SPELL_POWER_ID},
-        [HEALBOT_STILL_WATER] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_ROAR_OF_COURAGE] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_KEEN_SENSES] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_SPIRIT_BEAST_BLESSING] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_PLAINSWALKING] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_CACKLING_HOWL] = {HEALBOT_HASTE_ID},
-        [HEALBOT_ENERGIZING_SPORES] = {HEALBOT_HASTE_ID},
-        [HEALBOT_SPEED_OF_THE_SWARM] = {HEALBOT_HASTE_ID},
-        [HEALBOT_TERRIFYING_ROAR] = {HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_FEARLESS_ROAR] = {HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_STRENGTH_OF_THE_PACK] = {HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_FURIOUS_HOWL] = {HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_SONIC_FOCUS] = {HEALBOT_MULTISTRIKE_ID},
-        [HEALBOT_WILD_STRENGTH] = {HEALBOT_MULTISTRIKE_ID, HEALBOT_VERSATILITY_ID},
-        [HEALBOT_DOUBLE_BITE] = {HEALBOT_MULTISTRIKE_ID},
-        [HEALBOT_SPRY_ATTACKS] = {HEALBOT_MULTISTRIKE_ID},
-        [HEALBOT_BREATH_OF_THE_WINDS] = {HEALBOT_MULTISTRIKE_ID},
-        [HEALBOT_TENACITY] = {HEALBOT_VERSATILITY_ID},
-        [HEALBOT_INDOMITABLE] = {HEALBOT_VERSATILITY_ID},
-        [HEALBOT_DEFENSIVE_QUILLS] = {HEALBOT_VERSATILITY_ID},
-        [HEALBOT_CHITINOUS_ARMOR] = {HEALBOT_VERSATILITY_ID},
-        [HEALBOT_GRACE] = {HEALBOT_VERSATILITY_ID},
-        -- Mage
-        [HEALBOT_ARCANE_BRILLIANCE] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_DALARAN_BRILLIANCE] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        -- Monk
-        [HEALBOT_LEGACY_EMPEROR] = {HEALBOT_STATS_ID},
-        [HEALBOT_LEGACY_WHITETIGER] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        [HEALBOT_WINDFLURRY] = {HEALBOT_MULTISTRIKE_ID},
-        -- Paladin
-        [HEALBOT_BLESSING_OF_KINGS] = {HEALBOT_STATS_ID},
-        [HEALBOT_BLESSING_OF_MIGHT] = {HEALBOT_MASTERY_ID},
-        [HEALBOT_SANCTITY_AURA] = {HEALBOT_VERSATILITY_ID},
-        -- Priest
-        [HEALBOT_POWER_WORD_FORTITUDE] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_MIND_QUICKENING] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
-        -- Warlock
-        [HEALBOT_BLOOD_PACT] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_DARK_INTENT] = {HEALBOT_SPELL_POWER_ID, HEALBOT_MULTISTRIKE_ID},
-        -- Warrior
-        [HEALBOT_COMMANDING_SHOUT] = {HEALBOT_STAMINA_ID},
-        [HEALBOT_BATTLE_SHOUT] = {HEALBOT_ATTACK_POWER_ID},
-        [HEALBOT_INSPIRING_PRESENCE] = {HEALBOT_VERSATILITY_ID},
-        -- Rogue
-        [HEALBOT_SWIFTBLADES_CUNNING] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
-        -- Shaman
-        [HEALBOT_GRACE_OF_AIR] = {HEALBOT_MASTERY_ID, HEALBOT_HASTE_ID},
-    }
+    if HEALBOT_GAME_VERSION<4 then
+        local HBC_PRIE_SPIRIT_ID = 1 --Spirit
+        local HBC_PRIE_SP_ID = 2 --Shadow Resistance 
+        local HBC_PALA_WISDOM_ID = 3 --Mana Regen
+        local HBC_PALA_LIGHT_ID = 4 --Incoming Heals
+        local HBC_PALA_SANCTUARY_ID = 5 --Threat Reduction
+        local HBC_PALA_KINGS_ID = 6 --Stats
+        local HBC_PALA_MIGHT_ID = 7 --Attack Power
+        local HBC_PRIE_STAMINA_ID = 8 --Stamina
+        local HBC_MAGE_INT_ID = 9 --Int
+
+        HealBot_BuffNameTypes = {
+            -- Druid
+            [HEALBOT_MARK_OF_THE_WILD] = {HEALBOT_STATS_ID},
+            [HBC_GIFT_OF_THE_WILD] = {HEALBOT_STATS_ID},
+            -- Hunter
+            [HEALBOT_TRUESHOT_AURA] = {HEALBOT_ATTACK_POWER_ID},
+            -- Hunter Pets
+            -- Mage
+            [HBC_ARCANE_BRILLIANCE] = {HBC_MAGE_INT_ID},
+            -- Paladin
+            [HBC_BLESSING_OF_KINGS] = {HBC_PALA_KINGS_ID},
+            [HBC_BLESSING_OF_LIGHT] = {HBC_PALA_LIGHT_ID},
+            [HBC_BLESSING_OF_MIGHT] = {HBC_PALA_MIGHT_ID},
+            [HBC_BLESSING_OF_SANCTUARY] = {HBC_PALA_SANCTUARY_ID},
+            [HBC_BLESSING_OF_WISDOM] = {HBC_PALA_WISDOM_ID},
+            -- Priest
+            [HBC_POWER_WORD_FORTITUDE] = {HBC_PRIE_STAMINA_ID},
+            [HBC_PRAYER_OF_FORTITUDE] = {HBC_PRIE_STAMINA_ID},
+            [HBC_DIVINE_SPIRIT] = {HBC_PRIE_SPIRIT_ID},
+            [HBC_PRAYER_OF_SPIRIT] = {HBC_PRIE_SPIRIT_ID},
+            [HBC_SHADOW_PROTECTION] = {HBC_PRIE_SP_ID},
+            [HBC_PRAYER_OF_SHADOW_PROTECTION] = {HBC_PRIE_SP_ID},
+            -- Warrior
+            [HEALBOT_COMMANDING_SHOUT] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_BATTLE_SHOUT] = {HEALBOT_ATTACK_POWER_ID},
+            -- Rogue
+            -- Shaman
+        }
+    else
+        local HEALBOT_STATS_ID = 1 --RAID_BUFF_1 --Stats
+        local HEALBOT_STAMINA_ID = 2 --RAID_BUFF_2 --Stamina
+        local HEALBOT_ATTACK_POWER_ID = 3 --RAID_BUFF_3 --Attack Power
+        local HEALBOT_HASTE_ID = 4 --RAID_BUFF_4 --Haste
+        local HEALBOT_SPELL_POWER_ID = 5 --RAID_BUFF_5 --Spell Power
+        local HEALBOT_CRITICAL_STRIKE_ID = 6 --RAID_BUFF_6 --Critical Strike
+        local HEALBOT_MASTERY_ID = 7 --RAID_BUFF_7 --Mastery
+        local HEALBOT_MULTISTRIKE_ID = 8 --RAID_BUFF_8 --Multistrike
+        local HEALBOT_VERSATILITY_ID = 9 --RAID_BUFF_9 --Versatility
+
+        HealBot_BuffNameTypes = {
+            -- Death Knight
+            [HEALBOT_HORN_OF_WINTER] = {HEALBOT_ATTACK_POWER_ID},
+            [HEALBOT_POWER_OF_THE_GRAVE] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_UNHOLY_AURA] = {HEALBOT_HASTE_ID, HEALBOT_VERSATILITY_ID},
+            -- Druid
+            [HEALBOT_MARK_OF_THE_WILD] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
+            [HEALBOT_MOONKIN_AURA] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_LEADER_OF_THE_PACK] = {HEALBOT_CRITICAL_STRIKE_ID},
+            -- Hunter
+            [HEALBOT_TRUESHOT_AURA] = {HEALBOT_ATTACK_POWER_ID},
+            [HEALBOT_LW_FORTITUDE_OF_THE_BEAR] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_LW_POWER_OF_THE_PRIMATES] = {HEALBOT_STATS_ID},
+            [HEALBOT_LW_WISDOM_OF_THE_SERPENT] = {HEALBOT_SPELL_POWER_ID},
+            [HEALBOT_LW_GRACE_OF_THE_CAT] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_LW_HASTE_OF_THE_HYENA] = {HEALBOT_HASTE_ID},
+            [HEALBOT_LW_FEROCITY_OF_THE_RAPTOR] = {HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_LW_QUICKNESS_OF_THE_DRAGONHAWK] = {HEALBOT_MULTISTRIKE_ID},
+            [HEALBOT_LW_VERSATILITY_OF_THE_RAVAGER] = {HEALBOT_VERSATILITY_ID},
+            -- Hunter Pets
+            [HEALBOT_BARK_OF_THE_WILD] = {HEALBOT_STATS_ID},
+            [HEALBOT_BLESSING_OF_KONGS] = {HEALBOT_STATS_ID},
+            [HEALBOT_EMBRACE_OF_THE_SHALE_SPIDER] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_STRENGTH_OF_THE_EARTH] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
+            [HEALBOT_INVIGORATING_ROAR] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_STURDINESS] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_SAVAGE_VIGOR] = {HEALBOT_STAMINA_ID, HEALBOT_HASTE_ID},
+            [HEALBOT_QIRAJI_FORTITUDE] = {HEALBOT_STAMINA_ID, HEALBOT_SPELL_POWER_ID},
+            [HEALBOT_SERPENTS_CUNNING] = {HEALBOT_SPELL_POWER_ID},
+            [HEALBOT_STILL_WATER] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_ROAR_OF_COURAGE] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_KEEN_SENSES] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_SPIRIT_BEAST_BLESSING] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_PLAINSWALKING] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_CACKLING_HOWL] = {HEALBOT_HASTE_ID},
+            [HEALBOT_ENERGIZING_SPORES] = {HEALBOT_HASTE_ID},
+            [HEALBOT_SPEED_OF_THE_SWARM] = {HEALBOT_HASTE_ID},
+            [HEALBOT_TERRIFYING_ROAR] = {HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_FEARLESS_ROAR] = {HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_STRENGTH_OF_THE_PACK] = {HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_FURIOUS_HOWL] = {HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_SONIC_FOCUS] = {HEALBOT_MULTISTRIKE_ID},
+            [HEALBOT_WILD_STRENGTH] = {HEALBOT_MULTISTRIKE_ID, HEALBOT_VERSATILITY_ID},
+            [HEALBOT_DOUBLE_BITE] = {HEALBOT_MULTISTRIKE_ID},
+            [HEALBOT_SPRY_ATTACKS] = {HEALBOT_MULTISTRIKE_ID},
+            [HEALBOT_BREATH_OF_THE_WINDS] = {HEALBOT_MULTISTRIKE_ID},
+            [HEALBOT_TENACITY] = {HEALBOT_VERSATILITY_ID},
+            [HEALBOT_INDOMITABLE] = {HEALBOT_VERSATILITY_ID},
+            [HEALBOT_DEFENSIVE_QUILLS] = {HEALBOT_VERSATILITY_ID},
+            [HEALBOT_CHITINOUS_ARMOR] = {HEALBOT_VERSATILITY_ID},
+            [HEALBOT_GRACE] = {HEALBOT_VERSATILITY_ID},
+            -- Mage
+            [HEALBOT_ARCANE_BRILLIANCE] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_DALARAN_BRILLIANCE] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
+            -- Monk
+            [HEALBOT_LEGACY_EMPEROR] = {HEALBOT_STATS_ID},
+            [HEALBOT_LEGACY_WHITETIGER] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
+            [HEALBOT_WINDFLURRY] = {HEALBOT_MULTISTRIKE_ID},
+            -- Paladin
+            [HEALBOT_BLESSING_OF_KINGS] = {HEALBOT_STATS_ID},
+            [HEALBOT_BLESSING_OF_MIGHT] = {HEALBOT_MASTERY_ID},
+            [HEALBOT_SANCTITY_AURA] = {HEALBOT_VERSATILITY_ID},
+            -- Priest
+            [HEALBOT_POWER_WORD_FORTITUDE] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_MIND_QUICKENING] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
+            -- Warlock
+            [HEALBOT_BLOOD_PACT] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_DARK_INTENT] = {HEALBOT_SPELL_POWER_ID, HEALBOT_MULTISTRIKE_ID},
+            -- Warrior
+            [HEALBOT_COMMANDING_SHOUT] = {HEALBOT_STAMINA_ID},
+            [HEALBOT_BATTLE_SHOUT] = {HEALBOT_ATTACK_POWER_ID},
+            [HEALBOT_INSPIRING_PRESENCE] = {HEALBOT_VERSATILITY_ID},
+            -- Rogue
+            [HEALBOT_SWIFTBLADES_CUNNING] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
+            -- Shaman
+            [HEALBOT_GRACE_OF_AIR] = {HEALBOT_MASTERY_ID, HEALBOT_HASTE_ID},
+        }
+    end
 
     HealBot_Options_EmergencyFilter_Reset()
     HealBot_Action_sethbNumberFormat()
@@ -3812,8 +3782,10 @@ function HealBot_OnEvent_UnitHealth(button)
         health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
         if (health~=button.health.current) or (healthMax~=button.health.max) then
             HealBot_OnEvent_UnitThreat(button)
-            button.health.current=health
-            button.health.max=healthMax
+            if healthMax~=100 or not HealBot_knownUnitGUID[button.guid] or (healthMax==100 and button.health.max>200) then
+                button.health.current=health
+                button.health.max=healthMax
+            end
             HealBot_Action_setHealthText(button)
             HealBot_Action_UpdateHealthButton(button)
         elseif not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
@@ -4544,6 +4516,7 @@ end
 
 local function HealBot_CheckUnitDebuffs(button)
     local spellCD=0
+    local name, texture, count, debuffType, duration, expirationTime, unitCaster, spellId, isBossDebuff = nil,nil,nil,nil,nil,nil,nil,nil,nil
     TimeNow=GetTime()
     if not button or not UnitExists(button.unit) then return end
     _,DebuffClass=UnitClass(button.unit)
@@ -4558,7 +4531,17 @@ local function HealBot_CheckUnitDebuffs(button)
     if not UnitIsDeadOrGhost(button.unit) or UnitIsFeignDeath(button.unit) then
         local z=1
         while true do
-            local name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitDebuff(button.unit,z)
+            name=false
+            if HEALBOT_GAME_VERSION<4 and libCD then
+                name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId = libCD:UnitAura(button.unit,z,"HARMFUL")
+                if unitCaster and UnitClassification(unitCaster)=="worldboss" then
+                    isBossDebuff=true
+                else
+                    isBossDebuff=false
+                end
+            else
+                name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitDebuff(button.unit,z)
+            end
             if name then
                 z = z +1
                 if curDebuffs[spellId] and curDebuffs[spellId]["always"] and (curDebuffs[spellId]["type"]==HEALBOT_CUSTOM_en or HealBot_luVars["MaskAuraDCheck"]<TimeNow) then
@@ -4574,7 +4557,17 @@ local function HealBot_CheckUnitDebuffs(button)
         end
         z=1
         while true do
-            local name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitBuff(button.unit,z)
+            name=false
+            if HEALBOT_GAME_VERSION<4 and libCD then
+                name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId = libCD:UnitAura(button.unit,z,"HELPFUL")
+                if unitCaster and UnitClassification(unitCaster)=="worldboss" then
+                    isBossDebuff=true
+                else
+                    isBossDebuff=false
+                end
+            else
+                name, texture, count, debuffType, duration, expirationTime, unitCaster, _, _, spellId, _, isBossDebuff = UnitBuff(button.unit,z)
+            end
             if name then
                 z = z +1
                 if HealBot_Globals.HealBot_Custom_Debuffs[spellId] then 
@@ -4891,27 +4884,6 @@ local function HealBot_SetBuffIcon(button, name, texture, count, expirationTime,
   --HealBot_setCall("HealBot_SetBuffIcon")
 end
 
-local function HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
-    if HealBot_classicSpellCasts[unitCaster] and HealBot_classicSpellCasts[unitCaster][button.unit] and HealBot_classicSpellCasts[unitCaster][button.unit]==name then
-        HealBot_classicSpellCasts[unitCaster][button.unit]=nil
-        if HealBot_classicBuffDuration[name] then
-            if expirationTime==0 and button.unit~="player" then 
-                expirationTime=TimeNow+HealBot_classicBuffDuration[name]
-                HealBot_classicExpireTimes[button.unit][name]=expirationTime
-            end
-        elseif button.unit=="player" and expirationTime>0 then
-            HealBot_classicBuffDuration[name]=expirationTime-TimeNow
-        end
-    elseif HealBot_classicExpireTimes[button.unit] and HealBot_classicExpireTimes[button.unit][name] then
-        if HealBot_classicExpireTimes[button.unit][name]>TimeNow then
-            expirationTime=HealBot_classicExpireTimes[button.unit][name]
-        else
-            HealBot_classicExpireTimes[button.unit][name]=nil
-        end
-    end
-    return expirationTime
-end
-
 local function HealBot_CheckUnitBuffs(button)
     if HealBot_Config_Buffs.NoAuraWhenRested and IsResting() then 
         if HealBot_luVars["buffExists"] then
@@ -4919,12 +4891,14 @@ local function HealBot_CheckUnitBuffs(button)
             HealBot_ClearAllBuffs()
         end
     else
+        local name, texture, count, expirationTime, unitCaster, spellId = nil,nil,nil,nil,nil,nil
         local xGUID=button.guid
         local xUnit=button.unit   
         if not xUnit or not UnitExists(xUnit) then return end
         local cBuffs=false
         local gBuffs=false
         local cIcons=false
+        local doResetBuffTime=false
         local onlyPlayers=UnitIsPlayer(xUnit)
         if HEALBOT_GAME_VERSION<4 then onlyPlayers=UnitIsFriend("player", xUnit) end
         if HealBot_Config_Buffs.BuffWatch then
@@ -4958,10 +4932,12 @@ local function HealBot_CheckUnitBuffs(button)
         local z=1
         if not UnitIsFriend("player",button.unit) and cIcons then 
             while true do
-                local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitDebuff(button.unit, z); 
-                --if HEALBOT_GAME_VERSION<4 then
-                --    HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
-                --end
+                name=false
+                if HEALBOT_GAME_VERSION<4 and libCD then
+                    name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId = libCD:UnitAura(button.unit,z,"HARMFUL")
+                else
+                    name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId = UnitDebuff(button.unit,z)
+                end
                 if name then
                     z=z+1
                     if unitCaster and unitCaster=="player" and expirationTime and not hbExcludeSpells[spellId] then
@@ -4976,9 +4952,11 @@ local function HealBot_CheckUnitBuffs(button)
             end
         else
             while true do
-                local name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
-                if HEALBOT_GAME_VERSION<4 then
-                    expirationTime=HealBot_getAuraExpireTime(button, name, expirationTime, unitCaster)
+                name=false
+                if HEALBOT_GAME_VERSION<4 and libCD then
+                    name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = libCD:UnitAura(button.unit,z,"HELPFUL")
+                else
+                    name, texture, count, _, _, expirationTime, unitCaster, _, _, spellId, _, _ = UnitBuff(button.unit,z)
                 end
                 if name then
                     z = z +1
@@ -4998,7 +4976,6 @@ local function HealBot_CheckUnitBuffs(button)
                     end
                     if gBuffs then
                         local buffName=name
-                        local doResetBuffTime=false
                         if HealBot_Buff_Aura2Item[spellId] then
                             buffName=GetItemInfo(HealBot_Buff_Aura2Item[spellId]) or name
                         end
@@ -5018,7 +4995,6 @@ local function HealBot_CheckUnitBuffs(button)
                                 end
                             end
                         end
-                        if doResetBuffTime then HealBot_ResetCheckBuffsTime(button) end
                     end
                 else
                     break
@@ -5031,12 +5007,18 @@ local function HealBot_CheckUnitBuffs(button)
         end
 
         if gBuffs then
-            for x,_ in pairs(PlayerBuffs) do
-                if button.aura.buff.recheck[x] and button.aura.buff.recheck[x] < TimeNow then
-                    PlayerBuffs[x]=nil
+            local PlayerBuffsList=button.aura.buff.recheck
+            for bName,nexttime in pairs (PlayerBuffsList) do
+                if not PlayerBuffs[bName] then
+                    PlayerBuffsList[bName]=nil
+                    doResetBuffTime=true
+                elseif nexttime < TimeNow then
+                    PlayerBuffs[bName]=nil
                 end
             end
-
+            if not HealBot_knownUnitGUID[xGUID] then
+            end
+            if doResetBuffTime then HealBot_ResetCheckBuffsTime(button) end
             for bName,_ in pairs(HealBot_BuffWatch) do
                 if not PlayerBuffs[bName] then
                     local checkthis=false;
@@ -5102,9 +5084,7 @@ local function HealBot_CheckUnitBuffs(button)
                         end
                     end
                     if checkthis then
-                        if HealBot_HasBuffTypes(bName, PlayerBuffTypes) then
-                            altActive=true
-                        else
+                        if not HealBot_HasBuffTypes(bName, PlayerBuffTypes) then
                             curBuffName=bName;
                             break
                         end
@@ -5271,9 +5251,6 @@ local function HealBot_UnitUpdateFriendly(button)
             HealBot_Action_setNameTag(button)
             button.update.state=true
             button.status.update=true
-        elseif button.health.current<button.health.max then
-            button.health.updhealth=true
-            button.health.update=true
         elseif button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
             if button.aura.buff.nextcheck==1 then
                 HealBot_ResetCheckBuffsTime(button)
@@ -5281,6 +5258,9 @@ local function HealBot_UnitUpdateFriendly(button)
                 button.aura.buff.check=true
                 button.aura.buff.nextcheck=false
             end
+        elseif button.health.current<button.health.max then
+            button.health.updhealth=true
+            button.health.update=true
         end
     end
 end
@@ -5527,7 +5507,7 @@ function HealBot_Register_Aggro()
         HealBot:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
         HealBot:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
     else
-        libCTM = LibStub("ThreatClassic-1.0", true)
+        libCTM = libCTM or LibStub("ThreatClassic-1.0", true)
     end
   --HealBot_setCall("HealBot_Register_Aggro")
 end
@@ -5810,7 +5790,8 @@ function HealBot_retIsInVehicle(unit)
 end
 
 local function HealBot_OnEvent_UnitAura(button)
-    HealBot_AuraChecks(button)
+    button.aura.debuff.check=true
+    button.aura.buff.check=true
   --HealBot_setCall("HealBot_OnEvent_UnitAura")
 end
 
@@ -6043,12 +6024,6 @@ function HealBot_CheckAllBuffs(unit)
         end
     end
   --HealBot_setCall("HealBot_CheckAllBuffs")
-end
-
-function HealBot_AuraChecks(button)
-    button.aura.debuff.check=true
-    button.aura.buff.check=true
-  --HealBot_setCall("HealBot_AuraChecks")
 end
 
 function HealBot_CheckAllActiveDebuffs()
@@ -6431,9 +6406,6 @@ local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,spellRank,
     end
 
     if xUnit then
-        if HEALBOT_GAME_VERSION<4 and caster and spellName and HealBot_classicSpellCasts[caster] and xUnit~="target" then
-            HealBot_classicSpellCasts[caster][xUnit]=spellName
-        end
         if (spellID==HEALBOT_MASS_RESURRECTION or spellID==HEALBOT_ABSOLUTION or spellID==HEALBOT_ANCESTRAL_VISION or spellID==HEALBOT_REAWAKEN or spellID==HEALBOT_REVITALIZE or 
             spellID==HEALBOT_RESURRECTION or spellID==HEALBOT_ANCESTRALSPIRIT or spellID==HEALBOT_REBIRTH or spellID==HEALBOT_REDEMPTION or spellID==HEALBOT_REVIVE or spellID==HEALBOT_RESUSCITATE)
             and UnitExists(xUnit) and HealBot_Unit_Button[xUnit]  then
@@ -6452,12 +6424,6 @@ local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,spellRank,
                 if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 and Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"]==false then
                     HealBot_CastNotify(uscName,spellName,xUnit)
                 end
-            end
-        end
-    elseif HEALBOT_GAME_VERSION<4 and caster and spellName and HealBot_classicSpellCasts[caster] then
-        for xUnit,_ in pairs(HealBot_Unit_Button) do
-            if xUnit~="target" then
-                HealBot_classicSpellCasts[caster][xUnit]=spellName
             end
         end
     end
@@ -6853,11 +6819,9 @@ function HealBot_check2clearGUID(hbGUID)
 end
 
 function HealBot_clearGUID(hbGUID)
-    if HealBot_knownUnitGUID[hbGUID] then
-        HealBot_Panel_RemoveMember(hbGUID)
-        if hbManaPlayers[hbGUID] then hbManaPlayers[hbGUID]=nil end
-        HealBot_knownUnitGUID[hbGUID]=nil
-    end
+    if HealBot_knownUnitGUID[hbGUID] then HealBot_knownUnitGUID[hbGUID]=nil end
+    if hbManaPlayers[hbGUID] then hbManaPlayers[hbGUID]=nil end
+    HealBot_Panel_RemoveMember(hbGUID)
   --HealBot_setCall("HealBot_ClearGUIDs")
 end
 
@@ -7076,10 +7040,10 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_HEALTH") or (event=="UNIT_MAXHEALTH") then
         local _,_,xButton,aTarget,aFocus = HealBot_UnitID(arg1, true)
         if xButton then
-            HealBot_OnEvent_UnitHealth(xButton)
             if (event=="UNIT_MAXHEALTH") then
                 HealBot_OnEvent_TalentsChanged(xButton)
             end
+            HealBot_OnEvent_UnitHealth(xButton)
         end
         if aTarget then
             HealBot_OnEvent_UnitHealth(HealBot_Unit_Button["target"])

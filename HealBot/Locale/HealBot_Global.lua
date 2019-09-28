@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.5.0";
+﻿HEALBOT_VERSION    = "8.2.5.1.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.5" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.6.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -458,6 +458,7 @@ function HealBot_globalVars()
     HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word:Fortitude";
     HBC_POWER_WORD_FORTITUDE                = 1243
     HEALBOT_POWER_WORD_SHIELD               = 17 --GetSpellInfo(17) or "--Power Word:Shield";
+    HBC_PRAYER_OF_FORTITUDE                 = 21568
     HBC_PRAYER_OF_SHADOW_PROTECTION         = 27683
     HBC_PRAYER_OF_SPIRIT                    = 27681
 	HEALBOT_RAMMALS_ULTERIOR_MOTIVE         = 234711 --GetSpellInfo(234711) or "--Rammal's Ulterior Motive";
@@ -547,6 +548,7 @@ function HealBot_globalVars()
     --HEALBOT_DARK_BARGAIN                    = 110913 --GetSpellInfo(110913) or "--Dark Bargain"
     HEALBOT_DARK_INTENT                     = 109773 --GetSpellInfo(109773) or "--Dark Intent";
     HEALBOT_DEMON_ARMOR                     = 687 --GetSpellInfo(687) or "--Demon Armor";
+    HBC_DEMON_ARMOR                         = 706
     HEALBOT_FEL_ARMOR                       = 28176 --GetSpellInfo(28176) or "--Fel Armor";
     HEALBOT_LIFE_TAP                        = 1454 --GetSpellInfo(1454) or "--Life Tap";
     HEALBOT_SOUL_LINK                       = 19028 --GetSpellInfo(19028) or "--Soul Link";
