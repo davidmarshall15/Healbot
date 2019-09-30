@@ -11309,7 +11309,7 @@ function HealBot_Options_SetDefaults()
     HealBot_Options_Opened=false;
     HealBot_Action_Reset();
     HealBot_Action_SetAllAttribs()
-    HideUIPanel(HealBot_Options)
+    HealBot_Options:Hide()
     DoneInitTab={}
     HealBot_setOptions_Timer(8000)
 end

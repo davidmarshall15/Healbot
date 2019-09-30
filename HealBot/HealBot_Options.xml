@@ -15074,7 +15074,7 @@
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HideUIPanel(self:GetParent()); HealBot_Options_Close()</OnClick>
+          <OnClick>HealBot_TogglePanel(self:GetParent()); HealBot_Options_Close()</OnClick>
         </Scripts>
       </Button>
     </Frames>

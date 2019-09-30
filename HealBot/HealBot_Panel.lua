@@ -171,9 +171,12 @@ function HealBot_Panel_ClearBlackList()
     HealBot_nextRecalcParty(0)
 end
 
-function HealBot_Panel_AddBlackList(button)
-    HealBot_Panel_BlackList[button.guid]=true;
-    HealBot_nextRecalcParty(0)
+function HealBot_Panel_AddBlackList(unit)
+    xGUID=UnitGUID(unit)
+    if xGUID then
+        HealBot_Panel_BlackList[xGUID]=true;
+        HealBot_nextRecalcParty(0)
+    end
 end
 
 function HealBot_Panel_ClearHealTargets()
@@ -1661,9 +1664,9 @@ local function HealBot_Panel_petHeals()
             pUnit="raid"..j;
             if HEALBOT_GAME_VERSION>3 then 
                 pInVehicle=UnitUsingVehicle(pUnit) 
-            elseif not UnitIsVisible(pUnit) then
+            elseif not UnitIsVisible(xUnit) then
                 pInVehicle=true
-                HealBot_setNotVisible(pUnit,2)
+                HealBot_setNotVisible(xUnit,2)
             end
             if UnitExists(xUnit) and UnitExists(pUnit) and not pInVehicle then
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
@@ -1686,9 +1689,9 @@ local function HealBot_Panel_petHeals()
             pUnit="party"..j;
             if HEALBOT_GAME_VERSION>3 then 
                 pInVehicle=UnitUsingVehicle(pUnit) 
-            elseif not UnitIsVisible(pUnit) then
+            elseif not UnitIsVisible(xUnit) then
                 pInVehicle=true
-                HealBot_setNotVisible(pUnit,2)
+                HealBot_setNotVisible(xUnit,2)
             end
             if UnitExists(pUnit) and not pInVehicle and UnitExists(xUnit) then 
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
