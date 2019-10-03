@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.5.1";
+﻿HEALBOT_VERSION    = "8.2.5.2.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.6" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.7.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -375,6 +375,12 @@ function HealBot_globalVars()
     HEALBOT_DIVINE_SHIELD                   = 642 --GetSpellInfo(642) or "--Divine Shield";
     --HEALBOT_ETERNAL_FLAME                   = 114163 --GetSpellInfo(114163) or "--Eternal Flame";
     HEALBOT_EXECUTION_SENTENCE              = 114157 --GetSpellInfo(114157) or "--Execution Sentence";
+    HBC_GREATER_BLESSING_OF_KINGS           = 25898
+    HBC_GREATER_BLESSING_OF_LIGHT           = 25890
+    HBC_GREATER_BLESSING_OF_MIGHT           = 25782
+    HBC_GREATER_BLESSING_OF_SALVATION       = 25895
+    HBC_GREATER_BLESSING_OF_SANCTUARY       = 25899
+    HBC_GREATER_BLESSING_OF_WISDOM          = 25894
     --HEALBOT_GUARDED_BY_THE_LIGHT            = 53592 --GetSpellInfo(53592) or "--Guarded by the Light";
     HEALBOT_GUARDIAN_ANCIENT_KINGS          = 86659 --GetSpellInfo(86659) or "--Guardian of Ancient Kings";
     HEALBOT_HAND_OF_FREEDOM                 = 1044 --GetSpellInfo(1044) or "--Hand of Freedom";
@@ -458,7 +464,6 @@ function HealBot_globalVars()
     HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word:Fortitude";
     HBC_POWER_WORD_FORTITUDE                = 1243
     HEALBOT_POWER_WORD_SHIELD               = 17 --GetSpellInfo(17) or "--Power Word:Shield";
-    HBC_PRAYER_OF_FORTITUDE                 = 21568
     HBC_PRAYER_OF_SHADOW_PROTECTION         = 27683
     HBC_PRAYER_OF_SPIRIT                    = 27681
 	HEALBOT_RAMMALS_ULTERIOR_MOTIVE         = 234711 --GetSpellInfo(234711) or "--Rammal's Ulterior Motive";
@@ -555,6 +560,7 @@ function HealBot_globalVars()
     HEALBOT_UNENDING_BREATH                 = 5697 --GetSpellInfo(5697) or "--Unending Breath"
     HEALBOT_UNENDING_RESOLVE                = 104773 --GetSpellInfo(104773) or "--Unending Resolve"
     HEALBOT_SOUL_LEECH                      = 108366 --GetSpellInfo(108370) or "--Soul Leech"
+    HBC_PHASE_SHIFT                         = GetSpellInfo(4511) or "Phase Shift"
     
     --Warrior
     HEALBOT_BATTLE_SHOUT                    = 6673 --GetSpellInfo(6673) or "--Battle Shout";

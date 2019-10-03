@@ -366,10 +366,13 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_REMOVEFROM                = "Remove from";
     HEALBOT_WORDS_ADDTO                     = "Add to";
     HEALBOT_WORDS_INCLUDE                   = "Include";
+    HEALBOT_WORDS_UNSET                     = "Unset";
+    HEALBOT_WORDS_SETAS                     = "Set as";
 
     HEALBOT_OPTIONS_TTALPHA                 = "Opacity"
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
     HEALBOT_OPTIONS_MYTARGET                = "My Targets"
+    HEALBOT_OPTIONS_MYFRIEND                = "My Friend"
 
     HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
     HEALBOT_DISCONNECTED_TAG                = "[ DC ] "
@@ -585,7 +588,8 @@ function HealBot_Lang_enALL()
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
     HEALBOT_SPELL_RANGE                     = "Within spell range"
     HEALBOT_WORD_RESET                      = "Reset"
-    HEALBOT_HBMENU                          = "HBmenu"
+    HEALBOT_WOWMENU                         = "Blizzard Menu";
+    HEALBOT_HBMENU                          = "HealBot Menu"
     HEALBOT_ACTION_HBFOCUS                  = "Left click to set\nfocus on target"
     HEALBOT_WORD_CLEAR                      = "Clear"
     HEALBOT_WORD_SET                        = "Set"

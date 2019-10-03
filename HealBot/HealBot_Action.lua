@@ -384,12 +384,8 @@ function HealBot_Action_SetrSpell()
                 end
             end
         end
-        if HEALBOT_GAME_VERSION>3 then
-            sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
-        else
-            sName=HealBot_KnownSpell(HBC_PRAYER_OF_FORTITUDE)
-            if not sName then sName=HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) end
-        end
+        sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
+        if not sName and HEALBOT_GAME_VERSION<4 then sName=HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) end
 		if sName then 
 			HealBot_RangeSpells["BUFF"]=sName
 			x=sName
@@ -2780,7 +2776,7 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.update.state=false
         ghb.update.roleicon=false
         ghb.update.targeticon=false
-        ghb.status.range=-2
+        ghb.status.range=-9
         ghb.status.unittype=1
         ghb.status.offline=false
         ghb.status.enabled=false
@@ -3039,13 +3035,25 @@ local function HealBot_Action_DelCustomName(hbGUID, isAdd, isPerm)
     HealBot_Action_CustomName()
 end
 
+local function HealBot_Action_ToggelMyFriend(unit)
+    local xGUID=UnitGUID(unit)
+    if xGUID then
+        if HealBot_Config.MyFriend==xGUID then
+            HealBot_Config.MyFriend="x"
+        else
+            HealBot_Config.MyFriend=xGUID
+        end
+    end
+    HealBot_CheckAllBuffs(unit)
+end
+
 local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
     local info
     level = level or 1;
     if level==1 then
         info = UIDropDownMenu_CreateInfo();
-        info.isTitle = 1
-        info.text = self.name
+        info.isTitle = true
+        info.text = HealBot_GetUnitName(self.unit)
         UIDropDownMenu_AddButton(info, 1);
         
         info = UIDropDownMenu_CreateInfo();
@@ -3057,6 +3065,17 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
             info.text = HEALBOT_SKIN_ENTEXT;
         end
         info.func = function() HealBot_Action_Toggle_Enabled(self.unit); end
+        UIDropDownMenu_AddButton(info, 1);
+        
+        info = UIDropDownMenu_CreateInfo();
+        info.hasArrow = false; 
+        info.notCheckable = true;
+        if HealBot_Config.MyFriend==UnitGUID(self.unit) then
+            info.text = HEALBOT_WORDS_UNSET.." "..HEALBOT_OPTIONS_MYFRIEND;
+        else
+            info.text = HEALBOT_WORDS_SETAS.." "..HEALBOT_OPTIONS_MYFRIEND
+        end
+        info.func = function() HealBot_Action_ToggelMyFriend(self.unit, false); end;
         UIDropDownMenu_AddButton(info, 1);
 
         info = UIDropDownMenu_CreateInfo();
@@ -3523,7 +3542,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             HealBot_Action_CheckUnitLowMana(shb)
             shb.update.unit=true
             shb.status.update=true
-            shb.status.range=-2
+            shb.status.range=-9
             if UnitExists(unit) then
                 if UnitIsFriend("player",unit) then 
                     HealBot_CheckPlayerMana(shb) 

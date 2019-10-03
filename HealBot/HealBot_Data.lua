@@ -46,8 +46,8 @@ HealBot_Font_Outline={
 
 HealBot_ConfigDefaults = {
   LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
+  MyFriend="x",
   CurrentSpec=9,
-  HealBot_BuffWatchGUID={},
   Skin_ID = -1,
   MacroUse10 = 0,
   CrashProtMacroName="hbCrashProt",

@@ -190,7 +190,7 @@ function HealBot_Options_setLists()
             HEALBOT_OPTIONS_TANKHEALS,
             HEALBOT_OPTIONS_MYTARGET,
             HEALBOT_FOCUS,
-            HEALBOT_SORTBY_NAME,
+            HEALBOT_OPTIONS_MYFRIEND,
             HEALBOT_OPTIONS_SINGLETANK,
         }
 
@@ -228,6 +228,26 @@ function HealBot_Options_setLists()
             HEALBOT_CLASSES_RANGES,
             HEALBOT_CLASSES_HEALERS,
             HEALBOT_CLASSES_CUSTOM,
+        }
+
+        HealBot_Options_MouseWheel_List = {
+            HEALBOT_WORDS_NONE,
+            HEALBOT_HB_MENU,
+            HEALBOT_FOLLOW,
+            HEALBOT_TRADE,
+            HEALBOT_PROMOTE_RA,
+            HEALBOT_DEMOTE_RA,
+            HEALBOT_TOGGLE_ENABLED,
+            HEALBOT_TOGGLE_MYTARGETS,
+            HEALBOT_TOGGLE_PRIVATETANKS,
+            HEALBOT_TOGGLE_PRIVATEHEALERS,
+            HEALBOT_RESET_BAR,
+            HEALBOT_RANDOMMOUNT,
+            HEALBOT_RANDOMGOUNDMOUNT,
+            HEALBOT_RANDOMPET,
+            HEALBOT_RANDOMFAVMOUNT,
+            HEALBOT_RANDOMFAVPET,
+            HEALBOT_EMOTE,
         }
     else
         HealBot_Options_BuffTxt_List = {
@@ -252,7 +272,7 @@ function HealBot_Options_setLists()
             HEALBOT_BUFF_PVE,
             HEALBOT_OPTIONS_TANKHEALS,
             HEALBOT_OPTIONS_MYTARGET,
-            HEALBOT_SORTBY_NAME,
+            HEALBOT_OPTIONS_MYFRIEND,
             HEALBOT_OPTIONS_SINGLETANK,
         }
 
@@ -284,6 +304,21 @@ function HealBot_Options_setLists()
             HEALBOT_CLASSES_RANGES,
             HEALBOT_CLASSES_HEALERS,
             HEALBOT_CLASSES_CUSTOM,
+        }
+
+        HealBot_Options_MouseWheel_List = {
+            HEALBOT_WORDS_NONE,
+            HEALBOT_HB_MENU,
+            HEALBOT_FOLLOW,
+            HEALBOT_TRADE,
+            HEALBOT_PROMOTE_RA,
+            HEALBOT_DEMOTE_RA,
+            HEALBOT_TOGGLE_ENABLED,
+            HEALBOT_TOGGLE_MYTARGETS,
+            HEALBOT_TOGGLE_PRIVATETANKS,
+            HEALBOT_TOGGLE_PRIVATEHEALERS,
+            HEALBOT_RESET_BAR,
+            HEALBOT_EMOTE,
         }
     end
     
@@ -372,26 +407,6 @@ function HealBot_Options_setLists()
         HEALBOT_WORDS_SMALL,
         HEALBOT_WORDS_MEDIUM,
         HEALBOT_WORDS_LARGE,
-    }
-    
-    HealBot_Options_MouseWheel_List = {
-        HEALBOT_WORDS_NONE,
-        HEALBOT_HB_MENU,
-        HEALBOT_FOLLOW,
-        HEALBOT_TRADE,
-        HEALBOT_PROMOTE_RA,
-        HEALBOT_DEMOTE_RA,
-        HEALBOT_TOGGLE_ENABLED,
-        HEALBOT_TOGGLE_MYTARGETS,
-        HEALBOT_TOGGLE_PRIVATETANKS,
-        HEALBOT_TOGGLE_PRIVATEHEALERS,
-        HEALBOT_RESET_BAR,
-        HEALBOT_RANDOMMOUNT,
-        HEALBOT_RANDOMGOUNDMOUNT,
-        HEALBOT_RANDOMPET,
-        HEALBOT_RANDOMFAVMOUNT,
-        HEALBOT_RANDOMFAVPET,
-        HEALBOT_EMOTE,
     }
     
     HealBot_Options_EmoteCat_List = {
@@ -897,15 +912,21 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_BLESSING_OF_MIGHT,
             HBC_BLESSING_OF_MIGHT,
+            HBC_GREATER_BLESSING_OF_MIGHT,
             HBC_BLESSING_OF_SANCTUARY,
+            HBC_GREATER_BLESSING_OF_SANCTUARY,
             HEALBOT_BLESSING_OF_KINGS,
             HBC_BLESSING_OF_KINGS,
+            HBC_GREATER_BLESSING_OF_KINGS,
             HBC_BLESSING_OF_LIGHT,
+            HBC_GREATER_BLESSING_OF_LIGHT,
             HEALBOT_BLESSING_OF_WISDOM,
             HBC_BLESSING_OF_WISDOM,
+            HBC_GREATER_BLESSING_OF_WISDOM,
             HEALBOT_HAND_OF_FREEDOM,
             HEALBOT_HAND_OF_PROTECTION,
             HEALBOT_HAND_OF_SALVATION,
+            HBC_GREATER_BLESSING_OF_SALVATION,
             HEALBOT_RIGHTEOUS_FURY,
             HEALBOT_DEVOTION_AURA,
             HBC_RETRIBUTION_AURA,
@@ -933,7 +954,6 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_POWER_WORD_FORTITUDE,
             HBC_POWER_WORD_FORTITUDE,
-            HBC_PRAYER_OF_FORTITUDE,
             HBC_SHADOW_PROTECTION,
             HBC_TOUCH_OF_WEAKNESS,
             HBC_DIVINE_SPIRIT,
@@ -1144,12 +1164,8 @@ function HealBot_Options_retIsDebuffSpell(spellName)
     return nil
 end
 
-function HealBot_Options_retDebuffWatchTarget(debuffType, hbGUID)
-    if HealBot_DebuffSpell[debuffType] and HealBot_Config.HealBot_BuffWatchGUID[HealBot_DebuffSpell[debuffType]] then
-        return HealBot_DebuffWatchTarget[debuffType], HealBot_Config.HealBot_BuffWatchGUID[HealBot_DebuffSpell[debuffType]][hbGUID]
-    else
-        return HealBot_DebuffWatchTarget[debuffType], nil
-    end
+function HealBot_Options_retDebuffWatchTarget(debuffType)
+    return HealBot_DebuffWatchTarget[debuffType]
 end
 
 function HealBot_Options_retDebuffCureSpell(debuffType)
@@ -1167,12 +1183,8 @@ function HealBot_Options_retDebuffWatchTargetCD(debuffType)
     return remain
 end
 
-function HealBot_Options_retBuffWatchTarget(buffName, hbGUID)
-    if HealBot_Config.HealBot_BuffWatchGUID[buffName] then
-        return HealBot_BuffWatchTarget[buffName], HealBot_Config.HealBot_BuffWatchGUID[buffName][hbGUID]
-    else 
-        return HealBot_BuffWatchTarget[buffName], nil
-    end
+function HealBot_Options_retBuffWatchTarget(buffName)
+    return HealBot_BuffWatchTarget[buffName]
 end
 
 function HealBot_Options_retDebuffPriority(spellId, debuffType)
@@ -5950,6 +5962,10 @@ function HealBot_Options_ActionBarsCombo_DropDown()
     end
 end
 
+local HealBot_Options_SCAC = { [1] = HEALBOT_WOWMENU,
+                               [2] = HEALBOT_TOGGLE_ENABLED,
+                               [3] = HEALBOT_HBMENU
+                             }
 function HealBot_Options_ComboClass_Text()
     local combo=nil
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
@@ -6031,6 +6047,17 @@ function HealBot_Options_ComboClass_Text()
         HealBot_AltShiftAvoidBlueCursor:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
         HealBot_CtrlShiftAvoidBlueCursor:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
         HealBot_CtrlAltAvoidBlueCursor:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+    end
+    if HealBot_Options_ComboButtons_Button>3 then
+        local g=_G["HealBot_Options_ShiftCntlAltClickHeader"] 
+        g:SetText(" ")
+        local g=_G["HealBot_Options_ShiftCntlAltClickDetail"] 
+        g:SetText(" ")
+    else
+        local g=_G["HealBot_Options_ShiftCntlAltClickHeader"] 
+        g:SetText(HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK..":")
+        local g=_G["HealBot_Options_ShiftCntlAltClickDetail"] 
+        g:SetText(HealBot_Options_SCAC[HealBot_Options_ComboButtons_Button])
     end
 end
 
@@ -10239,7 +10266,6 @@ local function HealBot_Options_DoDebuff_Reset()
                         HealBot_DebuffWatchTargetSpell["Focus"]=true
                     elseif dropdownID==26 then
                         HealBot_DebuffWatchTargetSpell["Name"]=true
-                        if not FirstDebuffLoad then HealBot_Options_Get_deBuffWatchGUID(sName, "Debuff", k) end
                     end        
                 end)
             end
@@ -10484,7 +10510,6 @@ local function HealBot_Options_DoBuff_Reset()
                     HealBot_BuffWatchTargetSpell["Focus"]=true
                 elseif dropdownID==26 then
                     HealBot_BuffWatchTargetSpell["Name"]=true
-                    if not FirstBuffLoad then HealBot_Options_Get_BuffWatchGUID(sName, "Buff") end
                 elseif dropdownID==27 then
                     HealBot_BuffWatchTargetSpell["SingleTank"]=true
                 end
@@ -10504,159 +10529,6 @@ function HealBot_Options_BuffDebuff_Reset(aType)
     else
         HealBot_Options_DoBuff_Reset()
     end
-end
-
-local BuffWatchSpell=" "
-function HealBot_Options_BUFFNAMEDTITLE_show()
-    StaticPopupDialogs["HEALBOT_OPTIONS_BUFFNAMEDTITLE"] = {
-        text = HEALBOT_OPTIONS_BUFFNAMED.."%s",
-        button1 = ACCEPT,
-        button2 = CANCEL,
-        OnShow = function(self)
-            local g=_G[self:GetName().."WideEditBox"] or _G[self:GetName().."EditBox"]
-            g:SetText(HealBot_GuessName())
-        end,
-        OnAccept = function(self)
-            local g=_G[self:GetName().."WideEditBox"] or _G[self:GetName().."EditBox"]
-            HealBot_Options_Set_BuffWatchGUID(g:GetText())
-        end,
-        OnCancel = function()
-            -- do nothing
-        end,
-        timeout = 0,
-        whileDead = 1,
-        hideOnEscape = 1,
-        hasEditBox = 1,
-        hasWideEditBox = 1,
-    };
-    
-    StaticPopup_Show ("HEALBOT_OPTIONS_BUFFNAMEDTITLE", BuffWatchSpell);
-end
-
-function HealBot_GuessName()
-    local gName=nil
-    local gGUID=nil
-
-    if HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell] and (type(HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]) == "table") then
-        local tGUID=HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]
-        for uGUID,_ in pairs(tGUID) do
-            local xUnit=HealBot_retUnitGUID(myGUID)
-            if xUnit then
-                if gName then
-                    gName=gName..","..HealBot_Panel_UnitName(xUnit)
-                else
-                    gName=HealBot_Panel_UnitName(xUnit)
-                end
-            end
-        end
-    end
-    
-    if not gName then
-        if UnitExists("Target") and HealBot_Unit_Button["target"] then
-            gName=HealBot_GetUnitName("Target")
-        end
-        local myTargets=HealBot_GetMyHealTargets()
-        local x=true
-        table.foreach(myTargets, function (i,myGUID)
-            local xUnit=HealBot_retUnitGUID(myGUID)
-            if xUnit then
-                if gName and x then 
-                    gName=gName..","..HealBot_Panel_UnitName(xUnit)
-                    x=nil
-                elseif x then
-                    gName=HealBot_Panel_UnitName(xUnit)
-                end
-            end  
-        end)
-        if gName then 
-            gName=gName..","..HealBot_GetUnitName("Player")
-        else
-            gName=HealBot_GetUnitName("Player")
-        end
-    end
-    
-    gName=(gName or "")..","..HEALBOT_SORTBY_NAME
-
-    return gName
-end
-
-local BuffWatchType=nil
-function HealBot_Options_Set_BuffWatchGUID(unitName)
-    
-    if BuffWatchType=="Buff" and HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell] then
-        local tGUID=HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]
-        if tGUID and type(tGUID)=="table" then
-            for uGUID,_ in pairs(tGUID) do
-                local xUnit=HealBot_retUnitGUID(uGUID)
-                if xUnit then
-                    xButton=HealBot_Unit_Button[xUnit]
-                    if xButton and xButton.aura.buff.name==BuffWatchSpell then
-                        HealBot_ClearBuff(xButton)
-                    end
-                end
-            end
-        elseif tGUID then
-            local xUnit=HealBot_retUnitGUID(uGUID)
-            if xUnit then
-                xButton=HealBot_Unit_Button[xUnit]
-                if xButton and xButton.aura.buff.name==BuffWatchSpell then
-                    HealBot_ClearBuff(xButton)
-                end
-            end
-        end
-    end
-
-    local tName=nil
-    if strfind(unitName,",") then tName = HealBot_Split(unitName, ","); end
-    local tGUID={}
-
-    if tName and type(tName)=="table" then
-        for _,uName in pairs(tName) do
-            uName=HealBot_Options_CleanName(uName)
-            local xGUID=HealBot_RetUnitNameGUIDs(uName)
-            if xGUID then
-                tinsert(tGUID, xGUID);
-            end
-        end
-    elseif tName then
-        tName=HealBot_Options_CleanName(tName)
-        local xGUID=HealBot_RetUnitNameGUIDs(tName)
-        if xGUID then
-            tinsert(tGUID, xGUID);
-        end
-    end
-    
-    HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell]={}
-    
-    for _,uGUID in pairs(tGUID) do
-        local xUnit=HealBot_retUnitGUID(uGUID)
-        if xUnit then
-            HealBot_Config.HealBot_BuffWatchGUID[BuffWatchSpell][uGUID]=uGUID 
-            HealBot_Queue_MyBuffsCheck(uGUID)
-        end
-    end
-end
-
-function HealBot_Options_CleanName(unitName)
-    local uName=strtrim(unitName)
-    uName=strupper(strsub(uName, 1, 1))..strlower(strsub(uName, 2))
-    return uName
-end
-
-function HealBot_Options_Get_BuffWatchGUID(spellName, BuffType)
-    if not ClickedBuffGroupDD or ClickedBuffGroupDD~=ddID then return end
-    BuffWatchSpell=spellName
-    BuffWatchType=BuffType
-    HealBot_Options_BUFFNAMEDTITLE_show()
-    ClickedBuffGroupDD=nil
-end
-
-function HealBot_Options_Get_deBuffWatchGUID(spellName, BuffType)
-    if not ClickedBuffGroupDD or ClickedBuffGroupDD~=ddID then return end
-    BuffWatchSpell=spellName
-    BuffWatchType=BuffType
-    HealBot_Options_BUFFNAMEDTITLE_show()
-    ClickedBuffGroupDD=nil
 end
 
 function HealBot_Options_RetBuffRGB(button)
@@ -11452,6 +11324,8 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:SetTextColor(1,1,1,1);    
     g=_G["HealBot_Options_SkinAuthorName"]
     g:SetTextColor(1,1,1,1);  
+    g=_G["HealBot_Options_ShiftCntlAltClickDetail"]
+    g:SetTextColor(1,1,1,1);  
     HealBot_Options_CDCCastByCustom:Disable()    
     HealBot_Options_CDCPriorityCustom:Disable()
 end
@@ -11750,6 +11624,8 @@ function HealBot_Options_Lang(region)
         g:SetText(HEALBOT_OPTIONS_TAB_VISIBILITY)
         g=_G["HealBot_Options_SkinsFramesBarsAggrob"] 
         g:SetText(HEALBOT_OPTIONS_TAB_AGGRO)
+        g=_G["HealBot_Options_ShiftCntlAltClickHeader"] 
+        g:SetText(HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK..":")
         HealBot_Options_SetText(HealBot_Options_FrameTitle,HEALBOT_OPTIONS_FRAME_TITLE)
         HealBot_Options_SetText(HealBot_Options_FrameAlias,HEALBOT_OPTIONS_FRAME_ALIAS)
         HealBot_Options_SetText(HealBot_Options_FrameAliasShow,HEALBOT_OPTIONS_FRAME_TITLE_SHOW)

@@ -1664,9 +1664,9 @@ local function HealBot_Panel_petHeals()
             pUnit="raid"..j;
             if HEALBOT_GAME_VERSION>3 then 
                 pInVehicle=UnitUsingVehicle(pUnit) 
-            elseif not UnitIsVisible(xUnit) then
+            elseif not UnitIsVisible(pUnit) then
                 pInVehicle=true
-                HealBot_setNotVisible(xUnit,2)
+                HealBot_setNotVisible(pUnit,2)
             end
             if UnitExists(xUnit) and UnitExists(pUnit) and not pInVehicle then
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)
@@ -1689,9 +1689,9 @@ local function HealBot_Panel_petHeals()
             pUnit="party"..j;
             if HEALBOT_GAME_VERSION>3 then 
                 pInVehicle=UnitUsingVehicle(pUnit) 
-            elseif not UnitIsVisible(xUnit) then
+            elseif not UnitIsVisible(pUnit) then
                 pInVehicle=true
-                HealBot_setNotVisible(xUnit,2)
+                HealBot_setNotVisible(pUnit,2)
             end
             if UnitExists(pUnit) and not pInVehicle and UnitExists(xUnit) then 
                 HealBot_Panel_addUnit(xUnit, xGUID, hbincSort, false)

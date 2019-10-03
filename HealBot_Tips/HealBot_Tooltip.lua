@@ -61,7 +61,7 @@ local function HealBot_Tooltip_SpellPattern(button, click)
     local sPattern=nil
     if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
         if click=="Left" then
-            sPattern=HEALBOT_MENU
+            sPattern=HEALBOT_WOWMENU
         elseif click=="Right" then
             sPattern=HEALBOT_HBMENU
             --HealBot_Panel_ToggelHealTarget(self.unit)

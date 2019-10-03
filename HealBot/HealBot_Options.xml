@@ -2824,9 +2824,30 @@
           </Frame>
           <Frame name="HealBot_Options_Panel2" hidden="true" setAllPoints="true">
             <Frames>
-              <Frame name="HealBot_Options_KeysFrame">
+              <Frame name="HealBot_Options_KeysFrame">                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_Options_ShiftCntlAltClickHeader" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="-44" y="20"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_Options_ShiftCntlAltClickDetail" text="HEALBOT_MENU" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="LEFT" relativeTo="HealBot_Options_ShiftCntlAltClickHeader" relativePoint="RIGHT">
+                          <Offset>
+                            <AbsDimension x="10" y="0" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
                 <Size>
-                  <AbsDimension y="505"/>
+                  <AbsDimension y="525"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
@@ -3936,12 +3957,12 @@
               
               <Frame name="HealBot_Options_DisabledBarPanel">
                 <Size>
-                  <AbsDimension y="110"/>
+                  <AbsDimension y="100"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="20" y="-535"/>
+                      <AbsDimension x="20" y="-555"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
