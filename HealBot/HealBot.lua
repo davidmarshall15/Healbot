@@ -1823,8 +1823,8 @@ local function HealBot_RemoveIcon(button, index)
 end
 
 local function HealBot_Icon_AlphaValue(secLeft, curFrame)
-    if secLeft>=0 and secLeft<12 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
-        return (secLeft/11)+.2
+    if secLeft>=0 and secLeft<24 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
+        return (secLeft/24)+.1
     elseif secLeft>=0 then
         return 1
     end
@@ -3093,54 +3093,54 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
     
     if HEALBOT_GAME_VERSION<4 then
-        local HBC_PRIE_SPIRIT_ID = 1 --Spirit
-        local HBC_PRIE_SP_ID = 2 --Shadow Resistance 
-        local HBC_PALA_WISDOM_ID = 3 --Mana Regen
-        local HBC_PALA_LIGHT_ID = 4 --Incoming Heals
-        local HBC_PALA_SALVATION_ID = 5 --Threat Reduction
-        local HBC_PALA_SANCTUARY_ID = 6 --Damage Reduction
-        local HBC_PALA_KINGS_ID = 7 --Stats
-        local HBC_PALA_MIGHT_ID = 8 --Attack Power
-        local HBC_PRIE_STAMINA_ID = 9 --Stamina
-        local HBC_MAGE_INT_ID = 10 --Int
+        local HBC_SPIRIT_ID = 1 --Spirit
+        local HBC_SP_ID = 2 --Shadow Resistance 
+        local HBC_WISDOM_ID = 3 --Mana Regen
+        local HBC_LIGHT_ID = 4 --Incoming Heals
+        local HBC_SALVATION_ID = 5 --Threat Reduction
+        local HBC_SANCTUARY_ID = 6 --Damage Reduction
+        local HBC_STATS_ID = 7 --Stats
+        local HBC_MIGHT_ID = 8 --Attack Power
+        local HBC_STAMINA_ID = 9 --Stamina
+        local HBC_INT_ID = 10 --Int
 
         if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = {HEALBOT_STATS_ID},
-                [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "x")] = {HEALBOT_STATS_ID},
+                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = {HBC_STATS_ID},
+                [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "x")] = {HBC_STATS_ID},
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "x")] = {HBC_MAGE_INT_ID},
+                [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "x")] = {HBC_INT_ID},
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "x")] = {HBC_PALA_KINGS_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "x")] = {HBC_PALA_LIGHT_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "x")] = {HBC_PALA_MIGHT_ID},
-                [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "x")] = {HBC_PALA_SALVATION_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "x")] = {HBC_PALA_SANCTUARY_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "x")] = {HBC_PALA_WISDOM_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "x")] = {HBC_PALA_KINGS_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "x")] = {HBC_PALA_LIGHT_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "x")] = {HBC_PALA_MIGHT_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "x")] = {HBC_PALA_SALVATION_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "x")] = {HBC_PALA_SANCTUARY_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "x")] = {HBC_PALA_WISDOM_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "x")] = {HBC_STATS_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "x")] = {HBC_LIGHT_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "x")] = {HBC_MIGHT_ID},
+                [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "x")] = {HBC_SALVATION_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "x")] = {HBC_SANCTUARY_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "x")] = {HBC_WISDOM_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "x")] = {HBC_STATS_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "x")] = {HBC_LIGHT_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "x")] = {HBC_MIGHT_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "x")] = {HBC_SALVATION_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "x")] = {HBC_SANCTUARY_ID},
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "x")] = {HBC_WISDOM_ID},
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "x")] = {HBC_PRIE_STAMINA_ID},
-                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = {HBC_PRIE_STAMINA_ID},
-                [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "x")] = {HBC_PRIE_SPIRIT_ID},
-                [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "x")] = {HBC_PRIE_SPIRIT_ID},
-                [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = {HBC_PRIE_SP_ID},
-                [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = {HBC_PRIE_SP_ID},
+                [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "x")] = {HBC_STAMINA_ID},
+                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = {HBC_STAMINA_ID},
+                [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "x")] = {HBC_SPIRIT_ID},
+                [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "x")] = {HBC_SPIRIT_ID},
+                [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = {HBC_SP_ID},
+                [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = {HBC_SP_ID},
             }
         else
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = {HEALBOT_ATTACK_POWER_ID},
-                [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = {HEALBOT_ATTACK_POWER_ID},
+                [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = {HBC_STAMINA_ID},
+                [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = {HBC_STAMINA_ID},
             }
         end
         HealBot_setOptions_Timer(9990)
@@ -3755,7 +3755,7 @@ local function HealBot_Options_Update()
         HealBot_Options_Timer[9995]=nil
         if HealBot_luVars["NoSpamOOM"]<TimeNow and 
           (((UnitPower("player", 0)/UnitPowerMax("player", 0))*100) < Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"]) then
-            HealBot_luVars["NoSpamOOM"]=TimeNow+120
+            HealBot_luVars["NoSpamOOM"]=TimeNow+75
             DoEmote(HEALBOT_EMOTE_OOM)
             --HealBot_AddDebug(HEALBOT_EMOTE_OOM.." - mPct="..((UnitPower("player", 0)/UnitPowerMax("player", 0))*100))
         end

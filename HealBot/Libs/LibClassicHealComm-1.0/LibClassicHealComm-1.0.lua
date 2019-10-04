@@ -1,13 +1,13 @@
 --[[
 Name: LibClassicHealComm-1.0
-Revision: $Revision: 19 $
+Revision: $Revision: 20 $
 Author(s): Aviana, Original by Shadowed (shadowed.wow@gmail.com)
 Description: Healing communication library. This is a heavily modified clone of LibHealComm-4.0.
 Dependencies: LibStub, ChatThrottleLib
 ]]
 
 local major = "LibClassicHealComm-1.0"
-local minor = 19
+local minor = 20
 assert(LibStub, string.format("%s requires LibStub.", major))
 
 local HealComm = LibStub:NewLibrary(major, minor)
@@ -708,7 +708,7 @@ if( playerClass == "DRUID" ) then
 				healAmount = healAmount * 1.50
 			end
 			
-			if( spellData[spellID].ticks ) then
+			if( spellName == Tranquility ) then
 				return CHANNEL_HEALS, math.ceil(healAmount / spellData[spellID].ticks), spellData[spellID].ticks, spellData[spellID].ticks
 			end
 			
@@ -919,7 +919,7 @@ if( playerClass == "PRIEST" ) then
 			local healAmount = hotData[spellID].average
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
-			local totalTicks, duration
+			local totalTicks, duration, ticks
 
 			healModifier = healModifier + talentData[SpiritualHealing].current
 
@@ -1184,7 +1184,7 @@ function HealComm:UNIT_AURA(unit)
 	local increase, decrease, playerIncrease, playerDecrease = 1, 1, 1, 1
 
 	-- Scan debuffs
-	id = 1
+	local id = 1
 	while( true ) do
 		local _, _, stack, _, _, _, _, _, _, spellID = UnitAura(unit, id, "HARMFUL")
 		if( not spellID ) then break end
@@ -1479,7 +1479,7 @@ function HealComm:CHAT_MSG_ADDON(prefix, message, channel, sender)
 		parseDirectHeal(casterGUID, spellID, tonumber(arg1), castTime, string.split(",", arg2))
 	-- Direct or channel heal delayed - DL:<extra>:<spellID>:<start>:<end>...
 	elseif( commType == "DL" and arg1 and arg2 ) then
-		parseHealDelayed(casterGUID, tonumber(arg1)/1000, tonumber(arg2)/1000, spellID)
+		parseHealDelayed(casterGUID, tonumber(arg1), tonumber(arg2), spellID)
 	-- New channel heal - C:<extra>:<spellID>:<amount>:<totalTicks>:target1,target2...
 	elseif( commType == "C" and arg1 and arg3 ) then
 		parseChannelHeal(casterGUID, spellID, tonumber(arg1), tonumber(arg2), string.split(",", arg3))
@@ -1703,8 +1703,8 @@ function HealComm:UNIT_SPELLCAST_CHANNEL_STOP(casterUnit, castGUID, spellID)
 	if( casterUnit ~= "player" or not spellData[spellID] or spellID ~= castID ) then return end
 
 	castID = nil
-	parseHealEnd(playerGUID, nil, "name", spellID, false)
-	sendMessage(string.format("S::%d:0", spellID))
+	parseHealEnd(playerGUID, nil, "id", spellID, false)
+	sendMessage(string.format("HS::%d:0", spellID))
 end
 
 function HealComm:UNIT_SPELLCAST_INTERRUPTED(casterUnit, castGUID, spellID)
@@ -1724,13 +1724,13 @@ function HealComm:UNIT_SPELLCAST_DELAYED(casterUnit, castGUID, spellID)
 		local startTime, endTime = select(4, CastingInfo())
 		if( startTime and endTime ) then
 			parseHealDelayed(playerGUID, startTime / 1000, endTime / 1000, spellID)
-			sendMessage(string.format("DL::%d:%d:%d", spellID or 0, startTime, endTime))
+			sendMessage(string.format("DL::%d:%f:%f", spellID or 0, startTime/1000, endTime/1000))
 		end
 	elseif( pendingHeals[playerGUID][spellID].bitType == CHANNEL_HEALS ) then
 		local startTime, endTime = select(4, ChannelInfo())
 		if( startTime and endTime ) then
 			parseHealDelayed(playerGUID, startTime / 1000, endTime / 1000, spellID)
-			sendMessage(string.format("DL::%d:%d:%d", spellID or 0, startTime, endTime))
+			sendMessage(string.format("DL::%d:%f:%f", spellID or 0, startTime/1000, endTime/1000))
 		end
 	end
 end
@@ -1896,6 +1896,7 @@ local function clearGUIDData()
 	playerGUID = playerGUID or UnitGUID("player")
 	HealComm.guidToUnit = {[playerGUID] = "player"}
 	guidToUnit = HealComm.guidToUnit
+	HealComm:UNIT_PET("player")
 	
 	HealComm.guidToGroup = {}
 	guidToGroup = HealComm.guidToGroup
@@ -1938,7 +1939,7 @@ function HealComm:UNIT_PET(unit)
 	end
 end
 
--- Keep track of party GUIDs, ignored in raids as RRU will handle that mapping
+-- Keep track of party GUIDs
 function HealComm:GROUP_ROSTER_UPDATE()
 	updateDistributionChannel()
 	
@@ -1957,8 +1958,8 @@ function HealComm:GROUP_ROSTER_UPDATE()
 		for i=1, MAX_PARTY_MEMBERS do
 			local unit = "party" .. i
 			if( UnitExists(unit) ) then
-				local lastGroup = guidToGroup[guid]
 				local guid = UnitGUID(unit)
+				local lastGroup = guidToGroup[guid]
 				guidToUnit[guid] = unit
 				guidToGroup[guid] = 0
 				
@@ -1976,8 +1977,8 @@ function HealComm:GROUP_ROSTER_UPDATE()
 		for i=1, MAX_RAID_MEMBERS do
 			local unit = "raid" .. i
 			if( UnitExists(unit) ) then
-				local lastGroup = guidToGroup[guid]
 				local guid = UnitGUID(unit)
+				local lastGroup = guidToGroup[guid]
 				guidToUnit[guid] = unit
 				guidToGroup[guid] = select(3, GetRaidRosterInfo(i))
 				
