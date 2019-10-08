@@ -1159,6 +1159,7 @@ function HealBot_Lang_enALL()
                                    [16] = "xtacie",
                                    [17] = "bkwildlifecntrl",
                                    [18] = "mlharg",
+                                   [19] = "Yuriusha",
                                 }
                                
 end

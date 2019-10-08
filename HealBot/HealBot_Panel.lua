@@ -1313,7 +1313,7 @@ local function HealBot_Panel_SubSort(doSubSort,unitType)
         end)
     end
     for j=1,#subunits do
-        local sUnit=subunits[j];
+        local sUnit=subunits[j] or "x";
         local sGUID=UnitGUID(sUnit) or sUnit
         if not HealBot_TrackUnit[sUnit] and not HealBot_Panel_BlackList[sGUID] then
             local setButton=HealBot_Action_SetHealButton(sUnit,sGUID,hbCurrentFrame,unitType);

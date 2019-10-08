@@ -1823,8 +1823,8 @@ local function HealBot_RemoveIcon(button, index)
 end
 
 local function HealBot_Icon_AlphaValue(secLeft, curFrame)
-    if secLeft>=0 and secLeft<24 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
-        return (secLeft/24)+.1
+    if secLeft>=0 and secLeft<18 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] then
+        return (secLeft/20)+.1
     elseif secLeft>=0 then
         return 1
     end
@@ -4918,41 +4918,42 @@ local function HealBot_SetBuffIcon(button, name, texture, count, expirationTime,
 end
 
 local function HealBot_CheckUnitBuffs(button)
+    local xGUID=button.guid
+    local xUnit=button.unit   
+    if not xUnit or not UnitExists(xUnit) then return end
+    local doBuffCheck=true
     if HealBot_Config_Buffs.NoAuraWhenRested and IsResting() then 
         if HealBot_luVars["buffExists"] then
             HealBot_luVars["buffExists"]=false
             HealBot_ClearAllBuffs()
         end
-    else
+        doBuffCheck=false 
+    end
+    local cBuffs=false
+    local gBuffs=false
+    local cIcons=false
+    local curBuffName=nil;
+    local doResetBuffTime=false
+    local onlyPlayers=UnitIsPlayer(xUnit)
+    if HEALBOT_GAME_VERSION<4 then onlyPlayers=UnitIsFriend("player", xUnit) end
+    if HealBot_Config_Buffs.BuffWatch then
+        cBuffs=true
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then 
+            cIcons=true
+        end
+        if (not HealBot_Config_Buffs.BuffWatchWhenGrouped or GetNumGroupMembers()>0) and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and onlyPlayers then
+            gBuffs=true
+        end
+    end
+    if cIcons then 
+        HealBot_luVars["prevBuffIconCount"]=button.icon.buff.count
+        button.icon.buff.count=0
+    end
+    if doBuffCheck then 
         local name, texture, count, expirationTime, unitCaster, spellId = nil,nil,nil,nil,nil,nil
-        local xGUID=button.guid
-        local xUnit=button.unit   
-        if not xUnit or not UnitExists(xUnit) then return end
-        local cBuffs=false
-        local gBuffs=false
-        local cIcons=false
-        local doResetBuffTime=false
-        local onlyPlayers=UnitIsPlayer(xUnit)
-        if HEALBOT_GAME_VERSION<4 then onlyPlayers=UnitIsFriend("player", xUnit) end
-        if HealBot_Config_Buffs.BuffWatch then
-            cBuffs=true
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBUFF"] then 
-                cIcons=true
-            end
-            if (not HealBot_Config_Buffs.BuffWatchWhenGrouped or GetNumGroupMembers()>0) and (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and onlyPlayers then
-                gBuffs=true
-            end
-        end
-        
-        local prevIconCount = button.icon.buff.count
-        if cIcons then 
-            HealBot_luVars["prevBuffIconCount"]=button.icon.buff.count
-            button.icon.buff.count=0
-        end
         TimeNow=GetTime()
         local _,BuffClass=UnitClass(xUnit)
         if not BuffClass then BuffClass=HealBot_Class_En[HEALBOT_WARRIOR] end   
-        local curBuffName=nil;
         if gBuffs then 
             for x,_ in pairs(PlayerBuffs) do
                 PlayerBuffs[x]=nil;
@@ -5035,10 +5036,6 @@ local function HealBot_CheckUnitBuffs(button)
             end
         end
         
-        if cIcons then 
-            HealBot_CheckUnitBuffIcons(button)
-        end
-
         if gBuffs then
             local PlayerBuffsList=button.aura.buff.recheck
             for bName,nexttime in pairs (PlayerBuffsList) do
@@ -5122,62 +5119,58 @@ local function HealBot_CheckUnitBuffs(button)
                 end
             end
         end
-        if curBuffName then
-            if button.aura.buff.name~=curBuffName or curBuffName==HEALBOT_CUSTOM_en then
-                button.aura.buff.name=curBuffName;
-                if HealBot_Config_Buffs.SoundBuffWarning and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Sound-3) then
-                    HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
-                end
-                if HealBot_Config_Buffs.CBshownAB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro-3) then
-                    HealBot_Action_UpdateAggro(button.unit,"buff",4, 0)
-                end
-                if HealBot_Config_Buffs.ShowBuffWarning and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Screen-3) then
-                    if HealBot_BuffWatch[button.aura.buff.name] and HealBot_Config_Buffs.HealBotBuffColR[HealBot_BuffWatch[button.aura.buff.name]] then
-                        UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." requires "..button.aura.buff.name, 
-                                                 HealBot_Config_Buffs.HealBotBuffColR[HealBot_BuffWatch[button.aura.buff.name]],
-                                                 HealBot_Config_Buffs.HealBotBuffColG[HealBot_BuffWatch[button.aura.buff.name]],
-                                                 HealBot_Config_Buffs.HealBotBuffColB[HealBot_BuffWatch[button.aura.buff.name]],
-                                                 1, UIERRORS_HOLD_TIME);
-                    else
-                        local bName=GetSpellInfo(button.aura.buff.id)
-                        if bName and HealBot_luVars["lastBuffMsg"]~=bName then
-                            HealBot_luVars["lastBuffMsg"]=bName
-                            if HealBot_Globals.CustomBuffBarColour[button.aura.buff.id] then
-                                UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." benefits from "..bName, 
-                                                         HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].R,
-                                                         HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].G,
-                                                         HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].B,
-                                                         1, UIERRORS_HOLD_TIME);
-                            else
-                                local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
-                                UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." benefits from "..bName,
-                                                         HealBot_Globals.CustomBuffBarColour[customBuffPriority].R,
-                                                         HealBot_Globals.CustomBuffBarColour[customBuffPriority].G,
-                                                         HealBot_Globals.CustomBuffBarColour[customBuffPriority].B,
-                                                         1, UIERRORS_HOLD_TIME);
-                            end
+    end
+    if cIcons then 
+        HealBot_CheckUnitBuffIcons(button)
+    end
+    if curBuffName then
+        if button.aura.buff.name~=curBuffName or curBuffName==HEALBOT_CUSTOM_en then
+            button.aura.buff.name=curBuffName;
+            if HealBot_Config_Buffs.SoundBuffWarning and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Sound-3) then
+                HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
+            end
+            if HealBot_Config_Buffs.CBshownAB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro-3) then
+                HealBot_Action_UpdateAggro(button.unit,"buff",4, 0)
+            end
+            if HealBot_Config_Buffs.ShowBuffWarning and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Screen-3) then
+                if HealBot_BuffWatch[button.aura.buff.name] and HealBot_Config_Buffs.HealBotBuffColR[HealBot_BuffWatch[button.aura.buff.name]] then
+                    UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." requires "..button.aura.buff.name, 
+                                             HealBot_Config_Buffs.HealBotBuffColR[HealBot_BuffWatch[button.aura.buff.name]],
+                                             HealBot_Config_Buffs.HealBotBuffColG[HealBot_BuffWatch[button.aura.buff.name]],
+                                             HealBot_Config_Buffs.HealBotBuffColB[HealBot_BuffWatch[button.aura.buff.name]],
+                                             1, UIERRORS_HOLD_TIME);
+                else
+                    local bName=GetSpellInfo(button.aura.buff.id)
+                    if bName and HealBot_luVars["lastBuffMsg"]~=bName then
+                        HealBot_luVars["lastBuffMsg"]=bName
+                        if HealBot_Globals.CustomBuffBarColour[button.aura.buff.id] then
+                            UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." benefits from "..bName, 
+                                                     HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].R,
+                                                     HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].G,
+                                                     HealBot_Globals.CustomBuffBarColour[button.aura.buff.id].B,
+                                                     1, UIERRORS_HOLD_TIME);
+                        else
+                            local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
+                            UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." benefits from "..bName,
+                                                     HealBot_Globals.CustomBuffBarColour[customBuffPriority].R,
+                                                     HealBot_Globals.CustomBuffBarColour[customBuffPriority].G,
+                                                     HealBot_Globals.CustomBuffBarColour[customBuffPriority].B,
+                                                     1, UIERRORS_HOLD_TIME);
                         end
                     end
                 end
             end
-            HealBot_Action_UpdateDebuffButton(button)
-            HealBot_luVars["buffExists"]=true
-        elseif button.aura.buff.name then 
-            HealBot_ClearBuff(button)
-            HealBot_luVars["lastBuffMsg"]="nil"
-            if HealBot_Config_Buffs.CBshownAB then
-                HealBot_Action_UpdateAggro(button.unit,"off",nil,0)
-            end
-        end 
-    end
+        end
+        HealBot_Action_UpdateDebuffButton(button)
+        HealBot_luVars["buffExists"]=true
+    elseif button.aura.buff.name then 
+        HealBot_ClearBuff(button)
+        HealBot_luVars["lastBuffMsg"]="nil"
+        if HealBot_Config_Buffs.CBshownAB then
+            HealBot_Action_UpdateAggro(button.unit,"off",nil,0)
+        end
+    end 
   --HealBot_setCall("HealBot_CheckUnitBuffs")
-end
-
-local function HealBot_doAuraBuff(button)
-    if UnitExists(button.unit) then 
-        HealBot_CheckUnitBuffs(button)
-    end
-  --HealBot_setCall("HealBot_doAuraBuff")
 end
 
 function HealBot_CheckAggroUnits(button)
@@ -5296,7 +5289,7 @@ local function HealBot_UnitUpdateFriendly(button)
 end
 
 local function HealBot_UnitUpdateCheckDebuff(button)
-    if button.aura.debuff.check and not UnitOnTaxi("player") then
+    if button.aura.debuff.check then
         button.aura.debuff.check=false
         HealBot_doAuraDebuffUnit(button) 
     elseif button.health.update then
@@ -5311,7 +5304,7 @@ local function HealBot_UnitUpdateCheckBuff(button)
     end
     if button.aura.buff.check and not UnitOnTaxi("player") then
         button.aura.buff.check=false
-        HealBot_doAuraBuff(button)
+        HealBot_CheckUnitBuffs(button)
     end
     if button.checks.timed < TimeNow then
         HealBot_Player_CheckTime(button)
@@ -5357,7 +5350,7 @@ local function HealBot_UnitUpdateEnemy(button)
                 button.health.updincoming=true
                 button.health.updabsorbs=true
                 button.health.update=true
-                HealBot_doAuraBuff(button)
+                HealBot_CheckUnitBuffs(button)
                 HealBot_Update_UnitIcons(button)
             end
         end
