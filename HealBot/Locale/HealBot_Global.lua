@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.5.2";
+﻿HEALBOT_VERSION    = "8.2.5.3.b1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.7" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.8.b1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -270,6 +270,7 @@ function HealBot_globalVars()
     --HEALBOT_LIVING_SEED                     = 48500 --GetSpellInfo(48500) or "--Living Seed";
     HEALBOT_MARK_OF_THE_WILD                = 1126 --GetSpellInfo(1126) or "--Mark of the Wild";
     HEALBOT_MOONKIN_AURA                    = 24907 --GetSpellInfo(24907) or "--Moonkin Aura";
+    HBC_NATURE_GRASP                        = 16689
     HEALBOT_NATURE_MOMENT_OF_CLARITY        = 236068 --GetSpellInfo(236068) or "--Moment of Clarity";
     HEALBOT_NATURE_REJUVENATION_GERMINATION = 155777 --GetSpellInfo(155777) or "--Rejuvenation (Germination)";
     HEALBOT_NATURE_RAMPANT_GROWTH           = 155834 --GetSpellInfo(155834) or "--Rampant Growth";
@@ -333,6 +334,7 @@ function HealBot_globalVars()
     HEALBOT_WILD_STRENGTH                   = 57386 --GetSpellInfo(57386) or "--Wild Strength"
     
 	--Mage
+    HBC_AMPLIFY_MAGIC                       = 1008
     HEALBOT_ARCANE_BRILLIANCE               = 1459 --GetSpellInfo(1459) or "--Arcane Brilliance";
     HBC_ARCANE_BRILLIANCE                   = 23028
     HEALBOT_ARCANE_POWER                    = 12042 --GetSpellInfo(12042) or "--Arcane Power"
@@ -348,6 +350,7 @@ function HealBot_globalVars()
     HEALBOT_INCANTERS_WARD                  = 116267 --GetSpellInfo(1463) or "--Incanter's Ward"
     HBC_MAGE_ARMOR                          = 6117
     HEALBOT_MAGE_WARD                       = 543 --GetSpellInfo(543) or "--Mage Ward";
+    HBC_MANA_SHIELD                         = 1463
     HEALBOT_PRISMATIC_BARRIER               = 235450 --GetSpellInfo(235450) or "--Prismatic Barrier"
     HEALBOT_SLOW_FALL                       = 130 --GetSpellInfo(130) or "--Slow Fall"
 
@@ -368,6 +371,7 @@ function HealBot_globalVars()
 	HBC_BLESSING_OF_WISDOM                  = 19742
     HEALBOT_DAY_BREAK                       = 88821 --GetSpellInfo(88821) or "--Daybreak";
     HEALBOT_DEVOTION_AURA                   = 465 --GetSpellInfo(465) or "--Devotion Aura";
+    HBC_DIVINE_FAVOR                        = 20216
     HBC_DIVINE_INTERVENTION                 = 19752
     HEALBOT_DIVINE_PROTECTION               = 498 --GetSpellInfo(498) or "--Divine Protection";
     HEALBOT_DIVINE_PURPOSE                  = 223817 --GetSpellInfo(86172) or "--Divine Purpose";

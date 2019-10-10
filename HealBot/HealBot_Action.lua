@@ -2805,6 +2805,8 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.text.health="100"
         ghb.text.name=" "
         ghb.text.tag=""
+        ghb.text.class=""
+        ghb.text.level=0
         ghb.spec=" "
         local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
         local bar2 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar2"] 
@@ -3078,33 +3080,80 @@ local function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuLis
         info.func = function() HealBot_Action_ToggelMyFriend(self.unit, false); end;
         UIDropDownMenu_AddButton(info, 1);
 
-        info = UIDropDownMenu_CreateInfo();
-        info.notCheckable = true;
-        info.text = HEALBOT_WORDS_CUSTOMNAME
-        info.hasArrow = true; 
-        info.menuList = "cNames"
-        UIDropDownMenu_AddButton(info, 1);
+        if UnitIsPlayer(self.unit) then
+            info = UIDropDownMenu_CreateInfo();
+            info.notCheckable = true;
+            info.text = HEALBOT_WORDS_CUSTOMNAME
+            info.hasArrow = true; 
+            info.menuList = "cNames"
+            UIDropDownMenu_AddButton(info, 1);
 
-        info = UIDropDownMenu_CreateInfo();
-        info.notCheckable = true;
-        info.text = HEALBOT_OPTIONS_MYTARGET
-        info.hasArrow = true; 
-        info.menuList = "myHeals"
-        UIDropDownMenu_AddButton(info, 1);
-        
-        info = UIDropDownMenu_CreateInfo();
-        info.notCheckable = true;
-        info.text = HEALBOT_OPTIONS_PRIVATETANKS
-        info.hasArrow = true; 
-        info.menuList = "pTanks"
-        UIDropDownMenu_AddButton(info, 1);
-        
-        info = UIDropDownMenu_CreateInfo();
-        info.notCheckable = true;
-        info.text = HEALBOT_OPTIONS_PRIVATEHEALERS
-        info.hasArrow = true; 
-        info.menuList = "pHeals"
-        UIDropDownMenu_AddButton(info, 1);
+            info = UIDropDownMenu_CreateInfo();
+            info.notCheckable = true;
+            info.text = HEALBOT_OPTIONS_MYTARGET
+            info.hasArrow = true; 
+            info.menuList = "myHeals"
+            UIDropDownMenu_AddButton(info, 1);
+            
+            info = UIDropDownMenu_CreateInfo();
+            info.notCheckable = true;
+            info.text = HEALBOT_OPTIONS_PRIVATETANKS
+            info.hasArrow = true; 
+            info.menuList = "pTanks"
+            UIDropDownMenu_AddButton(info, 1);
+            
+            info = UIDropDownMenu_CreateInfo();
+            info.notCheckable = true;
+            info.text = HEALBOT_OPTIONS_PRIVATEHEALERS
+            info.hasArrow = true; 
+            info.menuList = "pHeals"
+            UIDropDownMenu_AddButton(info, 1);
+        else
+            info = UIDropDownMenu_CreateInfo();
+            info.hasArrow = false; 
+            info.notCheckable = true;
+            if HealBot_customTempUserName[UnitGUID(self.unit)] then
+                info.text = HEALBOT_WORDS_REMOVETEMPCUSTOMNAME
+                info.func = function() HealBot_Action_DelCustomName(UnitGUID(self.unit), false, false); end;
+            else
+                info.text = HEALBOT_WORDS_ADDTEMPCUSTOMNAME
+                info.func = function() HealBot_Action_GetCustomNameDialog(UnitGUID(self.unit), true, false); end;
+            end
+            UIDropDownMenu_AddButton(info, 1);
+            
+            info = UIDropDownMenu_CreateInfo();
+            info.hasArrow = false; 
+            info.notCheckable = true;
+            if HealBot_Panel_RetMyHealTarget(self.unit, false) then
+                info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_MYTARGET;
+            else
+                info.text = HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_MYTARGET
+            end
+            info.func = function() HealBot_Panel_ToggelHealTarget(self.unit, true); end;
+            UIDropDownMenu_AddButton(info, 1);
+
+            info = UIDropDownMenu_CreateInfo();
+            info.hasArrow = false; 
+            info.notCheckable = true;
+            if HealBot_Panel_RetPrivateTanks(self.unit, false) then
+                info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_PRIVATETANKS;
+            else
+                info.text = HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_PRIVATETANKS
+            end
+            info.func = function() HealBot_Panel_ToggelPrivateTanks(self.unit, false); end;
+            UIDropDownMenu_AddButton(info, 1);
+
+            info = UIDropDownMenu_CreateInfo();
+            info.hasArrow = false; 
+            info.notCheckable = true;
+            if HealBot_Panel_RetPrivateHealers(self.unit, false) then
+                info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_PRIVATEHEALERS;
+            else
+                info.text = HEALBOT_WORDS_ADDTO.." "..HEALBOT_OPTIONS_PRIVATEHEALERS
+            end
+            info.func = function() HealBot_Panel_ToggelPrivateHealers(self.unit, false); end;
+            UIDropDownMenu_AddButton(info, 1);
+        end
 
         if HEALBOT_GAME_VERSION>3 then 
             info = UIDropDownMenu_CreateInfo();
@@ -3517,10 +3566,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 HealBot_Enemy_Button[unit]=shb
             elseif unitType>1 and unitType<4 then
                 HealBot_Pet_Button[unit]=shb
-                HealBot_setUnitGUID(hbGUID, unit)
             else
                 HealBot_Unit_Button[unit]=shb
-                if unitType==1 then HealBot_setUnitGUID(hbGUID, unit) end
             end
             shb.status.unittype = unitType  -- 1=player  2=vehicle  3=pet  4=target  5=focus  6-8=reserved  9=enemy
             shb.checks.timed=GetTime() + HealBot_Action_luVars["updateDelay"]
@@ -3547,6 +3594,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 if UnitIsFriend("player",unit) then 
                     HealBot_CheckPlayerMana(shb) 
                 end
+                shb.text.class=UnitCreatureFamily(unit) or UnitClass(unit) or ""
+                shb.text.level=UnitLevel(unit) or 0
             end
         end
         if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then

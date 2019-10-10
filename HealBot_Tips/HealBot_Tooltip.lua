@@ -544,9 +544,11 @@ local function HealBot_Action_DoRefreshTooltip()
         if uName then
             local r,g,b=HealBot_Action_ClassColour(xUnit)
             local uLvl=UnitLevel(xUnit)
+            if uLvl<1 and xButton.text.level>0 then uLvl=xButton.text.level end
             if uLvl<1 then 
                 uLvl=nil
             else
+                if xButton.text.level~=uLvl then xButton.text.level=uLvl end
                 uLvl="Level "..uLvl
             end
             local uClassify=UnitClassification(xUnit) or " "
@@ -570,17 +572,20 @@ local function HealBot_Action_DoRefreshTooltip()
             elseif not uLvl then
                 uLvl=""
             end
-            if UnitClass(xUnit) and UnitIsPlayer(xUnit) then
-                local inRange=true
-                if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end
-                if xButton.spec==" " and inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] then
-                    HealBot_Data["INSPECT"]=true
-                    HealBot_TalentQuery(xUnit)
-                end
-                HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl.." "..xButton.spec..UnitClass(xUnit),r,g,b,1)                
-            else
-                HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl,r,g,b,1)      
-            end      
+            local uClass=UnitCreatureFamily(xUnit) or UnitClass(xUnit) or xButton.text.class
+            if uClass==uName then uClass=UnitCreatureType(xUnit) or "" end
+            if uClass=="" then
+                if strfind(xUnit,"pet") then uClass=HEALBOT_WORD_PET end
+            elseif uClass~=xButton.text.class then
+                xButton.text.class=uClass
+            end
+            local inRange=true
+            if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end
+            if xButton.spec==" " and UnitIsPlayer(xUnit) and inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] then
+                HealBot_Data["INSPECT"]=true
+                HealBot_TalentQuery(xUnit)
+            end
+            HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl..xButton.spec..uClass,r,g,b,1)                     
       
             local zone=nil;
             if HealBot_Data["PGUID"]==xGUID or UnitIsVisible(xUnit) then
@@ -611,6 +616,8 @@ local function HealBot_Action_DoRefreshTooltip()
                 elseif zone and not strfind(zone,"Level") then
                     --if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
                     HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                else
+                    HealBot_Tooltip_SetLine(linenum," ",1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
                 end
                 local vUnit=HealBot_retIsInVehicle(xUnit)
                 if vUnit then
@@ -635,14 +642,16 @@ local function HealBot_Action_DoRefreshTooltip()
                 HealBot_Tooltip_luVars["uGroup"]=HealBot_RetUnitGroups(xUnit)
             end
             if tp>0 or mana or (HealBot_Tooltip_luVars["uGroup"] and HealBot_Tooltip_luVars["uGroup"]>0) then
-                linenum=linenum+1
-                if not mana then
+                if not mana or (maxmana and maxmana==0) then
                     if tp>0 then
+                        linenum=linenum+1
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..tp.."%",1,0.1,0.1,1," ",0,0,0,0)
-                    else
+                    elseif HealBot_Tooltip_luVars["uGroup"] then
+                        linenum=linenum+1
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1," ",0,0,0,0)
                     end
                 else
+                    linenum=linenum+1
                     local mPct=100
                     if maxmana>0 then
                         mPct=floor((mana/maxmana)*100)

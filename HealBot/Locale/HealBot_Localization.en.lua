@@ -169,6 +169,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ENEMYSORT               = "Enemy Sort"
     HEALBOT_OPTIONS_SELFHEALS               = "Self"
     HEALBOT_OPTIONS_PETHEALS                = "Pets"
+    HEALBOT_WORD_PET                        = "Pet"
     HEALBOT_OPTIONS_GROUPHEALS              = "Group";
     HEALBOT_OPTIONS_TANKHEALS               = "Main tanks";
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";

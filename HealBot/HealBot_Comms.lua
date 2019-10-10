@@ -41,7 +41,7 @@ function HealBot_Comms_SendAddonMessage()
                 C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
             end
         elseif aType==4 and pName then
-            local xUnit=HealBot_Panel_RaidUnit(nil,pName)
+            local xUnit=HealBot_Panel_RaidUnitName(pName)
             if xUnit and UnitIsPlayer(xUnit) then
                 C_ChatInfo.SendAddonMessage(addon_id, msg, "WHISPER", pName );
             end

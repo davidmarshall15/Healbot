@@ -866,6 +866,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_BARKSKIN,
             HEALBOT_IRONBARK,
             HBC_THORNS,
+            HBC_NATURE_GRASP,
         }
     elseif tClass=="HUNT" then
         HealBot_Buff_Spells_Class_List = {
@@ -886,9 +887,12 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         HealBot_Buff_Spells_Class_List = {
             HEALBOT_ARCANE_BRILLIANCE,
             HBC_ARCANE_BRILLIANCE,
+            HBC_AMPLIFY_MAGIC,
             HEALBOT_DALARAN_BRILLIANCE,
+            HEALBOT_EVOCATION,
             HEALBOT_MAGE_WARD,
             HBC_MAGE_ARMOR,
+            HBC_MANA_SHIELD,
             HEALBOT_BLAZING_BARRIER,
             HEALBOT_PRISMATIC_BARRIER,
             HEALBOT_ARCANE_POWER,
@@ -937,6 +941,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_BEACON_OF_VIRTUE,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
             HEALBOT_SEAL_OF_INSIGHT,
+            HEALBOT_SEAL_OF_JUSTICE,
             HEALBOT_SEAL_OF_COMMAND,
             HEALBOT_SEAL_OF_TRUTH,
             HBC_SEAL_OF_THE_CRUSADER,
@@ -6330,7 +6335,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             --HBC_PRIEST_CURE_DISEASE,
             HBC_DRUID_ABOLISH_POISON,
             HBC_PRIEST_ABOLISH_DISEASE,
-            HBC_DRUID_CURE_POISON,
+            --HBC_DRUID_CURE_POISON,
             HBC_SHAMAN_CURE_POISON,
             --HBC_DISPELL_MAGIC,
             HEALBOT_CLEANSE_SPIRIT,
@@ -6340,6 +6345,8 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_DIVINE_SHIELD,
             HEALBOT_DIVINE_PROTECTION,
             HBC_DIVINE_INTERVENTION,
+            HBC_DIVINE_FAVOR,
+            HBC_DIVINE_FAVOR,
             HEALBOT_ANACESTRAL_SWIFTNESS,
             HEALBOT_LEAP_OF_FAITH,
             HEALBOT_UNLEASH_ELEMENTS,
