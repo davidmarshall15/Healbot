@@ -51,6 +51,8 @@ local UnitBuffIcons=nil
 local UnitDebuffIcons=nil
 local TimeNow=GetTime()
 local HealBot_luVars={}
+local HealBot_SpellID_LookupData={}
+local HealBot_SpellID_LookupIdx={}
 HealBot_luVars["hbInsName"]=HEALBOT_WORD_OUTSIDE
 HealBot_luVars["TargetUnitID"]="player"
 HealBot_luVars["qaFR"]=100
@@ -860,7 +862,11 @@ local function HealBot_configClassHoT()
     for xClass,_  in pairs(hbClassHoTwatch) do
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
         for sName,x  in pairs(HealBot_configClassHoTClass) do
-            if GetSpellInfo(sName) then
+            if tonumber(sName)==nil and not HealBot_SpellID_LookupData[sName] then
+                HealBot_SpellID_LookupData[sName]={}
+                HealBot_SpellID_LookupData[sName]["CHECK"]=true
+                HealBot_SpellID_LookupData[sName]["CLASS"]=xClass
+            elseif GetSpellInfo(sName) then
                 sName=GetSpellInfo(sName)
             end
             local giftNaaru=false
@@ -3778,6 +3784,7 @@ local function HealBot_OnEvent_UnitThreat(button)
                 local z, y=HealBot_CalcThreat(button.unit)
                 if (y+z)>0 then 
                     HealBot_OnEvent_PlayerRegenDisabled()
+                    HealBot_Action_UpdateAggro(button.unit,true,y,z)
                 end
             end
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
@@ -4188,6 +4195,29 @@ local function HealBot_Update_Slow()
                 if HealBot_luVars["addonMsgTh"]<TimeNow then
                     HealBot_Comms_SendAddonMessage()
                     HealBot_luVars["addonMsgTh"]=TimeNow+2
+                end
+            elseif HealBot_luVars["slowSwitch"]<7 then
+                if HealBot_SpellID_LookupIdx[1] then
+                    local sName=HealBot_SpellID_LookupIdx[1]
+                    local sID=HealBot_SpellID_LookupData[sName]["ID"]
+                    local class=HealBot_SpellID_LookupData[sName]["CLASS"]
+                    table.remove(HealBot_SpellID_LookupIdx,1)
+                    if GetSpellInfo(sID) and GetSpellInfo(sID)==sName and HealBot_Globals.WatchHoT[class][sName] then
+                        HealBot_Globals.WatchHoT[class][sID]=HealBot_Globals.WatchHoT[class][sName]
+                        if HealBot_Globals.IgnoreCustomBuff[sName] then
+                            HealBot_Globals.IgnoreCustomBuff[sID]=HealBot_Options_copyTable(HealBot_Globals.IgnoreCustomBuff[sName])
+                        end
+                        if HealBot_Globals.HealBot_Custom_Buffs[sName] then
+                            HealBot_Globals.HealBot_Custom_Buffs[sID]=HealBot_Globals.HealBot_Custom_Buffs[sName]
+                        end
+                        if HealBot_Globals.CustomBuffBarColour[sName] then
+                            HealBot_Globals.CustomBuffBarColour[sID]=HealBot_Options_copyTable(HealBot_Globals.CustomBuffBarColour[sName])
+                        end
+                        if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName] then
+                            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sID]=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]
+                        end
+                        HealBot_Options_DeleteBuffHoT(class, sName)
+                    end
                 end
             else
                 HealBot_setqaFR()
@@ -4886,6 +4916,11 @@ local function HealBot_CacheBuffIcon(button, id, name, texture, count, expiratio
 end
 
 local function HealBot_SetBuffIcon(button, name, texture, count, expirationTime, unitCaster, spellId, cIcons)
+    if HealBot_SpellID_LookupData[name] and HealBot_SpellID_LookupData[name]["CHECK"] then
+        HealBot_SpellID_LookupData[name]["CHECK"]=false
+        HealBot_SpellID_LookupData[name]["ID"]=spellId
+        table.insert(HealBot_SpellID_LookupIdx,name)
+    end
     if HealBot_Globals.IgnoreCustomBuff[spellId] and HealBot_Globals.IgnoreCustomBuff[spellId][HealBot_luVars["hbInsName"]] then
         -- Ignore it
     else
@@ -5916,7 +5951,7 @@ end
 
 function HealBot_OnEvent_PlayerRegenDisabled()
     HealBot_Data["UILOCK"]=true
-    HealBot_luVars["DelayLockdownCheck"]=TimeNow+5
+    HealBot_luVars["DelayLockdownCheck"]=TimeNow+3
     if not HealBot_Data["PGUID"] then
         HealBot_Load("playerRD")      
         HealBot_luVars["SoftResetAfterCombat"]=true
@@ -5980,7 +6015,7 @@ function HealBot_OnEvent_PlayerRegenDisabled()
         HealBot_OnEvent_PlayerTargetChanged(false)
     end
     if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] then HealBot_ClearLowMana() end
-    HealBot_Action_ResetUnitStatus()
+    --HealBot_Action_ResetUnitStatus()
     --HealBot_Options_RaidTargetUpdate()
   --HealBot_setCall("HealBot_OnEvent_PlayerRegenDisabled")
 end

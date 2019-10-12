@@ -407,6 +407,7 @@ function HealBot_Data_InitVars()
                 [HEALBOT_ICE_BARRIER]=4,
                 [HBC_DAMPEN_MAGIC]=4,
                 [HBC_FROST_ARMOR]=4,
+                [HBC_ICE_ARMOR]=4,
                 [HBC_MAGE_ARMOR]=4,
                 [HEALBOT_INCANTERS_WARD]=2,
                 [HBC_MANA_SHIELD]=2,

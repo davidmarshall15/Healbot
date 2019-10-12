@@ -3545,6 +3545,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 return nil
             else
                 shb.reset=true
+                HealBot_Panel_SetBarArrays(shb.id)
             end
         else
             shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit]
@@ -3554,8 +3555,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb:ClearAllPoints()
             shb:SetParent(gp)
             shb.frame=hbCurFrame
-            HealBot_Panel_SetBarArrays(shb.id)
-            HealBot_ResetBarSkinDone[shb.frame][shb.id] = nil
+            HealBot_ResetBarSkinDone[shb.frame][shb.id]=nil
             HealBot_initSkin[shb.frame][shb.id]=nil
         end
         if shb.unit~=unit or shb.reset or shb.guid~=hbGUID then

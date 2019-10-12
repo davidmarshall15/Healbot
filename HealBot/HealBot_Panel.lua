@@ -1309,10 +1309,6 @@ local function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
 end
 
 local function HealBot_Panel_enemyBar(eUnit)
-    local uName=HEALBOT_ENEMY_NO_TARGET
-    if UnitExists(eUnit) and UnitHealth(eUnit)>99 then
-        uName=HealBot_GetUnitName(eUnit) or HEALBOT_ENEMY_NO_TARGET
-    end
     i[hbCurrentFrame]=i[hbCurrentFrame]+1;
     table.insert(units,eUnit)
 end
@@ -1321,7 +1317,7 @@ local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"] then
         if HealBot_Data["UILOCK"] then
             if existsShow then
-                if UnitExists(eUnit) and UnitExists(pUnit) and (UnitIsUnit(eUnit, pUnit) or not UnitIsFriend(eUnit, pUnit)) then
+                if UnitExists(eUnit) and UnitExists(pUnit) then
                     HealBot_Panel_enemyBar(eUnit)
                 end
             else
@@ -2206,7 +2202,6 @@ local function HealBot_Panel_EnemyChanged()
         i[hbCurrentFrame]=0
         HealBot_Panel_enemyTargets()
         for xUnit,xButton in pairs(HealBot_Enemy_Button) do
-            local xGUID=xButton.guid
             if HealBot_TrackUnit[xUnit] then
                 HealBot_Action_UpdateBackgroundButton(xButton)
                 xButton:Show()

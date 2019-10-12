@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.5.3.b1";
+﻿HEALBOT_VERSION    = "8.2.5.3.b2";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.8.b1" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.8.b2" end
 
 function HealBot_globalVars()
     --Consumables
@@ -344,6 +344,7 @@ function HealBot_globalVars()
     HEALBOT_EVOCATION                       = 12051 --GetSpellInfo(12051) or "--Evocation";
     HEALBOT_FOCUS_MAGIC                     = 54646 --GetSpellInfo(54646) or "--Focus Magic";
     HBC_FROST_ARMOR                         = 168
+    HBC_ICE_ARMOR                           = 7302
     HEALBOT_ICE_BARRIER                     = 11426 --GetSpellInfo(11426) or "--Ice Barrier"
     HEALBOT_ICE_BLOCK                       = 45438 --GetSpellInfo(45438) or "--Ice Block"
     HEALBOT_ICE_WARD                        = 111264 --GetSpellInfo(111264) or "--Ice Ward"

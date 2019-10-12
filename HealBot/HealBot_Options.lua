@@ -902,6 +902,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_ICE_BARRIER,
             HBC_DAMPEN_MAGIC,
             HBC_FROST_ARMOR,
+            HBC_ICE_ARMOR,
         }
     elseif tClass=="MONK" then
         HealBot_Buff_Spells_Class_List = {
