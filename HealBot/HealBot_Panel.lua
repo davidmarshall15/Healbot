@@ -672,7 +672,7 @@ end
 local function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBars) do
         local xUnit=b.unit
-        HealBot_Action_DeleteButton(b.id)
+        HealBot_Action_MarkDeleteButton(b)
         HealBot_Action_DeleterCallsUnit(xUnit)
         HealBot_TestBars[x]=nil
     end
@@ -1075,16 +1075,16 @@ end
 
 local function HealBot_Panel_TestBarsOn()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_DeleteButton(xButton.id)
+        HealBot_Action_MarkDeleteButton(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_DeleteButton(xButton.id)
+        HealBot_Action_MarkDeleteButton(xButton)
     end
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         HealBot_Panel_DeleteHeader(xButton.id, xHeader)
     end
     for x,b in pairs(HealBot_TestBars) do
-        HealBot_Action_DeleteButton(b.id)
+        HealBot_Action_MarkDeleteButton(b)
         HealBot_TestBars[x]=nil
     end
     for x,_ in pairs(tHeader) do
@@ -2051,7 +2051,7 @@ local function HealBot_Panel_VehicleChanged()
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
-                    HealBot_Action_DeleteButton(xButton.id)
+                    HealBot_Action_MarkDeleteButton(xButton)
                 end
             end
         end
@@ -2080,7 +2080,7 @@ local function HealBot_Panel_PetsChanged()
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 elseif xButton.unit~="pet" or not HealBot_Panel_luVars["SelfPets"] then
-                    HealBot_Action_DeleteButton(xButton.id)
+                    HealBot_Action_MarkDeleteButton(xButton)
                 end
             end
         end
@@ -2206,7 +2206,7 @@ local function HealBot_Panel_EnemyChanged()
                 HealBot_Action_UpdateBackgroundButton(xButton)
                 xButton:Show()
             else
-                HealBot_Action_DeleteButton(xButton.id)
+                HealBot_Action_MarkDeleteButton(xButton)
             end
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame)
@@ -2347,7 +2347,7 @@ local function HealBot_Panel_PlayersChanged()
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
-                    HealBot_Action_DeleteButton(xButton.id)
+                    HealBot_Action_MarkDeleteButton(xButton)
                 end
             end
         end
@@ -2357,7 +2357,7 @@ local function HealBot_Panel_PlayersChanged()
                     HealBot_Action_UpdateBackgroundButton(xButton)
                     xButton:Show()
                 else
-                    HealBot_Action_DeleteButton(xButton.id)
+                    HealBot_Action_MarkDeleteButton(xButton)
                 end
             end
         end

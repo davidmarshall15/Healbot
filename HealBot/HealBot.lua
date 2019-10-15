@@ -3145,7 +3145,7 @@ local function HealBot_OnEvent_VariablesLoaded(self)
                 [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = {HBC_STAMINA_ID},
             }
         end
-        HealBot_setOptions_Timer(9990)
+        HealBot_setOptions_Timer(9920)
     else
         -- Don't see the point of this in current retail (8.2)
         -- Aura checks are often done and this adds unnecessary looping
@@ -3399,6 +3399,31 @@ function HealBot_setHighlightTargetBar()
             HealBot_luVars["hlPetBarsIC"]=true
         end
     end
+end
+
+local function HealBot_Check_Pets()
+    local nUnits=GetNumGroupMembers();
+    local RecalcParty=false
+    if IsInRaid() then 
+        for j=1,nUnits do
+            if UnitExists("raidpet"..j) and not HealBot_Pet_Button["raidpet"..j] then
+                RecalcParty=true
+                break
+            end
+        end
+    elseif nUnits>1 then
+        for j=1,nUnits do
+            if UnitExists("partypet"..j) and not HealBot_Pet_Button["partypet"..j] then
+                RecalcParty=true
+                break
+            end
+        end
+    end
+    if UnitExists("pet") and not HealBot_Pet_Button["pet"] then
+        RecalcParty=true
+    end
+  --HealBot_setCall("HealBot_Check_Pets")
+    return RecalcParty
 end
 
 local function HealBot_Options_Update()
@@ -3749,16 +3774,22 @@ local function HealBot_Options_Update()
             end
         end
         HealBot_Options_Timer[145]=nil
-    elseif HealBot_Options_Timer[9990] then
-        HealBot_Options_Timer[9990]=nil
+    elseif HealBot_Options_Timer[9920] then
+        HealBot_Options_Timer[9920]=nil
         HealBot_Action_SetAllAttribs()
-    elseif HealBot_Options_Timer[9995] then
-        HealBot_Options_Timer[9995]=nil
+    elseif HealBot_Options_Timer[9940] then
+        HealBot_Options_Timer[9940]=nil
         if HealBot_luVars["NoSpamOOM"]<TimeNow and 
           (((UnitPower("player", 0)/UnitPowerMax("player", 0))*100) < Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOMV"]) then
             HealBot_luVars["NoSpamOOM"]=TimeNow+75
             DoEmote(HEALBOT_EMOTE_OOM)
             --HealBot_AddDebug(HEALBOT_EMOTE_OOM.." - mPct="..((UnitPower("player", 0)/UnitPowerMax("player", 0))*100))
+        end
+    elseif HealBot_Options_Timer[9980] then
+        HealBot_Options_Timer[9980]=nil
+        if HealBot_Check_Pets() then
+            HealBot_nextRecalcParty(2)
+            --HealBot_AddDebug("Exit Combat HealBot_Check_Pets RecalcParty=true")
         end
     else -- 9999 will drop in here - for set timers only
         HealBot_Set_Timers()
@@ -4033,31 +4064,6 @@ function HealBot_PartyUpdate_CheckSkin()
   --HealBot_setCall("HealBot_PartyUpdate_CheckSkin")
 end
 
-local function HealBot_Check_Pets()
-    local nUnits=GetNumGroupMembers();
-    local RecalcParty=false
-    if IsInRaid() then 
-        for j=1,nUnits do
-            if UnitExists("raidpet"..j) and not HealBot_Pet_Button["raidpet"..j] then
-                RecalcParty=true
-                break
-            end
-        end
-    elseif nUnits>1 then
-        for j=1,nUnits do
-            if UnitExists("partypet"..j) and not HealBot_Pet_Button["partypet"..j] then
-                RecalcParty=true
-                break
-            end
-        end
-    end
-    if UnitExists("pet") and not HealBot_Pet_Button["pet"] then
-        RecalcParty=true
-    end
-  --HealBot_setCall("HealBot_Check_Pets")
-    return RecalcParty
-end
-
 local function HealBot_Not_Fighting()
     HealBot_Data["UILOCK"]=false
     --if HEALBOT_GAME_VERSION<4 then
@@ -4072,9 +4078,8 @@ local function HealBot_Not_Fighting()
     end
     HealBot_Action_CheckHideFrames()
     HealBot_Action_ResetActiveUnitStatus()
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and HealBot_Check_Pets() then
-        HealBot_nextRecalcParty(2)
-        --HealBot_AddDebug("Exit Combat HealBot_Check_Pets RecalcParty=true")
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+        HealBot_setOptions_Timer(9980)
     end
     if HealBot_luVars["SoftResetAfterCombat"] then
         HealBot_luVars["SoftResetAfterCombat"]=false
@@ -4100,7 +4105,7 @@ local function HealBot_Not_Fighting()
     HealBot_EndInstanceEncounter()
     HealBot_setOptions_Timer(9999)
     if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] then
-        HealBot_setOptions_Timer(9995)
+        HealBot_setOptions_Timer(9940)
     end
   --HealBot_setCall("HealBot_Not_Fighting")
 end
@@ -4219,6 +4224,8 @@ local function HealBot_Update_Slow()
                         HealBot_Options_DeleteBuffHoT(class, sName)
                     end
                 end
+            elseif HealBot_luVars["slowSwitch"]<8 then
+                HealBot_Action_DeleteMarkedButtons()
             else
                 HealBot_setqaFR()
                 HealBot_luVars["slowSwitch"]=0
@@ -5960,12 +5967,7 @@ function HealBot_OnEvent_PlayerRegenDisabled()
     else
         if HealBot_RefreshTypes[6] then HealBot_RecalcParty(6); end
         if HealBot_RefreshTypes[1] then HealBot_RecalcParty(1); end
-        if HealBot_RefreshTypes[2] then 
-            HealBot_RecalcParty(2); 
-        elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and HealBot_Check_Pets() then
-            HealBot_RecalcParty(2); 
-            --HealBot_AddDebug("Enter Combat HealBot_Check_Pets RecalcParty=true")
-        end
+        if HealBot_RefreshTypes[2] then HealBot_RecalcParty(2); end
         HealBot_RecalcParty(5);
     end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUNIT"] then
@@ -6551,7 +6553,18 @@ function HealBot_retDebufftype(id)
     return dType
 end
 
-function HealBot_HoT_RemoveIconButton(button,removeAll)
+function HealBot_HoT_RemoveAllIconButton(button)
+    for i=1,10 do
+        HealBot_RemoveIcon(button, i)
+    end
+    for i=51,55 do
+        HealBot_RemoveIcon(button, i)
+    end
+    HealBot_RaidTargetUpdate(button, 0)
+  --HealBot_setCall("HealBot_HoT_RemoveAllIconButton")
+end
+
+function HealBot_HoT_RemoveIconButton(button)
     if HealBot_UnitBuffIcons[button.unit] then
         UnitBuffIcons=HealBot_UnitBuffIcons[button.unit]
         for bName,_ in pairs(UnitBuffIcons) do
@@ -6569,9 +6582,6 @@ function HealBot_HoT_RemoveIconButton(button,removeAll)
         for i=51,55 do
             HealBot_RemoveIcon(button, i)
         end
-    end
-    if removeAll then
-        HealBot_RaidTargetUpdate(button, 0)
     end
   --HealBot_setCall("HealBot_HoT_RemoveIconButton")
 end

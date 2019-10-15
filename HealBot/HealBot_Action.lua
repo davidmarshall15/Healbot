@@ -7,7 +7,7 @@ local HealBot_RangeSpells={}
 local HealBot_AlwaysEnabled={}
 local HealBot_pcClass={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local LSM = HealBot_retLSM() --LibStub("LibSharedMedia-3.0") 
-local HealBot_ResetBarSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+local HealBot_ResetBarSkinDone={}
 local HealBot_Action_rCalls={}
 local _
 local hbNumFormats = {["Places"]        = {[1]=-1, [2]=-1, [3]=-1, [4]=-1, [5]=-1, [6]=-1, [7]=-1, [8]=-1, [9]=-1, [10]=-1},
@@ -232,9 +232,7 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
 end
 
 local function HealBot_Action_clearResetBarSkinDone()
-    for j=1,10 do
-        HealBot_ResetBarSkinDone[j]={};
-    end
+    HealBot_ResetBarSkinDone={};
 end
 
 function HealBot_Action_setpcClass()
@@ -1277,19 +1275,16 @@ function HealBot_Action_SetBar3Value(button, sName)
             HealBot_Action_SetBar3ColAlpha(barName, y, hcr, hcg, hcb, HealBot_Action_rCalls[unit]["hca"])
         end
     else
-        if HealBot_Action_rCalls[unit] and HealBot_Action_rCalls[unit]["powerIndicator"]~="p0" then
-            HealBot_Action_rCalls[unit]["powerIndicator"]="p0"
-            iconName = _G[barName:GetName().."Icon"..1];
-            iconName:SetAlpha(0)
-            iconName = _G[barName:GetName().."Icon"..2];
-            iconName:SetAlpha(0)
-            iconName = _G[barName:GetName().."Icon"..3];
-            iconName:SetAlpha(0)
-            iconName = _G[barName:GetName().."Icon"..4];
-            iconName:SetAlpha(0)
-            iconName = _G[barName:GetName().."Icon"..5];
-            iconName:SetAlpha(0)
-        end
+        iconName = _G[barName:GetName().."Icon"..1];
+        iconName:SetAlpha(0)
+        iconName = _G[barName:GetName().."Icon"..2];
+        iconName:SetAlpha(0)
+        iconName = _G[barName:GetName().."Icon"..3];
+        iconName:SetAlpha(0)
+        iconName = _G[barName:GetName().."Icon"..4];
+        iconName:SetAlpha(0)
+        iconName = _G[barName:GetName().."Icon"..5];
+        iconName:SetAlpha(0)
         HealBot_Action_SetBar3ColAlpha(barName, 0, r, g, b, 0)
     end
   --HealBot_setCall("HealBot_Action_SetBar3Value")
@@ -1930,7 +1925,7 @@ function HealBot_Action_resetInitSetFrame(frameID)
     HealBot_initSetFrame[frameID]=true
 end
 
-local HealBot_initSkin={[0]={},[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+local HealBot_initSkin={}
 local function HealBot_DoAction_ResetSkin(barType,button,numcols)
     local frameScale = 1
     local b2Size = 0
@@ -1963,7 +1958,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             abSize=0 
         end
          --for x=1,51 do
-        HealBot_ResetBarSkinDone[b.frame][b.id]=true
+        HealBot_ResetBarSkinDone[b.id]=true
         HealBot_Action_setHealthText(b)
         HealBot_Action_setTextLen(b.frame)
         HealBot_Action_setNameText(b)
@@ -2139,8 +2134,8 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
             pIcon = _G[bar3:GetName().."Icon5"];
             pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","14","0");
         end
-        if not HealBot_initSkin[b.frame][b.id] then
-            HealBot_initSkin[b.frame][b.id]=true
+        if not HealBot_initSkin[b.id] then
+            HealBot_initSkin[b.id]=true
             b:Enable();
             bar:SetMinMaxValues(0,100)
             bar2:SetMinMaxValues(0,100);
@@ -2737,12 +2732,6 @@ local function HealBot_Action_CreateButton(hbCurFrame)
             HealBot_Action_setRegisterForClicks(ghb)
             ghb.frame=hbCurFrame
             ghb.id=freeId
-        elseif ghb.frame~=hbCurFrame then
-            ghb.frame=0
-        end
-        ghb.guid="nil"
-        ghb.unit="nil"
-        if not ghb.aura then
             ghb.aura={}
             ghb.aura.buff={}
             ghb.aura.buff.recheck={}
@@ -2758,7 +2747,23 @@ local function HealBot_Action_CreateButton(hbCurFrame)
             ghb.icon={}
             ghb.icon.debuff={}
             ghb.icon.buff={}
+            local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
+            local bar2 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar2"] 
+            local bar3 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar3"] 
+            local bar4 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar4"] 
+            local bar5 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar5"]
+            local bar6 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar6"]
+            local barDir = _G["HealBot_Action_HealUnit"..ghb.id.."BarDir"]
+            bar:UnregisterAllEvents()
+            bar2:UnregisterAllEvents()
+            bar3:UnregisterAllEvents()
+            bar4:UnregisterAllEvents()
+            bar5:UnregisterAllEvents()
+            bar6:UnregisterAllEvents()
+            barDir:UnregisterAllEvents()
         end
+        ghb.guid="nil"
+        ghb.unit="nil"
         ghb.health.current=0
         ghb.health.max=100
         ghb.health.incoming=0
@@ -2808,21 +2813,8 @@ local function HealBot_Action_CreateButton(hbCurFrame)
         ghb.text.class=""
         ghb.text.level=0
         ghb.spec=" "
-        local bar = _G["HealBot_Action_HealUnit"..ghb.id.."Bar"]
-        local bar2 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar2"] 
-        local bar3 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar3"] 
-        local bar4 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar4"] 
-        local bar5 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar5"]
-        local bar6 = _G["HealBot_Action_HealUnit"..ghb.id.."Bar6"]
-        local barDir = _G["HealBot_Action_HealUnit"..ghb.id.."BarDir"]
-        bar:UnregisterAllEvents()
-        bar2:UnregisterAllEvents()
-        bar3:UnregisterAllEvents()
-        bar4:UnregisterAllEvents()
-        bar5:UnregisterAllEvents()
-        bar6:UnregisterAllEvents()
-        barDir:UnregisterAllEvents()
         HealBot_ActiveButtons[0]=freeId+1
+        ghb.reset=true
         return ghb
     else
         return nil
@@ -3539,24 +3531,15 @@ end
 function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
     local shb=nil
     if hbGUID then
-        if not HealBot_Unit_Button[unit] and not HealBot_Enemy_Button[unit] and not HealBot_Pet_Button[unit] then
-            shb=HealBot_Action_CreateButton(hbCurFrame)
-            if not shb then
-                return nil
-            else
-                shb.reset=true
-                HealBot_Panel_SetBarArrays(shb.id)
-            end
-        else
-            shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit]
-        end
+        shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
+        if not shb then return nil end
         if shb.frame~=hbCurFrame then
             local gp=_G["f"..hbCurFrame.."_HealBot_Action"]
             shb:ClearAllPoints()
             shb:SetParent(gp)
             shb.frame=hbCurFrame
-            HealBot_ResetBarSkinDone[shb.frame][shb.id]=nil
-            HealBot_initSkin[shb.frame][shb.id]=nil
+            HealBot_ResetBarSkinDone[shb.id]=nil
+            HealBot_initSkin[shb.id]=nil
         end
         if shb.unit~=unit or shb.reset or shb.guid~=hbGUID then
             shb.reset=false
@@ -3602,7 +3585,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             shb.update.roleicon=true
             shb.status.update=true
         end
-        if not HealBot_ResetBarSkinDone[shb.frame][shb.id] then
+        if not HealBot_ResetBarSkinDone[shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
     else
@@ -3624,7 +3607,6 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText)
             thb:ClearAllPoints()
             thb:SetParent(gp)
             thb.frame=hbCurFrame
-            HealBot_Panel_SetBarArrays(thb.id)
         end
         HealBot_Action_ResetSkin("bar",thb)
     end
@@ -3670,13 +3652,13 @@ function HealBot_Action_PartyChanged(changeType)
         end
         if not hbInitButtons then
             for _,xButton in pairs(HealBot_Unit_Button) do
-                HealBot_Action_DeleteButton(xButton.id)
+                HealBot_Action_MarkDeleteButton(xButton)
             end 
             for _,xButton in pairs(HealBot_Enemy_Button) do
-                HealBot_Action_DeleteButton(xButton.id)
+                HealBot_Action_MarkDeleteButton(xButton)
             end 
             for _,xButton in pairs(HealBot_Pet_Button) do
-                HealBot_Action_DeleteButton(xButton.id)
+                HealBot_Action_MarkDeleteButton(xButton)
             end 
             hbInitButtons=true
         end
@@ -3691,26 +3673,40 @@ function HealBot_Action_DeleterCallsUnit(unit)
     HealBot_Action_rCalls[unit]=nil
 end
 
-function HealBot_Action_DeleteButton(hbBarID)
+local function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
-    local dbUnit=dg.unit or "N"
-    local dbGUID=dg.guid or "0"
-    if not UnitExists(dbUnit) or dbGUID~=UnitGUID(dbUnit) then
-        HealBot_mark2clearGUID(dbGUID)
-    end
-    HealBot_HoT_RemoveIconButton(dg,true)
-    HealBot_Action_UpdateAggro(dbUnit,false,nil,0)
-    HealBot_Action_SetBar3Value(dg)
     local bar4=_G["HealBot_Action_HealUnit"..hbBarID.."Bar4"]
+    dg.unit=hbBarID
+    HealBot_mark2clearGUID(dg.guid)
+    HealBot_HoT_RemoveAllIconButton(dg)
+    HealBot_Action_SetBar3Value(dg)
     bar4:SetStatusBarColor(1,0,0,0)
-    dg.status.bar4=0
-    if HealBot_Unit_Button[dbUnit] then HealBot_Unit_Button[dbUnit]=nil end
-    if HealBot_Enemy_Button[dbUnit] then HealBot_Enemy_Button[dbUnit]=nil end
-    if HealBot_Pet_Button[dbUnit] then HealBot_Pet_Button[dbUnit]=nil end
-    dg:Hide();
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end
     HealBot_Panel_SetBarArrays(hbBarID)
+    HealBot_AddDebug("Deleted button "..hbBarID)
+end
+
+local hbMarkedDeleteButtons={}
+function HealBot_Action_DeleteMarkedButtons()
+    if #hbMarkedDeleteButtons>50 then
+        for i = 10, 1, -1 do
+            HealBot_Action_DeleteButton(hbMarkedDeleteButtons[i])
+            table.remove(hbMarkedDeleteButtons,i)
+        end
+    elseif hbMarkedDeleteButtons[1] then
+        HealBot_Action_DeleteButton(hbMarkedDeleteButtons[1])
+        table.remove(hbMarkedDeleteButtons,1)
+    end
+end
+
+function HealBot_Action_MarkDeleteButton(button)
+    button:Hide()
+    button.status.bar4=0
+    if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit]==button then HealBot_Unit_Button[button.unit]=nil end
+    if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit]==button then HealBot_Enemy_Button[button.unit]=nil end
+    if HealBot_Pet_Button[button.unit] and HealBot_Pet_Button[button.unit]==button then HealBot_Pet_Button[button.unit]=nil end
+    table.insert(hbMarkedDeleteButtons, button.id)
 end
 
 function HealBot_Action_Reset()
