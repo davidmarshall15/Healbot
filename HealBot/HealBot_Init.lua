@@ -54,8 +54,13 @@ local function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     return true
 end
 
+local skipSpells=false
+local function HealBot_Init_SkipSpells()
+    skipSpells={[HEALBOT_BLESSING_OF_MIGHT]=true}
+end
+
 local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
-    local skipSpells={ [HEALBOT_BLESSING_OF_MIGHT]=true}
+    if not skipSpells then HealBot_Init_SkipSpells() end
     if not skipSpells[spellName] then
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
             if HealBot_Heal_Names[spellName] and cRank then 
@@ -70,9 +75,15 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
 end
 
 function HealBot_Init_Spells_Defaults()
-    HealBot_Spell_IDs={}
-    HealBot_Spell_Names={}
-    HealBot_Heal_Names={}
+    for x,_ in pairs(HealBot_Spell_IDs) do
+        HealBot_Spell_IDs[x]=nil
+    end 
+    for x,_ in pairs(HealBot_Spell_Names) do
+        HealBot_Spell_Names[x]=nil
+    end 
+    for x,_ in pairs(HealBot_Heal_Names) do
+        HealBot_Heal_Names[x]=nil
+    end 
     local nTabs=GetNumSpellTabs()
     local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
     for j=1, getn(hbHeallist), 1 do

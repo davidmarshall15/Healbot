@@ -2271,7 +2271,7 @@
             <Frames>
               <Frame name="HealBot_Options_GenFrame">
                 <Size>
-                  <AbsDimension y="275"/>
+                  <AbsDimension y="325"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
@@ -2437,6 +2437,23 @@
                       <OnLeave>HealBot_Options_Show_Help("ADJUSTMAXHLTH",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Slider name="HealBot_Options_MaxBarCache" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="345" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-0" y="84" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_MaxBarCache_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("MAXBARCACHE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MAXBARCACHE",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
                   <Slider name="HealBot_Options_RangeCheckFreq" inherits="HealBot_Options_SliderTemplate">
                     <Size>
                       <AbsDimension x="345" y="16" />
@@ -2461,7 +2478,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="170" y="-340" />
+                      <AbsDimension x="170" y="-360" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -2507,7 +2524,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="170" y="-400" />
+                      <AbsDimension x="170" y="-410" />
                     </Offset>
                   </Anchor>
                 </Anchors>

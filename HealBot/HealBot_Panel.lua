@@ -254,15 +254,25 @@ function HealBot_Panel_SetHeadArrays(hbHID)
 end
 
 function HealBot_Panel_ClearBarArrays()
-    HealBot_BarX={};
-    HealBot_BarY={};
-    HealBot_HeadX={};
-    HealBot_HeadY={};
+    for x,_ in pairs(HealBot_BarX) do
+        HealBot_BarX[x]=0
+    end 
+    for x,_ in pairs(HealBot_BarY) do
+        HealBot_BarY[x]=0
+    end 
+    for x,_ in pairs(HealBot_HeadX) do
+        HealBot_HeadX[x]=0
+    end 
+    for x,_ in pairs(HealBot_HeadY) do
+        HealBot_HeadY[x]=0
+    end 
     HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ClearBlackList()
-    HealBot_Panel_BlackList={}
+    for x,_ in pairs(HealBot_Panel_BlackList) do
+        HealBot_Panel_BlackList[x]=nil
+    end 
     HealBot_nextRecalcParty(0)
 end
 
@@ -600,10 +610,10 @@ local function HealBot_Action_PositionButton(button,OsetX,OsetY,bWidth,bHeight,x
     return OsetX, OsetY;
 end
 
+local addsHeight={}
+local HealBot_addsHeightSize={}
+local addsHeightSize={}
 function HealBot_Action_SetAddHeightWidth()
-    local addsHeight={}
-    local HealBot_addsHeightSize={}
-    local addsHeightSize={}
     for j=1,10 do
         addsHeight[j]=0
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["SHOW"]==false and 
@@ -637,7 +647,9 @@ end
 
 local HealBot_Panel_initFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
 function HealBot_Panel_resetInitFrames()
-    HealBot_Panel_initFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
+    for j=1,10 do
+        HealBot_Panel_initFrame[j]=true
+    end
 end
 
 local function HealBot_Action_SetHeightWidth(width,height,bWidth,bHeight,hbCurFrame)
@@ -835,16 +847,21 @@ local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffse
     end)
 end
 
+local cols={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
+local rows={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
+local newHeader={["H"]={},["G"]={},["C"]={}}
 local function HealBot_Panel_SetupExtraBars(frame)
     OffsetY[frame] = 4 + ceil(HealBot_AddHeight["BOTH"][frame]/2)
     OffsetX[frame] = 6 + ceil(HealBot_AddWidth["BOTH"][frame]/2)
     MaxOffsetY[frame]=0
     MaxOffsetX[frame]=0
-    local h={[frame]=0}
-    local z={[frame]=1}
-    local newHeader={["H"]={},["G"]={},["C"]={}}
+    cols[frame]=0
+    rows[frame]=1
+    newHeader["H"]={}
+    newHeader["G"]={}
+    newHeader["C"]={}
     
-    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
+    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, cols, rows, newHeader)
 
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         if xButton.frame==frame and not HealBot_Track_Headers[xHeader] then
@@ -875,18 +892,21 @@ local function HealBot_Panel_SetupExtraBars(frame)
     end
 end
 
+
 local function HealBot_Panel_SetupBars()
     for j=1,5 do
         OffsetY[j] = 4 + ceil(HealBot_AddHeight["BOTH"][j]/2)
         OffsetX[j] = 6 + ceil(HealBot_AddWidth["BOTH"][j]/2)
         MaxOffsetY[j]=0
         MaxOffsetX[j]=0
+        cols[j]=0
+        rows[j]=1
     end
-    local h={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0}
-    local z={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1}
-    local newHeader={["H"]={},["G"]={},["C"]={}}
+    newHeader["H"]={}
+    newHeader["G"]={}
+    newHeader["C"]={}
 
-    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
+    HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, cols, rows, newHeader)
     
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         if xButton.frame<6 and not HealBot_Track_Headers[xHeader] then
@@ -1092,8 +1112,8 @@ local function HealBot_Panel_TestBarsOn()
     end
     for gl=1,10 do
         HeaderPos[gl]={};
+        hbBarsPerFrame[gl]=0
     end
-    hbBarsPerFrame={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
     for j=1,10 do
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==4 then
             HealBot_BottomAnchors[j]=true
@@ -1102,11 +1122,12 @@ local function HealBot_Panel_TestBarsOn()
         end
     end
     noBars=tonumber(HealBot_noBars)
-    i={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
+    for gl=1,10 do
+        i[gl]=0
+    end
     grpNo=1
     local gNo=5
     local healGroups=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin]
-    local gl=0
     local xRaidBars=40
     if HealBot_Globals.TestBars["PROFILE"]==3 then xRaidBars=25 end
     if HealBot_Globals.TestBars["PROFILE"]==2 then xRaidBars=10 end
@@ -2363,7 +2384,7 @@ local function HealBot_Panel_PlayersChanged()
         end
 
         if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] and not HealBot_Data["UILOCK"] and HealBot_Panel_luVars["SaveCrashProtection"]<GetTime() then
-            HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()+5
+            HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()+15
             HealBot_cpData["mName"]=HealBot_Config.CrashProtMacroName
             local j=0
             local k=1

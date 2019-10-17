@@ -3847,7 +3847,7 @@ function HealBot_OnEvent_UnitHealth(button)
         health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
         if (health~=button.health.current) or (healthMax~=button.health.max) then
             HealBot_OnEvent_UnitThreat(button)
-            if healthMax~=100 or not HealBot_Panel_RaidUnitGUID(button.guid) or (healthMax==100 and button.health.max<200) then
+            if healthMax~=100 or not HealBot_Panel_RaidUnitGUID(button.guid) or button.health.max<200 then
                 button.health.current=health
                 button.health.max=healthMax
             end
@@ -4354,7 +4354,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                 end
             end
             if unitCasterID==hbCasterID then 
-                curDebuffs[spellId]={}
+                if not curDebuffs[spellId] then curDebuffs[spellId]={} end
                 debuff_type=HEALBOT_CUSTOM_en
                 curDebuffs[spellId]["priority"]=dNamePriority
                 if hbCasterID==hbCastByEveryone then
@@ -4426,11 +4426,11 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
             end
         end
         if checkthis then
-            curDebuffs[spellId]={}
+            if not curDebuffs[spellId] then curDebuffs[spellId]={} end
             curDebuffs[spellId]["priority"]=dTypePriority
             curDebuffs[spellId]["always"]=always
         elseif isBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and (UnitExists("boss1") or not HealBot_Config_Cures.AlwaysShowBossStrict) then
-            curDebuffs[spellId]={}
+            if not curDebuffs[spellId] then curDebuffs[spellId]={} end
             debuff_type=HEALBOT_CUSTOM_en
             curDebuffs[spellId]["priority"]=15
             if dTypePriority<21 then
@@ -4439,7 +4439,7 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                 curDebuffs[spellId]["always"]=true
             end
         elseif HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuff_type] then
-            curDebuffs[spellId]={}
+            if not curDebuffs[spellId] then curDebuffs[spellId]={} end
             debuff_type=HEALBOT_CUSTOM_en
             curDebuffs[spellId]["priority"]=15
             if dTypePriority<21 then

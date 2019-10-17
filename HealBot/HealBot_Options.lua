@@ -1019,7 +1019,9 @@ function HealBot_Options_InitBuffList()
             table.insert(HealBot_Buff_Spells_List,spellName)
         end
     end
-    HealBot_Buff_Items_Lookup={}
+    for x,_ in pairs(HealBot_Buff_Items_Lookup) do
+        HealBot_Buff_Items_Lookup[x]=nil
+    end 
     for j=1, getn(HealBot_Buff_Items_List), 1 do
         if IsUsableItem(HealBot_Buff_Items_List[j]) or HealBot_IsItemInBag(HealBot_Buff_Items_List[j]) then   
             local itemName=GetItemInfo(HealBot_Buff_Items_List[j])
@@ -2565,8 +2567,19 @@ function HealBot_Options_AggroFlashAlphaMax_OnValueChanged(self)
     end
 end
 
+function HealBot_Options_MaxBarCache_OnValueChanged(self)
+    local val=HealBot_Comm_round(self:GetValue())
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    else
+        HealBot_Globals.MaxBarsCache = val
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val)
+    end
+end
+
 function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
-    local val=HealBot_Comm_round(self:GetValue(), 1)
+    local val=HealBot_Comm_round(self:GetValue())
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
@@ -9365,7 +9378,6 @@ end
 
 function HealBot_Options_CDebuffCat_genList()
     local tmpCDebuffCat_List={}
-    local tmpCDebuffCatID_List={}
     local j=0
     local dText=""
     for dID,x in pairs(HealBot_Globals.Custom_Debuff_Categories) do
@@ -10045,14 +10057,14 @@ function HealBot_Options_ComboClass_Button(bNo)
     return button, lButton;
 end
 
+local tIDs={ [1]=1,   [2]=2,   [3]=3,   [4]=4,   [5]=5, 
+             [6]=6,   [7]=7,   [8]=9,   [9]=10, [10]=11,
+            [11]=12, [12]=13, [13]=14, [14]=17, [15]=18, 
+            [16]=19, [17]=20, [18]=21, [19]=22, [20]=23,
+            [21]=24, [22]=26, [23]=27 }
 local function HealBot_Options_DecodeDDClass(id, k)
     local newID=id
     if HEALBOT_GAME_VERSION<4 then
-        local tIDs={ [1]=1,   [2]=2,   [3]=3,   [4]=4,   [5]=5, 
-                     [6]=6,   [7]=7,   [8]=9,   [9]=10, [10]=11,
-                    [11]=12, [12]=13, [13]=14, [14]=17, [15]=18, 
-                    [16]=19, [17]=20, [18]=21, [19]=22, [20]=23,
-                    [21]=24, [22]=26, [23]=27 }
         newID=tIDs[id]
     end
     return newID
@@ -11938,6 +11950,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
+            HealBot_Options_val_OnLoad(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,5,40,1,5)
+            HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.MaxBarsCache or 20)
+            HealBot_Options_MaxBarCacheText:SetText(HEALBOT_OPTIONS_MAXBARCACHE .. ": " .. HealBot_Globals.MaxBarsCache)
             HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,5.0,0.5,2,HEALBOT_WORDS_MORECPU,HEALBOT_WORDS_LESSCPU)
             HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)

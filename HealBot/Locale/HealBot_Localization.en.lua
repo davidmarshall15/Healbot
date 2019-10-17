@@ -303,6 +303,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_IGNOREDEBUFFCOOLDOWN    = "When cure spell CoolDown > 1.5 secs (GCD)";
     HEALBOT_OPTIONS_IGNOREDEBUFFFRIEND      = "When caster is known as friend";
 
+
+    HEALBOT_OPTIONS_MAXBARCACHE             = "Maximum bars to pre cache";
     HEALBOT_OPTIONS_RANGECHECKFREQ          = "Internal Timers and Updates";
 
     HEALBOT_OPTIONS_HIDEPARTYFRAMES         = "Hide party frames";
@@ -1161,6 +1163,7 @@ function HealBot_Lang_enALL()
                                    [17] = "bkwildlifecntrl",
                                    [18] = "mlharg",
                                    [19] = "Yuriusha",
+                                   [20] = "spicy_squid",
                                 }
                                
 end
@@ -1218,6 +1221,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DISABLEHEALBOT"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
                                  ["DISABLEHEALBOTSOLO"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
                                  ["ADJUSTMAXHLTH"]=HEALBOT_OPTION_ADJUST_MAX_HEALTH,
+                                 ["MAXBARCACHE"]=HEALBOT_OPTIONS_MAXBARCACHE,
                                  ["INTERNALTIMERS"]=HEALBOT_OPTIONS_RANGECHECKFREQ,
                                  ["LANG"]=HEALBOT_OPTIONS_LANG,
                                  ["SETLANG"]=HEALBOT_OPTIONS_LANG,
@@ -1608,6 +1612,7 @@ function HealBot_Lang_Options_enALL()
                                ["DISABLEHEALBOT"]="Put Healbot into a deep sleep.",
                                ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
                                ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect.",
+                               ["MAXBARCACHE"]="Bars within frames can be initialized and cached before joining a group or raid.\n--\nRecommended settings:\n- [5] - You never raid.\n- [10] - You only join 10 man raids.\n- [20-25] - You regularly join 25 man raids.\n- [25-40] - You regularly join 40 man raids.\n--\nNOTE: This is a pre-cache and once a bar is initialized, it is never destroyed\nIf you pre-cache 5 bars and join a 25 man raid, you will end up with a pool of 25+ reusable bars\nHaving a large pool of bars is far more valuable than saving a tiny amount of memory.",
                                ["INTERNALTIMERS"]="This combined with your FPS sets how\nquickly the following are updated:\n- Range checking\n- Buff checking\n- Debuff checking\n- fastHealth updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates",
                                ["LANG"]="Select the language used by healbot options.\nThis can be independent to the UI.",
                                ["SETLANG"]="Set the language selected.",

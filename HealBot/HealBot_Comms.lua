@@ -96,10 +96,13 @@ function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
     g:SetText(addon_id);
 end
 
+local sPeople={}
 function HealBot_Comms_Print_Supports()
     if not HEALBOT_SUPPORTERS_PEOPLE[1] then return end
     local b=0
-    local d={}
+    for x,_ in pairs(sPeople) do
+        sPeople[x]=false
+    end 
     for x=1,10 do
         local g=_G["HBIncH"..x.."Supporter"]
         local s=HealBot_Globals.LastSupporter+x
@@ -108,9 +111,9 @@ function HealBot_Comms_Print_Supports()
             s=b
             if not HEALBOT_SUPPORTERS_PEOPLE[s] then s=1 end
         end
-        if not d[HEALBOT_SUPPORTERS_PEOPLE[s]] then
+        if not sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]] then
             g:SetText(HEALBOT_SUPPORTERS_PEOPLE[s]);
-            d[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
+            sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
         end
     end
     if HEALBOT_SUPPORTERS_PEOPLE[11] then

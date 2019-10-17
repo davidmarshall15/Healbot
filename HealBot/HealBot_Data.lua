@@ -266,6 +266,7 @@ function HealBot_Data_InitVars()
         SmartCastBuff = true,
         SmartCastHeal = false,
         SmartCastRes = true,
+        MaxBarsCache=20,
         RangeCheckFreq=0.2,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,

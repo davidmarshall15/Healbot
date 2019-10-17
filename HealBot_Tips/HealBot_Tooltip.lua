@@ -928,9 +928,12 @@ local function HealBot_Tooltip_Options_Show(noLines)
     HealBot_Tooltip:Show();
 end
 
+local tLine={}
 function HealBot_Tooltip_OptionsHelp(title,text)
     HealBot_Tooltip_ClearLines();
-    local tLine={}
+    for x,_ in pairs(tLine) do
+        tLine[x]=nil;
+    end
     local i=0
     for l in string.gmatch(text, "[^\n]+") do
         local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
