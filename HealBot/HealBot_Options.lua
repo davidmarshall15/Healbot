@@ -1835,6 +1835,18 @@ function HealBot_BarDebuffButtonIconScale_OnValueChanged(self)
     end
 end
 
+function HealBot_BarButtonIconFadeStartTime_OnValueChanged(self)
+    local val=HealBot_Comm_round(self:GetValue(), 0)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    else
+        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FADESECS"] = val;
+        HealBot_setLuVars("FadeTimeDiv", (val*1.125))
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val .. " " .. HEALBOT_WORDS_SEC);
+    end
+end
+
 function HealBot_BarButtonIconTextScale_OnValueChanged(self)
 --    local val=floor(self:GetValue()+0.5)
     local val=HealBot_Comm_round(self:GetValue(), 1)
@@ -12592,6 +12604,10 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val2_OnLoad(HealBot_BarButtonIconScale,HEALBOT_OPTIONS_ICONSCALE,2.5,10,0.5,10)
             HealBot_BarButtonIconScale:SetValue((Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"] or 7.5)*10)
             HealBot_BarButtonIconScaleText:SetText(HEALBOT_OPTIONS_ICONSCALE..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])
+            HealBot_Options_val_OnLoad(HealBot_BarButtonIconFadeStartTime,HEALBOT_OPTIONS_FADESTARTTIME,5,30,1,3)
+            HealBot_BarButtonIconFadeStartTime:SetValue(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FADESECS"])
+            HealBot_setLuVars("FadeTimeDiv", (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FADESECS"]*1.125))
+            HealBot_BarButtonIconFadeStartTimeText:SetText(HEALBOT_OPTIONS_FADESTARTTIME..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["FADESECS"].." "..HEALBOT_WORDS_SEC)
             HealBot_Options_val2_OnLoad(HealBot_BarButtonDebuffIconScale,HEALBOT_OPTIONS_DEBUFFICONSCALE,2.5,10,0.5,10)
             HealBot_BarButtonDebuffIconScale:SetValue((Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DSCALE"] or 7.5)*10)
             HealBot_BarButtonDebuffIconScaleText:SetText(HEALBOT_OPTIONS_DEBUFFICONSCALE..": "..Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DSCALE"])

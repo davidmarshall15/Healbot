@@ -9631,7 +9631,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="35" y="-52" />
+                              <AbsDimension x="35" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9662,7 +9662,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="210" y="-52" />
+                              <AbsDimension x="210" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9693,7 +9693,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="370" y="-52" />
+                              <AbsDimension x="370" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9721,7 +9721,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="370" y="-108" />
+                              <AbsDimension x="370" y="-94" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9735,7 +9735,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="230" y="-162" />
+                              <AbsDimension x="230" y="-142" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9749,7 +9749,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="112" y="-205"/>
+                              <AbsDimension x="112" y="-185"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9805,7 +9805,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="112" y="-190"/>
+                              <AbsDimension x="112" y="-170"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9861,7 +9861,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="128" y="-250"/>
+                              <AbsDimension x="128" y="-225"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9962,7 +9962,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="90" y="-330"/>
+                              <AbsDimension x="90" y="-295"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9979,7 +9979,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="90" y="-380"/>
+                              <AbsDimension x="90" y="-340"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9993,7 +9993,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonDebuffIconScale" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="108" y="-40"/>
+                              <AbsDimension x="108" y="-35"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -10017,6 +10017,23 @@
                           <OnLeave>HealBot_Options_Show_Help("ICONFADE",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
+                      <Slider name="HealBot_BarButtonIconFadeStartTime" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="425" y="18" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="20"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_BarButtonIconFadeStartTime_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ICONFADESTART",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ICONFADESTART",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
                     </Frames>
                   </Frame>
 

@@ -544,11 +544,9 @@ local function HealBot_Action_DoRefreshTooltip()
         if uName then
             local r,g,b=HealBot_Action_ClassColour(xUnit)
             local uLvl=UnitLevel(xUnit)
-            if uLvl<1 and xButton.text.level>0 then uLvl=xButton.text.level end
             if uLvl<1 then 
                 uLvl=nil
             else
-                if xButton.text.level~=uLvl then xButton.text.level=uLvl end
                 uLvl="Level "..uLvl
             end
             local uClassify=UnitClassification(xUnit) or " "
@@ -572,12 +570,10 @@ local function HealBot_Action_DoRefreshTooltip()
             elseif not uLvl then
                 uLvl=""
             end
-            local uClass=UnitCreatureFamily(xUnit) or UnitClass(xUnit) or xButton.text.class
+            local uClass=UnitCreatureFamily(xUnit) or UnitClass(xUnit) or UnitCreatureType(xUnit)
             if uClass==uName then uClass=UnitCreatureType(xUnit) or "" end
             if uClass=="" then
                 if strfind(xUnit,"pet") then uClass=HEALBOT_WORD_PET end
-            elseif uClass~=xButton.text.class then
-                xButton.text.class=uClass
             end
             local inRange=true
             if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end

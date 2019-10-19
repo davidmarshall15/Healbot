@@ -1822,10 +1822,12 @@ local function HealBot_RemoveIcon(button, index)
   --HealBot_setCall("HealBot_RemoveIcon")
 end
 
+HealBot_luVars["FadeTimeDiv"]=18
 local function HealBot_Icon_AlphaValue(secLeft, curFrame)
     if secLeft>=0 then
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] and secLeft<18 then
-            return (secLeft/20)+.1
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] and 
+           secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADESECS"] then
+            return (secLeft/HealBot_luVars["FadeTimeDiv"])+.1
         else
             return 1
         end
@@ -1993,9 +1995,9 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*2))/(HealBot_luVars["qaFR"]/4), 4) -- At 50FPS with default settings = 0.144
-        HealBot_Timers["HB2Th"]=HealBot_Comm_round(HealBot_Globals.RangeCheckFreq/(HealBot_luVars["qaFR"]/2), 4) -- At 50FPS with default settings = 0.016
-        HealBot_Timers["HBaTh"]=0.01+(HealBot_Globals.RangeCheckFreq/20)
+        HealBot_Timers["HB1Th"]=HealBot_Comm_round((1+(HealBot_Globals.RangeCheckFreq*16))/(HealBot_luVars["qaFR"]/4), 4)
+        HealBot_Timers["HB2Th"]=HealBot_Comm_round((HealBot_Globals.RangeCheckFreq*4)/(HealBot_luVars["qaFR"]/2), 4)
+        HealBot_Timers["HBaTh"]=0.01+(HealBot_Globals.RangeCheckFreq/8)
     else
         HealBot_Timers["HB1Th"]=1
         HealBot_Timers["HB2Th"]=1
@@ -2003,7 +2005,7 @@ function HealBot_Set_Timers()
     end
     HealBot_setTooltipUpdateInterval()
     HealBot_CheckTime_Modifier()
- --   HealBot_AddDebug("HB1Th="..HealBot_Timers["HB1Th"])
+    --HealBot_AddDebug("HB2Th="..HealBot_Timers["HB2Th"])
   --HealBot_setCall("HealBot_Set_Timers")
 end
 
@@ -2462,6 +2464,7 @@ function HealBot_Check_Skin(SkinName)
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWBUFF"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWBUFF"]=true end
         if Healbot_Config_Skins.Icons[SkinName][gl]["POSITION"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["POSITION"]=2 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]=true end
+        if not Healbot_Config_Skins.Icons[SkinName][gl]["FADESECS"] then Healbot_Config_Skins.Icons[SkinName][gl]["FADESECS"]=15 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]=3 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]=8 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["ER"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["ER"]=1 end

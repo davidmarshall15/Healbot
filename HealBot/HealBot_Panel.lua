@@ -160,13 +160,13 @@ local function HealBot_Panel_addDataStore(unit, nRaidID)
                 end
             end
             if not hbFRole then
-                HealBot_Panel_SetRole(xUnit,dsGUID)
+                HealBot_Panel_SetRole(unit,dsGUID)
             else
-                hbPanel_dataRoles[xUnit]=hbFRole
+                hbPanel_dataRoles[unit]=hbFRole
                 if hbFRole=="TANK" then
-                    HealBot_Panel_TankRole(xUnit,dsGUID)
+                    HealBot_Panel_TankRole(unit,dsGUID)
                 elseif hbFRole=="HEALER" then 
-                    HealBot_Panel_HealerRole(xUnit,dsGUID)
+                    HealBot_Panel_HealerRole(unit,dsGUID)
                 end
             end
         else

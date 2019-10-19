@@ -2805,8 +2805,6 @@ local function HealBot_Action_PrepButton(button)
     button.text.health="100"
     button.text.name=" "
     button.text.tag=""
-    button.text.class=""
-    button.text.level=0
     button.spec=" "
     button.reset=true
 end
@@ -3599,8 +3597,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 if UnitIsFriend("player",unit) then 
                     HealBot_CheckPlayerMana(shb) 
                 end
-                shb.text.class=UnitCreatureFamily(unit) or UnitClass(unit) or ""
-                shb.text.level=UnitLevel(unit) or 0
             end
         end
         if not shb.update.unit and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
@@ -3699,13 +3695,13 @@ local function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     local bar4=_G["HealBot_Action_HealUnit"..hbBarID.."Bar4"]
     dg.unit="nil"
+    HealBot_Action_PrepButton(dg)
     HealBot_mark2clearGUID(dg.guid)
     HealBot_HoT_RemoveAllIconButton(dg)
     HealBot_Action_SetBar3Value(dg)
     bar4:SetStatusBarColor(1,0,0,0)
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end
-    HealBot_Action_PrepButton(dg)
     HealBot_Panel_SetBarArrays(hbBarID)
     HealBot_AddDebug("Deleted button "..hbBarID)
 end

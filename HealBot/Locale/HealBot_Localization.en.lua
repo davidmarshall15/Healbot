@@ -132,6 +132,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CTRL                    = "Ctrl";
     HEALBOT_OPTIONS_ENABLEHEALTHY           = "Always use enabled";
     HEALBOT_OPTIONS_FADEONEXPIRE            = "Fade on expire";
+    HEALBOT_OPTIONS_FADESTARTTIME           = "Fade start time";
 
     HEALBOT_OPTIONS_CASTNOTIFY1             = "No messages";
     HEALBOT_OPTIONS_CASTNOTIFY2             = "Notify self";
@@ -1465,6 +1466,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONSCALEDEBUFF"]=HEALBOT_OPTIONS_DEBUFFICONSCALE,
                                  ["ICONALWAYSEN"]=HEALBOT_OPTIONS_TTALPHA.." "..HEALBOT_OPTIONS_ENABLEHEALTHY,
                                  ["ICONFADE"]=HEALBOT_OPTIONS_FADEONEXPIRE,
+                                 ["ICONFADESTART"]=HEALBOT_OPTIONS_FADESTARTTIME,
                         -- Skins Frames Icons Text tab
                                  ["ICONSTEXT"]="Icons Text",
                                  ["ICONTXTSHOWCOUNT"]=HEALBOT_OPTIONS_HOTSHOWTEXT.." "..HEALBOT_OPTIONS_HOTTEXTCOUNT,
@@ -1856,6 +1858,7 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSCALEDEBUFF"]="The debuff icon scale relative to the bar.\nNote: The scale is halved when using Double row.",
                                ["ICONALWAYSEN"]="Always use enabled bar opacity setting even\nwhen the bar is using a different setting.",
                                ["ICONFADE"]="Fade the icon as it begins to expire.",
+                               ["ICONFADESTART"]="The number of seconds before expiry when the icon fades.\n--\nNOTE: The fade is gradual and generally not noticeable for the first few seconds.",
                         -- Skins Frames Icons Text tab
                                ["ICONSTEXT"]="Show the Skins Frames Icons Text tab.",
                                ["ICONTXTSHOWCOUNT"]="Set the type of text and conditions met to show text on the icon.\nCount - Show the number of stacks, for all casters or own casts if Self casts only is on.",
