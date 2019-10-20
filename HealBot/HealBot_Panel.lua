@@ -1511,15 +1511,19 @@ local function HealBot_Panel_MainSort(doMainSort,unitType)
             end)
             local SubSort=order[units[j]]
             for j=1,#units do
-                if SubSort~=order[units[j]] then
-                    HealBot_Panel_SubSort(incSubSort, unitType)
-                    k=j
-                    SubSort=order[units[j]]
-                end
-                if incSubSort then
-                    HealBot_Panel_insSort(units[j], UnitGUID(units[j]), false)
+                if units[j] then
+                    if SubSort~=order[units[j]] then
+                        HealBot_Panel_SubSort(incSubSort, unitType)
+                        k=j
+                        SubSort=order[units[j]]
+                    end
+                    if incSubSort then
+                        HealBot_Panel_insSort(units[j], UnitGUID(units[j]), false)
+                    else
+                        table.insert(subunits,units[j])
+                    end
                 else
-                    table.insert(subunits,units[j])
+                    HealBot_setOptions_Timer(595)
                 end
             end
             if not j or k<j then
@@ -1527,10 +1531,14 @@ local function HealBot_Panel_MainSort(doMainSort,unitType)
             end
         else
             for j=1,#units do
-                if incSubSort then
-                    HealBot_Panel_insSort(units[j], UnitGUID(units[j]), false)
+                if units[j] then
+                    if incSubSort then
+                        HealBot_Panel_insSort(units[j], UnitGUID(units[j]), false)
+                    else
+                        table.insert(subunits,units[j])
+                    end
                 else
-                    table.insert(subunits,units[j])
+                    HealBot_setOptions_Timer(595)
                 end
             end
             HealBot_Panel_SubSort(incSubSort, unitType)

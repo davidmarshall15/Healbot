@@ -4379,23 +4379,12 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                 WatchTarget=HealBot_Options_retDebuffWatchTarget(debuff_type);
             end
             if WatchTarget then 
-                if WatchTarget["Raid"] then
-                    checkthis=true;
-                    always=true
-                elseif WatchTarget["Party"] and (UnitInParty(button.unit) or button.guid==HealBot_Data["PGUID"]) then
-                    checkthis=true;
-                elseif WatchTarget["Self"] and button.guid==HealBot_Data["PGUID"] then
-                    checkthis=true
-                elseif WatchTarget[strsub(DebuffClass,1,4)] then
-                    checkthis=true;
-                elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
-                    checkthis=true
-                elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
-                    checkthis=true
-                elseif WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
+                if WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
                     checkthis=true
                 elseif WatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
                     checkthis=true;
+                elseif WatchTarget["Self"] and button.guid==HealBot_Data["PGUID"] then
+                    checkthis=true
                 elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     checkthis=true;
                 elseif WatchTarget["SingleTank"] and UnitIsUnit(xUnit, HealBot_luVars["TankUnit"]) then
@@ -4408,6 +4397,17 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                             break
                         end
                     end
+                elseif WatchTarget[strsub(DebuffClass,1,4)] then
+                    checkthis=true;
+                elseif WatchTarget["Party"] and (UnitInParty(button.unit) or button.guid==HealBot_Data["PGUID"]) then
+                    checkthis=true;
+                elseif WatchTarget["Raid"] then
+                    checkthis=true;
+                    always=true
+                elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
+                    checkthis=true
+                elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
+                    checkthis=true
                 end
             end
             if checkthis then
@@ -5125,21 +5125,11 @@ local function HealBot_CheckUnitBuffs(button)
                     if not x then
                         -- Spec change within that last few secs - buff outdated so do nothing
                     elseif x<2 then
-                        if WatchTarget["Raid"] then
-                            checkthis=true;
-                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then 
-                            checkthis=true
-                        elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
-                            checkthis=true
-                        elseif WatchTarget[strsub(BuffClass,1,4)] then
-                            checkthis=true
-                        elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
-                            checkthis=true
-                        elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
-                            checkthis=true
-                        elseif WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
+                        if WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
                             checkthis=true
                         elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
+                            checkthis=true
+                        elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
                             checkthis=true
                         elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
                             checkthis=true;
@@ -5153,6 +5143,16 @@ local function HealBot_CheckUnitBuffs(button)
                                     break;
                                 end
                             end
+                        elseif WatchTarget[strsub(BuffClass,1,4)] then
+                            checkthis=true
+                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then 
+                            checkthis=true
+                        elseif WatchTarget["Raid"] then
+                            checkthis=true;
+                        elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
+                            checkthis=true
+                        elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
+                            checkthis=true
                         end
                     end
                     if checkthis then

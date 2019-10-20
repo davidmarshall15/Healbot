@@ -572,8 +572,12 @@ local function HealBot_Action_DoRefreshTooltip()
             end
             local uClass=UnitCreatureFamily(xUnit) or UnitClass(xUnit) or UnitCreatureType(xUnit)
             if uClass==uName then uClass=UnitCreatureType(xUnit) or "" end
-            if uClass=="" then
-                if strfind(xUnit,"pet") then uClass=HEALBOT_WORD_PET end
+            if not uClass or uClass=="" then
+                if strfind(xUnit,"pet") then
+                    uClass=HEALBOT_WORD_PET 
+                else
+                    uClass=HEALBOT_WORDS_UNKNOWN 
+                end
             end
             local inRange=true
             if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end
