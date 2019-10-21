@@ -3099,6 +3099,15 @@ function HealBot_Options_MonitorBuffsWhenGrouped_OnClick(self)
     HealBot_setOptions_Timer(40)
 end
 
+function HealBot_Options_MonitorBuffsPalaBlessing_OnClick(self)
+    if self:GetChecked() then
+        HealBot_Config_Buffs.PalaBlessingsAsOne = true
+    else
+        HealBot_Config_Buffs.PalaBlessingsAsOne = false
+    end
+    HealBot_setOptions_Timer(40)
+end
+
 function HealBot_Options_SkinDefault_OnClick(self, gType)
     if self:GetChecked() then
         HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][gType] = true
@@ -13074,6 +13083,8 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_MonitorBuffsInCombat,HEALBOT_OPTIONS_MONITORBUFFSC)
             HealBot_Options_MonitorBuffsWhenGrouped:SetChecked(HealBot_Config_Buffs.BuffWatchWhenGrouped)
             HealBot_Options_SetText(HealBot_Options_MonitorBuffsWhenGrouped,HEALBOT_OPTIONS_IN_A_GROUP)
+            HealBot_Options_MonitorBuffsPalaBlessing:SetChecked(HealBot_Config_Buffs.PalaBlessingsAsOne)
+            HealBot_Options_SetText(HealBot_Options_MonitorBuffsPalaBlessing,HEALBOT_OPTIONS_PALADIN_BLESSINGS)
             HealBot_Options_valtime_OnLoad(HealBot_Options_LongBuffTimer,HEALBOT_OPTIONS_LONGBUFFTIMER,0,300,15)
             HealBot_Options_LongBuffTimer:SetValue(HealBot_Config_Buffs.LongBuffTimer)
             HealBot_Options_BuffTimer_OnValueChanged(HealBot_Options_LongBuffTimer,"LONG")
@@ -13575,9 +13586,15 @@ function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
         if subTabNo==51 then
             HealBot_Options_MonitorBuffsInCombat:Show()
             HealBot_Options_MonitorBuffsWhenGrouped:Show()
+            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] and HEALBOT_GAME_VERSION<4 then
+                HealBot_Options_MonitorBuffsPalaBlessing:Show()
+            else
+                HealBot_Options_MonitorBuffsPalaBlessing:Hide()
+            end
         elseif subTabNo>51 and subTabNo<54 then
             HealBot_Options_MonitorBuffsInCombat:Hide()
             HealBot_Options_MonitorBuffsWhenGrouped:Hide()
+            HealBot_Options_MonitorBuffsPalaBlessing:Hide()
         end
     end;
     

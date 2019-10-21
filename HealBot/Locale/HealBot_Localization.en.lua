@@ -1033,6 +1033,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ADDON_FAIL              = "Failed to load headbot addon"
     
     HEALBOT_OPTIONS_IN_A_GROUP              = "Only when in a Group or Raid"
+    HEALBOT_OPTIONS_PALADIN_BLESSINGS       = "View all my blessings as same"
     
     HEALBOT_OPTIONS_CONTENT_SKINS_GENERAL   = "    " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SKINSF_GENERAL  = "        " .. HEALBOT_OPTIONS_TAB_GENERAL

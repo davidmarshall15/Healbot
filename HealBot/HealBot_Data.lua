@@ -126,6 +126,7 @@ HealBot_Config_SpellsDefaults = {
 HealBot_Config_BuffsDefaults = {
   BuffWatch = true,
   BuffWatchInCombat = false,
+  PalaBlessingsAsOne = false,
   ShortBuffTimer=10,
   LongBuffTimer=120,
   BuffWatchWhenGrouped = true,

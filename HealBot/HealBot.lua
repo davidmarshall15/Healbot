@@ -3098,54 +3098,54 @@ local function HealBot_OnEvent_VariablesLoaded(self)
     HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
     
     if HEALBOT_GAME_VERSION<4 then
-        local HBC_SPIRIT_ID = 1 --Spirit
-        local HBC_SP_ID = 2 --Shadow Resistance 
-        local HBC_WISDOM_ID = 3 --Mana Regen
-        local HBC_LIGHT_ID = 4 --Incoming Heals
-        local HBC_SALVATION_ID = 5 --Threat Reduction
-        local HBC_SANCTUARY_ID = 6 --Damage Reduction
-        local HBC_STATS_ID = 7 --Stats
-        local HBC_MIGHT_ID = 8 --Attack Power
-        local HBC_STAMINA_ID = 9 --Stamina
-        local HBC_INT_ID = 10 --Int
+        local HBC_WISDOM_ID = 1 --Mana Regen
+        local HBC_LIGHT_ID = 2 --Incoming Heals
+        local HBC_SALVATION_ID = 3 --Threat Reduction
+        local HBC_SANCTUARY_ID = 4 --Damage Reduction
+        local HBC_STATS_ID = 5 --Stats
+        local HBC_MIGHT_ID = 6 --Attack Power
+        local HBC_STAMINA_ID = 7 --Stamina
+        local HBC_INT_ID = 8 --Int
+        local HBC_SPIRIT_ID = 9 --Spirit
+        local HBC_SP_ID = 10 --Shadow Resistance 
 
         if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = {HBC_STATS_ID},
-                [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "x")] = {HBC_STATS_ID},
+                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = HBC_STATS_ID,
+                [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "x")] = HBC_STATS_ID,
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "x")] = {HBC_INT_ID},
+                [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "x")] = HBC_INT_ID,
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "x")] = {HBC_STATS_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "x")] = {HBC_LIGHT_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "x")] = {HBC_MIGHT_ID},
-                [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "x")] = {HBC_SALVATION_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "x")] = {HBC_SANCTUARY_ID},
-                [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "x")] = {HBC_WISDOM_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "x")] = {HBC_STATS_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "x")] = {HBC_LIGHT_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "x")] = {HBC_MIGHT_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "x")] = {HBC_SALVATION_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "x")] = {HBC_SANCTUARY_ID},
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "x")] = {HBC_WISDOM_ID},
+                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "x")] = HBC_STATS_ID,
+                [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "x")] = HBC_LIGHT_ID,
+                [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "x")] = HBC_MIGHT_ID,
+                [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "x")] = HBC_SALVATION_ID,
+                [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "x")] = HBC_SANCTUARY_ID,
+                [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "x")] = HBC_WISDOM_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "x")] = HBC_STATS_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "x")] = HBC_LIGHT_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "x")] = HBC_MIGHT_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "x")] = HBC_SALVATION_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "x")] = HBC_SANCTUARY_ID,
+                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "x")] = HBC_WISDOM_ID,
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "x")] = {HBC_STAMINA_ID},
-                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = {HBC_STAMINA_ID},
-                [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "x")] = {HBC_SPIRIT_ID},
-                [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "x")] = {HBC_SPIRIT_ID},
-                [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = {HBC_SP_ID},
-                [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = {HBC_SP_ID},
+                [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "x")] = HBC_STAMINA_ID,
+                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = HBC_STAMINA_ID,
+                [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "x")] = HBC_SPIRIT_ID,
+                [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "x")] = HBC_SPIRIT_ID,
+                [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
+                [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
             }
         else
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = {HBC_STAMINA_ID},
-                [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = {HBC_STAMINA_ID},
+                [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = HBC_STAMINA_ID,
+                [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = HBC_STAMINA_ID,
             }
         end
         HealBot_setOptions_Timer(9920)
@@ -3153,6 +3153,7 @@ local function HealBot_OnEvent_VariablesLoaded(self)
         -- Don't see the point of this in current retail (8.2)
         -- Aura checks are often done and this adds unnecessary looping
         -- Should it be required in the future, consider only sticky buffs and exclude in range buffs
+        -- Also simplifying by only including the primary buff, using int instead of table
         
         --local HEALBOT_STATS_ID = 1 --RAID_BUFF_1 --Stats
         --local HEALBOT_STAMINA_ID = 2 --RAID_BUFF_2 --Stamina
@@ -3166,80 +3167,80 @@ local function HealBot_OnEvent_VariablesLoaded(self)
 
         HealBot_BuffNameTypes = {
             -- Death Knight
-        --    [(GetSpellInfo(HEALBOT_HORN_OF_WINTER) or "x")] = {HEALBOT_ATTACK_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_POWER_OF_THE_GRAVE) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_UNHOLY_AURA) or "x")] = {HEALBOT_HASTE_ID, HEALBOT_VERSATILITY_ID},
+        --    [(GetSpellInfo(HEALBOT_HORN_OF_WINTER) or "x")] = HEALBOT_ATTACK_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_POWER_OF_THE_GRAVE) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_UNHOLY_AURA) or "x")] = HEALBOT_HASTE_ID,
             -- Druid
-        --    [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_MOONKIN_AURA) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_LEADER_OF_THE_PACK) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_MOONKIN_AURA) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_LEADER_OF_THE_PACK) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
             -- Hunter
-        --    [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = {HEALBOT_ATTACK_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_FORTITUDE_OF_THE_BEAR) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_POWER_OF_THE_PRIMATES) or "x")] = {HEALBOT_STATS_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_WISDOM_OF_THE_SERPENT) or "x")] = {HEALBOT_SPELL_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_GRACE_OF_THE_CAT) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_HASTE_OF_THE_HYENA) or "x")] = {HEALBOT_HASTE_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_FEROCITY_OF_THE_RAPTOR) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_QUICKNESS_OF_THE_DRAGONHAWK) or "x")] = {HEALBOT_MULTISTRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_LW_VERSATILITY_OF_THE_RAVAGER) or "x")] = {HEALBOT_VERSATILITY_ID},
+        --    [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = HEALBOT_ATTACK_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_FORTITUDE_OF_THE_BEAR) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_POWER_OF_THE_PRIMATES) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_WISDOM_OF_THE_SERPENT) or "x")] = HEALBOT_SPELL_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_GRACE_OF_THE_CAT) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_HASTE_OF_THE_HYENA) or "x")] = HEALBOT_HASTE_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_FEROCITY_OF_THE_RAPTOR) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_QUICKNESS_OF_THE_DRAGONHAWK) or "x")] = HEALBOT_MULTISTRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_LW_VERSATILITY_OF_THE_RAVAGER) or "x")] = HEALBOT_VERSATILITY_ID,
             -- Hunter Pets
-        --    [(GetSpellInfo(HEALBOT_BARK_OF_THE_WILD) or "x")] = {HEALBOT_STATS_ID},
-        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_KONGS) or "x")] = {HEALBOT_STATS_ID},
-        --    [(GetSpellInfo(HEALBOT_EMBRACE_OF_THE_SHALE_SPIDER) or "x")] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_STRENGTH_OF_THE_EARTH) or "x")] = {HEALBOT_STATS_ID, HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_INVIGORATING_ROAR) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_STURDINESS) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_SAVAGE_VIGOR) or "x")] = {HEALBOT_STAMINA_ID, HEALBOT_HASTE_ID},
-        --    [(GetSpellInfo(HEALBOT_QIRAJI_FORTITUDE) or "x")] = {HEALBOT_STAMINA_ID, HEALBOT_SPELL_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_SERPENTS_CUNNING) or "x")] = {HEALBOT_SPELL_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_STILL_WATER) or "x")] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_ROAR_OF_COURAGE) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_KEEN_SENSES) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_SPIRIT_BEAST_BLESSING) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_PLAINSWALKING) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_CACKLING_HOWL) or "x")] = {HEALBOT_HASTE_ID},
-        --    [(GetSpellInfo(HEALBOT_ENERGIZING_SPORES) or "x")] = {HEALBOT_HASTE_ID},
-        --    [(GetSpellInfo(HEALBOT_SPEED_OF_THE_SWARM) or "x")] = {HEALBOT_HASTE_ID},
-        --    [(GetSpellInfo(HEALBOT_TERRIFYING_ROAR) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_FEARLESS_ROAR) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_STRENGTH_OF_THE_PACK) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_FURIOUS_HOWL) or "x")] = {HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_SONIC_FOCUS) or "x")] = {HEALBOT_MULTISTRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_WILD_STRENGTH) or "x")] = {HEALBOT_MULTISTRIKE_ID, HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_DOUBLE_BITE) or "x")] = {HEALBOT_MULTISTRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_SPRY_ATTACKS) or "x")] = {HEALBOT_MULTISTRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_BREATH_OF_THE_WINDS) or "x")] = {HEALBOT_MULTISTRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_TENACITY) or "x")] = {HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_INDOMITABLE) or "x")] = {HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_DEFENSIVE_QUILLS) or "x")] = {HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_CHITINOUS_ARMOR) or "x")] = {HEALBOT_VERSATILITY_ID},
-        --    [(GetSpellInfo(HEALBOT_GRACE) or "x")] = {HEALBOT_VERSATILITY_ID},
+        --    [(GetSpellInfo(HEALBOT_BARK_OF_THE_WILD) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_KONGS) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_EMBRACE_OF_THE_SHALE_SPIDER) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_STRENGTH_OF_THE_EARTH) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_INVIGORATING_ROAR) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_STURDINESS) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_SAVAGE_VIGOR) or "x")] = HEALBOT_HASTE_ID,
+        --    [(GetSpellInfo(HEALBOT_QIRAJI_FORTITUDE) or "x")] = HEALBOT_SPELL_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_SERPENTS_CUNNING) or "x")] = HEALBOT_SPELL_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_STILL_WATER) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_ROAR_OF_COURAGE) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_KEEN_SENSES) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_SPIRIT_BEAST_BLESSING) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_PLAINSWALKING) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_CACKLING_HOWL) or "x")] = HEALBOT_HASTE_ID,
+        --    [(GetSpellInfo(HEALBOT_ENERGIZING_SPORES) or "x")] = HEALBOT_HASTE_ID,
+        --    [(GetSpellInfo(HEALBOT_SPEED_OF_THE_SWARM) or "x")] = HEALBOT_HASTE_ID,
+        --    [(GetSpellInfo(HEALBOT_TERRIFYING_ROAR) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_FEARLESS_ROAR) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_STRENGTH_OF_THE_PACK) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_FURIOUS_HOWL) or "x")] = HEALBOT_CRITICAL_STRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_SONIC_FOCUS) or "x")] = HEALBOT_MULTISTRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_WILD_STRENGTH) or "x")] = HEALBOT_VERSATILITY_ID,
+        --    [(GetSpellInfo(HEALBOT_DOUBLE_BITE) or "x")] = HEALBOT_MULTISTRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_SPRY_ATTACKS) or "x")] = HEALBOT_MULTISTRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_BREATH_OF_THE_WINDS) or "x")] = HEALBOT_MULTISTRIKE_ID,
+        --    [(GetSpellInfo(HEALBOT_TENACITY) or "x")] = HEALBOT_VERSATILITY_ID,
+        --    [(GetSpellInfo(HEALBOT_INDOMITABLE) or "x")] = HEALBOT_VERSATILITY_ID,
+        --    [(GetSpellInfo(HEALBOT_DEFENSIVE_QUILLS) or "x")] = HEALBOT_VERSATILITY_ID,
+        --    [(GetSpellInfo(HEALBOT_CHITINOUS_ARMOR) or "x")] = HEALBOT_VERSATILITY_ID,
+        --    [(GetSpellInfo(HEALBOT_GRACE) or "x")] = HEALBOT_VERSATILITY_ID,
             -- Mage
-        --    [(GetSpellInfo(HEALBOT_ARCANE_BRILLIANCE) or "x")] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE) or "x")] = {HEALBOT_SPELL_POWER_ID, HEALBOT_CRITICAL_STRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_ARCANE_BRILLIANCE) or "x")] = HEALBOT_SPELL_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE) or "x")] = HEALBOT_SPELL_POWER_ID,
             -- Monk
-        --    [(GetSpellInfo(HEALBOT_LEGACY_EMPEROR) or "x")] = {HEALBOT_STATS_ID},
-        --    [(GetSpellInfo(HEALBOT_LEGACY_WHITETIGER) or "x")] = {HEALBOT_STATS_ID, HEALBOT_CRITICAL_STRIKE_ID},
-        --    [(GetSpellInfo(HEALBOT_WINDFLURRY) or "x")] = {HEALBOT_MULTISTRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_LEGACY_EMPEROR) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_LEGACY_WHITETIGER) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_WINDFLURRY) or "x")] = HEALBOT_MULTISTRIKE_ID,
             -- Paladin
-        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_KINGS) or "x")] = {HEALBOT_STATS_ID},
-        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_MIGHT) or "x")] = {HEALBOT_MASTERY_ID},
-        --    [(GetSpellInfo(HEALBOT_SANCTITY_AURA) or "x")] = {HEALBOT_VERSATILITY_ID},
+        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_KINGS) or "x")] = HEALBOT_STATS_ID,
+        --    [(GetSpellInfo(HEALBOT_BLESSING_OF_MIGHT) or "x")] = HEALBOT_MASTERY_ID,
+        --    [(GetSpellInfo(HEALBOT_SANCTITY_AURA) or "x")] = HEALBOT_VERSATILITY_ID,
             -- Priest
-        --    [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_MIND_QUICKENING) or "x")] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_MIND_QUICKENING) or "x")] = HEALBOT_HASTE_ID,
             -- Warlock
-        --    [(GetSpellInfo(HEALBOT_BLOOD_PACT) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_DARK_INTENT) or "x")] = {HEALBOT_SPELL_POWER_ID, HEALBOT_MULTISTRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_BLOOD_PACT) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_DARK_INTENT) or "x")] = HEALBOT_SPELL_POWER_ID,
             -- Warrior
-        --    [(GetSpellInfo(HEALBOT_COMMANDING_SHOUT) or "x")] = {HEALBOT_STAMINA_ID},
-        --    [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = {HEALBOT_ATTACK_POWER_ID},
-        --    [(GetSpellInfo(HEALBOT_INSPIRING_PRESENCE) or "x")] = {HEALBOT_VERSATILITY_ID},
+        --    [(GetSpellInfo(HEALBOT_COMMANDING_SHOUT) or "x")] = HEALBOT_STAMINA_ID,
+        --    [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = HEALBOT_ATTACK_POWER_ID,
+        --    [(GetSpellInfo(HEALBOT_INSPIRING_PRESENCE) or "x")] = HEALBOT_VERSATILITY_ID,
             -- Rogue
-        --    [(GetSpellInfo(HEALBOT_SWIFTBLADES_CUNNING) or "x")] = {HEALBOT_HASTE_ID, HEALBOT_MULTISTRIKE_ID},
+        --    [(GetSpellInfo(HEALBOT_SWIFTBLADES_CUNNING) or "x")] = HEALBOT_HASTE_ID,
             -- Shaman
-        --    [(GetSpellInfo(HEALBOT_GRACE_OF_AIR) or "x")] = {HEALBOT_MASTERY_ID, HEALBOT_HASTE_ID},
+        --    [(GetSpellInfo(HEALBOT_GRACE_OF_AIR) or "x")] = HEALBOT_MASTERY_ID,
         }
     end
 
@@ -4379,16 +4380,23 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                 WatchTarget=HealBot_Options_retDebuffWatchTarget(debuff_type);
             end
             if WatchTarget then 
-                if WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
-                    checkthis=true
-                elseif WatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
+                if WatchTarget["Raid"] then
                     checkthis=true;
-                elseif WatchTarget["Self"] and button.guid==HealBot_Data["PGUID"] then
-                    checkthis=true
+                    always=true
+                elseif WatchTarget["Party"] and (UnitInParty(button.unit) or button.guid==HealBot_Data["PGUID"]) then
+                    checkthis=true;
+                elseif WatchTarget[strsub(DebuffClass,1,4)] then
+                    checkthis=true;
                 elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     checkthis=true;
                 elseif WatchTarget["SingleTank"] and UnitIsUnit(xUnit, HealBot_luVars["TankUnit"]) then
                     checkthis=true
+                elseif WatchTarget["Self"] and button.guid==HealBot_Data["PGUID"] then
+                    checkthis=true
+                elseif WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
+                    checkthis=true
+                elseif WatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
+                    checkthis=true;
                 elseif WatchTarget["MyTargets"] then
                     local myhTargets=HealBot_GetMyHealTargets();
                     for i=1, #myhTargets do
@@ -4397,13 +4405,6 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                             break
                         end
                     end
-                elseif WatchTarget[strsub(DebuffClass,1,4)] then
-                    checkthis=true;
-                elseif WatchTarget["Party"] and (UnitInParty(button.unit) or button.guid==HealBot_Data["PGUID"]) then
-                    checkthis=true;
-                elseif WatchTarget["Raid"] then
-                    checkthis=true;
-                    always=true
                 elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
                     checkthis=true
                 elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
@@ -4815,25 +4816,12 @@ local function HealBot_SetUnitBuffTimer(button,buffName,endtime)
   --HealBot_setCall("HealBot_SetUnitBuffTimer")
 end
 
-local function HealBot_HasBuffTypes(spellName, pBuffTypes)
-    local hasBuffTypes = false
-    if (HealBot_BuffNameTypes[spellName]) then
-        local index = 0
-        local name = nil
-        local found = false
-        for _,v in pairs(HealBot_BuffNameTypes[spellName]) do
-            index = index + 1
-            if (pBuffTypes[v]) then
-                found = true
-            else
-                found = false
-            end
-            --print("v:"..v.." found:"..tostring(found))
-            if index == 1 then
-                hasBuffTypes = found
-            else
-                hasBuffTypes = hasBuffTypes and found
-            end
+local hasBuffTypes = false
+local function HealBot_HasBuffTypes(spellName, pBuffTypes, ownBlessing)
+    hasBuffTypes = false
+    if HealBot_BuffNameTypes[spellName] then
+        if pBuffTypes[HealBot_BuffNameTypes[spellName]] or (ownBlessing and HealBot_BuffNameTypes[spellName]<7 and HealBot_Config_Buffs.PalaBlessingsAsOne) then
+            hasBuffTypes = true
         end
     end
   --HealBot_setCall("HealBot_HasBuffTypes")
@@ -4981,6 +4969,7 @@ local function HealBot_CheckUnitBuffs(button)
     local cIcons=false
     local curBuffName=nil;
     local doResetBuffTime=false
+    local ownBlessing=false
     local onlyPlayers=UnitIsPlayer(xUnit)
     if HEALBOT_GAME_VERSION<4 then onlyPlayers=UnitIsFriend("player", xUnit) end
     if HealBot_Config_Buffs.BuffWatch then
@@ -5056,22 +5045,22 @@ local function HealBot_CheckUnitBuffs(button)
                         end
                     end
                     if gBuffs then
-                        local buffName=name
                         if HealBot_Buff_Aura2Item[spellId] then
-                            buffName=GetItemInfo(HealBot_Buff_Aura2Item[spellId]) or name
+                            name=GetItemInfo(HealBot_Buff_Aura2Item[spellId]) or name
                         end
-                        if HealBot_BuffNameTypes[buffName] and (not button.aura.buff.recheck[buffName] or button.aura.buff.recheck[buffName]>TimeNow) then
-                            for _,v in pairs(HealBot_BuffNameTypes[buffName]) do
-                                PlayerBuffTypes[v]=true
+                        if HealBot_BuffNameTypes[name] and (not button.aura.buff.recheck[name] or button.aura.buff.recheck[name]>TimeNow) then
+                            if HealBot_BuffNameTypes[name] then
+                                if HealBot_BuffNameTypes[name]<7 and xUnit==unitCaster then ownBlessing=true end
+                                PlayerBuffTypes[HealBot_BuffNameTypes[name]]=true
                             end
                         end
                         if not hbExcludeBuffSpells[spellId] then
-                            PlayerBuffs[buffName]=true
-                            if HealBot_CheckBuffs[buffName] then
+                            PlayerBuffs[name]=true
+                            if HealBot_CheckBuffs[name] then
                                 if expirationTime-TimeNow>0 then
-                                    HealBot_SetUnitBuffTimer(button,buffName,expirationTime)
-                                elseif button.aura.buff.recheck[buffName] then
-                                    button.aura.buff.recheck[buffName]=nil
+                                    HealBot_SetUnitBuffTimer(button,name,expirationTime)
+                                elseif button.aura.buff.recheck[name] then
+                                    button.aura.buff.recheck[name]=nil
                                     doResetBuffTime=true
                                 end
                             end
@@ -5095,7 +5084,7 @@ local function HealBot_CheckUnitBuffs(button)
             end
             if doResetBuffTime then HealBot_ResetCheckBuffsTime(button) end
             for bName,_ in pairs(HealBot_BuffWatch) do
-                if not PlayerBuffs[bName] then
+                if not PlayerBuffs[bName] and not HealBot_HasBuffTypes(bName, PlayerBuffTypes, ownBlessing) then
                     local checkthis=false;
                     local WatchTarget=HealBot_Options_retBuffWatchTarget(bName);
                     local z, x = nil, nil
@@ -5125,15 +5114,21 @@ local function HealBot_CheckUnitBuffs(button)
                     if not x then
                         -- Spec change within that last few secs - buff outdated so do nothing
                     elseif x<2 then
-                        if WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
+                        if WatchTarget["Raid"] then
+                            checkthis=true;
+                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then 
                             checkthis=true
-                        elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
-                            checkthis=true
-                        elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
+                        elseif WatchTarget[strsub(BuffClass,1,4)] then
                             checkthis=true
                         elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(xGUID) then
                             checkthis=true;
                         elseif WatchTarget["SingleTank"] and UnitIsUnit(xUnit, HealBot_luVars["TankUnit"]) then
+                            checkthis=true
+                        elseif WatchTarget["Self"] and xGUID==HealBot_Data["PGUID"] then
+                            checkthis=true
+                        elseif WatchTarget["Name"] and xGUID==HealBot_Config.MyFriend then
+                            checkthis=true
+                        elseif WatchTarget["Focus"] and UnitIsUnit(xUnit, "focus") then
                             checkthis=true
                         elseif WatchTarget["MyTargets"] then
                             local myhTargets=HealBot_GetMyHealTargets();
@@ -5143,12 +5138,6 @@ local function HealBot_CheckUnitBuffs(button)
                                     break;
                                 end
                             end
-                        elseif WatchTarget[strsub(BuffClass,1,4)] then
-                            checkthis=true
-                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then 
-                            checkthis=true
-                        elseif WatchTarget["Raid"] then
-                            checkthis=true;
                         elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
                             checkthis=true
                         elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
@@ -5156,10 +5145,8 @@ local function HealBot_CheckUnitBuffs(button)
                         end
                     end
                     if checkthis then
-                        if not HealBot_HasBuffTypes(bName, PlayerBuffTypes) then
-                            curBuffName=bName;
-                            break
-                        end
+                        curBuffName=bName;
+                        break
                     end
                 end
             end

@@ -12023,6 +12023,20 @@
                       <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_MonitorBuffsPalaBlessing" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorBuffsInCombat" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_MonitorBuffsPalaBlessing_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <Frame name="HealBot_Options_BuffsPanel">
                     <Size>
                       <AbsDimension y="580"/>
