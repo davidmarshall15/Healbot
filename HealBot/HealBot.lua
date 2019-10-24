@@ -1646,7 +1646,7 @@ end
 function HealBot_HealsInUpdate(button)
     button.health.updincoming=false
     local ebubar2 = _G["HealBot_Action_HealUnit"..button.id.."Bar2"]
-    if button.health.current<button.health.max and button.status.current>3 and button.status.current<9 and button.status.range>0 and UnitExists(button.unit) then
+    if button.status.current>3 and button.status.current<9 and button.status.range>0 and UnitExists(button.unit) then
         local healin=0
         if HEALBOT_GAME_VERSION>3 then
             healin=(UnitGetIncomingHeals(button.unit) or 0)
@@ -1686,7 +1686,7 @@ end
 function HealBot_AbsorbsUpdate(button)
     button.health.updabsorbs=false
     local ebubar6 = _G["HealBot_Action_HealUnit"..button.id.."Bar6"]
-    if button.health.current<button.health.max and button.status.current>3 and button.status.current<9 and button.status.range>0 and UnitExists(button.unit) then
+    if button.status.current>3 and button.status.current<9 and button.status.range>0 and UnitExists(button.unit) then
         local absorb=0
         if HEALBOT_GAME_VERSION>3 then
             absorb=(UnitGetTotalAbsorbs(button.unit) or 0)
@@ -4383,13 +4383,13 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                 if WatchTarget["Raid"] then
                     checkthis=true;
                     always=true
-                elseif WatchTarget["Party"] and (UnitInParty(button.unit) or button.guid==HealBot_Data["PGUID"]) then
+                elseif WatchTarget["Party"] and HealBot_Panel_UnitInParty(button.unit) then 
                     checkthis=true;
                 elseif WatchTarget[strsub(DebuffClass,1,4)] then
                     checkthis=true;
                 elseif WatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     checkthis=true;
-                elseif WatchTarget["SingleTank"] and UnitIsUnit(xUnit, HealBot_luVars["TankUnit"]) then
+                elseif WatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_luVars["TankUnit"]) then
                     checkthis=true
                 elseif WatchTarget["Self"] and button.guid==HealBot_Data["PGUID"] then
                     checkthis=true
@@ -4405,9 +4405,9 @@ local function HealBot_addCurDebuffs(dName,deBuffTexture,bCount,debuff_type,debu
                             break
                         end
                     end
-                elseif WatchTarget["PvP"] and UnitIsPVP(xUnit) then
+                elseif WatchTarget["PvP"] and UnitIsPVP(button.unit) then
                     checkthis=true
-                elseif WatchTarget["PvE"] and not UnitIsPVP(xUnit) then
+                elseif WatchTarget["PvE"] and not UnitIsPVP(button.unit) then
                     checkthis=true
                 end
             end
@@ -5116,7 +5116,7 @@ local function HealBot_CheckUnitBuffs(button)
                     elseif x<2 then
                         if WatchTarget["Raid"] then
                             checkthis=true;
-                        elseif WatchTarget["Party"] and (UnitInParty(xUnit) or xGUID==HealBot_Data["PGUID"]) then 
+                        elseif WatchTarget["Party"] and HealBot_Panel_UnitInParty(xUnit) then 
                             checkthis=true
                         elseif WatchTarget[strsub(BuffClass,1,4)] then
                             checkthis=true
