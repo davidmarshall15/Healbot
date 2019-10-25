@@ -975,6 +975,12 @@ function HealBot_UpdateUnit(button)
         HealBot_OnEvent_UnitMana(button);
     else
         HealBot_Action_UpdateHealthButton(button)
+        HealBot_HoT_RemoveIconButton(button)
+        if button.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
+            HealBot_nextRecalcParty(1)
+        elseif button.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+            HealBot_nextRecalcParty(2)
+        end
     end
     button.health.updincoming=true
     button.health.updabsorbs=true
@@ -2884,7 +2890,7 @@ local function HealBot_Update_Skins(forceCheck)
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
-        if HealBot_Globals.RangeCheckFreq>0.5 then HealBot_Globals.RangeCheckFreq=0.5 end
+        if HealBot_Globals.RangeCheckFreq>1 then HealBot_Globals.RangeCheckFreq=1 end
         if HealBot_Globals.RangeCheckFreq<0.1 then HealBot_Globals.RangeCheckFreq=0.1 end
         local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
         if not HealBot_Globals.CDCBarColour[customDebuffPriority] then
@@ -5323,7 +5329,8 @@ local function HealBot_UnitUpdateCheckDebuff(button)
     if button.aura.debuff.check then
         button.aura.debuff.check=false
         HealBot_doAuraDebuffUnit(button) 
-    elseif button.health.update then
+    end
+    if button.health.update then
         button.health.update=false
         HealBot_UnitUpdateHealth(button)
     end
@@ -5340,9 +5347,8 @@ local function HealBot_UnitUpdateCheckBuff(button)
     if button.checks.timed < TimeNow then
         HealBot_Player_CheckTime(button)
         HealBot_UnitUpdateFriendly(button)
-    else
-        HealBot_Update_UnitIcons(button)
     end
+    HealBot_Update_UnitIcons(button)
 end
 
 local function HealBot_UnitUpdateEnemy(button)
@@ -5388,28 +5394,33 @@ local function HealBot_UnitUpdateEnemy(button)
     end
 end
 
+local function HealBot_UnitUpdateButton(button, dmask, bmask)
+    if not button.status.reserved then
+        if UnitExists(button.unit) then
+            if button.bucket==dmask then
+                HealBot_UnitUpdateCheckDebuff(button)
+            end
+            if button.bucket==bmask then
+                HealBot_UnitUpdateCheckBuff(button)
+            end
+        else
+            HealBot_UpdateUnitReset(button)
+            HealBot_UpdateUnit(button)
+            button.status.reserved=true
+        end
+    elseif UnitExists(button.unit) then
+        button.status.reserved=false
+        button.update.unit=true
+        button.status.update=true
+    end
+end
+
 HealBot_luVars["petSwitch"]=0
 local function HealBot_Update_Fast()
     HealBot_luVars["fastSwitch"]=HealBot_luVars["fastSwitch"]+1
     if HealBot_luVars["fastSwitch"]<2 then
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if not xButton.status.reserved then
-                if UnitExists(xUnit) then
-                    if (xButton.id % 2 == 0) then
-                        HealBot_UnitUpdateCheckDebuff(xButton)
-                    else
-                        HealBot_UnitUpdateCheckBuff(xButton)
-                    end
-                else
-                    HealBot_UpdateUnitReset(xButton)
-                    HealBot_UpdateUnit(xButton)
-                    xButton.status.reserved=true
-                end
-            elseif UnitExists(xUnit) then
-                xButton.status.reserved=false
-                xButton.update.unit=true
-                xButton.status.update=true
-            end
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_UnitUpdateButton(xButton, 1, 3)
         end
     elseif HealBot_luVars["fastSwitch"]<3 then
         for xUnit,xButton in pairs(HealBot_Enemy_Button) do
@@ -5431,52 +5442,22 @@ local function HealBot_Update_Fast()
             end
         end
     elseif HealBot_luVars["fastSwitch"]<4 then
-        for xUnit,xButton in pairs(HealBot_Unit_Button) do
-            if not xButton.status.reserved then
-                if UnitExists(xUnit) then
-                    if not (xButton.id % 2 == 0) then
-                        HealBot_UnitUpdateCheckDebuff(xButton)
-                    else
-                        HealBot_UnitUpdateCheckBuff(xButton)
-                    end
-                else
-                    HealBot_UpdateUnitReset(xButton)
-                    HealBot_UpdateUnit(xButton)
-                    xButton.status.reserved=true
-                end
-            elseif UnitExists(xUnit) then
-                xButton.status.reserved=false
-                xButton.update.unit=true
-                xButton.status.update=true
-            end
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_UnitUpdateButton(xButton, 2, 4)
+        end
+    elseif HealBot_luVars["fastSwitch"]<5 then
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_UnitUpdateButton(xButton, 1, 1)
+        end
+    elseif HealBot_luVars["fastSwitch"]<6 then
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_UnitUpdateButton(xButton, 3, 1)
+        end
+    elseif HealBot_luVars["fastSwitch"]<7 then
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_UnitUpdateButton(xButton, 4, 2)
         end
     else
-        HealBot_luVars["petSwitch"]=HealBot_luVars["petSwitch"]+1
-        for xUnit,xButton in pairs(HealBot_Pet_Button) do
-            if not xButton.status.reserved then
-                if UnitExists(xUnit) then
-                    if not (HealBot_luVars["petSwitch"] == 1) then
-                        HealBot_UnitUpdateCheckDebuff(xButton)
-                    else
-                        HealBot_UnitUpdateCheckBuff(xButton)
-                    end
-                else
-                    HealBot_UpdateUnitReset(xButton)
-                    HealBot_UpdateUnit(xButton)
-                    xButton.status.reserved=true
-                    if xButton.status.unittype==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
-                        HealBot_nextRecalcParty(1)
-                    elseif xButton.status.unittype==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-                        HealBot_nextRecalcParty(2)
-                    end
-                end
-            elseif UnitExists(xUnit) then
-                xButton.status.reserved=false
-                xButton.update.unit=true
-                xButton.status.update=true
-            end
-        end
-        if HealBot_luVars["petSwitch"]>1 then HealBot_luVars["petSwitch"]=0 end
         if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
             HealBot_luVars["PrevTipTime"]=TimeNow+HealBot_luVars["TipTimeInterval"]
             HealBot_Action_RefreshTooltip() 
@@ -6543,7 +6524,7 @@ function HealBot_retDebufftype(id)
     return dType
 end
 
-function HealBot_HoT_RemoveAllIconButton(button)
+function HealBot_HoT_RemoveAllIconsButton(button)
     for i=1,10 do
         HealBot_RemoveIcon(button, i)
     end
@@ -6551,7 +6532,7 @@ function HealBot_HoT_RemoveAllIconButton(button)
         HealBot_RemoveIcon(button, i)
     end
     HealBot_RaidTargetUpdate(button, 0)
-  --HealBot_setCall("HealBot_HoT_RemoveAllIconButton")
+  --HealBot_setCall("HealBot_HoT_RemoveAllIconsButton")
 end
 
 function HealBot_HoT_RemoveIconButton(button)

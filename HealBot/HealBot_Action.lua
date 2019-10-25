@@ -25,6 +25,7 @@ HealBot_Action_luVars["UnitPowerMax"]=3
 HealBot_Action_luVars["resetSkinTo"]=""
 HealBot_Action_luVars["UpdatedAggroBars"]=true
 HealBot_Action_luVars["UpdateFluidBars"]=true
+HealBot_Action_luVars["updateBucket"]=1
 
 local hbStringSub=nil
 local hbStringLen=nil
@@ -2776,6 +2777,7 @@ local function HealBot_Action_PrepButton(button)
     button.update.state=false
     button.update.roleicon=false
     button.update.targeticon=false
+    button.bucket=1
     button.status.range=-9
     button.status.unittype=1
     button.status.offline=false
@@ -3606,6 +3608,13 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         if not HealBot_ResetBarSkinDone[shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
+        if unitType==1 or (unitType>3 and unitType<9) then
+            HealBot_Action_luVars["updateBucket"]=HealBot_Action_luVars["updateBucket"]+1
+            if HealBot_Action_luVars["updateBucket"]>4 then HealBot_Action_luVars["updateBucket"]=1 end
+            shb.bucket=HealBot_Action_luVars["updateBucket"]
+        else
+            shb.bucket=1
+        end
     else
         return nil
     end
@@ -3697,13 +3706,13 @@ local function HealBot_Action_DeleteButton(hbBarID)
     dg.unit="nil"
     HealBot_Action_PrepButton(dg)
     HealBot_mark2clearGUID(dg.guid)
-    HealBot_HoT_RemoveAllIconButton(dg)
+    HealBot_HoT_RemoveAllIconsButton(dg)
     HealBot_Action_SetBar3Value(dg)
     bar4:SetStatusBarColor(1,0,0,0)
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end
     HealBot_Panel_SetBarArrays(hbBarID)
-    HealBot_AddDebug("Deleted button "..hbBarID)
+    --HealBot_AddDebug("Deleted button "..hbBarID)
 end
 
 HealBot_Action_luVars["PreCacheBars"]=1
@@ -3722,6 +3731,7 @@ function HealBot_Action_DeleteMarkedButtons()
         local gn="HealBot_Action_HealUnit"..HealBot_Action_luVars["PreCacheBars"]
         local ghb=_G[gn]
         if not ghb then 
+            HealBot_ActiveButtons[HealBot_Action_luVars["PreCacheBars"]]=true
             local gp=_G["f10_HealBot_Action"]
             ghb=CreateFrame("Button", gn, gp, "HealBotButtonSecureTemplate") 
             ghb.id=HealBot_Action_luVars["PreCacheBars"]
