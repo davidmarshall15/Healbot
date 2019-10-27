@@ -90,6 +90,7 @@ local hbOptionsTooltip = CreateFrame("GameTooltip", "hbOptionsTooltip", nil, "Ga
 HealBot_Options_StorePrev["FramesSelFrame"]=1
 HealBot_Options_StorePrev["customDebuffPriority"]=10
 HealBot_Options_StorePrev["customBuffPriority"]=10
+HealBot_Options_StorePrev["maxRangeCheckFreq"]=10
 
 local HealBot_Debuff_Types = {}
 local HealBot_Buff_Items_List = {}
@@ -1844,6 +1845,7 @@ function HealBot_BarButtonIconFadeStartTime_OnValueChanged(self)
         HealBot_setLuVars("FadeTimeDiv", (val*1.125))
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val .. " " .. HEALBOT_WORDS_SEC);
+        HealBot_setOptions_Timer(35)
     end
 end
 
@@ -1868,6 +1870,7 @@ function HealBot_BarButtonIconTextDurationTime_OnValueChanged(self)
         Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DURTHRH"]=val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["DURTHRH"]);
+        HealBot_setOptions_Timer(35)
     end
 end
 
@@ -2585,8 +2588,6 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
         self:SetValue(val) 
     else
         HealBot_Globals.MaxBarsCache = val
-        local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. val)
     end
 end
 
@@ -2595,10 +2596,9 @@ function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        val=val/10;
+        val=((HealBot_Options_StorePrev["maxRangeCheckFreq"]+1)-val)/10;
+        HealBot_AddDebug("val="..val)
         HealBot_Globals.RangeCheckFreq = val;
-        --local g=_G[self:GetName().."Text"]
-        --g:SetText(self.text .. ": " .. val);
         HealBot_setOptions_Timer(9999)
     end
 end
@@ -3818,14 +3818,6 @@ function HealBot_Options_ShowTooltipMouseWheel_OnClick(self)
         HealBot_Globals.Tooltip_MouseWheel = true
     else
         HealBot_Globals.Tooltip_MouseWheel = false
-    end
-end
-
-function HealBot_Options_ShowTooltipInstant_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.Tooltip_Recommend = true
-    else
-        HealBot_Globals.Tooltip_Recommend = false
     end
 end
 
@@ -6009,6 +6001,7 @@ local HealBot_Options_SCAC = { [1] = HEALBOT_WOWMENU,
 function HealBot_Options_ComboClass_Text()
     local combo=nil
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
+    HealBot_Action_ClearSpellCache()
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo="ENABLED"
     elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
@@ -7969,6 +7962,7 @@ function HealBot_Options_LoadSpellsb_OnClick()
     local sStr=HealBot_Options_ShareSpellsExternalEditBox:GetText()
     local ssTab={}
     local i=0
+    HealBot_Action_ClearSpellCache()
     for l in string.gmatch(sStr, "[^\n]+") do
         local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
         if string.len(t)>1 then
@@ -9273,7 +9267,6 @@ function HealBot_Options_CDCPriorityC_DropDown()
                             cName=HealBot_Options_StorePrev["CDebuffcustomName"]
                             HealBot_Globals.HealBot_Custom_Debuffs[cName] = x
                             HealBot_Options_CDC_checkStatus(cName)
-                            HealBot_ClearDebuffCache(cName)
                             HealBot_CheckAllActiveDebuffs()
                         end
                         UIDropDownMenu_SetSelectedID(HealBot_Options_CDCPriorityC,x) 
@@ -9761,12 +9754,12 @@ function HealBot_Options_DeleteCDebuff(dId)
     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=nil
     if HealBot_Globals.FilterCustomDebuff[dId] then HealBot_Globals.FilterCustomDebuff[dId]=nil end
     HealBot_Globals.IgnoreCustomDebuff[dId]=nil
+    HealBot_DeleteKnownDebuffs(dId)
     HealBot_Options_InitSub(402)
     HealBot_Options_InitSub(403)
     HealBot_Options_InitSub(404)
     HealBot_SetCDCBarColours();
     HealBot_Options_CDebuffResetList()
-    HealBot_ClearDebuffCache(dId)
     HealBot_CheckAllActiveDebuffs()
 end
 
@@ -9802,7 +9795,6 @@ function HealBot_Options_EnableDisableCDBtn_OnClick(self)
         HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]][InstName]=true
     end
     HealBot_Options_SetEnableDisableCDBtn()
-    HealBot_ClearDebuffCache(HealBot_Options_StorePrev["CDebuffcustomName"])
     HealBot_setOptions_Timer(20)
 end
 
@@ -11971,11 +11963,11 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_val_OnLoad(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,5,40,1,5)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,5,40,1,5,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
             HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.MaxBarsCache or 20)
-            HealBot_Options_MaxBarCacheText:SetText(HEALBOT_OPTIONS_MAXBARCACHE .. ": " .. HealBot_Globals.MaxBarsCache)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,10.0,0.5,2,HEALBOT_WORDS_MORECPU,HEALBOT_WORDS_LESSCPU)
-            HealBot_Options_RangeCheckFreq:SetValue((HealBot_Globals.RangeCheckFreq or 0.5)*10)
+            HealBot_Options_MaxBarCacheText:SetText(HEALBOT_OPTIONS_MAXBARCACHE)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,HealBot_Options_StorePrev["maxRangeCheckFreq"],0.5,2,HEALBOT_WORDS_LESSCPU,HEALBOT_WORDS_MORECPU)
+            HealBot_Options_RangeCheckFreq:SetValue((HealBot_Options_StorePrev["maxRangeCheckFreq"]+1)-((HealBot_Globals.RangeCheckFreq or 0.4)*10))
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)
@@ -13167,8 +13159,6 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellCoolDown,HEALBOT_OPTIONS_SHOWCDTOOLTIP)
             HealBot_Options_ShowTooltipMouseWheel:SetChecked(HealBot_Globals.Tooltip_MouseWheel)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipMouseWheel,HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP)
-            HealBot_Options_ShowTooltipInstant:SetChecked(HealBot_Globals.Tooltip_Recommend)
-            HealBot_Options_SetText(HealBot_Options_ShowTooltipInstant,HEALBOT_OPTIONS_SHOWRECTOOLTIP)
             HealBot_Options_ShowTooltipUseGameTip:SetChecked(HealBot_Globals.UseGameTooltip)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipUseGameTip,HEALBOT_OPTIONS_USEGAMETOOLTIP)
             HealBot_Options_ShowTooltipShowHoT:SetChecked(HealBot_Globals.Tooltip_ShowHoT)

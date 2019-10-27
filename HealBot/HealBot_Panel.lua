@@ -189,6 +189,7 @@ end
 
 local function HealBot_Panel_buildDataStore(doPlayers, doPets)
     if doPlayers then
+        HealBot_ClearPlayerButtonCache()
         for x,_ in pairs(hbPanel_dataNames) do
             hbPanel_dataNames[x]=nil
         end
@@ -220,6 +221,7 @@ local function HealBot_Panel_buildDataStore(doPlayers, doPets)
         end
     end
     if doPets then
+        HealBot_ClearPetButtonCache()
         for x,_ in pairs(hbPanel_dataPetNames) do
             hbPanel_dataPetNames[x]=nil;
         end
@@ -1578,6 +1580,7 @@ local function HealBot_Panel_MainSort(doMainSort,unitType)
     for x,_ in pairs(units) do
         units[x]=nil;
     end
+    --HealBot_setCall("HealBot_Panel_MainSort")
 end
 
 local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
@@ -1587,6 +1590,7 @@ local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
     else
         HeaderPos[hbCurrentFrame][k+1] = hText 
     end
+    --HealBot_setCall("HealBot_Panel_addUnits")
 end
 
 local function HealBot_Panel_enemyTargets()
@@ -2129,7 +2133,7 @@ local function HealBot_Panel_TargetChanged(preCombat)
     else
         HealBot_Action_HidePanel(hbCurrentFrame)
     end
-    HealBot_setCall("HealBot_Panel_TargetChanged")
+      --HealBot_setCall("HealBot_Panel_TargetChanged")
 end
 
 function HealBot_Panel_TargetChangedCheckFocus()
@@ -2530,4 +2534,5 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             end
         end 
     end
+    --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

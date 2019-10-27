@@ -305,7 +305,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_IGNOREDEBUFFFRIEND      = "When caster is known as friend";
 
 
-    HEALBOT_OPTIONS_MAXBARCACHE             = "Maximum bars to pre cache";
+    HEALBOT_OPTIONS_MAXBARCACHE             = "Internal cache";
     HEALBOT_OPTIONS_RANGECHECKFREQ          = "Internal Timers and Updates";
 
     HEALBOT_OPTIONS_HIDEPARTYFRAMES         = "Hide party frames";
@@ -397,6 +397,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_NOTIFY_MSG              = "Message"
     HEALBOT_OPTIONS_CASTNOTIFYTAGS          = " #s=spell name  -  #n=players name "
     HEALBOT_WORDS_YOU                       = "you";
+    HEALBOT_WORDS_MOREMEM                   = "More Memory";
+    HEALBOT_WORDS_LESSMEM                   = "Less Memory";
     HEALBOT_WORDS_MORECPU                   = "More CPU";
     HEALBOT_WORDS_LESSCPU                   = "Less CPU";
     HEALBOT_NOTIFYOTHERMSG                  = "Casting #s on #n";
@@ -1520,6 +1522,7 @@ function HealBot_Lang_Options_enALL()
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                                  ["MONITORBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
+                                 ["MONITORBUFFSPALABLESSING"]=HEALBOT_OPTIONS_PALADIN_BLESSINGS,
                                  ["BUFFSSPELL"]=HEALBOT_OPTIONS_BUFFSTEXT1,
                                  ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
                                  ["BUFFSBARS"]=HEALBOT_OPTIONS_CDCBARS,
@@ -1912,6 +1915,7 @@ function HealBot_Lang_Options_enALL()
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
                                ["MONITORBUFFSGROUPED"]="Do not monitor buffs when solo.",
+                               ["MONITORBUFFSPALABLESSING"]="Ignore if player has any blessing cast by you.",
                                ["BUFFSSPELL"]="Select the spell to monitor and cast.",
                                ["BUFFSMEMBERS"]="The members to monitor.",
                                ["BUFFSBARS"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX..". Click to change.\nWhen the player is missing a buff and settings on the Buff Warning tab apply.",

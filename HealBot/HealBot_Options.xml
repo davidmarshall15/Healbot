@@ -12033,8 +12033,8 @@
                     </Anchors>
                     <Scripts>
                       <OnClick>HealBot_Options_MonitorBuffsPalaBlessing_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSPALABLESSING",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSPALABLESSING",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_BuffsPanel">
@@ -13724,7 +13724,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="155" y="-75" />
+                          <AbsDimension x="170" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13794,7 +13794,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-45" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13808,7 +13808,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellDetail" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-45" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13822,7 +13822,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-45" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13832,25 +13832,11 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPWHEELCMD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipInstant" inherits="OptionsCheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMouseWheel" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipInstant_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHOTREC",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHOTREC",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipInstant" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13864,7 +13850,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-45" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13923,9 +13909,9 @@
                       <AbsDimension x="540" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipPosSettings" relativePoint="TOPLEFT">
+                      <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-120" y="-70" />
+                          <AbsDimension x="0" y="50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
