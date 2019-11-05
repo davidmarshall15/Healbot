@@ -488,6 +488,7 @@ local function HealBot_Action_DoRefreshTooltip()
     --    HealBot_DebugTooltip() 
     --    return
     --end
+    if HealBot_Data["TIPTYPE"]=="NONE" then return end
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
     xUnit=HealBot_Data["TIPUNIT"]

@@ -115,8 +115,8 @@ function HealBot_Init_Spells_Defaults()
     end  
     HealBot_setOptions_Timer(5)
     HealBot_setOptions_Timer(15)
-    HealBot_setOptions_Timer(50)
-    HealBot_setOptions_Timer(40)  
+    HealBot_setOptions_Timer(12)
+    HealBot_setOptions_Timer(11)  
 end
 
 function HealBot_Init_SmartCast()
