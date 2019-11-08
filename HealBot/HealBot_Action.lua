@@ -2786,9 +2786,8 @@ local function HealBot_Action_PrepButton(button)
     button.mana.max=0
     button.status.current=0
     button.status.update=0
-    button.update.reset=true
-    button.update.unit=false
-    button.update.state=false
+    button.update.unit=true
+    button.update.state=true
     button.update.roleicon=false
     button.update.targeticon=false
     button.status.range=-9
@@ -3775,7 +3774,7 @@ function HealBot_Action_DeleteMarkedButtons()
     elseif hbMarkedDeleteButtons[1] then
         HealBot_Action_DeleteButton(hbMarkedDeleteButtons[1])
         table.remove(hbMarkedDeleteButtons,1)
-    elseif HealBot_Action_luVars["PreCacheBars"]<HealBot_Globals.CacheSize then
+    elseif HealBot_Action_luVars["PreCacheBars"]<HealBot_retLuVars("CacheSize") then
         HealBot_Action_luVars["PreCacheBars"]=HealBot_Action_luVars["PreCacheBars"]+1
         local gn="HealBot_Action_HealUnit"..HealBot_Action_luVars["PreCacheBars"]
         local ghb=_G[gn]

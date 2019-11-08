@@ -724,7 +724,7 @@ end
 
 local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffsetX, h, z, newHeader)
     table.foreach(HealBot_Action_HealButtons, function (x,xUnit)
-        local xButton=HealBot_Unit_Button[xUnit] or HealBot_Enemy_Button[xUnit] or HealBot_Pet_Button[xUnit]
+        local xButton=HealBot_Unit_Button[xUnit] or HealBot_Pet_Button[xUnit] or HealBot_Enemy_Button[xUnit]
         if xButton then
             local bFrame = xButton.frame
             if hbBarsPerFrame[bFrame] and z[bFrame] then 

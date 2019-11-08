@@ -2587,7 +2587,21 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
         self:SetValue(val) 
     else
         HealBot_Globals.CacheSize = val
+        HealBot_setLuVars("CacheSize", val*7)
     end
+end
+
+function HealBot_Options_RangeCheckFreq_setSession()
+    local val=((HealBot_Options_StorePrev["maxRangeCheckFreq"]-1)-HealBot_Globals.RangeCheckFreq)/10
+    HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
+    if val<0.1 then
+        val=0.1
+        HealBot_setLuVars("enTurbo", true)
+    else
+        HealBot_setLuVars("enTurbo", false)
+    end
+    HealBot_setLuVars("RangeCheckFreq", val)
+    HealBot_setOptions_Timer(9999)
 end
 
 function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
@@ -2595,10 +2609,8 @@ function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        val=((HealBot_Options_StorePrev["maxRangeCheckFreq"]+1)-val)/10;
-        HealBot_AddDebug("val="..val)
-        HealBot_Globals.RangeCheckFreq = val;
-        HealBot_setOptions_Timer(9999)
+        HealBot_Globals.RangeCheckFreq=val
+        HealBot_Options_RangeCheckFreq_setSession()
     end
 end
 
@@ -11955,12 +11967,12 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,2,50,1,5,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
-            HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.CacheSize or 25)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,1,7,1,2,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
+            HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.CacheSize or 4)
             HealBot_Options_MaxBarCacheText:SetText(HEALBOT_OPTIONS_MAXBARCACHE)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,HealBot_Options_StorePrev["maxRangeCheckFreq"],0.5,2,HEALBOT_WORDS_LESSCPU,HEALBOT_WORDS_MORECPU)
-            HealBot_Options_RangeCheckFreq:SetValue((HealBot_Options_StorePrev["maxRangeCheckFreq"]+1)-((HealBot_Globals.RangeCheckFreq or 0.4)*10))
-            HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)-- .. ": " .. HealBot_Globals.RangeCheckFreq)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,HealBot_Options_StorePrev["maxRangeCheckFreq"]-1,1,2,HEALBOT_WORDS_LESSCPU,HEALBOT_WORDS_MORECPU)
+            HealBot_Options_RangeCheckFreq:SetValue(HealBot_Globals.RangeCheckFreq or 4)
+            HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)
             g=_G["healbotcmdfontstr"]
