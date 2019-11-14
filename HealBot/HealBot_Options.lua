@@ -90,7 +90,7 @@ local hbOptionsTooltip = CreateFrame("GameTooltip", "hbOptionsTooltip", nil, "Ga
 HealBot_Options_StorePrev["FramesSelFrame"]=1
 HealBot_Options_StorePrev["customDebuffPriority"]=10
 HealBot_Options_StorePrev["customBuffPriority"]=10
-HealBot_Options_StorePrev["maxRangeCheckFreq"]=8
+HealBot_Options_StorePrev["maxRangeCheckFreq"]=10
 
 local HealBot_Debuff_Types = {}
 local HealBot_Buff_Items_List = {}
@@ -2587,7 +2587,7 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
         self:SetValue(val) 
     else
         HealBot_Globals.CacheSize = val
-        HealBot_setLuVars("CacheSize", val*7)
+        HealBot_setLuVars("CacheSize", val*5)
     end
 end
 
@@ -2599,6 +2599,9 @@ function HealBot_Options_RangeCheckFreq_setSession()
         HealBot_setLuVars("enTurbo", true)
     else
         HealBot_setLuVars("enTurbo", false)
+    end
+    if val<0.2 or HealBot_retLuVars("RangeCheckFreq")<0.2 then
+        HealBot_nextRecalcParty(6)
     end
     HealBot_setLuVars("RangeCheckFreq", val)
     HealBot_setOptions_Timer(9999)
@@ -2989,18 +2992,6 @@ function HealBot_Options_UseFluidBars_OnClick(self)
     HealBot_setOptions_Timer(80)
 end
 
-function HealBot_Options_EnableLibQuickHealth_OnClick(self)
-    local reason=HEALBOT_OPTIONS_ENABLELIBQH
-    if self:GetChecked() then
-        HealBot_Globals.EnLibQuickHealth=true
-        reason=reason.." - "..HEALBOT_WORD_ON
-    else
-        HealBot_Globals.EnLibQuickHealth=false
-        reason=reason.." - "..HEALBOT_WORD_OFF
-    end
-    HealBot_Options_ReloadUI(reason)
-end
-
 function HealBot_Options_EnableAutoCombat_OnClick(self)
     if self:GetChecked() then
         HealBot_Globals.EnAutoCombat=true
@@ -3088,7 +3079,7 @@ function HealBot_Options_MonitorDebuffs_OnClick(self)
 end
 
 function HealBot_Options_MonitorDebuffs_Toggle()
-    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
 end
 
 function HealBot_Options_MonitorBuffsInCombat_OnClick(self)
@@ -3185,7 +3176,7 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
         end
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.aura.debuff and xButton.aura.debuff.name then
-                xButton.aura.debuff.check=true
+                xButton.aura.check=true
             end
         end
     end
@@ -3207,7 +3198,7 @@ function HealBot_Options_CDCCol_ShowOnAggroBar_OnClick(self)
     if self:GetChecked() then
         HealBot_Config_Cures.CDCshownAB = true
         HealBot_ClearAllDebuffs()
-        HealBot_setOptions_Timer(20)
+        HealBot_setOptions_Timer(30)
     else
         HealBot_Config_Cures.CDCshownAB = false
         HealBot_SetResetFlag("SOFT")
@@ -3254,7 +3245,6 @@ function HealBot_Options_NoAuraWhenRested_OnClick(self)
         HealBot_Config_Buffs.NoAuraWhenRested=false
     end
     HealBot_setOptions_Timer(30)
-    HealBot_setOptions_Timer(20)
 end
 
 function HealBot_Options_AdjustMaxHealth_OnClick(self)
@@ -3901,7 +3891,7 @@ function HealBot_Options_BarTextInClassColour_OnClick(self)
     else
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSCOL"] = false
     end
-    HealBot_ResetAllUnitStatus()
+    HealBot_Action_ResetUnitStatus()
     HealBot_Options_SetBarsTextColour()
     HealBot_Panel_resetTestCols(true)
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
@@ -9595,7 +9585,7 @@ function HealBot_Options_CDCCastBy_DropDown()
                             HealBot_Globals.FilterCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]]=nil
                         end
                         UIDropDownMenu_SetText(HealBot_Options_CDCCastBy,HealBot_Options_StorePrev["CDebuffcustomCastBy"]) 
-                        HealBot_setOptions_Timer(20)
+                        HealBot_setOptions_Timer(30)
                     end
         info.checked = false;
         if HealBot_Options_StorePrev["CDebuffcustomName"] then
@@ -9658,7 +9648,7 @@ function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
     HealBot_Options_NewCDebuff:SetText("")
     HealBot_Options_CDC_checkStatus(useId)
   --  UIDropDownMenu_SetSelectedValue(HealBot_Options_CDebuffTxt1, useId);
-    HealBot_setOptions_Timer(20) 
+    HealBot_setOptions_Timer(30) 
     HealBot_Options_CDebuffResetList()
     HealBot_Globals.CatchAltDebuffIDs[name]=true
 end
@@ -9800,7 +9790,7 @@ function HealBot_Options_EnableDisableCDBtn_OnClick(self)
         HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]][InstName]=true
     end
     HealBot_Options_SetEnableDisableCDBtn()
-    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
 end
 
 function HealBot_Options_SetEnableDisableCDBtn()
@@ -10309,7 +10299,7 @@ local function HealBot_Options_DoDebuff_Reset()
             end
         end
     end
-    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
     FirstDebuffLoad=nil
 end
 
@@ -10728,7 +10718,7 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HR"],
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HG"],
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HB"] = R, G, B;
-        HealBot_ResetAllUnitStatus()
+        HealBot_Action_ResetUnitStatus()
     elseif HealBot_ColourObjWaiting=="CustomBackBar" then
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["BR"],
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["BG"],
@@ -11113,7 +11103,7 @@ function HealBot_Options_EnableHealthy_OnClick(self)
     else
         HealBot_Config.EnableHealthy = false
     end
-    HealBot_ResetAllUnitStatus()
+    HealBot_Action_ResetUnitStatus()
 end
 
 function HealBot_Options_EnableMouseWheel_OnClick(self)
@@ -11963,15 +11953,13 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
             HealBot_Options_RightButtonOptions:SetChecked(HealBot_Globals.RightButtonOptions)
             HealBot_Options_SetText(HealBot_Options_RightButtonOptions,HEALBOT_OPTIONS_RIGHTBOPTIONS)
-            HealBot_Options_EnableLibQuickHealth:SetChecked(HealBot_Globals.EnLibQuickHealth)
-            HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,1,7,1,2,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
-            HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.CacheSize or 4)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,1,9,1,2,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
+            HealBot_Options_MaxBarCache:SetValue(HealBot_Globals.CacheSize or 5)
             HealBot_Options_MaxBarCacheText:SetText(HEALBOT_OPTIONS_MAXBARCACHE)
             HealBot_Options_sliderlabels_Init(HealBot_Options_RangeCheckFreq,HEALBOT_OPTIONS_RANGECHECKFREQ,1.0,HealBot_Options_StorePrev["maxRangeCheckFreq"]-1,1,2,HEALBOT_WORDS_LESSCPU,HEALBOT_WORDS_MORECPU)
-            HealBot_Options_RangeCheckFreq:SetValue(HealBot_Globals.RangeCheckFreq or 4)
+            HealBot_Options_RangeCheckFreq:SetValue(HealBot_Globals.RangeCheckFreq or 5)
             HealBot_Options_RangeCheckFreqText:SetText(HEALBOT_OPTIONS_RANGECHECKFREQ)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
             HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)

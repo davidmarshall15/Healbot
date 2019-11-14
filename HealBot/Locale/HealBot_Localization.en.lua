@@ -421,7 +421,6 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_ERROR                     = "Error"
     HEALBOT_SPELL_NOT_FOUND	                = "Spell Not Found"
     HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT  = "Hide Tooltip in Combat"
-    HEALBOT_OPTIONS_ENABLELIBQH             = "Enable HealBot fastHealth"
 
     HEALBOT_OPTIONS_BUFFNAMED               = "Enter the player names to watch for\n\n"
     HEALBOT_WORD_ALWAYS                     = "Always";
@@ -1218,7 +1217,6 @@ function HealBot_Lang_Options_enALL()
                                  ["RIGHTTOOPENOPTIONS"]=HEALBOT_OPTIONS_RIGHTBOPTIONS,
                                  ["SHOWMINIMAPBUTTON"]=HEALBOT_OPTIONS_SHOWMINIMAPBUTTON,
                                  ["QUERYTALENTS"]=HEALBOT_OPTIONS_QUERYTALENTS,
-                                 ["ENABLEFASTHEALTH"]=HEALBOT_OPTIONS_ENABLELIBQH,
                                  ["ENABLEAUTOCOMBAT"]=HEALBOT_OPTIONS_ENABLEAUTOCOMBAT,
                                  ["IGNOREAURAEVENTS"]=HEALBOT_OPTION_IGNORE_AURA_RESTED,
                                  ["DISABLEHEALBOT"]=HEALBOT_OPTIONS_DISABLEHEALBOT,
@@ -1611,14 +1609,13 @@ function HealBot_Lang_Options_enALL()
                                ["RIGHTTOOPENOPTIONS"]="Right click on the edge of\na frame will open options.",
                                ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options.",
                                ["QUERYTALENTS"]="Query talent information when\nthe mouse moves over a bar.\nNOTE: This is only used by tooltips.",
-                               ["ENABLEFASTHEALTH"]="Monitor combat log and\nupdate health when required.",
                                ["ENABLEAUTOCOMBAT"]="Put healbot into lockdown combat mode when\nanyone in the group/raid goes into combat.",
                                ["IGNOREAURAEVENTS"]="Ignore required buffs when resting.",
                                ["DISABLEHEALBOT"]="Put Healbot into a deep sleep.",
                                ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
                                ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect.",
                                ["MAXBARCACHE"]="Aura Cache\n=========\nThis setting determines how quickly expired unit auras are purged.\n--\nNOTE:Expired aura data can be reused, keeping frequent auras in the cache reduces CPU usage.\n__________________________________________________________________________________________\n--\nBars Cache\n=========\nBars within frames can be initialized and cached before joining a group or raid.\nThe number of bars is determined by the cache size.\n--\nNOTE: This is a pre-cache and once a bar is initialized, it is never destroyed.",
-                               ["INTERNALTIMERS"]="This combined with your FPS sets how\nquickly the following are updated:\n- Range checking\n- Buff checking\n- Debuff checking\n- fastHealth updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates",
+                               ["INTERNALTIMERS"]="This combined with your FPS sets how quickly the following are updated:\n- Range checking\n- Buff updates\n- Debuff updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates\n--\nNote: Higher settings use significantly more CPU, especially the highest setting.",
                                ["LANG"]="Select the language used by healbot options.\nThis can be independent to the UI.",
                                ["SETLANG"]="Set the language selected.",
                                ["CMDS"]="Select a command to run.\nMany commands allow for resetting parts of\nhealbot without the need to reset to defaults.",

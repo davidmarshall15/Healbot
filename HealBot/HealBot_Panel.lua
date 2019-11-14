@@ -478,7 +478,6 @@ function HealBot_Panel_UnitRole(unit)
 end
 
 function HealBot_Action_SetClassIconTexture(button)
-    local prevTexture=button.icon.debuff.classtexture
     if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
         local setRole=false
         local unitRole=HEALBOT_WORDS_UNKNOWN
@@ -493,9 +492,7 @@ function HealBot_Action_SetClassIconTexture(button)
     else
         button.icon.debuff.classtexture=false
     end
-    if button.icon.debuff.classtexture~=prevTexture then
-        button.aura.debuff.check=true
-    end
+    button.aura.check=true
 end
 
 local HealBot_ResetHeaderSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}};
@@ -2408,7 +2405,7 @@ function HealBot_Panel_focusHeal(isOn)
 end
 
 function HealBot_Panel_RaidUnitGUID(guid)
-    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[xGUID] 
+    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] 
 end
 
 function HealBot_Panel_RaidUnitName(uName)

@@ -1,0 +1,77 @@
+tag bf6a56604b50fdf5f359966d23d49860e90fd737 v1.6.9
+Author:	Azilroka <darktemplar9900@yahoo.com>
+Date:	Sun Nov 3 19:54:19 2019 -0600
+
+commit d39315717390097a0c834128da8f6fb452ffeeef
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Nov 3 14:26:46 2019 -0600
+
+    Forgot to bump minor
+
+commit c9d790f5160fe0dc8f5bcbb47ddaec524e82d673
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Fri Nov 1 19:48:16 2019 -0500
+
+    Stop throwing errors on NPC
+
+commit 8b1bd1da92ce5911ad3e301d879ab4bd1148e540
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Fri Nov 1 14:36:29 2019 -0500
+
+    Updated Spell Lists from Swieia
+
+commit 075e54f2245abb7d744ad676c7b7846ecf7e5ce1
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Wed Oct 30 20:27:50 2019 -0500
+
+    Unneeded Upvalue
+
+commit c3e1d6ddb7cb7462d510901f3d17703116f8d5e1
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Wed Oct 30 20:25:24 2019 -0500
+
+    Remove all WotLK stuff.. I will just redo the lib as it has different math in each xpac. Math may still be a little off.
+
+commit e1488df46a2d7c59fdc657d1a1ea6a1ed8d5e714
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Mon Oct 28 18:19:42 2019 -0500
+
+    Fix CLEU / Player Jumping Before Cast|Channel Info is gathered.
+
+commit 237941beaee04f692ffaf9105bcd49357d5573e8
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Oct 26 09:52:30 2019 -0500
+
+    Disable Drain Life for now.
+
+commit 550bc4641f3f9934eb788bbb565a411b68798033
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Oct 26 09:47:47 2019 -0500
+
+    Stop an error from NPC Healing.
+
+commit 9aa5919a671aef32c2c6efe14822c9646a01324c
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Fri Oct 25 14:00:44 2019 -0500
+
+    Somehow reverted the commit before last.
+
+commit b9bd0aeeb4cb917c11a999af6e3f96744431c478
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Wed Oct 23 21:46:27 2019 -0500
+
+    Fixed Direct Heal / Hot Heal Messages
+    TODO: Add Backup Duration for HoTs without relying on LibClassicDurations.
+
+commit 10aa05b3bd45d4420682b098c3e8bc847e4dabf2
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Tue Oct 22 22:17:11 2019 -0500
+
+    Healing Touch Rank 9
+
+commit cbc0f5e82f5db3fd8d2a00b6b94bc9732b188294
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Tue Oct 22 16:05:13 2019 -0500
+
+    Drain Life / Level up
+

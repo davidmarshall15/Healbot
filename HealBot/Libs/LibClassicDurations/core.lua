@@ -39,7 +39,6 @@ Usage example 2:
     local LCD = LibStub("LibClassicDurations")
     LCD:Register("YourAddon") -- tell library it's being used and should start working
 
-
     local f = CreateFrame("frame", nil, UIParent)
     f:RegisterUnitEvent("UNIT_AURA", "target")
 
@@ -58,10 +57,15 @@ Usage example 2:
         EventHandler(f, "UNIT_AURA", unit)
     end)
 
+    -- Optional:
+    LCD.RegisterCallback(addon, "UNIT_BUFF_GAINED", function(event, unit, spellID)
+        print("Gained", GetSpellInfo(spellID))
+    end)
+
 --]================]
 if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
 
-local MAJOR, MINOR = "LibClassicDurations", 19
+local MAJOR, MINOR = "LibClassicDurations", 31
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -100,8 +104,9 @@ local callbacks = lib.callbacks
 local guids = lib.guids
 local spells = lib.spells
 local npc_spells = lib.npc_spells
+local indirectRefreshSpells
 
-
+local INFINITY = math.huge
 local PURGE_INTERVAL = 900
 local PURGE_THRESHOLD = 1800
 local UNKNOWN_AURA_DURATION = 3600 -- 60m
@@ -115,6 +120,7 @@ local tinsert = table.insert
 local unpack = unpack
 local GetAuraDurationByUnitDirect
 local enableEnemyBuffTracking = false
+local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER
 
 f:SetScript("OnEvent", function(self, event, ...)
     return self[event](self, event, ...)
@@ -126,6 +132,7 @@ local SpellDataVersions = lib.dataVersions
 function lib:SetDataVersion(dataType, version)
     SpellDataVersions[dataType] = version
     npc_spells = lib.npc_spells
+    indirectRefreshSpells = lib.indirectRefreshSpells
 end
 
 function lib:GetDataVersion(dataType)
@@ -183,6 +190,28 @@ local function processNPCSpellTable()
     end
 end
 lib.NPCSpellTableTimer = C_Timer.NewTimer(10, processNPCSpellTable)
+
+
+local function isHunterGUID(guid)
+    return select(2, GetPlayerInfoByGUID(guid)) == "HUNTER"
+end
+local function isFriendlyFeigning(guid)
+    if IsInRaid() then
+        for i = 1, MAX_RAID_MEMBERS do
+            local unitID = "raid"..i
+            if (UnitGUID(unitID) == guid) and UnitIsFeignDeath(unitID) then
+                return true
+            end
+        end
+    elseif IsInGroup() then
+        for i = 1, MAX_PARTY_MEMBERS do
+            local unitID = "party"..i
+            if (UnitGUID(unitID) == guid) and UnitIsFeignDeath(unitID) then
+                return true
+            end
+        end
+    end
+end
 --------------------------
 -- OLD GUIDs PURGE
 --------------------------
@@ -277,7 +306,9 @@ local function CountDiminishingReturns(eventType, srcGUID, srcFlags, dstGUID, ds
             addDRLevel(dstGUID, category)
         end
         if eventType == "UNIT_DIED" then
-            clearDRs(dstGUID)
+            if not isHunterGUID(dstGUID) then
+                clearDRs(dstGUID)
+            end
         end
     end
 end
@@ -309,18 +340,33 @@ end
 -- COMBAT LOG
 ---------------------------
 
-local function cleanDuration(duration, spellID, srcGUID, startTime)
+local function cleanDuration(duration, spellID, srcGUID, comboPoints)
     if type(duration) == "function" then
         local isSrcPlayer = srcGUID == UnitGUID("player")
-        local comboPoints
-        if isSrcPlayer and playerClass == "ROGUE" then
-            comboPoints = GetCP()
-        end
         -- Passing startTime for the sole reason of identifying different Rupture/KS applications for Rogues
         -- Then their duration func will cache one actual duration calculated at the moment of application
-        return duration(spellID, isSrcPlayer, comboPoints, startTime)
+        return duration(spellID, isSrcPlayer, comboPoints)
     end
     return duration
+end
+
+local function RefreshTimer(srcGUID, dstGUID, spellID)
+    local guidTable = guids[dstGUID]
+    if not guidTable then return end
+
+    local spellTable = guidTable[spellID]
+    if not spellTable then return end
+
+    local applicationTable
+    if spellTable.applications then
+        applicationTable = spellTable.applications[srcGUID]
+    else
+        applicationTable = spellTable
+    end
+    if not applicationTable then return end
+
+    applicationTable[2] = GetTime() -- set start time to now
+    return true
 end
 
 local function SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType, doRemove)
@@ -368,8 +414,12 @@ local function SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName,
         applicationTable = spellTable
     end
 
-    -- local duration = cleanDuration(opts.duration, spellID, srcGUID)
     local duration = opts.duration
+    local isDstPlayer = bit_band(dstFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0
+    if isDstPlayer and opts.pvpduration then
+        duration = opts.pvpduration
+    end
+
     if not duration then
         return SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType, true)
     end
@@ -383,32 +433,42 @@ local function SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName,
     --     -- local temporaryDuration = cleanDuration(opts.duration, spellID, srcGUID)
     --     expirationTime = now + duration
     -- end
+
     applicationTable[1] = duration
     applicationTable[2] = now
     -- applicationTable[2] = expirationTime
     applicationTable[3] = auraType
 
+    local isSrcPlayer = srcGUID == UnitGUID("player")
+    local comboPoints
+    if isSrcPlayer and playerClass == "ROGUE" then
+        comboPoints = GetCP()
+    end
+    applicationTable[4] = comboPoints
+
     guidAccessTimes[dstGUID] = now
 end
 
-local function NotifyGUIDBuffChange(dstGUID)
+local function FireToUnits(event, dstGUID)
     if dstGUID == UnitGUID("target") then
-        callbacks:Fire("UNIT_BUFF", "target")
+        callbacks:Fire(event, "target")
     end
     local nameplateUnit = nameplateUnitMap[dstGUID]
     if nameplateUnit then
-        callbacks:Fire("UNIT_BUFF", nameplateUnit)
+        callbacks:Fire(event, nameplateUnit)
     end
 end
 
-local lastSpellCastName
-local lastSpellCastTime = 0
-function f:UNIT_SPELLCAST_SUCCEEDED(event, unit, castID, spellID)
-    lastSpellCastName = GetSpellInfo(spellID)
-    lastSpellCastTime = GetTime()
+local function GetLastRankSpellID(spellName)
+    local spellID = spellNameToID[spellName]
+    if not spellID then
+        spellID = NPCspellNameToID[spellName]
+    end
+    return spellID
 end
 
-local SunderArmorName = GetSpellInfo(11597)
+local lastResistSpellID
+local lastResistTime = 0
 ---------------------------
 -- COMBAT LOG HANDLER
 ---------------------------
@@ -419,25 +479,57 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
     dstGUID, dstName, dstFlags, dstFlags2,
     spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
 
-    if spellName == SunderArmorName then
-        if eventType == "SPELL_CAST_SUCCESS" then
-            eventType = "SPELL_AURA_REFRESH"
-            auraType = "DEBUFF"
+    if indirectRefreshSpells[spellName] then
+        local refreshTable = indirectRefreshSpells[spellName]
+        if refreshTable.events[eventType] then
+            local targetSpellID = refreshTable.targetSpellID
+
+            local condition = refreshTable.condition
+            if condition then
+                local isMine = bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE
+                if not condition(isMine) then return end
+            end
+
+            if refreshTable.targetResistCheck then
+                local now = GetTime()
+                if lastResistSpellID == targetSpellID and now - lastResistTime < 0.4 then
+                    return
+                end
+            end
+
+            if refreshTable.applyAura then
+                local opts = spells[targetSpellID]
+                if opts then
+                    local targetAuraType = "DEBUFF"
+                    local targetSpellName = GetSpellInfo(targetSpellID)
+                    SetTimer(srcGUID, dstGUID, dstName, dstFlags, targetSpellID, targetSpellName, opts, targetAuraType)
+                end
+            else
+                RefreshTimer(srcGUID, dstGUID, targetSpellID)
+            end
         end
     end
 
-    if auraType == "BUFF" or auraType == "DEBUFF" then
-        local isSrcPlayer = bit_band(srcFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0
+    if  eventType == "SPELL_MISSED" and
+        bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE
+    then
+        local missType = auraType
+        if missType == "RESIST" then
+            spellID = GetLastRankSpellID(spellName)
+            if not spellID then
+                return
+            end
 
+            lastResistSpellID = spellID
+            lastResistTime = GetTime()
+        end
+    end
+
+    if auraType == "BUFF" or auraType == "DEBUFF" or eventType == "SPELL_CAST_SUCCESS" then
         if spellID == 0 then
             -- so not to rewrite the whole thing to spellnames after the combat log change
             -- just treat everything as max rank id of that spell name
-            if isSrcPlayer then
-                spellID = spellNameToID[spellName]
-            else
-                spellID = NPCspellNameToID[spellName]
-            end
-
+            spellID = GetLastRankSpellID(spellName)
             if not spellID then
                 return
             end
@@ -459,14 +551,23 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
         end
 
         if opts then
+            local castEventPass
+            if eventType == "SPELL_CAST_SUCCESS" and opts.castFilter then
+                -- For spells that have cast filter enabled, transform their CAST event into AURA_APPLIED
+                -- And give them a pass, while their normal AURA_APPLIED events get rejected without it
+                eventType = "SPELL_AURA_APPLIED"
+                auraType = opts.type == "BUFF" and "BUFF" or "DEBUFF"
+                castEventPass = true
+            end
+
             local isEnemyBuff = not isDstFriendly and auraType == "BUFF"
             -- print(eventType, srcGUID, "=>", dstName, spellID, spellName, auraType )
             if  eventType == "SPELL_AURA_REFRESH" or
                 eventType == "SPELL_AURA_APPLIED" or
                 eventType == "SPELL_AURA_APPLIED_DOSE"
             then
-                if not opts.castFilter or
-                    (lastSpellCastName == spellName and lastSpellCastTime + 1 > GetTime()) or
+                if  not opts.castFilter or
+                    castEventPass or
                     isEnemyBuff
                 then
                     SetTimer(srcGUID, dstGUID, dstName, dstFlags, spellID, spellName, opts, auraType)
@@ -480,18 +581,31 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(event)
                 -- invalidate buff cache
                 buffCacheValid[dstGUID] = nil
 
-                NotifyGUIDBuffChange(dstGUID)
+                FireToUnits("UNIT_BUFF", dstGUID)
+                if  eventType == "SPELL_AURA_REFRESH" or
+                    eventType == "SPELL_AURA_APPLIED" or
+                    eventType == "SPELL_AURA_APPLIED_DOSE"
+                then
+                    FireToUnits("UNIT_BUFF_GAINED", dstGUID, spellID)
+                end
             end
         end
     end
     if eventType == "UNIT_DIED" then
+        if isHunterGUID(dstGUID) then
+            local isDstFriendly = bit_band(dstFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) > 0
+            if not isDstFriendly or isFriendlyFeigning(dstGUID) then
+                return
+            end
+        end
+
         guids[dstGUID] = nil
         buffCache[dstGUID] = nil
         buffCacheValid[dstGUID] = nil
         guidAccessTimes[dstGUID] = nil
         local isDstFriendly = bit_band(dstFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) > 0
         if enableEnemyBuffTracking and not isDstFriendly then
-            NotifyGUIDBuffChange(dstGUID)
+            FireToUnits("UNIT_BUFF", dstGUID)
         end
         nameplateUnitMap[dstGUID] = nil
     end
@@ -502,11 +616,12 @@ end
 ---------------------------
 local makeBuffInfo = function(spellID, applicationTable, dstGUID, srcGUID)
     local name, rank, icon, castTime, minRange, maxRange, _spellId = GetSpellInfo(spellID)
-    local durationFunc, startTime = unpack(applicationTable)
-    local duration = cleanDuration(durationFunc, spellID, srcGUID, startTime) -- srcGUID isn't needed actually
+    local durationFunc, startTime, auraType, comboPoints = unpack(applicationTable)
+    local duration = cleanDuration(durationFunc, spellID, srcGUID, comboPoints) -- srcGUID isn't needed actually
     -- no DRs on buffs
     local expirationTime = startTime + duration
-    if duration == 0 then
+    if duration == INFINITY then
+        duration = 0
         expirationTime = 0
     end
     local now = GetTime()
@@ -585,6 +700,7 @@ function lib.UnitAuraDirect(unit, index, filter)
         return FillInDuration(unit, UnitAura(unit, index, filter))
     end
 end
+lib.UnitAuraWithBuffs = lib.UnitAuraDirect
 
 function lib.UnitAuraWrapper(unit, ...)
     return FillInDuration(unit, UnitAura(unit, ...))
@@ -638,8 +754,10 @@ local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
                 applicationTable = spellTable
             end
             if not applicationTable then return end
-            local durationFunc, startTime = unpack(applicationTable)
-            local duration = cleanDuration(durationFunc, spellID, srcGUID, startTime)
+            local durationFunc, startTime, auraType, comboPoints = unpack(applicationTable)
+            local duration = cleanDuration(durationFunc, spellID, srcGUID, comboPoints)
+            if duration == INFINITY then return nil end
+            if not duration then return nil end
             local mul = getDRMul(dstGUID, spellID)
             -- local mul = getDRMul(dstGUID, lastRankID)
             duration = duration * mul
@@ -648,6 +766,21 @@ local function GetGUIDAuraTime(dstGUID, spellName, spellID, srcGUID, isStacking)
                 return duration, expirationTime
             end
         end
+    end
+end
+
+if playerClass == "MAGE" then
+    local NormalGetGUIDAuraTime = GetGUIDAuraTime
+    local Chilled = GetSpellInfo(12486)
+    GetGUIDAuraTime = function(dstGUID, spellName, spellID, ...)
+
+        -- Overriding spellName for Improved blizzard's spellIDs
+        if spellName == Chilled and
+            spellID == 12486 or spellID == 12484 or spellID == 12485
+        then
+            spellName = "ImpBlizzard"
+        end
+        return NormalGetGUIDAuraTime(dstGUID, spellName, spellID, ...)
     end
 end
 
@@ -691,7 +824,6 @@ function lib:RegisterFrame(frame)
     activeFrames[frame] = true
     if next(activeFrames) then
         f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
         if playerClass == "ROGUE" then
             f:RegisterEvent("PLAYER_TARGET_CHANGED")
             f:RegisterUnitEvent("UNIT_POWER_UPDATE", "player")
@@ -704,7 +836,6 @@ function lib:UnregisterFrame(frame)
     activeFrames[frame] = nil
     if not next(activeFrames) then
         f:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-        f:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED")
         if playerClass == "ROGUE" then
             f:UnregisterEvent("PLAYER_TARGET_CHANGED")
             f:UnregisterEvent("UNIT_POWER_UPDATE")
@@ -712,3 +843,54 @@ function lib:UnregisterFrame(frame)
     end
 end
 lib.Unregister = lib.UnregisterFrame
+
+
+function lib:ToggleDebug()
+    if not lib.debug then
+        lib.debug = CreateFrame("Frame")
+        lib.debug:SetScript("OnEvent",function( self, event )
+            local timestamp, eventType, hideCaster,
+            srcGUID, srcName, srcFlags, srcFlags2,
+            dstGUID, dstName, dstFlags, dstFlags2,
+            spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
+            local isSrcPlayer = (bit_band(srcFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE)
+            if isSrcPlayer then
+                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cff00ff00==>|r", dstGUID, dstFlags, auraType, amount)
+            end
+        end)
+    end
+    if not lib.debug.enabled then
+        lib.debug:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        lib.debug.enabled = true
+        print("[LCD] Enabled combat log event display")
+    else
+        lib.debug:UnregisterAllEvents()
+        lib.debug.enabled = false
+        print("[LCD] Disabled combat log event display")
+    end
+end
+
+function lib:MonitorUnit(unit)
+    if not lib.debug then
+        lib.debug = CreateFrame("Frame")
+        local debugGUID = UnitGUID(unit)
+        lib.debug:SetScript("OnEvent",function( self, event )
+            local timestamp, eventType, hideCaster,
+            srcGUID, srcName, srcFlags, srcFlags2,
+            dstGUID, dstName, dstFlags, dstFlags2,
+            spellID, spellName, spellSchool, auraType, amount = CombatLogGetCurrentEventInfo()
+            if srcGUID == debugGUID or dstGUID == debugGUID then
+                print (GetTime(), "ID:", spellID, spellName, eventType, srcFlags, srcGUID,"|cff00ff00==>|r", dstGUID, dstFlags, auraType, amount)
+            end
+        end)
+    end
+    if not lib.debug.enabled then
+        lib.debug:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        lib.debug.enabled = true
+        print("[LCD] Enabled combat log event display")
+    else
+        lib.debug:UnregisterAllEvents()
+        lib.debug.enabled = false
+        print("[LCD] Disabled combat log event display")
+    end
+end
