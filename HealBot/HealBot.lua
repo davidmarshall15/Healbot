@@ -1716,6 +1716,7 @@ function HealBot_HealsInUpdate(button)
             healin=(UnitGetIncomingHeals(button.unit) or 0)
         elseif libCHC then
             healin = (libCHC:GetHealAmount(button.guid, libCHC.DIRECT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+            --healin = (libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
         end
         if button.health.incoming~=healin or (healin==0 and ebubar2:GetValue()>0) then
             button.health.incoming=healin
@@ -1732,22 +1733,22 @@ function HealBot_HealsInUpdate(button)
     --HealBot_setCall("HealBot_HealsInUpdate")
 end
 
-function HealBotClassic_HealsInUpdate(stopped, arg1, arg2, arg3, arg4, arg5, ...)
+local function HealBotClassic_HealsInDoUpdate(button, immediateUpdate)
+    if immediateUpdate then
+        HealBot_HealsInUpdate(button)
+    else
+        button.health.updincoming=true
+       -- button.health.update=true
+    end
+end
+
+function HealBotClassic_HealsInUpdate(immediateUpdate, spellId, ...)
     for i=1, select("#", ...) do
         local targetGUID = select(i, ...)
         if targetGUID and HealBot_Panel_RaidUnitGUID(targetGUID) then
             local _,_,xButton,aTarget,_ = HealBot_UnitID(HealBot_Panel_RaidUnitGUID(targetGUID), true)
-            if xButton then
-                if stopped then
-                    xButton.health.updincoming=true
-                   -- xButton.health.update=true
-                else
-                    HealBot_HealsInUpdate(xButton)
-                end
-            end
-            if aTarget then
-                HealBot_HealsInUpdate(HealBot_Unit_Button["target"])
-            end
+            if xButton then HealBotClassic_HealsInDoUpdate(xButton, immediateUpdate) end
+            if aTarget then HealBotClassic_HealsInDoUpdate(HealBot_Unit_Button["target"], immediateUpdate) end
         end
     end
 end
@@ -3525,6 +3526,9 @@ local function HealBot_Options_Update()
             end
         end
         HealBot_Options_Timer[25]=nil
+    elseif HealBot_Options_Timer[20] then
+        HealBot_AuraRefresh()
+        HealBot_Options_Timer[20]=nil
     elseif HealBot_Options_Timer[30] then
         HealBot_AuraCheck()
         HealBot_Options_Timer[30]=nil
@@ -4203,8 +4207,10 @@ local function HealBot_ResetCheckBuffsTime(button)
 end
 
 local function HealBot_DelUnitDebuffCache(unit, spellId)
+    HealBot_AddDebug("Try DelDebuffCache "..spellId)
     if HealBot_UnitDebuffCache[unit] and HealBot_UnitDebuffCache[unit][spellId] then
         HealBot_UnitDebuffCache[unit][spellId]=nil
+        HealBot_AddDebug("Done DelDebuffCache "..spellId)
     end
 end
 
@@ -4563,8 +4569,11 @@ function HealBot_DelBuffCache(spellId)
 end
 
 function HealBot_DelDebuffCache(spellId)
-    for unit,_ in pairs(HealBot_UnitBuffCache) do
+    for unit,_ in pairs(HealBot_UnitDebuffCache) do
         HealBot_DelUnitDebuffCache(unit, spellId)
+    end
+    if HealBot_AuraDebuffCache[spellId] then
+        HealBot_AuraDebuffCache[spellId].always=false
     end
 end
 
@@ -4734,7 +4743,7 @@ local function HealBot_checkCurDebuffs(button,spellId)
     local dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(spellId, debuff_type)
     if dTypePriority>dNamePriority and dNamePriority<21 then
         if HealBot_Globals.IgnoreCustomDebuff[spellId] and HealBot_Globals.IgnoreCustomDebuff[spellId][HealBot_luVars["hbInsName"]] then
-            -- Ignore it
+            HealBot_UnitDebuffCache[button.unit][spellId].current=false
         else
             local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
             local hbCastByEveryone = castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
@@ -5644,7 +5653,7 @@ local function HealBot_UnitUpdateButton(button)
                 HealBot_UnitUpdateHealth(button)
             elseif button.aggro.threatpct>0 then 
                 HealBot_CheckAggroUnits(button) 
-            elseif button.status.current==9 then
+            elseif button.status.current==9 or UnitIsDeadOrGhost(button.unit) then
                 HealBot_Action_UpdateTheDeadButton(button)
             end
             if button.aura.buff.nextupdate<=TimeNow then HealBot_Update_UnitBuffIcons(button) end
@@ -5812,23 +5821,23 @@ function HealBot_Register_IncHeals()
         
         if libCHC then
             libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStarted", 
-                function(casterGUID, spellID, healType, endTime, ...) 
-                HealBotClassic_HealsInUpdate(false, casterGUID, spellID, healType, endTime, ...) end)
+                function(event, casterGUID, spellID, healType, endTime, ...) 
+                HealBotClassic_HealsInUpdate(true, spellID, ...) end)
                 
             libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealUpdated", 
-                function(casterGUID, spellID, healType, endTime, ...) 
-                HealBotClassic_HealsInUpdate(true, casterGUID, spellID, healType, endTime, ...) end)
+                function(event, casterGUID, spellID, healType, endTime, ...) 
+                HealBotClassic_HealsInUpdate(true, spellID, ...) end)
                 
             libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealDelayed", 
-                function(casterGUID, spellID, healType, endTime, ...) 
-                HealBotClassic_HealsInUpdate(true, casterGUID, spellID, healType, endTime, ...) end)
+                function(event, casterGUID, spellID, healType, endTime, ...) 
+                HealBotClassic_HealsInUpdate(true, spellID, ...) end)
                 
             libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_HealStopped", 
-                function(casterGUID, spellID, healType, interrupted, ...) 
-                HealBotClassic_HealsInUpdate(true, casterGUID, spellID, healType, interrupted, ...) end)
+                function(event, casterGUID, spellID, healType, interrupted, ...) 
+                HealBotClassic_HealsInUpdate(interrupted, spellID, ...) end)
                 
             --libCHC.RegisterCallback(HEALBOT_HEALBOT, "HealComm_ABSORB-EVENT", 
-            --    function(casterGUID, spellID, ???, ???, ...) 
+            --    function(event, casterGUID, spellID, ???, ???, ...) 
             --    HealBotClassic_AbsorbsUpdate(casterGUID, spellID, ???, ???, ...) end)
         end
     end
@@ -6255,6 +6264,23 @@ local function HealBot_OnEvent_InstanceEncounterEngageUnit(arg1, arg2, arg3, arg
     end
     HealBot_OnEvent_PlayerRegenDisabled()
 end    
+
+function HealBot_AuraRefresh(unit)
+    if unit then
+        local xButton = HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit]
+        if xButton then
+            xButton.aura.refresh=true
+        end
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            xButton.aura.refresh=true
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            xButton.aura.refresh=true
+        end
+    end
+    --HealBot_setCall("HealBot_AuraRefresh")
+end
 
 function HealBot_AuraCheck(unit)
     if unit then

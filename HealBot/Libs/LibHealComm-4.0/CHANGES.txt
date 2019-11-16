@@ -1,77 +1,76 @@
-tag bf6a56604b50fdf5f359966d23d49860e90fd737 v1.6.9
+tag 321a2d81da34c1ddfab70c4e626e11a057158a4c v1.7.0
 Author:	Azilroka <darktemplar9900@yahoo.com>
-Date:	Sun Nov 3 19:54:19 2019 -0600
+Date:	Thu Nov 14 21:36:09 2019 -0600
 
-commit d39315717390097a0c834128da8f6fb452ffeeef
+commit f34820868408505c995e88ecf2f7a9f68ef8a30c
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Nov 3 14:26:46 2019 -0600
+Date:   Thu Nov 14 21:33:04 2019 -0600
 
-    Forgot to bump minor
+    Minor 77
 
-commit c9d790f5160fe0dc8f5bcbb47ddaec524e82d673
+commit 1e64ee748231513ed23c0ca0ef84cdfc8b7558b1
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Fri Nov 1 19:48:16 2019 -0500
+Date:   Thu Nov 14 17:48:53 2019 -0600
 
-    Stop throwing errors on NPC
+    Bump Minor
 
-commit 8b1bd1da92ce5911ad3e301d879ab4bd1148e540
+commit 94d436913055e3aa35bfc8d945556c2c95fb778c
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Fri Nov 1 14:36:29 2019 -0500
+Date:   Thu Nov 14 17:48:29 2019 -0600
 
-    Updated Spell Lists from Swieia
+    Patch from dev7355608
 
-commit 075e54f2245abb7d744ad676c7b7846ecf7e5ce1
+commit 6e24321bf6d2422d23069943f6f6a6dc7a2fc853
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Wed Oct 30 20:27:50 2019 -0500
+Date:   Wed Nov 13 16:50:37 2019 -0600
 
-    Unneeded Upvalue
+    Minor 75
 
-commit c3e1d6ddb7cb7462d510901f3d17703116f8d5e1
+commit 743e98d39e132b5222a49c16d04d57524a470cef
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Wed Oct 30 20:25:24 2019 -0500
+Date:   Wed Nov 13 15:29:13 2019 -0600
 
-    Remove all WotLK stuff.. I will just redo the lib as it has different math in each xpac. Math may still be a little off.
+    Minor 74
 
-commit e1488df46a2d7c59fdc657d1a1ea6a1ed8d5e714
+commit ad2b2f377d669fb6e6a215b31d185c8bbb9e8982
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Mon Oct 28 18:19:42 2019 -0500
+Date:   Tue Nov 12 16:03:47 2019 -0600
 
-    Fix CLEU / Player Jumping Before Cast|Channel Info is gathered.
+    Minor 73
 
-commit 237941beaee04f692ffaf9105bcd49357d5573e8
+commit d1e83bf24a95ef1dc3070c20301500a83c4a6be2
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sat Oct 26 09:52:30 2019 -0500
+Date:   Tue Nov 12 15:57:42 2019 -0600
 
-    Disable Drain Life for now.
+    Bump Minor
 
-commit 550bc4641f3f9934eb788bbb565a411b68798033
+commit 22ceb0cf38e804fc58f2bb60ae8a2204742a701e
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sat Oct 26 09:47:47 2019 -0500
+Date:   Tue Nov 12 15:54:46 2019 -0600
 
-    Stop an error from NPC Healing.
+    Patches from dev7355608
 
-commit 9aa5919a671aef32c2c6efe14822c9646a01324c
+commit 0880b398ce805132bfd64252310eedf68e3aa14b
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Fri Oct 25 14:00:44 2019 -0500
+Date:   Sun Nov 10 22:02:39 2019 -0600
 
-    Somehow reverted the commit before last.
+    Handle Hots in another table.. I want to rewrite this entire thing for a better table layout.
 
-commit b9bd0aeeb4cb917c11a999af6e3f96744431c478
+commit e87193b353ede91a7a4884df07722b04493a3a0a
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Wed Oct 23 21:46:27 2019 -0500
+Date:   Sun Nov 10 10:28:48 2019 -0600
 
-    Fixed Direct Heal / Hot Heal Messages
-    TODO: Add Backup Duration for HoTs without relying on LibClassicDurations.
+    Merge from Siweia
 
-commit 10aa05b3bd45d4420682b098c3e8bc847e4dabf2
+commit dcc3211b2ce8a7e46cd1ccf4e75e00f81dd9c406
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Oct 22 22:17:11 2019 -0500
+Date:   Sun Nov 10 10:12:16 2019 -0600
 
-    Healing Touch Rank 9
+    bump minor
 
-commit cbc0f5e82f5db3fd8d2a00b6b94bc9732b188294
+commit 2f6506bd7edc3ff13b1325054ba2f5d260dfb0aa
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Oct 22 16:05:13 2019 -0500
+Date:   Sun Nov 10 10:11:27 2019 -0600
 
-    Drain Life / Level up
+    Rejuv hot sp should be 20% I do believe.
 

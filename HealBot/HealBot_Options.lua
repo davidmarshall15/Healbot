@@ -9752,6 +9752,8 @@ function HealBot_Options_DeleteCDebuff(dId)
     HealBot_Options_InitSub(402)
     HealBot_Options_InitSub(403)
     HealBot_Options_InitSub(404)
+    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
     HealBot_SetCDCBarColours();
     HealBot_Options_CDebuffResetList()
     HealBot_CheckAllActiveDebuffs()
@@ -9770,6 +9772,8 @@ function HealBot_Options_DeleteBuffHoT(classTr, sId)
     HealBot_Globals.CustomBuffBarColour[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sId]=nil
     HealBot_DelBuffCache(sId)
+    HealBot_setOptions_Timer(20)
+    HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(169)
     HealBot_setOptions_Timer(170)
 end
@@ -9790,6 +9794,8 @@ function HealBot_Options_EnableDisableCDBtn_OnClick(self)
         HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]][InstName]=true
     end
     HealBot_Options_SetEnableDisableCDBtn()
+    HealBot_DelDebuffCache(HealBot_Options_StorePrev["CDebuffcustomName"])
+    HealBot_setOptions_Timer(20)
     HealBot_setOptions_Timer(30)
 end
 
