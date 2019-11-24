@@ -13,6 +13,15 @@
 --
 --
 
+
+if HEALBOT_GAME_VERSION>3 then
+    HEALBOT_classicABSORBHOT="absorb"
+    HEALBOT_classicABSORBHOTUP="Absorb"
+else    
+    HEALBOT_classicABSORBHOT="HoT"
+    HEALBOT_classicABSORBHOTUP="HoT"
+end
+    
 function HealBot_Lang_enUK()
     HEALBOT_enWORD_COLOUR_SUFFIX = "our"
     HealBot_Lang_enALL()
@@ -244,10 +253,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARHEALTHSEPHEALS       = "Separate incoming heals";
     HEALBOT_OPTIONS_BARHEALTHALLINCHEALS    = "Always Include incoming heals";
     HEALBOT_OPTIONS_BARHEALTHALLSEPHEALS    = "Always Separate incoming heals";
-    HEALBOT_OPTIONS_BARHEALTHINCALL         = "Include incoming heals and absorbs"
-    HEALBOT_OPTIONS_BARHEALTHSEPALL         = "Separate incoming heals and absorbs"
-    HEALBOT_OPTIONS_BARHEALTHALLINCALL      = "Always include incoming heals and absorbs"
-    HEALBOT_OPTIONS_BARHEALTHALLSEPALL      = "Always separate incoming heals and absorbs"
+    HEALBOT_OPTIONS_BARHEALTHINCALL         = "Include incoming heals and "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHSEPALL         = "Separate incoming heals and "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHALLINCALL      = "Always include incoming heals and "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHALLSEPALL      = "Always separate incoming heals and "..HEALBOT_classicABSORBHOT.."s"
     HEALBOT_OPTIONS_BARHEALTH1              = "as delta";
     HEALBOT_OPTIONS_BARHEALTH2              = "as percentage";
     HEALBOT_OPTIONS_TIPTEXT                 = "Tooltip information";
@@ -297,10 +306,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
 
     HEALBOT_OPTIONS_IGNOREDEBUFF            = "Ignore debuffs:";
-    HEALBOT_OPTIONS_IGNOREDEBUFFCLASS       = "By class";
-    HEALBOT_OPTIONS_IGNOREDEBUFFMOVEMENT    = "Slow movement";
     HEALBOT_OPTIONS_IGNOREDEBUFFDURATION    = "Short duration";
-    HEALBOT_OPTIONS_IGNOREDEBUFFNOHARM      = "Non harmful";
     HEALBOT_OPTIONS_IGNOREDEBUFFCOOLDOWN    = "When cure spell CoolDown > 1.5 secs (GCD)";
     HEALBOT_OPTIONS_IGNOREDEBUFFFRIEND      = "When caster is known as friend";
 
@@ -666,7 +672,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_MONK   = "Show chi power"
-    HEALBOT_OPTIONS_CUSTOMDEBUFF_REVDUR     = "Reverse Duration"
     HEALBOT_OPTIONS_DISABLEHEALBOTSOLO      = "only when solo"
     HEALBOT_OPTIONS_CUSTOM_ALLDISEASE       = "All Disease"
     HEALBOT_OPTIONS_CUSTOM_ALLMAGIC         = "All Magic"
@@ -1062,8 +1067,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL = "    " .. HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. HEALBOT_OPTIONS_TAB_FRAMES
     
-    HEALBOT_SKIN_ABSORBCOL_TEXT             = "Absorb effects";
-    HEALBOT_OPTIONS_BARALPHAABSORB          = "Absorb effects opacity";
+    HEALBOT_SKIN_ABSORBCOL_TEXT             = HEALBOT_classicABSORBHOTUP.." effects";
+    HEALBOT_OPTIONS_BARALPHAABSORB          = HEALBOT_classicABSORBHOTUP.." effects opacity";
     HEALBOT_OPTIONS_OUTLINE                 = "Outline"
     HEALBOT_OPTIONS_FRAME                   = "Frame"
     HEALBOT_OPTIONS_FRAMESOPTTEXT           = "Frames options"
@@ -1365,7 +1370,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSICCOL"]="Incoming Heals Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSICALPHA"]=HEALBOT_OPTIONS_BARALPHAINHEAL,
                                  ["HEALBARSAECOLTYPE"]=HEALBOT_SKIN_ABSORBCOL_TEXT,
-                                 ["HEALBARSAECOL"]="Absorb Effects Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["HEALBARSAECOL"]=HEALBOT_classicABSORBHOTUP.." Effects Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSAECOLALPHA"]=HEALBOT_OPTIONS_BARALPHAABSORB,
                                  ["HEALBARSALPHAOOR"]=HEALBOT_OPTIONS_BARALPHAEOR,
                                  ["HEALBARSALPHADIS"]=HEALBOT_OPTIONS_BARALPHADIS,
@@ -1489,7 +1494,6 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
                                  ["DEBUFFSCUSTOMDEBUFF"]=HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS,
                                  ["DEBUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
-                                 ["DEBUFFSCUSTOMREVDUR"]=HEALBOT_OPTIONS_CUSTOMDEBUFF_REVDUR,
                                  ["DEBUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
                                  ["DEBUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWDEBUFFTEXT,
                                  ["DEBUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
@@ -1756,9 +1760,9 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSICCOLTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the incoming heals.\nWhen custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["HEALBARSICCOL"]="Set the custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for incoming heals.",
                                ["HEALBARSICALPHA"]="Set the transparency of incoming heals.",
-                               ["HEALBARSAECOLTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the absorb effects.\nWhen custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
-                               ["HEALBARSAECOL"]="Set the custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for absorb effects.",
-                               ["HEALBARSAECOLALPHA"]="Set the transparency of absorb effects.",
+                               ["HEALBARSAECOLTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the "..HEALBOT_classicABSORBHOT.." effects.\nWhen custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["HEALBARSAECOL"]="Set the custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for "..HEALBOT_classicABSORBHOT.." effects.",
+                               ["HEALBARSAECOLALPHA"]="Set the transparency of "..HEALBOT_classicABSORBHOT.." effects.",
                                ["HEALBARSALPHAOOR"]="Set the transparency of the heal bars when the bar\nis in an enabled state and the player is out of range.",
                                ["HEALBARSALPHADIS"]="Set the transparency of the heal bar\nwhen the bar is in an disabled state.",
                         -- Skins Frames Bars Text tab
@@ -1776,7 +1780,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSTXTLINES"]="Use 2 lines for text, this is generally\nthe name on the 1st line and health on the 2nd.",
                                ["HEALBARSTXTMAXCHARS"]="Set the maximum number of characters shown on the heal bar.\nAuto will generally calculate the maximum number of characters\nto fit within the bar when standard fonts are used.",
                                ["HEALBARSTXTSHOWHEALTH"]="Show the players health on the bar.",
-                               ["HEALBARSTXTHEALTHICOPTION"]="Various options for incoming heals and absorbs.\n- No Incoming Heals - Never show incoming heals and absorbs\n- Include incoming heals - Include incoming heals in the health text when health is below 100%\n- Separate incoming heals - Show incoming heals next to the health text when health is below 100%\n- Always Include incoming heals - Always incoming heals in the health text\n- Always Separate incoming heals - Always show incoming heals next to the health text\n- Include incoming heals and absorbs - Include incoming heals and absorbs in the health text when health is below 100%\n- Separate incoming heals and absorbs - Show incoming heals and absorbs next to the health text when health is below 100%\n- Always include incoming heals and absorbs - Always incoming heals and absorbs in the health text\n- Always separate incoming heals and absorbs - Always show incoming heals and absorbs next to the health text",
+                               ["HEALBARSTXTHEALTHICOPTION"]="NOTE: Incoming heals and "..HEALBOT_classicABSORBHOT.."s text is only shown on enabled bars.\n--\n- No Incoming Heals - Never show incoming heals and "..HEALBOT_classicABSORBHOT.."s\n- Include incoming heals - Include incoming heals in the health text when health is below 100%\n- Separate incoming heals - Show incoming heals next to the health text when health is below 100%\n- Always Include incoming heals - Always incoming heals in the health text\n- Always Separate incoming heals - Always show incoming heals next to the health text\n- Include incoming heals and "..HEALBOT_classicABSORBHOT.."s - Include incoming heals and "..HEALBOT_classicABSORBHOT.."s in the health text when health is below 100%\n- Separate incoming heals and "..HEALBOT_classicABSORBHOT.."s - Show incoming heals and "..HEALBOT_classicABSORBHOT.."s next to the health text when health is below 100%\n- Always include incoming heals and "..HEALBOT_classicABSORBHOT.."s - Always incoming heals and "..HEALBOT_classicABSORBHOT.."s in the health text\n- Always separate incoming heals and "..HEALBOT_classicABSORBHOT.."s - Always show incoming heals and "..HEALBOT_classicABSORBHOT.."s next to the health text",
                                ["HEALBARSTXTHEALTHTYPE"]="Various options on how the health is displayed.",
                                ["HEALBARSTXTHEALTHFORMAT"]="Various options on the number format for health.",
                                ["HEALBARSTXTTAGDC"]="Display a tag before the characters name when the player is "..HEALBOT_DISCONNECTED_LABEL..".",
@@ -1881,7 +1885,6 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
                                ["DEBUFFSCUSTOMDEBUFF"]="Lists custom default settings or individual\ndebuffs depending on the Category selected.",
                                ["DEBUFFSCUSTOMCASTBY"]="Sets a filter on debuffs displayed\nby checking the caster of the debuff.",
-                               ["DEBUFFSCUSTOMREVDUR"]="Debuff duration count starts at 0 and increases.",
                                ["DEBUFFSCUSTOMDELETE"]="Delete the selected custom debuff.",
                                ["DEBUFFSCUSTOMNEWNAME"]="Add a new debuff to the current category.\nNote: The Spell Name or Spell ID can be used.\nUsing Spell ID is recommended.",
                                ["DEBUFFSCUSTOMNEWSAVE"]="Save the new custom debuff.",

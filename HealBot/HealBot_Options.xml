@@ -10453,69 +10453,14 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_IgnoreDebuffsClass" inherits="SendMailRadioButtonTemplate">
+                  <CheckButton name="HealBot_Options_IgnoreDebuffsDuration" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt3" relativePoint="BOTTOMLEFT">>
                         <Offset>
-                          <AbsDimension x="95" y="-45" />
+                          <AbsDimension x="95" y="-65" />
                         </Offset>
                       </Anchor>
                     </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_IgnoreDebuffsClass_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_IgnoreDebuffsNoHarm" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IgnoreDebuffsClass" relativePoint="TOPLEFT">>
-                        <Offset>
-                          <AbsDimension x="125" y="0" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_IgnoreDebuffsNoHarm_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_IgnoreDebuffsMovement" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IgnoreDebuffsNoHarm" relativePoint="TOPLEFT">>
-                        <Offset>
-                          <AbsDimension x="125" y="0" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_IgnoreDebuffsMovement_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_IgnoreDebuffsDuration" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IgnoreDebuffsClass" relativePoint="TOPLEFT">>
-                        <Offset>
-                          <AbsDimension x="0" y="-32" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_IgnoreDebuffsTxt" text="HEALBOT_OPTIONS_IGNOREDEBUFF" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="RIGHT">
-                              <Offset>
-                                <AbsDimension x="-22" y="-15" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsDuration_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
@@ -10547,6 +10492,19 @@
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_IgnoreDebuffsTxt" text="HEALBOT_OPTIONS_IGNOREDEBUFF" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="RIGHT">
+                              <Offset>
+                                <AbsDimension x="-32" y="0" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
                       <OnClick>HealBot_Options_IgnoreDebuffsCoolDown_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSIGNOREDEBUFFS",true)</OnEnter>
@@ -11288,12 +11246,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-140" />
+                          <AbsDimension x="50" y="-140" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 240)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFF",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFF",false)</OnLeave>
                     </Scripts>
@@ -11315,12 +11273,12 @@
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="RIGHT">
                         <Offset>
-                          <AbsDimension x="-5" y="0"/>
+                          <AbsDimension x="0" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 135)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMCASTBY",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCASTBY",false)</OnLeave>
                     </Scripts>
@@ -11350,23 +11308,9 @@
                       </Anchor>
                     </Anchors>
                   </Button>
-                  <CheckButton name="HealBot_Options_CDCReverseDurC" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_CDCCastBy" relativePoint="RIGHT">
-                        <Offset>
-                          <AbsDimension x="0" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_RevDurCDebuffBtn_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMREVDUR",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMREVDUR",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <Button name="HealBot_Options_DeleteCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
                     <Size>
-                      <AbsDimension x="95" y="22"/>
+                      <AbsDimension x="125" y="22"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
@@ -11436,7 +11380,7 @@
                           <Anchors>
                             <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableCDBtn" relativePoint="RIGHT">
                               <Offset>
-                                <AbsDimension x="8" y="0"/>
+                                <AbsDimension x="15" y="0"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -11444,7 +11388,7 @@
                       </Layer>
                     </Layers>
                     <Size>
-                      <AbsDimension x="95" y="22"/>
+                      <AbsDimension x="125" y="22"/>
                     </Size>
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_DeleteCDebuffBtn" relativePoint="RIGHT">
@@ -11476,7 +11420,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="50" y="-70"/>
+                          <AbsDimension x="10" y="-70"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11506,7 +11450,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="62" y="-73"/>
+                          <AbsDimension x="22" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11518,7 +11462,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-73"/>
+                          <AbsDimension x="165" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11535,7 +11479,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-73"/>
+                          <AbsDimension x="165" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -11596,7 +11540,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="375" y="-73"/>
+                          <AbsDimension x="345" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13186,12 +13130,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-140" />
+                          <AbsDimension x="50" y="-140" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 240)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBUFF",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFF",false)</OnLeave>
                     </Scripts>
@@ -13213,7 +13157,7 @@
                       <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="RIGHT">
                         <Offset>
-                          <AbsDimension x="-5" y="0"/>
+                          <AbsDimension x="0" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13250,7 +13194,7 @@
                   </Button>
                   <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
                     <Size>
-                      <AbsDimension x="95" y="22"/>
+                      <AbsDimension x="125" y="22"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
@@ -13272,7 +13216,7 @@
                           <Anchors>
                             <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableBuffBtn" relativePoint="RIGHT">
                               <Offset>
-                                <AbsDimension x="8" y="0"/>
+                                <AbsDimension x="15" y="0"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -13280,12 +13224,12 @@
                       </Layer>
                     </Layers>
                     <Size>
-                      <AbsDimension x="95" y="22"/>
+                      <AbsDimension x="125" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_DeleteBuffHoTBtn" relativePoint="RIGHT">
                         <Offset>
-                          <AbsDimension x="120" y="-8"/>
+                          <AbsDimension x="10" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13312,7 +13256,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="50" y="-70"/>
+                          <AbsDimension x="10" y="-70"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13342,7 +13286,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="62" y="-73"/>
+                          <AbsDimension x="22" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13354,7 +13298,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-73"/>
+                          <AbsDimension x="165" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13371,7 +13315,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-73"/>
+                          <AbsDimension x="165" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13418,7 +13362,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="375" y="-73"/>
+                          <AbsDimension x="345" y="-73"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

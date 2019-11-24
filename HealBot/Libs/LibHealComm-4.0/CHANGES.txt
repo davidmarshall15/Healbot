@@ -1,76 +1,122 @@
-tag 321a2d81da34c1ddfab70c4e626e11a057158a4c v1.7.0
+tag 3fb083cea200c32b268b943fff919108a6fc6ba5 v1.7.2
 Author:	Azilroka <darktemplar9900@yahoo.com>
-Date:	Thu Nov 14 21:36:09 2019 -0600
+Date:	Fri Nov 22 11:01:25 2019 -0600
 
-commit f34820868408505c995e88ecf2f7a9f68ef8a30c
+commit 5998d628c318f2ca66030d8290f4a66ce19e95d2
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Thu Nov 14 21:33:04 2019 -0600
+Date:   Fri Nov 22 11:00:54 2019 -0600
 
-    Minor 77
+    Minor 82
 
-commit 1e64ee748231513ed23c0ca0ef84cdfc8b7558b1
+commit 69dffe763ecb847960f0ad978897f19abe74d3e0
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Thu Nov 14 17:48:53 2019 -0600
+Date:   Thu Nov 21 18:20:21 2019 -0600
 
-    Bump Minor
+    Bump Minor 81
 
-commit 94d436913055e3aa35bfc8d945556c2c95fb778c
+commit 69dffe763ecb847960f0ad978897f19abe74d3e0
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Thu Nov 14 17:48:29 2019 -0600
+Date:   Thu Nov 21 18:20:21 2019 -0600
 
-    Patch from dev7355608
+    Bump Minor 81
 
-commit 6e24321bf6d2422d23069943f6f6a6dc7a2fc853
+commit 69dffe763ecb847960f0ad978897f19abe74d3e0
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Wed Nov 13 16:50:37 2019 -0600
+Date:   Thu Nov 21 18:20:21 2019 -0600
 
-    Minor 75
+    Bump Minor 81
 
-commit 743e98d39e132b5222a49c16d04d57524a470cef
+commit 04b78aaf4585cfff8325c62a0b542b4debd0dc4d
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Wed Nov 13 15:29:13 2019 -0600
+Date:   Thu Nov 21 18:19:24 2019 -0600
 
-    Minor 74
+    Merge Requests (Manually Inputted)
 
-commit ad2b2f377d669fb6e6a215b31d185c8bbb9e8982
+commit 5ba3eedc8285583c6c1e92c36daa5be71ba9f5b3
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Wed Nov 20 15:05:02 2019 +0100
+
+    Add GetHealTargets for First Aid
+
+commit 699ca5b3b0f1959facc728da470847556bd2a29d
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Wed Nov 20 03:43:03 2019 +0100
+
+    Remove redundant code in UNIT_SPELLCAST_SUCCEEDED
+    
+    We do not need it, because it is already handled by SPELL_AURA_APPLIED.
+
+commit 69a7f96dae2fa8c449af1ba146a7b81f2ba4a8c2
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Tue Nov 19 16:31:24 2019 +0100
+
+    Improve range check of Prayer of Healing
+
+commit 5ba3eedc8285583c6c1e92c36daa5be71ba9f5b3
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Wed Nov 20 15:05:02 2019 +0100
+
+    Add GetHealTargets for First Aid
+
+commit 699ca5b3b0f1959facc728da470847556bd2a29d
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Wed Nov 20 03:43:03 2019 +0100
+
+    Remove redundant code in UNIT_SPELLCAST_SUCCEEDED
+    
+    We do not need it, because it is already handled by SPELL_AURA_APPLIED.
+
+commit b7f1bfb2717667f58e79c2c3b94b1824d8d7ce01
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Wed Nov 20 03:34:30 2019 +0100
+
+    Improve spell ID detection in COMBAT_LOG_EVENT_UNFILTERED
+
+commit 377d4d41e46fff7da4801902a49db07f33475f13
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Tue Nov 19 21:04:45 2019 +0100
+
+    Fix range check of Prayer of Healing
+
+commit 69a7f96dae2fa8c449af1ba146a7b81f2ba4a8c2
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Tue Nov 19 16:31:24 2019 +0100
+
+    Improve range check of Prayer of Healing
+
+commit 97f06c77dbd1c4cce50a61460cfb31d5dc356c03
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Nov 12 16:03:47 2019 -0600
+Date:   Mon Nov 18 18:59:37 2019 -0600
 
-    Minor 73
+    Regrowth Coefficients
 
-commit d1e83bf24a95ef1dc3070c20301500a83c4a6be2
+commit d09b564097ef9a9a538a5b2695ecd2b4f087b17c
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Tue Nov 19 16:40:46 2019 +0100
+
+    Fix GetHealAmount returns 0 when Renew is applied
+
+commit 69a7f96dae2fa8c449af1ba146a7b81f2ba4a8c2
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Tue Nov 19 16:31:24 2019 +0100
+
+    Improve range check of Prayer of Healing
+
+commit 97f06c77dbd1c4cce50a61460cfb31d5dc356c03
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Nov 12 15:57:42 2019 -0600
+Date:   Mon Nov 18 18:59:37 2019 -0600
 
-    Bump Minor
+    Regrowth Coefficients
 
-commit 22ceb0cf38e804fc58f2bb60ae8a2204742a701e
+commit 6d3524972df59bfab964f2b41d817c8b547bdcd5
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Nov 12 15:54:46 2019 -0600
+Date:   Sun Nov 17 12:52:53 2019 -0600
 
-    Patches from dev7355608
+    More cleanup
 
-commit 0880b398ce805132bfd64252310eedf68e3aa14b
+commit aed87349fc47afdcc5ab25d2d295234a53ff2f6d
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Nov 10 22:02:39 2019 -0600
+Date:   Sun Nov 17 12:45:46 2019 -0600
 
-    Handle Hots in another table.. I want to rewrite this entire thing for a better table layout.
-
-commit e87193b353ede91a7a4884df07722b04493a3a0a
-Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Nov 10 10:28:48 2019 -0600
-
-    Merge from Siweia
-
-commit dcc3211b2ce8a7e46cd1ccf4e75e00f81dd9c406
-Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Nov 10 10:12:16 2019 -0600
-
-    bump minor
-
-commit 2f6506bd7edc3ff13b1325054ba2f5d260dfb0aa
-Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Sun Nov 10 10:11:27 2019 -0600
-
-    Rejuv hot sp should be 20% I do believe.
+    Cleaning up / Patches
 

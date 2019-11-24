@@ -2587,7 +2587,7 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
         self:SetValue(val) 
     else
         HealBot_Globals.CacheSize = val
-        HealBot_setLuVars("CacheSize", val*5)
+        HealBot_setLuVars("CacheSize", val*4)
     end
 end
 
@@ -2753,22 +2753,6 @@ function HealBot_Options_AutoShow_OnClick(self)
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
 end
 
-function HealBot_Options_IgnoreDebuffsClass_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Config_Cures.IgnoreClassDebuffs = true
-    else
-        HealBot_Config_Cures.IgnoreClassDebuffs = false
-    end
-end
-
-function HealBot_Options_IgnoreDebuffsNoHarm_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Config_Cures.IgnoreNonHarmfulDebuffs = true
-    else
-        HealBot_Config_Cures.IgnoreNonHarmfulDebuffs = false
-    end
-end
-
 function HealBot_Options_IgnoreDebuffsDuration_OnClick(self)
     if self:GetChecked() then
         HealBot_Config_Cures.IgnoreFastDurDebuffs = true
@@ -2783,6 +2767,7 @@ function HealBot_Options_IgnoreDebuffsCoolDown_OnClick(self)
     else
         HealBot_Config_Cures.IgnoreOnCooldownDebuffs = false
     end
+    HealBot_ResetDebuffCache()
 end
 
 function HealBot_Options_IgnoreDebuffsFriend_OnClick(self)
@@ -2801,14 +2786,6 @@ function HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(self)
         HealBot_Config_Cures.IgnoreFastDurDebuffsSecs = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v.." secs");
-    end
-end
-
-function HealBot_Options_IgnoreDebuffsMovement_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Config_Cures.IgnoreMovementDebuffs = true
-    else
-        HealBot_Config_Cures.IgnoreMovementDebuffs = false
     end
 end
 
@@ -3162,7 +3139,7 @@ function HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)
     else
         HealBot_Config_Buffs.CBshownHB = false
     end
-    HealBot_ClearAllBuffs()
+    --HealBot_ClearAllBuffs()
     HealBot_setOptions_Timer(30)
 end
 
@@ -8134,11 +8111,7 @@ function HealBot_Options_ShareCDebuffb_OnClick()
             else
                 ssStr=ssStr..",,,"
             end
-            if HealBot_Globals.HealBot_Custom_Debuffs_RevDur[dId] then
-                ssStr=ssStr.."true,"
-            else
-                ssStr=ssStr.."false,"
-            end
+            ssStr=ssStr.."false," -- This was Reverse Duration, no longer used.
             if HealBot_Globals.IgnoreCustomDebuff[dId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomDebuff[dId]) do
                     ssStr=ssStr..(instName)..","
@@ -8176,13 +8149,12 @@ function HealBot_Options_LoadCDebuffb_OnClick()
                 local g=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["G"]
                 local b=HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"]["B"]
                 HealBot_Globals.CDCBarColour={ [HEALBOT_CUSTOM_en.."15"] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
-                HealBot_Globals.HealBot_Custom_Debuffs_RevDur={}
                 HealBot_Globals.IgnoreCustomDebuff={}
                 HealBot_Globals.CatchAltDebuffIDs={}
             end
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
-                local dId,prio,filter,show,r,g,b,revdur,i1,i2,i3,i4=string.split(",", d)
+                local dId,prio,filter,show,r,g,b,_notused,i1,i2,i3,i4=string.split(",", d)
                 c=tonumber(c)
                 dId=tonumber(dId) or dId
                 prio=tonumber(prio)
@@ -8208,9 +8180,6 @@ function HealBot_Options_LoadCDebuffb_OnClick()
                         HealBot_Globals.CDCBarColour[dId]["B"]=b
                     elseif HealBot_Globals.CDCBarColour[dId] then
                         HealBot_Globals.CDCBarColour[dId]=nil
-                    end
-                    if show=="revdur" then
-                        HealBot_Globals.HealBot_Custom_Debuffs_RevDur[dId]=true
                     end
                     if string.len(i1)>0 then 
                         if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
@@ -9260,7 +9229,7 @@ function HealBot_Options_CDCPriorityC_DropDown()
                             cName=HealBot_Options_StorePrev["CDebuffcustomName"]
                             HealBot_Globals.HealBot_Custom_Debuffs[cName] = x
                             HealBot_Options_CDC_checkStatus(cName)
-                            HealBot_CheckAllActiveDebuffs()
+                            HealBot_CheckAllActiveDebuffs(true)
                         end
                         UIDropDownMenu_SetSelectedID(HealBot_Options_CDCPriorityC,x) 
                         HealBot_Options_setCustomDebuffList()
@@ -9529,7 +9498,6 @@ function HealBot_Options_CDebuffCatNameUpdate()
         HealBot_Options_DeleteCDebuffBtn:Disable();
         HealBot_Options_ResetCDebuffBtn:Disable();
         HealBot_Options_NewCDebuffBtn:Disable();
-        HealBot_Options_CDCReverseDurC:Hide()
         HealBot_Options_CDCCastBy:Hide();
         HealBot_Options_CDCCastByCustom:Show()
         HealBot_Options_CDCPriorityCustom:Show()
@@ -9547,7 +9515,6 @@ function HealBot_Options_CDebuffCatNameUpdate()
         if HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomNameDefault"]] then
             HealBot_Options_StorePrev["customDebuffPriority"]=HealBot_GlobalsDefaults.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomNameDefault"]]
         end
-        HealBot_Options_CDCReverseDurC:Show()
         HealBot_Options_CDCCastByCustom:Hide()
         HealBot_Options_CDCPriorityCustom:Hide()
         HealBot_Options_CDCCastBy:Show();
@@ -9633,7 +9600,10 @@ end
 function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
     local name, _, _, _, _, _, spellId = GetSpellInfo(NewCDebuffTxt)
     local useId=NewCDebuffTxt
-    if spellId then useId=spellId end
+    if spellId then 
+        useId=spellId 
+        HealBot_DeleteExcludeDebuffInCache(spellId)
+    end
     if not name then name=NewCDebuffTxt end
     local unique=true;
     for k, _ in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
@@ -9744,11 +9714,10 @@ function HealBot_Options_DeleteCDebuff(dId)
     HealBot_Globals.Custom_Debuff_Categories[dId]=nil;
     HealBot_Globals.HealBot_Custom_Debuffs[dId]=nil;
     if HealBot_Globals.CDCBarColour[dId] then HealBot_Globals.CDCBarColour[dId]=nil end
-    HealBot_Globals.HealBot_Custom_Debuffs_RevDur[dId]=nil
     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=nil
     if HealBot_Globals.FilterCustomDebuff[dId] then HealBot_Globals.FilterCustomDebuff[dId]=nil end
     HealBot_Globals.IgnoreCustomDebuff[dId]=nil
-    HealBot_DelDebuffCache(dId)
+    HealBot_ResetDebuffCache(dId)
     HealBot_Options_InitSub(402)
     HealBot_Options_InitSub(403)
     HealBot_Options_InitSub(404)
@@ -9756,7 +9725,7 @@ function HealBot_Options_DeleteCDebuff(dId)
     HealBot_setOptions_Timer(30)
     HealBot_SetCDCBarColours();
     HealBot_Options_CDebuffResetList()
-    HealBot_CheckAllActiveDebuffs()
+    HealBot_CheckAllActiveDebuffs(true)
 end
 
 function HealBot_Options_DeleteCDebuffBtn_OnClick()
@@ -9771,7 +9740,7 @@ function HealBot_Options_DeleteBuffHoT(classTr, sId)
     HealBot_Globals.HealBot_Custom_Buffs[sId]=nil
     HealBot_Globals.CustomBuffBarColour[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sId]=nil
-    HealBot_DelBuffCache(sId)
+    HealBot_ResetBuffCache(sId)
     HealBot_setOptions_Timer(20)
     HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(169)
@@ -9794,7 +9763,7 @@ function HealBot_Options_EnableDisableCDBtn_OnClick(self)
         HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]][InstName]=true
     end
     HealBot_Options_SetEnableDisableCDBtn()
-    HealBot_DelDebuffCache(HealBot_Options_StorePrev["CDebuffcustomName"])
+    HealBot_ResetDebuffCache(HealBot_Options_StorePrev["CDebuffcustomName"])
     HealBot_setOptions_Timer(20)
     HealBot_setOptions_Timer(30)
 end
@@ -9805,11 +9774,11 @@ function HealBot_Options_SetEnableDisableCDBtn()
     local dName=HealBot_Options_CDebuffTextID(HealBot_Options_StorePrev["CDebuffcustomName"])
     if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]] and HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomName"]][InstName] then
         HealBot_Options_EnableDisableCDText:SetTextColor(0.88,0.1,0.1)
-        HealBot_Options_EnableDisableCDText:SetText(InstName..": "..dName.." "..HEALBOT_SKIN_DISTEXT)
+        HealBot_Options_EnableDisableCDText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
         HealBot_Options_EnableDisableCDBtn:SetText(HEALBOT_WORD_ENABLE)
     elseif HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Options_StorePrev["CDebuffCatID"]>1 then
         HealBot_Options_EnableDisableCDText:SetTextColor(0.1,1,0.1)
-        HealBot_Options_EnableDisableCDText:SetText(InstName..": "..dName.." "..HEALBOT_SKIN_ENTEXT)
+        HealBot_Options_EnableDisableCDText:SetText(InstName..": "..HEALBOT_SKIN_ENTEXT)
         HealBot_Options_EnableDisableCDBtn:SetText(HEALBOT_WORD_DISABLE)
     else
         HealBot_Options_EnableDisableCDText:SetTextColor(0.7,0.7,0)
@@ -9830,6 +9799,7 @@ function HealBot_Options_EnableDisableBuffBtn_OnClick(self)
         end
         HealBot_Globals.IgnoreCustomBuff[sId][InstName]=true
     end
+    HealBot_ResetBuffCache(sId)
     HealBot_Options_SetEnableDisableBuffBtn()
 end
 
@@ -9840,11 +9810,11 @@ function HealBot_Options_SetEnableDisableBuffBtn()
     local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
     if HealBot_Globals.IgnoreCustomBuff[sId] and HealBot_Globals.IgnoreCustomBuff[sId][InstName] then
         HealBot_Options_EnableDisableBuffText:SetTextColor(0.88,0.1,0.1)
-        HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..bName.." "..HEALBOT_SKIN_DISTEXT)
+        HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
         HealBot_Options_EnableDisableBuffBtn:SetText(HEALBOT_WORD_ENABLE)
     elseif bName then
         HealBot_Options_EnableDisableBuffText:SetTextColor(0.1,1,0.1)
-        HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..bName.." "..HEALBOT_SKIN_ENTEXT)
+        HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..HEALBOT_SKIN_ENTEXT)
         HealBot_Options_EnableDisableBuffBtn:SetText(HEALBOT_WORD_DISABLE)
     else
         HealBot_Options_EnableDisableBuffText:SetTextColor(0.88,0.1,0)
@@ -9855,26 +9825,13 @@ function HealBot_Options_SetEnableDisableBuffBtn()
     HealBot_Options_BuffCatNameUpdate()
 end
 
-function HealBot_Options_RevDurCDebuffBtn_OnClick(self)
-    if self:GetChecked() then
-        if HealBot_Options_StorePrev["CDebuffcustomName"] and HealBot_Options_StorePrev["CDebuffCatID"]>1 then
-            HealBot_Globals.HealBot_Custom_Debuffs_RevDur[HealBot_Options_StorePrev["CDebuffcustomName"]] = true
-        else
-            HealBot_Options_CDCReverseDurC:SetChecked(0)
-        end
-    else
-        if HealBot_Options_StorePrev["CDebuffcustomName"] then
-            HealBot_Globals.HealBot_Custom_Debuffs_RevDur[HealBot_Options_StorePrev["CDebuffcustomName"]] = nil
-        end
-    end
-end
-
 function HealBot_Options_CDCAll_OnClick(self, debuffType)
     if self:GetChecked() then
         HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuffType]=true
     else
         HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuffType]=false
     end
+    HealBot_ResetDebuffCache()
 end
 
 function HealBot_Options_CDCAllBoss_OnClick(self, debuffType)
@@ -9883,6 +9840,7 @@ function HealBot_Options_CDCAllBoss_OnClick(self, debuffType)
     else
         HealBot_Config_Cures.AlwaysShowBoss=false
     end
+    HealBot_ResetDebuffCache()
 end
 
 function HealBot_Options_CDCAllBossStrict_OnClick(self, debuffType)
@@ -9891,6 +9849,7 @@ function HealBot_Options_CDCAllBossStrict_OnClick(self, debuffType)
     else
         HealBot_Config_Cures.AlwaysShowBossStrict=false
     end
+    HealBot_ResetDebuffCache()
 end
 
 function HealBot_Options_ResetCDebuff()
@@ -12821,7 +12780,6 @@ function HealBot_Options_InitSub2(subNo)
         HealBot_Options_CDebuffTxt1.initialize = HealBot_Options_CDebuffTxt1_DropDown
         local cdName=HealBot_Options_CDebuffTextID(HealBot_Options_StorePrev["CDebuffcustomName"]) 
         UIDropDownMenu_SetText(HealBot_Options_CDebuffTxt1, cdName)
-        HealBot_Options_CDCReverseDurC:SetChecked(HealBot_Globals.HealBot_Custom_Debuffs_RevDur[HealBot_Options_StorePrev["CDebuffcustomName"]] or false)
         local cdcBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HealBot_Options_StorePrev["CDebuffcustomName"]]
         HealBot_Options_CDCCol_OnOff:SetChecked(cdcBarCol)
         HealBot_Options_SetEnableDisableCDBtn()
@@ -12833,7 +12791,6 @@ function HealBot_Options_InitSub2(subNo)
         if HealBot_Options_StorePrev["CDebuffcustomName"] then
             if not HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomName"]] then HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomName"]]=x end;
             x=HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomName"]]
-            HealBot_Options_CDCReverseDurC:SetChecked(HealBot_Globals.HealBot_Custom_Debuffs_RevDur[HealBot_Options_StorePrev["CDebuffcustomName"]] or false)
             local cdcBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HealBot_Options_StorePrev["CDebuffcustomName"]]
             HealBot_Options_CDCCol_OnOff:SetChecked(cdcBarCol)
             HealBot_Options_SetEnableDisableCDBtn()
@@ -12887,15 +12844,9 @@ function HealBot_Options_InitSub2(subNo)
            -- HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,100,1)
             HealBot_Options_IgnoreDebuffsDuration:SetChecked(HealBot_Config_Cures.IgnoreFastDurDebuffs)
             HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsDuration,HEALBOT_OPTIONS_IGNOREDEBUFFDURATION)
-            HealBot_Options_IgnoreDebuffsMovement:SetChecked(HealBot_Config_Cures.IgnoreMovementDebuffs)
-            HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsMovement,HEALBOT_OPTIONS_IGNOREDEBUFFMOVEMENT)
             HealBot_Options_valtime_OnLoad(HealBot_Options_IgnoreDebuffsDurationSecs,HEALBOT_OPTIONS_HOTTEXTDURATION,1,5,1,true,1)
             HealBot_Options_IgnoreDebuffsDurationSecs:SetValue(HealBot_Config_Cures.IgnoreFastDurDebuffsSecs)
             HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(HealBot_Options_IgnoreDebuffsDurationSecs)
-            HealBot_Options_IgnoreDebuffsNoHarm:SetChecked(HealBot_Config_Cures.IgnoreNonHarmfulDebuffs)
-            HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsNoHarm,HEALBOT_OPTIONS_IGNOREDEBUFFNOHARM)
-            HealBot_Options_IgnoreDebuffsClass:SetChecked(HealBot_Config_Cures.IgnoreClassDebuffs)
-            HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsClass,HEALBOT_OPTIONS_IGNOREDEBUFFCLASS)
             HealBot_Options_IgnoreDebuffsCoolDown:SetChecked(HealBot_Config_Cures.IgnoreOnCooldownDebuffs)
             HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsCoolDown,HEALBOT_OPTIONS_IGNOREDEBUFFCOOLDOWN)
             HealBot_Options_IgnoreDebuffsFriend:SetChecked(HealBot_Config_Cures.IgnoreFriendDebuffs)
@@ -12927,7 +12878,6 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_CDCAllBoss,HEALBOT_OPTIONS_CUSTOM_ALLBOSS)
             HealBot_Options_CDCAllBossStrict:SetChecked(HealBot_Config_Cures.AlwaysShowBossStrict)
             HealBot_Options_SetText(HealBot_Options_CDCAllBossStrict,HEALBOT_OPTIONS_CUSTOM_ALLBOSSSTRICT)
-            HealBot_Options_SetText(HealBot_Options_CDCReverseDurC,HEALBOT_OPTIONS_CUSTOMDEBUFF_REVDUR)
             HealBot_Options_DeleteCDebuffBtn:SetText(HEALBOT_OPTIONS_DELSKIN)
             HealBot_Options_NewCDebuffBtn:SetText(HEALBOT_OPTIONS_SAVESKIN)
             HealBot_Options_NewBuffHoTBtn:SetText(HEALBOT_OPTIONS_SAVESKIN)

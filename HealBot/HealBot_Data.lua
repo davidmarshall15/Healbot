@@ -150,12 +150,9 @@ HealBot_Config_BuffsDefaults = {
 HealBot_Config_CuresDefaults = {
   SoundDebuffWarning = false,
   DebuffWatch = true,
-  IgnoreClassDebuffs = true,
-  IgnoreNonHarmfulDebuffs = true,
   IgnoreFastDurDebuffs = true,
   IgnoreFastDurDebuffsSecs=2,
   IgnoreOnCooldownDebuffs = false,
-  IgnoreMovementDebuffs = true,
   IgnoreFriendDebuffs = true,
   SoundDebuffPlay = HealBot_Default_Sounds[1].name,
   DebuffWatchInCombat = true,
@@ -348,7 +345,6 @@ function HealBot_Data_InitVars()
             [HEALBOT_SHROUD_OF_PURGATORY] = { R = 0.45, G = 0.34, B = 0.0, },
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = { R = 0.45, G = 0.34, B = 0.0, },
         },
-        HealBot_Custom_Debuffs_RevDur={},
         HealBot_Custom_Debuffs_ShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = true,
             [HEALBOT_SHROUD_OF_PURGATORY] = true,
