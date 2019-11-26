@@ -1153,24 +1153,24 @@ function HealBot_Lang_enALL()
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
     HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",  -- Mythago
-                                   [02] = "Nerak - Cenarion Circle",  -- Noobrak
-                                   [03] = "Slayybelle",
-                                   [04] = "SUNET",
-                                   [05] = "Daskills",
-                                   [06] = "killerdavy",
-                                   [07] = "zathrain",
-                                   [08] = "warhead0",
-                                   [09] = "Droodibaby",
-                                   [10] = "Byset",
-                                   [11] = "Redemption",
-                                   [12] = "Jaiseck",
-                                   [13] = "xtacie",
-                                   [14] = "bkwildlifecntrl",
-                                   [15] = "mlharg",
-                                   [16] = "Yuriusha",
-                                   [17] = "spicy_squid",
-                                   [18] = "Ameralanna_675",
-                                   [19] = "ninjoism",
+                                   [02] = "Slayybelle",
+                                   [03] = "SUNET",
+                                   [04] = "Daskills",
+                                   [05] = "killerdavy",
+                                   [06] = "zathrain",
+                                   [07] = "Droodibaby",
+                                   [08] = "Byset",
+                                   [09] = "Redemption",
+                                   [10] = "Jaiseck",
+                                   [11] = "xtacie",
+                                   [12] = "bkwildlifecntrl",
+                                   [13] = "mlharg",
+                                   [14] = "Yuriusha",
+                                   [15] = "spicy_squid",
+                                   [16] = "Ameralanna_675",
+                                   [17] = "ninjoism",
+                                   [18] = "nydiah",
+                                   [19] = "Getsemane",
                                 }
                                
 end

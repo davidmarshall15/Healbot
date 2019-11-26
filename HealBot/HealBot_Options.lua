@@ -2588,6 +2588,7 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
     else
         HealBot_Globals.CacheSize = val
         HealBot_setLuVars("CacheSize", val*4)
+        HealBot_Action_setLuVars("CacheSize", val*4)
     end
 end
 
@@ -2851,7 +2852,7 @@ function HealBot_Options_ShowClassOnBar_OnClick(self)
     else
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] = false
     end
-    HealBot_ResetClassIconTexture()
+    HealBot_setOptions_Timer(9950)
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
 end
 
@@ -4127,7 +4128,7 @@ function HealBot_Options_ShowClassOnBarType_OnClick(self,id)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSTYPE"]>0 then
         g=_G["HealBot_Options_ShowClassOnBarType"..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSTYPE"]]
         g:SetChecked(1);
-        HealBot_ResetClassIconTexture()
+        HealBot_setOptions_Timer(9950)
     end
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
 end
@@ -4147,7 +4148,7 @@ function HealBot_Options_ShowRoleOnBar_OnClick(self)
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWROLE"] = false
     end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSTYPE"]>0 then
-        HealBot_ResetClassIconTexture()
+        HealBot_setOptions_Timer(9950)
     end
     HealBot_Options_framesChanged(HealBot_Options_StorePrev["FramesSelFrame"])
 end
@@ -7700,6 +7701,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
         if not ddRefresh then
             DoneInitTab[305]=nil
             HealBot_Options_InitSub(305)
+            HealBot_setOptions_Timer(9950)
         end
         HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)

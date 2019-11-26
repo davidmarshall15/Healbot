@@ -111,6 +111,7 @@ local function HealBot_Panel_TankRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
     HealBot_SetTankUnit(unit)
+    HealBot_AddDebug(unit.." is MT")
 end
  
 local function HealBot_Panel_HealerRole(unit,guid)
@@ -349,7 +350,8 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
             HealBot_MyPrivateTanks[xGUID]=true
         end
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_Panel_buildDataStore(true, true)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -368,7 +370,8 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
             HealBot_MyPrivateHealers[xGUID]=true
         end
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_Panel_buildDataStore(true, true)
+    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)

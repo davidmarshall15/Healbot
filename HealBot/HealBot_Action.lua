@@ -25,6 +25,7 @@ HealBot_Action_luVars["UpdatedAggroBars"]=true
 HealBot_Action_luVars["UpdateFluidBars"]=true
 HealBot_Action_luVars["updateBucket"]=1
 HealBot_Action_luVars["updatePetBucket"]=1
+HealBot_Action_luVars["CacheSize"]=4
 HealBot_Action_luVars["clearSpellCache"]=true
 
 local hbStringSub=nil
@@ -35,6 +36,11 @@ if HealBot_Globals.useUTF8 then
 else
     hbStringSub=string.sub
     hbStringLen=string.len
+end
+
+function HealBot_Action_setLuVars(vName, vValue)
+    HealBot_Action_luVars[vName]=vValue
+    HealBot_setCall("HealBot_Action_setLuVars")
 end
 
 local function HealBot_Action_DoAggroIndicatorUpd(button)
@@ -902,7 +908,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
         button.status.current=9
         button.health.updincoming=true
         button.health.updabsorbs=true
-        button.health.update=true
+        HealBot_OnEvent_UnitHealth(button)
         HealBot_Action_UpdateBackgroundButton(button)
         if button.aura.debuff.name then  
             HealBot_ClearDebuff(button)
@@ -2642,12 +2648,10 @@ end
 
 function HealBot_Action_ResetUnitStatus(button)
     if button then
-        button.update.state=true
-        button.status.update=true
+        HealBot_Action_Refresh(button)
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.update.state=true
-            xButton.status.update=true
+            HealBot_Action_Refresh(xButton)
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
             xButton.update.state=true
@@ -2661,8 +2665,7 @@ end
 function HealBot_Action_ResetActiveUnitStatus()
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if not xButton.status.reserved and xButton.status.current>3 then
-            xButton.update.state=true
-            xButton.status.update=true
+            HealBot_Action_Refresh(xButton)
         end
     end
     for xUnit,xButton in pairs(HealBot_Pet_Button) do
@@ -2788,7 +2791,7 @@ local function HealBot_Action_PrepButton(button)
     button.status.update=0
     button.update.unit=true
     button.update.state=true
-    button.update.roleicon=false
+    button.update.roleicon=true
     button.update.targeticon=false
     button.status.range=-9
     button.status.unittype=1
@@ -3657,25 +3660,16 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             else
                 shb.status.range=-9
             end
-        elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"] then
-            shb.update.roleicon=true
         end
+        shb.update.roleicon=true
         shb.status.update=true
         if not HealBot_ResetBarSkinDone[shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
         if HealBot_Unit_Button[unit] then
             HealBot_Action_luVars["updateBucket"]=HealBot_Action_luVars["updateBucket"]+1
-            if HealBot_Action_luVars["updateBucket"]>4 then HealBot_Action_luVars["updateBucket"]=1 end
+            if HealBot_Action_luVars["updateBucket"]>3 then HealBot_Action_luVars["updateBucket"]=1 end
             HealBot_AddPlayerButtonCache(unit, HealBot_Action_luVars["updateBucket"])
-            if (HealBot_retLuVars("enTurbo") and HealBot_Panel_UnitRole(unit)=="HEALER") or
-              (HealBot_retLuVars("RangeCheckFreq")<0.2 and HealBot_Panel_UnitRole(unit)=="TANK") then
-                if HealBot_Action_luVars["updateBucket"]>2 then
-                    HealBot_AddPlayerButtonCache(unit, HealBot_Action_luVars["updateBucket"]-2)
-                else
-                    HealBot_AddPlayerButtonCache(unit, HealBot_Action_luVars["updateBucket"]+2)
-                end
-            end
         end
     else
         return nil
@@ -3777,15 +3771,10 @@ end
 HealBot_Action_luVars["PreCacheBars"]=1
 local hbMarkedDeleteButtons={}
 function HealBot_Action_DeleteMarkedButtons()
-    if #hbMarkedDeleteButtons>50 then
-        for i = 10, 1, -1 do
-            HealBot_Action_DeleteButton(hbMarkedDeleteButtons[i])
-            table.remove(hbMarkedDeleteButtons,i)
-        end
-    elseif hbMarkedDeleteButtons[1] then
+    if hbMarkedDeleteButtons[1] then
         HealBot_Action_DeleteButton(hbMarkedDeleteButtons[1])
         table.remove(hbMarkedDeleteButtons,1)
-    elseif HealBot_Action_luVars["PreCacheBars"]<HealBot_retLuVars("CacheSize") then
+    elseif HealBot_Action_luVars["PreCacheBars"]<HealBot_Action_luVars["CacheSize"] then
         HealBot_Action_luVars["PreCacheBars"]=HealBot_Action_luVars["PreCacheBars"]+1
         local gn="HealBot_Action_HealUnit"..HealBot_Action_luVars["PreCacheBars"]
         local ghb=_G[gn]
@@ -3952,7 +3941,7 @@ function HealBot_Action_setPoint(hbCurFrame)
             HealBot_Action_CheckStuckFrames(hbCurFrame)
         end
     else
-        HealBot_setOptions_Timer(2000+hbCurFrame)
+        HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true)
     end
 end
 
@@ -5095,7 +5084,7 @@ function HealBot_Action_StickyFrame(hbCurFrame, HBframe)
                 end
             end
         else
-            HealBot_setOptions_Timer(2000+hbCurFrame) -- Came back with coords
+            HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true)
         end
         if not isSticky then
             hbStickyFrameGetCoords[hbCurFrame]=false

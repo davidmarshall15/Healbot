@@ -72,7 +72,7 @@ function HealBot_Comms_About()
 
     linenum=1
     for x,v in pairs(hbcommver) do
-        if not hbtmpver[x] and linenum<21 then
+        if not hbtmpver[x] and linenum<16 then
             HealBot_Comms_Print_IncHealsSum(x,v,0,linenum)
             linenum=linenum+1
         end
@@ -103,7 +103,7 @@ function HealBot_Comms_Print_Supports()
     for x,_ in pairs(sPeople) do
         sPeople[x]=false
     end 
-    for x=1,10 do
+    for x=1,15 do
         local g=_G["HBIncH"..x.."Supporter"]
         local s=HealBot_Globals.LastSupporter+x
         if not HEALBOT_SUPPORTERS_PEOPLE[s] then
@@ -116,7 +116,7 @@ function HealBot_Comms_Print_Supports()
             sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
         end
     end
-    if HEALBOT_SUPPORTERS_PEOPLE[11] then
+    if HEALBOT_SUPPORTERS_PEOPLE[16] then
         HealBot_Globals.LastSupporter=HealBot_Globals.LastSupporter+1
         local s=HealBot_Globals.LastSupporter+1
         if not HEALBOT_SUPPORTERS_PEOPLE[s] then

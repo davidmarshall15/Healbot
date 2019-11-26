@@ -644,17 +644,15 @@ local function HealBot_Action_DoRefreshTooltip()
                     end
                 end
             end
-            local tp=0
-            if UnitIsPlayer(xUnit) then tp=HealBot_CalcThreat(xUnit) end
             HealBot_Tooltip_luVars["uGroup"]=false
             if IsInRaid() then 
                 HealBot_Tooltip_luVars["uGroup"]=HealBot_RetUnitGroups(xUnit)
             end
-            if tp>0 or mana or (HealBot_Tooltip_luVars["uGroup"] and HealBot_Tooltip_luVars["uGroup"]>0) then
+            if UnitIsPlayer(xUnit) and xButton.aggro.threatpct>0 or mana or (HealBot_Tooltip_luVars["uGroup"] and HealBot_Tooltip_luVars["uGroup"]>0) then
                 if not mana or (maxmana and maxmana==0) then
-                    if tp>0 then
+                    if xButton.aggro.threatpct>0 then
                         linenum=linenum+1
-                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..tp.."%",1,0.1,0.1,1," ",0,0,0,0)
+                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1," ",0,0,0,0)
                     elseif HealBot_Tooltip_luVars["uGroup"] then
                         linenum=linenum+1
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1," ",0,0,0,0)
@@ -667,14 +665,14 @@ local function HealBot_Action_DoRefreshTooltip()
                     end
                     mana=HealBot_Tooltip_readNumber(mana)
                     maxmana=HealBot_Tooltip_readNumber(maxmana)
-                    if tp<1 then
+                    if xButton.aggro.threatpct<1 then
                         if HealBot_Tooltip_luVars["uGroup"] then
                             HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                         else
                             HealBot_Tooltip_SetLine(linenum," ",0,0,0,0,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                         end
                     else
-                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..tp.."%",1,0.1,0.1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
+                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                     end
                 end
             end
