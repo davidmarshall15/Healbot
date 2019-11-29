@@ -62,8 +62,6 @@ function HealBot_Lang_enALL()
     HEALBOT_POISON                          = "Poison";
 
     HB_TOOLTIP_OFFLINE                      = "Offline";
-    HB_OFFLINE                              = "offline"; -- has gone offline msg
-    HB_ONLINE                               = "online"; -- has come online msg
 
     HEALBOT_HEALBOT                         = "HealBot";
     HEALBOT_ADDON                           = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;

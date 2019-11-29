@@ -895,12 +895,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
             end
-            if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
-                button.update.targeticon=true
-            end
             button.aura.check=true
-            button.update.state=true
-            button.status.update=true
+            HealBot_Action_Refresh(button)
             button.health.updhealth=true
             button.health.update=true
         end
@@ -920,15 +916,14 @@ function HealBot_Action_UpdateTheDeadButton(button)
         if UnitIsUnit(button.unit,"player") then
             HealBot_Action_ResetActiveUnitStatus() 
         else
-            button.update.state=true
+            HealBot_Action_Refresh(button)
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
-            button.update.roleicon=true
+            HealBot_Action_SetClassIconTexture(button)
         end
         if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
-            button.update.targeticon=true
+            HealBot_OnEvent_RaidTargetUpdate(button)
         end
-        button.status.update=true
         local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         button.spells.rangecheck=HealBot_RangeSpells["RES"]
         HealBot_UpdateUnitRange(button,false)
@@ -1808,7 +1803,7 @@ function HealBot_Action_setNameText(button)
         end
     else
         uName=button.unit
-        HealBot_Action_ResetUnitStatus(button)
+        HealBot_Action_Refresh(button)
     end
 
     local stringLen=hbStringLen(string.gsub(uName, "%s+", ""))+1
@@ -2006,7 +2001,7 @@ local function HealBot_DoAction_ResetSkin(barType,button,numcols)
         --HealBot_Action_setHealthText(b)
         HealBot_Action_setTextLen(b.frame)
         HealBot_Action_setNameText(b)
-        HealBot_Action_ResetUnitStatus(b)
+        HealBot_Action_Refresh(b)
         bar = _G["HealBot_Action_HealUnit"..b.id.."Bar"]
         bar2 = _G["HealBot_Action_HealUnit"..b.id.."Bar2"]
         bar3 = _G["HealBot_Action_HealUnit"..b.id.."Bar3"]
@@ -2646,19 +2641,13 @@ function HealBot_Action_HidePanel(hbCurFrame)
     --HealBot_setCall("HealBot_Action_HidePanel")
 end
 
-function HealBot_Action_ResetUnitStatus(button)
-    if button then
-        HealBot_Action_Refresh(button)
-    else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            HealBot_Action_Refresh(xButton)
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.update.state=true
-            xButton.status.update=true
-        end
+function HealBot_Action_ResetUnitStatus()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Action_Refresh(xButton)
     end
-    --HealBot_setCall("HealBot_Action_ResetUnitStatus")
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Action_Refresh(xButton)
+    end
     --HealBot_setCall("HealBot_Action_ResetUnitStatus")
 end
 
@@ -2670,8 +2659,7 @@ function HealBot_Action_ResetActiveUnitStatus()
     end
     for xUnit,xButton in pairs(HealBot_Pet_Button) do
         if not xButton.status.reserved and xButton.status.current>3 then
-            xButton.update.state=true
-            xButton.status.update=true
+            HealBot_Action_Refresh(xButton)
         end
     end
     --HealBot_setCall("HealBot_Action_ResetActiveUnitStatus")
@@ -2788,11 +2776,7 @@ local function HealBot_Action_PrepButton(button)
     button.mana.current=0
     button.mana.max=0
     button.status.current=0
-    button.status.update=0
     button.update.unit=true
-    button.update.state=true
-    button.update.roleicon=true
-    button.update.targeticon=false
     button.status.range=-9
     button.status.unittype=1
     button.status.offline=false
@@ -3660,15 +3644,15 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             else
                 shb.status.range=-9
             end
+        else
+            HealBot_Action_SetClassIconTexture(shb)
         end
-        shb.update.roleicon=true
-        shb.status.update=true
         if not HealBot_ResetBarSkinDone[shb.id] then
             HealBot_Action_ResetSkin("bar",shb)
         end
         if HealBot_Unit_Button[unit] then
             HealBot_Action_luVars["updateBucket"]=HealBot_Action_luVars["updateBucket"]+1
-            if HealBot_Action_luVars["updateBucket"]>3 then HealBot_Action_luVars["updateBucket"]=1 end
+            if HealBot_Action_luVars["updateBucket"]>2 then HealBot_Action_luVars["updateBucket"]=1 end
             HealBot_AddPlayerButtonCache(unit, HealBot_Action_luVars["updateBucket"])
         end
     else
@@ -4362,13 +4346,12 @@ local function HealBot_Action_PreClick(self,button)
                 if HealBot_Data["TIPUSE"] and HealBot_Globals.ShowTooltip then 
                     HealBot_Action_RefreshTargetTooltip(self) 
                 end
-            elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() and 
-                   not HealBot_Data["UILOCK"] and not UnitAffectingCombat(self.unit) then
+            elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() and not HealBot_Data["UILOCK"] then
                 HealBot_Action_UseSmartCast(xButton)
             end
         elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and button=="MiddleButton" then
             HealBot_Action_Toggle_Enabled(self.unit)
-        elseif not HealBot_Data["UILOCK"] and not UnitAffectingCombat(self.unit) then
+        elseif not HealBot_Data["UILOCK"] then
             if HealBot_Globals.ProtectPvP then
                 if UnitIsPVP(self.unit) and not UnitIsPVP("player") then 
                     HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"nil",aj)

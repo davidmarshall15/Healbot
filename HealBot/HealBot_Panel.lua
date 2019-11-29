@@ -111,7 +111,6 @@ local function HealBot_Panel_TankRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
     HealBot_SetTankUnit(unit)
-    HealBot_AddDebug(unit.." is MT")
 end
  
 local function HealBot_Panel_HealerRole(unit,guid)
@@ -1501,6 +1500,8 @@ local function HealBot_Panel_addUnit(unit, hbGUID, isRaidGroup)
                 if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
                 HealBot_TrackNames[hbGUID]=true;
                 HealBot_Panel_insSort(unit, true)
+            elseif isRaidGroup then
+                HealBot_setNotVisible(unit,6)
             else
                 HealBot_setNotVisible(unit,0)
             end

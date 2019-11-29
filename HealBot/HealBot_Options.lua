@@ -2834,7 +2834,6 @@ function HealBot_Options_Energy()
     else
         HealBot_UnRegister_Mana()
     end
-    HealBot_setEnemyBars()
 end
 
 function HealBot_Options_ShowTooltipMyBuffs_OnClick(self)
@@ -7618,7 +7617,7 @@ function HealBot_Options_EmergencyFilter_Reset()
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_MONK]] = HealBot_Globals.EmergIncCustom[HEALBOT_MONK];
         end
     end
-    HealBot_setOptions_Timer(580)
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Options_retEmergInc(classTrim, frame)
