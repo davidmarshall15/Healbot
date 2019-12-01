@@ -1,0 +1,10 @@
+## Interface: 80205
+## Title: HealBot Data
+## Author: Strife
+## Notes: Adds a panel with skinable bars for healing, decursive, buffing, ressing, range checking and aggro tracking
+## RequiredDeps: HealBot_en
+## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures
+## SavedVariables: Healbot_Config_Skins, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures
+## Version: 8.2.5.0
+
+HealBot_Data.lua

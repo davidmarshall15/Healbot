@@ -6,4 +6,5 @@
 ## LoadOnDemand: 1
 ## Version: 8.2.5.5
 
+Locale\HealBot_Localization.en.lua
 HealBot_Tooltip.lua

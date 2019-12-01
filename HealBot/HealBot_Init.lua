@@ -1,7 +1,5 @@
 local SmartCast_Res=nil;
 local SmartCast_MassRes=nil;
-local tonumber=tonumber
-local strmatch=strmatch
 local HealBot_Heal_Names={}
 local HealBot_KnownHeal_Names={}
 local _

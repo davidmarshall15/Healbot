@@ -1,3 +1,4 @@
+local LSM = HealBot_Libs_LSM()
 local HealBot_Options_ComboButtons_Button=1;
 local HealBot_Options_Opened=false;
 local HealBot_Options_SoftReset_flag=false;
@@ -7,10 +8,6 @@ local HealBot_buffbarcolb = {};
 local HealBot_DebuffWatchTarget={}
 local HealBot_BuffWatchTarget={}
 local BuffTextClass=nil
-local strtrim=strtrim
-local strsub=strsub
-local tonumber=tonumber
-local floor=floor
 local DoneInitTab={}
 local hb_textures=nil
 local texturesIndex={}
@@ -19,7 +16,6 @@ local fontsIndex={}
 local sounds=nil
 local soundsIndex={}
 local updatingMedia=false
-local LSM = HealBot_retLSM() --LibStub("LibSharedMedia-3.0")
 local ClickedBuffGroupDD=nil
 local hbCurSkin=""
 local hbCurSkinSubFrameID=1001
@@ -160,6 +156,7 @@ function HealBot_Options_InitVars()
         }
     end
 end
+
 function HealBot_Options_setLists()
     
     HealBot_Options_setClassEn()
@@ -1007,11 +1004,6 @@ function HealBot_Options_InitBuffClassList()
     table.sort(HealBot_Buff_Spells_Class_List)
 end
 
-local HealBot_Buff_Items_Lookup={}
-function HealBot_Options_retItemID(itemName)
-    return HealBot_Buff_Items_Lookup[itemName]
-end
-
 function HealBot_Options_InitBuffList()
     HealBot_Buff_Spells_List ={}
     for j=1, getn(HealBot_Buff_Spells_Class_List), 1 do
@@ -1020,15 +1012,11 @@ function HealBot_Options_InitBuffList()
             table.insert(HealBot_Buff_Spells_List,spellName)
         end
     end
-    for x,_ in pairs(HealBot_Buff_Items_Lookup) do
-        HealBot_Buff_Items_Lookup[x]=nil
-    end 
     for j=1, getn(HealBot_Buff_Items_List), 1 do
         if IsUsableItem(HealBot_Buff_Items_List[j]) or HealBot_IsItemInBag(HealBot_Buff_Items_List[j]) then   
             local itemName=GetItemInfo(HealBot_Buff_Items_List[j])
             if itemName then 
                 table.insert(HealBot_Buff_Spells_List,itemName) 
-                HealBot_Buff_Items_Lookup[itemName]=HealBot_Buff_Items_List[j]
             end
         end
     end

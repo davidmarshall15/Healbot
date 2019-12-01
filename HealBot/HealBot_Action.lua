@@ -1,12 +1,9 @@
-local ceil=ceil;
-local floor=floor
 local hbBarTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
-local strsub=strsub
 local HealBot_ActiveButtons={[0]=1}
 local HealBot_RangeSpells={}
 local HealBot_AlwaysEnabled={}
 local HealBot_pcClass={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
-local LSM = HealBot_retLSM() --LibStub("LibSharedMedia-3.0") 
+local LSM = HealBot_Libs_LSM() --LibStub("LibSharedMedia-3.0") 
 local HealBot_ResetBarSkinDone={}
 local HealBot_Action_rCalls={}
 local _
@@ -1775,15 +1772,13 @@ function HealBot_Action_setNameText(button)
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==2 and UnitClass(button.unit) then
             local clTxt=UnitClass(button.unit)
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-                local hbRole=HealBot_Panel_UnitRole(button.unit)
+                local hbRole=HealBot_Panel_UnitRole(button.unit, button.guid)
                 if hbRole=="DAMAGER" then
                     clTxt=HEALBOT_WORD_DAMAGER
                 elseif hbRole=="HEALER" then
                     clTxt=HEALBOT_WORD_HEALER
                 elseif hbRole=="TANK" then
                     clTxt=HEALBOT_WORD_TANK
-                else
-                    clTxt=UnitClass(button.unit)
                 end
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
@@ -2812,6 +2807,7 @@ local function HealBot_Action_PrepButton(button)
     button.text.r=1
     button.text.g=1
     button.text.b=1
+    button.text.classtrim="XXXX"
     button.spec=" "
     button.reset=true 
     local ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
@@ -3598,7 +3594,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
     local shb=nil
     if hbGUID then
         local upUnit=false
-        shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
+        shb=HealBot_Unit_Button[unit] or HealBot_Enemy_Button[unit] or HealBot_Pet_Button[unit]
+        if not shb then shb=HealBot_Action_CreateButton(hbCurFrame) end
         if not shb then return nil end
         if shb.frame~=hbCurFrame then
             local gp=_G["f"..hbCurFrame.."_HealBot_Action"]
@@ -3779,9 +3776,9 @@ end
 function HealBot_Action_MarkDeleteButton(button)
     button:Hide()
     button.status.bar4=0
-    if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit]==button then HealBot_Unit_Button[button.unit]=nil end
-    if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit]==button then HealBot_Enemy_Button[button.unit]=nil end
-    if HealBot_Pet_Button[button.unit] and HealBot_Pet_Button[button.unit]==button then HealBot_Pet_Button[button.unit]=nil end
+    if HealBot_Unit_Button[button.unit] then HealBot_Unit_Button[button.unit]=nil end
+    if HealBot_Enemy_Button[button.unit] then HealBot_Enemy_Button[button.unit]=nil end
+    if HealBot_Pet_Button[button.unit] then HealBot_Pet_Button[button.unit]=nil end
     table.insert(hbMarkedDeleteButtons, button.id)
 end
 
@@ -3954,7 +3951,6 @@ function HealBot_Action_ClassColour(unit)
     else
         xClass = "WARR"
     end
-    --HealBot_setCall("HealBot_Action_ClassColour")
     return hbClassCols[xClass].r, hbClassCols[xClass].g, hbClassCols[xClass].b
 end
 
