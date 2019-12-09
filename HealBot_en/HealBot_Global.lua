@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.2.5.7.b1";
+﻿HEALBOT_VERSION    = "8.2.5.7.b2";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "https://healbot.dpm15.net/"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.12.b1" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.2.12.b2" end
 
 function HealBot_globalVars()
     --Consumables
@@ -234,7 +234,9 @@ function HealBot_globalVars()
     --Warlock
     HEALBOT_HEALTH_FUNNEL                   = 755 --GetSpellInfo(755) or "--Health Funnel";
 
-    
+    HBC_INSPELLS = { [5185]=55,    [5186]=119,   [5187]=253,   [5188]=459,   [5189]=712,   [6778]=914,  -- Healing Touch
+                     [8903]=1143,  [9758]=1453,  [9888]=1826,  [9889]=2257,  [25297]=2677,              -- Healing Touch
+                   }
     --Buffs, Talents, Traits, Glyphs and Other Spells By Class
     --Death Knight
     HEALBOT_ANTIMAGIC_SHELL                 = 48707 --GetSpellInfo(48707) or "--Antimagic Shell";

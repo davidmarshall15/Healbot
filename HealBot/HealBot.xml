@@ -3,6 +3,7 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
   <Script file="HealBot_Init.lua" />
+  <Script file="HealBot_Aura.lua" />
   <Script file="HealBot.lua" />
   
   <!-- Comment Syntax -->
