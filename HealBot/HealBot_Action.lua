@@ -661,9 +661,9 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Aura_ClearDebuff(button)
         end
         if button.aggro.status>0 then
-            HealBot_Action_UpdateAggro(button.unit,false,nil,0)
+            HealBot_Action_UpdateAggro(button.unit,false,0,0,"")
         end
-        HealBot_Aura_HoT_HideIconButton(button)
+        HealBot_Aura_RemoveIcons(button)
         if UnitIsUnit(button.unit,"player") then
             HealBot_Action_ResetActiveUnitStatus() 
         else
@@ -2188,7 +2188,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 HealBot_Unit_Button[unit]=tSetHealButton
                 tSetHealButton.status.unittype = unitType  -- 8=enemy without events  9=enemy with events
             end
-            
             if tSetHealButton.status.offline and UnitIsConnected(unit) then
                 tSetHealButton.status.offline=false
             end
@@ -2198,6 +2197,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             vSetHealUnitUpdate=true
         end
         if vSetHealUnitUpdate or unit=="target" or unit=="focus" or unitType==9 then
+            tSetHealButton.text.r,tSetHealButton.text.g,tSetHealButton.text.b=HealBot_Action_ClassColour(unit)
+            tSetHealButton.text.update=true
             HealBot_Action_ResetrCallsUnit(unit)
             HealBot_Aura_setUnitIcons(unit)
             tSetHealButton.spells.rangecheck=HealBot_RangeSpells["HEAL"]
@@ -2532,10 +2533,6 @@ function HealBot_Action_ClassColour(unit)
     return hbClassCols[xClass].r, hbClassCols[xClass].g, hbClassCols[xClass].b
 end
 
-function HealBot_Action_setClassColour(button)
-    button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit)
-end
-
 function HealBot_Action_HideTooltip(self)
     if HealBot_Data["TIPUNIT"] then
         HealBot_Data["TIPUNIT"] = false;
@@ -2647,7 +2644,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
             vUnitOnEnterHighlight=true
         end
         if vUnitOnEnterHighlight then
-            HealBot_Action_UpdateAggro(self.unit,"highlight",self.aggro.status or 0, self.aggro.threatpct)
+            HealBot_Action_UpdateAggro(self.unit,true,self.aggro.status, self.aggro.threatpct,"highlight")
         end
     end
     HealBot_MountsPets_lastbutton(self)
@@ -2661,7 +2658,7 @@ function HealBot_Action_HealUnit_OnLeave(self)
         HealBot_Action_HideDirectionArrow(self)
     end
     if self.aggro and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][self.frame]["CBAR"] and self.aggro.status==-1 then
-        HealBot_Action_UpdateAggro(self.unit,"off",self.aggro.status or 0, 0)
+        HealBot_Action_UpdateAggro(self.unit,false,self.aggro.status, 0,"")
     end
     HealBot_MountsPets_lastbutton(false)
    -- ClearOverrideBindings(HealBot_Action)

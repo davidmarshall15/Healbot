@@ -115,7 +115,7 @@ end
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
 local adaButton={}
 local adaBar=false
-function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
+function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct,extra)
     if HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit] then
         adaButton=HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit]
         tConcat[1]="HealBot_Action_HealUnit"
@@ -127,29 +127,21 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
             if UnitIsDeadOrGhost(unit) and not UnitIsFeignDeath(unit) then
                 status=false
                 threatPct=0
-                if threatStatus then threatStatus=0 end
+                threatStatus=0
             end
-            if threatStatus and (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARSPCT"] or 
-                                 Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWTEXTPCT"]) then
-                if not threatPct then threatPct=HealBot_CalcThreat(unit) end
-                if threatPct>0 then
-                    if threatStatus==0 then
-                        threatStatus=1
-                        if not status then status=true end
-                    end
-                elseif threatStatus==3 then
-                    threatpct=100
-                elseif threatStatus==2 then
-                    if threatpct<25 then threatpct=50 end
-                elseif threatStatus==1 then
-                    if threatpct<10 then threatpct=25 end
-                else
-                    threatpct=0
-                end
-            else
-                if not threatStatus then threatStatus=0 end
-                threatpct=0
-            end
+        --    if threatStatus and (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARSPCT"] or 
+        --                         Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWTEXTPCT"]) then
+        --        if not threatPct then threatPct=HealBot_CalcThreat(unit) end
+        --        if threatPct>0 and threatStatus==0 then 
+        --            threatStatus=1
+        --        elseif threatStatus==3 then
+        --            threatpct=100
+        --        elseif threatStatus==2 then
+        --            if threatpct<25 then threatpct=50 end
+        --        elseif threatStatus==1 then
+        --            if threatpct<10 then threatpct=25 end
+        --        end
+        --    end
             if status then
                 if HealBot_Config_Cures.CDCshownAB and adaButton.aura.debuff.type then
                     threatStatus=debuffCodes[adaButton.aura.debuff.type]
@@ -158,14 +150,10 @@ function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct)
                 elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOW"] and 
                        threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["ALERT"] then
                     threatStatus=threatStatus or 0
-                elseif status=="target" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["TBAR"] then
+                elseif extra=="target" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["TBAR"] then
                     threatStatus=-2
-                elseif status=="highlight" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["CBAR"] then
+                elseif extra=="highlight" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["CBAR"] then
                     threatStatus=-1
-                elseif adaButton.aggro.status<0 and status=="off" then
-                    threatStatus=0
-                else
-                    threatStatus=threatStatus or 0
                 end
                 if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOW"] and 
                    Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWIND"] then
