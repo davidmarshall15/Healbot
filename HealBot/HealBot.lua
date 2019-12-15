@@ -3220,15 +3220,18 @@ function HealBot_OnEvent_UnitHealth(button)
     if button.health.updincoming then HealBot_HealsInUpdate(button) end
     if button.health.updabsorbs then HealBot_AbsorbsUpdate(button) end
     if UnitExists(button.unit) then
-        if HealBot_luVars["adjMaxHealth"] then HealBot_MaxHealth() end
-        health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
+        if UnitIsFeignDeath(button.unit) then
+            health,healthMax=button.health.current,button.health.max
+        else
+            if HealBot_luVars["adjMaxHealth"] then HealBot_MaxHealth() end
+            health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
+        end
         if (health~=button.health.current) or (healthMax~=button.health.max) then
             if HEALBOT_GAME_VERSION<4 then HealBot_OnEvent_UnitThreat(button) end
             if healthMax~=100 or not HealBot_Panel_RaidUnitGUID(button.guid) or button.health.max<200 then
                 button.health.current=health
                 button.health.max=healthMax
             end
-            --HealBot_Text_setHealthText(button)
             HealBot_Action_UpdateHealthButton(button)
         elseif not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
             ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
@@ -3238,7 +3241,6 @@ function HealBot_OnEvent_UnitHealth(button)
                 if bptc>100 then bptc=100 end
             end
             if ebubar:GetValue()~=bptc then 
-                --HealBot_Text_setHealthText(button)
                 HealBot_Action_UpdateHealthButton(button)
             end
         end

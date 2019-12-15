@@ -634,6 +634,7 @@ function HealBot_Action_UpdateBuffButton(button)
 end
 
 local ripBar=false
+local ripHasRes={}
 local ripPlayerBuffsList={}
 function HealBot_Action_UpdateTheDeadButton(button)
      if button.status.current==9 then
@@ -650,6 +651,14 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Action_Refresh(button)
             button.health.updhealth=true
             button.health.update=true
+        elseif UnitHasIncomingResurrection(button.unit) then
+            if not ripHasRes[button.unit] then
+                ripHasRes[button.unit]=true
+                button.text.update=true
+            end
+        elseif ripHasRes[button.unit] then
+            ripHasRes[button.unit]=false
+            button.text.update=true
         end
     elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
         button.status.current=9

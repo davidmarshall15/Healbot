@@ -9744,7 +9744,6 @@ function HealBot_Options_DeleteBuffHoT(classTr, sId)
     HealBot_Globals.HealBot_Custom_Buffs[sId]=nil
     HealBot_Globals.CustomBuffBarColour[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sId]=nil
-    HealBot_ResetBuffCache(sId)
     HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(169)
     HealBot_setOptions_Timer(170)
@@ -9801,7 +9800,6 @@ function HealBot_Options_EnableDisableBuffBtn_OnClick(self)
         end
         HealBot_Globals.IgnoreCustomBuff[sId][InstName]=true
     end
-    HealBot_ResetBuffCache(sId)
     HealBot_Options_SetEnableDisableBuffBtn()
 end
 

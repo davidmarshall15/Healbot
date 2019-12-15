@@ -703,7 +703,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
                     debuffIsCustom=true
                 end
             end
-        elseif UnitIsUnit(uaUnitCaster,"player") and UnitIsEnemy(button.unit, "player") then
+        elseif UnitIsUnit(uaUnitCaster,"player") then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=20
         else
