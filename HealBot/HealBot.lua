@@ -1576,15 +1576,15 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        if HealBot_luVars["enTurbo"] then
-            HealBot_Timers["slowUpdateFreq"]=HealBot_Comm_round((1+(HealBot_luVars["RangeCheckFreq"]*20))/(HealBot_luVars["qaFR"]/4), 4)
-        elseif HealBot_luVars["enSlowMo"] then
-            HealBot_Timers["slowUpdateFreq"]=HealBot_Comm_round((1+(HealBot_luVars["RangeCheckFreq"]*40))/(HealBot_luVars["qaFR"]/4), 4)
-        else
-            HealBot_Timers["slowUpdateFreq"]=HealBot_Comm_round((1+(HealBot_luVars["RangeCheckFreq"]*30))/(HealBot_luVars["qaFR"]/4), 4)
-        end
         HealBot_Timers["fastUpdateFreq"]=HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]*5)/(HealBot_luVars["qaFR"]/2), 4)
         HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/8)
+        if HealBot_luVars["enTurbo"] then
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*7)
+        elseif HealBot_luVars["enSlowMo"] then
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
+        else
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*9)
+        end
     else
         HealBot_Timers["slowUpdateFreq"]=1
         HealBot_Timers["fastUpdateFreq"]=1
@@ -2644,7 +2644,6 @@ local function HealBot_OnEvent_VariablesLoaded(self)
         if HealBot_Config.Profile==2 then
             HealBot_Options_hbProfile_setClass()
         end
-        HealBot_Init_Spells_Defaults();
         local pRace, pRaceEN=UnitRace("player")
         HealBot_Data["PRACE_EN"]=pRaceEN
         HealBot_Data["PNAME"]=UnitName("player")
@@ -2858,7 +2857,13 @@ end
 
 local function HealBot_Options_Update()
     HealBot_Action_DeleteMarkedButtons()
-    if HealBot_Options_Timer[150] then
+    if HealBot_Options_Timer[2] then
+        HealBot_OnEvent_PlayerEnteringWorld("OnUpdate")
+        HealBot_Options_Timer[2]=nil
+    elseif HealBot_Options_Timer[3] then
+        HealBot_OnEvent_PlayerRegenDisabled()
+        HealBot_Options_Timer[3]=nil
+    elseif HealBot_Options_Timer[150] then
         HealBot_Skins_ResetSkin("init")
         HealBot_Options_Timer[150]=nil
     elseif HealBot_Options_Timer[5] then
@@ -3626,28 +3631,30 @@ local function HealBot_Update_Slow()
             end
         end
     end
-    HealBot_luVars["slowUnitSwitch"]=HealBot_luVars["slowUnitSwitch"]+1
-    if HealBot_luVars["slowUnitSwitch"]<2 then
-        for xUnit,_ in pairs(HealBot_Player_ButtonCache1) do
-            if HealBot_Unit_Button[xUnit] then
-                HealBot_UnitSlowUpdateFriendly(HealBot_Unit_Button[xUnit])
-            else
-                HealBot_nextRecalcParty(6)
+    if not HealBot_Panel_retTestBars() then 
+        HealBot_luVars["slowUnitSwitch"]=HealBot_luVars["slowUnitSwitch"]+1
+        if HealBot_luVars["slowUnitSwitch"]<2 then
+            for xUnit,_ in pairs(HealBot_Player_ButtonCache1) do
+                if HealBot_Unit_Button[xUnit] then
+                    HealBot_UnitSlowUpdateFriendly(HealBot_Unit_Button[xUnit])
+                else
+                    HealBot_nextRecalcParty(6)
+                end
             end
-        end
-    elseif HealBot_luVars["slowUnitSwitch"]<3 then
-        for xUnit,_ in pairs(HealBot_Player_ButtonCache2) do
-            if HealBot_Unit_Button[xUnit] then
-                HealBot_UnitSlowUpdateFriendly(HealBot_Unit_Button[xUnit])
-            else
-                HealBot_nextRecalcParty(6)
+        elseif HealBot_luVars["slowUnitSwitch"]<3 then
+            for xUnit,_ in pairs(HealBot_Player_ButtonCache2) do
+                if HealBot_Unit_Button[xUnit] then
+                    HealBot_UnitSlowUpdateFriendly(HealBot_Unit_Button[xUnit])
+                else
+                    HealBot_nextRecalcParty(6)
+                end
             end
+        else
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                HealBot_UnitSlowUpdateFriendly(xButton)
+            end
+            HealBot_luVars["slowUnitSwitch"]=0
         end
-    else
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            HealBot_UnitSlowUpdateFriendly(xButton)
-        end
-        HealBot_luVars["slowUnitSwitch"]=0
     end
     if HealBot_luVars["Help"] then 
         if HealBot_luVars["HelpCnt1"] then
@@ -4298,56 +4305,58 @@ local function HealBot_ClearLowMana()
 end
 
 function HealBot_OnEvent_PlayerRegenDisabled()
-    HealBot_Data["UILOCK"]=true
-    HealBot_luVars["DelayLockdownCheck"]=TimeNow+1
     if not HealBot_Data["PGUID"] then
-        HealBot_Load("playerRD")      
+        HealBot_setOptions_Timer(3)  
         HealBot_luVars["SoftResetAfterCombat"]=true
-    elseif HealBot_RefreshTypes[0] then
-            HealBot_RecalcParty(0)
     else
-        if HealBot_RefreshTypes[6] then HealBot_RecalcParty(6); end
-        if HealBot_RefreshTypes[1] then HealBot_RecalcParty(1); end
-        if HealBot_RefreshTypes[2] then HealBot_RecalcParty(2); end
-        HealBot_RecalcParty(5);
-    end
-    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUNIT"] then
-        HealBot_Action_HideTooltipFrame()
-    end
-    for xUnit,xButton in pairs(HealBot_Unit_Button) do
-        if not HealBot_FrameVisible[xButton.frame] and UnitExists(xUnit) then
-            HealBot_Action_ShowPanel(xButton.frame)
-        end
-    end
-    for xUnit,xButton in pairs(HealBot_Pet_Button) do
-        if not HealBot_FrameVisible[xButton.frame] and UnitExists(xUnit) then
-            HealBot_Action_ShowPanel(xButton.frame)
-        end
-    end
-    HealBot_Aura_SetBuffCheckFlags()
-    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
-        HealBot_Action_HidePanel(9)
-    elseif HealBot_RefreshTypes[4] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
-        if HealBot_RefreshTypes[4] or not HealBot_Unit_Button["focus"] then
-            HealBot_RecalcParty(4)
+        HealBot_Data["UILOCK"]=true
+        HealBot_luVars["DelayLockdownCheck"]=TimeNow+1
+        if HealBot_RefreshTypes[0] then
+                HealBot_RecalcParty(0)
         else
-            HealBot_Action_ShowPanel(9)
+            if HealBot_RefreshTypes[6] then HealBot_RecalcParty(6); end
+            if HealBot_RefreshTypes[1] then HealBot_RecalcParty(1); end
+            if HealBot_RefreshTypes[2] then HealBot_RecalcParty(2); end
+            HealBot_RecalcParty(5);
         end
-    end
-    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
-        HealBot_Action_HidePanel(8)
-    elseif HealBot_RefreshTypes[3] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
-        if HealBot_RefreshTypes[3] or not HealBot_Unit_Button["target"] then
-            HealBot_RecalcParty(3)
-        else
-            HealBot_Action_ShowPanel(8)
+        if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUNIT"] then
+            HealBot_Action_HideTooltipFrame()
         end
+        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+            if not HealBot_FrameVisible[xButton.frame] and UnitExists(xUnit) then
+                HealBot_Action_ShowPanel(xButton.frame)
+            end
+        end
+        for xUnit,xButton in pairs(HealBot_Pet_Button) do
+            if not HealBot_FrameVisible[xButton.frame] and UnitExists(xUnit) then
+                HealBot_Action_ShowPanel(xButton.frame)
+            end
+        end
+        HealBot_Aura_SetBuffCheckFlags()
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
+            HealBot_Action_HidePanel(9)
+        elseif HealBot_RefreshTypes[4] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
+            if HealBot_RefreshTypes[4] or not HealBot_Unit_Button["focus"] then
+                HealBot_RecalcParty(4)
+            else
+                HealBot_Action_ShowPanel(9)
+            end
+        end
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
+            HealBot_Action_HidePanel(8)
+        elseif HealBot_RefreshTypes[3] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
+            if HealBot_RefreshTypes[3] or not HealBot_Unit_Button["target"] then
+                HealBot_RecalcParty(3)
+            else
+                HealBot_Action_ShowPanel(8)
+            end
+        end
+        if not HealBot_luVars["hlPlayerBarsIC"] and HealBot_luVars["HighlightTarget"] then
+            HealBot_OnEvent_PlayerTargetChanged(false)
+        end
+        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] then HealBot_ClearLowMana() end
+        HealBot_Action_ResetUnitStatus()
     end
-    if not HealBot_luVars["hlPlayerBarsIC"] and HealBot_luVars["HighlightTarget"] then
-        HealBot_OnEvent_PlayerTargetChanged(false)
-    end
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] then HealBot_ClearLowMana() end
-    HealBot_Action_ResetUnitStatus()
     --HealBot_Options_RaidTargetUpdate()
     --HealBot_setCall("HealBot_OnEvent_PlayerRegenDisabled")
 end
@@ -4581,48 +4590,48 @@ function HealBot_OnEvent_SpellsChanged(self, arg1)
 end
 
 function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
-    if HealBot_FrameVisible[8] then
-        if InCombatLockdown() then
-            HealBot_RecalcParty(3)
-        else
-            HealBot_Action_HidePanel(8)
-        end
-    end
     if not HealBot_Data["PGUID"] then
-        HealBot_Load("playerEW")      
+        HealBot_setOptions_Timer(2)
     else
         TimeNow=GetTime()
-    end
-
-    if hbCaller=="Event" then HealBot_SetResetFlag("QUICK") end
-    
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
-        HealBot_trackHiddenFrames["PARTY"]=true
-        HealBot_Options_DisablePartyFrame()
-        HealBot_Options_PlayerTargetFrames:Enable();
-        if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] then
-            HealBot_trackHiddenFrames["PLAYER"]=true
-            HealBot_Options_DisablePlayerFrame()
-            HealBot_Options_DisablePetFrame()
-            HealBot_Options_DisableTargetFrame()
+        if HealBot_FrameVisible[8] then
+            if InCombatLockdown() then
+                HealBot_RecalcParty(3)
+            else
+                HealBot_Action_HidePanel(8)
+            end
         end
+
+        if hbCaller=="Event" then HealBot_SetResetFlag("QUICK") end
+        
+        if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
+            HealBot_trackHiddenFrames["PARTY"]=true
+            HealBot_Options_DisablePartyFrame()
+            HealBot_Options_PlayerTargetFrames:Enable();
+            if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] then
+                HealBot_trackHiddenFrames["PLAYER"]=true
+                HealBot_Options_DisablePlayerFrame()
+                HealBot_Options_DisablePetFrame()
+                HealBot_Options_DisableTargetFrame()
+            end
+        end
+        if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
+            HealBot_trackHiddenFrames["MINIBOSS"]=true
+            HealBot_Options_DisableMiniBossFrame()
+        end
+        if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] then
+            HealBot_trackHiddenFrames["RAID"]=true
+            HealBot_Options_DisableRaidFrame()
+        end
+        HealBot_setOptions_Timer(180)
+        HealBot_setOptions_Timer(185)
+        HealBot_setOptions_Timer(188)
+        HealBot_setOptions_Timer(190)
+        HealBot_Register_Events()
+        HealBot_setOptions_Timer(120)
+        HealBot_setOptions_Timer(9930)
+        if HealBot_luVars["AuraEventRegistered"] then HealBot_luVars["hbReady"]=true end
     end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
-        HealBot_trackHiddenFrames["MINIBOSS"]=true
-        HealBot_Options_DisableMiniBossFrame()
-    end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] then
-        HealBot_trackHiddenFrames["RAID"]=true
-        HealBot_Options_DisableRaidFrame()
-    end
-    HealBot_setOptions_Timer(180)
-    HealBot_setOptions_Timer(185)
-    HealBot_setOptions_Timer(188)
-    HealBot_setOptions_Timer(190)
-    HealBot_Register_Events()
-    HealBot_setOptions_Timer(120)
-    HealBot_setOptions_Timer(9930)
-    if HealBot_luVars["AuraEventRegistered"] then HealBot_luVars["hbReady"]=true end
     --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
 end
 

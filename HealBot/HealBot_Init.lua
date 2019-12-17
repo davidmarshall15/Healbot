@@ -52,13 +52,12 @@ local function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     return true
 end
 
-local skipSpells=false
+local skipSpells={}
 local function HealBot_Init_SkipSpells()
     skipSpells={[HEALBOT_BLESSING_OF_MIGHT]=true}
 end
 
 local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
-    if not skipSpells then HealBot_Init_SkipSpells() end
     if not skipSpells[spellName] then
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
             if HealBot_Heal_Names[spellName] and cRank then 
@@ -89,6 +88,7 @@ function HealBot_Init_Spells_Defaults()
             HealBot_Heal_Names[GetSpellInfo(hbHeallist[j])]=true
         end
     end
+    HealBot_Init_SkipSpells()
     for j=1,nTabs do
         local _, _, offset, numEntries, _, offspecID = GetSpellTabInfo(j)
         if offspecID==0 then

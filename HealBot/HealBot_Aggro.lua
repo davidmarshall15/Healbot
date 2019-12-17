@@ -372,8 +372,8 @@ local function HealBot_Action_UpdateAggroBar(button)
         end
         HealBot_Aggro_luVars["UpdatedAggroBars"]=true
         aFrameUpd[button.frame]=true
-    elseif bar4 then
-        bar4:SetStatusBarColor(1,0,0,0)
+    elseif uaBar4 then
+        uaBar4:SetStatusBarColor(1,0,0,0)
         button.status.bar4=0
     end
 end

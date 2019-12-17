@@ -1,5 +1,5 @@
 local LSM = HealBot_Libs_LSM() --LibStub("LibSharedMedia-3.0")
-local vResetSkinPrevSkin=""
+--local vResetSkinPrevSkin=""
 local frameScale = 1
 local b2Size = 0
 local abSize = 2
@@ -637,10 +637,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         HealBot_Panel_clearResetHeaderSkinDone()
         HealBot_Action_clearResetBarSkinDone()
         HealBot_setOptions_Timer(80)
-        if vResetSkinPrevSkin~=Healbot_Config_Skins.Current_Skin then
-            vResetSkinPrevSkin=Healbot_Config_Skins.Current_Skin
-            HealBot_setOptions_Timer(800)
-        end
+        --if vResetSkinPrevSkin~=Healbot_Config_Skins.Current_Skin then
+        --    vResetSkinPrevSkin=Healbot_Config_Skins.Current_Skin
+            --HealBot_setOptions_Timer(800)
+        --end
         HealBot_setHighlightTargetBar()
     end
     --HealBot_setCall("HealBot_Skins_ResetSkin")

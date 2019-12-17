@@ -33,7 +33,7 @@ local HealBot_MyPrivateHealers={}
 local HealBot_MainTanks={};
 local HealBot_MainHealers={};
 local HealBot_UnitGroups={}
-local HealBot_TestBars={}
+local HealBot_TestBarsActive={}
 local hbBarsPerFrame={}
 local hbCurrentFrame=1
 local HealBot_unitRole={}
@@ -98,6 +98,7 @@ HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()
 HealBot_Panel_luVars["SelfPets"]=false
 HealBot_Panel_luVars["TanksOn"]=false
 HealBot_Panel_luVars["HealsOn"]=false
+HealBot_Panel_luVars["TestBarsDelAll"]=true
 HealBot_Panel_luVars["MAPID"]=0
 
 function HealBot_Panel_retLuVars(vName)
@@ -684,8 +685,8 @@ local function HealBot_Action_SetHeightWidth(width,height,bWidth,bHeight,hbCurFr
 end
 
 local HealBot_noBars=25
-local HealBot_setTestBars=false
 local HealBot_setTestCols={}
+local HealBot_setTestBars=false
 function HealBot_Panel_SetNumBars(numTestBars)
     if numTestBars>HealBot_noBars and HealBot_setTestBars then
         HealBot_Panel_resetTestCols()
@@ -694,11 +695,11 @@ function HealBot_Panel_SetNumBars(numTestBars)
 end
 
 local function HealBot_Panel_TestBarsOff()
-    for x,b in pairs(HealBot_TestBars) do
+    for x,b in pairs(HealBot_TestBarsActive) do
         local xUnit=b.unit
         HealBot_Action_MarkDeleteButton(b)
         HealBot_Action_DeleterCallsUnit(xUnit)
-        HealBot_TestBars[x]=nil
+        HealBot_TestBarsActive[x]=nil
     end
 end
 
@@ -710,10 +711,11 @@ function HealBot_Panel_ToggleTestBars()
         for j=1,10 do
             HealBot_Action_HidePanel(j)
         end
+        HealBot_setTestCols={}
     else
         HealBot_setTestBars=true
+        HealBot_Panel_luVars["TestBarsDelAll"]=true
         HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TESTBARS.." "..HEALBOT_WORD_ON)
-        HealBot_setTestCols={}
     end
 end
 
@@ -1017,7 +1019,7 @@ end
 local function HealBot_Panel_TestBarShow(index,button,tRole)
     table.insert(HealBot_Action_HealButtons,button.unit)
     HealBot_TrackUnit[button.unit]=true
-    HealBot_TestBars[index]=button
+    HealBot_TestBarsActive[index]=button
     local bar=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
     local HealBot_keepClass=false
     if not HealBot_setTestCols[index] then
@@ -1104,18 +1106,23 @@ local function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
 end
 
 local function HealBot_Panel_TestBarsOn()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_MarkDeleteButton(xButton)
+    if HealBot_Panel_luVars["TestBarsDelAll"] then
+        HealBot_Panel_luVars["TestBarsDelAll"]=false
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Enemy_Button) do
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
     end
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         HealBot_Panel_DeleteHeader(xButton.id, xHeader)
     end
-    for x,b in pairs(HealBot_TestBars) do
-        HealBot_Action_MarkDeleteButton(b)
-        HealBot_TestBars[x]=nil
+    for x,b in pairs(HealBot_TestBarsActive) do
+        HealBot_TestBarsActive[x]=nil
     end
     for x,_ in pairs(tHeader) do
         tHeader[x]=nil
@@ -1286,6 +1293,21 @@ local function HealBot_Panel_TestBarsOn()
         end 
         HealBot_Panel_testAddButton(HEALBOT_CUSTOM_CASTBY_ENEMY,HEALBOT_CUSTOM_CASTBY_ENEMY,1,HealBot_Globals.TestBars["ENEMY"],HEALBOT_CUSTOM_CASTBY_ENEMY)
         HealBot_Panel_SetupExtraBars(10)
+    end
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if not HealBot_TestBarsActive[xButton.id] then
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Enemy_Button) do
+        if not HealBot_TestBarsActive[xButton.id] then
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        if not HealBot_TestBarsActive[xButton.id] then
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
     end
 end
 

@@ -596,48 +596,46 @@ local function HealBot_Aura_CheckCurDebuff(button)
         end
     end
     dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaDebuffType)
-    if dTypePriority>dNamePriority and dNamePriority<21 then
-        if HealBot_Globals.IgnoreCustomDebuff[uaSpellId] and HealBot_Globals.IgnoreCustomDebuff[uaSpellId][HealBot_Aura_luVars["hbInsName"]] then
-            debuffIsCurrent=false
-            if not HealBot_Spell_Names[uaName] then debuffIsNever=true end
-        else
-            --local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
-            --local hbCastByEveryone = 1 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
-            --local hbCastByEnemy = 2 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] or -1
-            --local hbCastByFriend = 3 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] or -1
-            --local hbCastBySelf = 4 --castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] or -1
-     
-            ccdbCasterID=HealBot_Globals.FilterCustomDebuff[uaSpellId] or 0
-            ccdbUnitCasterID=1 --hbCastByEveryone
-            if ccdbCasterID==0 then
-                if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
-                    ccdbCasterID = 1 --hbCastByEveryone
-                elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
-                    ccdbCasterID = 2 --hbCastByEnemy
-                end
+    if HealBot_Globals.IgnoreCustomDebuff[uaSpellId] and HealBot_Globals.IgnoreCustomDebuff[uaSpellId][HealBot_Aura_luVars["hbInsName"]] then
+        debuffIsCurrent=false
+        if not HealBot_Spell_Names[uaName] then debuffIsNever=true end
+    elseif dTypePriority>dNamePriority and dNamePriority<21 then
+        --local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
+        --local hbCastByEveryone = 1 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
+        --local hbCastByEnemy = 2 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] or -1
+        --local hbCastByFriend = 3 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] or -1
+        --local hbCastBySelf = 4 --castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] or -1
+ 
+        ccdbCasterID=HealBot_Globals.FilterCustomDebuff[uaSpellId] or 0
+        ccdbUnitCasterID=1 --hbCastByEveryone
+        if ccdbCasterID==0 then
+            if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
+                ccdbCasterID = 1 --hbCastByEveryone
+            elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
+                ccdbCasterID = 2 --hbCastByEnemy
             end
-            if ccdbCasterID~=1 then --hbCastByEveryone then
-                if uaUnitCaster=="player" then
-                    ccdbUnitCasterID=4 --hbCastBySelf --4
-                    if ccdbCasterID==3 then 
-                        ccdbCasterID=4 --hbCastBySelf 
-                    end
-                elseif not UnitIsEnemy("player",uaUnitCaster) then
-                    ccdbUnitCasterID=3 --hbCastByFriend --3
-                else
-                    ccdbUnitCasterID=2 --hbCastByEnemy --2
+        end
+        if ccdbCasterID~=1 then --hbCastByEveryone then
+            if uaUnitCaster=="player" then
+                ccdbUnitCasterID=4 --hbCastBySelf --4
+                if ccdbCasterID==3 then 
+                    ccdbCasterID=4 --hbCastBySelf 
                 end
-            end
-            if ccdbUnitCasterID==ccdbCasterID then 
-                debuff_Type=HEALBOT_CUSTOM_en
-                cDebuffPrio=dNamePriority
-                if ccdbCasterID==1 then --hbCastByEveryone then 
-                    debuffIsAlways=true 
-                    debuffIsCustom=true
-                end
+            elseif not UnitIsEnemy("player",uaUnitCaster) then
+                ccdbUnitCasterID=3 --hbCastByFriend --3
             else
-                debuffIsCurrent=false
+                ccdbUnitCasterID=2 --hbCastByEnemy --2
             end
+        end
+        if ccdbUnitCasterID==ccdbCasterID then 
+            debuff_Type=HEALBOT_CUSTOM_en
+            cDebuffPrio=dNamePriority
+            if ccdbCasterID==1 then --hbCastByEveryone then 
+                debuffIsAlways=true 
+                debuffIsCustom=true
+            end
+        else
+            debuffIsCurrent=false
         end
     else
         ccdbCheckthis,ccdbAlways=false,false
@@ -691,7 +689,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
         elseif uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and (UnitExists("boss1") or not HealBot_Config_Cures.AlwaysShowBossStrict) then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=15
-        elseif dNamePriority<21 or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[uaDebuffType] then
+        elseif dNamePriority<21 or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[uaDebuffType] and not UnitIsFriend(uaUnitCaster, "player") then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=15
             if dTypePriority>20 then
@@ -703,7 +701,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
                     debuffIsCustom=true
                 end
             end
-        elseif UnitIsUnit(uaUnitCaster,"player") then
+        elseif UnitIsUnit(uaUnitCaster,"player") and not UnitIsFriend(button.unit, "player") then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=20
         else
@@ -953,7 +951,9 @@ function HealBot_Aura_CheckUnitAuras(button)
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count
         button.icon.buff.count=0
         if generalBuffs then
-            if HEALBOT_GAME_VERSION>3 then
+            if UnitIsUnit("player", button.unit) then
+                onlyPlayers=true
+            elseif HEALBOT_GAME_VERSION>3 then
                 onlyPlayers=UnitIsPlayer(button.unit)
             else
                 onlyPlayers=UnitIsFriend("player", button.unit)
@@ -965,6 +965,7 @@ function HealBot_Aura_CheckUnitAuras(button)
                 for x,_ in pairs(PlayerBuffTypes) do
                     PlayerBuffTypes[x]=false;
                 end
+                ownBlessing=false
             end
         end
         while true do
@@ -1058,7 +1059,13 @@ function HealBot_Aura_CheckIcons(button)
             end
         end
     end
-    if vUpdateIcons then HealBot_Aura_CheckUnitAuras(button) end
+    if vUpdateIcons then
+        if button.status.unittype<8 then 
+            HealBot_Aura_CheckUnitAuras(button) 
+        else
+            HealBot_Aura_RefreshEnemyAuras(button)
+        end
+    end
 end
 
 local lowTime=0
