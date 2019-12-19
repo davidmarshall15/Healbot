@@ -542,7 +542,7 @@ local function HealBot_Aura_SetBuffIcon(button, spellId, showIcons, name, textur
         buffCPrio=true
         if button.icon.buff.count>0 then
             for x=1, button.icon.buff.count do
-                if HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.unit][x]["spellId"]]["priority"]>buffPrio then
+                if (HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.unit][x]["spellId"]]["priority"] or 20)>buffPrio then
                     if showIcons then
                         HealBot_Aura_BumpBuffIcon(button,x) 
                         button.icon.buff.count=button.icon.buff.count+1
@@ -581,6 +581,46 @@ local dNamePriority, dTypePriority=99,99
 local spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever=0, true, 15, false, debuffType, false, false
 local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
 local ccdbWatchTarget={}
+local function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
+    --local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
+    --local hbCastByEveryone = 1 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
+    --local hbCastByEnemy = 2 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] or -1
+    --local hbCastByFriend = 3 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] or -1
+    --local hbCastBySelf = 4 --castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] or -1
+
+    ccdbCasterID=HealBot_Globals.FilterCustomDebuff[uaSpellId] or 0
+    ccdbUnitCasterID=1 --hbCastByEveryone
+    if ccdbCasterID==0 then
+        if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
+            ccdbCasterID = 1 --hbCastByEveryone
+        elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
+            ccdbCasterID = 2 --hbCastByEnemy
+        end
+    end
+    if ccdbCasterID~=1 then --hbCastByEveryone then
+        if uaUnitCaster=="player" then
+            ccdbUnitCasterID=4 --hbCastBySelf --4
+            if ccdbCasterID==3 then 
+                ccdbCasterID=4 --hbCastBySelf 
+            end
+        elseif not UnitIsEnemy("player",uaUnitCaster) then
+            ccdbUnitCasterID=3 --hbCastByFriend --3
+        else
+            ccdbUnitCasterID=2 --hbCastByEnemy --2
+        end
+    end
+    if ccdbUnitCasterID==ccdbCasterID then 
+        debuff_Type=HEALBOT_CUSTOM_en
+        cDebuffPrio=dNamePriority
+        if ccdbCasterID==1 and canBeAlways then --hbCastByEveryone then 
+            debuffIsAlways=true 
+            debuffIsCustom=true
+        end
+    else
+        debuffIsCurrent=false
+    end
+end
+
 local function HealBot_Aura_CheckCurDebuff(button)
     spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever=0, true, 20, false, uaDebuffType, false, false
     if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
@@ -600,43 +640,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
         debuffIsCurrent=false
         if not HealBot_Spell_Names[uaName] then debuffIsNever=true end
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
-        --local castByListIndexed = HealBot_Options_getCDebuffCasyByIndexed()
-        --local hbCastByEveryone = 1 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] or -1
-        --local hbCastByEnemy = 2 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY] or -1
-        --local hbCastByFriend = 3 --castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] or -1
-        --local hbCastBySelf = 4 --castByListIndexed[HEALBOT_OPTIONS_SELFHEALS] or -1
- 
-        ccdbCasterID=HealBot_Globals.FilterCustomDebuff[uaSpellId] or 0
-        ccdbUnitCasterID=1 --hbCastByEveryone
-        if ccdbCasterID==0 then
-            if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then
-                ccdbCasterID = 1 --hbCastByEveryone
-            elseif HealBot_Globals.CureCustomDefaultCastBy=="ENEMY" then
-                ccdbCasterID = 2 --hbCastByEnemy
-            end
-        end
-        if ccdbCasterID~=1 then --hbCastByEveryone then
-            if uaUnitCaster=="player" then
-                ccdbUnitCasterID=4 --hbCastBySelf --4
-                if ccdbCasterID==3 then 
-                    ccdbCasterID=4 --hbCastBySelf 
-                end
-            elseif not UnitIsEnemy("player",uaUnitCaster) then
-                ccdbUnitCasterID=3 --hbCastByFriend --3
-            else
-                ccdbUnitCasterID=2 --hbCastByEnemy --2
-            end
-        end
-        if ccdbUnitCasterID==ccdbCasterID then 
-            debuff_Type=HEALBOT_CUSTOM_en
-            cDebuffPrio=dNamePriority
-            if ccdbCasterID==1 then --hbCastByEveryone then 
-                debuffIsAlways=true 
-                debuffIsCustom=true
-            end
-        else
-            debuffIsCurrent=false
-        end
+        HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
         ccdbCheckthis,ccdbAlways=false,false
         if dTypePriority<21 and spellCD<1.5 then
@@ -689,7 +693,9 @@ local function HealBot_Aura_CheckCurDebuff(button)
         elseif uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and (UnitExists("boss1") or not HealBot_Config_Cures.AlwaysShowBossStrict) then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=15
-        elseif dNamePriority<21 or HealBot_Config_Cures.HealBot_Custom_Defuffs_All[uaDebuffType] and not UnitIsFriend(uaUnitCaster, "player") then
+        elseif dNamePriority<21 then
+            HealBot_Aura_CheckCurCustomDebuff(button, false)
+        elseif HealBot_Config_Cures.HealBot_Custom_Defuffs_All[uaDebuffType] and not UnitIsFriend(uaUnitCaster, "player") then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=15
             if dTypePriority>20 then

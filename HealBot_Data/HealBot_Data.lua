@@ -287,6 +287,7 @@ if HealBot_Version_Target() then
             RaidHideMethod=0,
             useUTF8=false,
             CustomCuresReset="6.0.0",
+            LastSupporter=1,
             PresetColoursAlias={[1]=HEALBOT_OPTIONS_PRESET.." 1",[2]=HEALBOT_OPTIONS_PRESET.." 2",
                                 [3]=HEALBOT_OPTIONS_PRESET.." 3",[4]=HEALBOT_OPTIONS_PRESET.." 4",
                                 [5]=HEALBOT_OPTIONS_PRESET.." 5",[6]=HEALBOT_OPTIONS_PRESET.." 6",

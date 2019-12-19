@@ -2467,11 +2467,14 @@ local function HealBot_Update_Skins(forceCheck)
                     HealBot_Globals.v1BuffExpireTimes=nil
                 end
             end
-            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
+            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<6 then
                 HealBot_Globals.RangeCheckFreq=5
                 HealBot_Globals.CacheSize=5
                 if HealBot_Globals.MaxBarsCache then HealBot_Globals.MaxBarsCache=nil end
                 if HealBot_Globals.EnLibQuickHealth then HealBot_Globals.EnLibQuickHealth=nil end
+            end
+            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
+                HealBot_NewVersionMessage(1)
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -5056,6 +5059,23 @@ end
 function HealBot_clearGUID(hbGUID)
     if hbManaPlayers[hbGUID] then hbManaPlayers[hbGUID]=nil end
     --HealBot_setCall("HealBot_ClearGUIDs")
+end
+
+function HealBot_NewVersionMessage(msgType)
+    local msg=""
+    if msgType==1 then
+        msg="HealBot\n----------\n\nIf not preparing for this version\nyour settings will be at defaults\n\nTo restore settings, visit the forum on\n"..HEALBOT_ABOUT_URL.."\n"
+    end
+    StaticPopupDialogs["HEALBOT_NEWVERSIONMSG"] = {
+        text = msg,
+        button1 = HEALBOT_WORDS_OK,
+        timeout = 0,
+        whileDead = 1,
+        hideOnEscape = 1
+    };
+
+    StaticPopup_Show ("HEALBOT_NEWVERSIONMSG");
+    --HealBot_setCall("HealBot_ReloadUI")
 end
 
 function HealBot_ReloadUI()

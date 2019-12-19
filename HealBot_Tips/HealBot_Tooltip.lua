@@ -718,7 +718,7 @@ local function HealBot_Action_DoRefreshTooltip()
             if HealBot_Globals.Tooltip_ShowMyBuffs then
                 for x,_ in pairs(HealBot_CheckBuffs) do
                     local z=HealBot_Aura_RetMyBuffTime(xButton,x)
-                    if z then
+                    if z and z>GetTime() then
                         d=true
                         z=z-GetTime()
                         local mins,secs=HealBot_Tooltip_ReturnMinsSecs(z)
