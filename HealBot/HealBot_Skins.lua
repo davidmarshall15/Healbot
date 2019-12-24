@@ -643,5 +643,5 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         --end
         HealBot_setHighlightTargetBar()
     end
-    --HealBot_setCall("HealBot_Skins_ResetSkin")
+    HealBot_setCall("HealBot_Skins_ResetSkin")
 end

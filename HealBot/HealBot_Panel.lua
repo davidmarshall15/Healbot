@@ -293,14 +293,14 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil
     end 
-    HealBot_nextRecalcParty(0)
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Panel_AddBlackList(unit)
     xGUID=UnitGUID(unit)
     if xGUID then
         HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_nextRecalcParty(0)
+        HealBot_setOptions_Timer(595)
     end
 end
 
@@ -331,7 +331,7 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             table.insert(HealBot_MyHealTargets,xGUID)
         end
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_setOptions_Timer(596)
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit, perm)
@@ -351,7 +351,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         end
     end
     HealBot_Panel_buildDataStore(true, true)
-    HealBot_nextRecalcParty(0)
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -371,7 +371,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         end
     end
     HealBot_Panel_buildDataStore(true, true)
-    HealBot_nextRecalcParty(0)
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)
@@ -1567,7 +1567,7 @@ local function HealBot_Panel_MainSort(doMainSort,unitType)
     for x,_ in pairs(units) do
         units[x]=nil;
     end
-    --HealBot_setCall("HealBot_Panel_MainSort")
+    HealBot_setCall("HealBot_Panel_MainSort")
 end
 
 local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
@@ -1577,7 +1577,7 @@ local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
     else
         HeaderPos[hbCurrentFrame][k+1] = hText 
     end
-    --HealBot_setCall("HealBot_Panel_addUnits")
+    HealBot_setCall("HealBot_Panel_addUnits")
 end
 
 local vEnemyIndex,vEnemyLocation,vEnemyBossNum,vEnemyBossExist=0,"",0,false
@@ -2130,7 +2130,7 @@ local function HealBot_Panel_TargetChanged(preCombat)
     else
         HealBot_Action_HidePanel(hbCurrentFrame)
     end
-      --HealBot_setCall("HealBot_Panel_TargetChanged")
+      HealBot_setCall("HealBot_Panel_TargetChanged")
 end
 
 local vFocusParent, vFocusFrame="",""
@@ -2538,5 +2538,5 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             end
         end 
     end
-    --HealBot_setCall("HealBot_Panel_PartyChanged")
+    HealBot_setCall("HealBot_Panel_PartyChanged")
 end

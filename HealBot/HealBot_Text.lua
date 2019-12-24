@@ -127,7 +127,7 @@ function HealBot_Text_sethbNumberFormat()
         end
         
     end
-    --HealBot_setCall("HealBot_Text_sethbNumberFormat")
+    HealBot_setCall("HealBot_Text_sethbNumberFormat")
 end
 
 function HealBot_Text_sethbAggroNumberFormat()
@@ -158,7 +158,7 @@ function HealBot_Text_sethbAggroNumberFormat()
             aggroNumFormatSurRa[j]=""
         end
     end
-    --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
+    HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
 end
 
 local atcR, atcG, atcB=1,1,1
@@ -194,7 +194,7 @@ local function HealBot_Text_TextColours(button)
         atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EG"] or 1;
         atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EB"] or 1;
     end
-    --HealBot_setCall("HealBot_Text_TextColours")
+    HealBot_setCall("HealBot_Text_TextColours")
     return atcR,atcG,atcB
 end
 
@@ -230,7 +230,7 @@ local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     else
         return amount, vTextCharNothing
     end
-    --HealBot_setCall("HealBot_Text_shortHealTxt")
+    HealBot_setCall("HealBot_Text_shortHealTxt")
 end
 
 local vHealthTextConcatIndex,vHealthTextConcatResult=0,""
@@ -375,7 +375,7 @@ function HealBot_Text_setHealthText(button)
         button.text.health=vTextCharNothing
         button.text.update=true
     end
-    --HealBot_setCall("HealBot_Text_setHealthText")
+    HealBot_setCall("HealBot_Text_setHealthText")
 end
 
 local vSetTextLenWidthAdj,vSetTextLenFontAdj=0,0
@@ -392,7 +392,7 @@ function HealBot_Text_setTextLen(curFrame)
     else
         hbBarTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]
     end
-    --HealBot_setCall("HealBot_Text_setTextLen")
+    HealBot_setCall("HealBot_Text_setTextLen")
 end
 
 function HealBot_Text_setNameTag(button)
@@ -414,7 +414,7 @@ function HealBot_Text_setNameTag(button)
         button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGR"]
     end
     button.text.update=true
-    --HealBot_setCall("HealBot_Text_setNameTag")
+    HealBot_setCall("HealBot_Text_setNameTag")
 end
 
 local vTextCharColon,vTextCharAggroLeft,vTextCharAggroRight=":",">> "," <<"
@@ -451,6 +451,8 @@ function HealBot_Text_setNameText(button)
             else
                 vSetNameTextName=HealBot_GetUnitName(button.unit, button.guid)
             end
+        else
+            vSetNameTextName=vTextCharNothing
         end
     else
         vSetNameTextName=button.unit
@@ -468,7 +470,7 @@ function HealBot_Text_setNameText(button)
         button.text.name=vSetNameTextName
         button.text.update=true
     end
-    --HealBot_setCall("HealBot_Text_setNameText")
+    HealBot_setCall("HealBot_Text_setNameText")
 end
 
 local atR, atG, atB, atA, atBar, atBatText, atConcat=0, 0, 0, 0, "", "", ""
@@ -500,7 +502,19 @@ function HealBot_Text_SetText(button)
             atBatText:SetText(HealBot_Text_Concat(2))
         end
     end
-    --HealBot_setCall("HealBot_Text_SetText")
+    HealBot_setCall("HealBot_Text_SetText")
+end
+
+function HealBot_Text_UpdateNames()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Text_setNameText(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Text_setNameText(xButton)
+    end
+    for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Text_setNameText(xButton)
+    end
 end
 
 function HealBot_Text_UpdateButtons()

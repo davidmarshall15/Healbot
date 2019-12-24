@@ -6,7 +6,7 @@ HealBot_Aggro_luVars["UpdateFluidBars"]=true
 
 function HealBot_Aggro_setLuVars(vName, vValue)
     HealBot_Aggro_luVars[vName]=vValue
-    --HealBot_setCall("HealBot_Aggro_setLuVars")
+    HealBot_setCall("HealBot_Aggro_setLuVars")
 end
 
 local tConcat={}
@@ -104,7 +104,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
             end
         end
     end
-    --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
+    HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
 function HealBot_Aggro_ResetrCallsUnit(unit)
@@ -113,93 +113,95 @@ function HealBot_Aggro_ResetrCallsUnit(unit)
 end
 
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
-local adaButton={}
 local adaBar=false
-function HealBot_Action_UpdateAggro(unit,status,threatStatus,threatPct,extra)
-    if HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit] then
-        adaButton=HealBot_Unit_Button[unit] or HealBot_Pet_Button[unit]
-        tConcat[1]="HealBot_Action_HealUnit"
-        tConcat[2]=adaButton.id
-        tConcat[3]="Bar4"
-        adaBar=_G[HealBot_Aggro_Concat(3)]
-        
-        if UnitExists(unit) and UnitIsFriend("player",unit) then
-            if UnitIsDeadOrGhost(unit) and not UnitIsFeignDeath(unit) then
-                status=false
-                threatPct=0
-                threatStatus=0
-            end
-        --    if threatStatus and (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARSPCT"] or 
-        --                         Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWTEXTPCT"]) then
-        --        if not threatPct then threatPct=HealBot_CalcThreat(unit) end
-        --        if threatPct>0 and threatStatus==0 then 
-        --            threatStatus=1
-        --        elseif threatStatus==3 then
-        --            threatpct=100
-        --        elseif threatStatus==2 then
-        --            if threatpct<25 then threatpct=50 end
-        --        elseif threatStatus==1 then
-        --            if threatpct<10 then threatpct=25 end
-        --        end
-        --    end
-            if status then
-                if HealBot_Config_Cures.CDCshownAB and adaButton.aura.debuff.type then
-                    threatStatus=debuffCodes[adaButton.aura.debuff.type]
-                elseif HealBot_Config_Buffs.CBshownAB and adaButton.aura.buff.name then
-                    threatStatus=4
-                elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOW"] and 
-                       threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["ALERT"] then
-                    threatStatus=threatStatus or 0
-                elseif extra=="target" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["TBAR"] then
-                    threatStatus=-2
-                elseif extra=="highlight" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][adaButton.frame]["CBAR"] then
-                    threatStatus=-1
-                end
-                if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOW"] and 
-                   Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWIND"] then
-                    HealBot_Aggro_IndicatorUpdate(adaButton)
-                end
-            else
-                threatStatus=0
-                HealBot_Aggro_IndicatorUpdate(adaButton)
-            end
-            if status and (threatStatus<0 or threatStatus>3 or 
-                          (threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["ALERT"] and 
-                           threatStatus<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARS"])) then
-                if threatStatus>0 and threatStatus<4 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARSPCT"] then
-                    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWBARS"] and 
-                       threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["ALERT"] then
-                        adaBar:SetValue(threatpct)
-                    end
-                else
-                    adaBar:SetValue(100)
-                end
-                adaButton.status.bar4=1
-                HealBot_Aggro_luVars["UpdatedAggroBars"]=true
-            else
-                adaBar:SetStatusBarColor(1,0,0,0)
-                adaButton.status.bar4=0
-            end
-        else
-            adaBar:SetStatusBarColor(1,0,0,0);
-            adaButton.status.bar4=0
+function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
+    tConcat[1]="HealBot_Action_HealUnit"
+    tConcat[2]=button.id
+    tConcat[3]="Bar4"
+    adaBar=_G[HealBot_Aggro_Concat(3)]
+    
+    if UnitExists(button.unit) and UnitIsFriend("player",button.unit) then
+        if UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
+            status=false
             threatPct=0
             threatStatus=0
         end
-        if adaButton.aggro.status~=threatStatus then
-            adaButton.aggro.status=threatStatus
-            if threatStatus==0 or (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOW"] and 
-                                   Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][adaButton.frame]["SHOWIND"]) then
-                HealBot_Aggro_IndicatorUpdate(adaButton)
+        --if threatStatus and (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBARSPCT"] or 
+        --                     Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"]) then
+        --    if not threatPct then threatPct=HealBot_CalcThreat(button.unit) end
+        --    if threatPct>0 and threatStatus==0 then 
+        --        threatStatus=1
+        --    elseif threatStatus==3 then
+        --        threatPct=100
+        --    elseif threatStatus==2 then
+        --        if threatPct<25 then threatPct=50 end
+        --    elseif threatStatus==1 then
+        --        if threatPct<10 then threatPct=25 end
+        --    end
+        --end
+        if status then
+            if HealBot_Config_Cures.CDCshownAB and button.aura.debuff.type then
+                threatStatus=debuffCodes[button.aura.debuff.type]
+            elseif HealBot_Config_Buffs.CBshownAB and button.aura.buff.name then
+                threatStatus=4
+            elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
+                   threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+                threatStatus=threatStatus or 0
+            elseif extra=="target" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][button.frame]["TBAR"] then
+                threatStatus=-2
+            elseif extra=="highlight" and Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][button.frame]["CBAR"] then
+                threatStatus=-1
             end
+            if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
+               Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] then
+                HealBot_Aggro_IndicatorUpdate(button)
+            end
+        else
+            threatStatus=0
+            HealBot_Aggro_IndicatorUpdate(button)
         end
-        if adaButton.aggro.threatpct~=threatPct then 
-            adaButton.aggro.threatpct=threatPct
-            HealBot_Text_setNameText(adaButton) 
-            HealBot_Action_UpdateHealthButton(adaButton) 
+        if status then
+            if threatStatus<0 or threatStatus>3 then
+                adaBar:SetValue(100)
+                button.status.bar4=1
+                HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+            elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBARS"] then 
+                if threatStatus>0 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBARSPCT"] then
+                    adaBar:SetValue(threatPct)
+                    button.status.bar4=1
+                    HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                elseif threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+                    adaBar:SetValue(100)
+                    button.status.bar4=1
+                    HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                end
+            else
+                adaBar:SetStatusBarColor(1,0,0,0)
+                button.status.bar4=0
+            end
+        else
+            adaBar:SetStatusBarColor(1,0,0,0)
+            button.status.bar4=0
+        end
+    else
+        adaBar:SetStatusBarColor(1,0,0,0);
+        button.status.bar4=0
+        threatPct=0
+        threatStatus=0
+    end
+    if button.aggro.status~=threatStatus then
+        button.aggro.status=threatStatus
+        if threatStatus==0 or (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
+                               Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"]) then
+            HealBot_Aggro_IndicatorUpdate(button)
         end
     end
-    --HealBot_setCall("HealBot_Action_DoUpdateAggro")
+    if button.aggro.threatpct~=threatPct then 
+        button.aggro.threatpct=threatPct
+        HealBot_Text_setNameText(button) 
+        HealBot_Action_UpdateHealthButton(button) 
+    end
+    HealBot_setCall("HealBot_Action_DoUpdateAggro")
 end
 
 
@@ -326,7 +328,7 @@ local function HealBot_Aggro_UpdateFluidBars()
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_UpdateFluidBar(xButton)
     end
-    --HealBot_setCall("HealBot_Aggro_UpdateFluidBars")
+    HealBot_setCall("HealBot_Aggro_UpdateFluidBars")
 end
 
 local aFrameUpd={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false}
@@ -410,7 +412,7 @@ local function HealBot_Aggro_UpdateAggroBars()
             end
         end
     end
-    --HealBot_setCall("HHealBot_Aggro_UpdateAggroBars)
+    HealBot_setCall("HHealBot_Aggro_UpdateAggroBars")
 end
 
 function HealBot_Aggro_UpdateBars()

@@ -1,5 +1,5 @@
 if HealBot_Version_Target() then
-    HealBot_lastVerSkinUpdate="8.2.0.2"
+    HealBot_lastVerSkinUpdate="8.2.5.8"
 
     HealBot_Default_Textures={
         [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -288,6 +288,7 @@ if HealBot_Version_Target() then
             useUTF8=false,
             CustomCuresReset="6.0.0",
             LastSupporter=1,
+            EnLibQuickHealth=false,
             PresetColoursAlias={[1]=HEALBOT_OPTIONS_PRESET.." 1",[2]=HEALBOT_OPTIONS_PRESET.." 2",
                                 [3]=HEALBOT_OPTIONS_PRESET.." 3",[4]=HEALBOT_OPTIONS_PRESET.." 4",
                                 [5]=HEALBOT_OPTIONS_PRESET.." 5",[6]=HEALBOT_OPTIONS_PRESET.." 6",

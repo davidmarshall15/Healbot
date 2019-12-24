@@ -2338,6 +2338,20 @@
                       <OnLeave>HealBot_Options_Show_Help("QUERYTALENTS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_EnableLibQuickHealth" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-12" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_EnableLibQuickHealth_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ENABLEFASTHEALTH",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ENABLEFASTHEALTH",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_EnableAutoCombat" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_QueryTalents" relativePoint="BOTTOMLEFT">>
@@ -2354,7 +2368,7 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_NoAuraWhenRested" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableLibQuickHealth" relativePoint="BOTTOMLEFT">>
                         <Offset>
                           <AbsDimension x="0" y="-12" />
                         </Offset>
@@ -2368,7 +2382,7 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_DisableHealBotOpt" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableAutoCombat" relativePoint="BOTTOMLEFT">>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableAutoCombat" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-12" />
                         </Offset>
@@ -2415,7 +2429,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-0" y="98" />
+                          <AbsDimension x="-0" y="82" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2432,7 +2446,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-0" y="34" />
+                          <AbsDimension x="-0" y="22" />
                         </Offset>
                       </Anchor>
                     </Anchors>

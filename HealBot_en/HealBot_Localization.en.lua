@@ -411,7 +411,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONSCALE               = "Buff Icon Scale"
     HEALBOT_OPTIONS_DEBUFFICONSCALE         = "Debuff Icon Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
-    
+    HEALBOT_OPTIONS_ENABLELIBQH             = "Enable HealBot fastHealth"
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"

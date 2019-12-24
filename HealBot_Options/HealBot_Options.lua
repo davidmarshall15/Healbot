@@ -2588,12 +2588,12 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
 end
 
 function HealBot_Options_RangeCheckFreq_setSession()
-    local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/20)
+    local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/40)
     HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
-    if val<0.25 then
+    if val<0.175 then
         HealBot_setLuVars("enTurbo", true)
         HealBot_setLuVars("enSlowMo", false)
-    elseif val>0.45 then
+    elseif val>0.275 then
         HealBot_setLuVars("enTurbo", false)
         HealBot_setLuVars("enSlowMo", true)
     else
@@ -2856,7 +2856,7 @@ function HealBot_Options_ShowNameOnBar_OnClick(self)
     else
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NAMEONBAR"] = false
     end
-    HealBot_setOptions_Timer(80)
+    HealBot_setOptions_Timer(85)
 end
 
 function HealBot_Options_libUTF8_OnClick(self)
@@ -2928,6 +2928,18 @@ function HealBot_Options_HighlightActiveBar_OnClick(self)
         Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CBAR"] = false
     end
     HealBot_setOptions_Timer(150)
+end
+
+function HealBot_Options_EnableLibQuickHealth_OnClick(self)
+    local reason=HEALBOT_OPTIONS_ENABLELIBQH
+    if self:GetChecked() then
+        HealBot_Globals.EnLibQuickHealth=true
+        reason=reason.." - "..HEALBOT_WORD_ON
+    else
+        HealBot_Globals.EnLibQuickHealth=false
+        reason=reason.." - "..HEALBOT_WORD_OFF
+    end
+    HealBot_Options_ReloadUI(reason)
 end
 
 function HealBot_Options_HighlightTargetBar_OnClick(self)
@@ -3320,7 +3332,7 @@ function HealBot_Options_SortOutOfRangeLast_OnClick(self)
     else
         Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OORLAST"] = false
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_setOptions_Timer(596)
     HealBot_nextRecalcParty(2)
 end
 
@@ -7621,7 +7633,7 @@ function HealBot_Options_EmergencyFilter_Reset()
             HealBot_EmergInc[j][HealBot_Class_En[HEALBOT_MONK]] = HealBot_Globals.EmergIncCustom[HEALBOT_MONK];
         end
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_setOptions_Timer(596)
 end
 
 function HealBot_Options_retEmergInc(classTrim, frame)
@@ -7709,7 +7721,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
         HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
-        HealBot_nextRecalcParty(0)
+        HealBot_setOptions_Timer(595)
         HealBot_AddDebug("Set_Current_Skin")
     else
         HealBot_setResetFlagCode(3)
@@ -11917,6 +11929,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
             HealBot_Options_RightButtonOptions:SetChecked(HealBot_Globals.RightButtonOptions)
             HealBot_Options_SetText(HealBot_Options_RightButtonOptions,HEALBOT_OPTIONS_RIGHTBOPTIONS)
+            HealBot_Options_EnableLibQuickHealth:SetChecked(HealBot_Globals.EnLibQuickHealth)
+            HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
             HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
             HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
             HealBot_Options_sliderlabels_Init(HealBot_Options_MaxBarCache,HEALBOT_OPTIONS_MAXBARCACHE,1,9,1,2,HEALBOT_WORDS_LESSMEM,HEALBOT_WORDS_MOREMEM)
