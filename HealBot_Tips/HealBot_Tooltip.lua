@@ -19,7 +19,7 @@ HealBot_Tooltip_luVars["doInit"]=true
 
 function HealBot_Tooltip_setLuVars(vName, vValue)
     HealBot_Tooltip_luVars[vName]=vValue
-    HealBot_setCall("HealBot_Tooltip_setLuVars")
+    --HealBot_setCall("HealBot_Tooltip_setLuVars")
 end
 
 function HealBot_Tooltip_Clear_CheckBuffs()
@@ -484,10 +484,10 @@ function HealBot_DebugTooltip()
 end
 
 local function HealBot_Action_DoRefreshTooltip()
-    if IsAltKeyDown() and HealBot_retCalls() then 
-        HealBot_DebugTooltip() 
-        return
-    end
+    --if IsAltKeyDown() and HealBot_retCalls() then 
+    --    HealBot_DebugTooltip() 
+    --    return
+    --end
     if HealBot_Data["TIPTYPE"]=="NONE" then return end
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
@@ -530,7 +530,7 @@ local function HealBot_Action_DoRefreshTooltip()
     if spellButton4 and strsub(strlower(spellButton4),1,4)==strlower(HEALBOT_TELL) then spellButton4=HEALBOT_TELL end
     if spellButton5 and strsub(strlower(spellButton5),1,4)==strlower(HEALBOT_TELL) then spellButton5=HEALBOT_TELL end
   
-    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and UnitExists(xUnit) and UnitIsFriend("player",xUnit) then 
+    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and UnitExists(xUnit) and xButton.status.friend then 
         local z=spellLeft;
         spellLeft=nil;
         spellLeft=HealBot_Action_SmartCast(xButton);

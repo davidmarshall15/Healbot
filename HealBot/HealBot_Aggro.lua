@@ -6,7 +6,7 @@ HealBot_Aggro_luVars["UpdateFluidBars"]=true
 
 function HealBot_Aggro_setLuVars(vName, vValue)
     HealBot_Aggro_luVars[vName]=vValue
-    HealBot_setCall("HealBot_Aggro_setLuVars")
+    --HealBot_setCall("HealBot_Aggro_setLuVars")
 end
 
 local tConcat={}
@@ -16,7 +16,7 @@ end
 
 local aiuBar, aiuIconName=false,false
 function HealBot_Aggro_IndicatorUpdate(button)
-    if not UnitExists(button.unit) or (UnitExists(button.unit) and not UnitIsFriend("player",button.unit)) then
+    if not UnitExists(button.unit) or (UnitExists(button.unit) and not button.status.friend) then
         if HealBot_Aggro_rCalls[button.unit] then HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]="notUnit" end
         aiuBar=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
         aiuIconName = _G[aiuBar:GetName().."Iconal1"];
@@ -104,7 +104,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
             end
         end
     end
-    HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
+    --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
 function HealBot_Aggro_ResetrCallsUnit(unit)
@@ -120,7 +120,7 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
     tConcat[3]="Bar4"
     adaBar=_G[HealBot_Aggro_Concat(3)]
     
-    if UnitExists(button.unit) and UnitIsFriend("player",button.unit) then
+    if UnitExists(button.unit) and button.status.friend then
         if UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
             status=false
             threatPct=0
@@ -174,6 +174,9 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
                     adaBar:SetValue(100)
                     button.status.bar4=1
                     HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                else
+                    adaBar:SetStatusBarColor(1,0,0,0)
+                    button.status.bar4=0
                 end
             else
                 adaBar:SetStatusBarColor(1,0,0,0)
@@ -201,7 +204,7 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
         HealBot_Text_setNameText(button) 
         HealBot_Action_UpdateHealthButton(button) 
     end
-    HealBot_setCall("HealBot_Action_DoUpdateAggro")
+    --HealBot_setCall("HealBot_Action_DoUpdateAggro")
 end
 
 
@@ -328,7 +331,7 @@ local function HealBot_Aggro_UpdateFluidBars()
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_UpdateFluidBar(xButton)
     end
-    HealBot_setCall("HealBot_Aggro_UpdateFluidBars")
+    --HealBot_setCall("HealBot_Aggro_UpdateFluidBars")
 end
 
 local aFrameUpd={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false}
@@ -412,7 +415,7 @@ local function HealBot_Aggro_UpdateAggroBars()
             end
         end
     end
-    HealBot_setCall("HHealBot_Aggro_UpdateAggroBars")
+    --HealBot_setCall("HHealBot_Aggro_UpdateAggroBars")
 end
 
 function HealBot_Aggro_UpdateBars()

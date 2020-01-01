@@ -1,5 +1,5 @@
 if HealBot_Version_Target() then
-    HealBot_lastVerSkinUpdate="8.2.5.8"
+    HealBot_lastVerSkinUpdate="8.2.5.10"
 
     HealBot_Default_Textures={
         [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -238,7 +238,7 @@ if HealBot_Version_Target() then
             Debug01=false, -- Currently not used
             VersionResetDone={},
             CatchAltDebuffIDs={["init"]=true},
-            CureCustomDefaultCastBy="ALL",
+            CureCustomDefaultCastBy=1,
             TopRole="TANK",
             TargetBarRestricted=0,
             ResLagDuration=3,
@@ -357,6 +357,7 @@ if HealBot_Version_Target() then
                 [HEALBOT_DEBUFF_FORBEARANCE] = 3,
                 [HEALBOT_DEBUFF_WEAKENED_SOUL] = 4,
             },
+            CustomDebuffIDMethod = {},
             HealBot_Custom_Debuffs = {
                 -- Defaults
                 [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15,
@@ -372,6 +373,7 @@ if HealBot_Version_Target() then
                 [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
             },
             HealBot_Custom_Buffs_ShowBarCol={},
+            CustomBuffIDMethod = {},
             WatchHoT = {
                ["DRUI"] = {
                     [HEALBOT_REJUVENATION]=2,

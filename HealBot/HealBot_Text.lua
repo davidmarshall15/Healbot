@@ -127,7 +127,7 @@ function HealBot_Text_sethbNumberFormat()
         end
         
     end
-    HealBot_setCall("HealBot_Text_sethbNumberFormat")
+    --HealBot_setCall("HealBot_Text_sethbNumberFormat")
 end
 
 function HealBot_Text_sethbAggroNumberFormat()
@@ -158,7 +158,7 @@ function HealBot_Text_sethbAggroNumberFormat()
             aggroNumFormatSurRa[j]=""
         end
     end
-    HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
+    --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
 end
 
 local atcR, atcG, atcB=1,1,1
@@ -166,7 +166,7 @@ local function HealBot_Text_TextColours(button)
     if button.status.current==9 and not hbGUID~=HealBot_Data["PGUID"] then
         if UnitHasIncomingResurrection(button.unit) then
             atcR,atcG,atcB=0.2, 1.0, 0.2
-        elseif UnitIsFriend(button.unit, "player") then
+        elseif button.status.friend then
             if UnitIsUnit(button.unit, "player") then
                 atcR,atcG,atcB=0.7, 0.4, 0.4
             elseif button.status.range > 0 or UnitInRange(button.unit) then
@@ -194,12 +194,12 @@ local function HealBot_Text_TextColours(button)
         atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EG"] or 1;
         atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EB"] or 1;
     end
-    HealBot_setCall("HealBot_Text_TextColours")
+    --HealBot_setCall("HealBot_Text_TextColours")
     return atcR,atcG,atcB
 end
 
 local vTextCharDoubleSpace,vTextCharSpace,vTextCharPercent,vTextCharPlus="  "," ","%","+"
-local vTextCharMinus,vTextCharNewline,vTextCharDot="-","\n","."
+local vTextCharNewline,vTextCharDot="\n","."
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix=true,0,""
 local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     if amount>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
@@ -230,7 +230,7 @@ local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     else
         return amount, vTextCharNothing
     end
-    HealBot_setCall("HealBot_Text_shortHealTxt")
+    --HealBot_setCall("HealBot_Text_shortHealTxt")
 end
 
 local vHealthTextConcatIndex,vHealthTextConcatResult=0,""
@@ -311,7 +311,7 @@ function HealBot_Text_setHealthText(button)
             if vHealthTextTotal>0 then
                 tHealthConcat[3]=vTextCharPlus
             else
-                tHealthConcat[3]=vTextCharMinus
+                tHealthConcat[3]=vTextCharNothing
             end
             tHealthConcat[4]=vHealthTextTotal
             tHealthConcat[5]=ahtNumSuffix
@@ -375,7 +375,7 @@ function HealBot_Text_setHealthText(button)
         button.text.health=vTextCharNothing
         button.text.update=true
     end
-    HealBot_setCall("HealBot_Text_setHealthText")
+    --HealBot_setCall("HealBot_Text_setHealthText")
 end
 
 local vSetTextLenWidthAdj,vSetTextLenFontAdj=0,0
@@ -392,12 +392,12 @@ function HealBot_Text_setTextLen(curFrame)
     else
         hbBarTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]
     end
-    HealBot_setCall("HealBot_Text_setTextLen")
+    --HealBot_setCall("HealBot_Text_setTextLen")
 end
 
 function HealBot_Text_setNameTag(button)
     if UnitExists(button.unit) then
-        if UnitIsFriend("player",button.unit) then
+        if button.status.friend then
             if button.status.offline then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGDC"];
             elseif button.status.current==9 then
@@ -414,7 +414,7 @@ function HealBot_Text_setNameTag(button)
         button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGR"]
     end
     button.text.update=true
-    HealBot_setCall("HealBot_Text_setNameTag")
+    --HealBot_setCall("HealBot_Text_setNameTag")
 end
 
 local vTextCharColon,vTextCharAggroLeft,vTextCharAggroRight=":",">> "," <<"
@@ -470,7 +470,7 @@ function HealBot_Text_setNameText(button)
         button.text.name=vSetNameTextName
         button.text.update=true
     end
-    HealBot_setCall("HealBot_Text_setNameText")
+    --HealBot_setCall("HealBot_Text_setNameText")
 end
 
 local atR, atG, atB, atA, atBar, atBatText, atConcat=0, 0, 0, 0, "", "", ""
@@ -502,7 +502,7 @@ function HealBot_Text_SetText(button)
             atBatText:SetText(HealBot_Text_Concat(2))
         end
     end
-    HealBot_setCall("HealBot_Text_SetText")
+    --HealBot_setCall("HealBot_Text_SetText")
 end
 
 function HealBot_Text_UpdateNames()

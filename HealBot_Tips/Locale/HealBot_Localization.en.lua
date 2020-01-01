@@ -308,6 +308,7 @@ function HealBot_Lang_Options_enALL()
                         -- Debuffs Custom tab
                                  ["DEBUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
                                  ["DEBUFFSCUSTOMDEBUFF"]=HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS,
+                                 ["DEBUFFSCUSTOMIDMETHOD"]=HEALBOT_OPTIONS_CUSTOM_IDMETHOD,
                                  ["DEBUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
                                  ["DEBUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
                                  ["DEBUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWDEBUFFTEXT,
@@ -347,6 +348,7 @@ function HealBot_Lang_Options_enALL()
                         -- Buffs Custom tab
                                  ["BUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
                                  ["BUFFSCUSTOMBUFF"]=HEALBOT_OPTIONS_ALLSPELLS,
+                                 ["BUFFSCUSTOMIDMETHOD"]=HEALBOT_OPTIONS_CUSTOM_IDMETHOD,
                                  ["BUFFSCUSTOMCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
                                  ["BUFFSCUSTOMDELETE"]=HEALBOT_OPTIONS_DELSKIN,
                                  ["BUFFSCUSTOMNEWNAME"]=HEALBOT_OPTIONS_NEWHOTBUFFTEXT,
@@ -429,7 +431,7 @@ function HealBot_Lang_Options_enALL()
                                ["SHOWMINIMAPBUTTON"]="Show a button on the minimap\nthat will open options.",
                                ["QUERYTALENTS"]="Query talent information when\nthe mouse moves over a bar.\nNOTE: This is only used by tooltips.",
                                ["ENABLEAUTOCOMBAT"]="Put healbot into lockdown combat mode when\nanyone in the group/raid goes into combat.",
-                               ["ENABLEFASTHEALTH"]="Monitor combat log for instant health updates.",
+                               ["ENABLEFASTHEALTH"]="Monitor combat log for instant health updates.\nNOTE: Not recommended in retail.",
                                ["IGNOREAURAEVENTS"]="Ignore required buffs when resting.",
                                ["DISABLEHEALBOT"]="Put Healbot into a deep sleep.",
                                ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
@@ -699,6 +701,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSTYPECOLOUR"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s by debuff types. Click to change.\nWhen the player has a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
                                ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
+                               ["DEBUFFSCUSTOMIDMETHOD"]="Check debuffs using Spell ID, Spell Name or Both.",
                                ["DEBUFFSCUSTOMDEBUFF"]="Lists custom default settings or individual\ndebuffs depending on the Category selected.",
                                ["DEBUFFSCUSTOMCASTBY"]="Sets a filter on debuffs displayed\nby checking the caster of the debuff.",
                                ["DEBUFFSCUSTOMDELETE"]="Delete the selected custom debuff.",
@@ -739,6 +742,7 @@ function HealBot_Lang_Options_enALL()
                         -- Buffs Custom tab
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the category dropdown.",
                                ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
+                               ["BUFFSCUSTOMIDMETHOD"]="Check buffs using Spell ID, Spell Name or Both.",
                                ["BUFFSCUSTOMCASTBY"]="Sets a filter on buffs displayed\nby checking the caster of the buff.",
                                ["BUFFSCUSTOMDELETE"]="Delete the selected custom buff.",
                                ["BUFFSCUSTOMNEWNAME"]="Add a new buff to the current category.\nNote: The Spell Name or Spell ID can be used.\nUsing Spell ID is recommended.",
