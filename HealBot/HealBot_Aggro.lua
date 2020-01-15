@@ -165,15 +165,18 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
                 adaBar:SetValue(100)
                 button.status.bar4=1
                 HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                HealBot_UpdateBarNow()
             elseif Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBARS"] then 
                 if threatStatus>0 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWBARSPCT"] then
                     adaBar:SetValue(threatPct)
                     button.status.bar4=1
                     HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                    HealBot_UpdateBarNow()
                 elseif threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
                     adaBar:SetValue(100)
                     button.status.bar4=1
                     HealBot_Aggro_luVars["UpdatedAggroBars"]=true
+                    HealBot_UpdateBarNow()
                 else
                     adaBar:SetStatusBarColor(1,0,0,0)
                     button.status.bar4=0
@@ -401,13 +404,13 @@ local function HealBot_Aggro_UpdateAggroBars()
     for j=1,9 do
         if aFrameUpd[j] then
             if HealBot_Aggro_luVars["AggroBarUp"] then
-                aAlpha[j]=aAlpha[j]+0.04+Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
+                aAlpha[j]=aAlpha[j]+0.05+Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
                 if aAlpha[j]>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MAXA"] then
                     HealBot_Aggro_luVars["AggroBarUp"]=false
                     aAlpha[j]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MAXA"]
                 end
             else
-                aAlpha[j]=aAlpha[j]-0.04-Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
+                aAlpha[j]=aAlpha[j]-0.05-Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["FREQ"]
                 if aAlpha[j]<=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MINA"] then
                     HealBot_Aggro_luVars["AggroBarUp"]=true
                     aAlpha[j]=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["MINA"]
@@ -418,11 +421,16 @@ local function HealBot_Aggro_UpdateAggroBars()
     --HealBot_setCall("HHealBot_Aggro_UpdateAggroBars")
 end
 
+local hbAggroUpdates=false
 function HealBot_Aggro_UpdateBars()
+    hbAggroUpdates=false
     if HealBot_Aggro_luVars["UpdatedAggroBars"] then
         HealBot_Aggro_UpdateAggroBars()
+        hbAggroUpdates=true
     end
     if HealBot_Aggro_luVars["UpdateFluidBars"] then
         HealBot_Aggro_UpdateFluidBars()
+        hbAggroUpdates=true
     end
+    return hbAggroUpdates
 end

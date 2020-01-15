@@ -54,7 +54,11 @@ end
 local floor=floor
 
 function HealBot_Text_Len(v)
-    return hbStringLen(v)
+    if "string" == type( v ) then
+        return hbStringLen(v)
+    else
+        return 0
+    end
 end
 
 local tConcat={}
@@ -200,11 +204,13 @@ end
 
 local vTextCharDoubleSpace,vTextCharSpace,vTextCharPercent,vTextCharPlus="  "," ","%","+"
 local vTextCharNewline,vTextCharDot="\n","."
-local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix=true,0,""
+local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
+local hbAbs=math.abs
 local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
-    if amount>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
+    vShortHealTxtAbsNum=hbAbs(amount)
+    if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
         if hbNumFormats["Places"][hbCurFrame]<3 then 
-            if amount>999999 then
+            if vShortHealTxtAbsNum>999999 then
                 vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,hbNumFormats["Places"][hbCurFrame]) 
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
             else
@@ -212,13 +218,13 @@ local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
                 vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
             end
         else
-            if amount>9999999 then
+            if vShortHealTxtAbsNum>9999999 then
                 vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,0)
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
-            elseif amount>999999 then
+            elseif vShortHealTxtAbsNum>999999 then
                 vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,1)
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
-            elseif amount>99999 then
+            elseif vShortHealTxtAbsNum>9999 then
                 vShortHealTxtAmount=HealBot_Comm_round(amount/1000,0)
                 vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
             else

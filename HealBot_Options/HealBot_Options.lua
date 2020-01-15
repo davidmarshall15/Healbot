@@ -82,6 +82,7 @@ local HealBot_Options_FontOutline_List={}
 local HealBot_Options_BuffTxt_List={}
 local HealBot_Options_HealGroupsFrame_List={}
 local HealBot_Options_TargetFocusInCombat_List={}
+local HealBot_Options_NoDuplcates={}
 local hbOptionsTooltip = CreateFrame("GameTooltip", "hbOptionsTooltip", nil, "GameTooltipTemplate")
 
 HealBot_Options_StorePrev["FramesSelFrame"]=1
@@ -112,9 +113,7 @@ end)
 function HealBot_Options_InitVars()
     if HEALBOT_GAME_VERSION<4 then 
         HealBot_Debuff_Types = {
-            [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
-            [HBC_PURIFY] = {HEALBOT_POISON_en, HEALBOT_DISEASE_en},
             [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
@@ -128,6 +127,13 @@ function HealBot_Options_InitVars()
             [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
             [HBC_PRIEST_ABOLISH_DISEASE] = {HEALBOT_DISEASE_en},
         }
+        if UnitLevel("player")>41 then
+            HealBot_Debuff_Types[HBC_PURIFY] =  {HEALBOT_POISON_en, HEALBOT_DISEASE_en}
+            HealBot_Debuff_Types[HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en}
+        else
+            HealBot_Debuff_Types[HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en}
+            HealBot_Debuff_Types[HBC_PURIFY] =  {HEALBOT_POISON_en, HEALBOT_DISEASE_en}
+        end
     else
         HealBot_Buff_Items_List = {
             HEALBOT_ORALIUS_WHISPERING_CRYSTAL,
@@ -1010,17 +1016,22 @@ end
 
 function HealBot_Options_InitBuffList()
     HealBot_Buff_Spells_List ={}
+    for x,_ in pairs(HealBot_Options_NoDuplcates) do
+        HealBot_Options_NoDuplcates[x]=nil
+    end 
     for j=1, getn(HealBot_Buff_Spells_Class_List), 1 do
         local spellName=HealBot_KnownSpell(HealBot_Buff_Spells_Class_List[j])
-        if spellName then
+        if spellName and not HealBot_Options_NoDuplcates[spellName] then
             table.insert(HealBot_Buff_Spells_List,spellName)
+            HealBot_Options_NoDuplcates[spellName]=true
         end
     end
     for j=1, getn(HealBot_Buff_Items_List), 1 do
         if IsUsableItem(HealBot_Buff_Items_List[j]) or HealBot_IsItemInBag(HealBot_Buff_Items_List[j]) then   
             local itemName=GetItemInfo(HealBot_Buff_Items_List[j])
-            if itemName then 
+            if itemName and not HealBot_Options_NoDuplcates[itemName] then 
                 table.insert(HealBot_Buff_Spells_List,itemName) 
+                HealBot_Options_NoDuplcates[itemName]=true
             end
         end
     end
@@ -1173,15 +1184,16 @@ function HealBot_Options_retDebuffCureSpell(debuffType)
     return HealBot_DebuffSpell[debuffType]
 end
 
+local hbDebuffSpellRemain,hbDebuffSpellStart,hbDebuffSpellDuration=0,0,0
 function HealBot_Options_retDebuffWatchTargetCD(debuffType)
-    local remain=0
+    hbDebuffSpellRemain=0
     if HealBot_DebuffSpell[debuffType] then
-        local start, duration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
-        if start and duration and duration>1 then 
-            remain = duration-(GetTime()-start)
+        hbDebuffSpellStart, hbDebuffSpellDuration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
+        if hbDebuffSpellStart and hbDebuffSpellDuration and hbDebuffSpellDuration>1 then 
+            hbDebuffSpellRemain = hbDebuffSpellDuration-(GetTime()-hbDebuffSpellStart)
         end
     end
-    return remain
+    return hbDebuffSpellRemain
 end
 
 function HealBot_Options_retBuffWatchTarget(buffName)
@@ -2617,12 +2629,12 @@ function HealBot_Options_MaxBarCache_OnValueChanged(self)
 end
 
 function HealBot_Options_RangeCheckFreq_setSession()
-    local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/40)
+    local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/10)
     HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
-    if val<0.175 then
+    if val<0.5 then
         HealBot_setLuVars("enTurbo", true)
         HealBot_setLuVars("enSlowMo", false)
-    elseif val>0.275 then
+    elseif val>0.7 then
         HealBot_setLuVars("enTurbo", false)
         HealBot_setLuVars("enSlowMo", true)
     else
@@ -2690,7 +2702,6 @@ function HealBot_Options_BarFreq_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        val=val/10;
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] = val;
     end
 end
@@ -2839,7 +2850,7 @@ function HealBot_Options_ShowPowerCounter_OnClick(self)
     else
         Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["POWERCNT"] = false
     end
-    HealBot_Action_setpcClass()
+    HealBot_setOptions_Timer(50)
     HealBot_Options_Energy()
 end
 
@@ -5731,16 +5742,16 @@ function HealBot_Options_LangsButton_OnClick(self)
         HealBot_Options_Lang("itIT")
     elseif HealBot_Options_StorePrev["hbLangs"]==9 then
         HealBot_Options_Lang("koKR")
-    elseif HealBot_Options_StorePrev["hbLangs"]==10 then
-        HealBot_Options_Lang("ptBR")
-    elseif HealBot_Options_StorePrev["hbLangs"]==11 then
-        HealBot_Options_Lang("ruRU")
-    elseif HealBot_Options_StorePrev["hbLangs"]==12 then
-        HealBot_Options_Lang("esES")
-    elseif HealBot_Options_StorePrev["hbLangs"]==13 then
-        HealBot_Options_Lang("zhTW")
-	elseif HealBot_Options_StorePrev["hbLangs"]==14 then
+	elseif HealBot_Options_StorePrev["hbLangs"]==10 then
         HealBot_Options_Lang("esMX")
+    elseif HealBot_Options_StorePrev["hbLangs"]==11 then
+        HealBot_Options_Lang("ptBR")
+    elseif HealBot_Options_StorePrev["hbLangs"]==12 then
+        HealBot_Options_Lang("ruRU")
+    elseif HealBot_Options_StorePrev["hbLangs"]==13 then
+        HealBot_Options_Lang("esES")
+    elseif HealBot_Options_StorePrev["hbLangs"]==14 then
+        HealBot_Options_Lang("zhTW")
     end
 end
 
@@ -6256,22 +6267,24 @@ end
 
 function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     local tmpHealDDlist={}
+    for x,_ in pairs(HealBot_Options_NoDuplcates) do
+        HealBot_Options_NoDuplcates[x]=nil
+    end 
     if HEALBOT_GAME_VERSION>3 then
         local fullHealDDlist=HealBot_Options_FullHealSpellsCombo_list(sType)
         for j=1, getn(fullHealDDlist), 1 do
             local spellName=HealBot_KnownSpell(fullHealDDlist[j])
-            if spellName then
+            if spellName and not HealBot_Options_NoDuplcates[spellName] then
                 table.insert(tmpHealDDlist, spellName)
+                HealBot_Options_NoDuplcates[spellName]=true
             end
         end
     else
         local knownHealSpells=HealBot_Init_retFoundHealSpells()
         for sName,_ in pairs(HealBot_Spell_Names) do
-            for kSpell,_ in pairs(knownHealSpells) do
-                if string.find(sName, kSpell) then
-                    table.insert(tmpHealDDlist, sName)
-                    break
-                end
+            if not HealBot_Options_NoDuplcates[sName] then
+                table.insert(tmpHealDDlist, sName)
+                HealBot_Options_NoDuplcates[sName]=true
             end
         end
     end
@@ -6313,6 +6326,9 @@ HealBot_Options_StorePrev["OtherSpellsComboID"] = 0
 local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
     local HealBot_Options_SelectOtherSpellsCombo_List = {}
     local tmpOtherDDlist={}
+    for x,_ in pairs(HealBot_Options_NoDuplcates) do
+        HealBot_Options_NoDuplcates[x]=nil
+    end 
     if HealBot_Options_StorePrev["ActionBarsCombo"]==3 then
         HealBot_Options_SelectOtherSpellsCombo_List = {
             HEALBOT_HEX,
@@ -6337,7 +6353,8 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
         }
         for j=1, getn(HealBot_Options_SelectOtherSpellsCombo_List), 1 do
             local spellName=HealBot_KnownSpell(HealBot_Options_SelectOtherSpellsCombo_List[j])
-            if spellName then
+            if spellName and not HealBot_Options_NoDuplcates[spellName] then
+                HealBot_Options_NoDuplcates[spellName]=true
                 table.insert(tmpOtherDDlist,spellName)
             end
         end
@@ -6416,12 +6433,16 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
         }
         for j=1, getn(HealBot_Options_SelectOtherSpellsCombo_List), 1 do
             local spellName=HealBot_KnownSpell(HealBot_Options_SelectOtherSpellsCombo_List[j])
-            if spellName then
+            if spellName and not HealBot_Options_NoDuplcates[spellName] then
+                HealBot_Options_NoDuplcates[spellName]=true
                 table.insert(tmpOtherDDlist,spellName)
             end
         end
         for j=1, getn(HealBot_Buff_Spells_List), 1 do
-            table.insert(tmpOtherDDlist,HealBot_Buff_Spells_List[j])
+            if not HealBot_Options_NoDuplcates[HealBot_Buff_Spells_List[j]] then
+                table.insert(tmpOtherDDlist,HealBot_Buff_Spells_List[j])
+                HealBot_Options_NoDuplcates[HealBot_Buff_Spells_List[j]]=true
+            end
         end
     end
     table.sort(tmpOtherDDlist)
@@ -6464,10 +6485,14 @@ function HealBot_Options_SelectMacrosCombo_DropDown()
     local numglobal,numperchar = GetNumMacros();
     local totalMacros=numglobal+numperchar
     local hbMacroName=nil
+    for x,_ in pairs(HealBot_Options_NoDuplcates) do
+        HealBot_Options_NoDuplcates[x]=nil
+    end 
     if totalMacros>0 then
         for j=1, numglobal, 1 do
             hbMacroName=GetMacroInfo(j)
-            if hbMacroName then
+            if hbMacroName and not HealBot_Options_NoDuplcates[hbMacroName] and not strfind(hbMacroName, HealBot_Config.CrashProtMacroName) then
+                HealBot_Options_NoDuplcates[hbMacroName]=true
                 local mgName = hbMacroName
                 info.text = mgName
                 info.func = function(self)
@@ -6482,7 +6507,8 @@ function HealBot_Options_SelectMacrosCombo_DropDown()
         end
         for j=MAX_ACCOUNT_MACROS+1, numperchar+MAX_ACCOUNT_MACROS, 1 do
             hbMacroName=GetMacroInfo(j)
-            if hbMacroName and strsub(hbMacroName,1,strlen(HealBot_Config.CrashProtMacroName))~=HealBot_Config.CrashProtMacroName then
+            if hbMacroName and not HealBot_Options_NoDuplcates[hbMacroName] and not strfind(hbMacroName, HealBot_Config.CrashProtMacroName) then
+                HealBot_Options_NoDuplcates[hbMacroName]=true
                 local mpName = hbMacroName
                 info.text = mpName
                 info.func = function(self)
@@ -6512,31 +6538,64 @@ end
 function HealBot_Options_itemsByLevel()
     local hbLevel = UnitLevel("player")
     local hbItemsByLevel={}
+    for x,_ in pairs(HealBot_Options_NoDuplcates) do
+        HealBot_Options_NoDuplcates[x]=nil
+    end 
     local hbTmpText1=nil
-    if hbLevel <= 20 then
-        hbTmpText1 = GetItemInfo(19004) or "Minor Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 30 then
-        hbTmpText1 = GetItemInfo(19007) or "Lesser Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 40 then
+    if HEALBOT_GAME_VERSION>3 then
         hbTmpText1 = GetItemInfo(19009) or "Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 50 then
-        hbTmpText1 = GetItemInfo(19011) or "Greater Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 60 then
-        hbTmpText1 = GetItemInfo(9421) or "Major Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 70 then
-        hbTmpText1 = GetItemInfo(19008) or "Master Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
-    elseif hbLevel <= 75 then
-        hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
+        if not HealBot_Options_NoDuplcates[hbTmpText1] then
+            table.insert(hbItemsByLevel,hbTmpText1)
+            HealBot_Options_NoDuplcates[hbTmpText1]=true
+        end
     else
-        hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
-        table.insert(hbItemsByLevel,hbTmpText1)
+        if hbLevel <= 20 then
+            hbTmpText1 = GetItemInfo(19004) or "Minor Healthstone"
+            table.insert(hbItemsByLevel,hbTmpText1)
+            HealBot_Options_NoDuplcates[hbTmpText1]=true
+        elseif hbLevel <= 30 then
+            hbTmpText1 = GetItemInfo(19007) or "Lesser Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        elseif hbLevel <= 40 then
+            hbTmpText1 = GetItemInfo(19009) or "Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        elseif hbLevel <= 50 then
+            hbTmpText1 = GetItemInfo(19011) or "Greater Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        elseif hbLevel <= 60 then
+            hbTmpText1 = GetItemInfo(9421) or "Major Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        elseif hbLevel <= 70 then
+            hbTmpText1 = GetItemInfo(19008) or "Master Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        elseif hbLevel <= 75 then
+            hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        else
+            hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
+            if not HealBot_Options_NoDuplcates[hbTmpText1] then
+                table.insert(hbItemsByLevel,hbTmpText1)
+                HealBot_Options_NoDuplcates[hbTmpText1]=true
+            end
+        end
     end
     return hbItemsByLevel
 end
@@ -6594,8 +6653,9 @@ function HealBot_Options_SelectItemsCombo_DropDown()
         }
         HealBot_Options_SelectItemsCombo_List=HealBot_Options_itemsByLevel()
         for j=1, getn(hbItemsIfExists), 1 do
-            if IsUsableItem(hbItemsIfExists[j]) or HealBot_IsItemInBag(hbItemsIfExists[j]) then
+            if not HealBot_Options_NoDuplcates[hbItemsIfExists[j]] and (IsUsableItem(hbItemsIfExists[j]) or HealBot_IsItemInBag(hbItemsIfExists[j])) then
                 table.insert(HealBot_Options_SelectItemsCombo_List, hbItemsIfExists[j])
+                HealBot_Options_NoDuplcates[hbItemsIfExists[j]]=true
             end
         end
         local tID=nil
@@ -6607,8 +6667,9 @@ function HealBot_Options_SelectItemsCombo_DropDown()
             else
                 tName=nil
             end
-            if tName and GetItemSpell(tName) then
+            if tName and GetItemSpell(tName) and not HealBot_Options_NoDuplcates[tName] then
                 table.insert(HealBot_Options_SelectItemsCombo_List, tName)
+                HealBot_Options_NoDuplcates[tName]=true
             end
         end
     end
@@ -8059,7 +8120,7 @@ function HealBot_Options_LoadSpellsb_OnClick()
 end
 
 function HealBot_Options_ShareBuffsb_OnClick()
-    local ssStr="CustomBuffs\n"
+    local ssStr="CustomBuffs_v8300\n"
     local hbClassHoTwatch=HealBot_Globals.WatchHoT
     for xClass,_  in pairs(hbClassHoTwatch) do
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
@@ -8079,6 +8140,7 @@ function HealBot_Options_ShareBuffsb_OnClick()
             else
                 ssStr=ssStr..",,,"
             end
+            ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 3).."," 
             if HealBot_Globals.IgnoreCustomBuff[bId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomBuff[bId]) do
                     ssStr=ssStr..(instName)..","
@@ -8102,8 +8164,8 @@ function HealBot_Options_LoadBuffsb_OnClick()
         end
     end
     if i>0 then
-        if ssTab[1]~="CustomBuffs" then
-            HealBot_Options_ImportFail("Buffs", "Header is incorrect - expecting CustomBuffs")
+        if ssTab[1]~="CustomBuffs_v8300" then
+            HealBot_Options_ImportFail("Buffs", "Header is incorrect - expecting CustomBuffs_v8300")
         else
             if HealBot_Options_StorePrev["InMethodBuff"]==1 then
                 HealBot_Options_StorePrev["custombufftextpage"]=1
@@ -8119,13 +8181,14 @@ function HealBot_Options_LoadBuffsb_OnClick()
             end
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
-                local bId,prio,filter,show,r,g,b,i1,i2,i3,i4=string.split(",", d)
+                local bId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
                 bId=tonumber(bId) or bId
                 prio=tonumber(prio)
                 filter=tonumber(filter)
                 r=tonumber(r)
                 g=tonumber(g)
                 b=tonumber(b)
+                idMethod=tonumber(idMethod) or 3
                 if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Options_StorePrev["InMethodBuff"]<3 then
                     local bName=GetSpellInfo(bId) or bId
                     HealBot_Globals.WatchHoT[c][bId]=filter
@@ -8142,6 +8205,9 @@ function HealBot_Options_LoadBuffsb_OnClick()
                         HealBot_Globals.CustomBuffBarColour[bId]["B"]=b
                     elseif HealBot_Globals.CustomBuffBarColour[bId] then
                         HealBot_Globals.CustomBuffBarColour[bId]=nil
+                    end
+                    if idMethod>0 and idMethod<3 then
+                        HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
                     end
                     if string.len(i1)>0 then 
                         if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
@@ -8183,7 +8249,7 @@ function HealBot_Options_ShareCDebuffb_OnClick()
             else
                 ssStr=ssStr..",,,"
             end
-            ssStr=ssStr.."false," -- This was Reverse Duration, no longer used.
+            ssStr=ssStr..(HealBot_Globals.CustomDebuffIDMethod[dId] or 3).."," 
             if HealBot_Globals.IgnoreCustomDebuff[dId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomDebuff[dId]) do
                     ssStr=ssStr..(instName)..","
@@ -8226,7 +8292,7 @@ function HealBot_Options_LoadCDebuffb_OnClick()
             end
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
-                local dId,prio,filter,show,r,g,b,_notused,i1,i2,i3,i4=string.split(",", d)
+                local dId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
                 c=tonumber(c)
                 dId=tonumber(dId) or dId
                 prio=tonumber(prio)
@@ -8234,6 +8300,7 @@ function HealBot_Options_LoadCDebuffb_OnClick()
                 r=tonumber(r)
                 g=tonumber(g)
                 b=tonumber(b)
+                idMethod=tonumber(idMethod) or 3
                 if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Options_StorePrev["InMethodCDbuff"]<3 then
                     local dName=GetSpellInfo(dId) or dId
                     if dName==dId then HealBot_Globals.CatchAltDebuffIDs[dName]=true end
@@ -8252,6 +8319,9 @@ function HealBot_Options_LoadCDebuffb_OnClick()
                         HealBot_Globals.CDCBarColour[dId]["B"]=b
                     elseif HealBot_Globals.CDCBarColour[dId] then
                         HealBot_Globals.CDCBarColour[dId]=nil
+                    end
+                    if idMethod>0 and idMethod<3 then
+                        HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
                     end
                     if string.len(i1)>0 then 
                         if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
@@ -9811,6 +9881,7 @@ function HealBot_Options_DeleteCDebuff(dId)
     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=nil
     if HealBot_Globals.FilterCustomDebuff[dId] then HealBot_Globals.FilterCustomDebuff[dId]=nil end
     HealBot_Globals.IgnoreCustomDebuff[dId]=nil
+    HealBot_Globals.CustomDebuffIDMethod[dId]=nil
     HealBot_Aura_ResetDebuffCache(dId)
     HealBot_Options_InitSub(402)
     HealBot_Options_InitSub(403)
@@ -9829,6 +9900,7 @@ end
 function HealBot_Options_DeleteBuffHoT(classTr, sId)
     HealBot_Globals.WatchHoT[classTr][sId]=nil
     HealBot_Globals.IgnoreCustomBuff[sId]=nil
+    HealBot_Globals.CustomBuffIDMethod[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs[sId]=nil
     HealBot_Globals.CustomBuffBarColour[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sId]=nil
@@ -12566,8 +12638,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_sliderlabels_Init(HealBot_Options_StickyFramesSensitivity,HEALBOT_OPTIONS_STICKYSENSITIVITY,15,75,1,5,HEALBOT_WORK_HIGH,HEALBOT_WORD_LOW)
             HealBot_Options_StickyFramesSensitivity:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYSENSITIVITY"])
             HealBot_Options_StickyFramesSensitivityText:SetText(HEALBOT_OPTIONS_STICKYSENSITIVITY)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,10,100,10,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
-            HealBot_Options_BarUpdateFreq:SetValue((Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 2)*10)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,10,3,1,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+            HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 3)
             HealBot_Options_BarUpdateFreqText:SetText(HEALBOT_OPTION_BARUPDFREQ)
             g=_G["HealBot_GeneralSkin_FontStr"]
             g:SetText(HEALBOT_OPTIONS_TAB_GENERAL)

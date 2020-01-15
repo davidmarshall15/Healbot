@@ -711,16 +711,16 @@ function HealBot_Panel_ToggleTestBars()
         for j=1,10 do
             HealBot_Action_HidePanel(j)
         end
+        HealBot_Action_setLuVars("TestBarsOn", false)
+        HealBot_setLuVars("TestBarsOn", false)
         HealBot_setTestCols={}
     else
+        HealBot_Action_setLuVars("TestBarsOn", true)
+        HealBot_setLuVars("TestBarsOn", true)
         HealBot_setTestBars=true
         HealBot_Panel_luVars["TestBarsDelAll"]=true
         HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TESTBARS.." "..HEALBOT_WORD_ON)
     end
-end
-
-function HealBot_Panel_retTestBars()
-    return HealBot_setTestBars
 end
 
 local vPosButton=""

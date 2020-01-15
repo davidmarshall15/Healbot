@@ -96,7 +96,11 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
         bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar2:GetStatusBarTexture():SetHorizTile(false)
-        bar3:SetHeight(b2Size);
+        if b2Size==0 then
+            bar3:SetHeight(1)
+        else
+            bar3:SetHeight(b2Size);
+        end
         bar3:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar3:GetStatusBarTexture():SetHorizTile(false)
         bar4:ClearAllPoints();
@@ -173,31 +177,31 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
         if HealBot_Action_retLuVars("UnitPowerMax")==3 then
             pIcon = _G[bar3:GetName().."Icon1"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-9","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-9","1");
             pIcon = _G[bar3:GetName().."Icon2"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","0","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","0","1");
             pIcon = _G[bar3:GetName().."Icon3"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","9","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","9","1");
         elseif HealBot_Action_retLuVars("UnitPowerMax")==4 then
             pIcon = _G[bar3:GetName().."Icon1"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-12","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-12","1");
             pIcon = _G[bar3:GetName().."Icon2"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-4","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-4","1");
             pIcon = _G[bar3:GetName().."Icon3"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","4","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","4","1");
             pIcon = _G[bar3:GetName().."Icon4"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","12","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","12","1");
         else
             pIcon = _G[bar3:GetName().."Icon1"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-14","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-14","1");
             pIcon = _G[bar3:GetName().."Icon2"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-7","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","-7","1");
             pIcon = _G[bar3:GetName().."Icon3"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","0","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","0","1");
             pIcon = _G[bar3:GetName().."Icon4"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","7","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","7","1");
             pIcon = _G[bar3:GetName().."Icon5"];
-            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","14","0");
+            pIcon:SetPoint("BOTTOM",bar3,"BOTTOM","14","1");
         end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["ONBAR"]==1 then
             HealBot_Panel_SetMultiColHoToffset(0)
@@ -524,11 +528,11 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
 
         if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["POWERSIZE"]==0 then
-            bar3:SetHeight(0);
             bar3:SetValue(0);
             bar3:SetStatusBarColor(0,0,0,0)
-        elseif b.unit then 
-            HealBot_Action_SetBar3Value(b)
+        end
+        if b.unit then 
+            HealBot_Action_updBar3Value(b)
         end
         if not Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][b.frame]["SHOWBARS"] and 
            not Healbot_Config_Skins.BarHighlight[Healbot_Config_Skins.Current_Skin][b.frame]["CBAR"] and
@@ -637,6 +641,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         HealBot_Panel_clearResetHeaderSkinDone()
         HealBot_Action_clearResetBarSkinDone()
         HealBot_setOptions_Timer(80)
+        HealBot_setOptions_Timer(50)
         --if vResetSkinPrevSkin~=Healbot_Config_Skins.Current_Skin then
         --    vResetSkinPrevSkin=Healbot_Config_Skins.Current_Skin
             --HealBot_setOptions_Timer(800)

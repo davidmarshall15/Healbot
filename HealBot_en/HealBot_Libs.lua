@@ -31,6 +31,6 @@ end
 
 if HEALBOT_GAME_VERSION<4 then
     libCD = libCD or (LibStub and LibStub("LibClassicDurations"))
-    libCTM = libCTM or (LibStub and LibStub("ThreatClassic-1.0", true))
+    libCTM = libCTM or (LibStub and LibStub("LibThreatClassic2"))
     libCHC = libCHC or (LibStub and LibStub("LibHealComm-4.0", true))
 end

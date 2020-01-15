@@ -1,9 +1,9 @@
-## Interface: 80205
+## Interface: 80300
 ## Title: HealBot Greek Localization
 ## Author: Snaomi
-## Notes: HealBot Localization for grGR
+## Notes: HealBot localization for grGR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.2.5.0
+## Version: 8.3.0.0
 
 HealBot_Localization.gr.lua

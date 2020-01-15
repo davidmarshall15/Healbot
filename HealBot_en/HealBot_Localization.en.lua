@@ -153,9 +153,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
-    HEALBOT_OPTIONS_BUFFCUSTOMURL           = "Custom buffs are available from  "..HEALBOT_ABOUT_URL
+    HEALBOT_OPTIONS_BUFFCUSTOMURL           = "Custom buffs are available at  "..HEALBOT_ABOUT_URL
     HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"
-    HEALBOT_OPTIONS_DEBUFFCUSTOMURL         = "Raid and Instance custom debuffs are available from  "..HEALBOT_ABOUT_URL
+    HEALBOT_OPTIONS_DEBUFFCUSTOMURL         = "Raid and Instance custom debuffs are available at  "..HEALBOT_ABOUT_URL
     HEALBOT_OPTIONS_BUFFMISSING             = "Missing buffs";
     HEALBOT_OPTIONS_DEBUFFDISPELL           = "Dispellable debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFICON          = "Show debuff";
@@ -446,7 +446,7 @@ function HealBot_Lang_enALL()
                    [8] = "[HealBot] /hb spt -- Self Pet toggle",
                    [9] = "[HealBot] /hb flb -- Toggle frame lock bypass (frame always moves with Ctrl+Alt+Left click)",
                    [10] = "[HealBot] /hb hs -- Display additional slash commands",
-                   [11] = "[HealBot] - All commands are listed on the HealBot website "..HEALBOT_ABOUT_URL,
+                   [11] = "[HealBot] - All commands are listed on the HealBot website at "..HEALBOT_ABOUT_URL,
                   }
 
     HEALBOT_HELP2={ [1] = "[HealBot] /hb rtb -- Toggle restrict target bar to Left=SmartCast and Right=add/remove to/from My Targets",
@@ -1013,7 +1013,7 @@ function HealBot_Lang_enALL()
                                   }
 
     HEALBOT_OPTIONS_SKINAUTHOR              = "Skin Author"
-    HEALBOT_OPTIONS_MORESKINSURL            = "Additional skins are available from  "..HEALBOT_ABOUT_URL
+    HEALBOT_OPTIONS_MORESKINSURL            = "Additional skins are available at  "..HEALBOT_ABOUT_URL
     HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Avoid\nBlue Cursor"
     HEALBOT_PLAYER_OF_REALM                 = "of"
     
@@ -1096,7 +1096,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SET_ALL_FRAMES          = "Apply current tab settings to all Frames"
     HEALBOT_WORDS_PROFILE                   = "Profile"
     HEALBOT_SHARE_SCREENSHOT                = "ScreenShot taken"
-    HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing with "..HEALBOT_ABOUT_URL
+    HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_BUFFINIT           = "Custom Buffs can be shared at "..HEALBOT_ABOUT_URL

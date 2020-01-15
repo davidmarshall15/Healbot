@@ -6,7 +6,7 @@ local HealBot_AuraDebuffCache={[-1]={},[-2]={},[-3]={}}
 local HealBot_ExcludeBuffInCache={}
 local HealBot_ExcludeDebuffInCache={}
 local HealBot_ExcludeEnemyInCache={}
-local HealBot_iconUpdate={[1]=0.2,[2]=0.2,[3]=0.2,[4]=0.2,[5]=0.2,[6]=0.2,[7]=0.2,[8]=0.2,[9]=0.2,[10]=0.2,}
+local HealBot_iconUpdate={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,}
 local HealBot_Watch_HoT={};
 local HealBot_CheckBuffs = {}
 local HealBot_ShortBuffs = {}
@@ -40,6 +40,7 @@ HealBot_Aura_luVars["hbInsName"]=HEALBOT_WORD_OUTSIDE
 HealBot_Aura_luVars["prevDebuffType"]="x"
 HealBot_Aura_luVars["prevDebuffName"]="x"
 HealBot_Aura_luVars["MaskAuraDCheck"]=0
+HealBot_Aura_luVars["MinIconUpdate"]=0.32
 
 function HealBot_Aura_setLuVars(vName, vValue)
     HealBot_Aura_luVars[vName]=vValue
@@ -748,14 +749,17 @@ local function HealBot_Aura_CheckCurDebuff(button)
     spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever=0, true, 20, false, uaDebuffType, false, false
     if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
         spellCD=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType)
-    end
-    if spellCD>1.5 then
-        HealBot_Aura_luVars["prevDebuffName"]="x"
-        if spellCD<12 and HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then 
-            HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD+0.5)
-            HealBot_setLuVars("MaskAuraDCheck", HealBot_Aura_luVars["MaskAuraDCheck"])
-            HealBot_setLuVars("MaskAuraReCheck", true)
-            HealBot_CheckAllActiveDebuffs()
+        if spellCD>1.5 then
+            HealBot_Aura_luVars["prevDebuffName"]="x"
+            if spellCD<12 and HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then 
+                HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-0.249
+                HealBot_setLuVars("MaskAuraDCheck", HealBot_Aura_luVars["MaskAuraDCheck"])
+                HealBot_setLuVars("MaskAuraReCheck", true)
+                HealBot_CheckAllActiveDebuffs()
+                HealBot_Update_FastEveryFrame(2)
+            end
+        elseif HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then
+            spellCD=0
         end
     end
     dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaName, uaDebuffType)
@@ -767,7 +771,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
         HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
         ccdbCheckthis,ccdbAlways=false,false
-        if dTypePriority<21 and spellCD<1.5 then
+        if dTypePriority<21 and spellCD<0.25 then
             ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffType);
             if ccdbWatchTarget then
                 if ccdbWatchTarget["Raid"] then
@@ -1417,9 +1421,11 @@ function HealBot_Aura_retDebufftype(unit, id)
 end
 
 function HealBot_Aura_SetIconUpdateInterval()
+    HealBot_Aura_luVars["MinIconUpdate"]=0.32
     for f=1,10 do
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][f]["FADE"] then
             HealBot_iconUpdate[f]=0.2
+            HealBot_Aura_luVars["MinIconUpdate"]=0.064
         else
             HealBot_iconUpdate[f]=1
         end

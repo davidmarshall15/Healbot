@@ -1,8 +1,8 @@
-## Interface: 80205
+## Interface: 80300
 ## Title: HealBot English Localization
 ## Author: Strife
-## Notes: Adds a panel with skinable bars for healing, decursive, buffing, ressing, range checking and aggro tracking
-## Version: 8.2.5.0
+## Notes: HealBot localization for enUS and enUK
+## Version: 8.3.0.0
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
