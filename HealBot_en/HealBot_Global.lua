@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.3.0.0";
+﻿HEALBOT_VERSION    = "8.3.0.1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.4" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.5" end
 
 function HealBot_globalVars()
     --Consumables

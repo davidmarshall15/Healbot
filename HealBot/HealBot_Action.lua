@@ -15,6 +15,7 @@ HealBot_Action_luVars["updateBucket"]=1
 HealBot_Action_luVars["CacheSize"]=4
 HealBot_Action_luVars["clearSpellCache"]=true
 HealBot_Action_luVars["TestBarsOn"]=false
+HealBot_Action_luVars["ShapeshiftForm"]=-1
 
 function HealBot_Action_setLuVars(vName, vValue)
     HealBot_Action_luVars[vName]=vValue
@@ -845,8 +846,9 @@ end
 
 local vPowerBarInfo={}
 local vPowerBarType,vPowerBarToken,vPowerBarR,vPowerBarG,vPowerBarB=0,"MANA",0,0,0
-local function HealBot_Action_GetManaBarCol(unit)
-    vPowerBarType, vPowerBarToken, vPowerBarR, vPowerBarG, vPowerBarB=UnitPowerType(unit);
+local function HealBot_Action_GetManaBarCol(button)
+    vPowerBarType, vPowerBarToken, vPowerBarR, vPowerBarG, vPowerBarB=UnitPowerType(button.unit);
+    button.mana.type=vPowerBarType
     vPowerBarInfo=PowerBarColor[vPowerBarToken]
     if vPowerBarInfo then
         return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
@@ -859,7 +861,7 @@ local function HealBot_Action_GetManaBarCol(unit)
 end
 
 function HealBot_Action_setButtonManaBarCol(button)
-    button.mana.r,button.mana.g,button.mana.b=HealBot_Action_GetManaBarCol(button.unit)
+    button.mana.r,button.mana.g,button.mana.b=HealBot_Action_GetManaBarCol(button)
 end
 
 function HealBot_Action_updBar3Value(button)
@@ -1050,6 +1052,9 @@ function HealBot_Action_SetBar3Value(button, sName)
                 tSetBar3Value["PowerMax"]=UnitPowerMax(button.unit)
             end
             tSetBar3Value["Power"]=floor((UnitPower(button.unit)/tSetBar3Value["PowerMax"])*100)
+            if button.mana.type~=UnitPowerType(button.unit) then
+                HealBot_Action_setButtonManaBarCol(button)
+            end
             HealBot_Action_SetBar3ColAlpha(tSetBar3Value["BarName"], tSetBar3Value["Power"], button.mana.r, button.mana.g, button.mana.b, HealBot_Action_rCalls[button.unit]["hca"])
         end
     else
@@ -1353,12 +1358,14 @@ local function HealBot_Action_PrepButton(button)
     button.health.max=100
     button.health.incoming=0
     button.health.absorbs=0
+    button.health.throttle=0
     button.health.update=false
     button.health.updhealth=false
     button.health.updincoming=false
     button.health.updabsorbs=false
     button.mana.current=0
     button.mana.max=0
+    button.mana.type=-1
     button.mana.r=0
     button.mana.g=0
     button.mana.b=1
@@ -1373,6 +1380,7 @@ local function HealBot_Action_PrepButton(button)
     button.status.reserved=false
     button.status.bar4=0
     button.status.friend=true
+    button.status.throttle=0
     button.spells.castpct=-1
     button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
     button.aura.buff.name=false
@@ -1381,6 +1389,7 @@ local function HealBot_Action_PrepButton(button)
     button.aura.buff.priority=99
     button.aura.buff.nextcheck=false
     button.aura.buff.nextupdate=GetTime()
+    button.aura.buff.check=true
     button.aura.debuff.type=false
     button.aura.debuff.name=false
     button.aura.debuff.id=0
@@ -2240,6 +2249,9 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             tSetHealButton.text.update=true
             HealBot_Action_ResetrCallsUnit(unit)
             HealBot_Aura_setUnitIcons(unit)
+            if tSetHealButton.status.throttle<GetTime() then
+                HealBot_BumpThrottleCtl(tSetHealButton)
+            end
             tSetHealButton.spells.rangecheck=HealBot_RangeSpells["HEAL"]
             if unitType<4 then
                 tSetHealButton.update.unit=true

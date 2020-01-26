@@ -2642,6 +2642,7 @@ function HealBot_Options_RangeCheckFreq_setSession()
         HealBot_setLuVars("enSlowMo", false)
     end
     HealBot_setLuVars("RangeCheckFreq", val)
+    HealBot_setLuVars("ThrottleFreq", (val/2))
     HealBot_setOptions_Timer(9999)
 end
 
@@ -2861,6 +2862,8 @@ function HealBot_Options_Energy()
             regPower=true
         elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] and 
            (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK]) then
+            regPower=true
+        elseif Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["LOWMANA"]>1 then
             regPower=true
         end
     end
@@ -6282,9 +6285,12 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     else
         local knownHealSpells=HealBot_Init_retFoundHealSpells()
         for sName,_ in pairs(HealBot_Spell_Names) do
-            if not HealBot_Options_NoDuplcates[sName] then
-                table.insert(tmpHealDDlist, sName)
-                HealBot_Options_NoDuplcates[sName]=true
+            for kSpell,_ in pairs(knownHealSpells) do
+                if not HealBot_Options_NoDuplcates[sName] and string.find(sName, kSpell) then
+                    HealBot_Options_NoDuplcates[sName]=true
+                    table.insert(tmpHealDDlist, sName)
+                    break
+                end
             end
         end
     end
@@ -6583,12 +6589,6 @@ function HealBot_Options_itemsByLevel()
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
-        elseif hbLevel <= 75 then
-            hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
-            if not HealBot_Options_NoDuplcates[hbTmpText1] then
-                table.insert(hbItemsByLevel,hbTmpText1)
-                HealBot_Options_NoDuplcates[hbTmpText1]=true
-            end
         else
             hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
@@ -6652,14 +6652,15 @@ function HealBot_Options_SelectItemsCombo_DropDown()
             [37] = HEALBOT_TIDESPRAY_LINEN_BANDAGE,
         }
         HealBot_Options_SelectItemsCombo_List=HealBot_Options_itemsByLevel()
-        for j=1, getn(hbItemsIfExists), 1 do
-            if not HealBot_Options_NoDuplcates[hbItemsIfExists[j]] and (IsUsableItem(hbItemsIfExists[j]) or HealBot_IsItemInBag(hbItemsIfExists[j])) then
-                table.insert(HealBot_Options_SelectItemsCombo_List, hbItemsIfExists[j])
-                HealBot_Options_NoDuplcates[hbItemsIfExists[j]]=true
-            end
-        end
         local tID=nil
         local tName=nil
+        for j=1, getn(hbItemsIfExists), 1 do
+            tName=GetItemInfo(hbItemsIfExists[j]) 
+            if tName and not HealBot_Options_NoDuplcates[tName] and (IsUsableItem(tName) or HealBot_IsItemInBag(tName)) then
+                table.insert(HealBot_Options_SelectItemsCombo_List, tName)
+                HealBot_Options_NoDuplcates[tName]=true
+            end
+        end
         for j=1,19 do 
             tID=GetInventoryItemID("player", j);
             if tID then 
