@@ -1690,6 +1690,12 @@ function HealBot_Aura_InitData()
                 [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
                 [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
             }
+        elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
+            HealBot_BuffNameTypes = {
+                [(GetSpellInfo(HBC_DETECT_LESSER_INVISIBILITY) or "x")] = HBC_SP_ID,
+                [(GetSpellInfo(HBC_DETECT_INVISIBILITY) or "x")] = HBC_SP_ID,
+                [(GetSpellInfo(HBC_DETECT_GREATER_INVISIBILITY) or "x")] = HBC_SP_ID,
+            }
         else
             HealBot_BuffNameTypes = {
                 [(GetSpellInfo(HEALBOT_TRUESHOT_AURA) or "x")] = HBC_STAMINA_ID,

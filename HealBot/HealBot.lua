@@ -64,7 +64,7 @@ HealBot_luVars["HealBot_Refresh"]=true
 HealBot_luVars["healthFactor"]=1
 HealBot_luVars["clearGUID"]=false
 HealBot_luVars["PrevTipTime"]=TimeNow
-HealBot_luVars["TipTimeInterval"]=0.098
+HealBot_luVars["TipUpdateFreq"]=1
 HealBot_luVars["reCheckActionFrames"]=false
 HealBot_luVars["EnableErrorSpeech"]=false
 HealBot_luVars["EnableErrorText"]=false
@@ -75,7 +75,6 @@ HealBot_luVars["enTurbo"]=false
 HealBot_luVars["enSlowMo"]=false
 HealBot_luVars["AuraEventRegistered"]=false 
 HealBot_luVars["RangeCheckFreq"]=0.02
-HealBot_luVars["fastHealthThrottle"]=0.1
 HealBot_luVars["CacheSize"]=4
 HealBot_luVars["fastUpdateEveryFrame"]=9
 HealBot_luVars["TestBarsOn"]=false
@@ -783,7 +782,7 @@ function HealBot_UpdateUnit(button)
         button.health.update=true
     end
     button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit)
-    button.text.update=true
+    --button.text.update=true
     HealBot_CheckAggroUnits(button)
     button.aura.check=true 
     HealBot_Text_setNameTag(button)
@@ -1580,32 +1579,38 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        --HealBot_Timers["fastUpdateFreq"]=HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]*5)/(HealBot_luVars["qaFR"]/2), 4)
-        --HealBot_Timers["fastUpdateFreq"]=HealBot_Aura_retLuVars("MinIconUpdate")
-        HealBot_Timers["fastUpdateFreq"]=0.064-(0.033-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/30), 3)))
-        HealBot_Timers["barsUpdateFreq"]=0.01+(HealBot_luVars["RangeCheckFreq"]/10)
-        if HealBot_luVars["qaFR"]<50 then
+        HealBot_Timers["fastUpdateFreq"]=0.064-(0.05-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/20), 3)))
+        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)-0.01
+        if HealBot_luVars["qaFR"]<30 then
             if HealBot_Timers["barsUpdateFreq"]<0.07 then HealBot_Timers["barsUpdateFreq"]=0.07 end
-        elseif HealBot_luVars["qaFR"]<70 then
+            if HealBot_Timers["fastUpdateFreq"]<0.04 then HealBot_Timers["fastUpdateFreq"]=0.04 end
+        elseif HealBot_luVars["qaFR"]<40 then
+            if HealBot_Timers["barsUpdateFreq"]<0.06 then HealBot_Timers["barsUpdateFreq"]=0.06 end
+            if HealBot_Timers["fastUpdateFreq"]<0.03 then HealBot_Timers["fastUpdateFreq"]=0.03 end
+        elseif HealBot_luVars["qaFR"]<50 then
             if HealBot_Timers["barsUpdateFreq"]<0.05 then HealBot_Timers["barsUpdateFreq"]=0.05 end
-        elseif HealBot_luVars["qaFR"]<100 then
+            if HealBot_Timers["fastUpdateFreq"]<0.025 then HealBot_Timers["fastUpdateFreq"]=0.025 end
+        elseif HealBot_luVars["qaFR"]<70 then
             if HealBot_Timers["barsUpdateFreq"]<0.04 then HealBot_Timers["barsUpdateFreq"]=0.04 end
+            if HealBot_Timers["fastUpdateFreq"]<0.02 then HealBot_Timers["fastUpdateFreq"]=0.02 end
+        elseif HealBot_luVars["qaFR"]<90 then
+            if HealBot_Timers["barsUpdateFreq"]<0.03 then HealBot_Timers["barsUpdateFreq"]=0.03 end
+        elseif HealBot_luVars["qaFR"]<115 then
+            if HealBot_Timers["barsUpdateFreq"]<0.02 then HealBot_Timers["barsUpdateFreq"]=0.02 end
         end
-        if HealBot_luVars["enTurbo"] then
+        if HealBot_luVars["enTurbo"] and HealBot_luVars["qaFR"]>40 then
             HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*5)
         elseif HealBot_luVars["enSlowMo"] then
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*9)
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
         else
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*7)
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*8)
         end
-        HealBot_luVars["fastHealthThrottle"]=HealBot_Timers["fastUpdateFreq"]*4
-        HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Slow="..HealBot_Timers["slowUpdateFreq"])
+        HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Bars="..HealBot_Timers["barsUpdateFreq"])
     else
-        HealBot_Timers["slowUpdateFreq"]=1
+        HealBot_Timers["slowUpdateFreq"]=4
         HealBot_Timers["fastUpdateFreq"]=1
-        HealBot_Timers["barsUpdateFreq"]=10
+        HealBot_Timers["barsUpdateFreq"]=15
     end
-    HealBot_setTooltipUpdateInterval()
 end
 
 local HealBot_Options_Timer={}
@@ -1624,10 +1629,10 @@ local function HealBot_setqaFR()
     HealBot_luVars["qaFR3"]=HealBot_luVars["qaFR2"]
     HealBot_luVars["qaFR2"]=HealBot_luVars["qaFR1"]
     HealBot_luVars["qaFR1"]=GetFramerate()
-    if HealBot_luVars["qaFR1"]>120 then 
-        HealBot_luVars["qaFR1"]=120 
-    elseif HealBot_luVars["qaFR1"]<40 then
-        HealBot_luVars["qaFR1"]=40
+    if HealBot_luVars["qaFR1"]>140 then 
+        HealBot_luVars["qaFR1"]=140 
+    elseif HealBot_luVars["qaFR1"]<25 then
+        HealBot_luVars["qaFR1"]=25
     end
     HealBot_luVars["qaFR"]=HealBot_Comm_round((HealBot_luVars["qaFR1"]+HealBot_luVars["qaFR2"]+HealBot_luVars["qaFR3"])/3, 2)       
     --HealBot_setCall("HealBot_setqaFR")
@@ -2243,7 +2248,7 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]=true end
     if Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]=false end
-    if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=3 end
+    if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=5 end
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]=30 end
     if Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]==nil then Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]=1 end
@@ -2586,9 +2591,9 @@ end
 
 function HealBot_setTooltipUpdateInterval()
     if HealBot_Globals.Tooltip_ShowCD then
-        HealBot_luVars["TipTimeInterval"]=0.1
+        HealBot_luVars["TipUpdateFreq"]=0.1
     else
-        HealBot_luVars["TipTimeInterval"]=1
+        HealBot_luVars["TipUpdateFreq"]=0.2
     end
     --HealBot_setCall("HealBot_setTooltipUpdateInterval")
 end
@@ -3161,11 +3166,11 @@ local function HealBot_Options_Update()
         HealBot_Options_Timer[8000]=HealBot_Options_idleInit()
         if HealBot_Options_Timer[8000] then
             HealBot_luVars["Timer8000"]=(HealBot_luVars["Timer8000"])+1
+            HealBot_setqaFR()
         end
         if not HealBot_Options_Timer[8000] then
             HealBot_AddDebug("Timer 8000 called #"..HealBot_luVars["Timer8000"])
             HealBot_luVars["Timer8000"]=0
-            HealBot_setqaFR()
             HealBot_AuraCheck("player")
             HealBot_setOptions_Timer(595)
         end
@@ -3513,7 +3518,7 @@ local function HealBot_Not_Fighting()
         HealBot_setOptions_Timer(190)
         HealBot_SetResetFlag("QUICK")
     end
-    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUSE"] and HealBot_Data["TIPUNIT"] then
+    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPUNIT"] then
         HealBot_Action_RefreshTooltip();
     end
     HealBot_EndAggro()
@@ -3772,7 +3777,7 @@ local function HealBot_EnemyUpdateButton(button)
                         else
                             euDuration=euEndTime-euStartTime
                             euCast=((TimeNow*1000)-euStartTime)
-                            euPct=ceil((euCast/euDuration)*100)
+                            euPct=ceil((euCast/euDuration)*1000)
                             if button.spells.castpct~=euPct then
                                 button.spells.castpct=euPct
                                 HealBot_Action_SetBar3Value(button, euName)
@@ -3817,13 +3822,11 @@ local function HealBot_OnEvent_Combat_Log()
     _, hbCBLUevent, _, _, _, _, _, hbCBLUguid = CombatLogGetCurrentEventInfo()
     if HealBot_Panel_RaidUnitGUID(hbCBLUguid) then
         local xButton=HealBot_Unit_Button[HealBot_Panel_RaidUnitGUID(hbCBLUguid)]
-        if xButton and xButton.health.throttle<TimeNow then
+        if xButton and not xButton.health.update then
             if (hbCBLUevent=="SWING_DAMAGE" or hbCBLUevent=="SPELL_PERIODIC_DAMAGE" or hbCBLUevent=="SPELL_DAMAGE" or hbCBLUevent=="DAMAGE_SPLIT" or
                 hbCBLUevent=="DAMAGE_SHIELD" or hbCBLUevent=="ENVIRONMENTAL_DAMAGE") and xButton.health.current > 0 then
-                xButton.health.throttle=TimeNow+HealBot_luVars["fastHealthThrottle"]
                 xButton.health.update=true
             elseif (hbCBLUevent=="SPELL_HEAL" or hbCBLUevent=="SPELL_PERIODIC_HEAL") and xButton.health.current < xButton.health.max then
-                xButton.health.throttle=TimeNow+HealBot_luVars["fastHealthThrottle"]
                 xButton.health.update=true
             end
         end
@@ -3925,7 +3928,11 @@ end
 
 function HealBot_UpdateBarNow()
     TimeNow=GetTime()
-    if HealBot_Timers["barsUpdate"]>(TimeNow+0.1) then HealBot_Timers["barsUpdate"]=TimeNow end
+    if HealBot_Timers["barsUpdate"]>(TimeNow+HealBot_Timers["barsUpdateFreq"]) then HealBot_Timers["barsUpdate"]=TimeNow end
+    if HealBot_Data["TIPUNIT"] and HealBot_Globals.TooltipUpdate then 
+        HealBot_luVars["ouTipUpdate"]=true 
+        if HealBot_luVars["PrevTipTime"]<(TimeNow-0.25) then HealBot_luVars["PrevTipTime"]=TimeNow end
+    end
 end
 
 local ouRegenEnabled, ouZ, ouY=true,0,0
@@ -3935,12 +3942,14 @@ function HealBot_OnUpdate(self)
         if HealBot_Timers["barsUpdate"]<TimeNow and not HealBot_luVars["TestBarsOn"] then
             if HealBot_Aggro_UpdateBars() then
                 HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
+            elseif HealBot_luVars["ouTipUpdate"] then
+                HealBot_Timers["barsUpdate"]=TimeNow+HealBot_luVars["TipUpdateFreq"]
             else
-                HealBot_Timers["barsUpdate"]=TimeNow+HealBot_luVars["TipTimeInterval"]
+                HealBot_Timers["barsUpdate"]=TimeNow+15
             end
-            if HealBot_Data["TIPUSE"] and HealBot_Globals.TooltipUpdate and HealBot_Data["TIPUNIT"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
-                HealBot_luVars["PrevTipTime"]=HealBot_luVars["PrevTipTime"]+HealBot_luVars["TipTimeInterval"]
-                HealBot_Action_RefreshTooltip() 
+            if HealBot_luVars["ouTipUpdate"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
+                HealBot_luVars["PrevTipTime"]=HealBot_luVars["PrevTipTime"]+HealBot_luVars["TipUpdateFreq"]
+                HealBot_Action_RefreshTooltip()
             end
         elseif HealBot_Timers["slowUpdate"]<TimeNow then
             if HealBot_luVars["TestBarsOn"] then
@@ -4200,7 +4209,6 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
     end
     if addon_id==HEALBOT_HEALBOT then
         local datatype, datamsg, hbExtra1, hbExtra2 = string.split(":", amIncMsg)
-        HealBot_AddDebug("AddonMsg: type="..datatype.." msg="..datamsg);
         if datatype=="R" then
             HealBot_luVars["VersionRequest"]=amSenderId
             if HealBot_Options_Timer[130] then HealBot_Options_Timer[130]=nil end
@@ -4871,48 +4879,48 @@ function HealBot_InitSpells()
 
     if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
         if HealBot_KnownSpell(HEALBOT_HEAL) then
-            HealBot_SmartCast_Spells[HEALBOT_HEAL]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_HEAL)]="L"
         elseif HealBot_KnownSpell(HBC_HEAL) then
-            HealBot_SmartCast_Spells[HBC_HEAL]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HBC_HEAL)]="L"
         end
         if HealBot_KnownSpell(HEALBOT_FLASH_HEAL) then
-            HealBot_SmartCast_Spells[HEALBOT_FLASH_HEAL]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_FLASH_HEAL)]="S"
         end
 	elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
         if HealBot_KnownSpell(HEALBOT_HEALING_TOUCH) then
-            HealBot_SmartCast_Spells[HEALBOT_HEALING_TOUCH]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_HEALING_TOUCH)]="L"
         end
         if HealBot_KnownSpell(HEALBOT_REJUVENATION) then
-            HealBot_SmartCast_Spells[HEALBOT_REJUVENATION]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_REJUVENATION)]="S"
         end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
         if HealBot_KnownSpell(HEALBOT_HOLY_LIGHT) then
-            HealBot_SmartCast_Spells[HEALBOT_HOLY_LIGHT]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_HOLY_LIGHT)]="L"
         elseif HealBot_KnownSpell(HBC_HOLY_LIGHT) then
-            HealBot_SmartCast_Spells[HBC_HOLY_LIGHT]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HBC_HOLY_LIGHT)]="L"
         end
         if HealBot_KnownSpell(HEALBOT_FLASH_OF_LIGHT) then
-            HealBot_SmartCast_Spells[HEALBOT_FLASH_OF_LIGHT]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_FLASH_OF_LIGHT)]="S"
         end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_SHAMAN] then
         if HealBot_KnownSpell(HEALBOT_HEALING_SURGE) then
-            HealBot_SmartCast_Spells[HEALBOT_HEALING_SURGE]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_HEALING_SURGE)]="S"
         elseif HealBot_KnownSpell(HBC_LESSER_HEALING_WAVE) then
-            HealBot_SmartCast_Spells[HBC_LESSER_HEALING_WAVE]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HBC_LESSER_HEALING_WAVE)]="S"
         end
         if HealBot_KnownSpell(HEALBOT_HEALING_WAVE) then
-            HealBot_SmartCast_Spells[HEALBOT_HEALING_WAVE]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_HEALING_WAVE)]="L"
         elseif HealBot_KnownSpell(HBC_HEALING_WAVE) then
-            HealBot_SmartCast_Spells[HBC_HEALING_WAVE]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HBC_HEALING_WAVE)]="L"
         end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
         if HealBot_KnownSpell(HEALBOT_ENVELOPING_MIST) then
-            HealBot_SmartCast_Spells[HEALBOT_ENVELOPING_MIST]="L"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_ENVELOPING_MIST)]="L"
         end
         if HealBot_KnownSpell(HEALBOT_REVIVAL) then
-            HealBot_SmartCast_Spells[HEALBOT_REVIVAL]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_REVIVAL)]="S"
         elseif HealBot_KnownSpell(HEALBOT_SOOTHING_MIST) then
-            HealBot_SmartCast_Spells[HEALBOT_SOOTHING_MIST]="S"
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_SOOTHING_MIST)]="S"
         end
     end
     HealBot_Action_SetrSpell()
@@ -4994,16 +5002,38 @@ function HealBot_MMButton_Toggle()
     --HealBot_setCall("HealBot_MMButton_Toggle")
 end
 
-local sSwitch=UnitLevel("player")*50
 function HealBot_SmartCast(hlthDelta)
     local s=nil
-    for sID,sType in pairs(HealBot_SmartCast_Spells) do
-        local sName=HealBot_KnownSpell(sID)
-        if sName then
-            if sType=="L" then
-                if hlthDelta>sSwitch then s=sName end
-            elseif not s then
-                s=sName
+    if HEALBOT_GAME_VERSION>3 then
+        for sName,sType in pairs(HealBot_SmartCast_Spells) do
+            if hlthDelta>58 then
+                if sType~="L" then
+                    s=sName
+                end
+            else
+                if sType=="L" then
+                    s=sName
+                elseif not s then
+                    s=sName
+                end
+            end
+        end
+    else
+        for sName,sType in pairs(HealBot_SmartCast_Spells) do
+            if hlthDelta>58 then
+                local sRank=floor((98-hlthDelta)/5)
+                if sType~="L" then
+                    if sRank==0 then sRank=1 end
+                    s=HealBot_Init_Spells_retRank(sName, sRank)
+                end
+            else
+                local sRank=floor((75-hlthDelta)/8)
+                if sRank==0 then sRank=1 end
+                if sType=="L" then
+                    s=HealBot_Init_Spells_retRank(sName, sRank)
+                elseif not s then
+                    s=HealBot_Init_Spells_retRank(sName, sRank)
+                end
             end
         end
     end
@@ -5390,7 +5420,7 @@ function HealBot_OnEvent(self, event, ...)
             if eButton then
                 HealBot_OnEvent_UnitThreat(eButton)
             end
-        end
+        end    
     elseif (event=="UNIT_SPELLCAST_START") then
         HealBot_OnEvent_UnitSpellCastStart(arg1)
     elseif (event=="UNIT_SPELLCAST_SENT") then
@@ -5424,7 +5454,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="PLAYER_FOCUS_CHANGED") then
         HealBot_OnEvent_FocusChanged(self);
     elseif (event=="MODIFIER_STATE_CHANGED") then
-        if HealBot_Data["TIPUSE"] and HealBot_Data["TIPUNIT"] then
+        if HealBot_Data["TIPUNIT"] then
             HealBot_Action_RefreshTooltip();
         end
     elseif (event=="PLAYER_CONTROL_GAINED") then

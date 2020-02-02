@@ -29,7 +29,7 @@ function HealBot_Libs_CD()
     return libCD
 end
 
-if HEALBOT_GAME_VERSION<4 then
+if HealBot_Version_Target() and HEALBOT_GAME_VERSION<4 then
     libCD = libCD or (LibStub and LibStub("LibClassicDurations"))
     libCTM = libCTM or (LibStub and LibStub("LibThreatClassic2"))
     libCHC = libCHC or (LibStub and LibStub("LibHealComm-4.0", true))

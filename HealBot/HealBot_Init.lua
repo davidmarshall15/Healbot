@@ -2,6 +2,7 @@ local SmartCast_Res=nil;
 local SmartCast_MassRes=nil;
 local HealBot_Heal_Names={}
 local HealBot_KnownHeal_Names={}
+local HealBot_Spell_Ranks={}
 local _
 local MANA_COST_PATTERN = gsub(MANA_COST, "%%d", "([%%d%.,]+)")
 
@@ -62,6 +63,14 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
             if HealBot_Heal_Names[spellName] and cRank then 
                 HealBot_KnownHeal_Names[spellName]=true
+                if not HealBot_Spell_Ranks[spellName] then
+                    HealBot_Spell_Ranks[spellName]={}
+                    HealBot_Spell_Ranks[spellName][0]=1
+                else
+                    HealBot_Spell_Ranks[spellName][0]=HealBot_Spell_Ranks[spellName][0]+1
+                end
+                local nRank=HealBot_Spell_Ranks[spellName][0]
+                HealBot_Spell_Ranks[spellName][nRank]=strtrim(spellName).."("..cRank..")"
                 spellName=strtrim(spellName).."("..cRank..")"
             end
             HealBot_Spell_IDs[spellId].name=spellName
@@ -69,6 +78,19 @@ local function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
             HealBot_Spell_Names[spellName]=spellId
         end
     end
+end
+
+function HealBot_Init_Spells_retRank(spellName, targetRank)
+    local sName=spellName
+    local sRank=targetRank
+    if HealBot_Spell_Ranks[spellName] then
+        if not HealBot_Spell_Ranks[spellName][targetRank] then
+            sRank=HealBot_Spell_Ranks[spellName][0]
+        end
+        sName=HealBot_Spell_Ranks[spellName][sRank]
+    end
+    --HealBot_AddDebug("sName="..sName.." sRank="..sRank)
+    return sName
 end
 
 function HealBot_Init_Spells_Defaults()
@@ -80,7 +102,13 @@ function HealBot_Init_Spells_Defaults()
     end 
     for x,_ in pairs(HealBot_Heal_Names) do
         HealBot_Heal_Names[x]=nil
-    end 
+    end  
+    for x,_ in pairs(HealBot_KnownHeal_Names) do
+        HealBot_KnownHeal_Names[x]=nil
+    end
+    for x,_ in pairs(HealBot_Spell_Ranks) do
+        HealBot_Spell_Ranks[x]=nil
+    end
     local nTabs=GetNumSpellTabs()
     local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
     for j=1, getn(hbHeallist), 1 do

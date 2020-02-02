@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.3.0.1";
+﻿HEALBOT_VERSION    = "8.3.0.2";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.5" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.6" end
 
 function HealBot_globalVars()
     --Consumables
@@ -337,7 +337,7 @@ function HealBot_globalVars()
     
 	--Mage
     HBC_AMPLIFY_MAGIC                       = 1008
-    HEALBOT_ARCANE_BRILLIANCE               = 1459 --GetSpellInfo(1459) or "--Arcane Brilliance";
+    HEALBOT_ARCANE_BRILLIANCE               = 1459 --GetSpellInfo(1459) or "--Arcane Brilliance"; -- Arcane Intellect in Classic
     HBC_ARCANE_BRILLIANCE                   = 23028
     HEALBOT_ARCANE_POWER                    = 12042 --GetSpellInfo(12042) or "--Arcane Power"
     HEALBOT_BLAZING_BARRIER                 = 235313 --GetSpellInfo(235313) or "--Blazing Barrier"
@@ -568,6 +568,9 @@ function HealBot_globalVars()
     HEALBOT_UNENDING_RESOLVE                = 104773 --GetSpellInfo(104773) or "--Unending Resolve"
     HEALBOT_SOUL_LEECH                      = 108366 --GetSpellInfo(108370) or "--Soul Leech"
     HBC_PHASE_SHIFT                         = GetSpellInfo(4511) or "Phase Shift"
+    HBC_DETECT_LESSER_INVISIBILITY          = 132
+    HBC_DETECT_INVISIBILITY                 = 2970
+    HBC_DETECT_GREATER_INVISIBILITY         = 11743
     
     --Warrior
     HEALBOT_BATTLE_SHOUT                    = 6673 --GetSpellInfo(6673) or "--Battle Shout";

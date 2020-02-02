@@ -999,6 +999,9 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_UNENDING_BREATH,
             HEALBOT_DARK_INTENT,
             HEALBOT_SOUL_LINK,
+            HBC_DETECT_LESSER_INVISIBILITY,
+            HBC_DETECT_INVISIBILITY,
+            HBC_DETECT_GREATER_INVISIBILITY,
         }
     elseif tClass=="WARR" then
         HealBot_Buff_Spells_Class_List = {
@@ -3798,6 +3801,7 @@ function HealBot_Options_LoadTips()
             HealBot_Options_AddonFail(failreason, "HealBot_Tips")
         end
     end
+    HealBot_setTooltipUpdateInterval()
 end
 
 function HealBot_Options_ShowTooltipUpdate_OnClick(self)
@@ -12639,8 +12643,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_sliderlabels_Init(HealBot_Options_StickyFramesSensitivity,HEALBOT_OPTIONS_STICKYSENSITIVITY,15,75,1,5,HEALBOT_WORK_HIGH,HEALBOT_WORD_LOW)
             HealBot_Options_StickyFramesSensitivity:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYSENSITIVITY"])
             HealBot_Options_StickyFramesSensitivityText:SetText(HEALBOT_OPTIONS_STICKYSENSITIVITY)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,10,3,1,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
-            HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 3)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,10,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+            HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 5)
             HealBot_Options_BarUpdateFreqText:SetText(HEALBOT_OPTION_BARUPDFREQ)
             g=_G["HealBot_GeneralSkin_FontStr"]
             g:SetText(HEALBOT_OPTIONS_TAB_GENERAL)
