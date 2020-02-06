@@ -601,8 +601,8 @@ end
 
 local buffIconSet, buffPrio, buffCPrio=false,10,true
 local function HealBot_Aura_SetBuffIcon(button)
-    if (hbCustomBuffsDisabled[uaSpellId] and hbCustomBuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]]) or
-       (hbCustomBuffsDisabled[uaName] and hbCustomBuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]]) then
+    if (hbCustomBuffsDisabled[uaSpellId] and (hbCustomBuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]] or hbCustomBuffsDisabled[uaSpellId]["ALL"])) or
+       (hbCustomBuffsDisabled[uaName] and (hbCustomBuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]] or hbCustomBuffsDisabled[uaName]["ALL"])) then
         -- Ignore it
     else
         buffIconSet=false
@@ -763,8 +763,8 @@ local function HealBot_Aura_CheckCurDebuff(button)
         end
     end
     dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaName, uaDebuffType)
-    if (hbCustomDebuffsDisabled[uaSpellId] and hbCustomDebuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]]) or
-       (hbCustomDebuffsDisabled[uaName] and hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]]) then
+    if (hbCustomDebuffsDisabled[uaSpellId] and (hbCustomDebuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]] or hbCustomDebuffsDisabled[uaSpellId]["ALL"])) or
+       (hbCustomDebuffsDisabled[uaName] and (hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]] or hbCustomDebuffsDisabled[uaName]["ALL"])) then
         debuffIsCurrent=false
         if not HealBot_Spell_Names[uaName] then debuffIsNever=true end
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
@@ -949,14 +949,14 @@ local function HealBot_Aura_DebuffWarnings(button)
 end
 
 local asbtPrevEndTime=0
-local function HealBot_Aura_SetUnitBuffTimer(button,buffName,endtime)
-    asbtPrevEndTime=button.aura.buff.recheck[buffName] or 0
-    if HealBot_ShortBuffs[buffName] then 
-        button.aura.buff.recheck[buffName] = endtime-HealBot_Config_Buffs.ShortBuffTimer
+local function HealBot_Aura_SetUnitBuffTimer(button)
+    asbtPrevEndTime=button.aura.buff.recheck[uaName] or 0
+    if HealBot_ShortBuffs[uaName] then 
+        button.aura.buff.recheck[uaName] = uaExpirationTime-HealBot_Config_Buffs.ShortBuffTimer
     else
-        button.aura.buff.recheck[buffName] = endtime-HealBot_Config_Buffs.LongBuffTimer
+        button.aura.buff.recheck[uaName] = uaExpirationTime-HealBot_Config_Buffs.LongBuffTimer
     end
-    if asbtPrevEndTime~=button.aura.buff.recheck[buffName] then
+    if asbtPrevEndTime~=button.aura.buff.recheck[uaName] then
         button.aura.buff.nextcheck=1
     end
     --HealBot_setCall("HealBot_Aura_SetUnitBuffTimer")
@@ -1009,7 +1009,7 @@ function HealBot_Aura_CheckUnitAuras(button)
             uaName=false
             if HEALBOT_GAME_VERSION<4 and libCD then
                 uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
-                if acUnitCaster and UnitClassification(acUnitCaster)=="worldboss" then
+                if uaUnitCaster and UnitClassification(uaUnitCaster)=="worldboss" then
                     uaIsBossDebuff=true
                 else
                     uaIsBossDebuff=false
@@ -1146,8 +1146,11 @@ function HealBot_Aura_CheckUnitAuras(button)
                                 end
                                 if not hbExcludeBuffSpells[uaSpellId] then
                                     PlayerBuffs[uaName]=true
-                                    if HealBot_CheckBuffs[uaName] and uaExpirationTime>0 then
-                                        HealBot_Aura_SetUnitBuffTimer(button,uaName,uaExpirationTime)
+                                    if HealBot_CheckBuffs[uaName] and uaExpirationTime>0 and (HEALBOT_GAME_VERSION>3 or UnitIsUnit(uaUnitCaster,"player")) then
+                                        HealBot_Aura_SetUnitBuffTimer(button)
+                                    elseif button.aura.buff.recheck[uaName] then
+                                        button.aura.buff.recheck[uaName]=nil
+                                        button.aura.buff.nextcheck=1
                                     end
                                 end
                             end

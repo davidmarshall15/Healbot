@@ -48,7 +48,7 @@ function HealBot_Comms_SendAddonMessage()
         elseif aType==5 then
             C_ChatInfo.SendAddonMessage(addon_id, msg, "GUILD" );
         end
-        HealBot_AddDebug("comms="..aMsg)
+        --HealBot_AddDebug("comms="..aMsg)
     end
 end
 

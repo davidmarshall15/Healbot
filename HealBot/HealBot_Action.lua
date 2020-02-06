@@ -1383,7 +1383,6 @@ local function HealBot_Action_PrepButton(button)
     button.aura.buff.priority=99
     button.aura.buff.nextcheck=false
     button.aura.buff.nextupdate=GetTime()
-    button.aura.buff.check=true
     button.aura.debuff.type=false
     button.aura.debuff.name=false
     button.aura.debuff.id=0

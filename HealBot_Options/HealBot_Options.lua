@@ -1361,7 +1361,7 @@ end
 
 function HealBot_Options_UIDropDownMenu_OnClick(varName, varValue)
     HealBot_Options_StorePrev[varName]=varValue
-    HealBot_AddDebug(varName.."="..varValue)
+    --HealBot_AddDebug(varName.."="..varValue)
 end
 
 function HealBot_Options_NotifyOtherMsg_OnTextChanged(self)
@@ -2633,7 +2633,7 @@ end
 
 function HealBot_Options_RangeCheckFreq_setSession()
     local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/10)
-    HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
+    --HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
     if val<0.5 then
         HealBot_setLuVars("enTurbo", true)
         HealBot_setLuVars("enSlowMo", false)
@@ -7843,7 +7843,6 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
         HealBot_setOptions_Timer(595)
-        HealBot_AddDebug("Set_Current_Skin")
     else
         HealBot_setResetFlagCode(3)
     end
@@ -9922,8 +9921,14 @@ end
 
 function HealBot_Options_EnableDisableCDBtn_OnClick(self)
     local InstName=HealBot_Aura_retLuVars("hbInsName")
-    if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] and HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] then
-        HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName]=nil
+    if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] and
+        (HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] or HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]["ALL"]) then
+        if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] then
+            HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName]=nil
+            HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]["ALL"]=true
+        else
+            HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]["ALL"]=nil
+        end
     else
         if not HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] then
             HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]={}
@@ -9939,10 +9944,16 @@ function HealBot_Options_SetEnableDisableCDBtn()
     local InstName=HealBot_Aura_retLuVars("hbInsName")
     HealBot_Options_EnableDisableCDBtn:Enable()
     local dName=HealBot_Options_CDebuffTextID(HealBot_Options_StorePrev["CDebuffcustomSpellID"])
-    if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] and HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] then
+    if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] and
+        (HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] or HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]["ALL"]) then
         HealBot_Options_EnableDisableCDText:SetTextColor(0.88,0.1,0.1)
-        HealBot_Options_EnableDisableCDText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
-        HealBot_Options_EnableDisableCDBtn:SetText(HEALBOT_WORD_ENABLE)
+        if HealBot_Globals.IgnoreCustomDebuff[HealBot_Options_StorePrev["CDebuffcustomSpellID"]][InstName] then
+            HealBot_Options_EnableDisableCDText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
+            HealBot_Options_EnableDisableCDBtn:SetText(HEALBOT_WORD_ALLZONE)
+        else
+            HealBot_Options_EnableDisableCDText:SetText(HEALBOT_WORD_ALLZONE..": "..HEALBOT_SKIN_DISTEXT)
+            HealBot_Options_EnableDisableCDBtn:SetText(HEALBOT_WORD_ENABLE)
+        end
     elseif HealBot_Options_StorePrev["CDebuffcustomSpellID"] and HealBot_Options_StorePrev["CDebuffCatID"]>1 then
         HealBot_Options_EnableDisableCDText:SetTextColor(0.1,1,0.1)
         HealBot_Options_EnableDisableCDText:SetText(InstName..": "..HEALBOT_SKIN_ENTEXT)
@@ -9958,8 +9969,13 @@ end
 function HealBot_Options_EnableDisableBuffBtn_OnClick(self)
     local InstName=HealBot_Aura_retLuVars("hbInsName")
     local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
-    if HealBot_Globals.IgnoreCustomBuff[sId] and HealBot_Globals.IgnoreCustomBuff[sId][InstName] then
-        HealBot_Globals.IgnoreCustomBuff[sId][InstName]=nil
+    if HealBot_Globals.IgnoreCustomBuff[sId] and (HealBot_Globals.IgnoreCustomBuff[sId][InstName] or HealBot_Globals.IgnoreCustomBuff[sId]["ALL"]) then
+        if HealBot_Globals.IgnoreCustomBuff[sId][InstName] then
+            HealBot_Globals.IgnoreCustomBuff[sId][InstName]=nil
+            HealBot_Globals.IgnoreCustomBuff[sId]["ALL"]=true
+        else
+            HealBot_Globals.IgnoreCustomBuff[sId]["ALL"]=nil
+        end
     else
         if not HealBot_Globals.IgnoreCustomBuff[sId] then
             HealBot_Globals.IgnoreCustomBuff[sId]={}
@@ -9976,10 +9992,15 @@ function HealBot_Options_SetEnableDisableBuffBtn()
     HealBot_Options_EnableDisableBuffBtn:Enable()
     local bName=HealBot_Options_CDebuffTextID(HealBot_Options_StorePrev["HoTname"])
     local sId=HealBot_Options_CDebuffGetId(HealBot_Options_StorePrev["HoTname"])
-    if HealBot_Globals.IgnoreCustomBuff[sId] and HealBot_Globals.IgnoreCustomBuff[sId][InstName] then
+    if HealBot_Globals.IgnoreCustomBuff[sId] and (HealBot_Globals.IgnoreCustomBuff[sId][InstName] or HealBot_Globals.IgnoreCustomBuff[sId]["ALL"]) then
         HealBot_Options_EnableDisableBuffText:SetTextColor(0.88,0.1,0.1)
-        HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
-        HealBot_Options_EnableDisableBuffBtn:SetText(HEALBOT_WORD_ENABLE)
+        if HealBot_Globals.IgnoreCustomBuff[sId][InstName] then
+            HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..HEALBOT_SKIN_DISTEXT)
+            HealBot_Options_EnableDisableBuffBtn:SetText(HEALBOT_WORD_ALLZONE)
+        else
+            HealBot_Options_EnableDisableBuffText:SetText(HEALBOT_WORD_ALLZONE..": "..HEALBOT_SKIN_DISTEXT)
+            HealBot_Options_EnableDisableBuffBtn:SetText(HEALBOT_WORD_ENABLE)
+        end
     elseif bName then
         HealBot_Options_EnableDisableBuffText:SetTextColor(0.1,1,0.1)
         HealBot_Options_EnableDisableBuffText:SetText(InstName..": "..HEALBOT_SKIN_ENTEXT)

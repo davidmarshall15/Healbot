@@ -658,16 +658,7 @@ local function HealBot_SlashCmd(cmd)
         HealBot_AddChat("Calls Reset")
         HealBot_Calls={}
     elseif (HBcmd=="zzz") then
-        local modes="Turbo=OFF - "
-        if HealBot_luVars["enTurbo"] then
-            modes="Turbo=ON - "
-        end 
-        if HealBot_luVars["enSlowMo"] then
-            modes=modes.."SlowMo=ON - "
-        else
-            modes=modes.."SlowMo=OFF - "
-        end
-        HealBot_AddDebug(modes.." - RangeCheckFreq="..HealBot_luVars["RangeCheckFreq"])
+        HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Bars="..HealBot_Timers["barsUpdateFreq"])
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -835,7 +826,15 @@ local function HealBot_Update_BuffsForSpecDD(ddId,bType)
             end
         end
     else
+        if HealBot_Config_Buffs.HealBotBuffText[ddId] and tonumber(HealBot_Config_Buffs.HealBotBuffText[ddId]) then
+            HealBot_Config_Buffs.HealBotBuffText[ddId]=HEALBOT_WORDS_NONE
+            HealBot_Config_Buffs.HealBotBuffDropDown[ddId]=4
+        end
         for z=1,4 do
+            if HealBot_Config_Buffs.HealBotBuffText[z..ddId] and tonumber(HealBot_Config_Buffs.HealBotBuffText[z..ddId]) then
+                HealBot_Config_Buffs.HealBotBuffDropDown[z..ddId]=nil
+                HealBot_Config_Buffs.HealBotBuffText[z..ddId]=nil
+            end
             if HealBot_Config_Buffs.HealBotBuffDropDown[ddId] and not HealBot_Config_Buffs.HealBotBuffDropDown[z..ddId] then 
                 HealBot_Config_Buffs.HealBotBuffDropDown[z..ddId]=HealBot_Config_Buffs.HealBotBuffDropDown[ddId]
             elseif not HealBot_Config_Buffs.HealBotBuffDropDown[z..ddId] then 
@@ -1143,22 +1142,22 @@ local function HealBot_DoReset_Buffs(pClassTrim)
         end
     end
     if IsUsableItem(HEALBOT_EVER_BLOOMING_FROND) or HealBot_IsItemInBag(HEALBOT_EVER_BLOOMING_FROND) then
-        HealBot_Config_Buffs.HealBotBuffText[7]=HEALBOT_EVER_BLOOMING_FROND
+        HealBot_Config_Buffs.HealBotBuffText[7]=GetItemInfo(HEALBOT_EVER_BLOOMING_FROND)
     end
     if IsUsableItem(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) or HealBot_IsItemInBag(HEALBOT_ORALIUS_WHISPERING_CRYSTAL) then
-        HealBot_Config_Buffs.HealBotBuffText[6]=HEALBOT_ORALIUS_WHISPERING_CRYSTAL
+        HealBot_Config_Buffs.HealBotBuffText[6]=GetItemInfo(HEALBOT_ORALIUS_WHISPERING_CRYSTAL)
     end
     if IsUsableItem(HEALBOT_REPURPOSED_FEL_FOCUSER) or HealBot_IsItemInBag(HEALBOT_REPURPOSED_FEL_FOCUSER) then
-        HealBot_Config_Buffs.HealBotBuffText[8]=HEALBOT_REPURPOSED_FEL_FOCUSER
+        HealBot_Config_Buffs.HealBotBuffText[8]=GetItemInfo(HEALBOT_REPURPOSED_FEL_FOCUSER)
     end
     if IsUsableItem(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) or HealBot_IsItemInBag(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) then
-        HealBot_Config_Buffs.HealBotBuffText[5]=HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE
+        HealBot_Config_Buffs.HealBotBuffText[5]=GetItemInfo(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE)
     end
     if IsUsableItem(HEALBOT_TAILWIND_SAPPHIRE) or HealBot_IsItemInBag(HEALBOT_TAILWIND_SAPPHIRE) then
-        HealBot_Config_Buffs.HealBotBuffText[8]=HEALBOT_TAILWIND_SAPPHIRE
+        HealBot_Config_Buffs.HealBotBuffText[8]=GetItemInfo(HEALBOT_TAILWIND_SAPPHIRE)
     end
     if IsUsableItem(HEALBOT_AMETHYST_OF_THE_SHADOW_KING) or HealBot_IsItemInBag(HEALBOT_AMETHYST_OF_THE_SHADOW_KING) then
-        HealBot_Config_Buffs.HealBotBuffText[7]=HEALBOT_AMETHYST_OF_THE_SHADOW_KING
+        HealBot_Config_Buffs.HealBotBuffText[7]=GetItemInfo(HEALBOT_AMETHYST_OF_THE_SHADOW_KING)
     end
     --HealBot_setCall("HealBot_DoReset_Buffs")
 end
@@ -1605,7 +1604,7 @@ function HealBot_Set_Timers()
         else
             HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*8)
         end
-        HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Bars="..HealBot_Timers["barsUpdateFreq"])
+        --HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Bars="..HealBot_Timers["barsUpdateFreq"])
     else
         HealBot_Timers["slowUpdateFreq"]=4
         HealBot_Timers["fastUpdateFreq"]=1
@@ -2487,17 +2486,24 @@ local function HealBot_Update_Skins(forceCheck)
                     HealBot_Globals.v1BuffExpireTimes=nil
                 end
             end
-            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<6 then
-                HealBot_Globals.RangeCheckFreq=5
-                HealBot_Globals.CacheSize=5
-                if HealBot_Globals.MaxBarsCache then HealBot_Globals.MaxBarsCache=nil end
-                if HealBot_Globals.EnLibQuickHealth then HealBot_Globals.EnLibQuickHealth=false end
-            end
-            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
-                HealBot_NewVersionMessage(1)
-            end
-            if tonumber(tMinor)<3 and tonumber(tPatch)<6 and tonumber(tHealbot)<10 then
-                HealBot_NewVersionMessage(2)
+            if tonumber(tMinor)<3 then
+                if tonumber(tPatch)<6 and tonumber(tHealbot)<6 then
+                    HealBot_Globals.RangeCheckFreq=5
+                    HealBot_Globals.CacheSize=5
+                    if HealBot_Globals.MaxBarsCache then HealBot_Globals.MaxBarsCache=nil end
+                    if HealBot_Globals.EnLibQuickHealth then HealBot_Globals.EnLibQuickHealth=false end
+                end
+                if tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
+                    HealBot_NewVersionMessage(1)
+                end
+                if tonumber(tPatch)<6 and tonumber(tHealbot)<10 then
+                    HealBot_NewVersionMessage(2)
+                end
+                HealBot_Update_BuffsForSpec("Buff")
+            elseif tonumber(tMinor)==3 then
+                if tonumber(tPatch)==0 and tonumber(tHealbot)<3 then
+                    HealBot_Update_BuffsForSpec("Buff")
+                end
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -2512,10 +2518,6 @@ local function HealBot_Update_Skins(forceCheck)
             HealBot_Globals.CDCBarColour[customDebuffPriority]["G"] = 0
             HealBot_Globals.CDCBarColour[customDebuffPriority]["B"] = 0.28
         end
-    
-        HealBot_AddDebug("Version change - "..HealBot_Config.LastVersionSkinUpdate)
-    else
-        HealBot_AddDebug("No version change - "..HealBot_Config.LastVersionSkinUpdate)
     end
     if HealBot_Config.CurrentSpec==9 then
         HealBot_Config.CurrentSpec=1
@@ -2586,7 +2588,6 @@ local function HealBot_VersionUpdate_Spells()
             end
         end
     end
-    HealBot_AddDebug("Updated Spells")
 end
 
 function HealBot_setTooltipUpdateInterval()
@@ -3597,15 +3598,9 @@ local function HealBot_UnitSlowUpdateFriendly(button)
                 button.aura.buff.nextcheck=false
             end
         end
-    elseif button.aura.buff.name and button.aura.buff.name~=HEALBOT_CUSTOM_en and button.aura.buff.check then
-        button.aura.buff.check=false
-        button.aura.check=true
-    else
-        if button.health.current<button.health.max then
-            button.health.updhealth=true
-            button.health.update=true
-        end
-        button.aura.buff.check=true
+    elseif button.health.current<button.health.max then
+        button.health.updhealth=true
+        button.health.update=true
     end
 end
 
@@ -4214,7 +4209,7 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
             if HealBot_Options_Timer[130] then HealBot_Options_Timer[130]=nil end
         elseif datatype=="S" then
             HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug(amSenderId..":  "..datamsg);
+            --HealBot_AddDebug(amSenderId..":  "..datamsg);
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         elseif datatype=="G" then
             HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "H:"..HEALBOT_VERSION, 4, amSenderId)
@@ -4228,12 +4223,12 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
             end
         elseif datatype=="H" then
             HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug(amSenderId..":  "..datamsg);
+            --HealBot_AddDebug(amSenderId..":  "..datamsg);
             HealBot_Options_setMyGuildMates(amSenderId)
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         elseif datatype=="C" then
             HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug(amSenderId..":  "..datamsg);
+            --HealBot_AddDebug(amSenderId..":  "..datamsg);
             HealBot_Options_setMyFriends(amSenderId)
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         end
@@ -4763,7 +4758,7 @@ local function HealBot_OnEvent_UnitSpellCastStart(unit)
                 HealBot_Action_Refresh(HealBot_Unit_Button[HealBot_UnitIsRessing[unit]]) 
             end
         end
-        HealBot_AddDebug(unit.." is ressing "..HealBot_UnitIsRessing[unit])
+        --HealBot_AddDebug(unit.." is ressing "..HealBot_UnitIsRessing[unit])
         HealBot_UnitIsRessing[unit]=false
     elseif HEALBOT_GAME_VERSION<4 then
         local _,ucsButton = HealBot_UnitID(unit)
