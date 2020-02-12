@@ -8,7 +8,7 @@ local _
 
 local qAddonMsg={}
 function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
-    local aMsg=addon_id..":"..msg..":"..aType..":"..pName
+    local aMsg=addon_id.."~"..msg.."~"..aType.."~"..pName
     local unique=true;
     table.foreach(qAddonMsg, function (index,msg)
         if msg==aMsg then unique=false; end
@@ -23,21 +23,14 @@ function HealBot_Comms_SendAddonMessage()
         local aMsg=qAddonMsg[1]
         table.remove(qAddonMsg,1)
         
-        local addon_id, msg, aType, pName=string.split(":", aMsg)
-        
-        local inInst=IsInInstance()
-        if aType==1 and inInst then
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-        elseif aType==2 then
-            if inInst then
+        local addon_id, msg, aType, pName=string.split("~", aMsg)
+        aType=tonumber(aType)
+        if aType<4 then
+            if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
                 C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-            else
+            elseif IsInRaid() then
                 C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
-            end
-        elseif aType==3 then
-            if inInst then
-                C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-            else
+            elseif IsInGroup() then
                 C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
             end
         elseif aType==4 and pName then

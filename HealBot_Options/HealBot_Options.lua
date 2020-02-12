@@ -6198,6 +6198,7 @@ function HealBot_Options_FullHealSpellsCombo_list (sType)
             HEALBOT_HEALING_TOUCH,
             HEALBOT_HEAL,
             HBC_HEAL,
+            HBC_HOLY_NOVA,
             HEALBOT_HEALING_WAVE,
             HBC_HEALING_WAVE,
             HBC_LESSER_HEALING_WAVE,

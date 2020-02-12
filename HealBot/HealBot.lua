@@ -2681,17 +2681,17 @@ local function HealBot_OnEvent_VariablesLoaded(self)
         C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
         HealBot_Options_InitBuffClassList()
         HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
-        HealBot_ResSpells={[HEALBOT_MASS_RESURRECTION]=2,
-                           [HEALBOT_ABSOLUTION]=2,
-                           [HEALBOT_ANCESTRAL_VISION]=2,
-                           [HEALBOT_REAWAKEN]=2,
-                           [HEALBOT_REVITALIZE]=2,
-                           [HEALBOT_RESURRECTION]=1,
-                           [HEALBOT_ANCESTRALSPIRIT]=1,
-                           [HEALBOT_REBIRTH]=1,
-                           [HEALBOT_REDEMPTION]=1,
-                           [HEALBOT_REVIVE]=1,
-                           [HEALBOT_RESUSCITATE]=1}
+        HealBot_ResSpells={[GetSpellInfo(HEALBOT_MASS_RESURRECTION) or "x"]=2,
+                           [GetSpellInfo(HEALBOT_ABSOLUTION) or "x"]=2,
+                           [GetSpellInfo(HEALBOT_ANCESTRAL_VISION) or "x"]=2,
+                           [GetSpellInfo(HEALBOT_REAWAKEN) or "x"]=2,
+                           [GetSpellInfo(HEALBOT_REVITALIZE) or "x"]=2,
+                           [GetSpellInfo(HEALBOT_RESURRECTION) or "x"]=1,
+                           [GetSpellInfo(HEALBOT_ANCESTRALSPIRIT) or "x"]=1,
+                           [GetSpellInfo(HEALBOT_REBIRTH) or "x"]=1,
+                           [GetSpellInfo(HEALBOT_REDEMPTION) or "x"]=1,
+                           [GetSpellInfo(HEALBOT_REVIVE) or "x"]=1,
+                           [GetSpellInfo(HEALBOT_RESUSCITATE) or "x"]=1}
         HealBot_Aura_InitData()
         HealBot_Options_EmergencyFilter_Reset()
         HealBot_Text_sethbNumberFormat()
@@ -3583,20 +3583,12 @@ local function HealBot_UnitSlowUpdateFriendly(button)
     HealBot_BumpThrottleCtl(button)
     if (button.status.offline and UnitIsConnected(button.unit)) or (not button.status.offline and not UnitIsConnected(button.unit)) then
         HealBot_SetUnitDisconnect(button)
-    elseif button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
-        if UnitOnTaxi("player") then
-            if button.aura.buff.name then 
-                button.aura.check=true 
-            elseif button.aura.buff.nextcheck>1 then
-                button.aura.buff.nextcheck=TimeNow+5
-            end
+    elseif not UnitOnTaxi("player") and button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
+        if button.aura.buff.nextcheck==1 then
+            HealBot_Aura_ResetCheckBuffsTime(button)
         else
-            if button.aura.buff.nextcheck==1 then
-                HealBot_Aura_ResetCheckBuffsTime(button)
-            else
-                button.aura.check=true
-                button.aura.buff.nextcheck=false
-            end
+            button.aura.check=true
+            button.aura.buff.nextcheck=false
         end
     elseif button.health.current<button.health.max then
         button.health.updhealth=true
@@ -3670,6 +3662,15 @@ local function HealBot_Update_Slow()
                         HealBot_luVars["addonMsgTh"]=TimeNow+2
                     end
                 else
+                    if not HealBot_luVars["onTaxi"] then
+                        if UnitOnTaxi("player") then
+                            HealBot_Aura_ClearAllBuffs()
+                            HealBot_luVars["onTaxi"]=true
+                        end
+                    elseif not UnitOnTaxi("player") then
+                        HealBot_AuraCheck()
+                        HealBot_luVars["onTaxi"]=false
+                    end
                     HealBot_setqaFR()
                     HealBot_luVars["slowSwitch"]=0
                 end     
@@ -3681,19 +3682,17 @@ local function HealBot_Update_Slow()
                             HealBot_notVisible[xUnit]=nil
                         end
                     end
-                    if HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
-                        HealBot_luVars["nextDebugMsg"]=TimeNow+1
-                        HealBot_AddChat(HealBot_DebugMsg[1])
-                        table.remove(HealBot_DebugMsg,1)
-                    end
-                    if HealBot_luVars["VersionRequest"] then
-                        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "S:"..HEALBOT_VERSION, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
-                        HealBot_luVars["VersionRequest"]=false;
-                    end
                 elseif HealBot_luVars["slowSwitch"]<3 then
                     if HealBot_luVars["rcEnd"] and HealBot_luVars["rcEnd"]<TimeNow then
                         HealBot_luVars["rcEnd"]=nil
                         HealBot_OnEvent_ReadyCheckClear(false)
+                    elseif HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
+                        HealBot_luVars["nextDebugMsg"]=TimeNow+1
+                        HealBot_AddChat(HealBot_DebugMsg[1])
+                        table.remove(HealBot_DebugMsg,1)
+                    elseif HealBot_luVars["VersionRequest"] then
+                        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "S:"..HEALBOT_VERSION, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
+                        HealBot_luVars["VersionRequest"]=false;
                     end
                 else
                     HealBot_Aura_BuffIdLookup()
@@ -4190,26 +4189,17 @@ local function HealBot_UnitNameOnly(unitName)
     return noName
 end
 
-local HealBotAddonSummary={}
-local HealBotAddonIncHeals={}
-local hbExtra1, hbExtra2=false,false
 local amIncMsg, amSenderId=false,false
 local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id)
     amIncMsg=msg
-    amSenderId = HealBot_UnitNameOnly(amSenderId) or "x"
-    if not HealBotAddonSummary[amSenderId..": "..addon_id] then
-        HealBotAddonSummary[amSenderId..": "..addon_id]=string.len(amIncMsg)
-    else
-        HealBotAddonSummary[amSenderId..": "..addon_id]=HealBotAddonSummary[amSenderId..": "..addon_id]+string.len(amIncMsg)
-    end
-    if addon_id==HEALBOT_HEALBOT then
-        local datatype, datamsg, hbExtra1, hbExtra2 = string.split(":", amIncMsg)
+    amSenderId = HealBot_UnitNameOnly(sender_id)
+    if amSenderId and amIncMsg and addon_id==HEALBOT_HEALBOT then
+        local datatype, datamsg = string.split(":", amIncMsg)
         if datatype=="R" then
             HealBot_luVars["VersionRequest"]=amSenderId
-            if HealBot_Options_Timer[130] then HealBot_Options_Timer[130]=nil end
         elseif datatype=="S" then
             HealBot_Vers[amSenderId]=datamsg
-            --HealBot_AddDebug(amSenderId..":  "..datamsg);
+            HealBot_AddDebug("AddonMsg S="..amSenderId..":"..datamsg);
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         elseif datatype=="G" then
             HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "H:"..HEALBOT_VERSION, 4, amSenderId)
@@ -4223,12 +4213,12 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
             end
         elseif datatype=="H" then
             HealBot_Vers[amSenderId]=datamsg
-            --HealBot_AddDebug(amSenderId..":  "..datamsg);
+            HealBot_AddDebug("AddonMsg H="..amSenderId..":"..datamsg);
             HealBot_Options_setMyGuildMates(amSenderId)
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         elseif datatype=="C" then
             HealBot_Vers[amSenderId]=datamsg
-            --HealBot_AddDebug(amSenderId..":  "..datamsg);
+            HealBot_AddDebug("AddonMsg C="..amSenderId..":"..datamsg);
             HealBot_Options_setMyFriends(amSenderId)
             HealBot_Comms_CheckVer(amSenderId, datamsg)
         end
@@ -4789,8 +4779,8 @@ local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,spellRank,
     if uscUnit and UnitExists(uscUnit) and uscUnitName then
         if caster=="player" and Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 then
             if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["RESONLY"] then
-                if HealBot_ResSpells[spellID] then
-                    if HealBot_ResSpells[spellID]==2 then           
+                if HealBot_ResSpells[uscSpellName] then
+                    if HealBot_ResSpells[uscSpellName]==2 then           
                         HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,uscUnit)
                         HealBot_UnitIsRessing[caster]=HEALBOT_OPTIONS_GROUPHEALS
                     else

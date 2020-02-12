@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.3.0.3";
+﻿HEALBOT_VERSION    = "8.3.0.4";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.7" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.3.8" end
 
 function HealBot_globalVars()
     --Consumables
@@ -218,6 +218,7 @@ function HealBot_globalVars()
 	HEALBOT_HOLY_WORD_SANCTIFY              = 34861 --GetSpellInfo(34861) or "--Holy Word: Sanctify";
 	HEALBOT_SPIRIT_OF_REDEMPTION            = 27827 --GetSpellInfo(20711) or "--Spirit of Redemption";
     HEALBOT_HOLY_WARD                       = 213610 --GetSpellInfo(213610) or "--Holy Ward";
+    HBC_HOLY_NOVA                           = 15237
 	
     --Shaman
     HEALBOT_CHAIN_HEAL                      = 1064 --GetSpellInfo(1064) or "--Chain Heal";
