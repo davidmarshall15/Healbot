@@ -5118,6 +5118,20 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <CheckButton name="HealBot_Options_HealGroupsAllowDups" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-84" y="20" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_HealGroupsAllowDups_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPSALLOWDUPS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPSALLOWDUPS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                 </Frames>
               </Frame>
 

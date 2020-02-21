@@ -554,11 +554,9 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_MACROSOUNDOFF              = "Sound suppressed when using auto trinkets"
     HEALBOT_CHAT_MACROERRORON               = "Errors not suppressed when using auto trinkets"
     HEALBOT_CHAT_MACROERROROFF              = "Errors suppressed when using auto trinkets"
-    HEALBOT_CHAT_ACCEPTSKINON               = "Share Skin - Show accept skin popup when someone shares a skin with you"
-    HEALBOT_CHAT_ACCEPTSKINOFF              = "Share Skin - Always ignore share skins from everyone"
     HEALBOT_CHAT_USE10ON                    = "Auto Trinket - Use10 is on - You must enable an existing auto trinket for use10 to work"
     HEALBOT_CHAT_USE10OFF                   = "Auto Trinket - Use10 is off"
-    HEALBOT_CHAT_SKINREC                    = " skin received from " 
+    HEALBOT_CHAT_SKINREC                    = " skin imported" 
 
     HEALBOT_OPTIONS_SELFCASTS               = "Self casts only"
     HEALBOT_OPTIONS_HOTSHOWICON             = "Show icon"
@@ -656,6 +654,7 @@ function HealBot_Lang_enALL()
     HEALBOT_COMBATPROT_PARTYNO              = "bars Reserved for Party"
     HEALBOT_COMBATPROT_RAIDNO               = "bars Reserved for Raid"
     HEALBOT_SKIN_CHECK_DONE                 = "Integrity check of skins complete"
+    HEALBOT_ALLOW_DUPLICATES                = "Allow Duplicates"
 
     HEALBOT_WORD_HEALTH                     = "Health"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"

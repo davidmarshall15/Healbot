@@ -265,10 +265,10 @@ end
 
 local UnitBuffIcons=nil
 local UnitDebuffIcons=nil
-local function HealBot_ToolTip_ShowHoT(unit)
+local function HealBot_ToolTip_ShowHoT(buttonId, unit)
     if HealBot_Globals.Tooltip_ShowHoT then
         local hbHoTline1=true
-        UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(unit)
+        UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(buttonId)
         if linenum<43 and UnitBuffIcons then
             for i = 1,10 do
                 if UnitBuffIcons[i].current and HealBot_Spell_IDs[UnitBuffIcons[i].spellId] then
@@ -321,7 +321,7 @@ local function HealBot_ToolTip_ShowHoT(unit)
 end
 
 local function HealBot_ToolTip_SetTooltipPos()
-    xButton=HealBot_Unit_Button[HealBot_Data["TIPUNIT"]] or HealBot_Enemy_Button[HealBot_Data["TIPUNIT"]] or HealBot_Pet_Button[HealBot_Data["TIPUNIT"]]
+    xButton=HealBot_Data["TIPBUTTON"]
     if xButton then
         local g = _G["f"..xButton.frame.."_HealBot_Action"]
         local top = g:GetTop();
@@ -491,10 +491,11 @@ local function HealBot_Action_DoRefreshTooltip()
     if HealBot_Data["TIPTYPE"]=="NONE" then return end
     if HealBot_Globals.ShowTooltip==false then return end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["UILOCK"] then return end
-    xUnit=HealBot_Data["TIPUNIT"]
+    xButton=HealBot_Data["TIPBUTTON"]
+    if not xButton then return end
+    xUnit=xButton.unit
     xGUID=UnitGUID(xUnit)
-    xButton=HealBot_Unit_Button[xUnit] or HealBot_Pet_Button[xUnit] or HealBot_Enemy_Button[xUnit]
-    if not xGUID or not xButton then return end
+    if not xGUID then return end
     local uName=HealBot_GetUnitName(xUnit, xGUID)
     if not uName then return end;
     
@@ -677,7 +678,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 end
             end
             
-            UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xUnit)
+            UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
             if UnitDebuffIcons then
                 for i = 51,55 do
                     if UnitDebuffIcons[i].current and UnitDebuffIcons[i].spellId>0 and GetSpellInfo(UnitDebuffIcons[i].spellId) then
@@ -838,7 +839,7 @@ local function HealBot_Action_DoRefreshTooltip()
         end
     end
   
-    HealBot_ToolTip_ShowHoT(xUnit)
+    HealBot_ToolTip_ShowHoT(xButton.id, xUnit)
     HealBot_Tooltip_Show()
 end
 

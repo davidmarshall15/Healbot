@@ -573,6 +573,8 @@ HealBot_Config_SkinsDefaults = {
   Skin_ID = 1,
   Current_Skin = HEALBOT_SKINS_STD,
   Skins = {HEALBOT_SKINS_STD, HEALBOT_OPTIONS_GROUPHEALS, HEALBOT_OPTIONS_RAID25, HEALBOT_OPTIONS_RAID40},
+  DuplicateBars = {[HEALBOT_SKINS_STD] = false, [HEALBOT_OPTIONS_GROUPHEALS] = false, 
+                   [HEALBOT_OPTIONS_RAID25] = false, [HEALBOT_OPTIONS_RAID40] = false,},
   Author = {[HEALBOT_SKINS_STD] = defaultAuthor, [HEALBOT_OPTIONS_GROUPHEALS] = defaultAuthor, 
               [HEALBOT_OPTIONS_RAID25] = defaultAuthor, [HEALBOT_OPTIONS_RAID40] = defaultAuthor,},
   Chat =    {[HEALBOT_SKINS_STD]          = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},
@@ -2292,7 +2294,7 @@ HealBot_Class_Buffs = {};
 HealBot_Class_Cures = {};
 HealBot_customTempUserName={}
 
-HealBot_Data={  ["TIPUNIT"] = false,
+HealBot_Data={  ["TIPBUTTON"] = false,
                 ["TIPTYPE"] = "NONE",
                 ["TIPUSE"] = false,
                 ["UILOCK"] = false,
@@ -2308,5 +2310,6 @@ HealBot_FrameVisible = {[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=fa
 HealBot_Spell_IDs = {};
 HealBot_Spell_Names = {};
 HealBot_Unit_Button={};
+HealBot_Private_Button={};
 HealBot_Enemy_Button={};
 HealBot_Pet_Button={};    

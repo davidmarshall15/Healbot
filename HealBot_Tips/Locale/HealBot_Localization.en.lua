@@ -133,6 +133,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ENABLEHEALGROUP"]=HEALBOT_OPTIONS_FRAME,
                                  ["HEALGROUPDOWN"]="Heal Group Down",
                                  ["HEALGROUPUP"]="Heal Group Up",
+                                 ["HEALGROUPSALLOWDUPS"]=HEALBOT_ALLOW_DUPLICATES,
                         -- Skins Frames Headers Bars tab
                                  ["BARHEADERS"]="Bar Headers",
                                  ["HEADERBARSSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
@@ -527,6 +528,7 @@ function HealBot_Lang_Options_enALL()
                                ["ENABLEHEALGROUP"]="Include/Exclude the heal group.",
                                ["HEALGROUPDOWN"]="Move the heal group down.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                                ["HEALGROUPUP"]="Move the heal group up.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
+                               ["HEALGROUPSALLOWDUPS"]="Allow a duplicate bar in the Raid/Group/Pets Heal Group\nwhen a bar exists in the Tank/Healers/Self/My Targets Heal Group.",
                         -- Skins Frames Headers Bars tab
                                ["BARHEADERS"]="Show the Skins Frames Headers Bars tab.",
                                ["HEADERBARSSHOW"]="Turn On/Off displaying the bars headers.\n- For the raid heal group the header is based on main sort.\n- For other heal groups the header is the heal group name.",

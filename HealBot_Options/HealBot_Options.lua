@@ -1441,6 +1441,7 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.FrameAliasBar[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Enemy[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.BarSort[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin])
+    Healbot_Config_Skins.DuplicateBars[newSkinName] = Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]
     Healbot_Config_Skins.Author[newSkinName] = HealBot_GetUnitName("Player").." "..HEALBOT_PLAYER_OF_REALM.." "..GetRealmName()
     local unique=true;
     table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
@@ -1492,6 +1493,7 @@ function HealBot_Options_DeleteSkin_OnClick(self)
         Healbot_Config_Skins.Chat[hbDelSkinName] = nil
         Healbot_Config_Skins.Anchors[hbDelSkinName] = nil
         HealBot_Config.SkinDefault[hbDelSkinName] = nil
+        Healbot_Config_Skins.DuplicateBars[hbDelSkinName] = nil
         Healbot_Config_Skins.BarVisibility[hbDelSkinName] = nil
         Healbot_Config_Skins.Protection[hbDelSkinName] = nil
         Healbot_Config_Skins.Author[hbDelSkinName] = nil
@@ -3338,6 +3340,15 @@ function HealBot_Options_HealGroups_OnClick(self, id)
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"] = false
     end
     HealBot_Options_framesChanged(id)
+end
+
+function HealBot_Options_HealGroupsAllowDups_OnClick(self)
+    if self:GetChecked() then
+        Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]=true
+    else
+        Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]=false
+    end
+    HealBot_setOptions_Timer(595)
 end
 
 function HealBot_Options_HealGroupUp_OnClick(self, id)
@@ -8410,7 +8421,7 @@ function HealBot_Options_ShareSkinComplete()
     HealBot_Options_SetSkins(true);
     HealBot_Options_NewSkin:SetText("")
     hbWarnSharedMedia=false
-    HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC..hbOptGetSkinFrom)
+    HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
     HealBot_SetResetFlag("SOFT")
     DoneInitTab[305]=nil
     HealBot_Options_InitSub(305)
@@ -8466,14 +8477,20 @@ function HealBot_Options_tab2str( tbl )
 end
 
 function HealBot_Options_BuildSkinSendMsg(skinName)
-    local SkinVars={'Author'}
+    local SkinVars={'Author', 'DuplicateBars'}
     local SkinTabVars={'Chat', 'General', 'Healing', 'Protection', 'Enemy'}
     local SkinTabFrameVars={'IncludeGroup','FrameAlias', 'FrameAliasBar', 'Frame', 'StickyFrames', 'HealGroups', 'Anchors', 'HeadBar', 'HeadText', 'HealBar', 'BarCol', 'BarIACol', 'BarText', 'BarTextCol', 'Icons', 'RaidIcon', 'IconText', 'BarVisibility', 'BarSort', 'BarAggro', 'BarHighlight'}
     HealBot_ShareSkinSendMsg("Init", skinName)
     for j=1, getn(SkinVars), 1 do
         local varName=SkinVars[j]
         local tabStr=Healbot_Config_Skins[varName][skinName]
-        HealBot_ShareSkinSendMsg(varName.."~v", tabStr)
+        if "string" == type( tabStr ) then
+            HealBot_ShareSkinSendMsg(varName.."~v", tabStr)
+        elseif tabStr then
+            HealBot_ShareSkinSendMsg(varName.."~v", "true")
+        else
+            HealBot_ShareSkinSendMsg(varName.."~v", "false")
+        end
     end
     for j=1, getn(SkinTabVars), 1 do
         local varName=SkinTabVars[j]
@@ -8525,7 +8542,8 @@ end
 
 local tmpRecParts={}
 local lFrame=1
-local skinBoolean ={["Chat"]          = {["RESONLY"]=true},
+local skinBoolean ={["DuplicateBars"] = true,
+                    ["Chat"]          = {["RESONLY"]=true},
                     ["General"]       = {["HIDEPARTYF"]=true,["HIDEPTF"]=true,["HIDEBOSSF"]=true,["HIDERAIDF"]=true,["FLUIDBARS"]=true,["STICKYFRAME"]=true},
                     ["Healing"]       = {["GROUPPETS"]=true,["TONLYFRIEND"]=true,["FONLYFRIEND"]=true},
                     ["Protection"]    = {["CRASH"]=true,["COMBAT"]=true},
@@ -8640,8 +8658,16 @@ function HealBot_Options_BuildSkinRecMsg(skinName, cmd, parts, msg)
             end
         end
     elseif vType=="v" and Healbot_Config_Skins[varName] then
-        if tonumber(msg) then msg=tonumber(msg) end
-        Healbot_Config_Skins[varName][skinName]=msg
+        if skinBoolean[varName] then
+            if msg=="true" then
+                Healbot_Config_Skins[varName][skinName]=true
+            else
+                Healbot_Config_Skins[varName][skinName]=false
+            end
+        else
+            if tonumber(msg) then msg=tonumber(msg) end
+            Healbot_Config_Skins[varName][skinName]=msg
+        end
     end
 end
 
@@ -12008,7 +12034,7 @@ function HealBot_Options_Init(tabNo)
         end
     elseif tabNo==8 then
         if not DoneInitTab[8] then
-            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestBars,HEALBOT_OPTION_NUMBARS,5,50,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestBars,HEALBOT_OPTION_NUMBARS,5,70,1)
             HealBot_Options_NumberTestBars:SetValue(HealBot_Globals.TestBars["BARS"])
             HealBot_Options_NumberTestBarsText:SetText(HEALBOT_OPTION_NUMBARS..": "..HealBot_Globals.TestBars["BARS"])
             HealBot_Options_val_OnLoad(HealBot_Options_NumberTestTanks,HEALBOT_OPTION_NUMTANKS,0,5,1)
@@ -12387,7 +12413,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val_OnLoad(HealBot_Options_BarWidthS,HEALBOT_OPTIONS_SKINWIDTH,20,225,1)
             HealBot_Options_BarWidthS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"])
             HealBot_Options_BarWidthSText:SetText(HEALBOT_OPTIONS_SKINWIDTH..": "..Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"])
-            HealBot_Options_val_OnLoad(HealBot_Options_BarNumColsS,HEALBOT_OPTIONS_SKINBRSPACE,0,10,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_BarNumColsS,HEALBOT_OPTIONS_SKINBRSPACE,1,10,1)
             HealBot_Options_BarNumColsS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NUMCOLS"] or 2)
             HealBot_Options_BarNumColsSText:SetText(HealBot_Options_SetNoColsText() .. ": " .. Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NUMCOLS"])
             HealBot_Options_val_OnLoad(HealBot_Options_BarBRSpaceS,HEALBOT_OPTIONS_SKINBRSPACE,0,10,1)
@@ -12927,6 +12953,8 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_HealGroups11Frame, HealBot_Options_HealGroupsFrame_List[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["FRAME"]])
             g=_G["HealBot_HealButtonsFrames1_Text"]
             g:SetText(HEALBOT_OPTIONS_FRAME)
+            HealBot_Options_HealGroupsAllowDups:SetChecked(Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin])
+            HealBot_Options_SetText(HealBot_Options_HealGroupsAllowDups,HEALBOT_ALLOW_DUPLICATES)
             if HEALBOT_GAME_VERSION<4 then 
                 HealBot_Options_HealGroups7:Hide()
                 HealBot_Options_HealGroups7Frame:Hide()
@@ -14128,6 +14156,38 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
                     bar3:GetStatusBarTexture():SetHorizTile(false)
                     bar6:GetStatusBarTexture():SetHorizTile(false)
                 end
+            end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+                local bar2 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar2"]
+                local bar3 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar3"]
+                local bar6 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar6"]
+                if bar then
+                    bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar3:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar6:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar:GetStatusBarTexture():SetHorizTile(false)
+                    bar2:GetStatusBarTexture():SetHorizTile(false)
+                    bar3:GetStatusBarTexture():SetHorizTile(false)
+                    bar6:GetStatusBarTexture():SetHorizTile(false)
+                end
+            end 
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
+                local bar2 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar2"]
+                local bar3 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar3"]
+                local bar6 = _G["HealBot_Action_HealUnit"..xButton.id.."Bar6"]
+                if bar then
+                    bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar3:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar6:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                    bar:GetStatusBarTexture():SetHorizTile(false)
+                    bar2:GetStatusBarTexture():SetHorizTile(false)
+                    bar3:GetStatusBarTexture():SetHorizTile(false)
+                    bar6:GetStatusBarTexture():SetHorizTile(false)
+                end
             end 
             for _,xButton in pairs(HealBot_Enemy_Button) do
                 local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar"]
@@ -14168,7 +14228,23 @@ function HealBot_UpdateUsedMedia(event, mediatype, key)
                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HEIGHT"],
                                     HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["OUTLINE"]]);
                 end
-            end   
+            end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar_text"]
+                if bar then
+                    bar:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["FONT"]),
+                                    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HEIGHT"],
+                                    HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["OUTLINE"]]);
+                end
+            end      
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar_text"]
+                if bar then
+                    bar:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["FONT"]),
+                                    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HEIGHT"],
+                                    HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["OUTLINE"]]);
+                end
+            end 
             for _,xButton in pairs(HealBot_Enemy_Button) do
                 local bar = _G["HealBot_Action_HealUnit"..xButton.id.."Bar_text"]
                 if bar then

@@ -306,6 +306,9 @@ local function HealBot_Aggro_UpdateFluidBars()
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Action_UpdateFluidBar(xButton)
     end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Action_UpdateFluidBar(xButton)
+    end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_UpdateFluidBar(xButton)
     end
@@ -368,6 +371,11 @@ local function HealBot_Aggro_UpdateAggroBars()
     end
     HealBot_Aggro_luVars["UpdatedAggroBars"]=false
     for _,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.status.bar4 then
+            HealBot_Action_UpdateAggroBar(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
         if xButton.status.bar4 then
             HealBot_Action_UpdateAggroBar(xButton)
         end
