@@ -79,6 +79,7 @@ HealBot_luVars["CacheSize"]=4
 HealBot_luVars["fastUpdateEveryFrame"]=9
 HealBot_luVars["TestBarsOn"]=false
 HealBot_luVars["RaidTargetUpdate"]=false
+HealBot_luVars["showReloadMsg"]=true
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -3029,14 +3030,16 @@ local function HealBot_Options_Update()
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." - "..HEALBOT_WORD_OFF)
         end
         HealBot_Options_Timer[180]=nil
-    elseif  HealBot_Options_Timer[185] then
+    elseif HealBot_Options_Timer[185] then
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
             HealBot_trackHiddenFrames["MINIBOSS"]=true
             HealBot_Options_DisableMiniBossFrame()
-            if HealBot_luVars["ReloadUI"]>GetTime() then
+            if HealBot_luVars["ReloadUI"]>GetTime() and HealBot_luVars["showReloadMsg"] then
+                HealBot_luVars["showReloadMsg"]=false
                 HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES.." - "..HEALBOT_WORD_ON)
             end
-        elseif HealBot_trackHiddenFrames["MINIBOSS"] then
+        elseif HealBot_trackHiddenFrames["MINIBOSS"] and HealBot_luVars["showReloadMsg"] then
+            HealBot_luVars["showReloadMsg"]=false
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES.." - "..HEALBOT_WORD_OFF)
         end
         HealBot_Options_Timer[185]=nil

@@ -484,7 +484,8 @@ function HealBot_Panel_UnitRole(unit, guid)
 end
 
 function HealBot_Action_SetClassIconTexture(button)
-    if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+    if UnitExists(button.unit) and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"]
+                               and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]<2 then
         local setRole=false
         local unitRole=HEALBOT_WORDS_UNKNOWN
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
@@ -1481,18 +1482,26 @@ local function HealBot_Panel_SubSort(doSubSort,unitType)
     end
 end
 
-local vSubOrderKey,vSubOrderName,vSubOrderGroup,vSubOrderRole=99,"",0,""
+local vSubOrderKey,allowOOR=99,true
 local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
     vSubOrderKey=99
+    if mainSort and Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SHOW"] then
+        allowOOR=false
+    else
+        allowOOR=true
+    end
     if barOrder==1 then
-        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
-            vSubOrderKey = "!";
-        elseif UnitExists(unit) then
-            vSubOrderName=UnitName(unit) or unit
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
-                vSubOrderKey = "ÿÿÿþ"..vSubOrderName
+        if unit == "player" then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+                vSubOrderKey = "!";
             else
-                vSubOrderKey = vSubOrderName
+                vSubOrderKey = UnitName(unit) or unit
+            end
+        elseif UnitExists(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                vSubOrderKey = "ÿÿÿþ"..(UnitName(unit) or unit)
+            else
+                vSubOrderKey = UnitName(unit) or unit
             end
         else
             vSubOrderKey = "ÿÿÿÿ"..unit
@@ -1505,7 +1514,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = HealBot_Panel_classEN(unit)
             end
         elseif UnitExists(unit) then
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = "ÿÿÿþ"..HealBot_Panel_classEN(unit)
             else
                 vSubOrderKey = HealBot_Panel_classEN(unit)
@@ -1514,25 +1523,28 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             vSubOrderKey = "ÿÿÿÿ"..unit
         end
     elseif barOrder==3 then
-        vSubOrderGroup=HealBot_UnitGroups[unit] or 1
         if unit == "player" then 
             if not mainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
                 vSubOrderKey = -1
             else
-                vSubOrderKey = vSubOrderGroup
+                vSubOrderKey = HealBot_UnitGroups[unit] or 1
             end 
         elseif UnitExists(unit) then
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
-                vSubOrderKey = 9+vSubOrderGroup
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                vSubOrderKey = 9+HealBot_UnitGroups[unit] or 1
             else
-                vSubOrderKey = vSubOrderGroup
+                vSubOrderKey = HealBot_UnitGroups[unit] or 1
             end
         else
-            vSubOrderKey = 19+vSubOrderGroup
+            vSubOrderKey = 19+HealBot_UnitGroups[unit] or 1
         end
     elseif barOrder==4 then
-        if unit == "player" and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
-            vSubOrderKey = -99999999
+        if unit == "player" then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
+                vSubOrderKey = -99999999
+            else
+                vSubOrderKey = 0-UnitHealthMax(unit)
+            end
         elseif UnitExists(unit) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = 9999999-UnitHealthMax(unit)
@@ -1544,21 +1556,20 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
         end
         if UnitIsPlayer(unit) and UnitHealthMax(unit)>TempMaxH then TempMaxH=UnitHealthMax(unit); end
     elseif barOrder==5 then
-        vSubOrderRole=HealBot_unitRole[unit] or 9
         if unit == "player" then 
             if not mainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] then
                 vSubOrderKey = -1
             else 
-                vSubOrderKey = vSubOrderRole
+                vSubOrderKey = HealBot_unitRole[unit] or 9
             end
         elseif UnitExists(unit) then
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
-                vSubOrderKey = 59+vSubOrderRole
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+                vSubOrderKey = 59+(HealBot_unitRole[unit] or 9)
             else
-                vSubOrderKey = vSubOrderRole
+                vSubOrderKey = HealBot_unitRole[unit] or 9
             end
         else
-            vSubOrderKey = 99+vSubOrderRole
+            vSubOrderKey = 99+(HealBot_unitRole[unit] or 9)
         end
     end
     return vSubOrderKey

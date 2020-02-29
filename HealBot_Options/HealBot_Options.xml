@@ -5889,8 +5889,6 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITION",false)</OnLeave>
                     </Scripts>
                   </Frame>
-
-
                   <Button name="HealBot_BackgroundColorpickb">
                     <Size>
                       <AbsDimension x="230" y="25"/>
@@ -8314,39 +8312,11 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_SubSortPlayerFirst" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-75" y="-70"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_SubSortPlayerFirst_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTSELF",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSELF",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-75" y="-130"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_SortOutOfRangeLast_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTOOR",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTOOR",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
                       <Frame name="HealBot_Options_ExtraSort" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SubSortPlayerFirst" relativePoint="BOTTOMLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-25" y="-105" />
+                              <AbsDimension x="0" y="-90" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8369,11 +8339,25 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTMAIN",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSort" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="25" y="-15"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_SortOutOfRangeLast_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTOOR",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <Frame name="HealBot_Options_ExtraSubSort" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSort" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-40" />
+                              <AbsDimension x="0" y="-95" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8396,11 +8380,25 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSUB",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <CheckButton name="HealBot_Options_SubSortPlayerFirst" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSubSort" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="25" y="-15"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_SubSortPlayerFirst_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSSORTSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSELF",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <CheckButton name="HealBot_Options_SelfPet" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SubSortPlayerFirst" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-75" y="-350"/>
+                              <AbsDimension x="0" y="-70"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8412,9 +8410,9 @@
                       </CheckButton>
                       <CheckButton name="HealBot_Options_GroupPetsByFive" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelfPet" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-75" y="-410"/>
+                              <AbsDimension x="0" y="-25"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
