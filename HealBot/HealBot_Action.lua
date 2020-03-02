@@ -2262,18 +2262,16 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                     tSetHealButton.status.unittype = 11
                 end
             elseif unitType>6 and unitType<9 then
-                HealBot_Pet_Button[unit]=tSetHealButton
-                tSetHealButton.status.unittype = unitType  -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
-                tSetHealButton.status.friend=true          -- 7=vehicle  8=pet  9=target  10=focus  11=enemy without events  12=enemy with events
+                HealBot_Pet_Button[unit]=tSetHealButton    -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
+                tSetHealButton.status.unittype = unitType  -- 7=vehicle  8=pet  9=target  10=focus  11=enemy without events  12=enemy with events        
             elseif unitType<5 then
                 HealBot_Private_Button[unit]=tSetHealButton
                 tSetHealButton.status.unittype = unitType
-                tSetHealButton.status.friend=UnitIsFriend("player",unit)
             else
                 HealBot_Unit_Button[unit]=tSetHealButton 
                 tSetHealButton.status.unittype = unitType
-                tSetHealButton.status.friend=UnitIsFriend("player",unit)
             end
+            tSetHealButton.status.friend=UnitIsFriend("player",unit)
             if tSetHealButton.status.offline and UnitIsConnected(unit) then
                 tSetHealButton.status.offline=false
             end
@@ -2311,6 +2309,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         if not HealBot_ResetBarSkinDone[tSetHealButton.id] then
             HealBot_Skins_ResetSkin("bar",tSetHealButton)
             HealBot_ResetBarSkinDone[tSetHealButton.id]=true
+        else
+            HealBot_Skins_ResetSkinWidth(tSetHealButton)
         end
         if HealBot_Unit_Button[unit] and unitType>4 then
             HealBot_Action_luVars["updateBucket"]=HealBot_Action_luVars["updateBucket"]+1

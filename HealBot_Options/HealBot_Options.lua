@@ -1566,6 +1566,24 @@ function HealBot_Options_HideEnemyOutOfCombat_OnClick(self)
     HealBot_Options_framesChanged(false) 
 end
 
+function HealBot_Options_ShowEnemyTargets_OnClick(self)
+    if self:GetChecked() then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"]=true
+    else
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"]=false
+    end
+    HealBot_Options_framesChanged(true)
+end
+
+function HealBot_Options_DoubleEnemyBarWidth_OnClick(self)
+    if self:GetChecked() then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"]=true
+    else
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"]=false
+    end
+    HealBot_Options_framesChanged(true)
+end
+
 function HealBot_Options_EnemyExistsPlayerTargets_OnClick(self)
     if self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]=true
@@ -1687,6 +1705,18 @@ function HealBot_Options_ShowEnemyNumBoss_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false)
+    end
+end
+
+function HealBot_Options_EnemyTargetSize_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]~=val then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"] = val;
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -12464,6 +12494,13 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val_OnLoad(HealBot_Options_ShowEnemyNumBoss,HEALBOT_ENEMY_NUMBER_BOSSES,0,4,1)
             HealBot_Options_ShowEnemyNumBoss:SetValue(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"])
             HealBot_Options_ShowEnemyNumBossText:SetText(HEALBOT_ENEMY_NUMBER_BOSSES..": "..Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"])
+            HealBot_Options_val_OnLoad(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE,20,80,1,5)
+            HealBot_Options_EnemyTargetSize:SetValue(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Options_EnemyTargetSizeText:SetText(HEALBOT_ENEMY_TARGET_SIZE..": "..Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"])
+            HealBot_Options_ShowEnemyTargets:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"])
+            HealBot_Options_SetText(HealBot_Options_ShowEnemyTargets,HEALBOT_ENEMY_SHOW_TARGET)
+            HealBot_Options_DoubleEnemyBarWidth:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"])
+            HealBot_Options_SetText(HealBot_Options_DoubleEnemyBarWidth,HEALBOT_ENEMY_DOUBLE_WIDTH)
             HealBot_Options_HideEnemyOutOfCombat:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"])
             HealBot_Options_SetText(HealBot_Options_HideEnemyOutOfCombat,HEALBOT_ENEMY_HIDE_OUTOFCOMBAT)
             HealBot_Options_EnemyExistsPlayerTargets:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"])

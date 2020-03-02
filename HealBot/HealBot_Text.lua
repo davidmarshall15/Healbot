@@ -40,6 +40,11 @@ local hbNumFormats = {["Places"]        = {[1]=-1, [2]=-1, [3]=-1, [4]=-1, [5]=-
                      }
 local aggroNumFormatSurLa={[1]="[",[2]="[",[3]="[",[4]="[",[5]="[",[6]="[",[7]="[",[8]="[",[9]="[",}
 local aggroNumFormatSurRa={[1]="]",[2]="]",[3]="]",[4]="]",[5]="]",[6]="]",[7]="]",[8]="]",[9]="]",}
+local HealBot_Text_EnemySizeWidth={}
+HealBot_Text_EnemySizeWidth["EnemySizeWidth1"]=100
+HealBot_Text_EnemySizeWidth["EnemySizeWidth2"]=100
+HealBot_Text_EnemySizeWidth[1]=10
+HealBot_Text_EnemySizeWidth[2]=10
 
 local hbStringSub=nil
 local hbutf8sub=string.gsub
@@ -401,6 +406,30 @@ function HealBot_Text_setTextLen(curFrame)
     --HealBot_setCall("HealBot_Text_setTextLen")
 end
 
+local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
+        vSetTextLenWidthAdj=0.8
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["DOUBLE"] then
+            vSetTextLenWidthAdj=1.7
+        end
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
+        HealBot_Text_EnemySizeWidth[eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"]/vSetTextLenFontAdj)))
+    end
+end
+
+function HealBot_Text_setEnemySizeWidth(vName, vValue)
+    if HealBot_Text_EnemySizeWidth[vName]~=vValue then
+        HealBot_Text_EnemySizeWidth[vName]=vValue
+        if vName=="EnemySizeWidth1" then
+            HealBot_Text_setEnemyTextLen(vValue, 1)
+        else
+            HealBot_Text_setEnemyTextLen(vValue, 2)
+        end
+    end
+end
+
 function HealBot_Text_setNameTag(button)
     if UnitExists(button.unit) then
         if button.status.friend then
@@ -465,10 +494,18 @@ function HealBot_Text_setNameText(button)
         HealBot_Action_Refresh(button)
     end
 
-    vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))+1
-    vSetNameTextBtnLen=hbBarTextLen[button.frame]-vSetNameTextStrLen
-    if vSetNameTextBtnLen<1 then
-        tConcat[1]=hbStringSub(vSetNameTextName,1,hbBarTextLen[button.frame])
+    vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))+2
+    if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+        vSetNameTextBtnLen=HealBot_Text_EnemySizeWidth[HealBot_Panel_isSpecialUnit(button.unit)]-vSetNameTextStrLen
+    else
+        vSetNameTextBtnLen=hbBarTextLen[button.frame]-vSetNameTextStrLen
+    end
+    if vSetNameTextBtnLen<0 then
+        if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+            tConcat[1]=hbStringSub(vSetNameTextName,1,HealBot_Text_EnemySizeWidth[HealBot_Panel_isSpecialUnit(button.unit)])
+        else
+            tConcat[1]=hbStringSub(vSetNameTextName,1,hbBarTextLen[button.frame])
+        end
         tConcat[2]=vTextCharDot
         vSetNameTextName = HealBot_Text_Concat(2)
     end

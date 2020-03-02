@@ -379,7 +379,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_TTALPHA                 = "Opacity"
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
-    HEALBOT_OPTIONS_MYTARGET                = "My Targets"
+    HEALBOT_OPTIONS_MYTARGET                = "Private List"
     HEALBOT_OPTIONS_MYFRIEND                = "My Friend"
 
     HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
@@ -449,7 +449,7 @@ function HealBot_Lang_enALL()
                    [11] = "[HealBot] - All commands are listed on the HealBot website at "..HEALBOT_ABOUT_URL,
                   }
 
-    HEALBOT_HELP2={ [1] = "[HealBot] /hb rtb -- Toggle restrict target bar to Left=SmartCast and Right=add/remove to/from My Targets",
+    HEALBOT_HELP2={ [1] = "[HealBot] /hb rtb -- Toggle restrict target bar to Left=SmartCast and Right=add/remove to/from Private List",
                     [2] = "[HealBot] /hb aggro 2 <n> -- Set aggro level 2 on threat percentage <n>",
                     [3] = "[HealBot] /hb aggro 3 <n> -- Set aggro level 3 on threat percentage <n>",
                     [4] = "[HealBot] /hb tr <Role> -- Set highest role priority for SubSort by Role. Valid Roles are 'TANK', 'HEALER' or 'DPS'",
@@ -690,7 +690,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PROMOTE_RA                      = "Promote raid assistant"
     HEALBOT_DEMOTE_RA                       = "Demote raid assistant"
     HEALBOT_TOGGLE_ENABLED                  = "Toggle enabled"
-    HEALBOT_TOGGLE_MYTARGETS                = "Toggle My Targets"
+    HEALBOT_TOGGLE_MYTARGETS                = "Toggle Private List"
     HEALBOT_WORD_PERMANENT                  = "Permanent"
     HEALBOT_TOGGLE_PRIVATETANKS             = "Toggle private tanks"
     HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
@@ -884,7 +884,7 @@ function HealBot_Lang_enALL()
                                       [10]  = "Options - How do I always use enabled settings",
                                       [11]  = "Options - How do I disable healbot automatically",
                                       [12]  = "Options - How do I make the bars grow a different direction",
-                                      [13]  = "Options - How do I setup 'My Targets'",
+                                      [13]  = "Options - How do I setup 'Private List'",
                                       [14]  = "Options - How do I setup 'Private Tanks'",
                                       [15]  = "Options - Will Healbot create a bar for an NPC",
                                       [16]  = "Range - I can't see when people are out of range, how do I fix this",
@@ -975,10 +975,10 @@ function HealBot_Lang_enALL()
                                               "Top Left: the bars will grow Down and Right \n" ..
                                               "Bottom Right: the bars will grow Up and Left \n" ..
                                               "Bottom Left: the bars will grow Up and Right",
-                                      [13]  = "My Targets allows you to create a list of Targets you \n" ..
+                                      [13]  = "Private List allows you to create a list of Targets you \n" ..
                                               "want to group separately from others, similar to the\nMT group \n\n" ..
                                               "The following options are available for \n" .. 
-                                              "adding/removing people to/from the My Targets group \n\n" ..
+                                              "adding/removing people to/from the Private List group \n\n" ..
                                               "- Shift+Ctrl+Alt+Right click on the bar \n" ..
                                               '- Use the Healbot Menu, enter "hbmenu" on the spells\ntab ' .. "\n" ..
                                               "- Use the Mouse Wheel, set on the Mouse Wheel tab",
@@ -992,7 +992,7 @@ function HealBot_Lang_enALL()
                                       [15]  = "Yes \n\n"..
                                               "1: On the Skins>Healing tab, turn on Focus \n" ..
                                               "2: set your focus on the NPC (or PC not in raid/party) \n" ..
-                                              "Healbot will create a bar in your My Targets list \n\n" ..
+                                              "Healbot will create a bar in your Private List \n\n" ..
                                               "Note: If in a combat situation where you zone in and out\nwhile \n" ..
                                               "in combat and need to reset focus on an NPC \n" ..
                                               "on the Skins>Healing tab set Focus: always show to on \n" ..
@@ -1102,7 +1102,7 @@ function HealBot_Lang_enALL()
     HEALBOT_INOUT_STATUS_SPELLINIT          = "Spells can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_PRESETCOLINIT      = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
-    HEALBOT_ENEMY_INCLUDE_SELF              = "Include my target"
+    HEALBOT_ENEMY_INCLUDE_SELF              = "Include My Target"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include tanks targets"
     HEALBOT_OPTIONS_ENEMY_OPT               = "Enemy Visibility";
     HEALBOT_OPTIONS_SHARE_OPT               = "Share Options";
@@ -1111,9 +1111,12 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
     HEALBOT_OPTIONS_ENEMYBARS               = "Enemy bars at all times";
     HEALBOT_OPTIONS_HARMFUL_SPELLS          = "Harmful Spells"
-    HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include My Targets targets"
+    HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include Private List targets"
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"
     HEALBOT_ENEMY_HIDE_OUTOFCOMBAT          = "Hide bars out of combat"
+    HEALBOT_ENEMY_SHOW_TARGET               = "Show enemy target"
+    HEALBOT_ENEMY_DOUBLE_WIDTH              = "Double total bar width"
+    HEALBOT_ENEMY_TARGET_SIZE               = "Enemy target size"
     HEALBOT_ENEMY_EXISTS_SHOW               = "Entering combat only".."\n".."show when exists"
     HEALBOT_ENEMY_EXISTS_SHOW_PTARGETS      = "Player target bars"
     HEALBOT_ENEMY_EXISTS_SHOW_BOSSES        = "Boss bars"

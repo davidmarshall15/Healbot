@@ -755,7 +755,11 @@ function HealBot_UpdateUnit(button)
     button.health.updincoming=true
     button.health.updabsorbs=true
     if UnitExists(button.unit) then
-        if button.status.unittype>8 then button.status.friend=UnitIsFriend("player",button.unit) end
+        if (button.status.friend and not UnitIsFriend("player",button.unit)) or 
+           (not button.status.friend and UnitIsFriend("player",button.unit)) then
+            HealBot_Aura_RemoveIcons(button)
+        end
+        button.status.friend=UnitIsFriend("player",button.unit)
         _, uuUnitClassEN = UnitClass(button.unit);
         button.text.classtrim = strsub(uuUnitClassEN or "XXXX",1,4)
         HealBot_Action_setButtonManaBarCol(button)
@@ -1729,6 +1733,10 @@ function HealBot_Check_Skin(SkinName)
                 Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_TARGETHEALS
                 break
             end
+            if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=="My Targets" then
+                Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]=HEALBOT_OPTIONS_MYTARGET
+                break
+            end
         end
         local freeHealGroups={}
         table.insert(freeHealGroups,HEALBOT_OPTIONS_SELFHEALS_en)
@@ -2284,6 +2292,9 @@ function HealBot_Check_Skin(SkinName)
     if Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWPTAR"]==nil then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWPTAR"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWARENA"]==nil then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWARENA"]=true end
+    if Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]==nil then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]=false end
+    if Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"]==nil then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"]=40 end
+    if Healbot_Config_Skins.Enemy[SkinName]["DOUBLEWIDTH"]==nil then Healbot_Config_Skins.Enemy[SkinName]["DOUBLEWIDTH"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCDPS"] then Healbot_Config_Skins.Enemy[SkinName]["INCDPS"]=nil end
     if Healbot_Config_Skins.Enemy[SkinName]["FRAME"] then Healbot_Config_Skins.Enemy[SkinName]["FRAME"]=nil end
     if Healbot_Config_Skins.General[SkinName]["LOWMANA"] then Healbot_Config_Skins.General[SkinName]["LOWMANA"]=nil end
@@ -3278,7 +3289,7 @@ function HealBot_OnEvent_UnitThreat(button)
     if not UnitIsDeadOrGhost("player") and  UnitAffectingCombat(button.unit) then
         if not HealBot_Data["UILOCK"] then
             if HealBot_Panel_RaidUnitGUID(button.guid) and HealBot_Globals.EnAutoCombat and UnitIsVisible(button.unit) then
-                utZ, utY=HealBot_CalcThreat(button.unit)
+                utZ, utY=HealBot_CalcThreat(button)
                 if (utY+utZ)>0 then 
                     HealBot_OnEvent_PlayerRegenDisabled()
                     if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
@@ -3788,7 +3799,7 @@ end
 local cau_z, cau_y=0,0
 function HealBot_CheckAggroUnits(button)
     if UnitExists(button.unit) then
-        cau_z, cau_y=HealBot_CalcThreat(button.unit)
+        cau_z, cau_y=HealBot_CalcThreat(button)
         if (cau_z+cau_y)==0 then
             HealBot_ClearUnitAggro(button)
         elseif cau_z~=button.aggro.threatpct then
@@ -3798,69 +3809,6 @@ function HealBot_CheckAggroUnits(button)
         HealBot_ClearUnitAggro(button)
     end
     --HealBot_setCall("HealBot_CheckAggroUnits")
-end
-
-HealBot_luVars["aRefresh"]=1
-local euName, euStartTime, euEndTime=false,0,0
-local euDuration, euCast, euPct, euGUID=0,0,0, false
-local function HealBot_EnemyUpdateButton(button)
-    if not button.status.reserved then
-        if UnitExists(button.unit) then
-            euGUID=UnitGUID(button.unit) or button.unit
-            if euGUID~=button.guid then
-                button.guid=euGUID
-                HealBot_UpdateUnit(button)
-            elseif UnitIsDeadOrGhost(button.unit) then
-                button.health.current=0
-                HealBot_Action_Refresh(button)
-            elseif HealBot_luVars["aRefresh"]<2 then
-                if HEALBOT_GAME_VERSION>3 then 
-                    euName, _, _, euStartTime, euEndTime = UnitCastingInfo(button.unit) 
-                    if euName and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][10]["POWERSIZE"]>0 then
-                        if TimeNow+0.01>euEndTime and button.spells.castpct>-1 then
-                            button.spells.castpct=-1
-                            HealBot_Action_SetBar3Value(button)
-                        else
-                            euDuration=euEndTime-euStartTime
-                            euCast=((TimeNow*1000)-euStartTime)
-                            euPct=ceil((euCast/euDuration)*1000)
-                            if button.spells.castpct~=euPct then
-                                button.spells.castpct=euPct
-                                HealBot_Action_SetBar3Value(button, euName)
-                            end
-                        end
-                    elseif button.spells.castpct>-1 then
-                        button.spells.castpct = -1
-                        HealBot_Action_SetBar3Value(button)
-                    end
-                end
-                if button.status.unittype==11 then
-                    HealBot_OnEvent_UnitHealth(button)
-                    HealBot_HealsInUpdate(button)
-                    HealBot_AbsorbsUpdate(button)
-                end
-            elseif HealBot_luVars["aRefresh"]<3 then
-                if HealBot_Config_Buffs.BuffWatch and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] then
-                    if button.status.unittype==11 or button.aura.check then
-                        HealBot_Aura_RefreshEnemyAuras(button)
-                    end
-                end
-            else
-                if button.aura.debuff.nextupdate<=TimeNow then 
-                    HealBot_Aura_Update_UnitDebuffIcons(button)
-                end
-            end
-            if HealBot_luVars["RaidTargetUpdate"] and button.status.unittype==11 then
-                HealBot_OnEvent_RaidTargetUpdate(button)
-            end
-        else
-            HealBot_UpdateUnit(button)
-            button.status.reserved=true
-        end
-    elseif UnitExists(button.unit) then
-        button.status.reserved=false
-        HealBot_UpdateUnit(button)
-    end
 end
 
 local hbCBLUevent, hbCBLUguid, hbCBLUnit, hbCBLbutton="","","",""
@@ -3917,6 +3865,79 @@ local function HealBot_UnitUpdateButton(button)
             end
         else
             HealBot_ClearUnitAggro(button)
+            HealBot_UpdateUnit(button)
+            button.status.reserved=true
+        end
+    elseif UnitExists(button.unit) then
+        button.status.reserved=false
+        HealBot_UpdateUnit(button)
+    end
+end
+
+HealBot_luVars["aRefresh"]=1
+local euName, euStartTime, euEndTime=false,0,0
+local euDuration, euCast, euPct, euGUID=0,0,0, false
+local function HealBot_EnemyUpdateButton(button)
+    if not button.status.reserved then
+        if UnitExists(button.unit) then
+            euGUID=UnitGUID(button.unit) or button.unit
+            if euGUID~=button.guid then
+                button.guid=euGUID
+                HealBot_UpdateUnit(button)
+            elseif UnitIsDeadOrGhost(button.unit) then
+                if button.status.friend then
+                    HealBot_Action_UpdateTheDeadButton(button)
+                else
+                    button.health.current=0
+                    HealBot_Action_Refresh(button)
+                end
+            elseif HealBot_luVars["aRefresh"]<2 then
+                if HEALBOT_GAME_VERSION>3 and not button.status.friend then 
+                    euName, _, _, euStartTime, euEndTime = UnitCastingInfo(button.unit) 
+                    if euName and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][10]["POWERSIZE"]>0 then
+                        if TimeNow+0.01>euEndTime and button.spells.castpct>-1 then
+                            button.spells.castpct=-1
+                            HealBot_Action_SetBar3Value(button)
+                        else
+                            euDuration=euEndTime-euStartTime
+                            euCast=((TimeNow*1000)-euStartTime)
+                            euPct=ceil((euCast/euDuration)*1000)
+                            if button.spells.castpct~=euPct then
+                                button.spells.castpct=euPct
+                                HealBot_Action_SetBar3Value(button, euName)
+                            end
+                        end
+                    elseif button.spells.castpct>-1 then
+                        button.spells.castpct = -1
+                        HealBot_Action_SetBar3Value(button)
+                    end
+                end
+                if button.status.unittype==11 then
+                    HealBot_OnEvent_UnitHealth(button)
+                    HealBot_HealsInUpdate(button)
+                    HealBot_AbsorbsUpdate(button)
+                end
+            elseif HealBot_luVars["aRefresh"]<3 then
+                if HealBot_Config_Buffs.BuffWatch and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] then
+                    if button.status.unittype==11 or button.aura.check then
+                        if button.status.friend then
+                            HealBot_Aura_CheckUnitAuras(button)
+                        else
+                            HealBot_Aura_RefreshEnemyAuras(button)
+                        end
+                    end
+                end
+            else
+                if button.aura.debuff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitDebuffIcons(button) end
+                if button.status.friend then
+                    if button.aura.buff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitBuffIcons(button) end
+                    if button.status.dirarrowshown then HealBot_Action_ShowDirectionArrow(button) end
+                end
+            end
+            if HealBot_luVars["RaidTargetUpdate"] and button.status.unittype==11 then
+                HealBot_OnEvent_RaidTargetUpdate(button)
+            end
+        else
             HealBot_UpdateUnit(button)
             button.status.reserved=true
         end
@@ -4194,64 +4215,66 @@ function HealBot_UnRegister_Mana()
 end
 
 local ctZ, ctY, ctEnemyUnit=0,0,false
-function HealBot_CalcThreat(unit)
+function HealBot_CalcThreat(button)
     ctZ,ctY,ctEnemyUnit=0,0,false
-    if UnitExists(unit.."target") and UnitIsEnemy(unit, unit.."target") then 
-        if UnitIsUnit(unit, unit.."targettarget") then
-            ctZ=100
-        else
-            ctEnemyUnit=unit.."target"
+    if button.status.friend then
+        if UnitExists(button.unit.."target") and UnitIsEnemy(button.unit, button.unit.."target") then 
+            if UnitIsUnit(button.unit, button.unit.."targettarget") then
+                ctZ=100
+            else
+                ctEnemyUnit=button.unit.."target"
+            end
+        elseif UnitExists(HealBot_luVars["TankUnit"]) and UnitExists(HealBot_luVars["TankUnit"].."target") and 
+               UnitIsEnemy(HealBot_luVars["TankUnit"], HealBot_luVars["TankUnit"].."target") then 
+            if UnitIsUnit(button.unit, HealBot_luVars["TankUnit"].."targettarget") then
+                ctZ=100
+            else
+                ctEnemyUnit=HealBot_luVars["TankUnit"].."target"
+            end
+        elseif UnitExists("target") and UnitIsEnemy("player", "target") then 
+            if UnitIsUnit(button.unit, "playertargettarget") then
+                ctZ=100
+            else
+                ctEnemyUnit="target"
+            end
+        elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then 
+            if UnitIsUnit(button.unit, "boss1target") then
+                ctZ=100
+            else
+                ctEnemyUnit="boss1"
+            end
+        elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then 
+            if UnitIsUnit(button.unit, "boss2target") then
+                ctZ=100
+            else
+                ctEnemyUnit="boss2"
+            end
         end
-    elseif UnitExists(HealBot_luVars["TankUnit"]) and UnitExists(HealBot_luVars["TankUnit"].."target") and 
-           UnitIsEnemy(HealBot_luVars["TankUnit"], HealBot_luVars["TankUnit"].."target") then 
-        if UnitIsUnit(unit, HealBot_luVars["TankUnit"].."targettarget") then
-            ctZ=100
-        else
-            ctEnemyUnit=HealBot_luVars["TankUnit"].."target"
+        if ctEnemyUnit then
+            if HEALBOT_GAME_VERSION>3 then
+                _, _, ctZ, _, _ = UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
+                ctY = UnitThreatSituation(button.unit, ctEnemyUnit)
+            elseif libCTM then
+                _, _, ctZ, _, _ = libCTM:UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
+                ctY = libCTM:UnitThreatSituation(button.unit, ctEnemyUnit)
+            end
+            ctZ=floor(ctZ or 0)
+        elseif ctZ==0 then
+            if HEALBOT_GAME_VERSION>3 then
+                ctY = UnitThreatSituation(button.unit)
+            elseif libCTM then
+                ctY = libCTM:UnitThreatSituation(button.unit, ctEnemyUnit)
+            end
         end
-    elseif UnitExists("target") and UnitIsEnemy("player", "target") then 
-        if UnitIsUnit(unit, "playertargettarget") then
-            ctZ=100
-        else
-            ctEnemyUnit="target"
+        if not ctY then ctY=0 end
+        if ctZ>=HealBot_Globals.aggro3pct then
+            ctY=3
+            if ctZ>100 then ctZ=100 end
+        elseif ctZ>=HealBot_Globals.aggro2pct and ctY<2 then
+            ctY=2 
+        elseif ctZ>0 and ctY<1 then
+            ctY=1
         end
-    elseif UnitExists("boss1") and UnitIsEnemy("player", "boss1") then 
-        if UnitIsUnit(unit, "boss1target") then
-            ctZ=100
-        else
-            ctEnemyUnit="boss1"
-        end
-    elseif UnitExists("boss2") and UnitIsEnemy("player", "boss2") then 
-        if UnitIsUnit(unit, "boss2target") then
-            ctZ=100
-        else
-            ctEnemyUnit="boss2"
-        end
-    end
-    if ctEnemyUnit then
-        if HEALBOT_GAME_VERSION>3 then
-            _, _, ctZ, _, _ = UnitDetailedThreatSituation(unit, ctEnemyUnit)
-            ctY = UnitThreatSituation(unit, ctEnemyUnit)
-        elseif libCTM then
-            _, _, ctZ, _, _ = libCTM:UnitDetailedThreatSituation(unit, ctEnemyUnit)
-            ctY = libCTM:UnitThreatSituation(unit, ctEnemyUnit)
-        end
-        ctZ=floor(ctZ or 0)
-    elseif ctZ==0 then
-        if HEALBOT_GAME_VERSION>3 then
-            ctY = UnitThreatSituation(unit)
-        elseif libCTM then
-            ctY = libCTM:UnitThreatSituation(unit, ctEnemyUnit)
-        end
-    end
-    if not ctY then ctY=0 end
-    if ctZ>=HealBot_Globals.aggro3pct then
-        ctY=3
-        if ctZ>100 then ctZ=100 end
-    elseif ctZ>=HealBot_Globals.aggro2pct and ctY<2 then
-        ctY=2 
-    elseif ctZ>0 and ctY<1 then
-        ctY=1
     end
     --HealBot_setCall("HealBot_CalcThreat")
     return ctZ, ctY
@@ -4528,22 +4551,26 @@ function HealBot_OnEvent_PlayerRegenDisabled()
             end
         end
         HealBot_Aura_SetBuffCheckFlags()
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
-            HealBot_Action_HidePanel(9)
-        elseif HealBot_RefreshTypes[4] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
-            if HealBot_RefreshTypes[4] or not HealBot_Unit_Button["focus"] then
-                HealBot_RecalcParty(4)
-            else
-                HealBot_Action_ShowPanel(9)
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==1 then
+                HealBot_Action_HidePanel(9)
+            elseif HealBot_RefreshTypes[4] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then
+                if HealBot_RefreshTypes[4] or not HealBot_Unit_Button["focus"] then
+                    HealBot_RecalcParty(4)
+                else
+                    HealBot_Action_ShowPanel(9)
+                end
             end
         end
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
-            HealBot_Action_HidePanel(8)
-        elseif HealBot_RefreshTypes[3] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
-            if HealBot_RefreshTypes[3] or not HealBot_Unit_Button["target"] then
-                HealBot_RecalcParty(3)
-            else
-                HealBot_Action_ShowPanel(8)
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
+                HealBot_Action_HidePanel(8)
+            elseif HealBot_RefreshTypes[3] or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
+                if HealBot_RefreshTypes[3] or not HealBot_Unit_Button["target"] then
+                    HealBot_RecalcParty(3)
+                else
+                    HealBot_Action_ShowPanel(8)
+                end
             end
         end
         if not HealBot_luVars["hlPlayerBarsIC"] and HealBot_luVars["HighlightTarget"] then

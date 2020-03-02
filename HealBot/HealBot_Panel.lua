@@ -22,6 +22,7 @@ local HealBot_MultiColHoToffset=0;
 local HealBot_MultiRowHoToffset=0;
 local HealBot_OutlineOffset={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local HealBot_TrackUnit={}
+local HealBot_SpecialUnit={}
 local HealBot_TrackPrivateUnit={}
 local HealBot_Panel_BlackList={};
 local HealBot_AddHeight={  ["BOTH"]={[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8]=4,[9]=4,[10]=4},
@@ -109,6 +110,10 @@ end
 
 function HealBot_Panel_setLuVars(vName, vValue)
     HealBot_Panel_luVars[vName]=vValue
+end
+
+function HealBot_Panel_isSpecialUnit(unit)
+    return HealBot_SpecialUnit[unit] or 0
 end
 
 local function HealBot_Panel_TankRole(unit,guid)
@@ -554,6 +559,7 @@ function HealBot_Panel_retHealBot_Header_Frames(hbCurFrame)
 end
 
 local vPosFrameHX,vPosFrameHY,vPosFrameHH,vPosFrameHF,vPosParentHF,vPosFrameHW,vPosFrameHB,vPostFrameBF=0,0,0,"","",0,"",""
+local vSpecialAnchor={}
 local function HealBot_Action_PositionButton(button,OsetX,OsetY,bWidth,bHeight,xHeader,hbCurFrame,bcSpace,brSpace)
     if xHeader then
         vPosFrameHX,vPosFrameHY=0,0
@@ -607,19 +613,31 @@ local function HealBot_Action_PositionButton(button,OsetX,OsetY,bWidth,bHeight,x
     else
 
         button:ClearAllPoints();
-        vPostFrameBF=_G["f"..hbCurFrame.."_HealBot_Action"]
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==1 then
-            button:SetPoint("TOPLEFT",vPostFrameBF,"TOPLEFT",OsetX,-OsetY);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==2 then
-            button:SetPoint("BOTTOMLEFT",vPostFrameBF,"BOTTOMLEFT",OsetX,OsetY);
-        elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==3 then
-            button:SetPoint("TOPRIGHT",vPostFrameBF,"TOPRIGHT",-OsetX,-OsetY);
+        if HealBot_SpecialUnit[button.unit] and HealBot_SpecialUnit[button.unit]==2 and vSpecialAnchor[button.unit] then
+            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]<3 then
+                button:SetPoint("TOPLEFT",vSpecialAnchor[button.unit],"TOPRIGHT",Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CMARGIN"],0);
+            else
+                button:SetPoint("TOPRIGHT",vSpecialAnchor[button.unit],"TOPLEFT",-Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CMARGIN"],0);
+            end
+            OsetY = OsetY
+            OsetX = OsetX
         else
-            button:SetPoint("BOTTOMRIGHT",vPostFrameBF,"BOTTOMRIGHT",-OsetX,OsetY);
+            if HealBot_SpecialUnit[button.unit] and HealBot_SpecialUnit[button.unit]==1 then
+                vSpecialAnchor[button.unit.."target"]=button
+            end
+            vPostFrameBF=_G["f"..hbCurFrame.."_HealBot_Action"]
+            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==1 then
+                button:SetPoint("TOPLEFT",vPostFrameBF,"TOPLEFT",OsetX,-OsetY);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==2 then
+                button:SetPoint("BOTTOMLEFT",vPostFrameBF,"BOTTOMLEFT",OsetX,OsetY);
+            elseif Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["BARS"]==3 then
+                button:SetPoint("TOPRIGHT",vPostFrameBF,"TOPRIGHT",-OsetX,-OsetY);
+            else
+                button:SetPoint("BOTTOMRIGHT",vPostFrameBF,"BOTTOMRIGHT",-OsetX,OsetY);
+            end
+            OsetY = OsetY+bHeight+HealBot_AddHeight["BOTH"][hbCurFrame]+HealBot_AddHeight["BOTTOM"][hbCurFrame]
+            OsetX = OsetX+bWidth+HealBot_AddWidth["BOTH"][hbCurFrame]+HealBot_AddWidth["SIDE"][hbCurFrame]
         end
-
-        OsetY = OsetY+bHeight+HealBot_AddHeight["BOTH"][hbCurFrame]+HealBot_AddHeight["BOTTOM"][hbCurFrame]
-        OsetX = OsetX+bWidth+HealBot_AddWidth["BOTH"][hbCurFrame]+HealBot_AddWidth["SIDE"][hbCurFrame]
     end
     return OsetX, OsetY;
 end
@@ -795,7 +813,9 @@ local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffse
                         if not newHeader["C"][vPosButton.frame] then newHeader["C"][vPosButton.frame]=1 end
                         --if not z[vPosButton.frame] then z[vPosButton.frame]=1 end
                         OffsetX[vPosButton.frame], _ = HealBot_Action_PositionButton(vPosButton,OffsetX[vPosButton.frame],OffsetY[vPosButton.frame],bwidth[vPosButton.frame],bheight[vPosButton.frame],nil,vPosButton.frame,bcspace[vPosButton.frame],brspace[vPosButton.frame])
-                        if newHeader["C"][vPosButton.frame]==ceil((hbBarsPerFrame[vPosButton.frame])/cols[vPosButton.frame]) and z[vPosButton.frame]<hbBarsPerFrame[vPosButton.frame] then
+                        if (not HealBot_SpecialUnit[vPosButton.unit] or HealBot_SpecialUnit[vPosButton.unit]==1) and
+                           newHeader["C"][vPosButton.frame]==ceil((hbBarsPerFrame[vPosButton.frame])/cols[vPosButton.frame]) and 
+                           z[vPosButton.frame]<hbBarsPerFrame[vPosButton.frame] then
                             newHeader["C"][vPosButton.frame]=0;
                             if MaxOffsetY[vPosButton.frame]<OffsetY[vPosButton.frame] then MaxOffsetY[vPosButton.frame] = OffsetY[vPosButton.frame]; end
                             if MaxOffsetX[vPosButton.frame]<OffsetX[vPosButton.frame] then MaxOffsetX[vPosButton.frame] = OffsetX[vPosButton.frame]; end
@@ -857,7 +877,9 @@ local function HealBot_Panel_PositionBars(OffsetY, OffsetX, MaxOffsetY, MaxOffse
                     else
                         if not newHeader["C"][vPosButton.frame] then newHeader["C"][vPosButton.frame]=1 end
                         _, OffsetY[vPosButton.frame] = HealBot_Action_PositionButton(vPosButton,OffsetX[vPosButton.frame],OffsetY[vPosButton.frame],bwidth[vPosButton.frame],bheight[vPosButton.frame],nil,vPosButton.frame,bcspace[vPosButton.frame],brspace[vPosButton.frame])
-                        if newHeader["C"][vPosButton.frame]==ceil((hbBarsPerFrame[vPosButton.frame])/cols[vPosButton.frame]) and z[vPosButton.frame]<hbBarsPerFrame[vPosButton.frame] then
+                        if (not HealBot_SpecialUnit[vPosButton.unit] or HealBot_SpecialUnit[vPosButton.unit]==1) and
+                           newHeader["C"][vPosButton.frame]==ceil((hbBarsPerFrame[vPosButton.frame])/cols[vPosButton.frame]) and
+                           z[vPosButton.frame]<hbBarsPerFrame[vPosButton.frame] then
                             newHeader["C"][vPosButton.frame]=0;
                             if MaxOffsetY[vPosButton.frame]<OffsetY[vPosButton.frame] then MaxOffsetY[vPosButton.frame] = OffsetY[vPosButton.frame]; end
                             if MaxOffsetX[vPosButton.frame]<OffsetX[vPosButton.frame] then MaxOffsetX[vPosButton.frame] = OffsetX[vPosButton.frame]; end
@@ -1416,6 +1438,14 @@ end
 local function HealBot_Panel_enemyBar(eUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1;
     table.insert(units,eUnit)
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
+        HealBot_SpecialUnit[eUnit]=1
+        table.insert(units,eUnit.."target")
+        HealBot_SpecialUnit[eUnit.."target"]=2
+    else
+        HealBot_SpecialUnit[eUnit]=nil
+        HealBot_SpecialUnit[eUnit.."target"]=nil
+    end
 end
 
 local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
@@ -1497,7 +1527,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             else
                 vSubOrderKey = UnitName(unit) or unit
             end
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and (not HealBot_SpecialUnit[unit] or HealBot_SpecialUnit[unit]==1) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = "ÿÿÿþ"..(UnitName(unit) or unit)
             else
@@ -1513,7 +1543,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             else
                 vSubOrderKey = HealBot_Panel_classEN(unit)
             end
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and (not HealBot_SpecialUnit[unit] or HealBot_SpecialUnit[unit]==1) then
             if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = "ÿÿÿþ"..HealBot_Panel_classEN(unit)
             else
@@ -1529,7 +1559,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             else
                 vSubOrderKey = HealBot_UnitGroups[unit] or 1
             end 
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and (not HealBot_SpecialUnit[unit] or HealBot_SpecialUnit[unit]==1) then
             if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = 9+HealBot_UnitGroups[unit] or 1
             else
@@ -1545,7 +1575,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             else
                 vSubOrderKey = 0-UnitHealthMax(unit)
             end
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and (not HealBot_SpecialUnit[unit] or HealBot_SpecialUnit[unit]==1) then
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = 9999999-UnitHealthMax(unit)
             else
@@ -1562,7 +1592,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             else 
                 vSubOrderKey = HealBot_unitRole[unit] or 9
             end
-        elseif UnitExists(unit) then
+        elseif UnitExists(unit) and (not HealBot_SpecialUnit[unit] or HealBot_SpecialUnit[unit]==1) then
             if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
                 vSubOrderKey = 59+(HealBot_unitRole[unit] or 9)
             else

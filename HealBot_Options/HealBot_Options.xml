@@ -8883,7 +8883,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="200" y="-40" />
+                              <AbsDimension x="80" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8897,7 +8897,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-30" />
+                              <AbsDimension x="0" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8907,11 +8907,25 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCTANKS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
+                      <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="320" y="-40" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowEnemyIncMyTargets_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <CheckButton name="HealBot_Options_ShowEnemyIncArena" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="BOTTOMLEFT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-30" />
+                              <AbsDimension x="0" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8935,28 +8949,14 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENAPETS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncArena" relativePoint="BOTTOMLEFT">
-                            <Offset>
-                              <AbsDimension x="0" y="-40" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_ShowEnemyIncMyTargets_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
                       <Slider name="HealBot_Options_ShowEnemyNumBoss" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="295" y="18" />
+                          <AbsDimension x="395" y="18" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-50" y="-50" />
+                              <AbsDimension x="0" y="-170" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8966,11 +8966,56 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYNUMBOSSES",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <CheckButton name="HealBot_Options_HideEnemyOutOfCombat" inherits="OptionsCheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyTargets" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyNumBoss" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="50" y="-45" />
+                              <AbsDimension x="125" y="-32" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowEnemyTargets_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWTARGET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWTARGET",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_DoubleEnemyBarWidth" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyTargets" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-20" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_DoubleEnemyBarWidth_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYDOUBLEWIDTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYDOUBLEWIDTH",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Slider name="HealBot_Options_EnemyTargetSize" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="395" y="18" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_ShowEnemyNumBoss" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-135" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_EnemyTargetSize_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYTARGETSIZE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYTARGETSIZE",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <CheckButton name="HealBot_Options_HideEnemyOutOfCombat" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DoubleEnemyBarWidth" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-75" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8984,7 +9029,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideEnemyOutOfCombat" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="100" y="-5" />
+                              <AbsDimension x="100" y="-25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8999,7 +9044,7 @@
                               <Anchors>
                                   <Anchor point="BOTTOMRIGHT" relativeTo="HealBot_Options_EnemyExistsPlayerTargets" relativePoint="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="-15" y="-32" />
+                                      <AbsDimension x="-15" y="-20" />
                                     </Offset>
                                   </Anchor>
                               </Anchors>
@@ -9011,7 +9056,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnemyExistsPlayerTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-15" />
+                              <AbsDimension x="0" y="-5" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9025,7 +9070,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnemyExistsArena" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-15" />
+                              <AbsDimension x="0" y="-5" />
                             </Offset>
                           </Anchor>
                         </Anchors>
