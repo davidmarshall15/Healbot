@@ -390,6 +390,21 @@ function HealBot_Text_setHealthText(button)
 end
 
 local vSetTextLenWidthAdj,vSetTextLenFontAdj=0,0
+local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
+        vSetTextLenWidthAdj=0.8
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["DOUBLE"] then
+            vSetTextLenWidthAdj=1.7
+        end
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
+        HealBot_Text_EnemySizeWidth[eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"]/vSetTextLenFontAdj)))
+    else
+        HealBot_Text_EnemySizeWidth[eBarID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]
+    end
+end
+
 function HealBot_Text_setTextLen(curFrame)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]==0 then
         vSetTextLenWidthAdj=0.8
@@ -403,20 +418,11 @@ function HealBot_Text_setTextLen(curFrame)
     else
         hbBarTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]
     end
-    --HealBot_setCall("HealBot_Text_setTextLen")
-end
-
-local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
-        vSetTextLenWidthAdj=0.8
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["DOUBLE"] then
-            vSetTextLenWidthAdj=1.7
-        end
-        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
-        HealBot_Text_EnemySizeWidth[eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
-                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"])
-                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"]/vSetTextLenFontAdj)))
+    if curFrame==10 then
+        HealBot_Text_setEnemyTextLen(HealBot_Text_EnemySizeWidth["EnemySizeWidth1"], 1)
+        HealBot_Text_setEnemyTextLen(HealBot_Text_EnemySizeWidth["EnemySizeWidth2"], 2)
     end
+    --HealBot_setCall("HealBot_Text_setTextLen")
 end
 
 function HealBot_Text_setEnemySizeWidth(vName, vValue)

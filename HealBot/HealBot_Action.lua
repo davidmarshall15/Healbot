@@ -894,10 +894,26 @@ function HealBot_Action_updBar3Value(button)
 end
 
 local tSetBar3Value={["BarName"]="",["Cast"]="",["PowerType"]=0,["IconName"]="",["PowerMax"]=100,["Power"]=0}
-function HealBot_Action_SetBar3Value(button, sName)
+function HealBot_Action_ClearBar3(button)
     if not button then return end
     tSetBar3Value["BarName"] = _G["HealBot_Action_HealUnit"..button.id.."Bar3"]
-    if UnitExists(button.unit) then
+    tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..1];
+    tSetBar3Value["IconName"]:SetAlpha(0)
+    tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..2];
+    tSetBar3Value["IconName"]:SetAlpha(0)
+    tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..3];
+    tSetBar3Value["IconName"]:SetAlpha(0)
+    tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..4];
+    tSetBar3Value["IconName"]:SetAlpha(0)
+    tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..5];
+    tSetBar3Value["IconName"]:SetAlpha(0)
+    HealBot_Action_SetBar3ColAlpha(tSetBar3Value["BarName"], 0, 0, 0, 0, 0)
+end
+
+function HealBot_Action_SetBar3Value(button, sName)
+    if not button then return end
+    if UnitExists(button.unit) then --and button.unit~='nil' 
+        tSetBar3Value["BarName"] = _G["HealBot_Action_HealUnit"..button.id.."Bar3"]
         if not button.status.friend then
             tSetBar3Value["Cast"]=button.spells.castpct or -1
             if tSetBar3Value["Cast"]>-1 then
@@ -1075,17 +1091,7 @@ function HealBot_Action_SetBar3Value(button, sName)
             HealBot_Action_SetBar3ColAlpha(tSetBar3Value["BarName"], tSetBar3Value["Power"], button.mana.r, button.mana.g, button.mana.b, HealBot_Action_rCalls[button.unit]["hca"])
         end
     else
-        tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..1];
-        tSetBar3Value["IconName"]:SetAlpha(0)
-        tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..2];
-        tSetBar3Value["IconName"]:SetAlpha(0)
-        tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..3];
-        tSetBar3Value["IconName"]:SetAlpha(0)
-        tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..4];
-        tSetBar3Value["IconName"]:SetAlpha(0)
-        tSetBar3Value["IconName"] = _G[tSetBar3Value["BarName"]:GetName().."Icon"..5];
-        tSetBar3Value["IconName"]:SetAlpha(0)
-        HealBot_Action_SetBar3ColAlpha(tSetBar3Value["BarName"], 0, 0, 0, 0, 0)
+        HealBot_Action_ClearBar3(button)
     end
     --HealBot_setCall("HealBot_Action_SetBar3Value")
 end
@@ -2412,7 +2418,7 @@ local function HealBot_Action_DeleteButton(hbBarID)
     HealBot_Action_PrepButton(dg)
     HealBot_mark2clearGUID(dg.guid)
     HealBot_Aura_RemoveIcons(dg)
-    HealBot_Action_SetBar3Value(dg)
+    HealBot_Action_ClearBar3(dg)
     bar4:SetStatusBarColor(1,0,0,0)
     HealBot_Aura_delUnitIcons(hbBarID)
     HealBot_ActiveButtons[hbBarID]=false

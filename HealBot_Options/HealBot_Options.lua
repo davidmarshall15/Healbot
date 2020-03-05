@@ -2170,7 +2170,7 @@ function HealBot_Options_BarNumColsS_OnValueChanged(self)
         Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NUMCOLS"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(HealBot_Options_SetNoColsText() .. ": " .. val);
-        HealBot_Options_framesChanged(false)
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -12692,6 +12692,13 @@ function HealBot_Options_InitSub1(subNo)
                 HealBot_Options_FocusExcludeRaid:Hide()
                 HealBot_Options_TargetInCombat:ClearAllPoints()
                 HealBot_Options_TargetInCombat:SetPoint("BOTTOM",0,85)
+                HealBot_Options_ShowEnemyNumBoss:Hide()
+                HealBot_Options_ShowEnemyIncArena:Hide()
+                HealBot_Options_ShowEnemyIncArenaPets:Hide()
+                HealBot_Options_ShowEnemyIncSelf:ClearAllPoints()
+                HealBot_Options_ShowEnemyIncSelf:SetPoint("TOP",-60,-58)
+                HealBot_Options_ShowEnemyIncMyTargets:ClearAllPoints()
+                HealBot_Options_ShowEnemyIncMyTargets:SetPoint("TOP",-60,-150)
             end
             HealBot_Options_ExtraSubSort_SetAlpha()
             DoneInitTab[302]=true

@@ -760,7 +760,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
                 HealBot_setLuVars("MaskAuraDCheck", HealBot_Aura_luVars["MaskAuraDCheck"])
                 HealBot_setLuVars("MaskAuraReCheck", true)
                 HealBot_CheckAllActiveDebuffs()
-                HealBot_Update_FastEveryFrame(5)
+                HealBot_Update_FastEveryFrame(4)
             end
         elseif HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then
             spellCD=0

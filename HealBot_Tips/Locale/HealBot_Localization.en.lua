@@ -642,7 +642,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISENEMYINCMYTARGETS"]="Include enemy bars for all My Private List targets.",
                                ["HEALBARSVISENEMYNUMBOSSES"]="Maximum number of bars to show for bosses.",
                                ["HEALBARSVISENEMYHIDEOC"]="Hide the bars when out of combat as they will often be empty and reserved.",
-                               ["HEALBARSVISENEMYSHOWTARGET"]="Show a bar for the enemy target.\n--\nFor exampe:\nA boss might be boss2target\nA tank might be raid2targettarget.",
+                               ["HEALBARSVISENEMYSHOWTARGET"]="Show a bar for the enemy target.\n--\nFor exampe:\nA boss might be boss2target (Retail Only)\nA tank might be raid2targettarget.",
                                ["HEALBARSVISENEMYTARGETSIZE"]="The percentage of the enemy bar width\nto be used by the enemy target bar.\n--\nTip: Set a large width for Enemy bars.",
                                ["HEALBARSVISENEMYDOUBLEWIDTH"]="Double the total width for the Enemy and Enemy Target bars.\n--\nNote: This option only applies when "..HEALBOT_ENEMY_SHOW_TARGET.." is ON.",
                                ["HEALBARSVISENEMYSHOWSELF"]="On entering combat only display bars when an enemy exists.\nAllows filtering of bars that will not likely turn up during combat.\n--\nPlayer target bars - Only display your target as an enemy if the target is hostile at the start of combat.",
