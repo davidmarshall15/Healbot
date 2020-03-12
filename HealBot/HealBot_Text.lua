@@ -1,4 +1,5 @@
 local hbBarTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
+local hbBarHealthTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
 local hbFontVal={ ["Accidental Presidency"]=3,
                   ["Alba Super"]=1.4,
                   ["Anime Ace"]=1,
@@ -41,10 +42,31 @@ local hbNumFormats = {["Places"]        = {[1]=-1, [2]=-1, [3]=-1, [4]=-1, [5]=-
 local aggroNumFormatSurLa={[1]="[",[2]="[",[3]="[",[4]="[",[5]="[",[6]="[",[7]="[",[8]="[",[9]="[",}
 local aggroNumFormatSurRa={[1]="]",[2]="]",[3]="]",[4]="]",[5]="]",[6]="]",[7]="]",[8]="]",[9]="]",}
 local HealBot_Text_EnemySizeWidth={}
-HealBot_Text_EnemySizeWidth["EnemySizeWidth1"]=100
-HealBot_Text_EnemySizeWidth["EnemySizeWidth2"]=100
-HealBot_Text_EnemySizeWidth[1]=10
-HealBot_Text_EnemySizeWidth[2]=10
+HealBot_Text_EnemySizeWidth["NAME"]={}
+HealBot_Text_EnemySizeWidth["HLTH"]={}
+HealBot_Text_EnemySizeWidth["NAME"][1]=10
+HealBot_Text_EnemySizeWidth["NAME"][2]=10
+HealBot_Text_EnemySizeWidth["HLTH"][1]=10
+HealBot_Text_EnemySizeWidth["HLTH"][2]=10
+
+local vShortChars={}
+vShortChars["LowerK"]="k"
+vShortChars["UpperK"]="K"
+vShortChars["LowerM"]="m"
+vShortChars["UpperM"]="M"
+
+local vTextChars={}
+vTextChars["Nothing"]=""
+vTextChars["Space"]=" "
+vTextChars["DoubleSpace"]="  "
+vTextChars["Percent"]="%"
+vTextChars["Plus"]="+"
+vTextChars["Newline"]="\n"
+vTextChars["Dot"]="."
+vTextChars["Caret"]="^"
+vTextChars["Colon"]="^"
+vTextChars["AggroLeft"]="^"
+vTextChars["AggroRight"]="^"
 
 local hbStringSub=nil
 local hbutf8sub=string.gsub
@@ -78,7 +100,53 @@ local function HealBot_Text_HealthConcat(elements)
     return tabconcat(tHealthConcat,"",1,elements)
 end
 
-local vShortHealTxtLowerK,vShortHealTxtUpperK,vShortHealTxtLowerM,vShortHealTxtUpperM,vTextCharNothing="k","K","m","M",""
+local vSetTextLenWidthAdj,vSetTextLenFontAdj=0,0
+local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
+        vSetTextLenWidthAdj=1.7
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
+        HealBot_Text_EnemySizeWidth["NAME"][eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"]/vSetTextLenFontAdj)))
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HFONT"]] or 2
+        HealBot_Text_EnemySizeWidth["HLTH"][eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HHEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HHEIGHT"]/vSetTextLenFontAdj)))
+    else
+        HealBot_Text_EnemySizeWidth["NAME"][eBarID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]
+        HealBot_Text_EnemySizeWidth["HLTH"][eBarID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HMAXCHARS"]
+    end
+end
+
+local vSetTextLenWidthAdj=1.7
+function HealBot_Text_setTextLen(curFrame)
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]==0 then
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["FONT"]] or 2
+        hbBarTextLen[curFrame] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][curFrame]["WIDTH"]*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HEIGHT"]/vSetTextLenFontAdj)))
+    else
+        hbBarTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]
+    end
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HMAXCHARS"]==0 then
+        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HFONT"]] or 2
+        hbBarHealthTextLen[curFrame] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][curFrame]["WIDTH"]*vSetTextLenWidthAdj)
+                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HHEIGHT"])
+                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HHEIGHT"]/vSetTextLenFontAdj)))
+    else
+        hbBarHealthTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HMAXCHARS"]
+    end
+    --HealBot_setCall("HealBot_Text_setTextLen")
+end
+
+function HealBot_Text_setEnemySizeWidth(vName, vValue)
+    if vName=="EnemySizeWidth1" then
+        HealBot_Text_setEnemyTextLen(vValue, 1)
+    else
+        HealBot_Text_setEnemyTextLen(vValue, 2)
+    end
+end
+
 function HealBot_Text_sethbNumberFormat()
     for j=1,10 do
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==2 or Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==5 or Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==8 then
@@ -93,17 +161,17 @@ function HealBot_Text_sethbNumberFormat()
             hbNumFormats["Places"][j]=-1
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]>1 and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]<5 then
-            hbNumFormats["SuffixK"][j]=vShortHealTxtUpperK
-            hbNumFormats["SuffixM"][j]=vShortHealTxtUpperM
+            hbNumFormats["SuffixK"][j]=vShortChars["UpperK"]
+            hbNumFormats["SuffixM"][j]=vShortChars["UpperM"]
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]>4 and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]<8 then
-            hbNumFormats["SuffixK"][j]=vShortHealTxtLowerK
-            hbNumFormats["SuffixM"][j]=vShortHealTxtLowerM
+            hbNumFormats["SuffixK"][j]=vShortChars["LowerK"]
+            hbNumFormats["SuffixM"][j]=vShortChars["LowerM"]
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==11 then
-            hbNumFormats["SuffixK"][j]=vShortHealTxtUpperK
-            hbNumFormats["SuffixM"][j]=vShortHealTxtUpperM
+            hbNumFormats["SuffixK"][j]=vShortChars["UpperK"]
+            hbNumFormats["SuffixM"][j]=vShortChars["UpperM"]
         else
-            hbNumFormats["SuffixK"][j]=vTextCharNothing
-            hbNumFormats["SuffixM"][j]=vTextCharNothing
+            hbNumFormats["SuffixK"][j]=vTextChars["Nothing"]
+            hbNumFormats["SuffixM"][j]=vTextChars["Nothing"]
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT2"]==2 then
             hbNumFormats["SurroundLeft"][j]="("
@@ -131,8 +199,8 @@ function HealBot_Text_sethbNumberFormat()
             hbNumFormats["SurroundRight"][j]=""
         end
         if hbNumFormats["Places"][j]==-1 then
-            hbNumFormats["SuffixK"][j]=vTextCharNothing
-            hbNumFormats["SuffixM"][j]=vTextCharNothing
+            hbNumFormats["SuffixK"][j]=vTextChars["Nothing"]
+            hbNumFormats["SuffixM"][j]=vTextChars["Nothing"]
         end
         
     end
@@ -171,11 +239,11 @@ function HealBot_Text_sethbAggroNumberFormat()
 end
 
 local atcR, atcG, atcB=1,1,1
-local function HealBot_Text_TextColours(button)
-    if button.status.current==9 and not hbGUID~=HealBot_Data["PGUID"] then
+local function HealBot_Text_TextNameColours(button)
+    if button.status.current==9 then
         if UnitHasIncomingResurrection(button.unit) then
             atcR,atcG,atcB=0.2, 1.0, 0.2
-        elseif button.status.friend then
+        elseif button.status.friend and not hbGUID~=HealBot_Data["PGUID"] then
             if UnitIsUnit(button.unit, "player") then
                 atcR,atcG,atcB=0.7, 0.4, 0.4
             elseif button.status.range > 0 or UnitInRange(button.unit) then
@@ -186,29 +254,44 @@ local function HealBot_Text_TextColours(button)
         else
             atcR,atcG,atcB=0.4, 0.4, 0.4
         end
-    elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSCOL"] then
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==3 or
+      ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] and button.aura.debuff.type) then
+        atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"];
+        atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"];
+        atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"];
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==2 then
         atcR=button.text.r
         atcG=button.text.g
         atcB=button.text.b
-    elseif button.aura.debuff.type then
-        atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["CR"];
-        atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["CG"];
-        atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["CB"];
-    elseif button.status.range<1 then
-        atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DR"]
-        atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DG"]
-        atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DB"]
     else
-        atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ER"] or 1;
-        atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EG"] or 1;
-        atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EB"] or 1;
+        atcR=button.health.rcol
+        atcG=button.health.gcol
+        atcB=0
     end
-    --HealBot_setCall("HealBot_Text_TextColours")
+    --HealBot_setCall("HealBot_Text_TextNameColours")
     return atcR,atcG,atcB
 end
 
-local vTextCharDoubleSpace,vTextCharSpace,vTextCharPercent,vTextCharPlus="  "," ","%","+"
-local vTextCharNewline,vTextCharDot="\n","."
+local athcR, athcG, athcB=1,1,1
+local function HealBot_Text_TextHealthColours(button)
+    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==3 or
+      ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] and button.aura.debuff.type) then
+        athcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"];
+        athcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCG"];
+        athcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCB"];
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 then
+        athcR=button.text.r
+        athcG=button.text.g
+        athcB=button.text.b
+    else
+        athcR=button.health.rcol
+        athcG=button.health.gcol
+        athcB=0
+    end
+    --HealBot_setCall("HealBot_Text_TextNameColours")
+    return athcR,athcG,athcB
+end
+
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
 local hbAbs=math.abs
 local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
@@ -239,34 +322,16 @@ local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
         end
         return vShortHealTxtAmount, vShortHealTxtSuffix
     else
-        return amount, vTextCharNothing
+        return amount, vTextChars["Nothing"]
     end
     --HealBot_setCall("HealBot_Text_shortHealTxt")
 end
 
-local vHealthTextConcatIndex,vHealthTextConcatResult=0,""
-local vHealthTextTotal,hbHealInTxt,healInTxt,ahtNumSuffix,ahitNumSuffix=0,"",0,"",""
+local vHealthTextConcatIndex,vHealthTextConcatResult,vSetHealthTextStrLen,vSetHealthTextBtnLen=0,"",0,0
+local vHealthTextTotal,sepHealTxt,absorbinTxt,ahtNumSuffix,ahitNumSuffix,ignoreInHeals=0,0,0,"","",false
 local vVehicleUnit,vVehicleName,vVehicleHealth,vVehicleMaxHealth,vVehicleHealthPct,vVehicleStrLen,vVehicleBtnLen="","",0,0,0,0,0
 function HealBot_Text_setHealthText(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and button.health.max then
-        hbHealInTxt=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]
-        if hbHealInTxt>5 then
-            if hbHealInTxt<8 and button.health.current==button.health.max then 
-                healInTxt=0
-            else
-                healInTxt=button.health.incoming+button.health.absorbs 
-            end
-            if hbHealInTxt==6 or hbHealInTxt==8 then hbHealInTxt=2 end
-            if hbHealInTxt==7 or hbHealInTxt==9 then hbHealInTxt=3 end
-        else
-            if button.health.current==button.health.max then 
-                healInTxt=0
-            else
-                healInTxt=button.health.incoming
-            end
-            if hbHealInTxt==4 then hbHealInTxt=2 end
-            if hbHealInTxt==5 then hbHealInTxt=3 end
-        end
         vVehicleUnit=false
         if HEALBOT_GAME_VERSION>3 and UnitInVehicle(button.unit) then
             vVehicleUnit=HealBot_UnitPet(button.unit)
@@ -286,157 +351,228 @@ function HealBot_Text_setHealthText(button)
                 end
             end
         end
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["DOUBLE"] and not vVehicleUnit then
-            tHealthConcat[1]=vTextCharNewline
+        tHealthConcat[1]=hbNumFormats["SurroundLeft"][button.frame]
+        if (Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] and 
+          button.health.current==button.health.max) then
+            ignoreInHeals=true
         else
-            tHealthConcat[1]=vTextCharSpace
+            ignoreInHeals=false
         end
-        tHealthConcat[2]=hbNumFormats["SurroundLeft"][button.frame]
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-            if hbHealInTxt==2 then
-                vHealthTextTotal=button.health.current+healInTxt
+            if ignoreInHeals then
+                vHealthTextTotal=button.health.current
             else
-                vHealthTextTotal=button.health.current;
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==2 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                        vHealthTextTotal=button.health.current+button.health.incoming+button.health.absorbs
+                    else
+                        vHealthTextTotal=button.health.current+button.health.incoming
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                    vHealthTextTotal=button.health.current+button.health.absorbs
+                else
+                    vHealthTextTotal=button.health.current
+                end
+            end
+            if ignoreInHeals then
+                sepHealTxt=0
+            else
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==3 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                        sepHealTxt=button.health.incoming+button.health.absorbs
+                    else
+                        sepHealTxt=button.health.incoming
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                    sepHealTxt=button.health.absorbs
+                else
+                    sepHealTxt=0
+                end
             end
             vHealthTextTotal, ahtNumSuffix=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
+            tHealthConcat[2]=vHealthTextTotal
+            tHealthConcat[3]=ahtNumSuffix
+            tHealthConcat[4]=hbNumFormats["SurroundRight"][button.frame]
+            if sepHealTxt>0 then
+                sepHealTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
+                tHealthConcat[5]=vTextChars["Space"]
+                tHealthConcat[6]=vTextChars["Plus"]
+                tHealthConcat[7]=sepHealTxt
+                tHealthConcat[8]=ahitNumSuffix
+                vHealthTextConcatIndex=8
+            else
+                vHealthTextConcatIndex=4
+            end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
+                sepHealTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
+                tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
+                tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
+                tHealthConcat[vHealthTextConcatIndex+3]=sepHealTxt
+                tHealthConcat[vHealthTextConcatIndex+4]=ahitNumSuffix
+                vHealthTextConcatIndex=vHealthTextConcatIndex+4
+            end
+        elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
+            if ignoreInHeals then
+                vHealthTextTotal=button.health.current-button.health.max
+            else
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==2 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                        vHealthTextTotal=(button.health.current+button.health.incoming+button.health.absorbs)-button.health.max
+                    else
+                        vHealthTextTotal=(button.health.current+button.health.incoming)-button.health.max
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                    vHealthTextTotal=(button.health.current+button.health.absorbs)-button.health.max
+                else
+                    vHealthTextTotal=button.health.current-button.health.max
+                end
+            end
+            if ignoreInHeals then
+                sepHealTxt=0
+            else
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==3 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                        sepHealTxt=button.health.incoming+button.health.absorbs
+                    else
+                        sepHealTxt=button.health.incoming
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                    sepHealTxt=button.health.absorbs
+                else
+                    sepHealTxt=0
+                end
+            end
+            vHealthTextTotal, ahtNumSuffix=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
+            if vHealthTextTotal>0 then
+                tHealthConcat[2]=vTextChars["Plus"]
+            else
+                tHealthConcat[2]=vTextChars["Nothing"]
+            end
             tHealthConcat[3]=vHealthTextTotal
             tHealthConcat[4]=ahtNumSuffix
             tHealthConcat[5]=hbNumFormats["SurroundRight"][button.frame]
-            if healInTxt>0 and hbHealInTxt==3 then
-                healInTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(healInTxt, button.frame)
-                tHealthConcat[6]=vTextCharSpace
-                tHealthConcat[7]=vTextCharPlus
-                tHealthConcat[8]=healInTxt
+            if sepHealTxt>0 then
+                sepHealTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
+                tHealthConcat[6]=vTextChars["Space"]
+                tHealthConcat[7]=vTextChars["Plus"]
+                tHealthConcat[8]=sepHealTxt
                 tHealthConcat[9]=ahitNumSuffix
                 vHealthTextConcatIndex=9
             else
                 vHealthTextConcatIndex=5
             end
-        elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
-            if hbHealInTxt==2 then
-                vHealthTextTotal=(button.health.current+healInTxt)-button.health.max;
-            else
-                vHealthTextTotal=button.health.current-button.health.max;
-            end
-            vHealthTextTotal, ahtNumSuffix=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
-            if vHealthTextTotal>0 then
-                tHealthConcat[3]=vTextCharPlus
-            else
-                tHealthConcat[3]=vTextCharNothing
-            end
-            tHealthConcat[4]=vHealthTextTotal
-            tHealthConcat[5]=ahtNumSuffix
-            tHealthConcat[6]=hbNumFormats["SurroundRight"][button.frame]
-            if healInTxt>0 and hbHealInTxt==3 then
-                healInTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(healInTxt, button.frame)
-                tHealthConcat[7]=vTextCharSpace
-                tHealthConcat[8]=vTextCharPlus
-                tHealthConcat[9]=healInTxt
-                tHealthConcat[10]=ahitNumSuffix
-                vHealthTextConcatIndex=10
-            else
-                vHealthTextConcatIndex=6
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
+                sepHealTxt, ahitNumSuffix=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
+                tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
+                tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
+                tHealthConcat[vHealthTextConcatIndex+3]=sepHealTxt
+                tHealthConcat[vHealthTextConcatIndex+4]=ahitNumSuffix
+                vHealthTextConcatIndex=vHealthTextConcatIndex+4
             end
         else
-            if hbHealInTxt==2 then
-                vHealthTextTotal=floor(((button.health.current+healInTxt)/button.health.max)*100)
-            else
+            if ignoreInHeals then
                 vHealthTextTotal=floor((button.health.current/button.health.max)*100)
-            end
-            tHealthConcat[3]=vHealthTextTotal
-            tHealthConcat[4]=vTextCharPercent
-            tHealthConcat[5]=hbNumFormats["SurroundRight"][button.frame]
-            if hbHealInTxt==3 and floor((healInTxt/button.health.max)*100)>0 then
-                tHealthConcat[6]=vTextCharSpace
-                tHealthConcat[7]=vTextCharPlus
-                tHealthConcat[8]=floor((healInTxt/button.health.max)*100)
-                tHealthConcat[9]=vTextCharPercent
-                vHealthTextConcatIndex=9
             else
-                vHealthTextConcatIndex=5
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==2 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                        vHealthTextTotal=floor(((button.health.current+button.health.incoming+button.health.absorbs)/button.health.max)*100)
+                    else
+                        vHealthTextTotal=floor(((button.health.current+button.health.incoming)/button.health.max)*100)
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==2 then
+                    vHealthTextTotal=floor(((button.health.current+button.health.absorbs)/button.health.max)*100)
+                else
+                    vHealthTextTotal=floor((button.health.current/button.health.max)*100)
+                end
+            end
+            if ignoreInHeals then
+                sepHealTxt=0
+            else
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCHEALS"]==3 then
+                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                        sepHealTxt=button.health.incoming+button.health.absorbs
+                    else
+                        sepHealTxt=button.health.incoming
+                    end
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["INCABSORBS"]==3 then
+                    sepHealTxt=button.health.absorbs
+                else
+                    sepHealTxt=0
+                end
+            end
+            tHealthConcat[2]=vHealthTextTotal
+            tHealthConcat[3]=vTextChars["Percent"]
+            tHealthConcat[4]=hbNumFormats["SurroundRight"][button.frame]
+            if floor((sepHealTxt/button.health.max)*100)>0 then
+                tHealthConcat[5]=vTextChars["Space"]
+                tHealthConcat[6]=vTextChars["Plus"]
+                tHealthConcat[7]=floor((sepHealTxt/button.health.max)*100)
+                tHealthConcat[8]=vTextChars["Percent"]
+                vHealthTextConcatIndex=8
+            else
+                vHealthTextConcatIndex=4
+            end
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
+                tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
+                tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
+                tHealthConcat[vHealthTextConcatIndex+3]=floor((button.health.overheal/button.health.max)*100)
+                tHealthConcat[vHealthTextConcatIndex+4]=vTextChars["Percent"]
+                vHealthTextConcatIndex=vHealthTextConcatIndex+4
             end
         end
         if button.frame<10 and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] and button.aggro.threatpct>0 then
-            tHealthConcat[vHealthTextConcatIndex+1]=vTextCharDoubleSpace
+            tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["DoubleSpace"]
             tHealthConcat[vHealthTextConcatIndex+2]=aggroNumFormatSurLa[button.frame]
             tHealthConcat[vHealthTextConcatIndex+3]=button.aggro.threatpct
-            tHealthConcat[vHealthTextConcatIndex+4]=vTextCharPercent
+            tHealthConcat[vHealthTextConcatIndex+4]=vTextChars["Percent"]
             tHealthConcat[vHealthTextConcatIndex+5]=aggroNumFormatSurRa[button.frame]
             vHealthTextConcatIndex=vHealthTextConcatIndex+5
         end
         if vVehicleUnit then
-            tHealthConcat[vHealthTextConcatIndex+1]=vTextCharNewline
+            tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Newline"]
             if vVehicleBtnLen<1 then
                 tHealthConcat[vHealthTextConcatIndex+2]=hbStringSub(vVehicleName,1,hbBarTextLen[button.frame])
-                tHealthConcat[vHealthTextConcatIndex+3]=vTextCharDot
+                tHealthConcat[vHealthTextConcatIndex+3]=vTextChars["Dot"]
             else
                 tHealthConcat[vHealthTextConcatIndex+2]=vVehicleName
-                tHealthConcat[vHealthTextConcatIndex+3]=vTextCharSpace
+                tHealthConcat[vHealthTextConcatIndex+3]=vTextChars["Space"]
             end
-            tHealthConcat[vHealthTextConcatIndex+4]=vTextCharSpace
+            tHealthConcat[vHealthTextConcatIndex+4]=vTextChars["Space"]
             tHealthConcat[vHealthTextConcatIndex+5]=vVehicleHealthPct
             vHealthTextConcatIndex=vHealthTextConcatIndex+5
         end
         vHealthTextConcatResult=HealBot_Text_HealthConcat(vHealthTextConcatIndex)
+
+        vSetHealthTextStrLen=hbStringLen(hbutf8sub(vHealthTextConcatResult, "%s+", ""))+2
+        if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+            vSetHealthTextBtnLen=HealBot_Text_EnemySizeWidth["HLTH"][HealBot_Panel_isSpecialUnit(button.unit)]-vSetHealthTextStrLen
+        else
+            vSetHealthTextBtnLen=hbBarHealthTextLen[button.frame]-vSetHealthTextStrLen
+        end
+        if vSetHealthTextBtnLen<0 then
+            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+                tConcat[1]=hbStringSub(vHealthTextConcatResult,1,HealBot_Text_EnemySizeWidth["HLTH"][HealBot_Panel_isSpecialUnit(button.unit)])
+            else
+                tConcat[1]=hbStringSub(vHealthTextConcatResult,1,hbBarHealthTextLen[button.frame])
+            end
+            tConcat[2]=vTextChars["Dot"]
+            vHealthTextConcatResult = HealBot_Text_Concat(2)
+        end
+
         if button.text.health~=vHealthTextConcatResult then
             button.text.health=vHealthTextConcatResult
-            button.text.update=true
+            button.text.healthupdate=true
         end
-    elseif button.text.health~=vTextCharNothing then
-        button.text.health=vTextCharNothing
-        button.text.update=true
+    elseif button.text.health~=vTextChars["Nothing"] then
+        button.text.health=vTextChars["Nothing"]
+        button.text.healthupdate=true
     end
     --HealBot_setCall("HealBot_Text_setHealthText")
 end
 
-local vSetTextLenWidthAdj,vSetTextLenFontAdj=0,0
-local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
-        vSetTextLenWidthAdj=0.8
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["DOUBLE"] then
-            vSetTextLenWidthAdj=1.7
-        end
-        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
-        HealBot_Text_EnemySizeWidth[eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
-                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"])
-                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["HEIGHT"]/vSetTextLenFontAdj)))
-    else
-        HealBot_Text_EnemySizeWidth[eBarID] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]
-    end
-end
-
-function HealBot_Text_setTextLen(curFrame)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]==0 then
-        vSetTextLenWidthAdj=0.8
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["DOUBLE"] then
-            vSetTextLenWidthAdj=1.7
-        end
-        vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["FONT"]] or 2
-        hbBarTextLen[curFrame] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][curFrame]["WIDTH"]*vSetTextLenWidthAdj)
-                                /(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HEIGHT"])
-                                -(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HEIGHT"]/vSetTextLenFontAdj)))
-    else
-        hbBarTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]
-    end
-    if curFrame==10 then
-        HealBot_Text_setEnemyTextLen(HealBot_Text_EnemySizeWidth["EnemySizeWidth1"], 1)
-        HealBot_Text_setEnemyTextLen(HealBot_Text_EnemySizeWidth["EnemySizeWidth2"], 2)
-    end
-    --HealBot_setCall("HealBot_Text_setTextLen")
-end
-
-function HealBot_Text_setEnemySizeWidth(vName, vValue)
-    if HealBot_Text_EnemySizeWidth[vName]~=vValue then
-        HealBot_Text_EnemySizeWidth[vName]=vValue
-        if vName=="EnemySizeWidth1" then
-            HealBot_Text_setEnemyTextLen(vValue, 1)
-        else
-            HealBot_Text_setEnemyTextLen(vValue, 2)
-        end
-    end
-end
-
+local prevTag=""
 function HealBot_Text_setNameTag(button)
+    prevTag=button.text.tag
     if UnitExists(button.unit) then
         if button.status.friend then
             if button.status.offline then
@@ -446,23 +582,30 @@ function HealBot_Text_setNameTag(button)
             elseif button.status.range<1 and button.status.range>-2 then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGOOR"];
             else
-                button.text.tag=vTextCharNothing
+                button.text.tag=vTextChars["Nothing"]
             end
         else
-            button.text.tag=vTextCharNothing
+            button.text.tag=vTextChars["Nothing"]
         end
     else
         button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGR"]
     end
-    button.text.update=true
+    if prevTag~=button.text.tag then
+        HealBot_Text_setNameText(button)
+    end
     --HealBot_setCall("HealBot_Text_setNameTag")
 end
 
-local vTextCharColon,vTextCharAggroLeft,vTextCharAggroRight=":",">> "," <<"
-local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen="","","",0,0
+local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen,vHealthTextConcatIndex="","","",0,0,0
 function HealBot_Text_setNameText(button)
     if UnitExists(button.unit) then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==2 and UnitClass(button.unit) then
+            if button.text.tag then
+                tConcat[1]=button.text.tag
+                vHealthTextConcatIndex=1
+            else
+                vHealthTextConcatIndex=0
+            end
             vSetNameTextClass=UnitClass(button.unit)
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
                 vSetNameTextRole=HealBot_Panel_UnitRole(button.unit, button.guid)
@@ -475,81 +618,111 @@ function HealBot_Text_setNameText(button)
                 end
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
-                tConcat[1]=vSetNameTextClass
-                tConcat[2]=vTextCharColon
-                tConcat[3]=HealBot_GetUnitName(button.unit, button.guid)
-                vSetNameTextName=HealBot_Text_Concat(3)
+                tConcat[vHealthTextConcatIndex+1]=vSetNameTextClass
+                tConcat[vHealthTextConcatIndex+2]=vTextChars["Colon"]
+                tConcat[vHealthTextConcatIndex+3]=HealBot_GetUnitName(button.unit, button.guid)
+                vSetNameTextName=HealBot_Text_Concat(vHealthTextConcatIndex+3)
+            elseif vHealthTextConcatIndex>0 then
+                tConcat[2]=vSetNameTextClass
+                vSetNameTextName=HealBot_Text_Concat(2)
             else
                 vSetNameTextName=vSetNameTextClass;
             end
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
+            if button.text.tag then
+                tConcat[1]=button.text.tag
+                vHealthTextConcatIndex=1
+            else
+                vHealthTextConcatIndex=0
+            end
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"] and button.aggro.status<4 and 
-                   (button.aggro.status or 0)>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] and vSetNameTextName then
-                tConcat[1]=vTextCharAggroLeft
+                   (button.aggro.status or 0)>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+                tConcat[vHealthTextConcatIndex+1]=vTextChars["AggroLeft"]
+                tConcat[vHealthTextConcatIndex+2]=HealBot_GetUnitName(button.unit, button.guid)
+                tConcat[vHealthTextConcatIndex+3]=vTextChars["AggroRight"]
+                vSetNameTextName=HealBot_Text_Concat(vHealthTextConcatIndex+3)
+            elseif vHealthTextConcatIndex>0 then
                 tConcat[2]=HealBot_GetUnitName(button.unit, button.guid)
-                tConcat[3]=vTextCharAggroRight
-                vSetNameTextName=HealBot_Text_Concat(3)
+                vSetNameTextName=HealBot_Text_Concat(2)
             else
                 vSetNameTextName=HealBot_GetUnitName(button.unit, button.guid)
             end
+        elseif button.text.tag then
+            vSetNameTextName=button.text.tag
         else
-            vSetNameTextName=vTextCharNothing
+            vSetNameTextName=vTextChars["Nothing"]
         end
     else
-        vSetNameTextName=button.unit
+        if button.text.tag then
+            tConcat[1]=button.text.tag
+            tConcat[2]=button.unit
+            vSetNameTextName=HealBot_Text_Concat(2)
+        else
+            vSetNameTextName=button.unit
+        end
         HealBot_Action_Refresh(button)
     end
 
     vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))+2
     if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-        vSetNameTextBtnLen=HealBot_Text_EnemySizeWidth[HealBot_Panel_isSpecialUnit(button.unit)]-vSetNameTextStrLen
+        vSetNameTextBtnLen=HealBot_Text_EnemySizeWidth["NAME"][HealBot_Panel_isSpecialUnit(button.unit)]-vSetNameTextStrLen
     else
         vSetNameTextBtnLen=hbBarTextLen[button.frame]-vSetNameTextStrLen
     end
     if vSetNameTextBtnLen<0 then
         if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-            tConcat[1]=hbStringSub(vSetNameTextName,1,HealBot_Text_EnemySizeWidth[HealBot_Panel_isSpecialUnit(button.unit)])
+            tConcat[1]=hbStringSub(vSetNameTextName,1,HealBot_Text_EnemySizeWidth["NAME"][HealBot_Panel_isSpecialUnit(button.unit)])
         else
             tConcat[1]=hbStringSub(vSetNameTextName,1,hbBarTextLen[button.frame])
         end
-        tConcat[2]=vTextCharDot
+        tConcat[2]=vTextChars["Dot"]
         vSetNameTextName = HealBot_Text_Concat(2)
     end
     if button.text.name~=vSetNameTextName then
         button.text.name=vSetNameTextName
-        button.text.update=true
+        button.text.nameupdate=true
     end
     --HealBot_setCall("HealBot_Text_setNameText")
 end
 
-local atR, atG, atB, atA, atBar, atBatText, atConcat=0, 0, 0, 0, "", "", ""
+local atR, atG, atB, atA, atBar, atBarText, atBarText2, atConcat=0, 0, 0, 0, "", "", "", ""
 local tButtonRef={[1]="HealBot_Action_HealUnit", [2]=0, [3]="Bar_text"}
 function HealBot_Text_SetText(button)
-    if button.text.update then
-        button.text.update=false
+    if button.text.nameupdate then
+        button.text.nameupdate=false
         tButtonRef[2]=button.id
-        atBatText = _G[tabconcat(tButtonRef)];
-        if button.status.enabled then
-            atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["EA"]
-        else
-            atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]
-        end
-        atR, atG, atB = HealBot_Text_TextColours(button)
-        if UnitExists(button.unit) and atR then
-            atBatText:SetTextColor(atR, atG, atB, atA)
-        else
-            atBatText:SetTextColor(0.5, 0.5, 0.5, 0.8)
-        end
+        tButtonRef[3]="Bar_text"
+        atBarText = _G[tabconcat(tButtonRef)];
         if UnitExists(button.unit) then
-            tConcat[1]=button.text.tag
-            tConcat[2]=button.text.name
-            tConcat[3]=button.text.health
-            atBatText:SetText(HealBot_Text_Concat(3));
+            if button.status.enabled then
+                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"]
+            else
+                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"]
+            end
+            atR, atG, atB = HealBot_Text_TextNameColours(button)
+            atBarText:SetTextColor(atR, atG, atB, atA)
         else
-            tConcat[1]=button.text.tag
-            tConcat[2]=button.text.name
-            atBatText:SetText(HealBot_Text_Concat(2))
+            atBarText:SetTextColor(0.5, 0.5, 0.5, 0.8)
         end
+        atBarText:SetText(button.text.name);
+    end
+    if button.text.healthupdate then
+        button.text.healthupdate=false
+        tButtonRef[2]=button.id
+        tButtonRef[3]="Bar_text2"
+        atBarText2 = _G[tabconcat(tButtonRef)];
+        if UnitExists(button.unit) then
+            if button.status.enabled then
+                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"]
+            else
+                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCDA"]
+            end
+            atR, atG, atB = HealBot_Text_TextHealthColours(button)
+            atBarText2:SetTextColor(atR, atG, atB, atA)
+        else
+            atBarText2:SetTextColor(0, 0, 0, 0)
+        end
+        atBarText2:SetText(button.text.health)
     end
     --HealBot_setCall("HealBot_Text_SetText")
 end
@@ -569,17 +742,26 @@ function HealBot_Text_UpdateNames()
     end
 end
 
+function HealBot_Text_UpdateButton(button)
+    button.text.nameupdate=true
+    button.text.healthupdate=true
+end
+
 function HealBot_Text_UpdateButtons()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        xButton.text.update=true
+        xButton.text.nameupdate=true
+        xButton.text.healthupdate=true
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-        xButton.text.update=true
+        xButton.text.nameupdate=true
+        xButton.text.healthupdate=true
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-        xButton.text.update=true
+        xButton.text.nameupdate=true
+        xButton.text.healthupdate=true
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
-        xButton.text.update=true
+        xButton.text.nameupdate=true
+        xButton.text.healthupdate=true
     end
 end

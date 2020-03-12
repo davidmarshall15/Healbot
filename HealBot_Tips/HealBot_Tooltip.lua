@@ -415,35 +415,6 @@ local function HealBot_Action_GetTimeOffline(button)
     return timeOffline;
 end
 
-local function HealBot_HealthColor(button)
-    local hca,hcr,hcb=0,0,0
-    local hcpct,hipct=0,0
-
-    hcr,hcg = 1, 1
-    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then -- Incoming Heal Bar Colour = "Same as Health (Future Health)"
-        if button.status.current<9 then
-            hipct = button.health.current+button.health.incoming
-            if hipct<button.health.max then
-                hipct=(button.health.current+button.health.incoming)/button.health.max
-            else
-                hipct=1;
-            end
-        end
-        hcr, hcg = HealBot_Action_BarColourPct(hipct)
-    else 
-        if button.status.current<9 then
-            if button.health.max == 0 then
-                hcpct=1
-            else
-                hcpct = button.health.current/button.health.max
-            end
-        end
-        hcr, hcg = HealBot_Action_BarColourPct(hcpct)
-    end
-
-    return hcr,hcg,hcb
-end
-
 local msgs={}
 local order={}
 function HealBot_DebugTooltip()
@@ -614,7 +585,6 @@ local function HealBot_Action_DoRefreshTooltip()
             linenum=linenum+1
             if hlth and maxhlth then
                 local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton)
-                r,g,b=HealBot_HealthColor(xButton);
                 local hPct=100
                 if maxhlth>0 then
                     hPct=floor((hlth/maxhlth)*100)
@@ -622,12 +592,12 @@ local function HealBot_Action_DoRefreshTooltip()
                 hlth=HealBot_Tooltip_readNumber(hlth)
                 maxhlth=HealBot_Tooltip_readNumber(maxhlth)
                 if UnitOffline then 
-                    HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                    HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                 elseif zone and not strfind(zone,"Level") then
                     --if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
-                    HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                    HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                 else
-                    HealBot_Tooltip_SetLine(linenum," ",1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                    HealBot_Tooltip_SetLine(linenum," ",1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                 end
                 local vUnit=HealBot_retIsInVehicle(xUnit)
                 if vUnit then
@@ -635,13 +605,12 @@ local function HealBot_Action_DoRefreshTooltip()
                     local lr,lg,lb=HealBot_Action_ClassColour(vUnit)
                     hlth,maxhlth=HealBot_VehicleHealth(vUnit)
                     local hPct=floor((hlth/maxhlth)*100)
-                    r,g,b=HealBot_HealthColor(xButton);
                     hlth=HealBot_Tooltip_readNumber(hlth)
                     maxhlth=HealBot_Tooltip_readNumber(maxhlth)
                     if UnitExists(vUnit) then
-                        HealBot_Tooltip_SetLine(linenum,"  "..HealBot_GetUnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                        HealBot_Tooltip_SetLine(linenum,"  "..HealBot_GetUnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                     else
-                        HealBot_Tooltip_SetLine(linenum,"  "..HEALBOT_VEHICLE,lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",r,g,b,1)
+                        HealBot_Tooltip_SetLine(linenum,"  "..HEALBOT_VEHICLE,lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                     end
                 end
             end

@@ -7,8 +7,8 @@ local bheight= 20
 local bWidth = 120
 local EnemySizeMod,EnemyTargetBarSize=2,40
 local bOutline = 1
-local btextheight=10
-local btextoutline=1
+local btextheight,btextheight2=10,10
+local btextoutline,btextoutline2=1,1
 local b,bar,bar2,bar3,bar4,icon,txt,icon17,pIcon,expire,count=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
 local icon1,expire1,count1,icon51,expire51,count51=nil,nil,nil,nil,nil,nil
 local barScale,h,hwidth,hheight,iScale,diScale,itScale,x,hcpct,bar5,bar6,barDir=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
@@ -75,7 +75,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         bWidth = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
         bOutline = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BOUT"]*frameScale);
         btextheight=ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]*frameScale);
+        btextheight2=ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*frameScale)
         btextoutline=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OUTLINE"];
+        btextoutline2=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]
         if HealBot_Panel_isSpecialUnit(button.unit)>0 then
             HealBot_Skins_AdjustBarWidth(button)
         end
@@ -107,6 +109,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         tBarsConcat[1]=bar:GetName()
         tBarsConcat[2]="_text"
         bar.txt = _G[HealBot_Skins_Concat(2)];
+        tBarsConcat[2]="_text2"
+        bar.txt2 = _G[HealBot_Skins_Concat(2)];
         tBarsConcat[1]=bar3:GetName()
         tBarsConcat[2]="Bar3Txt"
         bar3.txt = _G[HealBot_Skins_Concat(2)];
@@ -152,20 +156,31 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
                         btextheight,
                         HealBot_Font_Outline[btextoutline]);
+        bar.txt2:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
+                        btextheight2,
+                        HealBot_Font_Outline[btextoutline2]);
         bar3.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
                         btextheight,
                         HealBot_Font_Outline[btextoutline]);
         bar.txt:ClearAllPoints();
+        bar.txt2:ClearAllPoints();
         bar5:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar5:GetStatusBarTexture():SetHorizTile(false)
         bar6:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar6:GetStatusBarTexture():SetHorizTile(false)
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==1 then
-            bar.txt:SetPoint("LEFT",bar,"LEFT",4,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+            bar.txt:SetPoint("LEFT",bar,"LEFT",4,5+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==2 then
-            bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+            bar.txt:SetPoint("CENTER",bar,"CENTER",0,5+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
         else
-            bar.txt:SetPoint("RIGHT",bar,"RIGHT",-4,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+            bar.txt:SetPoint("RIGHT",bar,"RIGHT",-4,5+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+        end
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HALIGN"]==1 then
+            bar.txt2:SetPoint("LEFT",bar,"LEFT",4,-7+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"])
+        elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HALIGN"]==2 then
+            bar.txt2:SetPoint("CENTER",bar,"CENTER",0,-7+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"])
+        else
+            bar.txt2:SetPoint("RIGHT",bar,"RIGHT",-4,-7+Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"])
         end
         bar2:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
         bar2:GetStatusBarTexture():SetHorizTile(false)
@@ -326,7 +341,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             HealBot_Panel_SetMultiRowHoToffset(0)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
                 icon1:ClearAllPoints();
-                icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",1,0);
+                icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",1,1);
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",0,0);
                 count1:ClearAllPoints();
@@ -359,7 +374,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
                 icon51:ClearAllPoints();
-                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",1,0);
+                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",0,0);
                 count51:ClearAllPoints();
@@ -393,7 +408,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 end
             else
                 icon1:ClearAllPoints();
-                icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,0);
+                icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMRIGHT",-1,1);
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",2,0);
                 count1:ClearAllPoints();
@@ -426,7 +441,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
-                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",-1,0);
+                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMLEFT",1,1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
@@ -464,7 +479,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             HealBot_Panel_SetMultiRowHoToffset(0)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
                 icon1:ClearAllPoints();
-                icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,0);
+                icon1:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,1);
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMRIGHT",icon1,"BOTTOMRIGHT",2,0);
                 count1:ClearAllPoints();
@@ -497,7 +512,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
-                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",-1,0);
+                icon51:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",1,1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
@@ -531,7 +546,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 end
             else
                 icon1:ClearAllPoints();
-                icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",2,0);
+                icon1:SetPoint("BOTTOMLEFT",b,"BOTTOMRIGHT",1,1);
                 expire1:ClearAllPoints();
                 expire1:SetPoint("BOTTOMLEFT",icon1,"BOTTOMLEFT",0,0);
                 count1:ClearAllPoints();
@@ -564,7 +579,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     count:SetPoint("TOPRIGHT",icon,"TOPRIGHT",2,0);
                 end
                 icon51:ClearAllPoints();
-                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",2,0);
+                icon51:SetPoint("BOTTOMRIGHT",b,"BOTTOMLEFT",-1,1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMLEFT",icon51,"BOTTOMLEFT",0,0);
                 count51:ClearAllPoints();
@@ -706,7 +721,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     count:SetPoint("TOPLEFT",icon,"TOPLEFT",0,0);
                 end
                 icon51:ClearAllPoints();
-                icon51:SetPoint("TOPLEFT",b,"BOTTOMLEFT",-1,-1);
+                icon51:SetPoint("TOPLEFT",b,"BOTTOMLEFT",1,-1);
                 expire51:ClearAllPoints();
                 expire51:SetPoint("BOTTOMRIGHT",icon51,"BOTTOMRIGHT",2,0);
                 count51:ClearAllPoints();
@@ -795,6 +810,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         tBarsConcat[1]=bar:GetName()
         tBarsConcat[2]="_text"
         bar.txt = _G[HealBot_Skins_Concat(2)];
+        tBarsConcat[2]="_text2"
+        bar.txt2 = _G[HealBot_Skins_Concat(2)];
         bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
                                 Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"],
                                 HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
@@ -804,6 +821,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                              Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][button.frame]["A"]);
         bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
         bar:EnableMouse(false)
+        bar.txt2:SetTextColor(0,0,0,0);
         h:Disable();
     elseif barType=="frameheader" then
         tBarsConcat[1]="f"
@@ -847,10 +865,16 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         tBarsConcat[1]=bar:GetName()
         tBarsConcat[2]="_text"
         bar.txt = _G[HealBot_Skins_Concat(2)];
+        tBarsConcat[2]="_text2"
+        bar.txt2 = _G[HealBot_Skins_Concat(2)];
         bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"]),
                                             btextheight,
                                             HealBot_Font_Outline[btextoutline]);
         bar.txt:SetTextColor(0,0,0,1);
+        bar.txt2:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
+                                            btextheight2,
+                                            HealBot_Font_Outline[btextoutline2]);
+        bar.txt2:SetTextColor(0,0,0,1);
         iScale=0.84
         iScale=iScale+(numcols/10)
         bar:SetWidth(bWidth*iScale)

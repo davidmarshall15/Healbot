@@ -80,6 +80,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS      = "Custom Debuffs";
     HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS        = "Custom Buffs";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Buffs"
+    HEALBOT_OPTIONS_TAB_NAMETEXT            = "Name";
 
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
@@ -247,14 +248,13 @@ function HealBot_Lang_enALL()
     HEALBOT_DISABLED_TARGET                 = "Target";
     HEALBOT_OPTIONS_SHOWCLASSONBAR          = "Show class on bar";
     HEALBOT_OPTIONS_SHOWHEALTHONBAR         = "Show health on bar";
+    HEALBOT_OPTIONS_IGNOREINCOMINGONFULL    = "On full health ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s";
     HEALBOT_OPTIONS_BARHEALTHINCHEALS       = "Include incoming heals";
     HEALBOT_OPTIONS_BARHEALTHSEPHEALS       = "Separate incoming heals";
-    HEALBOT_OPTIONS_BARHEALTHALLINCHEALS    = "Always Include incoming heals";
-    HEALBOT_OPTIONS_BARHEALTHALLSEPHEALS    = "Always Separate incoming heals";
-    HEALBOT_OPTIONS_BARHEALTHINCALL         = "Include incoming heals and "..HEALBOT_classicABSORBHOT.."s"
-    HEALBOT_OPTIONS_BARHEALTHSEPALL         = "Separate incoming heals and "..HEALBOT_classicABSORBHOT.."s"
-    HEALBOT_OPTIONS_BARHEALTHALLINCALL      = "Always include incoming heals and "..HEALBOT_classicABSORBHOT.."s"
-    HEALBOT_OPTIONS_BARHEALTHALLSEPALL      = "Always separate incoming heals and "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHINCABSORBS     = "Include "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHSEPABSORBS     = "Separate "..HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_BARHEALTHMYOVERHEALS    = "Show my overheals";
+    HEALBOT_OPTIONS_BARHEALTHALLOVERHEALS   = "Show all overheals";
     HEALBOT_OPTIONS_BARHEALTH1              = "as delta";
     HEALBOT_OPTIONS_BARHEALTH2              = "as percentage";
     HEALBOT_OPTIONS_TIPTEXT                 = "Tooltip information";
@@ -280,6 +280,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARHEADEROPTTEXT        = "Bar Header options";
     HEALBOT_OPTIONS_FRAMEHEADEROPTTEXT      = "Frame Header options";
     HEALBOT_OPTIONS_ICONOPTTEXT             = "Icon options";
+    HEALBOT_OPTIONS_NAMEOPTTEXT             = "Name text options";
+    HEALBOT_OPTIONS_HEALTHOPTTEXT           = "Health text options";
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
@@ -483,6 +485,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_WARNING             = "Warning"
     HEALBOT_OPTIONS_SKINDEFAULTFOR          = "Skin default for"
     HEALBOT_OPTIONS_INCHEAL                 = "Incoming heals"
+    HEALBOT_OPTIONS_INCABSORB               = HEALBOT_classicABSORBHOT.."s"
+    HEALBOT_OPTIONS_NOOVERHEALS             = "No overheals"
     HEALBOT_WORD_ARENA                      = "Arena"
     HEALBOT_WORD_BATTLEGROUND               = "Battle Ground"
     HEALBOT_WORD_BG10                       = "BG 10"; 
@@ -610,7 +614,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_VISIBILITY          = "Visibility"
     HEALBOT_OPTIONS_TAB_AGGRO               = "Aggro"
     HEALBOT_OPTIONS_TAB_ICONTEXT            = "Icon text"
-    HEALBOT_OPTIONS_TAB_TEXT                = "Bar text"
+    HEALBOT_OPTIONS_TAB_TEXT                = "Text"
     HEALBOT_OPTIONS_AGGRO3COL               = "Aggro bar\ncol"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_OPTIONS_AGGROFLASHFREQ          = "Flash frequency"
     HEALBOT_OPTIONS_WORD_FASTER             = "Faster"
@@ -662,6 +666,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SAME_AS_HLTH_FUTURE     = "Same as health (future health)"
     HEALBOT_OPTIONS_FUTURE_HLTH             = "Future health"
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar";
+    HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
@@ -1149,6 +1154,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Toggle Custom Cures - Default Cast By"
     HEALBOT_OPTIONS_ENTERINGCOMBAT          = "When entering combat"
     HEALBOT_OPTIONS_OUTOFCOMBAT             = "When out of combat"
+    HEALBOT_OPTIONS_TEXTCOL_DEBUFF          = "Use Custom on Debuff"
     HEALBOT_OPTIONS_ALWAYSHIDE              = "Always Hide"
     HEALBOT_OPTIONS_NOCHANGE                = "No Change"
     HEALBOT_OPTIONS_ALWAYSSHOW              = "Always Show"
