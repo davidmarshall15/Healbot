@@ -500,7 +500,7 @@ function HealBot_Lang_Options_enALL()
                                ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\nNote: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\nNote: Changing this setting requires a UI Reload.",
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
-                               ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\nSlower is smoother as Faster skips steps.\nTIP: For a smooth yet fast fluid update:\nFirst increse Internal Timers and Updates on the General tab.",
+                               ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\nSlower is smoother as Faster skips steps.\nTIP: For a smooth yet fast fluid update:\nFirst increase Internal Timers and Updates on the General tab.",
                         -- Skins Protection tab
                                ["USECRASHPROT"]="Crash protection guards against the negative\neffects of a healbot user disconnecting during combat.\nA small number of macro slots will store current\ngroup/raid data that can be used on logon during combat.",
                                ["USECRASHPROTGENERALMACRO"]="Use global macro slots rather than per character.\nTo reduce overall usage this option is recommended\nwhen using Healbot on multiple characters.",

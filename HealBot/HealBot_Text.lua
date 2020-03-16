@@ -352,7 +352,7 @@ function HealBot_Text_setHealthText(button)
             end
         end
         tHealthConcat[1]=hbNumFormats["SurroundLeft"][button.frame]
-        if (Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] and 
+        if button.status.current<9 and (Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] and 
           button.health.current==button.health.max) then
             ignoreInHeals=true
         else
@@ -512,7 +512,8 @@ function HealBot_Text_setHealthText(button)
             else
                 vHealthTextConcatIndex=4
             end
-            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and 
+               floor((button.health.overheal/button.health.max)*100)>0 then
                 tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
                 tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
                 tHealthConcat[vHealthTextConcatIndex+3]=floor((button.health.overheal/button.health.max)*100)

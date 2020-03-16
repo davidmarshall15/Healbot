@@ -729,7 +729,7 @@ function HealBot_Panel_ToggleTestBars()
     if HealBot_setTestBars then
         HealBot_setTestBars=false
         HealBot_Panel_TestBarsOff()
-        HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TESTBARS.." "..HEALBOT_WORD_OFF)
+        HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSON)
         for j=1,10 do
             HealBot_Action_HidePanel(j)
         end
@@ -741,7 +741,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_setLuVars("TestBarsOn", true)
         HealBot_setTestBars=true
         HealBot_Panel_luVars["TestBarsDelAll"]=true
-        HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TESTBARS.." "..HEALBOT_WORD_ON)
+        HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSOFF)
     end
 end
 
@@ -1077,12 +1077,18 @@ local function HealBot_Panel_TestBarShow(index,button,tRole)
     HealBot_TestBarsActive[index]=button
     local bar=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
     local HealBot_keepClass=false
+    local HealBot_keepClass2=false
     if not HealBot_setTestCols[index] then
         if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] >= 2) then
             if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2) then
                 HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = HealBot_Panel_RandomClassColour(tRole)
                 if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==2 then
                     HealBot_keepClass=true
+                    HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index]
+                end
+                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 then
+                    HealBot_keepClass2=true
+                    HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index]
                 end
             else
                 HealBot_colIndex["hcr"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HR"]
@@ -1092,15 +1098,30 @@ local function HealBot_Panel_TestBarShow(index,button,tRole)
         else
             HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = 0,1,0
         end
-        if HealBot_keepClass then
-            HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index]
-        else
+        if not HealBot_keepClass then
             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==2 then
                 HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = HealBot_Panel_RandomClassColour(tRole)
+                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 then
+                    HealBot_keepClass2=true
+                    HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index]
+                end
+            elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 then
+                HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = 0,1,0
             else
                 HealBot_colIndex["hctr"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
                 HealBot_colIndex["hctg"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"]
                 HealBot_colIndex["hctb"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"]
+            end
+        end
+        if not HealBot_keepClass2 then
+            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 then
+                HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = HealBot_Panel_RandomClassColour(tRole)
+            elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==1 then
+                HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = 0,1,0
+            else
+                HealBot_colIndex["hctr2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"]
+                HealBot_colIndex["hctg2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCG"]
+                HealBot_colIndex["hctb2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCB"]
             end
         end
         bar:SetValue(1000)
@@ -1108,18 +1129,19 @@ local function HealBot_Panel_TestBarShow(index,button,tRole)
         HealBot_setTestCols[index]=true
     end
     bar.txt = _G[bar:GetName().."_text"];
+    bar.txt2 = _G[bar:GetName().."_text2"];
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-            bar.txt:SetText(button.unit.." 100K");
+            bar.txt2:SetText("10K");
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
-            bar.txt:SetText(button.unit.." (0)");
+            bar.txt2:SetText("(0)");
         else
-            bar.txt:SetText(button.unit.." (100%)");
+            bar.txt2:SetText("(100%)");
         end
-    else
-        bar.txt:SetText(button.unit)
     end
+    bar.txt:SetText(button.unit)
     bar.txt:SetTextColor(HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"]);
+    bar.txt2:SetTextColor(HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"]);
     button:Show()
 end
 

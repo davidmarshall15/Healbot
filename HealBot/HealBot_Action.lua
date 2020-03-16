@@ -656,8 +656,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             button.aura.check=true
             HealBot_Action_Refresh(button)
             button.health.updhealth=true
-            button.health.nameupdate=true
-            button.text.healthupdate=true
+            button.health.update=true
             ripHasRes[button.id]=nil
         elseif UnitHasIncomingResurrection(button.unit) then
             if not ripHasRes[button.id] then
@@ -673,7 +672,6 @@ function HealBot_Action_UpdateTheDeadButton(button)
         button.health.updincoming=true
         button.health.updabsorbs=true
         HealBot_OnEvent_UnitHealth(button)
-        button.text.healthupdate=true
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==1 then
             ripBar = _G["HealBot_Action_HealUnit"..button.id.."Bar5"]
             ripBar:SetStatusBarColor(1,0,0,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BA"]);
@@ -2334,7 +2332,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
         if not HealBot_ResetBarSkinDone[tSetHealButton.id] then
             HealBot_Skins_ResetSkin("bar",tSetHealButton)
             HealBot_ResetBarSkinDone[tSetHealButton.id]=true
-        else
+        elseif hbCurFrame==10 and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
             HealBot_Skins_ResetSkinWidth(tSetHealButton)
         end
         if HealBot_Unit_Button[unit] then

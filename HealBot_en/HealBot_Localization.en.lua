@@ -467,6 +467,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_HIGHLIGHTACTIVEBAR       = "Highlight mouseover"
     HEALBOT_OPTION_HIGHLIGHTTARGETBAR       = "Highlight target"
     HEALBOT_OPTIONS_TESTBARS                = "Test Bars"
+    HEALBOT_OPTIONS_TURNTESTBARSON          = "Turn On"
+    HEALBOT_OPTIONS_TURNTESTBARSOFF         = "Turn Off"
     HEALBOT_OPTION_NUMBARS                  = "Number of Bars"
     HEALBOT_OPTION_NUMTANKS                 = "Number of Tanks"
     HEALBOT_OPTION_NUMMYTARGETS             = "Number of MyTargets"

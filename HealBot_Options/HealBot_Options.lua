@@ -164,6 +164,9 @@ function HealBot_Options_InitVars()
             [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
         }
     end
+    HealBot_Options_UpdateMedia(3)
+    HealBot_Options_UpdateMedia(4)
+    HealBot_Options_UpdateMedia(5)
 end
 
 function HealBot_Options_setLists()
@@ -1598,6 +1601,7 @@ function HealBot_Options_EnemyExistsPlayerTargets_OnClick(self)
     else
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"]=false
     end
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_EnemyExistsArena_OnClick(self)
@@ -1606,6 +1610,7 @@ function HealBot_Options_EnemyExistsArena_OnClick(self)
     else
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"]=false
     end
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_EnemyExistsBosses_OnClick(self)
@@ -1614,6 +1619,7 @@ function HealBot_Options_EnemyExistsBosses_OnClick(self)
     else
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWBOSS"]=false
     end
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_CrashProt_OnClick(self)
@@ -1649,6 +1655,7 @@ function HealBot_Options_AfterCombatOOM_OnClick(self)
     else
         Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"]=false
     end
+    HealBot_Options_framesChanged(true)
 end
 
 function HealBot_Options_CombatProt_OnClick(self)
@@ -1805,11 +1812,11 @@ function HealBot_Options_BarTextureS_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end    
-        if not updatingMedia then
+        --if v>0 then
             HealBot_Options_framesChanged(true)
-            HealBot_setOptions_Timer(160)
-        end
+        --end
         updatingMedia=false;
+        HealBot_setOptions_Timer(160)
     end
 end
 
@@ -1822,6 +1829,7 @@ function HealBot_FrameStickyOffsetHorizontal_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_setOptions_Timer(7000)
+        HealBot_Options_framesChanged(false)
     end
 end
 
@@ -1834,6 +1842,7 @@ function HealBot_FrameStickyOffsetVertical_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_setOptions_Timer(7000)
+        HealBot_Options_framesChanged(false)
     end
 end
 
@@ -1981,9 +1990,9 @@ function HealBot_Options_HeadTextureS_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end  
-        if not updatingMedia then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
         HealBot_setOptions_Timer(160)
     end
@@ -1995,7 +2004,7 @@ function HealBot_Options_SkinFrameAliasTextureS_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        if val > 0 and hb_textures then
+        if val>0 and hb_textures then
             Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"] = hb_textures[val];
             g=_G[self:GetName().."Text"]
             g:SetText(self.text .. " " .. val..": " .. hb_textures[val]);
@@ -2003,9 +2012,9 @@ function HealBot_Options_SkinFrameAliasTextureS_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end  
-        if not updatingMedia then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
         HealBot_setOptions_Timer(160)
         HealBot_setOptions_Timer(415)
@@ -2026,9 +2035,9 @@ function HealBot_Options_HeadFontNameS_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end   
-        if not updatingMedia and  val > 0 then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
         HealBot_setOptions_Timer(160)
     end
@@ -2048,9 +2057,9 @@ function HealBot_BarButtonIconFont_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end   
-        if not updatingMedia and  val > 0 then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
         HealBot_setOptions_Timer(160)
     end
@@ -2110,6 +2119,7 @@ function HealBot_Options_SkinFrameAliasHeightS_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_setOptions_Timer(415)
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -2118,6 +2128,7 @@ function HealBot_Options_SkinFrameAliasWidthS_OnValueChanged(self)
     if Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"]~=val then 
         Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"]=val
         HealBot_setOptions_Timer(415)
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -2220,11 +2231,10 @@ function HealBot_Options_FontName_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end       
-        if not updatingMedia and  val > 0 then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
-        HealBot_Options_framesChanged(true)
         HealBot_setOptions_Timer(160)
     end
 end
@@ -2243,11 +2253,10 @@ function HealBot_Options_HealthFontName_OnValueChanged(self)
             g=_G[self:GetName().."Text"]
             g:SetText(self.text);
         end       
-        if not updatingMedia and  val > 0 then
+        --if val>0 then
             HealBot_Options_framesChanged(true)
-        end
+        --end
         updatingMedia=false;
-        HealBot_Options_framesChanged(true)
         HealBot_setOptions_Timer(160)
     end
 end
@@ -2855,6 +2864,7 @@ function HealBot_Options_StickyFramesSensitivity_OnValueChanged(self)
         self:SetValue(val) 
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYSENSITIVITY"] = val;
+        HealBot_Options_framesChanged(false)
     end
 end
 
@@ -3011,6 +3021,7 @@ function HealBot_Options_ShowPowerCounter_OnClick(self)
     end
     HealBot_setOptions_Timer(50)
     HealBot_Options_Energy()
+    HealBot_Options_framesChanged(true)
 end
 
 function HealBot_Options_Energy()
@@ -3066,6 +3077,7 @@ function HealBot_Options_libUTF8_OnClick(self)
     else
         HealBot_Globals.useUTF8 = false
     end
+    HealBot_setOptions_Timer(85)
 end
 
 function HealBot_Options_UseStickyFrames_OnClick(self)
@@ -3077,6 +3089,7 @@ function HealBot_Options_UseStickyFrames_OnClick(self)
         HealBot_Options_ActionAnchor_SetAlpha(HealBot_Options_StorePrev["FramesSelFrame"])
     end
     HealBot_setOptions_Timer(7000)
+    HealBot_Options_framesChanged(false)
 end
 
 
@@ -3492,7 +3505,11 @@ function HealBot_Options_HealGroups_OnClick(self, id)
     else
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"] = false
     end
-    HealBot_Options_framesChanged(false)
+    if id==1 then
+        HealBot_Options_framesChanged(true)
+    else
+        HealBot_Options_framesChanged(false)
+    end
 end
 
 function HealBot_Options_HealGroupsAllowDups_OnClick(self)
@@ -3501,7 +3518,7 @@ function HealBot_Options_HealGroupsAllowDups_OnClick(self)
     else
         Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]=false
     end
-    HealBot_setOptions_Timer(595)
+    HealBot_Options_framesChanged(true)
 end
 
 function HealBot_Options_HealGroupUp_OnClick(self, id)
@@ -3539,8 +3556,7 @@ function HealBot_Options_SortOutOfRangeLast_OnClick(self)
     else
         Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OORLAST"] = false
     end
-    HealBot_setOptions_Timer(596)
-    HealBot_nextRecalcParty(2)
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_HideBar_OnClick(self)
@@ -3550,22 +3566,6 @@ function HealBot_Options_HideBar_OnClick(self)
         Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HIDEOOR"] = false
     end
     HealBot_Options_framesChanged(false)
-end
-
-function HealBot_Options_HideIncFocus_OnClick(self)
-
-end
-
-function HealBot_Options_HideIncGroup_OnClick(self)
-
-end
-
-function HealBot_Options_HideIncTank_OnClick(self)
-
-end
-
-function HealBot_Options_HideIncMyTargets_OnClick(self)
-
 end
 
 function HealBot_Options_FocusOnlyFriend_OnClick(self)
@@ -8629,7 +8629,7 @@ function HealBot_Options_ShareSkinComplete()
     end
     Healbot_Config_Skins.Current_Skin = hbOptGetSkinName
     HealBot_Config.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
-    HealBot_Check_Skin(hbOptGetSkinName)  
+    HealBot_Skins_Check_Skin(hbOptGetSkinName)  
     HealBot_Options_SetSkins(true);
     HealBot_Options_NewSkin:SetText("")
     hbWarnSharedMedia=false
@@ -12260,7 +12260,7 @@ function HealBot_Options_Init(tabNo)
             HealBot_Options_val_OnLoad(HealBot_Options_NumberTestEnemy,HEALBOT_OPTION_NUMENEMYS,0,10,1)
             HealBot_Options_NumberTestEnemy:SetValue(HealBot_Globals.TestBars["ENEMY"])
             HealBot_Options_NumberTestEnemyText:SetText(HEALBOT_OPTION_NUMENEMYS..": "..HealBot_Globals.TestBars["ENEMY"])
-            HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TESTBARS.." "..HEALBOT_WORD_OFF)
+            HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSON)
             HealBot_Options_TestBarsProfile.initialize = HealBot_Options_TestBarsProfile_DropDown
             UIDropDownMenu_SetText(HealBot_Options_TestBarsProfile, HealBot_Options_TestBarsProfile_List[HealBot_Globals.TestBars["PROFILE"]])
             g=_G["HealBot_Options_TestBarsProfileTxt"]
@@ -12536,7 +12536,7 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_OPTIONS_GROW_DIRECTION)
             g=_G["healbotbarsorientationfontstr"]
             g:SetText(HEALBOT_OPTIONS_BARSORIENTATION)
-            HealBot_Options_val2_OnLoad(HealBot_FrameScale,HEALBOT_OPTIONS_FRAMESCALE,2.5,30,0.5,10)
+            HealBot_Options_val2_OnLoad(HealBot_FrameScale,HEALBOT_OPTIONS_FRAMESCALE,2.5,40,0.5,10,5)
             HealBot_FrameScale:SetValue((Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])*10)
             HealBot_FrameScaleText:SetText(HEALBOT_OPTIONS_FRAMESCALE..": "..Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])
             HealBot_Options_val_OnLoad(HealBot_FrameStickyOffsetHorizontal,HEALBOT_OPTIONS_STICKFRAMEOFFSETH,-10,15,1,2)
@@ -12616,10 +12616,10 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_ShowPowerCounter:SetChecked(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["POWERCNT"])
             HealBot_Options_SetText(HealBot_Options_ShowPowerCounter,HEALBOT_OPTIONS_SHOWPOWERCOUNTER)
             HealBot_Options_BarTextureS:SetValue(texturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]] or 1)
-            HealBot_Options_val_OnLoad(HealBot_Options_BarHeightS,HEALBOT_OPTIONS_SKINHEIGHT,10,80,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_BarHeightS,HEALBOT_OPTIONS_SKINHEIGHT,10,180,1)
             HealBot_Options_BarHeightS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HEIGHT"])
             HealBot_Options_BarHeightSText:SetText(HEALBOT_OPTIONS_SKINHEIGHT..": "..Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HEIGHT"])
-            HealBot_Options_val_OnLoad(HealBot_Options_BarWidthS,HEALBOT_OPTIONS_SKINWIDTH,20,225,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_BarWidthS,HEALBOT_OPTIONS_SKINWIDTH,20,320,1)
             HealBot_Options_BarWidthS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"])
             HealBot_Options_BarWidthSText:SetText(HEALBOT_OPTIONS_SKINWIDTH..": "..Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["WIDTH"])
             HealBot_Options_val_OnLoad(HealBot_Options_BarNumColsS,HEALBOT_OPTIONS_SKINBRSPACE,1,10,1)
@@ -13171,6 +13171,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_NameTextDisAlpha,HEALBOT_OPTIONS_BARALPHADIS,0,1,0.01,0.05)
             HealBot_Options_NameTextDisAlpha:SetValue(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NCDA"]);
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_NameTextDisAlpha)
+            HealBot_Options_NameTextColourDebuff:SetChecked(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NDEBUFF"])
             HealBot_Options_SetText(HealBot_Options_NameTextColourDebuff,HEALBOT_OPTIONS_TEXTCOL_DEBUFF)
             HealBot_Options_ShowNameOnBar:SetChecked(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NAMEONBAR"])
             HealBot_Options_SetText(HealBot_Options_ShowNameOnBar,HEALBOT_OPTIONS_SHOWNAMEONBAR)
@@ -13191,7 +13192,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_UnitDeadTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGRIP"])
             HealBot_Options_OutOfRangeTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGOOR"])
             HealBot_Options_ReserverTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGR"])
-            HealBot_Options_val_OnLoad(HealBot_Options_FontOffset,HEALBOT_OPTIONS_TEXTOFFSET,-25,25,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_FontOffset,HEALBOT_OPTIONS_TEXTOFFSET,-75,75,1)
             HealBot_Options_FontOffset:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"])
             HealBot_Options_FontOffsetText:SetText(HEALBOT_OPTIONS_TEXTOFFSET..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"])
             HealBot_Options_sliderlabels_Init(HealBot_Options_TextAlign,HEALBOT_OPTIONS_TEXTALIGNMENT,1,3,1,1,HEALBOT_OPTIONS_BUTTONLEFT,HEALBOT_OPTIONS_BUTTONRIGHT)
@@ -13221,6 +13222,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_HealthTextDisAlpha,HEALBOT_OPTIONS_BARALPHADIS,0,1,0.01,0.05)
             HealBot_Options_HealthTextDisAlpha:SetValue(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HCDA"]);
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_HealthTextDisAlpha)
+            HealBot_Options_HealthTextColourDebuff:SetChecked(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HDEBUFF"])
             HealBot_Options_SetText(HealBot_Options_HealthTextColourDebuff,HEALBOT_OPTIONS_TEXTCOL_DEBUFF)
             HealBot_Options_ShowHealthOnBar:SetChecked(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHONBAR"])
             HealBot_Options_SetText(HealBot_Options_ShowHealthOnBar,HEALBOT_OPTIONS_SHOWHEALTHONBAR)
@@ -13244,7 +13246,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val_OnLoad(HealBot_Options_HealthFontHeight,HEALBOT_OPTIONS_SKINFHEIGHT,7,18,1)
             HealBot_Options_HealthFontHeight:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HHEIGHT"])
             HealBot_Options_HealthFontHeightText:SetText(HEALBOT_OPTIONS_SKINFHEIGHT..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HHEIGHT"])
-            HealBot_Options_val_OnLoad(HealBot_Options_HealthFontOffset,HEALBOT_OPTIONS_TEXTOFFSET,-25,25,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_HealthFontOffset,HEALBOT_OPTIONS_TEXTOFFSET,-75,75,1)
             HealBot_Options_HealthFontOffset:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET"])
             HealBot_Options_HealthFontOffsetText:SetText(HEALBOT_OPTIONS_TEXTOFFSET..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET"])
             HealBot_Options_sliderlabels_Init(HealBot_Options_HealthTextAlign,HEALBOT_OPTIONS_TEXTALIGNMENT,1,3,1,1,HEALBOT_OPTIONS_BUTTONLEFT,HEALBOT_OPTIONS_BUTTONRIGHT)

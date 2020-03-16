@@ -949,6 +949,12 @@ local function HealBot_Aura_DebuffWarnings(button)
     if HealBot_Config_Cures.SoundDebuffWarning and dbUnitRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
         HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
     end
+    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] then
+        button.text.nameupdate=true
+    end
+    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] then
+        button.text.healthupdate=true
+    end
     HealBot_Action_UpdateDebuffButton(button)
 end
 
@@ -1271,6 +1277,12 @@ function HealBot_Aura_ClearDebuff(button)
 		button.aura.debuff.priority = 99;
         if button.aggro.status>4 then
             HealBot_Action_UpdateAggro(button,false,0,0,"")
+        end
+        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] then
+            button.text.nameupdate=true
+        end
+        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] then
+            button.text.healthupdate=true
         end
         HealBot_Action_UpdateDebuffButton(button)
 	end
