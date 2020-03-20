@@ -3877,6 +3877,7 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
             end
         end
     elseif HealBot_FrameVisible[8] then
+        if not InCombatLockdown() then HealBot_Action_HidePanel(8) end
         HealBot_RecalcParty(3)
     end
     --HealBot_setCall("HealBot_OnEvent_PlayerTargetChanged")
@@ -3948,6 +3949,8 @@ function HealBot_OnEvent_PlayerRegenDisabled()
                     HealBot_Action_ShowPanel(9)
                 end
             end
+        elseif HealBot_FrameVisible[9] then
+            HealBot_Action_HidePanel(9)
         end
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
             if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==1 then
@@ -3959,6 +3962,8 @@ function HealBot_OnEvent_PlayerRegenDisabled()
                     HealBot_Action_ShowPanel(8)
                 end
             end
+        elseif HealBot_FrameVisible[8] then
+            HealBot_Action_HidePanel(8)
         end
         if not HealBot_luVars["hlPlayerBarsIC"] and HealBot_luVars["HighlightTarget"] then
             HealBot_OnEvent_PlayerTargetChanged(false)
@@ -4461,6 +4466,8 @@ function HealBot_InitSpells()
             HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_REVIVAL)]="S"
         elseif HealBot_KnownSpell(HEALBOT_SOOTHING_MIST) then
             HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_SOOTHING_MIST)]="S"
+        elseif HealBot_KnownSpell(HEALBOT_UPLIFT) then
+            HealBot_SmartCast_Spells[GetSpellInfo(HEALBOT_UPLIFT)]="S"
         end
     end
     HealBot_Action_SetrSpell()

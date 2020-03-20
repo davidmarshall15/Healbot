@@ -6564,6 +6564,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_SHACKLE_UNDEAD,
             HEALBOT_PROVOKE,
             HEALBOT_DISABLE,
+            HEALBOT_EXPEL_HARM,
             HEALBOT_SPEAR_HAND_STRIKE,
             HEALBOT_PARALYSIS,
             HEALBOT_HAMMER_OF_JUSTICE,
