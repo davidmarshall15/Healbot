@@ -74,6 +74,7 @@ local HealBot_Options_TestBarsProfile_List={}
 local HealBot_Options_ButtonCastMethod_List={}
 local HealBot_Options_CastButton_List={}
 local HealBot_Options_BarHealthType_List={}
+local HealBot_Options_BarHealthAnchor_List={}
 local HealBot_Options_AbsorbColour_List={}
 local HealBot_Options_BarIncHealColour_List={}
 local HealBot_Options_BarHealthColour_List={}
@@ -370,8 +371,7 @@ function HealBot_Options_setLists()
 
     HealBot_Options_BarIncHealColour_List = {
         HEALBOT_OPTIONS_DONT_SHOW,
-        HEALBOT_OPTIONS_SAME_AS_HLTH_CURRENT,
-        HEALBOT_OPTIONS_SAME_AS_HLTH_FUTURE,
+        HEALBOT_WORD_HEALTH,
         HEALBOT_OPTIONS_FUTURE_HLTH,
         HEALBOT_CLASSES_CUSTOM,
     }
@@ -389,6 +389,14 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_BARHEALTH2,
     }
 
+    HealBot_Options_BarHealthAnchor_List = {
+        HEALBOT_OPTIONS_HLTHTXTANCHOR01,
+        HEALBOT_OPTIONS_HLTHTXTANCHOR02,
+        HEALBOT_OPTIONS_HLTHTXTANCHOR03,
+        HEALBOT_OPTIONS_HLTHTXTANCHOR04,
+        HEALBOT_OPTIONS_HLTHTXTANCHOR05,
+    }
+    
     HealBot_Options_CastButton_List = {
         HEALBOT_OPTIONS_BUTTONLEFT,
         HEALBOT_OPTIONS_BUTTONMIDDLE,
@@ -2359,6 +2367,18 @@ function HealBot_Options_HealthTextAlign_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Alignment[val]);
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HALIGN"] = val;
+        HealBot_Options_framesChanged(true)
+    end
+end
+
+function HealBot_Options_HealthTextHorOffset_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET2"] ~= val then
+        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET2"] = val;
+        local g=_G[self:GetName().."Text"]
+        g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(true)
     end
 end
@@ -4788,6 +4808,28 @@ function HealBot_Options_BarHealthOverHeal_DropDown()
                     end
         info.checked = false;
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OVERHEAL"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+local function HealBot_Options_BarHealthTextPosition_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_BarHealthAnchor_List), 1 do
+        info.text = HealBot_Options_BarHealthAnchor_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_BarHealthTextPosition, HealBot_Options_BarHealthAnchor_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"]])
+                        HealBot_Options_framesChanged(true)
+                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"]==1 then
+                            HealBot_Options_HealthTextHorOffset:Hide()
+                            HealBot_Options_HealthTextAlign:Show()
+                        else
+                            HealBot_Options_HealthTextAlign:Hide()
+                            HealBot_Options_HealthTextHorOffset:Show()
+                        end
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -7400,12 +7442,14 @@ function HealBot_Options_ApplyTab2Frames_OnClick()
                     Healbot_Config_Skins.BarText[s][j]["INCHEALS"]=Healbot_Config_Skins.BarText[s][f]["INCHEALS"]
                     Healbot_Config_Skins.BarText[s][j]["INCABSORBS"]=Healbot_Config_Skins.BarText[s][f]["INCABSORBS"]
                     Healbot_Config_Skins.BarText[s][j]["OVERHEAL"]=Healbot_Config_Skins.BarText[s][f]["OVERHEAL"]
+                    Healbot_Config_Skins.BarText[s][j]["HLTHTXTANCHOR"]=Healbot_Config_Skins.BarText[s][f]["HLTHTXTANCHOR"]
                     Healbot_Config_Skins.BarText[s][j]["NUMFORMAT1"]=Healbot_Config_Skins.BarText[s][f]["NUMFORMAT1"]
                     Healbot_Config_Skins.BarText[s][j]["NUMFORMAT2"]=Healbot_Config_Skins.BarText[s][f]["NUMFORMAT2"]
                     Healbot_Config_Skins.BarText[s][j]["HLTHTYPE"]=Healbot_Config_Skins.BarText[s][f]["HLTHTYPE"]
                     Healbot_Config_Skins.BarText[s][j]["HFONT"]=Healbot_Config_Skins.BarText[s][f]["HFONT"]
                     Healbot_Config_Skins.BarText[s][j]["HHEIGHT"]=Healbot_Config_Skins.BarText[s][f]["HHEIGHT"]
                     Healbot_Config_Skins.BarText[s][j]["HALIGN"]=Healbot_Config_Skins.BarText[s][f]["HALIGN"]
+                    Healbot_Config_Skins.BarText[s][j]["HOFFSET2"]=Healbot_Config_Skins.BarText[s][f]["HOFFSET2"]
                     Healbot_Config_Skins.BarText[s][j]["HOUTLINE"]=Healbot_Config_Skins.BarText[s][f]["HOUTLINE"]
                     Healbot_Config_Skins.BarText[s][j]["HMAXCHARS"]=Healbot_Config_Skins.BarText[s][f]["HMAXCHARS"]
                     Healbot_Config_Skins.BarText[s][j]["HOFFSET"]=Healbot_Config_Skins.BarText[s][f]["HOFFSET"]
@@ -12540,10 +12584,10 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val2_OnLoad(HealBot_FrameScale,HEALBOT_OPTIONS_FRAMESCALE,2.5,40,0.5,10,5)
             HealBot_FrameScale:SetValue((Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])*10)
             HealBot_FrameScaleText:SetText(HEALBOT_OPTIONS_FRAMESCALE..": "..Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SCALE"])
-            HealBot_Options_val_OnLoad(HealBot_FrameStickyOffsetHorizontal,HEALBOT_OPTIONS_STICKFRAMEOFFSETH,-10,15,1,2)
+            HealBot_Options_val_OnLoad(HealBot_FrameStickyOffsetHorizontal,HEALBOT_OPTIONS_STICKFRAMEOFFSETH,-25,25,1,2)
             HealBot_FrameStickyOffsetHorizontal:SetValue(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SFOFFSETH"])
             HealBot_FrameStickyOffsetHorizontalText:SetText(HEALBOT_OPTIONS_STICKFRAMEOFFSETH..": "..Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SFOFFSETH"])
-            HealBot_Options_val_OnLoad(HealBot_FrameStickyOffsetVertical,HEALBOT_OPTIONS_STICKFRAMEOFFSETV,-10,15,1,2)
+            HealBot_Options_val_OnLoad(HealBot_FrameStickyOffsetVertical,HEALBOT_OPTIONS_STICKFRAMEOFFSETV,-25,25,1,2)
             HealBot_FrameStickyOffsetVertical:SetValue(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SFOFFSETV"])
             HealBot_FrameStickyOffsetVerticalText:SetText(HEALBOT_OPTIONS_STICKFRAMEOFFSETV..": "..Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SFOFFSETV"])
             HealBot_Options_SetFrameCols()
@@ -13235,6 +13279,8 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_BarHealthIncAbsorb, HealBot_Options_BarHealthIncAbsorb_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["INCABSORBS"]])
             HealBot_Options_BarHealthOverHeal.initialize = HealBot_Options_BarHealthOverHeal_DropDown
             UIDropDownMenu_SetText(HealBot_Options_BarHealthOverHeal, HealBot_Options_BarHealthOverHeal_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OVERHEAL"]])
+            HealBot_Options_BarHealthTextPosition.initialize = HealBot_Options_BarHealthTextPosition_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_BarHealthTextPosition, HealBot_Options_BarHealthAnchor_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"]])
             HealBot_Options_BarHealthType.initialize = HealBot_Options_BarHealthType_DropDown
             UIDropDownMenu_SetText(HealBot_Options_BarHealthType, HealBot_Options_BarHealthType_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTYPE"]])
             HealBot_Options_BarHealthNumFormat1.initialize = HealBot_Options_BarHealthNumFormat1_DropDown
@@ -13253,6 +13299,9 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_sliderlabels_Init(HealBot_Options_HealthTextAlign,HEALBOT_OPTIONS_TEXTALIGNMENT,1,3,1,1,HEALBOT_OPTIONS_BUTTONLEFT,HEALBOT_OPTIONS_BUTTONRIGHT)
             HealBot_Options_HealthTextAlign:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HALIGN"])
             HealBot_Options_HealthTextAlignText:SetText(HEALBOT_OPTIONS_TEXTALIGNMENT..": "..HealBot_Alignment[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HALIGN"]])
+            HealBot_Options_val_OnLoad(HealBot_Options_HealthTextHorOffset,HEALBOT_OPTIONS_TEXTHOROFFSET,-25,25,1)
+            HealBot_Options_HealthTextHorOffset:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET2"])
+            HealBot_Options_HealthTextHorOffsetText:SetText(HEALBOT_OPTIONS_TEXTHOROFFSET..": "..Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOFFSET2"])
             HealBot_Options_sliderlabels_Init(HealBot_Options_HealthMaxChars,HEALBOT_OPTIONS_MAXCHARS,0,30,1,5,HEALBOT_WORD_AUTO,30)
             HealBot_Options_HealthMaxChars:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HMAXCHARS"])
             g=_G["HealBot_Options_HealthMaxCharsText"]
@@ -13265,7 +13314,13 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_HealthTextOutLine:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOUTLINE"])
             g=_G["HealBot_Options_HealthTextOutLineText"]
             g:SetText(HEALBOT_OPTIONS_SKINFOUTLINE .. ": ".. HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HOUTLINE"]])
-            
+            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HLTHTXTANCHOR"]==1 then
+                HealBot_Options_HealthTextHorOffset:Hide()
+                HealBot_Options_HealthTextAlign:Show()
+            else
+                HealBot_Options_HealthTextAlign:Hide()
+                HealBot_Options_HealthTextHorOffset:Show()
+            end
             DoneInitTab[312]=true
         end
     end

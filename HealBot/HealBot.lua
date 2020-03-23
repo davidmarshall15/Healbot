@@ -80,6 +80,7 @@ HealBot_luVars["TestBarsOn"]=false
 HealBot_luVars["RaidTargetUpdate"]=false
 HealBot_luVars["showReloadMsg"]=true
 HealBot_luVars["overhealUnit"]="-nil-"
+HealBot_luVars["overhealCastID"]="-nil-"
 HealBot_luVars["overhealAmount"]=0
 
 local HealBot_Calls={}
@@ -1920,6 +1921,15 @@ local function HealBot_Update_Skins(forceCheck)
                 if tonumber(tPatch)==0 and tonumber(tHealbot)<3 then
                     HealBot_Update_BuffsForSpec("Buff")
                 end
+                if tonumber(tPatch)==0 and tonumber(tHealbot)<8 then
+                    for x in pairs (Healbot_Config_Skins.Skins) do
+                        for gl=1,10 do
+                            if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IC"]>2 then
+                                Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IC"]=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][gl]["IC"]-1
+                            end
+                        end
+                    end
+                end
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
@@ -2738,10 +2748,6 @@ function HealBot_OnEvent_UnitHealth(button)
         elseif not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
             ebubar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
             bptc=floor((button.health.current/button.health.max)*100)
-            if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then
-                bptc=floor(((button.health.current+button.health.incoming)/button.health.max)*100)
-                if bptc>100 then bptc=100 end
-            end
             if ebubar:GetValue()~=bptc then 
                 HealBot_Action_UpdateHealthButton(button)
             end
@@ -3877,8 +3883,11 @@ function HealBot_OnEvent_PlayerTargetChanged(doRecalc)
             end
         end
     elseif HealBot_FrameVisible[8] then
-        if not InCombatLockdown() then HealBot_Action_HidePanel(8) end
-        HealBot_RecalcParty(3)
+        if not InCombatLockdown() then 
+            HealBot_Action_HidePanel(8) 
+        else
+            HealBot_RecalcParty(3)
+        end
     end
     --HealBot_setCall("HealBot_OnEvent_PlayerTargetChanged")
 end
@@ -4235,6 +4244,13 @@ function HealBot_OnEvent_PlayerEnteringWorld(hbCaller)
             HealBot_Action_HidePanel(8)
         end
     end
+    if HealBot_FrameVisible[9] then
+        if InCombatLockdown() then
+            HealBot_RecalcParty(4)
+        else
+            HealBot_Action_HidePanel(9)
+        end
+    end
 
     if hbCaller=="Event" then HealBot_SetResetFlag("QUICK") end
     
@@ -4308,7 +4324,7 @@ local function HealBot_OnEvent_UnitSpellCastStart(unit)
 end
 
 local uscUnit, uscButton, uscUnitName, uscSpellName=false,false,false,false
-local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,spellRank,spellID)
+local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID)
     uscUnit=false
     uscUnitName = HealBot_UnitNameOnly(unitName)
     uscSpellName = GetSpellInfo(spellID) or spellID
@@ -4331,9 +4347,11 @@ local function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,spellRank,
             _,uscButton,uspButton=HealBot_UnitID(uscUnit)
             if uscButton and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][uscButton.frame]["OVERHEAL"]==2 then
                 HealBot_luVars["overhealUnit"]=uscUnit
+                HealBot_luVars["overhealCastID"]=castGUID
                 HealBot_luVars["overhealAmount"]=0
             elseif uspButton and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][uspButton.frame]["OVERHEAL"]==2 then
                 HealBot_luVars["overhealUnit"]=uscUnit
+                HealBot_luVars["overhealCastID"]=castGUID
                 HealBot_luVars["overhealAmount"]=0
             end
             if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"]>1 then
@@ -4989,7 +5007,7 @@ function HealBot_OnEvent(self, event, ...)
         end
     elseif (event=="UNIT_SPELLCAST_FAILED") or (event=="UNIT_SPELLCAST_INTERRUPTED") 
         or (event=="UNIT_SPELLCAST_STOP") or (event=="UNIT_SPELLCAST_SUCCEEDED") then
-        if arg2==HealBot_Data["PGUID"] and HealBot_luVars["overhealUnit"]~="-nil-" then
+        if arg2==HealBot_luVars["overhealCastID"] then
             _,eButton,ePrivate = HealBot_UnitID(HealBot_luVars["overhealUnit"])
             if eButton and eButton.health.overheal>0 and 
               Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][eButton.frame]["OVERHEAL"]==2 then
@@ -5004,6 +5022,7 @@ function HealBot_OnEvent(self, event, ...)
                 HealBot_Text_SetText(ePrivate)
             end
             HealBot_luVars["overhealUnit"]="-nil-"
+            HealBot_luVars["overhealCastID"]="-nil-"
             HealBot_luVars["overhealAmount"]=0
         end
         if HEALBOT_GAME_VERSION<4 then

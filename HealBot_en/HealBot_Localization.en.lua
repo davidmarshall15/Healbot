@@ -220,10 +220,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Show target information";
     HEALBOT_OPTIONS_SHOWRECTOOLTIP          = "Show heal over time recommendation";
     HEALBOT_TOOLTIP_POSDEFAULT              = "Default location";
-    HEALBOT_TOOLTIP_POSLEFT                 = "Left of Healbot";
-    HEALBOT_TOOLTIP_POSRIGHT                = "Right of Healbot";
-    HEALBOT_TOOLTIP_POSABOVE                = "Above Healbot";
-    HEALBOT_TOOLTIP_POSBELOW                = "Below Healbot";
+    HEALBOT_TOOLTIP_POSLEFT                 = "Left of Frame";
+    HEALBOT_TOOLTIP_POSRIGHT                = "Right of Frame";
+    HEALBOT_TOOLTIP_POSABOVE                = "Above Frame";
+    HEALBOT_TOOLTIP_POSBELOW                = "Below Frame";
     HEALBOT_TOOLTIP_POSCURSOR               = "Next to Cursor";
     HEALBOT_TOOLTIP_RECOMMENDTEXT           = "Heal over time Recommendation";
     HEALBOT_TOOLTIP_NONE                    = "none available";
@@ -282,6 +282,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONOPTTEXT             = "Icon options";
     HEALBOT_OPTIONS_NAMEOPTTEXT             = "Name text options";
     HEALBOT_OPTIONS_HEALTHOPTTEXT           = "Health text options";
+    HEALBOT_OPTIONS_HEALTHTEXTANCHOR        = "Health text anchor";
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
@@ -304,6 +305,12 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DISABLEDBARS            = "Disabled bars when out of combat";
     HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
+    
+    HEALBOT_OPTIONS_HLTHTXTANCHOR01         = "Independent"
+    HEALBOT_OPTIONS_HLTHTXTANCHOR02         = "Right of Name Text"
+    HEALBOT_OPTIONS_HLTHTXTANCHOR03         = "Left of Name Text"
+    HEALBOT_OPTIONS_HLTHTXTANCHOR04         = "Below Name Text"
+    HEALBOT_OPTIONS_HLTHTXTANCHOR05         = "Above Name Text"
 
     HEALBOT_OPTIONS_IGNOREDEBUFF            = "Ignore debuffs:";
     HEALBOT_OPTIONS_IGNOREDEBUFFDURATION    = "Short duration";
@@ -422,6 +429,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Horizontal Alignment"
     HEALBOT_OPTIONS_TEXTOFFSET              = "Vertical Offset"
+    HEALBOT_OPTIONS_TEXTHOROFFSET           = "Horizontal Offset"
     HEALBOT_OPTIONS_MAXCHARS                = "Max Characters"
     HEALBOT_VEHICLE                         = "Vehicle"
     HEALBOT_WORDS_ERROR                     = "Error"

@@ -9146,7 +9146,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_NameTextCustomColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="35" y="8" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9163,7 +9163,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_NameTextAlpha" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-32" />
+                              <AbsDimension x="0" y="-28" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9191,7 +9191,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="40" y="-110" />
+                              <AbsDimension x="40" y="-100" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9595,7 +9595,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_HealthTextCustomColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="35" y="8" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9612,7 +9612,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_HealthTextAlpha" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-32" />
+                              <AbsDimension x="0" y="-28" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9640,7 +9640,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealthTextColour" relativePoint="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="40" y="-110" />
+                              <AbsDimension x="40" y="-90" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9748,6 +9748,33 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHSOHEALS",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <Frame name="HealBot_Options_BarHealthTextPosition" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_BarHealthIncAbsorb" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="50" y="-14" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_BarHealthTextPositiontxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_HEALTHTEXTANCHOR">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativeTo="HealBot_Options_BarHealthTextPosition" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="10" y="2"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 180)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTHLTHANCHOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHLTHANCHOR",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <Slider name="HealBot_Options_HealthFontName" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="320" y="16" />
@@ -9814,6 +9841,23 @@
                           <OnValueChanged>HealBot_Options_HealthTextAlign_OnValueChanged(self)</OnValueChanged>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTALIGN",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTALIGN",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_HealthTextHorOffset" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="170" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealthFontOffset" relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="28" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_HealthTextHorOffset_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTFONTHOFFSET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTFONTHOFFSET",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_Options_HealthMaxChars" inherits="HealBot_Options_SliderTemplate">

@@ -404,13 +404,13 @@ function HealBot_Action_UpdateHealsInButton(button)
          else
             auhiHiPct=1;
         end
-        if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 5) then -- Incoming Heal Bar Colour = "Custom"
+        if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 4) then -- Incoming Heal Bar Colour = "Custom"
             auhiHiR=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IR"]
             auhiHiG=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IG"]
             auhiHiB=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IB"]
-        elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 4) then -- Incoming Heal Bar Colour = "Future Health"
+        elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then -- Incoming Heal Bar Colour = "Future Health"
             HealBot_Action_BarColourPct(button, auhiHiPct)
-            auaHaR, auaHaG = button.health.rcol, button.health.gcol
+            auhiHiR, auhiHiG = button.health.rcol, button.health.gcol
         else
             auhiBar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
             auhiHiR,auhiHiG,auhiHiB = auhiBar:GetStatusBarColor();
@@ -720,14 +720,8 @@ function HealBot_Action_UpdateHealthButton(button)
         auhbBar = _G["HealBot_Action_HealUnit"..button.id.."Bar"]
         if UnitExists(button.unit) then
             auhbHcR,auhbHcG,auhbHcB,auhbHcA,auhbHcT = 0, 0, 0, 0, 0
-            if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then
-                auhbHcT = (button.health.current+button.health.incoming)/button.health.max
-                if auhbHcT > 1 then auhbHcT = 1 end
-                auhbPtc=floor(auhbHcT*1000)
-            else 
-                auhbHcT = button.health.current/button.health.max
-                auhbPtc=floor(auhbHcT*1000)
-            end
+            auhbHcT = button.health.current/button.health.max
+            auhbPtc=floor(auhbHcT*1000)
             HealBot_Action_BarColourPct(button, auhbHcT)
             if button.status.current==9 or (UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit)) then
                 HealBot_Action_UpdateTheDeadButton(button)
@@ -817,13 +811,13 @@ local hacpr, hacpg=1,1
 function HealBot_Action_BarColourPct(button, hlthPct)
     hacpr, hacpg = 1,1
     if hlthPct>=0.98 then 
-        hacpr = 0.0
+        hacpr = 0
     elseif hlthPct<0.98 and hlthPct>=0.65 then 
         hacpr=2.94-(hlthPct*3)
     elseif hlthPct<=0.64 and hlthPct>0.31 then 
         hacpg=(hlthPct-0.31)*3
     elseif hlthPct<=0.31 then 
-        hacpg = 0.0 
+        hacpg = 0
     end
     button.health.rcol=hacpr
     button.health.gcol=hacpg
