@@ -519,7 +519,7 @@
 		</Layers>
         <BarColor r="0.2" g="0.2" b="0.2" a="0"/>
       </StatusBar>
-      <StatusBar name="$parentBar2" inherits="HealBot_StatusBar">
+      <StatusBar name="$parentAux1" inherits="HealBot_StatusBar">
         <Anchors>
           <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
             <Offset>
@@ -532,31 +532,8 @@
             </Offset>
           </Anchor>
         </Anchors>
-      </StatusBar>
-      <StatusBar name="$parentBar3" inherits="HealBot_StatusBar">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-          <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
-            <Offset>
-              <AbsDimension x="0" y="0"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
         <Layers>
           <Layer level="OVERLAY">
-            <FontString name="$parentBar3Txt" inherits="NumberFontNormalSmall">
-                <Anchors>
-                    <Anchor point="BOTTOM">
-                        <Offset>
-                            <AbsDimension x="0" y="0"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
-            </FontString> 
             <Texture name="$parentIcon1" file="Interface\AddOns\HealBot\Images\indicator_red">
               <Size> <AbsDimension x="5" y="5"/> </Size>					
               <Anchors>
@@ -600,16 +577,141 @@
           </Layer>
 		</Layers>
       </StatusBar>
-      <StatusBar name="$parentBar4" inherits="HealBot_StatusBar">
+      <StatusBar name="$parentAux2" inherits="HealBot_StatusBar">
         <Anchors>
           <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
             <Offset>
-              <AbsDimension x="0" y="3"/>
+              <AbsDimension x="0" y="0"/>
             </Offset>
           </Anchor>
           <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
             <Offset>
-              <AbsDimension x="0" y="3"/>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_text" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="BOTTOM">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString> 
+          </Layer>
+		</Layers>
+      </StatusBar>
+      <StatusBar name="$parentAux3" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux4" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux5" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux6" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux7" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux8" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentAux9" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentBar2" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
             </Offset>
           </Anchor>
         </Anchors>
@@ -676,6 +778,20 @@
     </Scripts>
     <Frames>
       <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentBar5" inherits="HealBot_StatusBar">
         <Anchors>
           <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
             <Offset>

@@ -306,11 +306,20 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
     
+    
+    HEALBOT_OPTIONS_POWER                   = "Power"
+    
     HEALBOT_OPTIONS_HLTHTXTANCHOR01         = "Independent"
     HEALBOT_OPTIONS_HLTHTXTANCHOR02         = "Right of Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHOR03         = "Left of Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHOR04         = "Below Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHOR05         = "Above Name Text"
+    
+    HEALBOT_OPTIONS_AUXBARANCHOR            = "Anchor"
+    HEALBOT_OPTIONS_AUXBARANCHOR01          = "Below Health Bar"
+    HEALBOT_OPTIONS_AUXBARANCHOR02          = "Above Health Bar"
+    HEALBOT_OPTIONS_AUXBARANCHOR03          = "Left of Health Bar"
+    HEALBOT_OPTIONS_AUXBARANCHOR04          = "Right of Health Bar"
 
     HEALBOT_OPTIONS_IGNOREDEBUFF            = "Ignore debuffs:";
     HEALBOT_OPTIONS_IGNOREDEBUFFDURATION    = "Short duration";
@@ -430,6 +439,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Horizontal Alignment"
     HEALBOT_OPTIONS_TEXTOFFSET              = "Vertical Offset"
     HEALBOT_OPTIONS_TEXTHOROFFSET           = "Horizontal Offset"
+    HEALBOT_OPTIONS_TXTOFFSET               = "Offset"
+    HEALBOT_OPTIONS_TXTDEPTH                = "Depth"
+    HEALBOT_OPTIONS_TXTSIZE                 = "Size"
     HEALBOT_OPTIONS_MAXCHARS                = "Max Characters"
     HEALBOT_VEHICLE                         = "Vehicle"
     HEALBOT_WORDS_ERROR                     = "Error"
@@ -472,7 +484,7 @@ function HealBot_Lang_enALL()
                     [11] = "[HealBot] - Also see Commands on the General tab in Options",
                   }
                   
-    HEALBOT_OPTION_HIGHLIGHTACTIVEBAR       = "Highlight mouseover"
+    HEALBOT_OPTION_HIGHLIGHTACTIVEBAR       = "Highlight"
     HEALBOT_OPTION_HIGHLIGHTTARGETBAR       = "Highlight target"
     HEALBOT_OPTIONS_TESTBARS                = "Test Bars"
     HEALBOT_OPTIONS_TURNTESTBARSON          = "Turn On"
@@ -497,6 +509,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_INCHEAL                 = "Incoming heals"
     HEALBOT_OPTIONS_INCABSORB               = HEALBOT_classicABSORBHOT.."s"
     HEALBOT_OPTIONS_NOOVERHEALS             = "No overheals"
+    HEALBOT_WORD_OVERHEALS                  = "Overheals"
     HEALBOT_WORD_ARENA                      = "Arena"
     HEALBOT_WORD_BATTLEGROUND               = "Battle Ground"
     HEALBOT_WORD_BG10                       = "BG 10"; 
@@ -599,7 +612,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ALERTAGGROLEVEL1        = "1 - Low threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL2        = "2 - High threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL3        = "3 - Tanking"
-    HEALBOT_OPTIONS_AGGROALERT              = "Bar alert level"
+    HEALBOT_OPTIONS_AGGROALERT              = "Aux bar alert level"
     HEALBOT_OPTIONS_AGGROINDALERT           = "Indicator alert level"
     HEALBOT_OPTIONS_TOOLTIPSHOWHOT          = "Show active monitored HoT details"
     HEALBOT_WORDS_MIN                       = "min"
@@ -623,6 +636,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_HIDE                = "Hide"
     HEALBOT_OPTIONS_TAB_VISIBILITY          = "Visibility"
     HEALBOT_OPTIONS_TAB_AGGRO               = "Aggro"
+    HEALBOT_OPTIONS_TAB_AUX                 = "Aux"
     HEALBOT_OPTIONS_TAB_ICONTEXT            = "Icon text"
     HEALBOT_OPTIONS_TAB_TEXT                = "Text"
     HEALBOT_OPTIONS_AGGRO3COL               = "Aggro bar\ncol"..HEALBOT_enWORD_COLOUR_SUFFIX
@@ -669,6 +683,26 @@ function HealBot_Lang_enALL()
     HEALBOT_COMBATPROT_RAIDNO               = "bars Reserved for Raid"
     HEALBOT_SKIN_CHECK_DONE                 = "Integrity check of skins complete"
     HEALBOT_ALLOW_DUPLICATES                = "Allow Duplicates"
+    HEALBOT_OPTIONS_AUXSETTINGS             = "Auxiliary Bars Settings"
+    HEALBOT_OPTIONS_AUXASSIGN               = "Auxiliary Bars Assignments"
+    HEALBOT_OPTIONS_AUXCONFIG               = "Auxiliary Bar Configuration"
+    HEALBOT_OPTIONS_AUXFLASH                = "Variable Opacity"
+    HEALBOT_WORD_ASSIGNMENT                 = "Assignment:"
+    HEALBOT_OPTIONS_AUXOVERLAP              = "Extend Aux bars size"
+    HEALBOT_OPTIONS_AUXINDCONFIG            = "Individual Bar Configuration"
+    HEALBOT_OPTIONS_AUX1                    = "Aux Bar 1"
+    HEALBOT_OPTIONS_AUX2                    = "Aux Bar 2"
+    HEALBOT_OPTIONS_AUX3                    = "Aux Bar 3"
+    HEALBOT_OPTIONS_AUX4                    = "Aux Bar 4"
+    HEALBOT_OPTIONS_AUX5                    = "Aux Bar 5"
+    HEALBOT_OPTIONS_AUX6                    = "Aux Bar 6"
+    HEALBOT_OPTIONS_AUX7                    = "Aux Bar 7"
+    HEALBOT_OPTIONS_AUX8                    = "Aux Bar 8"
+    HEALBOT_OPTIONS_AUX9                    = "Aux Bar 9"
+    HEALBOT_OPTIONS_FULLAUX                 = "Auxiliary Bar "
+    HEALBOT_OPTIONS_AUXOPACITYTYPE          = "Opacity Type"
+    HEALBOT_OPTIONS_AUXOPACITYTYPE1         = "Fixed"
+    HEALBOT_OPTIONS_AUXOPACITYTYPE2         = "Variable"
 
     HEALBOT_WORD_HEALTH                     = "Health"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
