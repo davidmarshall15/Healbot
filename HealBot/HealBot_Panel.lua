@@ -1519,12 +1519,12 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
             end 
         elseif UnitExists(unit) then
             if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
-                vSubOrderKey = 9+HealBot_UnitGroups[unit] or 1
+                vSubOrderKey = 9+(HealBot_UnitGroups[unit] or 1)
             else
                 vSubOrderKey = HealBot_UnitGroups[unit] or 1
             end
         else
-            vSubOrderKey = 19+HealBot_UnitGroups[unit] or 1
+            vSubOrderKey = 19+(HealBot_UnitGroups[unit] or 1)
         end
     elseif barOrder==4 then
         if unit == "player" then
