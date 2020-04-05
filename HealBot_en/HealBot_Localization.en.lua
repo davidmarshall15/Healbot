@@ -320,6 +320,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXBARANCHOR02          = "Above Health Bar"
     HEALBOT_OPTIONS_AUXBARANCHOR03          = "Left of Health Bar"
     HEALBOT_OPTIONS_AUXBARANCHOR04          = "Right of Health Bar"
+    HEALBOT_OPTIONS_AUXBARANCHOR05          = "Below"
+    HEALBOT_OPTIONS_AUXBARANCHOR06          = "Above"
+    HEALBOT_OPTIONS_AUXBARANCHOR07          = "Left"
+    HEALBOT_OPTIONS_AUXBARANCHOR08          = "Right"
 
     HEALBOT_OPTIONS_IGNOREDEBUFF            = "Ignore debuffs:";
     HEALBOT_OPTIONS_IGNOREDEBUFFDURATION    = "Short duration";
@@ -688,6 +692,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXCONFIG               = "Auxiliary Bar Configuration"
     HEALBOT_OPTIONS_AUXFLASH                = "Variable Opacity"
     HEALBOT_WORD_ASSIGNMENT                 = "Assignment:"
+    HEALBOT_WORD_ANCHOR                     = "Anchor:"
     HEALBOT_OPTIONS_AUXOVERLAP              = "Extend Aux bars size"
     HEALBOT_OPTIONS_AUXINDCONFIG            = "Individual Bar Configuration"
     HEALBOT_OPTIONS_AUX1                    = "Aux Bar 1"

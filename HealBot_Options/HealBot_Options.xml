@@ -8711,7 +8711,7 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-85" />
+                                    <AbsDimension x="0" y="-70" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -8720,7 +8720,7 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-310" />
+                                    <AbsDimension x="0" y="-325" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -8741,7 +8741,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="70" y="-40" />
+                                  <AbsDimension x="70" y="-32" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8768,7 +8768,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="10" y="-135" />
+                                  <AbsDimension x="10" y="-105" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8778,7 +8778,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux1Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux1Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux1Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux1Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8805,7 +8823,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux2Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux2Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux2Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux2Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8832,7 +8868,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux3Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux3Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux3Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux3Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8849,7 +8903,7 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux1Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8859,7 +8913,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux4Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux4Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux4Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux4Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8876,7 +8948,7 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux2Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8886,7 +8958,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux5Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux5Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux5Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux5Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8903,7 +8993,7 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux3Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8913,7 +9003,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux6Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux6Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux6Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux6Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8930,7 +9038,7 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux4Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8940,7 +9048,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux7Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux7Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux7Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux7Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8957,7 +9083,7 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux5Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -8967,7 +9093,25 @@
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux8Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux8Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux8Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux8Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -8984,17 +9128,35 @@
                             <Anchors>
                               <Anchor point="TOP" relativeTo="HealBot_Options_Aux6Assign" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-25" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Layers>
                               <Layer level="BACKGROUND">
-                                <FontString name="HealBot_Aux8Assign_FontStr" text="HEALBOT_OPTIONS_AUX9" inherits="GameFontNormal">
+                                <FontString name="HealBot_Aux9Assign_FontStr" text="HEALBOT_OPTIONS_AUX9" inherits="GameFontNormal">
                                   <Anchors>
                                     <Anchor point="TOP">
                                       <Offset>
-                                        <AbsDimension x="0" y="14" />
+                                        <AbsDimension x="0" y="12" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux9Config_FontStr1" text="HEALBOT_WORD_ANCHOR" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Aux9Assign" relativePoint="BOTTOMLEFT">
+                                      <Offset>
+                                        <AbsDimension x="50" y="4" />
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                                <FontString name="HealBot_Aux9Config_FontStr2" inherits="GameFontNormal">
+                                  <Anchors>
+                                    <Anchor point="LEFT" relativeTo="HealBot_Aux9Config_FontStr1" relativePoint="RIGHT">
+                                      <Offset>
+                                        <AbsDimension x="5" y="0" />
                                       </Offset>
                                     </Anchor>
                                   </Anchors>

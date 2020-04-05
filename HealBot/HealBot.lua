@@ -36,10 +36,10 @@ local HealBot_Player_ButtonCache2={}
 local HealBot_Player_ButtonCache3={}
 local HealBot_ResSpells={}
 HealBot_luVars["TargetUnitID"]="player"
-HealBot_luVars["qaFR"]=50
-HealBot_luVars["qaFR1"]=40
-HealBot_luVars["qaFR2"]=40
-HealBot_luVars["qaFR3"]=40
+HealBot_luVars["qaFR"]=55
+HealBot_luVars["qaFR1"]=55
+HealBot_luVars["qaFR2"]=55
+HealBot_luVars["qaFR3"]=55
 HealBot_luVars["IsSolo"]=true
 HealBot_luVars["MaskAuraDCheck"]=TimeNow
 HealBot_luVars["MaskAuraReCheck"]=false
@@ -1674,32 +1674,32 @@ end
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
         HealBot_Timers["fastUpdateFreq"]=0.064-(0.05-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/20), 3)))
-        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)-0.01
-        if HealBot_luVars["qaFR"]<30 then
-            if HealBot_Timers["barsUpdateFreq"]<0.07 then HealBot_Timers["barsUpdateFreq"]=0.07 end
+        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)+0.01
+        if HealBot_luVars["qaFR"]<28 then
+            if HealBot_Timers["barsUpdateFreq"]<0.1 then HealBot_Timers["barsUpdateFreq"]=0.1 end
             if HealBot_Timers["fastUpdateFreq"]<0.04 then HealBot_Timers["fastUpdateFreq"]=0.04 end
         elseif HealBot_luVars["qaFR"]<40 then
-            if HealBot_Timers["barsUpdateFreq"]<0.06 then HealBot_Timers["barsUpdateFreq"]=0.06 end
+            if HealBot_Timers["barsUpdateFreq"]<0.08 then HealBot_Timers["barsUpdateFreq"]=0.08 end
             if HealBot_Timers["fastUpdateFreq"]<0.03 then HealBot_Timers["fastUpdateFreq"]=0.03 end
-        elseif HealBot_luVars["qaFR"]<50 then
-            if HealBot_Timers["barsUpdateFreq"]<0.05 then HealBot_Timers["barsUpdateFreq"]=0.05 end
+        elseif HealBot_luVars["qaFR"]<57 then
+            if HealBot_Timers["barsUpdateFreq"]<0.07 then HealBot_Timers["barsUpdateFreq"]=0.07 end
             if HealBot_Timers["fastUpdateFreq"]<0.025 then HealBot_Timers["fastUpdateFreq"]=0.025 end
-        elseif HealBot_luVars["qaFR"]<70 then
-            if HealBot_Timers["barsUpdateFreq"]<0.04 then HealBot_Timers["barsUpdateFreq"]=0.04 end
+        elseif HealBot_luVars["qaFR"]<75 then
+            if HealBot_Timers["barsUpdateFreq"]<0.06 then HealBot_Timers["barsUpdateFreq"]=0.06 end
             if HealBot_Timers["fastUpdateFreq"]<0.02 then HealBot_Timers["fastUpdateFreq"]=0.02 end
-        elseif HealBot_luVars["qaFR"]<90 then
-            if HealBot_Timers["barsUpdateFreq"]<0.03 then HealBot_Timers["barsUpdateFreq"]=0.03 end
-        elseif HealBot_luVars["qaFR"]<115 then
-            if HealBot_Timers["barsUpdateFreq"]<0.02 then HealBot_Timers["barsUpdateFreq"]=0.02 end
+        elseif HealBot_luVars["qaFR"]<100 then
+            if HealBot_Timers["barsUpdateFreq"]<0.05 then HealBot_Timers["barsUpdateFreq"]=0.05 end
+        elseif HealBot_luVars["qaFR"]<125 then
+            if HealBot_Timers["barsUpdateFreq"]<0.04 then HealBot_Timers["barsUpdateFreq"]=0.04 end
         end
-        if HealBot_luVars["enTurbo"] and HealBot_luVars["qaFR"]>40 then
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*5)
-        elseif HealBot_luVars["enSlowMo"] then
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
-        else
+        if HealBot_luVars["enTurbo"] and HealBot_luVars["qaFR"]>50 then
             HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*8)
+        elseif HealBot_luVars["enSlowMo"] then
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*20)
+        else
+            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
         end
-        --HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Bars="..HealBot_Timers["barsUpdateFreq"])
+        --HealBot_AddDebug("qaFR="..HealBot_luVars["qaFR"].."  Fast="..HealBot_Timers["fastUpdateFreq"].."  Bars="..HealBot_Timers["barsUpdateFreq"])
     else
         HealBot_Timers["slowUpdateFreq"]=4
         HealBot_Timers["fastUpdateFreq"]=1
@@ -1723,8 +1723,8 @@ local function HealBot_setqaFR()
     HealBot_luVars["qaFR3"]=HealBot_luVars["qaFR2"]
     HealBot_luVars["qaFR2"]=HealBot_luVars["qaFR1"]
     HealBot_luVars["qaFR1"]=GetFramerate()
-    if HealBot_luVars["qaFR1"]>140 then 
-        HealBot_luVars["qaFR1"]=140 
+    if HealBot_luVars["qaFR1"]>150 then 
+        HealBot_luVars["qaFR1"]=150 
     elseif HealBot_luVars["qaFR1"]<25 then
         HealBot_luVars["qaFR1"]=25
     end
@@ -3403,15 +3403,6 @@ local function HealBot_Update_Fast()
     --HealBot_setCall("HealBot_Update_Fast")
 end
 
-function HealBot_UpdateBarNow()
-    TimeNow=GetTime()
-    if HealBot_Timers["barsUpdate"]>(TimeNow+HealBot_Timers["barsUpdateFreq"]) then HealBot_Timers["barsUpdate"]=TimeNow end
-    if HealBot_Data["TIPBUTTON"] and HealBot_Globals.TooltipUpdate then 
-        HealBot_luVars["ouTipUpdate"]=true 
-        if HealBot_luVars["PrevTipTime"]<(TimeNow-0.25) then HealBot_luVars["PrevTipTime"]=TimeNow end
-    end
-end
-
 local auxAlpha={[1]=0.1,[2]=0.1,[3]=0.1,[4]=0.1,[5]=0.1,[6]=0.1,[7]=0.1,[8]=0.1,[9]=0.1,[10]=0.1}
 local HealBot_Aux_Buttons={}
 local HealBot_AuxStatic_Buttons={}
@@ -3462,7 +3453,6 @@ function HealBot_setAuxBar(button, id, value)
         button.aux[id]["A"]=auxAlpha[button.frame]
         button.aux[id]["FLASH"]=true
         HealBot_Aux_Buttons[button.unit]=button
-        HealBot_UpdateBarNow()
     else
         if button.status.enabled then
             button.aux[id]["A"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
@@ -3617,8 +3607,7 @@ function HealBot_OnUpdate(self)
                 HealBot_Action_RefreshTooltip()
             end
             HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
-        end
-        if HealBot_Timers["slowUpdate"]<TimeNow then
+        elseif HealBot_Timers["slowUpdate"]<TimeNow then
             if HealBot_luVars["TestBarsOn"] then
                 HealBot_Timers["slowUpdate"]=TimeNow+(HealBot_Timers["fastUpdateFreq"]*0.5)
             else

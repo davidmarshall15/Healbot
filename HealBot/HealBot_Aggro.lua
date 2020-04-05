@@ -142,7 +142,6 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
         if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
                       threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
             HealBot_Aggro_UpdateAggroBar(button)
-            HealBot_UpdateBarNow()
         else
             HealBot_Aggro_ClearAggroBar(button)
         end

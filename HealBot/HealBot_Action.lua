@@ -849,7 +849,6 @@ function HealBot_Action_UpdateHealthButton(button)
                 button.gref["Bar"]:SetValue(auhbPtc)
             else
                 HealBot_Fluid_Buttons[button.unit]=unit
-                HealBot_UpdateBarNow()
             end
         end
         if button.status.current>3 and button.status.current<9 and button.status.range==1 then
@@ -2700,7 +2699,6 @@ function HealBot_Action_HealUnit_OnEnter(self)
     HealBot_Action_ShowDirectionArrow(self)
     if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] and UnitExists(self.unit) then
         HealBot_Data["TIPBUTTON"] = self
-        HealBot_UpdateBarNow()
         if not UnitIsFriend("player",self.unit) then
             HealBot_Data["TIPTYPE"] = "Enemy"
         elseif HealBot_Data["UILOCK"] and HealBot_Globals.DisableToolTipInCombat==false then
@@ -2716,7 +2714,6 @@ function HealBot_Action_HealUnit_OnEnter(self)
     end
     if self and self.frame then HealBot_Action_UpdateHighlightBar(self) end
     HealBot_MountsPets_lastbutton(self)
-    HealBot_UpdateBarNow()
     --HealBot_setCall("HealBot_Action_HealUnit_OnEnter")
    -- SetOverrideBindingClick(HealBot_Action,true,"MOUSEWHEELUP", "HealBot_Action_HealUnit"..self.id,"Button4");
    -- SetOverrideBindingClick(HealBot_Action,true,"MOUSEWHEELDOWN", "HealBot_Action_HealUnit"..self.id,"Button5");
