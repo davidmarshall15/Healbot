@@ -977,12 +977,6 @@ function HealBot_Action_setPowerBars(button, sName)
     --HealBot_setCall("HealBot_Action_setPowerBars")
 end
 
-function HealBot_Action_clearPowerBars(button)
-    table.foreach(hbAuxPowerAssigned[button.frame], function (x,id)
-        HealBot_clearAuxBar(button, id)
-    end)
-end
-
 local hbLowManaTrig={[1] = {[1]=1,[2]=2,[3]=3},
                      [2] = {[1]=1,[2]=2,[3]=3},
                      [3] = {[1]=1,[2]=2,[3]=3},
@@ -2357,18 +2351,13 @@ function HealBot_Action_DeleterCallsUnit(unit)
     HealBot_Action_rCalls[unit]=nil
 end
 
-function HealBot_Action_CealAllAux(button)
-
-end
-
 local function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     dg.unit="nil"
     HealBot_Action_PrepButton(dg)
     HealBot_mark2clearGUID(dg.guid)
     HealBot_Aura_RemoveIcons(dg)
-    --HealBot_Action_clearPowerBars(dg)
-    HealBot_Action_CealAllAux(dg)
+    HealBot_clearAllAuxBar(dg)
     HealBot_Aura_delUnitIcons(hbBarID)
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID<HealBot_ActiveButtons[0] then HealBot_ActiveButtons[0]=hbBarID end

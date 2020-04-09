@@ -771,7 +771,10 @@ function HealBot_UpdateUnit(button)
             HealBot_nextRecalcParty(2)
         elseif button.status.unittype==7 then
             HealBot_nextRecalcParty(1)
-        end
+        end        
+        HealBot_ClearUnitAggro(button)
+        HealBot_Aura_RemoveIcons(button)
+        HealBot_clearAllAuxBar(button)
     end
     button.guid=UnitGUID(button.unit)
     button.health.updincoming=true
@@ -795,7 +798,7 @@ function HealBot_UpdateUnit(button)
         if button.status.dirarrowshown then HealBot_Action_HideDirectionArrow(button) end
         HealBot_ClearUnitAggro(button)
         HealBot_Aura_RemoveIcons(button)
-        HealBot_Action_clearPowerBars(button)
+        HealBot_clearAllAuxBar(button)
         button.health.update=true
     end
     HealBot_clearAllAuxBar(button)
