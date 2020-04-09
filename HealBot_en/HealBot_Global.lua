@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.3.0.9.b2";
+﻿HEALBOT_VERSION    = "8.3.0.9";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.4.2.b2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.4.2" end
 
 function HealBot_globalVars()
     --Consumables
@@ -73,6 +73,7 @@ function HealBot_globalVars()
     HEALBOT_TAILWIND                        = 284573 --GetSpellInfo(284573) or "--Tailwind"
     HEALBOT_AMETHYST_OF_THE_SHADOW_KING     = 284558 --GetItemInfo(284558) or "--Amethyst of the Shadow King"
     HEALBOT_SHADOW_TOUCHED                  = 284556 --GetSpellInfo(284556) or "--Shadow-Touched"
+    HEALBOT_INGENIOUS_MANA_BATTERY          = 169344 
     
 
     --Procs

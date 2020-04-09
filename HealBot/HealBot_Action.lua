@@ -562,7 +562,7 @@ function HealBot_Action_setEnabled(button, state)
         button.status.enabled=state
         HealBot_Action_ShowHideFrames(button) 
         HealBot_Text_UpdateButton(button)
-        HealBot_updAuxBar()
+        HealBot_UpdAuxBar(button)
     end
 end
 
@@ -679,19 +679,19 @@ function HealBot_Action_UpdateTheDeadButton(button)
      if button.status.current==9 then
         if not UnitIsDeadOrGhost(button.unit) then
             button.status.current=2
-            button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
-            HealBot_UpdateUnitRange(button,false)
-            HealBot_Action_UpdateBackgroundButton(button)
-            HealBot_Text_setNameTag(button)
-            if UnitIsUnit(button.unit,"player") then 
-                HealBot_Action_ResetActiveUnitStatus() 
-            end
             button.aura.check=true
-            HealBot_Action_Refresh(button)
             button.health.updhealth=true
             button.health.update=true
             ripHasRes[button.id]=nil
             button.text.nameupdate=true
+            button.spells.rangecheck=HealBot_RangeSpells["HEAL"]
+            HealBot_UpdateUnitRange(button,false)
+            HealBot_Action_UpdateBackgroundButton(button)
+            if UnitIsUnit(button.unit,"player") then 
+                HealBot_Action_ResetActiveUnitStatus() 
+            end
+            HealBot_Text_setNameTag(button)
+            HealBot_Action_Refresh(button)
         elseif UnitHasIncomingResurrection(button.unit) then
             if not ripHasRes[button.id] then
                 ripHasRes[button.id]=true
@@ -705,6 +705,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
         button.status.current=9
         button.health.updincoming=true
         button.health.updabsorbs=true
+        button.aura.buff.nextcheck=false
+        button.text.nameupdate=true
         HealBot_OnEvent_UnitHealth(button)
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==1 then
             button.gref["Back"]:SetStatusBarColor(1,0,0,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BA"]);
@@ -735,8 +737,6 @@ function HealBot_Action_UpdateTheDeadButton(button)
         HealBot_Text_setNameTag(button)
         HealBot_clearAllAuxBar(button)
         ripPlayerBuffsList=button.aura.buff.recheck
-        button.aura.buff.nextcheck=false
-        button.text.nameupdate=true
         for name,_ in pairs (ripPlayerBuffsList) do
             ripPlayerBuffsList[name]=nil
         end
@@ -2243,13 +2243,15 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
                 HealBot_BumpThrottleCtl(tSetHealButton)
             end
             tSetHealButton.spells.rangecheck=HealBot_RangeSpells["HEAL"]
-            HealBot_UpdateUnit(tSetHealButton)
+            if unitType<9 then
+                tSetHealButton.status.update=true
+            else
+                HealBot_UpdateUnit(tSetHealButton)
+            end
             if UnitExists(unit) then
                 if UnitIsFriend("player",tSetHealButton.unit) then 
                     HealBot_CheckPlayerMana(tSetHealButton) 
                 end
-                HealBot_UpdateUnitRange(tSetHealButton, false)
-            else
                 tSetHealButton.status.range=-9
             end
         else

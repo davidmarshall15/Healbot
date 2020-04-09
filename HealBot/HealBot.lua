@@ -724,6 +724,7 @@ function HealBot_TestBars(noBars)
 end
 
 local function HealBot_OnEvent_UnitMana(button)
+    button.mana.update=false
     if UnitExists(button.unit) and button.status.unittype < 11 then
         button.mana.current=UnitPower(button.unit)
         button.mana.max=UnitPowerMax(button.unit)
@@ -731,6 +732,14 @@ local function HealBot_OnEvent_UnitMana(button)
         HealBot_Action_setPowerBars(button)
     end
     --HealBot_setCall("HealBot_OnEvent_UnitMana")
+end
+
+local function HealBot_OnEvent_UnitManaUpdate(button, reset)
+    if reset then
+        button.mana.reset=false
+        HealBot_Action_setButtonManaBarCol(button)
+    end
+    button.mana.update=true
 end
 
 local function HealBot_setAllPowerBars()
@@ -776,6 +785,7 @@ function HealBot_UpdateUnit(button)
         HealBot_OnEvent_UnitMana(button);
         if button.status.dirarrowshown then HealBot_Action_ShowDirectionArrow(button) end
         HealBot_Action_CheckUnitLowMana(button)
+        button.mana.reset=true
     else
         if button.status.unittype==7 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
             HealBot_nextRecalcParty(1)
@@ -3038,7 +3048,7 @@ end
 local function HealBot_SetUnitDisconnect(button)
     if UnitIsConnected(button.unit) then
         button.status.offline=false
-    else
+    elseif not button.status.offline then
         button.status.offline=TimeNow
     end
     HealBot_Text_setNameTag(button)
@@ -3068,6 +3078,8 @@ local function HealBot_UnitSlowUpdateFriendly(button)
             button.aura.check=true
             button.aura.buff.nextcheck=false
         end
+    elseif button.mana.update then
+        HealBot_OnEvent_UnitMana(button)
     elseif button.health.current<button.health.max then
         button.health.updhealth=true
         button.health.update=true
@@ -3248,8 +3260,9 @@ local function HealBot_UnitUpdateButton(button)
         if button.status.range<1 or not CheckInteractDistance(button.unit,1) then
             HealBot_UpdateUnitRange(button, true)
         end
-        if button.guid~=UnitGUID(button.unit) or button.status.reserved then 
+        if button.guid~=UnitGUID(button.unit) or button.status.reserved or button.status.update then 
             button.status.reserved=false
+            button.status.update=false
             HealBot_UpdateUnit(button) 
         elseif button.aura.check then
             HealBot_Aura_CheckUnitAuras(button)
@@ -3417,21 +3430,25 @@ local function HealBot_UpdateFluidAuxBarsValue(button, value)
                 local setValue=barValue-HealBot_luVars["FLUIDFREQ"]
                 if setValue<value then
                     setValue=value
+                else
+                    sfabuActive=true
                 end
                 button.gref.aux[x]:SetValue(setValue)
-                sfabuActive=true
             elseif barValue<value then
                 local setValue=barValue+HealBot_luVars["FLUIDFREQ"]
                 if setValue>value then
                     setValue=value
+                else
+                    sfabuActive=true
                 end
                 button.gref.aux[x]:SetValue(setValue)
-                sfabuActive=true
-            else
-                button.aux[x]["FLUID"]=false
             end
         end
     end
+    if not sfabuActive then
+        button.aux[x]["FLUID"]=false
+    end
+    --HealBot_setCall("HealBot_UpdateFluidAuxBarsValue")
     return sfabuActive
 end
 
@@ -3477,15 +3494,15 @@ function HealBot_setAuxBar(button, id, value)
     else
         button.aux[id]["FLUID"]=true
         HealBot_AuxFluid_Buttons[button]=value
-       -- HealBot_AddDebug("HealBot_setAuxBar id="..id)
     end
     button.gref.aux[id]:SetStatusBarColor(button.aux[id]["R"], button.aux[id]["G"], button.aux[id]["B"], button.aux[id]["A"])
+    --HealBot_setCall("HealBot_setAuxBar")
 end
 
 local hbStaticOn=false
-function HealBot_DoUpdAuxBar(button)
+function HealBot_UpdAuxBar(button)
     hbStaticOn=false
-    for x=1,10 do
+    for x=1,9 do
         if button.aux[x]["STATIC"] then
             hbStaticOn=true
             if button.status.enabled then
@@ -3496,14 +3513,9 @@ function HealBot_DoUpdAuxBar(button)
             button.gref.aux[x]:SetStatusBarColor(button.aux[x]["R"], button.aux[x]["G"], button.aux[x]["B"], button.aux[x]["A"])
         end
     end
-    return hbStaticOn
-end
-
-function HealBot_updAuxBar()
-    for xUnit,xButton in pairs(HealBot_AuxStatic_Buttons) do
-        if not HealBot_DoUpdAuxBar(xButton) then
-            HealBot_AuxStatic_Buttons[xUnit]=nil
-        end
+    --HealBot_setCall("HealBot_DoUpdAuxBar")
+    if not hbStaticOn and HealBot_AuxStatic_Buttons[button.unit] then
+        HealBot_AuxStatic_Buttons[button.unit]=nil
     end
 end
 
@@ -3518,6 +3530,7 @@ function HealBot_clearAllAuxBar(button)
     for x=1,9 do
         HealBot_clearAuxBar(button, x)
     end
+    --HealBot_setCall("HealBot_clearAllAuxBar")
 end
 
 function HealBot_resetAllAuxBar()
@@ -3545,6 +3558,7 @@ function HealBot_resetAllAuxBar()
             end
         end
     end
+    --HealBot_setCall("HealBot_resetAllAuxBar")
 end
 
 local hbFlashOn=false
@@ -3556,6 +3570,7 @@ local function HealBot_DoUpdateVariableAuxBars(button)
             hbFlashOn=true
         end
     end
+    --HealBot_setCall("HealBot_DoUpdateVariableAuxBars")
     return hbFlashOn
 end
 
@@ -3777,12 +3792,16 @@ end
 
 function HealBot_Register_Mana()
     HealBot:RegisterEvent("UNIT_POWER_UPDATE")
+    HealBot:RegisterEvent("UNIT_POWER_FREQUENT")
+    HealBot:RegisterEvent("UNIT_DISPLAYPOWER")
     HealBot:RegisterEvent("UNIT_MAXPOWER")
     --HealBot_setCall("HealBot_Register_Mana")
 end
 
 function HealBot_UnRegister_Mana()
     HealBot:UnregisterEvent("UNIT_POWER_UPDATE")
+    HealBot:UnregisterEvent("UNIT_POWER_FREQUENT")
+    HealBot:UnregisterEvent("UNIT_DISPLAYPOWER")
     HealBot:UnregisterEvent("UNIT_MAXPOWER")
     --HealBot_setCall("HealBot_UnRegister_Mana")
 end
@@ -3790,7 +3809,7 @@ end
 local ctZ, ctY, ctEnemyUnit=0,0,false
 function HealBot_CalcThreat(button)
     ctZ,ctY,ctEnemyUnit=0,0,false
-    if UnitIsFriend("player",button.unit) then
+    if UnitIsFriend("player",button.unit) and button.status.current<9 then
         if UnitExists(button.unit.."target") and UnitIsEnemy(button.unit, button.unit.."target") then 
             if UnitIsUnit(button.unit, button.unit.."targettarget") then
                 ctZ=100
@@ -4759,7 +4778,13 @@ function HealBot_UpdateUnitRange(button, doRefresh)
         oldRange=button.status.range
         button.status.range=HealBot_UnitInRange(button.unit, button.spells.rangecheck)
         if oldRange~=button.status.range then
-            HealBot_Text_setNameTag(button)
+            if button.status.current==9 then
+                button.text.healthupdate=true
+                button.text.nameupdate=true
+                HealBot_Text_setNameText(button)
+            else
+                HealBot_Text_setNameTag(button)
+            end
             if button.status.range<1 then
                 HealBot_HealsInUpdate(button)
                 HealBot_AbsorbsUpdate(button)
@@ -5221,12 +5246,28 @@ function HealBot_OnEvent(self, event, ...)
         if HealBot_Data["TIPBUTTON"] then
             HealBot_Action_RefreshTooltip();
         end
-    elseif (event=="PLAYER_CONTROL_GAINED") then
-        HealBot_AuraCheck();
     elseif (event=="UNIT_PET") then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
             HealBot_nextRecalcParty(2)
         end
+    elseif (event=="UNIT_POWER_FREQUENT") then
+        _,eButton,ePrivate = HealBot_UnitID(arg1)
+        if eButton then
+            HealBot_OnEvent_UnitManaUpdate(eButton, eButton.mana.reset)
+        end
+        if ePrivate then
+            HealBot_OnEvent_UnitManaUpdate(ePrivate, ePrivate.mana.reset)
+        end
+    elseif (event=="UNIT_DISPLAYPOWER") then
+        _,eButton,ePrivate = HealBot_UnitID(arg1)
+        if eButton then
+            HealBot_OnEvent_UnitManaUpdate(eButton, true)
+        end
+        if ePrivate then
+            HealBot_OnEvent_UnitManaUpdate(ePrivate, true)
+        end
+    elseif (event=="PLAYER_CONTROL_GAINED") then
+        HealBot_AuraCheck();
     elseif (event=="ROLE_CHANGED_INFORM") then
         HealBot_ResetClassIconTexture()
     elseif (event=="UNIT_ENTERED_VEHICLE") then

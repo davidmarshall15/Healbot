@@ -2556,6 +2556,7 @@ local function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
         HealBot_Panel_VehicleChanged()
     end
+    HealBot_Update_FastEveryFrame(4)
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)

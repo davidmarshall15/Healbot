@@ -152,6 +152,7 @@ function HealBot_Options_InitVars()
             HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE,
             HEALBOT_TAILWIND_SAPPHIRE,
             HEALBOT_AMETHYST_OF_THE_SHADOW_KING,
+            HEALBOT_INGENIOUS_MANA_BATTERY,
         };
         HealBot_Debuff_Types = {
             [HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en},

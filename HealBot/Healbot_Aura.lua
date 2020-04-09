@@ -1057,7 +1057,7 @@ function HealBot_Aura_CheckUnitAuras(button)
     uaIsCurrent=false
     HealBot_Aura_luVars["prevIconCount"]=button.icon.debuff.count
     button.icon.debuff.count=0
-    if debuffCheck then
+    if debuffCheck and button.status.current<9 then
         HealBot_Aura_luVars["prevDebuffID"]=button.aura.debuff.id or 0
         HealBot_Aura_luVars["prevDebuffType"]=button.aura.debuff.type or "x"
         button.aura.debuff.type=false
@@ -1137,7 +1137,7 @@ function HealBot_Aura_CheckUnitAuras(button)
     
     if UnitOnTaxi("player") then
         button.aura.buff.nextcheck=TimeNow
-    elseif buffCheck then 
+    elseif buffCheck and button.status.current<9 then 
         uaZ=1
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count
         button.icon.buff.count=0
