@@ -244,7 +244,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.gref.aux[x]:SetStatusBarColor(0,0,0,0)
             end
         end
-
+        
         b.gref.txt["text"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
                         btextheight,
                         HealBot_Font_Outline[btextoutline]);
@@ -354,6 +354,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         button.gref.indicator.aggro["Iconar1"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+        button.gref.indicator.mana["Icontm1"]:SetAlpha(0)
+        button.gref.indicator.mana["Icontm2"]:SetAlpha(0)
+        button.gref.indicator.mana["Icontm3"]:SetAlpha(0)
         for x=1,5 do
             button.gref.indicator.power[x]:SetAlpha(0);
         end

@@ -953,6 +953,11 @@ local function HealBot_Panel_SetupBars()
             bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
             bar.txt:SetText(HEALBOT_ACTION_OPTIONS);
             bar:UnregisterAllEvents()
+            bar = _G[vSetupBarsOptionsFrame:GetName().."Bar5"]
+            bar:SetStatusBarColor(0.1,0.1,0.4,0);
+            bar:SetMinMaxValues(0,100);
+            bar:SetValue(0);
+            bar:UnregisterAllEvents()
         elseif vSetupBarsOptionsFrame.frame~=vSetupBarsFrame then
             vSetupBarsOptionsFrame:Hide()
             vSetupBarsOptionsFrame:ClearAllPoints()

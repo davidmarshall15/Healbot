@@ -749,7 +749,7 @@ end
 local HealBot_Fluid_Buttons={}
 local aufbPct,aufbActive=1000,false
 function HealBot_Action_UpdateFluidBar()
-    aufbPct,aufbActive=1000,false
+    aufbActive=false
     for xUnit,xButton in pairs(HealBot_Fluid_Buttons) do
         if xButton.status.current==9 then
             xButton.gref["Bar"]:SetValue(0)
@@ -757,6 +757,8 @@ function HealBot_Action_UpdateFluidBar()
         else
             if xButton.health.current<xButton.health.max then
                 aufbPct=floor((xButton.health.current/xButton.health.max)*1000)
+            else
+                aufbPct=1000
             end
             local barValue=xButton.gref["Bar"]:GetValue()
             if barValue>aufbPct then
@@ -848,7 +850,7 @@ function HealBot_Action_UpdateHealthButton(button)
             if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
                 button.gref["Bar"]:SetValue(auhbPtc)
             else
-                HealBot_Fluid_Buttons[button.unit]=unit
+                HealBot_Fluid_Buttons[button.unit]=button
             end
         end
         if button.status.current>3 and button.status.current<9 and button.status.range==1 then
@@ -2703,7 +2705,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
         end
         HealBot_Action_RefreshTooltip();
     end
-    if self and self.frame then HealBot_Action_UpdateHighlightBar(self) end
+    if self and self.aux then HealBot_Action_UpdateHighlightBar(self) end
     HealBot_MountsPets_lastbutton(self)
     --HealBot_setCall("HealBot_Action_HealUnit_OnEnter")
    -- SetOverrideBindingClick(HealBot_Action,true,"MOUSEWHEELUP", "HealBot_Action_HealUnit"..self.id,"Button4");
@@ -2715,7 +2717,7 @@ function HealBot_Action_HealUnit_OnLeave(self)
     if self.status and self.status.dirarrowshown and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
         HealBot_Action_HideDirectionArrow(self)
     end
-    if self and self.frame then HealBot_Action_ClearHighlightBar(self) end
+    if self and self.aux then HealBot_Action_ClearHighlightBar(self) end
     HealBot_MountsPets_lastbutton(false)
    -- ClearOverrideBindings(HealBot_Action)
 end

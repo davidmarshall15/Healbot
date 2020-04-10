@@ -77,6 +77,7 @@ local HealBot_Options_EmoteGreet_List={}
 local HealBot_Options_EmoteOther_List={}
 local HealBot_Options_EmoteRespect_List={}
 local HealBot_Options_EmoteUnhappy_List={}
+local HealBot_Options_ExtraSkinsCat_List={}
 local HealBot_Options_TestBarsProfile_List={}
 local HealBot_Options_ButtonCastMethod_List={}
 local HealBot_Options_CastButton_List={}
@@ -439,6 +440,12 @@ function HealBot_Options_setLists()
         HEALBOT_WORDS_SMALL,
         HEALBOT_WORDS_MEDIUM,
         HEALBOT_WORDS_LARGE,
+    }
+        
+    HealBot_Options_ExtraSkinsCat_List = {
+        HEALBOT_EXTRASKINS_CAT_GROUP,
+        HEALBOT_EXTRASKINS_CAT_SRAID,
+        HEALBOT_EXTRASKINS_CAT_LRAID,
     }
     
     HealBot_Options_EmoteCat_List = {
@@ -2949,8 +2956,8 @@ function HealBot_Options_StickyFramesSensitivity_OnValueChanged(self)
 end
 
 function HealBot_Options_BarFreq_setVars()
-    HealBot_Action_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*7))
-    HealBot_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*7))
+    HealBot_Action_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*5))
+    HealBot_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*5))
 end
 
 function HealBot_Options_BarFreq_OnValueChanged(self)
@@ -8488,6 +8495,57 @@ function HealBot_Options_InOutSkin_DropDown()
     end
 end
 
+function HealBot_Options_ExtraSkins_DropDown(self, level, menuList)
+    local info = UIDropDownMenu_CreateInfo()
+    if level == 1 then
+        for j=1, getn(HealBot_Options_ExtraSkinsCat_List), 1 do
+            info.text = HealBot_Options_ExtraSkinsCat_List[j];
+            info.hasArrow = true
+            info.menuList = HealBot_Options_ExtraSkinsCat_List[j], true, HealBot_Options_ExtraSkinsCat_List[j]
+            UIDropDownMenu_AddButton(info)
+        end
+    elseif menuList == HEALBOT_EXTRASKINS_CAT_GROUP then
+        local skinlist=HealBot_ExtraSkins_retNamesForCat("GROUP")
+        for j=1, getn(skinlist), 1 do
+            info.text = skinlist[j];
+            info.func = function(self)
+                        HealBot_Options_StorePrev["ExtraSkins"]=skinlist[j]
+                        HealBot_ExtraSkins_copyData(skinlist[j])
+                        UIDropDownMenu_SetText(HealBot_Options_ExtraSkins, skinlist[j])
+                    end
+            info.checked = false;
+            if HealBot_Options_StorePrev["ExtraSkins"] == skinlist[j] then info.checked = true; end
+            UIDropDownMenu_AddButton(info, level);
+        end
+    elseif menuList == HEALBOT_EXTRASKINS_CAT_SRAID then
+        local skinlist=HealBot_ExtraSkins_retNamesForCat("SMALL-RAID")
+        for j=1, getn(skinlist), 1 do
+            info.text = skinlist[j];
+            info.func = function(self)
+                        HealBot_Options_StorePrev["ExtraSkins"]=skinlist[j]
+                        HealBot_ExtraSkins_copyData(skinlist[j])
+                        UIDropDownMenu_SetText(HealBot_Options_ExtraSkins, skinlist[j])
+                    end
+            info.checked = false;
+            if HealBot_Options_StorePrev["ExtraSkins"] == skinlist[j] then info.checked = true; end
+            UIDropDownMenu_AddButton(info, level);
+        end
+    elseif menuList == HEALBOT_EXTRASKINS_CAT_LRAID then
+        local skinlist=HealBot_ExtraSkins_retNamesForCat("LARGE-RAID")
+        for j=1, getn(skinlist), 1 do
+            info.text = skinlist[j];
+            info.func = function(self)
+                        HealBot_Options_StorePrev["ExtraSkins"]=skinlist[j]
+                        HealBot_ExtraSkins_copyData(skinlist[j])
+                        UIDropDownMenu_SetText(HealBot_Options_ExtraSkins, skinlist[j])
+                    end
+            info.checked = false;
+            if HealBot_Options_StorePrev["ExtraSkins"] == skinlist[j] then info.checked = true; end
+            UIDropDownMenu_AddButton(info, level);
+        end
+    end
+end
+
 HealBot_Options_StorePrev["InMethodSpell"]=2
 function HealBot_Options_ImportMethodSpells_DropDown()
     local info = UIDropDownMenu_CreateInfo()
@@ -12579,6 +12637,7 @@ function HealBot_Options_Init(tabNo)
             HealBot_Options_LoadCDebuffb:SetText(HEALBOT_OPTIONS_BUTTONIMPORT)
             HealBot_Options_ImportMethodCDebufft:SetText(HEALBOT_OPTIONS_BUTTONIMPORTMETHOD)
             --HealBot_Options_ImportMethodBuffs:SetText(HEALBOT_OPTIONS_BUTTONIMPORTMETHOD)
+            HealBot_Options_InitSub(901)
             DoneInitTab[9]=true
         end
     elseif tabNo==1 then
@@ -13297,7 +13356,7 @@ function HealBot_Options_InitSub1(subNo)
             g:SetText(HEALBOT_SKIN_BORDERTEXT)
             DoneInitTab[303]=true
         end
-    elseif subNo==304 then -- Always run
+    elseif subNo==304 then  -- Always run
         HealBot_Options_InOutSkin.initialize = HealBot_Options_InOutSkin_DropDown
         UIDropDownMenu_SetText(HealBot_Options_InOutSkin, Healbot_Config_Skins.Skins[HealBot_Options_StorePrev["InOutSkin"]])
     elseif subNo==305 then
@@ -14178,7 +14237,14 @@ function HealBot_Options_InitSub2(subNo)
             UIDropDownMenu_SetText(HealBot_Options_ImportMethodBuffs, HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodBuff"]])
             HealBot_Options_ImportMethodSpells.initialize = HealBot_Options_ImportMethodSpells_DropDown
             UIDropDownMenu_SetText(HealBot_Options_ImportMethodSpells, HealBot_Import_Methods_List[HealBot_Options_StorePrev["InMethodSpell"]])
-            
+            local loaded = nil
+            loaded = LoadAddOn("HealBot_ExtraSkins")
+            if loaded then
+                HealBot_Options_ExtraSkins.initialize = HealBot_Options_ExtraSkins_DropDown
+            else
+                HealBot_Options_ExtraSkins:Hide()
+            end
+            DoneInitTab[901]=true
         end
     end
 end
@@ -14973,6 +15039,20 @@ function HealBot_Options_Show_Help(index,show)
     if HealBot_Data["TIPUSE"] then
         if show then
             HealBot_Tooltip_OptionsHelp(HEALBOT_OPTIONS_HELP_TITLES[index],HEALBOT_OPTIONS_HELP_TEXT[index])
+        else
+            HealBot_Tooltip_OptionsHide()
+        end
+    end
+end
+
+function HealBot_Options_Show_ExtraSkinsHelp(index,show)
+    if HealBot_Data["TIPUSE"] then
+        if show then
+            if HealBot_Options_StorePrev["ExtraSkins"] then
+                HealBot_Tooltip_OptionsHelp(HealBot_Options_StorePrev["ExtraSkins"],HealBot_ExtraSkins_retDesc(HealBot_Options_StorePrev["ExtraSkins"]))
+            else
+                HealBot_Tooltip_OptionsHelp(HEALBOT_OPTIONS_HELP_TITLES[index],HEALBOT_OPTIONS_HELP_TEXT[index])
+            end
         else
             HealBot_Tooltip_OptionsHide()
         end

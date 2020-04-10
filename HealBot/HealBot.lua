@@ -82,7 +82,7 @@ HealBot_luVars["showReloadMsg"]=true
 HealBot_luVars["overhealUnit"]="-nil-"
 HealBot_luVars["overhealCastID"]="-nil-"
 HealBot_luVars["overhealAmount"]=0
-HealBot_luVars["FLUIDFREQ"]=50
+HealBot_luVars["FLUIDFREQ"]=20
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -1687,22 +1687,20 @@ end
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
         HealBot_Timers["fastUpdateFreq"]=0.064-(0.05-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/20), 3)))
-        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)+0.01
+        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)
         if HealBot_luVars["qaFR"]<28 then
             if HealBot_Timers["barsUpdateFreq"]<0.1 then HealBot_Timers["barsUpdateFreq"]=0.1 end
             if HealBot_Timers["fastUpdateFreq"]<0.04 then HealBot_Timers["fastUpdateFreq"]=0.04 end
         elseif HealBot_luVars["qaFR"]<40 then
-            if HealBot_Timers["barsUpdateFreq"]<0.08 then HealBot_Timers["barsUpdateFreq"]=0.08 end
+            if HealBot_Timers["barsUpdateFreq"]<0.07 then HealBot_Timers["barsUpdateFreq"]=0.07 end
             if HealBot_Timers["fastUpdateFreq"]<0.03 then HealBot_Timers["fastUpdateFreq"]=0.03 end
         elseif HealBot_luVars["qaFR"]<57 then
-            if HealBot_Timers["barsUpdateFreq"]<0.07 then HealBot_Timers["barsUpdateFreq"]=0.07 end
+            if HealBot_Timers["barsUpdateFreq"]<0.06 then HealBot_Timers["barsUpdateFreq"]=0.06 end
             if HealBot_Timers["fastUpdateFreq"]<0.025 then HealBot_Timers["fastUpdateFreq"]=0.025 end
         elseif HealBot_luVars["qaFR"]<75 then
-            if HealBot_Timers["barsUpdateFreq"]<0.06 then HealBot_Timers["barsUpdateFreq"]=0.06 end
+            if HealBot_Timers["barsUpdateFreq"]<0.05 then HealBot_Timers["barsUpdateFreq"]=0.05 end
             if HealBot_Timers["fastUpdateFreq"]<0.02 then HealBot_Timers["fastUpdateFreq"]=0.02 end
         elseif HealBot_luVars["qaFR"]<100 then
-            if HealBot_Timers["barsUpdateFreq"]<0.05 then HealBot_Timers["barsUpdateFreq"]=0.05 end
-        elseif HealBot_luVars["qaFR"]<125 then
             if HealBot_Timers["barsUpdateFreq"]<0.04 then HealBot_Timers["barsUpdateFreq"]=0.04 end
         end
         if HealBot_luVars["enTurbo"] and HealBot_luVars["qaFR"]>50 then
@@ -3431,25 +3429,18 @@ local function HealBot_UpdateFluidAuxBarsValue(button, value)
             local barValue=button.gref.aux[x]:GetValue()
             if barValue>value then
                 local setValue=barValue-HealBot_luVars["FLUIDFREQ"]
-                if setValue<value then
-                    setValue=value
-                else
-                    sfabuActive=true
-                end
+                if setValue<value then setValue=value end
+                sfabuActive=true
                 button.gref.aux[x]:SetValue(setValue)
             elseif barValue<value then
                 local setValue=barValue+HealBot_luVars["FLUIDFREQ"]
-                if setValue>value then
-                    setValue=value
-                else
-                    sfabuActive=true
-                end
+                if setValue>value then setValue=value end
+                sfabuActive=true
                 button.gref.aux[x]:SetValue(setValue)
+            else
+                button.aux[x]["FLUID"]=false
             end
         end
-    end
-    if not sfabuActive then
-        button.aux[x]["FLUID"]=false
     end
     --HealBot_setCall("HealBot_UpdateFluidAuxBarsValue")
     return sfabuActive

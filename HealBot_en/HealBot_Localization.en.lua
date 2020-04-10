@@ -553,6 +553,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ACCEPTSKINMSG           = "Accept [HealBot] Skin: "
     HEALBOT_OPTIONS_ACCEPTSKINMSGFROM       = " from "
     HEALBOT_OPTIONS_EXPORTSKIN              = "Select Skin"
+    HEALBOT_OPTIONS_EXTRASKINS              = "Extra Skins"
     HEALBOT_OPTIONS_BUTTONEXPORT            = "Export"
     HEALBOT_OPTIONS_BUTTONIMPORT            = "Import"
     HEALBOT_OPTIONS_BUTTONIMPORTMETHOD      = "Import Method"
@@ -754,7 +755,10 @@ function HealBot_Lang_enALL()
     HEALBOT_RANDOMGOUNDMOUNT                = "Random Ground Mount"
     HEALBOT_RANDOMPET                       = "Random Pet"
     HEALBOT_RANDOMFAVMOUNT                  = "Random Favorite Mount"
-    HEALBOT_RANDOMFAVPET                    = "Random Favorite Pet"
+    HEALBOT_RANDOMFAVPET                    = "Random Favorite Pet"        
+    HEALBOT_EXTRASKINS_CAT_GROUP            = "Group"
+    HEALBOT_EXTRASKINS_CAT_SRAID            = "Small Raid"
+    HEALBOT_EXTRASKINS_CAT_LRAID            = "Large Raid"
     HEALBOT_EMOTE                           = "Emote"
     HEALBOT_EMOTE_CAT_COMBAT                = "Combat"
     HEALBOT_EMOTE_CAT_EMOTION               = "Emotion"
@@ -1066,7 +1070,7 @@ function HealBot_Lang_enALL()
                                   }
 
     HEALBOT_OPTIONS_SKINAUTHOR              = "Skin Author"
-    HEALBOT_OPTIONS_MORESKINSURL            = "Additional skins are available at  "..HEALBOT_ABOUT_URL
+    HEALBOT_OPTIONS_MORESKINSURL            = "Extra skins are available on the Import/Export > Skins tab"
     HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Avoid\nBlue Cursor"
     HEALBOT_PLAYER_OF_REALM                 = "of"
     

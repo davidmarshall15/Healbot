@@ -935,6 +935,7 @@ local function HealBot_Aura_BuffWarnings(button)
     --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
 
+local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
 local function HealBot_Aura_UpdateAuraDebuffBars(button)
     if button and button.frame then
         table.foreach(hbAuxDebuffAssigned[button.frame], function (x,id)
@@ -943,6 +944,14 @@ local function HealBot_Aura_UpdateAuraDebuffBars(button)
                     button.aux[id]["R"]=HealBot_Globals.CDCBarColour[button.aura.debuff.id].R
                     button.aux[id]["G"]=HealBot_Globals.CDCBarColour[button.aura.debuff.id].G
                     button.aux[id]["B"]=HealBot_Globals.CDCBarColour[button.aura.debuff.id].B
+                elseif button.aura.debuff.type == HEALBOT_CUSTOM_en then
+                    button.aux[id]["R"]=HealBot_Globals.CDCBarColour[customDebuffPriority].R
+                    button.aux[id]["G"]=HealBot_Globals.CDCBarColour[customDebuffPriority].G
+                    button.aux[id]["B"]=HealBot_Globals.CDCBarColour[customDebuffPriority].B
+                elseif HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type] then
+                    button.aux[id]["R"]=HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R
+                    button.aux[id]["G"]=HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G
+                    button.aux[id]["B"]=HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B
                 else
                     button.aux[id]["R"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["R"]
                     button.aux[id]["G"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["G"]
@@ -961,7 +970,6 @@ local function HealBot_Aura_ClearAuraDebuffBars(button)
 end
 
 local dbUnitRange=0
-local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
 local function HealBot_Aura_DebuffWarnings(button)
     if button.aura.debuff.type~=HEALBOT_CUSTOM_en and button.status.current<9  then 
         button.spells.rangecheck=HealBot_Action_dSpell() 
