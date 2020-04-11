@@ -738,7 +738,7 @@ local function HealBot_Aura_CheckCurDebuff(button)
     spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever=0, true, 20, false, uaDebuffType, false, false
     if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
         spellCD=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType)
-        if spellCD>1.5 then
+        if spellCD>2.0 then
             HealBot_Aura_luVars["prevDebuffID"]=0
             if spellCD<12 and HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then 
                 HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-0.249
@@ -878,7 +878,7 @@ local function HealBot_Aura_UpdateAuraBuffBars(button)
                 button.aux[id]["B"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["B"]
             end
         end
-        HealBot_setAuxBar(button, id, 1000)
+        HealBot_setAuxBar(button, id, 1000, false)
     end)
 end
 
@@ -930,7 +930,11 @@ local function HealBot_Aura_BuffWarnings(button)
             end
         end
     end
-    HealBot_Aura_UpdateAuraBuffBars(button)
+    if button.status.range>-1 then 
+        HealBot_Aura_UpdateAuraBuffBars(button) 
+    else
+        HealBot_Aura_ClearAuraBuffBars(button)
+    end
     HealBot_Action_UpdateDebuffButton(button)
     --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
@@ -958,7 +962,7 @@ local function HealBot_Aura_UpdateAuraDebuffBars(button)
                     button.aux[id]["B"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["B"]
                 end
             end
-            HealBot_setAuxBar(button, id, 1000)
+            HealBot_setAuxBar(button, id, 1000, false)
         end)
     end
 end
@@ -978,7 +982,11 @@ local function HealBot_Aura_DebuffWarnings(button)
     else
         dbUnitRange=HealBot_UnitInRange(button.unit, HealBot_Action_dSpell())
     end
-    HealBot_Aura_UpdateAuraDebuffBars(button)
+    if button.status.range>-1 then 
+        HealBot_Aura_UpdateAuraDebuffBars(button) 
+    else
+        HealBot_Aura_ClearAuraDebuffBars(button)
+    end
     if HealBot_Config_Cures.ShowDebuffWarning and dbUnitRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
         if HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
             UIErrorsFrame:AddMessage(HealBot_GetUnitName(button.unit, button.guid).." suffers from "..button.aura.debuff.name, 

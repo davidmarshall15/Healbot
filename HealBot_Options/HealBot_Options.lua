@@ -1285,7 +1285,7 @@ function HealBot_Options_retDebuffWatchTargetCD(debuffType)
     hbDebuffSpellRemain=0
     if HealBot_DebuffSpell[debuffType] then
         hbDebuffSpellStart, hbDebuffSpellDuration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
-        if hbDebuffSpellStart and hbDebuffSpellDuration and hbDebuffSpellDuration>1 then 
+        if hbDebuffSpellStart>0 and hbDebuffSpellDuration>1 then 
             hbDebuffSpellRemain = hbDebuffSpellDuration-(GetTime()-hbDebuffSpellStart)
         end
     end

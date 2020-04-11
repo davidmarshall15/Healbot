@@ -90,7 +90,7 @@ local function HealBot_Aggro_UpdateThreatBar(button)
             button.aux[id]["G"]=1
             button.aux[id]["B"]=0.2
         end
-        HealBot_setAuxBar(button, id, button.aggro.threatpct*10)
+        HealBot_setAuxBar(button, id, button.aggro.threatpct*10, true)
     end)
 end
 
@@ -107,7 +107,7 @@ local function HealBot_Aggro_UpdateAggroBar(button)
             button.aux[id]["G"]=0
             button.aux[id]["B"]=0
         end
-        HealBot_setAuxBar(button, id, 1000)
+        HealBot_setAuxBar(button, id, 1000, false)
     end)
 end
 

@@ -416,7 +416,7 @@ local function HealBot_Action_UpdateAuxAbsorbBar(button, r, g, b, value)
             button.aux[id]["G"]=g
             button.aux[id]["B"]=b
         end
-        HealBot_setAuxBar(button, id, value)
+        HealBot_setAuxBar(button, id, value, true)
     end)
 end
 
@@ -433,7 +433,7 @@ local function HealBot_Action_UpdateAuxHealInBar(button, r, g, b, value)
             button.aux[id]["G"]=g
             button.aux[id]["B"]=b
         end
-        HealBot_setAuxBar(button, id, value)
+        HealBot_setAuxBar(button, id, value, true)
     end)
 end
 
@@ -923,7 +923,7 @@ local vPowerBarInfo={}
 local vPowerBarType,vPowerBarToken,vPowerBarR,vPowerBarG,vPowerBarB=0,"MANA",0,0,0
 local function HealBot_Action_GetManaBarCol(button)
     vPowerBarType, vPowerBarToken, vPowerBarR, vPowerBarG, vPowerBarB=UnitPowerType(button.unit);
-    button.mana.type=vPowerBarType
+    if vPowerBarType then button.mana.type=vPowerBarType end
     vPowerBarInfo=PowerBarColor[vPowerBarToken]
     if vPowerBarInfo then
         return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
@@ -974,7 +974,7 @@ function HealBot_Action_setPowerBars(button, sName)
             button.aux[id]["G"]=button.mana.g
             button.aux[id]["B"]=button.mana.b
         end
-        HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000))
+        HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
     end)
     --HealBot_setCall("HealBot_Action_setPowerBars")
 end
@@ -1024,7 +1024,7 @@ end
 
 local tCheckLowMana={["MPCT"]=0,["MIND"]=0}
 function HealBot_Action_CheckUnitLowMana(button)
-    if button then
+    if button and button.mana.type==0 then
         if UnitExists(button.unit) and button.mana.current>0 and button.mana.max>0 and 
            Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["LOWMANA"]>1 then
             tCheckLowMana["MPCT"]=floor((button.mana.current/button.mana.max)*100)
@@ -1073,6 +1073,11 @@ function HealBot_Action_CheckUnitLowMana(button)
                 button.gref.indicator.mana["Icontm3"]:SetAlpha(0)
             end
         end
+    elseif HealBot_Action_rCalls[button.unit]["manaIndicator"]~="m0" then
+        HealBot_Action_rCalls[button.unit]["manaIndicator"]="m0"
+        button.gref.indicator.mana["Icontm1"]:SetAlpha(0)
+        button.gref.indicator.mana["Icontm2"]:SetAlpha(0)
+        button.gref.indicator.mana["Icontm3"]:SetAlpha(0)
     end
     --HealBot_setCall("HealBot_Action_CheckUnitLowMana")
 end
@@ -2244,12 +2249,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             else
                 HealBot_UpdateUnit(tSetHealButton)
             end
-            if UnitExists(unit) then
-                if UnitIsFriend("player",tSetHealButton.unit) then 
-                    HealBot_CheckPlayerMana(tSetHealButton) 
-                end
-                tSetHealButton.status.range=-9
-            end
+            tSetHealButton.status.range=-9
         else
             HealBot_Action_SetClassIconTexture(tSetHealButton)
         end
@@ -2357,7 +2357,6 @@ local function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     dg.unit="nil"
     HealBot_Action_PrepButton(dg)
-    HealBot_mark2clearGUID(dg.guid)
     HealBot_Aura_RemoveIcons(dg)
     HealBot_clearAllAuxBar(dg)
     HealBot_Aura_delUnitIcons(hbBarID)
@@ -2677,7 +2676,7 @@ local function HealBot_Action_UpdateHighlightBar(button)
             button.aux[id]["G"]=1
             button.aux[id]["B"]=1
         end
-        HealBot_setAuxBar(button, id, 1000)
+        HealBot_setAuxBar(button, id, 1000, false)
     end)
 end
 
