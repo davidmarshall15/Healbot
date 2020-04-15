@@ -3434,11 +3434,7 @@ function HealBot_setAuxBar(button, id, value, isFluid)
         button.aux[id]["FLASH"]=true
         HealBot_Aux_Buttons[button.unit]=button
     else
-        if button.status.enabled then
-            button.aux[id]["A"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
-        else
-            button.aux[id]["A"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
-        end
+        button.aux[id]["A"]=button.status.alpha
         button.aux[id]["STATIC"]=true
         HealBot_AuxStatic_Buttons[button.unit]=button
     end
@@ -3468,11 +3464,7 @@ function HealBot_UpdAuxBar(button)
     for x=1,9 do
         if button.aux[x]["STATIC"] then
             hbStaticOn=true
-            if button.status.enabled then
-                button.aux[x]["A"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
-            else
-                button.aux[x]["A"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
-            end
+            button.aux[x]["A"]=button.status.alpha
             button.gref.aux[x]:SetStatusBarColor(button.aux[x]["R"], button.aux[x]["G"], button.aux[x]["B"], button.aux[x]["A"])
         end
     end
@@ -4754,6 +4746,14 @@ function HealBot_UpdateUnitRange(button, doRefresh)
             if button.status.range<1 then
                 HealBot_HealsInUpdate(button)
                 HealBot_AbsorbsUpdate(button)
+            end
+            if button.status.enabled then                    
+                if button.status.range==1 then
+                    button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                else
+                    button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                end
+                HealBot_Action_stateChange(button)
             end
             if doRefresh then
                 HealBot_Action_Refresh(button)

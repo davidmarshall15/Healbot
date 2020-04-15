@@ -557,12 +557,17 @@ function HealBot_Action_bSpell()
     return HealBot_RangeSpells["BUFF"]
 end
 
-function HealBot_Action_setEnabled(button, state)
+function HealBot_Action_stateChange(button)
+    HealBot_Action_ShowHideFrames(button) 
+    HealBot_Text_UpdateButton(button)
+    HealBot_UpdAuxBar(button)
+    HealBot_Aura_UpdateAll_UnitBuffIcons(button)
+end
+
+local function HealBot_Action_setEnabled(button, state)
     if button.status.enabled~=state then
         button.status.enabled=state
-        HealBot_Action_ShowHideFrames(button) 
-        HealBot_Text_UpdateButton(button)
-        HealBot_UpdAuxBar(button)
+        HealBot_Action_stateChange(button)
     end
 end
 
@@ -614,12 +619,15 @@ function HealBot_Action_UpdateDebuffButton(button)
                 button.status.current=8
                 HealBot_Text_setHealthText(button)
                 if button.status.range==1 then  
-                    HealBot_Action_setEnabled(button, true)
-                    button.gref["Bar"]:SetStatusBarColor(audHcR,audHcG,audHcB,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
+                    button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                    button.gref["Bar"]:SetStatusBarColor(audHcR,audHcG,audHcB,button.status.alpha);
+                    --HealBot_Action_setEnabled(button, true)
                 else
-                    HealBot_Action_setEnabled(button, false)
-                    button.gref["Bar"]:SetStatusBarColor(audHcR,audHcG,audHcB,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
+                    button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                    button.gref["Bar"]:SetStatusBarColor(audHcR,audHcG,audHcB,button.status.alpha);
+                    --HealBot_Action_setEnabled(button, false)
                 end
+                HealBot_Action_setEnabled(button, true)
             else
                 button.status.current=6
                 HealBot_Action_UpdateBuffButton(button)
@@ -651,12 +659,15 @@ function HealBot_Action_UpdateBuffButton(button)
             button.status.current=7
             HealBot_Text_setHealthText(button)
             if button.status.range==1 then  
-                HealBot_Action_setEnabled(button, true)
-                button.gref["Bar"]:SetStatusBarColor(aubHcR,aubHcG,aubHcB,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]);
+                button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                button.gref["Bar"]:SetStatusBarColor(aubHcR,aubHcG,aubHcB,button.status.alpha);
+                --HealBot_Action_setEnabled(button, true)
             else
-                HealBot_Action_setEnabled(button, false)
-                button.gref["Bar"]:SetStatusBarColor(aubHcR,aubHcG,aubHcB,Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]);
+                button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                button.gref["Bar"]:SetStatusBarColor(aubHcR,aubHcG,aubHcB,button.status.alpha)
+                --HealBot_Action_setEnabled(button, false)
             end
+            HealBot_Action_setEnabled(button, true)
             HealBot_Text_SetText(button)
         else
             button.status.current=5
@@ -784,12 +795,12 @@ function HealBot_Action_UpdateFluidBar()
 end
 
 local auhbPtc=0
-local auhbHcR, auhbHcG, auhbHcB, auhbHcA, auhbHcT = 0, 0, 0, 0, 0
+local auhbHcR, auhbHcG, auhbHcB, auhbHcT = 0, 0, 0, 0
 function HealBot_Action_UpdateHealthButton(button)
     if not HealBot_Action_luVars["TestBarsOn"] then 
         auhbPtc=0
         if UnitExists(button.unit) then
-            auhbHcR,auhbHcG,auhbHcB,auhbHcA,auhbHcT = 0, 0, 0, 0, 0
+            auhbHcR,auhbHcG,auhbHcB,auhbHcT = 0, 0, 0, 0
             auhbHcT = button.health.current/button.health.max
             auhbPtc=floor(auhbHcT*1000)
             HealBot_Action_BarColourPct(button, auhbHcT)
@@ -815,18 +826,19 @@ function HealBot_Action_UpdateHealthButton(button)
                  (not HealBot_Data["UILOCK"] and button.health.current<=(button.health.max*Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTOC"])) then
                     if button.status.current<5 then button.status.current=4 end
                     if button.status.range==1 then
-                        HealBot_Action_setEnabled(button, true)
-                        auhbHcA=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                        button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                        --HealBot_Action_setEnabled(button, true)
                     else
-                        HealBot_Action_setEnabled(button, false)
-                        auhbHcA=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                        button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"]
+                        --HealBot_Action_setEnabled(button, false)
                     end
+                    HealBot_Action_setEnabled(button, true)
                 else
                     if button.status.current<5 then button.status.current=0 end
+                    button.status.alpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
                     HealBot_Action_setEnabled(button, false)
-                    auhbHcA=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"]
                 end
-                button.gref["Bar"]:SetStatusBarColor(auhbHcR,auhbHcG,auhbHcB,auhbHcA);
+                button.gref["Bar"]:SetStatusBarColor(auhbHcR,auhbHcG,auhbHcB,button.status.alpha);
                 HealBot_Text_setHealthText(button)
                 HealBot_Text_SetText(button)
             else
@@ -1361,6 +1373,7 @@ local function HealBot_Action_PrepButton(button)
     button.status.unittype=1
     button.status.offline=false
     button.status.enabled=false
+    button.status.alpha=1
     button.status.dirarrowcords=0 
     button.status.dirarrowshown=false 
     button.status.reserved=false

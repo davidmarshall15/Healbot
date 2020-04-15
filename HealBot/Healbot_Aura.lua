@@ -99,17 +99,29 @@ local function HealBot_Aura_RemoveDebuffIcons(button)
 end
 
 HealBot_Aura_luVars["FadeTimeDiv"]=18
-local function HealBot_Aura_Icon_AlphaValue(secLeft, curFrame)
+local retAlpha=0
+local function HealBot_Aura_Icon_AlphaValue(secLeft, button)
     if secLeft>=0 then
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADE"] and 
-           secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][curFrame]["FADESECS"] then
-            return (secLeft/HealBot_Aura_luVars["FadeTimeDiv"])+.1
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] and 
+           secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"] then
+            retAlpha=(secLeft/HealBot_Aura_luVars["FadeTimeDiv"])+.1
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
+                if retAlpha>Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
+                    retAlpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
+                end
+            elseif retAlpha>button.status.alpha then
+                retAlpha=button.status.alpha
+            end
+        elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
+            retAlpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
         else
-            return 1
+            retAlpha=button.status.alpha
         end
+    else
+        retAlpha=0
     end
     --HealBot_setCall("HealBot_Aura_Icon_AlphaValue")
-    return 0
+    return retAlpha
 end
 
 HealBot_UpdateIconFreq={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
@@ -123,26 +135,29 @@ function HealBot_Aura_SetUpdateIconFreq()
     end
 end
 
-local auSecsLeft=0
+local auSecsLeft,iconAlpha=0,0
 local function HealBot_Aura_UpdateIcon(button, iconData, index)
     if not button then return; end;
     if iconData.expirationTime>0 then
-        button.gref.icon[index]:SetAlpha(HealBot_Aura_Icon_AlphaValue(iconData.expirationTime-TimeNow, button.frame))
+        iconAlpha=HealBot_Aura_Icon_AlphaValue(iconData.expirationTime-TimeNow, button)
+    elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
+        iconAlpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
     else
-        button.gref.icon[index]:SetAlpha(1)
+        iconAlpha=button.status.alpha
     end
+    button.gref.icon[index]:SetAlpha(iconAlpha)
     if Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SDUR"] and iconData.expirationTime>0 then
         auSecsLeft=floor(iconData.expirationTime-TimeNow)
         if auSecsLeft>-1 and auSecsLeft<=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURTHRH"] then
             button.gref.txt.expire[index]:SetText(auSecsLeft);
             if auSecsLeft<=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["DURWARN"] then
                 if index > 50 and UnitIsFriend("player",button.unit) then
-                    button.gref.txt.expire[index]:SetTextColor(0,1,0,1);
+                    button.gref.txt.expire[index]:SetTextColor(0,1,0,iconAlpha);
                 else
-                    button.gref.txt.expire[index]:SetTextColor(1,0,0,1);
+                    button.gref.txt.expire[index]:SetTextColor(1,0,0,iconAlpha);
                 end
             else
-                button.gref.txt.expire[index]:SetTextColor(1,1,1,1);
+                button.gref.txt.expire[index]:SetTextColor(1,1,1,iconAlpha);
             end  
         else
             button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
@@ -154,7 +169,7 @@ local function HealBot_Aura_UpdateIcon(button, iconData, index)
     end
     if iconData.count > 1 then
         button.gref.txt.count[index]:SetText(iconData.count);
-        button.gref.txt.count[index]:SetTextColor(1,1,1,1);
+        button.gref.txt.count[index]:SetTextColor(1,1,1,iconAlpha);
     else
         button.gref.txt.count[index]:SetTextColor(1,1,1,0)
         button.gref.txt.count[index]:SetText(" ");
@@ -1528,6 +1543,14 @@ function HealBot_Aura_Update_UnitBuffIcons(button)
             if button.aura.buff.nextupdate>HealBot_UnitBuffIcons[button.id][i].nextUpdate then
                 button.aura.buff.nextupdate=HealBot_UnitBuffIcons[button.id][i].nextUpdate
             end
+        end
+    end
+end
+
+function HealBot_Aura_UpdateAll_UnitBuffIcons(button)
+    for i=1,10 do
+        if HealBot_UnitBuffIcons[button.id][i].current then
+            HealBot_Aura_UpdateIcon(button, HealBot_UnitBuffIcons[button.id][i], i)
         end
     end
 end

@@ -3158,6 +3158,7 @@ function HealBot_Options_ShowNameOnBar_OnClick(self)
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["NAMEONBAR"] = false
     end
     HealBot_setOptions_Timer(85)
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_libUTF8_OnClick(self)
@@ -9149,8 +9150,11 @@ local function HealBot_Options_BuildSkinFrameSendMsg(skinName, varName, varNameA
         local isDup=true
         local lMsg=strsub(tabStr,2,string.len(tabStr)-1)
         local d={}
-        d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],d[21],d[22]=string.split(",", lMsg)
-        for j=1,22 do
+        d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],
+        d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],
+        d[21],d[22],d[23],d[24],d[25],d[26],d[27],d[28],d[29],d[30],
+        d[31],d[32],d[33],d[34],d[35],d[36],d[37],d[38],d[39],d[40]=string.split(",", lMsg)
+        for j=1,40 do
             if d[j] then
                 local var, dat=string.split("=", d[j])
                 if tonumber(dat) then dat=tonumber(dat) end
@@ -9306,8 +9310,11 @@ function HealBot_Options_BuildSkinRecMsg(skinName, cmd, parts, msg)
         elseif varName~="ExtraIncGroup" then
             local lMsg=strsub(msg,2,string.len(msg)-1)
             local d={}
-            d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],d[21],d[22]=string.split(",", lMsg)
-            for j=1,22 do
+            d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],
+            d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],
+            d[21],d[22],d[23],d[24],d[25],d[26],d[27],d[28],d[29],d[30],
+            d[31],d[32],d[33],d[34],d[35],d[36],d[37],d[38],d[39],d[40]=string.split(",", lMsg)
+            for j=1,40 do
                 if d[j] then
                     local var, dat=string.split("=", d[j])
                     if tonumber(dat) then dat=tonumber(dat) end
@@ -9351,8 +9358,11 @@ function HealBot_Options_BuildSkinRecMsg(skinName, cmd, parts, msg)
         if not Healbot_Config_Skins[varName][skinName] then Healbot_Config_Skins[varName][skinName]={} end
         local lMsg=strsub(msg,2,string.len(msg)-1)
         local d={}
-        d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],d[21],d[22]=string.split(",", lMsg)
-        for j=1,22 do
+        d[1],d[2],d[3],d[4],d[5],d[6],d[7],d[8],d[9],d[10],
+        d[11],d[12],d[13],d[14],d[15],d[16],d[17],d[18],d[19],d[20],
+        d[21],d[22],d[23],d[24],d[25],d[26],d[27],d[28],d[29],d[30],
+        d[31],d[32],d[33],d[34],d[35],d[36],d[37],d[38],d[39],d[40]=string.split(",", lMsg)
+        for j=1,40 do
             if d[j] then
                 local var, dat=string.split("=", d[j])
                 if tonumber(dat) then dat=tonumber(dat) end

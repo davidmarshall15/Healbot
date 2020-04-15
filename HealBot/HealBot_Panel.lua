@@ -1024,6 +1024,11 @@ local function HealBot_Panel_TestBarShow(index,button,tRole)
     HealBot_TestBarsActive[index]=button
     local HealBot_keepClass=false
     local HealBot_keepClass2=false
+    local HealBot_showName=false
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] or 
+       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
+        HealBot_showName=true
+    end
     if not HealBot_setTestCols[index] then
         if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] >= 2) then
             if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2) then
@@ -1082,10 +1087,21 @@ local function HealBot_Panel_TestBarShow(index,button,tRole)
         else
             button.gref.txt["text2"]:SetText("(100%)");
         end
+    else
+        button.gref.txt["text2"]:SetText("")
     end
-    button.gref.txt["text"]:SetText(button.unit)
-    button.gref.txt["text"]:SetTextColor(HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"]);
-    button.gref.txt["text2"]:SetTextColor(HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"]);
+    if HealBot_showName then
+        button.gref.txt["text"]:SetText(button.unit)
+        button.gref.txt["text"]:SetTextColor(HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"]);
+    else
+        button.gref.txt["text"]:SetText("")
+        button.gref.txt["text"]:SetTextColor(0,0,0,0);
+    end
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] then
+        button.gref.txt["text2"]:SetTextColor(HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index],Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"]);
+    else
+        button.gref.txt["text2"]:SetTextColor(0,0,0,0)
+    end
     button:Show()
 end
 
