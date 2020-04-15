@@ -573,10 +573,19 @@ function HealBot_Text_setHealthText(button)
         if button.text.health~=vHealthTextConcatResult then
             button.text.health=vHealthTextConcatResult
             button.text.healthupdate=true
+            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 then
+                button.text.nameupdate=true
+            end
         end
-    elseif button.text.health~=vTextChars["Nothing"] then
-        button.text.health=vTextChars["Nothing"]
-        button.text.healthupdate=true
+    else
+        if button.text.health~=vTextChars["Nothing"] then
+            button.text.health=vTextChars["Nothing"]
+            button.text.healthupdate=true
+        end
+        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 and 
+           Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
+            button.text.nameupdate=true
+        end
     end
     --HealBot_setCall("HealBot_Text_setHealthText")
 end

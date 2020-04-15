@@ -1232,9 +1232,16 @@ function HealBot_Lang_enALL()
                                    [13] = "spicy_squid",
                                    [14] = "Ameralanna_675",
                                    [15] = "nydiah",
-                                   [16] = "unhealed",
-                                   [17] = "Doomsdaze",
-                                   [18] = "Solution",
+                                   [16] = "Doomsdaze",
+                                   [17] = "Solution",
+                                   [18] = "selena817",
+                                   [19] = "SirArion",
+                                   [20] = "Xarava",
+                                   [21] = "jchap2k",
+                                   [22] = "Vayah",
+                                   [23] = "Madaleine",
+                                   [24] = "ADDYDARI",
+                                   [25] = "plastisch",
                                 }
                                
 end

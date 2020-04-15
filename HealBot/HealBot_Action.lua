@@ -1402,6 +1402,9 @@ local function HealBot_Action_PrepButton(button)
     button.gref["Back"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Absorb"]:SetStatusBarColor(0, 0, 0, 0)
     for x=1,9 do
+        button.aux[x]["FLUID"]=-1
+        button.aux[x]["FLASH"]=false
+        button.aux[x]["STATIC"]=false
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
     end
     --HealBot_setCall("HealBot_Action_PrepButton")
@@ -2278,6 +2281,7 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText)
         thb.guid="TestBar"
         HealBot_Action_ResetrCallsUnit(thb.unit)
         HealBot_Unit_Button[unitText]=thb
+        thb.status.unittype=5
         if thb.frame~=hbCurFrame then
             thb:ClearAllPoints()
             thb:SetParent(grpFrame[hbCurFrame])
@@ -2390,13 +2394,17 @@ end
 
 function HealBot_Action_MarkDeleteButton(button)
     button:Hide()
-    if button.status.unittype and button.status.unittype<5 then
-        if HealBot_Private_Button[button.unit] then HealBot_Private_Button[button.unit]=nil end
-    else
-        if HealBot_Unit_Button[button.unit] then HealBot_Unit_Button[button.unit]=nil end
+    if button.status.unittype then
+        if button.status.unittype>10 then
+            if HealBot_Enemy_Button[button.unit] then HealBot_Enemy_Button[button.unit]=nil end
+        elseif button.status.unittype>6 and button.status.unittype<9 then
+            if HealBot_Pet_Button[button.unit] then HealBot_Pet_Button[button.unit]=nil end
+        elseif button.status.unittype<5 then
+            if HealBot_Private_Button[button.unit] then HealBot_Private_Button[button.unit]=nil end
+        else
+            if HealBot_Unit_Button[button.unit] then HealBot_Unit_Button[button.unit]=nil end
+        end
     end
-    if HealBot_Enemy_Button[button.unit] then HealBot_Enemy_Button[button.unit]=nil end
-    if HealBot_Pet_Button[button.unit] then HealBot_Pet_Button[button.unit]=nil end
     table.insert(hbMarkedDeleteButtons, button.id)
 end
 

@@ -156,6 +156,16 @@ local function HealBot_Tooltip_setspellName(button, spellName)
                     end
                 end
             else
+                if validSpellName and GetMacroIndexByName(validSpellName)>0 then
+                    local _,_,mText=GetMacroInfo(GetMacroIndexByName(validSpellName))
+                    local _,s=string.find(mText, "#showtooltip ")
+                    if s and s>0 then
+                        local e,_=string.find(mText, "\n")
+                        if e and e>0 then
+                             validSpellName=(string.sub(mText, s+1, e-1)) or validSpellName
+                        end
+                    end
+                end
                 spellAR,spellAG=0.5,1
             end
         end

@@ -727,6 +727,7 @@ local function HealBot_Panel_TestBarsOff()
         HealBot_Action_MarkDeleteButton(b)
         HealBot_Action_DeleterCallsUnit(xUnit)
         HealBot_TestBarsActive[x]=nil
+        HealBot_Action_DeleteMarkedButtons()
     end
 end
 

@@ -2020,6 +2020,7 @@ function HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXDICONS"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -2031,6 +2032,7 @@ function HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["MAXBICONS"] = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -2886,19 +2888,8 @@ end
 function HealBot_Options_RangeCheckFreq_setSession()
     local val=0.1+((HealBot_Options_StorePrev["maxRangeCheckFreq"]-HealBot_Globals.RangeCheckFreq)/10)
     --HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
-    if val<0.5 then
-        HealBot_setLuVars("enTurbo", true)
-        HealBot_setLuVars("enSlowMo", false)
-    elseif val>0.7 then
-        HealBot_setLuVars("enTurbo", false)
-        HealBot_setLuVars("enSlowMo", true)
-    else
-        HealBot_setLuVars("enTurbo", false)
-        HealBot_setLuVars("enSlowMo", false)
-    end
     HealBot_setLuVars("RangeCheckFreq", val)
     HealBot_setLuVars("ThrottleFreq", (val/2))
-    HealBot_Action_setLuVars("RangeCheckFreq", (val/7))
     HealBot_setOptions_Timer(9999)
 end
 
@@ -3245,12 +3236,21 @@ function HealBot_Options_EnableLibQuickHealth_OnClick(self)
     HealBot_Options_ReloadUI(reason)
 end
 
+local function HealBot_Options_FluidFlashInUse()
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] or HealBot_Options_StorePrev["AuxBarsFlash"] then
+        HealBot_setLuVars("FluidFlashInUse", true)
+    else
+        HealBot_setLuVars("FluidFlashInUse", false)
+    end
+end
+
 function HealBot_Options_UseFluidBars_OnClick(self)
     if self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = true
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = false
     end
+    HealBot_Options_FluidFlashInUse()
     HealBot_setOptions_Timer(80)
 end
 
@@ -8070,10 +8070,15 @@ local function HealBot_Options_AuxConfigBarChange()
 
     local fstr=_G["HealBot_AuxBarsConfigAssign2_FontStr"]
     fstr:SetText(HealBot_Options_AuxAssign_List[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["AuxBar"]][HealBot_Options_StorePrev["FramesSelFrame"]]["USE"]])
+    HealBot_Options_StorePrev["AuxBarsFlash"]=false
     for x=1,9 do
         fstr=_G["HealBot_Aux"..x.."Config_FontStr2"]
         fstr:SetText(HealBot_Options_AuxBarAnchor_ShortList[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["ANCHOR"]])
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["OTYPE"]==2 then
+            HealBot_Options_StorePrev["AuxBarsFlash"]=true
+        end
     end
+    HealBot_Options_FluidFlashInUse()
 end
 
 function HealBot_Options_clearAuxBars()
@@ -12011,34 +12016,21 @@ end
 function HealBot_Options_SetDefaults()
     HealBot_Config = HealBot_ConfigDefaults;
     HealBot_Globals = HealBot_GlobalsDefaults;
-    if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"] then HealBot_Options_CastNotify_OnClick(nil,0); end
-    table.foreach(HealBot_Config_SkinsDefaults, function (key,val)
-        if Healbot_Config_Skins[key]==nil then
-            Healbot_Config_Skins[key] = val;
-        end
-    end);
-    table.foreach(HealBot_Config_SpellsDefaults, function (key,val)
-        if HealBot_Config_Spells[key]==nil then
-            HealBot_Config_Spells[key] = val;
-        end
-    end);
-    table.foreach(HealBot_Config_BuffsDefaults, function (key,val)
-        if HealBot_Config_Buffs[key]==nil then
-            HealBot_Config_Buffs[key] = val;
-        end
-    end);
-    table.foreach(HealBot_Config_CuresDefaults, function (key,val)
-        if HealBot_Config_Cures[key]==nil then
-            HealBot_Config_Cures[key] = val;
-        end
-    end);
-    
+    Healbot_Config_Skins = HealBot_Config_SkinsDefaults
+    HealBot_Config_Spells = HealBot_Config_SpellsDefaults
+    HealBot_Config_Buffs = HealBot_Config_BuffsDefaults 
+    HealBot_Config_Cures = HealBot_Config_CuresDefaults 
+    if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["NOTIFY"] then HealBot_Options_CastNotify_OnClick(nil,0); end   
     HealBot_Config.CurrentSpec=1
+    Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD
     HealBot_runDefaults()
     HealBot_Options_Opened=false;
     HealBot_Action_Reset();
     HealBot_Action_SetAllAttribs()
     HealBot_Options:Hide()
+    for x in pairs (Healbot_Config_Skins.Skins) do
+        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
+    end
     DoneInitTab={}
     HealBot_setOptions_Timer(8000)
 end

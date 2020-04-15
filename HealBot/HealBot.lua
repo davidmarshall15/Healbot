@@ -70,8 +70,6 @@ HealBot_luVars["EnableErrorText"]=false
 HealBot_luVars["DelayLockdownCheck"]=TimeNow
 HealBot_luVars["addonMsgTh"]=TimeNow+20
 HealBot_luVars["NoSpamOOM"]=0
-HealBot_luVars["enTurbo"]=false
-HealBot_luVars["enSlowMo"]=false
 HealBot_luVars["AuraEventRegistered"]=false 
 HealBot_luVars["RangeCheckFreq"]=0.02
 HealBot_luVars["CacheSize"]=4
@@ -1686,21 +1684,11 @@ end
 
 function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
-        local minBarsFreq=HealBot_Comm_round(1/(HealBot_luVars["qaFR"]/3),4)
-        local minSlowFreq=HealBot_Comm_round(1/(HealBot_luVars["qaFR"]/12),4)
-        local minFastFreq=HealBot_Comm_round(1/(HealBot_luVars["qaFR"]/1.2),4)
+        local minSlowFreq=HealBot_Comm_round(1/(HealBot_luVars["qaFR"]/20),3)
         HealBot_Timers["fastUpdateFreq"]=0.064-(0.05-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/20), 3)))
-        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/10)-0.01
-        if HealBot_luVars["enTurbo"] and HealBot_luVars["qaFR"]>50 then
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*8)
-        elseif HealBot_luVars["enSlowMo"] then
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*20)
-        else
-            HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
-        end
-        if HealBot_Timers["barsUpdateFreq"]<minBarsFreq then HealBot_Timers["barsUpdateFreq"]=minBarsFreq end
+        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/20)
+        HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
         if HealBot_Timers["slowUpdateFreq"]<minSlowFreq then HealBot_Timers["slowUpdateFreq"]=minSlowFreq end
-        if HealBot_Timers["fastUpdateFreq"]<minFastFreq then HealBot_Timers["fastUpdateFreq"]=minFastFreq end
         --HealBot_AddDebug("qaFR="..HealBot_luVars["qaFR"].."  Fast="..HealBot_Timers["fastUpdateFreq"].."  Bars="..HealBot_Timers["barsUpdateFreq"])
     else
         HealBot_Timers["slowUpdateFreq"]=4
@@ -2388,6 +2376,7 @@ local function HealBot_Options_Update()
         HealBot_setAllPowerBars()
         HealBot_AuraCheck()
         HealBot_Options_Timer[118]=nil
+        --HealBot_setCall("HealBot_Options_Update-118")
     elseif HealBot_Options_Timer[120] then
         HealBot_CheckZone();
         HealBot_Options_Timer[120]=nil
@@ -2454,6 +2443,7 @@ local function HealBot_Options_Update()
             HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HIDEPARTYFRAMES.." - "..HEALBOT_WORD_OFF)
         end
         HealBot_Options_Timer[180]=nil
+        --HealBot_setCall("HealBot_Options_Update-180")
     elseif HealBot_Options_Timer[185] then
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] then
             HealBot_trackHiddenFrames["MINIBOSS"]=true
@@ -2630,6 +2620,7 @@ local function HealBot_Options_Update()
             HealBot_AuraCheck("player")
             HealBot_setOptions_Timer(595)
         end
+        --HealBot_setCall("HealBot_Options_Update-8000")
     elseif HealBot_Options_Timer[130] then
         HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "R", HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
         HealBot_Options_Timer[130]=nil
@@ -3403,20 +3394,20 @@ local sfabuActive=false
 local function HealBot_UpdateFluidAuxBarsValue(button)  
     sfabuActive=false
     for x=1,9 do
-        if button.aux[x]["FLUID"] then
+        if button.aux[x]["FLUID"]>-1 then
             local barValue=button.gref.aux[x]:GetValue()
-            if barValue>HealBot_AuxFluid_Buttons[button][x] then
+            if barValue>button.aux[x]["FLUID"] then
                 local setValue=barValue-HealBot_luVars["FLUIDFREQ"]
-                if setValue<HealBot_AuxFluid_Buttons[button][x] then setValue=HealBot_AuxFluid_Buttons[button][x] end
+                if setValue<button.aux[x]["FLUID"] then setValue=button.aux[x]["FLUID"] end
                 sfabuActive=true
                 button.gref.aux[x]:SetValue(setValue)
-            elseif barValue<HealBot_AuxFluid_Buttons[button][x] then
+            elseif barValue<button.aux[x]["FLUID"] then
                 local setValue=barValue+HealBot_luVars["FLUIDFREQ"]
-                if setValue>HealBot_AuxFluid_Buttons[button][x] then setValue=HealBot_AuxFluid_Buttons[button][x] end
+                if setValue>button.aux[x]["FLUID"] then setValue=button.aux[x]["FLUID"] end
                 sfabuActive=true
                 button.gref.aux[x]:SetValue(setValue)
             else
-                button.aux[x]["FLUID"]=false
+                button.aux[x]["FLUID"]=-1
             end
         end
     end
@@ -3427,9 +3418,9 @@ end
 local sfabActive=false
 local function HealBot_UpdateFluidAuxBars()
     sfabActive=false
-    for xButton,_ in pairs(HealBot_AuxFluid_Buttons) do
+    for xUnit,xButton in pairs(HealBot_AuxFluid_Buttons) do
         if not HealBot_UpdateFluidAuxBarsValue(xButton) then
-            HealBot_AuxFluid_Buttons[xButton]=nil
+            HealBot_AuxFluid_Buttons[xUnit]=nil
         else
             sfabActive=true
         end
@@ -3462,9 +3453,8 @@ function HealBot_setAuxBar(button, id, value, isFluid)
         button.aux[id]["A"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["A"]
     end
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] and isFluid then
-        button.aux[id]["FLUID"]=true
-        if not HealBot_AuxFluid_Buttons[button] then HealBot_AuxFluid_Buttons[button]={} end
-        HealBot_AuxFluid_Buttons[button][id]=value
+        button.aux[id]["FLUID"]=value
+        HealBot_AuxFluid_Buttons[button.unit]=button
     else
         button.gref.aux[id]:SetValue(value)
     end
@@ -3495,7 +3485,7 @@ end
 function HealBot_clearAuxBar(button, id)
     button.aux[id]["FLASH"]=false
     button.aux[id]["STATIC"]=false
-    button.aux[id]["FLUID"]=false
+    button.aux[id]["FLUID"]=-1
     button.gref.aux[id]:SetStatusBarColor(1,1,1,0)
 end
 
@@ -3523,10 +3513,10 @@ function HealBot_resetAllAuxBar()
             end
         end
     end
-    for xButton,_ in pairs(HealBot_AuxFluid_Buttons) do
+    for _,xButton in pairs(HealBot_AuxFluid_Buttons) do
         for x=1,9 do
-            if xButton.aux[x]["FLUID"] then
-                xButton.aux[x]["FLUID"]=false
+            if xButton.aux[x]["FLUID"]>-1 then
+                xButton.aux[x]["FLUID"]=-1
                 xButton.gref.aux[x]:SetStatusBarColor(1,1,1,0)
             end
         end
@@ -3586,7 +3576,8 @@ local ouRegenEnabled, ouZ, ouY=true,0,0
 function HealBot_OnUpdate(self)
     if HealBot_luVars["hbReady"] then
         TimeNow=GetTime()
-        if HealBot_Timers["barsUpdate"]<TimeNow and not HealBot_luVars["TestBarsOn"] then
+        if HealBot_Timers["barsUpdateAltFrame"] and HealBot_Timers["barsUpdate"]<TimeNow and not HealBot_luVars["TestBarsOn"] then
+            HealBot_Timers["barsUpdateAltFrame"]=false
             HealBot_UpdateVariableAuxBars()
             HealBot_Action_UpdateFluidBar()
             HealBot_UpdateFluidAuxBars()
@@ -3594,42 +3585,38 @@ function HealBot_OnUpdate(self)
                 HealBot_luVars["PrevTipTime"]=HealBot_luVars["PrevTipTime"]+HealBot_luVars["TipUpdateFreq"]
                 HealBot_Action_RefreshTooltip()
             end
-            HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
-        elseif HealBot_Timers["slowUpdate"]<TimeNow then
-            if HealBot_luVars["TestBarsOn"] then
-                HealBot_Timers["slowUpdate"]=TimeNow+(HealBot_Timers["fastUpdateFreq"]*0.5)
+            if HealBot_luVars["FluidFlashInUse"] then
+                HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
             else
-                HealBot_Timers["slowUpdate"]=TimeNow+HealBot_Timers["slowUpdateFreq"]
+                HealBot_Timers["barsUpdate"]=TimeNow+HealBot_luVars["TipUpdateFreq"]
             end
-            HealBot_Update_Slow()
-        elseif HealBot_Timers["fastUpdate"]<TimeNow then
-            if HealBot_luVars["fastUpdateEveryFrame"]>0 then
-                HealBot_luVars["fastUpdateEveryFrame"]=HealBot_luVars["fastUpdateEveryFrame"]-1
-            else
-                HealBot_Timers["fastUpdate"]=HealBot_Timers["fastUpdate"]+HealBot_Timers["fastUpdateFreq"]
-                if not InCombatLockdown() then
-                    if HealBot_luVars["reCheckActionFrames"] then
-                        HealBot_luVars["reCheckActionFrames"]=false
-                        HealBot_Action_CheckFrameSetPoint()
-                    else
-                        HealBot_ProcessRefreshTypes()
-                    end
-                    if HealBot_Data["UILOCK"] then
-                        if HealBot_luVars["DelayLockdownCheck"]<TimeNow then
-                            ouRegenEnabled=true
-                            if HealBot_Globals.EnAutoCombat then
-                                for xUnit,xButton in pairs(HealBot_Private_Button) do
-                                    if UnitIsVisible(xUnit) then
-                                        HealBot_CheckAggroUnits(xButton)
-                                        if xButton.aggro.threatpct>0 then 
-                                            ouRegenEnabled=false
-                                            break
-                                        end
-                                    end
-                                end
-                                if ouRegenEnabled then
-                                    for xUnit,xButton in pairs(HealBot_Unit_Button) do
-                                        if UnitIsVisible(xUnit) and not HealBot_Private_Button[xUnit] then
+        else
+            HealBot_Timers["barsUpdateAltFrame"]=true
+            if HealBot_Timers["slowUpdate"]<TimeNow then
+                if HealBot_luVars["TestBarsOn"] then
+                    HealBot_Timers["slowUpdate"]=TimeNow+(HealBot_Timers["fastUpdateFreq"]*2)
+                else
+                    HealBot_Timers["slowUpdate"]=TimeNow+HealBot_Timers["slowUpdateFreq"]
+                end
+                HealBot_Update_Slow()
+            elseif HealBot_Timers["fastUpdate"]<TimeNow then
+                if HealBot_luVars["fastUpdateEveryFrame"]>0 then
+                    HealBot_luVars["fastUpdateEveryFrame"]=HealBot_luVars["fastUpdateEveryFrame"]-1
+                else
+                    HealBot_Timers["fastUpdate"]=HealBot_Timers["fastUpdate"]+HealBot_Timers["fastUpdateFreq"]
+                    if not InCombatLockdown() then
+                        if HealBot_luVars["reCheckActionFrames"] then
+                            HealBot_luVars["reCheckActionFrames"]=false
+                            HealBot_Action_CheckFrameSetPoint()
+                        else
+                            HealBot_ProcessRefreshTypes()
+                        end
+                        if HealBot_Data["UILOCK"] then
+                            if HealBot_luVars["DelayLockdownCheck"]<TimeNow then
+                                ouRegenEnabled=true
+                                if HealBot_Globals.EnAutoCombat then
+                                    for xUnit,xButton in pairs(HealBot_Private_Button) do
+                                        if UnitIsVisible(xUnit) then
                                             HealBot_CheckAggroUnits(xButton)
                                             if xButton.aggro.threatpct>0 then 
                                                 ouRegenEnabled=false
@@ -3637,19 +3624,30 @@ function HealBot_OnUpdate(self)
                                             end
                                         end
                                     end
+                                    if ouRegenEnabled then
+                                        for xUnit,xButton in pairs(HealBot_Unit_Button) do
+                                            if UnitIsVisible(xUnit) and not HealBot_Private_Button[xUnit] then
+                                                HealBot_CheckAggroUnits(xButton)
+                                                if xButton.aggro.threatpct>0 then 
+                                                    ouRegenEnabled=false
+                                                    break
+                                                end
+                                            end
+                                        end
+                                    end
                                 end
-                            end
-                            if ouRegenEnabled then
-                                HealBot_Not_Fighting()
-                            else
-                                HealBot_luVars["DelayLockdownCheck"]=TimeNow+1
+                                if ouRegenEnabled then
+                                    HealBot_Not_Fighting()
+                                else
+                                    HealBot_luVars["DelayLockdownCheck"]=TimeNow+1
+                                end
                             end
                         end
                     end
                 end
-            end
-            if not HealBot_luVars["TestBarsOn"] then 
-                HealBot_Update_Fast() 
+                if not HealBot_luVars["TestBarsOn"] then 
+                    HealBot_Update_Fast() 
+                end
             end
         end
     elseif HealBot_luVars["hbLoaded"] and not InCombatLockdown() then
