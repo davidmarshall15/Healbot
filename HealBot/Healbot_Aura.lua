@@ -1548,9 +1548,33 @@ function HealBot_Aura_Update_UnitBuffIcons(button)
 end
 
 function HealBot_Aura_UpdateAll_UnitBuffIcons(button)
-    for i=1,10 do
-        if HealBot_UnitBuffIcons[button.id][i].current then
-            HealBot_Aura_UpdateIcon(button, HealBot_UnitBuffIcons[button.id][i], i)
+    if button then
+        for i=1,10 do
+            if HealBot_UnitBuffIcons[button.id][i].current then
+                HealBot_Aura_UpdateIcon(button, HealBot_UnitBuffIcons[button.id][i], i)
+            end
+        end
+    else
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            for i=1,10 do
+                if HealBot_UnitBuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
+                end
+            end
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            for i=1,10 do
+                if HealBot_UnitBuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
+                end
+            end
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            for i=1,10 do
+                if HealBot_UnitBuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
+                end
+            end
         end
     end
 end

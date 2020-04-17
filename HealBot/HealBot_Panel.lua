@@ -330,7 +330,7 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             table.insert(HealBot_MyHealTargets,xGUID)
         end
     end
-    HealBot_setOptions_Timer(596)
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit, perm)
@@ -705,10 +705,8 @@ local function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFra
     if HealBot_Panel_initFrame[hbCurFrame] then
         HealBot_Panel_initFrame[hbCurFrame]=false
         HealBot_Action_FrameSetPoint(hbCurFrame, vSetHWFrame)
-        HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true)
-    else
-        HealBot_Action_setPoint(hbCurFrame)
     end
+    HealBot_Action_setPoint(hbCurFrame)
 end
 
 local HealBot_noBars=25
@@ -2180,14 +2178,14 @@ local function HealBot_Panel_TargetChanged(preCombat)
         if vTargetButton then
             if HealBot_TrackUnit[vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
                 HealBot_setLuVars("TargetNeedReset", false)
-                --HealBot_Action_UpdateBackgroundButton(vTargetButton)
+                HealBot_Action_UpdateBackgroundButton(vTargetButton)
                 vTargetButton:Show()
-                HealBot_Panel_SetupExtraBars(hbCurrentFrame)
                 HealBot_Panel_TargetChangedCheckFocus()
             else
                 HealBot_Action_HidePanel(hbCurrentFrame)
             end
         end
+        HealBot_Panel_SetupExtraBars(hbCurrentFrame)
     else
         vTargetButton = HealBot_Unit_Button["target"]
         if vTargetButton then
@@ -2267,7 +2265,7 @@ local function HealBot_Panel_FocusChanged(preCombat)
             end
             HealBot_Panel_SetupExtraBars(hbCurrentFrame)
         else
-            vFocusButton = HealBot_Unit_Button["target"]
+            vFocusButton = HealBot_Unit_Button["focus"]
             if vFocusButton then
                 HealBot_Action_MarkDeleteButton(vFocusButton)
             end

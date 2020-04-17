@@ -449,7 +449,7 @@ function HealBot_Lang_Options_enALL()
                                ["DISABLEHEALBOT"]="Put Healbot into a deep sleep.",
                                ["DISABLEHEALBOTSOLO"]="Healbot is only sleeping when\nnot in a group or raid.",
                                ["ADJUSTMAXHLTH"]="Check for boss debuffs that alters healing\neffects and adjust max health to reflect.",
-                               ["MAXBARCACHE"]="Bars Cache\n=========\nBars within frames can be initialized and cached before joining a group or raid.\nThe number of bars is determined by the cache size.\n--\nNOTE: This is a pre-cache and once a bar is initialized, it is never destroyed.",
+                               ["MAXBARCACHE"]="Bars Cache\n=========\nBars within frames can be initialized and cached before joining a group or raid.\nThe number of bars is determined by the cache size.\n--\nNOTE: If you raid, the default setting or higher is recommended, otherwise reduce this setting.",
                                ["INTERNALTIMERS"]="This combined with your FPS sets how quickly the following are updated:\n- Range checking\n- Buff updates\n- Debuff updates\n- Aggro updates\n- Enemy bar updates\n- Fluid bars update frequency\n- Aggro bars flash frequency\n- General checks and out of combat updates\n--\nNote: Higher settings use significantly more CPU.",
                                ["LANG"]="Select the language used by healbot options.\nThis can be independent to the UI.",
                                ["SETLANG"]="Set the language selected.",
