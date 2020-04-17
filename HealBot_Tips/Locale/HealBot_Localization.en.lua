@@ -465,7 +465,7 @@ function HealBot_Lang_Options_enALL()
                                ["SPELLSBUTTONCAST"]="Timing of the spell cast\nCast when the button is Pressed or Released.",
                                ["SPELLSAVOIDBLUE"]="Cast Binding Heal on yourself and ended up\nwith a blue cursor? this option is your friend.",
                                ["SPELLSAUTOTARGET"]="Set the healers target to the player/npc\nreceiving the current spell cast.",
-                               ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells.",
+                               ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells.\n-------------\nWARNING\n-------------\nSome trinkets break the cast using this method\nensure the trinket works with the spell selected.",
                                ["SPELLSBUTTONCLICK"]="Spell to cast on button click.",
                                ["SPELLSBUTTONSHIFTCLICK"]="Spell to cast on button click\nwith the SHIFT key held down.",
                                ["SPELLSBUTTONCTRLCLICK"]="Spell to cast on button click\nwith the CTRL key held down.",

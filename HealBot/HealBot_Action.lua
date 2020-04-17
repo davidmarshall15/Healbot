@@ -1965,7 +1965,7 @@ local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, 
     local scText=""
     local spellType="help"
     if status=="Enemy" then spellType="harm" end
-    scText="/stopcasting\n/cast [@"..unit..","..spellType.."] "..spellName.."\n"
+    scText="/cast [@"..unit..","..spellType.."] "..spellName.."\n"
 
     if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se3\n' end
     if HealBot_Globals.MacroSuppressSound==1 then smName=smName..'/hb se1\n' end
@@ -1976,7 +1976,7 @@ local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, 
     if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
     if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se4\n' end
     smName=smName..scText
-    if spellAvoidBC then smName=smName.."/use 4\n/stopcasting\n" end
+    if spellAvoidBC then smName=smName.."/use 4\n" end
     if strlen(smName)>255 then
         smName=""
         if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se1\n" end
@@ -1986,7 +1986,7 @@ local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, 
         if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10\n" end
         if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
         smName=smName..scText
-        if spellAvoidBC then smName=smName.."/use 4\n/stopcasting\n" end
+        if spellAvoidBC then smName=smName.."/use 4\n" end
         if strlen(smName)>255 then
             smName=""
             if spellTar then smName=smName.."/target "..unit.."\n" end
@@ -1994,13 +1994,13 @@ local function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, 
             if spellTrin2 then smName=smName.."/use 14\n" end
             if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10\n" end
             smName=smName..scText
-            if spellAvoidBC then smName=smName.."/use 4\n/stopcasting\n" end
+            if spellAvoidBC then smName=smName.."/use 4\n" end
             if strlen(smName)>255 then
                 smName=""
                 if spellTrin1 then smName=smName.."/use 13\n" end
                 if spellTrin2 then smName=smName.."/use 14\n" end
                 smName=smName..scText
-                if spellAvoidBC then smName=smName.."/use 4\n/stopcasting\n" end
+                if spellAvoidBC then smName=smName.."/use 4\n" end
                 if strlen(smName)>255 then
                     smName=spellName
                 end
