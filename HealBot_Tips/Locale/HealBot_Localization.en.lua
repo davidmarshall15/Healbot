@@ -384,7 +384,6 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
                         -- Tips tab
                                  ["TOOLTIPSHOW"]=HEALBOT_OPTIONS_SHOWTOOLTIP,
-                                 ["TOOLTIPUPDATE"]=HEALBOT_OPTIONS_TOOLTIPUPDATE,
                                  ["TOOLTIPHIDEIC"]=HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT,
                                  ["TOOLTIPTARGETINFO"]=HEALBOT_OPTIONS_SHOWUNITTOOLTIP,
                                  ["TOOLTIPMYBUFFS"]=HEALBOT_OPTIONS_SHOWUNITBUFFTIME,
@@ -725,7 +724,7 @@ function HealBot_Lang_Options_enALL()
                                ["MONITORDEBUFFSGROUPED"]="Do not monitor debuffs when solo.",
                                ["DEBUFFSSPELLTOCURE"]="The spell to use.\nDebuffs displayed will only be those that the spell can remove.",
                                ["DEBUFFSSPELLCHECKMEMBERS"]="The members to monitor.",
-                               ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n- By class - Ignore debuffs that have no effect to the class\n- Non harmful - Ignore all non harmful debuff\n- Slow movement - Ignore debuffs that slows movement\n- Short duration - Ignore debuffs that last for less time than the Duration slider\n- When cure spell CoolDown > 1.5secs (GCD) - Ignore debuffs when its not possible to cast while the spell is on cooldown\n- When caster is known as friend - When the caster of the debuff is friendly",
+                               ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n- Short duration - Ignore debuffs that last for less time than the Duration slider\n- When cure spell CoolDown > 2secs - Ignore debuffs when its not possible to cast while the spell is on cooldown\n- When caster is known as friend - When the caster of the debuff is friendly",
                                ["DEBUFFSTYPEPRIORITY"]="Priority by debuff types.\nHighest priority is 1 and lowest is 20, highest priority is always displayed first.",
                                ["DEBUFFSTYPECOLOUR"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s by debuff types. Click to change.\nWhen the player has a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
@@ -791,7 +790,6 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
                         -- Tips tab
                                ["TOOLTIPSHOW"]="Show tooltip information on the\ncurrent bar the mouse is over.",
-                               ["TOOLTIPUPDATE"]="Keep updating the tooltip while\nthe mouse in stationary over a bar.",
                                ["TOOLTIPHIDEIC"]="Hide the tooltip when in combat.",
                                ["TOOLTIPTARGETINFO"]="Show the name, class and spec if relevant,\nlocation, health and mana/power.",
                                ["TOOLTIPMYBUFFS"]="Show buffs and duration cast by you.",

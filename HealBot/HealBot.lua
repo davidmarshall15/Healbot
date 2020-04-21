@@ -721,13 +721,19 @@ function HealBot_TestBars(noBars)
     --HealBot_setCall("HealBot_TestBars")
 end
 
+local hbManaCurrent, hbManaMax=0,0
 local function HealBot_OnEvent_UnitMana(button)
     button.mana.update=false
-    if UnitExists(button.unit) and button.status.unittype < 11 then
-        button.mana.current=UnitPower(button.unit)
-        button.mana.max=UnitPowerMax(button.unit)
-        HealBot_Action_CheckUnitLowMana(button)
-        HealBot_Action_setPowerBars(button)
+    if UnitExists(button.unit) then
+        hbManaCurrent=UnitPower(button.unit)
+        hbManaMax=UnitPowerMax(button.unit)
+        if button.mana.current~=hbManaCurrent or button.mana.max~=hbManaMax then
+            button.mana.current=hbManaCurrent
+            button.mana.max=hbManaMax
+            HealBot_Action_CheckUnitLowMana(button)
+            HealBot_Action_setPowerBars(button)
+            if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
+        end
     end
     --HealBot_setCall("HealBot_OnEvent_UnitMana")
 end
@@ -1278,6 +1284,7 @@ local function HealBot_Register_Events()
             end
         end
         HealBot:RegisterEvent("UNIT_SPELLCAST_START");
+        HealBot:RegisterEvent("SPELL_UPDATE_COOLDOWN")
         HealBot:RegisterEvent("UNIT_SPELLCAST_STOP");
         HealBot:RegisterEvent("UNIT_SPELLCAST_FAILED");
         HealBot:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED");
@@ -1360,6 +1367,7 @@ local function HealBot_UnRegister_Events()
         HealBot:UnregisterEvent("PET_BATTLE_OVER");
     end
     HealBot:UnregisterEvent("UNIT_SPELLCAST_START");
+    HealBot:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
     HealBot:UnregisterEvent("UNIT_SPELLCAST_STOP");
     HealBot:UnregisterEvent("UNIT_SPELLCAST_FAILED");
     HealBot:UnregisterEvent("UNIT_SPELLCAST_INTERRUPTED");
@@ -1686,7 +1694,7 @@ function HealBot_Set_Timers()
     if HealBot_Config.DisabledNow==0 then
         local minSlowFreq=HealBot_Comm_round(1/(HealBot_luVars["qaFR"]/20),3)
         HealBot_Timers["fastUpdateFreq"]=0.064-(0.05-(HealBot_Comm_round((HealBot_luVars["RangeCheckFreq"]/20), 3)))
-        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/20)
+        HealBot_Timers["barsUpdateFreq"]=(HealBot_luVars["RangeCheckFreq"]/25)
         HealBot_Timers["slowUpdateFreq"]=(HealBot_Timers["fastUpdateFreq"]*12)
         if HealBot_Timers["slowUpdateFreq"]<minSlowFreq then HealBot_Timers["slowUpdateFreq"]=minSlowFreq end
         --HealBot_AddDebug("qaFR="..HealBot_luVars["qaFR"].."  Fast="..HealBot_Timers["fastUpdateFreq"].."  Bars="..HealBot_Timers["barsUpdateFreq"])
@@ -1946,6 +1954,7 @@ local function HealBot_Update_Skins(forceCheck)
             end
         end
         if HealBot_Globals.mapScale then HealBot_Globals.mapScale=nil end
+        if HealBot_Globals.TooltipUpdate~=nil then HealBot_Globals.TooltipUpdate=nil end
         if HealBot_Globals.RangeCheckFreq>9 then HealBot_Globals.RangeCheckFreq=9 end
         if HealBot_Globals.RangeCheckFreq<1 then HealBot_Globals.RangeCheckFreq=5 end
         if HealBot_Globals.CureCustomDefaultCastBy=="ALL" then HealBot_Globals.CureCustomDefaultCastBy=1 end
@@ -2033,7 +2042,7 @@ function HealBot_setTooltipUpdateInterval()
     if HealBot_Globals.Tooltip_ShowCD then
         HealBot_luVars["TipUpdateFreq"]=0.1
     else
-        HealBot_luVars["TipUpdateFreq"]=0.2
+        HealBot_luVars["TipUpdateFreq"]=1
     end
     --HealBot_setCall("HealBot_setTooltipUpdateInterval")
 end
@@ -2421,7 +2430,14 @@ local function HealBot_Options_Update()
         HealBot_AuraCheck()
         HealBot_Options_Timer[30]=nil
     elseif HealBot_Options_Timer[50] then
-        HealBot_Action_setpcClass()
+        HealBot_Action_setpcClass()       
+        local _,xButton,pButton = HealBot_UnitID("player")
+        if xButton then
+            HealBot_OnEvent_UnitMana(xButton)
+        end
+        if pButton then
+            HealBot_OnEvent_UnitMana(pButton)
+        end
         HealBot_Options_Timer[50]=nil
     elseif  HealBot_Options_Timer[180] then
         if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] then
@@ -2748,6 +2764,7 @@ function HealBot_OnEvent_UnitHealth(button)
             end
             HealBot_OverHeal(button)
             HealBot_Action_UpdateHealthButton(button)
+            if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         elseif not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
             bptc=floor((button.health.current/button.health.max)*100)
             if button.gref["Bar"]:GetValue()~=bptc then 
@@ -2977,7 +2994,7 @@ local function HealBot_Not_Fighting()
         HealBot_SetResetFlag("QUICK")
     end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
-        HealBot_Action_RefreshTooltip();
+        HealBot_Action_RefreshTooltip()
     end
     HealBot_EndAggro()
     HealBot_setOptions_Timer(4915)
@@ -3560,17 +3577,22 @@ function HealBot_OnUpdate(self)
         TimeNow=GetTime()
         if HealBot_Timers["barsUpdateAltFrame"] and HealBot_Timers["barsUpdate"]<TimeNow and not HealBot_luVars["TestBarsOn"] then
             HealBot_Timers["barsUpdateAltFrame"]=false
-            HealBot_UpdateVariableAuxBars()
-            HealBot_Action_UpdateFluidBar()
-            HealBot_UpdateFluidAuxBars()
-            if HealBot_luVars["ouTipUpdate"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
-                HealBot_luVars["PrevTipTime"]=HealBot_luVars["PrevTipTime"]+HealBot_luVars["TipUpdateFreq"]
-                HealBot_Action_RefreshTooltip()
-            end
             if HealBot_luVars["FluidFlashInUse"] then
+                if HealBot_luVars["UpdateFluid"] then
+                    HealBot_luVars["UpdateFluid"]=false
+                    HealBot_UpdateVariableAuxBars()
+                else
+                    HealBot_luVars["UpdateFluid"]=true
+                    HealBot_Action_UpdateFluidBar()
+                    HealBot_UpdateFluidAuxBars()
+                end
                 HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
             else
                 HealBot_Timers["barsUpdate"]=TimeNow+HealBot_luVars["TipUpdateFreq"]
+            end
+            if HealBot_Data["TIPBUTTON"] and HealBot_luVars["PrevTipTime"]<TimeNow then 
+                HealBot_luVars["PrevTipTime"]=HealBot_luVars["PrevTipTime"]+HealBot_luVars["TipUpdateFreq"]
+                HealBot_Action_RefreshTooltip()
             end
         else
             HealBot_Timers["barsUpdateAltFrame"]=true
@@ -5129,6 +5151,8 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_OnEvent_UnitSpellCastStart(arg1)
     elseif (event=="UNIT_SPELLCAST_SENT") then
         HealBot_OnEvent_UnitSpellCastSent(self,arg1,arg2,arg3,arg4);  
+    elseif (event=="SPELL_UPDATE_COOLDOWN") then
+        if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
     elseif (event=="PLAYER_REGEN_DISABLED") then
         HealBot_OnEvent_PlayerRegenDisabled();
         if HealBot_luVars["rcEnd"] then
@@ -5164,9 +5188,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="PLAYER_FOCUS_CHANGED") then
         HealBot_OnEvent_FocusChanged(self);
     elseif (event=="MODIFIER_STATE_CHANGED") then
-        if HealBot_Data["TIPBUTTON"] then
-            HealBot_Action_RefreshTooltip();
-        end
+        if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
     elseif (event=="UNIT_PET") then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
             HealBot_nextRecalcParty(2)

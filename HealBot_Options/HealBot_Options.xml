@@ -7036,9 +7036,9 @@
                           </Slider>
                           <Frame name="HealBot_Options_ManaIndicator" inherits="UIDropDownMenuTemplate">
                             <Anchors>
-                              <Anchor point="BOTTOM">
+                              <Anchor point="TOP" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="-90" y="20" />
+                                  <AbsDimension x="0" y="-40" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -7063,9 +7063,9 @@
                           </Frame>
                           <CheckButton name="HealBot_Options_ManaIndicatorInCombat" inherits="SendMailRadioButtonTemplate">
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ManaIndicator" relativePoint="TOPRIGHT">
+                              <Anchor point="TOP" relativeTo="HealBot_Options_ManaIndicator" relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="-5"/>
+                                  <AbsDimension x="-40" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -7075,7 +7075,20 @@
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSLOWMANAIC",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          
+                          <CheckButton name="HealBot_Options_ShowPowerCounter" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBCSpaceS" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="40" y="-40"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowPowerCounter_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSPOWERCOUNT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSPOWERCOUNT",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                       </Frames>
                   </Frame>
                   <Frame name="HealBot_Options_SkinsFramesBarsColours" hidden="true">
@@ -14679,7 +14692,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-75" />
+                          <AbsDimension x="170" y="-85" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14689,25 +14702,11 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOW",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipUpdate" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="170" y="-5"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipUpdate_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPUPDATE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPUPDATE",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_Options_HideTooltipInCombat" inherits="SendMailRadioButtonTemplate" id="1">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="-25"/>
+                          <AbsDimension x="170" y="-5"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14721,7 +14720,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-70" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14866,7 +14865,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="50" />
+                          <AbsDimension x="0" y="58" />
                         </Offset>
                       </Anchor>
                     </Anchors>

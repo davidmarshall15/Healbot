@@ -160,6 +160,7 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
     if button.aggro.threatpct~=threatPct then 
         button.aggro.threatpct=threatPct
         HealBot_Text_setNameText(button) 
+        if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         if threatPct<1 then
             HealBot_Aggro_ClearThreatBar(button)
         else

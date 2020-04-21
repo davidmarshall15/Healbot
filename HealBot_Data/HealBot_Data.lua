@@ -239,7 +239,6 @@ function HealBot_Data_InitVars()
         ResLagDuration=3,
         ByPassLock=0,
         ShowTooltip = true,
-        TooltipUpdate = true,
         Tooltip_ShowSpellDetail = false,
         Tooltip_ShowTarget = true,
         Tooltip_ShowMyBuffs = false,

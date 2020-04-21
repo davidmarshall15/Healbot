@@ -389,9 +389,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         button.gref.indicator.aggro["Iconar1"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
-        button.gref.indicator.mana["Icontm1"]:SetAlpha(0)
-        button.gref.indicator.mana["Icontm2"]:SetAlpha(0)
-        button.gref.indicator.mana["Icontm3"]:SetAlpha(0)
+        button.gref.indicator.mana[1]:SetAlpha(0)
+        button.gref.indicator.mana[2]:SetAlpha(0)
+        button.gref.indicator.mana[3]:SetAlpha(0)
         for x=1,5 do
             button.gref.indicator.power[x]:SetAlpha(0);
         end
@@ -1358,14 +1358,18 @@ function HealBot_Skins_Check_Skin(SkinName)
 
         if HealBot_Config_Buffs.CBshownAB then
             for x=1,9 do
-                Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][7][x]["USE"]=9
+                Healbot_Config_Skins.AuxBar[SkinName][7][x]["USE"]=9
+                Healbot_Config_Skins.AuxBar[SkinName][7][x]["DEPTH"]=1
+                Healbot_Config_Skins.AuxBar[SkinName][7][x]["ANCHOR"]=2
             end
         end
         HealBot_Config_Buffs.CBshownAB=nil
         HealBot_Config_Buffs.HealBot_CBWarnRange_Aggro=nil
         if HealBot_Config_Buffs.CDCshownAB then
             for x=1,9 do
-                Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][8][x]["USE"]=10
+                Healbot_Config_Skins.AuxBar[SkinName][8][x]["USE"]=10
+                Healbot_Config_Skins.AuxBar[SkinName][8][x]["DEPTH"]=1
+                Healbot_Config_Skins.AuxBar[SkinName][8][x]["ANCHOR"]=2
             end
         end
         HealBot_Config_Cures.CDCshownAB=nil
@@ -1373,21 +1377,32 @@ function HealBot_Skins_Check_Skin(SkinName)
 
         if Healbot_Config_Skins.BarHighlight and Healbot_Config_Skins.BarHighlight[SkinName] and Healbot_Config_Skins.BarHighlight[SkinName][gl]["CBAR"] then
             Healbot_Config_Skins.AuxBar[SkinName][6][gl]["USE"]=8
+            Healbot_Config_Skins.AuxBar[SkinName][6][gl]["DEPTH"]=1
+            Healbot_Config_Skins.AuxBar[SkinName][6][gl]["ANCHOR"]=2
         end
         if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOW"] and Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"] and
                                                                    Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]>0 then
             Healbot_Config_Skins.AuxBar[SkinName][5][gl]["USE"]=5
-            Healbot_Config_Skins.AuxBar[SkinName][5][gl]["DEPTH"]=Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]
+            if Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]>1 then
+                Healbot_Config_Skins.AuxBar[SkinName][5][gl]["DEPTH"]=ceil(Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]/1.5)
+            else
+                Healbot_Config_Skins.AuxBar[SkinName][5][gl]["DEPTH"]=1
+            end
         end
         if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"] then
             Healbot_Config_Skins.AuxBar[SkinName][4][gl]["USE"]=6
+            Healbot_Config_Skins.AuxBar[SkinName][4][gl]["DEPTH"]=2
         end
         Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"]=nil
         Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARS"]=nil
         Healbot_Config_Skins.BarHighlight=nil
         if Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"] and Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]>0 then
             Healbot_Config_Skins.AuxBar[SkinName][1][gl]["USE"]=4
-            Healbot_Config_Skins.AuxBar[SkinName][1][gl]["DEPTH"]=Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]
+            if Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]>1 then
+                Healbot_Config_Skins.AuxBar[SkinName][1][gl]["DEPTH"]=ceil(Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]/1.5)
+            else
+                Healbot_Config_Skins.AuxBar[SkinName][1][gl]["DEPTH"]=1
+            end
         end
         Healbot_Config_Skins.HealBar[SkinName][gl]["POWERSIZE"]=nil
         Healbot_Config_Skins.HealBar[SkinName][gl]["AGGROSIZE"]=nil

@@ -415,7 +415,6 @@ function HealBot_Lang_enALL()
     HEALBOT_TAGS                            = "Tags"
     
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
-    HEALBOT_OPTIONS_TOOLTIPUPDATE           = "Constantly update";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER          = "Show buff before it expires";
     HEALBOT_OPTIONS_SHORTBUFFTIMER          = "Short buffs"
     HEALBOT_OPTIONS_LONGBUFFTIMER           = "Long buffs"
@@ -1242,6 +1241,7 @@ function HealBot_Lang_enALL()
                                    [23] = "Madaleine",
                                    [24] = "ADDYDARI",
                                    [25] = "plastisch",
+                                   [26] = "MMOnster",
                                 }
                                
 end

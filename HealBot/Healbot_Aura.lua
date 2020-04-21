@@ -1547,11 +1547,16 @@ function HealBot_Aura_Update_UnitBuffIcons(button)
     end
 end
 
-function HealBot_Aura_UpdateAll_UnitBuffIcons(button)
+function HealBot_Aura_Update_UnitAllIcons(button)
     if button then
         for i=1,10 do
             if HealBot_UnitBuffIcons[button.id][i].current then
                 HealBot_Aura_UpdateIcon(button, HealBot_UnitBuffIcons[button.id][i], i)
+            end
+        end
+        for i=51,55 do
+            if HealBot_UnitDebuffIcons[button.id][i].current then
+                HealBot_Aura_UpdateIcon(button, HealBot_UnitDebuffIcons[button.id][i], i)
             end
         end
     else
@@ -1561,6 +1566,11 @@ function HealBot_Aura_UpdateAll_UnitBuffIcons(button)
                     HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
                 end
             end
+            for i=51,55 do
+                if HealBot_UnitDebuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i)
+                end
+            end
         end
         for _,xButton in pairs(HealBot_Private_Button) do
             for i=1,10 do
@@ -1568,11 +1578,21 @@ function HealBot_Aura_UpdateAll_UnitBuffIcons(button)
                     HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
                 end
             end
+            for i=51,55 do
+                if HealBot_UnitDebuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i)
+                end
+            end
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
             for i=1,10 do
                 if HealBot_UnitBuffIcons[xButton.id][i].current then
                     HealBot_Aura_UpdateIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i)
+                end
+            end
+            for i=51,55 do
+                if HealBot_UnitDebuffIcons[xButton.id][i].current then
+                    HealBot_Aura_UpdateIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i)
                 end
             end
         end

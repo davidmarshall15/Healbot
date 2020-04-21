@@ -3070,7 +3070,7 @@ function HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(self)
     local v=floor(self:GetValue()+0.5)
     if v~=self:GetValue() then
         self:SetValue(v) 
-    elseif HealBot_Config_Cures.IgnoreFastDurDebuffsSecs~=v then
+    else
         HealBot_Config_Cures.IgnoreFastDurDebuffsSecs = v;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. v.." secs");
@@ -3103,7 +3103,6 @@ function HealBot_Options_ShowPowerCounter_OnClick(self)
     end
     HealBot_setOptions_Timer(50)
     HealBot_Options_Energy()
-    HealBot_Options_framesChanged(true)
 end
 
 function HealBot_Options_Energy()
@@ -3990,14 +3989,6 @@ function HealBot_Options_LoadTips()
     HealBot_setTooltipUpdateInterval()
 end
 
-function HealBot_Options_ShowTooltipUpdate_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.TooltipUpdate = true
-    else
-        HealBot_Globals.TooltipUpdate = false
-    end
-end
-
 function HealBot_Options_HideTooltipInCombat_OnClick(self)
     if self:GetChecked() then
         HealBot_Globals.DisableToolTipInCombat = true
@@ -4337,7 +4328,7 @@ function HealBot_BarButtonIconAlwaysEnabled_OnClick(self)
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["I15EN"] = false
     end
     HealBot_Options_framesChanged(true)
-    HealBot_Aura_UpdateAll_UnitBuffIcons()
+    HealBot_Aura_Update_UnitAllIcons()
 end
 
 function HealBot_BarButtonIconFadeOnExpire_OnClick(self)
@@ -12676,14 +12667,14 @@ function HealBot_Options_Init(tabNo)
             HealBot_Options_InitSub(306)
             HealBot_Options_InitSub(303)
             DoneInitTab[3]=true
-            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
-              --  HealBot_Options_ShowPowerCounter:Show()
-              --  HealBot_Options_ShowPowerCounterText:SetText(HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA)
+            if HEALBOT_GAME_VERSION>3 and HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
+                HealBot_Options_ShowPowerCounter:Show()
+                HealBot_Options_ShowPowerCounterText:SetText(HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA)
             elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
-               -- HealBot_Options_ShowPowerCounter:Show()
-               -- HealBot_Options_ShowPowerCounterText:SetText(HEALBOT_OPTIONS_SHOWPOWERCOUNTER_MONK)
+                HealBot_Options_ShowPowerCounter:Show()
+                HealBot_Options_ShowPowerCounterText:SetText(HEALBOT_OPTIONS_SHOWPOWERCOUNTER_MONK)
             else
-               -- HealBot_Options_ShowPowerCounter:Hide()
+                HealBot_Options_ShowPowerCounter:Hide()
             end
             g=_G["HealBot_Options_FramesSelFrameFontStr"]
             g:SetText(HEALBOT_OPTIONS_FRAME)
@@ -13068,8 +13059,8 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_BarBCSpaceSText:SetText(HEALBOT_OPTIONS_SKINBCSPACE..": "..Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CMARGIN"])
             HealBot_Options_BarNumGroupPerCol:SetChecked(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["GRPCOLS"])
             HealBot_Options_SetText(HealBot_Options_BarNumGroupPerCol,HEALBOT_OPTIONS_GROUPSPERCOLUMN)
-            --HealBot_Options_ShowPowerCounter:SetChecked(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["POWERCNT"])
-            --HealBot_Options_SetText(HealBot_Options_ShowPowerCounter,HEALBOT_OPTIONS_SHOWPOWERCOUNTER)
+            HealBot_Options_ShowPowerCounter:SetChecked(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["POWERCNT"])
+            HealBot_Options_SetText(HealBot_Options_ShowPowerCounter,HEALBOT_OPTIONS_SHOWPOWERCOUNTER)
             HealBot_Options_BarTextureS:SetValue(texturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TEXTURE"]] or 1)
             HealBot_Options_val_OnLoad(HealBot_Options_BarHeightS,HEALBOT_OPTIONS_SKINHEIGHT,10,180,1)
             HealBot_Options_BarHeightS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["HEIGHT"])
@@ -14090,8 +14081,6 @@ function HealBot_Options_InitSub2(subNo)
         if not DoneInitTab[601] then
             HealBot_Options_ShowTooltip:SetChecked(HealBot_Globals.ShowTooltip)
             HealBot_Options_SetText(HealBot_Options_ShowTooltip,HEALBOT_OPTIONS_SHOWTOOLTIP)
-            HealBot_Options_ShowTooltipUpdate:SetChecked(HealBot_Globals.TooltipUpdate)
-            HealBot_Options_SetText(HealBot_Options_ShowTooltipUpdate,HEALBOT_OPTIONS_TOOLTIPUPDATE)
             HealBot_Options_HideTooltipInCombat:SetChecked(HealBot_Globals.DisableToolTipInCombat)
             HealBot_Options_SetText(HealBot_Options_HideTooltipInCombat,HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT)
             HealBot_Options_ShowTooltipTarget:SetChecked(HealBot_Globals.Tooltip_ShowTarget)

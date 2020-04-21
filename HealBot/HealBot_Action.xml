@@ -494,6 +494,46 @@
                 </Anchor>
               </Anchors>
             </Texture>
+            <Texture name="$parentIconpi1" file="Interface\AddOns\HealBot\Images\indicator_red">
+              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="BOTTOM">
+                  <Offset> <AbsDimension x="-14" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIconpi2" file="Interface\AddOns\HealBot\Images\indicator_orange">
+              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="BOTTOM">
+                  <Offset> <AbsDimension x="-7" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIconpi3" file="Interface\AddOns\HealBot\Images\indicator_yellow">
+              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="BOTTOM">
+                  <Offset> <AbsDimension x="0" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIconpi4" file="Interface\AddOns\HealBot\Images\indicator_lime">
+              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="BOTTOM">
+                  <Offset> <AbsDimension x="7" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentIconpi5" file="Interface\AddOns\HealBot\Images\indicator_green">
+              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Anchors>
+                <Anchor point="BOTTOM" relativePoint="BOTTOM">
+                  <Offset> <AbsDimension x="14" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
             </Layer>
 		</Layers>
       </StatusBar>
@@ -532,50 +572,6 @@
             </Offset>
           </Anchor>
         </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <Texture name="$parentIcon1" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
-              <Anchors>
-                <Anchor point="BOTTOM" relativePoint="BOTTOM">
-                  <Offset> <AbsDimension x="-14" y="0"/> </Offset>
-                </Anchor>
-              </Anchors>
-            </Texture>
-            <Texture name="$parentIcon2" file="Interface\AddOns\HealBot\Images\indicator_orange">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
-              <Anchors>
-                <Anchor point="BOTTOM" relativePoint="BOTTOM">
-                  <Offset> <AbsDimension x="-7" y="0"/> </Offset>
-                </Anchor>
-              </Anchors>
-            </Texture>
-            <Texture name="$parentIcon3" file="Interface\AddOns\HealBot\Images\indicator_yellow">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
-              <Anchors>
-                <Anchor point="BOTTOM" relativePoint="BOTTOM">
-                  <Offset> <AbsDimension x="0" y="0"/> </Offset>
-                </Anchor>
-              </Anchors>
-            </Texture>
-            <Texture name="$parentIcon4" file="Interface\AddOns\HealBot\Images\indicator_lime">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
-              <Anchors>
-                <Anchor point="BOTTOM" relativePoint="BOTTOM">
-                  <Offset> <AbsDimension x="7" y="0"/> </Offset>
-                </Anchor>
-              </Anchors>
-            </Texture>
-            <Texture name="$parentIcon5" file="Interface\AddOns\HealBot\Images\indicator_green">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
-              <Anchors>
-                <Anchor point="BOTTOM" relativePoint="BOTTOM">
-                  <Offset> <AbsDimension x="14" y="0"/> </Offset>
-                </Anchor>
-              </Anchors>
-            </Texture>
-          </Layer>
-		</Layers>
       </StatusBar>
       <StatusBar name="$parentAux2" inherits="HealBot_StatusBar">
         <Anchors>
