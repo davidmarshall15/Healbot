@@ -24,7 +24,7 @@ local function HealBot_Skins_Concat(elements)
     return tabconcat(tBarsConcat,"",1,elements)
 end
 
-function HealBot_Skins_AdjustBarWidth(button)
+function HealBot_Skins_AdjustSpecialBarWidth(button)
     EnemyTargetBarSize=(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]/100)
     if HealBot_Panel_isSpecialUnit(button.unit)==1 then
         bWidth=bWidth*(1-EnemyTargetBarSize)
@@ -47,7 +47,7 @@ function HealBot_Skins_ResetSkinWidth(button)
     bWidth = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
     bOutline = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BOUT"]*frameScale);
     if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-        HealBot_Skins_AdjustBarWidth(button)
+        HealBot_Skins_AdjustSpecialBarWidth(button)
     end
     button.gref["Bar"]:SetWidth(bWidth)
     button.gref["Back"]:SetWidth(bWidth+(bOutline*2))
@@ -153,7 +153,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             pWidth=bWidth
         end
         if HealBot_Panel_isSpecialUnit(button.unit)>0 then
-            HealBot_Skins_AdjustBarWidth(button)        
+            HealBot_Skins_AdjustSpecialBarWidth(button)        
             if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then 
                 pWidth=pWidth*(2-(pWidth/7800))
             end

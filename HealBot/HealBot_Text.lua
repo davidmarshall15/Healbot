@@ -139,12 +139,14 @@ function HealBot_Text_setTextLen(curFrame)
     else
         hbBarHealthTextLen[curFrame] = Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HMAXCHARS"]
     end
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HLTHTXTANCHOR"]==2 then
-        hbBarTextLen[curFrame] = floor(hbBarTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
-        hbBarHealthTextLen[curFrame] = floor(hbBarHealthTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
-    elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HLTHTXTANCHOR"]==3 then
-        hbBarTextLen[curFrame] = floor(hbBarTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
-        hbBarHealthTextLen[curFrame] = floor(hbBarHealthTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
+    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]==0 then
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HLTHTXTANCHOR"]==2 then
+            hbBarTextLen[curFrame] = floor(hbBarTextLen[curFrame]*(0.82+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
+            hbBarHealthTextLen[curFrame] = floor(hbBarHealthTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
+        elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HLTHTXTANCHOR"]==3 then
+            hbBarTextLen[curFrame] = floor(hbBarTextLen[curFrame]*(0.82+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
+            hbBarHealthTextLen[curFrame] = floor(hbBarHealthTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
+        end
     end
     --HealBot_setCall("HealBot_Text_setTextLen")
 end

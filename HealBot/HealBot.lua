@@ -1934,9 +1934,7 @@ local function HealBot_Update_Skins(forceCheck)
                 if tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
                     HealBot_NewVersionMessage(1)
                 end
-                if tonumber(tPatch)<6 and tonumber(tHealbot)<10 then
-                    HealBot_NewVersionMessage(2)
-                end
+                HealBot_NewVersionMessage(2)
                 HealBot_Update_BuffsForSpec("Buff")
             elseif tonumber(tMinor)==3 then
                 if tonumber(tPatch)==0 and tonumber(tHealbot)<3 then
@@ -1950,6 +1948,9 @@ local function HealBot_Update_Skins(forceCheck)
                             end
                         end
                     end
+                end
+                if tonumber(tPatch)==0 and tonumber(tHealbot)<15 then
+                    HealBot_NewVersionMessage(2)
                 end
             end
         end
@@ -3578,14 +3579,9 @@ function HealBot_OnUpdate(self)
         if HealBot_Timers["barsUpdateAltFrame"] and HealBot_Timers["barsUpdate"]<TimeNow and not HealBot_luVars["TestBarsOn"] then
             HealBot_Timers["barsUpdateAltFrame"]=false
             if HealBot_luVars["FluidFlashInUse"] then
-                if HealBot_luVars["UpdateFluid"] then
-                    HealBot_luVars["UpdateFluid"]=false
-                    HealBot_UpdateVariableAuxBars()
-                else
-                    HealBot_luVars["UpdateFluid"]=true
-                    HealBot_Action_UpdateFluidBar()
-                    HealBot_UpdateFluidAuxBars()
-                end
+                HealBot_UpdateVariableAuxBars()
+                HealBot_Action_UpdateFluidBar()
+                HealBot_UpdateFluidAuxBars()
                 HealBot_Timers["barsUpdate"]=TimeNow+HealBot_Timers["barsUpdateFreq"]
             else
                 HealBot_Timers["barsUpdate"]=TimeNow+HealBot_luVars["TipUpdateFreq"]
@@ -4866,7 +4862,7 @@ function HealBot_NewVersionMessage(msgType)
     if msgType==1 then
         msg="HealBot\n----------\n\nIf not preparing for this version\nyour settings will be at defaults\n\nTo restore settings, visit the forum on\n"..HEALBOT_ABOUT_URL.."\n"
     elseif msgType==2 then
-        msg="HealBot\n----------\n\nCustom Buffs and Custom Debuffs\nnow use Spell ID and Spell Name\n\nIndividual Buffs and Debuffs can be set\nto use only Spell ID or Spell Name on the\nBuffs>Custom and Debuffs>Custom tabs\n"
+        msg="HealBot\n----------\n\n40 Extra Skins are available to import\nGo to HealBot options Import/Export>Skins\n\nDo you have a great skin to share?\nWant it included as a permanent backup?\n\nTo have your skins included\nvisit "..HEALBOT_ABOUT_URL.." and let us know.\n"
     end
     StaticPopupDialogs["HEALBOT_NEWVERSIONMSG"] = {
         text = msg,
