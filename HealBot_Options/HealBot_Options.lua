@@ -9065,7 +9065,6 @@ function HealBot_Options_ShareSkinComplete()
         Healbot_Config_Skins.Skin_ID = 2;
     end
     Healbot_Config_Skins.Current_Skin = hbOptGetSkinName
-    HealBot_Config.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
     HealBot_Skins_Check_Skin(hbOptGetSkinName)  
     HealBot_Options_SetSkins(true);
     HealBot_Options_NewSkin:SetText("")
@@ -13312,7 +13311,11 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SkinDefaultRaid10:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID10])
             HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid10,HEALBOT_OPTIONS_RAID10)
             HealBot_Options_SkinDefaultRaid25:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID25])
-            HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID25)
+            if HEALBOT_GAME_VERSION<4 then 
+                HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID20)
+            else
+                HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID25)
+            end
             HealBot_Options_SkinDefaultRaid40:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID40])
             HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid40,HEALBOT_OPTIONS_RAID40)
             HealBot_Options_SkinDefaultArena:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_ARENA])

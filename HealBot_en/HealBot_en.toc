@@ -2,7 +2,7 @@
 ## Title: HealBot English Localization
 ## Author: Strife
 ## Notes: HealBot localization for enUS and enUK
-## Version: 8.3.0.14
+## Version: 8.3.0.15
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

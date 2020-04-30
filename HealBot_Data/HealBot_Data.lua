@@ -1,4 +1,5 @@
-HealBot_lastVerSkinUpdate="8.3.0.2"
+HealBot_lastVerSkinUpdate="8.3.0.14"
+HealBot_lastVerUpdate="8.3.0.14"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -45,7 +46,7 @@ HealBot_Font_Outline={
 };
 
 HealBot_ConfigDefaults = {
-  LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
+  LastVersionUpdate=HealBot_lastVerUpdate,
   MyFriend="x",
   CurrentSpec=9,
   Skin_ID = -1,
@@ -229,6 +230,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
+        LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
         DebugOut=false,
         Debug01=false, -- Currently not used
         VersionResetDone={},
@@ -3128,6 +3130,7 @@ HealBot_Data={  ["TIPBUTTON"] = false,
                 ["INSPECT"] = false,
                 ["MAPID"] = 0,
                 ["UNITSLOCK"] = false,
+                ["POWERTYPE"]= 0,
 };
 
 HealBot_FrameVisible = {[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}

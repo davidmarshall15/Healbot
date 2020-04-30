@@ -722,12 +722,12 @@ function HealBot_TestBars(noBars)
 end
 
 local hbManaCurrent, hbManaMax=0,0
-local function HealBot_OnEvent_UnitMana(button)
+local function HealBot_OnEvent_UnitMana(button, force)
     button.mana.update=false
     if UnitExists(button.unit) then
         hbManaCurrent=UnitPower(button.unit)
         hbManaMax=UnitPowerMax(button.unit)
-        if button.mana.current~=hbManaCurrent or button.mana.max~=hbManaMax then
+        if button.mana.current~=hbManaCurrent or button.mana.max~=hbManaMax or force then
             button.mana.current=hbManaCurrent
             button.mana.max=hbManaMax
             HealBot_Action_CheckUnitLowMana(button)
@@ -748,13 +748,13 @@ end
 
 local function HealBot_setAllPowerBars()
     for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_setPowerBars(xButton)
+        HealBot_OnEvent_UnitMana(xButton, true)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_setPowerBars(xButton)
+        HealBot_OnEvent_UnitMana(xButton, true)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_setPowerBars(xButton)
+        HealBot_OnEvent_UnitMana(xButton, true)
     end
 end
 
@@ -1235,6 +1235,7 @@ local function HealBot_Load(hbCaller)
     --
     HealBot_setOptions_Timer(8000)
     HealBot_Data["PGUID"]=UnitGUID("player")
+    HealBot_Data["POWERTYPE"]=UnitPowerType("player") or 0
     HealBot_InitSpells()
     HealBot_setOptions_Timer(550)
     HealBot_useCrashProtection()
@@ -1605,7 +1606,8 @@ end
 local function HealBot_ResetSkins()
     Healbot_Config_Skins = HealBot_Config_SkinsDefaults
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMSKINDEFAULTS)
-    HealBot_Config.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
+    HealBot_Config.LastVersionUpdate=HealBot_lastVerUpdate
+    HealBot_Globals.LastVersionSkinUpdate=HealBot_lastVerSkinUpdate
     HealBot_Options_ReloadUI(HEALBOT_CMD_RESETSKINS)
     --HealBot_setCall("HealBot_ResetSkins")
 end
@@ -1814,11 +1816,12 @@ local function HealBot_Include_Skin(skinName)
 end
 
 local function HealBot_Update_Skins(forceCheck)
-    if HealBot_Globals.LastVersionSkinUpdate then
-        HealBot_Globals.LastVersionSkinUpdate=nil
-    end
-    if HealBot_Config.ActionVisible then
-        HealBot_Config.ActionVisible=nil
+    if HealBot_Config.LastVersionSkinUpdate then
+        if not HealBot_Globals.LastVersionSkinUpdate or HealBot_Globals.LastVersionSkinUpdate==HealBot_lastVerSkinUpdate then
+            HealBot_Globals.LastVersionSkinUpdate=HealBot_Config.LastVersionSkinUpdate
+        end
+        HealBot_Config.LastVersionUpdate=HealBot_Config.LastVersionSkinUpdate
+        HealBot_Config.LastVersionSkinUpdate=nil
     end
     local foundSkin=false
     for x in pairs (Healbot_Config_Skins.Skins) do
@@ -1841,11 +1844,11 @@ local function HealBot_Update_Skins(forceCheck)
         HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
     end
 
-    local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionSkinUpdate)
+    local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
     if tonumber(tMajor)<8 then
         HealBot_Options_SetDefaults();
         HealBot_ReloadUI()
-    elseif HealBot_Config.LastVersionSkinUpdate~=HEALBOT_VERSION_SC or forceCheck then   
+    elseif HealBot_Globals.LastVersionSkinUpdate~=HEALBOT_VERSION_SC or forceCheck then   
         for x in pairs (Healbot_Config_Skins.Skins) do
             HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
             if tonumber(tMajor)==8 then
@@ -1934,7 +1937,6 @@ local function HealBot_Update_Skins(forceCheck)
                 if tonumber(tPatch)<6 and tonumber(tHealbot)<7 then
                     HealBot_NewVersionMessage(1)
                 end
-                HealBot_NewVersionMessage(2)
                 HealBot_Update_BuffsForSpec("Buff")
             elseif tonumber(tMinor)==3 then
                 if tonumber(tPatch)==0 and tonumber(tHealbot)<3 then
@@ -1948,9 +1950,6 @@ local function HealBot_Update_Skins(forceCheck)
                             end
                         end
                     end
-                end
-                if tonumber(tPatch)==0 and tonumber(tHealbot)<15 then
-                    HealBot_NewVersionMessage(2)
                 end
             end
         end
@@ -1968,13 +1967,32 @@ local function HealBot_Update_Skins(forceCheck)
             HealBot_Globals.CDCBarColour[customDebuffPriority]["B"] = 0.28
         end
     end
+    tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
+    if HealBot_Config.LastVersionUpdate~=HEALBOT_VERSION_SC or forceCheck then 
+        if HealBot_Config.ActionVisible then
+            HealBot_Config.ActionVisible=nil
+        end
+        -- Character specific checks
+        if tonumber(tMajor)<8 then
+            HealBot_NewVersionMessage(2)
+        elseif tonumber(tMajor)==8 then
+            if tonumber(tMinor)<3 then
+                HealBot_NewVersionMessage(2)
+            elseif tonumber(tMinor)==3 then
+                if tonumber(tPatch)==0 and tonumber(tHealbot)<15 then
+                    HealBot_NewVersionMessage(2)
+                end
+            end
+        end
+    end
+    
     if HealBot_Config.CurrentSpec==9 then
         HealBot_Config.CurrentSpec=1
         HealBot_Update_SpellCombos()
         HealBot_Update_BuffsForSpec()
     end
-    
-    HealBot_Config.LastVersionSkinUpdate=HEALBOT_VERSION_SC
+    HealBot_Globals.LastVersionSkinUpdate=HEALBOT_VERSION_SC
+    HealBot_Config.LastVersionUpdate=HEALBOT_VERSION_SC
     --HealBot_setCall("HealBot_Update_Skins")
 end
 
@@ -2267,7 +2285,7 @@ local function HealBot_GetTalentInfo(button)
     if UnitIsUnit(button.unit, "player") then
         HealBot_Aura_ResetDebuffCache()
     end
-    HealBot_Action_setPowerBars(button)
+    HealBot_OnEvent_UnitMana(button, true)
     --HealBot_setCall("HealBot_GetTalentInfo")
 end
 
@@ -2915,7 +2933,7 @@ function HealBot_getDefaultSkin()
                     break
                 end
             end
-        elseif GetNumGroupMembers()>15 then
+        elseif GetNumGroupMembers()>14 then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_OPTIONS_RAID25] then
                     LastAutoSkinChangeType="Raid25"
@@ -3003,7 +3021,7 @@ local function HealBot_Not_Fighting()
         HealBot_MessageReloadUI(HealBot_luVars["MessageReloadUI"])
     end
     HealBot_EndInstanceEncounter()
-    if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] then
+    if Healbot_Config_Skins.Chat[Healbot_Config_Skins.Current_Skin]["EOCOOM"] and HealBot_Data["POWERTYPE"]==0 then
         HealBot_setOptions_Timer(9940)
     end
     HealBot_OnEvent_PlayerTargetChanged(true)
@@ -3265,6 +3283,12 @@ local function HealBot_UnitUpdateButton(button)
     end
 end
 
+local function HealBot_setPowerBars(button, cName)
+    button.mana.current=UnitPower(button.unit)
+    button.mana.max=UnitPowerMax(button.unit)
+    HealBot_Action_setPowerBars(button, cName)
+end
+
 HealBot_luVars["aRefresh"]=false
 local euName, euStartTime, euEndTime=false,0,0
 local euDuration, euCast, euPct, euGUID=0,0,0, false
@@ -3289,19 +3313,19 @@ local function HealBot_EnemyUpdateButton(button)
                 if euName and 1==0 then --Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][10]["POWERSIZE"]>0 then
                     if TimeNow+0.01>euEndTime and button.spells.castpct>-1 then
                         button.spells.castpct=-1
-                        HealBot_Action_setPowerBars(button)
+                        HealBot_setPowerBars(button)
                     else
                         euDuration=euEndTime-euStartTime
                         euCast=((TimeNow*1000)-euStartTime)
                         euPct=ceil((euCast/euDuration)*1000)
                         if button.spells.castpct~=euPct then
                             button.spells.castpct=euPct
-                            HealBot_Action_setPowerBars(button, euName)
+                            HealBot_setPowerBars(button, euName)
                         end
                     end
                 elseif button.spells.castpct>-1 then
                     button.spells.castpct = -1
-                    HealBot_Action_setPowerBars(button)
+                    HealBot_setPowerBars(button)
                 end
             end
             if button.status.unittype==11 then

@@ -929,7 +929,12 @@ local vPowerBarInfo={}
 local vPowerBarType,vPowerBarToken,vPowerBarR,vPowerBarG,vPowerBarB=0,"MANA",0,0,0
 local function HealBot_Action_GetManaBarCol(button)
     vPowerBarType, vPowerBarToken, vPowerBarR, vPowerBarG, vPowerBarB=UnitPowerType(button.unit);
-    if vPowerBarType then button.mana.type=vPowerBarType end
+    if vPowerBarType then 
+        button.mana.type=vPowerBarType 
+        if UnitIsUnit("player", button.unit) then
+            HealBot_Data["POWERTYPE"]=vPowerBarType
+        end
+    end
     vPowerBarInfo=PowerBarColor[vPowerBarToken]
     if vPowerBarInfo then
         return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
@@ -1441,9 +1446,9 @@ local function HealBot_Action_PrepButton(button)
     button.health.updabsorbs=false
     button.health.rcol=0
     button.health.gcol=0
-    button.mana.current=0
+    button.mana.current=-1
     button.mana.max=0
-    button.mana.type=-1
+    button.mana.type=0
     button.mana.r=0
     button.mana.g=0
     button.mana.b=1

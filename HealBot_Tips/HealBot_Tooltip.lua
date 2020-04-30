@@ -225,14 +225,24 @@ local function HealBot_Tooltip_SetLine(lNo,lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
 end
 
 local HealBot_Tooltip_Power = 9
+local HealBot_Tooltip_PowerDesc = {[0]="Mana", 
+                                   [1]="Rage", 
+                                   [2]="Focus", 
+                                   [3]="Energy", 
+                                   [4]="Happiness", 
+                                   [5]="Runes", 
+                                   [6]="Runic Power", 
+                                   [7]="Soul Shards", 
+                                   [8]="Eclipse", 
+                                   [9]="Holy Power"}
 local function HealBot_Tooltip_SpellInfo(spellName)
     if HealBot_Spell_Names[spellName] then
         if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana>0 then
             linenum=linenum+1
-            if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
+            if HealBot_Data["POWERTYPE"]==0 and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
                 HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Power: "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana,0.4,0.4,1,1)
             else
-                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,"Mana: "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana,0.4,0.4,1,1)
+                HealBot_Tooltip_SetLine(linenum,HEALBOT_WORDS_CAST..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].CastTime.." "..HEALBOT_WORDS_SEC..".",0.8,0.8,0.8,1,HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]..": "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana,0.4,0.4,1,1)
             end
         end
     end
@@ -241,10 +251,10 @@ end
 local function HealBot_Tooltip_SpellSummary(spellName)
     local ret_val = "  "
     if HealBot_Spell_Names[spellName] then
-        if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
+        if HealBot_Data["POWERTYPE"]==0 and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
             ret_val = " -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Power"
         else
-            ret_val = " -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." Mana"
+            ret_val = " -  "..HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana.." "..HealBot_Tooltip_PowerDesc[HealBot_Data["POWERTYPE"]]
         end
     end
     if strlen(ret_val)<5 then ret_val = " - "..spellName; end
