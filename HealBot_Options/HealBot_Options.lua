@@ -11846,12 +11846,16 @@ function HealBot_Options_FrameTitle_OnTextChanged(self)
 end
 
 function HealBot_Options_FrameAliasShow_OnClick(self)
+    local prevVal=Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"]
     if self:GetChecked() then
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] = true
     else
         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] = false
     end
-    HealBot_setOptions_Timer(415)
+    if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"]~=prevVal then
+        HealBot_Options_framesChanged(true)
+        HealBot_setOptions_Timer(415)
+    end
 end
 
 function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)

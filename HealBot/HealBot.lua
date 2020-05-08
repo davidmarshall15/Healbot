@@ -1236,6 +1236,7 @@ local function HealBot_Load(hbCaller)
     HealBot_setOptions_Timer(8000)
     HealBot_Data["PGUID"]=UnitGUID("player")
     HealBot_Data["POWERTYPE"]=UnitPowerType("player") or 0
+    if HealBot_Data["POWERTYPE"]<0 or HealBot_Data["POWERTYPE"]>9 then HealBot_Data["POWERTYPE"]=0 end
     HealBot_InitSpells()
     HealBot_setOptions_Timer(550)
     HealBot_useCrashProtection()
@@ -1554,7 +1555,7 @@ function HealBotClassic_HealsInUpdate(immediateUpdate, spellId, ...)
             chiUnit,chixButton,chipButton = HealBot_UnitID(HealBot_Panel_RaidUnitGUID(chiTargetGUID))
             if chixButton then HealBotClassic_HealsInDoUpdate(chixButton, immediateUpdate) end
             if chipButton then HealBotClassic_HealsInDoUpdate(chipButton, immediateUpdate) end
-            if HealBot_Unit_Button["target"] and chiUnit~="target" and UnitExists("target") and UnitIsUnit("target", chiUnit) then
+            if chiUnit and HealBot_Unit_Button["target"] and chiUnit~="target" and UnitExists("target") and UnitIsUnit("target", chiUnit) then
                 HealBotClassic_HealsInDoUpdate(HealBot_Unit_Button["target"], immediateUpdate)
             end
         end

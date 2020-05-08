@@ -933,6 +933,7 @@ local function HealBot_Action_GetManaBarCol(button)
         button.mana.type=vPowerBarType 
         if UnitIsUnit("player", button.unit) then
             HealBot_Data["POWERTYPE"]=vPowerBarType
+            if HealBot_Data["POWERTYPE"]<0 or HealBot_Data["POWERTYPE"]>9 then HealBot_Data["POWERTYPE"]=0 end
         end
     end
     vPowerBarInfo=PowerBarColor[vPowerBarToken]

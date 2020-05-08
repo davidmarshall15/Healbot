@@ -1768,7 +1768,7 @@ local function HealBot_Panel_targetHeals(preCombat)
     end
     if i[hbCurrentFrame]>vTargetIndex then 
         HealBot_Panel_SubSort(false,9)
-        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
+        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = HEALBOT_OPTIONS_TARGETHEALS
     end
 end
 
@@ -2022,7 +2022,7 @@ local function HealBot_Panel_focusHeals(preCombat)
  
     if i[hbCurrentFrame]>vFocusIndex then 
         HealBot_Panel_SubSort(false, 10)
-        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_FOCUS
+        HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = HEALBOT_FOCUS
     end
 end
 
