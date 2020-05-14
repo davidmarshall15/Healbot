@@ -1751,20 +1751,19 @@ function HealBot_Panel_validTarget(unit)
     return vTargetValid
 end
 
-local vTargetIndex,vTargetUnit=0,"target"
+local vTargetIndex=0
 local function HealBot_Panel_targetHeals(preCombat)
-    vTargetUnit="target";
     vTargetIndex=i[hbCurrentFrame]
-    if UnitExists(vTargetUnit) and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
-        if not UnitIsVisible(vTargetUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
-            if HealBot_Panel_validTarget() then
+    if UnitExists("target") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
+        if not UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+            if preCombat or HealBot_Panel_validTarget() then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-                table.insert(subunits,vTargetUnit)
+                table.insert(subunits,"target")
             end
         end
     elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==3 then
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        table.insert(subunits,vTargetUnit)
+        table.insert(subunits,"target")
     end
     if i[hbCurrentFrame]>vTargetIndex then 
         HealBot_Panel_SubSort(false,9)
@@ -2004,22 +2003,25 @@ function HealBot_Panel_validFocus()
     return vFocusUnitValid
 end
 
-local vFocusIndex,vFocusUnit=0,"focus"
+local vFocusIndex=0
 local function HealBot_Panel_focusHeals(preCombat)
     vFocusIndex=i[hbCurrentFrame]
-    local uExists=false
-    if HealBot_Panel_validFocus() and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]>1) then
-        if not UnitIsVisible(vFocusUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+    if UnitExists("focus") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]>1) then
+        if preCombat then
             i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-            table.insert(subunits,vFocusUnit)
+            table.insert(subunits,"focus")
+        elseif not UnitIsVisible("focus") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+            if HealBot_Panel_validFocus() then
+                i[hbCurrentFrame] = i[hbCurrentFrame]+1;
+                table.insert(subunits,"focus")
+            end
         else
-            HealBot_setNotVisible(vFocusUnit,4)
+            HealBot_setNotVisible("focus",4)
         end
     elseif preCombat and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==3 then 
         i[hbCurrentFrame] = i[hbCurrentFrame]+1;
-        table.insert(subunits,vFocusUnit)
+        table.insert(subunits,"focus")
     end
- 
     if i[hbCurrentFrame]>vFocusIndex then 
         HealBot_Panel_SubSort(false, 10)
         HeaderPos[hbCurrentFrame][i[hbCurrentFrame]] = HEALBOT_FOCUS
@@ -2112,8 +2114,8 @@ local function HealBot_Panel_VehicleChanged()
     hbCurrentFrame=6
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"]then
-        HeaderPos[hbCurrentFrame]={};
         i[hbCurrentFrame]=0
+        HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_vehicleHeals()
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==7 then
@@ -2141,8 +2143,8 @@ local function HealBot_Panel_PetsChanged()
     hbCurrentFrame=7
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-        HeaderPos[hbCurrentFrame]={};
         i[hbCurrentFrame]=0
+        HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_petHeals()
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==8 then
@@ -2171,8 +2173,8 @@ local function HealBot_Panel_TargetChanged(preCombat)
     hbCurrentFrame=8
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
-        HeaderPos[hbCurrentFrame]={};
         i[hbCurrentFrame]=0
+        HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_targetHeals(preCombat)        
         vTargetButton = HealBot_Unit_Button["target"]
         if vTargetButton then
@@ -2250,8 +2252,8 @@ local function HealBot_Panel_FocusChanged(preCombat)
         hbCurrentFrame=9
         hbBarsPerFrame[hbCurrentFrame]=0
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
-            HeaderPos[hbCurrentFrame]={};
             i[hbCurrentFrame]=0
+            HeaderPos[hbCurrentFrame]={};
             HealBot_Panel_focusHeals(preCombat)
             vFocusButton = HealBot_Unit_Button["focus"]
             if vFocusButton then
@@ -2280,8 +2282,8 @@ local function HealBot_Panel_EnemyChanged()
     hbCurrentFrame=10
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
-        HeaderPos[hbCurrentFrame]={};
         i[hbCurrentFrame]=0
+        HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_enemyTargets()
         for xUnit,xButton in pairs(HealBot_Enemy_Button) do
             if HealBot_TrackUnit[xUnit] then
@@ -2302,11 +2304,6 @@ end
 
 local vIsCrashProt,vPetsWithPlayers=false,false
 local function HealBot_Panel_PlayersChanged()
-    hbBarsPerFrame[1]=0
-    hbBarsPerFrame[2]=0
-    hbBarsPerFrame[3]=0
-    hbBarsPerFrame[4]=0
-    hbBarsPerFrame[5]=0
     nraid=GetNumGroupMembers();
     TempMaxH=9;
     
@@ -2314,17 +2311,14 @@ local function HealBot_Panel_PlayersChanged()
 
     for gl=1,5 do
         HeaderPos[gl]={};
+        hbBarsPerFrame[gl]=0
+        i[gl]=0
     end
     
     for x,_ in pairs(HealBot_cpName) do
         HealBot_cpName[x]=nil
     end 
 
-    i[1]=0
-    i[2]=0
-    i[3]=0
-    i[4]=0
-    i[5]=0
     vIsCrashProt=false
     if HealBot_retLuVars("UseCrashProtection") and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] then
         if nraid==0 and not UnitExists("player") then

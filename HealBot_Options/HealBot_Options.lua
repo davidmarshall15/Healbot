@@ -2945,8 +2945,12 @@ function HealBot_Options_StickyFramesSensitivity_OnValueChanged(self)
 end
 
 function HealBot_Options_BarFreq_setVars()
-    HealBot_Action_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*5))
-    HealBot_setLuVars("FLUIDFREQ", (Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*5))
+    local fluidFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*3
+    HealBot_Action_setLuVars("FLUIDFREQ", fluidFreq)
+    HealBot_setLuVars("FLUIDFREQ", fluidFreq)
+    local stateFreq=0.01+(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/100)
+    HealBot_Action_setLuVars("FLUIDSTATEFREQ", stateFreq)
+    HealBot_setLuVars("FLUIDSTATEFREQ", stateFreq)
 end
 
 function HealBot_Options_BarFreq_OnValueChanged(self)
@@ -3247,6 +3251,7 @@ function HealBot_Options_UseFluidBars_OnClick(self)
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = true
     else
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = false
+        HealBot_clearAllAuxFluid_Buttons()
     end
     HealBot_Options_FluidFlashInUse()
     HealBot_setOptions_Timer(80)
@@ -8630,11 +8635,15 @@ function HealBot_Options_LoadPresetColsb_OnClick()
                 if x>10 then break end
                 local alias,d = string.split("~", ssTab[e])
                 local r,g,b,a=string.split(",", d)
-                HealBot_Globals.PresetColoursAlias[x]=alias
-                HealBot_Globals.PresetColours[x]["R"]=r
-                HealBot_Globals.PresetColours[x]["G"]=g
-                HealBot_Globals.PresetColours[x]["B"]=b
-                HealBot_Globals.PresetColours[x]["A"]=a
+                if not alias or not r or not g or not b or not a then
+                    HealBot_Options_ImportFail("Preset Colours", "Data corruption")
+                else
+                    HealBot_Globals.PresetColoursAlias[x]=alias
+                    HealBot_Globals.PresetColours[x]["R"]=r
+                    HealBot_Globals.PresetColours[x]["G"]=g
+                    HealBot_Globals.PresetColours[x]["B"]=b
+                    HealBot_Globals.PresetColours[x]["A"]=a
+                end
             end
         end
     end
@@ -8752,24 +8761,28 @@ function HealBot_Options_LoadSpellsb_OnClick()
                 local _,c,d = string.split("~", ssTab[e])
                 local ActionBarsCombo,Buttons_Button,KeyPress=string.split(",", c)
                 local sName,sTar,sTrin1,sTrin2,AvoidBC=string.split(",", d)
-                ActionBarsCombo=tonumber(ActionBarsCombo)
-                Buttons_Button=tonumber(Buttons_Button)
-                KeyPress=tonumber(KeyPress)
-                local cType="ENEMY"
-                if ActionBarsCombo==1 then
-                    cType = "ENABLED"
-                elseif ActionBarsCombo==2 then
-                    cType = "DISABLED"
-                end
-                local button = HealBot_Options_ComboClass_Button(Buttons_Button)
-                local cText=HealBot_Action_GetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec)
-                if not cText or (cText and strlen(cText)<2) or HealBot_Options_StorePrev["InMethodSpell"]<3 then
-                    HealBot_Action_SetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec, sName)
-                    HealBot_Options_KnownSpellCheck(sName)
-                    HealBot_SpellAutoButton_Update("Target", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTar)
-                    HealBot_SpellAutoButton_Update("Trinket1", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin1)
-                    HealBot_SpellAutoButton_Update("Trinket2", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin2)
-                    HealBot_SpellAutoButton_Update("AvoidBC", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, AvoidBC)
+                if not ActionBarsCombo or not Buttons_Button or not KeyPress or not sName then
+                    HealBot_Options_ImportFail("Spells", "Data corruption")
+                else
+                    ActionBarsCombo=tonumber(ActionBarsCombo)
+                    Buttons_Button=tonumber(Buttons_Button)
+                    KeyPress=tonumber(KeyPress)
+                    local cType="ENEMY"
+                    if ActionBarsCombo==1 then
+                        cType = "ENABLED"
+                    elseif ActionBarsCombo==2 then
+                        cType = "DISABLED"
+                    end
+                    local button = HealBot_Options_ComboClass_Button(Buttons_Button)
+                    local cText=HealBot_Action_GetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec)
+                    if not cText or (cText and strlen(cText)<2) or HealBot_Options_StorePrev["InMethodSpell"]<3 then
+                        HealBot_Action_SetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec, sName)
+                        HealBot_Options_KnownSpellCheck(sName)
+                        HealBot_SpellAutoButton_Update("Target", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTar)
+                        HealBot_SpellAutoButton_Update("Trinket1", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin1)
+                        HealBot_SpellAutoButton_Update("Trinket2", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin2)
+                        HealBot_SpellAutoButton_Update("AvoidBC", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, AvoidBC)
+                    end
                 end
             end
             if HealBot_Config.Profile==2 then 
@@ -8847,45 +8860,49 @@ function HealBot_Options_LoadBuffsb_OnClick()
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
                 local bId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
-                bId=tonumber(bId) or bId
-                prio=tonumber(prio)
-                filter=tonumber(filter)
-                r=tonumber(r)
-                g=tonumber(g)
-                b=tonumber(b)
-                idMethod=tonumber(idMethod) or 3
-                if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Options_StorePrev["InMethodBuff"]<3 then
-                    local bName=GetSpellInfo(bId) or bId
-                    HealBot_Globals.WatchHoT[c][bId]=filter
-                    if prio>0 then HealBot_Globals.HealBot_Custom_Buffs[bId]=prio end
-                    if show=="true" then 
-                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=true
-                    else
-                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=false
-                    end
-                    if r then
-                        HealBot_Globals.CustomBuffBarColour[bId]={}
-                        HealBot_Globals.CustomBuffBarColour[bId]["R"]=r
-                        HealBot_Globals.CustomBuffBarColour[bId]["G"]=g
-                        HealBot_Globals.CustomBuffBarColour[bId]["B"]=b
-                    elseif HealBot_Globals.CustomBuffBarColour[bId] then
-                        HealBot_Globals.CustomBuffBarColour[bId]=nil
-                    end
-                    if idMethod>0 and idMethod<3 then
-                        HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
-                    end
-                    if string.len(i1)>0 then 
-                        if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
-                        HealBot_Globals.IgnoreCustomBuff[bId][i1]=true 
-                    end
-                    if string.len(i2)>0 then
-                        HealBot_Globals.IgnoreCustomBuff[bId][i2]=true 
-                    end
-                    if string.len(i3)>0 then
-                        HealBot_Globals.IgnoreCustomBuff[bId][i3]=true 
-                    end
-                    if string.len(i4)>0 then
-                        HealBot_Globals.IgnoreCustomBuff[bId][i4]=true 
+                if not c or not bId or not prio or not filter or not show or not r or not g or not b then
+                    HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
+                else
+                    bId=tonumber(bId) or bId
+                    prio=tonumber(prio)
+                    filter=tonumber(filter)
+                    r=tonumber(r)
+                    g=tonumber(g)
+                    b=tonumber(b)
+                    idMethod=tonumber(idMethod) or 3
+                    if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Options_StorePrev["InMethodBuff"]<3 then
+                        local bName=GetSpellInfo(bId) or bId
+                        HealBot_Globals.WatchHoT[c][bId]=filter
+                        if prio>0 then HealBot_Globals.HealBot_Custom_Buffs[bId]=prio end
+                        if show=="true" then 
+                            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=true
+                        else
+                            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=false
+                        end
+                        if r then
+                            HealBot_Globals.CustomBuffBarColour[bId]={}
+                            HealBot_Globals.CustomBuffBarColour[bId]["R"]=r
+                            HealBot_Globals.CustomBuffBarColour[bId]["G"]=g
+                            HealBot_Globals.CustomBuffBarColour[bId]["B"]=b
+                        elseif HealBot_Globals.CustomBuffBarColour[bId] then
+                            HealBot_Globals.CustomBuffBarColour[bId]=nil
+                        end
+                        if idMethod>0 and idMethod<3 then
+                            HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
+                        end
+                        if string.len(i1 or "")>0 then 
+                            if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
+                            HealBot_Globals.IgnoreCustomBuff[bId][i1]=true 
+                        end
+                        if string.len(i2 or "")>0 then
+                            HealBot_Globals.IgnoreCustomBuff[bId][i2]=true 
+                        end
+                        if string.len(i3 or "")>0 then
+                            HealBot_Globals.IgnoreCustomBuff[bId][i3]=true 
+                        end
+                        if string.len(i4 or "")>0 then
+                            HealBot_Globals.IgnoreCustomBuff[bId][i4]=true 
+                        end
                     end
                 end
             end
@@ -8958,48 +8975,52 @@ function HealBot_Options_LoadCDebuffb_OnClick()
             for e=2,#ssTab do 
                 local _,c,d = string.split("~", ssTab[e])
                 local dId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
-                c=tonumber(c)
-                dId=tonumber(dId) or dId
-                prio=tonumber(prio)
-                filter=tonumber(filter)
-                r=tonumber(r)
-                g=tonumber(g)
-                b=tonumber(b)
-                idMethod=tonumber(idMethod) or 3
-                if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Options_StorePrev["InMethodCDbuff"]<3 then
-                    local dName=GetSpellInfo(dId) or dId
-                    if dName==dId then HealBot_Globals.CatchAltDebuffIDs[dName]=true end
-                    HealBot_Globals.Custom_Debuff_Categories[dId]=c
-                    HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
-                    if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
-                    if show=="true" then
-                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=true
-                    else
-                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=false
-                    end
-                    if r then
-                        HealBot_Globals.CDCBarColour[dId]={}
-                        HealBot_Globals.CDCBarColour[dId]["R"]=r
-                        HealBot_Globals.CDCBarColour[dId]["G"]=g
-                        HealBot_Globals.CDCBarColour[dId]["B"]=b
-                    elseif HealBot_Globals.CDCBarColour[dId] then
-                        HealBot_Globals.CDCBarColour[dId]=nil
-                    end
-                    if idMethod>0 and idMethod<3 then
-                        HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
-                    end
-                    if string.len(i1)>0 then 
-                        if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
-                        HealBot_Globals.IgnoreCustomDebuff[dId][i1]=true 
-                    end
-                    if string.len(i2)>0 then
-                        HealBot_Globals.IgnoreCustomDebuff[dId][i2]=true 
-                    end
-                    if string.len(i3)>0 then
-                        HealBot_Globals.IgnoreCustomDebuff[dId][i3]=true 
-                    end
-                    if string.len(i4)>0 then
-                        HealBot_Globals.IgnoreCustomDebuff[dId][i4]=true 
+                if not c or not dId or not prio or not filter or not show or not r or not g or not b then
+                    HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
+                else
+                    c=tonumber(c)
+                    dId=tonumber(dId) or dId
+                    prio=tonumber(prio)
+                    filter=tonumber(filter)
+                    r=tonumber(r)
+                    g=tonumber(g)
+                    b=tonumber(b)
+                    idMethod=tonumber(idMethod) or 3
+                    if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Options_StorePrev["InMethodCDbuff"]<3 then
+                        local dName=GetSpellInfo(dId) or dId
+                        if dName==dId then HealBot_Globals.CatchAltDebuffIDs[dName]=true end
+                        HealBot_Globals.Custom_Debuff_Categories[dId]=c
+                        HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
+                        if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
+                        if show=="true" then
+                            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=true
+                        else
+                            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=false
+                        end
+                        if r then
+                            HealBot_Globals.CDCBarColour[dId]={}
+                            HealBot_Globals.CDCBarColour[dId]["R"]=r
+                            HealBot_Globals.CDCBarColour[dId]["G"]=g
+                            HealBot_Globals.CDCBarColour[dId]["B"]=b
+                        elseif HealBot_Globals.CDCBarColour[dId] then
+                            HealBot_Globals.CDCBarColour[dId]=nil
+                        end
+                        if idMethod>0 and idMethod<3 then
+                            HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
+                        end
+                        if string.len(i1 or "")>0 then 
+                            if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
+                            HealBot_Globals.IgnoreCustomDebuff[dId][i1]=true 
+                        end
+                        if string.len(i2 or "")>0 then
+                            HealBot_Globals.IgnoreCustomDebuff[dId][i2]=true 
+                        end
+                        if string.len(i3 or "")>0 then
+                            HealBot_Globals.IgnoreCustomDebuff[dId][i3]=true 
+                        end
+                        if string.len(i4 or "")>0 then
+                            HealBot_Globals.IgnoreCustomDebuff[dId][i4]=true 
+                        end
                     end
                 end
             end

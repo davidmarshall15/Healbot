@@ -1,0 +1,52 @@
+tag 03a5459db003174bc663766330cee0c55cd7ee67 v1.8.0
+Author:	Azilroka <darktemplar9900@yahoo.com>
+Date:	Sat Mar 14 13:49:56 2020 -0500
+
+commit 1e08e526ac423be677ec169447c84d9d07d9f6fa
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sat Mar 14 13:49:40 2020 -0500
+
+    Minor 90
+
+commit 5b611e4596fa9fc8c27c25041d4cc159ea33604a
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Sun Mar 8 16:47:51 2020 +0100
+
+    Fix Power Infusion
+
+commit eda32c9bb1a762194d1ba4d0244f7f6b5e1daa96
+Author: Aviana <winblocker@gmx.de>
+Date:   Fri Mar 6 18:54:35 2020 +0100
+
+    Update LibHealComm-4.0.lua
+    
+    Add API to get number of incoming direct heals
+
+commit eda32c9bb1a762194d1ba4d0244f7f6b5e1daa96
+Author: Aviana <winblocker@gmx.de>
+Date:   Fri Mar 6 18:54:35 2020 +0100
+
+    Update LibHealComm-4.0.lua
+    
+    Add API to get number of incoming direct heals
+
+commit 5b611e4596fa9fc8c27c25041d4cc159ea33604a
+Author: dev7355608 <dev7355608@gmail.com>
+Date:   Sun Mar 8 16:47:51 2020 +0100
+
+    Fix Power Infusion
+
+commit eda32c9bb1a762194d1ba4d0244f7f6b5e1daa96
+Author: Aviana <winblocker@gmx.de>
+Date:   Fri Mar 6 18:54:35 2020 +0100
+
+    Update LibHealComm-4.0.lua
+    
+    Add API to get number of incoming direct heals
+
+commit 46088c52de1f7d3c5b35a1a261d11f9ead80145a
+Author: Emrus <emrus@outlook.com>
+Date:   Tue Mar 3 00:02:13 2020 +0100
+
+    Adds tar- and srcGUID filter toGetNextHealAmount
+
