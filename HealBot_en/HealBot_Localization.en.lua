@@ -1243,6 +1243,7 @@ function HealBot_Lang_enALL()
                                    [24] = "ADDYDARI",
                                    [25] = "plastisch",
                                    [26] = "MMOnster",
+                                   [27] = "dennywh",
                                 }
                                
 end

@@ -3142,14 +3142,17 @@ function HealBot_Options_ShowTooltipMyBuffs_OnClick(self)
 end
 
 function HealBot_Options_ShowClassOnBar_OnClick(self)
-    HealBot_RaidTargetToggle(nil)
+    local prevValue=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"]
     if self:GetChecked() then
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] = true
     else
         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] = false
     end
-    HealBot_setOptions_Timer(9950)
-    HealBot_Options_framesChanged(false)
+    if prevValue~=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["CLASSONBAR"] then
+        HealBot_RaidTargetToggle(nil)
+        HealBot_setOptions_Timer(9950)
+        HealBot_Options_framesChanged(true)
+    end
 end
 
 function HealBot_Options_ShowNameOnBar_OnClick(self)
@@ -4068,10 +4071,14 @@ function HealBot_Options_ShowBuffWarning_OnClick(self)
 end
 
 function HealBot_Options_ShowDebuffIcon_OnClick(self)
+    local prevValue=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWDEBUFF"]
     if self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWDEBUFF"] = true
     else
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWDEBUFF"] = false
+    end
+    if prevValue~=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWDEBUFF"] then
+        HealBot_Options_framesChanged(true)
     end
 end
 
@@ -4092,21 +4099,29 @@ function HealBot_Options_SoundBuffWarning_OnClick(self)
 end
 
 function HealBot_Options_BarButtonShowHoT_OnClick(self)
+    local prevValue=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWBUFF"]
     if self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWBUFF"] = true
     else
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWBUFF"] = false
     end
-    HealBot_setOptions_Timer(7955)
+    if prevValue~=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWBUFF"] then
+        HealBot_setOptions_Timer(7955)
+        HealBot_Options_framesChanged(true)
+    end
 end
 
 function HealBot_Options_BarButtonShowRaidIcon_OnClick(self)
+    local prevValue=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"]
     if self:GetChecked() then
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] = true
     else
         Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] = false
     end
-    HealBot_setOptions_Timer(800)
+    if prevValue~=Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOW"] then
+        HealBot_setOptions_Timer(800)
+        HealBot_Options_framesChanged(true)
+    end
 end
 
 function HealBot_Options_BarButtonShowRaidIconStar_OnClick(self)
@@ -4191,12 +4206,16 @@ function HealBot_Options_SubSortPlayerFirst_OnClick(self)
 end
 
 function HealBot_Options_ShowReadyCheck_OnClick(self)
+    local prevValue=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWRC"]
     if self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWRC"] = true
     else
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWRC"] = false
     end
-    HealBot_Options_CheckReadyCheckEvent()
+    if prevValue~=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["SHOWRC"] then
+        HealBot_Options_CheckReadyCheckEvent()
+        HealBot_Options_framesChanged(true)
+    end
 end
 
 function HealBot_Options_ShowDirection_OnClick(self)
