@@ -4030,6 +4030,14 @@ function HealBot_Options_ShowTooltipSpellCoolDown_OnClick(self)
     HealBot_setTooltipUpdateInterval()
 end
 
+function HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown_OnClick(self)
+    if self:GetChecked() then
+        HealBot_Globals.Tooltip_IgnoreGCD = true
+    else
+        HealBot_Globals.Tooltip_IgnoreGCD = false
+    end
+end
+
 function HealBot_Options_ShowTooltipMouseWheel_OnClick(self)
     if self:GetChecked() then
         HealBot_Globals.Tooltip_MouseWheel = true
@@ -14138,6 +14146,8 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellDetail,HEALBOT_OPTIONS_SHOWDETTOOLTIP)
             HealBot_Options_ShowTooltipSpellCoolDown:SetChecked(HealBot_Globals.Tooltip_ShowCD)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellCoolDown,HEALBOT_OPTIONS_SHOWCDTOOLTIP)
+            HealBot_Options_ShowTooltipSpellCoolDown:SetChecked(HealBot_Globals.Tooltip_IgnoreGCD)
+            HealBot_Options_SetText(HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown,HEALBOT_OPTIONS_IGNOREGCDTOOLTIP)
             HealBot_Options_ShowTooltipMouseWheel:SetChecked(HealBot_Globals.Tooltip_MouseWheel)
             HealBot_Options_SetText(HealBot_Options_ShowTooltipMouseWheel,HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP)
             HealBot_Options_ShowTooltipUseGameTip:SetChecked(HealBot_Globals.UseGameTooltip)

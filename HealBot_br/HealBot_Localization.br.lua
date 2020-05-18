@@ -5,22 +5,22 @@
 ---------------
 --
 -------------
--- À = \195\128
--- Á = \195\129
--- Â = \195\130
--- Ê = \195\138
--- Í = \195\141
--- à = \195\160
--- á = \195\161
--- â = \195\162
--- ã = \195\163
--- ç = \195\167
--- é = \195\169
--- ê = \195\170
--- í = \195\173
--- ó = \195\179
--- õ = \195\181
--- ú = \195\186
+-- ï¿½ = \195\128
+-- ï¿½ = \195\129
+-- ï¿½ = \195\130
+-- ï¿½ = \195\138
+-- ï¿½ = \195\141
+-- ï¿½ = \195\160
+-- ï¿½ = \195\161
+-- ï¿½ = \195\162
+-- ï¿½ = \195\163
+-- ï¿½ = \195\167
+-- ï¿½ = \195\169
+-- ï¿½ = \195\170
+-- ï¿½ = \195\173
+-- ï¿½ = \195\179
+-- ï¿½ = \195\181
+-- ï¿½ = \195\186
 --
 -- (http://www.wowwiki.com/Localizing_an_addon)
 --
@@ -181,6 +181,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Exibir dicas";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Exibir informa\195\167\195\163o detalhada de magia";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Exibir recarga da magia";
+    HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignorar recarga global da magia";
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Exibir informa\195\167\195\163o do alvo";
     HEALBOT_OPTIONS_SHOWRECTOOLTIP          = "Exibir recomenda\195\167\195\163o de Cura-pelo-Tempo";
     HEALBOT_TOOLTIP_POSDEFAULT              = "Local padr\195\163o";

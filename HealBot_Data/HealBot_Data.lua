@@ -248,6 +248,7 @@ function HealBot_Data_InitVars()
         UseGameTooltip=false,
         Tooltip_ShowHoT=false,
         Tooltip_ShowCD=false,
+        Tooltip_IgnoreGCD=false,
         Tooltip_TextSize=2,
         ttalpha=0.8,
         tsadjmod=5,

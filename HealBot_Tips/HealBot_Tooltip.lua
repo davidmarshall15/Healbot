@@ -132,8 +132,9 @@ local function HealBot_Tooltip_setspellName(button, spellName)
             if mIdx==0 then 
                 validSpellName, spellAR, spellAG = HealBot_Tooltip_GetHealSpell(button,spellName) 
                 if validSpellName then
+                    local gcdSTART, gcdDUR = GetSpellCooldown(61304) -- GCD
                     local z, x, _ = GetSpellCooldown(spellName);
-                    if x and x>1 then 
+                    if x and x>1 and (not HealBot_Globals.Tooltip_IgnoreGCD or x > gcdDUR) then 
                         z = HealBot_Comm_round(x-(GetTime()-z),3)
                         local u=HEALBOT_TOOLTIP_SECS
                         if HealBot_Globals.Tooltip_ShowCD then
