@@ -14692,7 +14692,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-85" />
+                          <AbsDimension x="170" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
