@@ -151,6 +151,7 @@ function HealBot_Options_InitVars()
             HEALBOT_EVER_BLOOMING_FROND,
             HEALBOT_REPURPOSED_FEL_FOCUSER,
             HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE,
+            HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE,
             HEALBOT_TAILWIND_SAPPHIRE,
             HEALBOT_AMETHYST_OF_THE_SHADOW_KING,
             HEALBOT_INGENIOUS_MANA_BATTERY,
@@ -1409,22 +1410,15 @@ function HealBot_Options_sliderlabels_Init(self,vText,Min,Max,Step,pageStep,lowT
     self:SetStepsPerPage(StepsPerPage);
 end
 
-function HealBot_Options_valtime_OnLoad(self,vText,Min,Max,Step,secsOnly,pageStep)
+function HealBot_Options_valtime_OnLoad(self,vText,Min,Max,Step,pageStep)
     self.text = vText;
     local StepsPerPage=pageStep or 2 --HealBot_Options_getStepsPerPage(Max,Step)
     local g=_G[self:GetName().."Text"]
     g:SetText(vText);
-    if secsOnly then
-        g=_G[self:GetName().."Low"]
-        g:SetText(Min);
-        g=_G[self:GetName().."High"]
-        g:SetText(Max);
-    else
-        g=_G[self:GetName().."Low"]
-        g:SetText(Min/60);
-        g=_G[self:GetName().."High"]
-        g:SetText(Max/60);
-    end
+    g=_G[self:GetName().."Low"]
+    g:SetText(Min/60);
+    g=_G[self:GetName().."High"]
+    g:SetText(Max/60);
     self:SetMinMaxValues(Min,Max);
     self:SetValueStep(Step);
     self:SetStepsPerPage(StepsPerPage);
@@ -3045,12 +3039,21 @@ function HealBot_Options_AutoShow_OnClick(self)
     HealBot_Options_framesChanged(false)
 end
 
+function HealBot_Options_IgnoreDebuffsDuration_setAura()
+    if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
+        HealBot_Aura_setLuVars("IgnoreFastDurDebuffsSecs", HealBot_Config_Cures.IgnoreFastDurDebuffsSecs/2)
+    else
+        HealBot_Aura_setLuVars("IgnoreFastDurDebuffsSecs", -1)
+    end
+end
+
 function HealBot_Options_IgnoreDebuffsDuration_OnClick(self)
     if self:GetChecked() then
         HealBot_Config_Cures.IgnoreFastDurDebuffs = true
     else
         HealBot_Config_Cures.IgnoreFastDurDebuffs = false
     end
+    HealBot_Options_IgnoreDebuffsDuration_setAura()
 end
 
 function HealBot_Options_IgnoreDebuffsCoolDown_OnClick(self)
@@ -3077,8 +3080,9 @@ function HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(self)
     else
         HealBot_Config_Cures.IgnoreFastDurDebuffsSecs = v;
         local g=_G[self:GetName().."Text"]
-        g:SetText(self.text .. ": " .. v.." secs");
+        g:SetText(self.text .. ": " .. (v/2) .." secs");
     end
+    HealBot_Options_IgnoreDebuffsDuration_setAura()
 end
 
 function HealBot_Options_CastNotifyResOnly_OnClick(self)
@@ -9078,7 +9082,7 @@ function HealBot_Options_ShareSkinLoad()
             if tonumber(hbOptGetSkinName) then hbOptGetSkinName='#'..hbOptGetSkinName end
             for e=3,#ssTab do 
                 local c,m = string.split("!", ssTab[e])
-                HealBot_Options_BuildSkinRecMsg(hbOptGetSkinName, c, 0, m)
+                if c and m then HealBot_Options_BuildSkinRecMsg(hbOptGetSkinName, c, 0, m) end
             end
             hbOptGetSkinFrom=HEALBOT_ABOUT_URL
             HealBot_Options_ShareSkinComplete()
@@ -13881,7 +13885,7 @@ function HealBot_Options_InitSub2(subNo)
            -- HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,100,1)
             HealBot_Options_IgnoreDebuffsDuration:SetChecked(HealBot_Config_Cures.IgnoreFastDurDebuffs)
             HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsDuration,HEALBOT_OPTIONS_IGNOREDEBUFFDURATION)
-            HealBot_Options_valtime_OnLoad(HealBot_Options_IgnoreDebuffsDurationSecs,HEALBOT_OPTIONS_HOTTEXTDURATION,1,5,1,true,1)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_IgnoreDebuffsDurationSecs,HEALBOT_OPTIONS_HOTTEXTDURATION,1,5,1,1,"0.5","2.5")
             HealBot_Options_IgnoreDebuffsDurationSecs:SetValue(HealBot_Config_Cures.IgnoreFastDurDebuffsSecs)
             HealBot_Options_IgnoreDebuffsDurationSecs_OnValueChanged(HealBot_Options_IgnoreDebuffsDurationSecs)
             HealBot_Options_IgnoreDebuffsCoolDown:SetChecked(HealBot_Config_Cures.IgnoreOnCooldownDebuffs)
@@ -14068,10 +14072,10 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetText(HealBot_Options_MonitorBuffsWhenGrouped,HEALBOT_OPTIONS_IN_A_GROUP)
             HealBot_Options_MonitorBuffsPalaBlessing:SetChecked(HealBot_Config_Buffs.PalaBlessingsAsOne)
             HealBot_Options_SetText(HealBot_Options_MonitorBuffsPalaBlessing,HEALBOT_OPTIONS_PALADIN_BLESSINGS)
-            HealBot_Options_valtime_OnLoad(HealBot_Options_LongBuffTimer,HEALBOT_OPTIONS_LONGBUFFTIMER,0,300,15)
+            HealBot_Options_valtime_OnLoad(HealBot_Options_LongBuffTimer,HEALBOT_OPTIONS_LONGBUFFTIMER,0,300,15,4)
             HealBot_Options_LongBuffTimer:SetValue(HealBot_Config_Buffs.LongBuffTimer)
             HealBot_Options_BuffTimer_OnValueChanged(HealBot_Options_LongBuffTimer,"LONG")
-            HealBot_Options_valtime_OnLoad(HealBot_Options_ShortBuffTimer,HEALBOT_OPTIONS_SHORTBUFFTIMER,0,120,5)
+            HealBot_Options_valtime_OnLoad(HealBot_Options_ShortBuffTimer,HEALBOT_OPTIONS_SHORTBUFFTIMER,0,120,5,6)
             HealBot_Options_ShortBuffTimer:SetValue(HealBot_Config_Buffs.ShortBuffTimer)
             HealBot_Options_BuffTimer_OnValueChanged(HealBot_Options_ShortBuffTimer,"SHORT")
             HealBot_Options_MonitorBuffs:SetChecked(HealBot_Config_Buffs.BuffWatch)

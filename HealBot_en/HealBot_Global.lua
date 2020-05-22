@@ -1,11 +1,11 @@
-﻿HEALBOT_VERSION    = "8.3.0.18";
+﻿HEALBOT_VERSION    = "8.3.0.19";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
 local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.4.9" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.4.10" end
 
 function HealBot_globalVars()
     --Consumables
@@ -69,6 +69,8 @@ function HealBot_globalVars()
     HEALBOT_SEPHUZS_SECRET                  = 208052 --GetSpellInfo(208052) or "--Sephuz's Secret"
     HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE     = 160053 --GetItemInfo(160053) or "--Battle-Scarred Augment Rune"
     HEALBOT_BATTLE_SCARRED_AUGMENT          = 270058 --GetSpellInfo(270058) or "--Battle-Scarred Augment"
+    HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE   = 174906 --GetItemInfo(174906) or "--Lightning-Forged Augment Rune"
+    HEALBOT_LIGHTNING_FORGED_AUGMENT        = 317065 --GetSpellInfo(317065) or "--Battle-Scarred Augment"
     HEALBOT_TAILWIND_SAPPHIRE               = 284567 --GetItemInfo(284567) or "--Tailwind Sapphire"
     HEALBOT_TAILWIND                        = 284573 --GetSpellInfo(284573) or "--Tailwind"
     HEALBOT_AMETHYST_OF_THE_SHADOW_KING     = 284558 --GetItemInfo(284558) or "--Amethyst of the Shadow King"
