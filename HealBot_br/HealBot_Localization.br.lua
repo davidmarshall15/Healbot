@@ -181,6 +181,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Exibir dicas";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Exibir informa\195\167\195\163o detalhada de magia";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Exibir recarga da magia";
+    HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignorar recarga global da magia";
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Exibir informa\195\167\195\163o do alvo";
     HEALBOT_OPTIONS_SHOWRECTOOLTIP          = "Exibir recomenda\195\167\195\163o de Cura-pelo-Tempo";
     HEALBOT_TOOLTIP_POSDEFAULT              = "Local padr\195\163o";

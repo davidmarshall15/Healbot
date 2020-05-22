@@ -14692,7 +14692,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-85" />
+                          <AbsDimension x="170" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14772,9 +14772,23 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipMouseWheel" inherits="OptionsCheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-50" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipMouseWheel" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-50" />
                         </Offset>
