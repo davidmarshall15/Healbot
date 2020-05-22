@@ -1189,6 +1189,9 @@ local function HealBot_DoReset_Buffs(pClassTrim)
     if IsUsableItem(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) or HealBot_IsItemInBag(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) then
         HealBot_Config_Buffs.HealBotBuffText[5]=GetItemInfo(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE)
     end
+    if IsUsableItem(HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE) or HealBot_IsItemInBag(HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE) then
+        HealBot_Config_Buffs.HealBotBuffText[5]=GetItemInfo(HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE)
+    end
     if IsUsableItem(HEALBOT_TAILWIND_SAPPHIRE) or HealBot_IsItemInBag(HEALBOT_TAILWIND_SAPPHIRE) then
         HealBot_Config_Buffs.HealBotBuffText[8]=GetItemInfo(HEALBOT_TAILWIND_SAPPHIRE)
     end
@@ -1258,6 +1261,7 @@ local function HealBot_Load(hbCaller)
     end
     HealBot_setOptions_Timer(140)
     HealBot_MMButton_Init();
+    HealBot_Options_IgnoreDebuffsDuration_setAura()
     --HealBot_setCall("HealBot_Load")
 end
 
@@ -1985,17 +1989,6 @@ local function HealBot_Update_Skins(forceCheck)
             HealBot_Config.ActionVisible=nil
         end
         -- Character specific checks
-        if tonumber(tMajor)<8 then
-            HealBot_NewVersionMessage(2)
-        elseif tonumber(tMajor)==8 then
-            if tonumber(tMinor)<3 then
-                HealBot_NewVersionMessage(2)
-            elseif tonumber(tMinor)==3 then
-                if tonumber(tPatch)==0 and tonumber(tHealbot)<15 then
-                    HealBot_NewVersionMessage(2)
-                end
-            end
-        end
     end
     
     if HealBot_Config.CurrentSpec==9 then
@@ -4935,8 +4928,6 @@ function HealBot_NewVersionMessage(msgType)
     local msg=""
     if msgType==1 then
         msg="HealBot\n----------\n\nIf not preparing for this version\nyour settings will be at defaults\n\nTo restore settings, visit the forum on\n"..HEALBOT_ABOUT_URL.."\n"
-    elseif msgType==2 then
-        msg="HealBot\n----------\n\n40 Extra Skins are available to import\nGo to HealBot options Import/Export>Skins\n\nDo you have a great skin to share?\nWant it included as a permanent backup?\n\nTo have your skins included\nvisit "..HEALBOT_ABOUT_URL.." and let us know.\n"
     end
     StaticPopupDialogs["HEALBOT_NEWVERSIONMSG"] = {
         text = msg,

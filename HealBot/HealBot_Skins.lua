@@ -118,15 +118,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["ONBAR"]==2 then
                     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDEBUFF"] then
                         maxDebuffIcons=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["MAXDICONS"]
+                    elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRC"] then
+                        maxDebuffIcons=1
                     else
                         maxDebuffIcons=0
                     end
                     if Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then 
                         maxDebuffIcons=maxDebuffIcons+1 
                     end                           
-                    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRC"] then 
-                        maxDebuffIcons=maxDebuffIcons+1 
-                    end
                     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and
                        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]<2 then
                         maxDebuffIcons=maxDebuffIcons+1 

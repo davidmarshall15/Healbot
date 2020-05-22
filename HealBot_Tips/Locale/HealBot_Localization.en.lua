@@ -817,7 +817,7 @@ function HealBot_Lang_Options_enALL()
                                ["TESTNUMENEMY"]="Set the number of bars to represent the Enemy.",
                         -- Import/Export Skins tab
                                ["INOUTSELECTSKIN"]="Select the skin to be exported.",
-                               ["INEXTRASKIN"]="Select an extra skin to import.\n--\nNOTE: After importing extra skins, delete any that are not used.\nThis will reduce the addons main memory usage.",
+                               ["INEXTRASKIN"]="Select an extra skin to import.\n--\nNOTE: After importing extra skins, delete any that are not used.\nThis will reduce the addons main memory usage.\n--\nNOTE: Images can be viewed at "..HEALBOT_ABOUT_URL,
                                ["INOUTEXPORTSKIN"]="Export populates the large text box with data for the selected skin.\nThis can then be copied and saved outside the game.\n--\nTIP: To reduce the number of characters, first do the following:\nFor all tabs possible, in Skins>Frames, select the top frame and use Apply current tab settings to all Frames.",
                                ["INOUTIMPORTSKIN"]="Import reads the text from the large text box and sets the skin.\nNote: This will overwrite any existing skin with the same name.",
                         -- Import/Export Custom Debuffs tab
