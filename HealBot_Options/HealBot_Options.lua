@@ -2882,7 +2882,7 @@ function HealBot_Options_RangeCheckFreq_setSession()
     --HealBot_AddDebug("val="..val.." RangeCheckFreq="..HealBot_Globals.RangeCheckFreq)
     HealBot_setLuVars("RangeCheckFreq", val)
     HealBot_setLuVars("ThrottleFreq", (val/2))
-    HealBot_setOptions_Timer(9999)
+    HealBot_setOptions_Timer(9998)
 end
 
 function HealBot_Options_RangeCheckFreq_OnValueChanged(self)
@@ -2938,11 +2938,12 @@ function HealBot_Options_StickyFramesSensitivity_OnValueChanged(self)
     end
 end
 
-function HealBot_Options_BarFreq_setVars()
-    local fluidFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*3
+function HealBot_Options_BarFreq_setVars(fpsAdjust)
+    local fluidFreq=2+ceil(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]*fpsAdjust)
     HealBot_Action_setLuVars("FLUIDFREQ", fluidFreq)
     HealBot_setLuVars("FLUIDFREQ", fluidFreq)
-    local stateFreq=0.01+(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/100)
+    local stateFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/100
+    stateFreq=0.01+HealBot_Comm_round(stateFreq*fpsAdjust,2)
     HealBot_Action_setLuVars("FLUIDSTATEFREQ", stateFreq)
     HealBot_setLuVars("FLUIDSTATEFREQ", stateFreq)
 end
@@ -2953,7 +2954,7 @@ function HealBot_Options_BarFreq_OnValueChanged(self)
         self:SetValue(val) 
     elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]~=val then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] = val;
-        HealBot_Options_BarFreq_setVars()
+        HealBot_Options_BarFreq_setVars(HealBot_retLuVars("fpsFreqNorm"))
     end
 end
 
@@ -3251,6 +3252,17 @@ local function HealBot_Options_FluidFlashInUse()
     else
         HealBot_setLuVars("FluidFlashInUse", false)
     end
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+        HealBot_setLuVars("FluidInUse", true)
+    else
+        HealBot_setLuVars("FluidInUse", false)
+    end
+    if HealBot_Options_StorePrev["AuxBarsFlash"] then
+        HealBot_setLuVars("FlashInUse", true)
+    else
+        HealBot_setLuVars("FlashInUse", false)
+    end
+    HealBot_updateBarsNow()
 end
 
 function HealBot_Options_UseFluidBars_OnClick(self)
@@ -3985,9 +3997,13 @@ end
 function HealBot_Options_LoadTips()
     local loaded, reason = LoadAddOn("HealBot_Tips")
     if loaded then
-        HealBot_Data["TIPUSE"]=true
-        if HealBot_Config_Buffs.BuffWatch then
-            HealBot_setOptions_Timer(11)
+        if HealBot_Globals.ShowTooltip then
+            HealBot_Data["TIPUSE"]=true
+            if HealBot_Config_Buffs.BuffWatch then
+                HealBot_setOptions_Timer(11)
+            end
+        else
+            HealBot_Data["TIPUSE"]=false
         end
     else
         HealBot_Data["TIPUSE"]=false
@@ -8099,7 +8115,8 @@ local function HealBot_Options_AuxConfigBarChange()
     for x=1,9 do
         fstr=_G["HealBot_Aux"..x.."Config_FontStr2"]
         fstr:SetText(HealBot_Options_AuxBarAnchor_ShortList[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["ANCHOR"]])
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["OTYPE"]==2 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["USE"]>1 and
+           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_StorePrev["FramesSelFrame"]]["OTYPE"]==2 then
             HealBot_Options_StorePrev["AuxBarsFlash"]=true
         end
     end
@@ -13309,7 +13326,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,0,40,1)
             HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-20,20,1)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarSize,HEALBOT_OPTIONS_TXTSIZE,0.25,1,0.01)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_AuxBarFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,1,20,1,5,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_AuxBarFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,2,20,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarFlashAlphaMax,HEALBOT_WORDS_MAX,0.2,1,0.05,2)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarFlashAlphaMin,HEALBOT_WORDS_MIN,0,0.8,0.05,2)
             HealBot_Options_AuxBarFlashFreq:SetValue(Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["OFREQ"]*100)
@@ -13391,7 +13408,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_sliderlabels_Init(HealBot_Options_StickyFramesSensitivity,HEALBOT_OPTIONS_STICKYSENSITIVITY,15,75,1,5,HEALBOT_WORK_HIGH,HEALBOT_WORD_LOW)
             HealBot_Options_StickyFramesSensitivity:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYSENSITIVITY"])
             HealBot_Options_StickyFramesSensitivityText:SetText(HEALBOT_OPTIONS_STICKYSENSITIVITY)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,2,15,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,2,32,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
             HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 5)
             HealBot_Options_BarUpdateFreqText:SetText(HEALBOT_OPTION_BARUPDFREQ)
             g=_G["HealBot_GeneralSkin_FontStr"]

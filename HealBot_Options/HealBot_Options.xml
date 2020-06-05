@@ -4476,12 +4476,12 @@
                   </CheckButton>
                   <Slider name="HealBot_Options_StickyFramesSensitivity" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="320" y="16" />
+                      <AbsDimension x="400" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UseStickyFrames" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="-100" y="-20" />
+                          <AbsDimension x="-140" y="-20" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4563,12 +4563,12 @@
                   </CheckButton>
                   <Slider name="HealBot_Options_BarUpdateFreq" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="320" y="16" />
+                      <AbsDimension x="400" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UseFluidBars" relativePoint="BOTTOMLEFT">
+                      <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-100" y="-20" />
+                          <AbsDimension x="0" y="40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14692,7 +14692,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-45" />
+                          <AbsDimension x="170" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14879,7 +14879,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="58" />
+                          <AbsDimension x="0" y="40" />
                         </Offset>
                       </Anchor>
                     </Anchors>

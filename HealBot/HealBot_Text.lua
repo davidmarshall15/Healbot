@@ -682,7 +682,7 @@ function HealBot_Text_setNameText(button)
         else
             vSetNameTextName=button.unit
         end
-        HealBot_Action_Refresh(button)
+        button.status.refresh=true
     end
 
     vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))

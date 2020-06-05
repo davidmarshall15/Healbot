@@ -4,6 +4,6 @@
 ## Notes: HealBot options and player settings
 ## RequiredDeps: HealBot_Data
 ## OptionalDeps: LibSharedMedia-3.0
-## Version: 8.3.0.19
+## Version: 8.3.0.20
 
 HealBot_Options.xml

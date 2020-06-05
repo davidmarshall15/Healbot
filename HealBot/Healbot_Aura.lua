@@ -912,7 +912,6 @@ local buffUnitRange, WarnBuffName=0,false
 local function HealBot_Aura_BuffWarnings(button)
     if button.aura.buff.name~=curBuffName or curBuffName==HEALBOT_CUSTOM_en then
         if curBuffName~=HEALBOT_CUSTOM_en then 
-            button.spells.rangecheck=curBuffName 
             HealBot_UpdateUnitRange(button,false)
             buffUnitRange=button.status.range
         else
@@ -995,8 +994,7 @@ end
 
 local dbUnitRange=0
 local function HealBot_Aura_DebuffWarnings(button)
-    if button.aura.debuff.type~=HEALBOT_CUSTOM_en and button.status.current<9  then 
-        button.spells.rangecheck=HealBot_Action_dSpell() 
+    if button.aura.debuff.type~=HEALBOT_CUSTOM_en and button.status.current<9  then  
         HealBot_UpdateUnitRange(button,false)
         dbUnitRange=button.status.range
     else
