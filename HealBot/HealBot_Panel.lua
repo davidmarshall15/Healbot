@@ -486,11 +486,6 @@ function HealBot_Action_SetClassIconTexture(button)
     button.aura.check=true
 end
 
-local HealBot_ResetHeaderSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}};
-function HealBot_Panel_clearResetHeaderSkinDone()
-    HealBot_ResetHeaderSkinDone={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}};
-end
-
 local function HealBot_Panel_CreateHeader(hbCurFrame)
     if HealBot_ActiveHeaders[0]>99 then HealBot_ActiveHeaders[0]=1 end
     local tryId,freeId=HealBot_ActiveHeaders[0],nil
@@ -614,17 +609,13 @@ local function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn)
             vPosParentHF:ClearAllPoints()
             vPosParentHF:SetParent(vPosFrameHF)
             vPosParentHF.frame=button.frame
-            HealBot_ResetHeaderSkinDone[button.frame][vPosParentHF.id]=nil
         end
         local backFrame=_G[vPosParentHF:GetName().."Bar5"]
-        if not HealBot_ResetHeaderSkinDone[button.frame][vPosParentHF.id] then
-            HealBot_Skins_ResetSkin("header",vPosParentHF)
-            HealBot_ResetHeaderSkinDone[button.frame][vPosParentHF.id]=true
-            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["GROW"]==1 then
-                backFrame:SetHeight(backBarsSize[button.frame]["HEIGHT"])
-            else
-                backFrame:SetWidth(backBarsSize[button.frame]["WIDTH"])
-            end
+        HealBot_Skins_ResetSkin("header",vPosParentHF)
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["GROW"]==1 then
+            backFrame:SetHeight(backBarsSize[button.frame]["HEIGHT"])
+        else
+            backFrame:SetWidth(backBarsSize[button.frame]["WIDTH"])
         end
         HealBot_Track_Headers[xHeader]=true
         HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn)

@@ -105,7 +105,7 @@ local function HealBot_Aura_Icon_AlphaValue(secLeft, button)
     if secLeft>=0 then
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] and 
            secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"] then
-            retAlpha=(secLeft/HealBot_Aura_luVars["FadeTimeDiv"])+.1
+            retAlpha=(secLeft/HealBot_Aura_luVars["FadeTimeDiv"])+.12
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
                 if retAlpha>Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"] then
                     retAlpha=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"]
@@ -128,7 +128,7 @@ end
 HealBot_UpdateIconFreq={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
 function HealBot_Aura_SetUpdateIconFreq()
     for j=1,10 do
-        if not Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["FADE"] or Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][j]["DURTHRH"]<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["FADESECS"] then
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["FADE"] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["FADESECS"]<Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][j]["DURTHRH"] then
             HealBot_UpdateIconFreq[j]=Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][j]["DURTHRH"]
         else
             HealBot_UpdateIconFreq[j]=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][j]["FADESECS"]

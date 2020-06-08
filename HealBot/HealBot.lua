@@ -656,6 +656,13 @@ local function HealBot_SlashCmd(cmd)
         else
             HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
         end
+    elseif (HBcmd=="chihd" and x) then
+        if tonumber(x) and tonumber(x)>0 and tonumber(x)<=30 then
+            HealBot_Globals.cHoTinHealDur=ceil(x)
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CLASSIC_HOT_IHDUR.." "..ceil(x).." "..HEALBOT_WORDS_SEC)
+        else
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_RESLAG_INDICATOR_ERROR)
+        end
     elseif (HBcmd=="debug") then
         if HealBot_Globals.DebugOut then
             HealBot_Globals.DebugOut=false
@@ -1581,7 +1588,7 @@ function HealBot_AbsorbsUpdate(button)
         if HEALBOT_GAME_VERSION>3 then
             abuAbsorbAmount=(UnitGetTotalAbsorbs(button.unit) or 0)
         elseif libCHC then -- In Classic absorbs are not available from libhealcom but filtering HoT's is.
-            abuAbsorbAmount = (libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+            abuAbsorbAmount = (libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS, TimeNow+1+HealBot_Globals.cHoTinHealDur) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
         end
         if button.health.absorbs~=abuAbsorbAmount or (abuAbsorbAmount==0 and button.gref["Absorb"]:GetValue()>0) then
             button.health.absorbs=abuAbsorbAmount
@@ -2356,7 +2363,6 @@ function HealBot_ResetClassIconTexture()
 end
 
 local function HealBot_Options_Update()
-    HealBot_Action_DeleteMarkedButtons()
     if HealBot_Options_Timer[2] then
         HealBot_OnEvent_PlayerEnteringWorld("OnUpdate")
         HealBot_Options_Timer[2]=nil
@@ -3188,51 +3194,42 @@ local function HealBot_Update_Slow()
         elseif HealBot_luVars["HealBot_Options_Timer"] then
             HealBot_Options_Update()
         else
-            HealBot_setqaFR()
             HealBot_luVars["slowSwitch"]=HealBot_luVars["slowSwitch"]+1
-            if HealBot_luVars["slowSwitch"]>3 then
-                if HealBot_luVars["slowSwitch"]<5 then
-                    HealBot_Action_DeleteMarkedButtons()
-                elseif HealBot_luVars["slowSwitch"]<6 then
-                    if HealBot_luVars["addonMsgTh"]<TimeNow then
-                        HealBot_Comms_SendAddonMessage()
-                        HealBot_luVars["addonMsgTh"]=TimeNow+2
-                    end
+            if HealBot_luVars["slowSwitch"]<2 then
+                if not HealBot_luVars["onTaxi"] and UnitOnTaxi("player") then
+                    HealBot_Aura_ClearAllBuffs()
+                    HealBot_luVars["onTaxi"]=true
+                elseif HealBot_luVars["onTaxi"] and not UnitOnTaxi("player") then
+                    HealBot_AuraCheck()
+                    HealBot_luVars["onTaxi"]=false
+                elseif HealBot_luVars["addonMsgTh"]<TimeNow then
+                    HealBot_Comms_SendAddonMessage()
+                    HealBot_luVars["addonMsgTh"]=TimeNow+2
                 else
-                    if not HealBot_luVars["onTaxi"] and UnitOnTaxi("player") then
-                        HealBot_Aura_ClearAllBuffs()
-                        HealBot_luVars["onTaxi"]=true
-                    elseif HealBot_luVars["onTaxi"] and not UnitOnTaxi("player") then
-                        HealBot_AuraCheck()
-                        HealBot_luVars["onTaxi"]=false
-                    else
-                        HealBot_ProcessRefreshTypes()
-                    end
-                    HealBot_luVars["slowSwitch"]=0
-                end     
+                    HealBot_Action_DeleteMarkedButtons()
+                    HealBot_setqaFR()
+                end
             else
-                if HealBot_luVars["slowSwitch"]<2 then
+                if HealBot_luVars["rcEnd"] and HealBot_luVars["rcEnd"]<TimeNow then
+                    HealBot_luVars["rcEnd"]=nil
+                    HealBot_OnEvent_ReadyCheckClear(false)
+                elseif HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
+                    HealBot_luVars["nextDebugMsg"]=TimeNow+1
+                    HealBot_AddChat(HealBot_DebugMsg[1])
+                    table.remove(HealBot_DebugMsg,1)
+                elseif HealBot_luVars["VersionRequest"] then
+                    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "S:"..HEALBOT_VERSION, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
+                    HealBot_luVars["VersionRequest"]=false;
+                else
                     for xUnit,xGroup in pairs(HealBot_notVisible) do
                         if UnitIsVisible(xUnit) then
                             HealBot_nextRecalcParty(xGroup)
                             HealBot_notVisible[xUnit]=nil
                         end
                     end
-                elseif HealBot_luVars["slowSwitch"]<3 then
-                    if HealBot_luVars["rcEnd"] and HealBot_luVars["rcEnd"]<TimeNow then
-                        HealBot_luVars["rcEnd"]=nil
-                        HealBot_OnEvent_ReadyCheckClear(false)
-                    elseif HealBot_DebugMsg[1] and (HealBot_luVars["nextDebugMsg"] or 0)<TimeNow then
-                        HealBot_luVars["nextDebugMsg"]=TimeNow+1
-                        HealBot_AddChat(HealBot_DebugMsg[1])
-                        table.remove(HealBot_DebugMsg,1)
-                    elseif HealBot_luVars["VersionRequest"] then
-                        HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "S:"..HEALBOT_VERSION, HealBot_luVars["AddonMsgType"], HealBot_Data["PNAME"])
-                        HealBot_luVars["VersionRequest"]=false;
-                    end
-                else
                     HealBot_Aura_BuffIdLookup()
                 end
+                HealBot_luVars["slowSwitch"]=0
             end
         end
     end
@@ -3475,7 +3472,6 @@ local function HealBot_Update_Fast()
             HealBot_Timers["fastUpdate"]=HealBot_luVars["MaskAuraDCheck"]
         end
     end
-    --HealBot_setCall("HealBot_Update_Fast")
 end
 
 local auxAlpha={[1]=0.1,[2]=0.1,[3]=0.1,[4]=0.1,[5]=0.1,[6]=0.1,[7]=0.1,[8]=0.1,[9]=0.1,[10]=0.1}
@@ -3504,6 +3500,7 @@ local function HealBot_UpdateFluidAuxBarsValue(button)
         end
         if button.aux[x]["FLUIDSTATE"]>-1 then
             local _,_,_,alphaValue=button.gref.aux[x]:GetStatusBarColor()
+            alphaValue=HealBot_Comm_round(alphaValue, 2)
             if alphaValue>button.aux[x]["FLUIDSTATE"] then
                 local setValue=alphaValue-HealBot_luVars["FLUIDSTATEFREQ"]
                 if setValue<button.aux[x]["FLUIDSTATE"] then setValue=button.aux[x]["FLUIDSTATE"] end
@@ -3547,7 +3544,7 @@ function HealBot_setAuxBar(button, id, value, isFluid)
         button.aux[id]["B"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["B"]
     end
     if isFluid and Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
-        button.aux[id]["FLUID"]=value
+        button.aux[id]["FLUID"]=value-- or 0
         HealBot_AuxFluid_Buttons[button.id]=button
     else
         button.gref.aux[id]:SetValue(value)
@@ -3598,7 +3595,11 @@ function HealBot_clearAuxBar(button, id)
     button.aux[id]["FLASH"]=false
     button.aux[id]["STATIC"]=false
     button.aux[id]["FLUID"]=-1
-    button.gref.aux[id]:SetStatusBarColor(1,1,1,0)
+    if HealBot_AuxFluid_Buttons[button.id] then
+        button.aux[id]["FLUIDSTATE"]=0
+    else
+        button.gref.aux[id]:SetStatusBarColor(1,1,1,0)
+    end
 end
 
 function HealBot_clearAllAuxBar(button)
@@ -3772,7 +3773,6 @@ function HealBot_OnUpdate(self)
     elseif HealBot_luVars["HealBot_Options_Timer"] and not HealBot_Data["UILOCK"] and not InCombatLockdown() then
         HealBot_Options_Update() 
     end
-    --HealBot_setCall("HealBot_OnUpdate")
 end
 
 function HealBot_useCrashProtection()

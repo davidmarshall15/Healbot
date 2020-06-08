@@ -50,6 +50,8 @@ local HealBot_ExtraSkinNames={[1]="Aux Aggro",
                              [46]="B&W-Raid25",
                              [47]="B&W-Raid40",
                              [48]="High-Vis",
+                             [49]="Retro-Raid",
+                             [50]="Blended-Group",
                              }
 local HealBot_ExtraSkinCats={[1]=HEALBOT_EXTRASKINS_GROUP,
                              [2]=HEALBOT_EXTRASKINS_SMALL_RAID,
@@ -99,6 +101,8 @@ local HealBot_ExtraSkinCats={[1]=HEALBOT_EXTRASKINS_GROUP,
                             [46]=HEALBOT_EXTRASKINS_LARGE_RAID,
                             [47]=HEALBOT_EXTRASKINS_LARGE_RAID,
                             [48]=HEALBOT_EXTRASKINS_GROUP,
+                            [49]=HEALBOT_EXTRASKINS_LARGE_RAID,
+                            [50]=HEALBOT_EXTRASKINS_GROUP,
                              }
 local HealBot_ExtraSkinDesc={}
 local HealBot_ExtraSkinData={}
@@ -415,22 +419,32 @@ The skin is placed on the right of the screen.]]
 HealBot_ExtraSkinDesc[45]=[[JUNE 2020 - Group Skin
 =====================
 B&W-Group is a group skin using horizontal bars
-with aggro bars abovre and below the health bar.
+with aggro bars above and below the health bar.
 The skin is placed on the left of the screen.]]
 HealBot_ExtraSkinDesc[46]=[[JUNE 2020 - Large Raid Skin
 =====================
 B&W-Raid25 is a 25 man raid skin using horizontal bars
-with aggro bars abovre and below the health bar.
+with aggro bars above and below the health bar.
 The skin is placed on the left of the screen.]]
 HealBot_ExtraSkinDesc[47]=[[JUNE 2020 - Large Raid Skin
 =====================
 B&W-Raid40 is a 40 man raid skin using horizontal bars
-with aggro bars abovre and below the health bar.
+with aggro bars above and below the health bar.
 The skin is placed on the left of the screen.]]
 HealBot_ExtraSkinDesc[48]=[[JUNE 2020 - Group Skin
 =====================
 High-Vis is a group skin using horizontal bars
-with aggro bars abovre and below the health bar.
+with aggro bars above and below the health bar.
+The skin is placed on the right of the screen.]]
+HealBot_ExtraSkinDesc[49]=[[JUNE 2020 - Large Raid Skin
+=====================
+Retro Raid is a 25 or 40 man raid skin using horizontal bars
+with a power bar below the health bar.
+The skin is placed on the left of the screen.]]
+HealBot_ExtraSkinDesc[50]=[[JUN 2020 - Group Skin
+==================
+Blended-Group is a group skin using horizontal bars
+with aggro above and below the health bar.
 The skin is placed on the right of the screen.]]
 
 HealBot_ExtraSkinData[1]=[[Skin
@@ -438,7 +452,7 @@ Aux Aggro
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="true",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=2}
-General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=25,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",FLUIDFREQ=6}
+General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=25,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",FLUIDFREQ=12}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCPET="false",TEXRAID="false",TINCRAID="true"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=58,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -568,7 +582,7 @@ Raid10
 Author~v!Doco of Mirage Raceway
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=4}
+General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=1,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=70,INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -725,7 +739,7 @@ Verena
 Author~v!Vayah von Lothar
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=4,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="false",STICKYFRAME="false",FLUIDBARS="false",HIDEBOSSF="false"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="false",STICKYFRAME="false",FLUIDBARS="false",HIDEBOSSF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -834,7 +848,7 @@ Aux Group
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="true",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=2}
-General~t!{HIDEBOSSF="true",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=22,FLUIDBARS="false",FLUIDFREQ=6}
+General~t!{HIDEBOSSF="true",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=22,FLUIDBARS="false",FLUIDFREQ=12}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCPET="false",TEXRAID="false",TINCRAID="true"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -976,7 +990,7 @@ Addydari
 Author~v!ADDYDARI of HealBot Website
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=20,FLUIDBARS="false",FLUIDFREQ=3}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=20,FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1086,7 +1100,7 @@ Gridlike 40
 Author~v!jchap2k of HealBot Website
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=10,STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPARTYF="true"}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=15,STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPARTYF="true"}
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",TEXRAID="false",FONLYFRIEND="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",HIDE="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",ENEMYTARGET="false",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1231,7 +1245,7 @@ Full 25
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",NOTIFY=1}
-General~t!{FLUIDFREQ=3,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",STICKYSENSITIVITY=40,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",STICKYSENSITIVITY=40,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TONLYFRIEND="false",SELFPET="false",FOCUSINCOMBAT=2,GROUPPETS="true",TARGETINCOMBAT=1,TEXRAID="false",FONLYFRIEND="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=70,HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1414,7 +1428,7 @@ Full 40
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",NOTIFY=1}
-General~t!{FLUIDFREQ=3,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=40,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=40,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",FONLYFRIEND="false",TEXRAID="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="false",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1581,7 +1595,7 @@ Aphrahat 2020_4²
 Author~v!Aphrahat von Kazzak
 DuplicateBars~v!false
 Chat~t!{EOCOOM="true",EOCOOMV=18,MSG="† #n lasse Dich vom Blute Christi erlöse",RESONLY="true",NOTIFY=1}
-General~t!{FLUIDFREQ=5,HIDEPTF="true",HIDEBOSSF="true",STICKYFRAME="true",STICKYSENSITIVITY=15,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="true"}
+General~t!{FLUIDFREQ=12,HIDEPTF="true",HIDEBOSSF="true",STICKYFRAME="true",STICKYSENSITIVITY=15,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="true"}
 Healing~t!{TONLYFRIEND="false",SELFPET="false",FOCUSINCOMBAT=2,GROUPPETS="true",TARGETINCOMBAT=2,TEXRAID="false",FONLYFRIEND="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="false",CRASH="true",COMBATRAID="false"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1709,7 +1723,7 @@ Maddy's Large Raid Skin
 Author~v!Madaleine of HealBot Website
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=3,HIDEPARTYF="false",HIDEPTF="false",STICKYFRAME="false",STICKYSENSITIVITY=30,HIDERAIDF="false",FLUIDBARS="false",HIDEBOSSF="false"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",STICKYFRAME="false",STICKYSENSITIVITY=30,HIDERAIDF="false",FLUIDBARS="false",HIDEBOSSF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",FALWAYSSHOW="false",TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1819,7 +1833,7 @@ Maddy Disc
 Author~v!Madaleine of Runetotem
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=7,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="false",STICKYFRAME="false",FLUIDBARS="false",HIDEBOSSF="false"}
+General~t!{FLUIDFREQ=12,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="false",STICKYFRAME="false",FLUIDBARS="false",HIDEBOSSF="false"}
 Healing~t!{TINCRAID=1,GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP=1,FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET=1,TINCSELF="false",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBATRAID=0}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -1923,7 +1937,7 @@ Maddy's Classic Skin
 Author~v!Madaleine of HealBot Website
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="false",STICKYSENSITIVITY=20,HIDERAIDF="true",FLUIDBARS="false",FLUIDFREQ=3}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="false",STICKYSENSITIVITY=20,HIDERAIDF="true",FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TONLYFRIEND="false",SELFPET="false",FOCUSINCOMBAT=2,GROUPPETS="true",TARGETINCOMBAT=2,FONLYFRIEND="false",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2033,7 +2047,7 @@ Vivid
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=7,HIDEPARTYF="true",HIDEPTF="false",STICKYFRAME="true",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=12,HIDEPARTYF="true",HIDEPTF="false",STICKYFRAME="true",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",FEXRAID="false",TEXRAID="false",ALERT=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBATRAID=0}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2171,7 +2185,7 @@ Square
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=8,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
+General~t!{FLUIDFREQ=14,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
 Healing~t!{TINCSELF="false",TINCRAID="true",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FALWAYSSHOW="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.87999999523163}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBAT="false"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2283,7 +2297,7 @@ Ranged
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",FLUIDFREQ=7,STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
+General~t!{HIDEBOSSF="true",HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",FLUIDFREQ=12,STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
 Healing~t!{TINCRAID="true",SELFPET=0,GROUPPETS="true",TARGETINCOMBAT=2,TINCSELF="false",FONLYFRIEND="false",TINCGROUP="true",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCPET="false",TEXRAID="false",ALERT=1}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBAT="false"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2391,7 +2405,7 @@ Magic
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=7,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
+General~t!{FLUIDFREQ=12,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true"}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="true",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.88}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="true",COMBAT="false"}
 Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCSELF="true",NUMBOSS=2,EXISTSHOWPTAR="true",HIDE="true",EXISTSHOWBOSS="false",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2497,7 +2511,7 @@ Standard Original
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="false",STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=3}
+General~t!{HIDEBOSSF="false",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="false",STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2599,7 +2613,7 @@ Group Original
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=3,HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="true",HIDEPARTYF="false"}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=11,HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="true",HIDEPARTYF="false"}
 Healing~t!{TONLYFRIEND="false",SELFPET="false",FOCUSINCOMBAT=2,GROUPPETS="true",TARGETINCOMBAT=2,TEXRAID="false",FONLYFRIEND="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2707,7 +2721,7 @@ Raid Original
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",FLUIDFREQ=3}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2819,7 +2833,7 @@ Alterac Valley
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=3,HIDEPTF="false",STICKYFRAME="true",HIDEBOSSF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",STICKYFRAME="true",HIDEBOSSF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",TEXRAID="false",FONLYFRIEND="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",HIDE="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",ENEMYTARGET="false",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -2925,7 +2939,7 @@ Bottoms Up cRaid 25
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="false",HIDEPARTYF="false",FLUIDFREQ=2,STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
+General~t!{HIDEBOSSF="false",HIDEPARTYF="false",FLUIDFREQ=11,STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3052,7 +3066,7 @@ AuxBar^1~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B
 AuxBar^2~f~1!{SIZE=1,USE=5,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B=1,G=1}
 AuxBar^2~d!2~3~4~5~6~7~8~9~
 AuxBar^2~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B=1,G=1}
-AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
+AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
 AuxBar^3~d!2~3~4~5~6~7~8~9~
 AuxBar^3~f~10!{SIZE=1,USE=1,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
 AuxBar^4~f~1!{SIZE=1,USE=2,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
@@ -3076,7 +3090,7 @@ Bottoms Up hRaid 25
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="true",HIDEPARTYF="false",FLUIDFREQ=5,STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="true",HIDEPTF="false"}
+General~t!{HIDEBOSSF="true",HIDEPARTYF="false",FLUIDFREQ=12,STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="true",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3230,7 +3244,7 @@ Bottoms Up cGroup
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="false",FLUIDFREQ=2}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3347,7 +3361,7 @@ AuxBar^1~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=2,G=1,B=1,A=1,O
 AuxBar^2~f~1!{SIZE=1,USE=5,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,G=1,B=1,A=1,OTYPE=1}
 AuxBar^2~d!2~3~4~5~6~7~8~9~
 AuxBar^2~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,G=1,B=1,A=1,OTYPE=1}
-AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
+AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
 AuxBar^3~f~2!{SIZE=1,USE=1,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
 AuxBar^3~d!3~4~5~6~7~8~9~10~
 AuxBar^4~f~1!{SIZE=1,USE=2,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
@@ -3371,7 +3385,7 @@ Bottoms Up hGroup
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",FLUIDFREQ=2}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",HIDEPARTYF="false",STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",FLUIDFREQ=11}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3510,7 +3524,7 @@ Buttoms Up hRaid 40
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=5,HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="true",HIDEBOSSF="false"}
+General~t!{FLUIDFREQ=12,HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="true",HIDEBOSSF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3666,7 +3680,7 @@ Bottoms Up cRaid 40
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=2,HIDEPARTYF="false",HIDEBOSSF="false",STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEBOSSF="false",STICKYSENSITIVITY=35,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3795,10 +3809,10 @@ AuxBar^1~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B
 AuxBar^2~f~1!{SIZE=1,USE=5,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B=1,G=1}
 AuxBar^2~d!2~3~4~5~6~7~8~9~
 AuxBar^2~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,OTYPE=1,A=1,B=1,G=1}
-AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
+AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
 AuxBar^3~d!2~3~4~5~6~
 AuxBar^3~f~7!{SIZE=1,USE=1,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,G=1,B=1,A=1,OTYPE=1}
-AuxBar^3~f~8!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,G=1,B=1,A=1,OTYPE=1}
+AuxBar^3~f~8!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=5,G=1,B=1,A=1,OTYPE=1}
 AuxBar^3~d!9~
 AuxBar^3~f~10!{SIZE=1,USE=1,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
 AuxBar^4~f~1!{SIZE=1,USE=2,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=5,OTYPE=1,A=1,B=1,G=1}
@@ -3831,7 +3845,7 @@ Bottoms Up cRaid 10
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=5,HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="true",HIDEBOSSF="false"}
+General~t!{FLUIDFREQ=12,HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="true",HIDEBOSSF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -3948,7 +3962,7 @@ AuxBar^1~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=2,G=1,B=1,A=1,O
 AuxBar^2~f~1!{SIZE=1,USE=5,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,G=1,B=1,A=1,OTYPE=1}
 AuxBar^2~d!2~3~4~5~6~7~8~9~
 AuxBar^2~f~10!{SIZE=1,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=2,G=1,B=1,A=1,OTYPE=1}
-AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
+AuxBar^3~f~1!{SIZE=1,USE=3,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
 AuxBar^3~f~2!{SIZE=1,USE=1,R=1,COLOUR=2,ANCHOR=3,OFFSET=1,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
 AuxBar^3~d!3~4~5~6~7~8~9~10~
 AuxBar^4~f~1!{SIZE=1,USE=2,R=1,COLOUR=2,ANCHOR=3,OFFSET=0,DEPTH=8,G=1,B=1,A=1,OTYPE=1}
@@ -3972,7 +3986,7 @@ Bottoms Up hRaid 10
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=2,HIDEPARTYF="false",HIDEBOSSF="false",STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="false",HIDEPTF="false"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEBOSSF="false",STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="false",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -4114,7 +4128,7 @@ Bottoms Up Compact Group
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=5,STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{HIDEBOSSF="false",HIDEPTF="false",FLUIDFREQ=12,STICKYFRAME="true",STICKYSENSITIVITY=35,HIDERAIDF="true",FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -4279,7 +4293,7 @@ Bottoms Up Compact Small Raid
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{HIDEBOSSF="false",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="true",FLUIDFREQ=5}
+General~t!{HIDEBOSSF="false",HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="true",FLUIDFREQ=12}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -4442,7 +4456,7 @@ Bottoms Up Compact Large Raid
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=0}
-General~t!{FLUIDFREQ=5,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=12,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=35,FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -4599,7 +4613,7 @@ Aux Party
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -4734,7 +4748,7 @@ Clarity Party
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="true",HIDEPTF="false",FLUIDFREQ=4,STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{HIDEBOSSF="true",HIDEPTF="false",FLUIDFREQ=11,STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FEXRAID="false",FONLYFRIEND="true",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=58,HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -4874,7 +4888,7 @@ Clarity Raid 10
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEPARTYF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=58,INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5013,7 +5027,7 @@ Clarity Raid 25
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="true",HIDEPARTYF="false",FLUIDFREQ=4,HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
+General~t!{HIDEBOSSF="true",HIDEPARTYF="false",FLUIDFREQ=11,HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FEXRAID="false",FONLYFRIEND="true",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",TINCGROUP="true"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5153,7 +5167,7 @@ Clarity Raid 40
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",HIDERAIDF="true",STICKYSENSITIVITY=20,STICKYFRAME="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5293,7 +5307,7 @@ Compact Raid 40
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEPARTYF="false",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=58,INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5429,7 +5443,7 @@ Compact Raid 25
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=20,STICKYFRAME="true",HIDERAIDF="true",FLUIDBARS="false",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF="false",STICKYSENSITIVITY=20,STICKYFRAME="true",HIDERAIDF="true",FLUIDBARS="false",HIDEBOSSF="true"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5565,7 +5579,7 @@ Compact Raid 10
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,SELFPET=0,FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5701,7 +5715,7 @@ Compact Party
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=5,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=4,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF="true",STICKYFRAME="true",HIDERAIDF="true",STICKYSENSITIVITY=20,FLUIDBARS="false",HIDEPARTYF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,SELFPET=0,FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -5837,7 +5851,7 @@ RAID 40 RAVERA
 Author~v!Ravera de Mandokir
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",NOTIFY=5}
-General~t!{FLUIDFREQ=10,STICKYSENSITIVITY=45,FLUIDBARS="true",LOWMANACOMBAT="false",HIDEBOSSF="false",HIDEPTF="false",STICKYFRAME="true",HIDERAIDF="true",HIDEPARTYF="false"}
+General~t!{FLUIDFREQ=15,STICKYSENSITIVITY=45,FLUIDBARS="true",LOWMANACOMBAT="false",HIDEBOSSF="false",HIDEPTF="false",STICKYFRAME="true",HIDERAIDF="true",HIDEPARTYF="false"}
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",FONLYFRIEND="false",TEXRAID="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -5990,7 +6004,7 @@ Group 5
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=8,HIDEPARTYF="true",HIDEBOSSF="true",HIDERAIDF="true",STICKYSENSITIVITY=19,STICKYFRAME="true",FLUIDBARS="true",HIDEPTF="false"}
+General~t!{FLUIDFREQ=14,HIDEPARTYF="true",HIDEBOSSF="true",HIDERAIDF="true",STICKYSENSITIVITY=19,STICKYFRAME="true",FLUIDBARS="true",HIDEPTF="false"}
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
@@ -6136,7 +6150,7 @@ cRaid25
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=8,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="true",STICKYFRAME="true"}
+General~t!{FLUIDFREQ=14,HIDEPTF="false",HIDEPARTYF="true",HIDERAIDF="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="true",STICKYFRAME="true"}
 Healing~t!{TINCSELF="false",TINCPET="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCRAID="true",FONLYFRIEND="false",TINCGROUP="true",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -6295,7 +6309,7 @@ cRaid40
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=8,HIDEPARTYF="true",HIDEBOSSF="true",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="true",HIDEPTF="false"}
+General~t!{FLUIDFREQ=14,HIDEPARTYF="true",HIDEBOSSF="true",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="true",HIDEPTF="false"}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{USE=0,ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -6455,7 +6469,7 @@ B&W-Group
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=7,HIDEPARTYF="true",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=19,FLUIDBARS="true",HIDEBOSSF="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="true",HIDEPTF="false",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=19,FLUIDBARS="true",HIDEBOSSF="true"}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCPET="false",TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -6603,7 +6617,7 @@ B&W-Raid25
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{HIDEBOSSF="true",HIDEPARTYF="true",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",FLUIDFREQ=5}
+General~t!{HIDEBOSSF="true",HIDEPARTYF="true",HIDEPTF="false",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",FLUIDFREQ=11}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -6768,7 +6782,7 @@ B&W Raid40
 Author~v!Monti of Terenas
 DuplicateBars~v!true
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=5,HIDEPTF="false",HIDEBOSSF="true",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",HIDEPARTYF="true"}
+General~t!{FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF="true",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",HIDEPARTYF="true"}
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
@@ -6917,8 +6931,8 @@ High-Vis
 Author~v!Monti of Terenas
 DuplicateBars~v!false
 Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="",RESONLY="true",CHAN="",NOTIFY=1}
-General~t!{FLUIDFREQ=3,HIDEPARTYF="true",STICKYFRAME="true",HIDEBOSSF="true",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="false",HIDEPTF="false"}
-Healing~t!{TINCSELF="false",GROUPPETS="false",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",TINCGROUP="true"}
+General~t!{FLUIDFREQ=11,HIDEPARTYF="true",HIDEBOSSF="true",HIDERAIDF="true",STICKYFRAME="true",STICKYSENSITIVITY=30,FLUIDBARS="false",HIDEPTF="false"}
+Healing~t!{TINCSELF="false",GROUPPETS="false",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="false",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
 IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
@@ -6941,7 +6955,7 @@ FrameAlias~f~9!{SIZE=12,NAME="",R=1,ALIAS="Focus",G=1,SHOW="false",OFFSET=10,FON
 FrameAlias~f~10!{SIZE=12,NAME="",R=1,ALIAS="Enemy",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAliasBar~f~1!{A=0.5,WIDTH=0.7,B=0.25,HEIGHT=20,R=0.1,G=0.25,TEXTURE="HealBot 10"}
 FrameAliasBar~d!2~3~4~5~6~7~8~9~10~
-Frame~f~1!{BACKR=0.1,SFOFFSETH=0,BORDERG=0.2,AUTOCLOSE="false",LOCKED="false",OPENSOUND="false",BORDERA=0.2,SFOFFSETV=0,BACKG=0.1,BORDERB=0.2,BACKA=0.05,SCALE=1,BACKB=0.1,TIPLOC=5,BORDERR=0.2}
+Frame~f~1!{BACKR=0.1,SFOFFSETH=0,SFOFFSETV=0,BACKG=0.1,LOCKED="false",OPENSOUND="false",BORDERA=0.2,BORDERG=0.2,TIPLOC=5,BACKB=0.1,BACKA=0.05,SCALE=1,BORDERB=0.2,AUTOCLOSE="false",BORDERR=0.2}
 Frame~d!2~3~4~5~6~7~8~9~10~
 StickyFrames~f~1!{STUCK="false",STUCKTOPOINT="NONE",STUCKTO=0,STUCKPOINT="NONE"}
 StickyFrames~d!2~3~4~5~6~7~
@@ -6952,7 +6966,7 @@ HealGroups~f~1!{FRAME=1,STATE="false",NAME="Self"}
 HealGroups~f~2!{FRAME=1,STATE="true",NAME="Main tanks"}
 HealGroups~f~3!{FRAME=1,STATE="false",NAME="Healers"}
 HealGroups~f~4!{FRAME=1,STATE="true",NAME="Raid"}
-HealGroups~f~5!{FRAME=1,STATE="false",NAME="Group"}
+HealGroups~f~5!{FRAME=1,STATE="true",NAME="Group"}
 HealGroups~f~6!{FRAME=1,STATE="false",NAME="Private List"}
 HealGroups~f~7!{FRAME=1,STATE="false",NAME="Vehicle"}
 HealGroups~f~8!{FRAME=1,STATE="true",NAME="Pets"}
@@ -6965,10 +6979,10 @@ Anchors~f~3!{Y=52,GROW=2,BARS=3,FRAME=3,X=52}
 Anchors~f~4!{Y=53,GROW=2,BARS=3,FRAME=3,X=53}
 Anchors~f~5!{Y=54,GROW=2,BARS=3,FRAME=3,X=54}
 Anchors~f~6!{Y=55,GROW=2,BARS=3,FRAME=3,X=55}
-Anchors~f~7!{Y=64.61,GROW=2,BARS=3,FRAME=3,X=89.41}
-Anchors~f~8!{Y=68.08,GROW=2,BARS=3,FRAME=3,X=83.49}
+Anchors~f~7!{Y=57.61,GROW=2,BARS=3,FRAME=3,X=93.82}
+Anchors~f~8!{Y=68.08,GROW=2,BARS=3,FRAME=3,X=77.93}
 Anchors~f~9!{Y=57.89,GROW=2,BARS=3,FRAME=3,X=25.43}
-Anchors~f~10!{Y=64.44,GROW=2,BARS=3,FRAME=3,X=93.58}
+Anchors~f~10!{Y=71.8,GROW=2,BARS=3,FRAME=3,X=89.41}
 HeadBar~f~1!{SHOW="false",TEXTURE="HealBot 10",R=0.1,B=0.1,HEIGHT=17,A=0.4,G=0.7,WIDTH=0.7}
 HeadBar~f~2!{SHOW="false",WIDTH=0.7,B=0.1,R=0.1,HEIGHT=15,A=0.4,G=0.7,TEXTURE="HealBot 10"}
 HeadBar~d!3~4~5~6~7~8~9~10~
@@ -6977,20 +6991,20 @@ HeadText~d!2~3~4~5~6~7~8~9~10~
 HealBar~f~1!{HEIGHT=33,GRPCOLS="false",CMARGIN=0,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",LOWMANA=2,WIDTH=155,OFIX=1,RMARGIN=0,NUMCOLS=2}
 HealBar~f~2!{HEIGHT=30,GRPCOLS="false",CMARGIN=2,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",LOWMANA=2,WIDTH=161,OFIX=1,RMARGIN=1,NUMCOLS=2}
 HealBar~d!3~4~5~6~7~8~9~10~
-BarCol~f~1!{BACK=1,BA=0.05,BOUT=1,DISA=0.7,BR=0.4,HB=0.702,BG=0.4,HG=0.4,HA=1,HR=0.4,ORA=0.05,BB=0.7,HLTH=1}
-BarCol~f~2!{BACK=1,BA=0,BOUT=2,DISA=0.04,BR=0.4,HB=0.7,BG=0.4,HG=0.4,HA=1,HR=0.4,ORA=0.13,BB=0.7,HLTH=1}
+BarCol~f~1!{BACK=1,BA=0.05,BOUT=1,DISA=0.7,BR=0.4,HB=0.702,BG=0.4,HR=0.4,HA=1,HG=0.4,ORA=0.05,BB=0.7,HLTH=1}
+BarCol~f~2!{BACK=1,BA=0,BOUT=2,DISA=0.04,BR=0.4,HB=0.7,BG=0.4,HR=0.4,HA=1,HG=0.4,ORA=0.13,BB=0.7,HLTH=1}
 BarCol~d!3~4~5~6~7~8~9~10~
 BarIACol~f~1!{AC=3,AB=1,AA=0.72,AR=1,AG=1,IC=3,IB=0.2,IA=0.58,IR=0.2,IG=1}
 BarIACol~f~2!{AC=3,AB=1,AA=0.78,AR=1,AG=1,IC=3,IB=0.2,IA=0.64,IR=0.2,IG=1}
 BarIACol~d!3~4~5~6~7~8~9~10~
-BarText~f~1!{HLTHONBAR="false",TAGOOR="OOR|",IGNOREONFULL="true",MAXCHARS=15,TAGRIP="RIP|",CLASSONBAR="false",HOFFSET=0,OUTLINE=2,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=1,HMAXCHARS=0,INCABSORBS=1,NUMFORMAT2=1,HOUTLINE=1,NUMFORMAT1=11,HHEIGHT=10,NAMEONBAR="true",HEIGHT=15,FONT="Friz Quadrata TT",SHOWROLE="true",HALIGN=2,TAGDC="DC|",OVERHEAL=1,CLASSTYPE=1,HOFFSET2=0,ALIGN=1,TAGR="R|",HFONT="Friz Quadrata TT"}
-BarText~f~2!{HLTHONBAR="false",TAGOOR="OOR|",HOUTLINE=1,MAXCHARS=15,FONT="Friz Quadrata TT",HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=2,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=1,CLASSONBAR="false",CLASSTYPE=2,NUMFORMAT2=1,OVERHEAL=1,NUMFORMAT1=11,TAGDC="DC|",NAMEONBAR="true",HEIGHT=15,TAGRIP="RIP|",SHOWROLE="false",HALIGN=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=1,TAGR="R|",HOFFSET=0}
+BarText~f~1!{HLTHONBAR="false",TAGOOR="OOR|",IGNOREONFULL="true",MAXCHARS=15,FONT="Friz Quadrata TT",CLASSONBAR="false",HOFFSET=0,OUTLINE=2,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=1,HMAXCHARS=0,INCABSORBS=1,NUMFORMAT2=1,HOUTLINE=1,NUMFORMAT1=11,HHEIGHT=10,TAGRIP="RIP|",HEIGHT=15,NAMEONBAR="true",SHOWROLE="true",HALIGN=2,TAGDC="DC|",OVERHEAL=1,CLASSTYPE=1,HOFFSET2=0,ALIGN=1,TAGR="R|",HFONT="Friz Quadrata TT"}
+BarText~f~2!{HLTHONBAR="false",TAGOOR="OOR|",HOUTLINE=1,MAXCHARS=15,TAGRIP="RIP|",HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=2,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,FONT="Friz Quadrata TT",HLTHTYPE=1,CLASSTYPE=2,NUMFORMAT2=1,CLASSONBAR="false",NUMFORMAT1=11,OVERHEAL=1,NAMEONBAR="true",HEIGHT=15,TAGDC="DC|",SHOWROLE="false",HALIGN=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=1,TAGR="R|",HOFFSET=0}
 BarText~d!3~4~5~6~7~8~9~10~
-BarTextCol~f~1!{NAME=2,NDEBUFF="false",HCG=1,NCDA=0.7,NCB=0,HCA=1,NCG=1,NCA=1,NCR=1,HCB=0,HCR=1,HDEBUFF="false",HCDA=0.4,HLTH=2}
-BarTextCol~f~2!{NCB=0,NCR=1,HCG=1,NCDA=0.4,NAME=2,NDEBUFF="false",NCG=1,NCA=1,HCA=1,HCB=0,HCR=1,HDEBUFF="false",HLTH=2,HCDA=0.4}
+BarTextCol~f~1!{HCG=1,NDEBUFF="false",NAME=2,NCDA=0.7,NCB=0,NCR=1,HCB=0,HCR=1,HCA=1,NCG=1,NCA=1,HDEBUFF="false",HCDA=0.4,HLTH=2}
+BarTextCol~f~2!{HCG=1,NCR=1,NCB=0,NCDA=0.4,NAME=2,HCA=1,HCB=0,HCR=1,NDEBUFF="false",NCG=1,NCA=1,HDEBUFF="false",HLTH=2,HCDA=0.4}
 BarTextCol~d!3~4~5~6~7~8~9~10~
-Icons~f~1!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,MAXDICONS=3,POSITION=2,DOUBLE="true",ONBAR=1,FADE="false",DSCALE=0.85,SHOWDIR="false",SHOWRC="true",SCALE=0.85,I15EN="false",SHOWDIRMOUSE="false",MAXBICONS=8}
-Icons~f~2!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,I15EN="true",POSITION=2,DOUBLE="false",ONBAR=1,FADE="true",DSCALE=0.7,SHOWDIR="true",SHOWRC="true",SCALE=0.7,MAXDICONS=3,SHOWDIRMOUSE="false",MAXBICONS=8}
+Icons~f~1!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,MAXDICONS=3,POSITION=2,FADE="false",ONBAR=1,SHOWDIRMOUSE="false",DSCALE=0.85,SHOWDIR="false",SHOWRC="true",SCALE=0.85,DOUBLE="true",I15EN="false",MAXBICONS=8}
+Icons~f~2!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,I15EN="true",POSITION=2,FADE="true",ONBAR=1,SHOWDIRMOUSE="false",DSCALE=0.7,SHOWDIR="true",SHOWRC="true",SCALE=0.7,DOUBLE="false",MAXDICONS=3,MAXBICONS=8}
 Icons~d!3~4~5~6~7~8~9~10~
 RaidIcon~f~1!{SQUARE="true",CIRCLE="true",DIAMOND="true",SHOW="true",SKULL="true",TRIANGLE="true",STAR="true",CROSS="true",MOON="true"}
 RaidIcon~d!2~3~4~5~6~7~8~9~10~
@@ -7003,8 +7017,8 @@ BarVisibility~d!3~4~5~6~7~8~9~10~
 BarSort~f~1!{SUBORDER=1,OORLAST="false",RAIDORDER=1,SUBPF="true"}
 BarSort~f~2!{SUBORDER=1,OORLAST="false",RAIDORDER=3,SUBPF="true"}
 BarSort~d!3~4~5~6~7~8~9~10~
-BarAggro~f~1!{B=0,SHOWIND="false",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",ALERTIND=1,SHOWTEXT="true",R=1,ALERT=1}
-BarAggro~f~2!{B=0,SHOWIND="true",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",R=1,SHOWTEXT="true",ALERTIND=2,ALERT=2}
+BarAggro~f~1!{B=0,SHOWIND="false",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",R=1,ALERTIND=1,SHOWTEXT="true",ALERT=1}
+BarAggro~f~2!{B=0,SHOWIND="true",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",ALERTIND=2,R=1,SHOWTEXT="true",ALERT=2}
 BarAggro~d!3~4~5~6~7~8~9~10~
 AuxBarFrame~f~1!{OFREQ=0.07,OVERLAP=1,OMIN=0.1,OMAX=0.95}
 AuxBarFrame~d!2~3~4~5~6~7~8~9~10~
@@ -7029,5 +7043,278 @@ AuxBar^7~d!2~3~4~5~6~7~8~9~10~
 AuxBar^8~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,OTYPE=1,B=1,G=1}
 AuxBar^8~d!2~3~4~5~6~7~8~9~10~
 AuxBar^9~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,OTYPE=1,B=1,G=1}
+AuxBar^9~d!2~3~4~5~6~7~8~9~10~
+Complete!]]
+HealBot_ExtraSkinData[49]=[[Skin
+Retro-Raid
+Author~v!Ivanhoof of Terenas
+DuplicateBars~v!true
+Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="Casting #s on #n",RESONLY="true",CHAN="",NOTIFY=1}
+General~t!{FLUIDFREQ=16,HIDEPARTYF="true",HIDEPTF="false",STICKYFRAME="false",STICKYSENSITIVITY=30,HIDERAIDF="true",FLUIDBARS="true",HIDEBOSSF="true"}
+Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",FALWAYSSHOW="false",TEXRAID="false",TINCPET="false"}
+Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
+Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
+IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
+FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=10,FONT="Oregon LDO Black",A=1,B=1,OUTLINE=1}
+FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Frame 2",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~d!3~4~5~
+FrameAlias~f~6!{SIZE=12,NAME="",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~7!{SIZE=12,NAME="",R=1,ALIAS="Pets",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~8!{SIZE=12,NAME="",R=1,ALIAS="Target",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~9!{SIZE=12,NAME="",R=1,ALIAS="Focus",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~10!{SIZE=12,NAME="",R=1,ALIAS="Enemy",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAliasBar~f~1!{A=0.5,WIDTH=0.8,B=0.25,HEIGHT=20,R=0.1,G=0.25,TEXTURE="HealBot 10"}
+FrameAliasBar~f~2!{A=0.5,WIDTH=0.7,B=0.25,HEIGHT=20,R=0.1,G=0.25,TEXTURE="HealBot 10"}
+FrameAliasBar~d!3~4~5~6~7~8~9~10~
+Frame~f~1!{BORDERR=0.2,TIPLOC=5,AUTOCLOSE="false",BACKB=0.1,LOCKED="false",OPENSOUND="false",BORDERA=0.2,SFOFFSETV=0,BACKG=0.1,BORDERB=0.2,BACKA=0.05,SCALE=1,BORDERG=0.2,BACKR=0.1,SFOFFSETH=0}
+Frame~d!2~3~4~5~6~7~8~9~10~
+StickyFrames~f~1!{STUCK="false",STUCKTOPOINT="NONE",STUCKTO=0,STUCKPOINT="NONE"}
+StickyFrames~d!2~3~4~5~6~7~8~9~10~
+HealGroups~f~1!{FRAME=1,STATE="false",NAME="Self"}
+HealGroups~f~2!{FRAME=1,STATE="true",NAME="Main tanks"}
+HealGroups~f~3!{FRAME=1,STATE="true",NAME="Healers"}
+HealGroups~f~4!{FRAME=1,STATE="true",NAME="Raid"}
+HealGroups~f~5!{FRAME=1,STATE="false",NAME="Group"}
+HealGroups~f~6!{FRAME=1,STATE="false",NAME="Private List"}
+HealGroups~f~7!{FRAME=1,STATE="false",NAME="Vehicle"}
+HealGroups~f~8!{FRAME=1,STATE="true",NAME="Pets"}
+HealGroups~f~9!{FRAME=8,STATE="false",NAME="Target"}
+HealGroups~f~10!{FRAME=9,STATE="false",NAME="Focus"}
+HealGroups~f~11!{FRAME=10,STATE="false",NAME="Enemy"}
+Anchors~f~1!{Y=83.06,GROW=2,BARS=3,FRAME=3,X=29.67}
+Anchors~f~2!{Y=51,GROW=2,BARS=3,FRAME=3,X=51}
+Anchors~f~3!{Y=52,GROW=2,BARS=3,FRAME=3,X=52}
+Anchors~f~4!{Y=53,GROW=2,BARS=3,FRAME=3,X=53}
+Anchors~f~5!{Y=54,GROW=2,BARS=3,FRAME=3,X=54}
+Anchors~f~6!{Y=55,GROW=2,BARS=3,FRAME=3,X=55}
+Anchors~f~7!{Y=56,GROW=2,BARS=3,FRAME=3,X=56}
+Anchors~f~8!{Y=87.7,GROW=2,BARS=3,FRAME=3,X=23.77}
+Anchors~f~9!{Y=87.66,GROW=2,BARS=3,FRAME=3,X=29.7}
+Anchors~f~10!{Y=83.29,GROW=2,BARS=3,FRAME=3,X=35.14}
+HeadBar~f~1!{SHOW="true",TEXTURE="HealBot 10",R=0.1,B=0.1,HEIGHT=14,A=0.4,G=0.7,WIDTH=0.9}
+HeadBar~f~2!{SHOW="true",TEXTURE="HealBot 10",R=0.1,B=0.1,HEIGHT=13,A=0.4,G=0.7,WIDTH=0.7}
+HeadBar~d!3~4~5~6~7~8~9~10~
+HeadText~f~1!{A=0.74,R=1,OFFSET=0,B=1,FONT="Friz Quadrata TT",HEIGHT=9,G=1,OUTLINE=1}
+HeadText~d!2~3~4~5~6~7~8~9~10~
+HealBar~f~1!{HEIGHT=25,GRPCOLS="false",CMARGIN=1,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",WIDTH=79,RMARGIN=0,OFIX=1,NUMCOLS=2,LOWMANA=2}
+HealBar~f~2!{HEIGHT=25,GRPCOLS="false",CMARGIN=2,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",WIDTH=144,RMARGIN=1,OFIX=1,NUMCOLS=2,LOWMANA=2}
+HealBar~d!3~4~5~6~7~8~9~
+HealBar~f~10!{HEIGHT=25,GRPCOLS="false",CMARGIN=2,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",LOWMANA=2,NUMCOLS=2,OFIX=1,RMARGIN=0,WIDTH=144}
+BarCol~f~1!{BACK=1,BA=0,BOUT=0,DISA=0.1,BR=0.4,HB=0.7,BG=0.4,HR=0.4,HA=1,HG=0.4,ORA=0.4,BB=0.7,HLTH=1}
+BarCol~f~2!{BACK=1,BA=0,BOUT=2,DISA=0.1,BR=0.4,HB=0.7,BG=0.4,BB=0.7,HA=1,HR=0.4,ORA=0.4,HG=0.4,HLTH=1}
+BarCol~d!3~4~5~6~7~8~9~
+BarCol~f~10!{BACK=1,BA=0.3,BOUT=1,DISA=0.1,BR=0.4,HB=0.7,BG=0.4,HG=0.4,HA=1,HR=0.4,ORA=0.4,BB=0.7,HLTH=1}
+BarIACol~f~1!{AC=3,AB=1,AA=0.78,AR=1,AG=1,IC=3,IB=0.2,IA=0.82,IR=0.2,IG=1}
+BarIACol~d!2~3~4~5~6~7~8~9~10~
+BarText~f~1!{HLTHONBAR="true",TAGOOR="",OVERHEAL=1,MAXCHARS=0,CLASSONBAR="false",HFONT="Friz Quadrata TT",OUTLINE=1,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=3,HMAXCHARS=0,CLASSTYPE=1,NUMFORMAT2=1,IGNOREONFULL="true",TAGDC="",NUMFORMAT1=11,NAMEONBAR="true",HEIGHT=10,FONT="Friz Quadrata TT",SHOWROLE="true",HALIGN=2,TAGRIP="",HHEIGHT=10,HOUTLINE=1,INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~f~2!{HLTHONBAR="true",TAGOOR="[ OOR ] ",OVERHEAL=1,MAXCHARS=0,CLASSONBAR="false",HFONT="Friz Quadrata TT",OUTLINE=1,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=1,HMAXCHARS=0,CLASSTYPE=1,NUMFORMAT2=1,IGNOREONFULL="true",TAGDC="[ DC ] ",NUMFORMAT1=11,NAMEONBAR="true",HEIGHT=10,FONT="Friz Quadrata TT",SHOWROLE="true",HALIGN=2,TAGRIP="[ RIP ] ",HHEIGHT=10,HOUTLINE=1,INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="[ R ] ",HOFFSET=0}
+BarText~d!3~4~5~6~7~8~9~10~
+BarTextCol~f~1!{NAME=2,NDEBUFF="false",HLTH=2,NCDA=0.4,HCG=1,HCA=1,NCG=1,NCA=1,HCR=1,HCB=0,NCR=1,HDEBUFF="false",NCB=0,HCDA=0.4}
+BarTextCol~d!2~3~4~5~6~7~8~9~10~
+Icons~f~1!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,MAXDICONS=3,I15EN="true",DOUBLE="false",SHOWDIR="true",FADE="true",DSCALE=0.6,ONBAR=1,SHOWRC="true",SCALE=0.6,SHOWDIRMOUSE="false",POSITION=2,MAXBICONS=8}
+Icons~f~2!{SHOWBUFF="true",SHOWDEBUFF="true",FADESECS=15,MAXDICONS=3,I15EN="true",DOUBLE="false",SHOWDIR="true",FADE="true",DSCALE=0.7,ONBAR=1,SHOWRC="true",SCALE=0.7,SHOWDIRMOUSE="false",POSITION=2,MAXBICONS=8}
+Icons~d!3~4~5~6~7~8~9~10~
+RaidIcon~f~1!{SQUARE="true",CIRCLE="true",DIAMOND="true",SHOW="true",SKULL="true",TRIANGLE="true",STAR="true",CROSS="true",MOON="true"}
+RaidIcon~d!2~3~4~5~6~7~8~9~10~
+IconText~f~1!{SDUR="true",HEIGHT=8,SSCNT="false",SCNT="true",DURTHRH=9,FONT="Friz Quadrata TT",DURWARN=3,SSDUR="true",OUTLINE=2}
+IconText~f~2!{SDUR="true",HEIGHT=9,SSCNT="false",SCNT="true",DURTHRH=9,FONT="Friz Quadrata TT",DURWARN=3,SSDUR="true",OUTLINE=2}
+IconText~d!3~4~5~6~7~8~9~10~
+BarVisibility~f~1!{INCCLASSES=1,ALERTIC=0.98,ALERTOC=0.9,HIDEOOR="false"}
+BarVisibility~f~2!{INCCLASSES=1,ALERTIC=1,ALERTOC=0.95,HIDEOOR="false"}
+BarVisibility~d!3~4~5~6~7~8~9~10~
+BarSort~f~1!{SUBORDER=1,OORLAST="false",RAIDORDER=3,SUBPF="true"}
+BarSort~d!2~3~4~5~6~7~8~9~10~
+BarAggro~f~1!{B=0,SHOWIND="true",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",ALERTIND=2,R=1,SHOWTEXT="false",ALERT=2}
+BarAggro~f~2!{B=0,SHOWIND="true",G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",R=1,ALERTIND=2,SHOWTEXT="true",ALERT=2}
+BarAggro~d!3~4~5~6~7~8~9~10~
+AuxBarFrame~f~1!{OFREQ=0.07,OVERLAP=1,OMIN=0.1,OMAX=0.95}
+AuxBarFrame~d!2~3~4~5~6~7~8~9~10~
+AuxBar^1~f~1!{SIZE=0.98,USE=4,R=1,COLOUR=1,ANCHOR=1,OFFSET=0,DEPTH=2,G=1,B=1,OTYPE=1}
+AuxBar^1~d!2~3~4~5~6~7~8~9~
+AuxBar^1~f~10!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=0,DEPTH=2,OTYPE=1,B=1,G=1}
+AuxBar^2~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^2~d!2~3~4~5~6~7~8~9~10~
+AuxBar^3~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^3~d!2~3~4~5~6~7~8~9~10~
+AuxBar^4~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^4~d!2~3~4~5~6~7~8~9~10~
+AuxBar^5~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=0,DEPTH=1,G=1,B=1,OTYPE=1}
+AuxBar^5~d!2~3~4~5~6~7~8~9~10~
+AuxBar^6~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^6~d!2~3~4~5~6~7~8~9~10~
+AuxBar^7~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^7~d!2~3~4~5~6~7~8~9~10~
+AuxBar^8~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^8~d!2~3~4~5~6~7~8~9~10~
+AuxBar^9~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^9~d!2~3~4~5~6~7~8~9~10~
+Complete!]]
+HealBot_ExtraSkinData[50]=[[Skin
+Blended-Group
+Author~v!Ivanhoof of Terenas
+DuplicateBars~v!false
+Chat~t!{EOCOOM="false",EOCOOMV=20,MSG="",RESONLY="true",CHAN="",NOTIFY=1}
+General~t!{FLUIDFREQ=17,HIDEPTF="false",HIDEPARTYF="true",STICKYSENSITIVITY=30,HIDERAIDF="true",STICKYFRAME="true",FLUIDBARS="true",HIDEBOSSF="true"}
+Healing~t!{TINCSELF="false",TINCRAID="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET="true",TEXRAID="false",ALERT=0.95}
+Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="true",COMBATRAID=1}
+Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
+IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
+IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
+FrameAlias~f~1!{SIZE=12,NAME="",R=0.243,ALIAS="Tank and Heals",G=0.478,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.882,OUTLINE=1}
+FrameAlias~f~2!{SIZE=12,NAME="Damage Dealers",R=0.275,ALIAS="Group",G=0.882,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.243,OUTLINE=1}
+FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~d!4~5~
+FrameAlias~f~6!{SIZE=12,NAME="",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~7!{SIZE=12,NAME="Pets",R=0.275,ALIAS="Pets",G=0.882,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.243,OUTLINE=1}
+FrameAlias~f~8!{SIZE=12,NAME="",R=1,ALIAS="Target",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~9!{SIZE=12,NAME="",R=1,ALIAS="Focus",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
+FrameAlias~f~10!{SIZE=12,NAME="Enemy",R=0.902,ALIAS="Enemy",G=0.2,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.2,OUTLINE=1}
+FrameAliasBar~f~1!{A=0.5,TEXTURE="HealBot 10",B=0.25,HEIGHT=20,R=0.1,G=0.25,WIDTH=0.95}
+FrameAliasBar~f~2!{A=0.25,TEXTURE="Smooth v2",B=0,HEIGHT=14,R=0,G=0,WIDTH=0.95}
+FrameAliasBar~f~3!{A=0.5,TEXTURE="HealBot 10",B=0.25,HEIGHT=20,R=0.1,G=0.25,WIDTH=0.7}
+FrameAliasBar~d!4~5~6~
+FrameAliasBar~f~7!{A=0.25,TEXTURE="Smooth v2",B=0,HEIGHT=12,R=0,G=0,WIDTH=0.95}
+FrameAliasBar~f~8!{A=0.5,TEXTURE="HealBot 10",B=0.25,HEIGHT=20,R=0.1,G=0.25,WIDTH=0.7}
+FrameAliasBar~d!9~
+FrameAliasBar~f~10!{A=0.25,TEXTURE="HealBot 10",B=0,HEIGHT=14,R=0,G=0,WIDTH=0.9}
+Frame~f~1!{BACKR=0.2,BACKG=0.196,AUTOCLOSE="false",BORDERB=0.2,LOCKED="true",SCALE=1,BORDERA=0,SFOFFSETV=0,TIPLOC=4,BACKB=0.188,BACKA=0,OPENSOUND="false",BORDERG=0.2,BORDERR=0.2,SFOFFSETH=0}
+Frame~f~2!{BACKR=0.173,BACKG=0.184,AUTOCLOSE="false",BORDERB=0.808,LOCKED="true",SCALE=1,BORDERA=0,SFOFFSETV=0,TIPLOC=5,BACKB=0.2,BACKA=0,OPENSOUND="false",BORDERG=0.796,BORDERR=0.765,SFOFFSETH=0}
+Frame~f~3!{BORDERR=0.765,BACKR=0.173,AUTOCLOSE="false",BORDERB=0.808,LOCKED="true",OPENSOUND="false",BORDERA=0.5,SFOFFSETV=0,TIPLOC=5,BACKB=0.2,BACKA=0.1,SCALE=1,BACKG=0.184,BORDERG=0.796,SFOFFSETH=0}
+Frame~d!4~5~6~
+Frame~f~7!{BORDERR=0.765,BACKG=0.184,AUTOCLOSE="false",BORDERB=0.808,LOCKED="true",OPENSOUND="false",BORDERA=0,SFOFFSETV=0,TIPLOC=5,BACKB=0.2,BACKA=0,SCALE=1,BORDERG=0.796,BACKR=0.173,SFOFFSETH=0}
+Frame~f~8!{BACKR=0.173,BACKG=0.184,AUTOCLOSE="false",BORDERB=0.808,LOCKED="false",OPENSOUND="false",BORDERA=0.5,SFOFFSETV=0,TIPLOC=5,BACKB=0.2,BACKA=0.1,SCALE=1,BORDERG=0.796,BORDERR=0.765,SFOFFSETH=0}
+Frame~d!9~
+Frame~f~10!{BACKR=0.2,BACKG=0.2,AUTOCLOSE="false",BORDERB=0.2,LOCKED="true",SCALE=1,BORDERA=0,SFOFFSETV=-14,TIPLOC=2,BACKB=0.2,BACKA=0,OPENSOUND="false",BORDERG=0.2,BORDERR=0.2,SFOFFSETH=0}
+StickyFrames~f~1!{STUCK="false",STUCKTOPOINT="NONE",STUCKTO=0,STUCKPOINT="NONE"}
+StickyFrames~f~2!{STUCK="true",STUCKTOPOINT="BOTTOMRIGHT",STUCKTO=1,STUCKPOINT="TOPRIGHT"}
+StickyFrames~f~3!{STUCK="false",STUCKTOPOINT="NONE",STUCKTO=0,STUCKPOINT="NONE"}
+StickyFrames~d!4~5~6~
+StickyFrames~f~7!{STUCK="true",STUCKTOPOINT="BOTTOMRIGHT",STUCKTO=2,STUCKPOINT="TOPRIGHT"}
+StickyFrames~f~8!{STUCK="false",STUCKTOPOINT="NONE",STUCKTO=0,STUCKPOINT="NONE"}
+StickyFrames~d!9~
+StickyFrames~f~10!{STUCK="true",STUCKTOPOINT="TOPLEFT",STUCKTO=1,STUCKPOINT="TOPRIGHT"}
+HealGroups~f~1!{FRAME=1,STATE="true",NAME="Main tanks"}
+HealGroups~f~2!{FRAME=1,STATE="true",NAME="Healers"}
+HealGroups~f~3!{FRAME=1,STATE="false",NAME="Self"}
+HealGroups~f~4!{FRAME=2,STATE="true",NAME="Group"}
+HealGroups~f~5!{FRAME=2,STATE="false",NAME="Private List"}
+HealGroups~f~6!{FRAME=2,STATE="false",NAME="Raid"}
+HealGroups~f~7!{FRAME=1,STATE="false",NAME="Vehicle"}
+HealGroups~f~8!{FRAME=7,STATE="true",NAME="Pets"}
+HealGroups~f~9!{FRAME=8,STATE="false",NAME="Target"}
+HealGroups~f~10!{FRAME=9,STATE="false",NAME="Focus"}
+HealGroups~f~11!{FRAME=10,STATE="true",NAME="Enemy"}
+Anchors~f~1!{Y=69.09,X=79.66,BARS=1,FRAME=1,GROW=2}
+Anchors~f~2!{Y=62.92,X=84.89,BARS=1,FRAME=3,GROW=1}
+Anchors~f~3!{Y=41.05,X=35.18,BARS=1,FRAME=1,GROW=2}
+Anchors~f~4!{Y=38.93,X=33.85,BARS=1,FRAME=1,GROW=2}
+Anchors~f~5!{Y=36.82,X=32.53,BARS=1,FRAME=1,GROW=2}
+Anchors~f~6!{Y=34.7,X=31.21,BARS=1,FRAME=1,GROW=2}
+Anchors~f~7!{Y=58.17,X=84.89,BARS=1,FRAME=3,GROW=2}
+Anchors~f~8!{Y=63.18,X=83.33,BARS=1,FRAME=1,GROW=2}
+Anchors~f~9!{Y=58.28,X=83.32,BARS=1,FRAME=1,GROW=2}
+Anchors~f~10!{Y=67.92,X=79.66,BARS=3,FRAME=3,GROW=2}
+HeadBar~f~1!{SHOW="true",WIDTH=0.95,B=0,R=0,HEIGHT=14,A=0.25,G=0,TEXTURE="Smooth v2"}
+HeadBar~f~2!{SHOW="false",TEXTURE="Skewed",R=0.09,B=0.118,HEIGHT=13,A=0,G=0.11,WIDTH=0.9}
+HeadBar~f~3!{SHOW="true",TEXTURE="Skewed",R=0.09,B=0.118,HEIGHT=10,A=0,G=0.11,WIDTH=0.9}
+HeadBar~d!4~5~6~
+HeadBar~f~7!{SHOW="false",WIDTH=0.9,B=0.118,R=0.09,HEIGHT=12,A=0,G=0.11,TEXTURE="Skewed"}
+HeadBar~f~8!{SHOW="true",WIDTH=0.9,B=0.118,R=0.09,HEIGHT=10,A=0,G=0.11,TEXTURE="Skewed"}
+HeadBar~d!9~
+HeadBar~f~10!{SHOW="false",WIDTH=0.9,B=0.118,R=0.09,HEIGHT=5,A=0,G=0.11,TEXTURE="Skewed"}
+HeadText~f~1!{A=1,R=0.2,OFFSET=0,B=0.2,FONT="Friz Quadrata TT",HEIGHT=12,G=0.902,OUTLINE=1}
+HeadText~f~2!{A=1,B=0.835,OFFSET=-1,R=0.541,FONT="Friz Quadrata TT",HEIGHT=12,G=0.757,OUTLINE=1}
+HeadText~f~3!{A=0.85,B=0.973,OFFSET=0,R=0.651,FONT="Friz Quadrata TT",HEIGHT=12,G=0.82,OUTLINE=1}
+HeadText~d!4~5~6~
+HeadText~f~7!{A=0.85,B=0.973,OFFSET=-1,R=0.651,FONT="Friz Quadrata TT",HEIGHT=12,G=0.82,OUTLINE=1}
+HeadText~f~8!{A=0.85,B=0.973,OFFSET=0,R=0.651,FONT="Friz Quadrata TT",HEIGHT=12,G=0.82,OUTLINE=1}
+HeadText~d!9~10~
+HealBar~f~1!{HEIGHT=32,GRPCOLS="true",CMARGIN=1,TEXTURE="Charcoal",POWERCNT="true",LOWMANACOMBAT="true",NUMCOLS=1,RMARGIN=1,OFIX=1,WIDTH=140,LOWMANA=1}
+HealBar~f~2!{HEIGHT=31,GRPCOLS="false",CMARGIN=1,TEXTURE="Charcoal",POWERCNT="true",LOWMANACOMBAT="true",NUMCOLS=1,RMARGIN=1,OFIX=1,WIDTH=93,LOWMANA=1}
+HealBar~f~3!{HEIGHT=25,GRPCOLS="false",CMARGIN=1,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",WIDTH=75,RMARGIN=1,OFIX=1,NUMCOLS=5,LOWMANA=1}
+HealBar~d!4~5~6~
+HealBar~f~7!{HEIGHT=24,GRPCOLS="false",CMARGIN=1,TEXTURE="Charcoal",POWERCNT="true",LOWMANACOMBAT="true",NUMCOLS=4,RMARGIN=0,OFIX=1,WIDTH=69,LOWMANA=1}
+HealBar~f~8!{HEIGHT=25,GRPCOLS="false",CMARGIN=1,TEXTURE="Smooth",POWERCNT="true",LOWMANACOMBAT="true",NUMCOLS=5,RMARGIN=1,OFIX=1,WIDTH=75,LOWMANA=1}
+HealBar~d!9~
+HealBar~f~10!{HEIGHT=28,GRPCOLS="false",CMARGIN=1,TEXTURE="Charcoal",POWERCNT="true",LOWMANACOMBAT="true",NUMCOLS=1,RMARGIN=0,OFIX=1,WIDTH=102,LOWMANA=1}
+BarCol~f~1!{BACK=1,BA=0,BB=0.2,DISA=0.02,BR=0,HB=0.2,BG=0.2,BOUT=0,HA=1,HG=0.2,ORA=0.3,HR=0,HLTH=1}
+BarCol~d!2~3~4~5~6~7~8~9~
+BarCol~f~10!{BACK=1,BA=0,BOUT=0,DISA=0.02,BR=0,HB=0.11,BG=0.2,HR=0.824,HA=1,HG=0.11,ORA=0.3,BB=0.2,HLTH=3}
+BarIACol~f~1!{AC=4,AB=1,AA=0.5,AR=1,AG=1,IC=3,IB=0,IA=0.7,IR=0,IG=0.502}
+BarIACol~d!2~3~4~5~6~7~8~9~
+BarIACol~f~10!{AC=4,AB=1,AA=0.5,AR=1,AG=1,IC=4,IB=0.173,IA=0.7,IR=0.996,IG=0.886}
+BarText~f~1!{HLTHONBAR="true",TAGOOR="",OVERHEAL=1,MAXCHARS=0,HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=1,OFFSET=0,INCHEALS=2,HLTHTXTANCHOR=1,HLTHTYPE=1,FONT="Friz Quadrata TT",CLASSTYPE=1,NUMFORMAT2=1,IGNOREONFULL="true",TAGDC="",NUMFORMAT1=2,TAGRIP="",HEIGHT=10,NAMEONBAR="true",SHOWROLE="false",HALIGN=2,HHEIGHT=10,HOUTLINE=1,CLASSONBAR="false",INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~f~2!{HLTHONBAR="true",TAGOOR="",HOUTLINE=1,MAXCHARS=0,HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=1,CLASSONBAR="false",OFFSET=1,HLTHTXTANCHOR=1,HLTHTYPE=1,INCHEALS=2,CLASSTYPE=1,NUMFORMAT2=1,OVERHEAL=1,TAGDC="",FONT="Friz Quadrata TT",NAMEONBAR="true",HEIGHT=10,TAGRIP="",SHOWROLE="false",HALIGN=2,NUMFORMAT1=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~f~3!{HLTHONBAR="true",TAGOOR="",HOUTLINE=1,MAXCHARS=0,HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=1,CLASSONBAR="false",OFFSET=0,HLTHTXTANCHOR=1,HLTHTYPE=1,INCHEALS=2,CLASSTYPE=1,NUMFORMAT2=1,OVERHEAL=1,TAGDC="",FONT="Friz Quadrata TT",NAMEONBAR="true",HEIGHT=10,TAGRIP="",SHOWROLE="false",HALIGN=2,NUMFORMAT1=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~d!4~5~6~
+BarText~f~7!{HLTHONBAR="false",TAGOOR="",HOUTLINE=1,MAXCHARS=12,HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=1,CLASSONBAR="false",OFFSET=0,HLTHTXTANCHOR=1,HLTHTYPE=1,INCHEALS=2,CLASSTYPE=1,NUMFORMAT2=1,OVERHEAL=1,TAGDC="",FONT="Friz Quadrata TT",NAMEONBAR="true",HEIGHT=10,TAGRIP="",SHOWROLE="false",HALIGN=2,NUMFORMAT1=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~f~8!{HLTHONBAR="true",TAGOOR="",HOUTLINE=1,MAXCHARS=0,HMAXCHARS=0,HFONT="Friz Quadrata TT",OUTLINE=1,CLASSONBAR="false",OFFSET=0,HLTHTXTANCHOR=1,HLTHTYPE=1,INCHEALS=2,CLASSTYPE=1,NUMFORMAT2=1,OVERHEAL=1,TAGDC="",FONT="Friz Quadrata TT",NAMEONBAR="true",HEIGHT=10,TAGRIP="",SHOWROLE="false",HALIGN=2,NUMFORMAT1=2,HHEIGHT=10,IGNOREONFULL="true",INCABSORBS=1,HOFFSET2=0,ALIGN=2,TAGR="",HOFFSET=0}
+BarText~d!9~10~
+BarTextCol~f~1!{HCG=1,NCR=1,HLTH=2,NCDA=0.4,NCB=0,NDEBUFF="false",HCB=0,HCR=1,NCA=1,NCG=1,HCA=1,HDEBUFF="false",NAME=2,HCDA=0.4}
+BarTextCol~d!2~3~4~5~6~7~8~9~10~
+Icons~f~1!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=3,FADESECS=8,DOUBLE="false",ONBAR=1,FADE="true",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",POSITION=2,MAXBICONS=8}
+Icons~f~2!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=2,FADESECS=8,POSITION=2,ONBAR=1,DOUBLE="false",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",FADE="true",MAXBICONS=5}
+Icons~f~3!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=3,FADESECS=15,POSITION=2,ONBAR=1,DOUBLE="false",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",FADE="true",MAXBICONS=8}
+Icons~d!4~5~6~
+Icons~f~7!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=2,FADESECS=8,POSITION=2,ONBAR=1,DOUBLE="false",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",FADE="true",MAXBICONS=5}
+Icons~f~8!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=3,FADESECS=15,POSITION=2,ONBAR=1,DOUBLE="false",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",FADE="true",MAXBICONS=8}
+Icons~d!9~
+Icons~f~10!{SHOWBUFF="true",SHOWDEBUFF="true",I15EN="true",MAXDICONS=2,FADESECS=8,POSITION=2,ONBAR=1,DOUBLE="false",DSCALE=0.5,SHOWDIR="true",SHOWRC="false",SCALE=0.5,SHOWDIRMOUSE="false",FADE="true",MAXBICONS=5}
+RaidIcon~f~1!{SQUARE="true",CIRCLE="true",DIAMOND="true",SHOW="true",SKULL="true",TRIANGLE="true",STAR="true",MOON="true",CROSS="true"}
+RaidIcon~d!2~3~4~5~6~7~8~9~10~
+IconText~f~1!{DURWARN=3,HEIGHT=8,SSCNT="false",SCNT="true",DURTHRH=9,FONT="Friz Quadrata TT",SDUR="true",SSDUR="true",OUTLINE=2}
+IconText~d!2~
+IconText~f~3!{SDUR="false",HEIGHT=8,SSCNT="false",SCNT="true",DURTHRH=9,FONT="Friz Quadrata TT",DURWARN=3,SSDUR="true",OUTLINE=2}
+IconText~d!4~5~6~7~8~9~
+IconText~f~10!{SDUR="false",HEIGHT=8,SSCNT="false",SCNT="true",DURTHRH=9,FONT="Friz Quadrata TT",DURWARN=3,SSDUR="false",OUTLINE=2}
+BarVisibility~f~1!{INCCLASSES=1,ALERTIC=0.98,ALERTOC=0.95,HIDEOOR="false"}
+BarVisibility~f~2!{INCCLASSES=1,ALERTIC=0.95,ALERTOC=0.9,HIDEOOR="false"}
+BarVisibility~f~3!{INCCLASSES=1,ALERTIC=0.99,ALERTOC=0.95,HIDEOOR="false"}
+BarVisibility~d!4~5~6~
+BarVisibility~f~7!{INCCLASSES=1,ALERTIC=0.9,ALERTOC=0.8,HIDEOOR="false"}
+BarVisibility~f~8!{INCCLASSES=1,ALERTIC=0.99,ALERTOC=0.95,HIDEOOR="false"}
+BarVisibility~d!9~10~
+BarSort~f~1!{SUBORDER=1,OORLAST="false",RAIDORDER=3,SUBPF="true"}
+BarSort~d!2~3~4~5~6~7~8~9~10~
+BarAggro~f~1!{B=0,ALERTIND=2,G=0,TEXTFORMAT=3,SHOW="true",SHOWTEXTPCT="true",R=1,SHOWIND="true",SHOWTEXT="false",ALERT=2}
+BarAggro~d!2~3~4~5~6~7~8~9~10~
+AuxBarFrame~f~1!{OFREQ=0.07,OVERLAP=1,OMIN=0.1,OMAX=0.95}
+AuxBarFrame~d!2~3~4~5~6~7~8~9~10~
+AuxBar^1~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^1~d!2~3~4~5~6~7~8~9~10~
+AuxBar^2~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^2~d!2~3~4~5~6~7~8~9~10~
+AuxBar^3~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^3~d!2~3~4~5~6~7~8~9~10~
+AuxBar^4~f~1!{SIZE=0.98,USE=5,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=1,G=1,B=1,OTYPE=1}
+AuxBar^4~d!2~3~4~5~6~7~8~9~
+AuxBar^4~f~10!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=2,OFFSET=1,DEPTH=1,G=1,B=1,OTYPE=1}
+AuxBar^5~f~1!{SIZE=0.98,USE=5,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=1,G=1,B=1,OTYPE=1}
+AuxBar^5~d!2~3~4~5~6~7~8~9~
+AuxBar^5~f~10!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=1,G=1,B=1,OTYPE=1}
+AuxBar^6~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^6~d!2~3~4~5~6~7~8~9~10~
+AuxBar^7~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^7~d!2~3~4~5~6~7~8~9~10~
+AuxBar^8~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
+AuxBar^8~d!2~3~4~5~6~7~8~9~10~
+AuxBar^9~f~1!{SIZE=0.98,USE=1,R=1,COLOUR=1,ANCHOR=1,OFFSET=1,DEPTH=5,G=1,B=1,OTYPE=1}
 AuxBar^9~d!2~3~4~5~6~7~8~9~10~
 Complete!]]

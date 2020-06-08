@@ -595,9 +595,9 @@ function HealBot_Action_UpdateFluidBar()
         aufbActive=true
         --HealBot_setCall("HealBot_Action_UpdateInHealFluidBar")
     end
-    if aufbActive then
+    --if aufbActive then
         --HealBot_setCall("HealBot_Action_UpdateFluidBar")
-    end
+    --end
     return aufbActive
 end
 
@@ -618,7 +618,7 @@ function HealBot_Action_setAuxAssigned(aType, frame, id)
     end
 end
 
-local function HealBot_Action_UpdateAuxAbsorbBar(button, r, g, b, value)
+local function HealBot_Action_UpdateAuxAbsorbBar(button, value)
     table.foreach(hbAuxAbsorbAssigned[button.frame], function (x,id)
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=button.health.absorbr
@@ -639,8 +639,8 @@ local function HealBot_Action_UpdateAuxHealInBar(button, value)
     table.foreach(hbAuxHealInAssigned[button.frame], function (x,id)
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=button.health.inhealr
-            button.aux[id]["G"]=g
-            button.aux[id]["B"]=b
+            button.aux[id]["G"]=button.health.inhealg
+            button.aux[id]["B"]=button.health.inhealb
         end
         HealBot_setAuxBar(button, id, value, true)
     end)

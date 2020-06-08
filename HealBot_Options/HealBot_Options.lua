@@ -138,12 +138,13 @@ function HealBot_Options_InitVars()
             [HBC_PRIEST_CURE_DISEASE] = {HEALBOT_DISEASE_en},
             [HBC_PRIEST_ABOLISH_DISEASE] = {HEALBOT_DISEASE_en},
         }
-        if UnitLevel("player")>41 then
-            HealBot_Debuff_Types[HBC_PURIFY] =  {HEALBOT_POISON_en, HEALBOT_DISEASE_en}
+
+        if HEALBOT_GAME_VERSION<4 and UnitLevel("player")<41 then
             HealBot_Debuff_Types[HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en}
+            HealBot_Debuff_Types[HBC_PURIFY] =  {HEALBOT_POISON_en, HEALBOT_DISEASE_en}
         else
-            HealBot_Debuff_Types[HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en}
             HealBot_Debuff_Types[HBC_PURIFY] =  {HEALBOT_POISON_en, HEALBOT_DISEASE_en}
+            HealBot_Debuff_Types[HEALBOT_CLEANSE] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en, HEALBOT_MAGIC_en}
         end
     else
         HealBot_Buff_Items_List = {
