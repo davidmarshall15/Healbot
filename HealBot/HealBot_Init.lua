@@ -139,7 +139,7 @@ function HealBot_Init_Spells_Defaults()
             end
         end
     end  
-    HealBot_setOptions_Timer(5)
+    HealBot_Options_InitBuffList()
     HealBot_setOptions_Timer(15)
     HealBot_setOptions_Timer(12)
     HealBot_setOptions_Timer(11)  
