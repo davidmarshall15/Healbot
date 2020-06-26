@@ -830,7 +830,7 @@ function HealBot_Action_UpdateInHealStatusBarColor(button)
 end
 
 function HealBot_Action_UpdateHealthStatusBarColor(button)
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+    if button.health.init or not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
         button.gref["Bar"]:SetStatusBarColor(button.status.r,button.status.g,button.status.b,button.status.alpha);
     else
         HealBot_Fluid_BarButtons[button.id]=button
@@ -1066,6 +1066,7 @@ function HealBot_Action_UpdateHealthButton(button)
         else
             button.status.current=2
             button.health.current=0
+            button.health.init=true
             HealBot_Text_setHealthText(button)
             button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
             button.gref["Back"]:SetStatusBarColor(0, 0, 0, 0)
@@ -1074,8 +1075,9 @@ function HealBot_Action_UpdateHealthButton(button)
         
                                     
         if button.gref["Bar"]:GetValue()~=auhbPtc then
-            if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+            if button.health.init or not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
                 button.gref["Bar"]:SetValue(auhbPtc)
+                button.health.init=false
             elseif UnitExists(button.unit) then
                 HealBot_Fluid_BarButtons[button.id]=button
             elseif HealBot_Fluid_BarButtons[button.id] then
@@ -1659,6 +1661,7 @@ local tPrepButton=""
 local function HealBot_Action_PrepButton(button)
     button.guid="nil"
     button.unit="nil"
+    button.health.init=true
     button.health.current=99
     button.health.max=100
     button.health.incoming=0
@@ -2523,6 +2526,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType)
             tSetHealButton.reset=false
             tSetHealButton.unit=unit
             tSetHealButton.guid=hbGUID
+            tSetHealButton.health.init=true
             if unitType>10 then
                 HealBot_Enemy_Button[unit]=tSetHealButton
                 if vEnemyUnitsWithEvents[unit] then

@@ -778,7 +778,9 @@ end
 local uuUnitClassEN="XXXX"
 function HealBot_UpdateUnit(button)
     if UnitExists(button.unit) and button.guid~=UnitGUID(button.unit) then
+        button.guid=UnitGUID(button.unit)
         button.reset=true
+        button.health.init=true
         if button.status.unittype<7 then
             HealBot_setOptions_Timer(9993)
         elseif button.status.unittype==8 then
@@ -790,7 +792,6 @@ function HealBot_UpdateUnit(button)
         HealBot_Aura_RemoveIcons(button)
         HealBot_clearAllAuxBar(button)
     end
-    button.guid=UnitGUID(button.unit)
     button.health.updincoming=true
     button.health.updabsorbs=true
     if UnitExists(button.unit) then
@@ -804,6 +805,7 @@ function HealBot_UpdateUnit(button)
         HealBot_Action_CheckUnitLowMana(button)
         button.mana.reset=true
     else
+        button.guid=button.unit
         if button.status.unittype==7 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
             HealBot_setOptions_Timer(9990)
         elseif button.status.unittype==8 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
@@ -3373,6 +3375,7 @@ local function HealBot_EnemyUpdateButton(button)
         euGUID=UnitGUID(button.unit) or button.unit
         if euGUID~=button.guid or button.status.reserved then
             button.guid=euGUID
+            button.health.init=true
             button.status.reserved=false
             HealBot_UpdateUnit(button)
         end
@@ -3999,32 +4002,36 @@ local function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id
     amSenderId = HealBot_UnitNameOnly(sender_id)
     if amSenderId and amIncMsg and addon_id==HEALBOT_HEALBOT then
         local datatype, datamsg = string.split(":", amIncMsg)
-        if datatype=="R" then
-            HealBot_luVars["VersionRequest"]=amSenderId
-        elseif datatype=="S" then
-            HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug("AddonMsg S="..amSenderId..":"..datamsg);
-            HealBot_Comms_CheckVer(amSenderId, datamsg)
-        elseif datatype=="G" then
-            HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "H:"..HEALBOT_VERSION, 4, amSenderId)
-            if not HealBot_Vers[amSenderId] then
-                HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "G", 4, amSenderId)
+        if datatype then
+            if datatype=="R" then
+                HealBot_luVars["VersionRequest"]=amSenderId
+            elseif datatype=="G" then
+                HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "H:"..HEALBOT_VERSION, 4, amSenderId)
+                if not HealBot_Vers[amSenderId] then
+                    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "G", 4, amSenderId)
+                end
+            elseif datatype=="F" then
+                HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "C:"..HEALBOT_VERSION, 4, amSenderId)
+                if not HealBot_Vers[amSenderId] then
+                    HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, amSenderId)
+                end
+            elseif datamsg then
+                if datatype=="S" and datamsg then
+                    HealBot_Vers[amSenderId]=datamsg
+                    HealBot_AddDebug("AddonMsg S="..amSenderId..":"..datamsg);
+                    HealBot_Comms_CheckVer(amSenderId, datamsg)
+                elseif datatype=="H" then
+                    HealBot_Vers[amSenderId]=datamsg
+                    HealBot_AddDebug("AddonMsg H="..amSenderId..":"..datamsg);
+                    HealBot_Options_setMyGuildMates(amSenderId)
+                    HealBot_Comms_CheckVer(amSenderId, datamsg)
+                elseif datatype=="C" then
+                    HealBot_Vers[amSenderId]=datamsg
+                    HealBot_AddDebug("AddonMsg C="..amSenderId..":"..datamsg);
+                    HealBot_Options_setMyFriends(amSenderId)
+                    HealBot_Comms_CheckVer(amSenderId, datamsg)
+                end
             end
-        elseif datatype=="F" then
-            HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "C:"..HEALBOT_VERSION, 4, amSenderId)
-            if not HealBot_Vers[amSenderId] then
-                HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, amSenderId)
-            end
-        elseif datatype=="H" then
-            HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug("AddonMsg H="..amSenderId..":"..datamsg);
-            HealBot_Options_setMyGuildMates(amSenderId)
-            HealBot_Comms_CheckVer(amSenderId, datamsg)
-        elseif datatype=="C" then
-            HealBot_Vers[amSenderId]=datamsg
-            HealBot_AddDebug("AddonMsg C="..amSenderId..":"..datamsg);
-            HealBot_Options_setMyFriends(amSenderId)
-            HealBot_Comms_CheckVer(amSenderId, datamsg)
         end
     end
     --HealBot_setCall("HealBot_OnEvent_AddonMsg")
