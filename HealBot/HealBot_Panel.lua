@@ -95,6 +95,11 @@ HealBot_Panel_luVars["TanksOn"]=false
 HealBot_Panel_luVars["HealsOn"]=false
 HealBot_Panel_luVars["TestBarsDelAll"]=true
 HealBot_Panel_luVars["MAPID"]=0
+HealBot_Panel_luVars["cpCOMBATRAID"]=false
+HealBot_Panel_luVars["cpCOMBATPARTY"]=false
+HealBot_Panel_luVars["cpCOMBAT"]=false
+HealBot_Panel_luVars["cpMACRONAME"]="hbCombatProt"
+HealBot_Panel_luVars["cpCRASH"]=false
 
 function HealBot_Panel_retLuVars(vName)
     return HealBot_Panel_luVars[vName]
@@ -1886,8 +1891,7 @@ local function HealBot_Panel_raidHeals()
     end
     
     vRaidTargetNum = nraid
-    if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and nraid>0 and 
-       Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] then 
+    if HealBot_Panel_luVars["cpCOMBAT"] and nraid>0 and HealBot_Panel_luVars["cpCOMBATRAID"] then 
         if vRaidTargetNum<11 then
             vRaidTargetNum=10
         elseif vRaidTargetNum<16 then
@@ -1911,8 +1915,7 @@ local function HealBot_Panel_raidHeals()
             end
             if hbPanel_dataUnits[vRaidUnit] then
                 HealBot_Panel_addUnit(vRaidUnit, 5, hbPanel_dataUnits[vRaidUnit], true)
-            elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and 
-                   Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATRAID"] then 
+            elseif HealBot_Panel_luVars["cpCOMBAT"] and HealBot_Panel_luVars["cpCOMBATRAID"] then 
                 HealBot_Panel_addUnit(vRaidUnit, 5, vRaidUnit, true)
             end
         end
@@ -1920,8 +1923,7 @@ local function HealBot_Panel_raidHeals()
         for _,xUnit in ipairs(HealBot_Action_HealGroup) do
             if hbPanel_dataUnits[xUnit] then
                 HealBot_Panel_addUnit(xUnit, 5, hbPanel_dataUnits[xUnit], true)
-            elseif Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and 
-                   Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then 
+            elseif HealBot_Panel_luVars["cpCOMBAT"] and IsInGroup() and HealBot_Panel_luVars["cpCOMBATPARTY"] then 
                 HealBot_Panel_addUnit(xUnit, 5, xUnit, true)
             end
         end
@@ -2050,7 +2052,7 @@ local function HealBot_Panel_groupHeals()
                 xUnit=hbPanel_dataGUIDs[UnitGUID(xUnit)] or xUnit
             end
             HealBot_Panel_addUnit(xUnit, 6, hbPanel_dataUnits[xUnit], false)
-        elseif nraid==0 and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBAT"] and IsInGroup() and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["COMBATPARTY"] then
+        elseif nraid==0 and HealBot_Panel_luVars["cpCOMBAT"] and IsInGroup() and HealBot_Panel_luVars["cpCOMBATPARTY"] then
             HealBot_UnitGroups[xUnit]=1
             HealBot_Panel_addUnit(xUnit, 6, xUnit, false)
         end
@@ -2293,6 +2295,16 @@ local function HealBot_Panel_EnemyChanged()
     end
 end
 
+function HealBot_Panel_setCrashProt()
+    if HealBot_Globals.OverrideProt["USE"]==1 then
+        HealBot_Panel_luVars["cpMACRONAME"]=HealBot_Config.CrashProtMacroName
+        HealBot_Panel_luVars["cpCRASH"]=Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"]
+    else
+        HealBot_Panel_luVars["cpMACRONAME"]=HealBot_Globals.OverrideProt["MACRONAME"]
+        HealBot_Panel_luVars["cpCRASH"]=HealBot_Globals.OverrideProt["CRASH"]
+    end
+end
+
 local vIsCrashProt,vPetsWithPlayers=false,false
 local function HealBot_Panel_PlayersChanged()
     nraid=GetNumGroupMembers();
@@ -2311,9 +2323,9 @@ local function HealBot_Panel_PlayersChanged()
     end 
 
     vIsCrashProt=false
-    if HealBot_retLuVars("UseCrashProtection") and Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] then
+    if HealBot_Panel_luVars["cpCRASH"] and HealBot_retLuVars("cpLoadTime")>GetTime() then
         if nraid==0 and not UnitExists("player") then
-            HealBot_cpData["mName"]=HealBot_Config.CrashProtMacroName
+            HealBot_cpData["mName"]=HealBot_Panel_luVars["cpMACRONAME"]
             HealBot_cpData["body0"]=GetMacroBody(HealBot_cpData["mName"].."_0")
             if HealBot_cpData["body0"] and strsub(HealBot_cpData["body0"],1,5)~="Clean" then
                 local t=tonumber(strsub(HealBot_cpData["body0"],1,1))
@@ -2437,9 +2449,9 @@ local function HealBot_Panel_PlayersChanged()
             end
         end
 
-        if Healbot_Config_Skins.Protection[Healbot_Config_Skins.Current_Skin]["CRASH"] and not HealBot_Data["UILOCK"] and HealBot_Panel_luVars["SaveCrashProtection"]<GetTime() then
-            HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()+15
-            HealBot_cpData["mName"]=HealBot_Config.CrashProtMacroName
+        if HealBot_Panel_luVars["cpCRASH"] and not HealBot_Data["UILOCK"] and HealBot_Panel_luVars["SaveCrashProtection"]<=GetTime() then
+            HealBot_Panel_luVars["SaveCrashProtection"]=GetTime()+5
+            HealBot_cpData["mName"]=HealBot_Panel_luVars["cpMACRONAME"]
             local j=0
             local k=1
             local t=HealBot_cpData["body1"]
@@ -2490,6 +2502,10 @@ local function HealBot_Panel_PlayersChanged()
     end
     HealBot_Panel_SetupBars()
 
+end
+
+function HealBot_Panel_clearcpData()
+    HealBot_cpData={}
 end
 
 function HealBot_Panel_cpSave(mNum)

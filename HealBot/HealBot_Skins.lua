@@ -435,20 +435,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             button.gref.indicator.power[x]:SetAlpha(0);
         end
         if HealBot_Action_retLuVars("UnitPowerMax")==3 then
-            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","-9","1");
-            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","0","1");
-            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","9","1");
+            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","-9","1");
+            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","0","1");
+            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","9","1");
         elseif HealBot_Action_retLuVars("UnitPowerMax")==4 then
-            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","-12","1");
-            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","-4","1");
-            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","4","1");
-            button.gref.indicator.power[4]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","12","1");
+            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","-12","1");
+            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","-4","1");
+            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","4","1");
+            button.gref.indicator.power[4]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","12","1");
         else
-            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","-14","1");
-            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","-7","1");
-            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","0","1");
-            button.gref.indicator.power[4]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","7","1");
-            button.gref.indicator.power[5]:SetPoint("BOTTOM",button.gref.aux[1],"BOTTOM","14","1");
+            button.gref.indicator.power[1]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","-14","1");
+            button.gref.indicator.power[2]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","-7","1");
+            button.gref.indicator.power[3]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","0","1");
+            button.gref.indicator.power[4]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","7","1");
+            button.gref.indicator.power[5]:SetPoint("BOTTOM",button.gref["Bar"],"BOTTOM","14","1");
         end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["ONBAR"]==1 then
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["POSITION"]==1 then
@@ -1287,9 +1287,36 @@ function HealBot_Skins_Check_Skin(SkinName)
             if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"]=nil end
         end
         if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"]=1 end
-        if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"]=0.07 end
-        if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"]=0.1 end
-        if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"]=0.95 end
+        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"] then
+            if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then
+                for g=1,9 do
+                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"]==2 then
+                        Healbot_Config_Skins.General[SkinName]["OFREQ"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"]
+                    end
+                end
+            end
+            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"]=nil
+        end
+        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"] then
+            if not Healbot_Config_Skins.General[SkinName]["OMIN"] then
+                for g=1,9 do
+                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"]==2 then
+                        Healbot_Config_Skins.General[SkinName]["OMIN"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"]
+                    end
+                end
+            end
+            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMIN"]=nil
+        end
+        if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"] then
+            if not Healbot_Config_Skins.General[SkinName]["OMAX"] then
+                for g=1,9 do
+                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"]==2 then
+                        Healbot_Config_Skins.General[SkinName]["OMAX"]=Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"]
+                    end
+                end
+            end
+            Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OMAX"]=nil
+        end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["FRAME"]==nil then Healbot_Config_Skins.Anchors[SkinName][gl]["FRAME"]=1 end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["BARS"]==nil then Healbot_Config_Skins.Anchors[SkinName][gl]["BARS"]=1 end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["GROW"]==nil then Healbot_Config_Skins.Anchors[SkinName][gl]["GROW"]=2 end
@@ -1484,6 +1511,9 @@ function HealBot_Skins_Check_Skin(SkinName)
     if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=14 end
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYSENSITIVITY"]=30 end
+    if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then Healbot_Config_Skins.General[SkinName]["OFREQ"]=0.07 end
+    if not Healbot_Config_Skins.General[SkinName]["OMIN"] then Healbot_Config_Skins.General[SkinName]["OMIN"]=0.1 end
+    if not Healbot_Config_Skins.General[SkinName]["OMAX"] then Healbot_Config_Skins.General[SkinName]["OMAX"]=0.95 end
     if Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]==nil then Healbot_Config_Skins.Chat[SkinName]["NOTIFY"]=1 end
     if Healbot_Config_Skins.Chat[SkinName]["MSG"]==nil then Healbot_Config_Skins.Chat[SkinName]["MSG"]=HEALBOT_NOTIFYOTHERMSG end
     if Healbot_Config_Skins.Chat[SkinName]["RESONLY"]==nil then Healbot_Config_Skins.Chat[SkinName]["RESONLY"]=true end

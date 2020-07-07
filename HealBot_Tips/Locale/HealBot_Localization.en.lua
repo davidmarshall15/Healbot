@@ -51,6 +51,12 @@ function HealBot_Lang_Options_enALL()
                                  ["PROFILE"]="Profile",
                                  ["SETPROFILE"]="Profile",
                                  ["CLASSTYPES"]="Class type configuration",
+                        -- Overrides tab
+                                 ["OVERRIDESEFFECTS"]="Overrides Effects tab.",
+                                 ["OVERRIDESPROT"]="Overrides Protection tab.",
+                                 ["OVERRIDESCHAT"]="Overrides Chat tab.",
+                                 ["OVERRIDESFRAMES"]="Overrides Frames tab.",
+                                 ["OVERRIDESEFFECTSUSE"]=HEALBOT_OPTIONS_OVERRIDE_EFFECTS,
                         -- Spells tab
                                  ["SETSPELLSFOR"]=HEALBOT_OPTIONS_SETSPELLS,
                                  ["ALWAYSUSEENABLED"]=HEALBOT_OPTIONS_ENABLEHEALTHY,
@@ -92,8 +98,12 @@ function HealBot_Lang_Options_enALL()
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
                                  ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
+                        -- Skins Effects tab
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
                                  ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
+                                 ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
+                                 ["HEALBARSAGGROBARFLASHMIN"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MIN,
+                                 ["HEALBARSAGGROBARFLASHMAX"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MAX,
                         -- Skins Protection tab
                                  ["USECRASHPROT"]=HEALBOT_OPTIONS_CRASHPROT,
                                  ["USECRASHPROTGENERALMACRO"]=HEALBOT_OPTIONS_USEGENERALMACRO,
@@ -229,9 +239,6 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROPCTTXT"]=HEALBOT_OPTION_AGGROPCTTRACK.." "..HEALBOT_OPTION_AGGROPCTTXT,
                                  ["HEALBARSAGGROINDALERT"]=HEALBOT_OPTIONS_AGGROINDALERT,
                                  ["HEALBARSAGGROBARALERT"]=HEALBOT_OPTIONS_AGGROALERT,
-                                 ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
-                                 ["HEALBARSAGGROBARFLASHMIN"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MIN,
-                                 ["HEALBARSAGGROBARFLASHMAX"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MAX,
                         -- Skins Frames Bars Aux tab
                                  ["BARSAUX"]="Bars Aux",
                                  ["BARSAUXASSIGN"]=HEALBOT_OPTIONS_AUXASSIGN,
@@ -410,6 +417,12 @@ function HealBot_Lang_Options_enALL()
                                  ["TESTNUMMYTARGETS"]=HEALBOT_OPTION_NUMMYTARGETS,
                                  ["TESTNUMPETS"]=HEALBOT_OPTION_NUMPETS,
                                  ["TESTNUMENEMY"]=HEALBOT_OPTION_NUMENEMYS,
+                        -- Import/Export tab
+                                 ["INOUTSKINS"]="Import/Export Skins tab.",
+                                 ["INOUTCUSTOMDEBUFFS"]="Import/Export Custom Debuffs tab.",
+                                 ["INOUTCUSTOMBUFFS"]="Import/Export Custom Buffs tab.",
+                                 ["INOUTSPELLS"]="Import/Export Spells tab.",
+                                 ["INOUTPRESETCOLS"]="Import/Export Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s tab.",
                         -- Import/Export Skins tab
                                  ["INOUTSELECTSKIN"]=HEALBOT_OPTIONS_EXPORTSKIN,
                                  ["INEXTRASKIN"]=HEALBOT_OPTIONS_EXTRASKINS,
@@ -458,6 +471,12 @@ function HealBot_Lang_Options_enALL()
                                ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
                                ["SETPROFILE"]="Set the profile selected.",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
+                        -- Overrides tab
+                               ["OVERRIDESEFFECTS"]="Show the Overrides Effects tab.",
+                               ["OVERRIDESPROT"]="Show the Overrides Protection tab.",
+                               ["OVERRIDESCHAT"]="Show the Overrides Chat tab.",
+                               ["OVERRIDESFRAMES"]="Show the Overrides Frames tab.",
+                               ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
                         -- Spells tab
                                ["SETSPELLSFOR"]="Set spells that can be used in different states:\n* Enabled - Always when in combat and any time the bar is in an enabled state.\n* Disabled - Only when out of combat and the bar is in a disabled state.\n* Enemy - Allows for harmful spells to be set and used on enemy bars.",
                                ["ALWAYSUSEENABLED"]="Use this option to always cast enabled\nspells regardless of the bar state.",
@@ -499,8 +518,12 @@ function HealBot_Lang_Options_enALL()
                                ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player and pet frames.\nNote: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\nNote: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\nNote: Changing this setting requires a UI Reload.",
+                        -- Skins Effects tab
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\nSlower is smoother as Faster skips steps.\nTIP: For a smooth yet fast fluid update:\nFirst increase Internal Timers and Updates on the General tab.",
+                               ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.\nNote: faster means skipping steps in the update.\nFor a faster and smoother update first increase Internal Timers and Updates on the General Tab.",
+                               ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\nMin - The minimum opacity.",
+                               ["HEALBARSAGGROBARFLASHMAX"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\nMax - The maximum opacity.",
                         -- Skins Protection tab
                                ["USECRASHPROT"]="Crash protection guards against the negative\neffects of a healbot user disconnecting during combat.\nA small number of macro slots will store current\ngroup/raid data that can be used on logon during combat.",
                                ["USECRASHPROTGENERALMACRO"]="Use global macro slots rather than per character.\nTo reduce overall usage this option is recommended\nwhen using Healbot on multiple characters.",
@@ -636,9 +659,6 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROPCTTXT"]="Track percentage - Display the amount of aggro a player has.\nShow text - Display text using the format selected in the dropdown.",
                                ["HEALBARSAGGROINDALERT"]="When using the indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROBARALERT"]="When using the aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
-                               ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.\nNote: faster means skipping steps in the update.\nFor a faster and smoother update first increase Internal Timers and Updates on the General Tab.",
-                               ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\nMin - The minimum opacity.",
-                               ["HEALBARSAGGROBARFLASHMAX"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\nMax - The maximum opacity.",
                         -- Skins Frames Bars Aux tab
                                ["BARSAUX"]="Show the Skins Frames Aux tab.",
                                ["BARSAUXASSIGN"]="Assign a bar type to the auxiliary bar.\n--\nNote: Only Aux 1 shows Power Points when set to Power.\nNote: Only Aux 2 shows enemy casting when set to Power.",
@@ -817,6 +837,12 @@ function HealBot_Lang_Options_enALL()
                                ["TESTNUMMYTARGETS"]="Set the number of bars to represent your Private Targets.",
                                ["TESTNUMPETS"]="Set the number of bars to represent Pets.",
                                ["TESTNUMENEMY"]="Set the number of bars to represent the Enemy.",
+                        -- Import/Export tab
+                               ["INOUTSKINS"]="Show the Import/Export Skins tab.",
+                               ["INOUTCUSTOMDEBUFFS"]="Show the Import/Export Custom Debuffs tab.",
+                               ["INOUTCUSTOMBUFFS"]="Show the Import/Export Custom Buffs tab.",
+                               ["INOUTSPELLS"]="Show the Import/Export Spells tab.",
+                               ["INOUTPRESETCOLS"]="Show the Import/Export Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s tab.",
                         -- Import/Export Skins tab
                                ["INOUTSELECTSKIN"]="Select the skin to be exported.",
                                ["INEXTRASKIN"]="Select an extra skin to import.\n--\nNOTE: After importing extra skins, delete any that are not used.\nThis will reduce the addons main memory usage.\n--\nNOTE: Images can be viewed at "..HEALBOT_ABOUT_URL,

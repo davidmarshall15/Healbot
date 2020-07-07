@@ -17,6 +17,7 @@ HealBot_Action_luVars["TestBarsOn"]=false
 HealBot_Action_luVars["ShapeshiftForm"]=-1
 HealBot_Action_luVars["FLUIDFREQ"]=50
 HealBot_Action_luVars["FLUIDSTATEFREQ"]=50
+HealBot_Action_luVars["FluidInUse"]=false
 
 function HealBot_Action_setLuVars(vName, vValue)
     HealBot_Action_luVars[vName]=vValue
@@ -677,7 +678,7 @@ function HealBot_Action_UpdateHealsInButton(button)
         end
         button.health.inheala=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IA"]
         HealBot_Action_UpdateInHealStatusBarColor(button)
-        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+        if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["InHeal"]:SetValue(floor(auhiHiPct*1000));
         elseif UnitExists(button.unit) then
             if button.gref["InHeal"]:GetValue() < button.gref["Bar"]:GetValue() then
@@ -690,7 +691,7 @@ function HealBot_Action_UpdateHealsInButton(button)
         HealBot_Action_UpdateAuxHealInBar(button, floor(auhiHiPct*1000))
     else
         button.health.inheala=0
-        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+        if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["InHeal"]:SetValue(0)
         end
         HealBot_Action_UpdateInHealStatusBarColor(button)
@@ -736,7 +737,7 @@ function HealBot_Action_UpdateAbsorbsButton(button)
         end
         button.health.absorba=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
-        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+        if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Absorb"]:SetValue(floor(auaHaPct*1000));
         elseif UnitExists(button.unit) then
             if button.gref["Absorb"]:GetValue() < button.gref["InHeal"]:GetValue() then
@@ -749,7 +750,7 @@ function HealBot_Action_UpdateAbsorbsButton(button)
         HealBot_Action_UpdateAuxAbsorbBar(button, floor(auaHaPct*1000))
     else
         button.health.absorba=0
-        if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+        if not HealBot_Action_luVars["FluidInUse"] then
             button.gref["Absorb"]:SetValue(0)
         end
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
@@ -814,7 +815,7 @@ local function HealBot_Action_setState(button, state)
 end
 
 function HealBot_Action_UpdateAbsorbStatusBarColor(button)
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+    if not HealBot_Action_luVars["FluidInUse"] then
         button.gref["Absorb"]:SetStatusBarColor(button.health.absorbr,button.health.absorbg,button.health.absorbb,button.health.absorba);
     else
         HealBot_Fluid_AbsorbButtons[button.id]=button
@@ -822,7 +823,7 @@ function HealBot_Action_UpdateAbsorbStatusBarColor(button)
 end
 
 function HealBot_Action_UpdateInHealStatusBarColor(button)
-    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+    if not HealBot_Action_luVars["FluidInUse"] then
         button.gref["InHeal"]:SetStatusBarColor(button.health.inhealr,button.health.inhealg,button.health.inhealb,button.health.inheala);
     else
         HealBot_Fluid_InHealButtons[button.id]=button
@@ -830,7 +831,7 @@ function HealBot_Action_UpdateInHealStatusBarColor(button)
 end
 
 function HealBot_Action_UpdateHealthStatusBarColor(button)
-    if button.health.init or not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+    if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
         button.gref["Bar"]:SetStatusBarColor(button.status.r,button.status.g,button.status.b,button.status.alpha);
     else
         HealBot_Fluid_BarButtons[button.id]=button
@@ -1075,9 +1076,8 @@ function HealBot_Action_UpdateHealthButton(button)
         
                                     
         if button.gref["Bar"]:GetValue()~=auhbPtc then
-            if button.health.init or not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
+            if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
                 button.gref["Bar"]:SetValue(auhbPtc)
-                button.health.init=false
             elseif UnitExists(button.unit) then
                 HealBot_Fluid_BarButtons[button.id]=button
             elseif HealBot_Fluid_BarButtons[button.id] then
@@ -1091,6 +1091,7 @@ function HealBot_Action_UpdateHealthButton(button)
             HealBot_HealsInUpdate(button)
             HealBot_AbsorbsUpdate(button)
         end
+        button.health.init=false
     end
     --HealBot_setCall("HealBot_Action_UpdateHealthButton")
 end
@@ -1197,6 +1198,10 @@ function HealBot_Action_setPowerBars(button, sName)
         end
         HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
     end)
+    --HealBot_setCall("HealBot_Action_setPowerBars")
+end
+
+function HealBot_Action_setPowerIndicators(button)
     if HealBot_pcClass[button.frame] and button.unit=="player" then
         hbPowerIndicator=UnitPower("player", HealBot_pcClass[button.frame])
         if hbPowerIndicator==1 then
@@ -1289,8 +1294,14 @@ function HealBot_Action_setPowerBars(button, sName)
             button.gref.indicator.power[4]:SetAlpha(0)
             button.gref.indicator.power[5]:SetAlpha(0)
         end
+    elseif HealBot_Action_rCalls[button.unit]["powerIndicator"]~="p0" then
+        HealBot_Action_rCalls[button.unit]["powerIndicator"]="p0"
+        button.gref.indicator.power[1]:SetAlpha(0)
+        button.gref.indicator.power[2]:SetAlpha(0)
+        button.gref.indicator.power[3]:SetAlpha(0)
+        button.gref.indicator.power[4]:SetAlpha(0)
+        button.gref.indicator.power[5]:SetAlpha(0)
     end
-    --HealBot_setCall("HealBot_Action_setPowerBars")
 end
 
 local hbLowManaTrig={[1] = {[1]=1,[2]=2,[3]=3},
