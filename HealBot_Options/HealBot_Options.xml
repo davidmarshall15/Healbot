@@ -194,7 +194,7 @@
             </Offset>
           </Anchor>
         </Anchors>
-        <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+        <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true" inherits="BackdropTemplate">
           <EdgeSize>
             <AbsValue val="12"/>
           </EdgeSize>
@@ -1207,7 +1207,7 @@
             </Offset>
           </Anchor>
         </Anchors>
-        <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+        <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true" inherits="BackdropTemplate">
           <EdgeSize>
             <AbsValue val="12"/>
           </EdgeSize>
@@ -3427,170 +3427,200 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify1" inherits="SendMailRadioButtonTemplate" id="1">
+                  <Frame name="HealBot_Options_OverrideChatPanel">
+                    <Size>
+                      <AbsDimension y="510"/>
+                    </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="245" y="-133"/>
+                          <AbsDimension x="20" y="-90"/>
                         </Offset>
                       </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATNONE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATNONE",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify2" inherits="SendMailRadioButtonTemplate" id="2">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify1" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-22"/>
+                          <AbsDimension x="-20" y="-90"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY2)</OnLoad>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATSELF",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATSELF",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify3" inherits="SendMailRadioButtonTemplate" id="3">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify2" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-22"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY3)</OnLoad>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATTARGET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATTARGET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify4" inherits="SendMailRadioButtonTemplate" id="4">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify3" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-22"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY4)</OnLoad>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATPARTY",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATPARTY",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify5" inherits="SendMailRadioButtonTemplate" id="5">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify4" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-22"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY5)</OnLoad>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATRAID",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATRAID",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotify6" inherits="SendMailRadioButtonTemplate" id="6">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify5" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-22"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY6)</OnLoad>
-                      <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATCHAN",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATCHAN",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideCastNotifyResOnly" inherits="SendMailRadioButtonTemplate" id="7">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify6" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="-30" y="-30"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverrideCastNotifyResOnly_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("CHATRESONLY",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATRESONLY",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <EditBox name="HealBot_Options_OverrideNotifyOtherMsg" inherits="HealBot_Options_EditBoxTemplate">
-                    <Size>
-                      <AbsDimension x="445" y="20"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOP">
-                        <Offset>
-                          <AbsDimension x="0" y="-445"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_OverrideNotifyOtherMsgTxt" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="5" y="14" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnTextChanged>HealBot_Options_OverrideNotifyOtherMsg_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("CHATMSG",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("CHATMSG",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
-                  <CheckButton name="HealBot_Options_OverrideAfterCombatOOM" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>_
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="-125" y="80" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverrideAfterCombatOOM_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("EOCOOM",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("EOCOOM",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <Slider name="HealBot_Options_OverrideAfterCombatOOMValue" inherits="HealBot_Options_SliderTemplate">
-                    <Size>
-                      <AbsDimension x="480" y="16" />
-                    </Size>
-                    <Anchors>
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="40" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnValueChanged>HealBot_Options_OverrideAfterCombatOOMValue_OnValueChanged(self)</OnValueChanged>
-                      <OnEnter>HealBot_Options_Show_Help("EOCOOM",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("EOCOOM",false)</OnLeave>
-                    </Scripts>
-                  </Slider>
+                    <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+                      <EdgeSize>
+                        <AbsValue val="12"/>
+                      </EdgeSize>
+                      <TileSize>
+                        <AbsValue val="16"/>
+                      </TileSize>
+                      <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="5" bottom="5"/>
+                      </BackgroundInsets>
+                    </Backdrop>
+                    <Frames>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify1" inherits="SendMailRadioButtonTemplate" id="1">
+						<Anchors>
+						  <Anchor point="TOPLEFT">
+							<Offset>
+							  <AbsDimension x="245" y="-45"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATNONE",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATNONE",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify2" inherits="SendMailRadioButtonTemplate" id="2">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify1" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="0" y="-22"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY2)</OnLoad>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATSELF",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATSELF",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify3" inherits="SendMailRadioButtonTemplate" id="3">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify2" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="0" y="-22"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY3)</OnLoad>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATTARGET",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATTARGET",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify4" inherits="SendMailRadioButtonTemplate" id="4">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify3" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="0" y="-22"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY4)</OnLoad>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATPARTY",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATPARTY",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify5" inherits="SendMailRadioButtonTemplate" id="5">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify4" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="0" y="-22"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY5)</OnLoad>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATRAID",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATRAID",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotify6" inherits="SendMailRadioButtonTemplate" id="6">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify5" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="0" y="-22"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_CASTNOTIFY6)</OnLoad>
+						  <OnClick>HealBot_Options_OverrideCastNotify_OnClick(self,self:GetID())</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATCHAN",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATCHAN",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideCastNotifyResOnly" inherits="SendMailRadioButtonTemplate" id="7">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideCastNotify6" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="-30" y="-30"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverrideCastNotifyResOnly_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("CHATRESONLY",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATRESONLY",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <EditBox name="HealBot_Options_OverrideNotifyOtherMsg" inherits="HealBot_Options_EditBoxTemplate">
+						<Size>
+						  <AbsDimension x="445" y="20"/>
+						</Size>
+						<Anchors>
+						  <Anchor point="TOP">
+							<Offset>
+							  <AbsDimension x="0" y="-340"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Layers>
+						  <Layer level="BACKGROUND">
+							<FontString name="HealBot_Options_OverrideNotifyOtherMsgTxt" inherits="GameFontNormalSmall">
+							  <Anchors>
+								<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+								  <Offset>
+									<AbsDimension x="5" y="14" />
+								  </Offset>
+								</Anchor>
+							  </Anchors>
+							</FontString>
+						  </Layer>
+						</Layers>
+						<Scripts>
+						  <OnTextChanged>HealBot_Options_OverrideNotifyOtherMsg_OnTextChanged(self)</OnTextChanged>
+						  <OnEnter>HealBot_Options_Show_Help("CHATMSG",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("CHATMSG",false)</OnLeave>
+						</Scripts>
+					  </EditBox>
+					  <CheckButton name="HealBot_Options_OverrideAfterCombatOOM" inherits="OptionsCheckButtonTemplate">
+						<Anchors>_
+						  <Anchor point="BOTTOM">
+							<Offset>
+							  <AbsDimension x="-125" y="80" />
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverrideAfterCombatOOM_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("EOCOOM",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("EOCOOM",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <Slider name="HealBot_Options_OverrideAfterCombatOOMValue" inherits="HealBot_Options_SliderTemplate">
+						<Size>
+						  <AbsDimension x="480" y="16" />
+						</Size>
+						<Anchors>
+						  <Anchor point="BOTTOM">
+							<Offset>
+							  <AbsDimension x="0" y="40" />
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnValueChanged>HealBot_Options_OverrideAfterCombatOOMValue_OnValueChanged(self)</OnValueChanged>
+						  <OnEnter>HealBot_Options_Show_Help("EOCOOM",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("EOCOOM",false)</OnLeave>
+						</Scripts>
+					  </Slider>
+					</Frames>
+				  </Frame>
                 </Frames>
               </Frame>
               <Frame name="HealBot_Options_Override_FramesFrame">
@@ -3661,64 +3691,94 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_OverridePartyFrames" inherits="OptionsCheckButtonTemplate">
+                  <Frame name="HealBot_Options_OverrideFramesPanel">
+                    <Size>
+                      <AbsDimension y="510"/>
+                    </Size>
                     <Anchors>
-                      <Anchor point="TOP">
+                      <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-95" y="-220" />
+                          <AbsDimension x="20" y="-90"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-90"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverridePartyFrames_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverridePlayerTargetFrames" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverridePartyFrames" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="28" y="2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverridePlayerTargetFrames_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideMiniBossFrames" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverridePartyFrames" relativePoint="BOTTOMLEFT">>
-                        <Offset>
-                          <AbsDimension x="0" y="-55" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverrideMiniBossFrames_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_OverrideRaidFrames" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideMiniBossFrames" relativePoint="BOTTOMLEFT">>
-                        <Offset>
-                          <AbsDimension x="0" y="-48" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_OverrideRaidFrames_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("HIDEBLIZRAIDFRAMES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("HIDEBLIZRAIDFRAMES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                </Frames>
-              </Frame>
+                    <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+                      <EdgeSize>
+                        <AbsValue val="12"/>
+                      </EdgeSize>
+                      <TileSize>
+                        <AbsValue val="16"/>
+                      </TileSize>
+                      <BackgroundInsets>
+                        <AbsInset left="0" right="0" top="5" bottom="5"/>
+                      </BackgroundInsets>
+                    </Backdrop>
+                    <Frames>
+					  <CheckButton name="HealBot_Options_OverridePartyFrames" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+						  <Anchor point="TOP">
+							<Offset>
+							  <AbsDimension x="-85" y="-155" />
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverridePartyFrames_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverridePlayerTargetFrames" inherits="SendMailRadioButtonTemplate">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverridePartyFrames" relativePoint="BOTTOMLEFT">
+							<Offset>
+							  <AbsDimension x="28" y="2"/>
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverridePlayerTargetFrames_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideMiniBossFrames" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverridePartyFrames" relativePoint="BOTTOMLEFT">>
+							<Offset>
+							  <AbsDimension x="0" y="-55" />
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverrideMiniBossFrames_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					  <CheckButton name="HealBot_Options_OverrideRaidFrames" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+						  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideMiniBossFrames" relativePoint="BOTTOMLEFT">>
+							<Offset>
+							  <AbsDimension x="0" y="-48" />
+							</Offset>
+						  </Anchor>
+						</Anchors>
+						<Scripts>
+						  <OnClick>HealBot_Options_OverrideRaidFrames_OnClick(self)</OnClick>
+						  <OnEnter>HealBot_Options_Show_Help("HIDEBLIZRAIDFRAMES",true)</OnEnter>
+						  <OnLeave>HealBot_Options_Show_Help("HIDEBLIZRAIDFRAMES",false)</OnLeave>
+						</Scripts>
+					  </CheckButton>
+					</Frames>
+				  </Frame>
+				</Frames>
+			  </Frame>
             </Frames>
           </Frame>
             

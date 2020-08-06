@@ -1249,9 +1249,11 @@ function HealBot_Lang_enALL()
                                    [19] = "Madaleine",
                                    [20] = "ADDYDARI",
                                    [21] = "plastisch",
-                                   [22] = "MMOnster",
-                                   [23] = "dennywh",
-                                   [24] = "Brokenwings82",
+                                   [22] = "dennywh",
+                                   [23] = "Brokenwings82",
+                                   [24] = "dead76frog",
+                                   [25] = "ghor",
+                                   [26] = "Pandamonia",
                                 }
 end
 

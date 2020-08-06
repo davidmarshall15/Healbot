@@ -2814,10 +2814,14 @@ end
 
 function HealBot_Options_TTAlpha_OnValueChanged(self)
     HealBot_Globals.ttalpha = HealBot_Options_Pct_OnValueChanged(self);
-    HealBot_Tooltip:SetBackdropColor(0,0,0,HealBot_Globals.ttalpha)
+	if HEALBOT_GAME_VERSION>8 then
+	
+	else
+		HealBot_Tooltip:SetBackdropColor(0,0,0,HealBot_Globals.ttalpha)
+		HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
+	end
     local x=HealBot_Globals.ttalpha+0.12
     if x>1 then x=1 end
-    HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
 end
 
 function HealBot_Options_ClassColours()
@@ -2956,16 +2960,20 @@ function HealBot_SetSkinColours()
         Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["AB"]);
     for j=1,10 do
         local g=_G["f"..j.."_HealBot_Action"]
-        g:SetBackdropColor(
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKR"],
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKG"],
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKB"], 
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKA"]);
-        g:SetBackdropBorderColor(
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERR"],
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERG"],
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERB"],
-            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERA"]);
+		if HEALBOT_GAME_VERSION>8 then
+		
+		else
+			g:SetBackdropColor(
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKR"],
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKG"],
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKB"], 
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKA"]);
+			g:SetBackdropBorderColor(
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERR"],
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERG"],
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERB"],
+				Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BORDERA"]);
+	    end
         if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][j] then
             HealBot_Action_SetAlias(j)
             HealBot_Action_SetAliasFontSize(j)
@@ -12750,10 +12758,24 @@ function HealBot_Options_OnLoad(self, panelNum)
     g:SetTextColor(1,1,1,1)
     g=_G["HealBot_OverrideSkinsAggroAlphaText"]
     g:SetTextColor(1,1,1,1)
-    g=_G["HealBot_Options_Contents"]
-    g:SetBackdropColor(0,0,0,0.7);
-    g=_G["HealBot_Options_MainFrame"]
-    g:SetBackdropColor(0,0,0,0.7);
+	if HEALBOT_GAME_VERSION>8 then
+		g=_G["HealBot_Options_Contents"]
+		g.Backdrop.backdropInfo = {
+			bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+			edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+			tile = true,
+			tileSize = 16,
+			edgeSize = 12,
+			insets = { left = 0, right = 0, top = 5, bottom = 9, },
+		}
+		g.Backdrop:ApplyBackdrop()
+		--g:SetBackdropColor(0,0,0,0.7);
+	else
+		g=_G["HealBot_Options_Contents"]
+		g:SetBackdropColor(0,0,0,0.7);
+		g=_G["HealBot_Options_MainFrame"]
+		g:SetBackdropColor(0,0,0,0.7);
+	end
     g=_G["HealBot_About_AuthorH"]
     g:SetTextColor(1,1,1,1);
     g=_G["HealBot_About_URLH"]

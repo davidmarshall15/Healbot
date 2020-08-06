@@ -1162,7 +1162,6 @@ function HealBot_Aura_CheckUnitAuras(button)
             HealBot_Aura_ClearDebuff(button)
         elseif UnitIsFriend("player",button.unit) then
             HealBot_Aura_DebuffWarnings(button)
-            if HEALBOT_GAME_VERSION<4 then HealBot_OnEvent_UnitThreat(button) end
         end
     else
         HealBot_Aura_ClearDebuff(button)

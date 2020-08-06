@@ -832,7 +832,7 @@
   <Frame name="f1_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -881,7 +881,7 @@
   <Frame name="f2_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -930,7 +930,7 @@
   <Frame name="f3_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -979,7 +979,7 @@
   <Frame name="f4_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1028,7 +1028,7 @@
   <Frame name="f5_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1077,7 +1077,7 @@
   <Frame name="f6_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1126,7 +1126,7 @@
   <Frame name="f7_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1175,7 +1175,7 @@
   <Frame name="f8_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1224,7 +1224,7 @@
   <Frame name="f9_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
@@ -1273,7 +1273,7 @@
   <Frame name="f10_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
     <Backdrop tile="false"
       bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border"> 
+      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
       <EdgeSize> <AbsValue val="8"/> </EdgeSize>
       <TileSize> <AbsValue val="8"/> </TileSize>
       <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>

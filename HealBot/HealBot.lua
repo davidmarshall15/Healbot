@@ -812,12 +812,12 @@ function HealBot_UpdateUnit(button)
     end
     button.health.updincoming=true
     button.health.updabsorbs=true
+	button.health.update=true
     if UnitExists(button.unit) then
         _, uuUnitClassEN = UnitClass(button.unit);
         button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit)
         button.text.classtrim = strsub(uuUnitClassEN or "XXXX",1,4)
         HealBot_Action_setButtonManaBarCol(button)
-        HealBot_OnEvent_UnitHealth(button)
         HealBot_OnEvent_UnitMana(button);
         if button.status.dirarrowshown then HealBot_Action_ShowDirectionArrow(button) end
         HealBot_Action_CheckUnitLowMana(button)
@@ -835,7 +835,6 @@ function HealBot_UpdateUnit(button)
         HealBot_ClearUnitAggro(button)
         HealBot_Aura_RemoveIcons(button)
         HealBot_clearAllAuxBar(button)
-        button.health.update=true
     end
     HealBot_clearAllAuxBar(button)
     button.text.nameupdate=true
@@ -1329,12 +1328,16 @@ local function HealBot_Load(hbCaller)
         HealBot_setOptions_Timer(4980)
         HealBot_setOptions_Timer(4990)
         HealBot_Options_SetFrames()
-        HealBot_Tooltip:SetBackdropColor(0,0,0,HealBot_Globals.ttalpha)
+		if HEALBOT_GAME_VERSION>8 then
+		
+		else
+			HealBot_Tooltip:SetBackdropColor(0,0,0,HealBot_Globals.ttalpha)
+			HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
+		end
         HealBot_Panel_SetNumBars(HealBot_Globals.TestBars["BARS"])
         HealBot_Panel_SethbTopRole(HealBot_Globals.TopRole)
         local x=HealBot_Globals.ttalpha+0.12
         if x>1 then x=1 end
-        HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
         HealBot_setOptions_Timer(200)
         HealBot_Action_setLowManaTrig()
         HealBot_Options_MonitorBuffs_Toggle()
@@ -2914,18 +2917,17 @@ function HealBot_OnEvent_UnitHealth(button)
     if button.health.updincoming then HealBot_HealsInUpdate(button) end
     if button.health.updabsorbs then HealBot_AbsorbsUpdate(button) end
     if UnitExists(button.unit) then
+		if HealBot_luVars["adjMaxHealth"] then HealBot_MaxHealth() end
         if UnitIsFeignDeath(button.unit) and UnitHealth(button.unit)==0 then
             health,healthMax=button.health.current,button.health.max
-        elseif button.status.current<9 or not UnitIsDeadOrGhost(button.unit) then
-            if HealBot_luVars["adjMaxHealth"] then HealBot_MaxHealth() end
-            health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
-        else
+        elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
             health=0
             healthMax=(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
+        else
+            health,healthMax=UnitHealth(button.unit),(UnitHealthMax(button.unit) * HealBot_luVars["healthFactor"])
         end
         if health>healthMax then health=healthMax end
         if (health~=button.health.current) or (healthMax~=button.health.max) then
-            if HEALBOT_GAME_VERSION<4 then HealBot_OnEvent_UnitThreat(button) end
             if healthMax~=100 or not HealBot_Panel_RaidUnitGUID(button.guid) or button.health.max<200 then
                 button.health.current=health
                 button.health.max=healthMax
@@ -3410,7 +3412,7 @@ local function HealBot_UnitUpdateButton(button)
             HealBot_Action_Refresh(button)
         elseif button.health.update then
             HealBot_OnEvent_UnitHealth(button)
-        elseif button.status.current==9 or UnitIsDeadOrGhost(button.unit) then
+        elseif button.status.current==9 or (UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit)) then
             HealBot_Action_UpdateTheDeadButton(button)
         elseif button.aggro.threatpct>0 then 
             HealBot_CheckAggroUnits(button) 
@@ -3445,7 +3447,7 @@ local function HealBot_EnemyUpdateButton(button)
             button.status.reserved=false
             HealBot_UpdateUnit(button)
         end
-        if UnitIsDeadOrGhost(button.unit) then
+        if UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
             if UnitIsFriend("player",button.unit) then
                 HealBot_Action_UpdateTheDeadButton(button)
             else
@@ -3902,21 +3904,15 @@ end
 
 function HealBot_Register_Aggro()
     HealBot:RegisterEvent("UNIT_COMBAT")
-    if HEALBOT_GAME_VERSION>3 then
-        HealBot:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
-        HealBot:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
-    else
-        libCTM = libCTM or HealBot_Libs_CTM()
-    end
+    HealBot:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+    HealBot:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
     --HealBot_setCall("HealBot_Register_Aggro")
 end
 
 function HealBot_UnRegister_Aggro()
     HealBot:UnregisterEvent("UNIT_COMBAT")
-    if HEALBOT_GAME_VERSION>3 then
-        HealBot:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
-        HealBot:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
-    end
+    HealBot:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
+    HealBot:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
     HealBot_EndAggro() 
     --HealBot_setCall("HealBot_UnRegister_Aggro")
 end
@@ -4032,20 +4028,11 @@ function HealBot_CalcThreat(button)
             end
         end
         if ctEnemyUnit then
-            if HEALBOT_GAME_VERSION>3 then
-                _, _, ctZ, _, _ = UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
-                ctY = UnitThreatSituation(button.unit, ctEnemyUnit)
-            elseif libCTM then
-                _, _, ctZ, _, _ = libCTM:UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
-                ctY = libCTM:UnitThreatSituation(button.unit, ctEnemyUnit)
-            end
+            _, _, ctZ, _, _ = UnitDetailedThreatSituation(button.unit, ctEnemyUnit)
+            ctY = UnitThreatSituation(button.unit, ctEnemyUnit)
             ctZ=floor(ctZ or 0)
         elseif ctZ==0 then
-            if HEALBOT_GAME_VERSION>3 then
-                ctY = UnitThreatSituation(button.unit)
-            elseif libCTM then
-                ctY = libCTM:UnitThreatSituation(button.unit, ctEnemyUnit)
-            end
+            ctY = UnitThreatSituation(button.unit)
         end
         if not ctY then ctY=0 end
         if ctZ>=HealBot_Globals.aggro3pct then
@@ -4222,7 +4209,7 @@ function HealBot_OnEvent_PlayerTargetChanged()
             HealBot_RecalcParty(3)
         else
             local xButton=HealBot_Unit_Button["target"]
-            if xButton then 
+            if xButton then
                 if not InCombatLockdown() then
                     if UnitExists(xButton.unit) and HealBot_Panel_validTarget(xButton.unit) then
                         if not HealBot_FrameVisible[8] then HealBot_Action_ShowPanel(8) end
@@ -4528,7 +4515,7 @@ end
 local function HealBot_OnEvent_FocusChanged(self)
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
         local xButton=HealBot_Unit_Button["focus"]
-        if xButton or not UnitExists("focus") then
+        if xButton then
             if InCombatLockdown() or HealBot_luVars["FocusNeedReset"] then
                 HealBot_RecalcParty(4)
             elseif not InCombatLockdown() then
@@ -4621,14 +4608,6 @@ local function HealBot_OnEvent_UnitSpellCastStart(unit)
         end
         --HealBot_AddDebug(unit.." is ressing "..HealBot_UnitIsRessing[unit])
         HealBot_UnitIsRessing[unit]=false
-    elseif HEALBOT_GAME_VERSION<4 then
-        local _,ucsButton,ucsPrivate = HealBot_UnitID(unit)
-        if ucsButton then
-            HealBot_OnEvent_UnitThreat(ucsButton)
-        end
-        if ucsPrivate then
-            HealBot_OnEvent_UnitThreat(ucsPrivate)
-        end
     end
 end
 
@@ -5320,16 +5299,7 @@ function HealBot_OnEvent(self, event, ...)
                 HealBot_Text_SetText(ePrivate)
             end
             HealBot_luVars["overhealAmount"]=0
-        end
-        if HEALBOT_GAME_VERSION<4 then
-            _,eButton,ePrivate = HealBot_UnitID(arg1)
-            if eButton then
-                HealBot_OnEvent_UnitThreat(eButton)
-            end
-            if ePrivate then
-                HealBot_OnEvent_UnitThreat(ePrivate)
-            end
-        end    
+        end  
     elseif (event=="UNIT_SPELLCAST_START") then
         HealBot_OnEvent_UnitSpellCastStart(arg1)
     elseif (event=="UNIT_SPELLCAST_SENT") then
