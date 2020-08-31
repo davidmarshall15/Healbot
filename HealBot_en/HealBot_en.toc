@@ -2,6 +2,7 @@
 ## Title: HealBot English Localization
 ## Author: Strife
 ## Notes: HealBot localization for enUS and enUK
+## RequiredDeps: HealBot
 ## Version: 8.3.7.0
 
 Libs\LibStub\LibStub.lua
