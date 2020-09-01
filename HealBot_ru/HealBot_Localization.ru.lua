@@ -7,11 +7,6 @@
 --
 --
 --
---
---
---
---
---
 
 function HealBot_Lang_ruRU()
 

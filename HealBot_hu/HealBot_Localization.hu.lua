@@ -1,17 +1,12 @@
 ﻿-- Hungarian translator required
 
 ---------------
--- Hungarian --
----------------
--- http://www.wowwiki.com/Localizing_an_addon
+-- HUNGARIAN --
 ---------------
 --
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_hu
 --
 --
-
+--
 
 function HealBot_Lang_huHU()
 

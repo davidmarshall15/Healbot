@@ -4,10 +4,7 @@
 -- TAIWANESE --
 ---------------
 --
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_tw
---
+-- 
 --
 
 

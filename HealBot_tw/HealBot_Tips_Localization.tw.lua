@@ -1,19 +1,13 @@
-﻿-- English maintained by Strife.
+-- Taiwanese translator required
 
--------------
--- ENGLISH --
--------------
+---------------
+-- TAIWANESE --
+---------------
 --
---
---
---
---
---
---
---
+-- 
 --
 
-function HealBot_Lang_Options_enALL()
+function HealBot_Lang_Options_zhTW()
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -873,8 +867,4 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                               }
-end
-
-if HealBot_Version_Target() then
-    HealBot_Lang_Options_enALL()
 end

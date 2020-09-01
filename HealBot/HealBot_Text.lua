@@ -64,9 +64,9 @@ vTextChars["Plus"]="+"
 vTextChars["Newline"]="\n"
 vTextChars["Dot"]="."
 vTextChars["Caret"]="^"
-vTextChars["Colon"]="^"
-vTextChars["AggroLeft"]="^"
-vTextChars["AggroRight"]="^"
+vTextChars["Colon"]=":"
+vTextChars["AggroLeft"]=">"
+vTextChars["AggroRight"]="<"
 
 local hbStringSub=nil
 local hbutf8sub=string.gsub
@@ -621,7 +621,7 @@ end
 local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen,vHealthTextConcatIndex="","","",0,0,0
 function HealBot_Text_setNameText(button)
     if UnitExists(button.unit) then
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSTYPE"]==2 and UnitClass(button.unit) then
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and UnitClass(button.unit) then
             if button.text.tag then
                 tConcat[1]=button.text.tag
                 vHealthTextConcatIndex=1
@@ -682,7 +682,6 @@ function HealBot_Text_setNameText(button)
         else
             vSetNameTextName=button.unit
         end
-        button.status.refresh=true
     end
 
     vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))

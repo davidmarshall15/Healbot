@@ -53,6 +53,11 @@ function HealBot_Comms_GetChan(chan)
     end
 end
 
+local function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
+	HealBot_Options_SetLabel("HBIncH"..linenum.."Healer",sender_id)
+	HealBot_Options_SetLabel("HBIncH"..linenum.."Ver",addon_id)
+end
+
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
 
@@ -71,22 +76,15 @@ function HealBot_Comms_About()
         end
     end
 
-    HealBot_Error_Clientx:SetText(HEALBOT_WORD_CLIENT.."="..GetLocale())
+	HealBot_Options_SetLabel("HealBot_Error_Clientx",HEALBOT_WORD_CLIENT.."="..GetLocale())
     if HealBot_Globals.localLang then
-        HealBot_Error_Versionx:SetText(HEALBOT_OPTIONS_LANG.."="..HealBot_Globals.localLang)
+		HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG.."="..HealBot_Globals.localLang)
     else
-        HealBot_Error_Versionx:SetText(HEALBOT_OPTIONS_LANG.."="..GetLocale())
+		HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG.."="..GetLocale())
     end
-    HealBot_Error_Classx:SetText(HEALBOT_SORTBY_CLASS.."="..UnitClass("player"))
+	HealBot_Options_SetLabel("HealBot_Error_Classx",HEALBOT_SORTBY_CLASS.."="..UnitClass("player"))
     HealBot_Comms_MacroSuppressError()
     HealBot_Comms_MacroSuppressSound()
-end
-
-function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
-    local g=_G["HBIncH"..linenum.."Healer"]
-    g:SetText(sender_id);
-    g=_G["HBIncH"..linenum.."Ver"]
-    g:SetText(addon_id);
 end
 
 local sPeople={}
@@ -97,7 +95,6 @@ function HealBot_Comms_Print_Supports()
         sPeople[x]=false
     end 
     for x=1,20 do
-        local g=_G["HBIncH"..x.."Supporter"]
         local s=HealBot_Globals.LastSupporter+x
         if not HEALBOT_SUPPORTERS_PEOPLE[s] then
             b=b+1
@@ -105,7 +102,7 @@ function HealBot_Comms_Print_Supports()
             if not HEALBOT_SUPPORTERS_PEOPLE[s] then s=1 end
         end
         if not sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]] then
-            g:SetText(HEALBOT_SUPPORTERS_PEOPLE[s]);
+			HealBot_Options_SetLabel("HBIncH"..x.."Supporter",HEALBOT_SUPPORTERS_PEOPLE[s])
             sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
         end
     end

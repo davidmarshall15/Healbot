@@ -871,7 +871,7 @@
       </Layers>
     <Backdrop tile="true"
       bgFile="Interface\Buttons\WHITE8X8"
-      edgeFile="Interface\Tooltips\UI-Tooltip-Border" inherits="BackdropTemplate">
+      edgeFile="Interface\Tooltips\UI-Tooltip-Border">
       <EdgeSize>
         <AbsValue val="10"/>
       </EdgeSize>

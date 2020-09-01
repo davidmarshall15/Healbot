@@ -118,13 +118,14 @@ local function HealBot_Aggro_ClearAggroBar(button)
 end
 
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
-function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
-    --if not button then return end
+function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,threatValue,mobName)
     if UnitExists(button.unit) and UnitIsFriend("player",button.unit) then
         if UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
             status=false
             threatPct=0
             threatStatus=0
+			threatValue=0
+			mobName=""
         end
         if status then
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
@@ -149,6 +150,8 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
         HealBot_Aggro_ClearAggroBar(button)
         threatPct=0
         threatStatus=0
+		threatValue=0
+		mobName=""
     end
     if button.aggro.status~=threatStatus then
         button.aggro.status=threatStatus
@@ -157,9 +160,12 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra)
             HealBot_Aggro_IndicatorUpdate(button)
         end
     end
-    if button.aggro.threatpct~=threatPct then 
+    if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct
+		button.aggro.threatvalue=threatValue
+		button.aggro.mobname=mobName
         HealBot_Text_setNameText(button) 
+		-- if plugin then pluginfunc(button) end
         if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         if threatPct<1 then
             HealBot_Aggro_ClearThreatBar(button)

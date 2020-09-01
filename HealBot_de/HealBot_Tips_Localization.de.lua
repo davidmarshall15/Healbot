@@ -1,19 +1,19 @@
-﻿-- English maintained by Strife.
+-- German translator required
 
--------------
--- ENGLISH --
--------------
+------------
+-- GERMAN --
+------------
 --
---
---
---
---
---
---
---
+-- Ä = \195\132
+-- Ö = \195\150
+-- Ü = \195\156
+-- ß = \195\159
+-- ä = \195\164
+-- ö = \195\182
+-- ü = \195\188
 --
 
-function HealBot_Lang_Options_enALL()
+function HealBot_Lang_Options_deDE()
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -873,8 +873,4 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                               }
-end
-
-if HealBot_Version_Target() then
-    HealBot_Lang_Options_enALL()
 end

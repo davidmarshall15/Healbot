@@ -1,4 +1,9 @@
-ï»¿-- French version (by Kubik of Vol'Jin) 2015-09-25 / V. 6.2.2.0
+ï»¿-- French translator required
+
+------------
+-- FRENCH --
+------------
+--
 -- à = \195\160
 -- â = \195\162
 -- ç = \195\167

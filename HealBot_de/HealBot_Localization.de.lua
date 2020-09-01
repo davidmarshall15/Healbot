@@ -1,4 +1,6 @@
-﻿------------
+﻿-- German translator required
+
+------------
 -- GERMAN --
 ------------
 --

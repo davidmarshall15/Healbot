@@ -4,6 +4,7 @@
 ## Notes: HealBot localization for huHU
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.3.0.0
+## Version: 8.3.7.1
 
 HealBot_Localization.hu.lua
+HealBot_Tips_Localization.hu.lua

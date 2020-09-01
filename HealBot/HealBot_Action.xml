@@ -292,6 +292,58 @@
                         </Anchor>
                     </Anchors>
                 </FontString> 
+            <Texture name="$parentIcon11">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire11" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount11" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon12">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire12" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount12" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
             <Texture name="$parentIcon51">
               <Size> <AbsDimension x="16" y="16"/> </Size>					
               <Anchors>
@@ -422,6 +474,84 @@
                         </Anchor>
                     </Anchors>
                 </FontString> 
+            <Texture name="$parentIcon56">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire56" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount56" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+            <Texture name="$parentIcon57">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire57" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount57" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+            <Texture name="$parentIcon58">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire58" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount58" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
             <Texture name="$parentIconal1" file="Interface\AddOns\HealBot\Images\indicator_red">
               <Size> <AbsDimension x="7" y="7"/> </Size>					
               <Anchors>
@@ -534,30 +664,40 @@
                 </Anchor>
               </Anchors>
             </Texture>
+            <Texture name="$parentExtraClass">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentExtraTarget">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentExtraRC">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentExtraOOR">
+              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
             </Layer>
 		</Layers>
-      </StatusBar>
-      <StatusBar name="$parentBarDir" inherits="HealBot_StatusBar">
-        <Anchors>
-            <Anchor point="TOP" relativePoint="TOP">
-                <Offset>
-                    <AbsDimension x="0" y="0"/>
-                </Offset>
-            </Anchor>
-        </Anchors>
-        <Layers>
-            <Layer level="OVERLAY">
-                <Texture name="$parentIcon17" file="Interface\AddOns\HealBot\Images\arrow.blp">
-                      <Size> <AbsDimension x="16" y="16"/> </Size>					
-                      <Anchors>
-                        <Anchor point="TOP" relativePoint="TOP">
-                            <Offset> <AbsDimension x="0" y="0"/> </Offset>
-                        </Anchor>
-                    </Anchors>
-                </Texture>
-            </Layer>
-		</Layers>
-        <BarColor r="0.2" g="0.2" b="0.2" a="0"/>
       </StatusBar>
       <StatusBar name="$parentAux1" inherits="HealBot_StatusBar">
         <Anchors>
@@ -828,494 +968,4 @@
       </Anchor>
     </Anchors>
   </Button>
-  
-  <Frame name="f1_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f1_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f1_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f1_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 1); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 1); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 1); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 1); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 1); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f2_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f2_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f2_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f2_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 2); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 2); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 2); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 2); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 2); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f3_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f3_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f3_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f3_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 3); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 3); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 3); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 3); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 3); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f4_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f4_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f4_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f4_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 4); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 4); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 4); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 4); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 4); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f5_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f5_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f5_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f5_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 5); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 5); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 5); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 5); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 5); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f6_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f6_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f6_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f6_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 6); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 6); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 6); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 6); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 6); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f7_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f7_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f7_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f7_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 7); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 7); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 7); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 7); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 7); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f8_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f8_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f8_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f8_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 8); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 8); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 8); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 8); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 8); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f9_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f9_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f9_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f9_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 9); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 9); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 9); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 9); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 9); </OnDragStart>
-   </Scripts>
-  </Frame>
-  
-  <Frame name="f10_HealBot_Action" toplevel="true" parent="UIParent" movable="true" enableMouse="true" enableKeyboard="false" hidden="true" inherits="SecureFrameTemplate">
-    <Backdrop tile="false"
-      bgFile="Interface\Addons\HealBot\Images\WhiteLine"
-      edgeFile="Interface\Addons\HealBot\Images\border" inherits="BackdropTemplate"> 
-      <EdgeSize> <AbsValue val="8"/> </EdgeSize>
-      <TileSize> <AbsValue val="8"/> </TileSize>
-      <BackgroundInsets> <AbsInset left="3" right="3" top="3" bottom="3"/> </BackgroundInsets>
-    </Backdrop>
-    <Frames>
-      <StatusBar name="f10_HealBot_Action_HeaderBar" inherits="TextStatusBar">
-        <Size>
-          <AbsDimension x="225" y="25"/>
-        </Size>
-        <Anchors>
-          <Anchor point="BOTTOM" relativePoint="TOP">
-            <Offset>
-              <AbsDimension x="0" y="-2"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Layers>
-          <Layer level="OVERLAY">
-            <FontString name="f10_HealBot_Action_Title" inherits="GameFontNormal" text="">
-              <Anchors>
-                <Anchor point="CENTER" relativeTo="f10_HealBot_Action_HeaderBar" relativePoint="CENTER">
-                  <Offset>
-                    <AbsDimension x="0" y="1"/>
-                  </Offset>
-                </Anchor>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <Scripts>
-          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-        </Scripts>
-        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-        <BarColor r="0" g="1" b="0"/>
-      </StatusBar>
-    </Frames>
-    <Scripts>
-      <OnShow> HealBot_Action_OnShow(self, 10); </OnShow>
-      <OnHide> HealBot_Action_OnHide(self, 10); </OnHide>
-      <OnMouseDown> HealBot_Action_OnMouseDown(self,button, 10); </OnMouseDown>
-      <OnMouseUp> HealBot_Action_OnMouseUp(self,button, 10); </OnMouseUp>
-      <OnDragStart> HealBot_Action_OnDragStart(self, 10); </OnDragStart>
-   </Scripts>
-  </Frame>
 </Ui>

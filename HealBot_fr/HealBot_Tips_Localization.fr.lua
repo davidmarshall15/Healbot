@@ -1,19 +1,27 @@
-﻿-- English maintained by Strife.
+-- French translator required
 
--------------
--- ENGLISH --
--------------
+------------
+-- FRENCH --
+------------
 --
---
---
---
---
---
---
---
---
+-- ࠽ \195\160
+-- ⠽ \195\162
+-- 砽 \195\167
+-- 蠽 \195\168
+-- 頽 \195\169
+-- ꠽ \195\170
+--  \195\174
+--  \195\175
+-- 𠽠\195\180
+-- û = \195\187
+-- À = \195\128
+-- Ƞ= \195\136
+-- ɠ= \195\137
+-- ʠ= \195\138
+-- espace avant ':' (?) = \194\160
 
-function HealBot_Lang_Options_enALL()
+
+function HealBot_Lang_Options_frFR()
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -873,8 +881,4 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                               }
-end
-
-if HealBot_Version_Target() then
-    HealBot_Lang_Options_enALL()
 end

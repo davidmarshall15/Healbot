@@ -1,13 +1,8 @@
-﻿-- Greek maintained by Snaomi.
+﻿-- Greek translator required
 
--------------
+-----------
 -- GREEK --
--------------
---
---
---
---
---
+-----------
 --
 --
 --

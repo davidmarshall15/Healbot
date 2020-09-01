@@ -4,30 +4,9 @@
 -- Brazilian --
 ---------------
 --
--------------
--- À = \195\128
--- Á = \195\129
--- Â = \195\130
--- Ê = \195\138
--- Í = \195\141
--- à = \195\160
--- á = \195\161
--- â = \195\162
--- ã = \195\163
--- ç = \195\167
--- é = \195\169
--- ê = \195\170
--- í = \195\173
--- ó = \195\179
--- õ = \195\181
--- ú = \195\186
---
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_br
 --
 --
-
+--
 
 function HealBot_Lang_ptBR()
 

@@ -552,7 +552,7 @@ local function HealBot_Action_DoRefreshTooltip()
                 uLvl="Level "..uLvl
             end
             local uClassify=UnitClassification(xUnit) or " "
-            if uClassify=="worldboss" then 
+            if uClassify=="worldboss" or HealBot_UnitBosses(xUnit) then 
                 uClassify="Boss"
             elseif uClassify=="rareelite" then 
                 uClassify="Rare Elite"
@@ -643,7 +643,10 @@ local function HealBot_Action_DoRefreshTooltip()
                 if not mana or (maxmana and maxmana==0) then
                     if xButton.aggro.threatpct>0 then
                         linenum=linenum+1
-                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1," ",0,0,0,0)
+						HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1," ",0,0,0,0)
+						linenum=linenum+1
+						local threatvalue=HealBot_Tooltip_readNumber(xButton.aggro.threatvalue)
+						HealBot_Tooltip_SetLine(linenum,xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",0,0,0,0)
                     elseif HealBot_Tooltip_luVars["uGroup"] then
                         linenum=linenum+1
                         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_GROUPHEALS.." "..HealBot_Tooltip_luVars["uGroup"],1,1,1,1," ",0,0,0,0)
@@ -663,14 +666,17 @@ local function HealBot_Action_DoRefreshTooltip()
                             HealBot_Tooltip_SetLine(linenum," ",0,0,0,0,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
                         end
                     else
-                        HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
+						HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_THREAT.." "..xButton.aggro.threatpct.."%",1,0.1,0.1,1,mana.."/"..maxmana.." ("..mPct.."%)",0.4,0.4,1,1)
+						linenum=linenum+1
+						local threatvalue=HealBot_Tooltip_readNumber(xButton.aggro.threatvalue)
+						HealBot_Tooltip_SetLine(linenum,xButton.aggro.mobname.." ("..threatvalue..")",1,0.1,0.1,1," ",0,0,0,0)
                     end
                 end
             end
-            
+
             UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
             if UnitDebuffIcons then
-                for i = 51,55 do
+                for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+51 do
                     if UnitDebuffIcons[i].current and UnitDebuffIcons[i].spellId>0 and GetSpellInfo(UnitDebuffIcons[i].spellId) then
                         linenum=linenum+1
                         local DebuffType=HealBot_Aura_retDebufftype(xUnit, UnitDebuffIcons[i].spellId)
