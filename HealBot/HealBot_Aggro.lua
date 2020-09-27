@@ -1,6 +1,17 @@
 local HealBot_Aggro_rCalls={}
 local tConcat={}
-local function HealBot_Aggro_Concat(elements)
+local HealBot_Aggro_luVars={}
+HealBot_Aggro_luVars["pluginThreat"]=false
+
+function HealBot_Aggro_setLuVars(vName, vValue)
+    HealBot_Aggro_luVars[vName]=vValue
+end
+
+function HealBot_Aggro_retLuVars(vName)
+    return HealBot_Aggro_luVars[vName]
+end
+
+function HealBot_Aggro_Concat(elements)
     return table.concat(tConcat,"",1,elements)
 end
 
@@ -58,7 +69,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
             end
         end
     end
-    --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
+      --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
 function HealBot_Aggro_ResetrCallsUnit(unit)
@@ -77,44 +88,44 @@ end
 
 function HealBot_Aggro_setAuxAssigned(aType, frame, id)
     if aType=="AGGRO" then
-        table.insert(hbAuxAggroAssigned[frame], id)
+        hbAuxAggroAssigned[frame][id]=true
     else
-        table.insert(hbAuxThreatAssigned[frame], id)
+        hbAuxThreatAssigned[frame][id]=true
     end
 end
 
-local function HealBot_Aggro_UpdateThreatBar(button)
-    table.foreach(hbAuxThreatAssigned[button.frame], function (x,id)
+function HealBot_Aggro_UpdateThreatBar(button)
+	for id in pairs(hbAuxThreatAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=1
             button.aux[id]["B"]=0.2
         end
         HealBot_setAuxBar(button, id, button.aggro.threatpct*10, true)
-    end)
+    end
 end
 
-local function HealBot_Aggro_ClearThreatBar(button)
-    table.foreach(hbAuxThreatAssigned[button.frame], function (x,id)
+function HealBot_Aggro_ClearThreatBar(button)
+	for id in pairs(hbAuxThreatAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
-    end)
+    end
 end
 
-local function HealBot_Aggro_UpdateAggroBar(button)
-    table.foreach(hbAuxAggroAssigned[button.frame], function (x,id)
+function HealBot_Aggro_UpdateAggroBar(button)
+	for id in pairs(hbAuxAggroAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=0
             button.aux[id]["B"]=0
         end
         HealBot_setAuxBar(button, id, 1000, false)
-    end)
+    end
 end
 
-local function HealBot_Aggro_ClearAggroBar(button)
-    table.foreach(hbAuxAggroAssigned[button.frame], function (x,id)
+function HealBot_Aggro_ClearAggroBar(button)
+	for id in pairs(hbAuxAggroAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
-    end)
+    end
 end
 
 local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
@@ -165,7 +176,7 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,t
 		button.aggro.threatvalue=threatValue
 		button.aggro.mobname=mobName
         HealBot_Text_setNameText(button) 
-		-- if plugin then pluginfunc(button) end
+		if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
         if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         if threatPct<1 then
             HealBot_Aggro_ClearThreatBar(button)
@@ -174,5 +185,5 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,t
         end
         HealBot_Action_UpdateHealthButton(button) 
     end
-    --HealBot_setCall("HealBot_Action_DoUpdateAggro")
+      --HealBot_setCall("HealBot_Action_DoUpdateAggro")
 end

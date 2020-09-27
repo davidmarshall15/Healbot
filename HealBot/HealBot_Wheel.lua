@@ -12,19 +12,19 @@ function HealBot_MountsPets_lastbutton(button)
     hbLastButton=button
 end
 
-local function HealBot_MountsPets_FavMount()
+function HealBot_MountsPets_FavMount()
     if not InCombatLockdown() then
         C_MountJournal.SummonByID(0)
     end
 end
 
-local function HealBot_MountsPets_RandomPet(isFav)
+function HealBot_MountsPets_RandomPet(isFav)
     if not InCombatLockdown() then
         C_PetJournal.SummonRandomPet(isFav)
     end
 end
 
-local function HealBot_MountsPets_Mount(mount)
+function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
         if not InCombatLockdown() then
             C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
@@ -36,7 +36,7 @@ local function HealBot_MountsPets_Mount(mount)
 end
 
 local vToggleMountIndex=0
-local function HealBot_MountsPets_ToggelMount(mountType)
+function HealBot_MountsPets_ToggelMount(mountType)
     if IsMounted() then
         Dismount()
 	elseif HEALBOT_GAME_VERSION>3 and CanExitVehicle() then	
@@ -98,7 +98,7 @@ local function HealBot_MountsPets_ToggelMount(mountType)
     end
 end
 
-local function HealBot_Action_DoHealUnit_Wheel(self, delta)
+function HealBot_Action_DoHealUnit_Wheel(self, delta)
     --local xButton=hbLastButton
     if hbLastButton then
         if not hbLastButton then return end

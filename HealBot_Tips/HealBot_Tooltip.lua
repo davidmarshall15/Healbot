@@ -19,7 +19,7 @@ HealBot_Tooltip_luVars["doInit"]=true
 
 function HealBot_Tooltip_setLuVars(vName, vValue)
     HealBot_Tooltip_luVars[vName]=vValue
-    --HealBot_setCall("HealBot_Tooltip_setLuVars")
+      --HealBot_setCall("HealBot_Tooltip_setLuVars")
 end
 
 function HealBot_Tooltip_Clear_CheckBuffs()
@@ -32,7 +32,7 @@ function HealBot_Tooltip_CheckBuffs(buff)
     HealBot_CheckBuffs[buff]=true;
 end
 
-local function HealBot_Tooltip_ReturnMinsSecs(s)
+function HealBot_Tooltip_ReturnMinsSecs(s)
     local mins=floor(s/60)
     local secs=floor(s-(mins*60))
   --  mins=mins+1
@@ -40,7 +40,7 @@ local function HealBot_Tooltip_ReturnMinsSecs(s)
     return mins,secs
 end
 
-local function HealBot_Tooltip_readNumber(n)
+function HealBot_Tooltip_readNumber(n)
     if n>99999999 then
         n=tostring(HealBot_Comm_round(n/1000000,0)).."M"
     elseif n>9999999 then
@@ -57,7 +57,7 @@ local function HealBot_Tooltip_readNumber(n)
     return n
 end
 
-local function HealBot_Tooltip_SpellPattern(button, click)
+function HealBot_Tooltip_SpellPattern(button, click)
     local sPattern=nil
     if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
         if click=="Left" then
@@ -93,7 +93,7 @@ local function HealBot_Tooltip_SpellPattern(button, click)
     return sPattern
 end
 
-local function HealBot_Tooltip_GetHealSpell(button,sName)
+function HealBot_Tooltip_GetHealSpell(button,sName)
     if not sName or not HealBot_Spell_Names[sName] then
         if sName then
             local s = GetItemSpell(sName)
@@ -122,7 +122,7 @@ local function HealBot_Tooltip_GetHealSpell(button,sName)
     return sName, 0, 1
 end
 
-local function HealBot_Tooltip_setspellName(button, spellName)
+function HealBot_Tooltip_setspellName(button, spellName)
     local validSpellName=spellName
     local spellAR,spellAG=1,1
     if spellName then
@@ -174,7 +174,7 @@ local function HealBot_Tooltip_setspellName(button, spellName)
     return validSpellName, spellAR, spellAG
 end
 
-local function HealBot_Tooltip_SetLineLeft(Text,R,G,B,lNo,a)
+function HealBot_Tooltip_SetLineLeft(Text,R,G,B,lNo,a)
     if lNo>40 then return end
     local txtL = _G["HealBot_TooltipTextL" .. lNo]
     hbGameTooltip:AddFontStrings(
@@ -185,7 +185,7 @@ local function HealBot_Tooltip_SetLineLeft(Text,R,G,B,lNo,a)
     txtL:Show()
 end
 
-local function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
+function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
     if lNo>40 then return end
     local txtR = _G["HealBot_TooltipTextR" .. lNo]
     txtR:SetTextColor(R,G,B,a)
@@ -193,7 +193,7 @@ local function HealBot_Tooltip_SetLineRight(Text,R,G,B,lNo,a)
     txtR:Show()
 end
 
-local function HealBot_Tooltip_InitFont()
+function HealBot_Tooltip_InitFont()
     local fontType=GameFontNormal
     if HealBot_Globals.Tooltip_TextSize==1 then
         fontType=GameFontNormalSmall
@@ -208,7 +208,7 @@ local function HealBot_Tooltip_InitFont()
     end
 end
 
-local function HealBot_Tooltip_SetLine(lNo,lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
+function HealBot_Tooltip_SetLine(lNo,lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
     if rText then
         if HealBot_Globals.UseGameTooltip then
             GameTooltip:AddDoubleLine(lText,rText,lR,lG,lB,rR,rG,rB)
@@ -236,7 +236,7 @@ local HealBot_Tooltip_PowerDesc = {[0]="Mana",
                                    [7]="Soul Shards", 
                                    [8]="Eclipse", 
                                    [9]="Holy Power"}
-local function HealBot_Tooltip_SpellInfo(spellName)
+function HealBot_Tooltip_SpellInfo(spellName)
     if HealBot_Spell_Names[spellName] then
         if HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana>0 then
             linenum=linenum+1
@@ -249,7 +249,7 @@ local function HealBot_Tooltip_SpellInfo(spellName)
     end
 end
 
-local function HealBot_Tooltip_SpellSummary(spellName)
+function HealBot_Tooltip_SpellSummary(spellName)
     local ret_val = "  "
     if HealBot_Spell_Names[spellName] then
         if HealBot_Data["POWERTYPE"]==0 and HealBot_Spell_IDs[HealBot_Spell_Names[spellName]].Mana<HealBot_Tooltip_Power then
@@ -262,7 +262,7 @@ local function HealBot_Tooltip_SpellSummary(spellName)
     return ret_val;
 end
 
-local function HealBot_Tooltip_Show()
+function HealBot_Tooltip_Show()
     if HealBot_Globals.UseGameTooltip then
         GameTooltip:Show();
     else
@@ -286,7 +286,7 @@ end
 
 local UnitBuffIcons=nil
 local UnitDebuffIcons=nil
-local function HealBot_ToolTip_ShowHoT(buttonId, unit)
+function HealBot_ToolTip_ShowHoT(buttonId, unit)
     if HealBot_Globals.Tooltip_ShowHoT then
         local hbHoTline1=true
         UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(buttonId)
@@ -341,7 +341,7 @@ local function HealBot_ToolTip_ShowHoT(buttonId, unit)
     end
 end
 
-local function HealBot_ToolTip_SetTooltipPos()
+function HealBot_ToolTip_SetTooltipPos()
     xButton=HealBot_Data["TIPBUTTON"]
     if xButton then
         local g = _G["f"..xButton.frame.."_HealBot_Action"]
@@ -390,7 +390,7 @@ local function HealBot_ToolTip_SetTooltipPos()
     end
 end
 
-local function HealBot_Tooltip_ClearLines(allLines)
+function HealBot_Tooltip_ClearLines(allLines)
     if HealBot_Globals.UseGameTooltip then
         GameTooltip:ClearLines()
     else
@@ -403,7 +403,7 @@ local function HealBot_Tooltip_ClearLines(allLines)
     end
 end
 
-local function HealBot_Action_GetTimeOffline(button)
+function HealBot_Action_GetTimeOffline(button)
     local timeOffline=nil
     if button.status.offline then
         timeOffline = GetTime() - button.status.offline;
@@ -475,7 +475,7 @@ function HealBot_DebugTooltip()
     HealBot_Tooltip_Show()
 end
 
-local function HealBot_Action_DoRefreshTooltip()
+function HealBot_Action_DoRefreshTooltip()
     --if IsAltKeyDown() and HealBot_retCalls() then 
     --    HealBot_DebugTooltip() 
     --    return
@@ -676,7 +676,7 @@ local function HealBot_Action_DoRefreshTooltip()
 
             UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
             if UnitDebuffIcons then
-                for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+51 do
+                for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+50 do
                     if UnitDebuffIcons[i].current and UnitDebuffIcons[i].spellId>0 and GetSpellInfo(UnitDebuffIcons[i].spellId) then
                         linenum=linenum+1
                         local DebuffType=HealBot_Aura_retDebufftype(xUnit, UnitDebuffIcons[i].spellId)
@@ -839,7 +839,7 @@ local function HealBot_Action_DoRefreshTooltip()
     HealBot_Tooltip_Show()
 end
 
-local function HealBot_Action_DoRefreshTargetTooltip(button)
+function HealBot_Action_DoRefreshTargetTooltip(button)
     HealBot_TooltipInit();
     HealBot_Tooltip_ClearLines();
     linenum=1
@@ -878,7 +878,7 @@ function HealBot_Action_RefreshTargetTooltip(button)
     HealBot_Action_DoRefreshTargetTooltip(button)
 end
 
-local function HealBot_Tooltip_Options_Show(noLines)
+function HealBot_Tooltip_Options_Show(noLines)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_luVars["doInit"]=false
         HealBot_Tooltip_InitFont()

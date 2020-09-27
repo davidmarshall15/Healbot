@@ -86,6 +86,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_OVERRIDES           = "Overrides"
     HEALBOT_OPTIONS_TAB_EXTRAS              = "Extras"
 
+    HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK            = "Background bar opacity";
@@ -372,7 +373,6 @@ function HealBot_Lang_enALL()
 
 
     HEALBOT_OPTIONS_OPTIONSOPACITY          = "Options opacity";
-    HEALBOT_OPTIONS_RANGECHECKFREQ          = "Internal Timers and Updates";
 
     HEALBOT_OPTIONS_HIDEPARTYFRAMES         = "Hide party frames";
     HEALBOT_OPTIONS_HIDEPLAYERTARGET        = "Include player and target";
@@ -438,6 +438,11 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_INCLUDE                   = "Include";
     HEALBOT_WORDS_UNSET                     = "Unset";
     HEALBOT_WORDS_SETAS                     = "Set as";
+    HEALBOT_OPTIONS_MAXSECS                 = "Maximum seconds"
+    HEALBOT_WORDS_REQUIRED                  = "Required";
+    HEALBOT_WORDS_PENDING                   = "Pending";
+	HEALBOT_WORD_STATUS                     = "Status"
+	HEALBOT_WORD_TIME                       = "Time"
 
     HEALBOT_OPTIONS_TTALPHA                 = "Opacity"
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
@@ -485,6 +490,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TXTDEPTH                = "Depth"
     HEALBOT_OPTIONS_TXTSIZE                 = "Size"
     HEALBOT_OPTIONS_MAXCHARS                = "Max Characters"
+	HEALBOT_OPTIONS_PLAYERMAXCHARS          = "Max Characters - Player Name"
+	HEALBOT_OPTIONS_MOBMAXCHARS             = "Max Characters - Mob Name"
     HEALBOT_VEHICLE                         = "Vehicle"
     HEALBOT_WORDS_ERROR                     = "Error"
     HEALBOT_SPELL_NOT_FOUND	                = "Spell Not Found"
@@ -537,6 +544,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_NUMHEALERS               = "Number of Healers"
     HEALBOT_OPTION_NUMPETS                  = "Number of Pets"
     HEALBOT_WORD_TEST                       = "Test";
+    HEALBOT_OPTION_TESTMODE                 = "Test mode";
     HEALBOT_WORD_TEXT                       = "Text";
     HEALBOT_WORD_OFF                        = "Off";
     HEALBOT_WORD_ON                         = "On";
@@ -930,6 +938,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_DISABLE                    = "Disable"
 
     HEALBOT_OPTIONS_MYCLASS                 = "My Class"
+	HEALBOT_OPTIONS_PLUGINS                 = "Plugins"
+	HEALBOT_OPTIONS_PLUGIN_NA               = "Plugin not available"
 
     HEALBOT_OPTIONS_CONTENT_ABOUT           = "        About"
     HEALBOT_OPTIONS_CONTENT_OVERRIDES       = "        " .. HEALBOT_OPTIONS_TAB_OVERRIDES
@@ -942,6 +952,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_MOUSEWHEEL      = "        Mouse Wheel"
     HEALBOT_OPTIONS_CONTENT_TEST            = "        Test"
     HEALBOT_OPTIONS_CONTENT_INOUT           = "        Import / Export"
+    HEALBOT_OPTIONS_CONTENT_PLUGINS         = "        " .. HEALBOT_OPTIONS_PLUGINS
     HEALBOT_OPTIONS_REFRESH                 = "Refresh"
 
     HEALBOT_CUSTOM_CATEGORY                 = "Category"
@@ -960,6 +971,15 @@ function HealBot_Lang_enALL()
     HEALBOT_CUSTOM_CAT_13                   = "W-X"
     HEALBOT_CUSTOM_CAT_14                   = "Y-Z"
 
+    HEALBOT_PLUGIN_THREAT                   = "HealBot Threat"
+    HEALBOT_PLUGIN_TIMETODIE                = "HealBot TimeToDie"
+    HEALBOT_PLUGIN_TIMETOLIVE               = "HealBot TimeToLive"
+    HEALBOT_PLUGIN_EFFECTIVETANKS           = "HealBot EffectiveTanks"
+    HEALBOT_PLUGIN_EFFICIENTHEALERS         = "HealBot EfficientHealers"
+	HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
+	HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
+	HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"
+	
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Friend"
@@ -1209,6 +1229,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_BARCOLOUR = "        " .. "Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_SET_ALL_FRAMES          = "Apply current tab settings to all Frames"
     HEALBOT_WORDS_PROFILE                   = "Profile"
+    HEALBOT_WORDS_GLOBALPROFILE             = "Global profile"
     HEALBOT_SHARE_SCREENSHOT                = "ScreenShot taken"
     HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
@@ -1264,6 +1285,13 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_TOGGLECUSTOMCURECASTBY      = "Toggle Custom Cures - Default Cast By"
     HEALBOT_OPTIONS_ENTERINGCOMBAT          = "When entering combat"
     HEALBOT_OPTIONS_OUTOFCOMBAT             = "When out of combat"
+    HEALBOT_OPTIONS_ONLYINGCOMBAT           = "Only show in combat"
+    HEALBOT_OPTIONS_ONLYONDEMAND            = "Only show on demand"
+	HEALBOT_SKIN_RAIDBARCOL                 = "Raid col"..HEALBOT_enWORD_COLOUR_SUFFIX
+	HEALBOT_SKIN_TANKBARCOL                 = "Tank col"..HEALBOT_enWORD_COLOUR_SUFFIX
+	HEALBOT_SKIN_YOURBARCOL                 = "My col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_OPTIONS_MAXBARS                 = "Max bars"
+	HEALBOT_OPTIONS_STATUS                  = "Status"
     HEALBOT_OPTIONS_TEXTCOL_DEBUFF          = "Use Custom on Debuff"
     HEALBOT_OPTIONS_ALWAYSHIDE              = "Always Hide"
     HEALBOT_OPTIONS_NOCHANGE                = "No Change"

@@ -116,7 +116,7 @@ function HealBot_Panel_isSpecialUnit(unit)
     return HealBot_SpecialUnit[unit] or 0
 end
 
-local function HealBot_Panel_TankRole(unit,guid)
+function HealBot_Panel_TankRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
 	if UnitHealth(unit)>HealBot_Panel_luVars["TankHealth"] then
@@ -126,13 +126,13 @@ local function HealBot_Panel_TankRole(unit,guid)
 	end
 end
  
-local function HealBot_Panel_HealerRole(unit,guid)
+function HealBot_Panel_HealerRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
     HealBot_MainHealers[guid]=unit
 end
 
 local aRole = nil
-local function HealBot_Panel_SetRole(unit,guid)
+function HealBot_Panel_SetRole(unit,guid)
     aRole = HealBot_Panel_UnitRole(unit)
     if aRole=="TANK" then
         HealBot_Panel_TankRole(unit,guid)
@@ -145,7 +145,7 @@ local function HealBot_Panel_SetRole(unit,guid)
     end
 end
 
-local function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
+function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
     if UnitExists(unit) then
         if UnitIsUnit(unit, "player") then unit="player" end
         if UnitIsUnit(unit, "pet") then unit="pet" end
@@ -194,7 +194,7 @@ local function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
     end
 end
 
-local function HealBot_Panel_buildDataStore(doPlayers, doPets)
+function HealBot_Panel_buildDataStore(doPlayers, doPets)
     if doPlayers then
         HealBot_ClearPlayerButtonCache()
         for x,_ in pairs(hbPanel_dataNames) do
@@ -500,7 +500,7 @@ function HealBot_Action_SetClassIconTexture(button)
     end
 end
 
-local function HealBot_Panel_CreateHeader(hbCurFrame)
+function HealBot_Panel_CreateHeader(hbCurFrame)
     if HealBot_ActiveHeaders[0]>99 then HealBot_ActiveHeaders[0]=1 end
     local tryId,freeId=HealBot_ActiveHeaders[0],nil
     if not HealBot_ActiveHeaders[tryId] then
@@ -539,7 +539,7 @@ function HealBot_Panel_ResetHeaders()
     end
 end
 
-local function HealBot_Panel_DeleteHeader(hdrID, xHeader)
+function HealBot_Panel_DeleteHeader(hdrID, xHeader)
     local hg=_G["HealBot_Action_Header"..hdrID]
     if hdrID<HealBot_ActiveHeaders[0] then HealBot_ActiveHeaders[0]=hdrID end
     hg:Hide();
@@ -551,7 +551,7 @@ function HealBot_Panel_retHealBot_Header_Frames(hbCurFrame)
     return HealBot_Options_copyTable(HealBot_Header_Frames)
 end
 
-local function HealBot_Panel_Anchor2ParentFrame(button, backFrame)
+function HealBot_Panel_Anchor2ParentFrame(button, backFrame)
     local vPostFrameBF=_G["f"..button.frame.."_HealBot_Action"]
     if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]==1 then
         backFrame:SetPoint("TOPLEFT",vPostFrameBF,"TOPLEFT",5,-5);
@@ -564,7 +564,7 @@ local function HealBot_Panel_Anchor2ParentFrame(button, backFrame)
     end
 end
 
-local function HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
+function HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
     if child then
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]<3 then
             backFrame:SetPoint("LEFT",relButton,"RIGHT",backBarsSize[button.frame]["CMARGIN"],0)
@@ -587,7 +587,7 @@ local function HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, ne
     end
 end
 
-local function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
     if newColumn==2 then
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]==1 or
            Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["BARS"]==3 then
@@ -604,7 +604,7 @@ local function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn
     end
 end
 
-local function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
+function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
     backFrame:ClearAllPoints()
     if not relButton then
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
@@ -616,7 +616,7 @@ local function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColum
 end
 
 local vSpecialAnchor={}
-local function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn)
+function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn)
     if xHeader then
         local vPosParentHF=HealBot_Header_Frames[xHeader]
         if not vPosParentHF then
@@ -647,7 +647,7 @@ local function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn)
         
         if HealBot_SpecialUnit[button.unit] then
             local eGUID=UnitGUID(button.unit.."target") or button.unit.."target"
-            local eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,10,11) 
+            local eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,10,11,false,3) 
             if eButton then
                 HealBot_TrackUnit[eButton.unit]=true
                 HealBot_Panel_AnchorButton(eButton, eButton.gref["Back"], button.gref["Back"], 1, true)        
@@ -688,7 +688,7 @@ function HealBot_Panel_resetInitFrames()
 end
 
 local vSetHWFrame,vSetHWextraHeight,vSetHWextraWidth="",0,0
-local function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
+function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
     vSetHWFrame = _G["f"..hbCurFrame.."_HealBot_Action"]
     vSetHWextraHeight=10
     vSetHWextraWidth=10
@@ -729,7 +729,7 @@ function HealBot_Panel_SetNumBars(numTestBars)
     HealBot_noBars=numTestBars
 end
 
-local function HealBot_Panel_TestBarsOff()
+function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBarsActive) do
         local xUnit=b.unit
         HealBot_Action_MarkDeleteButton(b)
@@ -776,7 +776,7 @@ local maxHeaders={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local rowNo={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local barNo={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local headerNo={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
-local function HealBot_Panel_PositionBars()
+function HealBot_Panel_PositionBars()
     local newCol=1
     local sameCol=2
     local emtarPrev=false
@@ -793,6 +793,7 @@ local function HealBot_Panel_PositionBars()
             vPosButton=HealBot_Unit_Button[xUnit] or "nil"
         end
         if vPosButton~="nil" and hbBarsPerFrame[vPosButton.frame] then
+			vPosButton.group=HealBot_UnitGroups[vPosButton.unit]
             vFrame=vPosButton.frame
             rowNo[vFrame]=rowNo[vFrame]+1
             vBar[vFrame]["BUTTON"]=vPosButton
@@ -864,7 +865,7 @@ local function HealBot_Panel_PositionBars()
     end)
 end
 
-local function HealBot_Panel_SetupExtraBars(frame)
+function HealBot_Panel_SetupExtraBars(frame)
     if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] or
        Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["GRPCOLS"] then
         maxRows[frame]=0
@@ -902,7 +903,7 @@ local function HealBot_Panel_SetupExtraBars(frame)
 end
 
 local vSetupBarsOptionsFrame=nil
-local function HealBot_Panel_SetupBars()
+function HealBot_Panel_SetupBars()
     for j=1,5 do
         if hbBarsPerFrame[j] and hbBarsPerFrame[j]>0 then
             if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][j]["SHOW"] or
@@ -1001,7 +1002,7 @@ local function HealBot_Panel_SetupBars()
     end
 end
           
-local function HealBot_Panel_RandomClassColour(tRole)
+function HealBot_Panel_RandomClassColour(tRole)
     local newCol=1
     while newCol>0 do
         if not tRole then
@@ -1023,7 +1024,7 @@ local function HealBot_Panel_RandomClassColour(tRole)
 end
 
 local hbHealButtonsConcat={[1]="", [2]="~", [3]="1"}
-local function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
+function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
     hbHealButtonsConcat[1]=button.unit
     hbHealButtonsConcat[3]="5"
     table.insert(HealBot_Action_HealButtons,table.concat(hbHealButtonsConcat))
@@ -1112,7 +1113,7 @@ local function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
     button:Show()
 end
 
-local function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
+function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
     local k=i[hbCurrentFrame]
     for j=minBar,maxBar do
         if noBars>0 then
@@ -1136,7 +1137,7 @@ local function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
     end
 end
 
-local function HealBot_Panel_TestBarsOn()
+function HealBot_Panel_TestBarsOn()
     if HealBot_Panel_luVars["TestBarsDelAll"] then
         HealBot_Panel_luVars["TestBarsDelAll"]=false
         for _,xButton in pairs(HealBot_Unit_Button) do
@@ -1376,7 +1377,7 @@ function HealBot_Panel_resetTestCols(force)
     end
 end
 
-local function HealBot_cpsUnit(unit,sUnit)
+function HealBot_cpsUnit(unit,sUnit)
     local xUnit=nil
     if unit then
         if unit=="player" then
@@ -1402,13 +1403,13 @@ local function HealBot_cpsUnit(unit,sUnit)
     return xUnit
 end
 
-local function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
+function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
     if unitName and unit and hbGUID then
         unit=HealBot_cpsUnit(nil,unit)
         if not HealBot_TrackUnit[unit] then
             hbGUID="0x"..hbGUID
             local frameNo=tonumber(hbCurFrame) or 1
-            local setButton=HealBot_Action_SetHealButton(unit,hbGUID,frameNo,1);
+            local setButton=HealBot_Action_SetHealButton(unit,hbGUID,frameNo,1,false,3);
             if setButton then
                 hbHealButtonsConcat[1]=unit
                 hbHealButtonsConcat[3]="1"
@@ -1421,7 +1422,7 @@ local function HealBot_Panel_cpSort(unitName, unit, hbGUID, hbCurFrame)
     end
 end
 
-local function HealBot_Panel_enemyBar(eUnit)
+function HealBot_Panel_enemyBar(eUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1
     table.insert(units,eUnit)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
@@ -1433,7 +1434,7 @@ local function HealBot_Panel_enemyBar(eUnit)
     end
 end
 
-local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
+function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"] then
         if HealBot_Data["UILOCK"] then
             if existsShow then
@@ -1449,8 +1450,8 @@ local function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
     end
 end
 
-local vSubSortUnit,vSubSortGUID,vExists="","",false
-local function HealBot_Panel_SubSort(doSubSort,unitType)
+local vSubSortUnit,vSubSortGUID,vExists,vDup,vRole="","",false,false,3
+function HealBot_Panel_SubSort(doSubSort,unitType)
     if doSubSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then
         table.sort(subunits,function (a,b)
             if not suborder[a] or not suborder[b] then
@@ -1466,17 +1467,26 @@ local function HealBot_Panel_SubSort(doSubSort,unitType)
         vSubSortUnit=subunits[j] or "x";
         vSubSortGUID=UnitGUID(vSubSortUnit) or vSubSortUnit
         vExists=false
+		vDup=false
         if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
             if unitType<5 then
                 if HealBot_TrackPrivateUnit[vSubSortUnit] then vExists=true end
+				if HealBot_TrackUnit[vSubSortUnit] then vDup=true end
             else
                 if HealBot_TrackUnit[vSubSortUnit] then vExists=true end
+				if HealBot_TrackPrivateUnit[vSubSortUnit] then vDup=true end
             end
         elseif HealBot_TrackUnit[vSubSortUnit] or HealBot_TrackPrivateUnit[vSubSortUnit] then
             vExists=true
         end
         if not vExists and not HealBot_Panel_BlackList[vSubSortGUID] then
-            if HealBot_Action_SetHealButton(vSubSortUnit,vSubSortGUID,hbCurrentFrame,unitType) then
+			vRole=3
+			if HealBot_MainTanks[vSubSortGUID] then 
+				vRole=1 
+			elseif HealBot_MainHealers[vSubSortGUID] then 
+				vRole=2
+			end
+            if HealBot_Action_SetHealButton(vSubSortUnit,vSubSortGUID,hbCurrentFrame,unitType,vDup,vRole) then
                 if unitType<5 then
                     HealBot_TrackPrivateUnit[vSubSortUnit]=true
                 else
@@ -1500,7 +1510,7 @@ local function HealBot_Panel_SubSort(doSubSort,unitType)
 end
 
 local vSubOrderKey,allowOOR=99,true
-local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
+function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
     vSubOrderKey=99
     if mainSort and Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SHOW"] then
         allowOOR=false
@@ -1592,7 +1602,7 @@ local function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
     return vSubOrderKey
 end
 
-local function HealBot_Panel_insSort(unit, mainSort)
+function HealBot_Panel_insSort(unit, mainSort)
     if unit then
         if mainSort then 
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
@@ -1608,7 +1618,7 @@ local function HealBot_Panel_insSort(unit, mainSort)
     end
 end
 
-local function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
+function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
     local vAddUnitSubGroup=HealBot_UnitGroups[unit] or 0;
     if (vAddUnitSubGroup==0 or Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][vAddUnitSubGroup]) and 
        (Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["INCCLASSES"]==1 or HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame)) then
@@ -1641,7 +1651,7 @@ local function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
 end
 
 local vMainSortIndex,vMainSortKey=0,""
-local function HealBot_Panel_MainSort(doMainSort,unitType)
+function HealBot_Panel_MainSort(doMainSort,unitType)
     if #units>0 then
         if doMainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
             vMainSortIndex=0
@@ -1675,17 +1685,17 @@ local function HealBot_Panel_MainSort(doMainSort,unitType)
     for x,_ in pairs(units) do
         units[x]=nil;
     end
-    --HealBot_setCall("HealBot_Panel_MainSort")
+      --HealBot_setCall("HealBot_Panel_MainSort")
 end
 
-local function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
+function HealBot_Panel_addUnits(doMainSort,unitType,hText,k)
     HealBot_Panel_MainSort(doMainSort,unitType)
     HeaderPos[hbCurrentFrame][k+1] = hText 
-    --HealBot_setCall("HealBot_Panel_addUnits")
+      --HealBot_setCall("HealBot_Panel_addUnits")
 end
 
 local vEnemyIndex,vEnemyLocation,vEnemyBossNum,vEnemyBossExist=0,"",0,false
-local function HealBot_Panel_enemyTargets()
+function HealBot_Panel_enemyTargets()
     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
     vEnemyIndex=i[hbCurrentFrame]
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] then
@@ -1761,7 +1771,7 @@ function HealBot_Panel_validTarget(unit)
 end
 
 local vTargetIndex=0
-local function HealBot_Panel_targetHeals(preCombat)
+function HealBot_Panel_targetHeals(preCombat)
     vTargetIndex=i[hbCurrentFrame]
     if UnitExists("target") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
         if not UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
@@ -1781,7 +1791,7 @@ local function HealBot_Panel_targetHeals(preCombat)
 end
 
 local vVehiclePlayerUnit,vVehicleUnit,vVehicleIndex="","",0
-local function HealBot_Panel_vehicleHeals()
+function HealBot_Panel_vehicleHeals()
     if HEALBOT_GAME_VERSION>3 then
         vVehicleIndex=i[hbCurrentFrame]
         vVehicleUnit="pet"
@@ -1815,7 +1825,7 @@ local function HealBot_Panel_vehicleHeals()
 end
 
 local vPanelPetRole,vPanelPetRoleReturn="",""
-local function HealBot_Panel_petRole(unit)
+function HealBot_Panel_petRole(unit)
     vPanelPetRoleReturn="x"
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]>5 then
         vPanelPetRole=hbPanel_dataRoles[unit] or "x"
@@ -1826,7 +1836,7 @@ local function HealBot_Panel_petRole(unit)
 end
 
 local vPetPlayerUnit,vPetUnit,vPetIndex,vPetPlayerInVehicle,vPetRole,vPetGrp5ID="","",0,false,"",0
-local function HealBot_Panel_petHeals()
+function HealBot_Panel_petHeals()
     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_PETHEALS
     vPetGrp5ID=0
     vPetIndex=i[hbCurrentFrame]
@@ -1897,7 +1907,7 @@ end
 
 local vRaidTargetNum,vRaidUnit,vRaidIndex=0,"",0
 local vRaidPrevSort,vRaidHeadSort,vRaidSubSort,vRaidShowHeader="","","init",false
-local function HealBot_Panel_raidHeals()
+function HealBot_Panel_raidHeals()
     vRaidIndex=i[hbCurrentFrame]
     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==1 or Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==5 then
         HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_EMERGENCYHEALS
@@ -1921,10 +1931,11 @@ local function HealBot_Panel_raidHeals()
             vRaidUnit = "raid"..j;
             if UnitIsUnit(vRaidUnit,"player") then
                 vRaidUnit="player"
+				local _, _, subgroup = GetRaidRosterInfo(j);
                 if MyGroup["GROUP"]>0 then
-                    local _, _, subgroup = GetRaidRosterInfo(j);
                     HeaderPos[MyGroup["FRAME"]][MyGroup["GROUP"]] = HEALBOT_OPTIONS_GROUPHEALS.." "..subgroup;
                 end
+				HealBot_Data["PLAYERGROUP"]=subgroup
             end
             if hbPanel_dataUnits[vRaidUnit] then
                 HealBot_Panel_addUnit(vRaidUnit, 5, hbPanel_dataUnits[vRaidUnit], true)
@@ -2010,7 +2021,7 @@ function HealBot_Panel_validFocus()
 end
 
 local vFocusIndex=0
-local function HealBot_Panel_focusHeals(preCombat)
+function HealBot_Panel_focusHeals(preCombat)
     vFocusIndex=i[hbCurrentFrame]
     if UnitExists("focus") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]>1) then
         if preCombat then
@@ -2035,7 +2046,7 @@ local function HealBot_Panel_focusHeals(preCombat)
 end
 
 local vMyTargetsIndex,vMyTargetsUnit=0,"unknown"
-local function HealBot_Panel_myHeals()
+function HealBot_Panel_myHeals()
     vMyTargetsIndex=i[hbCurrentFrame]
     table.foreach(HealBot_MyHealTargets, function (index,xGUID)
         vMyTargetsUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
@@ -2057,7 +2068,7 @@ local function HealBot_Panel_myHeals()
 end
 
 local vGroupIndex=0
-local function HealBot_Panel_groupHeals()
+function HealBot_Panel_groupHeals()
     vGroupIndex=i[hbCurrentFrame]
     for _,xUnit in ipairs(HealBot_Action_HealGroup) do
         if UnitExists(xUnit) and UnitGUID(xUnit) and hbPanel_dataGUIDs[UnitGUID(xUnit)] then
@@ -2080,7 +2091,7 @@ local function HealBot_Panel_groupHeals()
 end
 
 local vHealIndex=0
-local function HealBot_Panel_healerHeals()
+function HealBot_Panel_healerHeals()
     vHealIndex=i[hbCurrentFrame]
     for xGUID,xUnit in pairs(HealBot_MainHealers) do
         HealBot_Panel_addUnit(xUnit, 2, xGUID, false)
@@ -2091,7 +2102,7 @@ local function HealBot_Panel_healerHeals()
 end
 
 local vTankIndex=0
-local function HealBot_Panel_tankHeals()
+function HealBot_Panel_tankHeals()
     vTankIndex=i[hbCurrentFrame]
     for xGUID,xUnit in pairs(HealBot_MainTanks) do
         HealBot_Panel_addUnit(xUnit, 1, xGUID, false)
@@ -2102,7 +2113,7 @@ local function HealBot_Panel_tankHeals()
 end
 
 local vSelfIndex,vSelfPetIndex,vSelfUnit,vSelfPetUnit=0,0,"player","pet"
-local function HealBot_Panel_selfHeals()
+function HealBot_Panel_selfHeals()
     vSelfIndex=i[hbCurrentFrame]
     HealBot_Panel_luVars["SelfPets"]=false
     HealBot_Panel_addUnit(vSelfUnit, 3, HealBot_Data["PGUID"], false)
@@ -2116,7 +2127,7 @@ local function HealBot_Panel_selfHeals()
     end
 end
 
-local function HealBot_Panel_VehicleChanged()
+function HealBot_Panel_VehicleChanged()
     hbCurrentFrame=6
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"]then
@@ -2145,7 +2156,7 @@ local function HealBot_Panel_VehicleChanged()
 end
 
 local vPetsChangedRole=""
-local function HealBot_Panel_PetsChanged()
+function HealBot_Panel_PetsChanged()
     hbCurrentFrame=7
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
@@ -2177,7 +2188,7 @@ local function HealBot_Panel_PetsChanged()
 end
 
 local vTargetButton=""
-local function HealBot_Panel_TargetChanged(preCombat)
+function HealBot_Panel_TargetChanged(preCombat)
     hbCurrentFrame=8
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
@@ -2203,7 +2214,7 @@ local function HealBot_Panel_TargetChanged(preCombat)
         end
         HealBot_Action_HidePanel(hbCurrentFrame)
     end
-      --HealBot_setCall("HealBot_Panel_TargetChanged")
+        --HealBot_setCall("HealBot_Panel_TargetChanged")
 end
 
 local vFocusParent, vFocusFrame="",""
@@ -2255,7 +2266,7 @@ function HealBot_Panel_TargetChangedCheckFocus()
 end
 
 local vFocusButton=""
-local function HealBot_Panel_FocusChanged(preCombat)
+function HealBot_Panel_FocusChanged(preCombat)
     if HEALBOT_GAME_VERSION>3 then 
         hbCurrentFrame=9
         hbBarsPerFrame[hbCurrentFrame]=0
@@ -2286,7 +2297,7 @@ local function HealBot_Panel_FocusChanged(preCombat)
     end
 end
 
-local function HealBot_Panel_EnemyChanged()
+function HealBot_Panel_EnemyChanged()
     hbCurrentFrame=10
     hbBarsPerFrame[hbCurrentFrame]=0
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
@@ -2321,7 +2332,7 @@ function HealBot_Panel_setCrashProt()
 end
 
 local vIsCrashProt,vPetsWithPlayers=false,false
-local function HealBot_Panel_PlayersChanged()
+function HealBot_Panel_PlayersChanged()
     nraid=GetNumGroupMembers();
     TempMaxH=9;
     
@@ -2401,6 +2412,7 @@ local function HealBot_Panel_PlayersChanged()
             HealBot_Panel_selfHeals()
         else
             MyGroup["GROUP"]=0
+			HealBot_Data["PLAYERGROUP"]=1
             for gl=1,8 do
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["STATE"] then
                     hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
@@ -2520,7 +2532,9 @@ local function HealBot_Panel_PlayersChanged()
 
     end
     HealBot_Panel_SetupBars()
-
+	if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_MarkClearDown() end
+	if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_MarkClearDown() end
+	if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_MarkClearDown() end
 end
 
 function HealBot_Panel_clearcpData()
@@ -2548,7 +2562,7 @@ function HealBot_Panel_RaidUnitName(uName)
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 
-local function HealBot_Panel_DoPartyChanged(preCombat, changeType)
+function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     for xHeader in pairs(HealBot_Track_Headers) do
         HealBot_Track_Headers[xHeader]=false
     end
@@ -2596,7 +2610,7 @@ local function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
         HealBot_Panel_VehicleChanged()
     end
-    HealBot_Update_FastEveryFrame(9)
+    HealBot_Update_FastEveryFrame(2)
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)
@@ -2635,16 +2649,20 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
                     HealBot_Panel_buildDataStore(false, true)
                     HealBot_Panel_DoPartyChanged(preCombat, 2)
                 end
-                HealBot_Panel_DoPartyChanged(preCombat, 3)
-                HealBot_Panel_DoPartyChanged(preCombat, 4)
             else
-                HealBot_nextRecalcParty(3)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
-                HealBot_nextRecalcParty(4)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end
                 HealBot_nextRecalcParty(5)
             end
+			HealBot_Panel_DoPartyChanged(preCombat, 3)
+			HealBot_Panel_DoPartyChanged(preCombat, 4)
         end 
     end
-    --HealBot_setCall("HealBot_Panel_PartyChanged")
+	local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+1
+    if nMembers>HealBot_Globals.AutoCacheSize then	
+		HealBot_Globals.AutoCacheSize=nMembers
+	end
+	HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((8/nMembers),4))
+	HealBot_Update_FastEveryFrame(5)
+      --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

@@ -62,7 +62,7 @@ function HealBot_Skins_ResetSkinWidth(button)
     end
 end
 
-local function HealBot_Skins_setIconAnchors(onBar, position, extra)
+function HealBot_Skins_setIconAnchors(onBar, position, extra)
 	if extra then
 		if onBar==3 then
 			if position==1 then
@@ -148,7 +148,7 @@ local function HealBot_Skins_setIconAnchors(onBar, position, extra)
 	end
 end
 
-local function HealBot_Skins_ResetElement(element)
+function HealBot_Skins_ResetElement(element)
 	if element=="Icons" then
 		for _,xButton in pairs(HealBot_Unit_Button) do
 			xButton.icon.reset=true
@@ -773,7 +773,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             --HealBot_setOptions_Timer(800)
         --end
     end
-    --HealBot_setCall("HealBot_Skins_ResetSkin")
+      --HealBot_setCall("HealBot_Skins_ResetSkin")
 end
 
 function HealBot_Skins_Check_Skin(SkinName)
@@ -1594,5 +1594,5 @@ function HealBot_Skins_Check_Skin(SkinName)
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1
         end
     end
-    --HealBot_setCall("HealBot_Skins_Check_Skin")
+      --HealBot_setCall("HealBot_Skins_Check_Skin")
 end

@@ -1,10 +1,10 @@
 ## Interface: 80300
 ## Title: HealBot Extra Skins
 ## Author: Strife
-## Notes: Large store of extra skins for HealBot.
+## Notes: Large store of extra skins for HealBot, can be imported on the Options Import/Export tab.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 8.3.7.3
+## Version: 8.3.7.4
 
 HealBot_ExtraSkins.lua
 

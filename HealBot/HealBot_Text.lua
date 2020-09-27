@@ -90,18 +90,18 @@ end
 
 local tConcat={}
 local tabconcat=table.concat
-local function HealBot_Text_Concat(elements)
+function HealBot_Text_Concat(elements)
     return tabconcat(tConcat,"",1,elements)
 end
 
 local tHealthConcat={}
 local tabconcat=table.concat
-local function HealBot_Text_HealthConcat(elements)
+function HealBot_Text_HealthConcat(elements)
     return tabconcat(tHealthConcat,"",1,elements)
 end
 
 local vSetTextLenWidthAdj,vSetTextLenFontAdj=1.1,0
-local function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
+function HealBot_Text_setEnemyTextLen(bWidth, eBarID)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
         vSetTextLenFontAdj=hbFontVal[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["FONT"]] or 2
         HealBot_Text_EnemySizeWidth["NAME"][eBarID] = floor((vSetTextLenFontAdj*2)+HealBot_Globals.tsadjmod+((bWidth*vSetTextLenWidthAdj)
@@ -148,7 +148,7 @@ function HealBot_Text_setTextLen(curFrame)
             hbBarHealthTextLen[curFrame] = floor(hbBarHealthTextLen[curFrame]*(0.52+(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["HOFFSET2"]/100)))
         end
     end
-    --HealBot_setCall("HealBot_Text_setTextLen")
+      --HealBot_setCall("HealBot_Text_setTextLen")
 end
 
 function HealBot_Text_setEnemySizeWidth(vName, vValue)
@@ -216,7 +216,7 @@ function HealBot_Text_sethbNumberFormat()
         end
         
     end
-    --HealBot_setCall("HealBot_Text_sethbNumberFormat")
+      --HealBot_setCall("HealBot_Text_sethbNumberFormat")
 end
 
 function HealBot_Text_sethbAggroNumberFormat()
@@ -247,11 +247,11 @@ function HealBot_Text_sethbAggroNumberFormat()
             aggroNumFormatSurRa[j]=""
         end
     end
-    --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
+      --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
 end
 
 local atcR, atcG, atcB=1,1,1
-local function HealBot_Text_TextNameColours(button)
+function HealBot_Text_TextNameColours(button)
     if button.status.current==9 then
         if UnitHasIncomingResurrection(button.unit) then
             atcR,atcG,atcB=0.2, 1.0, 0.2
@@ -280,12 +280,12 @@ local function HealBot_Text_TextNameColours(button)
         atcG=button.health.gcol
         atcB=0
     end
-    --HealBot_setCall("HealBot_Text_TextNameColours")
+      --HealBot_setCall("HealBot_Text_TextNameColours")
     return atcR,atcG,atcB
 end
 
 local athcR, athcG, athcB=1,1,1
-local function HealBot_Text_TextHealthColours(button)
+function HealBot_Text_TextHealthColours(button)
     if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==3 or
       ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] and button.aura.debuff.type) then
         athcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"];
@@ -300,13 +300,13 @@ local function HealBot_Text_TextHealthColours(button)
         athcG=button.health.gcol
         athcB=0
     end
-    --HealBot_setCall("HealBot_Text_TextNameColours")
+      --HealBot_setCall("HealBot_Text_TextNameColours")
     return athcR,athcG,athcB
 end
 
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
 local hbAbs=math.abs
-local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
+function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     vShortHealTxtAbsNum=hbAbs(amount)
     if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
         if hbNumFormats["Places"][hbCurFrame]<3 then 
@@ -336,33 +336,13 @@ local function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     else
         return amount, vTextChars["Nothing"]
     end
-    --HealBot_setCall("HealBot_Text_shortHealTxt")
+      --HealBot_setCall("HealBot_Text_shortHealTxt")
 end
 
 local vHealthTextConcatIndex,vHealthTextConcatResult,vSetHealthTextStrLen,vSetHealthTextBtnLen=0,"",0,0
 local vHealthTextTotal,sepHealTxt,absorbinTxt,ahtNumSuffix,ahitNumSuffix,ignoreInHeals=0,0,0,"","",false
-local vVehicleUnit,vVehicleName,vVehicleHealth,vVehicleMaxHealth,vVehicleHealthPct,vVehicleStrLen,vVehicleBtnLen="","",0,0,0,0,0
 function HealBot_Text_setHealthText(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and button.health.max then
-        vVehicleUnit=false
-        if HEALBOT_GAME_VERSION>3 and UnitInVehicle(button.unit) then
-            vVehicleUnit=HealBot_UnitPet(button.unit)
-            if vVehicleUnit then
-                vVehicleName=UnitName(vVehicleUnit)
-                if vVehicleName then
-                    vVehicleHealth=UnitHealth(vVehicleUnit)
-                    vVehicleMaxHealth=UnitHealthMax(vVehicleUnit)
-                    vVehicleHealthPct = floor((vVehicleHealth/vVehicleMaxHealth)*100)
-                    if vVehicleHealthPct < 1 then 
-                        vVehicleHealthPct = 1
-                    end
-                    vVehicleStrLen=hbStringLen(hbutf8sub(vVehicleName, "%s+", ""))
-                    vVehicleBtnLen=hbBarTextLen[button.frame]-vVehicleStrLen
-                else
-                    vVehicleUnit=false
-                end
-            end
-        end
         tHealthConcat[1]=hbNumFormats["SurroundLeft"][button.frame]
         if button.status.current<9 and (Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] and 
           button.health.current==button.health.max) then
@@ -541,19 +521,6 @@ function HealBot_Text_setHealthText(button)
             tHealthConcat[vHealthTextConcatIndex+5]=aggroNumFormatSurRa[button.frame]
             vHealthTextConcatIndex=vHealthTextConcatIndex+5
         end
-        if vVehicleUnit then
-            tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Newline"]
-            if vVehicleBtnLen<1 then
-                tHealthConcat[vHealthTextConcatIndex+2]=hbStringSub(vVehicleName,1,hbBarTextLen[button.frame])
-                tHealthConcat[vHealthTextConcatIndex+3]=vTextChars["Dot"]
-            else
-                tHealthConcat[vHealthTextConcatIndex+2]=vVehicleName
-                tHealthConcat[vHealthTextConcatIndex+3]=vTextChars["Space"]
-            end
-            tHealthConcat[vHealthTextConcatIndex+4]=vTextChars["Space"]
-            tHealthConcat[vHealthTextConcatIndex+5]=vVehicleHealthPct
-            vHealthTextConcatIndex=vHealthTextConcatIndex+5
-        end
         vHealthTextConcatResult=HealBot_Text_HealthConcat(vHealthTextConcatIndex)
 
         vSetHealthTextStrLen=hbStringLen(hbutf8sub(vHealthTextConcatResult, "%s+", ""))
@@ -589,7 +556,7 @@ function HealBot_Text_setHealthText(button)
             button.text.nameupdate=true
         end
     end
-    --HealBot_setCall("HealBot_Text_setHealthText")
+      --HealBot_setCall("HealBot_Text_setHealthText")
 end
 
 local prevTag=""
@@ -615,7 +582,7 @@ function HealBot_Text_setNameTag(button)
     if prevTag~=button.text.tag then
         HealBot_Text_setNameText(button)
     end
-    --HealBot_setCall("HealBot_Text_setNameTag")
+      --HealBot_setCall("HealBot_Text_setNameTag")
 end
 
 local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen,vHealthTextConcatIndex="","","",0,0,0
@@ -703,7 +670,7 @@ function HealBot_Text_setNameText(button)
         button.text.name=vSetNameTextName
         button.text.nameupdate=true
     end
-    --HealBot_setCall("HealBot_Text_setNameText")
+      --HealBot_setCall("HealBot_Text_setNameText")
 end
 
 local atR, atG, atB, atA=0, 0, 0, 0
@@ -738,7 +705,7 @@ function HealBot_Text_SetText(button)
         end
         button.gref.txt["text2"]:SetText(button.text.health)
     end
-    --HealBot_setCall("HealBot_Text_SetText")
+      --HealBot_setCall("HealBot_Text_SetText")
 end
 
 function HealBot_Text_UpdateNames()

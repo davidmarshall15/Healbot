@@ -130,8 +130,9 @@ function HealBot_Comms_Zone()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID.."#Group="..GetNumGroupMembers())
 end
 
+local mult=0
 function HealBot_Comm_round(num, idp)
-    local mult = 10^(idp or 0)
+    mult = 10^(idp or 0)
     return math.floor(num * mult + 0.5) / mult
 end
 

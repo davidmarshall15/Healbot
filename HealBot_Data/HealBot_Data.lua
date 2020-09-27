@@ -159,7 +159,7 @@ HealBot_Config_CuresDefaults = {
   DebuffWatchWhenGrouped = false,
   ShowDebuffWarning = true,
   AlwaysShowBoss = true,
-  AlwaysShowTimed = true,
+  AlwaysShowTimed = false,
   ShowTimeMaxDuration = 31,
   CDCshownHB=true,
   HealBot_CDCWarnRange_Bar=3,
@@ -233,6 +233,11 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
+		PluginThreat=true,
+		PluginTimeToDie=true,
+		PluginTimeToLive=true,
+		PluginEffectiveTanks=true,
+		PluginEfficientHealers=true,
 		OptionsOpacityAdj=35,
 		OptionsTheme=1,
         DebugOut=false,
@@ -266,7 +271,6 @@ function HealBot_Data_InitVars()
         SmartCastHeal = false,
         SmartCastRes = true,
         AutoCacheSize=20,
-        RangeCheckFreq=5,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},
@@ -3266,6 +3270,7 @@ HealBot_Data={  ["TIPBUTTON"] = false,
                 ["MAPID"] = 0,
                 ["UNITSLOCK"] = false,
                 ["POWERTYPE"]= 0,
+                ["PLAYERGROUP"]= 1,
 };
 
 HealBot_Spell_IDs = {};
