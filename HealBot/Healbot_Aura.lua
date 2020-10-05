@@ -2329,6 +2329,5 @@ function HealBot_Aura_InitData()
                 [(GetSpellInfo(HEALBOT_BATTLE_SHOUT) or "x")] = HBC_STAMINA_ID,
             }
         end
-        HealBot_setOptions_Timer(9920)
     end
 end

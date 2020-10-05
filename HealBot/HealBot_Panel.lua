@@ -2441,6 +2441,7 @@ function HealBot_Panel_PlayersChanged()
             end
         end   
         
+		HealBot_Panel_luVars["MarkClearDown"]=false
         for xUnit,xButton in pairs(HealBot_Unit_Button) do
             if xButton.status.unittype>4 and xButton.status.unittype<7 then
                 if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
@@ -2448,6 +2449,7 @@ function HealBot_Panel_PlayersChanged()
                     xButton:Show()
                 else
                     HealBot_Action_MarkDeleteButton(xButton)
+					HealBot_Panel_luVars["MarkClearDown"]=true
                 end
             elseif xButton.status.unittype<5 or xButton.status.unittype>10 then
                 HealBot_Unit_Button[xUnit]=nil
@@ -2462,6 +2464,7 @@ function HealBot_Panel_PlayersChanged()
 					HealBot_Panel_luVars["NumPrivate"]=HealBot_Panel_luVars["NumPrivate"]+1
                 else
                     HealBot_Action_MarkDeleteButton(xButton)
+					HealBot_Panel_luVars["MarkClearDown"]=true
                 end
             else
                 HealBot_Private_Button[xUnit]=nil
@@ -2532,9 +2535,11 @@ function HealBot_Panel_PlayersChanged()
 
     end
     HealBot_Panel_SetupBars()
-	if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_MarkClearDown() end
-	if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_MarkClearDown() end
-	if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_MarkClearDown() end
+	if HealBot_Panel_luVars["MarkClearDown"] then
+		if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_MarkClearDown() end
+		if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_MarkClearDown() end
+		if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_MarkClearDown() end
+	end
 end
 
 function HealBot_Panel_clearcpData()
@@ -2658,7 +2663,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
 			HealBot_Panel_DoPartyChanged(preCombat, 4)
         end 
     end
-	local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+1
+	local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+5
     if nMembers>HealBot_Globals.AutoCacheSize then	
 		HealBot_Globals.AutoCacheSize=nMembers
 	end

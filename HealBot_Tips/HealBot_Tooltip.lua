@@ -879,24 +879,28 @@ function HealBot_Action_RefreshTargetTooltip(button)
 end
 
 function HealBot_Tooltip_Options_Show(noLines)
-    if HealBot_Tooltip_luVars["doInit"] then
-        HealBot_Tooltip_luVars["doInit"]=false
-        HealBot_Tooltip_InitFont()
-    end
-    local height = 20 
-    local width = 0
-    for x = 1, noLines do
-        local txtL = _G["HealBot_TooltipTextL" .. x]
-        height = height + txtL:GetHeight() + 2
-        if (txtL:GetWidth() + 25 > width) then
-            width = txtL:GetWidth() + 25
-        end
-    end
-    HealBot_Tooltip:SetWidth(width)
-    HealBot_Tooltip:SetHeight(height)        
-    HealBot_Tooltip:SetScale(1.01);
-    HealBot_Tooltip:SetScale(1);
-    HealBot_Tooltip:Show();
+	if HealBot_Globals.UseGameTooltip then
+        GameTooltip:Show();
+    else
+		if HealBot_Tooltip_luVars["doInit"] then
+			HealBot_Tooltip_luVars["doInit"]=false
+			HealBot_Tooltip_InitFont()
+		end
+		local height = 20 
+		local width = 0
+		for x = 1, noLines do
+			local txtL = _G["HealBot_TooltipTextL" .. x]
+			height = height + txtL:GetHeight() + 2
+			if (txtL:GetWidth() + 25 > width) then
+				width = txtL:GetWidth() + 25
+			end
+		end
+		HealBot_Tooltip:SetWidth(width)
+		HealBot_Tooltip:SetHeight(height)        
+		HealBot_Tooltip:SetScale(1.01);
+		HealBot_Tooltip:SetScale(1);
+		HealBot_Tooltip:Show();
+	end
 end
 
 local tLine={}
@@ -914,23 +918,37 @@ function HealBot_Tooltip_OptionsHelp(title,text)
         end
     end
     local linenum=1
-    HealBot_Tooltip_SetLineLeft(title,1,1,1,linenum,1)
-    linenum=linenum+1
-    HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
-    for l=1,#tLine do 
-        linenum=linenum+1
-        HealBot_Tooltip_SetLineLeft(tLine[l],0.8,0.8,0.8,linenum,1)
-    end
+	local x, y = GetCursorPosition();
+	x=x/UIParent:GetScale();
+	y=y/UIParent:GetScale();
     local g=_G["HealBot_Options"]
-    HealBot_Tooltip:ClearAllPoints();
---    HealBot_Tooltip:SetPoint("TOPLEFT",g,"TOPRIGHT");
-    local x, y = GetCursorPosition();
-    x=x/UIParent:GetScale();
-    y=y/UIParent:GetScale();
-    HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
+	if HealBot_Globals.UseGameTooltip then
+		GameTooltip:SetOwner(g, "ANCHOR_NONE")
+        GameTooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
+        GameTooltip:AddLine(title,1,1,1)
+        GameTooltip:AddLine("    ",1,1,1)
+	else
+		HealBot_Tooltip:ClearAllPoints();
+		HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
+		HealBot_Tooltip_SetLineLeft(title,1,1,1,linenum,1)
+		linenum=linenum+1
+		HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
+	end
+    for l=1,#tLine do 
+		if HealBot_Globals.UseGameTooltip then
+			GameTooltip:AddLine(tLine[l],0.8,0.8,0.8)
+		else
+			linenum=linenum+1
+			HealBot_Tooltip_SetLineLeft(tLine[l],0.8,0.8,0.8,linenum,1)
+		end
+    end
     HealBot_Tooltip_Options_Show(linenum)
 end
 
 function HealBot_Tooltip_OptionsHide()
-    HealBot_Tooltip:Hide()
+	if HealBot_Globals.UseGameTooltip then
+		GameTooltip:Hide()
+	else
+		HealBot_Tooltip:Hide()
+	end
 end

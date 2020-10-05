@@ -71,7 +71,7 @@ HealBot_luVars["showReloadMsg"]=true
 HealBot_luVars["overhealUnit"]="-nil-"
 HealBot_luVars["overhealCastID"]="-nil-"
 HealBot_luVars["overhealAmount"]=0
-HealBot_luVars["FLUIDFREQ"]=50
+HealBot_luVars["FLUIDFREQ"]=40
 HealBot_luVars["FLUIDSTATEFREQ"]=0.05
 HealBot_luVars["cpLoadTime"]=TimeNow+3
 HealBot_luVars["ChatMSG"]=""
@@ -705,14 +705,6 @@ function HealBot_SlashCmd(cmd)
 		else
 			HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Tip="..HealBot_luVars["TipUpdateFreq"].." Bars="..HealBot_luVars["TipUpdateFreq"].." UnitSlow="..HealBot_luVars["UnitSlowUpdateFreq"])
 		end
-		xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
-		if xButton.status.plugin then
-			HealBot_AddDebug("button.status.plugin is true")
-		else
-			HealBot_AddDebug("button.status.plugin is false")
-		end
-		xButton.status.current=9
-		HealBot_Plugin_TimeToLive_UnitUpdate(xButton, true)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -738,7 +730,6 @@ function HealBot_ToggleSuppressSetting(settingType)
             HealBot_Globals.MacroSuppressSound=1
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_MACROSOUNDOFF)
         end
-        HealBot_setOptions_Timer(9920)
         HealBot_Comms_MacroSuppressSound()
     elseif settingType=="error" then
         if HealBot_Globals.MacroSuppressError==1 then
@@ -748,7 +739,6 @@ function HealBot_ToggleSuppressSetting(settingType)
             HealBot_Globals.MacroSuppressError=1
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_MACROERROROFF)
         end
-        HealBot_setOptions_Timer(9920)
         HealBot_Comms_MacroSuppressError()
     end
       --HealBot_setCall("HealBot_ToggleSuppressSetting")
@@ -842,6 +832,9 @@ function HealBot_UpdateUnit(button)
         if button.status.dirarrowshown then HealBot_Action_ShowDirectionArrow(button) end
         HealBot_Action_CheckUnitLowMana(button)
         button.mana.reset=true
+		button.health.updincoming=true
+		button.health.updabsorbs=true
+		button.health.update=true
     else
         button.guid=button.unit
         if button.status.unittype==7 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
@@ -853,10 +846,9 @@ function HealBot_UpdateUnit(button)
         end
         if button.status.dirarrowshown then HealBot_Action_HideDirectionArrow(button) end
         HealBot_Aura_RemoveIcons(button)
+		HealBot_OnEvent_UnitHealth(button)
+		button.status.classknown=false
     end
-    button.health.updincoming=true
-    button.health.updabsorbs=true
-	button.health.update=true
 	button.mana.update=true
     HealBot_clearAllAuxBar(button)
     button.text.nameupdate=true
@@ -1639,7 +1631,7 @@ function HealBot_HealsInUpdate(button)
         button.health.overheal=0
         HealBot_ClearAuxOverHealBar(button)
         HealBot_Text_setHealthText(button)
-        if not HealBot_luVars["FluidInUse"] then
+        if not HealBot_luVars["FluidInUse"] or not UnitExists(button.unit) then
             button.gref["InHeal"]:SetValue(0)
         end
         button.health.inheala=0
@@ -1693,7 +1685,7 @@ function HealBot_AbsorbsUpdate(button)
         button.health.absorbs=0
         HealBot_Text_setHealthText(button)
         button.health.absorba=0
-        if not HealBot_luVars["FluidInUse"] then
+        if not HealBot_luVars["FluidInUse"] or not UnitExists(button.unit) then
             button.gref["Absorb"]:SetValue(0)
         end
         HealBot_Action_UpdateAbsorbStatusBarColor(button)
@@ -1814,7 +1806,7 @@ function HealBot_Set_Timers()
 		else
 			HealBot_Timers["fastUpdateFreq"]=0.11
 		end
-		HealBot_Timers["slowUpdateFreq"]=4
+		HealBot_Timers["slowUpdateFreq"]=1
         HealBot_Options_BarFreq_setVars()
         if HealBot_Globals.OverrideEffects["USE"]==1 then
             HealBot_luVars["OFREQ"]=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OFREQ"]*0.5
@@ -1822,7 +1814,7 @@ function HealBot_Set_Timers()
             HealBot_luVars["OFREQ"]=HealBot_Globals.OverrideEffects["OFREQ"]*0.5
         end
     else
-        HealBot_Timers["slowUpdateFreq"]=10
+        HealBot_Timers["slowUpdateFreq"]=2
         HealBot_Timers["fastUpdateFreq"]=1
     end
 end
@@ -2250,8 +2242,9 @@ function HealBot_OnEvent_VariablesLoaded(self)
         HealBot_Options_InitVars()
         HealBot_Options_setLists()
 		
-		if HealBot_Globals.AutoCacheSize>10 then
-			HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-5
+		if HealBot_Globals.AutoCacheSize>20 and (HealBot_Globals.AutoCacheTime or 0)<TimeNow then
+			HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
+			HealBot_Globals.AutoCacheTime=TimeNow+(60*60*24)
 		end
         
         if HealBot_Globals.localLang then
@@ -2352,6 +2345,7 @@ function HealBot_ResetOnSpecChange(spec)
 	HealBot_Options_setDebuffTypes()
 	HealBot_setOptions_Timer(30)
 	HealBot_setOptions_Timer(50)
+	HealBot_Action_PrepSetAllAttribs(nil,nil,nil,true)
 	HealBot_setOptions_Timer(9920)
 	HealBot_setOptions_Timer(176)
 end
@@ -2976,9 +2970,9 @@ end
 local health,healthMax,bptc=0,0,0
 function HealBot_OnEvent_UnitHealth(button)
     button.health.update=false
-    if button.health.updincoming then HealBot_HealsInUpdate(button) end
-    if button.health.updabsorbs then HealBot_AbsorbsUpdate(button) end
     if UnitExists(button.unit) then
+		if button.health.updincoming then HealBot_HealsInUpdate(button) end
+		if button.health.updabsorbs then HealBot_AbsorbsUpdate(button) end
 		if HealBot_luVars["adjMaxHealth"] then HealBot_MaxHealth() end
         if UnitIsFeignDeath(button.unit) and UnitHealth(button.unit)==0 then
             health,healthMax=button.health.current,button.health.max
@@ -3006,6 +3000,11 @@ function HealBot_OnEvent_UnitHealth(button)
                 HealBot_Action_UpdateHealthButton(button)
             end
         end
+		if button.health.current==0 and button.status.current<9 then HealBot_Action_UpdateTheDeadButton(button) end
+	else
+		button.gref["Bar"]:SetValue(0)
+		HealBot_HealsInUpdate(button)
+		HealBot_AbsorbsUpdate(button)
     end
       --HealBot_setCall("HealBot_OnEvent_UnitHealth")
 end
@@ -3406,13 +3405,14 @@ function HealBot_Update_Slow()
 					end
 				end
 			elseif HealBot_luVars["slowSwitch"]<3 then
-				HealBot_Action_DeleteMarkedButtons()
-			elseif HealBot_luVars["slowSwitch"]<4 then
 				HealBot_Aura_BuffIdLookup()
 			else
 				HealBot_Comms_SendAddonMessage()
 				HealBot_luVars["slowSwitch"]=0
 			end
+		end
+		if HealBot_Action_DeleteMarkedButtons() then
+			HealBot_Timers["slowUpdate"]=TimeNow+0.25
 		end
     end
     if HealBot_luVars["Help"] then 
@@ -3915,7 +3915,9 @@ function HealBot_OnUpdate(self)
     if HealBot_Timers["slowUpdate"]<TimeNow then
         if HealBot_luVars["TestBarsOn"] then
             HealBot_Timers["slowUpdate"]=TimeNow+(HealBot_Timers["fastUpdateFreq"]*2)
-        else
+        elseif HealBot_luVars["Help"] then
+			HealBot_Timers["slowUpdate"]=TimeNow+0.5
+		else
             HealBot_Timers["slowUpdate"]=TimeNow+HealBot_Timers["slowUpdateFreq"]
         end
 		HealBot_Update_Slow()
@@ -4229,8 +4231,10 @@ function HealBot_Plugin_ThreatUpdate(guid)
 	if unit and UnitExists(unit) then
 		if HealBot_Unit_Button[unit] and HealBot_Unit_Button[unit].status.plugin then
 			HealBot_CalcThreat(HealBot_Unit_Button[unit])
+			HealBot_Plugin_Threat_UnitUpdate(HealBot_Unit_Button[unit])
 		elseif HealBot_Private_Button[unit] and HealBot_Private_Button[unit].status.plugin then
 			HealBot_CalcThreat(HealBot_Private_Button[unit])
+			HealBot_Plugin_Threat_UnitUpdate(HealBot_Private_Button[unit])
 		else
 			HealBot_Plugin_ThreatRemoveUnit(guid)
 		end

@@ -3384,10 +3384,10 @@ function HealBot_Options_BarFreq_setVars()
     local fluidFreq=0
     local stateFreq=0
     if HealBot_Globals.OverrideEffects["USE"]==1 then
-        fluidFreq=1+Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
+        fluidFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
         stateFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/200
     else
-        fluidFreq=1+HealBot_Globals.OverrideEffects["FLUIDFREQ"]
+        fluidFreq=HealBot_Globals.OverrideEffects["FLUIDFREQ"]
         stateFreq=HealBot_Globals.OverrideEffects["FLUIDFREQ"]/200
     end
     HealBot_Action_setLuVars("FLUIDFREQ", fluidFreq)
@@ -3403,7 +3403,7 @@ function HealBot_Options_OverrideBarFreq_OnValueChanged(self)
         self:SetValue(val) 
     elseif HealBot_Globals.OverrideEffects["FLUIDFREQ"]~=val then
         HealBot_Globals.OverrideEffects["FLUIDFREQ"] = val;
-        HealBot_setOptions_Timer(4940)
+        HealBot_Set_Timers()
     end
 end
 
@@ -3413,7 +3413,7 @@ function HealBot_Options_BarFreq_OnValueChanged(self)
         self:SetValue(val) 
     elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]~=val then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] = val;
-        HealBot_setOptions_Timer(4940)
+        HealBot_Set_Timers()
     end
 end
 
@@ -4613,11 +4613,17 @@ function HealBot_Options_ShowTooltipMouseWheel_OnClick(self)
 end
 
 function HealBot_Options_ShowTooltipUseGameTip_OnClick(self)
+	if HealBot_Data["TIPUSE"] then
+		HealBot_Tooltip_OptionsHide()
+	end
     if self:GetChecked() then
         HealBot_Globals.UseGameTooltip = true
     else
         HealBot_Globals.UseGameTooltip = false
     end
+	if HealBot_Data["TIPUSE"] then
+		HealBot_Options_Show_Help("TOOLTIPGAMETIP",true)
+	end
 end
 
 function HealBot_Options_ShowTooltipShowHoT_OnClick(self)
@@ -9684,7 +9690,6 @@ function HealBot_Options_setAuxBars()
             end
         end
     end
-    --HealBot_setOptions_Timer(9920)
 end
 
 function HealBot_Options_AuxBarOpacityType_DropDown()
@@ -10398,7 +10403,7 @@ function HealBot_Options_LoadSpellsb_OnClick()
                     local cText=HealBot_Action_GetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec)
                     if not cText or (cText and strlen(cText)<2) or HealBot_Options_StorePrev["InMethodSpell"]<3 then
                         HealBot_Action_SetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec, sName)
-                        HealBot_Options_KnownSpellCheck(sName)
+                        HealBot_Options_KnownSpellCheck(sName,cType,HealBot_Keys_List[KeyPress],Buttons_Button)
                         HealBot_SpellAutoButton_Update("Target", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTar)
                         HealBot_SpellAutoButton_Update("Trinket1", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin1)
                         HealBot_SpellAutoButton_Update("Trinket2", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin2)
@@ -10413,7 +10418,6 @@ function HealBot_Options_LoadSpellsb_OnClick()
             HealBot_Options_ResetDoInittab(2)
             HealBot_Options_Init(2)
             HealBot_Options_ComboClass_Text()
-            HealBot_Action_SetAllAttribs()
         end
     end
 end
@@ -12520,55 +12524,25 @@ function HealBot_Options_getDropDownId_bySpec(ddId)
     return HealBot_Config.CurrentSpec..ddId
 end
 
+local hbComboButtons={
+						[1]={["BTN"]="Left",     ["TXT"]=HEALBOT_OPTIONS_BUTTONLEFT},
+						[2]={["BTN"]="Middle",   ["TXT"]=HEALBOT_OPTIONS_BUTTONMIDDLE},
+						[3]={["BTN"]="Right",    ["TXT"]=HEALBOT_OPTIONS_BUTTONRIGHT},
+						[4]={["BTN"]="Button4",  ["TXT"]=HEALBOT_OPTIONS_BUTTON4},
+						[5]={["BTN"]="Button5",  ["TXT"]=HEALBOT_OPTIONS_BUTTON5},
+						[6]={["BTN"]="Button6",  ["TXT"]=HEALBOT_OPTIONS_BUTTON6},
+						[7]={["BTN"]="Button7",  ["TXT"]=HEALBOT_OPTIONS_BUTTON7},
+						[8]={["BTN"]="Button8",  ["TXT"]=HEALBOT_OPTIONS_BUTTON8},
+						[9]={["BTN"]="Button9",  ["TXT"]=HEALBOT_OPTIONS_BUTTON9},
+					   [10]={["BTN"]="Button10", ["TXT"]=HEALBOT_OPTIONS_BUTTON10},
+					   [11]={["BTN"]="Button11", ["TXT"]=HEALBOT_OPTIONS_BUTTON11},
+					   [12]={["BTN"]="Button12", ["TXT"]=HEALBOT_OPTIONS_BUTTON12},
+					   [13]={["BTN"]="Button13", ["TXT"]=HEALBOT_OPTIONS_BUTTON13},
+					   [14]={["BTN"]="Button14", ["TXT"]=HEALBOT_OPTIONS_BUTTON14},
+					   [15]={["BTN"]="Button15", ["TXT"]=HEALBOT_OPTIONS_BUTTON15},
+                     }
 function HealBot_Options_ComboClass_Button(bNo)
-    local button, lButton=nil, nil
-    if bNo==2 then 
-        button = "Middle"
-        lButton = HEALBOT_OPTIONS_BUTTONMIDDLE
-    elseif bNo==3 then 
-        button = "Right"
-        lButton = HEALBOT_OPTIONS_BUTTONRIGHT
-    elseif bNo==4 then 
-        button = "Button4"
-        lButton = HEALBOT_OPTIONS_BUTTON4
-    elseif bNo==5 then 
-        button = "Button5"
-        lButton = HEALBOT_OPTIONS_BUTTON5
-    elseif bNo==6 then 
-        button = "Button6"
-        lButton = HEALBOT_OPTIONS_BUTTON6
-    elseif bNo==7 then 
-        button = "Button7"
-        lButton = HEALBOT_OPTIONS_BUTTON7
-    elseif bNo==8 then 
-        button = "Button8"
-        lButton = HEALBOT_OPTIONS_BUTTON8
-    elseif bNo==9 then 
-        button = "Button9"
-        lButton = HEALBOT_OPTIONS_BUTTON9
-    elseif bNo==10 then 
-        button = "Button10"
-        lButton = HEALBOT_OPTIONS_BUTTON10
-    elseif bNo==11 then
-        button = "Button11"
-        lButton = HEALBOT_OPTIONS_BUTTON11
-    elseif bNo==12 then
-        button = "Button12"
-        lButton = HEALBOT_OPTIONS_BUTTON12
-    elseif bNo==13 then
-        button = "Button13"
-        lButton = HEALBOT_OPTIONS_BUTTON13
-    elseif bNo==14 then
-        button = "Button14"
-        lButton = HEALBOT_OPTIONS_BUTTON14
-    elseif bNo==15 then
-        button = "Button15"
-        lButton = HEALBOT_OPTIONS_BUTTON15
-    else 
-        button = "Left"
-        lButton = HEALBOT_OPTIONS_BUTTONLEFT
-    end
-    return button, lButton;
+	return hbComboButtons[bNo]["BTN"], hbComboButtons[bNo]["TXT"]
 end
 
 local tIDs={ [1]=1,   [2]=2,   [3]=3,   [4]=4,   [5]=5, 
@@ -13516,11 +13490,18 @@ function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
     else
         HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "false")
     end
+	HealBot_Action_PrepSetAllAttribs("Enemy",autoMod,HealBot_Options_ComboButtons_Button)
+	HealBot_Action_PrepSetAllAttribs("Enabled",autoMod,HealBot_Options_ComboButtons_Button)
     HealBot_setOptions_Timer(9920)
 end
 
-function HealBot_Options_KnownSpellCheck(sName)
+function HealBot_Options_KnownSpellCheck(sName,status,key,bNo)
     if HealBot_Spell_Names[sName] or GetMacroIndexByName(sName) or IsUsableItem(sName) then
+		if status=="ENEMY" then
+			HealBot_Action_PrepSetAllAttribs("Enemy",key,bNo)
+		else
+			HealBot_Action_PrepSetAllAttribs("Enabled",key,bNo)
+		end
         HealBot_setOptions_Timer(9920)
     end
 end
@@ -13536,7 +13517,7 @@ local function HealBot_Options_DoOnTextChanged(self, key)
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
     spellText = strtrim(self:GetText())
     HealBot_Action_SetSpell(cType, key..button..HealBot_Config.CurrentSpec, spellText)
-    HealBot_Options_KnownSpellCheck(spellText)
+    HealBot_Options_KnownSpellCheck(spellText,cType,key,HealBot_Options_ComboButtons_Button)
     HealBot_Options_SoftReset_flag=true
 end
 
@@ -13678,7 +13659,8 @@ function HealBot_Options_SetDefaults()
     HealBot_runDefaults()
     HealBot_Options_Opened=false;
     HealBot_Action_Reset();
-    HealBot_Action_SetAllAttribs()
+	HealBot_Action_PrepSetAllAttribs(nil,nil,nil,true)
+    HealBot_setOptions_Timer(9920)
     HealBot_Options:Hide()
     for x in pairs (Healbot_Config_Skins.Skins) do
         HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
@@ -13977,7 +13959,7 @@ end
 function HealBot_Options_Close()
     if HealBot_Options_SoftReset_flag then
         HealBot_Options_SoftReset_flag=false
-        HealBot_setOptions_Timer(9920)
+        --HealBot_setOptions_Timer(9920)
     end
 end
 
@@ -14548,14 +14530,6 @@ function HealBot_Options_Init(tabNo)
     end
 end
 
-function HealBot_Options_ResetSpellsHealperDropdown(ddType)
-    if ddType=="SPELLS" then
-        DoneInitTab[201]=nil
-        HealBot_Options_InitSub(201)
-        HealBot_Action_SetAllAttribs()
-    end
-end
-
 function HealBot_Options_InitSub(subNo)
     if subNo<400 then
         HealBot_Options_InitSub1(subNo)
@@ -14639,7 +14613,7 @@ function HealBot_Options_InitSub1(subNo)
             end
             HealBot_Options_OverrideUseFluidBars:SetChecked(HealBot_Globals.OverrideEffects["FLUIDBARS"])
             HealBot_Options_SetText(HealBot_Options_OverrideUseFluidBars,HEALBOT_OPTION_USEFLUIDBARS)
-            HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,2,32,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+            HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,3,17,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
             HealBot_Options_OverrideBarUpdateFreq:SetValue(HealBot_Globals.OverrideEffects["FLUIDFREQ"] or 5)
             HealBot_Options_SetText(HealBot_Options_OverrideBarUpdateFreq, HEALBOT_OPTION_BARUPDFREQ)
 			HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideAuxBarFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,2,20,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
@@ -15241,7 +15215,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_sliderlabels_Init(HealBot_Options_StickyFramesSensitivity,HEALBOT_OPTIONS_STICKYSENSITIVITY,15,75,1,5,HEALBOT_WORK_HIGH,HEALBOT_WORD_LOW)
             HealBot_Options_StickyFramesSensitivity:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYSENSITIVITY"])
             HealBot_Options_SetText(HealBot_Options_StickyFramesSensitivity,HEALBOT_OPTIONS_STICKYSENSITIVITY)
-			HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,2,32,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+			HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,3,17,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
             HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 5)
 			HealBot_Options_SetText(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ)
             g=_G["HealBot_GeneralSkin_FontStr"]

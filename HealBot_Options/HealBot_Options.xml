@@ -214,12 +214,12 @@
         <Frames>
           <StatusBar name="HealBot_Contents_ButtonT0">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT">
                 <Offset>
-                  <AbsDimension x="2" y="-10"/>
+                  <AbsDimension x="1" y="-10"/>
                 </Offset>
               </Anchor>
             </Anchors>
@@ -246,7 +246,7 @@
 
           <StatusBar name="HealBot_Contents_ButtonT1">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT0"  relativePoint="TOPLEFT">
@@ -278,7 +278,7 @@
 
           <StatusBar name="HealBot_Contents_ButtonT10">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT1"  relativePoint="TOPLEFT">
@@ -310,7 +310,7 @@
  
           <StatusBar name="HealBot_Contents_ButtonT2">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT10"  relativePoint="TOPLEFT">
@@ -342,7 +342,7 @@
  
           <StatusBar name="HealBot_Contents_ButtonT3">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT2"  relativePoint="TOPLEFT">
@@ -681,7 +681,7 @@
                   </Button>
           <StatusBar name="HealBot_Contents_ButtonT4">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button314"  relativePoint="TOPLEFT">
@@ -797,7 +797,7 @@
           
           <StatusBar name="HealBot_Contents_ButtonT5">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button43"  relativePoint="TOPLEFT">
@@ -912,7 +912,7 @@
                   </Button>
           <StatusBar name="HealBot_Contents_ButtonT6">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button53"  relativePoint="TOPLEFT">
@@ -944,7 +944,7 @@
 
           <StatusBar name="HealBot_Contents_ButtonT7">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT6"  relativePoint="TOPLEFT">
@@ -976,7 +976,7 @@
 
           <StatusBar name="HealBot_Contents_ButtonT8">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT7"  relativePoint="TOPLEFT">
@@ -1008,7 +1008,7 @@
 		  
           <StatusBar name="HealBot_Contents_ButtonT9">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT8"  relativePoint="TOPLEFT">
@@ -1040,7 +1040,7 @@
 		  
           <StatusBar name="HealBot_Contents_ButtonT99">
             <Size>
-              <AbsDimension x="168" y="20"/>
+              <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT9"  relativePoint="TOPLEFT">
