@@ -1,7 +1,6 @@
 local LSM = HealBot_Libs_LSM()
 local HealBot_Options_ComboButtons_Button=1;
 local HealBot_Options_Opened=false;
-local HealBot_Options_SoftReset_flag=false;
 local HealBot_buffbarcolr = {};
 local HealBot_buffbarcolg = {};
 local HealBot_buffbarcolb = {};
@@ -201,12 +200,6 @@ local optionsText = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontHighl
 optionsText:SetPoint("TOPLEFT", optionsTitle, "BOTTOMLEFT", 0, -8)
 optionsText:SetText(HEALBOT_ABOUT_DESC1)
 local optionsButton = CreateFrame("Button", nil, optionsPanel, "UIPanelButtonTemplate")
-optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
-optionsButton:SetWidth(100)
-optionsButton:SetPoint("TOPLEFT", 14, -58)
-optionsButton:SetScript('OnClick', function()
-    HealBot_TogglePanel(HealBot_Options)
-end)
 
 function HealBot_Options_InitVars()
 	if not HealBot_Globals.OptionsTheme then HealBot_Globals.OptionsTheme=1 end
@@ -268,6 +261,12 @@ function HealBot_Options_InitVars()
     HealBot_Options_UpdateMedia(3)
     HealBot_Options_UpdateMedia(4)
     HealBot_Options_UpdateMedia(5)
+	optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
+	optionsButton:SetWidth(100)
+	optionsButton:SetPoint("TOPLEFT", 14, -58)
+	optionsButton:SetScript('OnClick', function()
+		HealBot_TogglePanel(HealBot_Options)
+	end)
 end
 
 function HealBot_Options_setLists()
@@ -7361,6 +7360,7 @@ function HealBot_Options_hbProfile_saveClass(cType)
 		if sType=="BUFFS" or sType=="ALL" then HealBot_Class_Buffs[HealBot_Data["PCLASSTRIM"]]=HealBot_Options_copyTable(HealBot_Config_Buffs) end
 		if sType=="CURES" or sType=="ALL" then HealBot_Class_Cures[HealBot_Data["PCLASSTRIM"]]=HealBot_Options_copyTable(HealBot_Config_Cures) end
 	else
+		if not HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]] then HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]]={} end
 		if sType=="SPELLS" or sType=="ALL" then 
 			table.foreach(HealBot_Config_Spells, function (key,val)
 				if HealBot_Config_Spells[key] then
@@ -7368,6 +7368,7 @@ function HealBot_Options_hbProfile_saveClass(cType)
 				end
 			end);
 		end
+		if not HealBot_Class_Buffs[HealBot_Data["PCLASSTRIM"]] then HealBot_Class_Buffs[HealBot_Data["PCLASSTRIM"]]={} end
 		if sType=="BUFFS" or sType=="ALL" then 
 			table.foreach(HealBot_Config_Buffs, function (key,val)
 				if HealBot_Config_Buffs[key] then
@@ -7375,6 +7376,7 @@ function HealBot_Options_hbProfile_saveClass(cType)
 				end
 			end); 
 		end
+		if not HealBot_Class_Cures[HealBot_Data["PCLASSTRIM"]] then HealBot_Class_Cures[HealBot_Data["PCLASSTRIM"]]={} end
 		if sType=="CURES" or sType=="ALL" then 
 			table.foreach(HealBot_Config_Cures, function (key,val)
 				if HealBot_Config_Cures[key] then
@@ -10719,7 +10721,6 @@ function HealBot_Options_ShareSkinComplete()
     HealBot_SetResetFlag("SOFT")
     DoneInitTab[305]=nil
     HealBot_Options_InitSub(305)
-    --HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Options_checkSkinName(skinName)
@@ -13484,15 +13485,23 @@ function HealBot_Options_FrameAliasShow_OnClick(self)
     end
 end
 
+function HealBot_Options_KnownSpellCheckButtonNum(bNo)
+	if bNo==2 then
+		bNo=3
+	elseif bNo==3 then
+		bNo=2
+	end
+	return bNo
+end
+
 function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
     if self:GetChecked() then
         HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "true")
     else
         HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "false")
     end
-	HealBot_Action_PrepSetAllAttribs("Enemy",autoMod,HealBot_Options_ComboButtons_Button)
-	HealBot_Action_PrepSetAllAttribs("Enabled",autoMod,HealBot_Options_ComboButtons_Button)
-    HealBot_setOptions_Timer(9920)
+	HealBot_Action_PrepSetAllAttribs("Enemy",autoMod,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
+	HealBot_Action_PrepSetAllAttribs("Enabled",autoMod,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
 end
 
 function HealBot_Options_KnownSpellCheck(sName,status,key,bNo)
@@ -13502,7 +13511,6 @@ function HealBot_Options_KnownSpellCheck(sName,status,key,bNo)
 		else
 			HealBot_Action_PrepSetAllAttribs("Enabled",key,bNo)
 		end
-        HealBot_setOptions_Timer(9920)
     end
 end
 
@@ -13517,8 +13525,7 @@ local function HealBot_Options_DoOnTextChanged(self, key)
     local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
     spellText = strtrim(self:GetText())
     HealBot_Action_SetSpell(cType, key..button..HealBot_Config.CurrentSpec, spellText)
-    HealBot_Options_KnownSpellCheck(spellText,cType,key,HealBot_Options_ComboButtons_Button)
-    HealBot_Options_SoftReset_flag=true
+    HealBot_Options_KnownSpellCheck(spellText,cType,key,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
 end
 
 function HealBot_Options_Click_OnTextChanged(self)
@@ -13660,7 +13667,6 @@ function HealBot_Options_SetDefaults()
     HealBot_Options_Opened=false;
     HealBot_Action_Reset();
 	HealBot_Action_PrepSetAllAttribs(nil,nil,nil,true)
-    HealBot_setOptions_Timer(9920)
     HealBot_Options:Hide()
     for x in pairs (Healbot_Config_Skins.Skins) do
         HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
@@ -13957,10 +13963,7 @@ function HealBot_Options_OnShow(self)
 end
 
 function HealBot_Options_Close()
-    if HealBot_Options_SoftReset_flag then
-        HealBot_Options_SoftReset_flag=false
-        --HealBot_setOptions_Timer(9920)
-    end
+  --Nothing to do
 end
 
 function HealBot_Options_idleInit()

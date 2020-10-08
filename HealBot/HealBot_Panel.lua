@@ -2615,7 +2615,6 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
         HealBot_Panel_VehicleChanged()
     end
-    HealBot_Update_FastEveryFrame(2)
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)
@@ -2667,7 +2666,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
     if nMembers>HealBot_Globals.AutoCacheSize then	
 		HealBot_Globals.AutoCacheSize=nMembers
 	end
-	HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((8/nMembers),4))
+	HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
 	HealBot_Update_FastEveryFrame(5)
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end
