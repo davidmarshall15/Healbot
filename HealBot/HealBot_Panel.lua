@@ -2662,11 +2662,15 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
 			HealBot_Panel_DoPartyChanged(preCombat, 4)
         end 
     end
-	local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+5
-    if nMembers>HealBot_Globals.AutoCacheSize then	
-		HealBot_Globals.AutoCacheSize=nMembers
+	if HealBot_Data["UILOCK"] then 
+		HealBot_IconsInUse()
+	else
+		local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+5
+		if nMembers>HealBot_Globals.AutoCacheSize then	
+			HealBot_Globals.AutoCacheSize=nMembers
+		end
+		HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
+		HealBot_Update_FastEveryFrame(2)
 	end
-	HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
-	HealBot_Update_FastEveryFrame(5)
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

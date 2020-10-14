@@ -238,6 +238,8 @@ function HealBot_Data_InitVars()
 		PluginTimeToLive=true,
 		PluginEffectiveTanks=true,
 		PluginEfficientHealers=true,
+		CPUUsage=3,
+		OptionsTheme=1,
 		OptionsOpacityAdj=35,
 		OptionsTheme=1,
         DebugOut=false,

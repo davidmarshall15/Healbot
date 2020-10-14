@@ -53,7 +53,7 @@
   
 
   
-   <Frame name="HealBot_Tooltip" frameStrata="TOOLTIP" parent="UIParent" hidden="true">
+   <Frame name="HealBot_Tooltip" frameStrata="TOOLTIP" parent="UIParent" hidden="true" inherits="BackdropTemplate">
       <Layers>
          <Layer level="ARTWORK">
 			<FontString name="$parentTextL1" inherits="GameFontNormalSmall" hidden="true">

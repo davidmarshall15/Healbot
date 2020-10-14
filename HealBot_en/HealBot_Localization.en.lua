@@ -67,7 +67,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_ACTION_OPTIONS                  = "Options";
 
-    HEALBOT_OPTIONS_TITLE                   = HEALBOT_ADDON;
+    HEALBOT_OPTIONS_TITLE                   = HEALBOT_HEALBOT;
     HEALBOT_OPTIONS_DEFAULTS                = "Defaults";
     HEALBOT_OPTIONS_CLOSE                   = "Close";
     HEALBOT_OPTIONS_HARDRESET               = "ReloadUI"
@@ -380,8 +380,11 @@ function HealBot_Lang_enALL()
     
     HEALBOT_OPTIONS_STICKYFRAMES            = "Sticky Frames"
     HEALBOT_OPTIONS_STICKYSENSITIVITY       = "Sticky Sensitivity"
+    HEALBOT_WORD_VLOW                       = "Very Low"
     HEALBOT_WORD_LOW                        = "Low"
-    HEALBOT_WORK_HIGH                       = "High"
+	HEALBOT_WORD_NORMAL                     = "Normal"
+    HEALBOT_WORD_HIGH                       = "High"
+	HEALBOT_WORD_EXTREME                    = "Extreme"
 
     HEALBOT_ASSIST                          = "Assist";
     HEALBOT_FOCUS                           = "Focus";
@@ -767,6 +770,7 @@ function HealBot_Lang_enALL()
 	HEALBOT_WORD_FUCHSIA                    = "Fuchsia"
 	HEALBOT_WORD_PURPLE                     = "Purple"
 	HEALBOT_WORD_TEAL                       = "Teal"
+    HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
     HEALBOT_OPTIONS_SAME_AS_HLTH_CURRENT    = "Same as health (current health)"

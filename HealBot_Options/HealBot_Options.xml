@@ -127,7 +127,7 @@
   </EditBox>
  
   <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG"
-    movable="true" parent="UIParent" enableMouse="true" hidden="true">
+    movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="BackdropTemplate">
     <Size>
       <AbsDimension x="860" y="750"/>
     </Size>
@@ -195,7 +195,7 @@
 		<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 		<BarColor r="0.2" g="0.2" b="0.2"/>
 	  </StatusBar>
-      <Frame name="HealBot_Options_Contents">
+      <Frame name="HealBot_Options_Contents" inherits="BackdropTemplate">
         <Size>
           <AbsDimension y="665"/>
         </Size>
@@ -1071,7 +1071,7 @@
           </StatusBar>
         </Frames>
       </Frame>
-      <Frame name="HealBot_Options_MainFrame">
+      <Frame name="HealBot_Options_MainFrame" inherits="BackdropTemplate">
         <Size>
           <AbsDimension y="665"/>
         </Size>
@@ -1844,7 +1844,7 @@
                 </Layer>
               </Layers> 
         <Frames>
-              <Frame name="HealBot_Options_Panel0_1">
+              <Frame name="HealBot_Options_Panel0_1" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="105"/>
                 </Size>
@@ -1895,7 +1895,7 @@
                     </Layer>
                   </Layers>  
               </Frame>
-              <Frame name="HealBot_Options_Panel0_2">
+              <Frame name="HealBot_Options_Panel0_2" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="400"/>
                 </Size>
@@ -1964,7 +1964,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_Panel0_3">
+              <Frame name="HealBot_Options_Panel0_3" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="400"/>
                 </Size>
@@ -2039,7 +2039,7 @@
           </Frame>
           <Frame name="HealBot_Options_Panel1" hidden="true" setAllPoints="true">
             <Frames>
-              <Frame name="HealBot_Options_GenFrame">
+              <Frame name="HealBot_Options_GenFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="325"/>
                 </Size>
@@ -2172,7 +2172,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOM">>
                         <Offset>
-                          <AbsDimension x="25" y="-4" />
+                          <AbsDimension x="25" y="-2" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2376,7 +2376,7 @@
                 </Scripts>
               </Button>
 
-              <Frame name="HealBot_Options_EmergLFrame">
+              <Frame name="HealBot_Options_EmergLFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="140"/>
                 </Size>
@@ -2711,7 +2711,7 @@
 				<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 				<BarColor r="0.2" g="0.2" b="0.2"/>
 			  </StatusBar>
-              <Frame name="HealBot_Options_Override_EffectsFrame">
+              <Frame name="HealBot_Options_Override_EffectsFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="620"/>
                 </Size>
@@ -2768,7 +2768,7 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideFluidBarsPanel">
+                  <Frame name="HealBot_Options_OverrideFluidBarsPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -2831,7 +2831,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideFlashEffectPanel">
+                  <Frame name="HealBot_Options_OverrideFlashEffectPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -2946,7 +2946,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_Override_ProtFrame" hidden="true">
+              <Frame name="HealBot_Options_Override_ProtFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="620"/>
                 </Size>
@@ -3003,7 +3003,7 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>                  
-                  <Frame name="HealBot_Options_OverrideCrashProtPanel">
+                  <Frame name="HealBot_Options_OverrideCrashProtPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -3119,7 +3119,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideCombatProtPanel">
+                  <Frame name="HealBot_Options_OverrideCombatProtPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -3182,7 +3182,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_Override_ChatFrame" hidden="true">
+              <Frame name="HealBot_Options_Override_ChatFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="620"/>
                 </Size>
@@ -3239,7 +3239,7 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideChatPanel">
+                  <Frame name="HealBot_Options_OverrideChatPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="510"/>
                     </Size>
@@ -3424,7 +3424,7 @@
 				  </Frame>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_Override_FramesFrame" hidden="true">
+              <Frame name="HealBot_Options_Override_FramesFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="620"/>
                 </Size>
@@ -3481,7 +3481,7 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideFramesPanel">
+                  <Frame name="HealBot_Options_OverrideFramesPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="510"/>
                     </Size>
@@ -3563,7 +3563,7 @@
             
           <Frame name="HealBot_Options_Panel2" hidden="true" setAllPoints="true">
             <Frames>
-              <Frame name="HealBot_Options_KeysFrame">
+              <Frame name="HealBot_Options_KeysFrame" inherits="BackdropTemplate">
                 <Layers>
                   <Layer level="BACKGROUND">
                     <FontString name="HealBot_Options_ShiftCntlAltClickHeader" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormal">
@@ -4367,7 +4367,7 @@
                   </CheckButton>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_SelectSpellsFrame">
+              <Frame name="HealBot_Options_SelectSpellsFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="525"/>
                 </Size>
@@ -4661,7 +4661,7 @@
                 </Frames>
               </Frame>
               
-              <Frame name="HealBot_Options_DisabledBarPanel">
+              <Frame name="HealBot_Options_DisabledBarPanel" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="100"/>
                 </Size>
@@ -4947,7 +4947,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_GeneralSkinsFrame">
+              <Frame name="HealBot_Options_GeneralSkinsFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -5218,7 +5218,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_HealGroupsSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_HealGroupsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -5776,7 +5776,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_EffectsSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_EffectsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -5806,7 +5806,7 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <Frame name="HealBot_Options_FluidBarsPanel">
+                  <Frame name="HealBot_Options_FluidBarsPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -5869,7 +5869,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_FlashEffectPanel">
+                  <Frame name="HealBot_Options_FlashEffectPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -5985,7 +5985,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_ProtSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_ProtSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -6015,7 +6015,7 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <Frame name="HealBot_Options_CrashProtPanel">
+                  <Frame name="HealBot_Options_CrashProtPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -6131,7 +6131,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_CombatProtPanel">
+                  <Frame name="HealBot_Options_CombatProtPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="230"/>
                     </Size>
@@ -6195,7 +6195,7 @@
                 </Frames>
               </Frame>
               
-              <Frame name="HealBot_Options_ChatSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_ChatSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -6392,7 +6392,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_FramesSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_FramesSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -6824,7 +6824,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_HeadersSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_HeadersSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -6899,7 +6899,7 @@
 					<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 					<BarColor r="0.2" g="0.2" b="0.2"/>
 				  </StatusBar>
-                  <Frame name="HealBot_Options_SkinsFrameHeadersBar">
+                  <Frame name="HealBot_Options_SkinsFrameHeadersBar" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -7186,7 +7186,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFrameHeadersFrame" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFrameHeadersFrame" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -7510,7 +7510,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_BarsSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_BarsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -7701,7 +7701,7 @@
 					<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 					<BarColor r="0.2" g="0.2" b="0.2"/>
 				  </StatusBar>
-                  <Frame name="HealBot_Options_SkinsFramesBarsGeneral">
+                  <Frame name="HealBot_Options_SkinsFramesBarsGeneral" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -7904,7 +7904,7 @@
                           </CheckButton>
                       </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsColours" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsColours" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -8424,7 +8424,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsSort" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsSort" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -8566,7 +8566,7 @@
                       </CheckButton>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsVisibility" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsVisibility" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -8969,7 +8969,7 @@
                       </CheckButton>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsVisibilityEnemy" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsVisibilityEnemy" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -9202,7 +9202,7 @@
                       </CheckButton>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsAggro" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsAggro" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -9371,7 +9371,7 @@
                       </Frame>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFramesBarsAux" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFramesBarsAux" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -9446,7 +9446,7 @@
 						<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 						<BarColor r="0.2" g="0.2" b="0.2"/>
 					  </StatusBar>
-                      <Frame name="HealBot_Options_SkinsFramesBarsAuxAssign">
+                      <Frame name="HealBot_Options_SkinsFramesBarsAuxAssign" inherits="BackdropTemplate">
                         <Size>
                           <AbsDimension y="450"/>
                         </Size>
@@ -9920,7 +9920,7 @@
                         </Frames>
                       </Frame>
 
-                      <Frame name="HealBot_Options_SkinsFramesBarsAuxConfig" hidden="true">
+                      <Frame name="HealBot_Options_SkinsFramesBarsAuxConfig" hidden="true" inherits="BackdropTemplate">
                         <Size>
                           <AbsDimension y="450"/>
                         </Size>
@@ -10194,15 +10194,13 @@
                           </Slider>                      
                         </Frames>
                       </Frame>
-                      
-                      
                     </Frames>
                   </Frame>
                 </Frames>
               </Frame>
 
 
-              <Frame name="HealBot_Options_TextSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_TextSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -10277,7 +10275,7 @@
 					<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 					<BarColor r="0.2" g="0.2" b="0.2"/>
 				  </StatusBar>
-                  <Frame name="HealBot_Options_SkinsFrameTextName">
+                  <Frame name="HealBot_Options_SkinsFrameTextName" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -10687,7 +10685,7 @@
                       </Slider>
                     </Frames>
                   </Frame>
-                  <Frame name="HealBot_Options_SkinsFrameTextHealth" hidden="true">
+                  <Frame name="HealBot_Options_SkinsFrameTextHealth" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
                     </Size>
@@ -11118,7 +11116,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_IconsSkinsFrame" hidden="true">
+              <Frame name="HealBot_Options_IconsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
                 </Size>
@@ -11222,7 +11220,7 @@
 					<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 					<BarColor r="0.2" g="0.2" b="0.2"/>
 				  </StatusBar>
-				  <Frame name="HealBot_Options_SkinsFrameIconsDebuff">
+				  <Frame name="HealBot_Options_SkinsFrameIconsDebuff" inherits="BackdropTemplate">
 					<Size>
 					  <AbsDimension y="495"/>
 					</Size>
@@ -11297,7 +11295,7 @@
 						<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 						<BarColor r="0.2" g="0.2" b="0.2"/>
 					  </StatusBar>
-					  <Frame name="HealBot_Options_SkinsFrameIconsDebuffGeneral">
+					  <Frame name="HealBot_Options_SkinsFrameIconsDebuffGeneral" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -11478,7 +11476,7 @@
 						</Frames>
 					  </Frame>
 
-					  <Frame name="HealBot_Options_SkinsFrameIconsDebuffText" hidden="true">
+					  <Frame name="HealBot_Options_SkinsFrameIconsDebuffText" hidden="true" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -11678,7 +11676,7 @@
 
 					 </Frames>
 				   </Frame>
-				   <Frame name="HealBot_Options_SkinsFrameIconsBuff" hidden="true">
+				   <Frame name="HealBot_Options_SkinsFrameIconsBuff" hidden="true" inherits="BackdropTemplate">
 					<Size>
 					  <AbsDimension y="495"/>
 					</Size>
@@ -11754,7 +11752,7 @@
 						<BarColor r="0.2" g="0.2" b="0.2"/>
 					  </StatusBar>
 
-					  <Frame name="HealBot_Options_SkinsFrameIconsBuffGeneral">
+					  <Frame name="HealBot_Options_SkinsFrameIconsBuffGeneral" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -11934,7 +11932,7 @@
 						</Frames>
 					  </Frame>
 					  
-					  <Frame name="HealBot_Options_SkinsFrameIconsBuffText" hidden="true">
+					  <Frame name="HealBot_Options_SkinsFrameIconsBuffText" hidden="true" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -12131,16 +12129,9 @@
 						  </Frame>
 						</Frames>
 					  </Frame>
-
-					  
-					  
-					  
-					  
-					  
-					  
 					 </Frames>
 				   </Frame>
-				   <Frame name="HealBot_Options_SkinsFrameIconsExtra" hidden="true">
+				   <Frame name="HealBot_Options_SkinsFrameIconsExtra" hidden="true" inherits="BackdropTemplate">
 					<Size>
 					  <AbsDimension y="495"/>
 					</Size>
@@ -12273,7 +12264,7 @@
 						<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 						<BarColor r="0.2" g="0.2" b="0.2"/>
 					  </StatusBar>
-					  <Frame name="HealBot_Options_SkinsFrameIconsExtraClass">
+					  <Frame name="HealBot_Options_SkinsFrameIconsExtraClass" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -12453,7 +12444,7 @@
 						</Frames>
 					  </Frame>
 					  
-					  <Frame name="HealBot_Options_SkinsFrameIconsExtraTarget" hidden="true">
+					  <Frame name="HealBot_Options_SkinsFrameIconsExtraTarget" hidden="true" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -12732,7 +12723,7 @@
 					  </Frame>
 					  
 
-					  <Frame name="HealBot_Options_SkinsFrameIconsExtraReadyCheck" hidden="true">
+					  <Frame name="HealBot_Options_SkinsFrameIconsExtraReadyCheck" hidden="true" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -12900,7 +12891,7 @@
 					  
 					 
 
-					  <Frame name="HealBot_Options_SkinsFrameIconsExtraOORArrow" hidden="true">
+					  <Frame name="HealBot_Options_SkinsFrameIconsExtraOORArrow" hidden="true" inherits="BackdropTemplate">
 						<Size>
 						  <AbsDimension y="450"/>
 						</Size>
@@ -13079,16 +13070,10 @@
 						  </CheckButton>
 						</Frames>
 					  </Frame>
-					  
-					 
-					 
-					 
 					 </Frames>
 				   </Frame>
 				 </Frames>
               </Frame>
-            
-
             </Frames>
           </Frame>
           
@@ -13137,7 +13122,7 @@
                 </Scripts>
               </CheckButton>
 
-              <Frame name="HealBot_Options_CureDispelCleanse">
+              <Frame name="HealBot_Options_CureDispelCleanse" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -13733,7 +13718,7 @@
                   </Button>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_CustomCureFrame" hidden="true">
+              <Frame name="HealBot_Options_CustomCureFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -14588,7 +14573,7 @@
                   </CheckButton>
                 </Frames>
               </Frame>
-              <Frame name="HealBot_Options_WarningCureFrame" hidden="true">
+              <Frame name="HealBot_Options_WarningCureFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -14837,7 +14822,7 @@
                       <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSPALABLESSING",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <Frame name="HealBot_Options_BuffsPanel">
+                  <Frame name="HealBot_Options_BuffsPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="580"/>
                     </Size>
@@ -15586,7 +15571,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_BuffIconFrame" hidden="true">
+              <Frame name="HealBot_Options_BuffIconFrame" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="580"/>
                     </Size>
@@ -16345,7 +16330,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_WarningBuffFrame" hidden="true">
+              <Frame name="HealBot_Options_WarningBuffFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -17339,7 +17324,7 @@
 				<BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
 				<BarColor r="0.2" g="0.2" b="0.2"/>
 			  </StatusBar>
-              <Frame name="HealBot_Options_InOut_SkinFrame">
+              <Frame name="HealBot_Options_InOut_SkinFrame" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="621"/>
                 </Size>
@@ -17457,7 +17442,7 @@
                       <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_ShareExternalEditBoxFrame">
+                  <Frame name="HealBot_Options_ShareExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="485"/>
                     </Size>
@@ -17495,7 +17480,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_InOut_CDbuffsFrame" hidden="true">
+              <Frame name="HealBot_Options_InOut_CDbuffsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="621"/>
                 </Size>
@@ -17586,7 +17571,7 @@
                       <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCDEBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_ShareCDebuffExternalEditBoxFrame">
+                  <Frame name="HealBot_Options_ShareCDebuffExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="485"/>
                     </Size>
@@ -17624,7 +17609,7 @@
                 </Frames>
               </Frame>
 
-              <Frame name="HealBot_Options_InOut_BuffsFrame" hidden="true">
+              <Frame name="HealBot_Options_InOut_BuffsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="621"/>
                 </Size>
@@ -17715,7 +17700,7 @@
                       <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTCBUFF",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_ShareBuffsExternalEditBoxFrame">
+                  <Frame name="HealBot_Options_ShareBuffsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="485"/>
                     </Size>
@@ -17753,7 +17738,7 @@
                 </Frames>
               </Frame>
               
-              <Frame name="HealBot_Options_InOut_SpellsFrame" hidden="true">
+              <Frame name="HealBot_Options_InOut_SpellsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="621"/>
                 </Size>
@@ -17844,7 +17829,7 @@
                       <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTSPELLS",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_ShareSpellsExternalEditBoxFrame">
+                  <Frame name="HealBot_Options_ShareSpellsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="485"/>
                     </Size>
@@ -17882,7 +17867,7 @@
                 </Frames>
               </Frame>
               
-              <Frame name="HealBot_Options_InOut_PresetColsFrame" hidden="true">
+              <Frame name="HealBot_Options_InOut_PresetColsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="621"/>
                 </Size>
@@ -17946,7 +17931,7 @@
                       <OnLeave>HealBot_Options_Show_Help("INOUTIMPORTPRESETCOLS",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_SharePresetColsExternalEditBoxFrame">
+                  <Frame name="HealBot_Options_SharePresetColsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="515"/>
                     </Size>
@@ -18034,7 +18019,7 @@
                   <OnLeave>HealBot_Options_Show_Help("SELECTPLUGIN",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_PluginThreatFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginThreatFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -18051,7 +18036,7 @@
                   </Anchor>
                 </Anchors>
 			  </Frame>
-              <Frame name="HealBot_Options_PluginTimeToDieFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginTimeToDieFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -18068,7 +18053,7 @@
                   </Anchor>
                 </Anchors>
 			  </Frame>
-              <Frame name="HealBot_Options_PluginTimeToLiveFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginTimeToLiveFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -18085,7 +18070,7 @@
                   </Anchor>
                 </Anchors>
 			  </Frame>
-              <Frame name="HealBot_Options_PluginEffectiveTanksFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginEffectiveTanksFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -18102,7 +18087,7 @@
                   </Anchor>
                 </Anchors>
 			  </Frame>
-              <Frame name="HealBot_Options_PluginEfficientHealersFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginEfficientHealersFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

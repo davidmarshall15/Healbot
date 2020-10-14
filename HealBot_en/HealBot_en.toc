@@ -1,8 +1,8 @@
-## Interface: 80300
+## Interface: 90001
 ## Title: HealBot English Localization
 ## Author: Strife
 ## Notes: HealBot localization for enUS and enUK
-## Version: 8.3.7.6
+## Version: 9.0.1.0
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

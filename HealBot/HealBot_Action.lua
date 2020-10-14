@@ -9,7 +9,6 @@ local HealBot_Action_luVars={}
 HealBot_Action_luVars["FrameMoving"]=false
 HealBot_Action_luVars["UnitPowerMax"]=3
 HealBot_Action_luVars["resetSkinTo"]=""
-HealBot_Action_luVars["updateBucket"]=1
 HealBot_Action_luVars["clearSpellCache"]=false
 HealBot_Action_luVars["TestBarsOn"]=false
 HealBot_Action_luVars["ShapeshiftForm"]=-1
@@ -776,7 +775,7 @@ end
 function HealBot_Action_stateChange(button)
     HealBot_UpdAuxBar(button)
     HealBot_UnitAuraAlpha(button)
-	HealBot_Update_FastEveryFrame(11)
+	HealBot_Update_FastEveryFrame(2)
 end
 
 function HealBot_Action_setState(button, state)
@@ -955,10 +954,11 @@ function HealBot_Action_UpdateTheDeadButton(button)
 				end
                 button.text.nameupdate=true
             end
-			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, true) end
+			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 1) end
         elseif ripHasRes[button.id] and ripHasRes[button.id]<GetTime() then
             ripHasRes[button.id]=nil
 			ripHadRes[button.id]=GetTime()+HealBot_Globals.ResLagDuration
+			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 2) end
 		elseif ripHadRes[button.id] and ripHadRes[button.id]<GetTime() then
 			ripHadRes[button.id]=nil
             button.text.nameupdate=true
@@ -2725,9 +2725,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             HealBot_Skins_ResetSkinWidth(tSetHealButton)
         end
         if HealBot_Unit_Button[unit] then
-            HealBot_Action_luVars["updateBucket"]=HealBot_Action_luVars["updateBucket"]+1
-            if HealBot_Action_luVars["updateBucket"]>3 then HealBot_Action_luVars["updateBucket"]=1 end
-            HealBot_AddPlayerButtonCache(unit, HealBot_Action_luVars["updateBucket"])
+            HealBot_AddPlayerButtonCache(unit)
         end
 		tSetHealButton.status.duplicate=duplicate
     else
@@ -2874,14 +2872,6 @@ function HealBot_Action_ResethbInitButtons()
     end 
 end
 
-function HealBot_Action_PartyChanged(changeType)
-    if not InCombatLockdown() and HealBot_Data["PGUID"] then
-        HealBot_Panel_PartyChanged(HealBot_Data["UILOCK"], changeType)
-    else
-        HealBot_nextRecalcParty(changeType)
-    end
-end
-
 function HealBot_Action_DeleterCallsUnit(unit)
     HealBot_Action_rCalls[unit]=nil
 end
@@ -2948,6 +2938,7 @@ function HealBot_Action_MarkDeleteButton(button)
 	if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
 	if HealBot_Fluid_AbsorbButtonsAlpha[button.id] then HealBot_Fluid_AbsorbButtonsAlpha[button.id]=nil end
     table.insert(hbMarkedDeleteButtons, button.id)
+	HealBot_setOptions_Timer(9990)
 end
 
 function HealBot_Action_Reset()
@@ -2978,7 +2969,7 @@ function HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, setPoint)
     else
         hbFrameGetCoords[hbCurFrame]=true
     end
-    HealBot_setLuVars("reCheckActionFrames", true)
+    HealBot_setOptions_Timer(19)
 end
 
 function HealBot_Action_CheckFrameSetPoint()
