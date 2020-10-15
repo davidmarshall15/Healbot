@@ -4,7 +4,7 @@
 ## Notes: Large store of extra skins for HealBot.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.1.0
+## Version: 9.0.1.1
 
 HealBot_ExtraSkins.lua
 

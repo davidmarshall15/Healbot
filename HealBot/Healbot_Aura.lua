@@ -1993,34 +1993,26 @@ function HealBot_Aura_retDebufftype(unit, id)
 end
 
 function HealBot_Aura_SetIconUpdateInterval()
-	local fadeInUse=false
-	local durationInUse=false
     for f=1,10 do
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][f]["FADE"] then
             HealBot_iconUpdate["DEBUFF"][f]=0.2
-			fadeInUse=true
         else
             HealBot_iconUpdate["DEBUFF"][f]=1
         end
 		if Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][f]["SDUR"] then
-			durationInUse=true
 		elseif HealBot_iconUpdate["DEBUFF"][f]==1 then
 			HealBot_iconUpdate["DEBUFF"][f]=1000
 		end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][f]["BUFFFADE"] then
             HealBot_iconUpdate["BUFF"][f]=0.2
-			fadeInUse=true
         else
             HealBot_iconUpdate["BUFF"][f]=1
         end
 		if Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][f]["BUFFSDUR"] then
-			durationInUse=true
 		elseif HealBot_iconUpdate["BUFF"][f]==1 then
 			HealBot_iconUpdate["BUFF"][f]=1000
 		end
     end
-	HealBot_setLuVars("IconFadeInUse", fadeInUse)
-	HealBot_setLuVars("IconDurationInUse", durationInUse)
       --HealBot_setCall("HealBot_Aura_SetIconUpdateInterval")
 end
 
