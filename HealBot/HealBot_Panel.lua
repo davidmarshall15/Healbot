@@ -170,13 +170,15 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
             local hbFRole=nil
             local _, _, hbSubgroup, _, _, _, _, _, _, hbRRole, _, hbCombatRole = GetRaidRosterInfo(nRaidID);
             HealBot_UnitGroups[unit]=hbSubgroup
-            if hbPanel_dataRoles[unit]==HEALBOT_WORDS_UNKNOWN then
-                if hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
-                    hbFRole = hbCombatRole
-                elseif hbRRole and (string.lower(hbRRole)=="mainassist" or string.lower(hbRRole)=="maintank") then
-                    hbFRole="TANK"
-                end
-            end
+			if isPlayer then
+				if hbPanel_dataRoles[unit]==HEALBOT_WORDS_UNKNOWN then
+					if hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
+						hbFRole = hbCombatRole
+					elseif hbRRole and (string.lower(hbRRole)=="mainassist" or string.lower(hbRRole)=="maintank") then
+						hbFRole="TANK"
+					end
+				end
+			end
             if not hbFRole then
                 HealBot_Panel_SetRole(unit,dsGUID)
             else
@@ -474,7 +476,7 @@ function HealBot_Panel_UnitRole(unit, guid)
     local role = hbPanel_dataRoles[unit]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>3 then 
-            role=UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
+            role=UnitGroupRolesAssigned(unit) or "DAMAGER"
         else
             role="DAMAGER" 
         end
@@ -2670,7 +2672,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
 			HealBot_Globals.AutoCacheSize=nMembers
 		end
 		HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
-		HealBot_Update_FastEveryFrame(2)
+		HealBot_setLuVars("fastUpdateEveryFrame",2)
 	end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

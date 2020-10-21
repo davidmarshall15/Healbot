@@ -565,6 +565,7 @@ function HealBot_Aura_InitUnitBuffIcons(buttonId)
         HealBot_UnitBuffIcons[buttonId][i]["count"]=0
         HealBot_UnitBuffIcons[buttonId][i]["expirationTime"]=0
         HealBot_UnitBuffIcons[buttonId][i]["spellId"]=0
+        HealBot_UnitBuffIcons[buttonId][i]["name"]=""
         HealBot_UnitBuffIcons[buttonId][i]["texture"]=""
         HealBot_UnitBuffIcons[buttonId][i]["unitCaster"]="x"
         HealBot_UnitBuffIcons[buttonId][i].current=false
@@ -585,6 +586,7 @@ function HealBot_Aura_InitUnitDebuffIcons(buttonId)
         HealBot_UnitDebuffIcons[buttonId][i]["count"]=0
         HealBot_UnitDebuffIcons[buttonId][i]["expirationTime"]=0
         HealBot_UnitDebuffIcons[buttonId][i]["spellId"]=0
+        HealBot_UnitDebuffIcons[buttonId][i]["name"]=""
         HealBot_UnitDebuffIcons[buttonId][i]["texture"]=""
         HealBot_UnitDebuffIcons[buttonId][i]["unitCaster"]="x"
         HealBot_UnitDebuffIcons[buttonId][i].current=false
@@ -698,6 +700,7 @@ function HealBot_Aura_BumpDebuffIcon(button,id)
         HealBot_UnitDebuffIcons[button.id][x+1]["count"]=HealBot_UnitDebuffIcons[button.id][x]["count"]
         HealBot_UnitDebuffIcons[button.id][x+1]["expirationTime"]=HealBot_UnitDebuffIcons[button.id][x]["expirationTime"]
         HealBot_UnitDebuffIcons[button.id][x+1]["spellId"]=HealBot_UnitDebuffIcons[button.id][x]["spellId"]
+        HealBot_UnitDebuffIcons[button.id][x+1]["name"]=HealBot_UnitDebuffIcons[button.id][x]["name"]
         HealBot_UnitDebuffIcons[button.id][x+1]["texture"]=HealBot_UnitDebuffIcons[button.id][x]["texture"]
         HealBot_UnitDebuffIcons[button.id][x+1].current=false
     end
@@ -709,6 +712,7 @@ function HealBot_Aura_SetDebuffIcon(button, id)
         HealBot_UnitDebuffIcons[button.id][id]["count"]=uaCount
         HealBot_UnitDebuffIcons[button.id][id]["expirationTime"]=uaExpirationTime
         HealBot_UnitDebuffIcons[button.id][id]["spellId"]=uaSpellId
+        HealBot_UnitDebuffIcons[button.id][id]["name"]=uaName
         HealBot_UnitDebuffIcons[button.id][id]["texture"]=uaTexture
 		HealBot_UnitDebuffIcons[button.id][id]["unitCaster"]=uaUnitCaster
         HealBot_UnitDebuffIcons[button.id][id].current=false
@@ -737,6 +741,7 @@ function HealBot_Aura_BumpBuffIcon(button,id)
     for x=bbIconCount,id,-1 do
         HealBot_UnitBuffIcons[button.id][x+1]["count"]=HealBot_UnitBuffIcons[button.id][x]["count"]
         HealBot_UnitBuffIcons[button.id][x+1]["spellId"]=HealBot_UnitBuffIcons[button.id][x]["spellId"]
+        HealBot_UnitBuffIcons[button.id][x+1]["name"]=HealBot_UnitBuffIcons[button.id][x]["name"]
         HealBot_UnitBuffIcons[button.id][x+1]["expirationTime"]=HealBot_UnitBuffIcons[button.id][x]["expirationTime"]
         HealBot_UnitBuffIcons[button.id][x+1]["unitCaster"]=HealBot_UnitBuffIcons[button.id][x]["unitCaster"]
         HealBot_UnitBuffIcons[button.id][x+1]["texture"]=HealBot_UnitBuffIcons[button.id][x]["texture"]
@@ -750,6 +755,7 @@ function HealBot_Aura_CacheBuffIcon(button, id)
     if HealBot_UnitBuffIcons[button.id][id]["spellId"]~=uaSpellId then
         HealBot_UnitBuffIcons[button.id][id]["spellId"]=uaSpellId
         HealBot_UnitBuffIcons[button.id][id]["texture"]=uaTexture
+        HealBot_UnitBuffIcons[button.id][id]["name"]=uaName
         HealBot_UnitBuffIcons[button.id][id]["count"]=uaCount
         HealBot_UnitBuffIcons[button.id][id]["expirationTime"]=uaExpirationTime
         HealBot_UnitBuffIcons[button.id][id].current=false
@@ -1157,7 +1163,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                 HealBot_setLuVars("MaskAuraDCheck", HealBot_Aura_luVars["MaskAuraDCheck"])
                 HealBot_setLuVars("MaskAuraReCheck", true)
                 HealBot_CheckAllActiveDebuffs()
-                HealBot_Update_FastEveryFrame(5)
+                HealBot_setLuVars("fastUpdateEveryFrame",2)
             end
         elseif HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then
             spellCD=0
@@ -1876,6 +1882,7 @@ function HealBot_Aura_SetEnemyDebuffIcon(button, id)
         HealBot_UnitDebuffIcons[button.id][id]["count"]=eaCount
         HealBot_UnitDebuffIcons[button.id][id]["expirationTime"]=eaExpirationTime
         HealBot_UnitDebuffIcons[button.id][id]["spellId"]=eaSpellId
+        HealBot_UnitDebuffIcons[button.id][id]["name"]=eaName
         HealBot_UnitDebuffIcons[button.id][id]["texture"]=eaTexture
 		HealBot_UnitDebuffIcons[button.id][id]["unitCaster"]=eaUnitCaster
         HealBot_UnitDebuffIcons[button.id][id].current=false

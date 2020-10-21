@@ -29,7 +29,7 @@ function HealBot_Action_retLuVars(vName)
 end
 
 function HealBot_Action_setpcClass()
-	local xButton=HealBot_Unit_Button["player"]
+	local xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
 	if xButton then
 		for j=1,5 do
 			if HEALBOT_GAME_VERSION>3 and 
@@ -337,6 +337,17 @@ function HealBot_Action_SetrSpell()
                 HealBot_RangeSpells["HARM"]=sName
                 x=sName
             end
+		end
+		sName=HealBot_KnownSpell(HEALBOT_DEADLY_POISON)
+		if sName then 
+			HealBot_RangeSpells["BUFF"]=sName
+			x=sName
+		else
+			sName=HealBot_KnownSpell(HEALBOT_CRIPPLING_POISON)
+			if sName then 
+				HealBot_RangeSpells["BUFF"]=sName
+				x=sName
+			end
 		end
     elseif HealBot_Data["PCLASSTRIM"]=="DEAT" then
         sName=HealBot_KnownSpell(HEALBOT_DEATH_COIL)
@@ -775,7 +786,7 @@ end
 function HealBot_Action_stateChange(button)
     HealBot_UpdAuxBar(button)
     HealBot_UnitAuraAlpha(button)
-	HealBot_Update_FastEveryFrame(2)
+	HealBot_setLuVars("fastUpdateEveryFrame",2)
 end
 
 function HealBot_Action_setState(button, state)
@@ -1072,7 +1083,9 @@ function HealBot_Action_UpdateHealthButton(button)
         else
             button.status.current=2
             button.health.current=0
+            button.mana.current=0
             button.health.init=true
+            button.mana.init=true
             button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
             button.gref["Back"]:SetStatusBarColor(0, 0, 0, 0)
         end
@@ -1200,7 +1213,11 @@ function HealBot_Action_setPowerBars(button)
 			button.aux[id]["G"]=button.mana.g
 			button.aux[id]["B"]=button.mana.b
 		end
-		HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
+		if button.mana.max==0 then
+			HealBot_setAuxBar(button, id, 0, true)
+		else
+			HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
+		end
 	end
     --HealBot_setCall("HealBot_Action_setPowerBars")
 end
@@ -1744,6 +1761,7 @@ function HealBot_Action_PrepButton(button)
     button.unit="nil"
     button.group=1
     button.health.init=true
+    button.mana.init=true
     button.health.current=99
     button.health.max=100
     button.health.incoming=0
@@ -1762,7 +1780,7 @@ function HealBot_Action_PrepButton(button)
     button.health.absorbg=0
     button.health.absorbb=0
     button.health.absorba=0
-    button.mana.current=-1
+    button.mana.current=0
     button.mana.max=0
     button.mana.type=0
     button.mana.r=0
@@ -2707,6 +2725,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.text.nameupdate=true
             tSetHealButton.text.healthupdate=true
 			tSetHealButton.health.init=true
+			tSetHealButton.mana.init=true
             HealBot_Action_ResetrCallsUnit(unit)
             HealBot_Aura_setUnitIcons(tSetHealButton.id)
             if unitType<9 then

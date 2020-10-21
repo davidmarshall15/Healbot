@@ -1223,6 +1223,9 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         }
     elseif tClass=="ROGU" then
         HealBot_Buff_Spells_Class_List = {
+			HEALBOT_DEADLY_POISON,
+			HEALBOT_WOUND_POISON,
+			HEALBOT_CRIPPLING_POISON,
         }
     elseif tClass=="SHAM" then
         HealBot_Buff_Spells_Class_List = {
@@ -3783,9 +3786,6 @@ function HealBot_Options_FluidFlashInUse()
     end
     HealBot_setLuVars("FluidInUse", inUse)
     HealBot_Action_setLuVars("FluidInUse", inUse)
-    if not inUse then
-        HealBot_clearAllAuxFluid_Buttons()
-    end
     if HealBot_Options_StorePrev["AuxBarsFlash"] then
         HealBot_setLuVars("FlashInUse", true)
     else
@@ -7997,6 +7997,7 @@ function HealBot_Options_FullHealSpellsCombo_list (sType)
             HEALBOT_WELLSPRING,
             HEALBOT_DOWNPOUR,
             HEALBOT_REGROWTH,
+			HEALBOT_NOURISH,
             HEALBOT_RENEW,
             HEALBOT_DIVINE_HYMN,
             HEALBOT_HEALING_RAIN,

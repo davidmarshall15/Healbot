@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.1.1";
+﻿HEALBOT_VERSION    = "9.0.1.2";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.5.7" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.5.8" end
 
 function HealBot_globalVars()
     --Consumables
@@ -182,6 +182,7 @@ function HealBot_globalVars()
     HEALBOT_SWIFTMEND                       = 18562 --GetSpellInfo(18562) or "--Swiftmend";
     HEALBOT_TRANQUILITY                     = 157982 --GetSpellInfo(740) or "--Tranquility";
     HEALBOT_WILD_GROWTH                     = 48438 --GetSpellInfo(48438) or "--Wild Growth";
+	HEALBOT_NOURISH                         = 289022
     --Monk
     HEALBOT_CHI_WAVE                        = 132463 --GetSpellInfo(132463) or "--Chi Wave"
     HEALBOT_CHI_BURST                       = 130651 --GetSpellInfo(130651) or "--Chi Burst"
@@ -598,6 +599,10 @@ function HealBot_globalVars()
     HEALBOT_FEINT                           = 1966 --GetSpellInfo(1966) or "--Feint"
     HEALBOT_SWIFTBLADES_CUNNING             = 113742 --GetSpellInfo(113742) or "--Swiftblade's Cunning";
     HEALBOT_VANISH                          = 11327 --GetSpellInfo(1856) or "--Vanish";
+    HEALBOT_DEADLY_POISON                   = 2823
+	HEALBOT_CRIPPLING_POISON                = 3408
+	HEALBOT_WOUND_POISON                    = 8679
+	
     
     --Resurrection Spells
     HEALBOT_ANCESTRALSPIRIT                 = 2008 --GetSpellInfo(2008) or "--Ancestral Spirit";
