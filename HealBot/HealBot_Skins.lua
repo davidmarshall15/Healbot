@@ -162,6 +162,9 @@ function HealBot_Skins_ResetElement(element)
 		for _,xButton in pairs(HealBot_Pet_Button) do
 			xButton.icon.reset=true
 		end
+		for _,xButton in pairs(HealBot_Extra_Button) do
+			xButton.icon.reset=true
+		end
 	else
 		for _,xButton in pairs(HealBot_Unit_Button) do
 			xButton.skinreset=true
@@ -173,6 +176,9 @@ function HealBot_Skins_ResetElement(element)
 			xButton.skinreset=true
 		end
 		for _,xButton in pairs(HealBot_Pet_Button) do
+			xButton.skinreset=true
+		end
+		for _,xButton in pairs(HealBot_Extra_Button) do
 			xButton.skinreset=true
 		end
 	end

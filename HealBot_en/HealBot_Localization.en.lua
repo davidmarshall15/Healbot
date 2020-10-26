@@ -730,6 +730,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ACCEPTSKINS                     = "Accept Skins from others"
     HEALBOT_SUPPRESSSOUND                   = "Auto Trinket: Suppress sound"
     HEALBOT_SUPPRESSERROR                   = "Auto Trinket: Suppress errors"
+    HEALBOT_PERFLEVEL                       = "Performance Level"
     HEALBOT_OPTIONS_CRASHPROT               = "Crash Protection"
     HEALBOT_OPTIONS_USEGENERALMACRO         = "Use general macro slots"
     HEALBOT_CP_MACRO_LEN                    = "Macro name must be between 1 and 14 characters"

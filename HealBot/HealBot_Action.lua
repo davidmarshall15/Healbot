@@ -786,7 +786,7 @@ end
 function HealBot_Action_stateChange(button)
     HealBot_UpdAuxBar(button)
     HealBot_UnitAuraAlpha(button)
-	HealBot_setLuVars("fastUpdateEveryFrame",2)
+	HealBot_fastUpdateEveryFrame(5)
 end
 
 function HealBot_Action_setState(button, state)
@@ -911,8 +911,8 @@ end
 
 function HealBot_Action_UpdateBuffButton(button)
     if button.aura.buff.name and button.status.current<8 and UnitExists(button.unit) then
+		HealBot_UpdateUnitRange(button,false)
         if HealBot_Config_Buffs.CBshownHB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
-            HealBot_UpdateUnitRange(button,false)
             button.status.r,button.status.g,button.status.b=HealBot_Options_RetBuffRGB(button)  
             button.status.current=7
             HealBot_Text_setHealthText(button)
@@ -955,7 +955,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Text_setNameTag(button)
             HealBot_Action_Refresh(button)
 			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
-			button.status.throttle=0
+			button.status.throttle=true
 			HealBot_Text_SetText(button)
         elseif UnitHasIncomingResurrection(button.unit) then
             if not ripHasRes[button.id] then
@@ -982,6 +982,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
         end
     elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
         button.status.current=9
+		HealBot_Action_setState(button, true)
         button.aura.buff.nextcheck=false
         button.text.nameupdate=true
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==1 then
@@ -1018,7 +1019,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Action_Refresh(button)
         end
 		if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
-		button.status.throttle=0
+		button.status.throttle=true
     end
       --HealBot_setCall("HealBot_Action_UpdateTheDeadButton")
 end
@@ -1138,6 +1139,11 @@ function HealBot_Action_ShouldHealSome(hbCurFrame)
         end
     end
     for _,xButton in pairs(HealBot_Private_Button) do
+        if xButton.frame==hbCurFrame and xButton.status.enabled then
+            return true
+        end
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
         if xButton.frame==hbCurFrame and xButton.status.enabled then
             return true
         end
@@ -1550,6 +1556,9 @@ function HealBot_Action_ResetUnitStatus(noPets)
     for _,xButton in pairs(HealBot_Private_Button) do
         HealBot_Action_Refresh(xButton)
     end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_Action_Refresh(xButton)
+    end
 	if not noPets then
 		for _,xButton in pairs(HealBot_Pet_Button) do
 			HealBot_Action_Refresh(xButton)
@@ -1574,7 +1583,11 @@ function HealBot_Action_ResetActiveUnitStatus()
             HealBot_Action_Refresh(xButton)
         end
     end
-    --HealBot_setCall("HealBot_Action_ResetActiveUnitStatus")
+    for xUnit,xButton in pairs(HealBot_Extra_Button) do
+        if not xButton.status.reserved and xButton.status.current>3 then
+            HealBot_Action_Refresh(xButton)
+        end
+    end
     --HealBot_setCall("HealBot_Action_ResetActiveUnitStatus")
 end
 
@@ -1592,6 +1605,9 @@ function HealBot_Action_ResetrCalls()
         HealBot_Action_ResetrCallsUnit(xUnit)
     end
     for xUnit,_ in pairs(HealBot_Private_Button) do
+        HealBot_Action_ResetrCallsUnit(xUnit)
+    end
+    for xUnit,_ in pairs(HealBot_Extra_Button) do
         HealBot_Action_ResetrCallsUnit(xUnit)
     end
     for xUnit,_ in pairs(HealBot_Pet_Button) do
@@ -1792,6 +1808,7 @@ function HealBot_Action_PrepButton(button)
 	button.status.plugin=false
     button.status.current=0
     button.status.range=-9
+    button.status.rangecheck=0
     button.status.unittype=1
     button.status.offline=false
     button.status.enabled=false
@@ -1802,7 +1819,8 @@ function HealBot_Action_PrepButton(button)
     button.status.dirarrowcords=0 
     button.status.dirarrowshown=false 
     button.status.reserved=false
-    button.status.throttle=0
+    button.status.throttle=true
+    button.status.slowthrottle=0
     button.spells.castpct=-1
     button.aura.buff.name=false
     button.aura.buff.id=0
@@ -2677,7 +2695,9 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton=HealBot_Enemy_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
         elseif unitType>6 and unitType<9 then
             tSetHealButton=HealBot_Pet_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
-        else
+        elseif unitType>8 then
+			tSetHealButton=HealBot_Extra_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
+		else
             tSetHealButton=HealBot_Unit_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
         end
         if not tSetHealButton then return nil end
@@ -2708,7 +2728,9 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
                 HealBot_Pet_Button[unit]=tSetHealButton  
             elseif unitType<5 then
                 HealBot_Private_Button[unit]=tSetHealButton
-            else
+            elseif unitType>8 then
+				HealBot_Extra_Button[unit]=tSetHealButton
+			else
                 HealBot_Unit_Button[unit]=tSetHealButton 
             end
             if tSetHealButton.status.offline and UnitIsConnected(unit) then
@@ -2730,7 +2752,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             HealBot_Aura_setUnitIcons(tSetHealButton.id)
             if unitType<9 then
                 tSetHealButton.status.update=true
-				tSetHealButton.status.throttle=0
+				tSetHealButton.status.throttle=true
             else
                 HealBot_UpdateUnit(tSetHealButton)
             end
@@ -2859,6 +2881,10 @@ function HealBot_Action_SetAllAttribs()
 		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
 		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+    end
     for _,xButton in pairs(HealBot_Enemy_Button) do
 		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
 		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
@@ -2881,6 +2907,9 @@ function HealBot_Action_ResethbInitButtons()
         HealBot_Action_MarkDeleteButton(xButton)
     end 
     for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Action_MarkDeleteButton(xButton)
+    end 
+    for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end 
     for _,xButton in pairs(HealBot_Enemy_Button) do
@@ -2946,6 +2975,9 @@ function HealBot_Action_MarkDeleteButton(button)
 	end
 	if HealBot_Private_Button[button.unit] and HealBot_Private_Button[button.unit].id==button.id then 
 		HealBot_Private_Button[button.unit]=nil 
+	end
+	if HealBot_Extra_Button[button.unit] and HealBot_Extra_Button[button.unit].id==button.id then 
+		HealBot_Extra_Button[button.unit]=nil 
 	end
 	if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit].id==button.id then 
 		HealBot_Unit_Button[button.unit]=nil 
@@ -3161,6 +3193,11 @@ function HealBot_Action_CheckHideFrames()
         end
     end
     for _,xButton in pairs(HealBot_Private_Button) do
+        if xButton.status.enabled then
+            hideFrame[xButton.frame]=false
+        end
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
         if xButton.status.enabled then
             hideFrame[xButton.frame]=false
         end
@@ -3425,6 +3462,11 @@ function HealBot_Action_setRegisterForClicks(button)
                                         "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
                                        "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
             end
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
+                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
+                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+            end
         else
             for _,xButton in pairs(HealBot_Unit_Button) do
                 xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
@@ -3442,6 +3484,11 @@ function HealBot_Action_setRegisterForClicks(button)
                                     "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
             end
             for _,xButton in pairs(HealBot_Pet_Button) do
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
+                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
+                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+            end
+            for _,xButton in pairs(HealBot_Extra_Button) do
                 xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
                                     "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
                                     "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");

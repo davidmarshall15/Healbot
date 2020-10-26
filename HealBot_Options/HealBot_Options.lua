@@ -2141,7 +2141,7 @@ function HealBot_Options_OverrideAuxBarFlashFreq_OnValueChanged(self)
     else
         val=val/100;
         HealBot_Globals.OverrideEffects["OFREQ"] = val;
-		HealBot_Set_Timers()
+		HealBot_setOptions_Timer(4940)
     end
 end
 
@@ -2152,7 +2152,7 @@ function HealBot_Options_AuxBarFlashFreq_OnValueChanged(self)
     else
         val=val/100;
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OFREQ"] = val;
-		HealBot_Set_Timers()
+		HealBot_setOptions_Timer(4940)
     end
 end
 
@@ -3385,17 +3385,21 @@ end
 function HealBot_Options_BarFreq_setVars()
     local fluidFreq=0
     local stateFreq=0
+	local flashFreq=0
     if HealBot_Globals.OverrideEffects["USE"]==1 then
         fluidFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]
         stateFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]/200
+		flashFreq=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OFREQ"]*0.5
     else
         fluidFreq=HealBot_Globals.OverrideEffects["FLUIDFREQ"]
         stateFreq=HealBot_Globals.OverrideEffects["FLUIDFREQ"]/200
+		flashFreq=HealBot_Globals.OverrideEffects["OFREQ"]*0.5
     end
     HealBot_Action_setLuVars("FLUIDFREQ", fluidFreq)
     HealBot_setLuVars("FLUIDFREQ", fluidFreq)
     HealBot_Action_setLuVars("FLUIDSTATEFREQ", stateFreq)
     HealBot_setLuVars("FLUIDSTATEFREQ", stateFreq)
+    HealBot_setLuVars("OFREQ", flashFreq)
 	--HealBot_AddDebug("FLUIDFREQ="..fluidFreq.."  FLUIDSTATEFREQ="..stateFreq)
 end
 
@@ -3405,7 +3409,7 @@ function HealBot_Options_OverrideBarFreq_OnValueChanged(self)
         self:SetValue(val) 
     elseif HealBot_Globals.OverrideEffects["FLUIDFREQ"]~=val then
         HealBot_Globals.OverrideEffects["FLUIDFREQ"] = val;
-        HealBot_Set_Timers()
+        HealBot_setOptions_Timer(4940)
     end
 end
 
@@ -3415,7 +3419,7 @@ function HealBot_Options_BarFreq_OnValueChanged(self)
         self:SetValue(val) 
     elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"]~=val then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] = val;
-        HealBot_Set_Timers()
+        HealBot_setOptions_Timer(4940)
     end
 end
 
@@ -8002,6 +8006,7 @@ function HealBot_Options_FullHealSpellsCombo_list (sType)
             HEALBOT_DIVINE_HYMN,
             HEALBOT_HEALING_RAIN,
             HEALBOT_REJUVENATION,
+			HEALBOT_OVERGROWTH,
             HEALBOT_WILD_GROWTH,
             HEALBOT_SWIFTMEND,
             HEALBOT_TRANQUILITY,
@@ -16212,6 +16217,7 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_SetLabel("HealBot_About_Desc1",HEALBOT_ABOUT_DESC1)
             HealBot_Options_SetLabel("HealBot_Info_SuppressSounds",HEALBOT_SUPPRESSSOUND)
             HealBot_Options_SetLabel("HealBot_Info_SuppressErrors",HEALBOT_SUPPRESSERROR)
+			HealBot_Options_SetLabel("HealBot_Info_PerfLevel",HEALBOT_PERFLEVEL)
             g=_G["HealBot_About_AuthorH"] 
             g:SetText(HEALBOT_ABOUT_AUTHORH)
             HealBot_Options_SetLabel("HealBot_About_AuthorD",HEALBOT_ABOUT_AUTHORD)
@@ -17075,6 +17081,20 @@ function HealBot_UpdateUsedMedia(mediatype, key)
                 end
                 xButton.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
             end 
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                xButton.gref["Bar"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                xButton.gref["InHeal"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                for x=1,9 do
+                    xButton.gref.aux[x]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]))
+                end
+                xButton.gref["Absorb"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][xButton.frame]["TEXTURE"]));
+                xButton.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
+                xButton.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
+                for x=1,9 do
+                    xButton.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
+                end
+                xButton.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
+            end 
         end
     elseif mediatype == "font" then
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
@@ -17123,6 +17143,14 @@ function HealBot_UpdateUsedMedia(mediatype, key)
                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HHEIGHT"],
                                     HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HOUTLINE"]]);
             end 
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                xButton.gref.txt["text"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["FONT"]),
+                                    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HEIGHT"],
+                                    HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["OUTLINE"]]);
+                xButton.gref.txt["text2"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HFONT"]),
+                                    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HHEIGHT"],
+                                    HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][xButton.frame]["HOUTLINE"]]);
+            end
         end
     end
 end

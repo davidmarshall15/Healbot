@@ -721,6 +721,9 @@ function HealBot_Text_UpdateNames()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_setNameText(xButton)
     end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_Text_setNameText(xButton)
+    end
 end
 
 function HealBot_Text_UpdateButton(button)
@@ -742,6 +745,10 @@ function HealBot_Text_UpdateButtons()
         xButton.text.healthupdate=true
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        xButton.text.nameupdate=true
+        xButton.text.healthupdate=true
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
         xButton.text.nameupdate=true
         xButton.text.healthupdate=true
     end

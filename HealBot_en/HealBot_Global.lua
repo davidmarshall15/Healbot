@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.1.2";
+﻿HEALBOT_VERSION    = "9.0.1.3";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.5.8" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.5.9" end
 
 function HealBot_globalVars()
     --Consumables
@@ -183,6 +183,7 @@ function HealBot_globalVars()
     HEALBOT_TRANQUILITY                     = 157982 --GetSpellInfo(740) or "--Tranquility";
     HEALBOT_WILD_GROWTH                     = 48438 --GetSpellInfo(48438) or "--Wild Growth";
 	HEALBOT_NOURISH                         = 289022
+	HEALBOT_OVERGROWTH                      = 203651
     --Monk
     HEALBOT_CHI_WAVE                        = 132463 --GetSpellInfo(132463) or "--Chi Wave"
     HEALBOT_CHI_BURST                       = 130651 --GetSpellInfo(130651) or "--Chi Burst"

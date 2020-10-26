@@ -791,7 +791,9 @@ function HealBot_Panel_PositionBars()
             vPosButton=HealBot_Enemy_Button[xUnit] or "nil"
         elseif xUnitType>6 and xUnitType<9 then
             vPosButton=HealBot_Pet_Button[xUnit] or "nil"
-        else
+        elseif xUnitType>8 then
+			vPosButton=HealBot_Extra_Button[xUnit] or "nil"
+		else
             vPosButton=HealBot_Unit_Button[xUnit] or "nil"
         end
         if vPosButton~="nil" and hbBarsPerFrame[vPosButton.frame] then
@@ -1154,6 +1156,9 @@ function HealBot_Panel_TestBarsOn()
         for _,xButton in pairs(HealBot_Pet_Button) do
             HealBot_Action_MarkDeleteButton(xButton)
         end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
     end
     for x,_ in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_HealButtons[x]=nil;
@@ -1365,6 +1370,12 @@ function HealBot_Panel_TestBarsOn()
         end
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        if not HealBot_TestBarsActive[xButton.id] then
+            HealBot_setTestCols[xButton.id]=false
+            HealBot_Action_MarkDeleteButton(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
         if not HealBot_TestBarsActive[xButton.id] then
             HealBot_setTestCols[xButton.id]=false
             HealBot_Action_MarkDeleteButton(xButton)
@@ -2197,7 +2208,7 @@ function HealBot_Panel_TargetChanged(preCombat)
         i[hbCurrentFrame]=0
         HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_targetHeals(preCombat)        
-        vTargetButton = HealBot_Unit_Button["target"]
+        vTargetButton = HealBot_Extra_Button["target"]
         if vTargetButton then
             if HealBot_TrackUnit[vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
                 HealBot_setLuVars("TargetNeedReset", false)
@@ -2210,7 +2221,7 @@ function HealBot_Panel_TargetChanged(preCombat)
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame)
     else
-        vTargetButton = HealBot_Unit_Button["target"]
+        vTargetButton = HealBot_Extra_Button["target"]
         if vTargetButton then
             HealBot_Action_MarkDeleteButton(vTargetButton)
         end
@@ -2222,7 +2233,7 @@ end
 local vFocusParent, vFocusFrame="",""
 function HealBot_Panel_TargetChangedCheckFocus()
     if hbPanelShowhbFocus then
-        local tButton=HealBot_Unit_Button["target"]
+        local tButton=HealBot_Extra_Button["target"]
         if tButton then
             vFocusFrame=_G["HealBot_Action_HealUnit999"]
             local vFocusParent=_G["f8_HealBot_Action"]
@@ -2276,7 +2287,7 @@ function HealBot_Panel_FocusChanged(preCombat)
             i[hbCurrentFrame]=0
             HeaderPos[hbCurrentFrame]={};
             HealBot_Panel_focusHeals(preCombat)
-            vFocusButton = HealBot_Unit_Button["focus"]
+            vFocusButton = HealBot_Extra_Button["focus"]
             if vFocusButton then
                 if HealBot_TrackUnit[vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
                     HealBot_setLuVars("FocusNeedReset", false)
@@ -2288,7 +2299,7 @@ function HealBot_Panel_FocusChanged(preCombat)
             end
             HealBot_Panel_SetupExtraBars(hbCurrentFrame)
         else
-            vFocusButton = HealBot_Unit_Button["focus"]
+            vFocusButton = HealBot_Extra_Button["focus"]
             if vFocusButton then
                 HealBot_Action_MarkDeleteButton(vFocusButton)
             end
@@ -2453,7 +2464,7 @@ function HealBot_Panel_PlayersChanged()
                     HealBot_Action_MarkDeleteButton(xButton)
 					HealBot_Panel_luVars["MarkClearDown"]=true
                 end
-            elseif xButton.status.unittype<5 or xButton.status.unittype>10 then
+            elseif xButton.status.unittype<5 or xButton.status.unittype>8 then
                 HealBot_Unit_Button[xUnit]=nil
             end
         end
@@ -2664,15 +2675,13 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
 			HealBot_Panel_DoPartyChanged(preCombat, 4)
         end 
     end
-	if HealBot_Data["UILOCK"] then 
-		HealBot_IconsInUse()
-	else
+	if not HealBot_Data["UILOCK"] then 
 		local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+5
 		if nMembers>HealBot_Globals.AutoCacheSize then	
 			HealBot_Globals.AutoCacheSize=nMembers
 		end
 		HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
-		HealBot_setLuVars("fastUpdateEveryFrame",2)
+		HealBot_fastUpdateEveryFrame(5)
 	end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

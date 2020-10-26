@@ -389,6 +389,7 @@ function HealBot_Data_InitVars()
         WatchHoT = {
            ["DRUI"] = {
                 [HEALBOT_REJUVENATION]=2,
+				[HEALBOT_OVERGROWTH]=2,
                 [HEALBOT_CENARION_WARD]=2,
                 [HEALBOT_REGROWTH]=2,
                 [HEALBOT_LIFEBLOOM]=2,
@@ -3280,4 +3281,5 @@ HealBot_Spell_Names = {};
 HealBot_Unit_Button={};
 HealBot_Private_Button={};
 HealBot_Enemy_Button={};
+HealBot_Extra_Button={};
 HealBot_Pet_Button={};    
