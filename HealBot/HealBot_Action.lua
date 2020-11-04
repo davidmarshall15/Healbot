@@ -29,44 +29,44 @@ function HealBot_Action_retLuVars(vName)
 end
 
 function HealBot_Action_setpcClass()
-	local xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
-	if xButton then
-		for j=1,5 do
-			if HEALBOT_GAME_VERSION>3 and 
-			   (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK]) and 
-				Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
-				local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"];
-				if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
-					HealBot_pcClass[j]=9
-					HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 9);
-				else
-					HealBot_pcClass[j]=12
-					HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 12);
-				end     
-				if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
-					xButton.skinreset=true
-					xButton.icon.reset=true
-					HealBot_nextRecalcParty(6)
-				end
-			else
-				HealBot_pcClass[j]=false
-				HealBot_Action_rCalls[xButton.unit]["powerIndicator"]="p0"
-				for y=1,5 do
-					xButton.gref.indicator.power[y]:SetAlpha(0)
-				end
-			end
-		end
-	end
+    local xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
+    if xButton then
+        for j=1,5 do
+            if HEALBOT_GAME_VERSION>3 and 
+               (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK]) and 
+                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
+                local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"];
+                if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
+                    HealBot_pcClass[j]=9
+                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 9);
+                else
+                    HealBot_pcClass[j]=12
+                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 12);
+                end     
+                if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
+                    xButton.skinreset=true
+                    xButton.icon.reset=true
+                    HealBot_nextRecalcParty(6)
+                end
+            else
+                HealBot_pcClass[j]=false
+                HealBot_Action_rCalls[xButton.unit]["powerIndicator"]="p0"
+                for y=1,5 do
+                    xButton.gref.indicator.power[y]:SetAlpha(0)
+                end
+            end
+        end
+    end
     --HealBot_setCall("HealBot_Action_setpcClass")
 end
 
 function HealBot_Action_SetrSpell()
-	HealBot_RangeSpells["HEAL"]=nil
-	HealBot_RangeSpells["BUFF"]=nil
-	HealBot_RangeSpells["CURE"]=nil
-	HealBot_RangeSpells["RES"]=nil
+    HealBot_RangeSpells["HEAL"]=nil
+    HealBot_RangeSpells["BUFF"]=nil
+    HealBot_RangeSpells["CURE"]=nil
+    HealBot_RangeSpells["RES"]=nil
     HealBot_RangeSpells["HARM"]=nil
-	local x=HealBot_GetBandageType() or HEALBOT_WORDS_UNKNOWN
+    local x=HealBot_GetBandageType() or HEALBOT_WORDS_UNKNOWN
     local sName=nil
     if HealBot_Data["PCLASSTRIM"]=="DRUI" then
         sName=HealBot_KnownSpell(HEALBOT_WRATH)
@@ -82,9 +82,9 @@ function HealBot_Action_SetrSpell()
         end
         sName=HealBot_KnownSpell(HBC_GIFT_OF_THE_WILD)
         if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		else
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        else
             sName=HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD)
             if sName then 
                 HealBot_RangeSpells["BUFF"]=sName
@@ -93,19 +93,19 @@ function HealBot_Action_SetrSpell()
         end
         sName=HealBot_KnownSpell(HEALBOT_REMOVE_CORRUPTION)
         if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
-		end
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_REVIVE)
         if sName then 
-			HealBot_RangeSpells["RES"]=sName
-			x=sName
-		end
+            HealBot_RangeSpells["RES"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_REJUVENATION)
         if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
-		end
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="MAGE" then
         sName=HealBot_KnownSpell(HEALBOT_FROSTFIRE_BOLT)
         if sName then 
@@ -119,15 +119,15 @@ function HealBot_Action_SetrSpell()
             end
         end
         sName=HealBot_KnownSpell(HEALBOT_ARCANE_BRILLIANCE)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_REMOVE_CURSE)
-		if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
         sName=HealBot_KnownSpell(HEALBOT_HOLY_SHOCK)
         if sName then 
@@ -139,27 +139,27 @@ function HealBot_Action_SetrSpell()
                 HealBot_RangeSpells["HARM"]=sName
                 x=sName
             end
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_REDEMPTION)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_CLEANSE)
-		if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_REDEMPTION)
-		if sName then 
-			HealBot_RangeSpells["RES"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["RES"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_FLASH_OF_LIGHT)
-		if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="PRIE" then
         sName=HealBot_KnownSpell(HEALBOT_SHADOW_WORD_PAIN)
         if sName then 
@@ -180,46 +180,46 @@ function HealBot_Action_SetrSpell()
         end
         sName=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
         if not sName and HEALBOT_GAME_VERSION<4 then sName=HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) end
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_PURIFY)
-		if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_RESURRECTION)
-		if sName then 
-			HealBot_RangeSpells["RES"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["RES"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_FLASH_HEAL)
-		if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
+        if sName then 
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_PENANCE)
             if sName then 
                 HealBot_RangeSpells["HEAL"]=sName
                 x=sName
             end
-		end
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
         sName=HealBot_KnownSpell(HEALBOT_LIGHTNING_BOLT)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_EARTH_SHIELD)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_PURIFY_SPIRIT)
-		if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
+        if sName then 
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_CLEANSE_SPIRIT)
             if sName then 
@@ -232,47 +232,47 @@ function HealBot_Action_SetrSpell()
                     x=sName
                 end
             end
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_ANCESTRALSPIRIT)
-		if sName then 
-			HealBot_RangeSpells["RES"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["RES"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_HEALING_SURGE)
-		if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         sName=HealBot_KnownSpell(HEALBOT_CRACKLING_JADE_LIGHTNING)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_LEGACY_EMPEROR)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_DETOX)
-		if sName then 
-			HealBot_RangeSpells["CURE"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["CURE"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_RESUSCITATE)
-		if sName then 
-			HealBot_RangeSpells["RES"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["RES"]=sName
+            x=sName
+        end
         sName=HealBot_KnownSpell(HEALBOT_SOOTHING_MIST)
-		if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="WARL" then
         sName=HealBot_KnownSpell(HEALBOT_CORRUPTION)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_FEAR)
@@ -280,33 +280,33 @@ function HealBot_Action_SetrSpell()
                 HealBot_RangeSpells["HARM"]=sName
                 x=sName
             end
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_UNENDING_BREATH)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="WARR" then
         sName=HealBot_KnownSpell(HEALBOT_TAUNT)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_VIGILANCE)
         if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_BATTLE_SHOUT)
             if sName then 
                 HealBot_RangeSpells["BUFF"]=sName
                 x=sName
             end
-		end
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="HUNT" then
         sName=HealBot_KnownSpell(HEALBOT_ARCANE_SHOT)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_CONCUSSIVE_SHOT)
@@ -320,16 +320,16 @@ function HealBot_Action_SetrSpell()
                     x=sName
                 end
             end
-		end
+        end
         sName=HealBot_KnownSpell(HEALBOT_MENDPET)
-		if sName then 
-			HealBot_RangeSpells["HEAL"]=sName
-			x=sName
-		end
+        if sName then 
+            HealBot_RangeSpells["HEAL"]=sName
+            x=sName
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="ROGU" then
         sName=HealBot_KnownSpell(HEALBOT_THROW)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_GOUGE)
@@ -337,22 +337,22 @@ function HealBot_Action_SetrSpell()
                 HealBot_RangeSpells["HARM"]=sName
                 x=sName
             end
-		end
-		sName=HealBot_KnownSpell(HEALBOT_DEADLY_POISON)
-		if sName then 
-			HealBot_RangeSpells["BUFF"]=sName
-			x=sName
-		else
-			sName=HealBot_KnownSpell(HEALBOT_CRIPPLING_POISON)
-			if sName then 
-				HealBot_RangeSpells["BUFF"]=sName
-				x=sName
-			end
-		end
+        end
+        sName=HealBot_KnownSpell(HEALBOT_DEADLY_POISON)
+        if sName then 
+            HealBot_RangeSpells["BUFF"]=sName
+            x=sName
+        else
+            sName=HealBot_KnownSpell(HEALBOT_CRIPPLING_POISON)
+            if sName then 
+                HealBot_RangeSpells["BUFF"]=sName
+                x=sName
+            end
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="DEAT" then
         sName=HealBot_KnownSpell(HEALBOT_DEATH_COIL)
         if sName then 
-			HealBot_RangeSpells["HARM"]=sName
+            HealBot_RangeSpells["HARM"]=sName
             x=sName
         else
             sName=HealBot_KnownSpell(HEALBOT_PLAGUE_STRIKE)
@@ -360,13 +360,13 @@ function HealBot_Action_SetrSpell()
                 HealBot_RangeSpells["HARM"]=sName
                 x=sName
             end
-		end
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="DEMO" then
     end
-	if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
-	if (HealBot_RangeSpells["BUFF"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["BUFF"]=x end
-	if (HealBot_RangeSpells["CURE"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["CURE"]=x end
-	if (HealBot_RangeSpells["RES"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["RES"]=x end
+    if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
+    if (HealBot_RangeSpells["BUFF"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["BUFF"]=x end
+    if (HealBot_RangeSpells["CURE"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["CURE"]=x end
+    if (HealBot_RangeSpells["RES"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["RES"]=x end
     if (HealBot_RangeSpells["HARM"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HARM"]=x end
 end
 
@@ -408,109 +408,109 @@ local HealBot_Fluid_BarButtonsAlpha={}
 local aufbPct,aufbButtonActive,aufbActive=1000,false,false
 local aufbBarValue,aufbSetValue,aufbAlphaValue=0,0,0
 function HealBot_Action_UpdateFluidBar(upVal)
-	aufbActive=false
+    aufbActive=false
     for id,xButton in pairs(HealBot_Fluid_BarButtons) do
         aufbButtonActive=false
         if xButton.status.current<9 then
-			if xButton.health.current<xButton.health.max then
-				aufbPct=floor((xButton.health.current/xButton.health.max)*1000)
-			else
-				aufbPct=1000
-			end
-			aufbBarValue=xButton.gref["Bar"]:GetValue()
-			if aufbBarValue>aufbPct then
-				aufbSetValue=aufbBarValue-upVal
-				if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["Bar"]:SetValue(aufbSetValue)
-				aufbButtonActive=true
-			elseif aufbBarValue<aufbPct then
-				aufbSetValue=aufbBarValue+upVal
-				if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["Bar"]:SetValue(aufbSetValue)
-				aufbButtonActive=true
-			end
-		else
-			xButton.gref["Bar"]:SetValue(0)
-		end
+            if xButton.health.current<xButton.health.max then
+                aufbPct=floor((xButton.health.current/xButton.health.max)*1000)
+            else
+                aufbPct=1000
+            end
+            aufbBarValue=xButton.gref["Bar"]:GetValue()
+            if aufbBarValue>aufbPct then
+                aufbSetValue=aufbBarValue-upVal
+                if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["Bar"]:SetValue(aufbSetValue)
+                aufbButtonActive=true
+            elseif aufbBarValue<aufbPct then
+                aufbSetValue=aufbBarValue+upVal
+                if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["Bar"]:SetValue(aufbSetValue)
+                aufbButtonActive=true
+            end
+        else
+            xButton.gref["Bar"]:SetValue(0)
+        end
         if not aufbButtonActive then
             HealBot_Fluid_BarButtons[id]=nil
-		else
-			aufbActive=true
+        else
+            aufbActive=true
         end
     end
 
     for id,xButton in pairs(HealBot_Fluid_InHealButtons) do
-		if xButton.status.current>3 and xButton.status.current<9 and xButton.health.incoming>0 then
-			aufbActive=true
-			aufbBarValue=0
-			aufbPct = xButton.health.current+xButton.health.incoming
-			if aufbPct<xButton.health.max then 
-				aufbPct=floor((aufbPct/xButton.health.max)*1000)
-			 else
-				aufbPct=1000;
-			end
-			aufbBarValue=xButton.gref["InHeal"]:GetValue()
-			if aufbBarValue>aufbPct then
-				aufbSetValue=aufbBarValue-upVal
-				if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["InHeal"]:SetValue(aufbSetValue)
-			elseif aufbBarValue<aufbPct then
-				aufbSetValue=aufbBarValue+upVal
-				if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["InHeal"]:SetValue(aufbSetValue)
-			end
-		else
-			xButton.gref["InHeal"]:SetValue(0)
-			xButton.gref["InHeal"]:SetStatusBarColor(0,0,0,0)
-			HealBot_Fluid_InHealButtons[id]=nil
-		end
+        if xButton.status.current>3 and xButton.status.current<9 and xButton.health.incoming>0 then
+            aufbActive=true
+            aufbBarValue=0
+            aufbPct = xButton.health.current+xButton.health.incoming
+            if aufbPct<xButton.health.max then 
+                aufbPct=floor((aufbPct/xButton.health.max)*1000)
+             else
+                aufbPct=1000;
+            end
+            aufbBarValue=xButton.gref["InHeal"]:GetValue()
+            if aufbBarValue>aufbPct then
+                aufbSetValue=aufbBarValue-upVal
+                if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["InHeal"]:SetValue(aufbSetValue)
+            elseif aufbBarValue<aufbPct then
+                aufbSetValue=aufbBarValue+upVal
+                if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["InHeal"]:SetValue(aufbSetValue)
+            end
+        else
+            xButton.gref["InHeal"]:SetValue(0)
+            xButton.gref["InHeal"]:SetStatusBarColor(0,0,0,0)
+            HealBot_Fluid_InHealButtons[id]=nil
+        end
     end
 
     for id,xButton in pairs(HealBot_Fluid_AbsorbButtons) do
-		if xButton.status.current>3 and xButton.status.current<9 and xButton.health.absorbs>0 then
-			aufbActive=true
-			aufbBarValue=0
-			aufbPct = xButton.health.current+xButton.health.incoming+xButton.health.absorbs
-			if aufbPct<xButton.health.max then
-				aufbPct=floor((aufbPct/xButton.health.max)*1000)
-			else
-				aufbPct=1000
-			end
-			aufbBarValue=xButton.gref["Absorb"]:GetValue()
-			if aufbBarValue>aufbPct then
-				aufbSetValue=aufbBarValue-upVal
-				if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["Absorb"]:SetValue(aufbSetValue)
-			elseif aufbBarValue<aufbPct then
-				aufbSetValue=aufbBarValue+upVal
-				if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
-				xButton.gref["Absorb"]:SetValue(aufbSetValue)
-			end
-		else
-			xButton.gref["Absorb"]:SetValue(0)
-			xButton.gref["Absorb"]:SetStatusBarColor(0,0,0,0)
-			HealBot_Fluid_AbsorbButtons[id]=nil
-		end
+        if xButton.status.current>3 and xButton.status.current<9 and xButton.health.absorbs>0 then
+            aufbActive=true
+            aufbBarValue=0
+            aufbPct = xButton.health.current+xButton.health.incoming+xButton.health.absorbs
+            if aufbPct<xButton.health.max then
+                aufbPct=floor((aufbPct/xButton.health.max)*1000)
+            else
+                aufbPct=1000
+            end
+            aufbBarValue=xButton.gref["Absorb"]:GetValue()
+            if aufbBarValue>aufbPct then
+                aufbSetValue=aufbBarValue-upVal
+                if aufbSetValue<aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["Absorb"]:SetValue(aufbSetValue)
+            elseif aufbBarValue<aufbPct then
+                aufbSetValue=aufbBarValue+upVal
+                if aufbSetValue>aufbPct then aufbSetValue=aufbPct end
+                xButton.gref["Absorb"]:SetValue(aufbSetValue)
+            end
+        else
+            xButton.gref["Absorb"]:SetValue(0)
+            xButton.gref["Absorb"]:SetStatusBarColor(0,0,0,0)
+            HealBot_Fluid_AbsorbButtons[id]=nil
+        end
     end
-	if not aufbActive then
-		HealBot_UpdateEffectUse("FluidBarInUse", false)
-	end
+    if not aufbActive then
+        HealBot_UpdateEffectUse("FluidBarInUse", false)
+    end
 end
 
 function HealBot_Action_UpdateFluidBarAlpha(upVal)
-	aufbActive=false
+    aufbActive=false
     for id,xButton in pairs(HealBot_Fluid_BarButtonsAlpha) do
         aufbButtonActive=false
         if xButton.status.current<9 then
             _,_,_,aufbAlphaValue=xButton.gref["Bar"]:GetStatusBarColor()
             aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
             if aufbAlphaValue>xButton.status.alpha then
-				aufbSetValue=aufbAlphaValue-upVal
+                aufbSetValue=aufbAlphaValue-upVal
                 if aufbSetValue<xButton.status.alpha then aufbSetValue=xButton.status.alpha end
                 aufbButtonActive=true
                 xButton.gref["Bar"]:SetStatusBarColor(xButton.status.r,xButton.status.g,xButton.status.b, aufbSetValue)
             elseif aufbAlphaValue<xButton.status.alpha then
-				aufbSetValue=aufbAlphaValue+upVal
+                aufbSetValue=aufbAlphaValue+upVal
                 if aufbSetValue>xButton.status.alpha then aufbSetValue=xButton.status.alpha end
                 aufbButtonActive=true
                 xButton.gref["Bar"]:SetStatusBarColor(xButton.status.r,xButton.status.g,xButton.status.b, aufbSetValue)
@@ -520,8 +520,8 @@ function HealBot_Action_UpdateFluidBarAlpha(upVal)
         end
         if not aufbButtonActive then
             HealBot_Fluid_BarButtonsAlpha[id]=nil
-		else
-			aufbActive=true
+        else
+            aufbActive=true
         end
     end
 
@@ -531,25 +531,25 @@ function HealBot_Action_UpdateFluidBarAlpha(upVal)
             _,_,_,aufbAlphaValue=xButton.gref["InHeal"]:GetStatusBarColor()
             aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
             if aufbAlphaValue>xButton.health.inheala then
-				aufbSetValue=aufbAlphaValue-upVal
+                aufbSetValue=aufbAlphaValue-upVal
                 if aufbSetValue<xButton.health.inheala then aufbSetValue=xButton.health.inheala end
                 aufbButtonActive=true
                 xButton.gref["InHeal"]:SetStatusBarColor(xButton.health.inhealr,xButton.health.inhealg,xButton.health.inhealb, aufbSetValue)
             elseif aufbAlphaValue<xButton.health.inheala then
-				aufbSetValue=aufbAlphaValue+upVal
+                aufbSetValue=aufbAlphaValue+upVal
                 if aufbSetValue>xButton.health.inheala then aufbSetValue=xButton.health.inheala end
                 aufbButtonActive=true
                 xButton.gref["InHeal"]:SetStatusBarColor(xButton.health.inhealr,xButton.health.inhealg,xButton.health.inhealb, aufbSetValue)
             else
                 xButton.gref["InHeal"]:SetStatusBarColor(xButton.health.inhealr,xButton.health.inhealg,xButton.health.inhealb, xButton.health.inheala)
             end
-		else
+        else
             xButton.gref["InHeal"]:SetStatusBarColor(xButton.status.r,xButton.status.g,xButton.status.b,xButton.status.alpha)
         end
         if not aufbButtonActive then
             HealBot_Fluid_InHealButtonsAlpha[id]=nil
-		else
-			aufbActive=true
+        else
+            aufbActive=true
         end
     end
 
@@ -559,30 +559,30 @@ function HealBot_Action_UpdateFluidBarAlpha(upVal)
             _,_,_,aufbAlphaValue=xButton.gref["Absorb"]:GetStatusBarColor()
             aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
             if aufbAlphaValue>xButton.health.absorba then
-				aufbSetValue=aufbAlphaValue-upVal
+                aufbSetValue=aufbAlphaValue-upVal
                 if aufbSetValue<xButton.health.absorba then aufbSetValue=xButton.health.absorba end
                 aufbButtonActive=true
                 xButton.gref["Absorb"]:SetStatusBarColor(xButton.health.absorbr,xButton.health.absorbg,xButton.health.absorbb, aufbSetValue)
             elseif aufbAlphaValue<xButton.health.absorba then
-				aufbSetValue=aufbAlphaValue+upVal
+                aufbSetValue=aufbAlphaValue+upVal
                 if aufbSetValue>xButton.health.absorba then aufbSetValue=xButton.health.absorba end
                 aufbButtonActive=true
                 xButton.gref["Absorb"]:SetStatusBarColor(xButton.health.absorbr,xButton.health.absorbg,xButton.health.absorbb, aufbSetValue)
             else
                 xButton.gref["Absorb"]:SetStatusBarColor(xButton.health.absorbr,xButton.health.absorbg,xButton.health.absorbb, xButton.health.absorba)
             end
-		else
+        else
             xButton.gref["Absorb"]:SetStatusBarColor(xButton.status.r,xButton.status.g,xButton.status.b,xButton.status.alpha)
         end
         if not aufbButtonActive then
             HealBot_Fluid_AbsorbButtonsAlpha[id]=nil
-		else
-			aufbActive=true
+        else
+            aufbActive=true
         end
     end
-	if not aufbActive then
-		HealBot_UpdateEffectUse("FluidBarAlphaInUse", false)
-	end
+    if not aufbActive then
+        HealBot_UpdateEffectUse("FluidBarAlphaInUse", false)
+    end
 end
 
 local hbAuxAbsorbAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
@@ -603,7 +603,7 @@ function HealBot_Action_setAuxAssigned(aType, frame, id)
 end
 
 function HealBot_Action_UpdateAuxAbsorbBar(button, value)
-	for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
+    for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=button.health.absorbr
             button.aux[id]["G"]=button.health.absorbg
@@ -614,13 +614,13 @@ function HealBot_Action_UpdateAuxAbsorbBar(button, value)
 end
 
 function HealBot_Action_ClearAuxAbsorbBar(button)
-	for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
+    for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
     end
 end
 
 function HealBot_Action_UpdateAuxHealInBar(button, value)
-	for id in pairs(hbAuxHealInAssigned[button.frame]) do
+    for id in pairs(hbAuxHealInAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=button.health.inhealr
             button.aux[id]["G"]=button.health.inhealg
@@ -631,7 +631,7 @@ function HealBot_Action_UpdateAuxHealInBar(button, value)
 end
 
 function HealBot_Action_ClearAuxHealInBar(button)
-	for id in pairs(hbAuxHealInAssigned[button.frame]) do
+    for id in pairs(hbAuxHealInAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
     end
 end
@@ -654,7 +654,7 @@ function HealBot_Action_UpdateHealsInButton(button)
             button.health.inhealb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IB"]
         elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 3) then -- Incoming Heal Bar Colour = "Future Health"
             button.health.inhealr, button.health.inhealg = HealBot_Action_BarColourPct(auhiHiPct)
-			button.health.inhealb=0
+            button.health.inhealb=0
         else
             button.health.inhealr,button.health.inhealg,button.health.inhealb = button.health.rcol, button.health.gcol,0
         end
@@ -786,7 +786,7 @@ end
 function HealBot_Action_stateChange(button)
     HealBot_UpdAuxBar(button)
     HealBot_UnitAuraAlpha(button)
-	HealBot_fastUpdateEveryFrame(5)
+    HealBot_fastUpdateEveryFrame(5)
 end
 
 function HealBot_Action_setState(button, state)
@@ -795,10 +795,10 @@ function HealBot_Action_setState(button, state)
         HealBot_Action_ShowHideFrames(button) 
         HealBot_Text_UpdateButton(button)
         HealBot_Action_stateChange(button)
-		if not state then
-			if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-			if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
-		end
+        if not state then
+            if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+            if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+        end
     end
 end
 
@@ -806,8 +806,8 @@ function HealBot_Action_UpdateAbsorbStatusBarColor(button)
     if not HealBot_Action_luVars["FluidInUse"] then
         button.gref["Absorb"]:SetStatusBarColor(button.health.absorbr,button.health.absorbg,button.health.absorbb,button.health.absorba);
     else
-		HealBot_Fluid_AbsorbButtonsAlpha[button.id]=button
-		HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
+        HealBot_Fluid_AbsorbButtonsAlpha[button.id]=button
+        HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
     end
 end
 
@@ -815,8 +815,8 @@ function HealBot_Action_UpdateInHealStatusBarColor(button)
     if not HealBot_Action_luVars["FluidInUse"] then
         button.gref["InHeal"]:SetStatusBarColor(button.health.inhealr,button.health.inhealg,button.health.inhealb,button.health.inheala);
     else
-		HealBot_Fluid_InHealButtonsAlpha[button.id]=button
-		HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
+        HealBot_Fluid_InHealButtonsAlpha[button.id]=button
+        HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
     end
 end
 
@@ -824,8 +824,8 @@ function HealBot_Action_UpdateHealthStatusBarColor(button)
     if not HealBot_Action_luVars["FluidInUse"] then
         button.gref["Bar"]:SetStatusBarColor(button.status.r,button.status.g,button.status.b,button.status.alpha);
     else
-		HealBot_Fluid_BarButtonsAlpha[button.id]=button
-		HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
+        HealBot_Fluid_BarButtonsAlpha[button.id]=button
+        HealBot_UpdateEffectUse("FluidBarAlphaInUse", true)
     end
 end
 
@@ -863,11 +863,11 @@ function HealBot_Action_UpdateDebuffButton(button)
                             HealBot_Action_UpdateBuffButton(button)
                             return
                         end
-					else
+                    else
                         if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.id] or 
-						   HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name] or
+                           HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[button.aura.debuff.name] or
                           (not HealBot_Globals.HealBot_Custom_Debuffs[button.aura.debuff.id]
-						   and not HealBot_Globals.HealBot_Custom_Debuffs[button.aura.debuff.name]
+                           and not HealBot_Globals.HealBot_Custom_Debuffs[button.aura.debuff.name]
                            and button.aura.debuff.priority==15
                            and HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]) then
                             button.status.r = HealBot_Globals.CDCBarColour[customDebuffPriority].R
@@ -911,7 +911,7 @@ end
 
 function HealBot_Action_UpdateBuffButton(button)
     if button.aura.buff.name and button.status.current<8 and UnitExists(button.unit) then
-		HealBot_UpdateUnitRange(button,false)
+        HealBot_UpdateUnitRange(button,false)
         if HealBot_Config_Buffs.CBshownHB and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
             button.status.r,button.status.g,button.status.b=HealBot_Options_RetBuffRGB(button)  
             button.status.current=7
@@ -945,7 +945,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             button.aura.check=true
             button.health.update=true
             ripHasRes[button.id]=nil
-			ripHadRes[button.id]=nil
+            ripHadRes[button.id]=nil
             button.text.nameupdate=true
             HealBot_UpdateUnitRange(button,false)
             HealBot_Action_UpdateBackgroundButton(button)
@@ -954,35 +954,35 @@ function HealBot_Action_UpdateTheDeadButton(button)
             end
             HealBot_Text_setNameTag(button)
             HealBot_Action_Refresh(button)
-			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
-			button.status.throttle=true
-			HealBot_Text_SetText(button)
+            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+            button.status.throttle=true
+            HealBot_Text_SetText(button)
         elseif UnitHasIncomingResurrection(button.unit) then
             if not ripHasRes[button.id] then
-				if HEALBOT_GAME_VERSION>3 then
-					ripHasRes[button.id]=GetTime()+7
-				else
-					ripHasRes[button.id]=GetTime()+9
-				end
+                if HEALBOT_GAME_VERSION>3 then
+                    ripHasRes[button.id]=GetTime()+7
+                else
+                    ripHasRes[button.id]=GetTime()+9
+                end
                 button.text.nameupdate=true
-				HealBot_Text_SetText(button)
+                HealBot_Text_SetText(button)
             end
-			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 1) end
+            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 1) end
         elseif ripHasRes[button.id] and ripHasRes[button.id]<GetTime() then
             ripHasRes[button.id]=nil
-			ripHadRes[button.id]=GetTime()+HealBot_Globals.ResLagDuration
+            ripHadRes[button.id]=GetTime()+HealBot_Globals.ResLagDuration
             button.text.nameupdate=true
-			HealBot_Text_SetText(button)
-			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 2) end
-		elseif ripHadRes[button.id] and ripHadRes[button.id]<GetTime() then
-			ripHadRes[button.id]=nil
+            HealBot_Text_SetText(button)
+            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 2) end
+        elseif ripHadRes[button.id] and ripHadRes[button.id]<GetTime() then
+            ripHadRes[button.id]=nil
             button.text.nameupdate=true
-			HealBot_Text_SetText(button)
-			if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+            HealBot_Text_SetText(button)
+            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
         end
     elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
         button.status.current=9
-		HealBot_Action_setState(button, true)
+        HealBot_Action_setState(button, true)
         button.aura.buff.nextcheck=false
         button.text.nameupdate=true
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BACK"]==1 then
@@ -1006,8 +1006,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
         HealBot_UpdateUnitRange(button,false)
         HealBot_Text_setNameTag(button)
         HealBot_OnEvent_UnitHealth(button)
-		if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-		if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+        if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+        if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
         HealBot_clearAllAuxBar(button)
         ripPlayerBuffsList=button.aura.buff.recheck
         for name,_ in pairs (ripPlayerBuffsList) do
@@ -1018,24 +1018,24 @@ function HealBot_Action_UpdateTheDeadButton(button)
         else
             HealBot_Action_Refresh(button)
         end
-		if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
-		button.status.throttle=true
+        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+        button.status.throttle=true
     end
       --HealBot_setCall("HealBot_Action_UpdateTheDeadButton")
 end
 
 function HealBot_Action_IsUnitDead(guid)
-	local unit=HealBot_Panel_RaidUnitGUID(guid)
-	if unit and UnitExists(unit) then
-		local button=HealBot_Unit_Button[unit] or HealBot_Private_Button[unit]
-		if button and button.status.current==9 then
-			return true
-		else
-			return false
-		end
-	else
-		return false
-	end
+    local unit=HealBot_Panel_RaidUnitGUID(guid)
+    if unit and UnitExists(unit) then
+        local button=HealBot_Unit_Button[unit] or HealBot_Private_Button[unit]
+        if button and button.status.current==9 then
+            return true
+        else
+            return false
+        end
+    else
+        return false
+    end
 end
 
 local auhbPtc=0
@@ -1090,22 +1090,22 @@ function HealBot_Action_UpdateHealthButton(button)
             button.gref["Bar"]:SetStatusBarColor(0.2,0.2,0.2,0.4);
             button.gref["Back"]:SetStatusBarColor(0, 0, 0, 0)
         end
-		HealBot_Text_setHealthText(button)
-		HealBot_Text_SetText(button)
-		if button.gref["Bar"]:GetValue()~=auhbPtc then
-			if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
-				button.gref["Bar"]:SetValue(auhbPtc)
-				button.health.init=false
-			elseif UnitExists(button.unit) then
-				HealBot_Fluid_BarButtons[button.id]=button
-				HealBot_UpdateEffectUse("FluidBarInUse", true)
-			elseif HealBot_Fluid_BarButtons[button.id] then
-				HealBot_Fluid_BarButtons[button.id]=nil
-				button.gref["Bar"]:SetValue(0)
-			end
-			if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
-			if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
-		end
+        HealBot_Text_setHealthText(button)
+        HealBot_Text_SetText(button)
+        if button.gref["Bar"]:GetValue()~=auhbPtc then
+            if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
+                button.gref["Bar"]:SetValue(auhbPtc)
+                button.health.init=false
+            elseif UnitExists(button.unit) then
+                HealBot_Fluid_BarButtons[button.id]=button
+                HealBot_UpdateEffectUse("FluidBarInUse", true)
+            elseif HealBot_Fluid_BarButtons[button.id] then
+                HealBot_Fluid_BarButtons[button.id]=nil
+                button.gref["Bar"]:SetValue(0)
+            end
+            if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
+            if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
+        end
     end
       --HealBot_setCall("HealBot_Action_UpdateHealthButton")
 end
@@ -1122,7 +1122,7 @@ function HealBot_Action_BarColourPct(hlthPct)
     elseif hlthPct<=0.31 then 
         hacpg = 0
     end
-	return hacpr, hacpg
+    return hacpr, hacpg
     --HealBot_setCall("HealBot_Action_BarColourPct")
 end
 
@@ -1203,28 +1203,28 @@ end
 local hbAuxPowerAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 function HealBot_Action_clearAuxPowerAssigned()
     for f=1,10 do
-		hbAuxPowerAssigned[f]={};
+        hbAuxPowerAssigned[f]={};
     end
 end
 
 function HealBot_Action_setAuxPowerAssigned(frame, id)
-	hbAuxPowerAssigned[frame][id]=true
+    hbAuxPowerAssigned[frame][id]=true
 end
 
 local hbPowerIndicator=0
 function HealBot_Action_setPowerBars(button)
-	for id in pairs(hbAuxPowerAssigned[button.frame]) do
-		if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-			button.aux[id]["R"]=button.mana.r
-			button.aux[id]["G"]=button.mana.g
-			button.aux[id]["B"]=button.mana.b
-		end
-		if button.mana.max==0 then
-			HealBot_setAuxBar(button, id, 0, true)
-		else
-			HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
-		end
-	end
+    for id in pairs(hbAuxPowerAssigned[button.frame]) do
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=button.mana.r
+            button.aux[id]["G"]=button.mana.g
+            button.aux[id]["B"]=button.mana.b
+        end
+        if button.mana.max==0 then
+            HealBot_setAuxBar(button, id, 0, true)
+        else
+            HealBot_setAuxBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
+        end
+    end
     --HealBot_setCall("HealBot_Action_setPowerBars")
 end
 
@@ -1443,10 +1443,10 @@ function HealBot_Action_ShowDirectionArrow(button)
             if not button.status.dirarrowshown then 
                 button.status.dirarrowcords=ooRhbD
                 button.status.dirarrowshown=true
-				HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
+                HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
             elseif button.status.dirarrowcords~=ooRhbD then
                 button.status.dirarrowcords=ooRhbD
-				HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
+                HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
             end
         elseif button.status.dirarrowshown then
             HealBot_Action_HideDirectionArrow(button)
@@ -1458,12 +1458,12 @@ function HealBot_Action_ShowDirectionArrow(button)
 end
 
 function HealBot_Action_SetDirectionArrow(button, index)
-	button.gref.icon[index]:SetTexCoord(ooRhbX, ooRhbX + 0.109375, ooRhbY, ooRhbY + 0.08203125)
+    button.gref.icon[index]:SetTexCoord(ooRhbX, ooRhbX + 0.109375, ooRhbY, ooRhbY + 0.08203125)
 end
 
 function HealBot_Action_HideDirectionArrow(button)
     button.status.dirarrowshown=false
-	HealBot_Aura_OORUpdate(button, false)
+    HealBot_Aura_OORUpdate(button, false)
     --HealBot_setCall("HealBot_Action_HideDirectionArrow")
 end
 
@@ -1472,57 +1472,57 @@ local grpFrameBar={}
 local grpFrameText={}
 
 function HealBot_Action_setFrameHeader(f, frameScale)
-	if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][f]["SHOW"] then
-		local fWidth=grpFrame[f]:GetRight()-grpFrame[f]:GetLeft()
-		local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
-		grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*frameScale));
-		grpFrameBar[f]:SetWidth(hwidth);
-		grpFrameBar[f]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"]));
-		grpFrameBar[f]:GetStatusBarTexture():SetHorizTile(false)
-		grpFrameBar[f]:SetMinMaxValues(0,100);
-		grpFrameBar[f]:SetValue(100);
-		grpFrameBar[f]:SetStatusBarColor(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["R"],
-							  Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["G"],
-							  Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["B"],
-							  Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["A"]);
-	else
-		grpFrameBar[f]:SetStatusBarColor(0,0,0,0);
-	end
-	grpFrameBar[f]:EnableMouse(false)
-	barScale = grpFrameBar[f]:GetScale();
-	grpFrameBar[f]:SetScale(barScale + 0.01);
-	grpFrameBar[f]:SetScale(barScale);
+    if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][f]["SHOW"] then
+        local fWidth=grpFrame[f]:GetRight()-grpFrame[f]:GetLeft()
+        local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
+        grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*frameScale));
+        grpFrameBar[f]:SetWidth(hwidth);
+        grpFrameBar[f]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"]));
+        grpFrameBar[f]:GetStatusBarTexture():SetHorizTile(false)
+        grpFrameBar[f]:SetMinMaxValues(0,100);
+        grpFrameBar[f]:SetValue(100);
+        grpFrameBar[f]:SetStatusBarColor(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["R"],
+                              Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["G"],
+                              Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["B"],
+                              Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["A"]);
+    else
+        grpFrameBar[f]:SetStatusBarColor(0,0,0,0);
+    end
+    grpFrameBar[f]:EnableMouse(false)
+    barScale = grpFrameBar[f]:GetScale();
+    grpFrameBar[f]:SetScale(barScale + 0.01);
+    grpFrameBar[f]:SetScale(barScale);
 end
 
 function HealBot_Action_InitFrames()
     for x=1,10 do
         grpFrame[x]=_G["f"..x.."_HealBot_Action"]
-		if not grpFrame[x] then
-			grpFrame[x]=CreateFrame("Frame", "f"..x.."_HealBot_Action", UIParent, BackdropTemplateMixin and "SecureFrameTemplate,BackdropTemplate")
-			grpFrame[x]:SetBackdrop({
-				bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
-				edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
-				tile = true,
-				tileSize = 8,
-				edgeSize = 8,
-				insets = { left = 3, right = 3, top = 3, bottom = 3, },
-			})
-			grpFrame[x].id=x
-			grpFrame[x]:SetMovable(true)
-			grpFrame[x]:EnableMouse(true)
-			grpFrame[x]:SetScript("OnShow", function(self) HealBot_Action_OnShow(self) end)
-			grpFrame[x]:SetScript("OnMouseDown", function(self, button) HealBot_Action_OnMouseDown(self, button) end)
-			grpFrame[x]:SetScript("OnMouseUp", function(self, button) HealBot_Action_OnMouseUp(self, button) end)
-			grpFrame[x]:SetScript("OnDragStart", function(self) HealBot_Action_OnDragStart(self) end)
-			grpFrameBar[x]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_HeaderBar", grpFrame[x], "TextStatusBar")
-			grpFrameBar[x]:SetPoint("BOTTOM",grpFrame[x],"TOP",0,-2)
-			grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
-			ShowUIPanel(grpFrame[x])
-			HealBot_Action_FrameSetPoint(x, grpFrame[x])
-			HideUIPanel(grpFrame[x])
-		end
+        if not grpFrame[x] then
+            grpFrame[x]=CreateFrame("Frame", "f"..x.."_HealBot_Action", UIParent, BackdropTemplateMixin and "SecureFrameTemplate,BackdropTemplate")
+            grpFrame[x]:SetBackdrop({
+                bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
+                edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
+                tile = true,
+                tileSize = 8,
+                edgeSize = 8,
+                insets = { left = 3, right = 3, top = 3, bottom = 3, },
+            })
+            grpFrame[x].id=x
+            grpFrame[x]:SetMovable(true)
+            grpFrame[x]:EnableMouse(true)
+            grpFrame[x]:SetScript("OnShow", function(self) HealBot_Action_OnShow(self) end)
+            grpFrame[x]:SetScript("OnMouseDown", function(self, button) HealBot_Action_OnMouseDown(self, button) end)
+            grpFrame[x]:SetScript("OnMouseUp", function(self, button) HealBot_Action_OnMouseUp(self, button) end)
+            grpFrame[x]:SetScript("OnDragStart", function(self) HealBot_Action_OnDragStart(self) end)
+            grpFrameBar[x]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_HeaderBar", grpFrame[x], "TextStatusBar")
+            grpFrameBar[x]:SetPoint("BOTTOM",grpFrame[x],"TOP",0,-2)
+            grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
+            ShowUIPanel(grpFrame[x])
+            HealBot_Action_FrameSetPoint(x, grpFrame[x])
+            HideUIPanel(grpFrame[x])
+        end
     end
-	HealBot_Action_luVars["FrameInitDone"]=true
+    HealBot_Action_luVars["FrameInitDone"]=true
 end
 
 function HealBot_Action_ShowPanel(frame)
@@ -1536,11 +1536,11 @@ function HealBot_Action_ShowPanel(frame)
 end
 
 function HealBot_Action_FrameIsVisible(frame)
-	if grpFrame[frame]:IsVisible() then 
-		return true
-	else
-		return false
-	end
+    if grpFrame[frame]:IsVisible() then 
+        return true
+    else
+        return false
+    end
 end
 
 function HealBot_Action_HidePanel(frame)
@@ -1559,11 +1559,11 @@ function HealBot_Action_ResetUnitStatus(noPets)
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Action_Refresh(xButton)
     end
-	if not noPets then
-		for _,xButton in pairs(HealBot_Pet_Button) do
-			HealBot_Action_Refresh(xButton)
-		end
-	end
+    if not noPets then
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Action_Refresh(xButton)
+        end
+    end
     --HealBot_setCall("HealBot_Action_ResetUnitStatus")
 end
 
@@ -1706,10 +1706,10 @@ function HealBot_Action_InitButton(button)
     button.gref.icon[56]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon56"]
     button.gref.icon[57]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon57"]
     button.gref.icon[58]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon58"]
-	button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraClass"]
-	button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraTarget"]
-	button.gref.icon[93]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraRC"]
-	button.gref.icon[94]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraOOR"]
+    button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraClass"]
+    button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraTarget"]
+    button.gref.icon[93]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraRC"]
+    button.gref.icon[94]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraOOR"]
     button.gref.txt.expire[1]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire1"]
     button.gref.txt.count[1]=_G["HealBot_Action_HealUnit"..button.id.."BarCount1"]
     button.gref.txt.expire[2]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire2"]
@@ -1765,9 +1765,9 @@ function HealBot_Action_InitButton(button)
     button.gref.indicator.power[4]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi4"]
     button.gref.indicator.power[5]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi5"]
     button.skin=""
-	button.frame=0
-	HealBot_Action_SetButtonAttrib(button,"Left","Alt-Ctrl-Shift","Fixed",1)
-	HealBot_Action_SetButtonAttrib(button,"Right","Alt-Ctrl-Shift","Fixed",2)
+    button.frame=0
+    HealBot_Action_SetButtonAttrib(button,"Left","Alt-Ctrl-Shift","Fixed",1)
+    HealBot_Action_SetButtonAttrib(button,"Right","Alt-Ctrl-Shift","Fixed",2)
     --HealBot_setCall("HealBot_Action_InitButton")
 end
 
@@ -1802,10 +1802,10 @@ function HealBot_Action_PrepButton(button)
     button.mana.r=0
     button.mana.g=0
     button.mana.b=1
-	button.status.duplicate=false
-	button.status.classknown=false
-	button.status.role=0
-	button.status.plugin=false
+    button.status.duplicate=false
+    button.status.classknown=false
+    button.status.role=0
+    button.status.plugin=false
     button.status.current=0
     button.status.range=-9
     button.status.rangecheck=0
@@ -1867,8 +1867,8 @@ function HealBot_Action_PrepButton(button)
         button.aux[x]["STATIC"]=false
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
     end
-	HealBot_Action_SetAllButtonAttribs(button,"Enemy")
-	HealBot_Action_SetAllButtonAttribs(button,"Enabled")
+    HealBot_Action_SetAllButtonAttribs(button,"Enemy")
+    HealBot_Action_SetAllButtonAttribs(button,"Enabled")
     --HealBot_setCall("HealBot_Action_PrepButton")
 end
 
@@ -1897,11 +1897,11 @@ function HealBot_Action_CreateButton(hbCurFrame)
             HealBot_Action_PrepButton(ghb)
             ghb.frame=hbCurFrame
         end
-		if freeId<998 then
-			HealBot_ActiveButtons[0]=freeId+1
-		else
-			HealBot_ActiveButtons[0]=1
-		end
+        if freeId<998 then
+            HealBot_ActiveButtons[0]=freeId+1
+        else
+            HealBot_ActiveButtons[0]=1
+        end
         return ghb
     else
         return nil
@@ -1974,22 +1974,22 @@ end
 
 function HealBot_Action_SetSpell(cType, cKey, sText)
     if sText then
-		if HealBot_Text_Len(sText)>0 then
-			local cID = HealBot_Action_SpellCmdCodes(cType, sText)
-			if cID then 
-				sText = "C:"..cID 
-			else
-				local _, _, _, _, _, _, spellId = GetSpellInfo(sText)
-				if spellId then 
-					sText = "S:"..spellId
-				else
-					local itemID = GetItemInfoInstant(sText)
-					if itemID then sText = "I:"..itemID end
-				end
-			end
-		else
-			sText=nil
-		end
+        if HealBot_Text_Len(sText)>0 then
+            local cID = HealBot_Action_SpellCmdCodes(cType, sText)
+            if cID then 
+                sText = "C:"..cID 
+            else
+                local _, _, _, _, _, _, spellId = GetSpellInfo(sText)
+                if spellId then 
+                    sText = "S:"..spellId
+                else
+                    local itemID = GetItemInfoInstant(sText)
+                    if itemID then sText = "I:"..itemID end
+                end
+            end
+        else
+            sText=nil
+        end
     end
     if cType == "ENABLED" then
         HealBot_Config_Spells.EnabledKeyCombo[cKey] = sText
@@ -2044,7 +2044,7 @@ function HealBot_Action_GetSpell(cType, cKey)
                     end
                 end
             end
-			if vSpellText then HealBot_Action_SpellCache[cType][cKey]=vSpellText end
+            if vSpellText then HealBot_Action_SpellCache[cType][cKey]=vSpellText end
         end
         --HealBot_setCall("HealBot_Action_GetSpell")
     end
@@ -2107,14 +2107,14 @@ function HealBot_Action_CustomName(cName)
             HealBot_Globals.HealBot_customPermUserName[xGUID]=cName
         end
         HealBot_customTempUserName[xGUID]=cName
-		HealBot_SetUnitName(cName, xGUID)
+        HealBot_SetUnitName(cName, xGUID)
     else
         if isPerm then
             HealBot_Globals.HealBot_customPermUserName[xGUID]=nil
         else
             HealBot_customTempUserName[xGUID]=nil
         end
-		HealBot_DelUnitName(xGUID)
+        HealBot_DelUnitName(xGUID)
     end
 end
 
@@ -2374,8 +2374,8 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         info.func = function() HealBot_Panel_ToggelPrivateTanks(self.unit, true); end;
         UIDropDownMenu_AddButton(info, 2);
     elseif menuList=="pHeals" then
-		info = UIDropDownMenu_CreateInfo();
-		info.hasArrow = false; 
+        info = UIDropDownMenu_CreateInfo();
+        info.hasArrow = false; 
         info.notCheckable = true;
         if HealBot_Panel_RetPrivateHealers(self.unit, false) then
             info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_OPTIONS_PRIVATEHEALERS;
@@ -2385,8 +2385,8 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         info.func = function() HealBot_Panel_ToggelPrivateHealers(self.unit, false); end;
         UIDropDownMenu_AddButton(info, 2);
         
-		info = UIDropDownMenu_CreateInfo();
-		info.hasArrow = false; 
+        info = UIDropDownMenu_CreateInfo();
+        info.hasArrow = false; 
         info.notCheckable = true;
         if HealBot_Panel_RetPrivateHealers(self.unit, true) then
             info.text = HEALBOT_WORDS_REMOVEFROM.." "..HEALBOT_WORD_PERMANENT.." "..HEALBOT_OPTIONS_PRIVATEHEALERS;
@@ -2511,7 +2511,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             sName=strlower(HEALBOT_HBMENU)
         end
     end
-	if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=false end
+    if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=false end
     if sName then
         local mId=GetMacroIndexByName(sName)
         if strlower(sName)==strlower(HEALBOT_DISABLED_TARGET) then
@@ -2544,19 +2544,19 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
         elseif strlower(sName)==strlower(HEALBOT_MENU) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "togglemenu")
-			if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_HBMENU) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "showhbmenu")
             showHBmenu = function()
-				if UnitGUID(button.unit) then
-					local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
-					HBFriendsDropDown.unit = button.unit
-					HBFriendsDropDown.name = HealBot_GetUnitName(button.unit, button.guid)
-					HBFriendsDropDown.initialize = HealBot_Action_hbmenuFrame_DropDown_Initialize
-					HBFriendsDropDown.displayMode = "MENU"
-					ToggleDropDownMenu(1, nil, HBFriendsDropDown, "cursor", 10, -8)
-				end
+                if UnitGUID(button.unit) then
+                    local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
+                    HBFriendsDropDown.unit = button.unit
+                    HBFriendsDropDown.name = HealBot_GetUnitName(button.unit, button.guid)
+                    HBFriendsDropDown.initialize = HealBot_Action_hbmenuFrame_DropDown_Initialize
+                    HBFriendsDropDown.displayMode = "MENU"
+                    ToggleDropDownMenu(1, nil, HBFriendsDropDown, "cursor", 10, -8)
+                end
             end
             button.showhbmenu = showHBmenu
         elseif HealBot_Spell_Names[sName] then
@@ -2586,7 +2586,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, "item"..j);
             button:SetAttribute(HB_prefix.."type-item"..j, "item");
             button:SetAttribute(HB_prefix.."item-item"..j, sName);
-			if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         else
             if sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, button.unit, status)
@@ -2601,11 +2601,11 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             end
         end
         button:SetAttribute(HB_prefix.."checkselfcast"..j, "false")
-		return true
+        return true
     else
         button:SetAttribute(HB_prefix..buttonType..j, nil);
-		if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
-		return false
+        if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
+        return false
     end
     --HealBot_setCall("HealBot_Action_SetButtonAttrib")
 end
@@ -2616,71 +2616,71 @@ function HealBot_Action_SetAllButtonAttribs(button,status)
         HealBot_Action_luVars["clearSpellCache"]=false
         HealBot_Action_ClearSpellCache()
     end
-	if hbMaxMouseButtons[status]>0 then
-		local tmphasSpells,hasSpells=false,false
-		for x=1,hbMaxMouseButtons[status] do
-			hasSpells=false
-			for y=1, getn(HealBot_Keys_List), 1 do
-				if strlen(HealBot_Keys_List[y])>1 then
-					HB_prefix = strlower(HealBot_Keys_List[y]).."-"
-				else
-					HB_prefix = "";
-				end
-				if not hbAttribsMinReset[HB_prefix..status..x][button.id] then
-					if x==1 then 
-						HB_button="Left";
-					elseif x==2 then 
-						HB_button="Right";
-					elseif x==3 then 
-						HB_button="Middle";
-					else
-						HB_button="Button"..x
-					end
-					tmphasSpells=HealBot_Action_SetButtonAttrib(button,HB_button,HealBot_Keys_List[y],status,x)
-					if tmphasSpells then hasSpells=true end
-				elseif hbAttribsMinReset[HB_prefix..status..x][button.id]==2 then
-					hasSpells=true
-				end
-			end
-			if hasSpells then
-				hbMaxMouseButtons[status]=x
-			elseif x==15 and hbMaxMouseButtons[status]==15 then 
-				hbMaxMouseButtons[status]=0
-			end
-		end
-	end
-	--HealBot_AddDebug(status.." Max Mouse Buttons used = "..hbMaxMouseButtons[status])
+    if hbMaxMouseButtons[status]>0 then
+        local tmphasSpells,hasSpells=false,false
+        for x=1,hbMaxMouseButtons[status] do
+            hasSpells=false
+            for y=1, getn(HealBot_Keys_List), 1 do
+                if strlen(HealBot_Keys_List[y])>1 then
+                    HB_prefix = strlower(HealBot_Keys_List[y]).."-"
+                else
+                    HB_prefix = "";
+                end
+                if not hbAttribsMinReset[HB_prefix..status..x][button.id] then
+                    if x==1 then 
+                        HB_button="Left";
+                    elseif x==2 then 
+                        HB_button="Right";
+                    elseif x==3 then 
+                        HB_button="Middle";
+                    else
+                        HB_button="Button"..x
+                    end
+                    tmphasSpells=HealBot_Action_SetButtonAttrib(button,HB_button,HealBot_Keys_List[y],status,x)
+                    if tmphasSpells then hasSpells=true end
+                elseif hbAttribsMinReset[HB_prefix..status..x][button.id]==2 then
+                    hasSpells=true
+                end
+            end
+            if hasSpells then
+                hbMaxMouseButtons[status]=x
+            elseif x==15 and hbMaxMouseButtons[status]==15 then 
+                hbMaxMouseButtons[status]=0
+            end
+        end
+    end
+    --HealBot_AddDebug(status.." Max Mouse Buttons used = "..hbMaxMouseButtons[status])
     --HealBot_setCall("HealBot_Action_SetAllButtonAttribs")
 end
 
 function HealBot_Action_PrepSetAllAttribs(status,key,bNo,all)
-	if all then
-		for x,_ in pairs(hbAttribsMinReset) do
-			hbAttribsMinReset[x]={};
-		end
-	else
-		if strlen(key)>1 then
-			key = strlower(key).."-"
-		end
-		hbAttribsMinReset[key..status..bNo]={}
-		if hbMaxMouseButtons[status]<bNo then hbMaxMouseButtons[status]=bNo end
-		--HealBot_AddDebug("Key="..key.." status="..status.." bNo="..bNo)
-	end
-	HealBot_setOptions_Timer(9920)
+    if all then
+        for x,_ in pairs(hbAttribsMinReset) do
+            hbAttribsMinReset[x]={};
+        end
+    else
+        if strlen(key)>1 then
+            key = strlower(key).."-"
+        end
+        hbAttribsMinReset[key..status..bNo]={}
+        if hbMaxMouseButtons[status]<bNo then hbMaxMouseButtons[status]=bNo end
+        --HealBot_AddDebug("Key="..key.." status="..status.." bNo="..bNo)
+    end
+    HealBot_setOptions_Timer(9920)
 end
 
 for x=1,15 do
-	for y=1, getn(HealBot_Keys_List), 1 do
-		if strlen(HealBot_Keys_List[y])>1 then
-			HB_prefix = strlower(HealBot_Keys_List[y]).."-"
-		else
-			HB_prefix = "";
-		end
-		hbAttribsMinReset[HB_prefix.."Enemy"..x]={}
-		hbAttribsMinReset[HB_prefix.."Enabled"..x]={}
-	end
+    for y=1, getn(HealBot_Keys_List), 1 do
+        if strlen(HealBot_Keys_List[y])>1 then
+            HB_prefix = strlower(HealBot_Keys_List[y]).."-"
+        else
+            HB_prefix = "";
+        end
+        hbAttribsMinReset[HB_prefix.."Enemy"..x]={}
+        hbAttribsMinReset[HB_prefix.."Enabled"..x]={}
+    end
 end
-	
+    
 local tSetHealButton={}
 local vSetHealUnitUpdate=false
 local vEnemyUnitsWithEvents={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true,
@@ -2696,8 +2696,8 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
         elseif unitType>6 and unitType<9 then
             tSetHealButton=HealBot_Pet_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
         elseif unitType>8 then
-			tSetHealButton=HealBot_Extra_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
-		else
+            tSetHealButton=HealBot_Extra_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
+        else
             tSetHealButton=HealBot_Unit_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
         end
         if not tSetHealButton then return nil end
@@ -2707,16 +2707,16 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.frame=hbCurFrame
             tSetHealButton.skin=""
         end
-		if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
-			tSetHealButton.icon.reset=true
-			tSetHealButton.skinreset=true
-			tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
-		end
+        if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
+            tSetHealButton.icon.reset=true
+            tSetHealButton.skinreset=true
+            tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
+        end
         if tSetHealButton.unit~=unit or tSetHealButton.reset or tSetHealButton.guid~=hbGUID then
             tSetHealButton.reset=false
             tSetHealButton.unit=unit
             tSetHealButton.guid=hbGUID
-			tSetHealButton.status.unittype = unitType      -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
+            tSetHealButton.status.unittype = unitType      -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
             if unitType>10 then                            -- 7=vehicle  8=pet  9=target  10=focus  11=enemy without events  12=enemy with events 
                 HealBot_Enemy_Button[unit]=tSetHealButton
                 if vEnemyUnitsWithEvents[unit] then
@@ -2729,14 +2729,14 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             elseif unitType<5 then
                 HealBot_Private_Button[unit]=tSetHealButton
             elseif unitType>8 then
-				HealBot_Extra_Button[unit]=tSetHealButton
-			else
+                HealBot_Extra_Button[unit]=tSetHealButton
+            else
                 HealBot_Unit_Button[unit]=tSetHealButton 
             end
             if tSetHealButton.status.offline and UnitIsConnected(unit) then
                 tSetHealButton.status.offline=false
             end
-			tSetHealButton.status.role=role
+            tSetHealButton.status.role=role
             tSetHealButton:SetAttribute("unit", unit);
             HealBot_Action_SetAllButtonAttribs(tSetHealButton,"Enemy")
             HealBot_Action_SetAllButtonAttribs(tSetHealButton,"Enabled")
@@ -2746,13 +2746,13 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.text.r,tSetHealButton.text.g,tSetHealButton.text.b=HealBot_Action_ClassColour(unit)
             tSetHealButton.text.nameupdate=true
             tSetHealButton.text.healthupdate=true
-			tSetHealButton.health.init=true
-			tSetHealButton.mana.init=true
+            tSetHealButton.health.init=true
+            tSetHealButton.mana.init=true
             HealBot_Action_ResetrCallsUnit(unit)
             HealBot_Aura_setUnitIcons(tSetHealButton.id)
             if unitType<9 then
                 tSetHealButton.status.update=true
-				tSetHealButton.status.throttle=true
+                tSetHealButton.status.throttle=true
             else
                 HealBot_UpdateUnit(tSetHealButton)
             end
@@ -2768,7 +2768,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
         if HealBot_Unit_Button[unit] then
             HealBot_AddPlayerButtonCache(unit)
         end
-		tSetHealButton.status.duplicate=duplicate
+        tSetHealButton.status.duplicate=duplicate
     else
         return nil
     end
@@ -2789,109 +2789,109 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
             thb:ClearAllPoints()
             thb:SetParent(grpFrame[hbCurFrame])
             thb.frame=hbCurFrame
-			thb.skin=""
+            thb.skin=""
         end
-		if thb.skin~=Healbot_Config_Skins.Current_Skin then
-			thb.icon.reset=true
-			thb.skinreset=true
-			thb.skin=Healbot_Config_Skins.Current_Skin
-		end
-		if thb.skinreset or thb.icon.reset then
-			HealBot_Skins_ResetSkin("bar",thb)
-		end
+        if thb.skin~=Healbot_Config_Skins.Current_Skin then
+            thb.icon.reset=true
+            thb.skinreset=true
+            thb.skin=Healbot_Config_Skins.Current_Skin
+        end
+        if thb.skinreset or thb.icon.reset then
+            HealBot_Skins_ResetSkin("bar",thb)
+        end
     end
-	for j=1,3 do
-		thb.gref.icon[j]:SetAlpha(0)
-	end
-	for j=51,53 do
-		thb.gref.icon[j]:SetAlpha(0)
-	end
-	thb.gref.icon[91]:SetAlpha(0)
-	thb.gref.icon[92]:SetAlpha(0)
-	testBarsDat["cnt"]=testBarsDat["cnt"]+1
-	testBarsDat["buffId"]=0
-	testBarsDat["debuffId"]=50
-	if not testBarsDat["buffTexture"] then _, _, testBarsDat["buffTexture"] = GetSpellInfo(HEALBOT_RENEW) end
-	if not testBarsDat["debuffTexture"] then _, _, testBarsDat["debuffTexture"] = GetSpellInfo(HEALBOT_SHADOW_WORD_PAIN) end
-	if (testBarsDat["cnt"] % 3 == 0) and HealBot_Config_Buffs.BuffWatch and 
-	   Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXBICONS"]>0 then
-		testBarsDat["buffId"]=testBarsDat["buffId"]+1
-		thb.gref.icon[testBarsDat["buffId"]]:SetTexture(testBarsDat["buffTexture"])
-		thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-	end
-	if (testBarsDat["cnt"] % 4 == 0) and HealBot_Config_Cures.DebuffWatch and 
-	   Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXDICONS"]>0 then
-		testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-		thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(testBarsDat["debuffTexture"])
-		thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-	end
-	if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOW"] then
-		testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
-		if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
-		if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==1 then
-			testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-			thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-			thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-		elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==2 then
-			testBarsDat["buffId"]=testBarsDat["buffId"]+1
-			thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-			thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-		else
-			thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-			thb.gref.icon[92]:SetAlpha(1)
-		end
-	end
-	if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWCLASS"] then
-		if not unitRole then unitRole="DAMAGER" end
-		if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==1 then
-			testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-			if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-				thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
-			else
-				thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
-			end
-			thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-		elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==2 then
-			testBarsDat["buffId"]=testBarsDat["buffId"]+1
-			if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-				thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
-			else
-				thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
-			end
-			thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-		else
-			if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-				thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
-			else
-				thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
-			end
-			thb.gref.icon[91]:SetAlpha(1)
-		end
-	end
+    for j=1,3 do
+        thb.gref.icon[j]:SetAlpha(0)
+    end
+    for j=51,53 do
+        thb.gref.icon[j]:SetAlpha(0)
+    end
+    thb.gref.icon[91]:SetAlpha(0)
+    thb.gref.icon[92]:SetAlpha(0)
+    testBarsDat["cnt"]=testBarsDat["cnt"]+1
+    testBarsDat["buffId"]=0
+    testBarsDat["debuffId"]=50
+    if not testBarsDat["buffTexture"] then _, _, testBarsDat["buffTexture"] = GetSpellInfo(HEALBOT_RENEW) end
+    if not testBarsDat["debuffTexture"] then _, _, testBarsDat["debuffTexture"] = GetSpellInfo(HEALBOT_SHADOW_WORD_PAIN) end
+    if (testBarsDat["cnt"] % 3 == 0) and HealBot_Config_Buffs.BuffWatch and 
+       Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXBICONS"]>0 then
+        testBarsDat["buffId"]=testBarsDat["buffId"]+1
+        thb.gref.icon[testBarsDat["buffId"]]:SetTexture(testBarsDat["buffTexture"])
+        thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
+    end
+    if (testBarsDat["cnt"] % 4 == 0) and HealBot_Config_Cures.DebuffWatch and 
+       Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXDICONS"]>0 then
+        testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+        thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(testBarsDat["debuffTexture"])
+        thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+    end
+    if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOW"] then
+        testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
+        if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==1 then
+            testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+            thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+            thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+        elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==2 then
+            testBarsDat["buffId"]=testBarsDat["buffId"]+1
+            thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+            thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
+        else
+            thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+            thb.gref.icon[92]:SetAlpha(1)
+        end
+    end
+    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWCLASS"] then
+        if not unitRole then unitRole="DAMAGER" end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==1 then
+            testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
+                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
+            else
+                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
+            end
+            thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+        elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==2 then
+            testBarsDat["buffId"]=testBarsDat["buffId"]+1
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
+                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
+            else
+                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
+            end
+            thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
+        else
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
+                thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
+            else
+                thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
+            end
+            thb.gref.icon[91]:SetAlpha(1)
+        end
+    end
     return thb
 end
 
 function HealBot_Action_SetAllAttribs()
     HealBot_Action_luVars["clearSpellCache"]=true
     for _,xButton in pairs(HealBot_Unit_Button) do
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
     for _,xButton in pairs(HealBot_Private_Button) do
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
-		HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enemy")
+        HealBot_Action_SetAllButtonAttribs(xButton,"Enabled")
     end
 end
 
@@ -2926,17 +2926,17 @@ end
 
 function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
-    dg.unit="nil"	
-	HealBot_clearAllAuxBar(dg)
-	HealBot_Aura_RemoveIcons(dg)
-	HealBot_Aura_delUnitIcons(dg.id)
+    dg.unit="nil"    
+    HealBot_clearAllAuxBar(dg)
+    HealBot_Aura_RemoveIcons(dg)
+    HealBot_Aura_delUnitIcons(dg.id)
     HealBot_Action_PrepButton(dg)
     HealBot_ActiveButtons[hbBarID]=false
-	if hbBarID>HealBot_Globals.AutoCacheSize then
-		HealBot_ActiveButtons[0]=1
-	elseif hbBarID<HealBot_ActiveButtons[0] then 
-		HealBot_ActiveButtons[0]=hbBarID
-	end
+    if hbBarID>HealBot_Globals.AutoCacheSize then
+        HealBot_ActiveButtons[0]=1
+    elseif hbBarID<HealBot_ActiveButtons[0] then 
+        HealBot_ActiveButtons[0]=hbBarID
+    end
     --HealBot_AddDebug("Deleted button "..hbBarID)
 end
 
@@ -2959,37 +2959,37 @@ function HealBot_Action_DeleteMarkedButtons()
             ghb.unit="nil"
             HealBot_Action_MarkDeleteButton(ghb)
         end
-	else
-		return false
+    else
+        return false
     end
-	return true
+    return true
 end
 
 function HealBot_Action_MarkDeleteButton(button)
     button:Hide()
-	if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
-		HealBot_Enemy_Button[button.unit]=nil 
-	end
-	if HealBot_Pet_Button[button.unit] and HealBot_Pet_Button[button.unit].id==button.id then 
-		HealBot_Pet_Button[button.unit]=nil 
-	end
-	if HealBot_Private_Button[button.unit] and HealBot_Private_Button[button.unit].id==button.id then 
-		HealBot_Private_Button[button.unit]=nil 
-	end
-	if HealBot_Extra_Button[button.unit] and HealBot_Extra_Button[button.unit].id==button.id then 
-		HealBot_Extra_Button[button.unit]=nil 
-	end
-	if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit].id==button.id then 
-		HealBot_Unit_Button[button.unit]=nil 
-	end
-	if HealBot_Fluid_BarButtons[button.id] then HealBot_Fluid_BarButtons[button.id]=nil end
-	if HealBot_Fluid_BarButtonsAlpha[button.id] then HealBot_Fluid_BarButtonsAlpha[button.id]=nil end
-	if HealBot_Fluid_InHealButtons[button.id] then HealBot_Fluid_InHealButtons[button.id]=nil end
-	if HealBot_Fluid_InHealButtonsAlpha[button.id] then HealBot_Fluid_InHealButtonsAlpha[button.id]=nil end
-	if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
-	if HealBot_Fluid_AbsorbButtonsAlpha[button.id] then HealBot_Fluid_AbsorbButtonsAlpha[button.id]=nil end
+    if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
+        HealBot_Enemy_Button[button.unit]=nil 
+    end
+    if HealBot_Pet_Button[button.unit] and HealBot_Pet_Button[button.unit].id==button.id then 
+        HealBot_Pet_Button[button.unit]=nil 
+    end
+    if HealBot_Private_Button[button.unit] and HealBot_Private_Button[button.unit].id==button.id then 
+        HealBot_Private_Button[button.unit]=nil 
+    end
+    if HealBot_Extra_Button[button.unit] and HealBot_Extra_Button[button.unit].id==button.id then 
+        HealBot_Extra_Button[button.unit]=nil 
+    end
+    if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit].id==button.id then 
+        HealBot_Unit_Button[button.unit]=nil 
+    end
+    if HealBot_Fluid_BarButtons[button.id] then HealBot_Fluid_BarButtons[button.id]=nil end
+    if HealBot_Fluid_BarButtonsAlpha[button.id] then HealBot_Fluid_BarButtonsAlpha[button.id]=nil end
+    if HealBot_Fluid_InHealButtons[button.id] then HealBot_Fluid_InHealButtons[button.id]=nil end
+    if HealBot_Fluid_InHealButtonsAlpha[button.id] then HealBot_Fluid_InHealButtonsAlpha[button.id]=nil end
+    if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
+    if HealBot_Fluid_AbsorbButtonsAlpha[button.id] then HealBot_Fluid_AbsorbButtonsAlpha[button.id]=nil end
     table.insert(hbMarkedDeleteButtons, button.id)
-	HealBot_setOptions_Timer(9990)
+    HealBot_setOptions_Timer(9990)
 end
 
 function HealBot_Action_Reset()
@@ -3247,7 +3247,7 @@ function HealBot_Action_Refresh(button)
     if button then
         HealBot_Action_UpdateDebuffButton(button)
     end
-	  --HealBot_setCall("HealBot_Action_Refresh")
+      --HealBot_setCall("HealBot_Action_Refresh")
 end
 
 local hbAuxHightlightAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
@@ -3262,7 +3262,7 @@ function HealBot_Action_setAuxHightlightAssigned(frame, id)
 end
 
 function HealBot_Action_UpdateHighlightBar(button)
-	for id in pairs(hbAuxHightlightAssigned[button.frame]) do
+    for id in pairs(hbAuxHightlightAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=1
@@ -3273,7 +3273,7 @@ function HealBot_Action_UpdateHighlightBar(button)
 end
 
 function HealBot_Action_ClearHighlightBar(button)
-	for id in pairs(hbAuxHightlightAssigned[button.frame]) do
+    for id in pairs(hbAuxHightlightAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
     end
 end
@@ -3498,35 +3498,35 @@ function HealBot_Action_setRegisterForClicks(button)
 end
 
 function HealBot_Action_SetFrameColours(frame)
-	frame:SetBackdropColor(
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKR"],
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKG"],
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKB"], 
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKA"]);
-	frame:SetBackdropBorderColor(
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERR"],
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERG"],
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERB"],
-	Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERA"]);
+    frame:SetBackdropColor(
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKR"],
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKG"],
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKB"], 
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BACKA"]);
+    frame:SetBackdropBorderColor(
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERR"],
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERG"],
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERB"],
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame.id]["BORDERA"]);
 end
 
 function HealBot_Action_SetFrameCols(frameID)
-	HealBot_Action_SetFrameColours(grpFrame[frameID])
+    HealBot_Action_SetFrameColours(grpFrame[frameID])
 end
 
 local HealBot_Action_Init={}
 function HealBot_Action_OnShow(self)
-	if HealBot_Action_luVars["FrameInitDone"] then
-		if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["OPENSOUND"] then
-			PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
-		end
-		if not HealBot_Action_Init[self.id] then
-			HealBot_Action_SetFrameColours(self)
-			HealBot_Action_Init[self.id]=true
-			HealBot_Action_SetAlias(self.id)
-			HealBot_Action_SetAliasFontSize(self.id)
-		end
-	end
+    if HealBot_Action_luVars["FrameInitDone"] then
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["OPENSOUND"] then
+            PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
+        end
+        if not HealBot_Action_Init[self.id] then
+            HealBot_Action_SetFrameColours(self)
+            HealBot_Action_Init[self.id]=true
+            HealBot_Action_SetAlias(self.id)
+            HealBot_Action_SetAliasFontSize(self.id)
+        end
+    end
 end
 
 function HealBot_Action_SetAlias(hbCurFrame)
@@ -3603,7 +3603,7 @@ function HealBot_Action_SmartCast(button)
  
     if HealBot_Globals.SmartCastRes and button.status.current==9 then
         local mrSpell = HealBot_Init_retSmartCast_MassRes();
-		scuSpell=HealBot_Init_retSmartCast_Res();
+        scuSpell=HealBot_Init_retSmartCast_Res();
         rSpell=HealBot_RangeSpells["RES"]
     elseif button.aura.debuff.type and HealBot_Globals.SmartCastDebuff then
         scuSpell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type);

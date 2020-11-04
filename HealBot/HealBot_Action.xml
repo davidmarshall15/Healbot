@@ -33,7 +33,7 @@
         <Layers>
           <Layer level="OVERLAY">
             <Texture name="$parentIcon1">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-1" y="0"/> </Offset>
@@ -59,7 +59,7 @@
                     </Anchors>
                 </FontString>
             <Texture name="$parentIcon2">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-18" y="0"/> </Offset>
@@ -85,7 +85,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon3">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -111,7 +111,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon4">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -137,7 +137,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon5">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -163,7 +163,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon6">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -189,7 +189,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon7">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -215,7 +215,7 @@
                     </Anchors>
                 </FontString> 
                 <Texture name="$parentIcon8">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -241,7 +241,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon9">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -267,7 +267,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon10">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -293,7 +293,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon11">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -319,7 +319,7 @@
                     </Anchors>
                 </FontString>
             <Texture name="$parentIcon12">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -345,7 +345,7 @@
                     </Anchors>
                 </FontString>
             <Texture name="$parentIcon51">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-1" y="0"/> </Offset>
@@ -371,7 +371,7 @@
                     </Anchors>
                 </FontString>
             <Texture name="$parentIcon52">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-18" y="0"/> </Offset>
@@ -397,7 +397,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon53">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -423,7 +423,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon54">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -449,7 +449,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon55">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -475,7 +475,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon56">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -501,7 +501,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon57">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -527,7 +527,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIcon58">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -553,7 +553,7 @@
                     </Anchors>
                 </FontString> 
             <Texture name="$parentIconal1" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
                   <Offset> <AbsDimension x="2" y="-3"/> </Offset>
@@ -561,7 +561,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconal2" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
                   <Offset> <AbsDimension x="9" y="-3"/> </Offset>
@@ -569,7 +569,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconal3" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
                   <Offset> <AbsDimension x="16" y="-3"/> </Offset>
@@ -577,7 +577,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconar1" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
                   <Offset> <AbsDimension x="-2" y="-3"/> </Offset>
@@ -585,7 +585,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconar2" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
                   <Offset> <AbsDimension x="-9" y="-3"/> </Offset>
@@ -593,7 +593,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconar3" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
                   <Offset> <AbsDimension x="-16" y="-3"/> </Offset>
@@ -601,7 +601,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIcontm1" file="Interface\AddOns\HealBot\Images\indicator_blue">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOP" relativePoint="TOP">
                   <Offset> <AbsDimension x="-11" y="-1"/> </Offset>
@@ -609,7 +609,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIcontm2" file="Interface\AddOns\HealBot\Images\indicator_blue">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOP" relativePoint="TOP">
                   <Offset> <AbsDimension x="0" y="-1"/> </Offset>
@@ -617,7 +617,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIcontm3" file="Interface\AddOns\HealBot\Images\indicator_blue">
-              <Size> <AbsDimension x="7" y="7"/> </Size>					
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOP" relativePoint="TOP">
                   <Offset> <AbsDimension x="11" y="-1"/> </Offset>
@@ -625,7 +625,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconpi1" file="Interface\AddOns\HealBot\Images\indicator_red">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Size> <AbsDimension x="5" y="5"/> </Size>                    
               <Anchors>
                 <Anchor point="BOTTOM" relativePoint="BOTTOM">
                   <Offset> <AbsDimension x="-14" y="0"/> </Offset>
@@ -633,7 +633,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconpi2" file="Interface\AddOns\HealBot\Images\indicator_orange">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Size> <AbsDimension x="5" y="5"/> </Size>                    
               <Anchors>
                 <Anchor point="BOTTOM" relativePoint="BOTTOM">
                   <Offset> <AbsDimension x="-7" y="0"/> </Offset>
@@ -641,7 +641,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconpi3" file="Interface\AddOns\HealBot\Images\indicator_yellow">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Size> <AbsDimension x="5" y="5"/> </Size>                    
               <Anchors>
                 <Anchor point="BOTTOM" relativePoint="BOTTOM">
                   <Offset> <AbsDimension x="0" y="0"/> </Offset>
@@ -649,7 +649,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconpi4" file="Interface\AddOns\HealBot\Images\indicator_lime">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Size> <AbsDimension x="5" y="5"/> </Size>                    
               <Anchors>
                 <Anchor point="BOTTOM" relativePoint="BOTTOM">
                   <Offset> <AbsDimension x="7" y="0"/> </Offset>
@@ -657,7 +657,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentIconpi5" file="Interface\AddOns\HealBot\Images\indicator_green">
-              <Size> <AbsDimension x="5" y="5"/> </Size>					
+              <Size> <AbsDimension x="5" y="5"/> </Size>                    
               <Anchors>
                 <Anchor point="BOTTOM" relativePoint="BOTTOM">
                   <Offset> <AbsDimension x="14" y="0"/> </Offset>
@@ -665,7 +665,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentExtraClass">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -673,7 +673,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentExtraTarget">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -681,7 +681,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentExtraRC">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -689,7 +689,7 @@
               </Anchors>
             </Texture>
             <Texture name="$parentExtraOOR">
-              <Size> <AbsDimension x="16" y="16"/> </Size>					
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
                 <Anchor point="RIGHT" relativePoint="RIGHT">
                   <Offset> <AbsDimension x="-35" y="0"/> </Offset>
@@ -697,7 +697,7 @@
               </Anchors>
             </Texture>
             </Layer>
-		</Layers>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux1" inherits="HealBot_StatusBar">
         <Anchors>
@@ -738,7 +738,7 @@
                 </Anchors>
             </FontString> 
           </Layer>
-		</Layers>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux3" inherits="HealBot_StatusBar">
         <Anchors>

@@ -39,8 +39,8 @@ local vToggleMountIndex=0
 function HealBot_MountsPets_ToggelMount(mountType)
     if IsMounted() then
         Dismount()
-	elseif HEALBOT_GAME_VERSION>3 and CanExitVehicle() then	
-		VehicleExit()
+    elseif HEALBOT_GAME_VERSION>3 and CanExitVehicle() then    
+        VehicleExit()
     elseif HealBot_mountData["ValidUse"] and IsOutdoors() and not HealBot_IsFighting then
         local mount = nil
         vToggleMountIndex=0
@@ -227,7 +227,7 @@ function HealBot_MountsPets_InitMount()
     end
     
     local x = C_MountJournal.GetNumMounts()
-	for z=1,x do
+    for z=1,x do
         local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
         if faction and isUsable and isCollected then
             local englishFaction = UnitFactionGroup("player")
@@ -251,7 +251,7 @@ function HealBot_MountsPets_InitMount()
                 HealBot_MountIndex[mount]=z
             end
         end
-	end   
+    end   
     
     if #HealBot_FMount<4 then
         HealBot_mountData["PrevFlying#"]=0
@@ -274,13 +274,13 @@ end
 function HealBot_MountsPets_DislikeMount(action)
     local z = C_MountJournal.GetNumMounts()
     local mount=nil
-	for i=1,z do
- 		local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
- 		if active then
- 			mount=creatureName
+    for i=1,z do
+         local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
+         if active then
+             mount=creatureName
             break
- 		end
- 	end
+         end
+     end
     if mount then
         if action=="Exclude" then
             if HealBot_Globals.excludeMount[mount] then

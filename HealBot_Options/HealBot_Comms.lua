@@ -54,8 +54,8 @@ function HealBot_Comms_GetChan(chan)
 end
 
 local function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
-	HealBot_Options_SetLabel("HBIncH"..linenum.."Healer",sender_id)
-	HealBot_Options_SetLabel("HBIncH"..linenum.."Ver",addon_id)
+    HealBot_Options_SetLabel("HBIncH"..linenum.."Healer",sender_id)
+    HealBot_Options_SetLabel("HBIncH"..linenum.."Ver",addon_id)
 end
 
 function HealBot_Comms_About()
@@ -76,13 +76,13 @@ function HealBot_Comms_About()
         end
     end
 
-	HealBot_Options_SetLabel("HealBot_Error_Clientx",HEALBOT_WORD_CLIENT..": "..GetLocale())
+    HealBot_Options_SetLabel("HealBot_Error_Clientx",HEALBOT_WORD_CLIENT..": "..GetLocale())
     if HealBot_Globals.localLang then
-		HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG..": "..HealBot_Globals.localLang)
+        HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG..": "..HealBot_Globals.localLang)
     else
-		HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG..": "..GetLocale())
+        HealBot_Options_SetLabel("HealBot_Error_Versionx",HEALBOT_OPTIONS_LANG..": "..GetLocale())
     end
-	HealBot_Options_SetLabel("HealBot_Error_Classx",HEALBOT_WORD_VERSION..": "..HEALBOT_VERSION)
+    HealBot_Options_SetLabel("HealBot_Error_Classx",HEALBOT_WORD_VERSION..": "..HEALBOT_VERSION)
     HealBot_Comms_MacroSuppressError()
     HealBot_Comms_MacroSuppressSound()
 end
@@ -102,7 +102,7 @@ function HealBot_Comms_Print_Supports()
             if not HEALBOT_SUPPORTERS_PEOPLE[s] then s=1 end
         end
         if not sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]] then
-			HealBot_Options_SetLabel("HBIncH"..x.."Supporter",HEALBOT_SUPPORTERS_PEOPLE[s])
+            HealBot_Options_SetLabel("HBIncH"..x.."Supporter",HEALBOT_SUPPORTERS_PEOPLE[s])
             sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
         end
     end
@@ -161,7 +161,7 @@ function HealBot_Comms_CheckVer(userName, version)
             if not HealBot_Globals.OneTimeMsg["VERSION"] then
                 HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION1)
                 HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION2)
-				HealBot_Globals.OneTimeMsg["VERSION"]=true
+                HealBot_Globals.OneTimeMsg["VERSION"]=true
             end
             HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
         end
@@ -190,17 +190,17 @@ function HealBot_Comms_MacroSuppressSound()
 end    
 
 function HealBot_Comms_PerfLevel()
-	if GetCVarBool("scriptProfile") then
-		HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
-		HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
-	else
-		HealBot_Info_PerfLevelVal:SetText(HealBot_Globals.CPUUsage)
-		if HealBot_Globals.CPUUsage<3 then
-			HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
-		elseif HealBot_Globals.CPUUsage<5 then
-			HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
-		else
-			HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
-		end
-	end
+    if GetCVarBool("scriptProfile") then
+        HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
+        HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
+    else
+        HealBot_Info_PerfLevelVal:SetText(HealBot_Globals.CPUUsage)
+        if HealBot_Globals.CPUUsage<3 then
+            HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
+        elseif HealBot_Globals.CPUUsage<5 then
+            HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
+        else
+            HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
+        end
+    end
 end

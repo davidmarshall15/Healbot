@@ -40,7 +40,7 @@ function HealBot_Lang_Options_enALL()
                                  ["RUNCMDS"]=HEALBOT_OPTIONS_COMMANDS,
                                  ["PROFILE"]="Profile",
                                  ["SETPROFILE"]="Profile",
-								 ["OPTTHEME"]=HEALBOT_OPTIONS_THEME,
+                                 ["OPTTHEME"]=HEALBOT_OPTIONS_THEME,
                                  ["CLASSTYPES"]="Class type configuration",
                         -- Overrides tab
                                  ["OVERRIDESEFFECTS"]="Overrides Effects tab.",
@@ -280,15 +280,15 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTIGNOREINFULL"]=HEALBOT_OPTIONS_IGNOREINCOMINGONFULL,
                                  ["HEALBARSTXTHEALTHTYPE"]="Display Type",
                                  ["HEALBARSTXTHEALTHFORMAT"]="Format Dropdowns",
-						-- Skins Frames Icons  tab
-								 ["ICONSDEBUFFS"]="Icons Debuffs",
-								 ["ICONSBUFFS"]="Icons Buffs",
-								 ["ICONSEXTRA"]="Icons Extras",
-							     ["ICONPOSITION"]=HEALBOT_OPTIONS_ICONPOSITION,
-							     ["ICONANCHOR"]=HEALBOT_OPTIONS_ICONANCHOR,
+                        -- Skins Frames Icons  tab
+                                 ["ICONSDEBUFFS"]="Icons Debuffs",
+                                 ["ICONSBUFFS"]="Icons Buffs",
+                                 ["ICONSEXTRA"]="Icons Extras",
+                                 ["ICONPOSITION"]=HEALBOT_OPTIONS_ICONPOSITION,
+                                 ["ICONANCHOR"]=HEALBOT_OPTIONS_ICONANCHOR,
                         -- Skins Frames Icons Aura General tab
                                  ["ICONSDEBUFFGENERAL"]="Icons Debuffs General",
-							     ["ICONSBUFFGENERAL"]="Icons Buffs General",
+                                 ["ICONSBUFFGENERAL"]="Icons Buffs General",
                                  ["ICONNUMHOT"]=HEALBOT_OPTIONS_ALLSPELLS.." "..HEALBOT_OPTIONS_MAXICONS,
                                  ["ICONSHOWDEBUFF"]=HEALBOT_OPTIONS_SHOWDEBUFFICON,
                                  ["ICONNUMDEBUFF"]=HEALBOT_OPTIONS_TAB_DEBUFFS.." "..HEALBOT_OPTIONS_MAXICONS,
@@ -299,7 +299,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONFADESTART"]=HEALBOT_OPTIONS_FADESTARTTIME,
                         -- Skins Frames Icons Aura Text tab
                                  ["ICONSDEBUFFTEXT"]="Icons Debuffs Text",
-						         ["ICONSBUFFTEXT"]="Icons Buffs Text",
+                                 ["ICONSBUFFTEXT"]="Icons Buffs Text",
                                  ["ICONTXTSHOWCOUNT"]=HEALBOT_OPTIONS_HOTSHOWTEXT.." "..HEALBOT_OPTIONS_HOTTEXTCOUNT,
                                  ["ICONTXTSHOWDUR"]=HEALBOT_OPTIONS_HOTSHOWTEXT.." "..HEALBOT_OPTIONS_HOTTEXTDURATION,
                                  ["ICONTXTDURTIME"]=HEALBOT_OPTIONS_SHOWDURATIONFROM,
@@ -308,16 +308,16 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONTXTFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
                                  ["ICONTXTFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                         -- Skins Frames Icons Extra tabs
-						         ["ICONSCLASSROLE"]="Icons Extras Class / Role",
-						         ["ICONSRAIDTARGET"]="Icons Extras Raid Target",
-						         ["ICONSREADYCHECK"]="Icons Extras Ready Check",
-						         ["ICONSOORARROW"]="Icons Extras Out of Range Arrow.",
+                                 ["ICONSCLASSROLE"]="Icons Extras Class / Role",
+                                 ["ICONSRAIDTARGET"]="Icons Extras Raid Target",
+                                 ["ICONSREADYCHECK"]="Icons Extras Ready Check",
+                                 ["ICONSOORARROW"]="Icons Extras Out of Range Arrow.",
                                  ["ICONSHOWRC"]=HEALBOT_OPTIONS_SHOWREADYCHECK,
                                  ["ICONSHOWCLASS"]=HEALBOT_OPTIONS_SHOWCLASSICON,
                                  ["ICONSHOWRT"]=HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON,
                                  ["ICONSHOWDIR"]=HEALBOT_OPTIONS_SHOWDIRECTION,
                                  ["ICONSHOWDIRMO"]=HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE,
-								 ["ICONOFFSET"]="Extra Icon Offset",
+                                 ["ICONOFFSET"]="Extra Icon Offset",
                         -- Debuffs General tab
                                  ["MONITORDEBUFFS"]=HEALBOT_OPTIONS_MONITORDEBUFFS,
                                  ["MONITORDEBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
@@ -356,7 +356,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
                                  ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
-								 ["DEBUFFSWARNINGSPAMFILTER"]=HEALBOT_OPTIONS_SPAMFILTER,
+                                 ["DEBUFFSWARNINGSPAMFILTER"]=HEALBOT_OPTIONS_SPAMFILTER,
                         -- Buffs General tab
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
@@ -443,7 +443,7 @@ function HealBot_Lang_Options_enALL()
                         -- Import/Export Preset Colours tab
                                  ["INOUTEXPORTPRESETCOLS"]=HEALBOT_OPTIONS_BUTTONEXPORT,
                                  ["INOUTIMPORTPRESETCOLS"]=HEALBOT_OPTIONS_BUTTONIMPORT,
-						-- Plugin Tab
+                        -- Plugin Tab
                                  ["SELECTPLUGIN"]=HEALBOT_OPTIONS_PLUGINS,
                               }
     HEALBOT_OPTIONS_HELP_TEXT={
@@ -472,7 +472,7 @@ function HealBot_Lang_Options_enALL()
                                ["RUNCMDS"]="Run the command selected.",
                                ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
                                ["SETPROFILE"]="Set the profile selected.",
-							   ["OPTTHEME"]="Set the options Title Box, Borders and Contents text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
+                               ["OPTTHEME"]="Set the options Title Box, Borders and Contents text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
                         -- Overrides tab
                                ["OVERRIDESEFFECTS"]="Show the Overrides Effects tab.",
@@ -712,15 +712,15 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSTXTIGNOREINFULL"]="Ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s\nwhen the player is on full health.\n--\nNOTE:When this option is off, incoming heals and "..HEALBOT_classicABSORBHOT.."s\nare always shown when the bar is enabled.",
                                ["HEALBARSTXTHEALTHTYPE"]="Various options on how the health is displayed.",
                                ["HEALBARSTXTHEALTHFORMAT"]="Various options on the number format for health.",
-						-- Skins Frames Icons  tab
-							   ["ICONSDEBUFFS"]="Show the Skins Frames Icons Debuffs tab",
-							   ["ICONSBUFFS"]="Show the Skins Frames Icons Buffs tab",
-							   ["ICONSEXTRA"]="Show the Skins Frames Icons Extras tab",
-							   ["ICONPOSITION"]="Set the position of icons",
-							   ["ICONANCHOR"]="Set the location of icons based on the position",
+                        -- Skins Frames Icons  tab
+                               ["ICONSDEBUFFS"]="Show the Skins Frames Icons Debuffs tab",
+                               ["ICONSBUFFS"]="Show the Skins Frames Icons Buffs tab",
+                               ["ICONSEXTRA"]="Show the Skins Frames Icons Extras tab",
+                               ["ICONPOSITION"]="Set the position of icons",
+                               ["ICONANCHOR"]="Set the location of icons based on the position",
                         -- Skins Frames Icons Aura General tab
                                ["ICONSDEBUFFGENERAL"]="Show the Skins Frames Icons Debuffs General tab.",
-							   ["ICONSBUFFGENERAL"]="Show the Skins Frames Icons Buffs General tab.",
+                               ["ICONSBUFFGENERAL"]="Show the Skins Frames Icons Buffs General tab.",
                                ["ICONNUMHOT"]="Select the maximum number\nof buff and HoT icons to show.",
                                ["ICONNUMDEBUFF"]="Select the maximum number of debuff\nand Role/Class, Target Marker icons to show.",
                                ["ICONDOUBLE"]="Show 2 rows of icons taking less horizontal space.\n--\nNOTE: Icon scale is halved when using this setting.",
@@ -730,7 +730,7 @@ function HealBot_Lang_Options_enALL()
                                ["ICONFADESTART"]="The number of seconds before expiry when the icon fades.\n--\nNOTE: The fade is gradual and generally not noticeable for the first few seconds.",
                         -- Skins Frames Icons Aura Text tab
                                ["ICONSDEBUFFTEXT"]="Show the Skins Frames Icons Debuffs Text tab.",
-						       ["ICONSBUFFTEXT"]="Show the Skins Frames Icons Buffs Text tab.",
+                               ["ICONSBUFFTEXT"]="Show the Skins Frames Icons Buffs Text tab.",
                                ["ICONTXTSHOWCOUNT"]="Set the type of text and conditions met to show text on the icon.\nCount - Show the number of stacks, for all casters or own casts if Self casts only is on.",
                                ["ICONTXTSHOWDUR"]="Set the type of text and conditions met to show text on the icon.\nDuration - Show the duration remaining, for all casters or own casts if Self casts only is on.",
                                ["ICONTXTDURTIME"]="Only show the duration when the remaining\nduration is under the slider amount.",
@@ -739,16 +739,16 @@ function HealBot_Lang_Options_enALL()
                                ["ICONTXTFONTSIZE"]="Set the font size for the\ntext displayed on the icons.",
                                ["ICONTXTFONTOUTLINE"]="Set the font outline for the\ntext displayed on the icons.",
                         -- Skins Frames Icons Extra tabs
-						       ["ICONSCLASSROLE"]="Show the Skins Frames Icons Extras Class / Role tab.",
-						       ["ICONSRAIDTARGET"]="Show the Skins Frames Icons Extras Raid Target tab.",
+                               ["ICONSCLASSROLE"]="Show the Skins Frames Icons Extras Class / Role tab.",
+                               ["ICONSRAIDTARGET"]="Show the Skins Frames Icons Extras Raid Target tab.",
                                ["ICONSHOWCLASS"]="Shows the Class or Role when set.",
                                ["ICONSHOWRC"]="Shows the ready check status.",
                                ["ICONSHOWRT"]="Show the raid target when assigned to a player.\nThe target types can be individually filtered.",
                                ["ICONSHOWDIR"]="Show a direction arrow pointing at players out of range.\n--\nNOTE: This only works outside.",
                                ["ICONSHOWDIRMO"]="Only show the direction arrow\nwhen the mouse is over the bar.",
-						       ["ICONSREADYCHECK"]="Show the Skins Frames Icons Extras Ready Check tab.",
-						       ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
-						       ["ICONOFFSET"]="Offset the extra icon relative to the anchor.",
+                               ["ICONSREADYCHECK"]="Show the Skins Frames Icons Extras Ready Check tab.",
+                               ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
+                               ["ICONOFFSET"]="Offset the extra icon relative to the anchor.",
                         -- Debuffs General tab
                                ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
                                ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",
@@ -874,8 +874,8 @@ function HealBot_Lang_Options_enALL()
                         -- Import/Export Preset Colours tab
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
-						-- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.",	
+                        -- Plugin Tab
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.",    
                               }
 end
 

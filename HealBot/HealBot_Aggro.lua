@@ -95,7 +95,7 @@ function HealBot_Aggro_setAuxAssigned(aType, frame, id)
 end
 
 function HealBot_Aggro_UpdateThreatBar(button)
-	for id in pairs(hbAuxThreatAssigned[button.frame]) do
+    for id in pairs(hbAuxThreatAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=1
@@ -106,13 +106,13 @@ function HealBot_Aggro_UpdateThreatBar(button)
 end
 
 function HealBot_Aggro_ClearThreatBar(button)
-	for id in pairs(hbAuxThreatAssigned[button.frame]) do
+    for id in pairs(hbAuxThreatAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
     end
 end
 
 function HealBot_Aggro_UpdateAggroBar(button)
-	for id in pairs(hbAuxAggroAssigned[button.frame]) do
+    for id in pairs(hbAuxAggroAssigned[button.frame]) do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
             button.aux[id]["R"]=1
             button.aux[id]["G"]=0
@@ -123,7 +123,7 @@ function HealBot_Aggro_UpdateAggroBar(button)
 end
 
 function HealBot_Aggro_ClearAggroBar(button)
-	for id in pairs(hbAuxAggroAssigned[button.frame]) do
+    for id in pairs(hbAuxAggroAssigned[button.frame]) do
         HealBot_clearAuxBar(button, id)
     end
 end
@@ -135,8 +135,8 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,t
             status=false
             threatPct=0
             threatStatus=0
-			threatValue=0
-			mobName=""
+            threatValue=0
+            mobName=""
         end
         if status then
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
@@ -161,8 +161,8 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,t
         HealBot_Aggro_ClearAggroBar(button)
         threatPct=0
         threatStatus=0
-		threatValue=0
-		mobName=""
+        threatValue=0
+        mobName=""
     end
     if button.aggro.status~=threatStatus then
         button.aggro.status=threatStatus
@@ -173,10 +173,10 @@ function HealBot_Action_UpdateAggro(button,status,threatStatus,threatPct,extra,t
     end
     if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct
-		button.aggro.threatvalue=threatValue
-		button.aggro.mobname=mobName
+        button.aggro.threatvalue=threatValue
+        button.aggro.mobname=mobName
         HealBot_Text_setNameText(button) 
-		if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
+        if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
         if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         if threatPct<1 then
             HealBot_Aggro_ClearThreatBar(button)
