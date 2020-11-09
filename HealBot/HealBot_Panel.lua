@@ -736,6 +736,8 @@ function HealBot_Panel_TestBarsOff()
         local xUnit=b.unit
         HealBot_Action_MarkDeleteButton(b)
         HealBot_Action_DeleterCallsUnit(xUnit)
+        b.icon.reset=true
+        b.skinreset=true
         HealBot_TestBarsActive[x]=nil
         HealBot_Action_DeleteMarkedButtons()
     end

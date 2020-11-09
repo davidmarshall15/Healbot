@@ -17,6 +17,7 @@ HealBot_Action_luVars["FLUIDSTATEFREQ"]=50
 HealBot_Action_luVars["FluidInUse"]=false
 HealBot_Action_luVars["FrameInitDone"]=false
 HealBot_Action_luVars["pluginTimeToLive"]=false
+HealBot_Action_luVars["skinResetAll"]=true
 
 function HealBot_Action_setLuVars(vName, vValue)
     HealBot_Action_luVars[vName]=vValue
@@ -1854,6 +1855,7 @@ function HealBot_Action_PrepButton(button)
     button.text.nameupdate=true
     button.text.healthupdate=true
     button.spec=" "
+    button.specupdate=true
     button.reset=true 
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Bar"]:SetValue(1000)
@@ -2707,7 +2709,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.frame=hbCurFrame
             tSetHealButton.skin=""
         end
-        if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
+        if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin or HealBot_Action_luVars["skinResetAll"] then
             tSetHealButton.icon.reset=true
             tSetHealButton.skinreset=true
             tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
@@ -2748,6 +2750,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.text.healthupdate=true
             tSetHealButton.health.init=true
             tSetHealButton.mana.init=true
+            tSetHealButton.aura.alpha=true
             HealBot_Action_ResetrCallsUnit(unit)
             HealBot_Aura_setUnitIcons(tSetHealButton.id)
             if unitType<9 then
@@ -2759,6 +2762,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.status.range=-9
         else
             HealBot_Action_SetClassIconTexture(tSetHealButton)
+            HealBot_OnEvent_RaidTargetUpdate(tSetHealButton)
         end
         if tSetHealButton.skinreset or tSetHealButton.icon.reset then
             HealBot_Skins_ResetSkin("bar",tSetHealButton)
@@ -2789,9 +2793,8 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
             thb:ClearAllPoints()
             thb:SetParent(grpFrame[hbCurFrame])
             thb.frame=hbCurFrame
-            thb.skin=""
         end
-        if thb.skin~=Healbot_Config_Skins.Current_Skin then
+        if thb.skin~=Healbot_Config_Skins.Current_Skin or HealBot_Action_luVars["skinResetAll"] then
             thb.icon.reset=true
             thb.skinreset=true
             thb.skin=Healbot_Config_Skins.Current_Skin
@@ -2799,73 +2802,65 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
         if thb.skinreset or thb.icon.reset then
             HealBot_Skins_ResetSkin("bar",thb)
         end
-    end
-    for j=1,3 do
-        thb.gref.icon[j]:SetAlpha(0)
-    end
-    for j=51,53 do
-        thb.gref.icon[j]:SetAlpha(0)
-    end
-    thb.gref.icon[91]:SetAlpha(0)
-    thb.gref.icon[92]:SetAlpha(0)
-    testBarsDat["cnt"]=testBarsDat["cnt"]+1
-    testBarsDat["buffId"]=0
-    testBarsDat["debuffId"]=50
-    if not testBarsDat["buffTexture"] then _, _, testBarsDat["buffTexture"] = GetSpellInfo(HEALBOT_RENEW) end
-    if not testBarsDat["debuffTexture"] then _, _, testBarsDat["debuffTexture"] = GetSpellInfo(HEALBOT_SHADOW_WORD_PAIN) end
-    if (testBarsDat["cnt"] % 3 == 0) and HealBot_Config_Buffs.BuffWatch and 
-       Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXBICONS"]>0 then
-        testBarsDat["buffId"]=testBarsDat["buffId"]+1
-        thb.gref.icon[testBarsDat["buffId"]]:SetTexture(testBarsDat["buffTexture"])
-        thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-    end
-    if (testBarsDat["cnt"] % 4 == 0) and HealBot_Config_Cures.DebuffWatch and 
-       Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXDICONS"]>0 then
-        testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-        thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(testBarsDat["debuffTexture"])
-        thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-    end
-    if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOW"] then
-        testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
-        if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==1 then
-            testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-            thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-            thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-        elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==2 then
-            testBarsDat["buffId"]=testBarsDat["buffId"]+1
-            thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-            thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-        else
-            thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-            thb.gref.icon[92]:SetAlpha(1)
+        for j=1,3 do
+            thb.gref.icon[j]:SetAlpha(0)
         end
-    end
-    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWCLASS"] then
-        if not unitRole then unitRole="DAMAGER" end
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==1 then
-            testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
-            else
-                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
-            end
-            thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-        elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==2 then
+        for j=51,53 do
+            thb.gref.icon[j]:SetAlpha(0)
+        end
+        thb.gref.icon[91]:SetAlpha(0)
+        thb.gref.icon[92]:SetAlpha(0)
+        testBarsDat["cnt"]=testBarsDat["cnt"]+1
+        testBarsDat["buffId"]=0
+        testBarsDat["debuffId"]=50
+        if not testBarsDat["buffTexture"] then _, _, testBarsDat["buffTexture"] = GetSpellInfo(HEALBOT_RENEW) end
+        if not testBarsDat["debuffTexture"] then _, _, testBarsDat["debuffTexture"] = GetSpellInfo(HEALBOT_SHADOW_WORD_PAIN) end
+        if (testBarsDat["cnt"] % 3 == 0) and HealBot_Config_Buffs.BuffWatch and 
+           Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXBICONS"]>0 then
             testBarsDat["buffId"]=testBarsDat["buffId"]+1
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
-            else
-                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
-            end
+            thb.gref.icon[testBarsDat["buffId"]]:SetTexture(testBarsDat["buffTexture"])
             thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-        else
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
-                thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitRole))
+        end
+        if (testBarsDat["cnt"] % 4 == 0) and HealBot_Config_Cures.DebuffWatch and 
+           Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["MAXDICONS"]>0 then
+            testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+            thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(testBarsDat["debuffTexture"])
+            thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+        end
+        if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOW"] then
+            testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
+            if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==1 then
+                testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+                thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+            elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==2 then
+                testBarsDat["buffId"]=testBarsDat["buffId"]+1
+                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+                thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
             else
-                thb.gref.icon[91]:SetTexture(HealBot_Panel_retClassRoleIcon(unitClass))
+                thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+                thb.gref.icon[92]:SetAlpha(1)
             end
-            thb.gref.icon[91]:SetAlpha(1)
+        end
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWCLASS"] then
+            if not unitRole then unitRole="DAMAGER" end
+            local classTexture=HealBot_Panel_retClassRoleIcon(unitClass)
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
+                classTexture=HealBot_Panel_retClassRoleIcon(unitRole)
+            end
+            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==1 then
+                testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
+                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(classTexture)
+                thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
+            elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==2 then
+                testBarsDat["buffId"]=testBarsDat["buffId"]+1
+                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(classTexture)
+                thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
+            else
+                thb.gref.icon[91]:SetTexture(classTexture)
+                thb.gref.icon[91]:SetAlpha(1)
+            end
         end
     end
     return thb

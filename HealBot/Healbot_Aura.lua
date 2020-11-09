@@ -217,14 +217,14 @@ function HealBot_Aura_RemoveExtraUnitIcons(button, index)
     elseif index==93 then
         button.icon.extra.readycheck=false
     end
-    HealBot_OnEvent_UnitAura(button)
     if HealBot_UnitExtraIcons[button.id] and HealBot_UnitExtraIcons[button.id][index] then
         HealBot_UnitExtraIcons[button.id][index].current=false
         HealBot_UnitExtraIcons[button.id][index].nextUpdate=TimeNow+1000000
         HealBot_UnitExtraIcons[button.id][index]["spellId"]=0
         HealBot_UnitExtraIcons[button.id][index]["texture"]=""
-        HealBot_Aura_RemoveIcon(button, index)
     end
+    HealBot_Aura_RemoveIcon(button, index)
+    HealBot_OnEvent_UnitAura(button)
         --HealBot_setCall("HealBot_Aura_RemoveExtraUnitIcons")
 end
 

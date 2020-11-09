@@ -763,6 +763,7 @@ function HealBot_TestBars(noBars)
      elseif HealBot_luVars["TestBarsOn"] then
          HealBot_Panel_ToggleTestBars()
     end
+    HealBot_Action_setLuVars("skinResetAll", true)
     HealBot_nextRecalcParty(0)
       --HealBot_setCall("HealBot_TestBars")
 end
@@ -835,7 +836,7 @@ function HealBot_UpdateUnit(button)
                 HealBot_nextRecalcParty(1)
             end        
             HealBot_Aura_RemoveIcons(button)
-            HealBot_GetTalentInfo(button)
+            button.specupdate=true
         end
         _, uuUnitClassEN = UnitClass(button.unit);
         if not uuUnitClassEN and UnitIsPlayer(button.unit) then
@@ -880,6 +881,7 @@ function HealBot_UpdateUnit(button)
     HealBot_Aura_CheckIcons(button)
     HealBot_Action_UpdateBackgroundButton(button)
     HealBot_Text_SetText(button)
+    HealBot_GetTalentInfo(button)
     HealBot_Action_Refresh(button)
     if not button.status.duplicate and button.status.unittype<7 and button.status.classknown then 
         button.status.plugin=true
@@ -1523,7 +1525,7 @@ function HealBot_Reset(rType)
         HealBot_Panel_ClearBlackList()
         HealBot_Panel_ClearHealTargets()
         HealBot_Action_ResethbInitButtons()
-        HealBot_EndAggro() 
+        HealBot_EndAggro()  
         HealBot_setOptions_Timer(3)
         HealBot_Load("hbReset") 
         HealBot_setOptions_Timer(7950)
@@ -2581,6 +2583,7 @@ function HealBot_Options_Update()
         if HealBot_Options_Timer[8888] then
             if not HealBot_ProcessRefreshTypes() then
                 HealBot_Options_Timer[8888]=nil
+                HealBot_Action_setLuVars("skinResetAll", false)
             end
         elseif HealBot_Options_Timer[405] then
             HealBot_MountsPets_InitUse()
@@ -3453,6 +3456,9 @@ function HealBot_UnitSlowUpdateFriendly(button)
         HealBot_SetUnitDisconnect(button)
     elseif not button.status.classknown or button.health.max==1 then
         button.status.update=true
+    elseif button.specupdate then
+        button.specupdate=false
+        HealBot_GetTalentInfo(button)
     elseif not UnitOnTaxi("player") and button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
         if button.aura.buff.nextcheck==1 then
             HealBot_Aura_ResetCheckBuffsTime(button)
@@ -4950,6 +4956,7 @@ function HealBot_OnEvent_PlayerEnteringWorld()
     end
 
     HealBot_SetResetFlag("QUICK") 
+    if HealBot_luVars["Loaded"] then HealBot_Register_Events() end
     HealBot_luVars["qaFRNext"]=TimeNow+2
     --HealBot_Load("PlayerEnteringWorld")
       --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
