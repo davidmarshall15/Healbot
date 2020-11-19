@@ -90,6 +90,7 @@ HealBot_luVars["FluidBarAlphaInUse"]=false
 HealBot_luVars["FluidAuxAlphaInUse"]=false
 HealBot_luVars["FluidFlashInUse"]=false
 HealBot_luVars["UnitSlowUpdateFreq"]=1
+HealBot_luVars["UnitSlowUpdateFreqMax"]=25
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -1302,11 +1303,6 @@ function HealBot_Register_Events()
             HealBot:RegisterEvent("COMPANION_LEARNED");
             HealBot:RegisterEvent("PET_BATTLE_OPENING_START");
             HealBot:RegisterEvent("PET_BATTLE_OVER");
-        else
-            if not libCD then
-                libCD = HealBot_Libs_CD()
-                if libCD then libCD:Register(HEALBOT_HEALBOT) end
-            end
         end
         HealBot:RegisterEvent("UNIT_SPELLCAST_START");
         HealBot:RegisterEvent("SPELL_UPDATE_COOLDOWN")
@@ -2318,6 +2314,10 @@ function HealBot_OnEvent_VariablesLoaded(self)
         HealBot_Options_InitVars()
         HealBot_Options_setLists()
         HealBot_Action_InitFrames()
+        HealBot_Panel_Init()
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_luVars["UnitSlowUpdateFreqMax"]=5
+        end
         
         if HealBot_Globals.AutoCacheSize>20 and (HealBot_Globals.AutoCacheTime or 0)<TimeNow then
             HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
@@ -3439,7 +3439,7 @@ function HealBot_BumpThrottleCtl(button)
     if UnitIsUnit("player",button.unit) then
         button.status.slowthrottle=TimeNow+2.5
     else
-        if (hbThrottleCtl<(TimeNow)) or (hbThrottleCtl>(TimeNow+20)) then 
+        if (hbThrottleCtl<(TimeNow)) or (hbThrottleCtl>(TimeNow+HealBot_luVars["UnitSlowUpdateFreqMax"])) then 
             hbThrottleCtl=TimeNow+HealBot_luVars["UnitSlowUpdateFreq"]
         else
             hbThrottleCtl=hbThrottleCtl+HealBot_luVars["UnitSlowUpdateFreq"]
@@ -3468,6 +3468,12 @@ function HealBot_UnitSlowUpdateFriendly(button)
         end
     elseif button.health.current<button.health.max then
         button.health.update=true
+    elseif button.health.incoming>0 then 
+        HealBot_HealsInUpdate(button)
+    elseif button.health.absorbs>0 then 
+        HealBot_AbsorbsUpdate(button)
+    elseif button.status.current>3 then
+        HealBot_Action_Refresh(button)
     end
 end
 

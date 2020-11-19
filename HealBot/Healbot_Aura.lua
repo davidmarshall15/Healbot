@@ -3,6 +3,7 @@ local HealBot_UnitDebuffIcons={}
 local HealBot_UnitExtraIcons={}
 local HealBot_BuffNameTypes = {}
 local HealBot_AuraBuffCache={}
+local libCD=nil
 local HealBot_AuraDebuffCache={[-1]={},[-2]={},[-3]={}}
 local HealBot_ExcludeBuffInCache={}
 local HealBot_ExcludeDebuffInCache={}
@@ -2363,6 +2364,11 @@ function HealBot_Aura_InitData()
     };
         
     if HEALBOT_GAME_VERSION<4 then
+        if not libCD then
+            libCD = HealBot_Libs_CD()
+            if libCD then libCD:Register(HEALBOT_HEALBOT) end
+        end
+        
         local HBC_WISDOM_ID = 1 --Mana Regen
         local HBC_LIGHT_ID = 2 --Incoming Heals
         local HBC_SALVATION_ID = 3 --Threat Reduction
@@ -2373,7 +2379,6 @@ function HealBot_Aura_InitData()
         local HBC_INT_ID = 8 --Int
         local HBC_SPIRIT_ID = 9 --Spirit
         local HBC_SP_ID = 10 --Shadow Resistance 
-
         if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
             HealBot_BuffNameTypes = {
                 [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "x")] = HBC_STATS_ID,

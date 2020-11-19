@@ -103,6 +103,7 @@ HealBot_Panel_luVars["cpCRASH"]=false
 HealBot_Panel_luVars["NumPrivate"]=0
 HealBot_Panel_luVars["NumPets"]=0
 HealBot_Panel_luVars["TankHealth"]=0
+HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=25
 
 function HealBot_Panel_retLuVars(vName)
     return HealBot_Panel_luVars[vName]
@@ -2682,8 +2683,14 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
         if nMembers>HealBot_Globals.AutoCacheSize then    
             HealBot_Globals.AutoCacheSize=nMembers
         end
-        HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((20/nMembers),4))
+        HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]/nMembers),4))
         HealBot_fastUpdateEveryFrame(5)
     end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
+end
+
+function HealBot_Panel_Init()
+    if HEALBOT_GAME_VERSION<4 then
+        HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=5
+    end
 end

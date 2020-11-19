@@ -1,10 +1,10 @@
-## Interface: 90001
+## Interface: 90002
 ## Title: HealBot French Localization
 ## Author: Kubik
 ## Notes: HealBot localization for frFR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.1.0
+## Version: 9.0.2.0
 
 HealBot_Localization.fr.lua
 HealBot_Tips_Localization.fr.lua

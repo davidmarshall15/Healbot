@@ -1,10 +1,10 @@
-## Interface: 90001
+## Interface: 90002
 ## Title: HealBot Greek Localization
 ## Author: Snaomi
 ## Notes: HealBot localization for grGR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.1.0
+## Version: 9.0.2.0
 
 HealBot_Localization.gr.lua
 HealBot_Tips_Localization.gr.lua
