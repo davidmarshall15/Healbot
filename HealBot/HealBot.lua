@@ -756,8 +756,8 @@ function HealBot_ToggleSuppressSetting(settingType)
 end
 
 function HealBot_TestBars(noBars)
-    local numBars=noBars or HealBot_Globals.TestBars["BARS"]
-    if numBars and tonumber(numBars) and tonumber(numBars)>4 and tonumber(numBars)<71 then
+    local numBars=noBars or 80
+    if numBars and tonumber(numBars) and tonumber(numBars)>4 and tonumber(numBars)<81 then
         numBars=tonumber(numBars)
         HealBot_Panel_SetNumBars(numBars)
         HealBot_Panel_ToggleTestBars()
@@ -2423,7 +2423,6 @@ function HealBot_ResetOnSpecChange(spec)
     HealBot_Options_ResetDoInittab(5)
     HealBot_Options_ResetDoInittab(4)
     HealBot_Options_setDebuffTypes()
-    HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(50)
     HealBot_Action_PrepSetAllAttribs(nil,nil,nil,true)
     HealBot_setOptions_Timer(176)
@@ -3018,6 +3017,10 @@ function HealBot_Options_Update()
             HealBot_Options_Timer[9960]=nil
             HealBot_Action_InitFrames()
             HealBot_ResetClassIconTexture()
+        elseif HealBot_Options_Timer[9970] then
+            HealBot_Options_Timer[9970]=nil
+            HealBot_Action_setLuVars("skinResetAll", true)
+            HealBot_Panel_resetTestCols(true)
         elseif HealBot_Options_Timer[9990] then 
             if not HealBot_Action_DeleteMarkedButtons() then
                 HealBot_Options_Timer[9990]=nil
@@ -4932,9 +4935,11 @@ function HealBot_OnEvent_FocusChanged(self)
       --HealBot_setCall("HealBot_OnEvent_FocusChanged")
 end
 
-function HealBot_OnEvent_TalentsChanged(button)
-    button.spec = " "
-    HealBot_GetTalentInfo(button)
+function HealBot_Player_TalentsChanged()
+    _,xButton,pButton = HealBot_UnitID("player")
+    if xButton then xButton.spec = " " end
+    if pButton then pButton.spec = " " end
+    HealBot_setOptions_Timer(200)
       --HealBot_setCall("HealBot_OnEvent_TalentsChanged")
 end
 
@@ -4962,8 +4967,9 @@ function HealBot_OnEvent_PlayerEnteringWorld()
     end
 
     HealBot_SetResetFlag("QUICK") 
-    if HealBot_luVars["Loaded"] then HealBot_Register_Events() end
+    --if HealBot_luVars["Loaded"] then HealBot_Register_Events() end
     HealBot_luVars["qaFRNext"]=TimeNow+2
+    HealBot_setOptions_Timer(200)
     --HealBot_Load("PlayerEnteringWorld")
       --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
 end
@@ -4974,7 +4980,7 @@ function HealBot_OnEvent_PlayerLeavingWorld(self)
         HealBot_Options_hbProfile_saveClass()
     end
     HealBot_EndAggro() 
-    HealBot_UnRegister_Events();
+    --HealBot_UnRegister_Events();
       --HealBot_setCall("HealBot_OnEvent_PlayerLeavingWorld")
 end
 
@@ -5806,14 +5812,18 @@ function HealBot_OnEvent(self, event, ...)
             end
         end
     elseif (event=="PLAYER_SPECIALIZATION_CHANGED") then
-        _,eButton,ePrivate = HealBot_UnitID(arg1)
-        if eButton then 
-            HealBot_GetTalentInfo(eButton) 
-            HealBot_nextRecalcParty(6)
-        end
-        if ePrivate then 
-            HealBot_GetTalentInfo(ePrivate) 
-            HealBot_nextRecalcParty(6)
+        if UnitIsUnit(arg1,"player") then
+            HealBot_Player_TalentsChanged()
+        else
+            _,eButton,ePrivate = HealBot_UnitID(arg1)
+            if eButton then 
+                HealBot_GetTalentInfo(eButton) 
+                HealBot_nextRecalcParty(6)
+            end
+            if ePrivate then 
+                HealBot_GetTalentInfo(ePrivate) 
+                HealBot_nextRecalcParty(6)
+            end
         end
     elseif (event=="UNIT_CONNECTION") then
         _,eButton,ePrivate = HealBot_UnitID(arg1)
@@ -5843,21 +5853,9 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="LEARNED_SPELL_IN_TAB") then
         HealBot_OnEvent_SpellsChanged(self,arg1);
         HealBot_setOptions_Timer(405)        
-        _,eButton,ePrivate = HealBot_UnitID("player")
-        if eButton then
-            HealBot_OnEvent_TalentsChanged(eButton)
-        end
-        if ePrivate then
-            HealBot_OnEvent_TalentsChanged(ePrivate)
-        end
+        HealBot_Player_TalentsChanged()
     elseif (event=="PLAYER_TALENT_UPDATE") or (event=="CHARACTER_POINTS_CHANGED") or (event=="UNIT_DISPLAYPOWER") then
-        _,eButton,ePrivate = HealBot_UnitID("player")
-        if eButton then
-            HealBot_OnEvent_TalentsChanged(eButton)
-        end
-        if ePrivate then
-            HealBot_OnEvent_TalentsChanged(ePrivate)
-        end
+        HealBot_Player_TalentsChanged()
     elseif (event=="COMPANION_LEARNED") then
         HealBot_setOptions_Timer(405)
     elseif (event=="VARIABLES_LOADED") then

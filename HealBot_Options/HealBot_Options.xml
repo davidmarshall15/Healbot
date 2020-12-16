@@ -17078,23 +17078,6 @@
                   <OnLeave>HealBot_Options_Show_Help("TESTPROFILE",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Slider name="HealBot_Options_NumberTestBars" inherits="HealBot_Options_SliderTemplate">
-                <Size>
-                  <AbsDimension x="390" y="16" />
-                </Size>
-                <Anchors>
-                  <Anchor point="TOP">
-                    <Offset>
-                      <AbsDimension x="0" y="-165" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnValueChanged>HealBot_Options_NumTestBars_OnValueChanged(self)</OnValueChanged>
-                  <OnEnter>HealBot_Options_Show_Help("TESTNUMTOTAL",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("TESTNUMTOTAL",false)</OnLeave>
-                </Scripts>
-              </Slider>
               <Slider name="HealBot_Options_NumberTestTanks" inherits="HealBot_Options_SliderTemplate">
                 <Size>
                   <AbsDimension x="390" y="16" />
@@ -17102,7 +17085,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-240" />
+                      <AbsDimension x="0" y="-165" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -17119,7 +17102,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-315" />
+                      <AbsDimension x="0" y="-260" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -17136,7 +17119,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-390" />
+                      <AbsDimension x="0" y="-355" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -17153,7 +17136,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-465" />
+                      <AbsDimension x="0" y="-450" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -17170,7 +17153,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-540" />
+                      <AbsDimension x="0" y="-545" />
                     </Offset>
                   </Anchor>
                 </Anchors>

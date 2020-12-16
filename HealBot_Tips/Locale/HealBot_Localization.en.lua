@@ -411,7 +411,6 @@ function HealBot_Lang_Options_enALL()
                         -- Test tab
                                  ["TESTUSE"]=HEALBOT_OPTIONS_TESTBARS,
                                  ["TESTPROFILE"]=HEALBOT_WORDS_PROFILE,
-                                 ["TESTNUMTOTAL"]=HEALBOT_OPTION_NUMBARS,
                                  ["TESTNUMTANKS"]=HEALBOT_OPTION_NUMTANKS,
                                  ["TESTNUMHEALS"]=HEALBOT_OPTION_NUMHEALERS,
                                  ["TESTNUMMYTARGETS"]=HEALBOT_OPTION_NUMMYTARGETS,
@@ -842,7 +841,6 @@ function HealBot_Lang_Options_enALL()
                         -- Test tab
                                ["TESTUSE"]="The button shows the current state of test bars, click on it to change the state.",
                                ["TESTPROFILE"]="Profile limits the total number of bars for Groups or Raids.",
-                               ["TESTNUMTOTAL"]="Fine tune the total number of bars for selected profile.",
                                ["TESTNUMTANKS"]="Set the number of bars to represent Tanks.",
                                ["TESTNUMHEALS"]="Set the number of bars to represent Healers.",
                                ["TESTNUMMYTARGETS"]="Set the number of bars to represent your Private Targets.",

@@ -2520,22 +2520,22 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, "target"..j);
             button:SetAttribute(HB_prefix.."type"..j, "target")
             button:SetAttribute(HB_prefix.."type-target"..j, "target")
-            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_FOCUS) then
             button:SetAttribute(HB_prefix..buttonType..j, "focus"..j);
             button:SetAttribute(HB_prefix.."type"..j, "focus")
             button:SetAttribute(HB_prefix.."type-focus"..j, "focus")
-            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_ASSIST) then
             button:SetAttribute(HB_prefix..buttonType..j, "assist"..j);
             button:SetAttribute(HB_prefix.."type"..j, "assist")
             button:SetAttribute(HB_prefix.."type-assist"..j, "assist")
-            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_STOP) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "macro")
             button:SetAttribute(HB_prefix.."macrotext"..j, "/stopcasting")
-            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strsub(strlower(sName),1,4)==strlower(HEALBOT_TELL) then
             local mText='/script local n=UnitName("hbtarget");SendChatMessage("hbMSG","WHISPER",nil,n)'
             mText=string.gsub(mText,"hbtarget",button.unit)
@@ -2551,7 +2551,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "showhbmenu")
             showHBmenu = function()
-                if UnitGUID(button.unit) then
+                if UnitExists(button.unit) then
                     local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
                     HBFriendsDropDown.unit = button.unit
                     HBFriendsDropDown.name = HealBot_GetUnitName(button.unit, button.guid)
@@ -2571,7 +2571,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
                 button:SetAttribute(HB_prefix..buttonType..j, sType..j);
                 button:SetAttribute(HB_prefix.."type-"..sType..j, "spell");
                 button:SetAttribute(HB_prefix.."spell-"..sType..j, sName);
-                if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+                if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
             end
         elseif mId ~= 0 then
             local _,_,mText=GetMacroInfo(mId)
@@ -2588,7 +2588,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, "item"..j);
             button:SetAttribute(HB_prefix.."type-item"..j, "item");
             button:SetAttribute(HB_prefix.."item-item"..j, sName);
-            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         else
             if sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, button.unit, status)
@@ -2599,14 +2599,14 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
                 button:SetAttribute(HB_prefix..buttonType..j, sType..j);
                 button:SetAttribute(HB_prefix.."type-"..sType..j, "spell");
                 button:SetAttribute(HB_prefix.."spell-"..sType..j, sName);
-                if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+                if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
             end
         end
         button:SetAttribute(HB_prefix.."checkselfcast"..j, "false")
         return true
     else
         button:SetAttribute(HB_prefix..buttonType..j, nil);
-        if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
+        if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
         return false
     end
     --HealBot_setCall("HealBot_Action_SetButtonAttrib")

@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.2.0";
+﻿HEALBOT_VERSION    = "9.0.2.1";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.0" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.1" end
 
 function HealBot_globalVars()
     --Consumables
@@ -237,6 +237,7 @@ function HealBot_globalVars()
     HEALBOT_HEALING_WAVE                    = 77472 --GetSpellInfo(77472) or "--Healing Wave";
     HBC_LESSER_HEALING_WAVE                 = 8004
     HBC_HEALING_WAVE                        = 331
+    HEALBOT_PRIMORDIAL_WAVE                 = 326059
     HEALBOT_RIPTIDE                         = 61295 --GetSpellInfo(61295) or "--Riptide";
     HEALBOT_WELLSPRING                      = 197995 --GetSpellInfo(197995) or "--Wellspring";
     HEALBOT_DOWNPOUR                        = 207778 --GetSpellInfo(207778) or "--Downpour";

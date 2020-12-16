@@ -276,7 +276,7 @@ function HealBot_Data_InitVars()
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},
-        TestBars={["BARS"]=25,["PETS"]=4,["TARGETS"]=5,["HEALERS"]=3,["TANKS"]=2,["PROFILE"]=3,["ENEMY"]=2},
+        TestBars={["PETS"]=4,["TARGETS"]=5,["HEALERS"]=3,["TANKS"]=2,["PROFILE"]=3,["ENEMY"]=2},
         EmergencyFClass = 4,
         MacroSuppressSound = 1,
         MacroSuppressError = 1,
@@ -503,6 +503,7 @@ function HealBot_Data_InitVars()
             },
             ["SHAM"] = {
                 [HEALBOT_RIPTIDE]=2,
+                [HEALBOT_PRIMORDIAL_WAVE]=2,
                 [HEALBOT_WELLSPRING]=2,
                 [HEALBOT_DOWNPOUR]=2,
                 [HEALBOT_TIDAL_WAVES]=2,
