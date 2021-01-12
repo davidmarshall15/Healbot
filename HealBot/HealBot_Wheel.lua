@@ -101,7 +101,6 @@ end
 function HealBot_Action_DoHealUnit_Wheel(self, delta)
     --local xButton=hbLastButton
     if hbLastButton then
-        if not hbLastButton then return end
         --local xUnit=xButton.unit
         if not UnitExists(hbLastButton.unit) then return end
         local y="None"
@@ -117,7 +116,6 @@ function HealBot_Action_DoHealUnit_Wheel(self, delta)
             else
                 y=""
             end
-
         elseif IsAltKeyDown() then
             if not IsControlKeyDown() and not IsShiftKeyDown() then 
                 y="Alt" 
@@ -135,7 +133,6 @@ function HealBot_Action_DoHealUnit_Wheel(self, delta)
         else
             HealBot_MouseWheelCmd=HEALBOT_WORDS_NONE
         end
-        
         if HealBot_MouseWheelCmd==HEALBOT_HB_MENU then
             local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
             HBFriendsDropDown.unit = hbLastButton.unit

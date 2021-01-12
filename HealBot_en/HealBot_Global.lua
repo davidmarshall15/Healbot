@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.2.2";
+﻿HEALBOT_VERSION    = "9.0.2.4";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.1" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.3" end
 
 function HealBot_globalVars()
     --Consumables
@@ -696,6 +696,7 @@ function HealBot_globalVars()
     HEALBOT_DEBUFF_FORBEARANCE              = 25771 --GetSpellInfo(25771) or "--Forbearance";
     HEALBOT_DEBUFF_WEAKENED_SOUL            = 6788 --GetSpellInfo(6788) or "--Weakened Soul";
 end
+HealBot_globalVars()
 
 HEALBOT_DISEASE_en                      = "Disease";  -- Do NOT localize this value.
 HEALBOT_MAGIC_en                        = "Magic";  -- Do NOT localize this value.

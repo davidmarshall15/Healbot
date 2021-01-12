@@ -61,37 +61,28 @@ end
 
 function HealBot_Tooltip_SpellPattern(button, click)
     local sPattern=nil
+    local x = click
     if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
-        if click=="Left" then
-            sPattern=HEALBOT_WOWMENU
-        elseif click=="Right" then
-            sPattern=HEALBOT_HBMENU
-            --HealBot_Panel_ToggelHealTarget(self.unit)
-        elseif click=="Middle" then
-            sPattern=HEALBOT_TOGGLE_ENABLED
-        end
-    else    
-        local x = click;
-        if IsShiftKeyDown() then 
-            if IsAltKeyDown() then 
-                x = "Alt-Shift"..x
-            elseif IsControlKeyDown() then 
-                x = "Ctrl-Shift"..x
-            else
-                x = "Shift"..x
-            end
-        elseif IsAltKeyDown() then 
-            if IsControlKeyDown() then 
-                 x = "Alt-Ctrl"..x
-            else
-                x = "Alt"..x
-            end
+        x = "Alt-Ctrl-Shift"..x
+    elseif IsShiftKeyDown() then 
+        if IsAltKeyDown() then 
+            x = "Alt-Shift"..x
         elseif IsControlKeyDown() then 
-            x = "Ctrl"..x 
+            x = "Ctrl-Shift"..x
+        else
+            x = "Shift"..x
         end
-        x=x..HealBot_Config.CurrentSpec
-        sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
+    elseif IsAltKeyDown() then 
+        if IsControlKeyDown() then 
+             x = "Alt-Ctrl"..x
+        else
+            x = "Alt"..x
+        end
+    elseif IsControlKeyDown() then 
+        x = "Ctrl"..x 
     end
+    x=x..HealBot_Config.CurrentSpec
+    sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
     return sPattern
 end
 
@@ -598,9 +589,7 @@ function HealBot_Action_DoRefreshTooltip()
                     uClass=HEALBOT_WORDS_UNKNOWN 
                 end
             end
-            local inRange=true
-            if HEALBOT_GAME_VERSION<4 then inRange=CheckInteractDistance(xUnit,1) end
-            if xButton.spec==" " and UnitIsPlayer(xUnit) and inRange and HealBot_Globals.QueryTalents and not HealBot_Data["INSPECT"] then
+            if HEALBOT_GAME_VERSION>3 and xButton.spec==" " and UnitIsPlayer(xUnit) and not HealBot_Data["INSPECT"] then
                 HealBot_Data["INSPECT"]=true
                 HealBot_TalentQuery(xUnit)
             end
@@ -763,20 +752,7 @@ function HealBot_Action_DoRefreshTooltip()
         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_TAB_SPELLS,1,1,1,1," ",0,0,0,0)
     end
     
-    if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
-        if spellLeft then 
-            linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONLEFT,1,1,0,1,spellLeft,0.5,0.5,1,1)
-        end
-        if spellMiddle then
-            linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONMIDDLE,1,1,0,1,spellMiddle,0.5,0.5,1,1)
-        end
-        if spellRight then
-            linenum=linenum+1
-            HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_BUTTONRIGHT,1,1,0,1,spellRight,0.5,0.5,1,1)
-        end
-    elseif HealBot_Globals.Tooltip_ShowSpellDetail then
+    if HealBot_Globals.Tooltip_ShowSpellDetail then
 
         if LeftN then
             linenum=linenum+1

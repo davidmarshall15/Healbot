@@ -1767,8 +1767,6 @@ function HealBot_Action_InitButton(button)
     button.gref.indicator.power[5]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi5"]
     button.skin=""
     button.frame=0
-    HealBot_Action_SetButtonAttrib(button,"Left","Alt-Ctrl-Shift","Fixed",1)
-    HealBot_Action_SetButtonAttrib(button,"Right","Alt-Ctrl-Shift","Fixed",2)
     --HealBot_setCall("HealBot_Action_InitButton")
 end
 
@@ -1911,7 +1909,7 @@ function HealBot_Action_CreateButton(hbCurFrame)
     --HealBot_setCall("HealBot_Action_CreateButton")
 end
 
-local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl"}
+local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
 local hbAttribsMinReset = {}
 local HB_button,HB_prefix=nil,nil
 local showHBmenu=nil
@@ -1993,24 +1991,20 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
             sText=nil
         end
     end
-    if cType == "ENABLED" then
-        HealBot_Config_Spells.EnabledKeyCombo[cKey] = sText
-    elseif cType == "DISABLED" then
-        HealBot_Config_Spells.DisabledKeyCombo[cKey] = sText
-    else
+    if cType == "ENEMY" then
         HealBot_Config_Spells.EnemyKeyCombo[cKey] = sText
+    else
+        HealBot_Config_Spells.EnabledKeyCombo[cKey] = sText
     end
     --HealBot_setCall("HealBot_Action_SetSpell")
 end
 
 local HealBot_Action_SpellCache={}
 HealBot_Action_SpellCache["ENABLED"]={}
-HealBot_Action_SpellCache["DISABLED"]={}
 HealBot_Action_SpellCache["ENEMY"]={}
 
 function HealBot_Action_ClearSpellCache()
     HealBot_Action_SpellCache["ENABLED"]={}
-    HealBot_Action_SpellCache["DISABLED"]={}
     HealBot_Action_SpellCache["ENEMY"]={}
     --HealBot_setCall("HealBot_Action_ClearSpellCache")
 end
@@ -2021,8 +2015,6 @@ function HealBot_Action_GetSpell(cType, cKey)
     if not vSpellText then
         if cType == "ENABLED" then
             vSpellText=HealBot_Config_Spells.EnabledKeyCombo[cKey]
-        elseif cType == "DISABLED" then
-            vSpellText=HealBot_Config_Spells.DisabledKeyCombo[cKey]
         else
             vSpellText=HealBot_Config_Spells.EnemyKeyCombo[cKey]
         end
@@ -2066,21 +2058,6 @@ function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
         return nil 
     end
     --HealBot_setCall("HealBot_Action_AttribSpellPattern")
-end
-
-function HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
-    vAttribSpellName = HealBot_Action_GetSpell("DISABLED", HB_combo_prefix)
-    if vAttribSpellName then
-        return vAttribSpellName, 
-               HealBot_Config_Spells.DisabledSpellTarget[HB_combo_prefix], 
-               HealBot_Config_Spells.DisabledSpellTrinket1[HB_combo_prefix], 
-               HealBot_Config_Spells.DisabledSpellTrinket2[HB_combo_prefix], 
-               HealBot_Config_Spells.DisabledAvoidBlueCursor[HB_combo_prefix]
-    else
-        return nil 
-    end
-    --HealBot_setCall("HealBot_Action_AttribDisSpellPattern")
-
 end
 
 function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
@@ -2498,20 +2475,12 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
     end
     local HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
     local sName,sTar,sTrin1,sTrin2,AvoidBC=nil,0, 0, 0, 0
-    if status=="Enabled" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
-    elseif status=="Disabled" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
-    elseif status=="Enemy" then
+    if status=="Enemy" then
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
         buttonType="harmbutton"
         sType="harm"
-    elseif status=="Fixed" then
-        if j==1 then
-            sName=strlower(HEALBOT_MENU)
-        elseif j==2 then
-            sName=strlower(HEALBOT_HBMENU)
-        end
+    else
+        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     end
     if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=false end
     if sName then
@@ -2520,22 +2489,22 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, "target"..j);
             button:SetAttribute(HB_prefix.."type"..j, "target")
             button:SetAttribute(HB_prefix.."type-target"..j, "target")
-            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_FOCUS) then
             button:SetAttribute(HB_prefix..buttonType..j, "focus"..j);
             button:SetAttribute(HB_prefix.."type"..j, "focus")
             button:SetAttribute(HB_prefix.."type-focus"..j, "focus")
-            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_ASSIST) then
             button:SetAttribute(HB_prefix..buttonType..j, "assist"..j);
             button:SetAttribute(HB_prefix.."type"..j, "assist")
             button:SetAttribute(HB_prefix.."type-assist"..j, "assist")
-            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strlower(sName)==strlower(HEALBOT_STOP) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "macro")
             button:SetAttribute(HB_prefix.."macrotext"..j, "/stopcasting")
-            if hbAttribsMinReset[HB_prefix..status..j]  and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         elseif strsub(strlower(sName),1,4)==strlower(HEALBOT_TELL) then
             local mText='/script local n=UnitName("hbtarget");SendChatMessage("hbMSG","WHISPER",nil,n)'
             mText=string.gsub(mText,"hbtarget",button.unit)
@@ -2571,7 +2540,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
                 button:SetAttribute(HB_prefix..buttonType..j, sType..j);
                 button:SetAttribute(HB_prefix.."type-"..sType..j, "spell");
                 button:SetAttribute(HB_prefix.."spell-"..sType..j, sName);
-                if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+                if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
             end
         elseif mId ~= 0 then
             local _,_,mText=GetMacroInfo(mId)
@@ -2588,7 +2557,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
             button:SetAttribute(HB_prefix..buttonType..j, "item"..j);
             button:SetAttribute(HB_prefix.."type-item"..j, "item");
             button:SetAttribute(HB_prefix.."item-item"..j, sName);
-            if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+            if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
         else
             if sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, button.unit, status)
@@ -2599,20 +2568,20 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j)
                 button:SetAttribute(HB_prefix..buttonType..j, sType..j);
                 button:SetAttribute(HB_prefix.."type-"..sType..j, "spell");
                 button:SetAttribute(HB_prefix.."spell-"..sType..j, sName);
-                if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
+                if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=2 end
             end
         end
         button:SetAttribute(HB_prefix.."checkselfcast"..j, "false")
         return true
     else
         button:SetAttribute(HB_prefix..buttonType..j, nil);
-        if hbAttribsMinReset[HB_prefix..status..j] and UnitExists(button.unit) then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
+        if hbAttribsMinReset[HB_prefix..status..j] then hbAttribsMinReset[HB_prefix..status..j][button.id]=1 end
         return false
     end
     --HealBot_setCall("HealBot_Action_SetButtonAttrib")
 end
 
-local hbMaxMouseButtons={["Enemy"]=15,["Enabled"]=15}
+local hbMaxMouseButtons={["Enemy"]=5,["Enabled"]=5}
 function HealBot_Action_SetAllButtonAttribs(button,status)
     if HealBot_Action_luVars["clearSpellCache"] then
         HealBot_Action_luVars["clearSpellCache"]=false
@@ -2646,7 +2615,7 @@ function HealBot_Action_SetAllButtonAttribs(button,status)
             end
             if hasSpells then
                 hbMaxMouseButtons[status]=x
-            elseif x==15 and hbMaxMouseButtons[status]==15 then 
+            elseif x==5 and hbMaxMouseButtons[status]==5 then 
                 hbMaxMouseButtons[status]=0
             end
         end
@@ -2660,6 +2629,8 @@ function HealBot_Action_PrepSetAllAttribs(status,key,bNo,all)
         for x,_ in pairs(hbAttribsMinReset) do
             hbAttribsMinReset[x]={};
         end
+        hbMaxMouseButtons["Enemy"]=5
+        hbMaxMouseButtons["Enabled"]=5
     else
         if strlen(key)>1 then
             key = strlower(key).."-"
@@ -2671,7 +2642,7 @@ function HealBot_Action_PrepSetAllAttribs(status,key,bNo,all)
     HealBot_setOptions_Timer(9920)
 end
 
-for x=1,15 do
+for x=1,5 do
     for y=1, getn(HealBot_Keys_List), 1 do
         if strlen(HealBot_Keys_List[y])>1 then
             HB_prefix = strlower(HealBot_Keys_List[y]).."-"
@@ -3280,22 +3251,14 @@ function HealBot_Action_HealUnit_OnEnter(self)
         HealBot_Data["TIPBUTTON"] = self
         if not UnitIsFriend("player",self.unit) then
             HealBot_Data["TIPTYPE"] = "Enemy"
-        elseif HealBot_Data["UILOCK"] and HealBot_Globals.DisableToolTipInCombat==false then
+        else
             HealBot_Data["TIPTYPE"] = "Enabled"
-        elseif UnitAffectingCombat(self.unit) then
-            HealBot_Data["TIPTYPE"] = "Enabled"
-        elseif self.status.enabled or HealBot_Config.EnableHealthy then 
-            HealBot_Data["TIPTYPE"] = "Enabled"
-        elseif self.status.current<9 then
-            HealBot_Data["TIPTYPE"] = "Disabled"
         end
         HealBot_Action_RefreshTooltip();
     end
     if self and self.aux then HealBot_Action_UpdateHighlightBar(self) end
     HealBot_MountsPets_lastbutton(self)
     --HealBot_setCall("HealBot_Action_HealUnit_OnEnter")
-   -- SetOverrideBindingClick(HealBot_Action,true,"MOUSEWHEELUP", "HealBot_Action_HealUnit"..self.id,"Button4");
-   -- SetOverrideBindingClick(HealBot_Action,true,"MOUSEWHEELDOWN", "HealBot_Action_HealUnit"..self.id,"Button5");
 end
 
 function HealBot_Action_HealUnit_OnLeave(self)
@@ -3354,7 +3317,9 @@ function HealBot_Action_PreClick(self,button)
         HealBot_setLuVars("TargetUnitID", self.unit)
         usedSmartCast=false;
         ModKey=""
-        if IsShiftKeyDown() then 
+        if IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() then
+            ModKey="Alt-Ctrl-Shift"
+        elseif IsShiftKeyDown() then 
             if IsControlKeyDown() then 
                 ModKey="Ctrl-Shift"
             elseif IsAltKeyDown() then 
@@ -3389,8 +3354,6 @@ function HealBot_Action_PreClick(self,button)
             elseif button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() and not HealBot_Data["UILOCK"] then
                 HealBot_Action_UseSmartCast(self)
             end
-        elseif IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() and button=="MiddleButton" then
-            HealBot_Action_Toggle_Enabled(self.unit)
         elseif not HealBot_Data["UILOCK"] then
             if HealBot_Globals.ProtectPvP then
                 if UnitIsPVP(self.unit) and not UnitIsPVP("player") then 
@@ -3400,10 +3363,6 @@ function HealBot_Action_PreClick(self,button)
             end
             if button=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
                 HealBot_Action_UseSmartCast(self)
-            end
-            if not self.status.enabled and HealBot_Config.EnableHealthy==false and not usedSmartCast then
-                HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Disabled",aj)
-                usedSmartCast=true;
             end
         end
     end
@@ -3427,69 +3386,45 @@ end
 function HealBot_Action_setRegisterForClicks(button)
     if button then
         if HealBot_Config_Spells.ButtonCastMethod==1 then
-            button:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+            button:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
         else
-            button:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                        "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                        "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+            button:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
         end
     else
         if HealBot_Config_Spells.ButtonCastMethod==1 then
             for _,xButton in pairs(HealBot_Unit_Button) do
-                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
             end
             for _,xButton in pairs(HealBot_Private_Button) do
-                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
             end
             for _,xButton in pairs(HealBot_Enemy_Button) do
-                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
             end
             for _,xButton in pairs(HealBot_Pet_Button) do
-                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
             end
             for _,xButton in pairs(HealBot_Extra_Button) do
-                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down",
-                                        "Button6Down", "Button7Down", "Button8Down", "Button9Down", "Button10Down",
-                                       "Button11Down", "Button12Down", "Button13Down", "Button14Down", "Button15Down");
+                xButton:RegisterForClicks("LeftButtonDown", "MiddleButtonDown", "RightButtonDown", "Button4Down", "Button5Down");
             end
         else
             for _,xButton in pairs(HealBot_Unit_Button) do
-                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
             end
             for _,xButton in pairs(HealBot_Private_Button) do
-                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
             end
             for _,xButton in pairs(HealBot_Enemy_Button) do
-                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
             end
             for _,xButton in pairs(HealBot_Pet_Button) do
-                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
             end
             for _,xButton in pairs(HealBot_Extra_Button) do
-                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up",
-                                    "Button6Up", "Button7Up", "Button8Up", "Button9Up", "Button10Up",
-                                    "Button11Up", "Button12Up", "Button13Up", "Button14Up", "Button15Up");
+                xButton:RegisterForClicks("LeftButtonUp", "MiddleButtonUp", "RightButtonUp", "Button4Up", "Button5Up");
             end
         end
-    end
+    end   
 end
 
 function HealBot_Action_SetFrameColours(frame)

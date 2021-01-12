@@ -197,22 +197,13 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_RAID40                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 40";
     HEALBOT_OPTIONS_EMERGFILTER             = "Show bars for";
     HEALBOT_OPTIONS_EMERGFCLASS             = "Configure classes for";
+    HEALBOT_OPTIONS_MODIFIER                = "Modifier key"
     HEALBOT_OPTIONS_COMBOBUTTON             = "Button";
     HEALBOT_OPTIONS_BUTTONLEFT              = "Left";
     HEALBOT_OPTIONS_BUTTONMIDDLE            = "Middle";
     HEALBOT_OPTIONS_BUTTONRIGHT             = "Right";
     HEALBOT_OPTIONS_BUTTON4                 = "Button4";
     HEALBOT_OPTIONS_BUTTON5                 = "Button5";
-    HEALBOT_OPTIONS_BUTTON6                 = "Button6";
-    HEALBOT_OPTIONS_BUTTON7                 = "Button7";
-    HEALBOT_OPTIONS_BUTTON8                 = "Button8";
-    HEALBOT_OPTIONS_BUTTON9                 = "Button9";
-    HEALBOT_OPTIONS_BUTTON10                = "Button10";
-    HEALBOT_OPTIONS_BUTTON11                = "Button11";
-    HEALBOT_OPTIONS_BUTTON12                = "Button12";
-    HEALBOT_OPTIONS_BUTTON13                = "Button13";
-    HEALBOT_OPTIONS_BUTTON14                = "Button14";
-    HEALBOT_OPTIONS_BUTTON15                = "Button15";
 
     HEALBOT_CLASSES_ALL                     = "All classes";
     HEALBOT_CLASSES_MELEE                   = "Melee";
@@ -319,8 +310,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SMARTCASTHEAL           = "Healing spells";
     HEALBOT_OPTIONS_BAR2SIZE                = "Power bar size";
     HEALBOT_OPTIONS_SETSPELLS               = "Set spells for";
-    HEALBOT_OPTIONS_ENABLEDBARS             = "Enabled bars at all times";
-    HEALBOT_OPTIONS_DISABLEDBARS            = "Disabled bars when out of combat";
+    HEALBOT_OPTIONS_ENABLEDBARS             = "Helpful spells on friendly characters";
     HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
     
@@ -482,7 +472,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
     HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
-    HEALBOT_OPTIONS_ENABLELIBQH             = "Enable HealBot fastHealth"
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
@@ -579,7 +568,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SUBSORT                 = "Sub sort"
     HEALBOT_OPTIONS_SUBSORTINC              = "Also sub sort:"
 
-    HEALBOT_OPTIONS_BUTTONCASTMETHOD        = "cast when"
+    HEALBOT_OPTIONS_BUTTONCASTMETHOD        = "Cast when button"
     HEALBOT_OPTIONS_BUTTONCASTPRESSED       = "Pressed"
     HEALBOT_OPTIONS_BUTTONCASTRELEASED      = "Released"
 
@@ -928,8 +917,7 @@ function HealBot_Lang_enALL()
     HEALBOT_AGGRO3_SET_MSG                  = "Aggro level 3 set at threat percentage "
     HEALBOT_WORD_THREAT                     = "Threat"
     HEALBOT_AGGRO_ERROR_MSG                 = "Invalid aggro level - use 2 or 3"
-
-    HEALBOT_OPTIONS_QUERYTALENTS            = "Query talent data"       
+  
     HEALBOT_OPTIONS_LOWMANAINDICATOR        = "Low Mana indicator"
     HEALBOT_OPTIONS_LOWMANAINDICATOR1       = "Don't show"
     HEALBOT_OPTIONS_LOWMANAINDICATOR2       = "*10% / **20% / ***30%"
@@ -939,7 +927,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
     HEALBOT_OPTION_IGNORE_AURA_RESTED       = "Ignore aura events when resting"
-    HEALBOT_OPTION_ADJUST_MAX_HEALTH        = "Adjust unit max health"
 
     HEALBOT_WORD_ENABLE                     = "Enable"
     HEALBOT_WORD_DISABLE                    = "Disable"
@@ -1252,7 +1239,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"
     HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY     = "    " .. "Enemy"
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
-    HEALBOT_OPTIONS_ENEMYBARS               = "Enemy bars at all times";
+    HEALBOT_OPTIONS_ENEMYBARS               = "Harmful spells on hostile characters";
     HEALBOT_OPTIONS_HARMFUL_SPELLS          = "Harmful Spells"
     HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include Private List targets"
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"
@@ -1273,7 +1260,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SORTOORLAST             = "Sort out of range last"
     HEALBOT_OPTION_NUMENEMYS                = "Number of Enemies"
     HEALBOT_WORD_AUTO                       = "Auto"
-    HEALBOT_OPTIONS_ENABLEAUTOCOMBAT        = "Enable HealBot autoCombat"
     HEALBOT_WORDS_REMOVETEMPCUSTOMNAME      = "Remove temporary custom name"
     HEALBOT_WORDS_REMOVEPERMCUSTOMNAME      = "Remove permanent custom name"
     HEALBOT_WORDS_ADDTEMPCUSTOMNAME         = "Add temporary custom name"

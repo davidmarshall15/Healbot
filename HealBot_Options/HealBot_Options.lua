@@ -1,5 +1,5 @@
 local LSM = HealBot_Libs_LSM()
-local HealBot_Options_ComboButtons_Button=1;
+local HealBot_Options_ComboButtons_Modifier=1
 local HealBot_Options_Opened=false;
 local HealBot_buffbarcolr = {};
 local HealBot_buffbarcolg = {};
@@ -82,7 +82,7 @@ local HealBot_Options_EmoteUnhappy_List={}
 local HealBot_Options_ExtraSkinsCat_List={}
 local HealBot_Options_TestBarsProfile_List={}
 local HealBot_Options_ButtonCastMethod_List={}
-local HealBot_Options_CastButton_List={}
+local HealBot_Options_CastModifier_List={}
 local HealBot_Options_BarHealthType_List={}
 local HealBot_Options_BarHealthAnchor_List={}
 local HealBot_Options_AbsorbColour_List={}
@@ -496,22 +496,15 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_HLTHTXTANCHOR05,
     }
     
-    HealBot_Options_CastButton_List = {
-        HEALBOT_OPTIONS_BUTTONLEFT,
-        HEALBOT_OPTIONS_BUTTONMIDDLE,
-        HEALBOT_OPTIONS_BUTTONRIGHT,
-        HEALBOT_OPTIONS_BUTTON4,
-        HEALBOT_OPTIONS_BUTTON5,
-        HEALBOT_OPTIONS_BUTTON6,
-        HEALBOT_OPTIONS_BUTTON7,
-        HEALBOT_OPTIONS_BUTTON8,
-        HEALBOT_OPTIONS_BUTTON9,
-        HEALBOT_OPTIONS_BUTTON10,
-        HEALBOT_OPTIONS_BUTTON11,
-        HEALBOT_OPTIONS_BUTTON12,
-        HEALBOT_OPTIONS_BUTTON13,
-        HEALBOT_OPTIONS_BUTTON14,
-        HEALBOT_OPTIONS_BUTTON15,
+    HealBot_Options_CastModifier_List = {
+        HEALBOT_WORDS_NONE,
+        HEALBOT_OPTIONS_SHIFT,
+        HEALBOT_OPTIONS_CTRL,
+        HEALBOT_OPTIONS_ALT,
+        HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL,
+        HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_ALT,
+        HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT,
+        HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT
     }
 
     HealBot_Options_ButtonCastMethod_List = {
@@ -712,7 +705,6 @@ function HealBot_Options_setLists()
     
     HealBot_Options_ActionBarsCombo_List = {
         HEALBOT_OPTIONS_ENABLEDBARS,
-        HEALBOT_OPTIONS_DISABLEDBARS,
         HEALBOT_OPTIONS_ENEMYBARS,
     }
 
@@ -3771,18 +3763,6 @@ function HealBot_Options_AggroTrack_OnClick(self)
     HealBot_setOptions_Timer(80)
 end
 
-function HealBot_Options_EnableLibQuickHealth_OnClick(self)
-    local reason=HEALBOT_OPTIONS_ENABLELIBQH
-    if self:GetChecked() then
-        HealBot_Globals.EnLibQuickHealth=true
-        reason=reason.." - "..HEALBOT_WORD_ON
-    else
-        HealBot_Globals.EnLibQuickHealth=false
-        reason=reason.." - "..HEALBOT_WORD_OFF
-    end
-    HealBot_Options_ReloadUI(reason)
-end
-
 function HealBot_Options_FluidFlashInUse()
     local inUse=false
     if HealBot_Globals.OverrideEffects["USE"]==1 then
@@ -3820,14 +3800,6 @@ function HealBot_Options_UseFluidBars_OnClick(self)
     end
     HealBot_setOptions_Timer(4950)
     --HealBot_setOptions_Timer(80)
-end
-
-function HealBot_Options_EnableAutoCombat_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.EnAutoCombat=true
-    else
-        HealBot_Globals.EnAutoCombat=false
-    end
 end
 
 function HealBot_Options_AggroTxt_OnClick(self)
@@ -4028,14 +4000,6 @@ function HealBot_Options_NoAuraWhenRested_OnClick(self)
     end
     HealBot_setOptions_Timer(30)
     HealBot_setOptions_Timer(7955)
-end
-
-function HealBot_Options_AdjustMaxHealth_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Config.AdjustMaxHealth=true
-    else
-        HealBot_Config.AdjustMaxHealth=false
-    end
 end
 
 function HealBot_Options_DisableHealBot(checkval)
@@ -4516,14 +4480,6 @@ function HealBot_Options_ShowMinimapButton_OnClick(self)
         HealBot_Globals.MinimapIcon.hide=true
     end
     HealBot_MMButton_Toggle()
-end
-
-function HealBot_Options_QueryTalents_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.QueryTalents=true
-    else
-        HealBot_Globals.QueryTalents=false
-    end
 end
 
 function HealBot_Options_ShowTooltip_OnClick(self)
@@ -6219,17 +6175,17 @@ end
 
 --------------------------------------------------------------------------------
 
-local function HealBot_Options_CastButton_DropDown()
+local function HealBot_Options_CastModifier_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    for j=1, getn(HealBot_Options_CastButton_List), 1 do
-        info.text = HealBot_Options_CastButton_List[j];
+    for j=1, getn(HealBot_Options_CastModifier_List), 1 do
+        info.text = HealBot_Options_CastModifier_List[j];
         info.func = function(self)
-                        HealBot_Options_ComboButtons_Button = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_CastButton, HealBot_Options_CastButton_List[HealBot_Options_ComboButtons_Button])
+                        HealBot_Options_ComboButtons_Modifier = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_CastModifier, HealBot_Options_CastModifier_List[HealBot_Options_ComboButtons_Modifier])
                         HealBot_Options_ComboClass_Text()
                     end
         info.checked = false;
-        if HealBot_Options_ComboButtons_Button==j then info.checked = true end
+        if HealBot_Options_ComboButtons_Modifier==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -7827,97 +7783,66 @@ local HealBot_Options_SCAC = { [1] = HEALBOT_WOWMENU,
                              }
 function HealBot_Options_ComboClass_Text()
     local combo=nil
-    local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
+    local modifier=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
     HealBot_Action_ClearSpellCache()
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo="ENABLED"
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo="DISABLED"
     else
         combo="ENEMY"
     end       
-    HealBot_Options_Click:SetText(HealBot_Action_GetSpell(combo, button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_Shift:SetText(HealBot_Action_GetSpell(combo, "Shift"..button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_Ctrl:SetText(HealBot_Action_GetSpell(combo, "Ctrl"..button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_Alt:SetText(HealBot_Action_GetSpell(combo, "Alt"..button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_AltShift:SetText(HealBot_Action_GetSpell(combo, "Alt-Shift"..button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_CtrlShift:SetText(HealBot_Action_GetSpell(combo, "Ctrl-Shift"..button..HealBot_Config.CurrentSpec) or "")
-    HealBot_Options_CtrlAlt:SetText(HealBot_Action_GetSpell(combo, "Alt-Ctrl"..button..HealBot_Config.CurrentSpec) or "")
+    HealBot_Options_Button1:SetText(HealBot_Action_GetSpell(combo, modifier..HealBot_Options_ComboClass_Button(1)..HealBot_Config.CurrentSpec) or "")
+    HealBot_Options_Button2:SetText(HealBot_Action_GetSpell(combo, modifier..HealBot_Options_ComboClass_Button(2)..HealBot_Config.CurrentSpec) or "")
+    HealBot_Options_Button3:SetText(HealBot_Action_GetSpell(combo, modifier..HealBot_Options_ComboClass_Button(3)..HealBot_Config.CurrentSpec) or "")
+    HealBot_Options_Button4:SetText(HealBot_Action_GetSpell(combo, modifier..HealBot_Options_ComboClass_Button(4)..HealBot_Config.CurrentSpec) or "")
+    HealBot_Options_Button5:SetText(HealBot_Action_GetSpell(combo, modifier..HealBot_Options_ComboClass_Button(5)..HealBot_Config.CurrentSpec) or "")
 
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo = HealBot_Config_Spells.EnabledSpellTarget;
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo = HealBot_Config_Spells.DisabledSpellTarget;
     else
         combo = HealBot_Config_Spells.EnemySpellTarget;
     end
     if combo then
-        HealBot_SpellAutoTarget:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
-        HealBot_ShiftSpellAutoTarget:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlSpellAutoTarget:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltSpellAutoTarget:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltShiftSpellAutoTarget:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlShiftSpellAutoTarget:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAltSpellAutoTarget:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_SpellAutoTarget:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(1)..HealBot_Config.CurrentSpec] or false)
+        HealBot_ShiftSpellAutoTarget:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(2)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlSpellAutoTarget:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(3)..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltSpellAutoTarget:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(4)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlShiftSpellAutoTarget:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(5)..HealBot_Config.CurrentSpec] or false)
     end
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo = HealBot_Config_Spells.EnabledSpellTrinket1;
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo = HealBot_Config_Spells.DisabledSpellTrinket1;
     else
         combo = HealBot_Config_Spells.EnemySpellTrinket1;
     end
     if combo then
-        HealBot_SpellAutoTrinket1:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
-        HealBot_ShiftSpellAutoTrinket1:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlSpellAutoTrinket1:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltSpellAutoTrinket1:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltShiftSpellAutoTrinket1:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlShiftSpellAutoTrinket1:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAltSpellAutoTrinket1:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_SpellAutoTrinket1:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(1)..HealBot_Config.CurrentSpec] or false)
+        HealBot_ShiftSpellAutoTrinket1:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(2)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlSpellAutoTrinket1:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(3)..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltSpellAutoTrinket1:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(4)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlShiftSpellAutoTrinket1:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(5)..HealBot_Config.CurrentSpec] or false)
     end
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo = HealBot_Config_Spells.EnabledSpellTrinket2;
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo = HealBot_Config_Spells.DisabledSpellTrinket2;
     else
         combo = HealBot_Config_Spells.EnemySpellTrinket2;
     end
     if combo then
-        HealBot_SpellAutoTrinket2:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
-        HealBot_ShiftSpellAutoTrinket2:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlSpellAutoTrinket2:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltSpellAutoTrinket2:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltShiftSpellAutoTrinket2:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlShiftSpellAutoTrinket2:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAltSpellAutoTrinket2:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
+        HealBot_SpellAutoTrinket2:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(1)..HealBot_Config.CurrentSpec] or false)
+        HealBot_ShiftSpellAutoTrinket2:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(2)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlSpellAutoTrinket2:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(3)..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltSpellAutoTrinket2:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(4)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlShiftSpellAutoTrinket2:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(5)..HealBot_Config.CurrentSpec] or false)
     end
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         combo = HealBot_Config_Spells.EnabledAvoidBlueCursor;
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        combo = HealBot_Config_Spells.DisabledAvoidBlueCursor;
     else
         combo = HealBot_Config_Spells.EnemyAvoidBlueCursor;
     end
     if combo then
-        HealBot_AvoidBlueCursor:SetChecked(combo[button..HealBot_Config.CurrentSpec] or false)
-        HealBot_ShiftAvoidBlueCursor:SetChecked(combo["Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAvoidBlueCursor:SetChecked(combo["Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltAvoidBlueCursor:SetChecked(combo["Alt"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_AltShiftAvoidBlueCursor:SetChecked(combo["Alt-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlShiftAvoidBlueCursor:SetChecked(combo["Ctrl-Shift"..button..HealBot_Config.CurrentSpec] or false)
-        HealBot_CtrlAltAvoidBlueCursor:SetChecked(combo["Alt-Ctrl"..button..HealBot_Config.CurrentSpec] or false)
-    end
-    if HealBot_Options_ComboButtons_Button>3 then
-        local g=_G["HealBot_Options_ShiftCntlAltClickHeader"] 
-        g:SetText(" ")
-        local g=_G["HealBot_Options_ShiftCntlAltClickDetail"] 
-        g:SetText(" ")
-    else
-        local g=_G["HealBot_Options_ShiftCntlAltClickHeader"] 
-        g:SetText(HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK..":")
-        local g=_G["HealBot_Options_ShiftCntlAltClickDetail"] 
-        g:SetText(HealBot_Options_SCAC[HealBot_Options_ComboButtons_Button])
+        HealBot_AvoidBlueCursor:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(1)..HealBot_Config.CurrentSpec] or false)
+        HealBot_ShiftAvoidBlueCursor:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(2)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlAvoidBlueCursor:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(3)..HealBot_Config.CurrentSpec] or false)
+        HealBot_AltAvoidBlueCursor:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(4)..HealBot_Config.CurrentSpec] or false)
+        HealBot_CtrlShiftAvoidBlueCursor:SetChecked(combo[modifier..HealBot_Options_ComboClass_Button(5)..HealBot_Config.CurrentSpec] or false)
     end
 end
 
@@ -7927,7 +7852,7 @@ HealBot_Options_StorePrev["HealSpellsComboID"] = 0
 
 function HealBot_Options_FullHealSpellsCombo_list (sType)
     local HealBot_Options_SelectHealSpellsCombo_List = {}
-    if sType==3 then
+    if sType==2 then
         HealBot_Options_SelectHealSpellsCombo_List = {
             HEALBOT_MINDBENDER,
             HEALBOT_SMITE,
@@ -8075,7 +8000,7 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     for x,_ in pairs(HealBot_Options_NoDuplcates) do
         HealBot_Options_NoDuplcates[x]=nil
     end 
-    if sType==3 or HEALBOT_GAME_VERSION>3 then
+    if sType==2 or HEALBOT_GAME_VERSION>3 then
         local fullHealDDlist=HealBot_Options_FullHealSpellsCombo_list(sType)
         for j=1, getn(fullHealDDlist), 1 do
             local spellName=HealBot_KnownSpell(fullHealDDlist[j])
@@ -8137,7 +8062,7 @@ local function HealBot_Options_SelectOtherSpellsCombo_DDlist()
     for x,_ in pairs(HealBot_Options_NoDuplcates) do
         HealBot_Options_NoDuplcates[x]=nil
     end 
-    if HealBot_Options_StorePrev["ActionBarsCombo"]==3 then
+    if HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
         HealBot_Options_SelectOtherSpellsCombo_List = {
             HEALBOT_HEX,
             HEALBOT_ENTANGLING_ROOTS,
@@ -8410,7 +8335,7 @@ function HealBot_Options_SelectItemsCombo_DropDown()
 
     local info = UIDropDownMenu_CreateInfo()
     local HealBot_Options_SelectItemsCombo_List={}
-    if HealBot_Options_StorePrev["ActionBarsCombo"]==3 then
+    if HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
         HealBot_Options_SelectItemsCombo_List={
             HEALBOT_WORDS_NONE,
         }
@@ -8499,7 +8424,7 @@ HealBot_Options_StorePrev["CmdsComboID"]=0
 function HealBot_Options_SelectCmdsCombo_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     local HealBot_Options_SelectCmdsCombo_List={}
-    if HealBot_Options_StorePrev["ActionBarsCombo"]==3 then
+    if HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
         HealBot_Options_SelectCmdsCombo_List = {
                 HEALBOT_DISABLED_TARGET,
                 HEALBOT_FOCUS,
@@ -8545,20 +8470,16 @@ function HealBot_Options_SpellsSelect_OnClick(self, sType)
             hbTmpText1=HealBot_Options_StorePrev["hbHelpCmdsSelect"] or ""
         end
         if hbTmpText1~=HEALBOT_TOOLTIP_NONE then
-            if HealBot_Options_StorePrev["HealBot_Options_sLoc"]=="Click" then
-                HealBot_Options_Click:SetText(hbTmpText1)
-            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]=="Shift" then
-                HealBot_Options_Shift:SetText(hbTmpText1)
-            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]=="Ctrl" then
-                HealBot_Options_Ctrl:SetText(hbTmpText1)
-            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]=="Alt" then
-                HealBot_Options_Alt:SetText(hbTmpText1)
-            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]=="CtrlShift" then
-                HealBot_Options_CtrlShift:SetText(hbTmpText1)
-            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]== "AltShift" then
-                HealBot_Options_AltShift:SetText(hbTmpText1)
-            else -- "AltCtrl"
-                HealBot_Options_CtrlAlt:SetText(hbTmpText1)
+            if HealBot_Options_StorePrev["HealBot_Options_sLoc"]==1 then
+                HealBot_Options_Button1:SetText(hbTmpText1)
+            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]==2 then
+                HealBot_Options_Button2:SetText(hbTmpText1)
+            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]==3 then
+                HealBot_Options_Button3:SetText(hbTmpText1)
+            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]==4 then
+                HealBot_Options_Button4:SetText(hbTmpText1)
+            elseif HealBot_Options_StorePrev["HealBot_Options_sLoc"]==5 then
+                HealBot_Options_Button5:SetText(hbTmpText1)
             end
         end
     end
@@ -8572,28 +8493,21 @@ function HealBot_Options_HelpSpellsSelect_OnClick(self, sLoc)
     HealBot_Options_StorePrev["HealBot_Options_sLoc"]=sLoc
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         hbOptionText[1]=HEALBOT_OPTIONS_SETSPELLS..": "..HEALBOT_OPTIONS_ENABLEDBARS
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        hbOptionText[1]=HEALBOT_OPTIONS_SETSPELLS..": "..HEALBOT_OPTIONS_DISABLEDBARS
     else
         hbOptionText[1]=HEALBOT_OPTIONS_SETSPELLS..": "..HEALBOT_OPTIONS_ENEMYBARS
     end
     HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH1",hbOptionText[1])
-    local _,hbTmpText1=HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
-    hbTmpText1=hbTmpText1.." "..HEALBOT_OPTIONS_CLICK
-    if sLoc=="Click" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1
-    elseif sLoc=="Shift" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_SHIFT.."+"..hbTmpText1
-    elseif sLoc=="Ctrl" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_CTRL.."+"..hbTmpText1
-    elseif sLoc=="Alt" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_ALT.."+"..hbTmpText1
-    elseif sLoc=="CtrlShift" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_SHIFT.."+"..hbTmpText1
-    elseif sLoc=="AltShift" then
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_SHIFT.."+"..hbTmpText1
-    else -- "AltCtrl"
-        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..hbTmpText1
+    local hbTmpText1=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
+    if sLoc==1 then
+        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1.." "..HEALBOT_OPTIONS_BUTTONLEFT.." "..HEALBOT_OPTIONS_CLICK
+    elseif sLoc==2 then
+        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1.." "..HEALBOT_OPTIONS_BUTTONMIDDLE.." "..HEALBOT_OPTIONS_CLICK
+    elseif sLoc==3 then
+        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1.." "..HEALBOT_OPTIONS_BUTTONRIGHT.." "..HEALBOT_OPTIONS_CLICK
+    elseif sLoc==4 then
+        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1.." "..HEALBOT_OPTIONS_BUTTON4.." "..HEALBOT_OPTIONS_CLICK
+    else
+        hbOptionText[2]=HEALBOT_OPTIONS_COMBOCLASS..":  "..hbTmpText1.." "..HEALBOT_OPTIONS_BUTTON5.." "..HEALBOT_OPTIONS_CLICK
     end
     HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH2",hbOptionText[2])
     HealBot_Options_KeysFrame:Hide()
@@ -10309,13 +10223,13 @@ local hbInOut_SpellCmds={[HEALBOT_DISABLED_TARGET]=1,
                          [HEALBOT_HBMENU]=5,
                          [HEALBOT_STOP]=6,
                          [HEALBOT_TELL.." ..."]=7,}
-local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl"}
+local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
 
 function HealBot_Options_ShareSpellsb_OnClick()
     local ssStr="Spells_v8202\n"
     local sName, sTar, sTrin1, sTrin2, AvoidBC, HB_button, HB_combo_prefix, sText, sId=nil,nil,nil,nil,nil,nil,nil,nil,nil
-    for z=1,3 do
-        for x=1,15 do
+    for z=1,2 do
+        for x=1,5 do
             HB_button = HealBot_Options_ComboClass_Button(x)
             -- Menu~1,1,7~2,4,false,false,false,false,
             for y=1, getn(HealBot_Keys_List), 1 do
@@ -10323,9 +10237,6 @@ function HealBot_Options_ShareSpellsb_OnClick()
                 if z==1 then
                     sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
                     sText = HealBot_Config_Spells.EnabledKeyCombo[HB_combo_prefix]
-                elseif z==2 then
-                    sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribDisSpellPattern(HB_combo_prefix)
-                    sText = HealBot_Config_Spells.DisabledKeyCombo[HB_combo_prefix]
                 else
                     sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
                     sText = HealBot_Config_Spells.EnemyKeyCombo[HB_combo_prefix]
@@ -10367,11 +10278,6 @@ function HealBot_SpellAutoButton_Update(autoType, autoMod, ActionBarsCombo, Butt
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnabledSpellTrinket1;
         elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.EnabledSpellTrinket2; 
         else combo = HealBot_Config_Spells.EnabledAvoidBlueCursor; end
-    elseif ActionBarsCombo==2 then
-        if autoType=="Target" then combo = HealBot_Config_Spells.DisabledSpellTarget;
-        elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.DisabledSpellTrinket1;
-        elseif autoType=="Trinket2" then combo = HealBot_Config_Spells.DisabledSpellTrinket2;
-        else combo = HealBot_Config_Spells.DisabledAvoidBlueCursor; end
     else
         if autoType=="Target" then combo = HealBot_Config_Spells.EnemySpellTarget;
         elseif autoType=="Trinket1" then combo = HealBot_Config_Spells.EnemySpellTrinket1;
@@ -10404,7 +10310,6 @@ function HealBot_Options_LoadSpellsb_OnClick()
         else
             if HealBot_Options_StorePrev["InMethodSpell"]==1 then
                 HealBot_Config_Spells.EnabledKeyCombo = {}
-                HealBot_Config_Spells.DisabledKeyCombo = {}
                 HealBot_Config_Spells.EnemyKeyCombo = {}
             end
             -- Flash Heal~1,1,1~1,2061,false,true,true,false,
@@ -10421,8 +10326,6 @@ function HealBot_Options_LoadSpellsb_OnClick()
                     local cType="ENEMY"
                     if ActionBarsCombo==1 then
                         cType = "ENABLED"
-                    elseif ActionBarsCombo==2 then
-                        cType = "DISABLED"
                     end
                     local button = HealBot_Options_ComboClass_Button(Buttons_Button)
                     local cText=HealBot_Action_GetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec)
@@ -12554,19 +12457,23 @@ local hbComboButtons={
                         [3]={["BTN"]="Right",    ["TXT"]=HEALBOT_OPTIONS_BUTTONRIGHT},
                         [4]={["BTN"]="Button4",  ["TXT"]=HEALBOT_OPTIONS_BUTTON4},
                         [5]={["BTN"]="Button5",  ["TXT"]=HEALBOT_OPTIONS_BUTTON5},
-                        [6]={["BTN"]="Button6",  ["TXT"]=HEALBOT_OPTIONS_BUTTON6},
-                        [7]={["BTN"]="Button7",  ["TXT"]=HEALBOT_OPTIONS_BUTTON7},
-                        [8]={["BTN"]="Button8",  ["TXT"]=HEALBOT_OPTIONS_BUTTON8},
-                        [9]={["BTN"]="Button9",  ["TXT"]=HEALBOT_OPTIONS_BUTTON9},
-                       [10]={["BTN"]="Button10", ["TXT"]=HEALBOT_OPTIONS_BUTTON10},
-                       [11]={["BTN"]="Button11", ["TXT"]=HEALBOT_OPTIONS_BUTTON11},
-                       [12]={["BTN"]="Button12", ["TXT"]=HEALBOT_OPTIONS_BUTTON12},
-                       [13]={["BTN"]="Button13", ["TXT"]=HEALBOT_OPTIONS_BUTTON13},
-                       [14]={["BTN"]="Button14", ["TXT"]=HEALBOT_OPTIONS_BUTTON14},
-                       [15]={["BTN"]="Button15", ["TXT"]=HEALBOT_OPTIONS_BUTTON15},
                      }
 function HealBot_Options_ComboClass_Button(bNo)
     return hbComboButtons[bNo]["BTN"], hbComboButtons[bNo]["TXT"]
+end
+
+local hbComboModifiers={
+                        [1]="",
+                        [2]="Shift",
+                        [3]="Ctrl",
+                        [4]="Alt",
+                        [5]="Ctrl-Shift",
+                        [6]="Alt-Shift",
+                        [7]="Alt-Ctrl",
+                        [8]="Alt-Ctrl-Shift",
+                        }
+function HealBot_Options_ComboButton_ModifierKey(mod)
+    return hbComboModifiers[mod]
 end
 
 local tIDs={ [1]=1,   [2]=2,   [3]=3,   [4]=4,   [5]=5, 
@@ -13517,14 +13424,14 @@ function HealBot_Options_KnownSpellCheckButtonNum(bNo)
     return bNo
 end
 
-function HealBot_SpellAutoButton_OnClick(self, autoType, autoMod)
+function HealBot_SpellAutoButton_OnClick(self, autoType, autoButton)
     if self:GetChecked() then
-        HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "true")
+        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_StorePrev["ActionBarsCombo"], autoButton, "true")
     else
-        HealBot_SpellAutoButton_Update(autoType, autoMod, HealBot_Options_StorePrev["ActionBarsCombo"], HealBot_Options_ComboButtons_Button, "false")
+        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_StorePrev["ActionBarsCombo"], autoButton, "false")
     end
-    HealBot_Action_PrepSetAllAttribs("Enemy",autoMod,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
-    HealBot_Action_PrepSetAllAttribs("Enabled",autoMod,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
+    HealBot_Action_PrepSetAllAttribs("Enemy",HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier),HealBot_Options_KnownSpellCheckButtonNum(autoButton))
+    HealBot_Action_PrepSetAllAttribs("Enabled",HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier),HealBot_Options_KnownSpellCheckButtonNum(autoButton))
 end
 
 function HealBot_Options_KnownSpellCheck(sName,status,key,bNo)
@@ -13538,45 +13445,36 @@ function HealBot_Options_KnownSpellCheck(sName,status,key,bNo)
 end
 
 local spellText=nil
-local function HealBot_Options_DoOnTextChanged(self, key)
+local function HealBot_Options_DoOnTextChanged(self, bNo)
     local cType="ENEMY"
     if HealBot_Options_StorePrev["ActionBarsCombo"]==1 then
         cType="ENABLED"
-    elseif HealBot_Options_StorePrev["ActionBarsCombo"]==2 then
-        cType="DISABLED"
     end
-    local button = HealBot_Options_ComboClass_Button(HealBot_Options_ComboButtons_Button)
+    local button = HealBot_Options_ComboClass_Button(bNo)
+    local key=HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier)
     spellText = strtrim(self:GetText())
     HealBot_Action_SetSpell(cType, key..button..HealBot_Config.CurrentSpec, spellText)
-    HealBot_Options_KnownSpellCheck(spellText,cType,key,HealBot_Options_KnownSpellCheckButtonNum(HealBot_Options_ComboButtons_Button))
+    HealBot_Options_KnownSpellCheck(spellText,cType,key,HealBot_Options_KnownSpellCheckButtonNum(bNo))
 end
 
-function HealBot_Options_Click_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "")
+function HealBot_Options_Button1_OnTextChanged(self)
+    HealBot_Options_DoOnTextChanged(self, 1)
 end
 
-function HealBot_Options_Shift_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Shift")
+function HealBot_Options_Button2_OnTextChanged(self)
+    HealBot_Options_DoOnTextChanged(self, 2)
 end
 
-function HealBot_Options_Ctrl_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Ctrl")
+function HealBot_Options_Button3_OnTextChanged(self)
+    HealBot_Options_DoOnTextChanged(self, 3)
 end
 
-function HealBot_Options_Alt_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Alt")
+function HealBot_Options_Button4_OnTextChanged(self)
+    HealBot_Options_DoOnTextChanged(self, 4)
 end
 
-function HealBot_Options_CtrlShift_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Ctrl-Shift")
-end
-
-function HealBot_Options_AltShift_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Alt-Shift")
-end
-
-function HealBot_Options_CtrlAlt_OnTextChanged(self)
-    HealBot_Options_DoOnTextChanged(self, "Alt-Ctrl")
+function HealBot_Options_Button5_OnTextChanged(self)
+    HealBot_Options_DoOnTextChanged(self, 5)
 end
 
 function HealBot_Options_DisconnectedTag_OnTextChanged(self)
@@ -13593,15 +13491,6 @@ end
 
 function HealBot_Options_ReserverTag_OnTextChanged(self)
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["TAGR"] = self:GetText()
-end
-
-function HealBot_Options_EnableHealthy_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Config.EnableHealthy = true
-    else
-        HealBot_Config.EnableHealthy = false
-    end
-    HealBot_Action_ResetUnitStatus()
 end
 
 function HealBot_Options_EnableMouseWheel_OnClick(self)
@@ -13916,7 +13805,6 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_Colour(nil,_G["HealBot_About_LocalH"],true)
     HealBot_Options_Content_Colour(nil,_G["HealBot_About_Desc1"],true)
     HealBot_Options_Content_Colour(nil,_G["HealBot_Options_SkinURL"],true)
-    HealBot_Options_Content_Colour(nil,_G["HealBot_Options_ShiftCntlAltClickDetail"],true) 
     HealBot_Options_Content_Colour(nil,_G["HealBot_AuxBarsConfigAssign2_FontStr"],true)
     for x=1,9 do
         HealBot_Options_Content_Colour(nil,_G["HealBot_Aux"..x.."Config_FontStr2"],true)
@@ -14407,7 +14295,6 @@ function HealBot_Options_ResetDoInittab(tabNo)
     end
 end
 
-HealBot_Options_StorePrev["selSpellsType"]=1
 function HealBot_Options_Init(tabNo)
     local g=nil
     if tabNo==0 then
@@ -14498,13 +14385,13 @@ function HealBot_Options_Init(tabNo)
         end
     elseif tabNo==8 then
         if not DoneInitTab[8] then
-            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestTanks,HEALBOT_OPTION_NUMTANKS,0,5,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestTanks,HEALBOT_OPTION_NUMTANKS,0,8,1)
             HealBot_Options_NumberTestTanks:SetValue(HealBot_Globals.TestBars["TANKS"])
             HealBot_Options_SetText(HealBot_Options_NumberTestTanks,HEALBOT_OPTION_NUMTANKS..": "..HealBot_Globals.TestBars["TANKS"])
-            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestHealers,HEALBOT_OPTION_NUMHEALERS,0,8,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestHealers,HEALBOT_OPTION_NUMHEALERS,0,12,1)
             HealBot_Options_NumberTestHealers:SetValue(HealBot_Globals.TestBars["HEALERS"])
             HealBot_Options_SetText(HealBot_Options_NumberTestHealers,HEALBOT_OPTION_NUMHEALERS..": "..HealBot_Globals.TestBars["HEALERS"])
-            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestMyTargets,HEALBOT_OPTION_NUMMYTARGETS,0,7,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_NumberTestMyTargets,HEALBOT_OPTION_NUMMYTARGETS,0,10,1)
             HealBot_Options_NumberTestMyTargets:SetValue(HealBot_Globals.TestBars["TARGETS"])
             HealBot_Options_SetText(HealBot_Options_NumberTestMyTargets,HEALBOT_OPTION_NUMMYTARGETS..": "..HealBot_Globals.TestBars["TARGETS"])
             HealBot_Options_val_OnLoad(HealBot_Options_NumberTestPets,HEALBOT_OPTION_NUMPETS,0,10,1)
@@ -14529,21 +14416,16 @@ function HealBot_Options_Init(tabNo)
             HealBot_Options_SelectSpellsFrame:Hide()
         end
     elseif tabNo==10 then
-        if HealBot_Options_StorePrev["ActionBarsCombo"]>2 then
-            if HealBot_Options_StorePrev["selSpellsType"]<3 then
-                DoneInitTab[201]=nil
-                local g=_G["healbotspellshelphealfontstr"]
-                g:SetText(HEALBOT_OPTIONS_HARMFUL_SPELLS)
-            end
+        if HealBot_Options_StorePrev["ActionBarsCombo"]>1 then
+            DoneInitTab[201]=nil
+            local g=_G["healbotspellshelphealfontstr"]
+            g:SetText(HEALBOT_OPTIONS_HARMFUL_SPELLS)
         else
-            if HealBot_Options_StorePrev["selSpellsType"]>2 then
-                DoneInitTab[201]=nil
-                local g=_G["healbotspellshelphealfontstr"]
-                g:SetText(HEALBOT_OPTIONS_SMARTCASTHEAL)
-            end
+            DoneInitTab[201]=nil
+            local g=_G["healbotspellshelphealfontstr"]
+            g:SetText(HEALBOT_OPTIONS_SMARTCASTHEAL)
         end
         HealBot_Options_InitSub(201)
-        HealBot_Options_StorePrev["selSpellsType"]=HealBot_Options_StorePrev["ActionBarsCombo"]
     elseif tabNo==99 then
         HealBot_Options_InitSub(902)
     end
@@ -14575,22 +14457,14 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_hbLangs, HealBot_Options_hbLangs_List[HealBot_Options_StorePrev["hbLangs"]])
             HealBot_Options_NoAuraWhenRested:SetChecked(HealBot_Config_Buffs.NoAuraWhenRested)
             HealBot_Options_SetText(HealBot_Options_NoAuraWhenRested,HEALBOT_OPTION_IGNORE_AURA_RESTED)
-            HealBot_Options_AdjustMaxHealth:SetChecked(HealBot_Config.AdjustMaxHealth)
-            HealBot_Options_SetText(HealBot_Options_AdjustMaxHealth,HEALBOT_OPTION_ADJUST_MAX_HEALTH)
             local mmButtonShown=false
             if HealBot_Globals.MinimapIcon.hide==false then mmButtonShown=true end
             HealBot_Options_ShowMinimapButton:SetChecked(mmButtonShown)
             HealBot_Options_SetText(HealBot_Options_ShowMinimapButton,HEALBOT_OPTIONS_SHOWMINIMAPBUTTON)
-            HealBot_Options_QueryTalents:SetChecked(HealBot_Globals.QueryTalents)
-            HealBot_Options_SetText(HealBot_Options_QueryTalents,HEALBOT_OPTIONS_QUERYTALENTS)
             HealBot_Options_HideOptions:SetChecked(HealBot_Globals.HideOptions)
             HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
             HealBot_Options_RightButtonOptions:SetChecked(HealBot_Globals.RightButtonOptions)
             HealBot_Options_SetText(HealBot_Options_RightButtonOptions,HEALBOT_OPTIONS_RIGHTBOPTIONS)
-            HealBot_Options_EnableLibQuickHealth:SetChecked(HealBot_Globals.EnLibQuickHealth)
-            HealBot_Options_SetText(HealBot_Options_EnableLibQuickHealth,HEALBOT_OPTIONS_ENABLELIBQH)
-            HealBot_Options_EnableAutoCombat:SetChecked(HealBot_Globals.EnAutoCombat)
-            HealBot_Options_SetText(HealBot_Options_EnableAutoCombat,HEALBOT_OPTIONS_ENABLEAUTOCOMBAT)
             HealBot_Options_sliderlabels_Init(HealBot_Options_OptionsOpacityAdj,HEALBOT_OPTIONS_OPTIONSOPACITY,1,75,1,5,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
             HealBot_Options_OptionsOpacityAdj:SetValue(HealBot_Globals.OptionsOpacityAdj or 35)
             HealBot_Options_SetText(HealBot_Options_OptionsOpacityAdj,HEALBOT_OPTIONS_OPTIONSOPACITY)
@@ -14767,11 +14641,9 @@ function HealBot_Options_InitSub1(subNo)
         end
     elseif subNo==201 then
         if not DoneInitTab[201] then
-            HealBot_Options_CastButton.initialize = HealBot_Options_CastButton_DropDown
-            UIDropDownMenu_SetText(HealBot_Options_CastButton, HealBot_Options_CastButton_List[HealBot_Options_ComboButtons_Button])
-            HealBot_Options_SetText(HealBot_Options_CtrlShift,HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_CLICK)
-            HealBot_Options_SetText(HealBot_Options_AltShift,HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK)
-            HealBot_Options_SetText(HealBot_Options_CtrlAlt,HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK)
+            HealBot_Options_CastModifier.initialize = HealBot_Options_CastModifier_DropDown
+            UIDropDownMenu_SetText(HealBot_Options_CastModifier, HealBot_Options_CastModifier_List[HealBot_Options_ComboButtons_Modifier])
+            HealBot_Options_SetText(HealBot_Options_Button5,HEALBOT_OPTIONS_BUTTON5)
             HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH1",hbOptionText[1])
             HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH2",hbOptionText[2])
             g=_G["HealBot_Options_HealSpellsSelect"]
@@ -14795,8 +14667,6 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_ButtonCastMethod, HealBot_Options_ButtonCastMethod_List[HealBot_Config_Spells.ButtonCastMethod])
             HealBot_Options_ActionBarsCombo.initialize = HealBot_Options_ActionBarsCombo_DropDown
             UIDropDownMenu_SetText(HealBot_Options_ActionBarsCombo, HealBot_Options_ActionBarsCombo_List[HealBot_Options_StorePrev["ActionBarsCombo"]])
-            HealBot_Options_EnableHealthy:SetChecked(HealBot_Config.EnableHealthy)
-            HealBot_Options_SetText(HealBot_Options_EnableHealthy,HEALBOT_OPTIONS_ENABLEHEALTHY)
             HealBot_Options_SmartCastBuff:SetChecked(HealBot_Globals.SmartCastBuff)
             HealBot_Options_SetText(HealBot_Options_SmartCastBuff,HEALBOT_OPTIONS_SMARTCASTBUFF)
             HealBot_Options_SmartCastHeal:SetChecked(HealBot_Globals.SmartCastHeal)
@@ -14814,7 +14684,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetLabel("HealBot_AutoTarget_ButtonText",HEALBOT_OPTIONS_COMBOAUTOTARGET)
             HealBot_Options_SetLabel("HealBot_AutoTrinket_ButtonText",HEALBOT_OPTIONS_COMBOAUTOTRINKET)
             HealBot_Options_SetLabel("HealBot_AvoidBC_ButtonText",HEALBOT_OPTIONS_AVOIDBLUECURSOR)
-            HealBot_Options_SetLabel("healbotcombobuttonfontstr",HEALBOT_OPTIONS_COMBOBUTTON)
+            HealBot_Options_SetLabel("healbotcombobuttonfontstr",HEALBOT_OPTIONS_MODIFIER)
             HealBot_Options_SetLabel("healbotcastmethodfontstr",HEALBOT_OPTIONS_BUTTONCASTMETHOD)
             HealBot_Options_SetText(HealBot_SpellAutoTrinket1,HEALBOT_ONE)
             HealBot_Options_SetText(HealBot_SpellAutoTrinket2,HEALBOT_TWO)
@@ -14826,22 +14696,13 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_SetText(HealBot_AltSpellAutoTrinket2,HEALBOT_TWO)
             HealBot_Options_SetText(HealBot_CtrlShiftSpellAutoTrinket1,HEALBOT_ONE)
             HealBot_Options_SetText(HealBot_CtrlShiftSpellAutoTrinket2,HEALBOT_TWO)
-            HealBot_Options_SetText(HealBot_AltShiftSpellAutoTrinket1,HEALBOT_ONE)
-            HealBot_Options_SetText(HealBot_AltShiftSpellAutoTrinket2,HEALBOT_TWO)
-            HealBot_Options_SetText(HealBot_CtrlAltSpellAutoTrinket1,HEALBOT_ONE)
-            HealBot_Options_SetText(HealBot_CtrlAltSpellAutoTrinket2,HEALBOT_TWO)
-            if HealBot_Options_ComboButtons_Button>3 then
-                HealBot_Options_SetLabel("HealBot_Options_ShiftCntlAltClickHeader", " ")
-            else
-                HealBot_Options_SetLabel("HealBot_Options_ShiftCntlAltClickHeader", HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK..":")
-            end
-            HealBot_Options_SetText(HealBot_Options_Click,HEALBOT_OPTIONS_CLICK)
-            HealBot_Options_SetText(HealBot_Options_Shift,HEALBOT_OPTIONS_SHIFT.."+"..HEALBOT_OPTIONS_CLICK)
-            HealBot_Options_SetText(HealBot_Options_Ctrl,HEALBOT_OPTIONS_CTRL.."+"..HEALBOT_OPTIONS_CLICK)
-            HealBot_Options_SetText(HealBot_Options_Alt,HEALBOT_OPTIONS_ALT.."+"..HEALBOT_OPTIONS_CLICK)
+            HealBot_Options_SetText(HealBot_Options_Button1,HEALBOT_OPTIONS_BUTTONLEFT)
+            HealBot_Options_SetText(HealBot_Options_Button2,HEALBOT_OPTIONS_BUTTONMIDDLE)
+            HealBot_Options_SetText(HealBot_Options_Button3,HEALBOT_OPTIONS_BUTTONRIGHT)
+            HealBot_Options_SetText(HealBot_Options_Button4,HEALBOT_OPTIONS_BUTTON4)
             HealBot_Options_SelectHealSpellsCombo.numButtons = 0;
             HealBot_Options_SelectHealSpellsCombo.initialize = HealBot_Options_SelectHealSpellsCombo_DropDown
-            if HealBot_Options_StorePrev["ActionBarsCombo"]>2 then
+            if HealBot_Options_StorePrev["ActionBarsCombo"]>1 then
                 UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_HARMFUL_SPELLS)
             else
                 UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_SMARTCASTHEAL)

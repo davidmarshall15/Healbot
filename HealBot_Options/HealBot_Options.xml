@@ -2047,7 +2047,7 @@
             <Frames>
               <Frame name="HealBot_Options_GenFrame" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="325"/>
+                  <AbsDimension y="290"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
@@ -2066,7 +2066,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="28" y="-15" />
+                          <AbsDimension x="28" y="-25" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2094,7 +2094,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-12" />
+                          <AbsDimension x="0" y="-18" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2104,53 +2104,11 @@
                       <OnLeave>HealBot_Options_Show_Help("SHOWMINIMAPBUTTON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_QueryTalents" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_RightButtonOptions" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-12" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_QueryTalents_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("QUERYTALENTS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("QUERYTALENTS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_EnableLibQuickHealth" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-12" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_EnableLibQuickHealth_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ENABLEFASTHEALTH",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ENABLEFASTHEALTH",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_EnableAutoCombat" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_QueryTalents" relativePoint="BOTTOMLEFT">>
-                        <Offset>
-                          <AbsDimension x="0" y="-12" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_EnableAutoCombat_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ENABLEAUTOCOMBAT",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ENABLEAUTOCOMBAT",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_Options_NoAuraWhenRested" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableLibQuickHealth" relativePoint="BOTTOMLEFT">>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">>
                         <Offset>
-                          <AbsDimension x="0" y="-12" />
+                          <AbsDimension x="0" y="-18" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2162,9 +2120,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_DisableHealBotOpt" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableAutoCombat" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_RightButtonOptions" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-12" />
+                          <AbsDimension x="0" y="-18" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2178,7 +2136,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOM">>
                         <Offset>
-                          <AbsDimension x="25" y="-2" />
+                          <AbsDimension x="25" y="-4" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2188,25 +2146,11 @@
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_AdjustMaxHealth" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NoAuraWhenRested" relativePoint="BOTTOMLEFT">>
-                        <Offset>
-                          <AbsDimension x="0" y="-12" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_AdjustMaxHealth_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ADJUSTMAXHLTH",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ADJUSTMAXHLTH",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <Frame name="HealBot_Options_Theme" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="40" y="70" />
+                          <AbsDimension x="40" y="80" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2236,7 +2180,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-0" y="25" />
+                          <AbsDimension x="-0" y="32" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2253,7 +2197,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="170" y="-360" />
+                      <AbsDimension x="170" y="-330" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -2297,7 +2241,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="170" y="-410" />
+                      <AbsDimension x="170" y="-390" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -2341,7 +2285,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="170" y="-460" />
+                      <AbsDimension x="170" y="-450" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -3570,28 +3514,6 @@
           <Frame name="HealBot_Options_Panel2" hidden="true" setAllPoints="true">
             <Frames>
               <Frame name="HealBot_Options_KeysFrame" inherits="BackdropTemplate">
-                <Layers>
-                  <Layer level="BACKGROUND">
-                    <FontString name="HealBot_Options_ShiftCntlAltClickHeader" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="BOTTOM">
-                          <Offset>
-                            <AbsDimension x="-44" y="20"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_ShiftCntlAltClickDetail" text="HEALBOT_MENU" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="LEFT" relativeTo="HealBot_Options_ShiftCntlAltClickHeader" relativePoint="RIGHT">
-                          <Offset>
-                            <AbsDimension x="10" y="0" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
                 <Size>
                   <AbsDimension y="525"/>
                 </Size>
@@ -3612,7 +3534,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="100" y="-18" />
+                          <AbsDimension x="145" y="-25" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -3633,73 +3555,26 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 270)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SETSPELLSFOR",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SETSPELLSFOR",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_EnableHealthy" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="5" y="0" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_EnableHealthy_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ALWAYSUSEENABLED",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ALWAYSUSEENABLED",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <Frame name="HealBot_Options_ComboClassButton">
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_AutoTarget_ButtonText" text="HEALBOT_OPTIONS_COMBOAUTOTARGET" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="30" y="-85" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                        <FontString name="HealBot_AutoTrinket_ButtonText" text="HEALBOT_OPTIONS_COMBOAUTOTRINKET" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="358" y="-94" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                        <FontString name="HealBot_AvoidBC_ButtonText" text="HEALBOT_OPTIONS_AVOIDBLUECURSOR" inherits="GameFontNormalSmall">
-                          <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsCombo" relativePoint="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="-48" y="-85" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                  </Frame>
-                  <Frame name="HealBot_Options_CastButton" inherits="UIDropDownMenuTemplate">
+                  <Frame name="HealBot_Options_CastModifier" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="110" y="-58"/>
+                          <AbsDimension x="145" y="-90"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Layers>
                       <Layer level="OVERLAY">
-                        <FontString name="healbotcombobuttonfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_COMBOBUTTON">
+                        <FontString name="healbotcombobuttonfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_MODIFIER">
                           <Anchors>
-                            <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_CastButton" relativePoint="TOPLEFT">
+                            <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="10" y="-8"/>
+                                <AbsDimension x="0" y="34"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -3714,9 +3589,9 @@
                   </Frame>
                   <Frame name="HealBot_Options_ButtonCastMethod" inherits="UIDropDownMenuTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CastButton" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CastModifier" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="110" y="0" />
+                          <AbsDimension x="10" y="0" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -3724,9 +3599,9 @@
                       <Layer level="OVERLAY">
                         <FontString name="healbotcastmethodfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONCASTMETHOD">
                           <Anchors>
-                            <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_ButtonCastMethod" relativePoint="TOPLEFT">
+                            <Anchor point="BOTTOM">
                               <Offset>
-                                <AbsDimension x="10" y="-8"/>
+                                <AbsDimension x="0" y="34"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -3739,634 +3614,491 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCAST",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <EditBox name="HealBot_Options_Click" inherits="HealBot_Options_EditBoxTemplate">
+                  <EditBox name="HealBot_Options_Button1" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="230" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="185" y="-135"/>
+                          <AbsDimension x="185" y="-170"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnTextChanged>HealBot_Options_Click_OnTextChanged(self)</OnTextChanged>
+                      <OnTextChanged>HealBot_Options_Button1_OnTextChanged(self)</OnTextChanged>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONCLICK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_ClickHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                  <Button name="HealBot_Options_Button1HelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
                     <Size>
                       <AbsDimension x="22" y="19"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_Click" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Button1" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="7" y="-1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Click")</OnClick>
+                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, 1)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_AvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-110" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AvoidBC_ButtonText" text="HEALBOT_OPTIONS_AVOIDBLUECURSOR" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="20" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", 1)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_SpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-45" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AutoTarget_ButtonText" text="HEALBOT_OPTIONS_COMBOAUTOTARGET" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="20" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", 1)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_SpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="45" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_AutoTrinket_ButtonText" text="HEALBOT_OPTIONS_COMBOAUTOTRINKET" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="25" y="20" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", 1)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_SpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="85" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", 1)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <EditBox name="HealBot_Options_Shift" inherits="HealBot_Options_EditBoxTemplate">
+                  <EditBox name="HealBot_Options_Button2" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="230" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Click" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-33"/>
+                          <AbsDimension x="0" y="-50"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnTextChanged>HealBot_Options_Shift_OnTextChanged(self)</OnTextChanged>
+                      <OnTextChanged>HealBot_Options_Button2_OnTextChanged(self)</OnTextChanged>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCLICK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_ShiftHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                  <Button name="HealBot_Options_Button2HelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
                     <Size>
                       <AbsDimension x="22" y="19"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_Shift" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Button2" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="7" y="-1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Shift")</OnClick>
+                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, 2)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_ShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-110" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", 2)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_ShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-45" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", 2)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_ShiftSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="45" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", 2)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_ShiftSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Shift" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="85" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", 2)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <EditBox name="HealBot_Options_Ctrl" inherits="HealBot_Options_EditBoxTemplate">
+                  <EditBox name="HealBot_Options_Button3" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="230" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Shift" relativePoint="BOTTOMRIGHT">
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button2" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-33"/>
+                          <AbsDimension x="0" y="-50"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnTextChanged>HealBot_Options_Ctrl_OnTextChanged(self)</OnTextChanged>
+                      <OnTextChanged>HealBot_Options_Button3_OnTextChanged(self)</OnTextChanged>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONCTRLCLICK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCTRLCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_CtrlHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                  <Button name="HealBot_Options_Button3HelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
                     <Size>
                       <AbsDimension x="22" y="19"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Button3" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="7" y="-1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Ctrl")</OnClick>
+                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, 3)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_CtrlAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-110" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Ctrl")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", 3)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-45" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Ctrl")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", 3)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="45" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Ctrl")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", 3)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="85" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Ctrl")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", 3)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <EditBox name="HealBot_Options_Alt" inherits="HealBot_Options_EditBoxTemplate">
+                  <EditBox name="HealBot_Options_Button4" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="230" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Ctrl" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-33"/>
+                          <AbsDimension x="0" y="-50"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnTextChanged>HealBot_Options_Alt_OnTextChanged(self)</OnTextChanged>
+                      <OnTextChanged>HealBot_Options_Button4_OnTextChanged(self)</OnTextChanged>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONALTCLICK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONALTCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_AltHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                  <Button name="HealBot_Options_Button4HelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
                     <Size>
                       <AbsDimension x="22" y="19"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_Alt" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Button4" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="7" y="-1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "Alt")</OnClick>
+                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, 4)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_AltAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-110" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", 4)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_AltSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-45" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Alt")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", 4)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_AltSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="45" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Alt")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", 4)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_AltSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Alt" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="85" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Alt")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", 4)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <EditBox name="HealBot_Options_CtrlShift" inherits="HealBot_Options_EditBoxTemplate">
+                  <EditBox name="HealBot_Options_Button5" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
                       <AbsDimension x="230" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Alt" relativePoint="BOTTOMRIGHT">
+                      <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button4" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-33"/>
+                          <AbsDimension x="0" y="-50"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnTextChanged>HealBot_Options_CtrlShift_OnTextChanged(self)</OnTextChanged>
+                      <OnTextChanged>HealBot_Options_Button5_OnTextChanged(self)</OnTextChanged>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCTRLCLICK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCTRLCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_CtrlShiftHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                  <Button name="HealBot_Options_Button5HelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
                     <Size>
                       <AbsDimension x="22" y="19"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Button5" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="7" y="-1" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "CtrlShift")</OnClick>
+                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, 5)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <CheckButton name="HealBot_CtrlShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-110" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Ctrl-Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", 5)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="-45" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Ctrl-Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", 5)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlShiftSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="45" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Ctrl-Shift")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", 5)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <CheckButton name="HealBot_CtrlShiftSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="85" y="-3"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Ctrl-Shift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <EditBox name="HealBot_Options_AltShift" inherits="HealBot_Options_EditBoxTemplate">
-                    <Size>
-                      <AbsDimension x="230" y="20"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlShift" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-33"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnTextChanged>HealBot_Options_AltShift_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTALTCLICK",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTALTCLICK",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
-                  <Button name="HealBot_Options_AltShiftHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
-                    <Size>
-                      <AbsDimension x="22" y="19"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_AltShift" relativePoint="RIGHT">
-                        <Offset>
-                          <AbsDimension x="7" y="-1" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "AltShift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
-                    </Scripts>
-                  </Button>
-                  <CheckButton name="HealBot_AltShiftAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt-Shift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_AltShiftSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Alt-Shift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_AltShiftSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="45" y="-3"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Alt-Shift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_AltShiftSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="85" y="-3"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Alt-Shift")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <EditBox name="HealBot_Options_CtrlAlt" inherits="HealBot_Options_EditBoxTemplate">
-                    <Size>
-                      <AbsDimension x="230" y="20"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AltShift" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-33"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnTextChanged>HealBot_Options_CtrlAlt_OnTextChanged(self)</OnTextChanged>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSBUTTONCTRLALTCLICK",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCTRLALTCLICK",false)</OnLeave>
-                    </Scripts>
-                  </EditBox>
-                  <Button name="HealBot_Options_CtrlAltHelpSelectButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
-                    <Size>
-                      <AbsDimension x="22" y="19"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="RIGHT">
-                        <Offset>
-                          <AbsDimension x="7" y="-1" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_HelpSpellsSelect_OnClick(self, "AltCtrl")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSHELPSELECT",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSHELPSELECT",false)</OnLeave>
-                    </Scripts>
-                  </Button>
-                  <CheckButton name="HealBot_CtrlAltAvoidBlueCursor" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-110" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "AvoidBC", "Alt-Ctrl")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAVOIDBLUE",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_CtrlAltSpellAutoTarget" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="-45" y="-2"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Target", "Alt-Ctrl")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTARGET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTARGET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_CtrlAltSpellAutoTrinket1" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="45" y="-3"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_ONE)</OnLoad>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket1", "Alt-Ctrl")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_CtrlAltSpellAutoTrinket2" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CtrlAlt" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="85" y="-3"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_TWO)</OnLoad>
-                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", "Alt-Ctrl")</OnClick>
+                      <OnClick>HealBot_SpellAutoButton_OnClick(self, "Trinket2", 5)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
