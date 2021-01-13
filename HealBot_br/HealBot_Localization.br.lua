@@ -4,30 +4,9 @@
 -- Brazilian --
 ---------------
 --
--------------
--- À = \195\128
--- Á = \195\129
--- Â = \195\130
--- Ê = \195\138
--- Í = \195\141
--- à = \195\160
--- á = \195\161
--- â = \195\162
--- ã = \195\163
--- ç = \195\167
--- é = \195\169
--- ê = \195\170
--- í = \195\173
--- ó = \195\179
--- õ = \195\181
--- ú = \195\186
---
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_br
 --
 --
-
+--
 
 function HealBot_Lang_ptBR()
 
@@ -181,6 +160,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Exibir dicas";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Exibir informa\195\167\195\163o detalhada de magia";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Exibir recarga da magia";
+    HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignorar recarga global da magia";
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Exibir informa\195\167\195\163o do alvo";
     HEALBOT_OPTIONS_SHOWRECTOOLTIP          = "Exibir recomenda\195\167\195\163o de Cura-pelo-Tempo";
     HEALBOT_TOOLTIP_POSDEFAULT              = "Local padr\195\163o";
@@ -669,14 +649,6 @@ function HealBot_Lang_ptBR()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Inimigos"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amigos"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                    = "Adiciona um painel com barras de cura, remo\195\167\195\163o de maldi\195\167\195\181es, buffs e rastreamento de aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "Autor:"
@@ -842,18 +814,18 @@ function HealBot_Lang_ptBR()
     HEALBOT_PLAYER_OF_REALM                 = "de"
     
     HEALBOT_OPTIONS_LANG                    = "Language"
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - translator required)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Failed to load addon for localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Reason for failure is:"

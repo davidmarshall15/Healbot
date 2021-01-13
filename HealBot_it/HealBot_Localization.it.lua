@@ -4,12 +4,9 @@
 -- ITALIAN --
 -------------
 --
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_it
 --
 --
-
+--
 
 function HealBot_Lang_itIT()
 
@@ -651,14 +648,6 @@ function HealBot_Lang_itIT()
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Nemico"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amico"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
     HEALBOT_ABOUT_DESC1                    = "Aggiunge un pannello con barre skinnabili per curare, decursare, buffare, ressare e trackare aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "Autore:"
@@ -827,19 +816,19 @@ function HealBot_Lang_itIT()
     
     HEALBOT_OPTIONS_LANG                    = "Lingua"
     
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Cinese (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "Inglese (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "Inglese (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "Francese (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Ungherese (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italiana (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Coreano (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portoghese (ptBR - by aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russo (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spagnolo (esES - translator required)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Cinese (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "Inglese (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "Inglese (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "Francese (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE)"
+    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Ungherese (huHU)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italiana (itIT)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Coreano (krKR)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portoghese (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russo (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spagnolo (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Caricamento traduzione fallito"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Il motivo del problema è:"

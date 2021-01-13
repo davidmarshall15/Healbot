@@ -4,10 +4,7 @@
 -- TAIWANESE --
 ---------------
 --
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_tw
---
+-- 
 --
 
 
@@ -656,14 +653,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "任何人"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "敵方"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "友方"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "一個可定制樣式的治療、驅散、Buff、繃帶、隨機座騎、範圍檢查和仇恨框架的插件."
 HEALBOT_ABOUT_WEBSITE                  = "網址:"
 HEALBOT_ABOUT_AUTHORH                  = "作者:"
@@ -830,18 +819,18 @@ HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "防止藍\n色滑鼠"
 HEALBOT_PLAYER_OF_REALM                  = "的"
     
     HEALBOT_OPTIONS_LANG                    = "語言"
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN - 月夜寒星@銀月)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR - 需要翻譯)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU - 需要翻譯)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - 需要翻譯)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - 月夜寒星@銀月)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "無法載入本地化語言."
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "失敗原因是:"

@@ -1,13 +1,8 @@
-﻿-- Greek maintained by Snaomi.
+﻿-- Greek translator required
 
--------------
+-----------
 -- GREEK --
--------------
---
---
---
---
---
+-----------
 --
 --
 --
@@ -266,11 +261,11 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_HOTBARRIGHT             = "Δεξια μερια";
     HEALBOT_OPTIONS_HOTBARLEFT              = "Αριστερη μερια";
 
-    HEALBOT_ZONE_AB                         = "Arathi Basin"; --GetMapNameByID(461) or "Arathi Basin";
-    HEALBOT_ZONE_AV                         = "Alterac Valley"; -- GetMapNameByID(401) or "Alterac Valley";
-    HEALBOT_ZONE_ES                         = "Eye of the Storm"; -- GetMapNameByID(482) or "Eye of the Storm";
-    HEALBOT_ZONE_IC                         = "Isle of Conquest"; -- GetMapNameByID(540) or "Isle of Conquest";
-    HEALBOT_ZONE_SA                         = "Strand of the Ancients"; -- GetMapNameByID(512) or "Strand of the Ancients";
+    HEALBOT_ZONE_AB                         = "Arathi Basin"; 
+    HEALBOT_ZONE_AV                         = "Alterac Valley";
+    HEALBOT_ZONE_ES                         = "Eye of the Storm"; 
+    HEALBOT_ZONE_IC                         = "Isle of Conquest"; 
+    HEALBOT_ZONE_SA                         = "Strand of the Ancients"; 
 
     HEALBOT_OPTION_AGGROTRACK               = "Ελεγχος Aggro";
     HEALBOT_OPTION_AGGROBAR                 = "Bar";
@@ -652,18 +647,6 @@ function HealBot_Lang_grGR()
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Ολοι"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Friend"
-    
-    HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT     = "Σημαντικα Debuffs"
-	HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Damaging Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Effect Debuffs"
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Υπολοιπα Debuffs"
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
     HEALBOT_ABOUT_WEBSITE                  = "Ιστοσελιδα:"
@@ -827,19 +810,19 @@ function HealBot_Lang_grGR()
     
     HEALBOT_OPTIONS_LANG                    = "Γλωσσα"
     
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR - by Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES - translator required)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW - translator required)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinese (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "English (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "English (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "French (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "German (deDE)"
+    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungarian (huHU)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Korean (krKR)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italian (itIT)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portuguese (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russian (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanish (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanese (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Αποτυχια φορτωσης addon για localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Λογος αποτυχιας:"

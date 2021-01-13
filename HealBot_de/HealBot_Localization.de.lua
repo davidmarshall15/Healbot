@@ -1,4 +1,6 @@
-﻿------------
+﻿-- German translator required
+
+------------
 -- GERMAN --
 ------------
 --
@@ -653,14 +655,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Alle"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "Feind"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "Freund"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "Add a panel with skinable bars for healing, decursive, buffing, ressing and aggro tracking"
 HEALBOT_ABOUT_WEBSITE                  = "Webseite:"
 HEALBOT_ABOUT_AUTHORH                  = "Autor:"
@@ -825,19 +819,19 @@ HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Vermeide\nBlauen Kursor"
 HEALBOT_PLAYER_OF_REALM                 = "von"
     
     HEALBOT_OPTIONS_LANG                    = "Sprache"
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinesisch (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "Englisch (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "Englisch (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "Franz\195\182sisch (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Ungarisch (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Koreanisch (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italienisch (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portugiesisch (ptBR - by Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russisch (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Spanisch (esES - translator required)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanesisch (twTW - translator required)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinesisch (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "Englisch (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "Englisch (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "Franz\195\182sisch (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Deutsch (deDE)"
+    HEALBOT_OPTIONS_LANG_GRGR               = "Greek (grGR)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Ungarisch (huHU)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Koreanisch (krKR)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italienisch (itIT)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portugiesisch (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russisch (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Spanisch (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanesisch (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Laden des Addons f\195\188r Lokalisation ist fehlgeschlagen"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Grund des Fehlschlags ist:"

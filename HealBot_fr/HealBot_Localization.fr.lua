@@ -1,4 +1,9 @@
-ï»¿-- French version (by Kubik of Vol'Jin) 2015-09-25 / V. 6.2.2.0
+ï»¿-- French translator required
+
+------------
+-- FRENCH --
+------------
+--
 -- à = \195\160
 -- â = \195\162
 -- ç = \195\167
@@ -659,17 +664,6 @@ HEALBOT_CUSTOM_CAT_14                   = "Y - Z"   -- *************************
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Tous"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Ennemi"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Ami"
-    HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE        = "Debuffs de dommages"
-    HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT        = "Debuffs \195\160 effets"
-    HEALBOT_CUSTOM_CAT_CUSTOM_MISC          = "Debuffs divers"
-
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
 
     HEALBOT_ABOUT_DESC1                    = "Ajoute un panneau param\195\169trable de barres pour soigner, buff, debuff, rez et suivi d\'aggro"
     HEALBOT_ABOUT_WEBSITE                  = "Site Web :"
@@ -843,18 +837,18 @@ HEALBOT_ABOUT_FAQ_ANSWERS = {     [1]   = "Vous surveillez les buffs manquants \
     HEALBOT_PLAYER_OF_REALM                 = "de"
     
     HEALBOT_OPTIONS_LANG                    = "Langue"
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinois (zhCN - par Ydzzs)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Allemand (deDE - par Snaomi)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "Anglais (enUK - par Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "Anglais (enUS - par Strife)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Espagnol (esES - Recherche traducteur)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "Fran\195\167ais (frFR - par Kubik)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hongrois (huHU - par Von)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italien (itIT - par Brezza)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Kor\195\169en (krKR - Recherche traducteur)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portugais (ptBR - par Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Russe (ruRU - Recherche traducteur)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Ta\195\175wanais (twTW - Recherche traducteur)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chinois (zhCN)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Allemand (deDE)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "Anglais (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "Anglais (enUS)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Espagnol (esES)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "Fran\195\167ais (frFR)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hongrois (huHU)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italien (itIT)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Kor\195\169en (krKR)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portugais (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Russe (ruRU)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Ta\195\175wanais (twTW)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Echec du chargement de l\'addon de traduction"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "Raison de l\'\195\169chec :"

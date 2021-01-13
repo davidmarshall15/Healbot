@@ -1,3 +1,5 @@
+-- Spanish translator required
+
 -------------
 -- SPANISH
 --
@@ -7,10 +9,6 @@
 -- ó = \195\179
 -- ú = \195\186
 -- ñ = \195\177
---
--- (http://www.wowwiki.com/Localizing_an_addon)
---
--- To localize this addon, it can be cloned from GitHub, find it at https://github.com/davidmarshall15/HealBot_es
 --
 --
 
@@ -661,14 +659,6 @@ HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Cualquiera"
 HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemigo"
 HEALBOT_CUSTOM_CASTBY_FRIEND            = "Amigo"
 
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_IMPORTANT]  = 1,
-			[HEALBOT_CUSTOM_CAT_CUSTOM_DAMAGE]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_EFFECT]     = 1,
-            [HEALBOT_CUSTOM_CAT_CUSTOM_MISC]       = 1,
-	}
-
 HEALBOT_ABOUT_DESC1                    = "Agrega un panel con barras personalizables para curar, limpiar, buffear, revivir y vigilar agro"
 HEALBOT_ABOUT_WEBSITE                  = "Pagina web:"
 HEALBOT_ABOUT_AUTHORH                  = "Autor:"
@@ -833,19 +823,19 @@ HEALBOT_OPTIONS_AVOIDBLUECURSOR         = "Avoid\nBlue Cursor"
 HEALBOT_PLAYER_OF_REALM                 = "de"
     
     HEALBOT_OPTIONS_LANG                    = "Idioma"
-    HEALBOT_OPTIONS_LANG_ZHCN               = "Chino (zhCN - by Ydzzs)"
-    HEALBOT_OPTIONS_LANG_ENUK               = "Ingles Inglaterra (enUK - by Strife)"
-    HEALBOT_OPTIONS_LANG_ENUS               = "Ingles USA (enUS - by Strife)"
-    HEALBOT_OPTIONS_LANG_FRFR               = "Frances (frFR - by Kubik)"
-    HEALBOT_OPTIONS_LANG_DEDE               = "Aleman (deDE - by Snaomi)"
-    HEALBOT_OPTIONS_LANG_HUHU               = "Hungaro (huHU - by Von)"
-    HEALBOT_OPTIONS_LANG_KRKR               = "Coreano (krKR - translator required)"
-    HEALBOT_OPTIONS_LANG_ITIT               = "Italiano (itIT - by Brezza)"
-    HEALBOT_OPTIONS_LANG_PTBR               = "Portugues (ptBR - by Aldetal)"
-    HEALBOT_OPTIONS_LANG_RURU               = "Ruso (ruRU - translator required)"
-    HEALBOT_OPTIONS_LANG_ESES               = "Español (esES - by milotic)"
-    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanes (twTW - translator required)"
-    HEALBOT_OPTIONS_LANG_ESMX               = "Español latinoamerica (esMX - by milotic)"
+    HEALBOT_OPTIONS_LANG_ZHCN               = "Chino (zhCN)"
+    HEALBOT_OPTIONS_LANG_ENUK               = "Ingles Inglaterra (enUK)"
+    HEALBOT_OPTIONS_LANG_ENUS               = "Ingles USA (enUS)"
+    HEALBOT_OPTIONS_LANG_FRFR               = "Frances (frFR)"
+    HEALBOT_OPTIONS_LANG_DEDE               = "Aleman (deDE)"
+    HEALBOT_OPTIONS_LANG_HUHU               = "Hungaro (huHU)"
+    HEALBOT_OPTIONS_LANG_KRKR               = "Coreano (krKR)"
+    HEALBOT_OPTIONS_LANG_ITIT               = "Italiano (itIT)"
+    HEALBOT_OPTIONS_LANG_PTBR               = "Portugues (ptBR)"
+    HEALBOT_OPTIONS_LANG_RURU               = "Ruso (ruRU)"
+    HEALBOT_OPTIONS_LANG_ESES               = "Español (esES)"
+    HEALBOT_OPTIONS_LANG_TWTW               = "Taiwanes (twTW)"
+    HEALBOT_OPTIONS_LANG_ESMX               = "Español latinoamerica (esMX)"
     
     HEALBOT_OPTIONS_LANG_ADDON_FAIL1        = "Failed to load addon for localization"
     HEALBOT_OPTIONS_LANG_ADDON_FAIL2        = "La razon del fallo es:"
