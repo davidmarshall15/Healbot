@@ -643,7 +643,7 @@ function HealBot_Action_DoRefreshTooltip()
             end
             HealBot_Tooltip_luVars["uGroup"]=false
             if IsInRaid() then 
-                HealBot_Tooltip_luVars["uGroup"]=HealBot_RetUnitGroups(xUnit)
+                HealBot_Tooltip_luVars["uGroup"]=xButton.group
             end
             if UnitIsPlayer(xUnit) and xButton.aggro.threatpct>0 or mana or (HealBot_Tooltip_luVars["uGroup"] and HealBot_Tooltip_luVars["uGroup"]>0) then
                 if not mana or (maxmana and maxmana==0) then

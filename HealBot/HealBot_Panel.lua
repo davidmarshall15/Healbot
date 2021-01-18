@@ -800,7 +800,7 @@ function HealBot_Panel_PositionBars()
             vPosButton=HealBot_Unit_Button[xUnit] or "nil"
         end
         if vPosButton~="nil" and hbBarsPerFrame[vPosButton.frame] then
-            vPosButton.group=HealBot_UnitGroups[vPosButton.unit]
+            vPosButton.group=HealBot_UnitGroups[vPosButton.unit] or 1
             vFrame=vPosButton.frame
             rowNo[vFrame]=rowNo[vFrame]+1
             vBar[vFrame]["BUTTON"]=vPosButton
@@ -1635,33 +1635,29 @@ function HealBot_Panel_insSort(unit, mainSort)
 end
 
 function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
-    local vAddUnitSubGroup=HealBot_UnitGroups[unit] or 0;
-    if (vAddUnitSubGroup==0 or Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][vAddUnitSubGroup]) and 
-       (Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["INCCLASSES"]==1 or HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame)) then
-        local uExists=false
-        if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
-            if unitType<5 then
-                if HealBot_TrackPrivateNames[hbGUID] then uExists=true end
-            else
-                if HealBot_TrackNames[hbGUID] then uExists=true end
-            end
-        elseif HealBot_TrackNames[hbGUID] or HealBot_TrackPrivateNames[hbGUID] then
-            uExists=true
+    local uExists=false
+    if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
+        if unitType<5 then
+            if HealBot_TrackPrivateNames[hbGUID] then uExists=true end
+        else
+            if HealBot_TrackNames[hbGUID] then uExists=true end
         end
-        if not uExists then
-            if not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
-                if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
-                if unitType<5 then
-                    HealBot_TrackPrivateNames[hbGUID]=true
-                else
-                    HealBot_TrackNames[hbGUID]=true;
-                end
-                HealBot_Panel_insSort(unit, true)
-            elseif isRaidGroup then
-                HealBot_setNotVisible(unit,6)
+    elseif HealBot_TrackNames[hbGUID] or HealBot_TrackPrivateNames[hbGUID] then
+        uExists=true
+    end
+    if not uExists then
+        if UnitIsVisible(unit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+            if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
+            if unitType<5 then
+                HealBot_TrackPrivateNames[hbGUID]=true
             else
-                HealBot_setNotVisible(unit,0)
+                HealBot_TrackNames[hbGUID]=true;
             end
+            HealBot_Panel_insSort(unit, true)
+        elseif isRaidGroup then
+            HealBot_setNotVisible(unit,6)
+        else
+            HealBot_setNotVisible(unit,0)
         end
     end
 end
@@ -1790,7 +1786,7 @@ local vTargetIndex=0
 function HealBot_Panel_targetHeals(preCombat)
     vTargetIndex=i[hbCurrentFrame]
     if UnitExists("target") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
-        if not UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+        if UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
             if preCombat or HealBot_Panel_validTarget() then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,"target")
@@ -2043,7 +2039,7 @@ function HealBot_Panel_focusHeals(preCombat)
         if preCombat then
             i[hbCurrentFrame] = i[hbCurrentFrame]+1;
             table.insert(subunits,"focus")
-        elseif not UnitIsVisible("focus") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+        elseif UnitIsVisible("focus") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
             if HealBot_Panel_validFocus() then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,"focus")
@@ -2567,7 +2563,7 @@ function HealBot_Panel_cpSave(mNum)
 end
 
 function HealBot_RetUnitGroups(unit)
-    return HealBot_UnitGroups[unit]
+    return HealBot_UnitGroups[unit] or 1
 end
 
 local focusHeal=true
