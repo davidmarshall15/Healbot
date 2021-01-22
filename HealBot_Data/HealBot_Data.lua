@@ -1,5 +1,5 @@
-HealBot_lastVerSkinUpdate="8.3.0.14"
-HealBot_lastVerUpdate="8.3.0.14"
+HealBot_lastVerSkinUpdate="9.0.2.0"
+HealBot_lastVerUpdate="9.0.2.0"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -132,6 +132,7 @@ HealBot_Config_BuffsDefaults = {
   HealBotBuffColG={},
   HealBotBuffColB={},
   CBshownHB=true,
+  ShowGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
   ShowBuffWarning = false,
   SoundBuffWarning = false,
   SoundBuffPlay = HealBot_Default_Sounds[1].name,
@@ -142,7 +143,6 @@ HealBot_Config_BuffsDefaults = {
 
 HealBot_Config_CuresDefaults = {
   SoundDebuffWarning = false,
-  SpamFilterSecs = 15,
   DebuffWatch = true,
   IgnoreFastDurDebuffs = true,
   IgnoreFastDurDebuffsSecs=2,
@@ -156,6 +156,7 @@ HealBot_Config_CuresDefaults = {
   AlwaysShowTimed = false,
   ShowTimeMaxDuration = 31,
   CDCshownHB=true,
+  ShowGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
   HealBot_CDCWarnRange_Bar=3,
   HealBot_CDCWarnRange_Screen=2,
   HealBot_CDCWarnRange_Sound=3,
@@ -247,7 +248,6 @@ function HealBot_Data_InitVars()
         ResLagDuration=5,
         ByPassLock=0,
         ShowTooltip = true,
-        Tooltip_ShowSpellDetail = false,
         Tooltip_ShowTarget = true,
         Tooltip_ShowMyBuffs = false,
         Tooltip_MouseWheel = false,
@@ -305,7 +305,7 @@ function HealBot_Data_InitVars()
                        [8]={R = 0.9, G = 0.7, B = 0.5, A = 1 },
                        [9]={R = 1, G = 1, B = 1, A = 1 },
                        [10]={R = 0.7, G = 0.7, B = 0.7, A = 1 },},
-        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=false,["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95, ["FGDIMMING"]=2.5},
+        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=1,["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95, ["FGDIMMING"]=2.5},
         OverrideFocusGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
         OverrideProt={["USE"]=1,["CRASH"]=true,["COMBAT"]=false,["COMBATPARTY"]=true,["COMBATRAID"]=true,["GENERALMACRO"]=true,["STARTTIME"]=2,["MACRONAME"]="hbCrashProt"},
         OverrideChat={["USE"]=1,["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=10},
@@ -593,16 +593,16 @@ HealBot_Config_SkinsDefaults = {
              [HEALBOT_OPTIONS_RAID40]     = {["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=20},},
   General = {[HEALBOT_SKINS_STD]          = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,
                                              ["FLUIDBARS"]=false,["FLUIDFREQ"]=10,["STICKYFRAME"]=true,
-                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=false,["FGDIMMING"]=2.5},
+                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=1,["FGDIMMING"]=2.5},
              [HEALBOT_OPTIONS_GROUPHEALS] = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,
                                              ["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["STICKYFRAME"]=true,
-                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=false,["FGDIMMING"]=2.5},
+                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=1,["FGDIMMING"]=2.5},
              [HEALBOT_OPTIONS_RAID25]     = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,
                                              ["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["STICKYFRAME"]=true,
-                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=false,["FGDIMMING"]=2.5},
+                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=1,["FGDIMMING"]=2.5},
              [HEALBOT_OPTIONS_RAID40]     = {["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=false,["HIDERAIDF"]=true,
                                              ["FLUIDBARS"]=false,["FLUIDFREQ"]=10,["STICKYFRAME"]=true,
-                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=false,["FGDIMMING"]=2.5},},
+                                             ["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["FOCUSGROUPS"]=1,["FGDIMMING"]=2.5},},
   Healing = {[HEALBOT_SKINS_STD]          = {["GROUPPETS"]=true,["SELFPET"]=false,["TARGETINCOMBAT"]=2,["FOCUSINCOMBAT"]=2,
                                              ["TONLYFRIEND"]=false,["FONLYFRIEND"]=false,["TEXRAID"]=false,["FEXRAID"]=false},
              [HEALBOT_OPTIONS_GROUPHEALS] = {["GROUPPETS"]=true,["SELFPET"]=false,["TARGETINCOMBAT"]=2,["FOCUSINCOMBAT"]=2,

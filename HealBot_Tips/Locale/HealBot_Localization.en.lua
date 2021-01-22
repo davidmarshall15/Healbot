@@ -354,7 +354,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
                                  ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
-                                 ["DEBUFFSWARNINGSPAMFILTER"]=HEALBOT_OPTIONS_SPAMFILTER,
+                                 ["DEBUFFSWARNINGGROUPFILTER"]=HEALBOT_OPTIONS_RAIDGROUPWARN,
                         -- Buffs General tab
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
@@ -392,7 +392,6 @@ function HealBot_Lang_Options_enALL()
                                  ["TOOLTIPHIDEIC"]=HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT,
                                  ["TOOLTIPTARGETINFO"]=HEALBOT_OPTIONS_SHOWUNITTOOLTIP,
                                  ["TOOLTIPMYBUFFS"]=HEALBOT_OPTIONS_SHOWUNITBUFFTIME,
-                                 ["TOOLTIPSPELLDETAIL"]=HEALBOT_OPTIONS_SHOWDETTOOLTIP,
                                  ["TOOLTIPSPELLCD"]=HEALBOT_OPTIONS_SHOWCDTOOLTIP,
                                  ["TOOLTIPIGNORESPELLGCD"]=HEALBOT_OPTIONS_IGNOREGCDTOOLTIP,
                                  ["TOOLTIPWHEELCMD"]=HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP,
@@ -632,7 +631,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISEXCLUDERAID"]="Do not show yourself or members of your group/raid when out of combat.",
                                ["HEALBARSVISFOCUSFRIEND"]="Do not show hostile focus when out of combat.",
                                ["HEALBARSVISFILTER"]="Various classes and types can be filtered out using the dropdown.",
-                               ["HEALBARSVISFILTERGROUPS"]="Groups can be filtered out using these check boxes.",
+                               ["HEALBARSVISFILTERGROUPS"]="Select the groups to be focused.",
                                ["HEALBARSVISENEMYINCSELF"]="Include an enemy bar for your targets.",
                                ["HEALBARSVISENEMYINCTANKS"]="Include enemy bars for all tanks targets.",
                                ["HEALBARSVISENEMYINCARENA"]="Include enemy bars for player opponents in an arena.",
@@ -783,7 +782,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
                                ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
-                               ["DEBUFFSWARNINGSPAMFILTER"]="Minimum seconds for warnings of the same debuff.\n--\nNOTE: This applies to all players with the same debuff.",
+                               ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\nNOTE: This only applies to the Raid Heal Group.",
                         -- Buffs General tab
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
@@ -821,7 +820,6 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPHIDEIC"]="Hide the tooltip when in combat.",
                                ["TOOLTIPTARGETINFO"]="Show the name, class and spec if relevant,\nlocation, health and mana/power.",
                                ["TOOLTIPMYBUFFS"]="Show buffs and duration cast by you.",
-                               ["TOOLTIPSPELLDETAIL"]="Show the cast time of the spell.",
                                ["TOOLTIPSPELLCD"]="Show the cooldown remaining on the spell.",
                                ["TOOLTIPIGNORESPELLGCD"]="Ignore the global cooldown on the spell.",
                                ["TOOLTIPWHEELCMD"]="Show the commands defined on the Mouse Wheel tab.",
@@ -870,7 +868,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.",    
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.\n - HealBot ExtraButtons: Set spells for use with an MMO mouse on buttons 6 - 15",    
                               }
 end
 

@@ -1634,30 +1634,42 @@ function HealBot_Panel_insSort(unit, mainSort)
     end
 end
 
-function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
-    local uExists=false
-    if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
-        if unitType<5 then
-            if HealBot_TrackPrivateNames[hbGUID] then uExists=true end
-        else
-            if HealBot_TrackNames[hbGUID] then uExists=true end
-        end
-    elseif HealBot_TrackNames[hbGUID] or HealBot_TrackPrivateNames[hbGUID] then
-        uExists=true
+function HealBot_Panel_SetFocusGroups()
+    if HealBot_Globals.OverrideEffects["USE"]==2 then
+        HealBot_Panel_luVars["FocusGroups"]=HealBot_Globals.OverrideEffects["FOCUSGROUPS"]
+        HealBot_Panel_luVars["FGroups"]=HealBot_Globals.OverrideFocusGroups
+    else
+        HealBot_Panel_luVars["FocusGroups"]=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FOCUSGROUPS"]
+        HealBot_Panel_luVars["FGroups"]=Healbot_Config_Skins.FocusGroups[Healbot_Config_Skins.Current_Skin]
     end
-    if not uExists then
-        if UnitIsVisible(unit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
-            if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
+end
+
+function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
+    if HealBot_Panel_luVars["FocusGroups"]<3 or unitType~=5 or HealBot_Panel_luVars["FGroups"][HealBot_UnitGroups[unit]] then
+        local uExists=false
+        if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
             if unitType<5 then
-                HealBot_TrackPrivateNames[hbGUID]=true
+                if HealBot_TrackPrivateNames[hbGUID] then uExists=true end
             else
-                HealBot_TrackNames[hbGUID]=true;
+                if HealBot_TrackNames[hbGUID] then uExists=true end
             end
-            HealBot_Panel_insSort(unit, true)
-        elseif isRaidGroup then
-            HealBot_setNotVisible(unit,6)
-        else
-            HealBot_setNotVisible(unit,0)
+        elseif HealBot_TrackNames[hbGUID] or HealBot_TrackPrivateNames[hbGUID] then
+            uExists=true
+        end
+        if not uExists then
+            if UnitIsVisible(unit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+                if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
+                if unitType<5 then
+                    HealBot_TrackPrivateNames[hbGUID]=true
+                else
+                    HealBot_TrackNames[hbGUID]=true;
+                end
+                HealBot_Panel_insSort(unit, true)
+            elseif isRaidGroup then
+                HealBot_setNotVisible(unit,6)
+            else
+                HealBot_setNotVisible(unit,0)
+            end
         end
     end
 end

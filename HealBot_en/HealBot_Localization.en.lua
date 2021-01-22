@@ -160,6 +160,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
+    HEALBOT_OPTIONS_RAIDGROUPWARN           = "Raid heal group filter";
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
     HEALBOT_OPTIONS_BUFFCUSTOMURL           = "Custom buffs are available at  "..HEALBOT_ABOUT_URL
@@ -171,7 +172,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
     HEALBOT_OPTIONS_SOUNDBUFFWARNING        = "Play sound on buff";
-    HEALBOT_OPTIONS_SPAMFILTER              = "Minimum time between warnings";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
     HEALBOT_OPTIONS_WARN_CLASSCOL           = "Unable to change text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when\nCol"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is on"
 
@@ -203,8 +203,18 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTONLEFT              = "Left";
     HEALBOT_OPTIONS_BUTTONMIDDLE            = "Middle";
     HEALBOT_OPTIONS_BUTTONRIGHT             = "Right";
-    HEALBOT_OPTIONS_BUTTON4                 = "Button4";
-    HEALBOT_OPTIONS_BUTTON5                 = "Button5";
+    HEALBOT_OPTIONS_BUTTON4                 = "Button 4";
+    HEALBOT_OPTIONS_BUTTON5                 = "Button 5";
+    HEALBOT_OPTIONS_BUTTON6                 = "Button 6";
+    HEALBOT_OPTIONS_BUTTON7                 = "Button 7";
+    HEALBOT_OPTIONS_BUTTON8                 = "Button 8";
+    HEALBOT_OPTIONS_BUTTON9                 = "Button 9";
+    HEALBOT_OPTIONS_BUTTON10                = "Button 10";
+    HEALBOT_OPTIONS_BUTTON11                = "Button 11";
+    HEALBOT_OPTIONS_BUTTON12                = "Button 12";
+    HEALBOT_OPTIONS_BUTTON13                = "Button 13";
+    HEALBOT_OPTIONS_BUTTON14                = "Button 14";
+    HEALBOT_OPTIONS_BUTTON15                = "Button 15";
 
     HEALBOT_CLASSES_ALL                     = "All classes";
     HEALBOT_CLASSES_MELEE                   = "Melee";
@@ -698,6 +708,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_WORD_SLOWER             = "Slower"
     HEALBOT_OPTIONS_AGGROFLASHALPHA         = "Flash opacity"
     HEALBOT_OPTIONS_FOCUSGROUPS             = "Focus Groups"
+    HEALBOT_OPTIONS_FOCUSGROUPS1            = "OFF"
+    HEALBOT_OPTIONS_FOCUSGROUPS2            = "ON: Fade unfocused groups"
+    HEALBOT_OPTIONS_FOCUSGROUPS3            = "ON: Hide unfocused groups"
     HEALBOT_OPTIONS_SHOWDURATIONFROM        = "Show duration from"
     HEALBOT_OPTIONS_SHOWDURATIONWARN        = "Duration warning from"
     HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Toggle Aux Bar Opacity Type"
