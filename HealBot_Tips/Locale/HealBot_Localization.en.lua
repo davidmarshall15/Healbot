@@ -78,12 +78,13 @@ function HealBot_Lang_Options_enALL()
                         -- Skins General tab
                                  ["SKINDEFAULTFOR"]=HEALBOT_OPTIONS_SKINDEFAULTFOR,
                                  ["STICKFRAMES"]=HEALBOT_OPTIONS_STICKYFRAMES,
-                                 ["STICKSENSITIVITY"]=HEALBOT_OPTIONS_STICKYFRAMES.." Sensitivity",
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
                                  ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
                         -- Skins Effects tab
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
+                                 ["USEFOCUSGROUPS"]=HEALBOT_OPTION_USEFOCUSGROUPS,
+                                 ["FOCUSGROUPDIMMING"]=HEALBOT_OPTION_FOCUSGROUPDIMMING,
                                  ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
                                  ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
                                  ["HEALBARSAGGROBARFLASHMIN"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MIN,
@@ -256,6 +257,8 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTFONTHEIGHT"]=HEALBOT_OPTIONS_SKINFHEIGHT,
                                  ["HEALBARSTXTFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
                                  ["HEALBARSTXTFONTHOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
+                                 ["HEALBARSNAMETXTOPTIONS"]=HEALBOT_WORD_TEXT,
+                                 ["HEALBARSNAMECOLOPTIONS"]=HEALBOT_WORD_COLOUR,
                                  ["HEALBARSTXTFONTALIGN"]=HEALBOT_OPTIONS_TEXTALIGNMENT,
                                  ["HEALBARSTXTFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                                  ["HEALBARSTXTMAXCHARS"]=HEALBOT_OPTIONS_MAXCHARS,
@@ -273,6 +276,8 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTIGNOREINFULL"]=HEALBOT_OPTIONS_IGNOREINCOMINGONFULL,
                                  ["HEALBARSTXTHEALTHTYPE"]="Display Type",
                                  ["HEALBARSTXTHEALTHFORMAT"]="Format Dropdowns",
+                                 ["HEALBARSHEALTHTXTOPTIONS"]=HEALBOT_WORD_TEXT,
+                                 ["HEALBARSHEALTHCOLOPTIONS"]=HEALBOT_WORD_COLOUR,
                         -- Skins Frames Icons  tab
                                  ["ICONSDEBUFFS"]="Icons Debuffs",
                                  ["ICONSBUFFS"]="Icons Buffs",
@@ -349,7 +354,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
                                  ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
-                                 ["DEBUFFSWARNINGSPAMFILTER"]=HEALBOT_OPTIONS_SPAMFILTER,
+                                 ["DEBUFFSWARNINGGROUPFILTER"]=HEALBOT_OPTIONS_RAIDGROUPWARN,
                         -- Buffs General tab
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
@@ -387,7 +392,6 @@ function HealBot_Lang_Options_enALL()
                                  ["TOOLTIPHIDEIC"]=HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT,
                                  ["TOOLTIPTARGETINFO"]=HEALBOT_OPTIONS_SHOWUNITTOOLTIP,
                                  ["TOOLTIPMYBUFFS"]=HEALBOT_OPTIONS_SHOWUNITBUFFTIME,
-                                 ["TOOLTIPSPELLDETAIL"]=HEALBOT_OPTIONS_SHOWDETTOOLTIP,
                                  ["TOOLTIPSPELLCD"]=HEALBOT_OPTIONS_SHOWCDTOOLTIP,
                                  ["TOOLTIPIGNORESPELLGCD"]=HEALBOT_OPTIONS_IGNOREGCDTOOLTIP,
                                  ["TOOLTIPWHEELCMD"]=HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP,
@@ -396,6 +400,7 @@ function HealBot_Lang_Options_enALL()
                                  ["TOOLTIPMONBUFFS"]=HEALBOT_OPTIONS_TOOLTIPSHOWHOT,
                                  ["TOOLTIPFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
                                  ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
+                                 ["TOOLTIPPOSITIONLINK"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
                                  ["TOOLTIPALPHA"]=HEALBOT_OPTIONS_TTALPHA,
                         -- Mouse Wheel tab
                                  ["BUFFSMOUSEWHEELUSE"]=HEALBOT_OPTIONS_MOUSEWHEEL,
@@ -502,12 +507,13 @@ function HealBot_Lang_Options_enALL()
                         -- Skins General tab
                                ["SKINDEFAULTFOR"]="Set when the skin is displayed.\n--\nNOTE: This setting is Per Character.",
                                ["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\nTIP: Use the 1st frame as your main frame\nmove other frames to your main frame\nand when stuck lock them.",
-                               ["STICKSENSITIVITY"]="The higher the sensitivity the closer you need to get for a frame to stick to another frame.\n--\nTIP: Use test bars to see if the sensitivity is correct for your frames.\nTurn On/Off/On test bars to see if the frames remain in place.\n- High sensitivity can lead to frames becoming unstuck on reload/logon\n- Low sensitivity can lead to a frame attaching to a different frame on reload/logon\n* Start with a high sensitivity and lower if required.",
                                ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player and pet frames.\n--\nNOTE: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\n--\nNOTE: Changing this setting requires a UI Reload.",
                                ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\n--\nNOTE: Changing this setting requires a UI Reload.",
                         -- Skins Effects tab
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
+                               ["USEFOCUSGROUPS"]="Use if a raid leader requests the healer to focus on specific groups.\nThis option reduces the opacity on all groups not included.\n--\nNOTE: This only applies to the Raid Heal Group.",
+                               ["FOCUSGROUPDIMMING"]="Set the intensity of the opacity reduction on unfocused groups.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.",
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.",
                                ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\nMin - The minimum opacity.",
@@ -615,7 +621,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSSELFPET"]="Place your own pet in the Self heal group.\nEnsure Self is turned on and high up in the Heal Groups list.",
                                ["HEALBARSPETGROUP"]="Treat pets as being in groups of five.",
                         -- Skins Frames Bars Visibility tab
-                               ["BARSVISIBILITY"]="Show the Skins Frames Bars Visibility tab.\n--\nNOTE: Some options are dependant on the frame selected.\n- Target settings are only available when the Target frame is selected.\n- Focus settings are only available when the Focus frame is selected.\n- Enemy settings are only displayed when the Enemy frame is selected.",
+                               ["BARSVISIBILITY"]="Show the Skins Frames Bars Visibility tab.\n--\nNOTE: Some options are dependant on the frame selected.\n- Target settings are only available when the Target frame is selected.\n- Focus settings are only available when the Focus frame is selected.",
                                ["HEALBARSVISALERTIC"]="While in combat and when health is at or\nbelow this setting, the bar will become enabled.",
                                ["HEALBARSVISALERTOC"]="While out of combat and when health is at or\nbelow this setting, the bar will become enabled.",
                                ["HEALBARSVISHIDE100"]="Hide bars for players who are over 100 yards\ngenerally when not in visible in plain sight.",
@@ -625,7 +631,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISEXCLUDERAID"]="Do not show yourself or members of your group/raid when out of combat.",
                                ["HEALBARSVISFOCUSFRIEND"]="Do not show hostile focus when out of combat.",
                                ["HEALBARSVISFILTER"]="Various classes and types can be filtered out using the dropdown.",
-                               ["HEALBARSVISFILTERGROUPS"]="Groups can be filtered out using these check boxes.",
+                               ["HEALBARSVISFILTERGROUPS"]="Select the groups to be focused.",
                                ["HEALBARSVISENEMYINCSELF"]="Include an enemy bar for your targets.",
                                ["HEALBARSVISENEMYINCTANKS"]="Include enemy bars for all tanks targets.",
                                ["HEALBARSVISENEMYINCARENA"]="Include enemy bars for player opponents in an arena.",
@@ -681,6 +687,8 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSTXTFONTOFFSET"]="Vertically offset the bar text.",
                                ["HEALBARSTXTFONTALIGN"]="Horizontally set the bar text.",
                                ["HEALBARSTXTFONTHOFFSET"]="Horizontally offset the bar text.",
+                               ["HEALBARSNAMETXTOPTIONS"]="Name text options.",
+                               ["HEALBARSNAMECOLOPTIONS"]="Name col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options.",
                                ["HEALBARSTXTFONTOUTLINE"]="Set the font outline for the text\ndisplayed on the heal bars.",
                                ["HEALBARSTXTMAXCHARS"]="Set the maximum number of characters shown on the heal bar.\nAuto will generally calculate the maximum number of characters\nto fit within the bar when standard fonts are used.",
                         -- Skins Frames Text Health tab
@@ -697,6 +705,8 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSTXTIGNOREINFULL"]="Ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s\nwhen the player is on full health.\n--\nNOTE:When this option is off, incoming heals and "..HEALBOT_classicABSORBHOT.."s\nare always shown when the bar is enabled.",
                                ["HEALBARSTXTHEALTHTYPE"]="Various options on how the health is displayed.",
                                ["HEALBARSTXTHEALTHFORMAT"]="Various options on the number format for health.",
+                               ["HEALBARSHEALTHTXTOPTIONS"]="Health text options.",
+                               ["HEALBARSHEALTHCOLOPTIONS"]="Health col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options.",
                         -- Skins Frames Icons  tab
                                ["ICONSDEBUFFS"]="Show the Skins Frames Icons Debuffs tab",
                                ["ICONSBUFFS"]="Show the Skins Frames Icons Buffs tab",
@@ -772,7 +782,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
                                ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
-                               ["DEBUFFSWARNINGSPAMFILTER"]="Minimum seconds for warnings of the same debuff.\n--\nNOTE: This applies to all players with the same debuff.",
+                               ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\nNOTE: This only applies to the Raid Heal Group.",
                         -- Buffs General tab
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
@@ -810,7 +820,6 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPHIDEIC"]="Hide the tooltip when in combat.",
                                ["TOOLTIPTARGETINFO"]="Show the name, class and spec if relevant,\nlocation, health and mana/power.",
                                ["TOOLTIPMYBUFFS"]="Show buffs and duration cast by you.",
-                               ["TOOLTIPSPELLDETAIL"]="Show the cast time of the spell.",
                                ["TOOLTIPSPELLCD"]="Show the cooldown remaining on the spell.",
                                ["TOOLTIPIGNORESPELLGCD"]="Ignore the global cooldown on the spell.",
                                ["TOOLTIPWHEELCMD"]="Show the commands defined on the Mouse Wheel tab.",
@@ -818,7 +827,7 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPGAMETIP"]="Use the game tooltip, this includes tooltip addons.",
                                ["TOOLTIPMONBUFFS"]="On all monitored Buffs / HoT's\nshow who cast the spell and duration left.",
                                ["TOOLTIPFONTSIZE"]="Set the size using Blizzards standard font sizes.",
-                               ["TOOLTIPPOSITION"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
+                               ["TOOLTIPPOSITIONLINK"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
                                ["TOOLTIPALPHA"]="Set the transparency of the tooltip.",
                         -- Mouse Wheel tab
                                ["BUFFSMOUSEWHEELUSE"]="Turn On/Off usage of the mouse wheel.\n--\nNOTE: When this is on mouse over macros will not work on HealBot bars",
@@ -859,7 +868,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.",    
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n - HealBot Threat: See threat for all players on multiple mobs.\n - HealBot TimeToDie: Player damage tracker showing how soon players will die.\n - HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.\n - HealBot ExtraButtons: Set spells for use with an MMO mouse on buttons 6 - 15",    
                               }
 end
 

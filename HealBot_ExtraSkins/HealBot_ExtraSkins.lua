@@ -529,16 +529,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=25,FLUIDBARS="true",HIDEBOSSF="true",HID
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCPET="false",TEXRAID="false",TINCRAID="true"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Party",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Not Used",G=1,SHOW="true",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="true",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -656,16 +646,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=11,HIDEPA
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=1,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",TEXRAID="false",FONLYFRIEND="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=70,HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Tank and Healers",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -813,16 +793,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Rahmen 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -922,16 +892,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=22,FLUIDBARS="false",FLUIDFREQ=12,HIDEPA
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCRAID="true",FONLYFRIEND="true",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCPET="false",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=58,HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Party",G=1,SHOW="true",OFFSET=-1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Not Used",G=1,SHOW="true",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="true",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -1062,16 +1022,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",HIDEP
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -1172,16 +1122,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",FLUID
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",TEXRAID="false",FONLYFRIEND="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",HIDE="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",ENEMYTARGET="false",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Frame 2",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Frame 3",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -1317,16 +1257,6 @@ General~t!{HIDEBOSSF="true",STICKYSENSITIVITY=40,FLUIDBARS="false",HIDEPARTYF="f
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=1,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=70,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{A=1,NAME="",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Healers",R=1,ALIAS="Healers",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -1499,16 +1429,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=40,FLUIDBARS="false",FLUIDFREQ=11,HIDEPT
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="Healers",R=1,ALIAS="Healers",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=11,B=1,OUTLINE=1}
@@ -1664,16 +1584,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=15,FLUIDBARS="false",FLUIDFREQ=12,HIDEPA
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",TEXRAID="false",FONLYFRIEND="false",SELFPET="false"}
 Protection~t!{COMBAT="true",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=7,NAME="",R=0.988,ALIAS="Rahmen 1",G=0.988,SHOW="false",OFFSET=0,FONT="Swansea",A=0,B=0.988,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Rahmen 2",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=7,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -1791,16 +1701,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",FALWAYSSHOW="false",TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -1901,16 +1801,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=12,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCRAID=1,GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP=1,FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET=1,TINCSELF="false",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBATRAID=0}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2005,16 +1895,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",HIDEP
 Healing~t!{TONLYFRIEND="false",SELFPET="false",FOCUSINCOMBAT=2,GROUPPETS="true",TARGETINCOMBAT=2,FONLYFRIEND="false",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2115,16 +1995,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",OMAX=0.95,HIDEPTF="
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBATRAID=0}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=15,NAME="Tanks",R=1,ALIAS="Tanks",G=0.925,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.592,OUTLINE=3}
 FrameAlias~f~2!{SIZE=12,NAME="Everyone Else",R=1,ALIAS="Everyone",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=3}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Frame 3",G=1,SHOW="true",OFFSET=9,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=3}
@@ -2259,16 +2129,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",STICKYFRAME="true",
 Healing~t!{TINCSELF="false",TINCRAID="true",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",FEXRAID="false",TEXRAID="false",ALERT=0.87999999523163}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBAT="false"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{A=1,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used 2",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -2372,16 +2232,6 @@ General~t!{HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",OMAX=0.95,HID
 Healing~t!{TINCSELF="false",TINCRAID="true",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="true",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=1}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="false",COMBAT="false"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=9,NAME="Tanks",R=1,ALIAS="Frame 2",G=1,SHOW="true",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2494,16 +2344,6 @@ General~t!{FLUIDFREQ=12,STICKYSENSITIVITY=30,FLUIDBARS="false",OMAX=0.95,HIDEPTF
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="true",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCPET="false",TEXRAID="false",ALERT=0.88}
 Protection~t!{COMBATRAID=0,GENERALMACRO="false",COMBATPARTY=0,CRASH="true",COMBAT="false"}
 Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="true",NUMBOSS=2,EXISTSHOWPTAR="true",HIDE="true",EXISTSHOWBOSS="false",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="OneFrame",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Not Used 2",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2601,16 +2441,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",OMAX=0.95,HIDEPARTY
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",FONLYFRIEND="false",TEXRAID="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2703,16 +2533,6 @@ General~t!{HIDEBOSSF="false",STICKYSENSITIVITY=30,FLUIDBARS="true",OMAX=0.95,HID
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",TEXRAID="false",FONLYFRIEND="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{A=1,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -2812,16 +2632,6 @@ General~t!{HIDEBOSSF="false",STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=11
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",TEXRAID="false",FONLYFRIEND="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{A=1,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="",R=1,ALIAS="Frame 2",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Frame 3",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -2929,16 +2739,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",HIDEBOSSF="false",H
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",FONLYFRIEND="false",TEXRAID="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -3041,16 +2841,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPARTYF="false",FL
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3192,16 +2982,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPARTYF="false",FLU
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3346,16 +3126,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",HIDEP
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3487,16 +3257,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",HIDEP
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3626,16 +3386,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=12,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3782,16 +3532,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEBOS
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -3947,16 +3687,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=12,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -4088,16 +3818,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEBOS
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -4230,16 +3950,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPTF="false",FLUID
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Group",R=1,ALIAS="Group",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -4395,16 +4105,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="false",HIDEPARTYF="false",HI
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCGROUP=1,TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Raid",R=1,ALIAS="Raid",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -4558,16 +4258,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=12,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -4715,16 +4405,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Party",G=1,SHOW="true",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="true",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="true",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -4850,16 +4530,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPTF="false",FLUIDF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FEXRAID="false",FONLYFRIEND="true",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=58,HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Party",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -4990,16 +4660,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=58,INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5129,16 +4789,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPARTYF="false",FLU
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FEXRAID="false",FONLYFRIEND="true",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",TINCGROUP="true"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5269,16 +4919,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5409,16 +5049,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",INCARENAPETS="false",ENEMYTARGETSIZE=58,INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5545,16 +5175,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="false",HIDEPTF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="true",INCTANKS="true",INCMYTAR="false",INCARENA="false",ENEMYTARGETSIZE=58,INCARENAPETS="false",INCSELF="false",NUMBOSS=1,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5681,16 +5301,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF=
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,SELFPET=0,FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5817,16 +5427,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF=
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,SELFPET=0,FONLYFRIEND="true",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="false",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="true",ENEMYTARGETSIZE=58,INCARENAPETS="false",HIDE="true",NUMBOSS=1,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=1,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -5953,16 +5553,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=15,STICKYSENSITIVITY=45,FLUID
 Healing~t!{TONLYFRIEND="false",FEXRAID="false",FOCUSINCOMBAT=2,GROUPPETS="true",SELFPET="false",FONLYFRIEND="false",TEXRAID="false",TARGETINCOMBAT=2}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",INCARENAPETS="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Frame 2",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -6106,16 +5696,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=14,HIDEPARTYF="true",HIDEBOSS
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -6252,16 +5832,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=14,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",TINCPET="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCRAID="true",FONLYFRIEND="false",TINCGROUP="true",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Tanks and Healers",R=1,ALIAS="Tanks and Healers",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Damage Dealers",R=1,ALIAS="Raid",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Members Pets",R=1,ALIAS="Not Used",G=1,SHOW="true",OFFSET=8,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -6411,16 +5981,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=14,HIDEPARTYF="true",HIDEBOSS
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{USE=0,ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Raid",R=1,ALIAS="Raid",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Members Pets",R=1,ALIAS="Not Used",G=1,SHOW="true",OFFSET=8,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -6571,16 +6131,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="true",HIDEPTF=
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCPET="false",TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=0.714,ALIAS="Group",G=0.714,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=0.714,OUTLINE=1}
 FrameAlias~f~2!{A=0.66,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -6719,16 +6269,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPARTYF="true",HIDE
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Tanks",R=0.714,ALIAS="Tanks",G=0.714,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.714,OUTLINE=1}
 FrameAlias~f~2!{A=0.66,NAME="Raid",R=1,ALIAS="Raid",G=1,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -6884,16 +6424,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPTF="false",HIDEBOSSF=
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=0.66,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=0.66,NAME="Raid",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=0.66,NAME="",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -7033,16 +6563,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=11,HIDEPARTYF="true",HIDEBOSS
 Healing~t!{TINCSELF="false",GROUPPETS="false",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FALWAYSSHOW="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="false",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -7152,16 +6672,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=16,HIDEPARTYF="true",HIDEPTF=
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID="true",FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",FALWAYSSHOW="false",TEXRAID="false",TINCPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=10,FONT="Oregon LDO Black",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="",R=1,ALIAS="Frame 2",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!3~4~5~
@@ -7265,16 +6775,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=17,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",TINCRAID="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET="true",TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="true",COMBATRAID=1}
 Enemy~t!{USE=0,INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=0.243,ALIAS="Tank and Heals",G=0.478,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.882,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Damage Dealers",R=0.275,ALIAS="Group",G=0.882,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.243,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -7425,16 +6925,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPARTYF="true",HIDE
 Healing~t!{TINCRAID="false",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FALWAYSSHOW="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET="true",TINCPET="false",TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="true",COMBATRAID=1}
 Enemy~t!{USE=0,ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Tanks and Healers",R=0.2,ALIAS="Tank and Heals",G=0.9,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.2,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Raid",R=0.275,ALIAS="Raid",G=0.882,SHOW="true",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=0.243,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -7591,16 +7081,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=18,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tank",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -7737,16 +7217,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,FLUIDFREQ=21,HIDEPTF="false",HIDEPARTYF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCRAID=1,FONLYFRIEND="false",SELFPET=0,TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",TINCGROUP=1,TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -7885,16 +7355,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPTF="false",FLUIDF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,FEXRAID="false",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -8029,16 +7489,6 @@ General~t!{OFREQ=0.07,OMIN=0.1,OMAX=0.95,HIDEBOSSF="true",HIDEPTF="false",FLUIDF
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCPET="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCGROUP=1,TEXRAID="false",TINCRAID=1}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY=1,CRASH="false",COMBATRAID=2}
 Enemy~t!{INCARENA="true",INCTANKS="true",INCMYTAR="false",ENEMYTARGET="false",ENEMYTARGETSIZE=40,INCARENAPETS="false",INCSELF="false",NUMBOSS=2,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Raid",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Tanks",R=1,ALIAS="Tanks",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=1,ALIAS="Not Used",G=1,SHOW="false",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=1,OUTLINE=1}
@@ -8175,16 +7625,6 @@ General~t!{HIDEBOSSF="true",STICKYSENSITIVITY=19,FLUIDBARS="false",HIDEPARTYF="f
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="true",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",FEXRAID="false",TINCRAID="true",TEXRAID="false",SELFPET=0}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="false",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="false"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="Party",R=1,ALIAS="Group",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~2!{SIZE=12,NAME="Tank and Healer",R=1,ALIAS="Tank and Healer",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~f~3!{SIZE=12,NAME="Pets",R=1,ALIAS="Not Used 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -8316,16 +7756,6 @@ General~t!{HIDEBOSSF="true",STICKYSENSITIVITY=30,FLUIDBARS="false",HIDEPARTYF="f
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,TINCGROUP="true",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,FEXRAID="false",TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",ENEMYTARGETSIZE=40,INCARENAPETS="false",HIDE="true",NUMBOSS=4,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=11,NAME="Tanks",R=0.714,ALIAS="Tanks",G=0.714,SHOW="true",OFFSET=-1,FONT="Friz Quadrata TT",A=1,B=0.714,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Raid",R=0.714,ALIAS="Raid",G=0.714,SHOW="true",OFFSET=-1,FONT="Friz Quadrata TT",SIZE=12,B=0.714,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=0.714,ALIAS="Not Used 1",G=0.714,SHOW="true",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=0.714,OUTLINE=1}
@@ -8464,16 +7894,6 @@ General~t!{OFREQ=0.07,STICKYSENSITIVITY=30,FLUIDBARS="false",FLUIDFREQ=11,HIDEPA
 Healing~t!{TINCRAID="true",TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=1,FALWAYSSHOW="false",FONLYFRIEND="false",FEXRAID="false",TONLYFRIEND="false",TINCGROUP="true",FOCUSINCOMBAT=2,TALWAYSSHOW="false",TINCPET="false",SELFPET=0,TEXRAID="false",ALERT=0.95}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="false",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,INCSELF="false",NUMBOSS=4,EXISTSHOWPTAR="false",HIDE="true",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=11,NAME="Tanks",R=0.714,ALIAS="Tanks",G=0.714,SHOW="true",OFFSET=-1,FONT="Friz Quadrata TT",A=1,B=0.714,OUTLINE=1}
 FrameAlias~f~2!{A=1,NAME="Raid",R=0.714,ALIAS="Raid",G=0.714,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",SIZE=12,B=0.714,OUTLINE=1}
 FrameAlias~f~3!{A=1,NAME="",R=0.714,ALIAS="Not Used 1",G=0.714,SHOW="true",OFFSET=10,FONT="Friz Quadrata TT",SIZE=12,B=0.714,OUTLINE=1}
@@ -8617,16 +8037,6 @@ General~t!{HIDEBOSSF="false",STICKYSENSITIVITY=20,FLUIDBARS="true",HIDEPTF="fals
 Healing~t!{TONLYFRIEND="false",TARGETINCOMBAT=2,FOCUSINCOMBAT=2,GROUPPETS="true",FEXRAID="false",FONLYFRIEND="false",TEXRAID="false",SELFPET="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="true",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
@@ -8742,16 +8152,6 @@ General~t!{HIDEBOSSF="false",STICKYSENSITIVITY=30,FLUIDBARS="false",HIDEPTF="fal
 Healing~t!{TINCSELF="false",GROUPPETS="true",TARGETINCOMBAT=2,TINCGROUP="true",FONLYFRIEND="false",TINCPET="false",TONLYFRIEND="false",FALWAYSSHOW="false",FOCUSINCOMBAT=2,TALWAYSSHOW="false",SELFPET=0,TINCRAID="true",TEXRAID="false",FEXRAID="false"}
 Protection~t!{COMBAT="false",GENERALMACRO="false",COMBATPARTY="true",CRASH="true",COMBATRAID="true"}
 Enemy~t!{ENEMYTARGET="false",INCTANKS="true",INCMYTAR="false",INCARENA="true",INCARENAPETS="false",ENEMYTARGETSIZE=40,HIDE="true",NUMBOSS=2,EXISTSHOWPTAR="false",INCSELF="false",EXISTSHOWBOSS="true",DOUBLEWIDTH="false",EXISTSHOWARENA="true"}
-IncludeGroup~f~1!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~2!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~3!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~4!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~5!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~6!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~7!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~8!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~9!{"true","true","true","true","true","true","true","true"}
-IncludeGroup~f~10!{"true","true","true","true","true","true","true","true"}
 FrameAlias~f~1!{SIZE=12,NAME="",R=1,ALIAS="Frame 1",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}
 FrameAlias~d!2~3~4~5~
 FrameAlias~f~6!{SIZE=12,NAME="Vehicle",R=1,ALIAS="Vehicle",G=1,SHOW="false",OFFSET=0,FONT="Friz Quadrata TT",A=1,B=1,OUTLINE=1}

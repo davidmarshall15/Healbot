@@ -97,6 +97,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
     HEALBOT_OPTIONS_HEAL_CHATOPT            = "Chat Options";
+    HEALBOT_OPTIONS_BLIZZARD_FRAMES         = "Blizzard Frames";
 
     HEALBOT_OPTIONS_FRAMESCALE              = "Frame scale"
     HEALBOT_OPTIONS_STICKFRAMEOFFSETH       = "Sticky frame horizontal offset"
@@ -159,6 +160,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
+    HEALBOT_OPTIONS_RAIDGROUPWARN           = "Raid heal group filter";
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
     HEALBOT_OPTIONS_BUFFCUSTOMURL           = "Custom buffs are available at  "..HEALBOT_ABOUT_URL
@@ -170,7 +172,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
     HEALBOT_OPTIONS_SOUNDBUFFWARNING        = "Play sound on buff";
-    HEALBOT_OPTIONS_SPAMFILTER              = "Minimum time between warnings";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
     HEALBOT_OPTIONS_WARN_CLASSCOL           = "Unable to change text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when\nCol"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is on"
 
@@ -202,8 +203,18 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTONLEFT              = "Left";
     HEALBOT_OPTIONS_BUTTONMIDDLE            = "Middle";
     HEALBOT_OPTIONS_BUTTONRIGHT             = "Right";
-    HEALBOT_OPTIONS_BUTTON4                 = "Button4";
-    HEALBOT_OPTIONS_BUTTON5                 = "Button5";
+    HEALBOT_OPTIONS_BUTTON4                 = "Button 4";
+    HEALBOT_OPTIONS_BUTTON5                 = "Button 5";
+    HEALBOT_OPTIONS_BUTTON6                 = "Button 6";
+    HEALBOT_OPTIONS_BUTTON7                 = "Button 7";
+    HEALBOT_OPTIONS_BUTTON8                 = "Button 8";
+    HEALBOT_OPTIONS_BUTTON9                 = "Button 9";
+    HEALBOT_OPTIONS_BUTTON10                = "Button 10";
+    HEALBOT_OPTIONS_BUTTON11                = "Button 11";
+    HEALBOT_OPTIONS_BUTTON12                = "Button 12";
+    HEALBOT_OPTIONS_BUTTON13                = "Button 13";
+    HEALBOT_OPTIONS_BUTTON14                = "Button 14";
+    HEALBOT_OPTIONS_BUTTON15                = "Button 15";
 
     HEALBOT_CLASSES_ALL                     = "All classes";
     HEALBOT_CLASSES_MELEE                   = "Melee";
@@ -291,6 +302,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONOPTOORARROWBUTTON   = "OOR Arrow";
     HEALBOT_OPTIONS_NAMEOPTTEXT             = "Name text options";
     HEALBOT_OPTIONS_HEALTHOPTTEXT           = "Health text options";
+    HEALBOT_OPTIONS_NAMEOPTCOLOUR           = "Name col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options";
+    HEALBOT_OPTIONS_HEALTHOPTCOLOUR         = "Health col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options";
     HEALBOT_OPTIONS_HEALTHTEXTANCHOR        = "Health text anchor";
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
@@ -410,6 +423,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_AGGROIND                 = "Indicator"
     HEALBOT_OPTION_BARUPDFREQ               = "Refresh Speed"
     HEALBOT_OPTION_USEFLUIDBARS             = "Use fluid bars"
+    HEALBOT_OPTION_USEFOCUSGROUPS           = "Use focus groups"
+    HEALBOT_OPTION_FOCUSGROUPDIMMING        = "Unfocused groups - Opacity reduction"
     HEALBOT_OPTION_FLUIDBARS                = "Fluid Bars"
     HEALBOT_OPTIONS_RELOADUIMSG             = "This option requires a UI Reload, Reload now?"
 
@@ -692,6 +707,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_WORD_FASTER             = "Faster"
     HEALBOT_OPTIONS_WORD_SLOWER             = "Slower"
     HEALBOT_OPTIONS_AGGROFLASHALPHA         = "Flash opacity"
+    HEALBOT_OPTIONS_FOCUSGROUPS             = "Focus Groups"
+    HEALBOT_OPTIONS_FOCUSGROUPS1            = "OFF"
+    HEALBOT_OPTIONS_FOCUSGROUPS2            = "ON: Fade unfocused groups"
+    HEALBOT_OPTIONS_FOCUSGROUPS3            = "ON: Hide unfocused groups"
     HEALBOT_OPTIONS_SHOWDURATIONFROM        = "Show duration from"
     HEALBOT_OPTIONS_SHOWDURATIONWARN        = "Duration warning from"
     HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Toggle Aux Bar Opacity Type"
@@ -736,6 +755,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXSETTINGS             = "Auxiliary Bars Settings"
     HEALBOT_OPTIONS_AUXASSIGN               = "Auxiliary Bars Assignments"
     HEALBOT_OPTIONS_AUXCONFIG               = "Auxiliary Bar Configuration"
+    HEALBOT_OPTIONS_VISSTANDARD             = "Standard Frames"
+    HEALBOT_OPTIONS_ENEMYFRAME              = "Enemy Frame"
     HEALBOT_OPTIONS_AUXFLASH                = "Variable Opacity"
     HEALBOT_WORD_ASSIGNMENT                 = "Assignment:"
     HEALBOT_WORD_ANCHOR                     = "Anchor:"
@@ -968,6 +989,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_THREAT                   = "HealBot Threat"
     HEALBOT_PLUGIN_TIMETODIE                = "HealBot TimeToDie"
     HEALBOT_PLUGIN_TIMETOLIVE               = "HealBot TimeToLive"
+    HEALBOT_PLUGIN_EXTRABUTTONS             = "HealBot ExtraButtons"
     HEALBOT_PLUGIN_EFFECTIVETANKS           = "HealBot EffectiveTanks"
     HEALBOT_PLUGIN_EFFICIENTHEALERS         = "HealBot EfficientHealers"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
@@ -1178,6 +1200,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_EFFECTS             = "Effects"
     HEALBOT_OPTIONS_CONTENT_SKINS_GENERAL   = "    " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SKINS_EFFECTS   = "    " .. HEALBOT_OPTIONS_TAB_EFFECTS
+    HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY     = "    " .. HEALBOT_CUSTOM_CASTBY_ENEMY
     HEALBOT_OPTIONS_CONTENT_SKINSF_GENERAL  = "        " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SKINS_HEALING   = "    " .. HEALBOT_OPTIONS_TAB_HEALING
     HEALBOT_OPTIONS_CONTENT_SKINS_HEADERS   = "        " .. HEALBOT_OPTIONS_TAB_HEADERS

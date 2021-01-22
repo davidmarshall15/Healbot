@@ -800,7 +800,7 @@ function HealBot_Panel_PositionBars()
             vPosButton=HealBot_Unit_Button[xUnit] or "nil"
         end
         if vPosButton~="nil" and hbBarsPerFrame[vPosButton.frame] then
-            vPosButton.group=HealBot_UnitGroups[vPosButton.unit]
+            vPosButton.group=HealBot_UnitGroups[vPosButton.unit] or 1
             vFrame=vPosButton.frame
             rowNo[vFrame]=rowNo[vFrame]+1
             vBar[vFrame]["BUTTON"]=vPosButton
@@ -1634,10 +1634,18 @@ function HealBot_Panel_insSort(unit, mainSort)
     end
 end
 
+function HealBot_Panel_SetFocusGroups()
+    if HealBot_Globals.OverrideEffects["USE"]==2 then
+        HealBot_Panel_luVars["FocusGroups"]=HealBot_Globals.OverrideEffects["FOCUSGROUPS"]
+        HealBot_Panel_luVars["FGroups"]=HealBot_Globals.OverrideFocusGroups
+    else
+        HealBot_Panel_luVars["FocusGroups"]=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FOCUSGROUPS"]
+        HealBot_Panel_luVars["FGroups"]=Healbot_Config_Skins.FocusGroups[Healbot_Config_Skins.Current_Skin]
+    end
+end
+
 function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
-    local vAddUnitSubGroup=HealBot_UnitGroups[unit] or 0;
-    if (vAddUnitSubGroup==0 or Healbot_Config_Skins.IncludeGroup[Healbot_Config_Skins.Current_Skin][hbCurrentFrame][vAddUnitSubGroup]) and 
-       (Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["INCCLASSES"]==1 or HealBot_Options_retEmergInc(HealBot_Panel_classEN(unit), hbCurrentFrame)) then
+    if HealBot_Panel_luVars["FocusGroups"]<3 or unitType~=5 or HealBot_Panel_luVars["FGroups"][HealBot_UnitGroups[unit]] then
         local uExists=false
         if Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin] then
             if unitType<5 then
@@ -1649,7 +1657,7 @@ function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
             uExists=true
         end
         if not uExists then
-            if not UnitIsVisible(xUnit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+            if UnitIsVisible(unit) or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
                 if not isRaidGroup then i[hbCurrentFrame] = i[hbCurrentFrame]+1; end
                 if unitType<5 then
                     HealBot_TrackPrivateNames[hbGUID]=true
@@ -1790,7 +1798,7 @@ local vTargetIndex=0
 function HealBot_Panel_targetHeals(preCombat)
     vTargetIndex=i[hbCurrentFrame]
     if UnitExists("target") and (not preCombat or Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]>1) then
-        if not UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+        if UnitIsVisible("target") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
             if preCombat or HealBot_Panel_validTarget() then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,"target")
@@ -2043,7 +2051,7 @@ function HealBot_Panel_focusHeals(preCombat)
         if preCombat then
             i[hbCurrentFrame] = i[hbCurrentFrame]+1;
             table.insert(subunits,"focus")
-        elseif not UnitIsVisible("focus") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
+        elseif UnitIsVisible("focus") or not Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["HIDEOOR"] then
             if HealBot_Panel_validFocus() then
                 i[hbCurrentFrame] = i[hbCurrentFrame]+1;
                 table.insert(subunits,"focus")
@@ -2567,7 +2575,7 @@ function HealBot_Panel_cpSave(mNum)
 end
 
 function HealBot_RetUnitGroups(unit)
-    return HealBot_UnitGroups[unit]
+    return HealBot_UnitGroups[unit] or 1
 end
 
 local focusHeal=true

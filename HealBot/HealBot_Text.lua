@@ -679,9 +679,9 @@ function HealBot_Text_SetText(button)
         button.text.nameupdate=false
         if UnitExists(button.unit) then
             if button.status.enabled then
-                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"]
+                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
             else
-                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"]
+                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)
             end
             atR, atG, atB = HealBot_Text_TextNameColours(button)
             button.gref.txt["text"]:SetTextColor(atR, atG, atB, atA)
@@ -694,9 +694,9 @@ function HealBot_Text_SetText(button)
         button.text.healthupdate=false
         if UnitExists(button.unit) then
             if button.status.enabled then
-                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"]
+                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"], 1)
             else
-                atA=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCDA"]
+                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCDA"], 1)
             end
             atR, atG, atB = HealBot_Text_TextHealthColours(button)
             button.gref.txt["text2"]:SetTextColor(atR, atG, atB, atA)
