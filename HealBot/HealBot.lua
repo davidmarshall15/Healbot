@@ -433,7 +433,7 @@ function HealBot_UnitInPhase(unit)
         else
             hbInPhase=UnitInPhase(unit)
         end
-    elseif UnitPhaseReason(unit) then
+    elseif UnitPhaseReason(unit) ~= nil and UnitPhaseReason(unit) ~= 2 then
         hbInPhase=false
     else
         hbInPhase=true
