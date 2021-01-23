@@ -254,6 +254,8 @@ function HealBot_Options_InitVars()
             [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
             [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
             [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [HEALBOT_POTION_OF_SOUL_PURITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [HEALBOT_PHIAL_OF_SERENITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
         }
     end
     LSM.RegisterCallback(HEALBOT_HEALBOT, "LibSharedMedia_SetGlobal", function(mediatype, key) HealBot_UpdateUsedMedia(mediatype, key) end)
@@ -798,16 +800,20 @@ function HealBot_Options_setLists()
     }
 
     HealBot_Debuff_Item_List = {
+        HEALBOT_POTION_OF_SOUL_PURITY,
         HEALBOT_PURIFICATION_POTION,
         HEALBOT_ELIXIR_OF_POISON_RES,
         HEALBOT_ANTI_VENOM,
         HEALBOT_POWERFUL_ANTI_VENOM,
+        HEALBOT_PHIAL_OF_SERENITY,
     }
     
-    local iName = GetItemInfo(HEALBOT_PURIFICATION_POTION)
+    local iName = GetItemInfo(HEALBOT_POTION_OF_SOUL_PURITY)
+    iName = GetItemInfo(HEALBOT_PURIFICATION_POTION)
     iName = GetItemInfo(HEALBOT_ELIXIR_OF_POISON_RES)
     iName = GetItemInfo(HEALBOT_ANTI_VENOM)
     iName = GetItemInfo(HEALBOT_POWERFUL_ANTI_VENOM)
+    iName = GetItemInfo(HEALBOT_PHIAL_OF_SERENITY)
 
     HealBot_Debuff_RangeWarning_List = {
         HEALBOT_WORD_ALWAYS,
@@ -8460,6 +8466,14 @@ function HealBot_Options_ItemsInBag(cType)
             [35] = HEALBOT_SILKWEAVE_BANDAGE,
             [36] = HEALBOT_DEEP_SEA_BANDAGE,
             [37] = HEALBOT_TIDESPRAY_LINEN_BANDAGE,
+            [38] = HEALBOT_SOULFUL_HEALING_POTION,
+            [39] = HEALBOT_SPIRITUAL_HEALING_POTION,
+            [40] = HEALBOT_SOULFUL_MANA_POTION,
+            [41] = HEALBOT_SPIRITUAL_MANA_POTION,
+            [42] = HEALBOT_POTION_OF_SOUL_PURITY,
+            [43] = HEALBOT_PHIAL_OF_SERENITY,
+            [44] = HEALBOT_SHROUDED_CLOTH_BANDAGE,
+            [45] = HEALBOT_HEAVY_SHROUDED_CLOTH_BANDAGE,
         }
         HealBot_Options_SelectItemsCombo_List=HealBot_Options_itemsByLevel()
         local tID=nil
