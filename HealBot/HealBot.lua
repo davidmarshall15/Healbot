@@ -433,7 +433,7 @@ function HealBot_UnitInPhase(unit)
         else
             hbInPhase=UnitInPhase(unit)
         end
-    elseif UnitPhaseReason(unit) ~= nil and UnitPhaseReason(unit) ~= 2 then
+    elseif (UnitPhaseReason(unit) or 2)~=2 then
         hbInPhase=false
     else
         hbInPhase=true
@@ -3304,6 +3304,9 @@ end
 function HealBot_PartyUpdate_CheckSolo()
     local PrevSolo=HealBot_luVars["IsSolo"]
     if IsInRaid() or IsInGroup() then
+        if HealBot_luVars["IsSolo"] then
+            HealBot_setOptions_Timer(130)
+        end
         HealBot_luVars["IsSolo"]=false
     else
         HealBot_luVars["IsSolo"]=true
@@ -5581,7 +5584,7 @@ function HealBot_Reset_Spells()
     HealBot_Update_SpellCombos()
     HealBot_Options_ResetDoInittab(2)
     HealBot_Options_Init(2)
-    HealBot_Options_ComboClass_Text()
+    HealBot_setOptions_Timer(15)
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMSPELLRESET)
       --HealBot_setCall("HealBot_Reset_Spells")
 end
@@ -5645,7 +5648,6 @@ function HealBot_Reset_Icons()
     HealBot_Globals.WatchHoT=HealBot_GlobalsDefaults.WatchHoT
     HealBot_Options_ResetDoInittab(3)
     HealBot_Options_Init(3)
-    HealBot_Options_ComboClass_Text()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMICONRESET)
       --HealBot_setCall("HealBot_Reset_Icons")
 end

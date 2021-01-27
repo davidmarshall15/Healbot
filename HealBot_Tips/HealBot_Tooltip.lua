@@ -62,25 +62,35 @@ end
 
 function HealBot_Tooltip_SpellPattern(button, click)
     local sPattern=nil
-    local x = click
-    if IsShiftKeyDown() and IsAltKeyDown() and IsControlKeyDown() then
-        x = "Alt-Ctrl-Shift"..x
-    elseif IsShiftKeyDown() then 
-        if IsAltKeyDown() then 
-            x = "Alt-Shift"..x
-        elseif IsControlKeyDown() then 
-            x = "Ctrl-Shift"..x
+    local x=nil
+    if IsAltKeyDown() then 
+        x="Alt" 
+    end
+    if IsControlKeyDown() then
+        if x then
+            x=x.."-Ctrl"
         else
-            x = "Shift"..x
+            x="Ctrl"
         end
-    elseif IsAltKeyDown() then 
-        if IsControlKeyDown() then 
-             x = "Alt-Ctrl"..x
+    end
+    if IsShiftKeyDown() then
+        if x then
+            x=x.."-Shift"
         else
-            x = "Alt"..x
+            x="Shift"
         end
-    elseif IsControlKeyDown() then 
-        x = "Ctrl"..x 
+    end
+    --if IsMetaKeyDown() then
+    --    if x then
+    --        x=x.."-Meta"
+    --    else
+    --        x="Meta"
+    --    end
+    --end
+    if x then
+        x = x..click
+    else
+        x = click
     end
     x=x..HealBot_Config.CurrentSpec
     sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
@@ -674,7 +684,13 @@ function HealBot_Action_DoRefreshTooltip()
                 for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+50 do
                     if UnitDebuffIcons[i].current and UnitDebuffIcons[i].spellId>0 then
                         linenum=linenum+1
-                        if HealBot_Globals.CDCBarColour[i] then
+                        if HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId] then
+                            HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..UnitDebuffIcons[i].spellId,
+                                                        (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].R or 0.4)+0.2,
+                                                        (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].G or 0.05)+0.2,
+                                                        (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].B or 0.2)+0.2,
+                                                        1," ",0,0,0,0)
+                        elseif HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].name] then
                             HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..UnitDebuffIcons[i].name,
                                                         (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].name].R or 0.4)+0.2,
                                                         (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].name].G or 0.05)+0.2,

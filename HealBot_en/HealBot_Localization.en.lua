@@ -199,6 +199,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_EMERGFILTER             = "Show bars for";
     HEALBOT_OPTIONS_EMERGFCLASS             = "Configure classes for";
     HEALBOT_OPTIONS_MODIFIER                = "Modifier key"
+    HEALBOT_OPTIONS_MODIFIERKEYS            = "Modifier keys:"
     HEALBOT_OPTIONS_COMBOBUTTON             = "Button";
     HEALBOT_OPTIONS_BUTTONLEFT              = "Left";
     HEALBOT_OPTIONS_BUTTONMIDDLE            = "Middle";
@@ -1319,32 +1320,27 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESET_COLOUR           = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
-    HEALBOT_SUPPORTERS_PEOPLE = {  [01] = "Mythagos - Draenor",  -- Mythago
+    HEALBOT_SUPPORTERS_PEOPLE = {  
+                                   [01] = "Mythagos",  -- Mythago
                                    [02] = "SUNET",
                                    [03] = "killerdavy",
                                    [04] = "zathrain",
-                                   [05] = "Droodibaby",
-                                   [06] = "Redemption",
-                                   [07] = "Jaiseck",
-                                   [08] = "xtacie",
-                                   [09] = "bkwildlifecntrl",
-                                   [10] = "mlharg",
-                                   [11] = "Yuriusha",
-                                   [12] = "spicy_squid",
-                                   [13] = "Ameralanna_675",
-                                   [14] = "nydiah",
-                                   [15] = "Doomsdaze",
-                                   [16] = "Xarava",
-                                   [17] = "jchap2k",
-                                   [18] = "Vayah",
-                                   [19] = "Madaleine",
-                                   [20] = "ADDYDARI",
-                                   [21] = "plastisch",
-                                   [22] = "dennywh",
-                                   [23] = "Brokenwings82",
-                                   [24] = "dead76frog",
-                                   [25] = "ghor",
-                                   [26] = "Pandamonia",
+                                   [05] = "Xarava",
+                                   [06] = "jchap2k",
+                                   [07] = "Vayah",
+                                   [08] = "Madaleine",
+                                   [09] = "ADDYDARI",
+                                   [10] = "plastisch",
+                                   [11] = "dennywh",
+                                   [12] = "Pandamonia",
+                                   [13] = "Daydream",
+                                   [14] = "Mirandinn",
+                                   [15] = "jarmfield",
+                                   [16] = "piAwd",
+                                   [17] = "Slayybelle",
+                                   [18] = "Belcantor",
+                                   [19] = "Kamerth",
+                                   [20] = "dbsvok",
                                 }
 end
 

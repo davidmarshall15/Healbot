@@ -475,7 +475,7 @@ function HealBot_Lang_Options_enALL()
                                ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
                         -- Spells tab
                                ["SETSPELLSFOR"]="Set spells that can be used on Friendly and Hostile characters:\n* Helpful - Spells that can be cast on friends.\n* Harmful - Spells that can be cast on enemies.",
-                               ["SPELLSBUTTON"]="The key modifier held.",
+                               ["SPELLSBUTTON"]="Modifier key held when casting.",
                                ["SPELLSBUTTONCAST"]="Timing of the spell cast\nCast when the button is Pressed or Released.",
                                ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend.",
                                ["SPELLSAUTOTARGET"]="Set the healers target to the character\nreceiving the current spell cast.",

@@ -915,7 +915,10 @@ end
 
 function HealBot_Action_UpdateBuffButton(button)
     if button.aura.buff.name and button.status.current<8 and UnitExists(button.unit) and HealBot_Config_Buffs.CBshownHB and (button.status.unittype~=5 or HealBot_Config_Buffs.ShowGroups[button.group])
-     and ((button.aura.buff.missingbuff and HealBot_Aura_retBuffWatch(button.aura.buff.name)) or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id]) then
+     and (   (button.aura.buff.missingbuff and HealBot_Aura_retBuffWatch(button.aura.buff.name)) 
+           or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id]
+           or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.name]
+         ) then
         HealBot_UpdateUnitRange(button,false)
         if button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
             button.status.r,button.status.g,button.status.b=HealBot_Options_RetBuffRGB(button)  
@@ -3343,22 +3346,27 @@ function HealBot_Action_PreClick(self,button)
     --local xButton=self
     if self.id<999 and UnitExists(self.unit) and UnitIsFriend("player",self.unit) then
         HealBot_setLuVars("TargetUnitID", self.unit)
-        usedSmartCast=false;
-        ModKey=""
-        if IsShiftKeyDown() and IsControlKeyDown() and IsAltKeyDown() then
-            ModKey="Alt-Ctrl-Shift"
-        elseif IsShiftKeyDown() then 
-            if IsControlKeyDown() then 
-                ModKey="Ctrl-Shift"
-            elseif IsAltKeyDown() then 
-                ModKey="Alt-Shift"
+        usedSmartCast=false;    
+        ModKey=nil
+        if IsAltKeyDown() then 
+            ModKey="Alt" 
+        end
+        if IsControlKeyDown() then
+            if ModKey then
+                ModKey=ModKey.."-Ctrl"
             else
-                ModKey="Shift" 
+                ModKey="Ctrl"
             end
-        elseif IsControlKeyDown() then 
-            ModKey="Ctrl"
-        elseif IsAltKeyDown() then 
-            ModKey="Alt"
+        end
+        if IsShiftKeyDown() then
+            if ModKey then
+                ModKey=ModKey.."-Shift"
+            else
+                ModKey="Shift"
+            end
+        end
+        if not ModKey then
+            ModKey=""
         end
         if button=="LeftButton" then 
             abutton="Left"
