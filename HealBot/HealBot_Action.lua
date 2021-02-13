@@ -12,7 +12,7 @@ HealBot_Action_luVars["resetSkinTo"]=""
 HealBot_Action_luVars["clearSpellCache"]=false
 HealBot_Action_luVars["TestBarsOn"]=false
 HealBot_Action_luVars["ShapeshiftForm"]=-1
-HealBot_Action_luVars["FLUIDFREQ"]=50
+HealBot_Action_luVars["FLUIDFREQ"]=15
 HealBot_Action_luVars["FLUIDSTATEFREQ"]=50
 HealBot_Action_luVars["FluidInUse"]=false
 HealBot_Action_luVars["FrameInitDone"]=false
@@ -795,7 +795,7 @@ end
 function HealBot_Action_stateChange(button)
     HealBot_UpdAuxBar(button)
     HealBot_UnitAuraAlpha(button)
-    HealBot_fastUpdateEveryFrame(5)
+    HealBot_fastUpdateEveryFrame(12)
 end
 
 function HealBot_Action_setState(button, state)
@@ -946,22 +946,22 @@ end
 local ripHasRes={}
 local ripHadRes={}
 local ripPlayerBuffsList={}
-function HealBot_Action_UpdateTheDeadButton(button)
+function HealBot_Action_UpdateTheDeadButton(button, fromHlth)
      if button.status.current==9 then
         if not UnitIsDeadOrGhost(button.unit) then
             button.status.current=2
             button.aura.check=true
-            button.health.update=true
             ripHasRes[button.id]=nil
             ripHadRes[button.id]=nil
             button.text.nameupdate=true
+            if not fromHlth then HealBot_UnitHealthFastUpdate(button, true) end
             HealBot_UpdateUnitRange(button,false)
             HealBot_Action_UpdateBackgroundButton(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
             end
             HealBot_Text_setNameTag(button)
-            HealBot_Action_Refresh(button)
+            --HealBot_Action_Refresh(button)
             if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
             button.status.throttle=true
             HealBot_Text_SetText(button)
@@ -999,7 +999,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
             HealBot_Action_UpdateBackgroundButton(button)
         end
         if button.aura.debuff.name then  
-            HealBot_Aura_ClearDebuff(button)
+            HealBot_Aura_ClearDebuff(button, true)
         end
         if button.aggro.status>0 then
             HealBot_Action_UpdateAggro(button,false,0,0,"",0,"")
@@ -1013,7 +1013,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
         end
         HealBot_UpdateUnitRange(button,false)
         HealBot_Text_setNameTag(button)
-        HealBot_OnEvent_UnitHealth(button)
+        if not fromHlth then HealBot_UnitHealthFastUpdate(button, true) end
         if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
         HealBot_clearAllAuxBar(button)
@@ -1023,8 +1023,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
         end
         if UnitIsUnit(button.unit,"player") then
             HealBot_Action_ResetActiveUnitStatus() 
-        else
-            HealBot_Action_Refresh(button)
+        --else
+        --    HealBot_Action_Refresh(button)
         end
         if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
         button.status.throttle=true
@@ -1500,6 +1500,7 @@ end
 local grpFrame={}
 local grpFrameBar={}
 local grpFrameText={}
+local grpFrameStickyInd={}
 
 function HealBot_Action_setFrameHeader(f, frameScale)
     if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][f]["SHOW"] then
@@ -1543,10 +1544,28 @@ function HealBot_Action_InitFrames()
             grpFrame[x]:SetScript("OnShow", function(self) HealBot_Action_OnShow(self) end)
             grpFrame[x]:SetScript("OnMouseDown", function(self, button) HealBot_Action_OnMouseDown(self, button) end)
             grpFrame[x]:SetScript("OnMouseUp", function(self, button) HealBot_Action_OnMouseUp(self, button) end)
-            grpFrame[x]:SetScript("OnDragStart", function(self) HealBot_Action_OnDragStart(self) end)
             grpFrameBar[x]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_HeaderBar", grpFrame[x], "TextStatusBar")
             grpFrameBar[x]:SetPoint("BOTTOM",grpFrame[x],"TOP",0,-2)
             grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
+            local StickIndPoints={[1]="TOPLEFT",[2]="TOP",[3]="TOPRIGHT",[4]="TOPRIGHT",[5]="RIGHT",[6]="BOTTOMRIGHT",[7]="BOTTOMRIGHT",[8]="BOTTOM",[9]="BOTTOMLEFT",[10]="BOTTOMLEFT",[11]="LEFT",[12]="TOPLEFT"}
+            for y=1,12 do
+                if not grpFrameStickyInd[x] then grpFrameStickyInd[x]={} end
+                grpFrameStickyInd[x][y]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_StickyInd"..y, grpFrame[x], "TextStatusBar")
+                grpFrameStickyInd[x][y]:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[16].name));
+                grpFrameStickyInd[x][y]:SetStatusBarColor(1,1,0.25,0)
+                grpFrameStickyInd[x][y]:SetPoint(StickIndPoints[y],grpFrame[x])
+                grpFrameStickyInd[x][y]:SetMinMaxValues(0,100);
+                grpFrameStickyInd[x][y]:SetValue(100);
+                if (y>3 and y<7) or (y>9) then
+                    grpFrameStickyInd[x][y]:SetOrientation("VERTICAL")
+                    grpFrameStickyInd[x][y]:SetHeight(25);
+                    grpFrameStickyInd[x][y]:SetWidth(1);
+                else
+                    grpFrameStickyInd[x][y]:SetOrientation("HORIZONTAL")
+                    grpFrameStickyInd[x][y]:SetHeight(1);
+                    grpFrameStickyInd[x][y]:SetWidth(25);
+                end
+            end
             ShowUIPanel(grpFrame[x])
             HealBot_Action_FrameSetPoint(x, grpFrame[x])
             HideUIPanel(grpFrame[x])
@@ -1557,8 +1576,11 @@ end
 
 function HealBot_Action_ShowPanel(frame)
     if HealBot_Config.DisabledNow==0 then
-        if not grpFrame[frame]:IsVisible() then 
+        if (frame<10 or HealBot_Data["UILOCK"]) and not grpFrame[frame]:IsVisible() then 
             ShowUIPanel(grpFrame[frame])
+            if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==3 then
+                PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
+            end
         end
         HealBot_Skins_ResetSkin("frameheader",nil,frame)
     end
@@ -1576,6 +1598,9 @@ end
 function HealBot_Action_HidePanel(frame)
     if grpFrame[frame]:IsVisible() then 
         HideUIPanel(grpFrame[frame])
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==3 then
+            PlaySound(SOUNDKIT.IG_ABILITY_CLOSE)
+        end
     end
 end
 
@@ -1851,7 +1876,6 @@ function HealBot_Action_PrepButton(button)
     button.status.slowthrottle=0
     button.spells.castpct=-1
     button.aura.buff.name=false
-    button.aura.buff.custom=false
     button.aura.buff.missingbuff=false
     button.aura.buff.id=0
     button.icon.buff.count=0
@@ -2832,18 +2856,8 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
         if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.RaidIcon[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOW"] then
             testBarsDat["targetCnt"]=testBarsDat["targetCnt"]+1
             if testBarsDat["targetCnt"]>8 then testBarsDat["targetCnt"]=1 end
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==1 then
-                testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-                thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-            elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["TARGETONBAR"]==2 then
-                testBarsDat["buffId"]=testBarsDat["buffId"]+1
-                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-                thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-            else
-                thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
-                thb.gref.icon[92]:SetAlpha(1)
-            end
+            thb.gref.icon[92]:SetTexture(HealBot_Aura_retRaidtargetIcon(testBarsDat["targetCnt"]))
+            thb.gref.icon[92]:SetAlpha(1)
         end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWCLASS"] then
             if not unitRole then unitRole="DAMAGER" end
@@ -2851,18 +2865,8 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SHOWROLE"] then
                 classTexture=HealBot_Panel_retClassRoleIcon(unitRole)
             end
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==1 then
-                testBarsDat["debuffId"]=testBarsDat["debuffId"]+1
-                thb.gref.icon[testBarsDat["debuffId"]]:SetTexture(classTexture)
-                thb.gref.icon[testBarsDat["debuffId"]]:SetAlpha(1)
-            elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][hbCurFrame]["CLASSONBAR"]==2 then
-                testBarsDat["buffId"]=testBarsDat["buffId"]+1
-                thb.gref.icon[testBarsDat["buffId"]]:SetTexture(classTexture)
-                thb.gref.icon[testBarsDat["buffId"]]:SetAlpha(1)
-            else
-                thb.gref.icon[91]:SetTexture(classTexture)
-                thb.gref.icon[91]:SetAlpha(1)
-            end
+            thb.gref.icon[91]:SetTexture(classTexture)
+            thb.gref.icon[91]:SetAlpha(1)
         end
     end
     return thb
@@ -2995,18 +2999,18 @@ function HealBot_Action_Reset()
     for i=1, 10 do
         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][i]["X"]=(49+i)
         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][i]["Y"]=(49+i)
-        Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]=false
+        Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]=1
         if HealBot_Config.DisabledNow==0 and HealBot_Action_FrameIsVisible(i) then
             HealBot_Action_setPoint(i)
             HealBot_Action_ShowPanel(i)
         end
         HealBot_Action_unlockFrame(i)
     end
+    HealBot_Options_Frame_initCurFrame()
 end
 
 function HealBot_Action_unlockFrame(hbCurFrame)
-    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["LOCKED"]=false
-    HealBot_Options_ActionLocked:SetChecked(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["LOCKED"])
+    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["LOCKED"]=1
 end
 
 local hbFrameSetPoint={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
@@ -3121,7 +3125,7 @@ function HealBot_Action_setPoint(hbCurFrame)
     if not hbCurFrame then return end
     if not InCombatLockdown() then  -- not InCombatLockdown() -- not HealBot_Data["UILOCK"]
         HealBot_Action_CheckFrame(hbCurFrame, grpFrame[hbCurFrame])
-        if not HealBot_Action_StickyFrame(hbCurFrame, grpFrame[hbCurFrame]) then
+        if not HealBot_Action_StickyFrame(hbCurFrame) then
             HealBot_Action_FrameSetPoint(hbCurFrame, grpFrame[hbCurFrame])
         end
         if hbCurFrame<10 then
@@ -3212,27 +3216,45 @@ function HealBot_Action_CheckHideFrames()
         end
     end
     for i=1, 10 do
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"] and hideFrame[i] and HealBot_Action_FrameIsVisible(i) then
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]>1 and hideFrame[i] and HealBot_Action_FrameIsVisible(i) then
             HealBot_Action_HidePanel(i)
         end
     end
 end
 
+function HealBot_Action_CheckHideFrameExtras()
+    for j=8,9 do
+        hideFrame[j]=true
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        if xButton.status.enabled then
+            hideFrame[xButton.frame]=false
+        end
+    end
+    for i=8, 9 do
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]>1 and hideFrame[i] and HealBot_Action_FrameIsVisible(i) then
+            HealBot_Action_HidePanel(i)
+            if i==8 then HealBot_nextRecalcParty(3) end
+            if i==9 then HealBot_nextRecalcParty(4) end
+        end
+    end
+end
+
 function HealBot_Action_ShowHideFrames(button)
-    if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"] then 
-        if not InCombatLockdown() then
+    if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"]>1 then 
+        if not HealBot_Data["UILOCK"] then
             if not HealBot_Action_FrameIsVisible(button.frame) and HealBot_Config.DisabledNow==0 then
                 if button.status.enabled then
-                    HealBot_Action_ShowPanel(button.frame);
+                    HealBot_Action_ShowPanel(button.frame)
                 end
             elseif HealBot_Action_FrameIsVisible(button.frame) then
                 if not button.status.enabled then
                     if button.status.unittype>6 or button.status.unittype<9 then
                         if not HealBot_Action_ShouldHealSomePet(button.frame) then
-                            HealBot_Action_HidePanel(button.frame);
+                            HealBot_Action_HidePanel(button.frame)
                         end
                     elseif not HealBot_Action_ShouldHealSome(button.frame) then
-                        HealBot_Action_HidePanel(button.frame);
+                        HealBot_Action_HidePanel(button.frame)
                     end
                 end
             end
@@ -3240,6 +3262,33 @@ function HealBot_Action_ShowHideFrames(button)
     end
 end
 
+function HealBot_Action_ShowHideFrameOption(frame)
+    if not HealBot_Data["UILOCK"] then
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]>1 then 
+            if not HealBot_Data["UILOCK"] then
+                if frame==10 then
+                    HealBot_Action_HidePanel(10)
+                elseif frame>7 then
+                    HealBot_Action_CheckHideFrameExtras()
+                elseif not HealBot_Action_ShouldHealSomePet(frame) and not HealBot_Action_ShouldHealSome(frame) then
+                    HealBot_Action_HidePanel(frame)
+                end
+            end
+        elseif not HealBot_Action_FrameIsVisible(frame) then
+            if frame>5 then
+                if frame<8 then
+                    HealBot_nextRecalcParty(2)
+                elseif frame==8 then
+                    HealBot_nextRecalcParty(3) 
+                elseif frame==9 then 
+                    HealBot_nextRecalcParty(4)
+                end
+            else
+                HealBot_nextRecalcParty(6)
+            end
+        end
+    end
+end
 function HealBot_Action_Refresh(button)
     if button then
         HealBot_Action_UpdateDebuffButton(button)
@@ -3303,7 +3352,7 @@ function HealBot_Action_HealUnit_OnLeave(self)
 end
 
 function HealBot_Action_OptionsButton_OnClick(self)
-    HealBot_TogglePanel(HealBot_Options);
+    HealBot_TogglePanel(HealBot_Options, true);
 end
 
 local usedSmartCast=nil
@@ -3481,9 +3530,6 @@ end
 local HealBot_Action_Init={}
 function HealBot_Action_OnShow(self)
     if HealBot_Action_luVars["FrameInitDone"] then
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["OPENSOUND"] then
-            PlaySound(SOUNDKIT.IG_ABILITY_OPEN);
-        end
         if not HealBot_Action_Init[self.id] then
             HealBot_Action_SetFrameColours(self)
             HealBot_Action_Init[self.id]=true
@@ -3523,9 +3569,21 @@ end
 
 function HealBot_Action_OnMouseDown(self,button)
     if button=="LeftButton" then
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]==false or (HealBot_Globals.ByPassLock==1 and IsControlKeyDown() and IsAltKeyDown()) then
+        local modKey=1 -- Not Locked
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]>2 then
+            if IsAltKeyDown() then 
+                if IsControlKeyDown() then
+                    modKey=5
+                else
+                    modKey=4
+                end
+            elseif IsControlKeyDown() then
+                modKey=3
+            end
+        end
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]==modKey then
             HealBot_Action_luVars["FrameMoving"]=true
-            HealBot_StartMoving(self);
+            HealBot_StartMoving(self, self.id);
         end
     end
 end
@@ -3536,13 +3594,6 @@ function HealBot_Action_OnMouseUp(self,button)
         HealBot_Action_luVars["FrameMoving"]=false
     elseif button=="RightButton" and not HealBot_Data["UILOCK"] and HealBot_Globals.RightButtonOptions then
         HealBot_Action_OptionsButton_OnClick();
-    end
-end
-
-function HealBot_Action_OnDragStart(self)
-    if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]==false then
-        HealBot_Action_luVars["FrameMoving"]=true
-        HealBot_StartMoving(self);
     end
 end
 
@@ -3662,101 +3713,207 @@ function HealBot_Action_StickyFrameStuckTo(hbCurFrame,stuckTo,stuckPoint,stuckTo
     HealBot_Action_StickyFrameSetPoint(hbCurFrame,stuckTo,stuckPoint,stuckToPoint,HBframe,cf)
 end
 
+local vStickyFrameCurInd={[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0,}
+local vStickyFrameParInd={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,}
+local vStickyFrameLastPar=0
+local vStickyFrameLastParInd=0
+local vsfIndCols={["R"]=1,["G"]=1,["B"]=.025}
+function HealBot_Action_StickyFrameIndCols()
+    vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"]=HealBot_Options_OptionsThemeCols()
+end
+
+function HealBot_Action_StickyFrameCanStickTo(frame,frameind,parent,parentind)
+    if vStickyFrameCurInd[frame]~=frameind then
+        if vStickyFrameCurInd[frame]>0 then
+            grpFrameStickyInd[frame][vStickyFrameCurInd[frame]]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],0)
+        end
+        if frameind>0 then
+            grpFrameStickyInd[frame][frameind]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],1)
+        end
+        vStickyFrameCurInd[frame]=frameind
+    end
+    if parent==0 then
+        if vStickyFrameLastPar>0 then
+            grpFrameStickyInd[vStickyFrameLastPar][vStickyFrameLastParInd]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],0)
+            vStickyFrameParInd[vStickyFrameLastPar]=0
+            vStickyFrameLastPar=0
+            vStickyFrameLastParInd=0
+        end
+    else
+        if vStickyFrameLastPar~=parent then
+            if vStickyFrameLastPar>0 then
+                grpFrameStickyInd[vStickyFrameLastPar][vStickyFrameLastParInd]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],0)
+                vStickyFrameParInd[vStickyFrameLastPar]=0
+                vStickyFrameLastPar=parent
+            end
+        end
+        if vStickyFrameParInd[parent]~=parentind then
+            if vStickyFrameParInd[parent]>0 then
+                grpFrameStickyInd[parent][vStickyFrameParInd[parent]]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],0)
+            end
+            if parentind>0 then
+                grpFrameStickyInd[parent][parentind]:SetStatusBarColor(vsfIndCols["R"],vsfIndCols["G"],vsfIndCols["B"],1)
+                vStickyFrameLastPar=parent
+                vStickyFrameLastParInd=parentind
+            end
+        end
+        vStickyFrameParInd[parent]=parentind
+    end
+end
+
 local vStickyFrameIsSticky,vStickyFrameLeft,vStickyFrameRight,vStickyFrameTop,vStickyFrameBottom=false,0,0,0,0
-local vStickyFrameSen=25
-function HealBot_Action_StickyFrame(hbCurFrame, HBframe)
+local vStickyFrameCurAnchor=0
+local vStickyFrameParAnchor=0
+local vStickyFrameSen=28
+function HealBot_Action_CheckForStickyFrame(frame,stick)
     vStickyFrameIsSticky=false
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"] and hbCurFrame>1 then
-        if Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCK"] and
-           HealBot_Action_FrameIsVisible(Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCKTO"]) then
-            HealBot_Action_StickyFrameSetPoint(hbCurFrame,
-                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCKTO"],
-                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCKPOINT"],
-                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCKTOPOINT"],
-                                               HBframe,
-                                               grpFrame[Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][hbCurFrame]["STUCKTO"]])
-            vStickyFrameIsSticky=true
-        else
-            vStickyFrameLeft=HBframe:GetLeft()
-            vStickyFrameRight=HBframe:GetRight()
-            vStickyFrameTop=HBframe:GetTop()
-            vStickyFrameBottom=HBframe:GetBottom()
-            for x=1,hbCurFrame-1 do
-                if HealBot_Action_FrameIsVisible(x) then
-                    if grpFrame[x]:GetLeft() then
-                        if grpFrame[x]:GetLeft()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameRight+vStickyFrameSen) and
-                           grpFrame[x]:GetTop()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameTop+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"TOPRIGHT","TOPLEFT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetLeft()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameLeft+vStickyFrameSen) and
-                           grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"BOTTOMLEFT","TOPLEFT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetRight()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameRight+vStickyFrameSen) and
-                           grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"BOTTOMRIGHT","TOPRIGHT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetRight()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameLeft+vStickyFrameSen) and
-                           grpFrame[x]:GetTop()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameTop+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"TOPLEFT","TOPRIGHT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetRight()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameLeft+vStickyFrameSen) and
-                           grpFrame[x]:GetBottom()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameBottom+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"BOTTOMLEFT","BOTTOMRIGHT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetRight()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameRight+vStickyFrameSen) and
-                           grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"TOPRIGHT","BOTTOMRIGHT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetLeft()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameLeft+vStickyFrameSen) and
-                           grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"TOPLEFT","BOTTOMLEFT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetLeft()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameRight+vStickyFrameSen) and
-                           grpFrame[x]:GetBottom()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameBottom+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"BOTTOMRIGHT","BOTTOMLEFT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) and
-                               ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)>(((vStickyFrameLeft+vStickyFrameRight)/2)-vStickyFrameSen) and
-                               ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)<(((vStickyFrameLeft+vStickyFrameRight)/2)+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"BOTTOM","TOP",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) and
-                               ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)>(((vStickyFrameLeft+vStickyFrameRight)/2)-vStickyFrameSen) and
-                               ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)<(((vStickyFrameLeft+vStickyFrameRight)/2)+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"TOP","BOTTOM",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetLeft()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameRight+vStickyFrameSen) and
-                               ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)>(((vStickyFrameTop+vStickyFrameBottom)/2)-vStickyFrameSen) and
-                               ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)<(((vStickyFrameTop+vStickyFrameBottom)/2)+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"RIGHT","LEFT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
-                        elseif grpFrame[x]:GetRight()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameLeft+vStickyFrameSen) and
-                               ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)>(((vStickyFrameTop+vStickyFrameBottom)/2)-vStickyFrameSen) and
-                               ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)<(((vStickyFrameTop+vStickyFrameBottom)/2)+vStickyFrameSen) then
-                            HealBot_Action_StickyFrameStuckTo(hbCurFrame,x,"LEFT","RIGHT",HBframe,grpFrame[x])
-                            vStickyFrameIsSticky=true
-                            break
+    vStickyFrameCurAnchor=0
+    vStickyFrameParAnchor=0
+    vStickyFrameLeft=grpFrame[frame]:GetLeft()
+    vStickyFrameRight=grpFrame[frame]:GetRight()
+    vStickyFrameTop=grpFrame[frame]:GetTop()
+    vStickyFrameBottom=grpFrame[frame]:GetBottom()
+    for x=1,frame-1 do
+        if HealBot_Action_FrameIsVisible(x) then
+            if grpFrame[x]:GetLeft() then
+                if grpFrame[x]:GetLeft()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameRight+vStickyFrameSen) then
+                    if grpFrame[x]:GetTop()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameTop+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"TOPRIGHT","TOPLEFT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,4,x,12)
                         end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif grpFrame[x]:GetBottom()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameBottom+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"BOTTOMRIGHT","BOTTOMLEFT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,6,x,10)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)>(((vStickyFrameTop+vStickyFrameBottom)/2)-vStickyFrameSen) and
+                           ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)<(((vStickyFrameTop+vStickyFrameBottom)/2)+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"RIGHT","LEFT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,5,x,11)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
                     end
+                elseif grpFrame[x]:GetLeft()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameLeft+vStickyFrameSen) then
+                    if grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"BOTTOMLEFT","TOPLEFT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,9,x,1)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"TOPLEFT","BOTTOMLEFT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,1,x,9)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    end
+                elseif grpFrame[x]:GetRight()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameRight+vStickyFrameSen) then
+                    if grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"BOTTOMRIGHT","TOPRIGHT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,7,x,3)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"TOPRIGHT","BOTTOMRIGHT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,3,x,7)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    end
+                elseif grpFrame[x]:GetRight()>(vStickyFrameLeft-vStickyFrameSen) and grpFrame[x]:GetRight()<(vStickyFrameLeft+vStickyFrameSen) then
+                    if grpFrame[x]:GetTop()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameTop+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"TOPLEFT","TOPRIGHT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,12,x,4)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif grpFrame[x]:GetBottom()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameBottom+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"BOTTOMLEFT","BOTTOMRIGHT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,10,x,6)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    elseif ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)>(((vStickyFrameTop+vStickyFrameBottom)/2)-vStickyFrameSen) and
+                           ((grpFrame[x]:GetTop()+grpFrame[x]:GetBottom())/2)<(((vStickyFrameTop+vStickyFrameBottom)/2)+vStickyFrameSen) then
+                        if stick then
+                            HealBot_Action_StickyFrameStuckTo(frame,x,"LEFT","RIGHT",grpFrame[frame],grpFrame[x])
+                        else
+                            HealBot_Action_StickyFrameCanStickTo(frame,11,x,5)
+                        end
+                        vStickyFrameIsSticky=true
+                        break
+                    end
+                elseif grpFrame[x]:GetTop()>(vStickyFrameBottom-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameBottom+vStickyFrameSen) and
+                       ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)>(((vStickyFrameLeft+vStickyFrameRight)/2)-vStickyFrameSen) and
+                       ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)<(((vStickyFrameLeft+vStickyFrameRight)/2)+vStickyFrameSen) then
+                    if stick then
+                        HealBot_Action_StickyFrameStuckTo(frame,x,"BOTTOM","TOP",grpFrame[frame],grpFrame[x])
+                    else
+                        HealBot_Action_StickyFrameCanStickTo(frame,8,x,2)
+                    end
+                    vStickyFrameIsSticky=true
+                    break
+                elseif grpFrame[x]:GetBottom()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetBottom()<(vStickyFrameTop+vStickyFrameSen) and
+                       ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)>(((vStickyFrameLeft+vStickyFrameRight)/2)-vStickyFrameSen) and
+                       ((grpFrame[x]:GetLeft()+grpFrame[x]:GetRight())/2)<(((vStickyFrameLeft+vStickyFrameRight)/2)+vStickyFrameSen) then
+                    if stick then
+                        HealBot_Action_StickyFrameStuckTo(frame,x,"TOP","BOTTOM",grpFrame[frame],grpFrame[x])
+                    else
+                        HealBot_Action_StickyFrameCanStickTo(frame,2,x,8)
+                    end
+                    vStickyFrameIsSticky=true
+                    break
                 end
             end
         end
-        if not vStickyFrameIsSticky then
-            hbStickyFrameGetCoords[hbCurFrame]=false
+    end
+    if not vStickyFrameIsSticky and not stick then
+        HealBot_Action_StickyFrameCanStickTo(frame,0,0,0)
+    end
+end
+
+function HealBot_Action_StickyFrame(frame)
+    vStickyFrameIsSticky=false
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"] and frame>1 then
+        if Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCK"] and
+           HealBot_Action_FrameIsVisible(Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCKTO"]) then
+            HealBot_Action_StickyFrameSetPoint(frame,
+                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCKTO"],
+                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCKPOINT"],
+                                               Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCKTOPOINT"],
+                                               grpFrame[frame],
+                                               grpFrame[Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCKTO"]])
+            vStickyFrameIsSticky=true
+        else
+            HealBot_Action_CheckForStickyFrame(frame,true)
         end
-        HealBot_Options_ActionAnchor_SetAlpha(hbCurFrame)
+        if not vStickyFrameIsSticky then
+            hbStickyFrameGetCoords[frame]=false
+        end
+        HealBot_Options_ActionAnchor_SetAlpha(frame)
     end
     return vStickyFrameIsSticky
 end

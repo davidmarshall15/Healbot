@@ -898,7 +898,7 @@ function HealBot_Panel_SetupExtraBars(frame)
     if hbBarsPerFrame[frame]>0 then
         if HealBot_Config.DisabledNow==0 then
             HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
-            if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==false or HealBot_Data["UILOCK"]) then
+            if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==1 or HealBot_Data["UILOCK"]) then
                 HealBot_Action_ShowPanel(frame)
             end
         else
@@ -997,7 +997,7 @@ function HealBot_Panel_SetupBars()
         if hbBarsPerFrame[j]>0 then    
             if HealBot_Config.DisabledNow==0 then
                 HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
-                if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==false or HealBot_Data["UILOCK"]) then
+                if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==1 or HealBot_Data["UILOCK"]) then
                     HealBot_Action_ShowPanel(j)
                 end
             else
@@ -1239,12 +1239,20 @@ function HealBot_Panel_TestBarsOn()
                 xRaidBars=xRaidBars-HealBot_Globals.TestBars["TARGETS"]
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
-            if healGroups[gl]["STATE"] and HealBot_Globals.TestBars["PROFILE"]>1 and xRaidBars>0 then
+            if healGroups[gl]["STATE"] and xRaidBars>0 then
                 if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 then
                     if xRaidBars<5 then
-                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
+                        if HealBot_Globals.TestBars["PROFILE"]>1 then
+                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
+                        else
+                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,xRaidBars)
+                        end
                     else
-                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,5)
+                        if HealBot_Globals.TestBars["PROFILE"]>1 then
+                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,5)
+                        else
+                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,5)
+                        end
                     end
                     if xRaidBars>5 then
                         if xRaidBars<10 then
@@ -1291,8 +1299,10 @@ function HealBot_Panel_TestBarsOn()
                     if xRaidBars>35 then
                         HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,36,xRaidBars)
                     end
-                else
+                elseif HealBot_Globals.TestBars["PROFILE"]>1 then
                     HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
+                else
+                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,xRaidBars)
                 end
             end
         end
@@ -1327,7 +1337,7 @@ function HealBot_Panel_TestBarsOn()
         for x,_ in pairs(HealBot_Action_HealButtons) do
             HealBot_Action_HealButtons[x]=nil;
         end 
-        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_OPTIONS_PETHEALS,1,HealBot_Globals.TestBars["PETS"])
+        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
         HealBot_Panel_SetupExtraBars(7)
     else
         HealBot_Action_HidePanel(7)
@@ -1451,15 +1461,9 @@ function HealBot_Panel_enemyBar(eUnit)
 end
 
 function HealBot_Panel_checkEnemyBar(eUnit, pUnit, existsShow)
-    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["HIDE"] then
-        if HealBot_Data["UILOCK"] then
-            if existsShow then
-                if UnitExists(eUnit) and UnitExists(pUnit) then
-                    HealBot_Panel_enemyBar(eUnit)
-                end
-            else
-                HealBot_Panel_enemyBar(eUnit)
-            end
+    if existsShow then
+        if UnitExists(eUnit) and UnitExists(pUnit) then
+            HealBot_Panel_enemyBar(eUnit)
         end
     else
         HealBot_Panel_enemyBar(eUnit)
@@ -1742,13 +1746,13 @@ function HealBot_Panel_enemyTargets()
     end
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"] then
         for _,xUnit in pairs(HealBot_MainTanks) do
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"])
+            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWTANK"])
         end
     end
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"] then
         table.foreach(HealBot_MyHealTargets, function (index,xGUID)
             xUnit=hbPanel_dataGUIDs[xGUID] or hbPanel_dataPetGUIDs[xGUID] or "unknown"
-            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"])
+            HealBot_Panel_checkEnemyBar(xUnit.."target", xUnit, Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"])
         end)
     end
     
@@ -2321,10 +2325,10 @@ function HealBot_Panel_FocusChanged(preCombat)
     end
 end
 
-function HealBot_Panel_EnemyChanged()
+function HealBot_Panel_EnemyChanged(preCombat)
     hbCurrentFrame=10
     hbBarsPerFrame[hbCurrentFrame]=0
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] and preCombat then
         i[hbCurrentFrame]=0
         HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_enemyTargets()
@@ -2633,7 +2637,7 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     elseif changeType==3 then
         HealBot_Panel_TargetChanged(preCombat)
     elseif changeType==5 then
-        HealBot_Panel_EnemyChanged()
+        HealBot_Panel_EnemyChanged(preCombat)
     elseif changeType==4 then
         HealBot_Panel_FocusChanged(preCombat)
     elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
@@ -2680,7 +2684,6 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             else
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end
-                HealBot_nextRecalcParty(5)
             end
             HealBot_Panel_DoPartyChanged(preCombat, 3)
             HealBot_Panel_DoPartyChanged(preCombat, 4)
@@ -2692,7 +2695,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             HealBot_Globals.AutoCacheSize=nMembers
         end
         HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]/nMembers),4))
-        HealBot_fastUpdateEveryFrame(5)
+        HealBot_fastUpdateEveryFrame(12)
     end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

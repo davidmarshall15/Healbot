@@ -141,6 +141,7 @@ function HealBot_Init_Spells_Defaults()
     end  
     HealBot_Options_InitBuffList()
     HealBot_Aura_InitData()
+    HealBot_setOptions_Timer(18)
     HealBot_setOptions_Timer(15)
     HealBot_setOptions_Timer(12)
     HealBot_setOptions_Timer(11)  

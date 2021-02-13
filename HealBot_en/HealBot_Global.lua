@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.2.8";
+﻿HEALBOT_VERSION    = "9.0.2.9";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.6" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.7" end
 
 function HealBot_globalVars()
     --Consumables
@@ -80,6 +80,8 @@ function HealBot_globalVars()
     HEALBOT_BATTLE_SCARRED_AUGMENT          = 270058 --GetSpellInfo(270058) or "--Battle-Scarred Augment"
     HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE   = 174906 --GetItemInfo(174906) or "--Lightning-Forged Augment Rune"
     HEALBOT_LIGHTNING_FORGED_AUGMENT        = 317065 --GetSpellInfo(317065) or "--Battle-Scarred Augment"
+    HEALBOT_VEILED_AUGMENT_RUNE             = 181468 --GetItemInfo(181468) or "--Veiled Augment Rune"
+    HEALBOT_VEILED_AUGMENTATION             = 347901 --GetSpellInfo(347901) or "--Veiled Augmentation"
     HEALBOT_TAILWIND_SAPPHIRE               = 284567 --GetItemInfo(284567) or "--Tailwind Sapphire"
     HEALBOT_TAILWIND                        = 284573 --GetSpellInfo(284573) or "--Tailwind"
     HEALBOT_AMETHYST_OF_THE_SHADOW_KING     = 284558 --GetItemInfo(284558) or "--Amethyst of the Shadow King"
@@ -235,11 +237,12 @@ function HealBot_globalVars()
     HEALBOT_SPIRIT_OF_REDEMPTION            = 27827 --GetSpellInfo(20711) or "--Spirit of Redemption";
     HEALBOT_HOLY_WARD                       = 213610 --GetSpellInfo(213610) or "--Holy Ward";
     HBC_HOLY_NOVA                           = 15237
+    HEALBOT_UNHOLY_HOVA                     = 324724
     
     --Shaman
     HEALBOT_CHAIN_HEAL                      = 1064 --GetSpellInfo(1064) or "--Chain Heal";
     HEALBOT_HEALING_RAIN                    = 73920 --GetSpellInfo(73920) or "--Healing Rain";
-    HEALBOT_HEALING_STREAM_TOTEM            = 119523 --GetSpellInfo(119523) or "--Healing Stream Totem";
+    HEALBOT_HEALING_STREAM_TOTEM            = 5394 --GetSpellInfo(119523) or "--Healing Stream Totem";
     HEALBOT_HEALING_SURGE                   = 8004 --GetSpellInfo(8004) or "--Healing Surge";
     HEALBOT_HEALING_TIDE_TOTEM              = 108280 --GetSpellInfo(108280) or "--Healing Tide Totem";
     HEALBOT_HEALING_WAVE                    = 77472 --GetSpellInfo(77472) or "--Healing Wave";
