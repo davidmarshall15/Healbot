@@ -712,6 +712,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux2" inherits="HealBot_StatusBar">
         <Anchors>
@@ -728,15 +741,15 @@
         </Anchors>
         <Layers>
           <Layer level="OVERLAY">
-            <FontString name="$parent_text" inherits="NumberFontNormalSmall">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
                 <Anchors>
-                    <Anchor point="BOTTOM">
+                    <Anchor point="CENTER">
                         <Offset>
                             <AbsDimension x="0" y="0"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
-            </FontString> 
+            </FontString>
           </Layer>
         </Layers>
       </StatusBar>
@@ -753,6 +766,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux4" inherits="HealBot_StatusBar">
         <Anchors>
@@ -767,6 +793,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux5" inherits="HealBot_StatusBar">
         <Anchors>
@@ -781,6 +820,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux6" inherits="HealBot_StatusBar">
         <Anchors>
@@ -795,6 +847,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux7" inherits="HealBot_StatusBar">
         <Anchors>
@@ -809,6 +874,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux8" inherits="HealBot_StatusBar">
         <Anchors>
@@ -823,6 +901,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentAux9" inherits="HealBot_StatusBar">
         <Anchors>
@@ -837,6 +928,19 @@
             </Offset>
           </Anchor>
         </Anchors>
+        <Layers>
+          <Layer level="OVERLAY">
+            <FontString name="$parent_Txt" inherits="NumberFontNormalSmall">
+                <Anchors>
+                    <Anchor point="CENTER">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
       </StatusBar>
       <StatusBar name="$parentBar2" inherits="HealBot_StatusBar">
         <Anchors>

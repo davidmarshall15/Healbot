@@ -119,7 +119,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
 
-    if not UnitIsUnit("player",button.unit) and HealBot_UnitInRange(button.unit, sName, false)<1 then
+    if not UnitIsUnit("player",button.unit) and HealBot_UnitInRange(button.unit, sName)<1 then
         return sName, 1,0.5
     end
  
@@ -438,7 +438,7 @@ function HealBot_Action_GetTimeOffline(button)
             else
                 timeOffline = timeOffline..seconds.." secs";
             end
-        end                        
+        end
     end      
     return timeOffline;
 end
@@ -538,7 +538,7 @@ function HealBot_Action_DoRefreshTooltip()
     local spellButton5 = HealBot_Tooltip_SpellPattern(xButton, "Button5");
     linenum = 1
 
-    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and UnitExists(xUnit) and UnitIsFriend("player",xButton.unit) then 
+    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and xButton.status.current<10 and UnitIsFriend("player",xButton.unit) then 
         local z=spellLeft;
         spellLeft=HealBot_Action_SmartCast(xButton) or z;
     end
@@ -621,7 +621,6 @@ function HealBot_Action_DoRefreshTooltip()
                 if UnitOffline then 
                     HealBot_Tooltip_SetLine(linenum,HB_TOOLTIP_OFFLINE..": "..UnitOffline,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                 elseif zone and not strfind(zone,"Level") then
-                    --if zone==HB_TOOLTIP_OFFLINE then xButton.status.offline = GetTime() end
                     HealBot_Tooltip_SetLine(linenum,zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                 else
                     HealBot_Tooltip_SetLine(linenum," ",1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)

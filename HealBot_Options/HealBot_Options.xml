@@ -455,40 +455,12 @@
                       <OnMouseDown>HealBot_Options_ShowPanel(self, 3, 304); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1004)</OnMouseDown>
                     </Scripts>
                   </Button>
-                  <Button name="HealBot_Contents_Button305">
-                    <Size>
-                      <AbsDimension x="168" y="20"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button304"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-20"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString  name= "HealBot_Contents_ButtonT305Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_SKINS_PROT">
-                          <Anchors>
-                            <Anchor point="LEFT" relativeTo="HealBot_Contents_Button305" relativePoint="LEFT">
-                              <Offset>
-                                <AbsDimension x="28" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnMouseDown>HealBot_Options_ShowPanel(self, 3, 305); HealBot_Options_ShowSkinsPanel("HealBot_Options_ProtSkinsFrame", 1005)</OnMouseDown>
-                    </Scripts>
-                  </Button>
                   <Button name="HealBot_Contents_Button307">
                     <Size>
                       <AbsDimension x="168" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button305"  relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button304"  relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-20"/>
                         </Offset>
@@ -2575,12 +2547,12 @@
             <Frames>
               <StatusBar name="HealBot_Options_OverrideEffectb">
                 <Size>
-                  <AbsDimension x="145" y="24"/>
+                  <AbsDimension x="190" y="25"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="11" y="-10"/>
+                      <AbsDimension x="11" y="-11"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -2602,43 +2574,14 @@
                 <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                 <BarColor r="0.2" g="0.2" b="0.2"/>
               </StatusBar>
-              <StatusBar name="HealBot_Options_OverrideProtb">
+              <StatusBar name="HealBot_Options_OverrideChatb">
                 <Size>
-                  <AbsDimension x="145" y="24"/>
+                  <AbsDimension x="190" y="25"/>
                 </Size>
                 <Anchors>
                   <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideEffectb" relativePoint="RIGHT">
                     <Offset>
-                      <AbsDimension x="8" y="0"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name= "HealBot_Options_OverrideProtbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TAB_PROTECTION">
-                      <Anchors>
-                        <Anchor point="CENTER"></Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                  <OnMouseDown>HealBot_Options_ShowPanel(self, 10); HealBot_Options_ShowOverridePanel("HealBot_Options_Override_ProtFrame", "HealBot_Options_OverrideProtb")</OnMouseDown>
-                  <OnEnter>HealBot_Options_Show_Help("OVERRIDESPROT",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("OVERRIDESPROT",false)</OnLeave>
-                </Scripts>
-                <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
-                <BarColor r="0.2" g="0.2" b="0.2"/>
-              </StatusBar>
-              <StatusBar name="HealBot_Options_OverrideChatb">
-                <Size>
-                  <AbsDimension x="145" y="24"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideProtb" relativePoint="RIGHT">
-                    <Offset>
-                      <AbsDimension x="8" y="0"/>
+                      <AbsDimension x="17" y="0"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -2662,12 +2605,12 @@
               </StatusBar>
               <StatusBar name="HealBot_Options_Overrideframesb">
                 <Size>
-                  <AbsDimension x="145" y="24"/>
+                  <AbsDimension x="190" y="25"/>
                 </Size>
                 <Anchors>
                   <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideChatb" relativePoint="RIGHT">
                     <Offset>
-                      <AbsDimension x="8" y="0"/>
+                      <AbsDimension x="17" y="0"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -3099,242 +3042,6 @@
                           <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
                         </Scripts>
                       </Button>
-                    </Frames>
-                  </Frame>
-                </Frames>
-              </Frame>
-              <Frame name="HealBot_Options_Override_ProtFrame" hidden="true" inherits="BackdropTemplate">
-                <Size>
-                  <AbsDimension y="620"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="0" y="-45"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="0" y="-45"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="BACKGROUND">
-                    <FontString name="HealBot_OverrideProt_FontStr" text="HEALBOT_OPTIONS_TAB_PROTECTION" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOP">
-                          <Offset>
-                            <AbsDimension x="0" y="-8" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Frames>
-                  <Frame name="HealBot_Options_Override_ProtUse" inherits="UIDropDownMenuTemplate">
-                    <Anchors>
-                      <Anchor point="TOP">
-                        <Offset>
-                          <AbsDimension x="20" y="-40" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="healbotOverride_Protfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_OVERRIDE_PROT">
-                          <Anchors>
-                            <Anchor point="RIGHT" relativeTo="HealBot_Options_Override_ProtUse" relativePoint="LEFT">
-                              <Offset>
-                                <AbsDimension x="10" y="3"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 250)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
-                    </Scripts>
-                  </Frame>                  
-                  <Frame name="HealBot_Options_OverrideCrashProtPanel" inherits="BackdropTemplate">
-                    <Size>
-                      <AbsDimension y="255"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="20" y="-90"/>
-                        </Offset>
-                      </Anchor>
-                      <Anchor point="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="-20" y="-90"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Frames>
-                      <CheckButton name="HealBot_Options_OverrideCrashProt" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-50" y="-30" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_OverrideCrashProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROT",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideUseGeneralMacros" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-30" y="-55" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_Options_OverridecpMacroSave" text="HEALBOT_CP_MACRO_SAVE" inherits="GameFontNormalSmall">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="38" y="-45" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                            <FontString name="HealBot_Options_OverridecpMacroSaveTime" inherits="GameFontNormalSmall">
-                              <Anchors>
-                                <Anchor point="LEFT" relativeTo="HealBot_Options_OverridecpMacroSave" relativePoint="RIGHT">
-                                  <Offset>
-                                    <AbsDimension x="5" y="0" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnClick>HealBot_Options_OverrideUseGeneralMacros_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTGENERALMACRO",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTGENERALMACRO",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <EditBox name="HealBot_Options_OverrideCrashProtEditBox" inherits="HealBot_Options_EditBoxTemplate">
-                        <Size>
-                          <AbsDimension x="175" y="20"/>
-                        </Size>
-                        <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_Options_OverridecpMacroName" text="HEALBOT_CP_MACRO_BASE" inherits="GameFontNormal">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="15" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Anchors>
-                          <Anchor point="TOPLEFT">
-                            <Offset>
-                              <AbsDimension x="55" y="-175"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnTextChanged>HealBot_Options_OverrideCrashProt_OnTextChanged(self)</OnTextChanged>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTBASEMACRO",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTBASEMACRO",false)</OnLeave>
-                        </Scripts>
-                      </EditBox>
-                      <Slider name="HealBot_Options_OverrideCrashProtStartTime" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="215" y="18" />
-                        </Size>
-                        <Anchors>
-                          <Anchor point="TOPLEFT">
-                            <Offset>
-                              <AbsDimension x="310" y="-175" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnValueChanged>HealBot_Options_OverrideCrashProtStartTime_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTLOGONDURATION",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTLOGONDURATION",false)</OnLeave>
-                        </Scripts>
-                      </Slider>
-                    </Frames>
-                  </Frame>
-                  <Frame name="HealBot_Options_OverrideCombatProtPanel" inherits="BackdropTemplate">
-                    <Size>
-                      <AbsDimension y="230"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="20" y="20"/>
-                        </Offset>
-                      </Anchor>
-                      <Anchor point="BOTTOMRIGHT">
-                        <Offset>
-                          <AbsDimension x="-20" y="20"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Frames>
-                      <CheckButton name="HealBot_Options_OverrideCombatProt" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-58" y="-80" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_OverrideCombatProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROT",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideCombatPartyProt" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-40" y="-110" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_OverrideCombatPartyProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROTGROUP",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROTGROUP",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideCombatRaidProt" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-40" y="-130" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_OverrideCombatRaidProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROTRAID",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROTRAID",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -6243,7 +5950,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="95" y="-25" />
+                              <AbsDimension x="20" y="-40" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6253,25 +5960,65 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCSELF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_EnemyExistsPlayerTargets" inherits="SendMailRadioButtonTemplate">
+                      <Frame name="HealBot_Options_EnemyExistsPlayerTargets" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="200" y="" />
+                              <AbsDimension x="170" y="-2" />
                             </Offset>
                           </Anchor>
                         </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_EnemyOOC_FontStr" text="HEALBOT_OPTIONS_OUTOFCOMBAT" inherits="GameFontNormalSmall">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
                         <Scripts>
-                          <OnClick>HealBot_Options_EnemyExistsPlayerTargets_OnClick(self)</OnClick>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWSELF",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWSELF",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
+                      </Frame>
+                      <Frame name="HealBot_Options_EnemyCombatSelf" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_EnemyExistsPlayerTargets" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="-10" y="" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_EnemyCombat_FontStr" text="HEALBOT_OPTIONS_ENTERINGCOMBAT" inherits="GameFontNormalSmall">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWSELF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWSELF",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-18" />
+                              <AbsDimension x="0" y="-25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6281,25 +6028,39 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCTANKS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_EnemyExistsTankTargets" inherits="SendMailRadioButtonTemplate">
+                      <Frame name="HealBot_Options_EnemyExistsTankTargets" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="200" y="" />
+                              <AbsDimension x="170" y="-2" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_EnemyExistsTankTargets_OnClick(self)</OnClick>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWTANK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWTANK",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
+                      </Frame>
+                      <Frame name="HealBot_Options_EnemyCombatTanks" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_EnemyExistsTankTargets" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="-10" y="" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWTANK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWTANK",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-18" />
+                              <AbsDimension x="0" y="-25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6309,25 +6070,39 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCMYTARGETS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_EnemyExistsMyTargets" inherits="SendMailRadioButtonTemplate">
+                      <Frame name="HealBot_Options_EnemyExistsMyTargets" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="200" y="" />
+                              <AbsDimension x="170" y="-2" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_EnemyExistsMyTargets_OnClick(self)</OnClick>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWMYTARGETS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWMYTARGETS",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
+                      </Frame>
+                      <Frame name="HealBot_Options_EnemyCombatMyTargets" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_EnemyExistsMyTargets" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="-10" y="" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWMYTARGETS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWMYTARGETS",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <CheckButton name="HealBot_Options_ShowEnemyIncArena" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-18" />
+                              <AbsDimension x="0" y="-25" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6351,20 +6126,34 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCARENAPETS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_EnemyExistsArena" inherits="SendMailRadioButtonTemplate">
+                      <Frame name="HealBot_Options_EnemyExistsArena" inherits="UIDropDownMenuTemplate">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ShowEnemyIncArena" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="200" y="" />
+                              <AbsDimension x="170" y="-2" />
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_EnemyExistsArena_OnClick(self)</OnClick>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWARENA",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWARENA",false)</OnLeave>
                         </Scripts>
-                      </CheckButton>
+                      </Frame>
+                      <Frame name="HealBot_Options_EnemyCombatArena" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_EnemyExistsArena" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="-10" y="" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWARENA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWARENA",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
                       <Slider name="HealBot_Options_ShowEnemyNumBoss" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="450" y="18" />
@@ -6372,7 +6161,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-255" />
+                              <AbsDimension x="0" y="-270" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6386,7 +6175,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_ShowEnemyNumBoss" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="-70" y="-7" />
+                              <AbsDimension x="-70" y="-5" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6460,215 +6249,6 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYTARGETSIZE",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                    </Frames>
-                  </Frame>
-                </Frames>
-              </Frame>
-              <Frame name="HealBot_Options_ProtSkinsFrame" hidden="true" inherits="BackdropTemplate">
-                <Size>
-                  <AbsDimension y="540"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="15" y="-110"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-15" y="-110"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="BACKGROUND">
-                    <FontString name="HealBot_ProtSkin_FontStr" text="HEALBOT_OPTIONS_TAB_PROTECTION" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOP">
-                          <Offset>
-                            <AbsDimension x="0" y="-8" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Frames>
-                  <Frame name="HealBot_Options_CrashProtPanel" inherits="BackdropTemplate">
-                    <Size>
-                      <AbsDimension y="230"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="20" y="-40"/>
-                        </Offset>
-                      </Anchor>
-                      <Anchor point="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="-20" y="-40"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Frames>
-                      <CheckButton name="HealBot_Options_CrashProt" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-50" y="-20" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_CrashProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROT",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_UseGeneralMacros" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-30" y="-45" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_Options_cpMacroSave" text="HEALBOT_CP_MACRO_SAVE" inherits="GameFontNormalSmall">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="38" y="-45" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                            <FontString name="HealBot_Options_cpMacroSaveTime" text="HEALBOT_CP_MACRO_SAVE" inherits="GameFontNormalSmall">
-                              <Anchors>
-                                <Anchor point="LEFT" relativeTo="HealBot_Options_cpMacroSave" relativePoint="RIGHT">
-                                  <Offset>
-                                    <AbsDimension x="5" y="0" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnClick>HealBot_Options_UseGeneralMacros_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTGENERALMACRO",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTGENERALMACRO",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <EditBox name="HealBot_Options_CrashProtEditBox" inherits="HealBot_Options_EditBoxTemplate">
-                        <Size>
-                          <AbsDimension x="175" y="20"/>
-                        </Size>
-                        <Layers>
-                          <Layer level="BACKGROUND">
-                            <FontString name="HealBot_Options_cpMacroName" text="HEALBOT_CP_MACRO_BASE" inherits="GameFontNormalSmall">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="15" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Anchors>
-                          <Anchor point="TOPLEFT">
-                            <Offset>
-                              <AbsDimension x="55" y="-155"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnTextChanged>HealBot_Options_CrashProt_OnTextChanged(self)</OnTextChanged>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTBASEMACRO",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTBASEMACRO",false)</OnLeave>
-                        </Scripts>
-                      </EditBox>
-                      <Slider name="HealBot_Options_CrashProtStartTime" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="245" y="18" />
-                        </Size>
-                        <Anchors>
-                          <Anchor point="TOPLEFT">
-                            <Offset>
-                              <AbsDimension x="290" y="-155" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnValueChanged>HealBot_Options_CrashProtStartTime_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("USECRASHPROTLOGONDURATION",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECRASHPROTLOGONDURATION",false)</OnLeave>
-                        </Scripts>
-                      </Slider>
-                    </Frames>
-                  </Frame>
-                  <Frame name="HealBot_Options_CombatProtPanel" inherits="BackdropTemplate">
-                    <Size>
-                      <AbsDimension y="230"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="20" y="-290"/>
-                        </Offset>
-                      </Anchor>
-                      <Anchor point="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="-20" y="-290"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Frames>
-                      <CheckButton name="HealBot_Options_CombatProt" inherits="OptionsCheckButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-58" y="-80" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_CombatProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROT",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_CombatPartyProt" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-40" y="-110" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_CombatPartyProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROTGROUP",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROTGROUP",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
-                      <CheckButton name="HealBot_Options_CombatRaidProt" inherits="SendMailRadioButtonTemplate">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="-40" y="-130" />
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_CombatRaidProt_OnClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("USECOMBATPROTRAID",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("USECOMBATPROTRAID",false)</OnLeave>
-                        </Scripts>
-                      </CheckButton>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -18617,6 +18197,23 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginExtraButtonsFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginCombatProtFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

@@ -39,7 +39,6 @@ function HealBot_Lang_Options_enALL()
                                  ["CLASSTYPES"]="Class type configuration",
                         -- Overrides tab
                                  ["OVERRIDESEFFECTS"]="Overrides Effects tab.",
-                                 ["OVERRIDESPROT"]="Overrides Protection tab.",
                                  ["OVERRIDESCHAT"]="Overrides Chat tab.",
                                  ["OVERRIDESFRAMES"]="Overrides Frames tab.",
                                  ["OVERRIDESEFFECTSUSE"]=HEALBOT_OPTIONS_OVERRIDE_EFFECTS,
@@ -88,14 +87,6 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
                                  ["HEALBARSAGGROBARFLASHMIN"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MIN,
                                  ["HEALBARSAGGROBARFLASHMAX"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MAX,
-                        -- Skins Protection tab
-                                 ["USECRASHPROT"]=HEALBOT_OPTIONS_CRASHPROT,
-                                 ["USECRASHPROTGENERALMACRO"]=HEALBOT_OPTIONS_USEGENERALMACRO,
-                                 ["USECRASHPROTBASEMACRO"]=HEALBOT_CP_MACRO_BASE,
-                                 ["USECRASHPROTLOGONDURATION"]=HEALBOT_CP_STARTTIME,
-                                 ["USECOMBATPROT"]=HEALBOT_OPTIONS_COMBATPROT,
-                                 ["USECOMBATPROTGROUP"]=HEALBOT_OPTIONS_COMBATPROT,
-                                 ["USECOMBATPROTRAID"]=HEALBOT_OPTIONS_COMBATPROT,
                         -- Skins Chat tab
                                  ["CHATNONE"]=HEALBOT_OPTIONS_CASTNOTIFY1,
                                  ["CHATSELF"]=HEALBOT_OPTIONS_CASTNOTIFY2,
@@ -211,11 +202,15 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSVISENEMYSHOWTARGET"]=HEALBOT_ENEMY_SHOW_TARGET,
                                  ["HEALBARSVISENEMYTARGETSIZE"]=HEALBOT_ENEMY_TARGET_SIZE,
                                  ["HEALBARSVISENEMYDOUBLEWIDTH"]=HEALBOT_ENEMY_DOUBLE_WIDTH,
-                                 ["HEALBARSVISENEMYSHOWSELF"]=HEALBOT_ENEMY_EXISTS_SHOW,
-                                 ["HEALBARSVISENEMYSHOWTANK"]=HEALBOT_ENEMY_EXISTS_SHOW,
-                                 ["HEALBARSVISENEMYSHOWMYTARGETS"]=HEALBOT_ENEMY_EXISTS_SHOW,
-                                 ["HEALBARSVISENEMYSHOWARENA"]=HEALBOT_ENEMY_EXISTS_SHOW,
+                                 ["HEALBARSVISENEMYSHOWSELF"]=HEALBOT_OPTIONS_OUTOFCOMBAT,
+                                 ["HEALBARSVISENEMYSHOWTANK"]=HEALBOT_OPTIONS_OUTOFCOMBAT,
+                                 ["HEALBARSVISENEMYSHOWMYTARGETS"]=HEALBOT_OPTIONS_OUTOFCOMBAT,
+                                 ["HEALBARSVISENEMYSHOWARENA"]=HEALBOT_OPTIONS_OUTOFCOMBAT,
                                  ["HEALBARSVISENEMYSHOWBOSSES"]=HEALBOT_ENEMY_EXISTS_SHOW,
+                                 ["HEALBARSCOMBATENEMYSHOWSELF"]=HEALBOT_OPTIONS_ENTERINGCOMBAT,
+                                 ["HEALBARSCOMBATENEMYSHOWTANK"]=HEALBOT_OPTIONS_ENTERINGCOMBAT,
+                                 ["HEALBARSCOMBATENEMYSHOWMYTARGETS"]=HEALBOT_OPTIONS_ENTERINGCOMBAT,
+                                 ["HEALBARSCOMBATENEMYSHOWARENA"]=HEALBOT_OPTIONS_ENTERINGCOMBAT,
                         -- Skins Frames Bars Aggro tab
                                  ["BARSAGGRO"]="Bars Aggro",
                                  ["HEALBARSAGGROSHOW"]=HEALBOT_OPTION_AGGROTRACK,
@@ -469,7 +464,6 @@ function HealBot_Lang_Options_enALL()
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
                         -- Overrides tab
                                ["OVERRIDESEFFECTS"]="Show the Overrides Effects tab.",
-                               ["OVERRIDESPROT"]="Show the Overrides Protection tab.",
                                ["OVERRIDESCHAT"]="Show the Overrides Chat tab.",
                                ["OVERRIDESFRAMES"]="Show the Overrides Frames tab.",
                                ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
@@ -518,14 +512,6 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.",
                                ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Min - The minimum opacity.",
                                ["HEALBARSAGGROBARFLASHMAX"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Max - The maximum opacity.",
-                        -- Skins Protection tab
-                               ["USECRASHPROT"]="Crash protection guards against the negative\neffects of a healbot user disconnecting during combat.\nA small number of macro slots will store current\ngroup/raid data that can be used on logon during combat.",
-                               ["USECRASHPROTGENERALMACRO"]="Use global macro slots rather than per character.\nTo reduce overall usage this option is recommended\nwhen using Healbot on multiple characters.",
-                               ["USECRASHPROTBASEMACRO"]="Set a common text string to be\nused at the start of the macro names.",
-                               ["USECRASHPROTLOGONDURATION"]="Set how long protection data is valid after logon.",
-                               ["USECOMBATPROT"]="Combat protection reserves bars to guard against random\nmembers leaving/joining the group/raid during combat.\nThis option will reserve bars to make up\nthe numbers to standard group or raid sizes.",
-                               ["USECOMBATPROTGROUP"]="Use Combat Protection in Groups.",
-                               ["USECOMBATPROTRAID"]="Use Combat Protection in Raids.",
                         -- Skins Chat tab
                                ["CHATNONE"]="Do not send chat messages.",
                                ["CHATSELF"]="Send chat messages only to yourself, good for testing.",
@@ -641,11 +627,15 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISENEMYSHOWTARGET"]="Show a bar for the enemy target.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."For example:\n".._G["GREEN_FONT_COLOR_CODE"].."A boss might be boss2target (Retail Only)\n".._G["GREEN_FONT_COLOR_CODE"].."A tank might be raid2targettarget.",
                                ["HEALBARSVISENEMYTARGETSIZE"]="The percentage of the enemy bar width\nto be used by the enemy target bar.\n--\n".."|cff77c8ff".."Tip: Set a large width for Enemy bars.",
                                ["HEALBARSVISENEMYDOUBLEWIDTH"]="Double the total width for the Enemy and Enemy Target bars.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option only applies when "..HEALBOT_ENEMY_SHOW_TARGET.." is ON.",
-                               ["HEALBARSVISENEMYSHOWSELF"]="Only display bars when an enemy exists. This option is not available when in combat.\nHide the frame when out of combat using Close Automatically on the Frames>General tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Player target bar - When entering combat only display your target if the target exists.".._G["FONT_COLOR_CODE_CLOSE"],
-                               ["HEALBARSVISENEMYSHOWTANK"]="Only display bars when an enemy exists. This option is not available when in combat.\nHide the frame when out of combat using Close Automatically on the Frames>General tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Tank target bars - When entering combat only display tank targets if the target exists.".._G["FONT_COLOR_CODE_CLOSE"],
-                               ["HEALBARSVISENEMYSHOWMYTARGETS"]="Only display bars when an enemy exists. This option is not available when in combat.\nHide the frame when out of combat using Close Automatically on the Frames>General tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."My Private List target bars - When entering combat only display your private list targets if the target exists.".._G["FONT_COLOR_CODE_CLOSE"],
-                               ["HEALBARSVISENEMYSHOWARENA"]="Only display bars when an enemy exists. This option is not available when in combat.\nHide the frame when out of combat using Close Automatically on the Frames>General tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Arena opponent bars - When entering combat only display bars for existing opponents.".._G["FONT_COLOR_CODE_CLOSE"],
-                               ["HEALBARSVISENEMYSHOWBOSSES"]="Only display bars when an enemy exists. This option is not available when in combat.\nHide the frame when out of combat using Close Automatically on the Frames>General tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Boss bars - When entering combat only display bars for existing bosses.".._G["FONT_COLOR_CODE_CLOSE"],
+                               ["HEALBARSVISENEMYSHOWSELF"]="When to show your target.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when out of combat",
+                               ["HEALBARSVISENEMYSHOWTANK"]="When to show tank targets.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when out of combat",
+                               ["HEALBARSVISENEMYSHOWMYTARGETS"]="When to show your private list targets.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when out of combat",
+                               ["HEALBARSVISENEMYSHOWARENA"]="When to show arena opponents.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when out of combat",
+                               ["HEALBARSVISENEMYSHOWBOSSES"]="When to show boss bars.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This applies to both out of combat and when entering combat",
+                               ["HEALBARSCOMBATENEMYSHOWSELF"]="When to show your target.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when entering combat",
+                               ["HEALBARSCOMBATENEMYSHOWTANK"]="When to show the tank targets.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when entering combat",
+                               ["HEALBARSCOMBATENEMYSHOWMYTARGETS"]="When to show your private list targets.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when entering combat",
+                               ["HEALBARSCOMBATENEMYSHOWARENA"]="When to show arena opponents.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when entering combat",
                         -- Skins Frames Bars Aggro tab
                                ["BARSAGGRO"]="Show the Skins Frames Aggro tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This tab is not available when the Enemy frame is selected.",
                                ["HEALBARSAGGROSHOW"]="Turn On/Off monitoring aggro.",
@@ -656,7 +646,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROBARALERT"]="When using the aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
                         -- Skins Frames Bars Aux tab
                                ["BARSAUX"]="Show the Skins Frames Aux tab.",
-                               ["BARSAUXASSIGN"]="Assign a bar type to the auxiliary bar.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only Aux 1 shows Power Points when set to Power.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only Aux 2 shows enemy casting when set to Power.",
+                               ["BARSAUXASSIGN"]="Assign a bar type to the auxiliary bar.",
                                ["BARSAUXOVERLAP"]="Extend the size of the vertical or horizontal\nauxiliary bars when auxiliary bars exist on both\nthe left or right and above or below the health bar.",
                                ["BARSAUXCONFIG"]="Select the auxiliary bar to configure.",
                                ["BARSAUXCOLOUR"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the auxiliary bar.\nWhen custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
@@ -870,7 +860,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: Set spells for use with an MMO mouse on buttons 6 - 15",    
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.",    
                               }
 end
 
