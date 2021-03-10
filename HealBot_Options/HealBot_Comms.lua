@@ -45,6 +45,14 @@ function HealBot_Comms_SendAddonMessage()
     end
 end
 
+function HealBot_Comms_SendInstantAddonMsg(addon_id, msg)
+    if IsInRaid() then
+        C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
+    elseif IsInGroup() then
+        C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
+    end
+end
+
 function HealBot_Comms_GetChan(chan)
     if GetChannelName(chan)>0 then
         return GetChannelName(chan);

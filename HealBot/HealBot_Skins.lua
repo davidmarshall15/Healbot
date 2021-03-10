@@ -148,42 +148,6 @@ function HealBot_Skins_setIconAnchors(onBar, position, extra)
     end
 end
 
-function HealBot_Skins_ResetElement(element)
-    if element=="Icons" then
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.icon.reset=true
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            xButton.icon.reset=true
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.icon.reset=true
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.icon.reset=true
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.icon.reset=true
-        end
-    else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.skinreset=true
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            xButton.skinreset=true
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.skinreset=true
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.skinreset=true
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.skinreset=true
-        end
-    end
-end
-
 function HealBot_Skins_ResetSkin(barType,button,numcols)
     if button and button.frame then 
         frameScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]
@@ -391,9 +355,17 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                             btextheight2,
                             HealBot_Font_Outline[btextoutline2]);
             for x=1,9 do
-                b.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
-                                btextheight,
-                                HealBot_Font_Outline[btextoutline]);
+                b.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
+                                ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"]*frameScale),
+                                HealBot_Font_Outline[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["OUTLINE"]]);
+                b.gref.auxtxt[x]:ClearAllPoints();
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==1 then
+                    b.gref.auxtxt[x]:SetPoint("LEFT",b.gref.aux[x],"LEFT",4,0+Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+                elseif Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["ALIGN"]==2 then
+                    b.gref.auxtxt[x]:SetPoint("CENTER",b.gref.aux[x],"CENTER",0,0+Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+                else
+                    b.gref.auxtxt[x]:SetPoint("RIGHT",b.gref.aux[x],"RIGHT",-4,0+Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][b.frame]["OFFSET"])
+                end
             end
             b.gref.txt["text"]:ClearAllPoints();
             b.gref.txt["text2"]:ClearAllPoints();
@@ -760,14 +732,6 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         bar:SetScale(barScale + 0.01);
         bar:SetScale(barScale);
     else
-        if barType=="initAll" then
-            HealBot_Skins_ResetElement("Icons")
-            HealBot_Skins_ResetElement("Bar")
-        elseif barType=="initIcons" then
-            HealBot_Skins_ResetElement("Icons")
-        else
-            HealBot_Skins_ResetElement("Bar")
-        end
         HealBot_Panel_ResetHeaders()
         HealBot_setOptions_Timer(80)
         HealBot_setOptions_Timer(50)
@@ -879,6 +843,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.FrameAliasBar[SkinName] then Healbot_Config_Skins.FrameAliasBar[SkinName]={} end
     if not Healbot_Config_Skins.HealBar[SkinName] then Healbot_Config_Skins.HealBar[SkinName]={} end
     if not Healbot_Config_Skins.BarCol[SkinName] then Healbot_Config_Skins.BarCol[SkinName]={} end
+    if not Healbot_Config_Skins.AuxBarText[SkinName] then Healbot_Config_Skins.AuxBarText[SkinName]={} end
     if not Healbot_Config_Skins.BarIACol[SkinName] then Healbot_Config_Skins.BarIACol[SkinName]={} end
     if not Healbot_Config_Skins.BarText[SkinName] then Healbot_Config_Skins.BarText[SkinName]={} end
     if not Healbot_Config_Skins.BarTextCol[SkinName] then Healbot_Config_Skins.BarTextCol[SkinName]={} end
@@ -910,6 +875,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.FrameAliasBar[SkinName][gl] then Healbot_Config_Skins.FrameAliasBar[SkinName][gl]={} end
         if not Healbot_Config_Skins.HealBar[SkinName][gl] then Healbot_Config_Skins.HealBar[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarCol[SkinName][gl] then Healbot_Config_Skins.BarCol[SkinName][gl]={} end
+        if not Healbot_Config_Skins.AuxBarText[SkinName][gl] then Healbot_Config_Skins.AuxBarText[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarIACol[SkinName][gl] then Healbot_Config_Skins.BarIACol[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarText[SkinName][gl] then Healbot_Config_Skins.BarText[SkinName][gl]={} end
         if not Healbot_Config_Skins.BarTextCol[SkinName][gl] then Healbot_Config_Skins.BarTextCol[SkinName][gl]={} end
@@ -1254,6 +1220,18 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarCol[SkinName][gl]["BB"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["BB"]=0.7 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["BA"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["BA"]=0 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["BOUT"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["SHOW"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["SHOW"]=true end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["FONT"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["FONT"]=HealBot_Default_Font end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["HEIGHT"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["HEIGHT"]=9 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["OFFSET"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["OFFSET"]=0 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["ALIGN"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["ALIGN"]=2 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["OUTLINE"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["OUTLINE"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["MAXCHARS"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["MAXCHARS"]=0 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLTYPE"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLTYPE"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLR"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLR"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLG"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLG"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLB"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLB"]=1 end
+        if Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLA"]==nil then Healbot_Config_Skins.AuxBarText[SkinName][gl]["COLA"]=0.98 end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["OUTLINE"]==nil then Healbot_Config_Skins.HeadText[SkinName][gl]["OUTLINE"]=1 end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["FONT"]==nil then Healbot_Config_Skins.HeadText[SkinName][gl]["FONT"]=HealBot_Default_Font end
         if Healbot_Config_Skins.HeadText[SkinName][gl]["HEIGHT"]==nil then Healbot_Config_Skins.HeadText[SkinName][gl]["HEIGHT"]=9 end
@@ -1530,7 +1508,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDEBOSSF"]=false end
     if Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]=true end
     if Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]=false end
-    if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=15 end
+    if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=10 end
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if not Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"] then Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["FGDIMMING"] then Healbot_Config_Skins.General[SkinName]["FGDIMMING"]=2.5 end

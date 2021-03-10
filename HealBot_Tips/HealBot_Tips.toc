@@ -1,10 +1,10 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: HealBot Tooltips
 ## Author: Strife
 ## Notes: HealBot Tooltips, only loads if Tooltips are used
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.2.10
+## Version: 9.0.5.0
 
 Locale\HealBot_Localization.en.lua
 HealBot_Tooltip.lua

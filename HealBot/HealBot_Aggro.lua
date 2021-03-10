@@ -18,8 +18,8 @@ end
 function HealBot_Aggro_IndicatorUpdate(button)
     if button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
         if button.aggro.status==1 then
-            if HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]~="a1" then
-                HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]="a1"
+            if button.aggro.ind~=1 then
+                button.aggro.ind=1
                 button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
                 button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
                 button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
@@ -28,8 +28,8 @@ function HealBot_Aggro_IndicatorUpdate(button)
                 button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
             end
         elseif button.aggro.status==2 then
-            if HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]~="a2" then
-                HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]="a2"
+            if button.aggro.ind~=2 then
+                button.aggro.ind=2
                 button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
                 button.gref.indicator.aggro["Iconal2"]:SetAlpha(1)
                 button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
@@ -38,8 +38,8 @@ function HealBot_Aggro_IndicatorUpdate(button)
                 button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
             end
         elseif button.aggro.status==3 then
-            if HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]~="a3" then
-                HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]="a3"
+            if button.aggro.ind~=3 then
+                button.aggro.ind=3
                 button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
                 button.gref.indicator.aggro["Iconal2"]:SetAlpha(1)
                 button.gref.indicator.aggro["Iconal3"]:SetAlpha(1)
@@ -48,8 +48,8 @@ function HealBot_Aggro_IndicatorUpdate(button)
                 button.gref.indicator.aggro["Iconar3"]:SetAlpha(1)
             end
         end
-    elseif HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]~="off" then
-        HealBot_Aggro_rCalls[button.unit]["aggroIndicator"]="off"
+    elseif button.aggro.ind~=0 then
+        button.aggro.ind=0
         button.gref.indicator.aggro["Iconal1"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
         button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
@@ -58,11 +58,6 @@ function HealBot_Aggro_IndicatorUpdate(button)
         button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
     end
       --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
-end
-
-function HealBot_Aggro_ResetrCallsUnit(unit)
-    if not HealBot_Aggro_rCalls[unit] then HealBot_Aggro_rCalls[unit]={} end
-    HealBot_Aggro_rCalls[unit]["aggroIndicator"]="notSet"
 end
 
 local hbAuxAggroAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}

@@ -95,7 +95,7 @@ HealBot_Panel_luVars["MAPID"]=0
 HealBot_Panel_luVars["NumPrivate"]=0
 HealBot_Panel_luVars["NumPets"]=0
 HealBot_Panel_luVars["TankHealth"]=0
-HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=10
+HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=7
 HealBot_Panel_luVars["cpUse"]=false
 HealBot_Panel_luVars["cpGroup"]=false
 HealBot_Panel_luVars["cpRaid"]=false
@@ -749,6 +749,7 @@ function HealBot_Panel_TestBarsOff()
 end
 
 function HealBot_Panel_ToggleTestBars()
+    HealBot_Options_framesChanged(true, true)
     if HealBot_setTestBars then
         HealBot_setTestBars=false
         HealBot_Panel_TestBarsOff()
@@ -766,7 +767,6 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Panel_luVars["TestBarsDelAll"]=true
         HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSOFF)
     end
-    HealBot_Action_setLuVars("skinResetAll", true)
 end
 
 local vBar={[1]={["BUTTON"]="",["PREVROW"]="",["PREVCOL"]=""},
@@ -2534,6 +2534,8 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
         HealBot_Panel_DoPartyChanged(preCombat, 6)
         if preCombat then
             HealBot_Panel_DoPartyChanged(preCombat, 5)
+            HealBot_Panel_DoPartyChanged(preCombat, 3)
+            HealBot_Panel_DoPartyChanged(preCombat, 4)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then 
                 HealBot_Panel_buildDataStore(false, true)
                 HealBot_Panel_DoPartyChanged(preCombat, 1)
@@ -2546,9 +2548,9 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end
             HealBot_nextRecalcParty(5)
+            HealBot_nextRecalcParty(3)
+            HealBot_nextRecalcParty(4)
         end
-        HealBot_Panel_DoPartyChanged(preCombat, 3)
-        HealBot_Panel_DoPartyChanged(preCombat, 4)
     end 
 end
 
@@ -2569,7 +2571,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
             HealBot_Globals.AutoCacheSize=nMembers
         end
         HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]/nMembers),4))
-        HealBot_fastUpdateEveryFrame(4)
     end
+    HealBot_fastUpdateEveryFrame(4)
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end
