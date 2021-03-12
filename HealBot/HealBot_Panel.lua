@@ -508,6 +508,7 @@ function HealBot_Action_SetClassIconTexture(button)
     end
 end
 
+HealBot_Panel_luVars["HealerHWM"]=1
 function HealBot_Panel_CreateHeader(hbCurFrame)
     if HealBot_ActiveHeaders[0]>99 then HealBot_ActiveHeaders[0]=1 end
     local tryId,freeId=HealBot_ActiveHeaders[0],nil
@@ -529,9 +530,9 @@ function HealBot_Panel_CreateHeader(hbCurFrame)
         if not hhb then 
             hhb=CreateFrame("Button", hn, hp, "HealingButtonTemplate3") 
             hhb.id=freeId
-       -- elseif hhb.frame~=hbCurFrame then
-       --     hhb:ClearAllPoints()
-       --     hhb:SetParent(hp)
+            if freeId>HealBot_Panel_luVars["HealerHWM"] then
+                HealBot_Panel_luVars["HealerHWM"]=freeId
+            end
         end
         hhb.frame=0
         HealBot_ActiveHeaders[0]=freeId+1
@@ -542,8 +543,9 @@ function HealBot_Panel_CreateHeader(hbCurFrame)
 end
 
 function HealBot_Panel_ResetHeaders()
-    for _,xButton in pairs(HealBot_Header_Frames) do
-        xButton.frame=0
+    for i=1,HealBot_Panel_luVars["HealerHWM"] do
+        local hhb=_G["HealBot_Action_Header"..i]
+        if hhb then hhb.frame=0 end
     end
 end
 
@@ -900,6 +902,7 @@ function HealBot_Panel_SetupExtraBars(frame)
         end
     end
     if hbBarsPerFrame[frame]>0 then
+        HealBot_Text_setTextLen(frame)
         if HealBot_Config.DisabledNow==0 then
             HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
             if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==1 or HealBot_Data["UILOCK"]) then
@@ -1000,8 +1003,9 @@ function HealBot_Panel_SetupBars()
     end
     
     for j=1,5 do
-        if hbBarsPerFrame[j]>0 then    
+        if hbBarsPerFrame[j]>0 then
             if HealBot_Config.DisabledNow==0 then
+                HealBot_Text_setTextLen(j)
                 HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
                 if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==1 or HealBot_Data["UILOCK"]) then
                     HealBot_Action_ShowPanel(j)
@@ -1411,9 +1415,10 @@ function HealBot_Panel_resetTestCols(force)
     end
 end
 
-function HealBot_Panel_enemyBar(eUnit)
+function HealBot_Panel_enemyBar(eUnit, pUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1
     table.insert(units,eUnit)
+    hbPanel_enemyUnits[pUnit]=true
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
         HealBot_SpecialUnit[eUnit]=1
         HealBot_SpecialUnit[eUnit.."target"]=2
@@ -1427,21 +1432,20 @@ function HealBot_Panel_checkEnemyBar(eUnit, pUnit, preCombat, existsShow, preCom
     if preCombat then
         if preCombatShow==2 then
             if UnitExists(pUnit) and UnitExists(eUnit) then
-                HealBot_Panel_enemyBar(eUnit)
+                HealBot_Panel_enemyBar(eUnit, pUnit)
             end
         else
-            HealBot_Panel_enemyBar(eUnit)
+            HealBot_Panel_enemyBar(eUnit, pUnit)
         end
     elseif existsShow>1 then
         if existsShow==2 then
             if UnitExists(pUnit) and HealBot_ValidLivingEnemy(pUnit, eUnit) then
-                HealBot_Panel_enemyBar(eUnit)
+                HealBot_Panel_enemyBar(eUnit, pUnit)
             end
         else
-            HealBot_Panel_enemyBar(eUnit)
+            HealBot_Panel_enemyBar(eUnit, pUnit)
         end
     end
-    hbPanel_enemyUnits[pUnit]=eUnit
 end
 
 local vSubSortUnit,vSubSortGUID,vExists,vDup,vRole="","",false,false,3

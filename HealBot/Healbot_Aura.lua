@@ -1472,6 +1472,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
     button.aura.buff.colbar=false
     if UnitOnTaxi("player") then
         button.aura.buff.nextcheck=TimeNow
+        button.aura.buff.colbar=false
     elseif buffCheck and button.status.current<9 then 
         uaZ=1
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count
@@ -1561,7 +1562,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
 end
 
 local vUpdateIcons=false
-function HealBot_Aura_CheckIcons(button, TimeNow)
+function HealBot_Aura_CheckUnitsWithoutEvents(button, TimeNow)
     vUpdateIcons=false
     if HealBot_UnitBuffIcons[button.id] then
         for i=1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["MAXBICONS"] do
@@ -1580,13 +1581,13 @@ function HealBot_Aura_CheckIcons(button, TimeNow)
         end
     end
     if vUpdateIcons then
-        if button.status.unittype<11 then 
-            HealBot_OnEvent_UnitAura(button) 
+        if UnitIsFriend("player",button.unit) then
+            HealBot_Aura_CheckUnitAuras(button, TimeNow)
         else
             HealBot_Aura_RefreshEnemyAuras(button, TimeNow)
         end
     end
-        --HealBot_setCall("HealBot_Aura_CheckIcons")
+        --HealBot_setCall("HealBot_Aura_CheckUnitsWithoutEvents")
 end
 
 local lowTime=0
@@ -1674,6 +1675,7 @@ end
 function HealBot_Aura_ClearBuff(button, updButton)
     if button.aura.buff.name then
         button.aura.buff.name=false
+        button.aura.buff.colbar=false
         button.aura.buff.priority=99
         if updButton then HealBot_Action_UpdateDebuffButton(button) end
         HealBot_Aura_ClearAuraBuffBars(button)

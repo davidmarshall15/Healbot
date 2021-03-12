@@ -496,8 +496,6 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     b.gref.aux[x]:SetStatusBarColor(0,0,0,0)
                 end 
             end
-            HealBot_Text_setTextLen(b.frame)
-            HealBot_Text_setNameText(b)
             b.skinreset=false
         end
         

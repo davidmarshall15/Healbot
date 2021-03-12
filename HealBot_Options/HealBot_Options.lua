@@ -977,8 +977,9 @@ function HealBot_Options_framesChanged(skinUpdate, iconUpdate)
         HealBot_setOptions_Timer(4)
     elseif skinUpdate then
         HealBot_setOptions_Timer(5)
+    else
+        HealBot_nextRecalcParty(0)
     end
-    HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Options_ToggleCustomCuresCastBy()
@@ -9960,6 +9961,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
                 if Healbot_Config_Skins.Current_Skin~=Healbot_Config_Skins.Skins[j] then
                     HealBot_setLuVars("showReloadMsg", true)
                     HealBot_Reset_FPS()
+                    HealBot_Action_ResetrCalls()
                 end
                 hbFoundSkin=true
                 Healbot_Config_Skins.Skin_ID = j
@@ -10014,7 +10016,6 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
             HealBot_Options_InitSub(305)
             HealBot_setOptions_Timer(9950)
         end
-        HealBot_Action_ResetrCalls()
         HealBot_setLuVars("TargetNeedReset", true)
         HealBot_setLuVars("FocusNeedReset", true)
         HealBot_setOptions_Timer(595)
@@ -14657,7 +14658,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_OverrideAuxBarFlashFreq:SetValue(HealBot_Globals.OverrideEffects["OFREQ"]*100)
             HealBot_Options_SetText(HealBot_Options_OverrideAuxBarFlashFreq, HEALBOT_OPTIONS_AGGROFLASHFREQ) 
             HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideFocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,38,1,2,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-            HealBot_Options_OverrideFocusGroupDimming:SetValue(HealBot_Globals.OverrideEffects["FGDIMMING"]*10)
+            HealBot_Options_OverrideFocusGroupDimming:SetValue((HealBot_Globals.OverrideEffects["FGDIMMING"] or 2.5)*10)
             HealBot_Options_SetText(HealBot_Options_OverrideFocusGroupDimming, HEALBOT_OPTION_FOCUSGROUPDIMMING) 
             HealBot_Options_SetLabel("HealBot_OverrideSkinsAggroAlphaText",HEALBOT_OPTIONS_AGGROFLASHALPHA)
             
@@ -15124,7 +15125,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_AuxBarFlashFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OFREQ"]*100)
             HealBot_Options_SetText(HealBot_Options_AuxBarFlashFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ) 
             HealBot_Options_sliderlabels_Init(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING,12,38,1,2,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
-            HealBot_Options_FocusGroupDimming:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FGDIMMING"]*10)
+            HealBot_Options_FocusGroupDimming:SetValue((Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FGDIMMING"] or 2.5)*10)
             HealBot_Options_SetText(HealBot_Options_FocusGroupDimming,HEALBOT_OPTION_FOCUSGROUPDIMMING) 
             HealBot_Options_AuxBarFlashAlphaMin:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["OMIN"])
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_AuxBarFlashAlphaMin)
