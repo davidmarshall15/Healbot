@@ -5447,9 +5447,9 @@ function HealBot_OnEvent_UnitSpellCastSucceeded(unit, spellID)
     end
 end
 
-local uscUnit, uscButton, uscUnitName, uscSpellName=false,false,false,false
+local uscUnit, uscUnitExists, uscButton, uscUnitName, uscSpellName=false,false,false,false,false
 function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID)
-    uscUnit=false
+    uscUnit=false 
     uscUnitName = HealBot_UnitNameOnly(unitName)
     uscSpellName = GetSpellInfo(spellID) or spellID
 
@@ -5465,7 +5465,9 @@ function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID
     else
         uscUnit=HealBot_Panel_RaidUnitName(uscUnitName)
     end
-    if uscUnit and UnitExists(uscUnit) and uscUnitName then
+    
+    uscUnitExists = UnitExists(uscUnit)
+    if uscUnit and uscUnitExists and uscUnitName then
         if caster=="player" then
             _,uscButton,uspButton=HealBot_UnitID(uscUnit)
             if uscButton and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][uscButton.frame]["OVERHEAL"]==2 then
@@ -5477,25 +5479,25 @@ function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID
                 HealBot_luVars["overhealCastID"]=castGUID
                 HealBot_luVars["overhealAmount"]=0
             end
-            if HealBot_luVars["ChatNOTIFY"]>1 then
-                if HealBot_luVars["ChatRESONLY"] then
-                    if HealBot_ResSpells[uscSpellName] then
-                        if HealBot_ResSpells[uscSpellName]==2 then           
-                            HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,uscUnit)
-                            HealBot_UnitIsRessing[caster]=HEALBOT_OPTIONS_GROUPHEALS
-                        else
-                            HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
-                            HealBot_UnitIsRessing[caster]=uscUnit
-                        end
-                    end
-                elseif HealBot_Spell_Names[uscSpellName] then
-                    HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
-                end
-            end
             --HealBot_OnEvent_CheckAura(spellID)
         end
     end
-      --HealBot_setCall("HealBot_OnEvent_UnitSpellCastSent")
+    if HealBot_luVars["ChatNOTIFY"]>1 then
+        if HealBot_luVars["ChatRESONLY"] then
+            if HealBot_ResSpells[uscSpellName] then
+                if HealBot_ResSpells[uscSpellName]==2 then           
+                    HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,uscUnit)
+                    HealBot_UnitIsRessing[caster]=HEALBOT_OPTIONS_GROUPHEALS
+                elseif uscUnit and uscUnitExists and uscUnitName then
+                    HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
+                    HealBot_UnitIsRessing[caster]=uscUnit
+                end
+            end
+        elseif HealBot_Spell_Names[uscSpellName] and uscUnit and uscUnitExists and uscUnitName then
+            HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
+        end
+    end
+    --HealBot_setCall("HealBot_OnEvent_UnitSpellCastSent")
 end
 
 function HealBot_GetCorpseName(cName)

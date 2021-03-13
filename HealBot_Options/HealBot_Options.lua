@@ -1404,7 +1404,8 @@ local function HealBot_Options_ImportFail(import, reason)
 end
 
 function HealBot_Options_retIsDebuffSpell(spellName)
-    if HealBot_Debuff_Types[spellName] then
+    local name = GetItemInfoInstant(spellName) or spellName
+    if HealBot_Debuff_Types[name] then
         return true
     end
     return nil
@@ -12607,9 +12608,10 @@ local function HealBot_Options_DoDebuff_Reset()
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=HealBot_Options_DecodeDDClass(DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)])
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
-            if HealBot_Debuff_Types[sName] then
-                table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
+            local tName = GetItemInfoInstant(sName) or sName
 
+            if HealBot_Debuff_Types[tName] then
+                table.foreach(HealBot_Debuff_Types[tName], function (i,dName)
                     if not HealBot_DebuffSpell[dName] then
                         HealBot_DebuffSpell[dName]=sName;
                     end
