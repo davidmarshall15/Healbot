@@ -1403,6 +1403,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
     uaIsCurrent=false
     HealBot_Aura_luVars["prevIconCount"]=button.icon.debuff.count
     button.icon.debuff.count=0
+    button.aura.debuff.colbar=false
     if debuffCheck and button.status.current<9 then
         HealBot_Aura_luVars["prevDebuffID"]=button.aura.debuff.id or 0
         HealBot_Aura_luVars["prevDebuffType"]=button.aura.debuff.type or "x"
@@ -1456,8 +1457,6 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
                 button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][51]["spellId"]
                 button.aura.debuff.priority=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][51]["spellId"]]["priority"]
             end
-        else
-            button.aura.debuff.colbar=false
         end
         if button.aura.debuff.type and UnitIsFriend("player",button.unit) then 
             HealBot_Aura_DebuffWarnings(button, TimeNow)
@@ -1472,7 +1471,6 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
     button.aura.buff.colbar=false
     if UnitOnTaxi("player") then
         button.aura.buff.nextcheck=TimeNow
-        button.aura.buff.colbar=false
     elseif buffCheck and button.status.current<9 then 
         uaZ=1
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count

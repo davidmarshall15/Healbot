@@ -2728,6 +2728,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
         if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
             tSetHealButton.icon.reset=true
             tSetHealButton.skinreset=true
+            tSetHealButton.reset=true
             tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
         end
         if tSetHealButton.unit~=unit or tSetHealButton.reset or tSetHealButton.guid~=hbGUID or tSetHealButton.status.unittype~=unitType then
