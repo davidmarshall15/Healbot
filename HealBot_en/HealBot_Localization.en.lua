@@ -482,7 +482,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LONGBUFFTIMER           = "Long buffs"
 
     HEALBOT_OPTIONS_NOTIFY_MSG              = "Message"
-    HEALBOT_OPTIONS_CASTNOTIFYTAGS          = " #s=spell name  -  #n=players name "
+    HEALBOT_OPTIONS_CASTNOTIFYTAGS          = " #s=spell name  -  #l=spell link  -  #n=players name "
     HEALBOT_WORDS_YOU                       = "you";
     HEALBOT_WORDS_MOREMEM                   = "More Memory";
     HEALBOT_WORDS_LESSMEM                   = "Less Memory";
