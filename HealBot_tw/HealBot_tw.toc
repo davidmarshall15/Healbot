@@ -1,10 +1,10 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: HealBot Taiwanese Localization
 ## Author: Required
 ## Notes: HealBot localization for zhTW
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.2.0
+## Version: 9.0.5.0
 
 HealBot_Localization.tw.lua
 HealBot_Tips_Localization.tw.lua
