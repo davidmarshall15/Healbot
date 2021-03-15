@@ -1403,8 +1403,19 @@ local function HealBot_Options_ImportFail(import, reason)
     StaticPopup_Show("HEALBOT_OPTIONS_IMPORTFAIL");
 end
 
+function HealBot_Options_convertToName(spellItem)
+    local name = GetItemInfoInstant(spellItem) or spellItem
+    if name == spellItem then
+        local _, _, _, _, _, _, sId = GetSpellInfo(spellItem)
+        if HealBot_Debuff_Types[sId] ~= nil then
+            name = sId
+        end
+    end
+    return name
+end
+
 function HealBot_Options_retIsDebuffSpell(spellName)
-    local name = GetItemInfoInstant(spellName) or spellName
+    local name = HealBot_Options_convertToName(spellName)
     if HealBot_Debuff_Types[name] then
         return true
     end
@@ -12593,11 +12604,11 @@ end
 local FirstDebuffLoad=true
 local function HealBot_Options_DoDebuff_Reset()
     HealBot_Options_setDebuffTypes()
-    HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
-    HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {HEALBOT_POISON_en = {}};
-    HealBot_DebuffWatchTarget[HEALBOT_MAGIC_en] = {HEALBOT_MAGIC_en = {}};
-    HealBot_DebuffWatchTarget[HEALBOT_CURSE_en] = {HEALBOT_CURSE_en = {}};
-    HealBot_DebuffWatchTarget[HEALBOT_CUSTOM_en] = {HEALBOT_CUSTOM_en = {}}; -- added by Diacono
+    HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {};
+    HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {};
+    HealBot_DebuffWatchTarget[HEALBOT_MAGIC_en] = {};
+    HealBot_DebuffWatchTarget[HEALBOT_CURSE_en] = {};
+    HealBot_DebuffWatchTarget[HEALBOT_CUSTOM_en] = {}; -- added by Diacono
     for x,_ in pairs(HealBot_DebuffSpell) do
         HealBot_DebuffSpell[x]=nil;
     end
@@ -12608,7 +12619,7 @@ local function HealBot_Options_DoDebuff_Reset()
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=HealBot_Options_DecodeDDClass(DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)])
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
-            local tName = GetItemInfoInstant(sName) or sName
+            local tName = HealBot_Options_convertToName(sName)
 
             if HealBot_Debuff_Types[tName] then
                 table.foreach(HealBot_Debuff_Types[tName], function (i,dName)
