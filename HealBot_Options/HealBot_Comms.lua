@@ -2,8 +2,6 @@ local HealBotcommAddonSummary={}
 local HealBotAddonSummaryNoCommsCPU={}
 local HealBotAddonSummaryNoCommsMem={}
 local HealBotAddonSummaryNoCommsSort={}
-local sortorder={}
-local hbtmpver={}
 local _
 
 local qAddonMsg={}
@@ -69,16 +67,9 @@ end
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
 
-    for x,_ in pairs(hbtmpver) do
-        hbtmpver[x]=nil
-    end
-    for x,_ in pairs(sortorder) do
-        sortorder[x]=nil;
-    end
-
     linenum=1
     for x,v in pairs(hbcommver) do
-        if not hbtmpver[x] and linenum<9 then
+        if linenum<9 then
             HealBot_Comms_Print_IncHealsSum(x,v,0,linenum)
             linenum=linenum+1
         end

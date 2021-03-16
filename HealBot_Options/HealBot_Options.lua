@@ -1404,8 +1404,8 @@ local function HealBot_Options_ImportFail(import, reason)
 end
 
 function HealBot_Options_retIsDebuffSpell(spellName)
-    local name = GetItemInfoInstant(spellName) or spellName
-    if HealBot_Debuff_Types[name] then
+    spellName = GetItemInfoInstant(spellName) or spellName
+    if HealBot_Debuff_Types[spellName] then
         return true
     end
     return nil
@@ -10028,19 +10028,6 @@ end
 --------------------------------------------------------------------------------
 HealBot_Options_StorePrev["InOutSkin"]=1
 HealBot_Options_StorePrev["hbTempNumUnitNames"]=0
-local hbMyGuildMates = {}
-local hbMyFriends = {}
-
-function HealBot_Options_setMyFriends(unitName)
-    if hbMyGuildMates[unitName] or unitName==HealBot_Data["PNAME"] then return end
-    hbMyFriends[unitName]=true
-end
-
-function HealBot_Options_setMyGuildMates(unitName)
-    if hbMyFriends[unitName] or unitName==HealBot_Data["PNAME"] then return end
-    hbMyGuildMates[unitName]=true
-end
-
 HealBot_Options_StorePrev["InOutSkin"]=1
 function HealBot_Options_InOutSkin_DropDown()
     local info = UIDropDownMenu_CreateInfo()
@@ -10689,6 +10676,7 @@ function HealBot_Options_ShareSkinLoad()
 end
 
 function HealBot_Options_ShareSkinComplete()
+    HealBot_Skins_Check_Skin(hbOptGetSkinName)
     for j=1,10 do
         if not fontsIndex[Healbot_Config_Skins.BarText[hbOptGetSkinName][j]["FONT"]] then
             Healbot_Config_Skins.BarText[hbOptGetSkinName][j]["FONT"] = "Friz Quadrata TT"
@@ -10718,7 +10706,6 @@ function HealBot_Options_ShareSkinComplete()
         Healbot_Config_Skins.Skin_ID = 2;
     end
     Healbot_Config_Skins.Current_Skin = hbOptGetSkinName
-    HealBot_Skins_Check_Skin(hbOptGetSkinName)  
     HealBot_Options_SetSkins(true);
     HealBot_Options_NewSkin:SetText("")
     hbWarnSharedMedia=false
@@ -12608,10 +12595,10 @@ local function HealBot_Options_DoDebuff_Reset()
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=HealBot_Options_DecodeDDClass(DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)])
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
-            local tName = GetItemInfoInstant(sName) or sName
+            sName = GetItemInfoInstant(sName) or sName
 
-            if HealBot_Debuff_Types[tName] then
-                table.foreach(HealBot_Debuff_Types[tName], function (i,dName)
+            if HealBot_Debuff_Types[sName] then
+                table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
                     if not HealBot_DebuffSpell[dName] then
                         HealBot_DebuffSpell[dName]=sName;
                     end

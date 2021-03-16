@@ -1471,6 +1471,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
     button.aura.buff.colbar=false
     if UnitOnTaxi("player") then
         button.aura.buff.nextcheck=TimeNow
+        HealBot_Aura_ClearBuff(button, true)
     elseif buffCheck and button.status.current<9 then 
         uaZ=1
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count

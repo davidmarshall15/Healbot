@@ -3793,13 +3793,13 @@ function HealBot_UpdateAuxCastBar(button, text, startTime, endTime, CastIsChan)
 end
 
 function HealBot_ClearAuxCastBar(button)
+    button.spells.caststart=-1
     for id in pairs(hbAuxCastBarAssigned) do
         HealBot_clearAuxBar(button, id)
     end
 end
 
 local addonMsg=""
-local ModCastSent={}
 function HealBot_ClassicEnemyCasts(guid, current, chan, name, startTime, endTime)
     if current then
         if not hbClassicEnemyCasts[guid] then hbClassicEnemyCasts[guid]={} end
@@ -3820,10 +3820,7 @@ function HealBot_EnemyUpdateAura(button)
     if UnitIsFriend("player",button.unit) then 
         if button.aura.buff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitBuffIcons(button,TimeNow) end
         if button.status.dirarrowshown>0 and button.status.dirarrowshown<TimeNow then HealBot_Action_ShowDirectionArrow(button, TimeNow) end
-        if button.spells.caststart>-1 then 
-            button.spells.caststart=-1
-            HealBot_ClearAuxCastBar(button)
-        end
+        if button.spells.caststart>-1 then HealBot_ClearAuxCastBar(button) end
     elseif HealBot_luVars["AuxCastBarAssigned"] then
         euChan=false
         if HEALBOT_GAME_VERSION>3 then
@@ -3833,7 +3830,7 @@ function HealBot_EnemyUpdateAura(button)
                 euName, _, _, euStartTime, euEndTime = UnitChannelInfo(button.unit) 
             end
         elseif hbClassicEnemyCasts[button.guid] and hbClassicEnemyCasts[button.guid].current then
-            if hbClassicEnemyCasts[button.guid].endTime>TimeNow then
+            if hbClassicEnemyCasts[button.guid].endTime>(TimeNow*1000) then
                 euChan=hbClassicEnemyCasts[button.guid].chan
                 euName=hbClassicEnemyCasts[button.guid].name
                 euStartTime=hbClassicEnemyCasts[button.guid].startTime
@@ -3848,14 +3845,12 @@ function HealBot_EnemyUpdateAura(button)
             euStartTime=false
         end
         if not euStartTime and button.spells.caststart>-1 then
-            button.spells.caststart=-1
             HealBot_ClearAuxCastBar(button)
-        elseif euStartTime and button.spells.caststart~=euStartTime then
+        elseif euStartTime and floor(button.spells.caststart/1000)~=floor(euStartTime/1000) then
             button.spells.caststart=euStartTime
             HealBot_UpdateAuxCastBar(button, euName, euStartTime, euEndTime, euChan)
         end
-    elseif button.spells.caststart>-1 then
-        button.spells.caststart = -1
+    elseif button.spells.caststart>-1 then 
         HealBot_ClearAuxCastBar(button)
     end
     if button.aura.debuff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitDebuffIcons(button,TimeNow) end
@@ -4655,7 +4650,7 @@ end
 
 local noName=false
 function HealBot_UnitNameOnly(unitName)
-    local noName=false
+    noName=false
     if unitName then
         noName=strtrim(string.match(unitName, "^[^-]*"))
     end
@@ -4663,13 +4658,11 @@ function HealBot_UnitNameOnly(unitName)
     return noName
 end
 
-local next_d=TimeNow
-local amIncMsg, amSenderId=false,false
+local amSenderId=false
 function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id)
-    amIncMsg=msg
     amSenderId = HealBot_UnitNameOnly(sender_id)
-    if amSenderId and amIncMsg and addon_id==HEALBOT_HEALBOT then
-        local datatype, datamsg = string.split(":", amIncMsg)
+    if amSenderId and msg and addon_id==HEALBOT_HEALBOT then
+        local datatype, datamsg = string.split(":", msg)
         if datatype then
             if datatype=="R" then
                 HealBot_luVars["VersionRequest"]=amSenderId
@@ -4684,35 +4677,25 @@ function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id)
                     HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "F", 4, amSenderId)
                 end
             elseif datamsg then
-                if datatype=="S" and datamsg then
+                if datatype=="S" or datatype=="H" or datatype=="C" then
                     HealBot_Vers[amSenderId]=datamsg
-                    HealBot_AddDebug("AddonMsg S="..amSenderId..":"..datamsg);
-                    HealBot_Comms_CheckVer(amSenderId, datamsg)
-                elseif datatype=="H" then
-                    HealBot_Vers[amSenderId]=datamsg
-                    HealBot_AddDebug("AddonMsg H="..amSenderId..":"..datamsg);
-                    HealBot_Options_setMyGuildMates(amSenderId)
-                    HealBot_Comms_CheckVer(amSenderId, datamsg)
-                elseif datatype=="C" then
-                    HealBot_Vers[amSenderId]=datamsg
-                    HealBot_AddDebug("AddonMsg C="..amSenderId..":"..datamsg);
-                    HealBot_Options_setMyFriends(amSenderId)
+                    HealBot_AddDebug("AddonMsg "..amSenderId..":"..datamsg);
                     HealBot_Comms_CheckVer(amSenderId, datamsg)
                 elseif datatype=="V" and amSenderId~=UnitName("player") then
                     local guid, current, chan, name, startTime, endTime=string.split("~", datamsg)
                     if current=="T" then
-                        current=true
+                        if chan=="T" then
+                            chan=true
+                        else
+                            chan=false
+                        end
+                        startTime=(TimeNow*1000)-tonumber(startTime)
+                        endTime=startTime+tonumber(endTime)
+                        HealBot_ClassicEnemyCasts(guid, true, chan, name, startTime, endTime)
                     else
-                        current=false
+                        HealBot_ClassicEnemyCasts(guid, false, nil, nil, nil, nil)
                     end
-                    if chan=="T" then
-                        chan=true
-                    else
-                        chan=false
-                    end
-                    startTime=(TimeNow*1000)-tonumber(startTime)
-                    endTime=startTime+tonumber(endTime)
-                    HealBot_ClassicEnemyCasts(guid, current, chan, name, startTime, endTime)
+                    --HealBot_AddDebug("AddonMsg "..amSenderId..":"..datamsg);
                 end
             end
         end
@@ -5447,9 +5430,9 @@ function HealBot_OnEvent_UnitSpellCastSucceeded(unit, spellID)
     end
 end
 
-local uscUnit, uscUnitExists, uscButton, uscUnitName, uscSpellName=false,false,false,false,false
+local uscUnit, uscButton, uscUnitName, uscSpellName=nil,false,false,false
 function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID)
-    uscUnit=false 
+    uscUnit=nil
     uscUnitName = HealBot_UnitNameOnly(unitName)
     uscSpellName = GetSpellInfo(spellID) or spellID
 
@@ -5464,10 +5447,10 @@ function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID
         end
     else
         uscUnit=HealBot_Panel_RaidUnitName(uscUnitName)
+        if uscUnit and not UnitExists(uscUnit) then uscUnit=nil end
     end
-    
-    uscUnitExists = UnitExists(uscUnit)
-    if uscUnit and uscUnitExists and uscUnitName then
+
+    if uscUnit and uscUnitName then
         if caster=="player" then
             _,uscButton,uspButton=HealBot_UnitID(uscUnit)
             if uscButton and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][uscButton.frame]["OVERHEAL"]==2 then
@@ -5486,14 +5469,14 @@ function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID
         if HealBot_luVars["ChatRESONLY"] then
             if HealBot_ResSpells[uscSpellName] then
                 if HealBot_ResSpells[uscSpellName]==2 then           
-                    HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,uscUnit)
+                    HealBot_CastNotify(HEALBOT_OPTIONS_GROUPHEALS,uscSpellName,(uscUnit or ""))
                     HealBot_UnitIsRessing[caster]=HEALBOT_OPTIONS_GROUPHEALS
-                elseif uscUnit and uscUnitExists and uscUnitName then
+                elseif uscUnit and uscUnitName then
                     HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
                     HealBot_UnitIsRessing[caster]=uscUnit
                 end
             end
-        elseif HealBot_Spell_Names[uscSpellName] and uscUnit and uscUnitExists and uscUnitName then
+        elseif HealBot_Spell_Names[uscSpellName] and uscUnit and uscUnitName then
             HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
         end
     end
@@ -6066,6 +6049,7 @@ function HealBot_libCC_CastStart(self, unit, event, ...)
         if castStartTime then
             local guid=UnitGUID(unit)
             if not hbClassicEnemyCasts[guid] or not hbClassicEnemyCasts[guid].current then
+                castName=string.gsub(castName,":","")
                 if chan then
                     addonMsg="V:"..guid.."~T~T~"..castName.."~"..(TimeNow*1000)-castStartTime.."~"..castEndTime-castStartTime
                 else
@@ -6081,11 +6065,9 @@ end
 function HealBot_libCC_CastStop(self, unit, event, ...)
     if unit then
         local guid=UnitGUID(unit)
-        if hbClassicEnemyCasts[guid] then
-            if hbClassicEnemyCasts[guid].current then
-                addonMsg="V:"..guid.."~F"
-                HealBot_Comms_SendInstantAddonMsg(HEALBOT_HEALBOT, addonMsg)
-            end
+        if hbClassicEnemyCasts[guid] and hbClassicEnemyCasts[guid].current then
+            addonMsg="V:"..guid.."~F"
+            HealBot_Comms_SendInstantAddonMsg(HEALBOT_HEALBOT, addonMsg)
             HealBot_ClassicEnemyCasts(guid, false, nil, nil, nil, nil)
         end
     end
