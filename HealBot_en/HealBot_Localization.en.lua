@@ -265,7 +265,7 @@ function HealBot_Lang_enALL()
     HEALBOT_DISABLED_TARGET                 = "Target";
     HEALBOT_OPTIONS_SHOWCLASSONBAR          = "Show class on bar";
     HEALBOT_OPTIONS_SHOWHEALTHONBAR         = "Show health on bar";
-    HEALBOT_OPTIONS_SHOWTEXTONBAR           = "Show text on bar";
+    HEALBOT_OPTIONS_SHOWTEXT                = "Show text";
     HEALBOT_OPTIONS_IGNOREINCOMINGONFULL    = "On full health ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s";
     HEALBOT_OPTIONS_BARHEALTHINCHEALS       = "Include incoming heals";
     HEALBOT_OPTIONS_BARHEALTHSEPHEALS       = "Separate incoming heals";
@@ -678,7 +678,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCLASSICON           = "Show Class";
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
     HEALBOT_OPTION_AGGROPCTBAR              = "Move bar"
-    HEALBOT_OPTION_AGGROPCTTXT              = "Show text"
     HEALBOT_OPTION_AGGROPCTTRACK            = "Track percentage" 
     HEALBOT_OPTIONS_ALERTAGGROLEVEL1        = "1 - Low threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL2        = "2 - High threat"
@@ -806,6 +805,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use Game Tooltip"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
+    HEALBOT_OPTIONS_SHOWPOWERCOUNTER_ROGU   = "Show combo points"
+    HEALBOT_OPTIONS_SHOWPOWERCOUNTER_WARL   = "Show soul shards"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_MONK   = "Show chi power"
     HEALBOT_OPTIONS_DISABLEHEALBOTSOLO      = "only when solo"
     HEALBOT_OPTIONS_CUSTOM_ALLDISEASE       = "All Disease"
