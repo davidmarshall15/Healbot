@@ -693,11 +693,11 @@ function HealBot_Action_UpdateDebuffButton(button)
             button.status.current=8
             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] then
                 button.text.healthupdate=true
-                HealBot_Text_SetText(button)
+                HealBot_Text_UpdateText(button)
             end
             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] then
                 button.text.nameupdate=true
-                HealBot_Text_SetText(button)
+                HealBot_Text_UpdateText(button)
             end
             if button.status.range==1 then  
                 button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"],1)
@@ -771,7 +771,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             HealBot_Text_setNameTag(button)
             --HealBot_Action_Refresh(button)
             if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
-            HealBot_Text_SetText(button)
+            HealBot_Text_UpdateText(button)
         elseif UnitHasIncomingResurrection(button.unit) then
             if not ripHasRes[button.id] then
                 if HEALBOT_GAME_VERSION>3 then
@@ -780,29 +780,30 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                     ripHasRes[button.id]=TimeNow+9
                 end
                 button.text.nameupdate=true
-                HealBot_Text_SetText(button)
+                HealBot_Text_UpdateText(button)
                 if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 1) end
             end
         elseif ripHasRes[button.id] and ripHasRes[button.id]<TimeNow then
             ripHasRes[button.id]=nil
             ripHadRes[button.id]=TimeNow+HealBot_Globals.ResLagDuration
             button.text.nameupdate=true
-            HealBot_Text_SetText(button)
+            HealBot_Text_UpdateText(button)
             if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 2) end
         else
             ripHasRes[button.id]=nil
             if ripHadRes[button.id] and ripHadRes[button.id]<TimeNow then
                 ripHadRes[button.id]=nil
                 button.text.nameupdate=true
-                HealBot_Text_SetText(button)
+                HealBot_Text_UpdateText(button)
                 if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
             end
         end
     elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
         button.status.current=9
-        HealBot_Action_setState(button, true)
         button.aura.buff.nextcheck=false
         button.text.nameupdate=true
+        HealBot_Text_setNameTag(button)
+        HealBot_Action_setState(button, true)
         if button.aura.debuff.name then  
             HealBot_Aura_ClearDebuff(button, true)
         end
@@ -818,7 +819,6 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
         end
         if button.status.unittype<11 then button.status.rangespell=HealBot_RangeSpells["RES"] end
         HealBot_UpdateUnitRange(button,false)
-        HealBot_Text_setNameTag(button)
         HealBot_OnEvent_UnitHealth(button)
         HealBot_Action_UpdateBackgroundButton(button)
         if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
@@ -1737,6 +1737,7 @@ function HealBot_Action_PrepButton(button)
     button.status.change=true
     button.status.refresh=false
     button.status.slowthrottle=0
+    button.status.switch=true
     button.status.castend=-1
     button.aura.buff.name=false
     button.aura.buff.missingbuff=false

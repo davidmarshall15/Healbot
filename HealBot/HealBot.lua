@@ -803,7 +803,7 @@ function HealBot_UpdateUnit(button)
     button.aura.check=true
     button.group=HealBot_RetUnitGroups(button.unit)
     HealBot_Action_SetClassIconTexture(button)
-    HealBot_Text_UpdateText(button)
+    button.text.update=true
 end
 
 function HealBot_UpdateUnitGUIDChange(button)
@@ -3061,11 +3061,11 @@ function HealBot_OnEvent_UnitHealth(button)
             if UnitIsFeignDeath(button.unit) then
                 health=button.health.current
             else
-                if button.status.current<9 then HealBot_Action_UpdateTheDeadButton(button, TimeNow) end
+                --if button.status.current<9 then HealBot_Action_UpdateTheDeadButton(button, TimeNow) end
                 health=0
             end
         else
-            if button.status.current==9 then HealBot_Action_UpdateTheDeadButton(button, TimeNow) end
+            --if button.status.current==9 then HealBot_Action_UpdateTheDeadButton(button, TimeNow) end
             if HealBot_luVars["adjMaxHealth"]>0 then 
                 HealBot_MaxHealth()
             else
@@ -3100,7 +3100,7 @@ function HealBot_OnEvent_UnitHealth(button)
         button.health.init=true
         HealBot_HealsInUpdate(button)
         HealBot_AbsorbsUpdate(button)
-        HealBot_Text_SetText(button)
+        HealBot_Text_UpdateText(button)
         if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then 
             HealBot_Plugin_TimeToDie_UnitUpdate(button, 0) 
         end
@@ -3672,7 +3672,7 @@ function HealBot_UnitUpdateHealthButton(button)
     if button.text.update then HealBot_Text_UpdateText(button) end
 end
 
-function HealBot_UnitUpdateButton(button, auraRefresh)
+function HealBot_UnitUpdateButton(button)
     if UnitExists(button.unit) then
         if button.status.update then 
             if button.status.change then
@@ -3682,9 +3682,11 @@ function HealBot_UnitUpdateButton(button, auraRefresh)
             end
         elseif button.aura.check then
             HealBot_Aura_CheckUnitAuras(button, TimeNow)
-        elseif auraRefresh then
+        elseif button.status.switch then
+            button.status.switch=false
             HealBot_UnitUpdateAuraButton(button)
         else
+            button.status.switch=true
             HealBot_UnitUpdateHealthButton(button)
         end
     elseif button.status.current<11 then
@@ -3706,7 +3708,6 @@ function HealBot_ClassicEnemyCasts(guid, current, chan, name, startTime, endTime
     end
 end
 
-HealBot_luVars["aRefresh"]=false
 HealBot_luVars["updateEnemieGUID"]="ALL"
 local euName, euStartTime, euEndTime, euChan="",0,false
 function HealBot_EnemyUpdateAura(button)
@@ -3798,9 +3799,11 @@ function HealBot_EnemyUpdateButton(button)
                 HealBot_UpdateUnit(button)
             end
         else
-            if HealBot_luVars["aRefresh"] then
+            if button.status.switch then
+                button.status.switch=false
                 HealBot_EnemyUpdateHealth(button)
             else
+                button.status.switch=true
                 HealBot_EnemyUpdateAura(button)
             end
             if button.text.update then HealBot_Text_UpdateText(button) end
@@ -3811,55 +3814,38 @@ function HealBot_EnemyUpdateButton(button)
     end
 end
 
-HealBot_luVars["uRefresh"]=false
 function HealBot_UnitUpdate()
     if HealBot_luVars["UnitRefresh"]>3 then
         HealBot_luVars["UnitRefresh"]=0
-        if HealBot_luVars["uRefresh"] then
-            HealBot_luVars["uRefresh"]=false
-        else
-            HealBot_luVars["uRefresh"]=true
-        end
     end
     HealBot_luVars["UnitRefresh"]=HealBot_luVars["UnitRefresh"]+1
     for _,xButton in pairs(HealBot_RefreshUnits[HealBot_luVars["UnitRefresh"]]) do
-        HealBot_UnitUpdateButton(xButton, HealBot_luVars["uRefresh"])
+        HealBot_UnitUpdateButton(xButton)
     end
 end
 
-HealBot_luVars["oRefresh"]=false
 function HealBot_Update_Fast01()
     if HealBot_luVars["OtherRefresh"]>1 then
         HealBot_luVars["OtherRefresh"]=0
-        if HealBot_luVars["oRefresh"] then
-            HealBot_luVars["oRefresh"]=false
-        else
-            HealBot_luVars["oRefresh"]=true
-        end
     end
     HealBot_luVars["OtherRefresh"]=HealBot_luVars["OtherRefresh"]+1
     for _,xButton in pairs(HealBot_RefreshPrivate[HealBot_luVars["OtherRefresh"]]) do
-        HealBot_UnitUpdateButton(xButton, HealBot_luVars["oRefresh"])
+        HealBot_UnitUpdateButton(xButton)
     end
 end
 
 function HealBot_Update_Fast02()
     for _,xButton in pairs(HealBot_RefreshPets[HealBot_luVars["OtherRefresh"]]) do
-        HealBot_UnitUpdateButton(xButton, HealBot_luVars["aRefresh"])
+        HealBot_UnitUpdateButton(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_UnitUpdateButton(xButton, HealBot_luVars["aRefresh"])
+        HealBot_UnitUpdateButton(xButton)
     end
 end
 
 function HealBot_Update_Fast03()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_EnemyUpdateButton(xButton)
-    end
-    if HealBot_luVars["aRefresh"] then 
-        HealBot_luVars["aRefresh"]=false
-    else
-        HealBot_luVars["aRefresh"]=true
     end
     if HealBot_luVars["MaskAuraCheckDebuff"] and HealBot_luVars["MaskAuraCheckDebuff"]<=TimeNow then
         HealBot_luVars["MaskAuraCheckDebuff"]=false
@@ -5276,7 +5262,7 @@ function HealBot_UpdateUnitRange(button, doRefresh)
         if oldRange~=button.status.range then
             if button.status.current==9 then
                 button.text.nameupdate=true
-                HealBot_Text_SetText(button)
+                button.text.update=true
             else
                 HealBot_Text_setNameTag(button)
             end

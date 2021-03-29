@@ -9800,12 +9800,12 @@
                           </Frame>
                           <Slider name="HealBot_Options_AuxBarOpacityCustom" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="300" y="16" />
+                              <AbsDimension x="340" y="16" />
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarOpacityType" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="40" y="-5" />
+                                  <AbsDimension x="5" y="-5" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -9817,12 +9817,12 @@
                           </Slider>
                           <Button name="HealBot_AuxBarCustomColourb">
                             <Size>
-                              <AbsDimension x="80" y="20"/>
+                              <AbsDimension x="120" y="20"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-4"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -9834,12 +9834,12 @@
                           </Button>
                           <StatusBar name="HealBot_AuxBarCustomColour" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="80" y="20"/>
+                              <AbsDimension x="120" y="20"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-4"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -9869,7 +9869,7 @@
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_AuxBarCustomColour" relativePoint="RIGHT">
                                 <Offset>
-                                  <AbsDimension x="2" y="1"/>
+                                  <AbsDimension x="5" y="1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>

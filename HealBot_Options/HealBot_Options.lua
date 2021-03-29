@@ -10886,7 +10886,7 @@ local function HealBot_Options_BuildSkinFrameSendMsg(skinName, varName, varNameA
     local p={}
     local tabStr=""
     for i=1,10 do
-        if varName=="AuxBar" then
+        if varName=="AuxBar" or varName=="AuxBarText" then
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][varNameAppend][i])
         else
             tabStr=HealBot_Options_tab2str(Healbot_Config_Skins[varName][skinName][i])
@@ -10939,7 +10939,7 @@ end
 function HealBot_Options_BuildSkinSendMsg(skinName)
     local SkinVars={'Author', 'DuplicateBars'}
     local SkinTabVars={'Chat', 'General', 'Healing', 'Enemy', 'FocusGroups'}
-    local SkinTabFrameVars={'FrameAlias', 'FrameAliasBar', 'Frame', 'StickyFrames', 'HealGroups', 'Anchors', 'HeadBar', 'HeadText', 'HealBar', 'BarCol', 'BarIACol', 'BarText', 'BarTextCol', 'Icons', 'RaidIcon', 'IconText', 'BarVisibility', 'BarSort', 'BarAggro', 'AuxBarFrame', 'AuxBarText'}
+    local SkinTabFrameVars={'FrameAlias', 'FrameAliasBar', 'Frame', 'StickyFrames', 'HealGroups', 'Anchors', 'HeadBar', 'HeadText', 'HealBar', 'BarCol', 'BarIACol', 'BarText', 'BarTextCol', 'Icons', 'RaidIcon', 'IconText', 'BarVisibility', 'BarSort', 'BarAggro', 'AuxBarFrame'}
     HealBot_ShareSkinSendMsg("Init", skinName)
     for j=1, getn(SkinVars), 1 do
         local varName=SkinVars[j]
@@ -10967,6 +10967,9 @@ function HealBot_Options_BuildSkinSendMsg(skinName)
     end
     for x=1,9 do
         HealBot_Options_BuildSkinFrameSendMsg(skinName, "AuxBar", x)
+    end
+    for x=1,9 do
+        HealBot_Options_BuildSkinFrameSendMsg(skinName, "AuxBarText", x)
     end
     HealBot_ShareSkinSendMsg("Complete", "")
 end
@@ -15255,7 +15258,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_AuxConfigBar.initialize = HealBot_Options_AuxConfigBar_DropDown
             UIDropDownMenu_SetText(HealBot_Options_AuxConfigBar,HealBot_Options_AuxConfigSelect_List[HealBot_Options_StorePrev["AuxBar"]]) 
             HealBot_Options_SetText(HealBot_Options_ShowTextOnAuxBar,HEALBOT_OPTIONS_SHOWTEXT)
-            HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,0,40,1)
+            HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,40,1)
             HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-20,20,1)
             HealBot_Options_AuxBarOffset:SetValue(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["AuxBar"]][HealBot_Options_StorePrev["FramesSelFrame"]]["OFFSET"])
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarSize,HEALBOT_OPTIONS_TXTSIZE,0.25,1,0.01)

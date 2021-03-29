@@ -429,23 +429,20 @@ function HealBot_Text_setHealthText(button)
                     sepHealTxt=0
                 end
             end
-            vHealthTextTotal=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
-            tHealthConcat[2]=vHealthTextTotal
+            tHealthConcat[2]=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
             tHealthConcat[3]=hbNumFormats["SurroundRight"][button.frame]
             if sepHealTxt>0 then
-                sepHealTxt=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
                 tHealthConcat[4]=vTextChars["Space"]
                 tHealthConcat[5]=vTextChars["Plus"]
-                tHealthConcat[6]=sepHealTxt
+                tHealthConcat[6]=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
                 vHealthTextConcatIndex=6
             else
                 vHealthTextConcatIndex=3
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
-                sepHealTxt=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
                 tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
                 tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
-                tHealthConcat[vHealthTextConcatIndex+3]=sepHealTxt
+                tHealthConcat[vHealthTextConcatIndex+3]=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
                 vHealthTextConcatIndex=vHealthTextConcatIndex+3
             end
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
@@ -460,7 +457,7 @@ function HealBot_Text_setHealthText(button)
             else
                 vHealthTextTotal=button.health.current-button.health.max
             end
-            if ignoreInHeals and vHealthTextTotal<0 then
+            if ignoreInHeals and vHealthTextTotal>0 then
                 vHealthTextTotal=0
             end
             if ignoreInHeals and button.health.current==button.health.max then
@@ -478,28 +475,25 @@ function HealBot_Text_setHealthText(button)
                     sepHealTxt=0
                 end
             end
-            vHealthTextTotal=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
             if vHealthTextTotal>0 then
                 tHealthConcat[2]=vTextChars["Plus"]
             else
                 tHealthConcat[2]=vTextChars["Nothing"]
             end
-            tHealthConcat[3]=vHealthTextTotal
+            tHealthConcat[3]=HealBot_Text_shortHealTxt(vHealthTextTotal, button.frame)
             tHealthConcat[4]=hbNumFormats["SurroundRight"][button.frame]
             if sepHealTxt>0 then
-                sepHealTxt=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
                 tHealthConcat[5]=vTextChars["Space"]
                 tHealthConcat[6]=vTextChars["Plus"]
-                tHealthConcat[7]=sepHealTxt
+                tHealthConcat[7]=HealBot_Text_shortHealTxt(sepHealTxt, button.frame)
                 vHealthTextConcatIndex=7
             else
                 vHealthTextConcatIndex=4
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 and button.health.overheal>0 then
-                sepHealTxt=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
                 tHealthConcat[vHealthTextConcatIndex+1]=vTextChars["Space"]
                 tHealthConcat[vHealthTextConcatIndex+2]=vTextChars["Caret"]
-                tHealthConcat[vHealthTextConcatIndex+3]=sepHealTxt
+                tHealthConcat[vHealthTextConcatIndex+3]=HealBot_Text_shortHealTxt(button.health.overheal, button.frame)
                 vHealthTextConcatIndex=vHealthTextConcatIndex+3
             end
         else
@@ -585,18 +579,18 @@ function HealBot_Text_setHealthText(button)
             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 then
                 button.text.nameupdate=true
             end
-            HealBot_Text_SetText(button)
+            HealBot_Text_UpdateText(button)
         end
     else
         if button.text.health~=vTextChars["Nothing"] then
             button.text.health=vTextChars["Nothing"]
             button.text.healthupdate=true
-            HealBot_Text_SetText(button)
+            HealBot_Text_UpdateText(button)
         end
         if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 and 
            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
             button.text.nameupdate=true
-            HealBot_Text_SetText(button)
+            HealBot_Text_UpdateText(button)
         end
     end
       --HealBot_setCall("HealBot_Text_setHealthText")
@@ -712,13 +706,9 @@ function HealBot_Text_setNameText(button)
     if button.text.name~=vSetNameTextName then
         button.text.name=vSetNameTextName
         button.text.nameupdate=true
-        HealBot_Text_SetText(button)
+        HealBot_Text_UpdateText(button)
     end
       --HealBot_setCall("HealBot_Text_setNameText")
-end
-
-function HealBot_Text_SetText(button)
-    button.text.update=true
 end
 
 local atR, atG, atB, atA=0, 0, 0, 0
@@ -754,7 +744,7 @@ function HealBot_Text_UpdateText(button)
         end
         button.gref.txt["text2"]:SetText(button.text.health)
     end
-      --HealBot_setCall("HealBot_Text_SetText")
+      --HealBot_setCall("HealBot_Text_UpdateText")
 end
 
 function HealBot_Text_UpdateNames()
@@ -778,7 +768,7 @@ end
 function HealBot_Text_UpdateButton(button)
     button.text.nameupdate=true
     button.text.healthupdate=true
-    HealBot_Text_SetText(button)
+    button.text.update=true
 end
 
 function HealBot_Text_UpdateButtons()
