@@ -165,7 +165,7 @@ HealBot_Config_CuresDefaults = {
     [HEALBOT_MAGIC_en] = 5,
     [HEALBOT_POISON_en] = 8,
     [HEALBOT_CURSE_en] = 6,
-    [HEALBOT_CUSTOM_en] = 10,
+    [HEALBOT_CUSTOM_en] = 15,
   },
   CDCBarColour = {
     [HEALBOT_DISEASE_en] = { R = 0.55, G = 0.19, B = 0.7, },

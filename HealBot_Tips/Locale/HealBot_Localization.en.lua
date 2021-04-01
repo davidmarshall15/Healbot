@@ -794,7 +794,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
                                ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
-                               ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies to the Raid Heal Group.",
+                               ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This applies to all frames when in a Raid.",
                         -- Buffs General tab
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",

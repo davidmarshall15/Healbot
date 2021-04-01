@@ -796,7 +796,7 @@ function HealBot_UpdateUnit(button)
     HealBot_OnEvent_UnitManaUpdate(button)
     HealBot_Text_setNameText(button)
     HealBot_Aux_UpdBar(button)
-    if (button.aura.buff.name or button.aura.debuff.name) and button.status.range>-1 then 
+    if (button.aura.buff.name or button.aura.debuff.name) then 
         if button.aura.buff.name then button.aura.buff.name="" end
         if button.aura.debuff.name then button.aura.debuff.name="" end
     end
@@ -1439,19 +1439,7 @@ function HealBot_Reset(rType)
         HealBot_Register_Events()
         HealBot_setOptions_Timer(595)
     else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.status.reset=true
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            xButton.status.reset=true
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.status.reset=true
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.status.reset=true
-        end
-        HealBot_nextRecalcParty(0)
+        HealBot_setOptions_Timer(3)
     end
       --HealBot_setCall("HealBot_Reset")
 end
@@ -2594,8 +2582,8 @@ function HealBot_Options_Update()
         elseif HealBot_Options_Timer[118] then
             HealBot_setAllPowerBars()
             HealBot_OnEvent_PlayerTargetChanged()
-            HealBot_Options_framesChanged(false)
             HealBot_setOptions_Timer(30)
+            HealBot_Options_framesChanged(true)
             HealBot_Options_Timer[118]=nil
           --HealBot_setCall("HealBot_Options_Update-118")
         elseif HealBot_Options_Timer[119] then
@@ -2999,9 +2987,6 @@ function HealBot_Options_Update()
         elseif HealBot_Options_Timer[9995] then
             HealBot_PartyUpdate_CheckSolo()
             HealBot_Options_Timer[9995]=nil
-        elseif HealBot_Options_Timer[9998] then 
-            HealBot_Options_Timer[9998]=nil
-            HealBot_setOptions_Timer(9999)
         else -- 9999 will drop in here - for set timers only
             HealBot_Set_Timers()
             HealBot_luVars["HealBot_Options_Timer"]=false
@@ -3488,8 +3473,6 @@ function HealBot_UnitSlowUpdateFriendly(button)
     button.status.slowthrottle=button.status.slowthrottle+HealBot_Timers["slowUpdateFreq"]
     if button.guid~=UnitGUID(button.unit) then 
         HealBot_UpdateUnitGUIDChange(button)
-    elseif button.status.castend>0 and button.status.castend<(TimeNow*1000) then
-        HealBot_Aux_ClearCastBar(button)
     elseif button.aggro.threatpct>0 then
         HealBot_CalcThreat(button)
     elseif button.specupdate then
@@ -3648,6 +3631,8 @@ function HealBot_UnitUpdateAuraButton(button)
         HealBot_Action_Refresh(button)
     elseif button.icon.extra.raidtarget then
         HealBot_OnEvent_RaidTargetUpdate(button)
+    elseif button.status.castend>0 and button.status.castend<(TimeNow*1000) then
+        HealBot_Aux_ClearCastBar(button)
     end
     if button.aura.debuff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitDebuffIcons(button,TimeNow) end
     if button.aura.buff.nextupdate<=TimeNow then HealBot_Aura_Update_UnitBuffIcons(button,TimeNow) end
@@ -5651,7 +5636,7 @@ function HealBot_OnEvent(self, event, ...)
             HealBot_OnEvent_ReadyCheckClear(true)
         end
     elseif (event=="PLAYER_REGEN_ENABLED") then
-        HealBot_setOptions_Timer(9998)
+        HealBot_setOptions_Timer(9999)
     elseif (event=="GROUP_ROSTER_UPDATE") or (event=="RAID_ROSTER_UPDATE") then
         HealBot_OnEvent_PartyMembersChanged(self);
     elseif (event=="RAID_TARGET_UPDATE") then

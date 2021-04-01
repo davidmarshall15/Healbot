@@ -185,8 +185,7 @@ local OptionThemes={[1]={["egdeFile"]="Interface\\DialogFrame\\UI-DialogBox-Gold
 
 if not HealBot_Globals.OptionsTheme then HealBot_Globals.OptionsTheme=1 end
 HealBot_Options_StorePrev["FramesSelFrame"]=1
-HealBot_Options_StorePrev["customDebuffPriority"]=10
-HealBot_Options_StorePrev["customBuffPriority"]=10
+HealBot_Options_StorePrev["customDebuffPriority"]=15
 HealBot_Options_StorePrev["OptionsOpacityAdj"]=0.35
 HealBot_Options_StorePrev["ModKeyShift"]=false
 HealBot_Options_StorePrev["ModKeyCtrl"]=false
@@ -1418,7 +1417,11 @@ function HealBot_Options_retIsDebuffSpell(spellID)
 end
 
 function HealBot_Options_retDebuffWatchTarget(debuffType)
-    return HealBot_DebuffWatchTarget[debuffType]
+    if HealBot_DebuffSpell[debuffType] then
+        return HealBot_DebuffWatchTarget[debuffType]
+    else
+        return nil
+    end
 end
 
 function HealBot_Options_retDebuffCureSpell(debuffType)
@@ -1467,7 +1470,11 @@ function HealBot_Options_setDebuffPriority()
 end
 
 function HealBot_Options_retDebuffPriority(spellId, spellName, debuffType)
-    return hbCustomDebuffPrio[spellId] or hbCustomDebuffPrio[spellName] or 89, HealBot_Config_Cures.HealBotDebuffPriority[debuffType] or 88
+    if HealBot_DebuffSpell[debuffType] then
+        return hbCustomDebuffPrio[spellId] or hbCustomDebuffPrio[spellName] or 89, HealBot_Config_Cures.HealBotDebuffPriority[debuffType] or 88
+    else
+        return hbCustomDebuffPrio[spellId] or hbCustomDebuffPrio[spellName] or 89, 88
+    end
 end
 
 function HealBot_Options_OptionsThemeCols()
@@ -10828,7 +10835,6 @@ function HealBot_Options_ShareSkinComplete()
     HealBot_Options_NewSkin:SetText("")
     hbWarnSharedMedia=false
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
-    HealBot_SetResetFlag("SOFT")
     DoneInitTab[305]=nil
     HealBot_Options_InitSub(305)
 end
@@ -11878,7 +11884,6 @@ function HealBot_Options_BuffPriorityC_DropDown()
                                 sName=HealBot_Options_SpellGetName(sId)
                                 HealBot_Globals.HealBot_Custom_Buffs[sId] = x
                                 if sName then HealBot_Globals.HealBot_Custom_Buffs[sName] = x end
-                                HealBot_Options_StorePrev["customBuffPriority"]=x
                                 HealBot_setOptions_Timer(171)
                                 HealBot_setOptions_Timer(170)
                                 HealBot_Options_CustomBuffs_checkStatus(sId)
@@ -12714,7 +12719,7 @@ local function HealBot_Options_DoDebuff_Reset()
     for k=1,3 do
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=HealBot_Options_DecodeDDClass(DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)])
-            local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
+            local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)] or "x"
             sName = GetItemInfoInstant(sName) or sName  -- Items are not stored in table HealBot_Debuff_Types
 
             if HealBot_Debuff_Types[sName] then
@@ -15952,7 +15957,7 @@ function HealBot_Options_InitSub2(subNo)
         HealBot_Options_StorePrev["numCustomDebuffs"]=#CDebuffCat_List
         HealBot_Options_CDebuffCatNameUpdate()
     elseif subNo==403 then -- Always run this
-        local x=HealBot_Options_StorePrev["customDebuffPriority"] or 10
+        local x=HealBot_Options_StorePrev["customDebuffPriority"] or 15
         if HealBot_Options_StorePrev["CDebuffcustomSpellID"] then
             if not HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomSpellID"]] then HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]=x end;
             x=HealBot_Globals.HealBot_Custom_Debuffs[HealBot_Options_StorePrev["CDebuffcustomSpellID"]]
@@ -16501,14 +16506,14 @@ function HealBot_Options_SetSkins(force)
             HealBot_Panel_resetInitFrames()
             HealBot_Options_ResetDoInittab(3) 
             HealBot_Options_InitSub(102)
-            HealBot_setOptions_Timer(115)
-            HealBot_Options_framesChanged(true, true)
+            HealBot_setOptions_Timer(3)
             HealBot_Aura_RemoveExtraIcons(91)
             HealBot_Aura_RemoveExtraIcons(92)
             HealBot_Aura_RemoveExtraIcons(93)
             HealBot_Aura_RemoveExtraIcons(94)
             HealBot_setOptions_Timer(160)
             HealBot_setOptions_Timer(2080)
+            HealBot_setOptions_Timer(115)
         end
         HealBot_SetSkinColours()
         HealBot_Options_SetSkinBars()

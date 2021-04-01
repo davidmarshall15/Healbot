@@ -530,9 +530,9 @@ function HealBot_Panel_CreateHeader(hbCurFrame)
         if not hhb then 
             hhb=CreateFrame("Button", hn, hp, "HealingButtonTemplate3") 
             hhb.id=freeId
-            if freeId>HealBot_Panel_luVars["HealerHWM"] then
-                HealBot_Panel_luVars["HealerHWM"]=freeId
-            end
+        end
+        if freeId>HealBot_Panel_luVars["HealerHWM"] then
+            HealBot_Panel_luVars["HealerHWM"]=freeId
         end
         hhb.frame=0
         HealBot_ActiveHeaders[0]=freeId+1
@@ -2357,7 +2357,14 @@ function HealBot_Panel_PlayersChanged()
     nraid=GetNumGroupMembers();
     TempMaxH=9;
     
-    if not IsInRaid() then nraid=0 end;
+    if not IsInRaid() then 
+        nraid=0
+        HealBot_Action_setLuVars("InRaid", false)
+        HealBot_Aura_setLuVars("InRaid", false)
+    else
+        HealBot_Action_setLuVars("InRaid", true)
+        HealBot_Aura_setLuVars("InRaid", true)
+    end
 
     for gl=1,5 do
         HeaderPos[gl]={};

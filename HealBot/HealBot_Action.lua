@@ -691,14 +691,6 @@ function HealBot_Action_UpdateDebuffButton(button)
         if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
             button.status.r,button.status.g,button.status.b=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
             button.status.current=8
-            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] then
-                button.text.healthupdate=true
-                HealBot_Text_UpdateText(button)
-            end
-            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] then
-                button.text.nameupdate=true
-                HealBot_Text_UpdateText(button)
-            end
             if button.status.range==1 then  
                 button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"],1)
             else
@@ -1833,9 +1825,9 @@ function HealBot_Action_CreateButton(hbCurFrame)
             HealBot_Action_InitButton(ghb)
             HealBot_Action_PrepButton(ghb)
             ghb.frame=hbCurFrame
-            if freeId>HealBot_Action_luVars["ButtonHWM"] then
-                HealBot_Action_luVars["ButtonHWM"]=freeId
-            end
+        end
+        if freeId>HealBot_Action_luVars["ButtonHWM"] then
+            HealBot_Action_luVars["ButtonHWM"]=freeId
         end
         if freeId<998 then
             HealBot_ActiveButtons[0]=freeId+1
@@ -1855,6 +1847,7 @@ function HealBot_Action_ResetAllButtons(skin, icon)
         if ghb then
             if skin then ghb.skinreset=true end
             if icon then ghb.icon.reset=true end
+            ghb.reset=true
         end
     end
     HealBot_Panel_ResetHeaders()
@@ -2608,12 +2601,12 @@ end
 
 local function HealBot_Action_SetHealButtonAuraCols(button)
     if button.status.unittype<11 then
-        if HealBot_Config_Buffs.CBshownHB and (button.status.unittype~=5 or HealBot_Config_Buffs.ShowGroups[HealBot_RetUnitGroups(button.unit)])  then
+        if HealBot_Config_Buffs.CBshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[HealBot_RetUnitGroups(button.unit)])  then
             button.aura.buff.showcol=true
         else
             button.aura.buff.showcol=false
         end
-        if HealBot_Config_Cures.CDCshownHB and (button.status.unittype~=5 or HealBot_Config_Cures.ShowGroups[HealBot_RetUnitGroups(button.unit)]) then
+        if HealBot_Config_Cures.CDCshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[HealBot_RetUnitGroups(button.unit)]) then
             button.icon.debuff.showcol=true
         else
             button.icon.debuff.showcol=false

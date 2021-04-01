@@ -60,7 +60,6 @@ function HealBot_Aggro_IndicatorUpdate(button)
       --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
-local debuffCodes={ [HEALBOT_DISEASE_en]=5, [HEALBOT_MAGIC_en]=6, [HEALBOT_POISON_en]=7, [HEALBOT_CURSE_en]=8, [HEALBOT_CUSTOM_en]=9}
 function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
     if HealBot_Data["UILOCK"] and button.status.current<9 and UnitIsFriend("player",button.unit) then
         if status then
