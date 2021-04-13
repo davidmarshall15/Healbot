@@ -35,7 +35,7 @@ local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.
                                      [6]=[[Interface\Addons\HealBot\Images\Square.tga]],
                                      [7]=[[Interface\Addons\HealBot\Images\Cross.tga]],
                                      [8]=[[Interface\Addons\HealBot\Images\Skull.tga]],}
-
+local HealBot_Weapon_Enchant={[1]={["id"]=false,["name"]="x"}, [2]={["id"]=false,["name"]="x"}}
 local HealBot_Aura_luVars={}
 HealBot_Aura_luVars["TankUnit"]="x"
 HealBot_Aura_luVars["hbInsName"]=HEALBOT_WORD_OUTSIDE
@@ -781,6 +781,15 @@ end
 local curBuffName,curBuffxTime=false,0
 local buffCheckThis, buffWatchTarget, buffSpellStart, buffSpellDur=false,false,0,0
 local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
+function HealBot_Aura_SetGeneralBuff(button, bName)
+    curBuffName=bName
+    button.aura.buff.missingbuff=true
+    if not button.aura.buff.colbar then
+        button.aura.buff.colbar=true
+        button.aura.buff.priority=1
+    end
+end
+
 function HealBot_Aura_CheckGeneralBuff(button, TimeNow)  
     PlayerBuffsList=button.aura.buff.recheck
     for bName,nexttime in pairs (PlayerBuffsList) do
@@ -832,17 +841,42 @@ function HealBot_Aura_CheckGeneralBuff(button, TimeNow)
                     buffCheckThis=true
                 end
                 if buffCheckThis then
-                    curBuffName=bName
-                    button.aura.buff.missingbuff=true
-                    if not button.aura.buff.colbar then
-                        button.aura.buff.colbar=true
-                        button.aura.buff.priority=1
-                    end
+                    HealBot_Aura_SetGeneralBuff(button, bName)
                     break
                 end
             else
                 button.aura.buff.recheck[bName] = (TimeNow-buffSpellStart)+buffSpellDur
                 button.aura.buff.nextcheck=1
+            end
+        end
+    end
+    if not button.aura.buff.missingbuff and UnitIsUnit("player", button.unit) then
+        for x=1,2 do
+            if HealBot_Weapon_Enchant[x]["id"] then
+                local hasMainHandEnchant, mainHandExpiration, _, mainHandEnchantID, hasOffHandEnchant, offHandExpiration, _, offHandEnchantID = GetWeaponEnchantInfo()
+                if hasMainHandEnchant and mainHandEnchantID==HealBot_Weapon_Enchant[x]["id"] then
+                    if (mainHandExpiration/1000)<HealBot_Config_Buffs.LongBuffTimer then
+                        HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x]["Name"])
+                    else
+                        button.aura.buff.recheck[HealBot_Weapon_Enchant[x]["Name"]]=ceil(TimeNow+(mainHandExpiration/1000)-HealBot_Config_Buffs.LongBuffTimer)
+                        if not button.aura.buff.nextcheck or button.aura.buff.nextcheck>button.aura.buff.recheck[HealBot_Weapon_Enchant[x]["Name"]] then
+                            button.aura.buff.nextcheck=1
+                        end
+                    end
+                elseif hasOffHandEnchant and offHandEnchantID==HealBot_Weapon_Enchant[x]["id"] then
+                    if (offHandExpiration/1000)<HealBot_Config_Buffs.LongBuffTimer then
+                        HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x]["Name"])
+                    else
+                        button.aura.buff.recheck[HealBot_Weapon_Enchant[x]["Name"]]=ceil(TimeNow+(offHandExpiration/1000)-HealBot_Config_Buffs.LongBuffTimer)
+                        if not button.aura.buff.nextcheck or button.aura.buff.nextcheck>button.aura.buff.recheck[HealBot_Weapon_Enchant[x]["Name"]] then
+                            button.aura.buff.nextcheck=1
+                        end
+                    end
+                else
+                    HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x]["Name"])
+                    button.aura.buff.recheck[HealBot_Weapon_Enchant[x]["Name"]]=nil
+                    button.aura.buff.nextcheck=1
+                end
             end
         end
     end
@@ -1370,7 +1404,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
             button.aura.buff.priority=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][1]["spellId"]]["priority"]
         end
         if generalBuffs and onlyPlayers then
-            HealBot_Aura_CheckGeneralBuff(button, TimeNow) 
+            HealBot_Aura_CheckGeneralBuff(button, TimeNow)
         end
         if curBuffName then
             HealBot_Aura_BuffWarnings(button, TimeNow)
@@ -1531,9 +1565,7 @@ function HealBot_Aura_SetAuraCheckFlags()
         buffCheck=false 
     end
     
-    if HealBot_Config_Buffs.NoAuraWhenRested and IsResting() then 
-        debuffCheck=false 
-    elseif HealBot_Config_Cures.DebuffWatch and 
+    if HealBot_Config_Cures.DebuffWatch and 
            (not HealBot_Config_Cures.DebuffWatchWhenGrouped or GetNumGroupMembers()>0) and 
            (HealBot_Config_Cures.DebuffWatchInCombat or not HealBot_Data["UILOCK"])  then
         debuffCheck=true
@@ -2043,12 +2075,32 @@ function HealBot_Aura_BuffIdLookup()
 end
 
 local function HealBot_Aura_InitItem2BuffsNames(buffId, itemId)
-    local sName=GetSpellInfo(buffId)
-    if sName then HealBot_Buff_Aura2Item[sName] = itemId end
+    if HealBot_IsItemInBag(itemId) then
+        local sName=GetSpellInfo(buffId)
+        if sName then HealBot_Buff_Aura2Item[sName] = itemId end
+    end
+end
+
+local hbWeaponEnchants={}
+function HealBot_Aura_WeaponEnchants(spell, x)
+    if hbWeaponEnchants[spell] and GetSpellInfo(spell) then
+        HealBot_Weapon_Enchant[x]["id"]=hbWeaponEnchants[spell]
+        HealBot_Weapon_Enchant[x]["Name"]=GetSpellInfo(spell)
+    else
+        HealBot_Weapon_Enchant[x]["id"]=false
+        HealBot_Weapon_Enchant[x]["Name"]="x"
+    end
+    HealBot_setOptions_Timer(8100)
 end
 
 function HealBot_Aura_InitData()
     local sName=nil
+    sName=GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
+    if sName then hbWeaponEnchants[sName]=HEALBOT_BRILLIANT_MANA_OIL_ENCHANT end
+    sName=GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
+    if sName then hbWeaponEnchants[sName]=HEALBOT_BRILLIANT_WIZARD_OIL_ENCHANT end
+    sName=GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
+    if sName then hbWeaponEnchants[sName]=HEALBOT_BLESSED_WIZARD_OIL_ENCHANT end
     if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
         sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
         if sName then HealBot_ShortBuffs[sName]=true end
@@ -2079,9 +2131,9 @@ function HealBot_Aura_InitData()
         sName=GetSpellInfo(HBC_BLESSING_OF_SANCTUARY)
         if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
-        -- short buffs
+        -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARRIOR] then
-        -- short buffs
+        -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
         sName=GetSpellInfo(HEALBOT_ICE_WARD)
         if sName then HealBot_ShortBuffs[sName]=true end
@@ -2090,18 +2142,21 @@ function HealBot_Aura_InitData()
         sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
         if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
-        -- short buffs
+        -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEATHKNIGHT] then
         sName=GetSpellInfo(HEALBOT_HORN_OF_WINTER)
         if sName then HealBot_ShortBuffs[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_HUNTER] then
-        -- short buffs
+        -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_SHAMAN] then
-        -- short buffs
+        sName=GetSpellInfo(HEALBOT_FLAMETONGUE_SPELL)
+        if sName then hbWeaponEnchants[sName]=HEALBOT_FLAMETONGUE_ENCHANT end
+        sName=GetSpellInfo(HEALBOT_WINDFURY_SPELL)
+        if sName then hbWeaponEnchants[sName]=HEALBOT_WINDFURY_ENCHANT end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
-        -- short buffs
+        -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEMONHUNTER] then
-        -- short buffs
+        -- Class buffs
     end
 
     
@@ -2113,11 +2168,8 @@ function HealBot_Aura_InitData()
     HealBot_Aura_InitItem2BuffsNames(HEALBOT_TAILWIND, HEALBOT_TAILWIND_SAPPHIRE)
     HealBot_Aura_InitItem2BuffsNames(HEALBOT_SHADOW_TOUCHED, HEALBOT_AMETHYST_OF_THE_SHADOW_KING)
     HealBot_Aura_InitItem2BuffsNames(HEALBOT_VEILED_AUGMENTATION, HEALBOT_VEILED_AUGMENT_RUNE)
-    if HealBot_IsItemInBag(HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE) then
-        HealBot_Aura_InitItem2BuffsNames(HEALBOT_LIGHTNING_FORGED_AUGMENT, HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE)
-    elseif HealBot_IsItemInBag(HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE) then
-        HealBot_Aura_InitItem2BuffsNames(HEALBOT_BATTLE_SCARRED_AUGMENT, HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE)
-    end
+    HealBot_Aura_InitItem2BuffsNames(HEALBOT_LIGHTNING_FORGED_AUGMENT, HEALBOT_LIGHTNING_FORGED_AUGMENT_RUNE)
+    HealBot_Aura_InitItem2BuffsNames(HEALBOT_BATTLE_SCARRED_AUGMENT, HEALBOT_BATTLE_SCARRED_AUGMENT_RUNE)
     
     HealBot_Buff_ItemIDs={}
     for _,id in pairs(HealBot_Buff_Aura2Item) do
@@ -2190,4 +2242,7 @@ function HealBot_Aura_InitData()
             }
         end
     end
+    
+    HealBot_Options_BuffWeaponEnchantSetAura(1)
+    HealBot_Options_BuffWeaponEnchantSetAura(2)
 end

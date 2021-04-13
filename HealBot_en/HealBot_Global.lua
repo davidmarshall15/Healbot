@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.5.5";
+﻿HEALBOT_VERSION    = "9.0.5.6";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,7 +6,7 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.12" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.6.13" end
 
 function HealBot_globalVars()
     --Consumables
@@ -99,6 +99,17 @@ function HealBot_globalVars()
     HEALBOT_GIFT_OF_THE_NAARU               = 59547 --GetSpellInfo(59547) or "--Gift of the Naaru";
     HEALBOT_STONEFORM                       = 20594 --GetSpellInfo(20594) or "--Stoneform";
 
+    --Weapon Enchants
+    HEALBOT_FLAMETONGUE_SPELL               = 318038
+    HEALBOT_FLAMETONGUE_ENCHANT             = 5400
+    HEALBOT_WINDFURY_SPELL                  = 33757
+    HEALBOT_WINDFURY_ENCHANT                = 5401
+    HEALBOT_BRILLIANT_MANA_OIL_SPELL        = 20748
+    HEALBOT_BRILLIANT_MANA_OIL_ENCHANT      = 2629
+    HEALBOT_BRILLIANT_WIZARD_OIL_SPELL      = 20749
+    HEALBOT_BRILLIANT_WIZARD_OIL_ENCHANT    = 2628
+    HEALBOT_BLESSED_WIZARD_OIL_SPELL        = 23123
+    HEALBOT_BLESSED_WIZARD_OIL_ENCHANT      = 2685
     --Harmful Spells
     --Death Knight
     HEALBOT_DEATH_COIL                      = 47541 --GetSpellInfo(47541) or "--Death Coil"

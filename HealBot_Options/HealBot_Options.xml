@@ -15419,7 +15419,7 @@
                           <Anchors>
                             <Anchor point="BOTTOM" relativeTo="HealBot_Options_BuffsPanel" relativePoint="BOTTOM">
                               <Offset>
-                                <AbsDimension x="0" y="75" />
+                                <AbsDimension x="0" y="58" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -15440,7 +15440,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="14" y="-58"/>
+                              <AbsDimension x="14" y="-50"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15558,7 +15558,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt1" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15637,7 +15637,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt2" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15716,7 +15716,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt3" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15795,7 +15795,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt4" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15874,7 +15874,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt5" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15953,7 +15953,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt6" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -16032,7 +16032,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt7" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -16107,6 +16107,162 @@
                           <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                         </Scripts>
                       </Button>
+                      <Frame name="HealBot_Options_BuffWeaponEnchant1" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffTxt8" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="58" y="-32"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_Panel5_1_Weapon" text="HEALBOT_OPTIONS_BUFFSTEXTWE" inherits="GameFontNormalSmall">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELLITEM",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELLITEM",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Buff9Colourb">
+                        <Size>
+                          <AbsDimension x="110" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWeaponEnchant1"  relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="8" y="-3"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_Panel5_3_Weapon" text="HEALBOT_OPTIONS_BUFFSTEXT3" inherits="GameFontNormalSmall">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="17" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnClick>HealBot_BuffColorpick_OnClick("Buff9",9)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_Buff9Colour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="110" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWeaponEnchant1"  relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="8" y="-3"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour9" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff9Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Frame name="HealBot_Options_BuffWeaponEnchant2" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWeaponEnchant1" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-10"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELLITEM",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELLITEM",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Buff10Colourb">
+                        <Size>
+                          <AbsDimension x="110" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWeaponEnchant2"  relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="8" y="-3"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_BuffColorpick_OnClick("Buff10",10)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSBARS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSBARS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_Buff10Colour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="110" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWeaponEnchant2"  relativePoint="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="8" y="-3"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_BuffPresetColour10" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Buff10Colour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_ShortBuffTimer" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="240" y="16" />
@@ -16114,7 +16270,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="42" y="-532" />
+                              <AbsDimension x="42" y="-545" />
                             </Offset>
                           </Anchor>
                         </Anchors>

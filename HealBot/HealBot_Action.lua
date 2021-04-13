@@ -1431,6 +1431,7 @@ function HealBot_Action_ResetrCalls()
 end 
 
 local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
+                    ["UNIT_INVENTORY_CHANGED"]=HealBot_Player_InvChange,
                     ["UNIT_HEALTH"]=HealBot_OnEvent_UnitHealth,
                     ["UNIT_MAXHEALTH"]=HealBot_OnEvent_UnitHealth,
                     ["UNIT_THREAT_SITUATION_UPDATE"]=HealBot_OnEvent_UnitThreat,
@@ -1624,6 +1625,7 @@ end
 
 function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_AURA")
+    button:UnregisterEvent("UNIT_INVENTORY_CHANGED")
     button:UnregisterEvent("UNIT_HEALTH")
     button:UnregisterEvent("UNIT_MAXHEALTH")
     HealBot_UnRegister_Aggro(button)
@@ -1666,6 +1668,7 @@ function HealBot_Action_RegisterUnitEvents(button)
     end
     if UnitIsUnit(button.unit,"player") then
         button:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", button.unit)
+        button:RegisterUnitEvent("UNIT_INVENTORY_CHANGED", button.unit)
     end
 end
 

@@ -367,6 +367,7 @@ function HealBot_Lang_Options_enALL()
                                  ["MONITORBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
                                  ["MONITORBUFFSPALABLESSING"]=HEALBOT_OPTIONS_PALADIN_BLESSINGS,
                                  ["BUFFSSPELL"]=HEALBOT_OPTIONS_BUFFSTEXT1,
+                                 ["BUFFSSPELLITEM"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
                                  ["BUFFSBARS"]=HEALBOT_OPTIONS_CDCBARS,
                                  ["BUFFSTIMER"]=HEALBOT_OPTIONS_BUFFSTEXTTIMER,
@@ -764,7 +765,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSSPELLCHECKMEMBERS"]="The members to monitor.\n".."|cff77c8ff".."Tip: Use on raid to cover All",
                                ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n".._G["GREEN_FONT_COLOR_CODE"].."- Short duration - Ignore debuffs that last for less time than the Duration slider\n".._G["GREEN_FONT_COLOR_CODE"].."- When cure spell CoolDown > 2secs - Ignore debuffs when its not possible to cast while the spell is on cooldown\n".._G["GREEN_FONT_COLOR_CODE"].."- When caster is known as friend - When the caster of the debuff is friendly",
                                ["DEBUFFSTYPEPRIORITY"]="Priority by debuff types.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
-                               ["DEBUFFSTYPECOLOUR"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s by debuff types. Click to change.\nWhen the player has a debuff and settings on the Debuff Warning tab apply.",
+                               ["DEBUFFSTYPECOLOUR"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player\nhas a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
                                ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
                                ["DEBUFFSCUSTOMIDMETHOD"]="Check debuffs using Spell ID, Spell Name or Both.",
@@ -801,8 +802,9 @@ function HealBot_Lang_Options_enALL()
                                ["MONITORBUFFSGROUPED"]="Do not monitor buffs when solo.",
                                ["MONITORBUFFSPALABLESSING"]="Ignore if player has any blessing cast by you.",
                                ["BUFFSSPELL"]="Select the spell to monitor and cast.",
+                               ["BUFFSSPELLITEM"]="Select the spell or item to monitor and cast.",
                                ["BUFFSMEMBERS"]="The members to monitor.",
-                               ["BUFFSBARS"]="Bars are changed to defined col"..HEALBOT_enWORD_COLOUR_SUFFIX..". Click to change.\nWhen the player is missing a buff and settings on the Buff Warning tab apply.",
+                               ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the category dropdown.",
