@@ -3813,16 +3813,16 @@ function HealBot_Options_OverrideUseFluidBars_OnClick(self)
     if self:GetChecked()~=HealBot_Globals.OverrideEffects["FLUIDBARS"] then
         HealBot_Globals.OverrideEffects["FLUIDBARS"]=self:GetChecked()
         HealBot_Options_framesChanged(false)
+        HealBot_setOptions_Timer(4950)
     end
-    --HealBot_setOptions_Timer(80)
 end
 
 function HealBot_Options_UseFluidBars_OnClick(self)
     if self:GetChecked()~=Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"] = self:GetChecked()
         HealBot_Options_framesChanged(false)
+        HealBot_setOptions_Timer(4950)
     end
-    --HealBot_setOptions_Timer(80)
 end
 
 function HealBot_Options_AggroTxt_OnClick(self)
@@ -13218,7 +13218,7 @@ local function HealBot_Options_DoBuff_Reset()
         end
     end    
     for k=9,10 do
-        if BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
+        if BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 and getn(HealBot_Buff_WeaponEnchant_List)>=BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] then
             HealBot_buffbarcolr[HealBot_Buff_WeaponEnchant_List[BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]]]=buffbarcolrClass[k];
             HealBot_buffbarcolg[HealBot_Buff_WeaponEnchant_List[BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]]]=buffbarcolgClass[k];
             HealBot_buffbarcolb[HealBot_Buff_WeaponEnchant_List[BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]]]=buffbarcolbClass[k];
