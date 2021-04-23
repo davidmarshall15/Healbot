@@ -57,6 +57,15 @@ function HealBot_Skins_ResetSkinWidth(button)
     button.gref["InHeal"]:SetWidth(bWidth)
     button.gref["Absorb"]:SetWidth(bWidth)
     button:SetWidth(bWidth)
+    auxWidth=0
+    for x=1,9 do
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<2 and Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAP"]==2 then
+            auxTmp=auxWidth
+            auxWidth=auxWidth+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]
+            auxWidth=auxWidth+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]
+            if auxWidth<auxTmp then auxWidth=auxTmp end
+        end
+    end
     for x=1,9 do
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<3 then

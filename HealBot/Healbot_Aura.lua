@@ -1087,10 +1087,9 @@ function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
     end
 end
 
-function HealBot_Aura_CacheDebuff(spellId, spellName, debuffIsCustom, debuffIsAlways, debuffTexture, debuffType, isAuto)
+function HealBot_Aura_CacheDebuff(spellId, spellName, debuffIsCustom, debuffIsAlways, debuffTexture, debuffType)
     if not HealBot_AuraDebuffCache[uaSpellId] then HealBot_AuraDebuffCache[spellId]={} end
     HealBot_AuraDebuffCache[spellId].customType=debuffIsCustom
-    HealBot_AuraDebuffCache[spellId].isAuto=isAuto
     HealBot_AuraDebuffCache[spellId].always=debuffIsAlways
     HealBot_AuraDebuffCache[spellId]["texture"]=debuffTexture
     HealBot_AuraDebuffCache[spellId]["debuffType"]=debuffType
@@ -1197,9 +1196,10 @@ function HealBot_Aura_CheckCurDebuff(button, TimeNow)
     end
     if debuffIsCurrent then
         if not HealBot_AuraDebuffCache[uaSpellId] or HealBot_AuraDebuffCache[uaSpellId].reset then
-            HealBot_Aura_CacheDebuff(uaSpellId, uaName, debuffIsCustom, debuffIsAlways, uaTexture, uaDebuffType, debuffIsAuto)
+            HealBot_Aura_CacheDebuff(uaSpellId, uaName, debuffIsCustom, debuffIsAlways, uaTexture, uaDebuffType)
         end
         HealBot_AuraDebuffCache[uaSpellId]["priority"]=cDebuffPrio
+        HealBot_AuraDebuffCache[uaSpellId].isAuto=debuffIsAuto
     end
       --HealBot_setCall("HealBot_Aura_CheckCurDebuff")
     return debuffIsCurrent, debuff_Type, debuffIsNever, debuffIsAuto

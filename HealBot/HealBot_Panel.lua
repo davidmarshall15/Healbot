@@ -154,15 +154,15 @@ end
 
 function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
     if UnitExists(unit) then
-        if UnitIsUnit(unit, "player") then unit="player" end
-        if UnitIsUnit(unit, "pet") then unit="pet" end
         local dsGUID=UnitGUID(unit) or unit
-        local dsName=HealBot_GetUnitName(unit) or unit
+        local dsName=HealBot_GetUnitName(unit)
         if isPlayer then
+            if UnitIsUnit(unit, "player") then unit="player" end
             hbPanel_dataNames[dsName]=unit
             hbPanel_dataGUIDs[dsGUID]=unit
             hbPanel_dataUnits[unit]=dsGUID
         else
+            if UnitIsUnit(unit, "pet") then unit="pet" end
             hbPanel_dataPetNames[dsName]=unit
             hbPanel_dataPetGUIDs[dsGUID]=unit
             hbPanel_dataPetUnits[unit]=dsGUID
@@ -369,7 +369,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
             HealBot_MyPrivateTanks[xGUID]=true
         end
     end
-    HealBot_Panel_buildDataStore(true, true)
+    --HealBot_Panel_buildDataStore(true, true)
     HealBot_setOptions_Timer(595)
 end
 
@@ -389,7 +389,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
             HealBot_MyPrivateHealers[xGUID]=true
         end
     end
-    HealBot_Panel_buildDataStore(true, true)
+    --HealBot_Panel_buildDataStore(true, true)
     HealBot_setOptions_Timer(595)
 end
 
@@ -2550,13 +2550,14 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
             HealBot_Panel_DoPartyChanged(preCombat, 5)
             HealBot_Panel_DoPartyChanged(preCombat, 3)
             HealBot_Panel_DoPartyChanged(preCombat, 4)
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then 
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then 
                 HealBot_Panel_buildDataStore(false, true)
-                HealBot_Panel_DoPartyChanged(preCombat, 1)
-            end
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then 
-                HealBot_Panel_buildDataStore(false, true)
-                HealBot_Panel_DoPartyChanged(preCombat, 2)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
+                    HealBot_Panel_DoPartyChanged(preCombat, 1)
+                end
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then 
+                    HealBot_Panel_DoPartyChanged(preCombat, 2)
+                end
             end
         else
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end

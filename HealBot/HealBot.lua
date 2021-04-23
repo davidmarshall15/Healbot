@@ -1447,7 +1447,7 @@ function HealBot_Reset(rType)
         HealBot_Register_Events()
         HealBot_setOptions_Timer(595)
     else
-        HealBot_setOptions_Timer(3)
+        HealBot_Options_framesChanged(true, true)
     end
       --HealBot_setCall("HealBot_Reset")
 end
@@ -3421,18 +3421,18 @@ function HealBot_AfterCombatCleanup()
     end
     HealBot_setOptions_Timer(82)
     HealBot_setOptions_Timer(95)
+    HealBot_nextRecalcParty(5)
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+        HealBot_nextRecalcParty(2)
+    end
 end
 
 function HealBot_Not_Fighting()
     HealBot_Data["UILOCK"]=false
     HealBot_Aura_SetAuraCheckFlags()
-    HealBot_nextRecalcParty(5)
     HealBot_setOptions_Timer(9952)
     HealBot_setOptions_Timer(9954)
     HealBot_setOptions_Timer(9955)
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-        HealBot_nextRecalcParty(2)
-    end
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
         HealBot_Action_RefreshTooltip()
     end
@@ -4699,7 +4699,7 @@ function HealBot_GetUnitName(unit, hbGUID)
     guName=HEALBOT_WORDS_UNKNOWN
     if unit and UnitExists(unit) then
         guGUID=hbGUID or "0"
-        guName=HealBot_customTempUserName[guGUID] or UnitName(unit) or HEALBOT_WORDS_UNKNOWN
+        guName=HealBot_customTempUserName[guGUID] or UnitName(unit) or unit
     end
       --HealBot_setCall("HealBot_GetUnitName")
     return guName

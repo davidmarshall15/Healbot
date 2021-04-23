@@ -2891,6 +2891,7 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Fluid_InHealButtonsAlpha[button.id] then HealBot_Fluid_InHealButtonsAlpha[button.id]=nil end
     if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
     if HealBot_Fluid_AbsorbButtonsAlpha[button.id] then HealBot_Fluid_AbsorbButtonsAlpha[button.id]=nil end
+    button.status.enabled=false
     table.insert(hbMarkedDeleteButtons, button.id)
     HealBot_setOptions_Timer(9990)
 end
@@ -3087,7 +3088,7 @@ end
 
 local hideFrame={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true,[9]=true,[10]=true}
 function HealBot_Action_CheckHideFrames()
-    for j=1,9 do
+    for j=1,10 do
         hideFrame[j]=true
     end
     for _,xButton in pairs(HealBot_Unit_Button) do
@@ -3117,7 +3118,7 @@ function HealBot_Action_CheckHideFrames()
             break
         end
     end
-    for i=1, 9 do
+    for i=1, 10 do
         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][i]["AUTOCLOSE"]>1 and hideFrame[i] and HealBot_Action_FrameIsVisible(i) then
             HealBot_Action_HidePanel(i)
         end
@@ -3127,7 +3128,7 @@ end
 function HealBot_Action_ShowHideFrames(button)
     if not HealBot_Data["UILOCK"] and Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["AUTOCLOSE"]>1 then 
         if not HealBot_Action_FrameIsVisible(button.frame) and HealBot_Config.DisabledNow==0 then
-            if button.status.enabled then
+            if button.status.enabled and button:IsVisible() then
                 HealBot_Action_ShowPanel(button.frame)
             end
         elseif  HealBot_Action_FrameIsVisible(button.frame) and not button.status.enabled and not HealBot_Action_ShouldHealSome(button.frame) then
