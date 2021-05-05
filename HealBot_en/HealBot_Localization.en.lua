@@ -92,7 +92,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK            = "Background bar opacity";
     HEALBOT_OPTIONS_BARALPHAEOR             = "Out of range opacity";
-    HEALBOT_OPTIONS_ACTIONLOCKED            = "Lock position";
+    HEALBOT_OPTIONS_ACTIONLOCKED            = "Lock frame";
     HEALBOT_OPTIONS_AUTOSHOW                = "Close automatically";
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
@@ -309,12 +309,22 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONOPTOORARROWBUTTON   = "OOR Arrow";
     HEALBOT_OPTIONS_NAMEOPTTEXT             = "Name text options";
     HEALBOT_OPTIONS_HEALTHOPTTEXT           = "Health text options";
+    HEALBOT_OPTIONS_EXTRAHOPTOVERHEAL       = "Extra overheals options";
+    HEALBOT_OPTIONS_EXTRAHOPTINHEAL         = "Extra incoming heals options";
+    HEALBOT_OPTIONS_EXTRAHOPTAGGRO          = "Extra aggro options";
     HEALBOT_OPTIONS_AUXOPTTEXT              = "Aux text options";
     HEALBOT_OPTIONS_TABNOTAVAIL             = "Tab not available with current frame";
     HEALBOT_OPTIONS_NAMEOPTCOLOUR           = "Name col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options";
     HEALBOT_OPTIONS_HEALTHOPTCOLOUR         = "Health col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options";
     HEALBOT_OPTIONS_AUXOPTCOLOUR            = "Aux col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options";
     HEALBOT_OPTIONS_HEALTHTEXTANCHOR        = "Health text anchor";
+    HEALBOT_OPTIONS_AGGROINDTEXT            = "Aggro indicator on name";
+    HEALBOT_OPTIONS_OVERHEALFORMAT          = "Overheals format";
+    HEALBOT_OPTIONS_OVERHEALCOLOUR          = "Overheals col"..HEALBOT_enWORD_COLOUR_SUFFIX;
+    HEALBOT_OPTIONS_SEPARATEFORMAT          = "Separate format";
+    HEALBOT_OPTIONS_SEPARATECOLOUR          = "Separate col"..HEALBOT_enWORD_COLOUR_SUFFIX;
+    HEALBOT_OPTIONS_PERCENTAGEFORMAT        = "Percentage format";
+    HEALBOT_OPTIONS_PERCENTAGECOLOUR        = "Percentage col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
@@ -679,7 +689,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCLASSICON           = "Show Class";
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
     HEALBOT_OPTION_AGGROPCTBAR              = "Move bar"
-    HEALBOT_OPTION_AGGROPCTTRACK            = "Track percentage" 
+    HEALBOT_OPTION_AGGROPCTTRACK            = "Show aggro percentage" 
     HEALBOT_OPTIONS_ALERTAGGROLEVEL1        = "1 - Low threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL2        = "2 - High threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL3        = "3 - Tanking"
@@ -1217,7 +1227,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONS     = "        " .. HEALBOT_OPTIONS_TAB_ICONS
     HEALBOT_OPTIONS_CONTENT_SKINS_AGGRO     = "    " .. HEALBOT_OPTIONS_TAB_AGGRO
     HEALBOT_OPTIONS_CONTENT_SKINS_CHAT      = "    " .. HEALBOT_OPTIONS_TAB_CHAT
-    HEALBOT_OPTIONS_CONTENT_SKINS_TEXT      = "        " .. HEALBOT_OPTIONS_TAB_TEXT
+    HEALBOT_OPTIONS_CONTENT_SKINS_TEXT      = "        " .. HEALBOT_OPTIONS_TEXTOPTIONS
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONTEXT  = "        " .. HEALBOT_OPTIONS_TAB_ICONTEXT
 
     HEALBOT_OPTIONS_CONTENT_CURE_DEBUFF     = "    " .. HEALBOT_OPTIONS_TAB_GENERAL

@@ -116,7 +116,7 @@ function HealBot_Panel_setCP(cpType, useCP)
     else
         HealBot_Panel_luVars["cpRaid"]=useCP
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_setOptions_Timer(189)
 end
 
 function HealBot_Panel_isSpecialUnit(unit)
@@ -1434,7 +1434,7 @@ end
 function HealBot_Panel_checkEnemyBar(eUnit, pUnit, preCombat, existsShow, preCombatShow)
     if preCombat then
         if preCombatShow==2 then
-            if UnitExists(pUnit) and UnitExists(eUnit) then
+            if UnitExists(pUnit) and UnitExists(eUnit) and not UnitIsUnit(pUnit,eUnit) then
                 HealBot_Panel_enemyBar(eUnit, pUnit)
             end
         else
@@ -1659,11 +1659,12 @@ function HealBot_Panel_addUnit(unit, unitType, hbGUID, isRaidGroup)
     end
 end
 
-local vMainSortIndex,vMainSortKey=0,""
+--local vMainSortIndex,vMainSortKey=0,""
+local vMainSortKey=""
 function HealBot_Panel_MainSort(doMainSort,unitType)
     if #units>0 then
         if doMainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
-            vMainSortIndex=0
+            --vMainSortIndex=0
             table.sort(units,function (a,b)
                 if order[a]<order[b] then return true end
                 if order[a]>order[b] then return false end
@@ -1673,14 +1674,14 @@ function HealBot_Panel_MainSort(doMainSort,unitType)
             for j=1,#units do
                 if vMainSortKey~=order[units[j]] then
                     HealBot_Panel_SubSort(true, unitType)
-                    vMainSortIndex=j
+                    --vMainSortIndex=j
                     vMainSortKey=order[units[j]]
                 end
                 HealBot_Panel_insSort(units[j], false)
             end
-            if not j or vMainSortIndex<j then
+            --if not j or vMainSortIndex<j then
                 HealBot_Panel_SubSort(true, unitType)
-            end
+            --end
         else
             for j=1,#units do
                 HealBot_Panel_insSort(units[j], false)
@@ -2383,6 +2384,18 @@ function HealBot_Panel_PlayersChanged()
         HealBot_Data["PLAYERGROUP"]=1
         for gl=1,8 do
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["STATE"] then
+                for x,_ in pairs(order) do
+                    order[x]=nil;
+                end
+                for x,_ in pairs(units) do
+                    units[x]=nil;
+                end
+                for x,_ in pairs(suborder) do
+                    suborder[x]=nil;
+                end
+                for x,_ in pairs(subunits) do
+                    subunits[x]=nil;
+                end
                 hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
                     HealBot_Panel_raidHeals()
@@ -2496,30 +2509,32 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     for x,_ in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_HealButtons[x]=nil;
     end
-    for x,_ in pairs(order) do
-        order[x]=nil;
-    end
-    for x,_ in pairs(units) do
-        units[x]=nil;
-    end
-    for x,_ in pairs(suborder) do
-        suborder[x]=nil;
-    end
-    for x,_ in pairs(subunits) do
-        subunits[x]=nil;
-    end
     if changeType>5 then
         HealBot_Panel_PlayersChanged()
-    elseif changeType==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then
-        HealBot_Panel_PetsChanged()
-    elseif changeType==3 then
-        HealBot_Panel_TargetChanged(preCombat)
-    elseif changeType==5 then
-        HealBot_Panel_EnemyChanged(preCombat)
-    elseif changeType==4 then
-        HealBot_Panel_FocusChanged(preCombat)
-    elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
-        HealBot_Panel_VehicleChanged()
+    else
+        for x,_ in pairs(order) do
+            order[x]=nil;
+        end
+        for x,_ in pairs(units) do
+            units[x]=nil;
+        end
+        for x,_ in pairs(suborder) do
+            suborder[x]=nil;
+        end
+        for x,_ in pairs(subunits) do
+            subunits[x]=nil;
+        end
+        if changeType==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then
+            HealBot_Panel_PetsChanged()
+        elseif changeType==3 then
+            HealBot_Panel_TargetChanged(preCombat)
+        elseif changeType==5 then
+            HealBot_Panel_EnemyChanged(preCombat)
+        elseif changeType==4 then
+            HealBot_Panel_FocusChanged(preCombat)
+        elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
+            HealBot_Panel_VehicleChanged()
+        end
     end
 end
 
@@ -2547,9 +2562,6 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
         end
         HealBot_Panel_DoPartyChanged(preCombat, 6)
         if preCombat then
-            HealBot_Panel_DoPartyChanged(preCombat, 5)
-            HealBot_Panel_DoPartyChanged(preCombat, 3)
-            HealBot_Panel_DoPartyChanged(preCombat, 4)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then 
                 HealBot_Panel_buildDataStore(false, true)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
@@ -2559,6 +2571,9 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
                     HealBot_Panel_DoPartyChanged(preCombat, 2)
                 end
             end
+            HealBot_Panel_DoPartyChanged(preCombat, 5)
+            HealBot_Panel_DoPartyChanged(preCombat, 3)
+            HealBot_Panel_DoPartyChanged(preCombat, 4)
         else
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end

@@ -1827,7 +1827,7 @@ function HealBot_Action_CreateButton(hbCurFrame)
             ghb.id=freeId
             HealBot_Action_InitButton(ghb)
             HealBot_Action_PrepButton(ghb)
-            ghb.frame=hbCurFrame
+            --ghb.frame=hbCurFrame
         end
         if freeId>HealBot_Action_luVars["ButtonHWM"] then
             HealBot_Action_luVars["ButtonHWM"]=freeId
@@ -2638,18 +2638,16 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton=HealBot_Unit_Button[unit] or HealBot_Action_CreateButton(hbCurFrame)
         end
         if not tSetHealButton then return nil end
-        if tSetHealButton.frame~=hbCurFrame then
+
+        if tSetHealButton.frame~=hbCurFrame or tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
             tSetHealButton:ClearAllPoints()
             tSetHealButton:SetParent(grpFrame[hbCurFrame])
             tSetHealButton.frame=hbCurFrame
-            tSetHealButton.skin=""
-        end
-        if tSetHealButton.skin~=Healbot_Config_Skins.Current_Skin then
             tSetHealButton.icon.reset=true
             tSetHealButton.skinreset=true
-            tSetHealButton.reset=true
             tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
         end
+
         if tSetHealButton.unit~=unit or tSetHealButton.reset or tSetHealButton.guid~=hbGUID or tSetHealButton.status.unittype~=unitType then
             tSetHealButton.reset=false
             tSetHealButton:SetAttribute("unit", unit);
@@ -2714,16 +2712,16 @@ local testBarsDat={["cnt"]=0, ["targetCnt"]=0, ["buffId"]=0,["debuffId"]=50}
 function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
     local thb=HealBot_Unit_Button[unitText] or HealBot_Action_CreateButton(hbCurFrame)
     if thb then
-        thb.unit=unitText
-        thb.guid="TestBar"
-        HealBot_Action_ResetrCallsUnit(thb)
-        HealBot_Unit_Button[unitText]=thb
-        thb.status.unittype=5
         if thb.frame~=hbCurFrame then
             thb:ClearAllPoints()
             thb:SetParent(grpFrame[hbCurFrame])
             thb.frame=hbCurFrame
         end
+        thb.unit=unitText
+        thb.guid="TestBar"
+        HealBot_Action_ResetrCallsUnit(thb)
+        HealBot_Unit_Button[unitText]=thb
+        thb.status.unittype=5
         if thb.skin~=Healbot_Config_Skins.Current_Skin then
             thb.skin=Healbot_Config_Skins.Current_Skin
         end
@@ -3026,7 +3024,7 @@ end
 
 function HealBot_Action_setPoint(hbCurFrame)
     if not hbCurFrame then return end
-    if not InCombatLockdown() then  -- not InCombatLockdown() -- not HealBot_Data["UILOCK"]
+    if not InCombatLockdown() then
         HealBot_Action_CheckFrame(hbCurFrame, grpFrame[hbCurFrame])
         if not HealBot_Action_StickyFrame(hbCurFrame) then
             HealBot_Action_FrameSetPoint(hbCurFrame, grpFrame[hbCurFrame])
@@ -3440,7 +3438,7 @@ function HealBot_Action_Toggle_Enabled(unit)
     else
         HealBot_AlwaysEnabled[xGUID]=true
     end
-    HealBot_setOptions_Timer(80)
+    --HealBot_setOptions_Timer(80)
 end
 
 function HealBot_Action_AlwaysEnabled(hbGUID)
