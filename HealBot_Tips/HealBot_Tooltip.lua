@@ -102,7 +102,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
 
-    if not UnitIsUnit("player",button.unit) and HealBot_UnitInRange(button.unit, sName)<1 then
+    if button.status.range<1 then
         return sName, 1,0.5
     end
  

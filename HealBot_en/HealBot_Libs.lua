@@ -30,7 +30,9 @@ function HealBot_Libs_CC()
 end
 
 if HealBot_Version_Target() and HEALBOT_GAME_VERSION<4 then
-    libCD = libCD or (LibStub and LibStub("LibClassicDurations"))
+    if HEALBOT_GAME_VERSION==1 then 
+        libCD = libCD or (LibStub and LibStub("LibClassicDurations")) 
+        libCC = libCC or (LibStub and LibStub("LibClassicCasterino", true))
+    end
     libCHC = libCHC or (LibStub and LibStub("LibHealComm-4.0", true))
-    libCC = libCC or (LibStub and LibStub("LibClassicCasterino", true))
 end

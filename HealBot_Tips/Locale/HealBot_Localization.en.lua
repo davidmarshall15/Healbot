@@ -82,6 +82,7 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Effects tab
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
                                  ["USEFOCUSGROUPS"]=HEALBOT_OPTION_USEFOCUSGROUPS,
+                                 ["UNITINCOMBAT"]=HEALBOT_OPTIONS_UNITINCOMBAT,
                                  ["FOCUSGROUPDIMMING"]=HEALBOT_OPTION_FOCUSGROUPDIMMING,
                                  ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
                                  ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
@@ -215,7 +216,6 @@ function HealBot_Lang_Options_enALL()
                                  ["BARSAGGRO"]="Bars Aggro",
                                  ["HEALBARSAGGROSHOW"]=HEALBOT_OPTION_AGGROTRACK,
                                  ["HEALBARSAGGROSHOWTEXT"]=HEALBOT_OPTION_AGGROTXT,
-                                 ["HEALBARSAGGROSHOWIND"]=HEALBOT_OPTION_AGGROIND,
                                  ["HEALBARSAGGROINDALERT"]=HEALBOT_OPTIONS_AGGROINDALERT,
                                  ["HEALBARSAGGROBARALERT"]=HEALBOT_OPTIONS_AGGROALERT,
                         -- Skins Frames Bars Aux tab
@@ -254,7 +254,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTFONTOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
                                  ["HEALBARSTXTFONTHOFFSET"]=HEALBOT_OPTIONS_FONT_OFFSET,
                                  ["HEALBARSNAMETXTOPTIONS"]=HEALBOT_WORD_TEXT,
-                                 ["HEALBARSNAMECOLOPTIONS"]=HEALBOT_WORD_COLOUR,
+                                 ["HEALBARSNAMECOLOPTIONS"]=HEALBOT_WORD_COLOURS,
                                  ["HEALBARSTXTFONTALIGN"]=HEALBOT_OPTIONS_TEXTALIGNMENT,
                                  ["HEALBARSTXTFONTOUTLINE"]=HEALBOT_OPTIONS_SKINFOUTLINE,
                                  ["HEALBARSTXTMAXCHARS"]=HEALBOT_OPTIONS_MAXCHARS,
@@ -273,11 +273,11 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSTXTHEALTHTYPE"]="Display Type",
                                  ["HEALBARSTXTHEALTHFORMAT"]="Format Dropdowns",
                                  ["HEALBARSHEALTHTXTOPTIONS"]=HEALBOT_WORD_TEXT,
-                                 ["HEALBARSHEALTHCOLOPTIONS"]=HEALBOT_WORD_COLOUR,
+                                 ["HEALBARSHEALTHCOLOPTIONS"]=HEALBOT_WORD_COLOURS,
                         -- Skins Frames Text Aux tab
                                  ["TEXTAUX"]="Aux Text",
                                  ["HEALBARSCOLTEXTAUX"]=HEALBOT_SKIN_NAMETEXTCOL_TEXT,
-                                 ["HEALBARSAUXCOLOPTIONS"]=HEALBOT_WORD_COLOUR,
+                                 ["HEALBARSAUXCOLOPTIONS"]=HEALBOT_WORD_COLOURS,
                                  ["HEALBARSAUXTXTOPTIONS"]=HEALBOT_WORD_TEXT,
                                  ["HEALBARSCOLCUSTOMTEXTAUX"]="Aux Text Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSAUXTEXTCOLALPHA"]=HEALBOT_OPTIONS_BARALPHA,
@@ -332,6 +332,13 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONSHOWDIRMO"]=HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE,
                                  ["ICONOFFSET"]="Extra Icon Offset",
                                  ["EXTRAICONSCALE"]=HEALBOT_OPTIONS_ICONSCALE,
+                        -- Skins Frames Indicators
+                                 ["HEALBARSAGGROSHOWIND"]=HEALBOT_OPTION_AGGROIND,
+                                 ["INDICATORCOL"]=HEALBOT_WORD_COLOUR,
+                                 ["INDICATORANCHOR"]=HEALBOT_OPTIONS_AUXBARANCHOR,
+                                 ["INDICATOROFFSET"]="Indicator offset",
+                                 ["INDICATORSIZE"]=HEALBOT_OPTIONS_TXTSIZE,
+                                 ["INDICATORSPACE"]=HEALBOT_WORDS_SPACE,
                         -- Debuffs General tab
                                  ["MONITORDEBUFFS"]=HEALBOT_OPTIONS_MONITORDEBUFFS,
                                  ["MONITORDEBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
@@ -528,6 +535,7 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Effects tab
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.",
                                ["USEFOCUSGROUPS"]="Use if a raid leader requests the healer to focus on specific groups.\nThis option reduces the opacity on all groups not included.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies to the Raid Heal Group.",
+                               ["UNITINCOMBAT"]="When a visible Group/Raid member enters combat and your out of combat, do the following:\n--\n* Do nothing - ".._G["GREEN_FONT_COLOR_CODE"].."Keep Healbot unlocked and do nothing.\n* Show enemy frame - ".._G["GREEN_FONT_COLOR_CODE"].."Show the enemy frame when used with HealBot out of combat mode.\n* Lockdown HealBot - ".._G["GREEN_FONT_COLOR_CODE"].."Lockdown HealBot in combat mode.", 
                                ["FOCUSGROUPDIMMING"]="Set the intensity of the opacity reduction on unfocused groups.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.",
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.",
@@ -598,7 +606,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSWIDTH"]="Set the width for the heal bars.",
                                ["HEALBARSBRSPACE"]="Set the space between each row.",
                                ["HEALBARSBCSPACE"]="Set the space between each column.",
-                               ["HEALBARSPOWERCOUNT"]="Show power indicator at\nthe bottom of the heal bar.",
+                               ["HEALBARSPOWERCOUNT"]="Show an indicator on the heal bar when a player has a power counter.",
                                ["HEALBARSLOWMANA"]="Set if and when indicators are\ndisplayed to show a player is low on mana.",
                                ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.",
                         -- Skins Frames Bars Colours tab
@@ -661,7 +669,6 @@ function HealBot_Lang_Options_enALL()
                                ["BARSAGGRO"]="Show the Skins Frames Aggro tab.",
                                ["HEALBARSAGGROSHOW"]="Turn On/Off monitoring aggro.",
                                ["HEALBARSAGGROSHOWTEXT"]="Display » text « when a player has aggro.",
-                               ["HEALBARSAGGROSHOWIND"]="Display small round icons on the bar when a player has aggro.",
                                ["HEALBARSAGGROINDALERT"]="When using the indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROBARALERT"]="When using the aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
                         -- Skins Frames Bars Aux tab
@@ -777,6 +784,13 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
                                ["ICONOFFSET"]="Offset the extra icon relative to the anchor.",
                                ["EXTRAICONSCALE"]="The icon scale relative to the bar.",
+                        -- Skins Frames Indicators
+                               ["HEALBARSAGGROSHOWIND"]="Display an indicator on the bar when a player has aggro.",
+                               ["INDICATORCOL"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the indicators.",
+                               ["INDICATORANCHOR"]="Set the anchor for the indicators relative to the health bar.",
+                               ["INDICATOROFFSET"]="Offset the indicators relative to the anchor.",
+                               ["INDICATORSIZE"]="Set the size of the indicators.",
+                               ["INDICATORSPACE"]="Set the space between indicators.",
                         -- Debuffs General tab
                                ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
                                ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",

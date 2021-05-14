@@ -16,6 +16,7 @@ HealBot_Action_luVars["FluidInUse"]=false
 HealBot_Action_luVars["FrameInitDone"]=false
 HealBot_Action_luVars["pluginTimeToLive"]=false
 HealBot_Action_luVars["pluginExtraButtons"]=false
+HealBot_Action_luVars["showTestPowerIndicator"]=0
 HealBot_Action_luVars["FocusGroups"]=false
 HealBot_Action_luVars["FGDimming"]=2
 HealBot_Action_luVars["FGroups"]={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true}
@@ -1028,6 +1029,19 @@ function HealBot_Action_setButtonManaBarCol(button)
     button.mana.r,button.mana.g,button.mana.b=HealBot_Action_GetManaBarCol(button)
 end
 
+function HealBot_Action_hasPowerCounter(frame)
+    if HealBot_pcClass[frame] then
+        return HealBot_Action_luVars["UnitPowerMax"]
+    end
+    return 0
+end
+
+function HealBot_Action_UpdateAllIndicators(button)
+    HealBot_Action_setPowerIndicators(button)
+    HealBot_Action_CheckUnitLowMana(button)
+    HealBot_Aggro_IndicatorUpdate(button)
+end
+
 local hbPowerIndicator=0
 function HealBot_Action_setPowerIndicators(button)
     if HealBot_pcClass[button.frame] and button.unit=="player" and button.status.current<9 then
@@ -1035,7 +1049,9 @@ function HealBot_Action_setPowerIndicators(button)
         if hbPowerIndicator==1 then
             if button.mana.power~=1 then
                 button.mana.power=1
-                button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_red.tga]])
+                if Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][button.frame]["PCOL"]==1 then
+                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_red.tga]])
+                end
                 button.gref.indicator.power[1]:SetAlpha(1)
                 button.gref.indicator.power[2]:SetAlpha(0)
                 button.gref.indicator.power[3]:SetAlpha(0)
@@ -1045,12 +1061,14 @@ function HealBot_Action_setPowerIndicators(button)
         elseif hbPowerIndicator==2 then
             if button.mana.power~=2 then
                 button.mana.power=2
-                if HealBot_Action_luVars["UnitPowerMax"]<4 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                else
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
+                if Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][button.frame]["PCOL"]==1 then
+                    if HealBot_Action_luVars["UnitPowerMax"]<4 then
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                    else
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_orange.tga]]);
+                    end
                 end
                 button.gref.indicator.power[1]:SetAlpha(1)
                 button.gref.indicator.power[2]:SetAlpha(1)
@@ -1061,18 +1079,20 @@ function HealBot_Action_setPowerIndicators(button)
         elseif hbPowerIndicator==3 then
             if button.mana.power~=3 then
                 button.mana.power=3
-                if HealBot_Action_luVars["UnitPowerMax"]<4 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                elseif HealBot_Action_luVars["UnitPowerMax"]<5 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                else
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                if Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][button.frame]["PCOL"]==1 then
+                    if HealBot_Action_luVars["UnitPowerMax"]<4 then
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                    elseif HealBot_Action_luVars["UnitPowerMax"]<5 then
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                    else
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_yellow.tga]]);
+                    end
                 end
                 button.gref.indicator.power[1]:SetAlpha(1)
                 button.gref.indicator.power[2]:SetAlpha(1)
@@ -1083,17 +1103,19 @@ function HealBot_Action_setPowerIndicators(button)
         elseif hbPowerIndicator==4 then
             if button.mana.power~=4 then
                 button.mana.power=4
-                if HealBot_Action_luVars["UnitPowerMax"]<5 then
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                    button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                if Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][button.frame]["PCOL"]==1 then
+                    if HealBot_Action_luVars["UnitPowerMax"]<5 then
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
 
-                else
-                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
-                    button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                    else
+                        button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                        button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_lime.tga]]);
+                    end
                 end
                 button.gref.indicator.power[1]:SetAlpha(1)
                 button.gref.indicator.power[2]:SetAlpha(1)
@@ -1104,10 +1126,12 @@ function HealBot_Action_setPowerIndicators(button)
         elseif hbPowerIndicator==5 then
             if button.mana.power~=5 then
                 button.mana.power=5
-                button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
-                button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                if Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][button.frame]["PCOL"]==1 then
+                    button.gref.indicator.power[1]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                    button.gref.indicator.power[2]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                    button.gref.indicator.power[3]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                    button.gref.indicator.power[4]:SetTexture([[Interface\AddOns\HealBot\Images\indicator_green.tga]]);
+                end
                 button.gref.indicator.power[1]:SetAlpha(1)
                 button.gref.indicator.power[2]:SetAlpha(1)
                 button.gref.indicator.power[3]:SetAlpha(1)
@@ -1177,7 +1201,7 @@ end
 
 local tCheckLowManaPct=0
 function HealBot_Action_CheckUnitLowMana(button)
-    if button.mana.type==0 then
+    if button.mana.type==0 and button.frame<10 then
         if button.status.current<9 and button.mana.max>0 and 
            Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["LOWMANA"]>1 then
             tCheckLowManaPct=floor((button.mana.current/button.mana.max)*100)
@@ -1471,6 +1495,7 @@ function HealBot_Action_InitButton(button)
     button.spells={}
     button.aggro={}
     button.mana={}
+    button.power={}
     button.text={}
     button.icon={}
     button.icon.debuff={}
@@ -1504,6 +1529,11 @@ function HealBot_Action_InitButton(button)
     button.gref["Back"]:UnregisterAllEvents()
     button.gref["Back"]:SetValue(100)
     button.gref["Back"]:SetMinMaxValues(0,100)
+    button.gref["Top"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7"]
+    button.gref["Top"]:UnregisterAllEvents()
+    button.gref["Top"]:SetValue(100)
+    button.gref["Top"]:SetMinMaxValues(0,100)
+    button.gref["Top"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Absorb"]=_G["HealBot_Action_HealUnit"..button.id.."Bar6"]
     button.gref["Absorb"]:UnregisterAllEvents()
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
@@ -1533,87 +1563,87 @@ function HealBot_Action_InitButton(button)
     end
     button.gref.txt["text"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text"]
     button.gref.txt["text2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text2"]
-    button.gref.icon["Icontm1"]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm1"]
-    button.gref.icon["Icontm2"]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm2"]
-    button.gref.icon["Icontm3"]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm3"]
-    button.gref.icon[1]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon1"]
-    button.gref.icon[2]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon2"]
-    button.gref.icon[3]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon3"]
-    button.gref.icon[4]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon4"]
-    button.gref.icon[5]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon5"]
-    button.gref.icon[6]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon6"]
-    button.gref.icon[7]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon7"]
-    button.gref.icon[8]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon8"]
-    button.gref.icon[9]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon9"]
-    button.gref.icon[10]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon10"]
-    button.gref.icon[11]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon11"]
-    button.gref.icon[12]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon12"]
-    button.gref.icon[51]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon51"]
-    button.gref.icon[52]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon52"]
-    button.gref.icon[53]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon53"]
-    button.gref.icon[54]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon54"]
-    button.gref.icon[55]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon55"]
-    button.gref.icon[56]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon56"]
-    button.gref.icon[57]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon57"]
-    button.gref.icon[58]=_G["HealBot_Action_HealUnit"..button.id.."BarIcon58"]
-    button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraClass"]
-    button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraTarget"]
-    button.gref.icon[93]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraRC"]
-    button.gref.icon[94]=_G["HealBot_Action_HealUnit"..button.id.."BarExtraOOR"]
-    button.gref.txt.expire[1]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire1"]
-    button.gref.txt.count[1]=_G["HealBot_Action_HealUnit"..button.id.."BarCount1"]
-    button.gref.txt.expire[2]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire2"]
-    button.gref.txt.count[2]=_G["HealBot_Action_HealUnit"..button.id.."BarCount2"]
-    button.gref.txt.expire[3]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire3"]
-    button.gref.txt.count[3]=_G["HealBot_Action_HealUnit"..button.id.."BarCount3"]
-    button.gref.txt.expire[4]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire4"]
-    button.gref.txt.count[4]=_G["HealBot_Action_HealUnit"..button.id.."BarCount4"]
-    button.gref.txt.expire[5]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire5"]
-    button.gref.txt.count[5]=_G["HealBot_Action_HealUnit"..button.id.."BarCount5"]
-    button.gref.txt.expire[6]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire6"]
-    button.gref.txt.count[6]=_G["HealBot_Action_HealUnit"..button.id.."BarCount6"]
-    button.gref.txt.expire[7]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire7"]
-    button.gref.txt.count[7]=_G["HealBot_Action_HealUnit"..button.id.."BarCount7"]
-    button.gref.txt.expire[8]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire8"]
-    button.gref.txt.count[8]=_G["HealBot_Action_HealUnit"..button.id.."BarCount8"]
-    button.gref.txt.expire[9]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire9"]
-    button.gref.txt.count[9]=_G["HealBot_Action_HealUnit"..button.id.."BarCount9"]
-    button.gref.txt.expire[10]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire10"]
-    button.gref.txt.count[10]=_G["HealBot_Action_HealUnit"..button.id.."BarCount10"]
-    button.gref.txt.expire[11]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire11"]
-    button.gref.txt.count[11]=_G["HealBot_Action_HealUnit"..button.id.."BarCount11"]
-    button.gref.txt.expire[12]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire12"]
-    button.gref.txt.count[12]=_G["HealBot_Action_HealUnit"..button.id.."BarCount12"]
-    button.gref.txt.expire[51]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire51"]
-    button.gref.txt.count[51]=_G["HealBot_Action_HealUnit"..button.id.."BarCount51"]
-    button.gref.txt.expire[52]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire52"]
-    button.gref.txt.count[52]=_G["HealBot_Action_HealUnit"..button.id.."BarCount52"]
-    button.gref.txt.expire[53]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire53"]
-    button.gref.txt.count[53]=_G["HealBot_Action_HealUnit"..button.id.."BarCount53"]
-    button.gref.txt.expire[54]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire54"]
-    button.gref.txt.count[54]=_G["HealBot_Action_HealUnit"..button.id.."BarCount54"]
-    button.gref.txt.expire[55]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire55"]
-    button.gref.txt.count[55]=_G["HealBot_Action_HealUnit"..button.id.."BarCount55"]
-    button.gref.txt.expire[56]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire56"]
-    button.gref.txt.count[56]=_G["HealBot_Action_HealUnit"..button.id.."BarCount56"]
-    button.gref.txt.expire[57]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire57"]
-    button.gref.txt.count[57]=_G["HealBot_Action_HealUnit"..button.id.."BarCount57"]
-    button.gref.txt.expire[58]=_G["HealBot_Action_HealUnit"..button.id.."BarExpire58"]
-    button.gref.txt.count[58]=_G["HealBot_Action_HealUnit"..button.id.."BarCount58"]
-    button.gref.indicator.aggro["Iconal1"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconal1"]
-    button.gref.indicator.aggro["Iconal2"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconal2"]
-    button.gref.indicator.aggro["Iconal3"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconal3"]
-    button.gref.indicator.aggro["Iconar1"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconar1"]
-    button.gref.indicator.aggro["Iconar2"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconar2"]
-    button.gref.indicator.aggro["Iconar3"]=_G["HealBot_Action_HealUnit"..button.id.."BarIconar3"]
-    button.gref.indicator.mana[1]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm1"]
-    button.gref.indicator.mana[2]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm2"]
-    button.gref.indicator.mana[3]=_G["HealBot_Action_HealUnit"..button.id.."BarIcontm3"]
-    button.gref.indicator.power[1]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi1"]
-    button.gref.indicator.power[2]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi2"]
-    button.gref.indicator.power[3]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi3"]
-    button.gref.indicator.power[4]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi4"]
-    button.gref.indicator.power[5]=_G["HealBot_Action_HealUnit"..button.id.."BarIconpi5"]
+    button.gref.icon["Icontm1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm1"]
+    button.gref.icon["Icontm2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm2"]
+    button.gref.icon["Icontm3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm3"]
+    button.gref.icon[1]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon1"]
+    button.gref.icon[2]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon2"]
+    button.gref.icon[3]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon3"]
+    button.gref.icon[4]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon4"]
+    button.gref.icon[5]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon5"]
+    button.gref.icon[6]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon6"]
+    button.gref.icon[7]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon7"]
+    button.gref.icon[8]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon8"]
+    button.gref.icon[9]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon9"]
+    button.gref.icon[10]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon10"]
+    button.gref.icon[11]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon11"]
+    button.gref.icon[12]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon12"]
+    button.gref.icon[51]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon51"]
+    button.gref.icon[52]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon52"]
+    button.gref.icon[53]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon53"]
+    button.gref.icon[54]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon54"]
+    button.gref.icon[55]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon55"]
+    button.gref.icon[56]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon56"]
+    button.gref.icon[57]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon57"]
+    button.gref.icon[58]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icon58"]
+    button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."Bar7ExtraClass"]
+    button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."Bar7ExtraTarget"]
+    button.gref.icon[93]=_G["HealBot_Action_HealUnit"..button.id.."Bar7ExtraRC"]
+    button.gref.icon[94]=_G["HealBot_Action_HealUnit"..button.id.."Bar7ExtraOOR"]
+    button.gref.txt.expire[1]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire1"]
+    button.gref.txt.count[1]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count1"]
+    button.gref.txt.expire[2]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire2"]
+    button.gref.txt.count[2]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count2"]
+    button.gref.txt.expire[3]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire3"]
+    button.gref.txt.count[3]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count3"]
+    button.gref.txt.expire[4]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire4"]
+    button.gref.txt.count[4]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count4"]
+    button.gref.txt.expire[5]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire5"]
+    button.gref.txt.count[5]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count5"]
+    button.gref.txt.expire[6]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire6"]
+    button.gref.txt.count[6]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count6"]
+    button.gref.txt.expire[7]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire7"]
+    button.gref.txt.count[7]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count7"]
+    button.gref.txt.expire[8]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire8"]
+    button.gref.txt.count[8]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count8"]
+    button.gref.txt.expire[9]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire9"]
+    button.gref.txt.count[9]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count9"]
+    button.gref.txt.expire[10]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire10"]
+    button.gref.txt.count[10]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count10"]
+    button.gref.txt.expire[11]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire11"]
+    button.gref.txt.count[11]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count11"]
+    button.gref.txt.expire[12]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire12"]
+    button.gref.txt.count[12]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count12"]
+    button.gref.txt.expire[51]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire51"]
+    button.gref.txt.count[51]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count51"]
+    button.gref.txt.expire[52]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire52"]
+    button.gref.txt.count[52]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count52"]
+    button.gref.txt.expire[53]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire53"]
+    button.gref.txt.count[53]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count53"]
+    button.gref.txt.expire[54]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire54"]
+    button.gref.txt.count[54]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count54"]
+    button.gref.txt.expire[55]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire55"]
+    button.gref.txt.count[55]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count55"]
+    button.gref.txt.expire[56]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire56"]
+    button.gref.txt.count[56]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count56"]
+    button.gref.txt.expire[57]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire57"]
+    button.gref.txt.count[57]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count57"]
+    button.gref.txt.expire[58]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Expire58"]
+    button.gref.txt.count[58]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Count58"]
+    button.gref.indicator.aggro["Iconal1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconal1"]
+    button.gref.indicator.aggro["Iconal2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconal2"]
+    button.gref.indicator.aggro["Iconal3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconal3"]
+    button.gref.indicator.aggro["Iconar1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconar1"]
+    button.gref.indicator.aggro["Iconar2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconar2"]
+    button.gref.indicator.aggro["Iconar3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconar3"]
+    button.gref.indicator.mana[1]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm1"]
+    button.gref.indicator.mana[2]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm2"]
+    button.gref.indicator.mana[3]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm3"]
+    button.gref.indicator.power[1]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconpi1"]
+    button.gref.indicator.power[2]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconpi2"]
+    button.gref.indicator.power[3]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconpi3"]
+    button.gref.indicator.power[4]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconpi4"]
+    button.gref.indicator.power[5]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Iconpi5"]
     for x=1,5 do
         button.gref.indicator.power[x]:SetAlpha(0);
     end
@@ -1844,17 +1874,22 @@ function HealBot_Action_CreateButton(hbCurFrame)
     --HealBot_setCall("HealBot_Action_CreateButton")
 end
 
-function HealBot_Action_ResetAllButtons(skin, icon)
+function HealBot_Action_ResetAllButtons()
     for i=1,HealBot_Action_luVars["ButtonHWM"] do
         local ghb=_G["HealBot_Action_HealUnit"..i]
         if ghb then
-            if skin then ghb.skinreset=true end
-            if icon then ghb.icon.reset=true end
+            if HealBot_Action_luVars["resetSkin"] then ghb.skinreset=true end
+            if HealBot_Action_luVars["resetIcon"] then ghb.icon.reset=true end
+            if HealBot_Action_luVars["resetIndicator"] then ghb.indreset=true end
             ghb.reset=true
         end
     end
     HealBot_Panel_ResetHeaders()
-    HealBot_nextRecalcParty(0)
+    HealBot_setOptions_Timer(188)
+    --HealBot_nextRecalcParty(0)
+    HealBot_Action_luVars["resetSkin"]=false
+    HealBot_Action_luVars["resetIcon"]=false
+    HealBot_Action_luVars["resetIndicator"]=false
 end
 
 local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
@@ -2623,7 +2658,7 @@ end
 local tSetHealButton={}
 local vEnemyUnitsWithEvents={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true,
                              ["arena1"]=true,["arena2"]=true,["arena3"]=true,["arena4"]=true,["arena5"]=true}
-function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,role)
+function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,role,preCombat)
     tSetHealButton=false
     if hbGUID then
         if unitType<5 then
@@ -2645,6 +2680,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.frame=hbCurFrame
             tSetHealButton.icon.reset=true
             tSetHealButton.skinreset=true
+            tSetHealButton.indreset=true
             tSetHealButton.skin=Healbot_Config_Skins.Current_Skin
         end
 
@@ -2689,13 +2725,13 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.aura.alpha=true
             tSetHealButton.status.range=1
             tSetHealButton.status.change=true
-            HealBot_HealthAlertLevel(HealBot_Data["UILOCK"], tSetHealButton)
+            HealBot_HealthAlertLevel(preCombat, tSetHealButton)
             HealBot_Action_RegisterUnitEvents(tSetHealButton)
             HealBot_BumpThrottleCtl(tSetHealButton)
         end
         tSetHealButton.status.update=true
         HealBot_Action_SetHealButtonAuraCols(tSetHealButton)
-        if tSetHealButton.skinreset or tSetHealButton.icon.reset then
+        if tSetHealButton.skinreset or tSetHealButton.icon.reset or tSetHealButton.indreset then
             HealBot_Skins_ResetSkin("bar",tSetHealButton)
         elseif hbCurFrame==10 then
             HealBot_Skins_ResetSkinWidth(tSetHealButton)
@@ -2709,6 +2745,7 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
 end
 
 local testBarsDat={["cnt"]=0, ["targetCnt"]=0, ["buffId"]=0,["debuffId"]=50}
+local testBarsManaClass={["DRUI"]=true,["MAGE"]=true,["PALA"]=true,["PRIE"]=true,["SHAM"]=true,["WARL"]=true}
 function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
     local thb=HealBot_Unit_Button[unitText] or HealBot_Action_CreateButton(hbCurFrame)
     if thb then
@@ -2725,8 +2762,16 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
         if thb.skin~=Healbot_Config_Skins.Current_Skin then
             thb.skin=Healbot_Config_Skins.Current_Skin
         end
+        if testBarsManaClass[unitClass] then
+            thb.mana.type=0
+        else
+            thb.mana.type=1
+        end
+        HealBot_Skins_showPowerCounter(HealBot_Action_luVars["showTestPowerIndicator"])
+        HealBot_Action_luVars["showTestPowerIndicator"]=0
         thb.icon.reset=true
         thb.skinreset=true
+        thb.indreset=true
         HealBot_Skins_ResetSkin("bar",thb)
         for j=1,3 do
             thb.gref.icon[j]:SetAlpha(0)
@@ -3198,11 +3243,9 @@ function HealBot_Action_UseSmartCast(bp)
     local sName=HealBot_Action_SmartCast(bp);
     if sName then
         if HealBot_Spell_Names[sName] then
-            if bp.status.range>0 then
-                bp:SetAttribute("helpbutton1", "heal1");
-                bp:SetAttribute("type-heal1", "spell");
-                bp:SetAttribute("spell-heal1", sName);
-            end
+            bp:SetAttribute("helpbutton1", "heal1");
+            bp:SetAttribute("type-heal1", "spell");
+            bp:SetAttribute("spell-heal1", sName);
         else
             local mId=GetMacroIndexByName(sName)
             if mId ~= 0 then
@@ -3467,8 +3510,10 @@ function HealBot_Action_SmartCast(button)
             scuSpell=HealBot_SmartCast(hptc)
         end
     end
- 
-    if not UnitIsUnit("player",button.unit) and HealBot_UnitInRange(button.unit, rSpell)<1 then
+     
+    if button.status.unittype<11 then button.status.rangespell=rSpell end
+    HealBot_UpdateUnitRange(button,false)
+    if button.status.range<1 then
         return nil
     end
     return scuSpell;
