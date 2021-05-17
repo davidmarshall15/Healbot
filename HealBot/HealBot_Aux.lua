@@ -432,7 +432,6 @@ function HealBot_Aux_setPowerBars(button)
         if button.mana.max==0 then
             HealBot_Aux_setBar(button, id, 0, true)
         else
-            if button.mana.change then HealBot_Action_setButtonManaBarCol(button) end
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
                 button.aux[id]["R"]=button.mana.r
                 button.aux[id]["G"]=button.mana.g

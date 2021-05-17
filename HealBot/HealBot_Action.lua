@@ -1667,6 +1667,8 @@ function HealBot_Action_UnregisterUnitEvents(button)
     if HEALBOT_GAME_VERSION>3 then
         button:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+    end
+    if HEALBOT_GAME_VERSION>1 then
         button:UnregisterEvent("UNIT_SPELLCAST_START")
         button:UnregisterEvent("UNIT_SPELLCAST_CHANNEL_START")
     end
@@ -1687,10 +1689,12 @@ function HealBot_Action_RegisterUnitEvents(button)
     if HEALBOT_GAME_VERSION>3 then
         button:RegisterUnitEvent("UNIT_ABSORB_AMOUNT_CHANGED", button.unit)
         button:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", button.unit)
+    end
+    if HEALBOT_GAME_VERSION>1 then
         button:RegisterUnitEvent("UNIT_SPELLCAST_START", button.unit)
         button:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_START", button.unit)
     end
-    if HEALBOT_GAME_VERSION>3 or UnitIsUnit(button.unit,"player") then
+    if HEALBOT_GAME_VERSION>1 or UnitIsUnit(button.unit,"player") then
         button:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", button.unit)
         button:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", button.unit)
         button:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", button.unit)
@@ -1734,8 +1738,8 @@ function HealBot_Action_PrepButton(button)
     button.mana.current=0
     button.mana.max=0
     button.mana.type=0
-    button.mana.ind=0
-    button.mana.power=0
+    button.mana.ind=-1
+    button.mana.power=-1
     button.mana.r=0
     button.mana.g=0
     button.mana.b=1
@@ -1794,7 +1798,7 @@ function HealBot_Action_PrepButton(button)
     button.aura.debuff.nextupdate=GetTime()
     button.aura.check=true
     button.aura.alpha=false
-    button.aggro.ind=0
+    button.aggro.ind=-1
     button.aggro.status=-1
     button.aggro.threatpct=0
     button.aggro.threatvalue=0
@@ -2233,7 +2237,7 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
             UIDropDownMenu_AddButton(info, 1);
         end
 
-        if HEALBOT_GAME_VERSION>3 then 
+        if HEALBOT_GAME_VERSION>1 then 
             info = UIDropDownMenu_CreateInfo();
             info.notCheckable = true;
             if HealBot_retHbFocus(self.unit) then
@@ -2357,7 +2361,7 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
         end
         info.func = function() HealBot_Panel_ToggelPrivateHealers(self.unit, true); end;
         UIDropDownMenu_AddButton(info, 2);
-    elseif menuList=="hbFocus" and HEALBOT_GAME_VERSION>3 then
+    elseif menuList=="hbFocus" and HEALBOT_GAME_VERSION>1 then
         info = UIDropDownMenu_CreateInfo();
         info.text = HEALBOT_WORD_ALLZONE
         info.hasArrow = false; 

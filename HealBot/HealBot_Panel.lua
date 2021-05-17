@@ -1723,7 +1723,7 @@ function HealBot_Panel_enemyTargets(preCombat)
     _,vEnemyLocation = IsInInstance()
     if vEnemyLocation == "arena" then
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCARENA"] then
-            for j=1,5 do
+            for j=1,GetNumGroupMembers() do
                 xUnit="arena"..j;
                 HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, 
                                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"],
@@ -1731,7 +1731,7 @@ function HealBot_Panel_enemyTargets(preCombat)
             end
         end
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCARENAPETS"] then
-            for j=1,5 do
+            for j=1,GetNumGroupMembers() do
                 xUnit="arenapet"..j;
                 HealBot_Panel_checkEnemyBar(xUnit, "player", preCombat, 
                                             Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"],
@@ -1755,7 +1755,7 @@ function HealBot_Panel_enemyTargets(preCombat)
         end)
     end
     
-    if HEALBOT_GAME_VERSION>3 then
+    if HEALBOT_GAME_VERSION>1 then
         vEnemyBossNum=Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"]
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWBOSS"] then
             vEnemyBossExist=2
@@ -1823,7 +1823,7 @@ end
 
 local vVehiclePlayerUnit,vVehicleUnit,vVehicleIndex="","",0
 function HealBot_Panel_vehicleHeals(preCombat)
-    if HEALBOT_GAME_VERSION>3 then
+    if HEALBOT_GAME_VERSION>2 then
         vVehicleIndex=i[hbCurrentFrame]
         vVehicleUnit="pet"
         vVehiclePlayerUnit="player"
@@ -1876,7 +1876,7 @@ function HealBot_Panel_petHeals(preCombat)
     vPetPlayerInVehicle=false
     vPetRole=HealBot_Panel_petRole(vPetUnit)
     if vPetRole~="TANK" and vPetRole~="HEALER" then
-        if HEALBOT_GAME_VERSION>3 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
+        if HEALBOT_GAME_VERSION>2 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
         if hbPanel_dataPetUnits[vPetUnit] and not vPetPlayerInVehicle and not HealBot_Panel_luVars["SelfPets"] then
             HealBot_Panel_addUnit(vPetUnit, 8, hbPanel_dataPetUnits[vPetUnit], false)
         end
@@ -1888,7 +1888,7 @@ function HealBot_Panel_petHeals(preCombat)
                 vPetRole=HealBot_Panel_petRole(vPetUnit)
                 if vPetRole~="TANK" and vPetRole~="HEALER" then
                     vPetPlayerUnit="raid"..j;
-                    if HEALBOT_GAME_VERSION>3 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
+                    if HEALBOT_GAME_VERSION>2 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
                     if UnitExists(vPetPlayerUnit) and not vPetPlayerInVehicle then
                         HealBot_Panel_addUnit(vPetUnit, 8, hbPanel_dataPetUnits[vPetUnit], false)
                     end
@@ -1917,7 +1917,7 @@ function HealBot_Panel_petHeals(preCombat)
                 vPetRole=HealBot_Panel_petRole(vPetUnit)
                 if vPetRole~="TANK" and vPetRole~="HEALER" then
                     vPetPlayerUnit="party"..j;
-                    if HEALBOT_GAME_VERSION>3 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
+                    if HEALBOT_GAME_VERSION>2 then vPetPlayerInVehicle=UnitUsingVehicle(vPetPlayerUnit) end
                     if UnitExists(vPetPlayerUnit) and not vPetPlayerInVehicle then 
                         HealBot_Panel_addUnit(vPetUnit, 8, hbPanel_dataPetUnits[vPetUnit], false)
                     end
@@ -2301,7 +2301,7 @@ end
 
 local vFocusButton=""
 function HealBot_Panel_FocusChanged(preCombat)
-    if HEALBOT_GAME_VERSION>3 then 
+    if HEALBOT_GAME_VERSION>1 then 
         hbCurrentFrame=9
         hbBarsPerFrame[hbCurrentFrame]=0
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then

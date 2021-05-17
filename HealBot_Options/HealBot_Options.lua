@@ -1089,7 +1089,7 @@ end
 HealBot_Options_setClassEn()
 
 function HealBot_Options_FrameAliasList()
-    if HEALBOT_GAME_VERSION<4 then 
+    if HEALBOT_GAME_VERSION<2 then 
         if Healbot_Config_Skins.FrameAlias and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin] then
             HealBot_Options_HealGroupsFrame_List = {
                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][1]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 1",
@@ -1114,6 +1114,34 @@ function HealBot_Options_FrameAliasList()
                 HEALBOT_OPTIONS_PETHEALS_en,
                 HEALBOT_OPTIONS_TARGETHEALS_en,
                 "--------",
+                HEALBOT_CUSTOM_CASTBY_ENEMY_en,
+            }
+        end
+    elseif HEALBOT_GAME_VERSION<4 then 
+        if Healbot_Config_Skins.FrameAlias and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin] then
+            HealBot_Options_HealGroupsFrame_List = {
+                Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][1]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 1",
+                Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][2]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 2",
+                Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][3]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 3",
+                Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][4]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 4",
+                Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][5]["ALIAS"] or HEALBOT_OPTIONS_FRAME.." 5",
+                "--------",
+                HEALBOT_OPTIONS_PETHEALS_en,
+                HEALBOT_OPTIONS_TARGETHEALS_en,
+                HEALBOT_FOCUS_en,
+                HEALBOT_CUSTOM_CASTBY_ENEMY_en,
+            }
+        else
+            HealBot_Options_HealGroupsFrame_List = {
+                HEALBOT_OPTIONS_FRAME.." 1",
+                HEALBOT_OPTIONS_FRAME.." 2",
+                HEALBOT_OPTIONS_FRAME.." 3",
+                HEALBOT_OPTIONS_FRAME.." 4",
+                HEALBOT_OPTIONS_FRAME.." 5",
+                "--------",
+                HEALBOT_OPTIONS_PETHEALS_en,
+                HEALBOT_OPTIONS_TARGETHEALS_en,
+                HEALBOT_FOCUS_en,
                 HEALBOT_CUSTOM_CASTBY_ENEMY_en,
             }
         end
@@ -1820,6 +1848,7 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.Enemy[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.BarSort[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.DuplicateBars[newSkinName] = Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]
+    Healbot_Config_Skins.Indicators[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Author[newSkinName] = HealBot_GetUnitName("Player").." "..HEALBOT_PLAYER_OF_REALM.." "..GetRealmName()
     local unique=true;
     table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
@@ -3342,10 +3371,8 @@ function HealBot_SetSkinColours()
         Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["AG"],
         Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["AB"]);
     for j=1,10 do
-        local g=_G["f"..j.."_HealBot_Action"]
-        if HEALBOT_GAME_VERSION>8 then
-        
-        else
+        if HEALBOT_GAME_VERSION<2 then
+            local g=_G["f"..j.."_HealBot_Action"]
             g:SetBackdropColor(
                 Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKR"],
                 Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["BACKG"],
@@ -4170,11 +4197,7 @@ function HealBot_Options_HealGroups_OnClick(self, id)
     else
         Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"] = false
     end
-    if id==1 then
-        HealBot_Options_framesChanged(true)
-    else
-        HealBot_Options_framesChanged(false)
-    end
+    HealBot_Options_framesChanged(false)
 end
 
 function HealBot_Options_HealGroupsAllowDups_OnClick(self)
@@ -9083,7 +9106,9 @@ function HealBot_Options_FramesSelFrame_DropDown()
                         HealBot_Options_StorePrev["FramesSelFrame"]=self:GetID()
                         if HEALBOT_GAME_VERSION<4 then 
                             if HealBot_Options_StorePrev["FramesSelFrame"]==6 then HealBot_Options_StorePrev["FramesSelFrame"]=7 end
-                            if HealBot_Options_StorePrev["FramesSelFrame"]==9 then HealBot_Options_StorePrev["FramesSelFrame"]=10 end
+                            if HEALBOT_GAME_VERSION<2 then 
+                                if HealBot_Options_StorePrev["FramesSelFrame"]==9 then HealBot_Options_StorePrev["FramesSelFrame"]=10 end
+                            end
                         end
                         UIDropDownMenu_SetText(HealBot_Options_FramesSelFrame,HealBot_Options_HealGroupsFrame_List[HealBot_Options_StorePrev["FramesSelFrame"]]) 
                         HealBot_Options_Frame_initCurFrame()
@@ -10051,7 +10076,6 @@ function HealBot_Options_Aux1Assign_GenList()
         for j=1, 4 do
             list[j]=HealBot_Options_AuxAssign_List[j]
         end
-        --if HEALBOT_GAME_VERSION>3 then list[5]=HEALBOT_OPTIONS_CASTBAR end
         list[5]=HEALBOT_OPTIONS_CASTBAR
     elseif HealBot_Options_StorePrev["FramesSelFrame"]>7 then
         for j=1, 10 do
@@ -15778,7 +15802,7 @@ function HealBot_Options_InitSub1(subNo)
             HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_BarAlphaAbsorb,HEALBOT_OPTIONS_TTALPHA,0,0.90,0.01)
             HealBot_Options_BarAlphaAbsorb:SetValue(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["AA"] or 50);
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_BarAlphaAbsorb)
-            HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_BarAlphaBackGround,HEALBOT_OPTIONS_TTALPHA,0,0.75,0.01)
+            HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_BarAlphaBackGround,HEALBOT_OPTIONS_TTALPHA,0,1,0.01)
             HealBot_Options_BarAlphaBackGround:SetValue(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_StorePrev["FramesSelFrame"]]["BA"]);
             HealBot_Options_Pct_OnValueChanged(HealBot_Options_BarAlphaBackGround)
             HealBot_Options_val_OnLoad(HealBot_Options_BarOutlineBackGround,HEALBOT_OPTIONS_OUTLINE,0,10,1)
@@ -15931,7 +15955,7 @@ function HealBot_Options_InitSub1(subNo)
             
             HealBot_Options_AuxConfigBarChange()
             
-            if HEALBOT_GAME_VERSION<4 then 
+            if HEALBOT_GAME_VERSION<2 then 
                 HealBot_Options_FocusInCombat:Hide()
                 HealBot_Options_FocusOnlyFriend:Hide()
                 HealBot_FocusOutOfCombat_Text:Hide()
@@ -16381,11 +16405,6 @@ function HealBot_Options_InitSub1(subNo)
             for id=1,11 do
                 g=_G["HealBot_Options_HealGroups"..id]
                 g:SetChecked(Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["STATE"])
-                local n=id
-                if HEALBOT_GAME_VERSION<4 then 
-                    if n>9 then n=n-1 end
-                    if n>6 then n=n-1 end
-                end
                 HealBot_Options_SetLabel("HealBot_Options_HealGroups"..id.."Text",HealBot_HealGroupsTrans[Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][id]["NAME"]])
             end
             HealBot_Options_HealGroups1Frame.initialize = HealBot_Options_HealGroups1Frame_DropDown
@@ -16419,10 +16438,12 @@ function HealBot_Options_InitSub1(subNo)
                 HealBot_Options_HealGroups7Frame:Hide()
                 HealBot_Options_HealGroups8:ClearAllPoints()
                 HealBot_Options_HealGroups8:SetPoint("TOPLEFT",HealBot_Options_HealGroups6,"TOPLEFT",0,-40)
-                HealBot_Options_HealGroups10:Hide()
-                HealBot_Options_HealGroups10Frame:Hide()
-                HealBot_Options_HealGroups11:ClearAllPoints()
-                HealBot_Options_HealGroups11:SetPoint("TOPLEFT",HealBot_Options_HealGroups9,"TOPLEFT",0,-40)
+                if HEALBOT_GAME_VERSION<2 then 
+                    HealBot_Options_HealGroups10:Hide()
+                    HealBot_Options_HealGroups10Frame:Hide()
+                    HealBot_Options_HealGroups11:ClearAllPoints()
+                    HealBot_Options_HealGroups11:SetPoint("TOPLEFT",HealBot_Options_HealGroups9,"TOPLEFT",0,-40)
+                end
             end
             DoneInitTab[310]=true
         end

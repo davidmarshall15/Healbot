@@ -1106,10 +1106,10 @@ function HealBot_Aura_CheckCurDebuff(button, TimeNow)
     spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever, debuffIsAuto=0, true, 20, false, uaDebuffType, false, false, false
     if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
         spellCD=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType, TimeNow)
-        if spellCD>2 then
+        if spellCD>1.8 then
             HealBot_Aura_luVars["prevDebuffID"]=0
             if HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then 
-                HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-0.05
+                HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-1.75
                 HealBot_setLuVars("MaskAuraCheckDebuff", HealBot_Aura_luVars["MaskAuraDCheck"])
                 HealBot_CheckAllActiveDebuffs()
             end
@@ -1126,7 +1126,7 @@ function HealBot_Aura_CheckCurDebuff(button, TimeNow)
         HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
         ccdbCheckthis=false
-        if dTypePriority<21 and spellCD<0.2 and 
+        if dTypePriority<21 and spellCD<0.1 and 
           (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaUnitCaster)) and
           (uaDuration==0 or uaDuration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
             ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffType);
@@ -1230,6 +1230,7 @@ function HealBot_Aura_BuffWarnings(button, TimeNow)
         end
     end
     button.status.refresh=true
+    HealBot_fastUpdateEveryFrame(1)
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
 
@@ -1275,6 +1276,7 @@ function HealBot_Aura_DebuffWarnings(button, TimeNow, dbType)
             HealBot_Aura_DebuffAttribs(button, dbType)
         end
         button.status.refresh=true
+        HealBot_fastUpdateEveryFrame(1)
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
 end
@@ -1349,7 +1351,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
         end
         while true do
             uaName=false
-            if HEALBOT_GAME_VERSION<4 and libCD then
+            if HEALBOT_GAME_VERSION<2 and libCD then
                 uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HELPFUL")
             else
                 uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitBuff(button.unit,uaZ)
@@ -1375,7 +1377,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
                                 end
                             end
                             PlayerBuffs[uaName]=true
-                            if HealBot_CheckBuffs[uaName] and uaExpirationTime>0 and (HEALBOT_GAME_VERSION>3 or UnitIsUnit(uaUnitCaster,"player")) then
+                            if HealBot_CheckBuffs[uaName] and uaExpirationTime>0 and (HEALBOT_GAME_VERSION>1 or UnitIsUnit(uaUnitCaster,"player")) then
                                 HealBot_Aura_SetUnitBuffTimer(button)
                             elseif button.aura.buff.recheck[uaName] then
                                 button.aura.buff.recheck[uaName]=nil
@@ -1424,7 +1426,7 @@ function HealBot_Aura_CheckUnitAuras(button, TimeNow)
         curDebuffName=false
         while true do
             uaName=false
-            if HEALBOT_GAME_VERSION<4 and libCD then
+            if HEALBOT_GAME_VERSION<2 and libCD then
                 uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
                 if uaUnitCaster and (UnitClassification(uaUnitCaster)=="worldboss" or HealBot_UnitBosses(uaUnitCaster)) then
                     uaIsBossDebuff=true
@@ -1668,7 +1670,7 @@ function HealBot_Aura_RefreshEnemyAuras(button, TimeNow)
     button.icon.debuff.count=0
     while true do
         eaName=false
-        if HEALBOT_GAME_VERSION<4 and libCD then
+        if HEALBOT_GAME_VERSION<2 and libCD then
             eaName, eaTexture, eaCount, eaDebuffType, _, eaExpirationTime, eaUnitCaster, _, _, eaSpellId = libCD:UnitAura(button.unit,eaZ,"HARMFUL")
         else
             eaName, eaTexture, eaCount, eaDebuffType, _, eaExpirationTime, eaUnitCaster, _, _, eaSpellId = UnitDebuff(button.unit,eaZ)
@@ -2177,7 +2179,7 @@ function HealBot_Aura_InitData()
         end
     end
 
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_GAME_VERSION<2 then
         if not libCD then
             libCD = HealBot_Libs_CD()
             if libCD then libCD:Register(HEALBOT_HEALBOT) end
