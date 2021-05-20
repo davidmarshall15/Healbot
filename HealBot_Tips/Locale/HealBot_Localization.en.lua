@@ -232,6 +232,7 @@ function HealBot_Lang_Options_enALL()
                                  ["BARSAUXOFFSET"]="Auxiliary Bar Offset",
                                  ["HEALBARSTXTSHOWAUXTEXT"]=HEALBOT_OPTIONS_SHOWTEXT,
                                  ["BARSAUXCUSTOMOPACITY"]="Custom Opacity",
+                                 ["BARSAUXMANAONLY"]=HEALBOT_OPTION_MANAONLY,
                         -- Skins Frames Text Name tab
                                  ["TEXTNAME"]="Name Text",
                                  ["HEALBARSCOLTEXTNAME"]=HEALBOT_SKIN_NAMETEXTCOL_TEXT,
@@ -685,6 +686,7 @@ function HealBot_Lang_Options_enALL()
                                ["BARSAUXOFFSET"]="The auxiliary bar offset, relative to the next\nauxiliary bar or health bar depending on configuration.",
                                ["HEALBARSTXTSHOWAUXTEXT"]="Show text on the aux bars.\n".._G["GREEN_FONT_COLOR_CODE"].."For text format options, go to the Text>Aux tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."- Text is not available when in vertical orientation.\n".._G["YELLOW_FONT_COLOR_CODE"].."- Text is not available on assignments: Aggro, Highlight and Target.",
                                ["BARSAUXCUSTOMOPACITY"]="Set the custom auxiliary bar Opacity",
+                               ["BARSAUXMANAONLY"]="Only display mana bars, all other power types are hidden.\n--\n".."|cff77c8ff".."Tip: When using this option:\n".."|cff77c8ff".."If necessary increase the size of the health bar and\n".."|cff77c8ff".."offset the power bar so it's on top of the health bar.",
                         -- Skins Frames Text Name tab
                                ["TEXTNAME"]="Show the Skins Frames Text Name tab.",
                                ["HEALBARSCOLTEXTNAME"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the name text.\n".._G["GREEN_FONT_COLOR_CODE"].."When custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",

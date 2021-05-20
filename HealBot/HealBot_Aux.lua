@@ -429,7 +429,7 @@ end
 
 function HealBot_Aux_setPowerBars(button)
     for id in pairs(hbAuxPowerAssigned[button.frame]) do
-        if button.mana.max==0 then
+        if button.mana.max==0 or (Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] and button.mana.type~=0) then
             HealBot_Aux_setBar(button, id, 0, true)
         else
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then

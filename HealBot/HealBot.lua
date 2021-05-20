@@ -1386,7 +1386,7 @@ function HealBot_Load(hbCaller)
         HealBot_setOptions_Timer(189)
         HealBot_Register_Events()
         HealBot_setOptions_Timer(120)
-        HealBot_setOptions_Timer(595)
+        HealBot_nextRecalcParty(0)
         HealBot_luVars["Loaded"]=true
           --HealBot_setCall("HealBot_Load")
     end
@@ -1465,7 +1465,7 @@ function HealBot_Reset(rType)
         HealBot_Load("hbReset") 
         HealBot_setOptions_Timer(7950)
         HealBot_Register_Events()
-        HealBot_setOptions_Timer(595)
+        HealBot_setOptions_Timer(185)
     else
         HealBot_Options_framesChanged(true, true, true)
     end
@@ -2152,10 +2152,12 @@ end
 
 function HealBot_IncorrentVersion()
     local msg=""
-    if HEALBOT_GAME_VERSION>3 then
-        msg="You have Healbot Classic in Retail\nHealbot Classic is not compatible with Retail\n\nTo use Healbot download Healbot Retail"
+    if HEALBOT_GAME_VERSION>2 then
+        msg="You have Healbot "..HEALBOT_VERSION.." in Retail\nHealbot "..HEALBOT_VERSION.." is not compatible with Retail\n\nTo use Healbot download Healbot Retail"
+    elseif HEALBOT_GAME_VERSION==2 then
+        msg="You have Healbot "..HEALBOT_VERSION.." in Classic TBC\nHealbot "..HEALBOT_VERSION.." is not compatible with Classic TBC\n\nTo use Healbot download Healbot Classic TBC"
     else
-        msg="You have Healbot Retail in Classic\nHealbot Retail is not compatible with Classic\n\nTo use Healbot download Healbot Classic"
+        msg="You have Healbot "..HEALBOT_VERSION.." in Classic\nHealbot "..HEALBOT_VERSION.." is not compatible with Classic\n\nTo use Healbot download Healbot Classic"
     end
     StaticPopupDialogs["HEALBOT_INCORRECTVERSION"] = {
         text = msg,
@@ -2501,9 +2503,6 @@ function HealBot_Options_Update()
     if HealBot_Options_Timer[10] then
         HealBot_OnEvent_VariablesLoaded()
         HealBot_Options_Timer[10]=nil
-    elseif HealBot_Options_Timer[5] then
-        HealBot_nextRecalcParty(0)
-        HealBot_Options_Timer[5]=nil
     elseif HealBot_Options_Timer[11] then
         HealBot_Options_BuffDebuff_Reset("buff")
         HealBot_Options_ResetDoInittab(5)
@@ -2533,15 +2532,6 @@ function HealBot_Options_Update()
             if not HealBot_ProcessRefreshTypes() then
                 HealBot_Options_Timer[8888]=nil
             end
-        elseif HealBot_Options_Timer[186] then
-            HealBot_setOptions_Timer(187)
-            HealBot_Options_Timer[186]=nil
-        elseif HealBot_Options_Timer[187] then
-            HealBot_Action_ResetAllButtons()
-            HealBot_Options_Timer[187]=nil
-        elseif HealBot_Options_Timer[188] then
-            HealBot_Skins_ResetAll()
-            HealBot_Options_Timer[188]=nil
         elseif HealBot_Options_Timer[189] then
             HealBot_luVars["SlowRaidGroupUpdate"]=TimeNow+0.2
             HealBot_Options_Timer[189]=nil
@@ -2575,7 +2565,7 @@ function HealBot_Options_Update()
             HealBot_Text_sethbAggroNumberFormat()
             HealBot_Action_ResetUnitStatus(false)
             HealBot_Aura_SetIconUpdateInterval()
-            HealBot_setOptions_Timer(595)
+            HealBot_setOptions_Timer(185)
             HealBot_Options_Timer[80]=nil
         elseif HealBot_Options_Timer[81] then
             HealBot_Text_setExtraCustomCols()
@@ -2786,9 +2776,6 @@ function HealBot_Options_Update()
         elseif HealBot_Options_Timer[550] then
             HealBot_InitSpells()
             HealBot_Options_Timer[550]=nil
-        elseif HealBot_Options_Timer[595] then
-            HealBot_nextRecalcParty(0)
-            HealBot_Options_Timer[595]=nil
         elseif HealBot_Options_Timer[800] then
             HealBot_Options_RaidTargetUpdate()
             HealBot_Options_Timer[800]=nil
@@ -2953,15 +2940,21 @@ function HealBot_Options_Update()
                 HealBot_AddDebug("Timer 8000 called #"..HealBot_luVars["Timer8000"])
                 HealBot_luVars["Timer8000"]=0
                 HealBot_setOptions_Timer(8100)
-                HealBot_setOptions_Timer(595)
+                HealBot_setOptions_Timer(185)
             end
           --HealBot_setCall("HealBot_Options_Update-8000")
+        elseif HealBot_Options_Timer[185] then
+            HealBot_nextRecalcParty(0)
+            HealBot_Options_Timer[185]=nil
+        elseif HealBot_Options_Timer[187] then
+            HealBot_Action_ResetAllButtons()
+            HealBot_Options_Timer[187]=nil
+        elseif HealBot_Options_Timer[188] then
+            HealBot_Skins_ResetAll()
+            HealBot_Options_Timer[188]=nil
         elseif HealBot_Options_Timer[8100] then
             HealBot_Options_Timer[8100]=nil
             HealBot_AuraCheck("player")
-        elseif HealBot_Options_Timer[130] then
-            HealBot_luVars["GetVersions"]=TimeNow+15
-            HealBot_Options_Timer[130]=nil
         elseif HealBot_Options_Timer[140] then
             if GetGuildInfo("player") then HealBot_Comms_SendAddonMsg(HEALBOT_HEALBOT, "G", 5, HealBot_Data["PNAME"]) end
             HealBot_setOptions_Timer(200)
@@ -3026,6 +3019,9 @@ function HealBot_Options_Update()
         elseif HealBot_Options_Timer[9995] then
             HealBot_PartyUpdate_CheckSolo()
             HealBot_Options_Timer[9995]=nil
+        elseif HealBot_Options_Timer[130] then
+            HealBot_luVars["GetVersions"]=TimeNow+5
+            HealBot_Options_Timer[130]=nil
         else -- 9999 will drop in here - for set timers only
             HealBot_Set_Timers()
             HealBot_luVars["HealBot_Options_Timer"]=false
@@ -4409,7 +4405,7 @@ function HealBot_OnEvent_SpecChange(button)
         HealBot_Player_TalentsChanged()
     else
         HealBot_GetTalentInfo(button)
-        HealBot_setOptions_Timer(595)
+        HealBot_setOptions_Timer(185)
     end
 end
 

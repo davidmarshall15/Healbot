@@ -761,7 +761,9 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Action_ResetActiveUnitStatus() 
             end
+            button.text.nameupdate=true
             HealBot_Text_setNameTag(button)
+            HealBot_Text_UpdateText(button)
             --HealBot_Action_Refresh(button)
             if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
             HealBot_Text_UpdateText(button)
@@ -796,6 +798,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
         button.aura.buff.nextcheck=false
         button.text.nameupdate=true
         HealBot_Text_setNameTag(button)
+        HealBot_Text_UpdateText(button)
         HealBot_Action_setState(button, true)
         if button.aura.debuff.name then  
             HealBot_Aura_ClearDebuff(button, true)
@@ -1885,12 +1888,11 @@ function HealBot_Action_ResetAllButtons()
             if HealBot_Action_luVars["resetSkin"] then ghb.skinreset=true end
             if HealBot_Action_luVars["resetIcon"] then ghb.icon.reset=true end
             if HealBot_Action_luVars["resetIndicator"] then ghb.indreset=true end
-            ghb.reset=true
+            --ghb.reset=true
         end
     end
     HealBot_Panel_ResetHeaders()
     HealBot_setOptions_Timer(188)
-    --HealBot_nextRecalcParty(0)
     HealBot_Action_luVars["resetSkin"]=false
     HealBot_Action_luVars["resetIcon"]=false
     HealBot_Action_luVars["resetIndicator"]=false
@@ -2819,6 +2821,11 @@ function HealBot_Action_SetTestButton(hbCurFrame, unitText, unitRole, unitClass)
         end
     end
     return thb
+end
+
+function HealBot_Action_resetTestBarsCounters()
+    testBarsDat["cnt"]=0
+    testBarsDat["targetCnt"]=0
 end
 
 function HealBot_Action_SetAllAttribs()

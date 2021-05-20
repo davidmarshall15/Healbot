@@ -312,14 +312,14 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil
     end 
-    HealBot_setOptions_Timer(595)
+    HealBot_setOptions_Timer(185)
 end
 
 function HealBot_Panel_AddBlackList(unit)
     xGUID=UnitGUID(unit)
     if xGUID then
         HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_setOptions_Timer(595)
+        HealBot_setOptions_Timer(185)
     end
 end
 
@@ -370,7 +370,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_setOptions_Timer(595)
+    HealBot_setOptions_Timer(185)
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -390,7 +390,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_setOptions_Timer(595)
+    HealBot_setOptions_Timer(185)
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)
@@ -816,8 +816,8 @@ function HealBot_Panel_PositionBars(preCombat)
             vPosButton.group=HealBot_UnitGroups[vPosButton.unit] or 1
             vFrame=vPosButton.frame
             rowNo[vFrame]=rowNo[vFrame]+1
-            vBar[vFrame]["BUTTON"]=vPosButton
             barNo[vFrame]=barNo[vFrame]+1
+            vBar[vFrame]["BUTTON"]=vPosButton
             if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vFrame]["GROW"]==1 then
                 newCol=2
                 sameCol=1
@@ -1163,6 +1163,7 @@ function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
 end
 
 function HealBot_Panel_TestBarsOn()
+    HealBot_Action_resetTestBarsCounters()
     if HealBot_Panel_luVars["TestBarsDelAll"] then
         HealBot_Panel_luVars["TestBarsDelAll"]=false
         for _,xButton in pairs(HealBot_Unit_Button) do
@@ -1180,15 +1181,18 @@ function HealBot_Panel_TestBarsOn()
         for _,xButton in pairs(HealBot_Extra_Button) do
             HealBot_Action_MarkDeleteButton(xButton)
         end
+        for xHeader,xButton in pairs(HealBot_Header_Frames) do
+            HealBot_Panel_DeleteHeader(xButton.id, xHeader)
+        end
     end
     for x,_ in pairs(HealBot_Action_HealButtons) do
         HealBot_Action_HealButtons[x]=nil;
     end 
-    for xHeader,xButton in pairs(HealBot_Header_Frames) do
-        HealBot_Panel_DeleteHeader(xButton.id, xHeader)
-    end
     for x,b in pairs(HealBot_TestBarsActive) do
         HealBot_TestBarsActive[x]=nil
+    end
+    for xHeader in pairs(HealBot_Track_Headers) do
+        HealBot_Track_Headers[xHeader]=false
     end
     for x,_ in pairs(tHeader) do
         tHeader[x]=nil
@@ -1414,6 +1418,11 @@ function HealBot_Panel_TestBarsOn()
         if not HealBot_TestBarsActive[xButton.id] then
             HealBot_setTestCols[xButton.id]=false
             HealBot_Action_MarkDeleteButton(xButton)
+        end
+    end
+    for xHeader,xButton in pairs(HealBot_Header_Frames) do
+        if not HealBot_Track_Headers[xHeader] then
+            HealBot_Panel_DeleteHeader(xButton.id, xHeader)
         end
     end
 end

@@ -9748,7 +9748,7 @@
                           </Slider>
                           <Button name="HealBot_AuxBarCustomColourb">
                             <Size>
-                              <AbsDimension x="120" y="20"/>
+                              <AbsDimension x="90" y="20"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour"  relativePoint="TOPRIGHT">
@@ -9765,7 +9765,7 @@
                           </Button>
                           <StatusBar name="HealBot_AuxBarCustomColour" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="120" y="20"/>
+                              <AbsDimension x="90" y="20"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour"  relativePoint="TOPRIGHT">
@@ -9810,6 +9810,20 @@
                               <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                             </Scripts>
                           </Button>
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarManaOnly" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="50" y="0"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_SkinBarAuxBarManaOnly_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("BARSAUXMANAONLY",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("BARSAUXMANAONLY",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
 
                           <Slider name="HealBot_Options_AuxBarSize" inherits="HealBot_Options_SliderTemplate">
                             <Size>

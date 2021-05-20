@@ -1106,15 +1106,17 @@ function HealBot_Aura_CheckCurDebuff(button, TimeNow)
     spellCD, debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsCustom, debuffIsNever, debuffIsAuto=0, true, 20, false, uaDebuffType, false, false, false
     if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
         spellCD=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType, TimeNow)
-        if spellCD>1.8 then
+        if (HealBot_Aura_luVars["cureOnCd"] and spellCD>0.12) or (not HealBot_Aura_luVars["cureOnCd"] and spellCD>2) then
             HealBot_Aura_luVars["prevDebuffID"]=0
             if HealBot_Aura_luVars["MaskAuraDCheck"]<TimeNow then 
-                HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-1.75
+                HealBot_Aura_luVars["MaskAuraDCheck"]=(TimeNow+spellCD)-0.1
                 HealBot_setLuVars("MaskAuraCheckDebuff", HealBot_Aura_luVars["MaskAuraDCheck"])
                 HealBot_CheckAllActiveDebuffs()
+                HealBot_Aura_luVars["cureOnCd"]=true
             end
         else
             spellCD=0
+            HealBot_Aura_luVars["cureOnCd"]=false
         end
     end
     dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaName, uaDebuffType)
@@ -1229,8 +1231,7 @@ function HealBot_Aura_BuffWarnings(button, TimeNow)
             end
         end
     end
-    button.status.refresh=true
-    HealBot_fastUpdateEveryFrame(1)
+    HealBot_Action_Refresh(button)
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
 
@@ -1275,8 +1276,7 @@ function HealBot_Aura_DebuffWarnings(button, TimeNow, dbType)
         elseif button.aura.debuff.type~=dbType then
             HealBot_Aura_DebuffAttribs(button, dbType)
         end
-        button.status.refresh=true
-        HealBot_fastUpdateEveryFrame(1)
+        HealBot_Action_Refresh(button)
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
 end
@@ -2179,8 +2179,8 @@ function HealBot_Aura_InitData()
         end
     end
 
-    if HEALBOT_GAME_VERSION<2 then
-        if not libCD then
+    if HEALBOT_GAME_VERSION<4 then
+        if HEALBOT_GAME_VERSION<2 and not libCD then
             libCD = HealBot_Libs_CD()
             if libCD then libCD:Register(HEALBOT_HEALBOT) end
         end
