@@ -1,3 +1,6 @@
+local HealBot_Fluid_TextNameAlpha={}
+local HealBot_Fluid_TextHealthAlpha={}
+local HealBot_Fluid_TextHealthAlpha={}
 local hbBarTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
 local hbBarHealthTextLen={[1]=50,[2]=50,[3]=50,[4]=50,[5]=50,[6]=50,[7]=50,[8]=50,[9]=50,[10]=50}
 local hbFontVal={ ["Accidental Presidency"]=3,
@@ -72,6 +75,7 @@ vTextChars["Newline"]="\n"
 vTextChars["Dot"]="."
 vTextChars["GreaterThan"]=">"
 vTextChars["LessThan"]="<"
+vTextChars["Colon"]=":"
 
 local vTextCustomCols={}
 vTextCustomCols["Close"]=_G["FONT_COLOR_CODE_CLOSE"]
@@ -95,6 +99,17 @@ else
     hbStringLen=string.len
 end
 local floor=floor
+local HealBot_Text_luVars={}
+HealBot_Text_luVars["FluidInUse"]=false
+
+function HealBot_Text_setLuVars(vName, vValue)
+    HealBot_Text_luVars[vName]=vValue
+      --HealBot_setCall("HealBot_Text_setLuVars - "..vName)
+end
+
+function HealBot_Text_retLuVars(vName)
+    return HealBot_Text_luVars[vName]
+end
 
 function HealBot_Text_Len(v)
     if "string" == type( v ) then
@@ -911,37 +926,126 @@ function HealBot_Text_setNameText(button)
       --HealBot_setCall("HealBot_Text_setNameText")
 end
 
-local atR, atG, atB, atA=0, 0, 0, 0
+
+local aufbButtonActive=false
+local aufbSetValue,aufbAlphaValue=0,0
+local aufbSetRValue,aufbSetGValue,aufbSetBValue=0,0,0
+function HealBot_Text_UpdateFluidTextAlpha(upVal)
+    HealBot_Text_luVars["FluidTextAlphaInUse"]=false
+    
+    for id,xButton in pairs(HealBot_Fluid_TextHealthAlpha) do
+        aufbButtonActive=false
+        aufbAlphaValue=xButton.gref.txt["text2"]:GetAlpha()
+        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+		HealBot_setCall("HealthAlpha A="..aufbAlphaValue)
+        if aufbAlphaValue>xButton.text.ha then
+            aufbSetValue=aufbAlphaValue-upVal
+            if aufbSetValue<xButton.text.ha then 
+                aufbSetValue=xButton.text.ha
+            else
+                aufbButtonActive=true
+            end
+        elseif aufbAlphaValue<xButton.text.ha then
+            aufbSetValue=aufbAlphaValue+upVal
+            if aufbSetValue>xButton.text.ha then 
+                aufbSetValue=xButton.text.ha
+            else
+                aufbButtonActive=true
+            end
+        else
+            aufbSetValue=xButton.text.ha
+        end
+        xButton.gref.txt["text2"]:SetTextColor(xButton.text.hr, xButton.text.hg, xButton.text.hb, aufbSetValue)
+        if not aufbButtonActive then
+            HealBot_Fluid_TextHealthAlpha[id]=nil
+        else
+            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
+        end
+    end
+	
+    for id,xButton in pairs(HealBot_Fluid_TextNameAlpha) do
+        aufbButtonActive=false
+        aufbAlphaValue=xButton.gref.txt["text"]:GetAlpha()
+        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+		HealBot_setCall("NameAlpha A="..aufbAlphaValue)
+        if aufbAlphaValue>xButton.text.na then
+            aufbSetValue=aufbAlphaValue-upVal
+            if aufbSetValue<xButton.text.na then 
+                aufbSetValue=xButton.text.na
+            else
+                aufbButtonActive=true
+            end
+        elseif aufbAlphaValue<xButton.text.na then
+            aufbSetValue=aufbAlphaValue+upVal
+            if aufbSetValue>xButton.text.na then 
+                aufbSetValue=xButton.text.na
+            else
+                aufbButtonActive=true
+            end
+        else
+            aufbSetValue=xButton.text.na
+        end
+        xButton.gref.txt["text"]:SetTextColor(xButton.text.nr, xButton.text.ng, xButton.text.nb, aufbSetValue)
+
+        if not aufbButtonActive then
+            HealBot_Fluid_TextNameAlpha[id]=nil
+        else
+            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
+        end
+    end
+    HealBot_Aux_setLuVars("FluidTextAlphaInUse", HealBot_Text_luVars["FluidTextAlphaInUse"])
+      --HealBot_setCall("HealBot_Text_UpdateFluidTextAlpha")
+end
+
+local function HealBot_Text_UpdateNameColour(button)
+    if HealBot_Text_luVars["FluidInUse"] then
+        HealBot_Fluid_TextNameAlpha[button.id]=button
+        HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
+    else
+        button.gref.txt["text"]:SetTextColor(button.text.nr, button.text.ng, button.text.nb, button.text.na)
+    end
+      --HealBot_setCall("HealBot_Text_UpdateNameColour")
+end
+
+local function HealBot_Text_UpdateHealthColour(button)
+    if HealBot_Text_luVars["FluidInUse"] then
+        HealBot_Fluid_TextHealthAlpha[button.id]=button
+        HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
+    else
+        button.gref.txt["text2"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
+    end
+      --HealBot_setCall("HealBot_Text_UpdateHealthColour")
+end
+
 function HealBot_Text_UpdateText(button)
-    button.text.update=false
     if button.text.nameupdate then
         button.text.nameupdate=false
         if button.status.current<10 then
             if button.status.enabled then
-                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
+                button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
             else
-                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)
+                button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)
             end
-            atR, atG, atB = HealBot_Text_TextNameColours(button)
-            button.gref.txt["text"]:SetTextColor(atR, atG, atB, atA)
+            button.text.nr, button.text.ng, button.text.nb = HealBot_Text_TextNameColours(button)
         else
-            button.gref.txt["text"]:SetTextColor(0.5, 0.5, 0.5, 0.8)
+            button.text.nr, button.text.ng, button.text.nb, button.text.na = 0.5, 0.5, 0.5, 0.8
         end
+        HealBot_Text_UpdateNameColour(button)
         button.gref.txt["text"]:SetText(button.text.name);
     end
     if button.text.healthupdate then
         button.text.healthupdate=false
         if button.status.current<10 then
             if button.status.enabled then
-                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"], 1)
+                button.text.ha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"], 1)
             else
-                atA=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCDA"], 1)
+                button.text.ha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCDA"], 1)
             end
-            atR, atG, atB = HealBot_Text_TextHealthColours(button)
-            button.gref.txt["text2"]:SetTextColor(atR, atG, atB, atA)
+            button.text.hr, button.text.hg, button.text.hb = HealBot_Text_TextHealthColours(button)
         else
-            button.gref.txt["text2"]:SetTextColor(0, 0, 0, 0)
+            button.text.hr, button.text.hg, button.text.hb, button.text.ha = 0, 0, 0, 0
         end
+        HealBot_Text_UpdateHealthColour(button)
         button.gref.txt["text2"]:SetText(button.text.health)
     end
       --HealBot_setCall("HealBot_Text_UpdateText")
@@ -968,7 +1072,7 @@ end
 function HealBot_Text_UpdateButton(button)
     button.text.nameupdate=true
     button.text.healthupdate=true
-    button.text.update=true
+    HealBot_Text_UpdateText(button)
 end
 
 function HealBot_Text_UpdateButtons()

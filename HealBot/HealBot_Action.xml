@@ -1021,10 +1021,6 @@
     <Size>
       <AbsDimension x="128" y="18" />
     </Size>
-    <Scripts>
-      <OnEnter>HealBot_Action_HealUnit_OnEnter(self);</OnEnter>
-      <OnLeave>HealBot_Action_HealUnit_OnLeave(self);</OnLeave>
-    </Scripts>
     <Frames>
       <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
         <Anchors>
@@ -1070,6 +1066,8 @@
     </Anchors>
     <Scripts>
       <OnClick> HealBot_Action_OptionsButton_OnClick(self); </OnClick>
+      <OnEnter>HealBot_Action_HealUnit_OnEnter(self);</OnEnter>
+      <OnLeave>HealBot_Action_HealUnit_OnLeave(self);</OnLeave>
     </Scripts>
   </Button>
   <Button name="HealBotFocusButtonTemplate" virtual="true" inherits="HealingButtonTemplate2">
@@ -1080,5 +1078,33 @@
         </Offset>
       </Anchor>
     </Anchors>
+  </Button>  
+  
+   <Button name="HealingButtonTemplateEmerg" virtual="true" inherits="SecureUnitButtonTemplate">
+    <Size>
+      <AbsDimension x="128" y="18" />
+    </Size>
+    <Scripts>
+      <OnLoad>HealBot_Action_OnLoad(self)</OnLoad>
+      <OnEnter>HealBot_Action_EmergUnit_OnEnter(self);</OnEnter>
+      <OnLeave>HealBot_Action_EmergUnit_OnLeave(self);</OnLeave>
+    </Scripts>
+    <Frames>
+      <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+          <Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </StatusBar>
+    </Frames>
   </Button>
+  
 </Ui>

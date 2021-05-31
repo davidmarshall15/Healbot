@@ -1,8 +1,10 @@
 local SmartCast_Res=nil;
 local SmartCast_MassRes=nil;
 local HealBot_Heal_Names={}
+local HealBot_Buff_Names={}
 local HealBot_KnownHeal_Names={}
 local HealBot_Spell_Ranks={}
+local HealBot_Buff_Ranks={}
 local _
 local MANA_COST_PATTERN = gsub(MANA_COST, "%%d", "([%%d%.,]+)")
 
@@ -61,18 +63,39 @@ end
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     if not skipSpells[spellName] then
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
-            if HealBot_Heal_Names[spellName] and cRank then 
-                HealBot_KnownHeal_Names[spellName]=true
-                if not HealBot_Spell_Ranks[spellName] then
-                    HealBot_Spell_Ranks[spellName]={}
-                    HealBot_Spell_Ranks[spellName][0]=1
-                else
-                    HealBot_Spell_Ranks[spellName][0]=HealBot_Spell_Ranks[spellName][0]+1
-                end
-                local nRank=HealBot_Spell_Ranks[spellName][0]
-                HealBot_Spell_Ranks[spellName][nRank]=strtrim(spellName).."("..cRank..")"
-                spellName=strtrim(spellName).."("..cRank..")"
-            end
+            if cRank then
+				if HealBot_Heal_Names[spellName] then 
+					local rank=tonumber(string.match(cRank, "%d")) or 0
+					if rank>0 then
+						HealBot_KnownHeal_Names[spellName]=true
+						if not HealBot_Spell_Ranks[spellName] then 
+							HealBot_Spell_Ranks[spellName]={} 
+							HealBot_Spell_Ranks[spellName][0]=1
+						end
+						if not HealBot_Spell_Ranks[spellName][rank] then
+							HealBot_Spell_Ranks[spellName][rank]=strtrim(spellName).."("..cRank..")"
+							if rank>HealBot_Spell_Ranks[spellName][0] then
+								HealBot_Spell_Ranks[spellName][0]=rank
+							end
+						end
+						spellName=strtrim(spellName).."("..cRank..")"
+					end
+				elseif HealBot_Buff_Names[spellName] then
+					local rank=tonumber(string.match(cRank, "%d")) or 0
+					if rank>0 then
+						if not HealBot_Buff_Ranks[spellName] then 
+							HealBot_Buff_Ranks[spellName]={} 
+							HealBot_Buff_Ranks[spellName][0]=1
+						end
+						if not HealBot_Buff_Ranks[spellName][rank] then
+							HealBot_Buff_Ranks[spellName][rank]=strtrim(spellName).."("..cRank..")"
+							if rank>HealBot_Buff_Ranks[spellName][0] then
+								HealBot_Buff_Ranks[spellName][0]=rank
+							end
+						end
+					end
+				end
+			end
             HealBot_Spell_IDs[spellId].name=spellName
             HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
             HealBot_Spell_Names[spellName]=spellId
@@ -80,17 +103,36 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     end
 end
 
+local sBuffName=""
+local sBuffRank=0
+function HealBot_Init_Buffs_retRank(spellName, targetRank)
+    if HealBot_Buff_Ranks[spellName] then
+        if not HealBot_Buff_Ranks[spellName][targetRank] then
+            sBuffRank=HealBot_Buff_Ranks[spellName][0]
+		else
+			sBuffRank=targetRank
+        end
+        sBuffName=HealBot_Buff_Ranks[spellName][sBuffRank]
+    end
+    --HealBot_AddDebug("spellName="..spellName.." targetRank="..targetRank)
+    --HealBot_AddDebug("sBuffName="..sBuffName.." sBuffRank="..sBuffRank)
+    return sBuffName
+end
+
+local sHealName=""
+local sHealRank=0
 function HealBot_Init_Spells_retRank(spellName, targetRank)
-    local sName=spellName
-    local sRank=targetRank
     if HealBot_Spell_Ranks[spellName] then
         if not HealBot_Spell_Ranks[spellName][targetRank] then
-            sRank=HealBot_Spell_Ranks[spellName][0]
+            sHealRank=HealBot_Spell_Ranks[spellName][0]
+		else
+			sHealRank=targetRank
         end
-        sName=HealBot_Spell_Ranks[spellName][sRank]
+        sHealName=HealBot_Spell_Ranks[spellName][sHealRank]
     end
-    --HealBot_AddDebug("sName="..sName.." sRank="..sRank)
-    return sName
+    --HealBot_AddDebug("spellName="..spellName.." targetRank="..targetRank)
+    --HealBot_AddDebug("sHealName="..sHealName.." sHealRank="..sHealRank)
+    return sHealName
 end
 
 function HealBot_Init_Spells_Defaults()
@@ -102,6 +144,9 @@ function HealBot_Init_Spells_Defaults()
     end 
     for x,_ in pairs(HealBot_Heal_Names) do
         HealBot_Heal_Names[x]=nil
+    end  
+    for x,_ in pairs(HealBot_Buff_Names) do
+        HealBot_Buff_Names[x]=nil
     end  
     for x,_ in pairs(HealBot_KnownHeal_Names) do
         HealBot_KnownHeal_Names[x]=nil
@@ -116,6 +161,13 @@ function HealBot_Init_Spells_Defaults()
             HealBot_Heal_Names[GetSpellInfo(hbHeallist[j])]=true
         end
     end
+    local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
+    for j=1, getn(hbBufflist), 1 do
+        if hbBufflist[j] and GetSpellInfo(hbBufflist[j]) then
+            HealBot_Buff_Names[GetSpellInfo(hbBufflist[j])]=true
+        end
+    end
+	
     HealBot_Init_SkipSpells()
     for j=1,nTabs do
         local _, _, offset, numEntries, _, offspecID = GetSpellTabInfo(j)

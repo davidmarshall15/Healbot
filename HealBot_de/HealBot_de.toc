@@ -4,7 +4,7 @@
 ## Notes: HealBot localization for deDE
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.5.0
+## Version: 9.0.5.16
 
 HealBot_Localization.de.lua
 HealBot_Tips_Localization.de.lua

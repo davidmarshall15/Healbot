@@ -22,7 +22,7 @@ HealBot_Tooltip_luVars["doInit"]=true
 
 function HealBot_Tooltip_setLuVars(vName, vValue)
     HealBot_Tooltip_luVars[vName]=vValue
-      --HealBot_setCall("HealBot_Tooltip_setLuVars")
+      --HealBot_setCall("HealBot_Tooltip_setLuVars - "..vName)
 end
 
 function HealBot_Tooltip_Clear_CheckBuffs()
@@ -76,7 +76,11 @@ function HealBot_Tooltip_SpellPattern(button, click)
         x = click
     end
     x=x..HealBot_Config.CurrentSpec
-    sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
+    if HealBot_Data["TIPTYPE"]=="Emerg" then
+        sPattern=HealBot_Action_GetSpell("ENABLED", x, button.frame)
+    else
+        sPattern=HealBot_Action_GetSpell(string.upper(HealBot_Data["TIPTYPE"]), x)
+    end
     return sPattern
 end
 

@@ -36,6 +36,7 @@ local HealBot_unitRole={}
 local _
 local nraid=0
 local hbOptionOn=0
+local hbMoveMe=0
 local hbFocusOn=0
 local HealBot_Header_Frames={}
 local HealBot_Track_Headers={}
@@ -86,8 +87,11 @@ local HealBot_Action_HealGroupPets = {
 local HealBot_colIndex= {}
 local HealBot_Action_HealButtons = {};
 local hbPanelShowhbFocus=nil
+local hbPanelNoCols={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
+local hbPanelNoRows={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
 local HealBot_Panel_luVars={}
 HealBot_Panel_luVars["SelfPets"]=false
+HealBot_Panel_luVars["OptionsShown"]=false
 HealBot_Panel_luVars["TanksOn"]=false
 HealBot_Panel_luVars["HealsOn"]=false
 HealBot_Panel_luVars["TestBarsDelAll"]=true
@@ -106,6 +110,15 @@ end
 
 function HealBot_Panel_setLuVars(vName, vValue)
     HealBot_Panel_luVars[vName]=vValue
+      --HealBot_setCall("HealBot_Panel_setLuVars - "..vName)
+end
+
+function HealBot_Panel_retNoCols(frame)
+    return hbPanelNoCols[frame]
+end
+
+function HealBot_Panel_retHeadersCols(frame)
+    return ceil(hbPanelNoRows[frame]/5)
 end
 
 function HealBot_Panel_setCP(cpType, useCP)
@@ -708,6 +721,9 @@ function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
     if hbOptionOn==hbCurFrame then
         vSetHWextraHeight=vSetHWextraHeight+30
     end
+    if hbMoveMe==hbCurFrame then
+        vSetHWextraHeight=vSetHWextraHeight+20
+    end
     if hbFocusOn==hbCurFrame then
         vSetHWextraHeight=vSetHWextraHeight+10+ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"])
     end
@@ -888,7 +904,7 @@ end
 function HealBot_Panel_SetupExtraBars(frame, preCombat)
     if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] or
        Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["GRPCOLS"] then
-        maxRows[frame]=0
+        maxRows[frame]=1
     else
         maxRows[frame]=ceil(hbBarsPerFrame[frame]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["NUMCOLS"])
     end
@@ -901,6 +917,9 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
     vBar[frame]["PREVROW"]=nil
     vBar[frame]["PREVCOL"]=nil
     HealBot_Panel_PositionBars(preCombat)
+    
+    hbPanelNoCols[frame]=maxCols[frame]
+    hbPanelNoRows[frame]=maxRows[frame]
 
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         if xButton.frame==frame and not HealBot_Track_Headers[xHeader] then
@@ -909,6 +928,21 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
     end
     if hbBarsPerFrame[frame]>0 then
         HealBot_Text_setTextLen(frame)
+        hbMoveMe=0
+        vSetupBarsOptionsParent=_G["f"..frame.."_HealBot_Action"]
+        vSetupFrameTag=_G[vSetupBarsOptionsParent:GetName().."_UnlockTxt"]
+        if not preCombat and HealBot_Action_CanMove(frame) then
+            hbMoveMe=frame
+            vSetupFrameTag:ClearAllPoints()
+            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["BARS"]==4 then
+                vSetupFrameTag:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-8)
+            else
+                vSetupFrameTag:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,8)
+            end
+            vSetupFrameTag:SetText(HEALBOT_ACTION_UNLOCKED)
+        else
+            vSetupFrameTag:SetText("")
+        end
         if HealBot_Config.DisabledNow==0 then
             HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
             if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==1 or preCombat) then
@@ -918,19 +952,25 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
             end
         else
             HealBot_Action_HidePanel(frame)
-        end    
+        end
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]>1 then
+            HealBot_CheckActiveFrames(frame, true)
+        else
+            HealBot_CheckActiveFrames(frame, false)
+        end
     else
         HealBot_Action_HidePanel(frame)
+        HealBot_CheckActiveFrames(frame, false)
     end
 end
 
-local vSetupBarsOptionsFrame=nil
+local vSetupBarsOptionsFrame, vSetupBarsOptionsParent, vSetupFrameTag=nil, nil, nil
 function HealBot_Panel_SetupBars(preCombat)
     for j=1,5 do
         if hbBarsPerFrame[j] and hbBarsPerFrame[j]>0 then
             if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][j]["SHOW"] or
                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["GRPCOLS"] then
-                maxRows[j]=0
+                maxRows[j]=1
             else
                 maxRows[j]=ceil(hbBarsPerFrame[j]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["NUMCOLS"])
             end
@@ -949,6 +989,11 @@ function HealBot_Panel_SetupBars(preCombat)
 
     HealBot_Panel_PositionBars(preCombat)
 
+    for j=1,5 do
+        hbPanelNoCols[j]=maxCols[j]
+        hbPanelNoRows[j]=maxRows[j]
+    end 
+    
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         if xButton.frame<6 and not HealBot_Track_Headers[xHeader] then
             HealBot_Panel_DeleteHeader(xButton.id, xHeader)
@@ -956,53 +1001,65 @@ function HealBot_Panel_SetupBars(preCombat)
     end
 
     local vSetupBarsFrame=0
+    hbMoveMe=0
     for j=1,5 do
-        if hbBarsPerFrame[j]>0 and vSetupBarsFrame==0 then 
-            vSetupBarsFrame=j
-            break
+        if hbBarsPerFrame[j]>0 then
+            vSetupBarsOptionsParent=_G["f"..j.."_HealBot_Action"]
+            vSetupFrameTag=_G[vSetupBarsOptionsParent:GetName().."_UnlockTxt"]
+            if not preCombat and HealBot_Action_CanMove(j) then
+                hbMoveMe=j
+                vSetupFrameTag:ClearAllPoints()
+                if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][j]["BARS"]==4 then
+                    vSetupFrameTag:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-8)
+                else
+                    vSetupFrameTag:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,8)
+                end
+                vSetupFrameTag:SetText(HEALBOT_ACTION_UNLOCKED)
+            else
+                vSetupFrameTag:SetText("")
+            end
+            if vSetupBarsFrame==0 then 
+                vSetupBarsFrame=j
+            end
+            if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]>1 then
+                HealBot_CheckActiveFrames(j, true)
+            else
+                HealBot_CheckActiveFrames(j, false)
+            end
+        else
+            HealBot_CheckActiveFrames(j, false)
         end
     end
+
     if HealBot_Globals.HideOptions then
         if vSetupBarsOptionsFrame and hbOptionOn>0 then
             vSetupBarsOptionsFrame:Hide()
             hbOptionOn=0
         end
-    elseif vSetupBarsFrame>0 then
-        local vSetupBarsOptionsParent=_G["f"..vSetupBarsFrame.."_HealBot_Action"]
-        vSetupBarsOptionsFrame=_G["HealBot_Action_OptionsButton"]
-        if not vSetupBarsOptionsFrame then 
-            vSetupBarsOptionsFrame=CreateFrame("Button", "HealBot_Action_OptionsButton", vSetupBarsOptionsParent, "HealBotOptionsButtonTemplate") 
-            local bar = _G[vSetupBarsOptionsFrame:GetName().."Bar"]
-            bar:SetStatusBarColor(0.1,0.1,0.4,0);
-            bar:SetMinMaxValues(0,100);
-            bar:SetValue(0);
-            vSetupBarsOptionsFrame.frame=vSetupBarsFrame
-            bar.txt = _G[bar:GetName().."_text"];
-            bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
-            bar.txt:SetText(HEALBOT_ACTION_OPTIONS);
-            bar:UnregisterAllEvents()
-            bar = _G[vSetupBarsOptionsFrame:GetName().."Bar5"]
-            bar:SetStatusBarColor(0.1,0.1,0.4,0);
-            bar:SetMinMaxValues(0,100);
-            bar:SetValue(0);
-            bar:UnregisterAllEvents()
-        elseif vSetupBarsOptionsFrame.frame~=vSetupBarsFrame then
+    elseif vSetupBarsFrame>0 and vSetupBarsOptionsFrame then
+        vSetupBarsOptionsParent=_G["f"..vSetupBarsFrame.."_HealBot_Action"]
+        if vSetupBarsOptionsFrame.frame~=vSetupBarsFrame then
             vSetupBarsOptionsFrame:Hide()
             vSetupBarsOptionsFrame:ClearAllPoints()
             vSetupBarsOptionsFrame:SetParent(vSetupBarsOptionsParent)
             vSetupBarsOptionsFrame.frame=vSetupBarsFrame
         end
-        if vSetupBarsOptionsFrame then
-            vSetupBarsOptionsFrame:ClearAllPoints()
-            if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==4 then
+        vSetupBarsOptionsFrame:ClearAllPoints()
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==4 then
+            if hbMoveMe==vSetupBarsFrame then
+                vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-30);
+            else
                 vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-10);
+            end
+        else
+            if hbMoveMe==vSetupBarsFrame then
+                vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,30);
             else
                 vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,10);
             end
-            vSetupBarsOptionsFrame:Show();
-            hbOptionOn=vSetupBarsFrame
-            --MaxOffsetY[vSetupBarsFrame] = MaxOffsetY[vSetupBarsFrame]+30;
         end
+        vSetupBarsOptionsFrame:Show();
+        hbOptionOn=vSetupBarsFrame
     elseif hbOptionOn>0 and vSetupBarsOptionsFrame then
         vSetupBarsOptionsFrame:Hide()
         hbOptionOn=0
@@ -1012,12 +1069,10 @@ function HealBot_Panel_SetupBars(preCombat)
         if hbBarsPerFrame[j]>0 then
             if HealBot_Config.DisabledNow==0 then
                 HealBot_Text_setTextLen(j)
-                HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
                 if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==1 or preCombat) then
                     HealBot_Action_ShowPanel(j)
-                --else
-                --    HealBot_Action_HidePanel(j)
                 end
+                HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
             else
                 HealBot_Action_HidePanel(j)
             end
@@ -1026,7 +1081,30 @@ function HealBot_Panel_SetupBars(preCombat)
         end
     end
 end
-          
+
+function HealBot_Panel_InitOptBars()
+    vSetupBarsOptionsFrame=_G["HealBot_Action_OptionsButton"]
+    if not vSetupBarsOptionsFrame then
+        vSetupBarsOptionsParent=_G["f1_HealBot_Action"]
+        vSetupBarsOptionsFrame=CreateFrame("Button", "HealBot_Action_OptionsButton", vSetupBarsOptionsParent, "HealBotOptionsButtonTemplate") 
+        local bar = _G[vSetupBarsOptionsFrame:GetName().."Bar"]
+        bar:SetStatusBarColor(0.1,0.1,0.4,0);
+        bar:SetMinMaxValues(0,100);
+        bar:SetValue(0);
+        bar:UnregisterAllEvents()
+        vSetupBarsOptionsFrame.frame=1
+        bar.txt = _G[bar:GetName().."_text"];
+        bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
+        bar.txt:SetText(HEALBOT_ACTION_OPTIONS);
+        bar = _G[vSetupBarsOptionsFrame:GetName().."Bar5"]
+        bar:SetStatusBarColor(0.1,0.1,0.4,0);
+        bar:SetMinMaxValues(0,100);
+        bar:SetValue(0);
+        bar:UnregisterAllEvents()
+        vSetupBarsOptionsFrame:Hide()
+    end
+end
+
 function HealBot_Panel_RandomClassColour(tRole)
     local newCol=1
     while newCol>0 do

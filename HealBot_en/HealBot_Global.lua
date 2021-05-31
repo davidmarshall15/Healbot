@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.5.13";
+﻿HEALBOT_VERSION    = "9.0.5.17";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,8 +6,8 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.7.6" end
-if HEALBOT_GAME_VERSION==2 then HEALBOT_VERSION = "2.5.1.2" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.7.10" end
+if HEALBOT_GAME_VERSION==2 then HEALBOT_VERSION = "2.5.1.6" end
 
 function HealBot_globalVars()
     --Consumables
@@ -97,7 +97,7 @@ function HealBot_globalVars()
     
     --Racial Abilities
     HEALBOT_DARKFLIGHT                      = 68992 --GetSpellInfo(68992) or "--Darkflight";
-    HEALBOT_GIFT_OF_THE_NAARU               = 59547 --GetSpellInfo(59547) or "--Gift of the Naaru";
+    HEALBOT_GIFT_OF_THE_NAARU               = 28880 --GetSpellInfo(59547) or "--Gift of the Naaru";
     HEALBOT_STONEFORM                       = 20594 --GetSpellInfo(20594) or "--Stoneform";
 
     --Weapon Enchants
@@ -400,6 +400,7 @@ function HealBot_globalVars()
     HEALBOT_BLESSING_OF_KINGS               = 203538 --GetSpellInfo(203538) or "--Greater Blessing of Kings";
     HBC_BLESSING_OF_KINGS                   = 20217
     HBC_BLESSING_OF_LIGHT                   = 19977
+    HBC_BLESSING_OF_SALVATION               = 1038
     HEALBOT_BLESSING_OF_MIGHT               = 203528 --GetSpellInfo(203528) or "--Greater Blessing of Might";
     HBC_BLESSING_OF_MIGHT                   = 19740 --GetSpellInfo(19740) or "--Greater Blessing of Might";
     HBC_BLESSING_OF_SANCTUARY               = 20912
@@ -549,6 +550,7 @@ function HealBot_globalVars()
     HEALBOT_HIGH_TIDE                       = 157154 --GetSpellInfo(157154) or "--High Tide";
     HEALBOT_LIGHTNING_SHIELD                = 192106 --GetSpellInfo(192106) or "--Lightning Shield";
     HBC_LIGHTNING_SHIELD                    = 324
+    HBC_EARTH_SHIELD                        = 974
     HBC_ROCKBITER_WEAPON                    = 8017
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";

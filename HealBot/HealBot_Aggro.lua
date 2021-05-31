@@ -5,6 +5,7 @@ HealBot_Aggro_luVars["pluginThreat"]=false
 
 function HealBot_Aggro_setLuVars(vName, vValue)
     HealBot_Aggro_luVars[vName]=vValue
+      --HealBot_setCall("HealBot_Aggro_setLuVars - "..vName)
 end
 
 function HealBot_Aggro_retLuVars(vName)
@@ -81,6 +82,9 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         threatValue=0
         mobName=""
     end
+    if (button.aggro.status==3 or threatStatus==3) and button.aggro.status~=threatStatus then
+        HealBot_Action_UpdateHealthButton(button)
+    end
     button.aggro.status=threatStatus
     if threatStatus==0 or (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
                            Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"]) then
@@ -98,7 +102,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         else
             HealBot_Aux_UpdateThreatBar(button)
         end
-        HealBot_Action_UpdateHealthButton(button) 
+        
     end
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end

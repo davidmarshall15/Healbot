@@ -66,12 +66,14 @@ function HealBot_Lang_enALL()
     HEALBOT_LOADED                          = " loaded.";
 
     HEALBOT_ACTION_OPTIONS                  = "Options";
+    HEALBOT_ACTION_UNLOCKED                 = "Unlocked";
 
     HEALBOT_OPTIONS_TITLE                   = HEALBOT_HEALBOT;
     HEALBOT_OPTIONS_DEFAULTS                = "Defaults";
     HEALBOT_OPTIONS_CLOSE                   = "Close";
     HEALBOT_OPTIONS_HARDRESET               = "ReloadUI"
     HEALBOT_OPTIONS_SOFTRESET               = "ResetHB"
+    HEALBOT_OPTIONS_COPY                    = "Copy";
     HEALBOT_OPTIONS_TAB_GENERAL             = "General";
     HEALBOT_OPTIONS_TAB_SPELLS              = "Spells";
     HEALBOT_OPTIONS_TAB_FRAMES              = "Frames";
@@ -99,6 +101,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_UNITINCOMBAT03          = "Lockdown HealBot"
     HEALBOT_OPTIONS_AUTOSHOW                = "Close automatically";
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
+    HEALBOT_OPTIONS_HIDEUNLOCKEDTAG         = "Hide unlocked tag"
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
     HEALBOT_OPTIONS_HEAL_CHATOPT            = "Chat Options";
     HEALBOT_OPTIONS_BLIZZARD_FRAMES         = "Blizzard Frames";
@@ -335,6 +338,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSTEXTWE             = "Self weapon enchants";
     HEALBOT_OPTIONS_BUFFSTEXT2              = "check members";
     HEALBOT_OPTIONS_BUFFSTEXT3              = "bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
+    HEALBOT_OPTIONS_EMERGCOLS               = "Emergency col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
+    HEALBOT_OPTIONS_EMERGGENERAL            = "Emergency general";
+    HEALBOT_OPTIONS_EMERGSPELLS             = "Emergency spells";
     HEALBOT_OPTIONS_BUFF                    = "Buff ";
     HEALBOT_OPTIONS_BUFFSELF                = "on self";
     HEALBOT_OPTIONS_BUFFPARTY               = "on party";
@@ -504,6 +510,9 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_LESSMEM                   = "Less Memory";
     HEALBOT_WORDS_MORECPU                   = "More CPU";
     HEALBOT_WORDS_LESSCPU                   = "Less CPU";
+    HEALBOT_WORDS_CRITICAL                  = "Critical";
+    HEALBOT_WORDS_INJURED                   = "Injured";
+    HEALBOT_WORDS_HEALTHY                   = "Healthy";
     HEALBOT_NOTIFYOTHERMSG                  = "Casting #s on #n";
 
     HEALBOT_OPTIONS_HOTPOSITION             = "Icon position"
@@ -512,12 +521,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
     HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
+    HEALBOT_OPTIONS_EMERGBUTTONUSE          = "Use the Emergency Bar"
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
     HEALBOT_OPTIONS_TEXTALIGNMENT           = "Horizontal Alignment"
     HEALBOT_OPTIONS_TEXTOFFSET              = "Vertical Offset"
     HEALBOT_OPTIONS_TEXTHOROFFSET           = "Horizontal Offset"
+    HEALBOT_OPTIONS_EMERGINJTRIG            = "Injured trigger"
+    HEALBOT_OPTIONS_EMERGCRITTRIG           = "Critical trigger"
     HEALBOT_OPTIONS_TXTOFFSET               = "Offset"
     HEALBOT_OPTIONS_TXTDEPTH                = "Depth"
     HEALBOT_OPTIONS_TXTSIZE                 = "Size"
@@ -744,7 +756,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_FOCUSGROUPS3            = "ON: Hide unfocused groups"
     HEALBOT_OPTIONS_SHOWDURATIONFROM        = "Show duration from"
     HEALBOT_OPTIONS_SHOWDURATIONWARN        = "Duration warning from"
-    HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Toggle Aux Bar Opacity Type"
+    HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Set Aux Bar Opacity Type"
     HEALBOT_CMD_RESETCUSTOMDEBUFFS          = "Reset custom debuffs"
     HEALBOT_CMD_RESETSKINS                  = "Reset skins"
     HEALBOT_CMD_CLEARBLACKLIST              = "Clear BlackList"
@@ -1042,8 +1054,8 @@ function HealBot_Lang_enALL()
     HEALBOT_ABOUT_WEBSITE                  = "Website:"
     HEALBOT_ABOUT_AUTHORH                  = "Author:"
     HEALBOT_ABOUT_AUTHORD                  = "Strife"
-    HEALBOT_ABOUT_CATH                     = "Category:"
-    HEALBOT_ABOUT_CATD                     = "Unit Frames, Buffs and Debuffs, Combat:Healer"
+    HEALBOT_ABOUT_CATH                     = "Discord:"
+    HEALBOT_ABOUT_CATD                     = "discord.gg/gwa6rdCeZ4"
     HEALBOT_ABOUT_CREDITH                  = "Credits:"
     HEALBOT_ABOUT_CREDITD                  = "Acirac, Kubik, Von, Aldetal, Brezza, Moonlight Han Xing, CTShammy, Hermis, Ariá, Snaomi"  -- Anyone taking on translations (if required), feel free to add yourself here.
     HEALBOT_ABOUT_LOCALH                   = "Localizations:"
@@ -1067,128 +1079,116 @@ function HealBot_Lang_enALL()
                                       [13]  = "Options - How do I setup 'Private List'",
                                       [14]  = "Options - How do I setup 'Private Tanks'",
                                       [15]  = "Options - Will Healbot create a bar for an NPC",
-                                      [16]  = "Range - I can't see when people are out of range, how do I fix this",
+                                      [16]  = "Range - I can't see when players are out of range, how do I fix this",
                                       [17]  = "Spells - Healbot casts a different spell to my setup",
                                       [18]  = "Spells - I can no longer cast heals on unwounded targets",
+                                      [19]  = "Skins - Are more skins available?",
+                                      [20]  = "Frames - I am unable to move the frame, is it locked?",
                                   }
 
     HEALBOT_ABOUT_FAQ_SPELLS_ANSWER01       = "This is due to options set on the Spells tab \n" ..
                                               "try changing the following and testing: \n\n" ..
-                                              "1: On the spells tab: Turn on Always Use Enabled \n" ..
-                                              "2: On the spells tab: Turn off SmartCast \n\n" ..
-                                              "Note: It is expected that most users will want to \n"..
-                                              "turn SmartCast back on \n\n" ..
-                                              "Note: It is expected that experienced users will want to \n" ..
-                                              "turn off Always Use Enabled  \n" ..
-                                              "and set the spells for disabled bars"
+                                              "1: On the Spells tab: Turn off Unset spells on disabled bars \n" ..
+                                              "2: On the Spells tab: Turn off SmartCast \n\n" ..
+                                              "Note: It is expected that most users will want to \n" ..
+                                              "turn SmartCast back on"
                                               
     HEALBOT_ABOUT_FAQ_ANSWERS = {     [1]   = "You are monitoring for missing buffs \n\n" .. 
-                                              "This can be turned off on the buffs tab \n" ..
+                                              "This can be turned off on the Buffs General tab \n" ..
                                               "Alternatively click on the bar and cast the buff",
                                       [2]   = "This is blizzard functionality, not Healbot \n\n" .. 
                                               "Using the standard blizzard frames, \n" ..
-                                              "try casting a spell thats on Cooldown \n" ..
+                                              "try casting a spell that is on Cooldown \n" ..
                                               "Notice how the cursor turns blue. \n\n" ..
-                                              "On the spells tab, use Avoid Blue Cursor",
+                                              "Healbot has built in functionally to prevent \n" ..
+                                              "this. on the Spells tab use Avoid Blue Cursor",
                                       [3]   = "Yes \n\n"..
-                                              "Paladin Hand of Salvation cooldown macro example: \n\n" ..
-                                              "#show Hand of Salvation \n" ..
-                                              '/script local n=UnitName("hbtarget"); ' .. "\n" ..
-                                              'if GetSpellCooldown("Hand of Salvation")==0 then ' .. " \n" ..
-                                              'SendChatMessage("Hand of Salvation on "..n,"YELL") ' .. "\n" ..
-                                              'SendChatMessage("Hand of Salvation!","WHISPER",nil,n) ' .. "\n" ..
-                                              "end; \n" ..
-                                              "/cast [@hbtarget] Hand of Salvation",
+                                              "Visit "..HEALBOT_ABOUT_URL.." for examples",
                                       [4]   = "Yes \n\n"..
-                                              "Preist Flash Heal, example using both trinkets: \n\n" ..
-                                              "#show Flash Heal \n" ..
-                                              "/script UIErrorsFrame:Hide() \n" ..
-                                              "/console Sound_EnableSFX 0 \n" ..
-                                              "/use 13 \n" ..
-                                              "/use 14 \n" ..
-                                              "/console Sound_EnableSFX 1 \n" ..
-                                              "/cast [@hbtarget] Flash Heal \n" ..
-                                              "/script UIErrorsFrame:Clear(); UIErrorsFrame:Show()",
+                                              "Visit "..HEALBOT_ABOUT_URL.." for examples",
                                       [5]   = "1: On the Mouse Wheel tab: Turn off Use Mouse Wheel \n" ..
-                                              "2: Bind your macros to blizzard's bindings with\n[@mouseover] \n\n\n" ..
+                                              "2: Create a macro using [@mouseover] \n\n\n" ..
                                               "Eample macro: \n\n" ..
                                               "#showtooltip Flash Heal \n" ..
                                               "/cast [@mouseover] Flash Heal \n",
                                       [6]   = "Yes \n\n\n"..
                                               "With Headers: \n" ..
-                                              "1: On the Skins>Headers tab, switch on Show Headers \n" ..
-                                              "2: On the Skins>Bars tab, set Number of Groups per\ncolumn \n\n" ..
-                                              "Without Headers: \n" ..
-                                              "1: On the Skins>Bars tab, switch on Use Groups per\nColumn \n" ..
-                                              "2: On the Skins>Bars tab, set Number of Groups per\ncolumn ",
+                                              "1: On the Skins>Headers>Bars tab, \nswitch on Show Headers \n" ..
+                                              "2: On the Skins>Frames>Bars>General tab,  \n" ..
+                                              "set Number of Groups per column \n\n Without Headers: \n" ..
+                                              "1: On the Skins>Frames>Bars>General tab, \n" ..
+                                              "switch on Use Groups per Column \n" ..
+                                              "2: On the Skins>Frames>Bars>General tab, \n" ..
+                                              "set Number of Groups per column ",
                                       [7]   = "Yes \n\n"..
-                                              "1: On the Skins>Healing>Alert tab, set Alert Level to 0 \n" ..
-                                              "2: On the Skins>Aggro tab, turn off the Aggro Monitor \n" .. 
-                                              "3: On the Skins>Bars tab, set Disabled opacity to 0 \n" ..
-                                              "4: On the Skins>Bars tab, set Background opacity to 0 \n" ..
-                                              "5: On the Skins>Bar Text tab, click on the bar Disabled \n" ..
-                                              "and set the Disabled text opacity to 0 \n" ..
-                                              "6: On the Skins>General tab, click on the bar\n" ..
-                                              "Background and set the Background opacity to 0 \n" ..
-                                              "7: On the Cure tab, Turn on debuff monitoring",
+                                              "1: On the Skins>Frame>Bars>Visibility tab, \nset Alert Levels to 0 \n" ..
+                                              "2: On the Skins>Frame>Bars>Aggro tab, \nturn off Monitor Aggro \n" .. 
+                                              "3: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nset Disabled opacity to 0 \n" ..
+                                              "4: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nset Background opacity to 0 \n" ..
+                                              "5: On the Skins>Frame>Bar Text tabs, \nset Disabled opacity to 0 \n" ..
+                                              "6: On the Debuff tabs, Turn on debuff monitoring",
                                       [8]   = "Yes \n\n"..
-                                              "1: On the Skins>Bars tab, set Incoming Heals to Dont\nShow\n" ..
-                                              "2: On the Skins>Bar Text tab, \n" ..
-                                              "set Show Health on Bar to No Incoming Heals",
+                                              "1: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nset Incoming Heals to Don't Show\n" ..
+                                              "2: On the Skins>Frame>Bar Text>Extras tab, \n" ..
+                                              "Turn off Incoming Heals",
                                       [9]   = "This has been present since a change in WoW 3.2, \n" ..
                                               "it can affects characters with weird letters in their name \n\n" ..
-                                              "If your on Vista or Win7, try the follow: \n"..
+                                              "If your on Win7 or Win10, try the follow: \n"..
                                               "change system locale to English\n(for non-unicode programs) \n" ..
                                               "in Control Panel > Region and Language >\nAdministrative Tab",
-                                      [10]   = "On the spells tab turn on Always Use Enabled \n\n" ..
-                                              "Some my also want to set the Alert Level to 100 \n" ..
-                                              "This can be done on the Skins>Healing>Alert tab",
+                                      [10]   = "On the Spells tab turn off Unset spells on disabled bars \n\n" ..
+                                              "Also check out setting Alert Levels to 100 on the \n" ..
+                                              "Skins>Frame>Bars>Visibility tab",
                                       [11]  = "Disable for a character: \n\n" ..
                                               "1: Open the General tab \n" ..
-                                              "2: Turn on the Disable option \n\n\n" ..
-                                              "Disable when solo: \n\n" ..
-                                              "1: Open the General tab \n" ..
-                                              "2: To the right of the Disable option, Select only when\nsolo \n" ..
-                                              "3: Turn on the Disable option",
-                                      [12]  = "Change the Bars Anchor setting on the Skins>General\ntab  \n\n" ..
+                                              "2: Turn on the Disable option \n\n\n",
+                                      [12]  = "Change the Bars Anchor setting on the \nSkins>Frames>General tab  \n\n" ..
                                               "Top Right: the bars will grow Down and Left \n" ..
                                               "Top Left: the bars will grow Down and Right \n" ..
                                               "Bottom Right: the bars will grow Up and Left \n" ..
                                               "Bottom Left: the bars will grow Up and Right",
                                       [13]  = "Private List allows you to create a list of Targets you \n" ..
-                                              "want to group separately from others, similar to the\nMT group \n\n" ..
-                                              "The following options are available for \n" .. 
-                                              "adding/removing people to/from the Private List group \n\n" ..
-                                              "- Shift+Ctrl+Alt+Right click on the bar \n" ..
-                                              '- Use the Healbot Menu, enter "hbmenu" on the spells\ntab ' .. "\n" ..
-                                              "- Use the Mouse Wheel, set on the Mouse Wheel tab",
+                                              "want to group separately from others, similar to the\nTank group \n\n" ..
+                                              "The following options are available to \n" .. 
+                                              "add/remove players to/from the Private List \n\n" ..
+                                              "- The Healbot Menu, enter 'hbmenu' on the Spells tab \n" ..
+                                              "- The Mouse Wheel, set on the Mouse Wheel tab",
                                       [14]  = "Private Tanks can be added to the Main Tanks list, \n" ..
                                               "the Private tanks are only visible in your Healbot \n" ..
                                               "and do not affect other players or addons \n\n" ..
-                                              "The following options are available for \n" ..
-                                              "adding/removing people to/from the Tanks list \n\n" ..
-                                              '- Use the Healbot Menu, enter "hbmenu" on the spells\ntab ' .. "\n" ..
-                                              "- Use the Mouse Wheel, set on the Mouse Wheel tab",                                     
+                                              "The following options are available to \n" ..
+                                              "add/remove players to/from the Tanks list \n\n" ..
+                                              "- The Healbot Menu, enter 'hbmenu' on the Spells tab \n" ..
+                                              "- The Mouse Wheel, set on the Mouse Wheel tab",                                     
                                       [15]  = "Yes \n\n"..
-                                              "1: On the Skins>Healing tab, turn on Focus \n" ..
-                                              "2: set your focus on the NPC (or PC not in raid/party) \n" ..
-                                              "Healbot will create a bar in your Private List \n\n" ..
-                                              "Note: If in a combat situation where you zone in and out\nwhile \n" ..
-                                              "in combat and need to reset focus on an NPC \n" ..
-                                              "on the Skins>Healing tab set Focus: always show to on \n" ..
+                                              "1: On the Skins>Frames>Heal Group tab, turn on Focus \n" ..
+                                              "2: Set your focus on the NPC \n" ..
+                                              "Healbot will create a bar in a new frame \n\n" ..
+                                              "Note: If in a combat situation where\nyou zone in and out while in combat \n" ..
+                                              "and need to reset focus on an NPC \n\n" ..
+                                              "On the Skins>Frame>Bars>Visibility tab \nset Focus When entering combat to Always Show \n" ..
                                               "This will keep the bar available during combat. \n\n" ..
                                               "Note: The HealBot Menu has the option\n'Set HealBot Focus' \n" ..
                                               "This can make setting focus easy on NPC's and \n" ..
                                               "serves as a reminder to set focus. \n\n" ..
-                                              "Enter 'hbmenu' on the spells tab to use HealBot Menu \n" ..
-                                              "or use the Mouse Wheel tab to and set HealBot Menu",
-                                      [16]  = "1: On the Skins>Bars tab, adjust the disabled bar\nopacity \n" ..
-                                              "2: On the Skins>Bars Text tab, adjust the disabled text \n" ..
-                                              "opacity to do this click on the bar labeled Disabled. \n\n" ..
-                                              "Some my also want to set the Alert Level to 100 \n" ..
-                                              "This can be done on the Skins>Healing>Alert tab",
-                                      [17]  = "Actually Healbot is casting exacly as the setup. \n\n" .. HEALBOT_ABOUT_FAQ_SPELLS_ANSWER01,
+                                              "Enter 'hbmenu' on the Spells tab to use HealBot Menu \n" ..
+                                              "or use the Mouse Wheel tab and set HealBot Menu",
+                                      [16]  = "1: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nadjust the disabled bar opacity \n" ..
+                                              "2: On the Skins>Frame>Bars Text tabs, \nadjust the disabled text opacity\n\n" ..
+                                              "Also check out setting the Alert Levels to 100 \n" ..
+                                              "on the Skins>Frame>Bars>Visibility tab",
+                                      [17]  = "Actually Healbot is casting exactly as the setup. \n\n" .. HEALBOT_ABOUT_FAQ_SPELLS_ANSWER01,
                                       [18]  = HEALBOT_ABOUT_FAQ_SPELLS_ANSWER01,
+                                      [19]  = "Yes\n\n" ..
+                                              "On the Import/Export>Skins tab\nselect Extra Skins from the dropdown and Import\n\n" ..
+                                              "Images of the Extra Skins are\navailable at "..HEALBOT_ABOUT_URL.."\n\n" ..
+                                              "Additional skins are also\navailable at "..HEALBOT_ABOUT_URL.."\n\n" ..
+                                              "Additional skins might have been\nshared at "..HEALBOT_ABOUT_CATD,
+                                      [20]  = "Check if the frame is locked on\nthe Skins>Frames>General tab\n\n" ..
+                                              "To move the frame, select near the edge of the frame\n\n" ..
+                                              "To make moving frames easier\nthe following options are available\n\n" ..
+                                              " - Turn on Test mode\n\n" ..
+                                              " - On the General tab, turn off Hide unlocked tag\n\n",
                                   }
 
     HEALBOT_OPTIONS_SKINAUTHOR              = "Skin Author"
@@ -1241,6 +1241,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_BARS       = "        " .. HEALBOT_OPTIONS_TAB_BARS
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONS      = "        " .. HEALBOT_OPTIONS_TAB_ICONS
     HEALBOT_OPTIONS_CONTENT_SKINS_INDICATORS = "        " .. HEALBOT_OPTIONS_TAB_INDICATORS
+    HEALBOT_OPTIONS_CONTENT_SKINS_EMERG      = "        Emergency"
     HEALBOT_OPTIONS_CONTENT_SKINS_AGGRO      = "    " .. HEALBOT_OPTIONS_TAB_AGGRO
     HEALBOT_OPTIONS_CONTENT_SKINS_CHAT       = "    " .. HEALBOT_OPTIONS_TAB_CHAT
     HEALBOT_OPTIONS_CONTENT_SKINS_TEXT       = "        " .. HEALBOT_OPTIONS_TEXTOPTIONS
@@ -1353,26 +1354,19 @@ function HealBot_Lang_enALL()
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
     HEALBOT_SUPPORTERS_PEOPLE = {  
-                                   [01] = "Mythagos",  -- Mythago
-                                   [02] = "SUNET",
-                                   [03] = "killerdavy",
-                                   [04] = "zathrain",
-                                   [05] = "Xarava",
-                                   [06] = "jchap2k",
-                                   [07] = "Vayah",
-                                   [08] = "Madaleine",
-                                   [09] = "ADDYDARI",
-                                   [10] = "plastisch",
-                                   [11] = "dennywh",
-                                   [12] = "Pandamonia",
-                                   [13] = "Daydream",
-                                   [14] = "Mirandinn",
-                                   [15] = "jarmfield",
-                                   [16] = "piAwd",
-                                   [17] = "Slayybelle",
-                                   [18] = "Belcantor",
-                                   [19] = "Kamerth",
-                                   [20] = "dbsvok",
+                                 [01] = "Mythagos",  -- Mythago
+                                 [02] = "SUNET",
+                                 [03] = "killerdavy",
+                                 [04] = "zathrain",
+                                 [05] = "Pandamonia",
+                                 [06] = "Daydream",
+                                 [07] = "Mirandinn",
+                                 [08] = "jarmfield",
+                                 [09] = "piAwd",
+                                 [10] = "Slayybelle",
+                                 [11] = "Belcantor",
+                                 [12] = "Kamerth",
+                                 [13] = "dbsvok",
                                 }
 end
 
