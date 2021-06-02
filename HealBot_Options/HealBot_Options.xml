@@ -12373,7 +12373,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-125" y="-80"/>
+                                  <AbsDimension x="-125" y="-55"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12400,7 +12400,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="125" y="-80"/>
+                                  <AbsDimension x="125" y="-55"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12423,14 +12423,48 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONANCHOR",false)</OnLeave>
                             </Scripts>
                           </Frame>
-                          <Slider name="HealBot_BarButtonMaxDebuffIcons" inherits="HealBot_Options_SliderTemplate">
+                          <Slider name="HealBot_BarButtonDebuffIconVOffset" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="18" />
+                              <AbsDimension x="210" y="18" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT">
+                              <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="70" y="-170" />
+                                  <AbsDimension x="-125" y="295"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_BarButtonDebuffIconVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_BarButtonDebuffIconHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="210" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="125" y="295"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_BarButtonDebuffIconHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_BarButtonMaxDebuffIcons" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="210" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="-125" y="225"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12440,29 +12474,15 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONNUMDEBUFF",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_BarButtonShowDebuffx2Bar" inherits="OptionsCheckButtonTemplate">
-                            <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonMaxDebuffIcons" relativePoint="TOPRIGHT">
-                                <Offset>
-                                  <AbsDimension x="90" y="0"/>
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Debuffx2Bar_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONDOUBLE",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
 
                           <Slider name="HealBot_BarButtonDebuffIconScale" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="475" y="18" />
+                              <AbsDimension x="210" y="18" />
                             </Size>
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="175"/>
+                                  <AbsDimension x="125" y="225"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12472,11 +12492,25 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
+                          <CheckButton name="HealBot_BarButtonShowDebuffx2Bar" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="-50" y="170"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Debuffx2Bar_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONDOUBLE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_BarButtonIconAlwaysEnabled" inherits="OptionsCheckButtonTemplate">
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonDebuffIconScale" relativePoint="TOPLEFT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonShowDebuffx2Bar" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="135" y="-40"/>
+                                  <AbsDimension x="0" y="-18"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12830,7 +12864,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-125" y="-80"/>
+                                  <AbsDimension x="-125" y="-55"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12857,7 +12891,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="125" y="-80"/>
+                                  <AbsDimension x="125" y="-55"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12880,14 +12914,48 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONANCHOR",false)</OnLeave>
                             </Scripts>
                           </Frame>
-                          <Slider name="HealBot_BarButtonMaxBuffIcons" inherits="HealBot_Options_SliderTemplate">
+                          <Slider name="HealBot_BarButtonBuffIconVOffset" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="245" y="18" />
+                              <AbsDimension x="210" y="18" />
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT">
+                              <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="70" y="-170" />
+                                  <AbsDimension x="-125" y="295"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_BarButtonBuffIconVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_BarButtonBuffIconHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="210" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="125" y="295"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_BarButtonBuffIconHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_BarButtonMaxBuffIcons" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="210" y="18" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="-125" y="225"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12897,28 +12965,14 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONNUMHOT",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_BarButtonShowBuffx2Bar" inherits="OptionsCheckButtonTemplate">
-                            <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonMaxBuffIcons" relativePoint="TOPRIGHT">
-                                <Offset>
-                                  <AbsDimension x="90" y="0"/>
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Buffx2Bar_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONDOUBLE",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
                           <Slider name="HealBot_BarButtonIconScale" inherits="HealBot_Options_SliderTemplate">
                             <Size>
-                              <AbsDimension x="475" y="18" />
+                              <AbsDimension x="210" y="18" />
                             </Size>
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="0" y="175"/>
+                                  <AbsDimension x="125" y="225"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12928,11 +12982,25 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
+                          <CheckButton name="HealBot_BarButtonShowBuffx2Bar" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="-50" y="170"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Buffx2Bar_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONDOUBLE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_BarButtonIconBuffAlwaysEnabled" inherits="OptionsCheckButtonTemplate">
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonDebuffIconScale" relativePoint="TOPLEFT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_BarButtonShowBuffx2Bar" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="135" y="-40"/>
+                                  <AbsDimension x="0" y="-18"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>

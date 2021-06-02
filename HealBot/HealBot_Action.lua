@@ -598,29 +598,31 @@ function HealBot_Action_UpdateFluidBarsAlpha(upVal)
     HealBot_Aux_setLuVars("FluidBarAlphaInUse", HealBot_Action_luVars["FluidBarAlphaInUse"])
 end
 
-local prevState=false
+local prevState=0
 function HealBot_Action_EmergBarCheck(button, force)
     if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][button.frame]["USE"] then
 		if button.status.current<9 then
 			if button.emerg.debuff then
-				button.emerg.enabled=true
+				button.emerg.state=1
 				HealBot_Action_EmergBarUpdate(button, button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b)
 			elseif button.emerg.buff then
-				button.emerg.enabled=true
+				button.emerg.state=2
 				HealBot_Action_EmergBarUpdate(button, button.aura.buff.r,button.aura.buff.g,button.aura.buff.b)
 			else
-				prevState=button.emerg.enabled
-				if floor(button.health.hptc/10)<Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["INJURED"] then
-					button.emerg.enabled=true
-				else
-					button.emerg.enabled=false
-				end
-				if button.emerg.enabled~=prevState or force then
-					HealBot_Action_EmergBarUpdate(button)
-				end
-			end
+                prevState=button.emerg.state
+                if floor(button.health.hptc/10)<Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["CRITICAL"] then
+                    button.emerg.state=4
+                elseif floor(button.health.hptc/10)<Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["INJURED"] then
+                    button.emerg.state=3
+                else
+                    button.emerg.state=0
+                end
+                if button.emerg.state~=prevState or force then
+                    HealBot_Action_EmergBarUpdate(button)
+                end
+            end
 		else
-			button.emerg.enabled=false
+			button.emerg.state=0
 			button.emerg.r,button.emerg.g,button.emerg.b=0,0,0
 			button.emerg.a=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]
 			HealBot_Action_EmergBarColUpdate(button)
@@ -636,11 +638,11 @@ function HealBot_Action_EmergBarUpdate(button, r, g, b)
 		button.emerg.b=0
 	elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["BARCOL"]==2 then
 		button.emerg.r,button.emerg.g,button.emerg.b=button.text.r,button.text.g,button.text.b
-	elseif floor(button.health.hptc/10)<Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["CRITICAL"] then
+	elseif button.emerg.state==4 then
 		button.emerg.r=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["CR"]
 		button.emerg.g=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["CG"]
 		button.emerg.b=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["CB"]
-	elseif floor(button.health.hptc/10)<Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["INJURED"] then
+	elseif button.emerg.state==3 then
 		button.emerg.r=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["IR"]
 		button.emerg.g=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["IG"]
 		button.emerg.b=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["IB"]
@@ -649,7 +651,7 @@ function HealBot_Action_EmergBarUpdate(button, r, g, b)
 		button.emerg.g=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["HG"]
 		button.emerg.b=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["HB"]
 	end
-	if button.emerg.enabled then
+	if button.emerg.state>0 then
 		button.emerg.a=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["A"]
 	else
 		button.emerg.a=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["DA"]
@@ -2024,7 +2026,7 @@ function HealBot_Action_PrepButton(button)
         button.aux[x]["STATIC"]=false
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
     end
-    button.emerg.enabled=false
+    button.emerg.state=0
     button.emerg.bar:SetStatusBarColor(0,0,0,0)
     HealBot_Action_SetAllButtonAttribs(button,"Enemy")
     HealBot_Action_UnregisterUnitEvents(button)
@@ -3797,15 +3799,17 @@ function HealBot_Action_PreClick(self,button)
 end
 
 function HealBot_Action_PostClick(self,button)
+    if not self.isEmerg then
+        xButton=self
+    else
+        xButton=HealBot_Action_EmergParent(self)
+    end
     if self.id==999 then
         HealBot_Panel_clickToFocus("hide")
         HealBot_nextRecalcParty(3)
-    elseif not self.isEmerg and UnitExists(self.unit) and UnitIsFriend("player",self.unit) and usedSmartCast then
-        HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Enemy",aj,self.frame,self.id,self.unit,self.guid)
-        HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Enabled",aj,self.frame,self.id,self.unit,self.guid)
-        if self.frame>0 and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][self.frame]["USE"] then
-            tmphasSpells=HealBot_Action_SetButtonAttrib(self.emerg,abutton,ModKey,"Enabled",aj,self.frame,self.id,self.unit,self.guid)
-        end
+    elseif xButton and UnitExists(self.unit) and UnitIsFriend("player",self.unit) and usedSmartCast then
+        HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Enemy",aj,xButton.frame,self.id,self.unit,xButton.guid)
+        HealBot_Action_SetButtonAttrib(self,abutton,ModKey,"Enabled",aj,xButton.frame,self.id,self.unit,xButton.guid)
     end
 end
 

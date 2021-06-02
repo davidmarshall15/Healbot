@@ -418,7 +418,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             local gaf = _G[HealBot_Skins_Concat(3)]
             b:SetFrameLevel(gaf:GetFrameLevel()+ 1); 
             b.gref["Back"]:SetFrameLevel(b:GetFrameLevel()+ 1);      -- Background
-            b.gref["Absorb"]:SetFrameLevel(button.gref["Back"]:GetFrameLevel()+ 1);   -- Absorbs
+            b.gref["Absorb"]:SetFrameLevel(b.gref["Back"]:GetFrameLevel()+ 1);   -- Absorbs
             b.gref["InHeal"]:SetFrameLevel(b.gref["Absorb"]:GetFrameLevel()+ 1);   -- Incoming Heal
             b.gref["Bar"]:SetFrameLevel(b.gref["InHeal"]:GetFrameLevel()+ 1);    -- Health
             b.gref["Top"]:SetFrameLevel(b:GetFrameLevel()+12)
@@ -449,14 +449,18 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"],
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["VOFFSET"])
-                button.emerg:Show()
+                b.emerg:Show()
             else
                 b.emerg.bar:ClearAllPoints()
                 b.emerg:SetFrameLevel(b:GetFrameLevel()-1)
                 b.emerg.bar:SetStatusBarColor(0,0,0,0)
             end
 			if testBarsOn and b.frame<10 and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][b.frame]["USE"]  then
-                b.emerg.bar:SetStatusBarColor(0,0.9,0,1)
+                if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["BARCOL"]==2 then
+                    b.emerg.bar:SetStatusBarColor(b.text.r,b.text.g,b.text.b,1)
+                else
+                    b.emerg.bar:SetStatusBarColor(0,0.9,0,1)
+                end
             end
 			
             b.gref.txt["text"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
@@ -649,7 +653,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFANCHOR"])
             
             b.gref.icon[1]:ClearAllPoints();
-            b.gref.icon[1]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],0,0);
+            b.gref.icon[1]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
+                                    Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BHOFFSET"],
+                                    Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BVOFFSET"]);
             b.gref.txt.expire[1]:ClearAllPoints()
             b.gref.txt.expire[1]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[1],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
             b.gref.txt.count[1]:ClearAllPoints()
@@ -674,7 +680,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DEBUFFONBAR"], 
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DEBUFFANCHOR"])
             b.gref.icon[51]:ClearAllPoints()
-            b.gref.icon[51]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],0,0)
+            b.gref.icon[51]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
+                                     Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DHOFFSET"],
+                                     Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DVOFFSET"])
             b.gref.txt.expire[51]:ClearAllPoints()
             b.gref.txt.expire[51]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[51],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
             b.gref.txt.count[51]:ClearAllPoints()
@@ -1493,6 +1501,10 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]=0 end
+        if not Healbot_Config_Skins.Icons[SkinName][gl]["DVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["DVOFFSET"]=0 end
+        if not Healbot_Config_Skins.Icons[SkinName][gl]["DHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["DHOFFSET"]=0 end
+        if not Healbot_Config_Skins.Icons[SkinName][gl]["BVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["BVOFFSET"]=0 end
+        if not Healbot_Config_Skins.Icons[SkinName][gl]["BHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["BHOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]=0.5 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"]=0 end

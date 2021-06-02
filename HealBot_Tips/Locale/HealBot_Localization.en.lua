@@ -332,7 +332,7 @@ function HealBot_Lang_Options_enALL()
                                  ["ICONSHOWRT"]=HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON,
                                  ["ICONSHOWDIR"]=HEALBOT_OPTIONS_SHOWDIRECTION,
                                  ["ICONSHOWDIRMO"]=HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE,
-                                 ["ICONOFFSET"]="Extra Icon Offset",
+                                 ["ICONOFFSET"]="Icon Offset",
                                  ["EXTRAICONSCALE"]=HEALBOT_OPTIONS_ICONSCALE,
                         -- Skins Frames Indicators
                                  ["INDAGGRO"]=HEALBOT_OPTIONS_TAB_AGGRO,
@@ -579,7 +579,7 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Frames General tab
                                ["GOTOHEALGROUPS"]="Go to the Heal Groups tab.",
                                ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
-                               ["FRAMELOCKED"]="Lock the frame at the current position.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: If the frame is locked and stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."the frame will remain stuck and cannot be unstuck.",
+                               ["FRAMELOCKED"]="Lock the frame at the current position.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: If the frame is locked and stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."the frame will remain stuck and cannot be unstuck.\n--\n".."|cff77c8ff".."Tip: In Test mode the frames are always unlocked \n|cff77c8ffand the spells unregistered on the bars.\n--\n|cff77c8ffUse test mode to easily move the frames.",
                                ["FRAMEAUTOSHOW"]="Hide the frame when out of combat and\nnone of the bars are in an enabled state.",
                                ["FRAMEANCHOR"]="The position of the frame anchor relative to the screen.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: When the frame is stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."this setting is automatically updated\n".._G["YELLOW_FONT_COLOR_CODE"].."and used to store the frames location.",
                                ["BARANCHOR"]="The position of the bars anchor relative to the frame.",
@@ -808,7 +808,7 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSHOWDIRMO"]="Only show the direction arrow\nwhen the mouse is over the bar.",
                                ["ICONSREADYCHECK"]="Show the Skins Frames Icons Extras Ready Check tab.",
                                ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
-                               ["ICONOFFSET"]="Offset the extra icon relative to the anchor.",
+                               ["ICONOFFSET"]="Offset the icon relative to the anchor.",
                                ["EXTRAICONSCALE"]="The icon scale relative to the bar.",
                         -- Skins Frames Indicators
                                ["INDAGGRO"]="Show the Skins Frames Indicators Aggro tab",

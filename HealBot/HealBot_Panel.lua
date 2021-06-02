@@ -781,11 +781,13 @@ function HealBot_Panel_ToggleTestBars()
         end
         HealBot_Action_setLuVars("TestBarsOn", false)
         HealBot_setLuVars("TestBarsOn", false)
+        HealBot_Options_setLuVars("TestBarsOn", false)
         HealBot_Skins_isTestBars(false)
         HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
         HealBot_setLuVars("TestBarsOn", true)
+        HealBot_Options_setLuVars("TestBarsOn", true)
         HealBot_Skins_isTestBars(true)
         HealBot_setTestBars=true
         HealBot_Panel_luVars["TestBarsDelAll"]=true
@@ -1141,6 +1143,7 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
         HealBot_showName=true
     end
     if not HealBot_setTestCols[index] then
+        button.text.r,button.text.g,button.text.b=r,g,b
         if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] >= 2) then
             if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2) then
                 HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = r,g,b
