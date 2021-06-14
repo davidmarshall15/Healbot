@@ -361,6 +361,7 @@ function HealBot_Lang_Options_enALL()
                                  ["COLCUSTOMHEALTHY"]="Custom Healthy Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["COLCUSTOMENABLED"]=HEALBOT_OPTIONS_BARALPHA,
                                  ["COLCUSTOMDISABLED"]=HEALBOT_OPTIONS_BARALPHADIS,
+                                 ["COLCUSTOMOOR"]=HEALBOT_OPTIONS_BARALPHAEOR,
                                  ["EMERGBARCOLBUFF"]=HEALBOT_OPTIONS_BUFFWARNINGS,
                                  ["EMERGBARCOLDEBUFF"]=HEALBOT_OPTIONS_CDCWARNINGS,
                         -- Debuffs General tab
@@ -836,9 +837,10 @@ function HealBot_Lang_Options_enALL()
                                ["COLCUSTOMINJ"]="When bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is set to Custom\nThis col"..HEALBOT_enWORD_COLOUR_SUFFIX.."is used when the health is low",
                                ["COLCUSTOMHEALTHY"]="When bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is set to Custom\nThis col"..HEALBOT_enWORD_COLOUR_SUFFIX.."is used when the health is reasonably high",
                                ["COLCUSTOMENABLED"]="When the player is injured or\nhas a buff/debuff that changes the bar.",
+                               ["COLCUSTOMOOR"]="When the player is injured or\nhas a buff/debuff that changes the bar\nbut is out of range for the spell.",
                                ["COLCUSTOMDISABLED"]="When the player is healthy and\nhas no buff/debuff that would change the bar.",
-                               ["EMERGBARCOLBUFF"]="With the emergency bar in use,\nbuffs col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed in various ways.",
-                               ["EMERGBARCOLDEBUFF"]="With the emergency bar in use,\ndebuffs col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed in various ways.",
+                               ["EMERGBARCOLBUFF"]="When the emergency bar is in use,\nBuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed on the emergency bar.",
+                               ["EMERGBARCOLDEBUFF"]="When the emergency bar is in use,\nDebuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed on the emergency bar.",
                         -- Debuffs General tab
                                ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
                                ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",

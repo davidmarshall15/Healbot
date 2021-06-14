@@ -99,7 +99,7 @@ HealBot_Panel_luVars["MAPID"]=0
 HealBot_Panel_luVars["NumPrivate"]=0
 HealBot_Panel_luVars["NumPets"]=0
 HealBot_Panel_luVars["TankHealth"]=0
-HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=4
+HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=2
 HealBot_Panel_luVars["cpUse"]=false
 HealBot_Panel_luVars["cpGroup"]=false
 HealBot_Panel_luVars["cpRaid"]=false
@@ -363,7 +363,8 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             table.insert(HealBot_MyHealTargets,xGUID)
         end
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_setOptions_Timer(185)
+    --HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit, perm)
@@ -384,6 +385,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
     end
     --HealBot_Panel_buildDataStore(true, true)
     HealBot_setOptions_Timer(185)
+    --HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -404,6 +406,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
     end
     --HealBot_Panel_buildDataStore(true, true)
     HealBot_setOptions_Timer(185)
+    --HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)
@@ -490,8 +493,7 @@ function HealBot_Panel_classEN(unit)
     end
 end
 
-function HealBot_Panel_UnitRole(unit, guid)
-    if guid and hbPanel_dataGUIDs[guid] then unit=hbPanel_dataGUIDs[guid] end
+function HealBot_Panel_UnitRole(unit)
     local role = hbPanel_dataRoles[unit]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>3 then 
@@ -509,7 +511,7 @@ function HealBot_Action_SetClassIconTexture(button)
         local setRole=false
         local unitRole=HEALBOT_WORDS_UNKNOWN
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-            unitRole=HealBot_Panel_UnitRole(button.unit, button.guid)
+            unitRole=HealBot_Panel_UnitRole(button.unit)
         end
         if roleTextures[unitRole] then
             HealBot_Aura_ClassUpdate(button, roleTextures[unitRole])
@@ -1217,6 +1219,9 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
         button.gref.txt["text2"]:SetTextColor(0,0,0,0)
     end
     button:Show()
+    if button.frame<10 and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][button.frame]["USE"] then
+        button.emerg.bar:Show()
+    end
 end
 
 function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
@@ -1776,7 +1781,7 @@ function HealBot_Panel_MainSort(doMainSort,unitType, preCombat)
                 end
                 HealBot_Panel_insSort(units[j], false)
             end
-            --if not j or vMainSortIndex<j then
+            --if vMainSortIndex<#units then
                 HealBot_Panel_SubSort(true, unitType, preCombat)
             --end
         else
@@ -2265,6 +2270,9 @@ function HealBot_Panel_VehicleChanged(preCombat)
             if xButton.status.unittype==7 then
                 if HealBot_TrackUnit[xUnit] then
                     xButton:Show()
+                    if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
+                        xButton.emerg.bar:Show()
+                    end
                 else
                     HealBot_Action_MarkDeleteButton(xButton)
                 end
@@ -2295,6 +2303,9 @@ function HealBot_Panel_PetsChanged(preCombat)
                 vPetsChangedRole=HealBot_Panel_petRole(xUnit)
                 if HealBot_TrackUnit[xUnit] or vPetsChangedRole=="TANK" or vPetsChangedRole=="HEALER" then
                     xButton:Show()
+                    if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
+                        xButton.emerg.bar:Show()
+                    end
                     HealBot_Panel_luVars["NumPets"]=HealBot_Panel_luVars["NumPets"]+1
                 elseif xButton.unit~="pet" or not HealBot_Panel_luVars["SelfPets"] then
                     HealBot_Action_MarkDeleteButton(xButton)
@@ -2325,6 +2336,9 @@ function HealBot_Panel_TargetChanged(preCombat)
             if HealBot_TrackUnit[vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
                 HealBot_setLuVars("TargetNeedReset", false)
                 vTargetButton:Show()
+                if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][vTargetButton.frame]["USE"] then
+                    vTargetButton.emerg.bar:Show()
+                end
                 HealBot_Panel_TargetChangedCheckFocus()
             else
                 HealBot_Action_HidePanel(hbCurrentFrame)
@@ -2403,6 +2417,9 @@ function HealBot_Panel_FocusChanged(preCombat)
                 if HealBot_TrackUnit[vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
                     HealBot_setLuVars("FocusNeedReset", false)
                     vFocusButton:Show()
+                    if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][vFocusButton.frame]["USE"] then
+                        vFocusButton.emerg.bar:Show()
+                    end
                 else
                     HealBot_Action_HidePanel(hbCurrentFrame)
                 end
@@ -2452,7 +2469,6 @@ end
 
 local vPetsWithPlayers=false
 function HealBot_Panel_PlayersChanged(preCombat)
-    nraid=GetNumGroupMembers();
     TempMaxH=9;
     
     if not IsInRaid() then 
@@ -2460,6 +2476,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
         HealBot_Action_setLuVars("InRaid", false)
         HealBot_Aura_setLuVars("InRaid", false)
     else
+        nraid=GetNumGroupMembers();
         HealBot_Action_setLuVars("InRaid", true)
         HealBot_Aura_setLuVars("InRaid", true)
     end
@@ -2524,6 +2541,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
         if xButton.status.unittype>4 and xButton.status.unittype<7 then
             if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
                 xButton:Show()
+                if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
+                    xButton.emerg.bar:Show()
+                end
             else
                 HealBot_Action_MarkDeleteButton(xButton)
                 HealBot_Panel_luVars["MarkClearDown"]=true
@@ -2537,6 +2557,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
         if xButton.status.unittype<5 then
             if HealBot_TrackPrivateUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
                 xButton:Show()
+                if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
+                    xButton.emerg.bar:Show()
+                end
                 HealBot_Panel_luVars["NumPrivate"]=HealBot_Panel_luVars["NumPrivate"]+1
             else
                 HealBot_Action_MarkDeleteButton(xButton)
@@ -2551,6 +2574,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if HealBot_TrackUnit[xUnit] then
                 xButton:Show()
+                if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
+                    xButton.emerg.bar:Show()
+                end
                 HealBot_Panel_luVars["NumPets"]=HealBot_Panel_luVars["NumPets"]+1
             else
                 HealBot_Action_MarkDeleteButton(xButton)
@@ -2693,12 +2719,12 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
         HealBot_Panel_PrePartyChanged(preCombat, changeType)
     end
     if not HealBot_Data["UILOCK"] then 
-        local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+5
+        local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+8
         if nMembers>HealBot_Globals.AutoCacheSize then    
             HealBot_Globals.AutoCacheSize=nMembers
         end
         HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]/nMembers),4))
     end
-    --HealBot_fastUpdateEveryFrame(1)
+    HealBot_fastUpdateEveryFrame(17)
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

@@ -16,20 +16,8 @@
     </Size>
     <Layers>
     <Layer level="ARTWORK">
-      <FontString name="$parent_text" inherits="GameFontNormalSmall">
-        <Anchors>
-        <Anchor point="CENTER">
-          <Offset> <AbsDimension y="1"/> </Offset>
-        </Anchor>
-        </Anchors>
-      </FontString>
-      <FontString name="$parent_text2" inherits="GameFontNormalSmall">
-        <Anchors>
-        <Anchor point="CENTER">
-          <Offset> <AbsDimension y="1"/> </Offset>
-        </Anchor>
-        </Anchors>
-      </FontString>
+      <FontString name="$parent_text" inherits="GameFontNormalSmall" />
+      <FontString name="$parent_text2" inherits="GameFontNormalSmall" />
     </Layer>
     </Layers>
     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>

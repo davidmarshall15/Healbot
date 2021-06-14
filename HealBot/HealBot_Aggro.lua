@@ -16,6 +16,16 @@ function HealBot_Aggro_Concat(elements)
     return table.concat(tConcat,"",1,elements)
 end
 
+function HealBot_Aggro_IndicatorClear(button)
+    button.aggro.ind=0
+    button.gref.indicator.aggro["Iconal1"]:SetAlpha(0)
+    button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
+    button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
+    button.gref.indicator.aggro["Iconar1"]:SetAlpha(0)
+    button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
+    button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+end
+
 function HealBot_Aggro_IndicatorUpdate(button)
     if button.status.current<9 and button.frame<10 and button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
         if button.aggro.status==1 then
@@ -50,13 +60,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
             end
         end
     elseif button.aggro.ind~=0 then
-        button.aggro.ind=0
-        button.gref.indicator.aggro["Iconal1"]:SetAlpha(0)
-        button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
-        button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
-        button.gref.indicator.aggro["Iconar1"]:SetAlpha(0)
-        button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
-        button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+        HealBot_Aggro_IndicatorClear(button)
     end
       --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
@@ -83,18 +87,23 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         mobName=""
     end
     if (button.aggro.status==3 or threatStatus==3) and button.aggro.status~=threatStatus then
-        HealBot_Action_UpdateHealthButton(button)
+        button.status.refresh=true
     end
     button.aggro.status=threatStatus
-    if threatStatus==0 or (Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
-                           Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"]) then
+    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
+       Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] then
         HealBot_Aggro_IndicatorUpdate(button)
     end
     if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct
         button.aggro.threatvalue=threatValue
         button.aggro.mobname=mobName
-        HealBot_Text_setNameText(button) 
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"]>1 then
+            HealBot_Text_setNameText(button)
+        end
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] then
+            HealBot_Text_setAggroText(button)
+        end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
         if HealBot_Data["TIPBUTTON"] and HealBot_Data["TIPBUTTON"]==button then HealBot_Action_RefreshTooltip() end
         if threatPct<1 then
@@ -102,7 +111,6 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         else
             HealBot_Aux_UpdateThreatBar(button)
         end
-        
     end
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end

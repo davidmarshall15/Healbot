@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION    = "9.0.5.18";
+﻿HEALBOT_VERSION    = "9.0.5.20";
 HEALBOT_VERSION_SC = HEALBOT_VERSION
 HEALBOT_ABOUT_URL = "healbot.dpm15.net"
 
@@ -6,8 +6,8 @@ local version = GetBuildInfo()
 local vMajor = string.split(".", version)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
-if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.7.11" end
-if HEALBOT_GAME_VERSION==2 then HEALBOT_VERSION = "2.5.1.7" end
+if HEALBOT_GAME_VERSION==1 then HEALBOT_VERSION = "1.13.7.13" end
+if HEALBOT_GAME_VERSION==2 then HEALBOT_VERSION = "2.5.1.9" end
 
 function HealBot_globalVars()
     --Consumables
@@ -552,6 +552,9 @@ function HealBot_globalVars()
     HBC_LIGHTNING_SHIELD                    = 324
     HBC_EARTH_SHIELD                        = 974
     HBC_ROCKBITER_WEAPON                    = 8017
+    HBC_FLAMETONGUE_WEAPON                  = 8024
+    HBC_WINDFURY_WEAPON                     = 8232
+    HBC_WATER_SHIELD                        = 24398
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";
     HEALBOT_SPIRIT_LINK_TOTEM               = 98008 --GetSpellInfo(98008) or "--Spirit Link Totem";

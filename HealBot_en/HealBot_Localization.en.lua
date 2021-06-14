@@ -1136,8 +1136,7 @@ function HealBot_Lang_enALL()
                                               "If your on Win7 or Win10, try the follow: \n"..
                                               "change system locale to English\n(for non-unicode programs) \n" ..
                                               "in Control Panel > Region and Language >\nAdministrative Tab",
-                                      [10]   = "On the Spells tab turn off Unset spells on disabled bars \n\n" ..
-                                              "Also check out setting Alert Levels to 100 on the \n" ..
+                                      [10]   = "Set Alert Levels to 100 on the \n" ..
                                               "Skins>Frame>Bars>Visibility tab",
                                       [11]  = "Disable for a character: \n\n" ..
                                               "1: Open the General tab \n" ..

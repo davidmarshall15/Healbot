@@ -180,7 +180,6 @@ HealBot_Config_CuresDefaults = {
     [HEALBOT_CURSE_en]   = false,
   },
 };
-
 HealBot_Class_En = { 
                 [HEALBOT_CLASSES_ALL]="ALL",
                 [HEALBOT_DRUID]="DRUI",

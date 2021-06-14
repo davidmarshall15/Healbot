@@ -449,7 +449,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"],
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["VOFFSET"])
-                b.emerg:Show()
+                --b.emerg:Show()
             else
                 b.emerg.bar:ClearAllPoints()
                 b.emerg:SetFrameLevel(b:GetFrameLevel()-1)
@@ -1081,7 +1081,7 @@ function HealBot_Skins_ResetAll()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Skins_ResetSkin("bar",xButton)
     end
-    HealBot_nextRecalcParty(0)
+    HealBot_setOptions_Timer(185)
 end
 
 function HealBot_Skins_Check_Skin(SkinName, fromImport)
@@ -1661,11 +1661,28 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["VOFFSET"] then Healbot_Config_Skins.Emerg[SkinName][gl]["VOFFSET"]=0 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["HOFFSET"] then Healbot_Config_Skins.Emerg[SkinName][gl]["HOFFSET"]=0 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["A"] then Healbot_Config_Skins.Emerg[SkinName][gl]["A"]=1 end
+        if not Healbot_Config_Skins.Emerg[SkinName][gl]["OA"] then Healbot_Config_Skins.Emerg[SkinName][gl]["OA"]=0.5 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["DA"] then Healbot_Config_Skins.Emerg[SkinName][gl]["DA"]=0.2 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"]=25 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"] then Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"]=50 end
-        if not Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"] then Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]=1 end
-        if not Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"] then Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]=2 end
+        if Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]==nil then 
+            Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]=false 
+        elseif type(Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"])=="number" then
+            if Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]>1 then
+                Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]=true
+            else
+                Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]=false
+            end
+        end
+        if Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]==nil then 
+            Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]=false 
+        elseif type(Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"])=="number" then
+            if Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]>1 then
+                Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]=true
+            else
+                Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFBARCOL"]=false
+            end
+        end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["CR"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CR"]=1 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["CG"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CG"]=0.1 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["CB"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CB"]=0.1 end
