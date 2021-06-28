@@ -230,6 +230,7 @@ function HealBot_Data_InitVars()
         PluginExtraButtons=true,
         PluginCombatProt=true,
         PluginTimeToLive=true,
+        PluginPreformance=true,
         PluginQuickSet=true,
         PluginEffectiveTanks=true,
         PluginEfficientHealers=true,
@@ -319,6 +320,10 @@ function HealBot_Data_InitVars()
                          ["ShiftUp"]=HEALBOT_EMOTE_HELLO, ["ShiftDown"]=HEALBOT_EMOTE_HELLO,
                          ["CtrlUp"]=HEALBOT_EMOTE_HELLO,  ["CtrlDown"]=HEALBOT_EMOTE_HELLO,
                          ["AltUp"]=HEALBOT_EMOTE_HELLO,   ["AltDown"]=HEALBOT_EMOTE_HELLO, },
+        HealBot_Macros={ ["NoneUp"]="",  ["NoneDown"]="",
+                         ["ShiftUp"]="", ["ShiftDown"]="",
+                         ["CtrlUp"]="",  ["CtrlDown"]="",
+                         ["AltUp"]="",   ["AltDown"]="", },
         EmergIncRange = {
             [HEALBOT_DRUID]    = false,  [HEALBOT_HUNTER]      = true,   [HEALBOT_MAGE]     = true,
             [HEALBOT_PALADIN]  = false,  [HEALBOT_PRIEST]      = false,  [HEALBOT_ROGUE]    = false,
@@ -4051,3 +4056,5 @@ HealBot_Private_Button={};
 HealBot_Enemy_Button={};
 HealBot_Extra_Button={};
 HealBot_Pet_Button={};
+HealBot_Vehicle_Button={};
+HealBot_Emerg_Button={};

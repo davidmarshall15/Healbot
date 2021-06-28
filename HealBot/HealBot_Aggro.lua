@@ -66,7 +66,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
 end
 
 function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
-    if button.status.current<9 and UnitIsFriend("player",button.unit) then
+    if button.status.current<9 and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status then
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
                 if threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
@@ -113,4 +113,27 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         end
     end
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
+end
+
+function HealBot_Aggro_ClearUnitAggro(button)
+    HealBot_Aggro_UpdateUnit(button,false,0,0,"",0,"")
+      --HealBot_setCall("HealBot_Aggro_ClearUnitAggro")
+end
+
+function HealBot_Aggro_UpdateAggroText()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Text_setAggroText(xButton, true)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Text_setAggroText(xButton, true)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Text_setAggroText(xButton, true)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        HealBot_Text_setAggroText(xButton, true)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_Text_setAggroText(xButton, true)
+    end
 end

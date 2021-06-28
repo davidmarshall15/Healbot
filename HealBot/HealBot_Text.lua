@@ -103,6 +103,8 @@ end
 local floor=floor
 local HealBot_Text_luVars={}
 HealBot_Text_luVars["FluidInUse"]=false
+HealBot_Text_luVars["FluidTextAlphaUpdate"]=0.02
+HealBot_Text_luVars["FluidTextAlphaFreq"]=0.025
 
 function HealBot_Text_setLuVars(vName, vValue)
     HealBot_Text_luVars[vName]=vValue
@@ -670,32 +672,32 @@ function HealBot_Text_ClearOverHeals()
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
-        xButton.text.health=""
-        HealBot_Text_setHealthText(xButton)
+        HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
-        xButton.text.health=""
-        HealBot_Text_setHealthText(xButton)
+        HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
-        xButton.text.health=""
-        HealBot_Text_setHealthText(xButton)
+        HealBot_Text_ConcatHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        xButton.text.overheal=vTextChars["Nothing"]
+        xButton.text.overheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
-        xButton.text.health=""
-        HealBot_Text_setHealthText(xButton)
+        HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
-        xButton.text.health=""
-        HealBot_Text_setHealthText(xButton)
+        HealBot_Text_ConcatHealthText(xButton)
     end
 end
 
@@ -711,6 +713,11 @@ function HealBot_Text_ClearSeparateInHealsAbsorbs()
         HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        xButton.text.inheal=vTextChars["Nothing"]
+        xButton.text.inheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
         xButton.text.inheal=vTextChars["Nothing"]
         xButton.text.inheallen=0
         HealBot_Text_ConcatHealthText(xButton)
@@ -841,7 +848,7 @@ function HealBot_Text_setOverHealText(button)
                     tHealthConcat[3]=floor((button.health.overheal/button.health.max)*100)
                 end
                 tHealthConcat[4]=hbNumFormats["OverHealRight"][button.frame]
-                vHealthTextConcatIndex=vHealthTextConcatIndex+4
+                vHealthTextConcatResult=HealBot_Text_HealthConcat(4)
                 button.text.overheallen=(hbStringLen(hbutf8sub(vHealthTextConcatResult, "%s+", "")))
             else
                 tHealthConcat[2]=vTextCustomCols["OverHeal"][button.frame]
@@ -1024,7 +1031,7 @@ end
 local aufbButtonActive=false
 local aufbSetValue,aufbAlphaValue=0,0
 local aufbSetRValue,aufbSetGValue,aufbSetBValue=0,0,0
-function HealBot_Text_UpdateFluidTextAlpha(upVal)
+function HealBot_Text_UpdateFluidTextAlpha()
     HealBot_Text_luVars["FluidTextAlphaInUse"]=false
     
     for id,xButton in pairs(HealBot_Fluid_TextHealthAlpha) do
@@ -1032,14 +1039,14 @@ function HealBot_Text_UpdateFluidTextAlpha(upVal)
         aufbAlphaValue=xButton.gref.txt["text2"]:GetAlpha()
         aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.ha then
-            aufbSetValue=aufbAlphaValue-upVal
+            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.ha then 
                 aufbSetValue=xButton.text.ha
             else
                 aufbButtonActive=true
             end
         elseif aufbAlphaValue<xButton.text.ha then
-            aufbSetValue=aufbAlphaValue+upVal
+            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue>xButton.text.ha then 
                 aufbSetValue=xButton.text.ha
             else
@@ -1061,14 +1068,14 @@ function HealBot_Text_UpdateFluidTextAlpha(upVal)
         aufbAlphaValue=xButton.gref.txt["text"]:GetAlpha()
         aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.na then
-            aufbSetValue=aufbAlphaValue-upVal
+            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.na then 
                 aufbSetValue=xButton.text.na
             else
                 aufbButtonActive=true
             end
         elseif aufbAlphaValue<xButton.text.na then
-            aufbSetValue=aufbAlphaValue+upVal
+            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue>xButton.text.na then 
                 aufbSetValue=xButton.text.na
             else
@@ -1085,14 +1092,20 @@ function HealBot_Text_UpdateFluidTextAlpha(upVal)
             HealBot_Text_luVars["FluidTextAlphaInUse"]=true
         end
     end
-    HealBot_Aux_setLuVars("FluidTextAlphaInUse", HealBot_Text_luVars["FluidTextAlphaInUse"])
+    if HealBot_Text_luVars["FluidTextAlphaInUse"] then
+        C_Timer.After(HealBot_Text_luVars["FluidTextAlphaFreq"], HealBot_Text_UpdateFluidTextAlpha)
+    end
+    --HealBot_Aux_setLuVars("FluidTextAlphaInUse", HealBot_Text_luVars["FluidTextAlphaInUse"])
       --HealBot_setCall("HealBot_Text_UpdateFluidTextAlpha")
 end
 
 local function HealBot_Text_UpdateNameColour(button)
     if HealBot_Text_luVars["FluidInUse"] then
         HealBot_Fluid_TextNameAlpha[button.id]=button
-        HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
+        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
+            HealBot_Text_UpdateFluidTextAlpha()
+        end
+        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
     else
         button.gref.txt["text"]:SetTextColor(button.text.nr, button.text.ng, button.text.nb, button.text.na)
     end
@@ -1102,7 +1115,10 @@ end
 local function HealBot_Text_UpdateHealthColour(button)
     if HealBot_Text_luVars["FluidInUse"] and button.status.current<10 then
         HealBot_Fluid_TextHealthAlpha[button.id]=button
-        HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
+        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
+            HealBot_Text_UpdateFluidTextAlpha()
+        end
+        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
     else
         button.gref.txt["text2"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
     end
@@ -1127,7 +1143,7 @@ function HealBot_Text_UpdateText(button)
     end
     if button.text.healthupdate then
         button.text.healthupdate=false
-        if button.status.current<10 then
+        if button.status.current<9 then
             if button.status.enabled then
                 button.text.ha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCA"], 1)
             else
@@ -1153,6 +1169,9 @@ function HealBot_Text_UpdateNames()
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Text_setNameText(xButton)
     end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        HealBot_Text_setNameText(xButton)
+    end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_setNameText(xButton)
     end
@@ -1171,6 +1190,10 @@ function HealBot_Text_UpdateHealth()
         HealBot_Text_setHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        xButton.text.health=""
+        HealBot_Text_setHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
         xButton.text.health=""
         HealBot_Text_setHealthText(xButton)
     end
@@ -1198,6 +1221,9 @@ function HealBot_Text_UpdateButtons()
         HealBot_Text_UpdateButton(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Text_UpdateButton(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
         HealBot_Text_UpdateButton(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do

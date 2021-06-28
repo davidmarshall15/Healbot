@@ -1,10 +1,10 @@
-## Interface: 90005
+## Interface: 90100
 ## Title: HealBot Tooltips
 ## Author: Strife
 ## Notes: HealBot Tooltips, used on HealBot frames and in HealBot options.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.5.20
+## Version: 9.1.0.0
 
 Locale\HealBot_Localization.en.lua
 HealBot_Tooltip.lua

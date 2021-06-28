@@ -21,6 +21,7 @@ local maxIcons=0
 local AuxOverlapOffset=0
 local maxScale=0
 local tBarsConcat={}
+local erButton=nil
 local iAnchors={["ICON"]="", ["BUTTON"]="", ["DOUBLE"]="", ["RELATIVE"]="", ["TXTCOUNT"]="", ["TXTEXPIRE"]="", ["TXTEXPIREX"]=1, ["TXTCOUNTX"]=1}
 
 local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicator_gold]],
@@ -428,38 +429,39 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["Bar"]:ClearAllPoints()
             b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",barOffsetH+lIconWidth,barOffsetV+bIconHeight)
             
+            erButton=HealBot_Emerg_Button[button.id]
             if b.frame<10 and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][b.frame]["USE"] then
-                b.emerg.bar:SetHeight(ceil(bheight*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"]))
-                b.emerg.bar:SetWidth(ceil(bWidth*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["WIDTH"]))
-                b.emerg:SetHeight(ceil(bheight*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"]))
-                b.emerg:SetWidth(ceil(bWidth*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["WIDTH"]))
-                b.emerg:SetFrameLevel(b:GetFrameLevel()+1)
-                b.emerg.bar:SetFrameLevel(b.gref["Top"]:GetFrameLevel()-1)
-                b.emerg.bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
-                b.emerg.bar:GetStatusBarTexture():SetHorizTile(false)
-                b.emerg:ClearAllPoints()
-                b.emerg:SetPoint(HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
+                erButton.bar:SetHeight(ceil(bheight*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"]))
+                erButton.bar:SetWidth(ceil(bWidth*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["WIDTH"]))
+                erButton:SetHeight(ceil(bheight*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"]))
+                erButton:SetWidth(ceil(bWidth*Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["WIDTH"]))
+                erButton:SetFrameLevel(b:GetFrameLevel()+1)
+                erButton.bar:SetFrameLevel(b.gref["Top"]:GetFrameLevel()-1)
+                erButton.bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
+                erButton.bar:GetStatusBarTexture():SetHorizTile(false)
+                erButton:ClearAllPoints()
+                erButton:SetPoint(HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                  b.gref["Back"],
                                  HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                  Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"],
                                  Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["VOFFSET"])
-                b.emerg.bar:ClearAllPoints()
-                b.emerg.bar:SetPoint(HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
+                erButton.bar:ClearAllPoints()
+                erButton.bar:SetPoint(HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                      b.gref["Back"],
                                      HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"],
                                      Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["VOFFSET"])
-                --b.emerg:Show()
+                --erButton:Show()
             else
-                b.emerg.bar:ClearAllPoints()
-                b.emerg:SetFrameLevel(b:GetFrameLevel()-1)
-                b.emerg.bar:SetStatusBarColor(0,0,0,0)
+                erButton.bar:ClearAllPoints()
+                erButton:SetFrameLevel(b:GetFrameLevel()-1)
+                erButton.bar:SetStatusBarColor(0,0,0,0)
             end
 			if testBarsOn and b.frame<10 and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][b.frame]["USE"]  then
                 if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["BARCOL"]==2 then
-                    b.emerg.bar:SetStatusBarColor(b.text.r,b.text.g,b.text.b,1)
+                    erButton.bar:SetStatusBarColor(b.text.r,b.text.g,b.text.b,1)
                 else
-                    b.emerg.bar:SetStatusBarColor(0,0.9,0,1)
+                    erButton.bar:SetStatusBarColor(0,0.9,0,1)
                 end
             end
 			
@@ -582,7 +584,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                             AuxRight=b.gref.aux[x]
                         end
                     end
-                    if HealBot_retLuVars("TestBarsOn") then
+                    if testBarsOn then
                         b.gref.aux[x]:SetValue(1000)
                         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==2 then
                             b.gref.aux[x]:SetStatusBarColor(0.8,1,0.8,1)
@@ -1076,6 +1078,9 @@ function HealBot_Skins_ResetAll()
         HealBot_Skins_ResetSkin("bar",xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Skins_ResetSkin("bar",xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
         HealBot_Skins_ResetSkin("bar",xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do

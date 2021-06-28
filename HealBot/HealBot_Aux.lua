@@ -9,10 +9,12 @@ local HealBot_Aux_luVars={}
 HealBot_Aux_luVars["auxAlpha"]=0.1
 HealBot_Aux_luVars["AUXOMIN"]=0.1
 HealBot_Aux_luVars["AUXOMAX"]=0.95
-HealBot_Aux_luVars["FLUIDSTATEFREQ"]=0.05
-HealBot_Aux_luVars["FLUIDFREQ"]=10
-HealBot_Aux_luVars["OFREQ"]=0.07
-HealBot_Aux_luVars["FluidFlashInUse"]=true
+HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]=0.02
+HealBot_Aux_luVars["AuxFluidBarAlphaFreq"]=0.025
+HealBot_Aux_luVars["AuxFluidBarOpacityUpdate"]=0.02
+HealBot_Aux_luVars["AuxFluidBarOpacityFreq"]=0.025
+HealBot_Aux_luVars["AuxFluidBarUpdate"]=50
+HealBot_Aux_luVars["AuxFluidBarFreq"]=0.025
 
 function HealBot_Aux_setLuVars(vName, vValue)
     HealBot_Aux_luVars[vName]=vValue
@@ -64,7 +66,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
         if isFluid and HealBot_Aux_luVars["FluidInUse"] and not button.mana.init then
             button.aux[id]["FLUID"]=value-- or 0
             HealBot_AuxFluid_Buttons[button.id]=button
-            HealBot_Aux_luVars["AuxFluidBarInUse"]=true
+            if not HealBot_Aux_luVars["AuxFluidBarInUse"] then HealBot_Aux_UpdateFluidBars(GetTime()-0.01) end
         elseif endTime then
             if CastIsChan then
                 button.aux[id]["TIMEDH2L"]=value
@@ -80,7 +82,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
                 button.gref.aux[id]:SetValue(0)
             end
             HealBot_AuxTimed_Buttons[button.id]=button
-            HealBot_Aux_luVars["AuxCastBarInUse"]=true
+            if not HealBot_Aux_luVars["AuxCastBarInUse"] then HealBot_Aux_UpdateTimedBars() end
         else
             button.gref.aux[id]:SetValue(value)
             button.mana.init=false
@@ -89,7 +91,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.aux[id]["FLASH"]=true
             button.gref.aux[id]:SetStatusBarColor(button.aux[id]["R"], button.aux[id]["G"], button.aux[id]["B"], HealBot_Aux_luVars["auxAlpha"])
             HealBot_Aux_Buttons[button.id]=button
-            HealBot_Aux_luVars["AuxFlashBarsInUse"]=true
+            if not HealBot_Aux_luVars["AuxFlashBarsInUse"] then HealBot_Aux_UpdateVariableBars() end
         else
             button.aux[id]["STATIC"]=true
             HealBot_AuxStatic_Buttons[button.id]=button
@@ -101,7 +103,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
                 end
                 button.aux[id]["ISFLUID"]=true
                 HealBot_AuxFluid_ButtonsAlpha[button.id]=button
-                HealBot_Aux_luVars["AuxFluidBarAlphaInUse"]=true
+                if not HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] then HealBot_Aux_UpdateFluidBarsAlpha() end
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OTYPE"]==3 then
                 button.gref.aux[id]:SetStatusBarColor(button.aux[id]["R"], button.aux[id]["G"], button.aux[id]["B"], Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["A"])
             else
@@ -159,7 +161,7 @@ function HealBot_Aux_UpdBar(button, noFluid)
                     button.aux[x]["FLUIDSTATE"]=button.status.alpha
                 end
                 HealBot_AuxFluid_ButtonsAlpha[button.id]=button
-                HealBot_Aux_luVars["AuxFluidBarAlphaInUse"]=true
+                if not HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] then HealBot_Aux_UpdateFluidBarsAlpha() end
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OTYPE"]==3 then
                 button.gref.aux[x]:SetStatusBarColor(button.aux[x]["R"], button.aux[x]["G"], button.aux[x]["B"], Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["A"])
             else
@@ -248,7 +250,7 @@ function HealBot_Aux_resetAllBars()
             end
         end
     end
-    HealBot_fastUpdateEveryFrame(5)
+    HealBot_fastUpdateEveryFrame(1)
       --HealBot_setCall("HealBot_resetAllAuxBar")
 end
 
@@ -265,7 +267,7 @@ local function HealBot_Aux_DoUpdateVariableBars(button)
     return hbFlashOn
 end
 
-local function HealBot_Aux_UpdateVariableBars(upVal)
+function HealBot_Aux_UpdateVariableBars()
     HealBot_Aux_luVars["AuxFlashBarsInUse"]=false
     for id,xButton in pairs(HealBot_Aux_Buttons) do
         if not HealBot_Aux_DoUpdateVariableBars(xButton) then
@@ -276,30 +278,33 @@ local function HealBot_Aux_UpdateVariableBars(upVal)
     end
     if HealBot_Aux_luVars["AuxFlashBarsInUse"] then
         if HealBot_Aux_luVars["AuxAlphaUp"] then
-            HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["auxAlpha"]+upVal
+            HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["auxAlpha"]+HealBot_Aux_luVars["AuxFluidBarOpacityUpdate"]
             if HealBot_Aux_luVars["auxAlpha"]>=HealBot_Aux_luVars["AUXOMAX"] then 
                 HealBot_Aux_luVars["AuxAlphaUp"]=false
                 HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["AUXOMAX"]
             end
         else
-            HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["auxAlpha"]-upVal
+            HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["auxAlpha"]-HealBot_Aux_luVars["AuxFluidBarOpacityUpdate"]
             if HealBot_Aux_luVars["auxAlpha"]<=HealBot_Aux_luVars["AUXOMIN"] then
                 HealBot_Aux_luVars["AuxAlphaUp"]=true
                 HealBot_Aux_luVars["auxAlpha"]=HealBot_Aux_luVars["AUXOMIN"]
             end
         end
+        C_Timer.After(HealBot_Aux_luVars["AuxFluidBarOpacityFreq"], HealBot_Aux_UpdateVariableBars)
     end
 end
 
 --------------------------------
 
-local function HealBot_Aux_UpdateFluidBarsValue(button, upVal) 
+local function HealBot_Aux_UpdateFluidBarsValue(button, PrevTime) 
     ufaBarActive=false
+    HealBot_Aux_luVars["AuxFluidBarElapsed"]=(GetTime()-PrevTime)*2
+    HealBot_Aux_luVars["AuxFluidBarUpdateElapsed"]=HealBot_Comm_round(HealBot_Aux_luVars["AuxFluidBarElapsed"]*HealBot_Aux_luVars["AuxFluidBarUpdate"],2)
     for x=1,9 do
         if button.aux[x]["FLUID"]>-1 then
             aBarGetValue=button.gref.aux[x]:GetValue()
             if aBarGetValue>button.aux[x]["FLUID"] then
-                aBarSetValue=aBarGetValue-upVal
+                aBarSetValue=aBarGetValue-HealBot_Aux_luVars["AuxFluidBarUpdateElapsed"]
                 if aBarSetValue<button.aux[x]["FLUID"] then 
                     aBarSetValue=button.aux[x]["FLUID"]
                     button.aux[x]["FLUID"]=-1
@@ -308,7 +313,7 @@ local function HealBot_Aux_UpdateFluidBarsValue(button, upVal)
                 end
                 button.gref.aux[x]:SetValue(aBarSetValue)
             elseif aBarGetValue<button.aux[x]["FLUID"] then
-                aBarSetValue=aBarGetValue+upVal
+                aBarSetValue=aBarGetValue+HealBot_Aux_luVars["AuxFluidBarUpdateElapsed"]
                 if aBarSetValue>button.aux[x]["FLUID"] then 
                     aBarSetValue=button.aux[x]["FLUID"]
                     button.aux[x]["FLUID"]=-1
@@ -321,7 +326,6 @@ local function HealBot_Aux_UpdateFluidBarsValue(button, upVal)
             end
         end
     end
-    
       --HealBot_setCall("HealBot_Aux_UpdateFluidBarsValue")
     return ufaBarActive
 end
@@ -350,14 +354,14 @@ local function HealBot_Aux_UpdateTimedBarsValue(button, TimeNow)
     return ufaBarActive
 end
 
-local function HealBot_Aux_UpdateFluidBarsAlphaValue(button, upVal)
+local function HealBot_Aux_UpdateFluidBarsAlphaValue(button)
     ufaBarActive=false
     for x=1,9 do
         if button.aux[x]["FLUIDSTATE"]>-1 then
             _,_,_,aBarGetValue=button.gref.aux[x]:GetStatusBarColor()
             aBarGetValue=HealBot_Comm_round(aBarGetValue, 2)
             if aBarGetValue>button.aux[x]["FLUIDSTATE"] then
-                aBarSetValue=aBarGetValue-upVal
+                aBarSetValue=aBarGetValue-HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue<button.aux[x]["FLUIDSTATE"] then 
                     aBarSetValue=button.aux[x]["FLUIDSTATE"]
                 else
@@ -365,7 +369,7 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button, upVal)
                 end
                 button.gref.aux[x]:SetStatusBarColor(button.aux[x]["R"], button.aux[x]["G"], button.aux[x]["B"], aBarSetValue)
             elseif aBarGetValue<button.aux[x]["FLUIDSTATE"] then
-                aBarSetValue=aBarGetValue+upVal
+                aBarSetValue=aBarGetValue+HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue>button.aux[x]["FLUIDSTATE"] then 
                     aBarSetValue=button.aux[x]["FLUIDSTATE"]
                 else
@@ -380,7 +384,7 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button, upVal)
             _,_,_,aBarGetValue=button.gref.auxtxt[x]:GetTextColor()
             aBarGetValue=HealBot_Comm_round(aBarGetValue, 2)
             if aBarGetValue>button.aux[x]["FLUIDTEXT"] then
-                aBarSetValue=aBarGetValue-upVal
+                aBarSetValue=aBarGetValue-HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue<button.aux[x]["FLUIDTEXT"] then 
                     aBarSetValue=button.aux[x]["FLUIDTEXT"]
                 else
@@ -388,7 +392,7 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button, upVal)
                 end
                 button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"], aBarSetValue)
             elseif aBarGetValue<button.aux[x]["FLUIDTEXT"] then
-                aBarSetValue=aBarGetValue+upVal
+                aBarSetValue=aBarGetValue+HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue>button.aux[x]["FLUIDTEXT"] then 
                     aBarSetValue=button.aux[x]["FLUIDTEXT"]
                 else
@@ -405,19 +409,25 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button, upVal)
     return ufaBarActive
 end
 
-local function HealBot_Aux_UpdateFluidBars(upVal)
+function HealBot_Aux_UpdateFluidBars(PrevTime)
     HealBot_Aux_luVars["AuxFluidBarInUse"]=false
     for id,xButton in pairs(HealBot_AuxFluid_Buttons) do
-        if not HealBot_Aux_UpdateFluidBarsValue(xButton, upVal) then
+        if not HealBot_Aux_UpdateFluidBarsValue(xButton, PrevTime) then
             HealBot_AuxFluid_Buttons[id]=nil
         else
             HealBot_Aux_luVars["AuxFluidBarInUse"]=true
         end
     end
+    if HealBot_Aux_luVars["AuxFluidBarInUse"] then
+        PrevTime=GetTime()
+        C_Timer.After(HealBot_Aux_luVars["AuxFluidBarFreq"], function() HealBot_Aux_UpdateFluidBars(PrevTime) end)
+    end
 end
 
-function HealBot_Aux_UpdateTimedBars(TimeNow)
+local TimeNow=0
+function HealBot_Aux_UpdateTimedBars()
     HealBot_Aux_luVars["AuxCastBarInUse"]=false
+    TimeNow=GetTime()
     for id,xButton in pairs(HealBot_AuxTimed_Buttons) do
         if not HealBot_Aux_UpdateTimedBarsValue(xButton, TimeNow) then
             HealBot_AuxTimed_Buttons[id]=nil
@@ -425,54 +435,23 @@ function HealBot_Aux_UpdateTimedBars(TimeNow)
             HealBot_Aux_luVars["AuxCastBarInUse"]=true
         end
     end
+    if HealBot_Aux_luVars["AuxCastBarInUse"] then
+        C_Timer.After(0.0245, HealBot_Aux_UpdateTimedBars)
+    end
 end
 
-local function HealBot_Aux_UpdateFluidBarsAlpha(upVal)
+function HealBot_Aux_UpdateFluidBarsAlpha()
     HealBot_Aux_luVars["AuxFluidBarAlphaInUse"]=false
     for id,xButton in pairs(HealBot_AuxFluid_ButtonsAlpha) do
-        if not HealBot_Aux_UpdateFluidBarsAlphaValue(xButton, upVal) then
+        if not HealBot_Aux_UpdateFluidBarsAlphaValue(xButton) then
             HealBot_AuxFluid_ButtonsAlpha[id]=nil
         else
             HealBot_Aux_luVars["AuxFluidBarAlphaInUse"]=true
         end
     end
-end
-
-local ouFF, ouFA=0,0
-function HealBot_Aux_FlashFluidInUse(elapsed)
-    if HealBot_Aux_luVars["AuxFlashBarsInUse"] then
-        HealBot_Aux_UpdateVariableBars(HealBot_Comm_round(elapsed+HealBot_Aux_luVars["OFREQ"],2))
+    if HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] then
+        C_Timer.After(HealBot_Aux_luVars["AuxFluidBarAlphaFreq"], HealBot_Aux_UpdateFluidBarsAlpha)
     end
-    if HealBot_Aux_luVars["FluidBarInUse"] or HealBot_Aux_luVars["AuxFluidBarInUse"] then
-        ouFF=ceil(elapsed*HealBot_Aux_luVars["FLUIDFREQ"])
-        if HealBot_Aux_luVars["FluidBarInUse"] then HealBot_Action_UpdateFluidBars(ouFF) end
-        if HealBot_Aux_luVars["AuxFluidBarInUse"] then HealBot_Aux_UpdateFluidBars(ouFF) end
-    end
-    if HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] or HealBot_Aux_luVars["FluidBarAlphaInUse"] or HealBot_Aux_luVars["FluidTextAlphaInUse"] then
-        ouFA=HealBot_Comm_round(elapsed+HealBot_Aux_luVars["FLUIDSTATEFREQ"],2)
-        if HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] then HealBot_Aux_UpdateFluidBarsAlpha(ouFA) end
-        if HealBot_Aux_luVars["FluidBarAlphaInUse"] then HealBot_Action_UpdateFluidBarsAlpha(ouFA) end
-        if HealBot_Aux_luVars["FluidTextAlphaInUse"] then HealBot_Text_UpdateFluidTextAlpha(ouFA) end
-    end
-end
-
-function HealBot_Aux_CheckFlashFluidNotInUse()
-    if not HealBot_Aux_luVars["AuxFlashBarsInUse"] and 
-       not HealBot_Aux_luVars["FluidBarInUse"] and
-       not HealBot_Aux_luVars["AuxFluidBarInUse"] and
-       not HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] and 
-       not HealBot_Aux_luVars["FluidTextAlphaInUse"] and 
-       not HealBot_Aux_luVars["FluidBarAlphaInUse"] then
-        HealBot_Aux_luVars["FluidFlashInUse"]=false
-        return true
-    else
-        return false
-    end
-end
-
-function HealBot_Aux_BarsUpdate(elapsed, TimeNow)
-    if HealBot_Aux_luVars["FluidFlashInUse"] then HealBot_Aux_FlashFluidInUse(elapsed) end
-    if HealBot_Aux_luVars["AuxCastBarInUse"] then HealBot_Aux_UpdateTimedBars(TimeNow) end
 end
 
 -- Power

@@ -1,10 +1,10 @@
-﻿## Interface: 90005
+﻿## Interface: 90100
 ## Title: HealBot Chinese Localization
 ## Author: Required
 ## Notes: HealBot 中文语言文件
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.0.5.16
+## Version: 9.1.0.0
 
 HealBot_Localization.cn.lua
 HealBot_Tips_Localization.cn.lua

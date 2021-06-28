@@ -7,7 +7,7 @@
   <Script file="HealBot_Wheel.lua" />
   <Script file="HealBot_Action.lua" />
  
-  <Button name="HealBotButtonSecureTemplate" virtual="true" inherits="SecureUnitButtonTemplate">
+  <Button name="HealBotButtonSecureTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
     <Size>
       <AbsDimension x="95" y="18" />
     </Size>
@@ -1085,7 +1085,7 @@
       <AbsDimension x="128" y="18" />
     </Size>
     <Scripts>
-      <OnLoad>HealBot_Action_OnLoad(self)</OnLoad>
+      <OnLoad>HealBot_Action_EmergOnLoad(self)</OnLoad>
       <OnEnter>HealBot_Action_EmergUnit_OnEnter(self);</OnEnter>
       <OnLeave>HealBot_Action_EmergUnit_OnLeave(self);</OnLeave>
     </Scripts>

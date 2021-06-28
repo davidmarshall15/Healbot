@@ -18944,8 +18944,8 @@
                         </Layers>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
-                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELLITEM",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELLITEM",false)</OnLeave>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSWEAPONENCHANT1",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSWEAPONENCHANT1",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff9Colourb">
@@ -19022,8 +19022,8 @@
                         </Anchors>
                         <Scripts>
                           <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 205)</OnLoad>
-                          <OnEnter>HealBot_Options_Show_Help("BUFFSSPELLITEM",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("BUFFSSPELLITEM",false)</OnLeave>
+                          <OnEnter>HealBot_Options_Show_Help("BUFFSWEAPONENCHANT2",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BUFFSWEAPONENCHANT2",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Button name="HealBot_Buff10Colourb">
@@ -21732,6 +21732,23 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginCombatProtFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginPreformanceFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
