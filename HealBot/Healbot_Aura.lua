@@ -2111,7 +2111,7 @@ function HealBot_Aura_BuffIdLookup()
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sID]=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]
             end
         end
-        C_Timer.After(0.2, HealBot_Aura_BuffIdLookup)
+        C_Timer.After(0.27, HealBot_Aura_BuffIdLookup)
     end
 end
 

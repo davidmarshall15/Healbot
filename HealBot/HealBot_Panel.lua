@@ -100,7 +100,6 @@ HealBot_Panel_luVars["MAPID"]=0
 HealBot_Panel_luVars["NumPrivate"]=0
 HealBot_Panel_luVars["NumPets"]=0
 HealBot_Panel_luVars["TankHealth"]=0
-HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]=2
 HealBot_Panel_luVars["cpUse"]=false
 HealBot_Panel_luVars["cpGroup"]=false
 HealBot_Panel_luVars["cpRaid"]=false
@@ -2549,7 +2548,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
         end
     end   
     
-    HealBot_Panel_luVars["MarkClearDown"]=false
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
         if xButton.status.unittype>4 and xButton.status.unittype<7 then
             if HealBot_TrackUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
@@ -2559,7 +2557,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 end
             else
                 HealBot_Action_MarkDeleteButton(xButton)
-                HealBot_Panel_luVars["MarkClearDown"]=true
             end
         elseif xButton.status.unittype<5 or xButton.status.unittype>8 then
             HealBot_Unit_Button[xUnit]=nil
@@ -2576,7 +2573,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 HealBot_Panel_luVars["NumPrivate"]=HealBot_Panel_luVars["NumPrivate"]+1
             else
                 HealBot_Action_MarkDeleteButton(xButton)
-                HealBot_Panel_luVars["MarkClearDown"]=true
             end
         else
             HealBot_Private_Button[xUnit]=nil
@@ -2610,11 +2606,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
     end
         
     HealBot_Panel_SetupBars(preCombat)
-    if HealBot_Panel_luVars["MarkClearDown"] then
-        if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_MarkClearDown() end
-        if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_MarkClearDown() end
-        if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_MarkClearDown() end
-    end
+    if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_Cleardown() end
+    if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_Cleardown() end
+    if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_Cleardown() end
 end
 
 function HealBot_RetUnitGroups(unit)
@@ -2744,11 +2738,10 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
         HealBot_Panel_PrePartyChanged(preCombat, changeType)
     end
     if not HealBot_Data["UILOCK"] then 
-        local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+8
+        local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+14
         if nMembers>HealBot_Globals.AutoCacheSize then    
             HealBot_Globals.AutoCacheSize=nMembers
         end
-        HealBot_setLuVars("UnitSlowUpdateFreq",HealBot_Comm_round((HealBot_Panel_luVars["UnitSlowUpdateFreqMax"]/nMembers),4))
     end
     HealBot_fastUpdateEveryFrame(2)
       --HealBot_setCall("HealBot_Panel_PartyChanged")

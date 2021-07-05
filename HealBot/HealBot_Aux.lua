@@ -10,11 +10,11 @@ HealBot_Aux_luVars["auxAlpha"]=0.1
 HealBot_Aux_luVars["AUXOMIN"]=0.1
 HealBot_Aux_luVars["AUXOMAX"]=0.95
 HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]=0.02
-HealBot_Aux_luVars["AuxFluidBarAlphaFreq"]=0.025
+HealBot_Aux_luVars["AuxFluidBarAlphaFreq"]=0.088
 HealBot_Aux_luVars["AuxFluidBarOpacityUpdate"]=0.02
-HealBot_Aux_luVars["AuxFluidBarOpacityFreq"]=0.025
+HealBot_Aux_luVars["AuxFluidBarOpacityFreq"]=0.088
 HealBot_Aux_luVars["AuxFluidBarUpdate"]=50
-HealBot_Aux_luVars["AuxFluidBarFreq"]=0.025
+HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 
 function HealBot_Aux_setLuVars(vName, vValue)
     HealBot_Aux_luVars[vName]=vValue

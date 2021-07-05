@@ -4526,7 +4526,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableSmartCast" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="90" y="-12"/>
+                          <AbsDimension x="85" y="-21"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4540,7 +4540,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SmartCastDisspell" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="0"/>
+                          <AbsDimension x="125" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4550,25 +4550,11 @@
                       <OnLeave>HealBot_Options_Show_Help("SMARTCASTBUFF",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_SmartCastHeal" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SmartCastDisspell" relativePoint="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-3"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_SmartCastHeal_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SMARTCASTHEAL",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SMARTCASTHEAL",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <CheckButton name="HealBot_Options_SmartCastRes" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SmartCastBuff" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SmartCastBuff" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-3"/>
+                          <AbsDimension x="95" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -21748,7 +21734,7 @@
                   </Anchor>
                 </Anchors>
               </Frame>
-              <Frame name="HealBot_Options_PluginPreformanceFrame" hidden="true">
+              <Frame name="HealBot_Options_PluginPerformanceFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>
@@ -21832,7 +21818,22 @@
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick>HealBot_Options_Defaults_OnClick(self)</OnClick>
+          <OnClick>HealBot_Options_Defaults_OnClick(self, true)</OnClick>
+        </Scripts>
+      </Button>
+      <Button name="HealBot_Options_Local_Defaults" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_LOCALDEFAULTS">
+        <Size>
+          <AbsDimension x="125" y="22"/>
+        </Size>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="HealBot_Options_Defaults" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="15" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>HealBot_Options_Defaults_OnClick(self, false)</OnClick>
         </Scripts>
       </Button>
       <Button name="HealBot_Options_Reset" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SOFTRESET">
@@ -21840,7 +21841,7 @@
           <AbsDimension x="125" y="22"/>
         </Size>
         <Anchors>
-          <Anchor point="LEFT" relativeTo="HealBot_Options_Defaults" relativePoint="RIGHT">
+          <Anchor point="LEFT" relativeTo="HealBot_Options_Local_Defaults" relativePoint="RIGHT">
             <Offset>
               <AbsDimension x="15" y="0"/>
             </Offset>

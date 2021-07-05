@@ -63,12 +63,12 @@ function HealBot_Skins_AdjustSpecialBarWidth(button)
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then 
             bWidth=bWidth*2 
         end
-        HealBot_Text_setEnemySizeWidth("EnemySizeWidth1", bWidth)
+        HealBot_Text_setEnemySizeWidth("EnemySizeWidth1", bWidth, EnemyTargetBarSize)
         HealBot_Action_SetBackSpecialWidth(10, 0)
     else
         bWidth=bWidth*EnemyTargetBarSize
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then bWidth=bWidth*2 end
-        HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth)
+        HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth, EnemyTargetBarSize)
         HealBot_Action_SetBackSpecialWidth(10, bWidth)
     end
     

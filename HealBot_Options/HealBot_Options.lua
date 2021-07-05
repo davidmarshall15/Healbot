@@ -1778,7 +1778,6 @@ end
 
 function HealBot_Options_UIDropDownMenu_OnClick(varName, varValue)
     HealBot_Options_luVars[varName]=varValue
-    --HealBot_AddDebug(varName.."="..varValue)
 end
 
 function HealBot_Options_OverrideNotifyOtherMsg_OnTextChanged(self)
@@ -3811,7 +3810,7 @@ function HealBot_Options_BarFreq_setVars()
     HealBot_Aux_setLuVars("AuxFluidBarAlphaUpdate", HealBot_Comm_round(stateFreqUpd,2))
     HealBot_Aux_setLuVars("AuxFluidBarAlphaFreq", stateFreq)
     
-    HealBot_AddDebug("fluidFreq="..fluidFreq.."  fluidFreqUpd="..fluidFreqUpd)
+    --HealBot_AddDebug("fluidFreq="..fluidFreq.."  fluidFreqUpd="..fluidFreqUpd)
     --HealBot_AddDebug("stateFreq="..stateFreq.."  stateFreqUpd="..HealBot_Comm_round(stateFreqUpd,2))
     --HealBot_AddDebug("flashFreq="..HealBot_Comm_round(flashFreq,4).."  flashFreqUpd="..flashFreqUpd)
 end
@@ -11512,7 +11511,7 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [3]="pluginTimeToLive",
                     [4]="pluginExtraButtons",
                     [5]="pluginCombatProt",
-                    [6]="pluginPreformance",
+                    [6]="pluginPerformance",
                     [7]="pluginQuickSet",
                     [8]="pluginEffectiveTanks",
                     [9]="pluginEfficientHealers",}
@@ -11521,7 +11520,7 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
     HealBot_Options_PluginExtraButtonsFrame:Hide()
     HealBot_Options_PluginCombatProtFrame:Hide()
-    HealBot_Options_PluginPreformanceFrame:Hide()
+    HealBot_Options_PluginPerformanceFrame:Hide()
     HealBot_Options_PluginQuickSetFrame:Hide()
     HealBot_Options_PluginEffectiveTanksFrame:Hide()
     HealBot_Options_PluginEfficientHealersFrame:Hide()
@@ -11529,7 +11528,6 @@ local function HealBot_Options_Plugins_ShowFrame()
         HealBot_Options_PluginNATxt:Show()
         HealBot_Options_PluginNAReasonTxt:Show()
         HealBot_Options_PluginNAReasonTxt:SetText(HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Reason"))
-        HealBot_AddDebug("Not Working")
     else
         HealBot_Options_PluginNATxt:Hide()
         HealBot_Options_PluginNAReasonTxt:Hide()
@@ -11549,8 +11547,8 @@ local function HealBot_Options_Plugins_ShowFrame()
             HealBot_Plugin_CombatProt_Options()
             HealBot_Options_PluginCombatProtFrame:Show()
         elseif HealBot_Options_luVars["curPlugin"]==6 then
-            HealBot_Plugin_Preformance_Options()
-            HealBot_Options_PluginPreformanceFrame:Show()
+            HealBot_Plugin_Performance_Options()
+            HealBot_Options_PluginPerformanceFrame:Show()
         elseif HealBot_Options_luVars["curPlugin"]==7 then
             HealBot_Plugin_QuickSet_Options()
             HealBot_Options_PluginQuickSetFrame:Show()
@@ -15147,14 +15145,6 @@ function HealBot_Options_SmartCastBuff_OnClick(self)
     end
 end
 
-function HealBot_Options_SmartCastHeal_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.SmartCastHeal = true
-    else
-        HealBot_Globals.SmartCastHeal = false
-    end
-end
-
 function HealBot_Options_SmartCastRes_OnClick(self)
     if self:GetChecked() then
         HealBot_Globals.SmartCastRes = true
@@ -15180,13 +15170,19 @@ function HealBot_About_Copy_OnClick(self, titleText, copyText)
     StaticPopup_Show ("HEALBOT_OPTIONS_COPY");
 end
 
-function HealBot_Options_Defaults_OnClick(self)
+function HealBot_Options_Defaults_OnClick(self, global)
+    local popMsg=""
+    if global then
+        popMsg=HEALBOT_OPTIONS_SETDEFAULTSMSG
+    else
+        popMsg=HEALBOT_OPTIONS_SETLOCALDEFAULTSMSG
+    end
     StaticPopupDialogs["HEALBOT_OPTIONS_SETDEFAULTS"] = {
-        text = HEALBOT_OPTIONS_SETDEFAULTSMSG,
+        text = popMsg,
         button1 = HEALBOT_WORDS_YES,
         button2 = HEALBOT_WORDS_NO,
         OnAccept = function()
-            HealBot_Options_SetDefaults();
+            HealBot_Options_SetDefaults(global);
         end,
         timeout = 0,
         whileDead = 1,
@@ -15200,17 +15196,23 @@ function HealBot_Options_Reset_OnClick(self,mode)
     HealBot_SetResetFlag(mode)
 end
 
-function HealBot_Options_SetDefaults()
-    HealBot_Config = HealBot_ConfigDefaults;
-    HealBot_Globals = HealBot_GlobalsDefaults;
-    Healbot_Config_Skins = HealBot_Config_SkinsDefaults
-    HealBot_Config_Spells = HealBot_Config_SpellsDefaults
-    HealBot_Config_Buffs = HealBot_Config_BuffsDefaults 
-    HealBot_Config_Cures = HealBot_Config_CuresDefaults 
-    HealBot_Config.CurrentSpec=1
-    Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD
-    for x in pairs (Healbot_Config_Skins.Skins) do
-        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
+function HealBot_Options_SetDefaults(global)
+    if global then
+        HealBot_Config = HealBot_ConfigDefaults;
+        HealBot_Globals = HealBot_GlobalsDefaults;
+        Healbot_Config_Skins = HealBot_Config_SkinsDefaults
+        HealBot_Config_Spells = HealBot_Config_SpellsDefaults
+        HealBot_Config_Buffs = HealBot_Config_BuffsDefaults 
+        HealBot_Config_Cures = HealBot_Config_CuresDefaults 
+        HealBot_Config.CurrentSpec=1
+        Healbot_Config_Skins.Current_Skin=HEALBOT_SKINS_STD
+        for x in pairs (Healbot_Config_Skins.Skins) do
+            HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
+        end
+    else
+        HealBot_Reset_Spells()
+        HealBot_Reset_Cures()
+        HealBot_Reset_Buffs()
     end
     HealBot_runDefaults()
     HealBot_Options_luVars["Options_Opened"]=false;
@@ -15600,7 +15602,11 @@ function HealBot_Options_idleInit()
                 HealBot_Options_InitSub(DoneInitTab[0])
                 HealBot_Options_luVars["IdleInit"]=HealBot_Options_luVars["IdleInit"]+1
             end
-            C_Timer.After(0.1, HealBot_Options_idleInit)
+            if HealBot_Globals.CPUUsage<4 then
+                C_Timer.After(0.1, HealBot_Options_idleInit)
+            else
+                C_Timer.After(0.05, HealBot_Options_idleInit)
+            end
         end
     else
         HealBot_setLuVars("TargetNeedReset", true)
@@ -16404,8 +16410,6 @@ function HealBot_Options_InitSub1(subNo)
             UIDropDownMenu_SetText(HealBot_Options_ActionBarsCombo, HealBot_Options_ActionBarsCombo_List[HealBot_Options_luVars["ActionBarsCombo"]])
             HealBot_Options_SmartCastBuff:SetChecked(HealBot_Globals.SmartCastBuff)
             HealBot_Options_SetText(HealBot_Options_SmartCastBuff,HEALBOT_OPTIONS_SMARTCASTBUFF)
-            HealBot_Options_SmartCastHeal:SetChecked(HealBot_Globals.SmartCastHeal)
-            HealBot_Options_SetText(HealBot_Options_SmartCastHeal,HEALBOT_OPTIONS_SMARTCASTHEAL)
             HealBot_Options_SmartCastRes:SetChecked(HealBot_Globals.SmartCastRes)
             HealBot_Options_SetText(HealBot_Options_SmartCastRes,GetSpellInfo(HEALBOT_RESURRECTION))
             HealBot_Options_SmartCastDisspell:SetChecked(HealBot_Globals.SmartCastDebuff)

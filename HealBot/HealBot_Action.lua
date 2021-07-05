@@ -2105,7 +2105,7 @@ function HealBot_Action_PrepButton(button)
     --HealBot_setCall("HealBot_Action_PrepButton")
 end
 
-local tryId,freeId,buttonId=1,0,0
+local tryId,freeId,fromId,buttonId=1,0,0.0
 HealBot_ActiveButtons[0]=1
 HealBot_Action_luVars["ButtonHWM"]=1
 function HealBot_Action_FreeId()
@@ -2113,7 +2113,12 @@ function HealBot_Action_FreeId()
     if not HealBot_ActiveButtons[tryId] then
         freeId=tryId
     else
-        for i=1,998 do
+        if tryId<HealBot_Globals.AutoCacheSize then
+            fromId=tryId+1
+        else
+            fromId=1
+        end
+        for i=fromId,998 do
             if not HealBot_ActiveButtons[i] then
                 freeId=i
                 break
@@ -3122,7 +3127,6 @@ function HealBot_Action_SetHealButton(unit,hbGUID,hbCurFrame,unitType,duplicate,
             tSetHealButton.status.throttle=0
             HealBot_HealthAlertLevel(preCombat, tSetHealButton)
             HealBot_Action_RegisterUnitEvents(tSetHealButton)
-            HealBot_BumpThrottleCtl(tSetHealButton)
         end
         tSetHealButton.status.update=true
         HealBot_Action_SetHealButtonAuraCols(tSetHealButton)
@@ -3298,12 +3302,13 @@ end
 HealBot_Action_luVars["PreCacheBars"]=1
 local hbMarkedDeleteButtons={}
 local cButtonId=0
-function HealBot_Action_DeleteMarkedButtons()
+function HealBot_Action_DoDeleteMarkedButtons()
     if not HealBot_Data["UILOCK"] then
+        HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if hbMarkedDeleteButtons[1] then
             HealBot_Action_DeleteButton(hbMarkedDeleteButtons[1])
             table.remove(hbMarkedDeleteButtons,1)
-            C_Timer.After(0.12, HealBot_Action_DeleteMarkedButtons)
+            C_Timer.After(0.08, HealBot_Action_DoDeleteMarkedButtons)
         elseif HealBot_Action_luVars["PreCacheBars"]<HealBot_Globals.AutoCacheSize then
             HealBot_Action_luVars["PreCacheBars"]=HealBot_Action_luVars["PreCacheBars"]+1
             cButtonId=HealBot_Action_FreeId()
@@ -3324,10 +3329,18 @@ function HealBot_Action_DeleteMarkedButtons()
                     HealBot_Action_MarkDeleteButton(ghb)
                 end
             end
-            C_Timer.After(0.08, HealBot_Action_DeleteMarkedButtons)
+            C_Timer.After(0.08, HealBot_Action_DoDeleteMarkedButtons)
+        else
+            HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end
     else
         HealBot_setOptions_Timer(9990)
+    end
+end
+
+function HealBot_Action_DeleteMarkedButtons()
+    if not HealBot_Action_luVars["DeleteMarkedButtonsActive"] then
+        HealBot_Action_DoDeleteMarkedButtons()
     end
 end
 
@@ -4202,13 +4215,6 @@ function HealBot_Action_SmartCast(button)
     elseif button.aura.buff.missingbuff and button.aura.buff.name and HealBot_Globals.SmartCastBuff then
         scuSpell=button.aura.buff.name
         rSpell=HealBot_RangeSpells["BUFF"]
-    elseif HealBot_Globals.SmartCastHeal then
-        local hptc=floor(((button.health.current+button.health.incoming)/button.health.max)*100)
-        if hptc<98 then
-            local uLvlDiff=(UnitLevel(button.unit) or HealBot_Data["PLEVEL"])-HealBot_Data["PLEVEL"]
-            hptc=hptc-uLvlDiff
-            scuSpell=HealBot_SmartCast(hptc)
-        end
     end
      
     if button.status.unittype<11 then button.status.rangespell=rSpell end

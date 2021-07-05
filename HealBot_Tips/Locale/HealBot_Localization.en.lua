@@ -65,7 +65,6 @@ function HealBot_Lang_Options_enALL()
                                  ["SMARTCASTAVOIDPVP"]=HEALBOT_OPTIONS_PROTECTPVP,
                                  ["SMARTCASTDEBUFF"]=HEALBOT_OPTIONS_SMARTCASTDISPELL,
                                  ["SMARTCASTBUFF"]=HEALBOT_OPTIONS_SMARTCASTBUFF,
-                                 ["SMARTCASTHEAL"]=HEALBOT_OPTIONS_SMARTCASTHEAL,
                                  ["SMARTCASTRES"]="Cast resurrection",
                         -- Skins top
                                  ["SELECTSKIN"]=HEALBOT_OPTIONS_EXPORTSKIN,
@@ -544,7 +543,6 @@ function HealBot_Lang_Options_enALL()
                                ["SMARTCASTAVOIDPVP"]="Do not use SmartCast\non PVP flagged players.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Note: This will also block all spells when out of combat",
                                ["SMARTCASTDEBUFF"]="Use SmartCast to remove debuffs.",
                                ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
-                               ["SMARTCASTHEAL"]="Use SmartCast to cast healing type spells.",
                                ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
                         -- Skins top
                                ["SELECTSKIN"]="Select the skin you want to use.",
