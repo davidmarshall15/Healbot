@@ -123,28 +123,25 @@ function HealBot_Tooltip_setspellName(button, spellName)
                 validSpellName, spellAR, spellAG = HealBot_Tooltip_GetHealSpell(button,spellName) 
                 if validSpellName then
                     local z, x, _ = GetSpellCooldown(spellName);
-                    if HealBot_Globals.Tooltip_ShowCD then
-                        local gcdSTART, gcdDUR = GetSpellCooldown(61304) -- GCD
-                        if x and x>1 and (not HealBot_Globals.Tooltip_IgnoreGCD or x > gcdDUR) then 
-                            z = HealBot_Comm_round(x-(GetTime()-z),3)
-                            local u=HEALBOT_TOOLTIP_SECS
-                            if HealBot_Globals.Tooltip_ShowCD then
-                                z = HealBot_Comm_round(z,1)
-                                if z>=10 then
-                                    if z>59 then
-                                        z = ceil(z/60)
-                                        u=HEALBOT_TOOLTIP_MINS
-                                    else
-                                        z = HealBot_Comm_round(z,0)
-                                    end
-                                elseif ceil(z)==z then
-                                    u=".0"..u
-                                end                            
-                                validSpellName=validSpellName..HEALBOT_TOOLTIP_CD..z..u 
-                                if z>0 then spellAR,spellAG=1,0.5 end
-                            end
+                    local gcd=0
+                    if HealBot_Globals.Tooltip_IgnoreGCD then
+                        if HEALBOT_GAME_VERSION>3 then
+                            local gcdSTART, gcdDUR = GetSpellCooldown(61304) -- GCD
+                            gcd=gcdDUR
+                        else
+                            gcd=1.5
                         end
-                    elseif (z or 0)>0.101 then
+                    end
+                    if HealBot_Globals.Tooltip_ShowCD and x and x>gcd then 
+                        z = HealBot_Comm_round(x-(GetTime()-z),0)
+                        local u=HEALBOT_TOOLTIP_SECS
+                        if z>59 then
+                            z = ceil(z/60)
+                            u=HEALBOT_TOOLTIP_MINS
+                        end                            
+                        validSpellName=validSpellName..HEALBOT_TOOLTIP_CD..z..u 
+                        if z>0 then spellAR,spellAG=1,0.5 end
+                    elseif (x or 1)>gcd then
                         spellAR,spellAG=1,0.5
                     end
                 end

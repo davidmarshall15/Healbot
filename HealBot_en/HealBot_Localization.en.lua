@@ -248,7 +248,7 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_RECOMMENDTEXT           = "Heal over time Recommendation";
     HEALBOT_TOOLTIP_NONE                    = "none available";
     HEALBOT_TOOLTIP_CORPSE                  = "Corpse of ";
-    HEALBOT_TOOLTIP_CD                      = " (CD ";
+    HEALBOT_TOOLTIP_CD                      = "  (";
     HEALBOT_TOOLTIP_SECS                    = " sec)";
     HEALBOT_TOOLTIP_MINS                    = " min)";
     HEALBOT_WORDS_SMALL                     = "Small"

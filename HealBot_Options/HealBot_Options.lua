@@ -1183,19 +1183,44 @@ end
 
 local HealBot_Buff_Spells_Class_List={}
 local HealBot_Buff_Spells_List ={}
+local Buff_WeaponEnchant_List={[1]={}, [2]={}}
+function HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, id)
+    local exists=false
+    for j=1, getn(Buff_WeaponEnchant_List[id]) do
+        if Buff_WeaponEnchant_List[id][j]==sName then
+            exists=true
+            break;
+        end
+    end
+    if not exists then
+        table.insert(Buff_WeaponEnchant_List[id], sName)
+    end
+end
+
+function HealBot_Options_UpdateBuffSpellsWeaponEnchantList()
+    local sName=nil
+    if HEALBOT_GAME_VERSION<3 then
+        sName=GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        sName=GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        if HEALBOT_GAME_VERSION==2 then
+            sName=GetItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL)
+            if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+            sName=GetItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
+            if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
+        end
+    end
+end
 
 function HealBot_Options_InitBuffSpellsClassList(tClass)
 	local Buff_Spells_List={}
-    local Buff_WeaponEnchant_List={[1]={}, [2]={}}
-    table.insert(Buff_WeaponEnchant_List[1], HEALBOT_WORDS_NONE)
-    table.insert(Buff_WeaponEnchant_List[2], HEALBOT_WORDS_NONE)
+    HealBot_Options_InsertBuffSpellsWeaponEnchantList(HEALBOT_WORDS_NONE, 1)
+    HealBot_Options_InsertBuffSpellsWeaponEnchantList(HEALBOT_WORDS_NONE, 2)
+    HealBot_Options_UpdateBuffSpellsWeaponEnchantList()
 
-    local sName=GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
-    if sName and HealBot_IsItemInBag(HEALBOT_BRILLIANT_MANA_OIL_SPELL) then table.insert(Buff_WeaponEnchant_List[1], sName) end
-    sName=GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
-    if sName and HealBot_IsItemInBag(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL) then table.insert(Buff_WeaponEnchant_List[1], sName) end
-    sName=GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
-    if sName and HealBot_IsItemInBag(HEALBOT_BLESSED_WIZARD_OIL_SPELL) then table.insert(Buff_WeaponEnchant_List[1], sName) end
     if tClass=="DEAT" then
         Buff_Spells_List = {
             HEALBOT_HORN_OF_WINTER,
@@ -1335,18 +1360,24 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_WATER_WALKING,
         }
         sName=HealBot_KnownSpell(HEALBOT_FLAMETONGUE_SPELL)
-        if sName then table.insert(Buff_WeaponEnchant_List[2], sName) end
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) end
         sName=HealBot_KnownSpell(HEALBOT_WINDFURY_SPELL)
-        if sName then table.insert(Buff_WeaponEnchant_List[1], sName) end
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         sName=HealBot_KnownSpell(HBC_ROCKBITER_WEAPON)
-        if sName then table.insert(Buff_WeaponEnchant_List[1], sName) end
-        if sName then table.insert(Buff_WeaponEnchant_List[2], sName) end
+        if sName then 
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
+        end
         sName=HealBot_KnownSpell(HBC_FLAMETONGUE_WEAPON)
-        if sName then table.insert(Buff_WeaponEnchant_List[1], sName) end
-        if sName then table.insert(Buff_WeaponEnchant_List[2], sName) end
+        if sName then 
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
+        end
         sName=HealBot_KnownSpell(HBC_WINDFURY_WEAPON)
-        if sName then table.insert(Buff_WeaponEnchant_List[1], sName) end
-        if sName then table.insert(Buff_WeaponEnchant_List[2], sName) end
+        if sName then 
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
+            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
+        end
     elseif tClass=="WARL" then
         Buff_Spells_List = {
             HEALBOT_DEMON_ARMOR,
@@ -10677,7 +10708,7 @@ function HealBot_Options_setCustomBuffList()
         for bID,_  in pairs(HealBot_configClassHoTClass) do
             local bName=HealBot_Options_CDebuffTextID(bID)
             if tonumber(bName) == nil then
-                cusPrio=HealBot_Globals.HealBot_Custom_Buffs[bID] or 10
+                cusPrio=HealBot_Globals.HealBot_Custom_Buffs[bID] or 20
                 if not customPriority[cusPrio] then customPriority[cusPrio]={} end
                 customPriority[cusPrio][bID]=bID
             else
@@ -17898,9 +17929,15 @@ function HealBot_Options_InitSub2(subNo)
             UIDropDownMenu_SetText(HealBot_Options_BuffGroups8, HealBot_Options_BuffTxt_List[BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(8)]])
             HealBot_Options_BuffWeaponEnchant1.initialize = HealBot_Options_BuffWeaponEnchant1_DropDown
             if not BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(9)] then BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(9)]=1 end;
+            if not HealBot_Buff_WeaponEnchant_List[1][BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(9)]] then
+                BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(9)]=1
+            end
             UIDropDownMenu_SetText(HealBot_Options_BuffWeaponEnchant1, HealBot_Buff_WeaponEnchant_List[1][BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(9)]]) 
             HealBot_Options_BuffWeaponEnchant2.initialize = HealBot_Options_BuffWeaponEnchant2_DropDown
             if not BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(10)] then BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(10)]=1 end;
+            if not HealBot_Buff_WeaponEnchant_List[2][BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(10)]] then
+                BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(10)]=1
+            end
             UIDropDownMenu_SetText(HealBot_Options_BuffWeaponEnchant2, HealBot_Buff_WeaponEnchant_List[2][BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(10)]]) 
             
             HealBot_Options_MonitorBuffsInCombat:SetChecked(HealBot_Config_Buffs.BuffWatchInCombat)
@@ -17965,7 +18002,7 @@ function HealBot_Options_InitSub2(subNo)
             HealBot_Options_Class_HoTctlIDMethod.initialize = HealBot_Options_Class_HoTctlIDMethod_DropDown
             x=HealBot_Globals.CustomBuffIDMethod[sId] or 3
             UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlIDMethod, HealBot_Options_Class_HoTctlIDMethod_List[x])
-            x=HealBot_Globals.HealBot_Custom_Buffs[sId] or 10
+            x=HealBot_Globals.HealBot_Custom_Buffs[sId] or 20
             HealBot_Options_BuffPriorityC.initialize = HealBot_Options_BuffPriorityC_DropDown
             UIDropDownMenu_SetSelectedID(HealBot_Options_BuffPriorityC, x)
             UIDropDownMenu_SetText(HealBot_Options_BuffPriorityC, x)

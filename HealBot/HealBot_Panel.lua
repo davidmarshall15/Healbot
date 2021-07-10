@@ -218,6 +218,7 @@ end
 
 function HealBot_Panel_buildDataStore(doPlayers, doPets)
     if doPlayers then
+        HealBot_setLuVars("pluginClearDown", true)
         for x,_ in pairs(hbPanel_dataNames) do
             hbPanel_dataNames[x]=nil
         end
@@ -2606,9 +2607,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
     end
         
     HealBot_Panel_SetupBars(preCombat)
-    if HealBot_retLuVars("pluginTimeToDie") then HealBot_Plugin_TimeToDie_Cleardown() end
-    if HealBot_retLuVars("pluginTimeToLive") then HealBot_Plugin_TimeToLive_Cleardown() end
-    if HealBot_retLuVars("pluginThreat") then HealBot_Plugin_Threat_Cleardown() end
 end
 
 function HealBot_RetUnitGroups(unit)
@@ -2742,7 +2740,7 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
         if nMembers>HealBot_Globals.AutoCacheSize then    
             HealBot_Globals.AutoCacheSize=nMembers
         end
+        HealBot_fastUpdateEveryFrame(2)
     end
-    HealBot_fastUpdateEveryFrame(2)
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

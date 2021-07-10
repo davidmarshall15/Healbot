@@ -930,6 +930,8 @@ function HealBot_Action_UpdateBuffButton(button)
         if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFBARCOL"] then
             erButton.buff=true
             HealBot_Action_EmergBarCheck(button)
+        elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["DEBUFFBARCOL"] then
+            HealBot_Action_EmergBarCheck(button)
         end
         if button.aura.buff.showcol and button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
             button.status.current=7
@@ -972,9 +974,9 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             ripHasRes[button.id]=nil
             ripHadRes[button.id]=nil
             button.text.nameupdate=true
-            HealBot_OnEvent_UnitHealth(button)
             if button.status.unittype<11 then button.status.rangespell=HealBot_RangeSpells["HEAL"] end
             HealBot_UpdateUnitRange(button,false)
+            HealBot_OnEvent_UnitHealth(button)
             HealBot_Action_UpdateBackgroundButton(button)
             if UnitIsUnit(button.unit,"player") then 
                 HealBot_Data["PALIVE"]=true
@@ -1740,7 +1742,7 @@ function HealBot_Action_InitButton(button)
     button.text={}
     button.icon={}
     button.attribs={["Enemy"]={},["Enabled"]={}}
-    erButton.attribs={["Enabled"]={}}
+    erButton.attribs={["Enemy"]={},["Enabled"]={}}
     button.icon.debuff={}
     button.icon.buff={}
     button.icon.extra={}
@@ -2797,14 +2799,16 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,status,j,frame,id,un
     end
     local HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
     local sName,sTar,sTrin1,sTrin2,AvoidBC=nil,0, 0, 0, 0
-    if status=="Enemy" then
-        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
-        buttonType="harmbutton"
-        sType="harm"
-    elseif button.isEmerg then
+    if button.isEmerg then
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix, frame)
+    elseif status=="Enemy" then
+        sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
     else
         sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
+    end
+    if status=="Enemy" then
+        buttonType="harmbutton"
+        sType="harm"
     end
     HealBot_Action_UpdateAttribsMinReset(button, HB_prefix, status, j, false)
     if sName then
@@ -2948,7 +2952,7 @@ function HealBot_Action_SetAllButtonAttribs(button,status)
             end
         end
     end
-    if status=="Enabled" and button.frame>0 and hbMaxMouseButtons[button.frame]>0 then
+    if button.frame>0 and hbMaxMouseButtons[button.frame]>0 then
         local tmphasSpells,hasSpells,attribSet=false,false,false
         for x=1,hbMaxMouseButtons[button.frame] do
             hasSpells=false
@@ -2997,11 +3001,25 @@ function HealBot_Action_PrepSetAllAttribs(status,key,bNo,all,emerg)
             end
             ehb= _G["HealBot_Action_EmergUnit"..i]
             if ehb then
-                ehb.attribs={["Enabled"]={}}
+                ehb.attribs={["Enemy"]={},["Enabled"]={}}
             end
+        end
+        hbMaxMouseButtons["Enemy"]=15
+        hbMaxMouseButtons["Enabled"]=15
+        for x=1,10 do
+            hbMaxMouseButtons[x]=5
         end
         callSetAllAtribs=true
     else
+        if emerg then
+            for x=1,10 do
+                if hbMaxMouseButtons[x]<bNo then
+                    hbMaxMouseButtons[x]=bNo
+                end
+            end
+        elseif hbMaxMouseButtons[status]<bNo then
+            hbMaxMouseButtons[status]=bNo
+        end
         if strlen(key)>1 then
             key = strlower(key).."-"..bNo
         else

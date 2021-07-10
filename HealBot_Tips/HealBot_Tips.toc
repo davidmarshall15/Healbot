@@ -4,7 +4,7 @@
 ## Notes: HealBot Tooltips, used on HealBot frames and in HealBot options.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.1.0.2
+## Version: 9.1.0.3
 
 Locale\HealBot_Localization.en.lua
 HealBot_Tooltip.lua

@@ -927,7 +927,7 @@ function HealBot_Aura_CheckCurBuff(button)
     if ciCustomBuff or HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName] then
         if not HealBot_AuraBuffCache[uaSpellId] or HealBot_AuraBuffCache[uaSpellId].reset then
             if not HealBot_AuraBuffCache[uaSpellId] then HealBot_AuraBuffCache[uaSpellId]={} end
-            HealBot_AuraBuffCache[uaSpellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaSpellId] or HealBot_Globals.HealBot_Custom_Buffs[uaName] or 15
+            HealBot_AuraBuffCache[uaSpellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaSpellId] or HealBot_Globals.HealBot_Custom_Buffs[uaName] or 20
             HealBot_AuraBuffCache[uaSpellId]["texture"]=uaTexture
             HealBot_AuraBuffCache[uaSpellId]["name"]=uaName
             HealBot_AuraBuffCache[uaSpellId].custom=ciCustomBuff
@@ -2129,17 +2129,34 @@ function HealBot_Aura_WeaponEnchants(spell, x)
     else
         HealBot_Weapon_Enchant[x]=false
     end
-    HealBot_setOptions_Timer(8100)
+end
+
+function HealBot_Aura_WeaponEnchantsAvailable(name)
+    return hbWeaponEnchants[name]
+end
+
+function HealBot_Aura_UpdateItemData(iName, id)
+    if iName then
+        if IsUsableItem(id) or HealBot_IsItemInBag(id) then 
+            hbWeaponEnchants[iName]=true 
+        else
+            hbWeaponEnchants[iName]=false 
+        end
+        HealBot_Aura_WeaponEnchants(iName, 1)
+    end
 end
 
 function HealBot_Aura_InitData()
     local sName=nil
-    sName=GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
-    if sName then hbWeaponEnchants[sName]=HEALBOT_BRILLIANT_MANA_OIL_ENCHANT end
-    sName=GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
-    if sName then hbWeaponEnchants[sName]=HEALBOT_BRILLIANT_WIZARD_OIL_ENCHANT end
-    sName=GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
-    if sName then hbWeaponEnchants[sName]=HEALBOT_BLESSED_WIZARD_OIL_ENCHANT end
+    if HEALBOT_GAME_VERSION<3 then
+        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL)
+        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
+        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL), HEALBOT_BLESSED_WIZARD_OIL_SPELL)
+        if HEALBOT_GAME_VERSION==2 then
+            HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL), HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
+            HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL), HEALBOT_SUPERIOR_MANA_OIL_SPELL)
+        end
+    end
     if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
         sName=GetSpellInfo(HBC_DAMPEN_MAGIC)
         if sName then HealBot_ShortBuffs[sName]=true end
@@ -2189,15 +2206,15 @@ function HealBot_Aura_InitData()
         -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_SHAMAN] then
         sName=GetSpellInfo(HEALBOT_FLAMETONGUE_SPELL)
-        if sName then hbWeaponEnchants[sName]=HEALBOT_FLAMETONGUE_ENCHANT end
+        if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HEALBOT_WINDFURY_SPELL)
-        if sName then hbWeaponEnchants[sName]=HEALBOT_WINDFURY_ENCHANT end
+        if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HBC_ROCKBITER_WEAPON)
-        if sName then hbWeaponEnchants[sName]=HBC_ROCKBITER_WEAPON end
+        if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HBC_FLAMETONGUE_WEAPON)
-        if sName then hbWeaponEnchants[sName]=HBC_FLAMETONGUE_WEAPON end
+        if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HBC_WINDFURY_WEAPON)
-        if sName then hbWeaponEnchants[sName]=HBC_WINDFURY_WEAPON end
+        if sName then hbWeaponEnchants[sName]=true end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
         -- Class buffs
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DEMONHUNTER] then
