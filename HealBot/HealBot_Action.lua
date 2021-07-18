@@ -3968,10 +3968,10 @@ function HealBot_Action_ButtonPreClick(self,button,xButton)
                 if HealBot_Data["TIPUSE"] and HealBot_Globals.ShowTooltip then 
                     HealBot_Action_RefreshTargetTooltip(self) 
                 end
-            elseif not HealBot_Data["UILOCK"] then
+            elseif not InCombatLockdown() then
                 HealBot_Action_PreSmartCast(self,button,xButton)
             end
-        elseif not HealBot_Data["UILOCK"] then
+        elseif not InCombatLockdown() then
             HealBot_Action_PreSmartCast(self,button,xButton)
         end
     end

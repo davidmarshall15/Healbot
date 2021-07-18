@@ -8902,6 +8902,15 @@ function HealBot_Options_FullHealSpellsCombo_list (sType)
     return HealBot_Options_SelectHealSpellsCombo_List
 end
 
+local cHealDDlistLvl2={}
+function HealBot_Options_SelectClassicHealSpellsRanksCombo_DDlist(spellName)
+    local rankHealDDlist={}
+    for j=1, cHealDDlistLvl2[spellName], 1 do
+        table.insert(rankHealDDlist, HealBot_Init_Spells_retRank(spellName, j))
+    end
+    return rankHealDDlist
+end
+    
 function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     local tmpHealDDlist={}
     for x,_ in pairs(HealBot_Options_NoDuplcates) do
@@ -8920,9 +8929,14 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
         local knownHealSpells=HealBot_Init_retFoundHealSpells()
         for sName,_ in pairs(HealBot_Spell_Names) do
             for kSpell,_ in pairs(knownHealSpells) do
+                if not HealBot_Options_NoDuplcates[kSpell] then
+                    HealBot_Options_NoDuplcates[kSpell]=true
+                    table.insert(tmpHealDDlist, kSpell)
+                    cHealDDlistLvl2[kSpell]=0
+                end
                 if not HealBot_Options_NoDuplcates[sName] and string.find(sName, kSpell) then
                     HealBot_Options_NoDuplcates[sName]=true
-                    table.insert(tmpHealDDlist, sName)
+                    cHealDDlistLvl2[kSpell]=cHealDDlistLvl2[kSpell]+1
                     break
                 end
             end
@@ -8932,20 +8946,54 @@ function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
     return tmpHealDDlist
 end
 
-local function HealBot_Options_SelectHealSpellsCombo_DropDown()
+local function HealBot_Options_SelectHealSpellsCombo_DropDown(self, level, menuList)
     local info = UIDropDownMenu_CreateInfo()
     local hbHealDDlist=HealBot_Options_SelectHealSpellsCombo_DDlist(HealBot_Options_luVars["ActionBarsCombo"])
     if getn(hbHealDDlist)>0 then
-        for j=1, getn(hbHealDDlist), 1 do
-            info.text = hbHealDDlist[j];
-            info.func = function(self)
-                        HealBot_Options_luVars["hbHelpHealSelect"] = self:GetText()
-                        HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,hbHealDDlist[HealBot_Options_luVars["HealSpellsComboID"]]) 
+        if HEALBOT_GAME_VERSION>3 then
+            for j=1, getn(hbHealDDlist), 1 do
+                info.text = hbHealDDlist[j];
+                info.func = function(self)
+                            HealBot_Options_luVars["hbHelpHealSelect"] = self:GetText()
+                            HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,hbHealDDlist[HealBot_Options_luVars["HealSpellsComboID"]]) 
+                        end
+                info.checked = false;
+                if HealBot_Options_luVars["HealSpellsComboID"]==j then info.checked = true end
+                UIDropDownMenu_AddButton(info);
+            end
+        else
+            if level == 1 then
+                for j=1, getn(hbHealDDlist), 1 do
+                    info.text = hbHealDDlist[j];
+                    info.hasArrow = true
+                    info.menuList = hbHealDDlist[j], true, hbHealDDlist[j]
+                    UIDropDownMenu_AddButton(info)
+                end
+            else
+                local cHealDDlist=HealBot_Options_SelectClassicHealSpellsRanksCombo_DDlist(menuList)
+                if getn(cHealDDlist)>0 then
+                    for j=1, getn(cHealDDlist), 1 do
+                        info.text = cHealDDlist[j];
+                        info.func = function(self)
+                                    HealBot_Options_luVars["hbHelpHealSelect"] = self:GetText()
+                                    HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
+                                    UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,cHealDDlist[HealBot_Options_luVars["HealSpellsComboID"]]) 
+                                end
+                        info.checked = false;
+                        --if HealBot_Options_luVars["HealSpellsComboID"]==j then info.checked = true end
+                        UIDropDownMenu_AddButton(info, level);
                     end
-            info.checked = false;
-            if HealBot_Options_luVars["HealSpellsComboID"]==j then info.checked = true end
-            UIDropDownMenu_AddButton(info);
+                else
+                    info.text = HEALBOT_TOOLTIP_NONE
+                    info.func = function(self)
+                                    HealBot_Options_luVars["hbHelpHealSelect"] = nil
+                                    HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
+                                    UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,HEALBOT_TOOLTIP_NONE) 
+                                end
+                    UIDropDownMenu_AddButton(info, level);
+                end
+            end
         end
     else
         info.text = HEALBOT_TOOLTIP_NONE
@@ -15082,7 +15130,7 @@ function HealBot_Options_KnownSpellCheck(self, sName,status,key,bNo, isEmerg)
         HealBot_Action_PrepSetAllAttribs("Enabled",key,bNo,false,isEmerg)
     end
     if self then
-        if HealBot_Spell_Names[sName] then
+        if HealBot_Spell_Names[sName] or HealBot_Init_knowClassicHealSpell(sName) then
             self:SetTextColor(1,1,1,1)
         elseif GetMacroIndexByName(sName)>0 then
             self:SetTextColor(0.2,1,0.5,1)

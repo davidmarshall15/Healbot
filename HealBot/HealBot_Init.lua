@@ -20,6 +20,10 @@ function HealBot_Init_retFoundHealSpells()
     return HealBot_KnownHeal_Names
 end
 
+function HealBot_Init_knowClassicHealSpell(sName)
+    return HealBot_KnownHeal_Names[sName]
+end
+
 local cRank=false
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
 
@@ -64,9 +68,9 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     if not skipSpells[spellName] then
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
             if cRank then
-				if HealBot_Heal_Names[spellName] then 
-					local rank=tonumber(string.match(cRank, "%d")) or 0
-					if rank>0 then
+                local rank=tonumber(string.match(cRank, "%d+")) or 0
+                if rank>0 then
+                    if HealBot_Heal_Names[spellName] then 
 						HealBot_KnownHeal_Names[spellName]=true
 						if not HealBot_Spell_Ranks[spellName] then 
 							HealBot_Spell_Ranks[spellName]={} 
@@ -79,10 +83,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
 							end
 						end
 						spellName=strtrim(spellName).."("..cRank..")"
-					end
-				elseif HealBot_Buff_Names[spellName] then
-					local rank=tonumber(string.match(cRank, "%d")) or 0
-					if rank>0 then
+                    elseif HealBot_Buff_Names[spellName] then
 						if not HealBot_Buff_Ranks[spellName] then 
 							HealBot_Buff_Ranks[spellName]={} 
 							HealBot_Buff_Ranks[spellName][0]=1
@@ -93,8 +94,8 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
 								HealBot_Buff_Ranks[spellName][0]=rank
 							end
 						end
-					end
-				end
+                    end
+                end
 			end
             HealBot_Spell_IDs[spellId].name=spellName
             HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)

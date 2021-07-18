@@ -522,7 +522,7 @@ function HealBot_Action_DoRefreshTooltip()
     local spellButton5 = HealBot_Tooltip_SpellPattern(xButton, "Button5");
     linenum = 1
 
-    if not IsModifierKeyDown() and not HealBot_Data["UILOCK"] and HealBot_Globals.SmartCast and xButton.status.current<10 and UnitIsFriend("player",xButton.unit) then 
+    if not IsModifierKeyDown() and not InCombatLockdown() and HealBot_Globals.SmartCast and xButton.status.current<10 and UnitIsFriend("player",xButton.unit) then 
         local z=spellLeft;
         spellLeft=HealBot_Action_SmartCast(xButton) or z;
     end

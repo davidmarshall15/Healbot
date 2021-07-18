@@ -3131,6 +3131,9 @@ function HealBot_Options_Update()
         elseif HealBot_Options_Timer[9952] then
             HealBot_Options_Timer[9952]=nil
             HealBot_Action_CheckHideFrames()
+        elseif HealBot_Options_Timer[9953] then
+            HealBot_Options_Timer[9953]=nil
+            HealBot_Not_Fighting()
         elseif HealBot_Options_Timer[9954] then
             HealBot_Options_Timer[9954]=nil
             HealBot_AfterCombatCleanup()
@@ -3549,47 +3552,61 @@ end
 
 local hbClassicEnemyCasts={}
 function HealBot_AfterCombatCleanup()
-    for guid in pairs(HealBot_MobGUID) do
-        HealBot_MobGUID[guid]=nil
-    end
-    for name in pairs(HealBot_MobNames) do
-        HealBot_MobNames[name]=nil
-    end
-    for guid in pairs(hbClassicEnemyCasts) do
-        hbClassicEnemyCasts[guid]=nil
-    end
-    if HealBot_luVars["MessageReloadUI"]>0 then
-        HealBot_MessageReloadUI(HealBot_luVars["MessageReloadUI"])
-    end
-    if HealBot_luVars["healthFactor"]~=1 then
-        HealBot_luVars["healthFactor"]=1
-        HealBot_setOptions_Timer(9150)
-    end
-    HealBot_setOptions_Timer(82)
-    HealBot_setOptions_Timer(85)
-    HealBot_setOptions_Timer(9951)
-    HealBot_setOptions_Timer(9952)
-    HealBot_setOptions_Timer(4915)
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
-        HealBot_nextRecalcParty(2)
+    if HealBot_luVars["RegenDisabled"] then
+        HealBot_luVars["RegenDisabled"]=false
+        for guid in pairs(HealBot_MobGUID) do
+            HealBot_MobGUID[guid]=nil
+        end
+        for name in pairs(HealBot_MobNames) do
+            HealBot_MobNames[name]=nil
+        end
+        for guid in pairs(hbClassicEnemyCasts) do
+            hbClassicEnemyCasts[guid]=nil
+        end
+        if HealBot_luVars["MessageReloadUI"]>0 then
+            HealBot_MessageReloadUI(HealBot_luVars["MessageReloadUI"])
+        end
+        if HealBot_luVars["healthFactor"]~=1 then
+            HealBot_luVars["healthFactor"]=1
+            HealBot_setOptions_Timer(9150)
+        end
+        HealBot_setOptions_Timer(82)
+        HealBot_setOptions_Timer(85)
+        HealBot_setOptions_Timer(9951)
+        HealBot_setOptions_Timer(9952)
+        HealBot_setOptions_Timer(4915)
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+            HealBot_nextRecalcParty(2)
+        end
     end
 end
 
 function HealBot_Not_Fighting()
-    HealBot_Data["UILOCK"]=false
-    HealBot_Aura_SetAuraCheckFlags()
-    if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
-        HealBot_Action_RefreshTooltip()
-    end
-    if HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"]==0 then
-        xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
-        if xButton and xButton.status.current<9 then
-            HealBot_setOptions_Timer(9940)
+    if not InCombatLockdown() then
+        if HealBot_Data["UILOCK"] then
+            HealBot_Data["UILOCK"]=false
+            HealBot_Aura_SetAuraCheckFlags()
+            if not HealBot_luVars["UpdateEnemyFrame"] then
+                HealBot_luVars["UpdateEnemyFrame"]=true
+                HealBot_nextRecalcParty(5)
+            end
+            if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
+                HealBot_Action_RefreshTooltip()
+            end
+            if HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"]==0 then
+                xButton=HealBot_Unit_Button["player"] or HealBot_Private_Button["player"]
+                if xButton and xButton.status.current<9 then
+                    HealBot_setOptions_Timer(9940)
+                end
+            end
+            HealBot_luVars["TargetNeedReset"]=true
+            HealBot_OnEvent_PlayerTargetChanged()
+            HealBot_Action_ResetUnitStatus(true)
+            HealBot_setOptions_Timer(9954)
         end
+    elseif HealBot_Data["UILOCK"] then
+        HealBot_luVars["DropCombat"]=true
     end
-    HealBot_luVars["TargetNeedReset"]=true
-    HealBot_OnEvent_PlayerTargetChanged()
-    HealBot_Action_ResetUnitStatus(true)
       --HealBot_setCall("HealBot_Not_Fighting")
 end
 
@@ -3729,6 +3746,10 @@ function HealBot_Update_Slow()
             if HealBot_luVars["Loaded"] then HealBot_Set_FPS() end
             HealBot_luVars["slowSwitch"]=0
         end
+    elseif HealBot_luVars["DropCombat"] and not InCombatLockdown() then
+        HealBot_luVars["DropCombat"]=false
+        HealBot_luVars["UILOCK"]=false
+        HealBot_luVars["AllOutOfCombatCheck"]=TimeNow
     end
     if HealBot_luVars["Help"] then 
         if HealBot_luVars["HelpCnt1"] then
@@ -3908,7 +3929,7 @@ function HealBot_EnemyUpdateHealth(button)
             button.health.current=2
             HealBot_Action_Refresh(button)
         end
-    elseif button.status.unittype==11 then
+    else
         HealBot_OnEvent_UnitHealth(button)
         HealBot_HealsInUpdate(button)
         HealBot_AbsorbsUpdate(button)
@@ -4043,7 +4064,7 @@ end
 
 local ouRegenEnabled=true
 function HealBot_OnUpdate(self, elapsed)
-    if not HealBot_Data["UILOCK"] then
+    if not HealBot_luVars["UILOCK"] then
         if HealBot_luVars["AllOutOfCombatCheck"]<TimeNow then
             ouRegenEnabled=true
             for xUnit,xButton in pairs(HealBot_Private_Button) do
@@ -4063,17 +4084,10 @@ function HealBot_OnUpdate(self, elapsed)
                 end
             end
             if ouRegenEnabled then
+                HealBot_setOptions_Timer(9953)
                 HealBot_luVars["AllOutOfCombatCheck"]=TimeNow+999999999
-                if not HealBot_luVars["UpdateEnemyFrame"] then
-                    HealBot_luVars["UpdateEnemyFrame"]=true
-                    HealBot_nextRecalcParty(5)
-                end
-                if HealBot_luVars["RegenDisabled"] then
-                    HealBot_luVars["RegenDisabled"]=false
-                    HealBot_setOptions_Timer(9954)
-                end
             else
-                HealBot_luVars["AllOutOfCombatCheck"]=TimeNow+0.1
+                HealBot_luVars["AllOutOfCombatCheck"]=TimeNow+0.5
             end
         elseif HealBot_luVars["HealBot_Options_Timer"] then
             HealBot_Options_Update()
@@ -5080,14 +5094,12 @@ end
 
 function HealBot_OnEvent_PlayerEnteringWorld()
     HealBot_startTimers()
+    HealBot_luVars["DropCombat"]=true
     if HealBot_Action_FrameIsVisible(8) then
         HealBot_PlayerTargetChanged()
     end
     if HealBot_Action_FrameIsVisible(9) then
         HealBot_FocusChanged()
-    end
-    if HealBot_Action_FrameIsVisible(10) then
-        HealBot_luVars["AllOutOfCombatCheck"]=TimeNow+0.5
     end
     if HealBot_Action_FrameIsVisible(7) then
         HealBot_nextRecalcParty(2)
@@ -5753,8 +5765,9 @@ function HealBot_OnEvent(self, event, ...)
     --    HealBot_OnEvent_Combat_Log(CombatLogGetCurrentEventInfo())
     elseif (event=="PLAYER_REGEN_DISABLED") then
         HealBot_OnEvent_PlayerRegenDisabled();
+        HealBot_luVars["UILOCK"]=true
     elseif (event=="PLAYER_REGEN_ENABLED") then
-        HealBot_Not_Fighting()
+        HealBot_luVars["UILOCK"]=false
     elseif (event=="GROUP_ROSTER_UPDATE") or (event=="RAID_ROSTER_UPDATE") then
         HealBot_OnEvent_PartyMembersChanged(self);
     elseif (event=="RAID_TARGET_UPDATE") then
