@@ -2700,7 +2700,7 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
         else
             HealBot_Panel_buildDataStore(true, false)
         end
-        HealBot_Panel_DoPartyChanged(preCombat, 6)
+        HealBot_Panel_DoPartyChanged(preCombat, 4)
         if preCombat then
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 or Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then 
                 HealBot_Panel_buildDataStore(false, true)
@@ -2711,15 +2711,15 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
                     HealBot_Panel_DoPartyChanged(preCombat, 2)
                 end
             end
-            HealBot_Panel_DoPartyChanged(preCombat, 5)
             HealBot_Panel_DoPartyChanged(preCombat, 3)
-            HealBot_Panel_DoPartyChanged(preCombat, 4)
+            HealBot_Panel_DoPartyChanged(preCombat, 5)
+            HealBot_Panel_DoPartyChanged(preCombat, 6)
         else
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then HealBot_nextRecalcParty(1) end
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then HealBot_nextRecalcParty(2) end
-            HealBot_nextRecalcParty(5)
             HealBot_nextRecalcParty(3)
-            HealBot_nextRecalcParty(4)
+            HealBot_nextRecalcParty(5)
+            HealBot_nextRecalcParty(6)
         end
     end 
 end

@@ -16,6 +16,9 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                      [strlower(HEALBOT_STOP)]=true,
                      [strlower(HEALBOT_TELL)]=true,
                     }  
+local hbCustomTipAnchor=nil
+local hbCustomTipAnchorText={}
+local hbCustomTipAnchorObjects={}
 local HealBot_Tooltip_luVars={}
 HealBot_Tooltip_luVars["uGroup"]=false
 HealBot_Tooltip_luVars["doInit"]=true
@@ -346,11 +349,21 @@ function HealBot_ToolTip_SetTooltipPos()
                    GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_TOP")
                 elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["TIPLOC"]==5 then
                    GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_BOTTOM")
-                else
+                elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["TIPLOC"]==6 then
                     hbtPosX=hbtPosX/UIParent:GetScale();
                     hbtPosY=hbtPosY/UIParent:GetScale();
                     GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
                     GameTooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",hbtPosX+25,hbtPosY-20);
+                elseif Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then
+                    GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
+                    GameTooltip:SetPoint(Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
+                                             "WorldFrame",
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"],
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"])
+                else
+                    GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
+                    GameTooltip:SetPoint("BOTTOMRIGHT","WorldFrame","BOTTOMRIGHT",-275,175);
                 end
             else
                 GameTooltip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
@@ -369,10 +382,18 @@ function HealBot_ToolTip_SetTooltipPos()
                     HealBot_Tooltip:SetPoint("BOTTOM",hbtPosFrm,"TOP",0,0);
                 elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["TIPLOC"]==5 then
                     HealBot_Tooltip:SetPoint("TOP",hbtPosFrm,"BOTTOM",0,0);
-                else
+                elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][xButton.frame]["TIPLOC"]==6 then
                     hbtPosX=hbtPosX/UIParent:GetScale();
                     hbtPosY=hbtPosY/UIParent:GetScale();
                     HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",hbtPosX+25,hbtPosY-20);
+                elseif Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then
+                    HealBot_Tooltip:SetPoint(Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
+                                             "WorldFrame",
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"],
+                                             Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"])
+                else
+                    HealBot_Tooltip:SetPoint("BOTTOMRIGHT","WorldFrame","BOTTOMRIGHT",-275,175);
                 end
             else
                 HealBot_Tooltip:SetPoint("BOTTOMRIGHT","WorldFrame","BOTTOMRIGHT",-105,105);
@@ -865,45 +886,47 @@ end
 
 local tLine={}
 function HealBot_Tooltip_OptionsHelp(title,text)
-    HealBot_Tooltip_ClearLines();
-    for x,_ in pairs(tLine) do
-        tLine[x]=nil;
-    end
-    local i=0
-    for l in string.gmatch(text, "[^\n]+") do
-        local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
-        if string.len(t)>1 then
-            i=i+1
-            tLine[i]=t
+    if title and text then
+        HealBot_Tooltip_ClearLines();
+        for x,_ in pairs(tLine) do
+            tLine[x]=nil;
         end
-    end
-    local linenum=1
-    local x, y = GetCursorPosition();
-    x=x/UIParent:GetScale();
-    y=y/UIParent:GetScale();
-    local g=_G["HealBot_Options"]
-    if HealBot_Globals.UseGameTooltip then
-        GameTooltip:SetOwner(g, "ANCHOR_NONE")
-        GameTooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
-        GameTooltip:AddLine(title,1,1,1)
-        GameTooltip:AddLine("    ",1,1,1)
-    else
-        HealBot_Tooltip:ClearAllPoints();
-        HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
-        HealBot_Tooltip_SetLineLeft(title,1,1,1,linenum,1)
-        linenum=linenum+1
-        HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
-    end
-    for l=1,#tLine do 
+        local i=0
+        for l in string.gmatch(text, "[^\n]+") do
+            local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
+            if string.len(t)>1 then
+                i=i+1
+                tLine[i]=t
+            end
+        end
+        local linenum=1
+        local x, y = GetCursorPosition();
+        x=x/UIParent:GetScale();
+        y=y/UIParent:GetScale();
+        local g=_G["HealBot_Options"]
         if HealBot_Globals.UseGameTooltip then
-            GameTooltip:AddLine(tLine[l],0.8,0.8,0.8)
+            GameTooltip:SetOwner(g, "ANCHOR_NONE")
+            GameTooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
+            GameTooltip:AddLine(title,1,1,1)
+            GameTooltip:AddLine("    ",1,1,1)
         else
+            HealBot_Tooltip:ClearAllPoints();
+            HealBot_Tooltip:SetPoint("TOPLEFT","WorldFrame","BOTTOMLEFT",x,y-30);
+            HealBot_Tooltip_SetLineLeft(title,1,1,1,linenum,1)
             linenum=linenum+1
-            HealBot_Tooltip_SetLineLeft(tLine[l],0.8,0.8,0.8,linenum,1)
+            HealBot_Tooltip_SetLineLeft("     ",0,0,0,linenum,0)
         end
+        for l=1,#tLine do 
+            if HealBot_Globals.UseGameTooltip then
+                GameTooltip:AddLine(tLine[l],0.8,0.8,0.8)
+            else
+                linenum=linenum+1
+                HealBot_Tooltip_SetLineLeft(tLine[l],0.8,0.8,0.8,linenum,1)
+            end
+        end
+        HealBot_Tooltip_Options_Show(linenum)
+        hbtMaxLines=linenum
     end
-    HealBot_Tooltip_Options_Show(linenum)
-    hbtMaxLines=linenum
 end
 
 function HealBot_Tooltip_OptionsHide()
@@ -912,4 +935,183 @@ function HealBot_Tooltip_OptionsHide()
     else
         HealBot_Tooltip:Hide()
     end
+end
+
+local function HealBot_Tooltip_CustomAnchor_SetPoint()
+	local fY=Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"] or 175
+	local fX=Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"] or -275
+    local fPoint=Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"] or "BOTTOMRIGHT"
+	Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"] = ceil(fY)
+	Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"] = ceil(fX)
+    Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]=fPoint
+	hbCustomTipAnchor:ClearAllPoints()
+	hbCustomTipAnchor:SetPoint(fPoint,"WorldFrame",fPoint,fX,fY);
+end
+
+local function HealBot_Tooltip_CustomAnchor_OnMouseDown(self, button)
+    if button=="LeftButton" and not hbCustomTipAnchor.isMoving then
+        hbCustomTipAnchor:StartMoving();
+        hbCustomTipAnchor.isMoving = true;
+    end
+end
+
+local function HealBot_Tooltip_CustomAnchor_SetAnchorText()
+    hbCustomTipAnchorText["AP1"]:SetText(HEALBOT_OPTIONS_TTCUSTOMANCHOR_POINT..": "..Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"])
+    hbCustomTipAnchorText["AX2"]:SetText(Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"])
+    hbCustomTipAnchorText["AY2"]:SetText(Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"])
+end
+
+local function HealBot_Tooltip_CustomAnchor_SavePoints()
+    local fX, fY=0, 0
+    if Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]=="BOTTOMRIGHT" then
+        fX=hbCustomTipAnchor:GetRight()-GetScreenWidth()
+        fY=hbCustomTipAnchor:GetBottom()
+        if fX>0 then fX=0 end
+        if fY<0 then fY=0 end
+    elseif Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]=="TOPRIGHT" then
+        fX=hbCustomTipAnchor:GetRight()-GetScreenWidth()
+        fY=hbCustomTipAnchor:GetTop()-GetScreenHeight()
+        if fX>0 then fX=0 end
+        if fY>0 then fY=0 end
+    elseif Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]=="BOTTOMLEFT" then
+        fX=hbCustomTipAnchor:GetLeft()
+        fY=hbCustomTipAnchor:GetBottom()
+        if fX<0 then fX=0 end
+        if fY<0 then fY=0 end
+    else
+        fX=hbCustomTipAnchor:GetLeft()
+        fY=hbCustomTipAnchor:GetTop()-GetScreenHeight()
+        if fX<0 then fX=0 end
+        if fY>0 then fY=0 end
+    end
+    Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"] = ceil(fY)
+    Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"] = ceil(fX)
+    HealBot_Tooltip_CustomAnchor_SetAnchorText()
+    HealBot_Tooltip_CustomAnchor_SetPoint()
+end
+
+local function HealBot_Tooltip_CustomAnchor_OnMouseUp(self, button)
+    if button=="LeftButton" and hbCustomTipAnchor.isMoving then
+		hbCustomTipAnchor:StopMovingOrSizing();
+		hbCustomTipAnchor.isMoving = false;
+        HealBot_Tooltip_CustomAnchor_SavePoints()
+    end
+end
+
+local function HealBot_Tooltip_CustomAnchor_SetText()
+	hbCustomTipAnchorText["SKIN1"]:SetText(HEALBOT_OPTIONS_SKIN..": "..Healbot_Config_Skins.Current_Skin)
+    HealBot_Tooltip_CustomAnchor_SetAnchorText()
+end
+
+local function HealBot_Tooltip_CustomAnchor_CreateText()
+	hbCustomTipAnchorText["TITLE"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameTitleText", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["TITLE"]:SetPoint("TOP", hbCustomTipAnchor, "TOP", 0, -8)
+	hbCustomTipAnchorText["TITLE"]:SetText(HEALBOT_OPTIONS_TTCUSTOMANCHOR_TITLE)
+    hbCustomTipAnchorText["TITLE"]:SetTextColor(1,1,1,1)
+	hbCustomTipAnchorText["SKIN1"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameSkinText1", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["SKIN1"]:SetPoint("TOP", hbCustomTipAnchor, "TOP", 0, -35)
+    hbCustomTipAnchorText["SKIN1"]:SetTextColor(1,1,0.2,1)
+    hbCustomTipAnchorText["AP1"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameAnchorPointText1", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["AP1"]:SetPoint("TOP", hbCustomTipAnchor, "TOP", 0, -58)
+    hbCustomTipAnchorText["AP1"]:SetTextColor(0.2,1,0.2,1)
+    hbCustomTipAnchorText["AX1"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameAnchorXText1", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["AX1"]:SetPoint("TOPRIGHT", hbCustomTipAnchor, "TOPRIGHT", -150, -73)
+	hbCustomTipAnchorText["AX1"]:SetText("X:")
+    hbCustomTipAnchorText["AX1"]:SetTextColor(0.2,1,0.2,1)
+    hbCustomTipAnchorText["AX2"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameAnchorXText2", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["AX2"]:SetPoint("LEFT", hbCustomTipAnchorText["AX1"], "RIGHT", 4, 0)
+    hbCustomTipAnchorText["AX2"]:SetTextColor(0.2,1,0.2,1)
+    hbCustomTipAnchorText["AY1"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameAnchorYText1", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["AY1"]:SetPoint("LEFT", hbCustomTipAnchorText["AX2"], "RIGHT", 12, 0)
+	hbCustomTipAnchorText["AY1"]:SetText("Y:")
+    hbCustomTipAnchorText["AY1"]:SetTextColor(0.2,1,0.2,1)
+    hbCustomTipAnchorText["AY2"]=hbCustomTipAnchor:CreateFontString("HealBot_Custom_Anchor_FrameAnchorYText2", "OVERLAY", "GameFontNormal")
+	hbCustomTipAnchorText["AY2"]:SetPoint("LEFT", hbCustomTipAnchorText["AY1"], "RIGHT", 4, 0)
+    hbCustomTipAnchorText["AY2"]:SetTextColor(0.2,1,0.2,1)
+end
+
+local function HealBot_Tooltip_CustomAnchor_SetAnchor(loc)
+    Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]=loc
+    hbCustomTipAnchorObjects["TOPLEFT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["TOPRIGHT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["BOTTOMLEFT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["BOTTOMRIGHT"]:SetChecked(false)
+    hbCustomTipAnchorObjects[loc]:SetChecked(true)
+    HealBot_Tooltip_CustomAnchor_SavePoints()
+end
+
+function HealBot_Tooltip_CustomAnchor_Hide()
+    if hbCustomTipAnchor then 
+        hbCustomTipAnchor:Hide()
+    end
+end
+
+function HealBot_Tooltip_ResetCustomAnchor()
+    if Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then
+        Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"]=175
+        Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"]=-275
+        Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]="BOTTOMRIGHT"
+        if hbCustomTipAnchor then 
+            HealBot_Tooltip_CustomAnchor_SetAnchor("BOTTOMRIGHT")
+        end
+    end
+end
+
+function HealBot_Tooltip_ShowCustomAnchor()
+    if not hbCustomTipAnchor then
+		hbCustomTipAnchor=CreateFrame("Frame", "HealBot_Custom_Anchor_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
+		hbCustomTipAnchor:SetBackdrop({
+			bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
+			edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
+			tile = true,
+			tileSize = 8,
+			edgeSize = 8,
+			insets = { left = 3, right = 3, top = 3, bottom = 3, },
+		})
+		hbCustomTipAnchor:SetMovable(true)
+		hbCustomTipAnchor:EnableMouse(true)
+		hbCustomTipAnchor:SetScript("OnMouseDown", function(self, button) HealBot_Tooltip_CustomAnchor_OnMouseDown(self, button) end)
+		hbCustomTipAnchor:SetScript("OnMouseUp", function(self, button) HealBot_Tooltip_CustomAnchor_OnMouseUp(self, button) end)
+
+		hbCustomTipAnchor:SetWidth(220)
+        hbCustomTipAnchor:SetHeight(120)	
+        hbCustomTipAnchor:SetBackdropColor(0.2,0.2,0.2,0.8)
+        hbCustomTipAnchor:SetBackdropBorderColor(0.4,0.4,0.4,0.9)
+        
+        hbCustomTipAnchorObjects["TOPLEFT"] = CreateFrame("CheckButton", "HealBot_Custom_Anchor_TOPLEFT", hbCustomTipAnchor, "SendMailRadioButtonTemplate")
+		hbCustomTipAnchorObjects["TOPLEFT"]:SetPoint("TOPLEFT", 5, -5)
+		hbCustomTipAnchorObjects["TOPLEFT"]:SetScript("OnClick", function() HealBot_Tooltip_CustomAnchor_SetAnchor("TOPLEFT"); end)
+        hbCustomTipAnchorObjects["TOPRIGHT"] = CreateFrame("CheckButton", "HealBot_Custom_Anchor_TOPRIGHT", hbCustomTipAnchor, "SendMailRadioButtonTemplate")
+		hbCustomTipAnchorObjects["TOPRIGHT"]:SetPoint("TOPRIGHT", -5, -5)
+		hbCustomTipAnchorObjects["TOPRIGHT"]:SetScript("OnClick", function() HealBot_Tooltip_CustomAnchor_SetAnchor("TOPRIGHT"); end)
+        hbCustomTipAnchorObjects["BOTTOMLEFT"] = CreateFrame("CheckButton", "HealBot_Custom_Anchor_BOTTOMLEFT", hbCustomTipAnchor, "SendMailRadioButtonTemplate")
+		hbCustomTipAnchorObjects["BOTTOMLEFT"]:SetPoint("BOTTOMLEFT", 5, 5)
+		hbCustomTipAnchorObjects["BOTTOMLEFT"]:SetScript("OnClick", function() HealBot_Tooltip_CustomAnchor_SetAnchor("BOTTOMLEFT"); end)
+        hbCustomTipAnchorObjects["BOTTOMRIGHT"] = CreateFrame("CheckButton", "HealBot_Custom_Anchor_BOTTOMRIGHT", hbCustomTipAnchor, "SendMailRadioButtonTemplate")
+		hbCustomTipAnchorObjects["BOTTOMRIGHT"]:SetPoint("BOTTOMRIGHT", -5, 5)
+		hbCustomTipAnchorObjects["BOTTOMRIGHT"]:SetScript("OnClick", function() HealBot_Tooltip_CustomAnchor_SetAnchor("BOTTOMRIGHT"); end)
+        
+        hbCustomTipAnchorObjects["CloseBtn"] = CreateFrame("Button", "HealBot_Custom_Anchor_CloseBtn", hbCustomTipAnchor, "OptionsButtonTemplate")
+        hbCustomTipAnchorObjects["CloseBtn"]:SetPoint("BOTTOM", 0, 7)
+        hbCustomTipAnchorObjects["CloseBtn"]:SetWidth(120)
+        hbCustomTipAnchorObjects["CloseBtn"]:SetHeight(22)
+        hbCustomTipAnchorObjects["CloseBtn"]:SetNormalFontObject("GameFontNormal")
+        hbCustomTipAnchorObjects["CloseBtn"]:SetText(HEALBOT_OPTIONS_CLOSE)
+        hbCustomTipAnchorObjects["CloseBtn"]:SetScript("OnMouseDown", function() HealBot_Tooltip_CustomAnchor_Hide(); end)
+        
+        HealBot_Tooltip_CustomAnchor_CreateText()
+    end
+    hbCustomTipAnchorObjects["TOPLEFT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["TOPRIGHT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["BOTTOMLEFT"]:SetChecked(false)
+    hbCustomTipAnchorObjects["BOTTOMRIGHT"]:SetChecked(false)
+    if not Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then
+        Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]={}
+        hbCustomTipAnchorObjects["BOTTOMRIGHT"]:SetChecked(true)
+    else
+        hbCustomTipAnchorObjects[Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"]]:SetChecked(true)
+    end
+    HealBot_Tooltip_CustomAnchor_SetPoint()
+    HealBot_Tooltip_CustomAnchor_SetText()
+    hbCustomTipAnchor:Show()
 end

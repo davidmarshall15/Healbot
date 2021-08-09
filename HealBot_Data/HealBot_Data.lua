@@ -137,6 +137,9 @@ HealBot_Config_BuffsDefaults = {
   HealBot_CBWarnRange_Bar=3,
   HealBot_CBWarnRange_Screen=2,
   HealBot_CBWarnRange_Sound=3,
+  CustomBuffCheck={[1]=false, [2]=false, [3]=false},
+  CustomBuffName={[1]="", [2]="", [3]=""},
+  CustomItemName={[1]="", [2]="", [3]=""},
 };
 
 HealBot_Config_CuresDefaults = {
@@ -4019,6 +4022,7 @@ HealBot_Config_SkinsDefaults = {
   SpellsTrinket2 = {},
   SpellsAvoidBlueCursor = {},
   Emerg = {},
+  ToolTip = {},
 };
 
 

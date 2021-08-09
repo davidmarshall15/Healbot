@@ -85,9 +85,12 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS      = "Custom Debuffs";
     HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS        = "Custom Buffs";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Buffs"
+    HEALBOT_OPTIONS_TAB_GENERALBUFFS        = "General Buffs"
     HEALBOT_OPTIONS_TAB_NAMETEXT            = "Name";
     HEALBOT_OPTIONS_TAB_OVERRIDES           = "Overrides"
     HEALBOT_OPTIONS_TAB_EXTRAS              = "Extras"
+    
+    HEALBOT_STRING_MATCH_WELLFED            = "become well fed"
 
     HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_ALPHA                   = "Opacity";
@@ -175,6 +178,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"
     HEALBOT_OPTIONS_DEBUFFCUSTOMURL         = "Raid and Instance custom debuffs are available at  "..HEALBOT_ABOUT_URL
     HEALBOT_OPTIONS_BUFFMISSING             = "Missing buffs";
+    HEALBOT_OPTIONS_BUFFEXTRA               = "Extra Buffs";
+    HEALBOT_OPTIONS_CHECKWELLFED            = "Check well fed";
     HEALBOT_OPTIONS_DEBUFFDISPELL           = "Dispellable debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
@@ -337,7 +342,10 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
-    HEALBOT_OPTIONS_BUFFSTEXTWE             = "Self weapon enchants";
+    HEALBOT_OPTIONS_BUFFSTEXTWE             = "Weapon enchants";
+    HEALBOT_OPTIONS_BUFFSTEXTWEMAIN         = "Main hand / 2H";
+    HEALBOT_OPTIONS_BUFFSTEXTWEOFF          = "Off hand";
+    HEALBOT_OPTIONS_ITEMNAME                = "Item name";
     HEALBOT_OPTIONS_BUFFSTEXT2              = "check members";
     HEALBOT_OPTIONS_BUFFSTEXT3              = "bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
     HEALBOT_OPTIONS_EMERGCOLS               = "Emergency col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
@@ -1266,6 +1274,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_FRAME                   = "Frame"
     HEALBOT_OPTIONS_FRAMESOPTTEXT           = "Frames options"
     HEALBOT_OPTIONS_SETTOOLTIP_POSITION     = "Set Tooltip Position"
+    HEALBOT_OPTIONS_SETTOOLTIP_CUSTOMANCHOR = "Set Tooltip Custom Anchor"
+    HEALBOT_OPTIONS_TTCUSTOMANCHOR_TITLE    = "Tips Custom Anchor"
+    HEALBOT_OPTIONS_TTCUSTOMANCHOR_POINT    = "Anchor Point"
+    HEALBOT_OPTIONS_SKIN                    = "Skin"
     HEALBOT_OPTIONS_FRAME_TITLE             = "Frame Title"
     HEALBOT_OPTIONS_FRAME_TITLE_SHOW        = "Show Header"
     HEALBOT_OPTIONS_GROW_DIRECTION          = "Grow Direction"

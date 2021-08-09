@@ -403,6 +403,8 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGGROUPFILTER"]=HEALBOT_OPTIONS_RAIDGROUPWARN,
                         -- Buffs General tab
+                                 ["BUFFSGENERAL"]=HEALBOT_OPTIONS_TAB_GENERALBUFFS,
+                                 ["BUFFSEXTRA"]=HEALBOT_OPTIONS_BUFFEXTRA,
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                                  ["MONITORBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
@@ -411,6 +413,13 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSWEAPONENCHANT1"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSWEAPONENCHANT2"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
+                                 ["BUFFSCHECKWELLFED"]=HEALBOT_OPTIONS_CHECKWELLFED,
+                                 ["BUFFSCHECKEXTRA"]=HEALBOT_OPTIONS_BUFFEXTRA,
+                                 ["BUFFSWELLFEDITEM"]=HEALBOT_OPTIONS_ITEMNAME,
+                                 ["BUFFSEXTRABUFF"]=HEALBOT_OPTIONS_BUFFNAME,
+                                 ["BUFFSEXTRAITEM"]=HEALBOT_OPTIONS_ITEMNAME,
+                                 ["BUFFSWELLFEDITEMSELECTOR"]="Item helper",
+                                 ["BUFFSWELLFEDITEMS"]="Item selector",
                                  ["BUFFSBARS"]=HEALBOT_OPTIONS_CDCBARS,
                                  ["BUFFSTIMER"]=HEALBOT_OPTIONS_BUFFSTEXTTIMER,
                         -- Buffs Custom tab
@@ -450,6 +459,7 @@ function HealBot_Lang_Options_enALL()
                                  ["TOOLTIPFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
                                  ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
                                  ["TOOLTIPPOSITIONLINK"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
+                                 ["TOOLTIPCUSTOMANCHOR"]=HEALBOT_OPTIONS_SETTOOLTIP_CUSTOMANCHOR,
                                  ["TOOLTIPALPHA"]=HEALBOT_OPTIONS_TTALPHA,
                         -- Mouse Wheel tab
                                  ["BUFFSMOUSEWHEELUSE"]=HEALBOT_OPTIONS_MOUSEWHEEL,
@@ -880,6 +890,8 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
                                ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This applies to all frames when in a Raid.",
                         -- Buffs General tab
+                               ["BUFFSGENERAL"]="Show the general buffs tab.",
+                               ["BUFFSEXTRA"]="Show the extra buffs tab.",
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
                                ["MONITORBUFFSGROUPED"]="Do not monitor buffs when solo.",
@@ -888,6 +900,13 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSWEAPONENCHANT1"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Main Hand and 2H Weapons.",
                                ["BUFFSWEAPONENCHANT2"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Off Hand Weapons.",
                                ["BUFFSMEMBERS"]="The members to monitor.",
+                               ["BUFFSCHECKWELLFED"]="Check for missing well fed",
+                               ["BUFFSWELLFEDITEM"]="Type the food item to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is currently only on En clients\n".._G["YELLOW_FONT_COLOR_CODE"].."Non En clients can use the below Extras to track Well Fed.",
+                               ["BUFFSEXTRABUFF"]="Type the buff name to track.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."There is no validation on the Buff Name, ensure it is correct.",
+                               ["BUFFSEXTRAITEM"]="Type the item name to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.",
+                               ["BUFFSWELLFEDITEMSELECTOR"]="Toggle between the item text and the item selector.",
+                               ["BUFFSCHECKEXTRA"]="Check for missing extra buffs",
+                               ["BUFFSWELLFEDITEMS"]="Items found in your bad may show in this list.\nSelect an item to update or None to do nothing.",
                                ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
@@ -926,6 +945,7 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPMONBUFFS"]="On all monitored Buffs / HoT's\nshow who cast the spell and duration left.",
                                ["TOOLTIPFONTSIZE"]="Set the size using Blizzards standard font sizes.",
                                ["TOOLTIPPOSITIONLINK"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
+                               ["TOOLTIPCUSTOMANCHOR"]="Show the Set custom anchor frame.\nA single custom anchor can be set per Skin.",
                                ["TOOLTIPALPHA"]="Set the transparency of the tooltip.",
                         -- Mouse Wheel tab
                                ["BUFFSMOUSEWHEELUSE"]="Turn On/Off usage of the mouse wheel.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: When this is on mouse over macros will not work on HealBot bars",

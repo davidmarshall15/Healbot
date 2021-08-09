@@ -20,8 +20,16 @@ function HealBot_Init_retFoundHealSpells()
     return HealBot_KnownHeal_Names
 end
 
-function HealBot_Init_knowClassicHealSpell(sName)
+function HealBot_Init_knownClassicHealSpell(sName)
     return HealBot_KnownHeal_Names[sName]
+end
+
+function HealBot_Init_ClassicHealSpellMaxRank(sName)
+    if HealBot_Spell_Ranks[sName] then
+        return HealBot_Spell_Ranks[sName][0]
+    else
+        return 0
+    end
 end
 
 local cRank=false
