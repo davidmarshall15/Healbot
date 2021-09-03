@@ -100,7 +100,7 @@ end
 
 function HealBot_Action_DoHealUnit_Wheel(self, delta)
     --local xButton=hbLastButton
-    if hbLastButton and hbLastButton.status.current<10 then
+    if hbLastButton and hbLastButton.status.current<HealBot_Unit_Status["DC"] then
         --local xUnit=xButton.unit
         local y="None"
         if IsShiftKeyDown() then

@@ -214,6 +214,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MODIFIER                = "Modifier key"
     HEALBOT_OPTIONS_MODIFIERKEYS            = "Modifier keys:"
     HEALBOT_OPTIONS_COMBOBUTTON             = "Button";
+    HEALBOT_OPTIONS_BUTTONANY               = "Any button";
     HEALBOT_OPTIONS_BUTTONLEFT              = "Left";
     HEALBOT_OPTIONS_BUTTONMIDDLE            = "Middle";
     HEALBOT_OPTIONS_BUTTONRIGHT             = "Right";
@@ -237,6 +238,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CLASSES_CUSTOM                  = "Custom";
 
     HEALBOT_OPTIONS_DEBUFFNAME              = "Debuff Name"
+    HEALBOT_OPTIONS_DEBUFFAUTOTOCUSTOM      = "Add to custom list"
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Show tooltips";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
@@ -351,6 +353,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_EMERGCOLS               = "Emergency col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
     HEALBOT_OPTIONS_EMERGGENERAL            = "Emergency general";
     HEALBOT_OPTIONS_EMERGSPELLS             = "Emergency spells";
+    HEALBOT_OPTIONS_ICONSCMD                = "Icon commands";
     HEALBOT_OPTIONS_BUFF                    = "Buff ";
     HEALBOT_OPTIONS_BUFFSELF                = "on self";
     HEALBOT_OPTIONS_BUFFPARTY               = "on party";
@@ -364,7 +367,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SMARTCASTHEAL           = "Healing spells";
     HEALBOT_OPTIONS_BAR2SIZE                = "Power bar size";
     HEALBOT_OPTIONS_SETSPELLS               = "Set spells for";
-    HEALBOT_OPTIONS_ENABLEDBARS             = "Helpful spells on friendly characters";
+    HEALBOT_OPTIONS_ENABLEDBARS             = "Health Bars - Helpful spells on friendly characters";
+    HEALBOT_OPTIONS_EMERGBARS               = "Emergency Bars - All spells on all characters";
+    HEALBOT_OPTIONS_ICONS                   = "Icons: Commands that can be used on icons";
     HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
     
@@ -430,6 +435,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_NORMAL                     = "Normal"
     HEALBOT_WORD_HIGH                       = "High"
     HEALBOT_WORD_EXTREME                    = "Extreme"
+    HEALBOT_WORD_CASTER                     = "Caster"
+    HEALBOT_WORD_TYPE                       = "Type"
 
     HEALBOT_ASSIST                          = "Assist";
     HEALBOT_FOCUS                           = "Focus";
@@ -437,7 +444,16 @@ function HealBot_Lang_enALL()
     HEALBOT_MAINTANK                        = "MainTank";
     HEALBOT_STOP                            = "Stop";
     HEALBOT_TELL                            = "Tell";
-
+    HEALBOT_IGNOREAURAALL                   = "Disable - Ignore in all zones";
+    HEALBOT_ICONRAISEPRIO1                  = "Priority raise x1";
+    HEALBOT_ICONRAISEPRIO3                  = "Priority raise x3";
+    HEALBOT_ICONLOWERPRIO1                  = "Priority lower x1";
+    HEALBOT_ICONLOWERPRIO3                  = "Priority lower x3";
+    HEALBOT_ICONRAISESCALE                  = "Scale increase";
+    HEALBOT_ICONLOWERSCALE                  = "Scale decrease";
+    HEALBOT_ICONBARCOLOURON                 = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." on"
+    HEALBOT_ICONBARCOLOUROFF                = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." off"
+    
     HEALBOT_OPTIONS_SHOWMINIMAPBUTTON       = "Show minimap button";
     HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON   = "Show Raid Target";
     HEALBOT_OPTIONS_HOTONBAR                = "On bar";
@@ -1312,7 +1328,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"
     HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY     = "    " .. "Enemy"
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
-    HEALBOT_OPTIONS_ENEMYBARS               = "Harmful spells on hostile characters";
+    HEALBOT_OPTIONS_ENEMYBARS               = "Health Bars - Harmful spells on hostile characters";
     HEALBOT_OPTIONS_HARMFUL_SPELLS          = "Harmful Spells"
     HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include Private List targets"
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"

@@ -27,7 +27,7 @@ function HealBot_Aggro_IndicatorClear(button)
 end
 
 function HealBot_Aggro_IndicatorUpdate(button)
-    if button.status.current<9 and button.frame<10 and button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 and button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
         if button.aggro.status==1 then
             if button.aggro.ind~=1 then
                 button.aggro.ind=1
@@ -66,7 +66,7 @@ function HealBot_Aggro_IndicatorUpdate(button)
 end
 
 function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
-    if button.status.current<9 and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
+    if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status then
             if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
                 if threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then

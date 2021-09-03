@@ -634,6 +634,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFFONT"]),
                                                 Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFHEIGHT"],
                                                 HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFOUTLINE"]]);
+                b.gref.iconf[x]:SetHeight(iScale)
+                b.gref.iconf[x]:SetWidth(iScale)
             end
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DEBUFFDOUBLE"] then
                 diScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DSCALE"])-2)*0.485)
@@ -649,8 +651,9 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
                                                 Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["HEIGHT"],
                                                 HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame]["OUTLINE"]]);
+                b.gref.iconf[x]:SetHeight(diScale)
+                b.gref.iconf[x]:SetWidth(diScale)
             end
-
             HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFONBAR"], 
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BUFFANCHOR"])
             
@@ -658,6 +661,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.icon[1]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
                                     Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BHOFFSET"],
                                     Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["BVOFFSET"]);
+            b.gref.iconf[1]:ClearAllPoints()
+            b.gref.iconf[1]:SetPoint("TOPLEFT",b.gref.icon[1],"TOPLEFT")
             b.gref.txt.expire[1]:ClearAllPoints()
             b.gref.txt.expire[1]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[1],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
             b.gref.txt.count[1]:ClearAllPoints()
@@ -673,6 +678,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 else
                     b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["RELATIVE"],0,0)
                 end
+                b.gref.iconf[x]:ClearAllPoints()
+                b.gref.iconf[x]:SetPoint("TOPLEFT",b.gref.icon[x],"TOPLEFT")
                 b.gref.txt.expire[x]:ClearAllPoints()
                 b.gref.txt.expire[x]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[x],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
                 b.gref.txt.count[x]:ClearAllPoints()
@@ -685,6 +692,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.icon[51]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
                                      Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DHOFFSET"],
                                      Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["DVOFFSET"])
+            b.gref.iconf[51]:ClearAllPoints()
+            b.gref.iconf[51]:SetPoint("TOPLEFT",b.gref.icon[51],"TOPLEFT")
             b.gref.txt.expire[51]:ClearAllPoints()
             b.gref.txt.expire[51]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[51],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
             b.gref.txt.count[51]:ClearAllPoints()
@@ -700,6 +709,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 else
                     b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["RELATIVE"],0,0)
                 end
+                b.gref.iconf[x]:ClearAllPoints()
+                b.gref.iconf[x]:SetPoint("TOPLEFT",b.gref.icon[x],"TOPLEFT")
                 b.gref.txt.expire[x]:ClearAllPoints()
                 b.gref.txt.expire[x]:SetPoint(iAnchors["TXTEXPIRE"],b.gref.icon[x],iAnchors["TXTEXPIRE"],iAnchors["TXTEXPIREX"],0)
                 b.gref.txt.count[x]:ClearAllPoints()
@@ -1209,10 +1220,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.AuxBarFrame[SkinName] then Healbot_Config_Skins.AuxBarFrame[SkinName]={} end
     if not Healbot_Config_Skins.Indicators[SkinName] then Healbot_Config_Skins.Indicators[SkinName]={} end
     if not Healbot_Config_Skins.Spells[SkinName] then Healbot_Config_Skins.Spells[SkinName]={} end
-    if not Healbot_Config_Skins.SpellsTarget[SkinName] then Healbot_Config_Skins.SpellsTarget[SkinName]={} end
-    if not Healbot_Config_Skins.SpellsTrinket1[SkinName] then Healbot_Config_Skins.SpellsTrinket1[SkinName]={} end
-    if not Healbot_Config_Skins.SpellsTrinket2[SkinName] then Healbot_Config_Skins.SpellsTrinket2[SkinName]={} end
-    if not Healbot_Config_Skins.SpellsAvoidBlueCursor[SkinName] then Healbot_Config_Skins.SpellsAvoidBlueCursor[SkinName]={} end
     if not Healbot_Config_Skins.Emerg[SkinName] then Healbot_Config_Skins.Emerg[SkinName]={} end
     
     for g=1,9 do
@@ -1220,7 +1227,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.AuxBarText[SkinName][g] then Healbot_Config_Skins.AuxBarText[SkinName][g]={} end
     end
     for gl=1,10 do
-    
         if not Healbot_Config_Skins.HeadText[SkinName][gl] then Healbot_Config_Skins.HeadText[SkinName][gl]={} end
         if not Healbot_Config_Skins.HeadBar[SkinName][gl] then Healbot_Config_Skins.HeadBar[SkinName][gl]={} end
         if not Healbot_Config_Skins.Anchors[SkinName][gl] then Healbot_Config_Skins.Anchors[SkinName][gl]={} end
@@ -1246,10 +1252,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]={} end
         if not Healbot_Config_Skins.Indicators[SkinName][gl] then Healbot_Config_Skins.Indicators[SkinName][gl]={} end
         if not Healbot_Config_Skins.Spells[SkinName][gl] then Healbot_Config_Skins.Spells[SkinName][gl]={} end
-        if not Healbot_Config_Skins.SpellsTarget[SkinName][gl] then Healbot_Config_Skins.SpellsTarget[SkinName][gl]={} end
-        if not Healbot_Config_Skins.SpellsTrinket1[SkinName][gl] then Healbot_Config_Skins.SpellsTrinket1[SkinName][gl]={} end
-        if not Healbot_Config_Skins.SpellsTrinket2[SkinName][gl] then Healbot_Config_Skins.SpellsTrinket2[SkinName][gl]={} end
-        if not Healbot_Config_Skins.SpellsAvoidBlueCursor[SkinName][gl] then Healbot_Config_Skins.SpellsAvoidBlueCursor[SkinName][gl]={} end
         if not Healbot_Config_Skins.Emerg[SkinName][gl] then Healbot_Config_Skins.Emerg[SkinName][gl]={} end
     end
 

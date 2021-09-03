@@ -990,7 +990,7 @@
       </StatusBar>
     </Frames>
   </Button>
-  
+
    <Button name="HealingButtonTemplate2" virtual="true" inherits="SecureUnitButtonTemplate">
     <Size>
       <AbsDimension x="128" y="18" />

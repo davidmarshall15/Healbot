@@ -1,8 +1,7 @@
-﻿HEALBOT_VERSION_SC = "9.1.0.6";
+﻿HEALBOT_VERSION_SC = "9.1.0.7";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
-local version        = GetBuildInfo()
 local vMajor         = string.split(".", HEALBOT_VERSION)
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
@@ -381,6 +380,7 @@ function HealBot_globalVars()
     HEALBOT_FOCUS_MAGIC                     = 54646 --GetSpellInfo(54646) or "--Focus Magic";
     HBC_FROST_ARMOR                         = 168
     HBC_ICE_ARMOR                           = 7302
+    HBC_MOLTEN_ARMOR                        = 30482
     HEALBOT_ICE_BARRIER                     = 11426 --GetSpellInfo(11426) or "--Ice Barrier"
     HEALBOT_ICE_BLOCK                       = 45438 --GetSpellInfo(45438) or "--Ice Block"
     HEALBOT_ICE_WARD                        = 111264 --GetSpellInfo(111264) or "--Ice Ward"

@@ -46,7 +46,6 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
    
     local hbMana=nil
     if spellBookId then
-        HealBot_TooltipInit();
         HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
         local ttText = getglobal("HealBot_ScanTooltipTextLeft2");
         if (ttText:GetText()) then

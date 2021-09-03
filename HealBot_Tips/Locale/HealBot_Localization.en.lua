@@ -532,7 +532,7 @@ function HealBot_Lang_Options_enALL()
                                ["OVERRIDESFRAMES"]="Show the Overrides Frames tab.",
                                ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
                         -- Spells tab
-                               ["SETSPELLSFOR"]="Set spells that can be used on Friendly and Hostile characters:\n".._G["GREEN_FONT_COLOR_CODE"].."* Helpful - Spells that can be cast on friends.\n".._G["GREEN_FONT_COLOR_CODE"].."* Harmful - Spells that can be cast on enemies.",
+                               ["SETSPELLSFOR"]="Set spells that can be used on Friendly and Hostile characters:\n--\n".._G["GREEN_FONT_COLOR_CODE"].."* Health Bars - Spells that can be cast on the health bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Emergency Bars - Spells that can be cast on the emergency bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Icons - Commands that can be used on icons.",
                                ["SPELLSBUTTON"]="Modifier key held when casting.",
                                ["SPELLSBUTTONCAST"]="Timing of the spell cast\n".._G["GREEN_FONT_COLOR_CODE"].."Cast when the button is Pressed or Released.",
                                ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend.",

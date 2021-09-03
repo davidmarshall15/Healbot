@@ -103,16 +103,21 @@ HealBot_ConfigDefaults = {
   };
 
 HealBot_Config_SpellsDefaults = {
-  EnabledKeyCombo=nil,
+  EnabledKeyCombo={},
   EnabledSpellTarget={},
   EnabledSpellTrinket1={},
   EnabledSpellTrinket2={},
   EnabledAvoidBlueCursor={},
-  EnemyKeyCombo=nil,
+  EnemyKeyCombo={},
   EnemySpellTarget={},
   EnemySpellTrinket1={},
   EnemySpellTrinket2={},
   EnemyAvoidBlueCursor={},
+  EmergKeyCombo={},
+  EmergSpellTarget={},
+  EmergSpellTrinket1={},
+  EmergSpellTrinket2={},
+  EmergAvoidBlueCursor={},
   ButtonCastMethod = 2,
 };
 
@@ -248,7 +253,6 @@ function HealBot_Data_InitVars()
         CureCustomDefaultCastBy=1,
         TopRole="TANK",
         TargetBarRestricted=0,
-        ResLagDuration=5,
         ShowTooltip = true,
         Tooltip_ShowTarget = true,
         Tooltip_ShowMyBuffs = false,
@@ -386,6 +390,7 @@ function HealBot_Data_InitVars()
         },
         HealBot_Custom_Buffs_ShowBarCol={},
         CustomBuffIDMethod = {},
+        IconKeyCombo={},
         WatchHoT = {
            ["DRUI"] = {
                 [HEALBOT_REJUVENATION]=2,
@@ -419,6 +424,7 @@ function HealBot_Data_InitVars()
                 [HBC_DAMPEN_MAGIC]=4,
                 [HBC_FROST_ARMOR]=4,
                 [HBC_ICE_ARMOR]=4,
+                [HBC_MOLTEN_ARMOR]=4,
                 [HBC_MAGE_ARMOR]=4,
                 [HEALBOT_INCANTERS_WARD]=2,
                 [HBC_MANA_SHIELD]=2,
@@ -576,7 +582,7 @@ function HealBot_Data_InitVars()
                 --[HEALBOT_AOF_INFUSION_OF_LIGHT]=2,
                 [HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL]=2,
                 [HEALBOT_HIGHFATHERS_TIMEKEEPING]=2,
-                [HEALBOT_TAILWIND]=2,
+                --[HEALBOT_TAILWIND]=2,
                 [HEALBOT_BRACING_CHILL]=2,
                 [HEALBOT_BLESSED_PORTENTS]=2,
             },
@@ -4051,6 +4057,21 @@ HealBot_Data={  ["TIPBUTTON"] = false,
                 ["POWERTYPE"]= 0,
                 ["PLAYERGROUP"]= 1,
 };
+
+HealBot_Unit_Status={   ["DISABLED"]=0,
+                        ["CHECK"]=2,
+                        ["ENABLEDOOR"]=3,
+                        ["ENABLEDIR"]=4,
+                        ["BUFFNOCOL"]=5,
+                        ["BUFFBARCOL"]=6,
+                        ["DEBUFFNOCOL"]=7,
+                        ["DEBUFFBARCOL"]=8,
+                        ["SUMMONED"]=9,
+                        ["DEAD"]=18,
+                        ["RES"]=19,
+                        ["DC"]=20,
+                        ["RESERVED"]=99,
+}
 
 HealBot_Spell_IDs = {};
 HealBot_Spell_Names = {};
