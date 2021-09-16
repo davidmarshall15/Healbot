@@ -45,6 +45,7 @@ function HealBot_Lang_Options_enALL()
                                  ["OVERRIDESEFFECTSUSE"]=HEALBOT_OPTIONS_OVERRIDE_EFFECTS,
                         -- Spells tab
                                  ["SETSPELLSFOR"]=HEALBOT_OPTIONS_SETSPELLS,
+                                 ["SPELLSUSEICONCMDS"]=HEALBOT_OPTIONS_USEICONCMDS,
                                  ["SPELLSBUTTON"]=HEALBOT_OPTIONS_MODIFIER,
                                  ["SPELLSBUTTONCAST"]=HEALBOT_OPTIONS_BUTTONCASTMETHOD,
                                  ["SPELLSAVOIDBLUE"]="Avoid Blue Cursor",
@@ -236,11 +237,17 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Frames Text Name tab
                                  ["TEXTNAME"]="Name Text",
                                  ["HEALBARSCOLTEXTNAME"]=HEALBOT_SKIN_NAMETEXTCOL_TEXT,
+                                 ["HEALBARSCOLDEADTEXTNAME"]="Name Text Dead Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["HEALBARSCOLRESTEXTNAME"]="Name Text Res Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["HEALBARSCOLSUMMONTEXTNAME"]="Name Text Summons Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSCOLCUSTOMTEXTNAME"]="Name Text Custom Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSNAMETEXTCOLALPHA"]=HEALBOT_OPTIONS_BARALPHA,
                                  ["HEALBARSNAMETEXTDISCOLALPHA"]=HEALBOT_OPTIONS_BARALPHADIS,
                                  ["HEALBARSNAMETEXTDEBUFF"]=HEALBOT_OPTIONS_TEXTCOL_DEBUFF,
                                  ["HEALBARSTXTSHOWNAME"]=HEALBOT_OPTIONS_SHOWNAMEONBAR,
+                                 ["HEALBARSTXTCHANGEDEADTEXTCOL"]="Change Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["HEALBARSTXTCHANGERESTEXTCOL"]="Change Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                                 ["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change Text Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
                                  ["HEALBARSTXTUTF8"]=HEALBOT_OPTIONS_ENABLELIBUTF8,
                                  ["HEALBARSTXTSHOWCLASS"]=HEALBOT_OPTIONS_SHOWCLASSONBAR,
                                  ["HEALBARSTXTSHOWROLE"]=HEALBOT_SHOW_ROLE,
@@ -533,6 +540,7 @@ function HealBot_Lang_Options_enALL()
                                ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
                         -- Spells tab
                                ["SETSPELLSFOR"]="Set spells that can be used on Friendly and Hostile characters:\n--\n".._G["GREEN_FONT_COLOR_CODE"].."* Health Bars - Spells that can be cast on the health bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Emergency Bars - Spells that can be cast on the emergency bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Icons - Commands that can be used on icons.",
+                               ["SPELLSUSEICONCMDS"]="Turn On/Off the use of Icon Commands set on this tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."On: Click on buff/debuff icons to run commands with icon tooltips.\n".._G["GREEN_FONT_COLOR_CODE"].."Off: Click through icons to cast spells on the health/emergancy bar with normal tooltips.",
                                ["SPELLSBUTTON"]="Modifier key held when casting.",
                                ["SPELLSBUTTONCAST"]="Timing of the spell cast\n".._G["GREEN_FONT_COLOR_CODE"].."Cast when the button is Pressed or Released.",
                                ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend.",
@@ -550,7 +558,7 @@ function HealBot_Lang_Options_enALL()
                                ["SPELLSSELECTCMDS"]="Select a command for the spells tab.",
                                ["SPELLSSELECTCANCEL"]="Do not select anything and\nreturn to the spells tab.",
                                ["SMARTCAST"]="Select and cast an appropriate spell for the situation.\nThis only works out of combat.",
-                               ["SMARTCASTAVOIDPVP"]="Do not use SmartCast\non PVP flagged players.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Note: This will also block all spells when out of combat",
+                               ["SMARTCASTAVOIDPVP"]="Do not use SmartCast\non PVP flagged players.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Note: This will also block all spells when out of combat.",
                                ["SMARTCASTDEBUFF"]="Use SmartCast to remove debuffs.",
                                ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
                                ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
@@ -725,7 +733,13 @@ function HealBot_Lang_Options_enALL()
                                ["TEXTNAME"]="Show the Skins Frames Text Name tab.",
                                ["HEALBARSCOLTEXTNAME"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the name text.\n".._G["GREEN_FONT_COLOR_CODE"].."When custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["HEALBARSCOLCUSTOMTEXTNAME"]="Set the custom name text col"..HEALBOT_enWORD_COLOUR_SUFFIX,
+                               ["HEALBARSCOLDEADTEXTNAME"]="Set the name text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is dead.",
+                               ["HEALBARSCOLRESTEXTNAME"]="Set the name text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being ressed.",
+                               ["HEALBARSCOLSUMMONTEXTNAME"]="Set the name text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being summoned.",
+                               ["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.."when the player is being summoned.",
                                ["HEALBARSNAMETEXTCOLALPHA"]="Set the transparency of the\nname text when in an enabled state.",
+                               ["HEALBARSTXTCHANGEDEADTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.."when the player is dead.",
+                               ["HEALBARSTXTCHANGERESTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.."when the player is being ressed.",
                                ["HEALBARSNAMETEXTDISCOLALPHA"]="Set the transparency of the\nname text when in a disabled state.",
                                ["HEALBARSNAMETEXTDEBUFF"]="Always use the Custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\nwhen the player has a debuff.",
                                ["HEALBARSTXTSHOWNAME"]="Show the players name on the bar.",
@@ -988,6 +1002,11 @@ function HealBot_Lang_Options_enALL()
                         -- Plugin Tab
                                ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.",  
                               }
+
+    if HEALBOT_GAME_VERSION<4 then
+        HEALBOT_OPTIONS_HELP_TEXT["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.."when the player is being summoned.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."This setting is only recommended in Retail."
+        HEALBOT_OPTIONS_HELP_TEXT["HEALBARSCOLSUMMONTEXTNAME"]="Set the name text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being summoned.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."This setting is only recommended in Retail."
+    end
 end
 
 if HealBot_Version_Target() then

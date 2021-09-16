@@ -434,18 +434,24 @@ local atcR, atcG, atcB=1,1,1
 function HealBot_Text_TextNameColours(button)
     if HealBot_Action_IsUnitDead(button) then
         if UnitIsFriend("player",button.unit) then
-            if button.status.current==HealBot_Unit_Status["RES"] then
-                atcR,atcG,atcB=0.2, 1.0, 0.2
-            elseif not UnitIsUnit(button.unit, "player") and button.status.range>0 then
-                atcR,atcG,atcB=1.0, 0.2, 0.2
+            if button.status.current==HealBot_Unit_Status["RES"] and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["RES"] then
+                atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCR"]
+                atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCG"]
+                atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCB"]
+            elseif not UnitIsUnit(button.unit, "player") and button.status.range>0 and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["RIP"] then
+                atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCR"]
+                atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCG"]
+                atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCB"]
             else
                 atcR,atcG,atcB=0.5, 0.5, 0.5
             end
         else
             atcR,atcG,atcB=0.4, 0.4, 0.4
         end
-    elseif button.status.current==HealBot_Unit_Status["SUMMONED"] then
-        atcR,atcG,atcB=0.75, 0.75, 0.75
+    elseif button.status.summons and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SUM"] then
+        atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCR"]
+        atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCG"]
+        atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCB"]
     elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==3 or
       ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] and button.aura.debuff.type) then
         atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"];
@@ -927,8 +933,12 @@ function HealBot_Text_setNameTag(button)
         if UnitIsFriend("player",button.unit) then
             if button.status.current==HealBot_Unit_Status["DC"] then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGDC"];
-            elseif HealBot_Action_IsUnitDead(button) then
+            elseif button.status.current==HealBot_Unit_Status["DEAD"] then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGRIP"];
+            elseif button.status.current==HealBot_Unit_Status["RES"] then
+                button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGRES"];
+            elseif button.status.summons then
+                button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGSUM"];
             elseif button.status.range<1 then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGOOR"];
             else
@@ -1137,7 +1147,7 @@ function HealBot_Text_UpdateText(button)
     if button.text.nameupdate then
         button.text.nameupdate=false
         if button.status.current<HealBot_Unit_Status["DC"] then
-            if button.status.enabled then
+            if button.status.enabled or button.status.summons then
                 button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCA"], 1)
             else
                 button.text.na=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCDA"], 1)

@@ -3615,6 +3615,20 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCAST",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <CheckButton name="HealBot_Options_UseIconCmds" inherits="OptionsCheckButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="220" y="-75" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_UseIconCmds_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SPELLSUSEICONCMDS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SPELLSUSEICONCMDS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_ModKeyShift" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -10360,7 +10374,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowNameOnBar" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="20" y="-100" />
+                                  <AbsDimension x="40" y="-80" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -10370,7 +10384,7 @@
                                   <Anchors>
                                     <Anchor point="RIGHT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="LEFT">
                                       <Offset>
-                                        <AbsDimension x="-20" y="1"/>
+                                        <AbsDimension x="-20" y="-21"/>
                                       </Offset>
                                     </Anchor>
                                   </Anchors>
@@ -10390,7 +10404,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="25" y="0" />
+                                  <AbsDimension x="40" y="0" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -10407,7 +10421,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UnitDeadTag" relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="25" y="0" />
+                                  <AbsDimension x="40" y="0" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -10422,14 +10436,48 @@
                               <AbsDimension x="80" y="20"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OutOfRangeTag" relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisconnectedTag" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="25" y="0" />
+                                  <AbsDimension x="0" y="-28" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
                               <OnTextChanged>HealBot_Options_ReserverTag_OnTextChanged(self)</OnTextChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGR",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGR",false)</OnLeave>
+                            </Scripts>
+                          </EditBox>
+                          <EditBox name="HealBot_Options_ResTag" inherits="HealBot_Options_EditBoxTemplate">
+                            <Size>
+                              <AbsDimension x="80" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_UnitDeadTag" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-28" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnTextChanged>HealBot_Options_ResTag_OnTextChanged(self)</OnTextChanged>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGR",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGR",false)</OnLeave>
+                            </Scripts>
+                          </EditBox>
+                          <EditBox name="HealBot_Options_SummonsTag" inherits="HealBot_Options_EditBoxTemplate">
+                            <Size>
+                              <AbsDimension x="80" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OutOfRangeTag" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-28" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnTextChanged>HealBot_Options_SummonsTag_OnTextChanged(self)</OnTextChanged>
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTTAGR",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGR",false)</OnLeave>
                             </Scripts>
@@ -10596,6 +10644,20 @@
                               </Layer>
                             </Layers>
                           </Frame>
+                          <CheckButton name="HealBot_Options_NameTextColourDebuff" inherits="SendMailRadioButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="95" y="-12"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_NameTextColourDebuff_OnClick(self,self:GetID())</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSNAMETEXTDEBUFF",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTDEBUFF",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <Button name="HealBot_NameTextCustomColourb">
                             <Size>
                               <AbsDimension x="140" y="20"/>
@@ -10694,20 +10756,249 @@
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTDISCOLALPHA",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_Options_NameTextColourDebuff" inherits="SendMailRadioButtonTemplate">
+                          <Button name="HealBot_NameTextDeadColb">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour" relativePoint="BOTTOMLEFT">
+                              <Anchor point="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="95" y="-12"/>
+                                  <AbsDimension x="-200" y="25"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_Options_NameTextColourDebuff_OnClick(self,self:GetID())</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSNAMETEXTDEBUFF",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTDEBUFF",false)</OnLeave>
+                              <OnClick>HealBot_SkinColorpick_OnClick("DeadNameText")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLDEADTEXTNAME",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLDEADTEXTNAME",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <StatusBar name="HealBot_NameTextDeadCol" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_NameTextDeadColb"  relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="0"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="HealBot_NameTextDeadColourt" inherits="GameFontNormalSmall" text="HEALBOT_DEAD_LABEL">
+                                  <Anchors>
+                                    <Anchor point="CENTER" relativeTo="HealBot_NameTextDeadCol" relativePoint="CENTER">
+                                      <Offset>
+                                        <AbsDimension x="0" y="1"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                            </Scripts>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="1"/>
+                          </StatusBar>
+                          <CheckButton name="HealBot_Options_NameTextDeadCol" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="RIGHT" relativeTo="HealBot_NameTextDeadCol" relativePoint="LEFT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <HitRectInsets>
+                                <AbsInset left="0" right="0" top="0" bottom="0"/>
+                            </HitRectInsets>
+                            <Scripts>
+                              <OnClick>HealBot_Options_NameTextDeadCol_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTCHANGEDEADTEXTCOL",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTCHANGEDEADTEXTCOL",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <Button name="HealBot_Options_SkinDeadColPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                            <Size>
+                              <AbsDimension x="22" y="22"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_NameTextDeadCol" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <Button name="HealBot_NameTextResColb">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="25"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_SkinColorpick_OnClick("ResNameText")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLRESTEXTNAME",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLRESTEXTNAME",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <StatusBar name="HealBot_NameTextResCol" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_NameTextResColb"  relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="0"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="HealBot_NameTextResColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORD_RESURRECTION">
+                                  <Anchors>
+                                    <Anchor point="CENTER" relativeTo="HealBot_NameTextResCol" relativePoint="CENTER">
+                                      <Offset>
+                                        <AbsDimension x="0" y="1"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                            </Scripts>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="1"/>
+                          </StatusBar>
+                          <CheckButton name="HealBot_Options_NameTextResCol" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="RIGHT" relativeTo="HealBot_NameTextResCol" relativePoint="LEFT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <HitRectInsets>
+                                <AbsInset left="0" right="0" top="0" bottom="0"/>
+                            </HitRectInsets>
+                            <Scripts>
+                              <OnClick>HealBot_Options_NameTextResCol_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTCHANGERESTEXTCOL",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTCHANGERESTEXTCOL",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Button name="HealBot_Options_SkinResColPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                            <Size>
+                              <AbsDimension x="22" y="22"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_NameTextResCol" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <Button name="HealBot_NameTextSummonColb">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="200" y="25"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_SkinColorpick_OnClick("SummonNameText")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLSUMMONTEXTNAME",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLSUMMONTEXTNAME",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <StatusBar name="HealBot_NameTextSummonCol" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="110" y="20"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_NameTextSummonColb"  relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="0"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="HealBot_NameTextSummonColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORD_SUMMONS">
+                                  <Anchors>
+                                    <Anchor point="CENTER" relativeTo="HealBot_NameTextSummonCol" relativePoint="CENTER">
+                                      <Offset>
+                                        <AbsDimension x="0" y="1"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                            </Scripts>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="1"/>
+                          </StatusBar>
+                          <CheckButton name="HealBot_Options_NameTextSummonCol" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="RIGHT" relativeTo="HealBot_NameTextSummonCol" relativePoint="LEFT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <HitRectInsets>
+                                <AbsInset left="0" right="0" top="0" bottom="0"/>
+                            </HitRectInsets>
+                            <Scripts>
+                              <OnClick>HealBot_Options_NameTextSummonCol_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTCHANGESUMMONTEXTCOL",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTCHANGESUMMONTEXTCOL",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <Button name="HealBot_Options_SkinSummonColPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                            <Size>
+                              <AbsDimension x="22" y="22"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_NameTextSummonCol" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
                         </Frames>
                       </Frame>
                     </Frames>

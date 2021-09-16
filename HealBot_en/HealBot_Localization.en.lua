@@ -367,6 +367,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SMARTCASTHEAL           = "Healing spells";
     HEALBOT_OPTIONS_BAR2SIZE                = "Power bar size";
     HEALBOT_OPTIONS_SETSPELLS               = "Set spells for";
+    HEALBOT_OPTIONS_USEICONCMDS             = "Use icon commands";
     HEALBOT_OPTIONS_ENABLEDBARS             = "Health Bars - Helpful spells on friendly characters";
     HEALBOT_OPTIONS_EMERGBARS               = "Emergency Bars - All spells on all characters";
     HEALBOT_OPTIONS_ICONS                   = "Icons: Commands that can be used on icons";
@@ -508,6 +509,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_PENDING                   = "Pending";
     HEALBOT_WORD_STATUS                     = "Status"
     HEALBOT_WORD_TIME                       = "Time"
+    HEALBOT_WORD_SUMMONS                    = "Summons"
+    HEALBOT_WORD_RESURRECTION               = "Resurrection"
 
     HEALBOT_OPTIONS_TTALPHA                 = "Opacity"
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
@@ -515,13 +518,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MYFRIEND                = "My Friend"
 
     HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
-    HEALBOT_DISCONNECTED_TAG                = "[ DC ] "
+    HEALBOT_DISCONNECTED_TAG                = "DC-"
     HEALBOT_DEAD_LABEL                      = "Dead"
-    HEALBOT_DEAD_TAG                        = "[ RIP ] "
+    HEALBOT_DEAD_TAG                        = "RIP-"
+    HEALBOT_RES_TAG                         = "RES-"
+    HEALBOT_SUMMONS_TAG                     = "SUM-"
     HEALBOT_OUTOFRANGE_LABEL                = "Out Of Range"
-    HEALBOT_OUTOFRANGE_TAG                  = "[ OOR ] "
+    HEALBOT_OUTOFRANGE_TAG                  = "OOR-"
     HEALBOT_RESERVED_LABEL                  = "Reserved"
-    HEALBOT_RESERVED_TAG                    = "[ R ] "
+    HEALBOT_RESERVED_TAG                    = "R-"
     HEALBOT_TAGS                            = "Tags"
     
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
@@ -818,6 +823,8 @@ function HealBot_Lang_enALL()
     HEALBOT_COMBATPROT_PARTYNO              = "bars Reserved for Party"
     HEALBOT_COMBATPROT_RAIDNO               = "bars Reserved for Raid"
     HEALBOT_SKIN_CHECK_DONE                 = "Integrity check of skins complete"
+    HEALBOT_ENABLE_CUSTOM_BUFFS             = "All custom buffs have been enabled"
+    HEALBOT_ENABLE_CUSTOM_DEBUFFS           = "All custom debuffs have been enabled"
     HEALBOT_ALLOW_DUPLICATES                = "Allow Duplicates"
     HEALBOT_OPTIONS_AUXSETTINGS             = "Auxiliary Bars Settings"
     HEALBOT_OPTIONS_AUXASSIGN               = "Auxiliary Bars Assignments"
