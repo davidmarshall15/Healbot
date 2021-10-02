@@ -107,6 +107,15 @@ function HealBot_Debug_HideShow(show)
     end
 end
     
+function HealBot_Debug_Clear(cat)
+    debugText[cat]={};
+    if debugCatText[debugCat]==cat then
+        for x=1,50 do
+            dFrameText[x]:SetText("")
+        end
+    end
+end
+
 function HealBot_Debug_Add(cat, text, incTime)
     if not debugText[cat] then 
         debugText[cat]={} 
@@ -119,7 +128,7 @@ function HealBot_Debug_Add(cat, text, incTime)
             dedupText[cat][text]=true
         end
     else
-        table.insert(debugText[cat],"["..date("%H:%M", time()).."] "..text)
+        table.insert(debugText[cat],"["..date("%H:%M:%S", time()).."] "..text)
     end
     if #debugText[cat]>50 then
         table.remove(debugText[cat],1)
@@ -127,4 +136,43 @@ function HealBot_Debug_Add(cat, text, incTime)
     HealBot_Debug_RefreshCat()
 end
 
-HealBot_Debug_Add("Load", "Debug Loaded", "["..date("%H:%M", time()).."] DEBUG: ".."Debug Loaded", true)
+
+local msgs={}
+local order={}
+function HealBot_Debug_UpdateCalls()
+    if not debugText["Calls"] then 
+        debugText["Calls"]={}
+        table.insert(debugCatText,"Calls")
+        HealBot_Debug_Add("Calls", "Calls Active", true)
+    elseif debugCatText[debugCat]=="Calls" then    
+        debugText["Calls"]={}
+        msgs=HealBot_retCalls()
+        linenum = 0
+        local maxcount=0
+        for x,_ in pairs(order) do
+            order[x]=nil;
+        end
+        
+        for name,count in pairs(msgs) do
+            table.insert(order,name)
+            if count>maxcount then maxcount=count end
+        end
+        local filtercount=floor(maxcount/100)
+        table.sort(order,function (a,b)
+            if msgs[a]>msgs[b] then return true end
+            if msgs[a]<msgs[b] then return false end
+            return a>b
+        end)
+        --
+        for j=1,#order do
+            if linenum<50 then --and msgs[order[j]]>filtercount then
+                linenum=linenum+1
+                table.insert(debugText["Calls"],order[j].." = "..msgs[order[j]])
+            end
+        end
+        HealBot_Debug_RefreshCat()
+    end
+end
+
+
+HealBot_Debug_Add("Load", "Debug Loaded", true)

@@ -32,6 +32,18 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
     end
 end
 
+local ssName,ssRank="x", 0
+function HealBot_Init_SetSpell(spellId, cKey)
+    ssName=GetSpellInfo(spellId)
+    if ssName then
+        ssRank=HealBot_Init_ClassicHealSpellMaxRank(ssName)
+        if ssRank>0 then
+            ssName=HealBot_Init_Spells_retRank(ssName, ssRank)
+        end
+        HealBot_Action_SetSpell("ENABLED", cKey, ssName)
+    end
+end
+
 local cRank=false
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
 
@@ -76,7 +88,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
         if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
             if cRank then
                 local rank=tonumber(string.match(cRank, "%d+")) or 0
-                if rank>0 then
+                if rank>0 and not HealBot_Globals.NoRanks then
                     if HealBot_Heal_Names[spellName] then 
 						HealBot_KnownHeal_Names[spellName]=true
 						if not HealBot_Spell_Ranks[spellName] then 

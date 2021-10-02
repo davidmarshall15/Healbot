@@ -27,7 +27,11 @@ end
 function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
         if not InCombatLockdown() then
-            C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
+            if HEALBOT_GAME_VERSION>3 then
+                C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
+            else
+                CallCompanion("MOUNT", mount)
+            end
         end
     else
         HealBot_setOptions_Timer(405)
@@ -157,15 +161,15 @@ function HealBot_Action_DoHealUnit_Wheel(self, delta)
             HealBot_Panel_ToggelPrivateHealers(hbLastButton.unit, false)
         elseif HealBot_MouseWheelCmd==HEALBOT_RESET_BAR then
             HealBot_Reset_Unit(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMMOUNT and UnitIsUnit(hbLastButton.unit,"player") and not UnitAffectingCombat("player") then
+        elseif (HealBot_MouseWheelCmd==HEALBOT_RANDOMMOUNT or HealBot_MouseWheelCmd==HEALBOT_CMD_DISMOUNT) and hbLastButton.player and not UnitAffectingCombat("player") then
             HealBot_MountsPets_ToggelMount("all")
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMGOUNDMOUNT and UnitIsUnit(hbLastButton.unit,"player") and not UnitAffectingCombat("player") then
+        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMGOUNDMOUNT and hbLastButton.player and not UnitAffectingCombat("player") then
             HealBot_MountsPets_ToggelMount("ground")
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMPET and UnitIsUnit(hbLastButton.unit,"player") then
+        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMPET and hbLastButton.player then
             HealBot_MountsPets_RandomPet(false)   
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVMOUNT and UnitIsUnit(hbLastButton.unit,"player") then
+        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVMOUNT and hbLastButton.player then
             HealBot_MountsPets_FavMount()   
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and UnitIsUnit(hbLastButton.unit,"player") then
+        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and hbLastButton.player then
             HealBot_MountsPets_RandomPet(true)   
         elseif HealBot_MouseWheelCmd==HEALBOT_EMOTE then
             DoEmote(HealBot_Globals.HealBot_Emotes[y], hbLastButton.unit)
@@ -179,7 +183,7 @@ function HealBot_Action_HealUnit_Wheel(self, delta)
 end
 
 function HealBot_MountsPets_InitUse()
-    if HealBot_Globals.HealBot_Enable_MouseWheel and HEALBOT_GAME_VERSION>3 then
+    if HealBot_Globals.HealBot_Enable_MouseWheel and HEALBOT_GAME_VERSION>2 then
         HealBot_setOptions_Timer(410)
     end
 end
@@ -222,9 +226,24 @@ function HealBot_MountsPets_InitMount()
         HealBot_mountData["IncFlying"]=true
     end
     
-    local x = C_MountJournal.GetNumMounts()
+    local x = 0
+    local mount, sID, isUsable, faction, isCollected, mountType
+    if HEALBOT_GAME_VERSION>3 then
+        x = C_MountJournal.GetNumMounts()
+    else
+        x = GetNumCompanions("MOUNT")
+        isUsable=true
+        faction=false
+        isCollected=true
+    end
     for z=1,x do
-        local mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
+        if HEALBOT_GAME_VERSION>3 then
+            mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
+            _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
+        else
+            _, mount, sID, _, _, mountType = GetCompanionInfo("type", id)
+            HealBot_AddDebug("HERE")
+        end
         if faction and isUsable and isCollected then
             local englishFaction = UnitFactionGroup("player")
             if (faction~=HealBot_mountData["playerFaction"]) then
@@ -233,7 +252,6 @@ function HealBot_MountsPets_InitMount()
         end
         
         if isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
-            local _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
             if (mountType==248 or mountType==247 or mountType==242) then
                 if HealBot_mountData["IncFlying"] then
                     table.insert(HealBot_FMount, mount);

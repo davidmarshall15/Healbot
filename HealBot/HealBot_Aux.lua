@@ -190,7 +190,7 @@ function HealBot_Aux_clearAllBars(button)
     for x=1,9 do
         HealBot_Aux_clearBar(button, x)
     end
-    HealBot_OnEvent_UnitManaUpdate(button)
+    if button.frame>0 and UnitExists(button.unit) then HealBot_OnEvent_UnitManaUpdate(button) end
       --HealBot_setCall("HealBot_Aux_clearAllBars")
 end
 

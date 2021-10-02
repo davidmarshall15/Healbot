@@ -793,6 +793,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_CLEARBLACKLIST              = "Clear BlackList"
     HEALBOT_CMD_TOGGLEDISLIKEMOUNT          = "Toggle Dislike Mount"
     HEALBOT_OPTION_DISLIKEMOUNT_ON          = "Now Dislike Mount"
+    HEALBOT_CMD_DISMOUNT                    = "Dismount"
     HEALBOT_OPTION_DISLIKEMOUNT_OFF         = "No longer Dislike Mount"
     HEALBOT_CMD_COPYSPELLS                  = "Copy current spells to all specs"
     HEALBOT_CMD_RESETSPELLS                 = "Reset spells"
