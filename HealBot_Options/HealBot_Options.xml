@@ -4759,6 +4759,24 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <FontString name="HealBot_Options_CopyTabsCurrentFrame" text="HEALBOT_OPTIONS_CURRENT_FRAME" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="132" y="-72" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_Options_CopyTabsCurrentFrameName" text=" " inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTabsCurrentFrame" relativePoint="RIGHT">
+                          <Offset>
+                            <AbsDimension x="5" y="0" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
                   </Layer>
                 </Layers>
                 <Anchors>
@@ -4877,7 +4895,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_ApplyTab2Frames_OnClick(self)</OnClick>
+                      <OnClick>HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesCopyOptions", 1000)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("FRAMEAPPLYTAB",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("FRAMEAPPLYTAB",false)</OnLeave>
                     </Scripts>
@@ -6733,6 +6751,794 @@
                 </Frames>
               </Frame>
 
+              <Frame name="HealBot_Options_FramesCopyOptions" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="540"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="15" y="-110"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-15" y="-110"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_HealButtons_FramesCopyTabsText" text="HEALBOT_OPTIONS_SET_ALL_FRAMES" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-8" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <Button name="HealBot_Options_CopyOptionsClose" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CLOSE">
+                    <Size>
+                      <AbsDimension x="150" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="95" y="12"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowSkinsPanel("BACK", 0)</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Button name="HealBot_Options_CopyOptionsCopy" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_COPY">
+                    <Size>
+                      <AbsDimension x="150" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-95" y="12"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CopyOptionsCopy()</OnClick>
+                    </Scripts>
+                  </Button>
+                  <Frame name="HealBot_Options_FramesCopyOptionsTabs" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="220"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="15" y="-35"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-15" y="-35"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_HealButtons_FramesCopyTabsTxt" text="HEALBOT_OPTIONS_COPY_TABS" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <CheckButton name="HealBot_Options_CopyTab1" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-35" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab1Txt" text="HEALBOT_OPTIONS_TAB_GENERAL" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab2" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab1" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab2Txt" text="HEALBOT_OPTIONS_TAB_HEADERS" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab3" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab2" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab4" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab2" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab4Txt" text="HEALBOT_OPTIONS_TAB_BARS" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab5" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab4" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab6" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab5" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab7" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab6" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab8" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab7" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab9" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab8" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab10" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab4" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab10Txt" text="HEALBOT_OPTIONS_TEXTOPTIONS" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab11" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab10" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab12" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab11" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab13" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab12" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab14" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab10" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab14Txt" text="HEALBOT_OPTIONS_TAB_ICONS" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab15" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab14" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab16" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab15" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab17" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab14" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab17Txt" text="HEALBOT_OPTIONS_TAB_INDICATORS" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab18" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab17" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab19" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab18" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab20" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab17" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab20Txt" text="HEALBOT_OPTIONS_TAB_EMERG" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab21" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab20" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="HealBot_Options_CopyOptionsTabsSelectAll" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT_ALL">
+                        <Size>
+                          <AbsDimension x="150" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab1" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="280" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyTabsSelect(true)</OnClick>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_CopyOptionsTabsSelectNone" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT_NONE">
+                        <Size>
+                          <AbsDimension x="150" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab17" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="280" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyTabsSelect(false)</OnClick>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_FramesCopyOptionsFrames" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="220"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="15" y="-270"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-15" y="-270"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_HealButtons_FramesToFramesText" text="HEALBOT_OPTIONS_TO_FRAMES" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <CheckButton name="HealBot_Options_CopyFrame1" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-35" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame2" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame1" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame3" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame2" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame4" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame3" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame5" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame4" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame6" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame5" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame7" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyFrame4" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="214" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame8" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame7" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyFrame9" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame8" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-4" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <HitRectInsets>
+                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+                        </HitRectInsets>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="HealBot_Options_CopyOptionsFramesSelectAll" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT_ALL">
+                        <Size>
+                          <AbsDimension x="150" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyFrame1" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="280" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyFramesSelect(true)</OnClick>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_CopyOptionsFramesSelectNone" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT_NONE">
+                        <Size>
+                          <AbsDimension x="150" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyFrame3" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="280" y="20"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyFramesSelect(false)</OnClick>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
+                </Frames>
+              </Frame>
+
               <Frame name="HealBot_Options_FramesSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -6985,7 +7791,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AutoShow" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="47" y="-95" />
+                          <AbsDimension x="47" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -6997,12 +7803,12 @@
                   </Slider>
                   <Slider name="HealBot_FrameStickyOffsetHorizontal" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="210" y="16" />
+                      <AbsDimension x="450" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_FrameScale" relativePoint="TOPLEFT">
+                      <Anchor point="TOP" relativeTo="HealBot_FrameScale" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-70" />
+                          <AbsDimension x="0" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7014,12 +7820,12 @@
                   </Slider>
                   <Slider name="HealBot_FrameStickyOffsetVertical" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="210" y="16" />
+                      <AbsDimension x="450" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPRIGHT" relativeTo="HealBot_FrameScale" relativePoint="TOPRIGHT">
+                      <Anchor point="TOP" relativeTo="HealBot_FrameStickyOffsetHorizontal" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-70" />
+                          <AbsDimension x="0" y="-55" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -15907,6 +16713,20 @@
                   <OnLeave>HealBot_Options_Show_Help("MONITORDEBUFFSGROUPED",false)</OnLeave>
                 </Scripts>
               </CheckButton>
+              <CheckButton name="HealBot_Options_MonitorDebuffsWhenMounted" inherits="SendMailRadioButtonTemplate">
+                <Anchors>
+                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorDebuffsInCombat" relativePoint="BOTTOMLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="-5"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_MonitorDebuffsWhenMounted_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("MONITORDEBUFFSMOUNTED",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("MONITORDEBUFFSMOUNTED",false)</OnLeave>
+                </Scripts>
+              </CheckButton>
 
               <Frame name="HealBot_Options_CureDispelCleanse" inherits="BackdropTemplate">
                 <Size>
@@ -17710,11 +18530,25 @@
                       <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSGROUPED",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_MonitorBuffsPalaBlessing" inherits="SendMailRadioButtonTemplate">
+                  <CheckButton name="HealBot_Options_MonitorBuffsWhenMounted" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorBuffsInCombat" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_MonitorBuffsWhenMounted_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORBUFFSMOUNTED",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORBUFFSMOUNTED",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_MonitorBuffsPalaBlessing" hidden="true" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorBuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="-15" y="-82"/>
                         </Offset>
                       </Anchor>
                     </Anchors>

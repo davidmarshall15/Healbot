@@ -6,6 +6,7 @@
   <Script file="HealBot_Text.lua" />
   <Script file="HealBot_Wheel.lua" />
   <Script file="HealBot_Action.lua" />
+  <Script file="HealBot_Timers.lua" />
  
   <Button name="HealBotButtonSecureTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate,SecureHandlerShowHideTemplate">
     <Size>

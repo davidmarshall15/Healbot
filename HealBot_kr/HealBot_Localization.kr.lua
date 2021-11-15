@@ -40,6 +40,9 @@ HEALBOT_MONK                            = "Monk";
     HEALBOT_ADDON                           = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;
     HEALBOT_LOADED = "|1을;를; 불려옵니다.";
 
+    HEALBOT_RANK   = {[1]="(1 레벨)", [2]="(2 레벨)", [3]="(3 레벨)", [4]="(4 레벨)", [5]="(5 레벨)", [6]="(6 레벨)", [7]="(7 레벨)",
+                      [8]="(8 레벨)", [9]="(9 레벨)", [10]="(10 레벨)", [11]="(11 레벨)", [12]="(12 레벨)", [13]="(13 레벨)"}
+
     HEALBOT_ACTION_OPTIONS = "옵션";
 
     HEALBOT_OPTIONS_TITLE = HEALBOT_ADDON;

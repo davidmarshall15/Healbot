@@ -584,6 +584,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                             AuxRight=b.gref.aux[x]
                         end
                     end
+                    b.gref.aux[x]:SetMinMaxValues(0,1000)
                     if testBarsOn then
                         b.gref.aux[x]:SetValue(1000)
                         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==2 then
@@ -1087,11 +1088,11 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         bar:SetScale(barScale);
     else
         HealBot_Panel_ResetHeaders()
-        HealBot_setOptions_Timer(80)
-        HealBot_setOptions_Timer(81)
+        HealBot_Timers_Set("SKINS","SkinsFormat")
+        HealBot_Timers_Set("SKINS","TextExtraCustomCols")
         --if vResetSkinPrevSkin~=Healbot_Config_Skins.Current_Skin then
         --    vResetSkinPrevSkin=Healbot_Config_Skins.Current_Skin
-            --HealBot_setOptions_Timer(800)
+            --HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         --end
     end
       --HealBot_setCall("HealBot_Skins_ResetSkin")
@@ -1113,7 +1114,7 @@ function HealBot_Skins_ResetAll()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Skins_ResetSkin("bar",xButton)
     end
-    HealBot_setOptions_Timer(185)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Skins_Check_Skin(SkinName, fromImport)

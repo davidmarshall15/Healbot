@@ -99,6 +99,9 @@ function HealBot_Lang_Options_enALL()
                                  ["CHATRESONLY"]=HEALBOT_OPTIONS_CASTNOTIFYRESONLY,
                                  ["CHATMSG"]=HEALBOT_OPTIONS_NOTIFY_MSG,
                                  ["EOCOOM"]=HEALBOT_OPTIONS_EOC_OOM,
+                        -- Skins Frames Copy Tabs
+                                 ["COPYTAB"]=HEALBOT_OPTIONS_COPY_TABS,
+                                 ["COPYFRAME"]=HEALBOT_OPTIONS_TO_FRAMES,
                         -- Skins Frames General tab
                                  ["GOTOHEALGROUPS"]=HEALBOT_OPTIONS_SET_FRAME_HEALGROUPS,
                                  ["FRAMEALIAS"]=HEALBOT_OPTIONS_FRAME_ALIAS,
@@ -374,6 +377,7 @@ function HealBot_Lang_Options_enALL()
                                  ["MONITORDEBUFFS"]=HEALBOT_OPTIONS_MONITORDEBUFFS,
                                  ["MONITORDEBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                                  ["MONITORDEBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
+                                 ["MONITORDEBUFFSMOUNTED"]=HEALBOT_OPTIONS_ALSO_WHEN_MOUNTED,
                                  ["DEBUFFSSPELLTOCURE"]=HEALBOT_OPTIONS_DEBUFFTEXT1,
                                  ["DEBUFFSSPELLCHECKMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
                                  ["DEBUFFSIGNOREDEBUFFS"]="Ignore Debuffs",
@@ -415,6 +419,7 @@ function HealBot_Lang_Options_enALL()
                                  ["MONITORBUFFS"]=HEALBOT_OPTIONS_MONITORBUFFS,
                                  ["MONITORBUFFSIC"]=HEALBOT_OPTIONS_MONITORBUFFSC,
                                  ["MONITORBUFFSGROUPED"]=HEALBOT_OPTIONS_IN_A_GROUP,
+                                 ["MONITORBUFFSMOUNTED"]=HEALBOT_OPTIONS_ALSO_WHEN_MOUNTED,
                                  ["MONITORBUFFSPALABLESSING"]=HEALBOT_OPTIONS_PALADIN_BLESSINGS,
                                  ["BUFFSSPELL"]=HEALBOT_OPTIONS_BUFFSTEXT1,
                                  ["BUFFSWEAPONENCHANT1"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
@@ -594,6 +599,9 @@ function HealBot_Lang_Options_enALL()
                                ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
                                ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
                                ["EOCOOM"]="When enabled and mana drops below the select amount.\nAt the end of combat emote Out of Mana.",
+                        -- Skins Frames Copy Tabs
+                                ["COPYTAB"]="Select to copy the tab.",
+                                ["COPYFRAME"]="Select to update the frame.",
                         -- Skins Frames General tab
                                ["GOTOHEALGROUPS"]="Go to the Heal Groups tab.",
                                ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
@@ -868,6 +876,7 @@ function HealBot_Lang_Options_enALL()
                                ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
                                ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",
                                ["MONITORDEBUFFSGROUPED"]="Do not monitor debuffs when solo.",
+                               ["MONITORDEBUFFSMOUNTED"]="Monitor debuffs when mounted.",
                                ["DEBUFFSSPELLTOCURE"]="The spell to use.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Debuffs displayed will only be those that the spell can remove.",
                                ["DEBUFFSSPELLCHECKMEMBERS"]="The members to monitor.\n".."|cff77c8ff".."Tip: Use on raid to cover All",
                                ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n".._G["GREEN_FONT_COLOR_CODE"].."- Short duration - Ignore debuffs that last for less time than the Duration slider\n".._G["GREEN_FONT_COLOR_CODE"].."- When cure spell CoolDown > 2secs - Ignore debuffs when its not possible to cast while the spell is on cooldown\n".._G["GREEN_FONT_COLOR_CODE"].."- When caster is known as friend - When the caster of the debuff is friendly",
@@ -909,6 +918,7 @@ function HealBot_Lang_Options_enALL()
                                ["MONITORBUFFS"]="Turn on/off buff monitoring.",
                                ["MONITORBUFFSIC"]="Turn on/off monitoring for buffs in combat.",
                                ["MONITORBUFFSGROUPED"]="Do not monitor buffs when solo.",
+                               ["MONITORBUFFSMOUNTED"]="Monitor buffs when mounted.",
                                ["MONITORBUFFSPALABLESSING"]="Ignore if player has any blessing cast by you.",
                                ["BUFFSSPELL"]="Select the spell to monitor and cast.",
                                ["BUFFSWEAPONENCHANT1"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Main Hand and 2H Weapons.",
@@ -1000,7 +1010,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.",  
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers, queues and effects.",  
                               }
 
     if HEALBOT_GAME_VERSION<4 then

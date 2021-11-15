@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.1.0.9";
+﻿HEALBOT_VERSION_SC = "9.1.0.12";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -567,6 +567,7 @@ function HealBot_globalVars()
     HEALBOT_UNLEASHED_FURY                  = 117012 --GetSpellInfo(117012) or "--Unleashed Fury";
     HEALBOT_WATER_SHIELD                    = 52127 --GetSpellInfo(52127) or "--Water Shield";
     HEALBOT_WATER_WALKING                   = 546 --GetSpellInfo(546) or "--Water Walking";
+    HEALBOT_WATER_BREATHING                 = 131 --GetSpellInfo(131) or "--Water Breathing";
     
     --Monk
     HEALBOT_BREATH_OF_THE_SERPENT           = 157535 --GetSpellInfo(157535) or "--Breath of the Serpent"

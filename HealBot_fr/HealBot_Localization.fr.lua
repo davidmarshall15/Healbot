@@ -53,6 +53,9 @@ function HealBot_Lang_frFR()
     HEALBOT_ADDON              = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;
     HEALBOT_LOADED             = " charg\195\169.";
 
+    HEALBOT_RANK   = {[1]="(Rang 1)", [2]="(Rang 2)", [3]="(Rang 3)", [4]="(Rang 4)", [5]="(Rang 5)", [6]="(Rang 6)", [7]="(Rang 7)",
+                      [8]="(Rang 8)", [9]="(Rang 9)", [10]="(Rang 10)", [11]="(Rang 11)", [12]="(Rang 12)", [13]="(Rang 13)"}
+
 HEALBOT_ACTION_OPTIONS     = "Options";
 
     HEALBOT_OPTIONS_TITLE         = HEALBOT_ADDON;

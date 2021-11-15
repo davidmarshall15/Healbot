@@ -1,10 +1,10 @@
-## Interface: 90100
+## Interface: 90105
 ## Title: HealBot Italian Localization
 ## Author: Required
 ## Notes: HealBot localization for itIT
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.1.0.0
+## Version: 9.1.5.0
 
 HealBot_Localization.it.lua
 HealBot_Tips_Localization.it.lua

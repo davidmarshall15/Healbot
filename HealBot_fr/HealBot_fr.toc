@@ -1,10 +1,10 @@
-## Interface: 90100
+## Interface: 90105
 ## Title: HealBot French Localization
 ## Author: Kubik
 ## Notes: HealBot localization for frFR
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.1.0.0
+## Version: 9.1.5.0
 
 HealBot_Localization.fr.lua
 HealBot_Tips_Localization.fr.lua

@@ -374,8 +374,9 @@ end
 
 function HealBot_Action_GetTimeOffline(button)
     local timeOffline=nil
-    if button.status.offline then
-        timeOffline = GetTime() - button.status.offline;
+    local offlineStart=HealBot_Action_getGuidData(button, "OFFLINE")
+    if offlineStart then
+        timeOffline = GetTime() - offlineStart;
         local seconds = math.floor(timeOffline % 60)
         local minutes = math.floor(timeOffline / 60) % 60
         local hours = math.floor(timeOffline / 3600)

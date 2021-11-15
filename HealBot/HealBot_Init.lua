@@ -5,6 +5,7 @@ local HealBot_Buff_Names={}
 local HealBot_KnownHeal_Names={}
 local HealBot_Spell_Ranks={}
 local HealBot_Buff_Ranks={}
+local HealBot_Other_Ranks={}
 local _
 local MANA_COST_PATTERN = gsub(MANA_COST, "%%d", "([%%d%.,]+)")
 
@@ -44,16 +45,17 @@ function HealBot_Init_SetSpell(spellId, cKey)
     end
 end
 
-local cRank=false
-function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
 
-    if ( not id ) then return nil; end
+function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
+    local cRank=""
+    if ( not id ) then return false; end
 
     local spell, _, texture, msCast, _, _ = GetSpellInfo(id);
+
     if HEALBOT_GAME_VERSION<4 then 
         cRank = GetSpellSubtext(id)
     end
-    if ( not spell ) then return nil; end
+    if ( not spell ) then return false; end
     if not spellName then spellName=spell end
    
     local hbMana=nil
@@ -75,7 +77,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     HealBot_Spell_IDs[id].CastTime=hbCastTime;
     HealBot_Spell_IDs[id].Mana=hbMana or 0
     HealBot_Spell_IDs[id].texture=texture
-    return true
+    return cRank
 end
 
 local skipSpells={}
@@ -83,12 +85,16 @@ function HealBot_Init_SkipSpells()
     skipSpells={[HEALBOT_BLESSING_OF_MIGHT]=true}
 end
 
+local HealBot_Ranks={}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     if not skipSpells[spellName] then
-        if HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId) then
-            if cRank then
+        local cRank=HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId)
+        if cRank then
+            if string.len(cRank)>2 and not HealBot_Globals.NoRanks then
+                if not HealBot_Ranks[spellName] then HealBot_Ranks[spellName]=0 end
+                HealBot_Ranks[spellName]=HealBot_Ranks[spellName]+1
                 local rank=tonumber(string.match(cRank, "%d+")) or 0
-                if rank>0 and not HealBot_Globals.NoRanks then
+                if rank>0 then
                     if HealBot_Heal_Names[spellName] then 
 						HealBot_KnownHeal_Names[spellName]=true
 						if not HealBot_Spell_Ranks[spellName] then 
@@ -96,21 +102,32 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
 							HealBot_Spell_Ranks[spellName][0]=1
 						end
 						if not HealBot_Spell_Ranks[spellName][rank] then
-							HealBot_Spell_Ranks[spellName][rank]=strtrim(spellName).."("..cRank..")"
+							HealBot_Spell_Ranks[spellName][rank]=spellName.."("..cRank..")"
 							if rank>HealBot_Spell_Ranks[spellName][0] then
 								HealBot_Spell_Ranks[spellName][0]=rank
 							end
 						end
-						spellName=strtrim(spellName).."("..cRank..")"
+						spellName=spellName.."("..cRank..")"
                     elseif HealBot_Buff_Names[spellName] then
 						if not HealBot_Buff_Ranks[spellName] then 
 							HealBot_Buff_Ranks[spellName]={} 
 							HealBot_Buff_Ranks[spellName][0]=1
 						end
 						if not HealBot_Buff_Ranks[spellName][rank] then
-							HealBot_Buff_Ranks[spellName][rank]=strtrim(spellName).."("..cRank..")"
+							HealBot_Buff_Ranks[spellName][rank]=spellName.."("..cRank..")"
 							if rank>HealBot_Buff_Ranks[spellName][0] then
 								HealBot_Buff_Ranks[spellName][0]=rank
+							end
+						end
+                    else
+                        if not HealBot_Other_Ranks[spellName] then 
+                            HealBot_Other_Ranks[spellName]={}
+                            HealBot_Other_Ranks[spellName][0]=1
+						end
+						if not HealBot_Other_Ranks[spellName][rank] then
+							HealBot_Other_Ranks[spellName][rank]=spellName.."("..cRank..")"
+							if rank>HealBot_Other_Ranks[spellName][0] then
+								HealBot_Other_Ranks[spellName][0]=rank
 							end
 						end
                     end
@@ -123,9 +140,27 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
     end
 end
 
+local sOtherName=""
+local sOtherRank=0
+function HealBot_Init_Other_retRank(spellName, targetRank)
+    sOtherName=false
+    if HealBot_Other_Ranks[spellName] then
+        if not HealBot_Other_Ranks[spellName][targetRank] then
+            sOtherRank=HealBot_Other_Ranks[spellName][0]
+		else
+			sOtherRank=targetRank
+        end
+        sOtherName=HealBot_Other_Ranks[spellName][sOtherRank]
+    end
+    --HealBot_AddDebug("spellName="..spellName.." targetRank="..targetRank)
+    --HealBot_AddDebug("sBuffName="..sBuffName.." sBuffRank="..sBuffRank)
+    return sOtherName
+end
+
 local sBuffName=""
 local sBuffRank=0
 function HealBot_Init_Buffs_retRank(spellName, targetRank)
+    sBuffName=false
     if HealBot_Buff_Ranks[spellName] then
         if not HealBot_Buff_Ranks[spellName][targetRank] then
             sBuffRank=HealBot_Buff_Ranks[spellName][0]
@@ -142,6 +177,7 @@ end
 local sHealName=""
 local sHealRank=0
 function HealBot_Init_Spells_retRank(spellName, targetRank)
+    sHealName=false
     if HealBot_Spell_Ranks[spellName] then
         if not HealBot_Spell_Ranks[spellName][targetRank] then
             sHealRank=HealBot_Spell_Ranks[spellName][0]
@@ -153,6 +189,57 @@ function HealBot_Init_Spells_retRank(spellName, targetRank)
     --HealBot_AddDebug("spellName="..spellName.." targetRank="..targetRank)
     --HealBot_AddDebug("sHealName="..sHealName.." sHealRank="..sHealRank)
     return sHealName
+end
+
+local sRankName=""
+function HealBot_Init_retRank(spellName, targetRank)
+    if HealBot_Ranks[spellName] then
+        if HealBot_Init_Spells_retRank(spellName, targetRank) then
+            sRankName=HealBot_Init_Spells_retRank(spellName, targetRank)
+        elseif HealBot_Init_Buffs_retRank(spellName, targetRank) then
+            sRankName=HealBot_Init_Buffs_retRank(spellName, targetRank)
+        elseif HealBot_Init_Other_retRank(spellName, targetRank) then
+            sRankName=HealBot_Init_Other_retRank(spellName, targetRank)
+        else
+            sRankName=spellName
+        end
+    else
+        sRankName=spellName
+    end
+    return sRankName
+end
+
+function HealBot_InitValidateRanks()
+    for sName,maxRank in pairs(HealBot_Ranks) do
+        for x=1, maxRank do
+            if HealBot_Spell_Ranks[sName] then
+                if not HealBot_Spell_Ranks[sName][x] then
+                    HealBot_Spell_Ranks[sName][x]=sName..HEALBOT_RANK[x]
+                    if HealBot_Spell_Ranks[sName][0]<maxRank then
+                        HealBot_Spell_Ranks[sName][0]=maxRank
+                    end
+                end
+            elseif HealBot_Buff_Ranks[sName] then
+                if not HealBot_Buff_Ranks[sName][x] then
+                    HealBot_Buff_Ranks[sName][x]=sName..HEALBOT_RANK[x]
+                    if HealBot_Buff_Ranks[sName][0]<maxRank then
+                        HealBot_Buff_Ranks[sName][0]=maxRank
+                    end
+                end
+            elseif HealBot_Other_Ranks[sName] then
+                if not HealBot_Other_Ranks[sName][x] then
+                    HealBot_Other_Ranks[sName][x]=sName..HEALBOT_RANK[x]
+                    if HealBot_Other_Ranks[sName][0]<maxRank then
+                        HealBot_Other_Ranks[sName][0]=maxRank
+                    end
+                end
+            else
+                HealBot_Other_Ranks[sName]={}
+                HealBot_Other_Ranks[sName][0]=maxRank
+                HealBot_Other_Ranks[sName][x]=sName..HEALBOT_RANK[x]
+            end
+        end
+    end
 end
 
 function HealBot_Init_Spells_Defaults()
@@ -173,6 +260,15 @@ function HealBot_Init_Spells_Defaults()
     end
     for x,_ in pairs(HealBot_Spell_Ranks) do
         HealBot_Spell_Ranks[x]=nil
+    end
+    for x,_ in pairs(HealBot_Buff_Ranks) do
+        HealBot_Buff_Ranks[x]=nil
+    end
+    for x,_ in pairs(HealBot_Other_Ranks) do
+        HealBot_Other_Ranks[x]=nil
+    end
+    for x,_ in pairs(HealBot_Ranks) do
+        HealBot_Ranks[x]=nil
     end
     local nTabs=GetNumSpellTabs()
     local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
@@ -210,13 +306,10 @@ function HealBot_Init_Spells_Defaults()
                 end
             end
         end
-    end  
-    HealBot_Options_InitBuffList()
-    HealBot_Aura_InitData()
-    HealBot_setOptions_Timer(18)
-    HealBot_setOptions_Timer(15)
-    HealBot_setOptions_Timer(12)
-    HealBot_setOptions_Timer(11)  
+    end
+    if HEALBOT_GAME_VERSION<4 then 
+        HealBot_InitValidateRanks()
+    end
 end
 
 function HealBot_Init_SmartCast()
@@ -225,7 +318,11 @@ function HealBot_Init_SmartCast()
         if HealBot_Spell_IDs[HEALBOT_RESURRECTION] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
         if HealBot_Spell_IDs[HEALBOT_REVITALIZE] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REVITALIZE].name end
-        if HealBot_Spell_IDs[HEALBOT_REVIVE] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REVIVE].name end
+        if HealBot_Spell_IDs[HEALBOT_REVIVE] then 
+            SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REVIVE].name 
+        elseif HealBot_Spell_IDs[HEALBOT_REBIRTH] then 
+            SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REBIRTH].name
+        end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         if HealBot_Spell_IDs[HEALBOT_REAWAKEN] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REAWAKEN].name end
         if HealBot_Spell_IDs[HEALBOT_RESUSCITATE] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESUSCITATE].name end

@@ -39,6 +39,9 @@ function HealBot_Lang_ruRU()
     HEALBOT_ADDON                           = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;
     HEALBOT_LOADED                          = " загружен.";
 
+    HEALBOT_RANK   = {[1]="(Уровень 1)", [2]="(Уровень 2)", [3]="(Уровень 3)", [4]="(Уровень 4)", [5]="(Уровень 5)", [6]="(Уровень 6)", [7]="(Уровень 7)",
+                      [8]="(Уровень 8)", [9]="(Уровень 9)", [10]="(Уровень 10)", [11]="(Уровень 11)", [12]="(Уровень 12)", [13]="(Уровень 13)"}
+
     HEALBOT_ACTION_OPTIONS                  = "Настройки";
 
     HEALBOT_OPTIONS_TITLE                   = HEALBOT_ADDON;

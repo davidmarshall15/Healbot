@@ -164,7 +164,6 @@ function HealBot_Comms_CheckVer(userName, version)
             end
             HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
         end
-        --HealBot_setOptions_Timer(195)
     end
 end
 

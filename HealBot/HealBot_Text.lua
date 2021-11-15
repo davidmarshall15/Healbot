@@ -753,10 +753,10 @@ function HealBot_Text_setSeparateInHealsAbsorbs()
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][x]["INCHEALS"]==3 or 
            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][x]["INCABSORBS"]==3 then
             hbSeparateInHealsAbsorbs[x]=true
-            HealBot_setOptions_Timer(86)
+            HealBot_Timers_Set("SKINS","TextUpdateHealth")
         else
             if hbSeparateInHealsAbsorbs[x] then
-                HealBot_setOptions_Timer(88)
+                HealBot_Timers_Set("SKINS","ClearSeparateInHealsAbsorbs")
             end
             hbSeparateInHealsAbsorbs[x]=false
         end
@@ -764,7 +764,7 @@ function HealBot_Text_setSeparateInHealsAbsorbs()
             hbOverHeal[x]=true
         else
             if hbOverHeal[x] then
-                HealBot_setOptions_Timer(87)
+                HealBot_Timers_Set("SKINS","ClearOverHeals")
             end
             hbOverHeal[x]=false
         end
@@ -1196,6 +1196,7 @@ function HealBot_Text_UpdateNames()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_setNameText(xButton)
     end
+   -- HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
 end
 
 function HealBot_Text_UpdateHealth()
@@ -1223,6 +1224,7 @@ function HealBot_Text_UpdateHealth()
         xButton.text.health=""
         HealBot_Text_setHealthText(xButton)
     end
+   -- HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
 end
 
 function HealBot_Text_UpdateButton(button)

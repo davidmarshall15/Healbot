@@ -97,6 +97,7 @@ HealBot_Panel_luVars["TankHealth"]=0
 HealBot_Panel_luVars["cpUse"]=false
 HealBot_Panel_luVars["cpGroup"]=false
 HealBot_Panel_luVars["cpRaid"]=false
+HealBot_Panel_luVars["FocusGroups"]=1
 
 function HealBot_Panel_retLuVars(vName)
     return HealBot_Panel_luVars[vName]
@@ -332,14 +333,14 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil
     end 
-    HealBot_setOptions_Timer(185)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_AddBlackList(unit)
     xGUID=UnitGUID(unit)
     if xGUID then
         HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_setOptions_Timer(185)
+        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -370,7 +371,8 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             table.insert(HealBot_MyHealTargets,xGUID)
         end
     end
-    HealBot_setOptions_Timer(185)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
     --HealBot_nextRecalcParty(0)
 end
 
@@ -391,7 +393,8 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_setOptions_Timer(185)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
     --HealBot_nextRecalcParty(0)
 end
 
@@ -412,7 +415,8 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_setOptions_Timer(185)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
     --HealBot_nextRecalcParty(0)
 end
 
@@ -791,13 +795,13 @@ function HealBot_Panel_ToggleTestBars()
             HealBot_Action_HidePanel(j)
         end
         HealBot_Action_setLuVars("TestBarsOn", false)
-        HealBot_setLuVars("TestBarsOn", false)
+        HealBot_TestBarsState(false)
         HealBot_Options_setLuVars("TestBarsOn", false)
         HealBot_Skins_isTestBars(false)
         HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
-        HealBot_setLuVars("TestBarsOn", true)
+        HealBot_TestBarsState(true)
         HealBot_Options_setLuVars("TestBarsOn", true)
         HealBot_Skins_isTestBars(true)
         HealBot_setTestBars=true
@@ -2784,12 +2788,10 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
     else
         HealBot_Panel_PrePartyChanged(preCombat, changeType)
     end
-    if not HealBot_Data["UILOCK"] then 
-        local nMembers=(GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"])+14
-        if nMembers>HealBot_Globals.AutoCacheSize then    
-            HealBot_Globals.AutoCacheSize=nMembers
-        end
+    local nMembers=GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"]+14
+    if nMembers>HealBot_Globals.AutoCacheSize then    
+        HealBot_Globals.AutoCacheSize=nMembers
     end
-    HealBot_fastUpdateEveryFrame(1)
+    HealBot_fastUpdateEveryFrame()
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

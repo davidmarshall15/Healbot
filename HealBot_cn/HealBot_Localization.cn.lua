@@ -40,6 +40,9 @@ HEALBOT_HEALBOT     = "HealBot";
 HEALBOT_ADDON       = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;
 HEALBOT_LOADED      = " 已载入.";
 
+HEALBOT_RANK   = {[1]="(等级 1)", [2]="(等级 2)", [3]="(等级 3)", [4]="(等级 4)", [5]="(等级 5)", [6]="(等级 6)", [7]="(等级 7)",
+                  [8]="(等级 8)", [9]="(等级 9)", [10]="(等级 10)", [11]="(等级 11)", [12]="(等级 12)", [13]="(等级 13)"}
+                  
 HEALBOT_ACTION_OPTIONS        = "设置";
 
 HEALBOT_OPTIONS_TITLE         = "HEALBOT 目录";

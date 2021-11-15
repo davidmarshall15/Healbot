@@ -40,6 +40,9 @@ function HealBot_Lang_ptBR()
     HEALBOT_ADDON                           = HEALBOT_HEALBOT .. " " .. HEALBOT_VERSION;
     HEALBOT_LOADED                          = " carregado.";
 
+    HEALBOT_RANK   = {[1]="(Rango 1)", [2]="(Rango 2)", [3]="(Rango 3)", [4]="(Rango 4)", [5]="(Rango 5)", [6]="(Rango 6)", [7]="(Rango 7)",
+                      [8]="(Rango 8)", [9]="(Rango 9)", [10]="(Rango 10)", [11]="(Rango 11)", [12]="(Rango 12)", [13]="(Rango 13)"}
+
     HEALBOT_ACTION_OPTIONS                  = "Op\195\167\195\181es";
 
     HEALBOT_OPTIONS_TITLE                   = HEALBOT_ADDON;
