@@ -4,6 +4,7 @@ local HealBot_AlwaysEnabled={}
 local HealBot_pcClass={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local LSM = HealBot_Libs_LSM() --LibStub("LibSharedMedia-3.0") 
 local HealBot_Action_rCalls={}
+local HealBot_PluginUpdate_TimeToLive={}
 local _
 local HealBot_Action_luVars={}
 HealBot_Action_luVars["FrameMoving"]=false
@@ -860,13 +861,15 @@ function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
         button.text.nameupdate=true
         HealBot_Text_setNameTag(button)
         HealBot_Text_UpdateText(button)
-        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 1) end
+        button.status.hasres=1
+        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_WORD_RESURRECTION, ripHasResStart[button.guid]*1000, (ripHasResEnd[button.guid]+1.5)*1000, false)
     elseif state==2 then
         ripHasResEnd[button.guid]=nil
         button.text.nameupdate=true
         HealBot_Text_UpdateText(button)
-        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, 2) end
+        button.status.hasres=2
+        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_WORD_RESURRECTION, ripHadResStart[button.guid]*1000, ripHadResEnd[button.guid]*1000, true)
     else
         ripHadResEnd[button.guid]=nil
@@ -874,13 +877,19 @@ function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
         button.text.nameupdate=true
         HealBot_Text_setNameTag(button)
         HealBot_Text_UpdateText(button)
-        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+        button.status.hasres=false
+        if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_DEAD_LABEL)
     end
 end
 
 function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
     if button.frame<10 then
+        if HealBot_PluginUpdate_TimeToLive[button.guid] then
+            HealBot_AddDebug("Res Plugin Update for "..(UnitName(button.unit) or "_nil"),"Res",true)
+            HealBot_PluginUpdate_TimeToLive[button.guid]=false
+            HealBot_Plugin_TimeToLive_UnitUpdate(button, true)
+        end
         if button.status.dccheck<TimeNow then
             HealBot_CheckUnitStatus(button)
         elseif HealBot_Action_IsUnitDead(button) then
@@ -897,13 +906,15 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                     HealBot_Data["PALIVE"]=true
                     HealBot_Action_ResetActiveUnitStatus() 
                 end
-                if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+                button.status.hasres=false
+                if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
                 button.text.nameupdate=true
                 HealBot_Text_setNameTag(button)
                 HealBot_Text_UpdateText(button)
                 HealBot_RefreshUnit(button)
                 if button.frame<10 then HealBot_Check_UnitAura(button) end
                 HealBot_Aux_ClearResBar(button)
+                if button.player then HealBot_setLuVars("ActionPlayerDead", false) end
             elseif UnitHasIncomingResurrection(button.unit) or HealBot_MassRes() then
                 if not ripHasResEnd[button.guid] and not ripHadResEnd[button.guid] then
                     ripHasResStart[button.guid]=TimeNow
@@ -981,11 +992,13 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             end
             HealBot_Action_UpdateDebuffButton(button)
             --HealBot_Action_EmergBarCheck(button, true)
-            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button, false) end
+            button.status.hasres=false
+            if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
             HealBot_Aux_UpdateResBar(button, HEALBOT_DEAD_LABEL)
             if button.status.range<1 then
                 HealBot_Aux_UpdateOORBar(button)
             end
+            if button.player then HealBot_setLuVars("ActionPlayerDead", true) end
         elseif ripHasResEnd[button.id] then
             ripHasResEnd[button.id]=false
             button.text.nameupdate=true
@@ -1013,6 +1026,10 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
         HealBot_Aux_ClearResBar(button)
     end
       --HealBot_setCall("HealBot_Action_UpdateTheDeadButton")
+end
+
+function HealBot_Action_UpdatePlugin_TimeToLive(guid)
+    HealBot_PluginUpdate_TimeToLive[guid]=true
 end
 
 function HealBot_Action_IsUnitDead(button, guid)
@@ -2014,6 +2031,7 @@ local tPrepButton=""
 function HealBot_Action_PrepButton(button)
     erButton=HealBot_Emerg_Button[button.id]
     button.status.role=0
+    button.status.hasres=false
     button.group=1
     button.player=false
     button.isplayer=false
@@ -2158,7 +2176,7 @@ end
 
 local tryId,freeId,fromId,buttonId=1,0,0.0
 HealBot_ActiveButtons[0]=1
-HealBot_Action_luVars["ButtonHWM"]=1
+HealBot_Action_luVars["ButtonHWM"]=0
 function HealBot_Action_FreeId()
     tryId,freeId=HealBot_ActiveButtons[0],0
     if not HealBot_ActiveButtons[tryId] then
@@ -2242,27 +2260,31 @@ function HealBot_Action_CreateButton(hbCurFrame)
 end
 
 function HealBot_Action_ResetAllButtons()
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        local ghb=_G["HealBot_Action_HealUnit"..i]
-        ghb.reset=true
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            local ghb=_G["HealBot_Action_HealUnit"..i]
+            ghb.reset=true
+        end
     end
 end
 
 function HealBot_Action_ResetSkinAllButtons()
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        local ghb=_G["HealBot_Action_HealUnit"..i]
-        if ghb then
-            if HealBot_Action_luVars["resetSkin"] then ghb.skinreset=true end
-            if HealBot_Action_luVars["resetIcon"] then ghb.icon.reset=true end
-            if HealBot_Action_luVars["resetIndicator"] then ghb.indreset=true end
-            --ghb.reset=true
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            local ghb=_G["HealBot_Action_HealUnit"..i]
+            if ghb then
+                if HealBot_Action_luVars["resetSkin"] then ghb.skinreset=true end
+                if HealBot_Action_luVars["resetIcon"] then ghb.icon.reset=true end
+                if HealBot_Action_luVars["resetIndicator"] then ghb.indreset=true end
+                --ghb.reset=true
+            end
         end
+        HealBot_Panel_ResetHeaders()
+        HealBot_Timers_Set("SKINSSLOW","ResetAll")
+        HealBot_Action_luVars["resetSkin"]=false
+        HealBot_Action_luVars["resetIcon"]=false
+        HealBot_Action_luVars["resetIndicator"]=false
     end
-    HealBot_Panel_ResetHeaders()
-    HealBot_Timers_Set("SKINSSLOW","ResetAll")
-    HealBot_Action_luVars["resetSkin"]=false
-    HealBot_Action_luVars["resetIcon"]=false
-    HealBot_Action_luVars["resetIndicator"]=false
 end
 
 local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
@@ -3138,71 +3160,79 @@ function HealBot_Action_SetAllButtonAttribs(button,status)
 end
 
 function HealBot_Action_PrepSetEnabledAttribs()
-    local ghb,ehb
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        ghb=_G["HealBot_Action_HealUnit"..i]
-        if ghb then
-            ghb.attribs["Enabled"]={}
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        local ghb,ehb
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            ghb=_G["HealBot_Action_HealUnit"..i]
+            if ghb then
+                ghb.attribs["Enabled"]={}
+            end
+            ehb= _G["HealBot_Action_EmergUnit"..i]
+            if ehb then
+                ehb.attribs["Enabled"]={}
+            end
         end
-        ehb= _G["HealBot_Action_EmergUnit"..i]
-        if ehb then
-            ehb.attribs["Enabled"]={}
-        end
+        hbMaxMouseButtons["Enabled"]=15
+        HealBot_Timers_Set("INIT","SetEnabledAttribs")
     end
-    hbMaxMouseButtons["Enabled"]=15
-    HealBot_Timers_Set("INIT","SetEnabledAttribs")
 end
 
 function HealBot_Action_PrepSetEnemyAttribs()
-    local ghb,ehb
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        ghb=_G["HealBot_Action_HealUnit"..i]
-        if ghb then
-            ghb.attribs["Enemy"]={}
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        local ghb,ehb
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            ghb=_G["HealBot_Action_HealUnit"..i]
+            if ghb then
+                ghb.attribs["Enemy"]={}
+            end
+            ehb= _G["HealBot_Action_EmergUnit"..i]
+            if ehb then
+                ehb.attribs["Enemy"]={}
+            end
         end
-        ehb= _G["HealBot_Action_EmergUnit"..i]
-        if ehb then
-            ehb.attribs["Enemy"]={}
-        end
+        hbMaxMouseButtons["Enemy"]=15
+        HealBot_Timers_Set("INIT","SetEnemyAttribs")
     end
-    hbMaxMouseButtons["Enemy"]=15
-    HealBot_Timers_Set("INIT","SetEnemyAttribs")
 end
 
 function HealBot_Action_PrepSetEmergAttribs()
-    local ghb,ehb
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        ghb=_G["HealBot_Action_HealUnit"..i]
-        if ghb then
-            ghb.attribs["Emerg"]={}
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        local ghb,ehb
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            ghb=_G["HealBot_Action_HealUnit"..i]
+            if ghb then
+                ghb.attribs["Emerg"]={}
+            end
+            ehb= _G["HealBot_Action_EmergUnit"..i]
+            if ehb then
+                ehb.attribs["Emerg"]={}
+            end
         end
-        ehb= _G["HealBot_Action_EmergUnit"..i]
-        if ehb then
-            ehb.attribs["Emerg"]={}
-        end
+        hbMaxMouseButtons["Emerg"]=15
+        HealBot_Timers_Set("INIT","SetEmergAttribs")
     end
-    hbMaxMouseButtons["Emerg"]=15
-    HealBot_Timers_Set("INIT","SetEmergAttribs")
 end
 
 function HealBot_Action_PrepSetAllAttribs()
-    local ghb,ehb
-    for i=1,HealBot_Action_luVars["ButtonHWM"] do
-        ghb=_G["HealBot_Action_HealUnit"..i]
-        if ghb then
-            ghb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        local ghb,ehb
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            ghb=_G["HealBot_Action_HealUnit"..i]
+            if ghb then
+                ghb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
+            end
+            ehb= _G["HealBot_Action_EmergUnit"..i]
+            if ehb then
+                ehb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
+            end
         end
-        ehb= _G["HealBot_Action_EmergUnit"..i]
-        if ehb then
-            ehb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
-        end
+        hbMaxMouseButtons["Enemy"]=15
+        hbMaxMouseButtons["Enabled"]=15
+        hbMaxMouseButtons["Emerg"]=15
+        HealBot_Timers_Set("INIT","SetEnabledAttribs")
+        HealBot_Timers_Set("INIT","SetEnemyAttribs")
+        HealBot_Timers_Set("INIT","SetEmergAttribs")
     end
-    hbMaxMouseButtons["Enemy"]=15
-    hbMaxMouseButtons["Enabled"]=15
-    hbMaxMouseButtons["Emerg"]=15
-    HealBot_Timers_Set("INIT","SetEnabledAttribs")
-    HealBot_Timers_Set("INIT","SetEnemyAttribs")
-    HealBot_Timers_Set("INIT","SetEmergAttribs")
 end
 
 local function HealBot_Action_SetHealButtonAuraCols(button)
@@ -4843,6 +4873,7 @@ function HealBot_Action_ClearGUID(guid)
     ripHadResStart[guid]=nil
     ripHadResEnd[guid]=nil
     hbGuidData[guid]=nil
+    HealBot_PluginUpdate_TimeToLive[guid]=nil
     if HealBot_Action_luVars["pluginTimeToLive"] then HealBot_Plugin_TTLRemoveUnit(guid) end
     if HealBot_Action_luVars["pluginThreat"] then HealBot_Plugin_ThreatRemoveUnit(guid) end
     if HealBot_Action_luVars["pluginTimeToDie"] then HealBot_Plugin_TTDRemoveUnit(guid) end

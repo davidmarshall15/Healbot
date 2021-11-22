@@ -14,7 +14,6 @@ local HealBot_Timers={
                       ["PARTYSLOW"]={},
                       ["PLAYERSLOW"]={},
                       ["SKINSSLOW"]={},
-                      ["AURASLOW"]={},
                       ["LAST"]={},
                      }
 local HealBot_Timers_NoDups={
@@ -32,7 +31,6 @@ local HealBot_Timers_NoDups={
                       ["PARTYSLOW"]={},
                       ["PLAYERSLOW"]={},
                       ["SKINSSLOW"]={},
-                      ["AURASLOW"]={},
                       ["LAST"]={},
                      }
 local HealBot_Timers_NoCalls={}
@@ -384,11 +382,6 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateTextButtons"]=HealBot_Text_UpdateButtons,
                         ["setRaidTargetChecked"]=HealBot_setRaidTargetChecked,
                     },
-                    ["AURASLOW"]={
-                        ["CheckUnits"]=HealBot_AuraCheck,
-                        ["ClearAllBuffIcons"]=HealBot_Aura_RemoveAllBuffIcons,
-                        ["ClearAllDebuffIcons"]=HealBot_Aura_RemoveAllDebuffIcons,
-                    },
                     ["LAST"]={
                         ["DeleteMarkedButtons"]=HealBot_Action_DeleteMarkedButtons,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timer_nextRecalcEnemy,
@@ -481,9 +474,6 @@ function HealBot_Timers_Run()
     elseif HealBot_Timers["SKINSSLOW"][1] then
         HealBot_Timers_RunDelayedTimer("SKINSSLOW", HealBot_Timers["SKINSSLOW"][1],0.1)
         table.remove(HealBot_Timers["SKINSSLOW"],1)
-    elseif HealBot_Timers["AURASLOW"][1] then
-        HealBot_Timers_RunDelayedTimer("AURASLOW", HealBot_Timers["AURASLOW"][1],0.2)
-        table.remove(HealBot_Timers["AURASLOW"],1)
     elseif HealBot_Timers["LAST"][1] then
         HealBot_Timers_RunDelayedTimer("LAST", HealBot_Timers["LAST"][1], 0.25)
         table.remove(HealBot_Timers["LAST"],1)

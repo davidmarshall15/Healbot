@@ -99,6 +99,8 @@ HealBot_luVars["EventQueue"]=9
 HealBot_luVars["MaxFastQueue"]=12
 HealBot_luVars["fastQueueSwitch"]=0
 HealBot_luVars["PlayerCheck"]=0
+HealBot_luVars["PlayerDead"]=false
+HealBot_luVars["ActionPlayerDead"]=false
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -1878,7 +1880,7 @@ function HealBot_OnLoad(self)
 end
 
 function HealBot_Update_QueueUsage()
-    HealBot_luVars["MaxFastQueue"]=HealBot_luVars["EventQueue"]+HealBot_Globals.CPUUsage
+    HealBot_luVars["MaxFastQueue"]=HealBot_luVars["EventQueue"]+HealBot_Globals.CPUUsage+3
 end
 
 local hbLTfps={[1]="<20",[2]="<30",[3]="<40",[4]="<55",[5]="<70",[6]="<85",[7]="<100",
@@ -1914,8 +1916,6 @@ function HealBot_Update_CPUUsage()
         HealBot_Globals.CPUUsage=HealBot_Globals.CPUUsage+HealBot_luVars["cpuAdj"]
         if HealBot_Globals.CPUUsage<1 then 
             HealBot_Globals.CPUUsage=1
-        --elseif HealBot_Globals.CPUUsage>9 then
-        --    HealBot_Globals.CPUUsage=9
         end
     end
     if prevCPU~=HealBot_Globals.CPUUsage then
@@ -3320,6 +3320,7 @@ function HealBot_AfterCombatCleanup()
             HealBot_Timers_Set("LAST","RefreshPartyNextRecalcEnemy")
         end
         HealBot_Timers_Set("PARTYSLOW","TargetFocusUpdate")
+        if HealBot_luVars["pluginThreat"] then HealBot_Plugin_Threat_TogglePanel() end
     end
 end
 
@@ -3327,7 +3328,8 @@ function HealBot_Not_Fighting()
     if not InCombatLockdown() then
         if HealBot_Data["UILOCK"] then
             HealBot_Data["UILOCK"]=false
-            HealBot_Aura_SetAuraCheckFlags()
+            HealBot_luVars["CheckAuraFlags"]=true
+            HealBot_PlayerCheck()
             HealBot_Timers_Set("INIT","HealthAlertLevel")
             if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
                 HealBot_Action_RefreshTooltip()
@@ -3808,6 +3810,12 @@ function HealBot_Update_Fast10()
     if HealBot_luVars["MaskAuraCheckDebuff"] and HealBot_luVars["MaskAuraCheckDebuff"]<=TimeNow then
         HealBot_luVars["MaskAuraCheckDebuff"]=false
         HealBot_CheckAllActiveDebuffs()
+    elseif HealBot_luVars["CheckAllActiveDebuffs"] then
+        HealBot_luVars["CheckAllActiveDebuffs"]=false
+        HealBot_CheckAllActiveDebuffs()
+    elseif HealBot_luVars["CheckAllActiveBuffs"] then
+        HealBot_luVars["CheckAllActiveBuffs"]=false
+        HealBot_CheckAllActiveBuffs()
     end
     if HealBot_luVars["slowUpdateStall"]>HealBot_luVars["slowUpdateMaxStall"] then 
         HealBot_IncSlowUpdate() 
@@ -4533,7 +4541,8 @@ function HealBot_OnEvent_PlayerRegenDisabled()
     HealBot_Data["UILOCK"]=true
     HealBot_luVars["RegenDisabled"]=true
     HealBot_Timers_RunInitTimers()
-    HealBot_Aura_SetAuraCheckFlags()
+    HealBot_luVars["CheckAuraFlags"]=true
+    HealBot_PlayerCheck()
     if HealBot_RefreshTypes[0] then
         HealBot_RefreshTypes[1]=true
         HealBot_RefreshTypes[2]=true
@@ -4644,6 +4653,10 @@ end
 
 function HealBot_PlayerCheck()
     HealBot_luVars["PlayerCheck"]=TimeNow+4
+    if HealBot_luVars["PlayerDead"]~=HealBot_luVars["ActionPlayerDead"] then
+        HealBot_luVars["PlayerDead"]=HealBot_luVars["ActionPlayerDead"]
+        HealBot_luVars["CheckAuraFlags"]=true
+    end
     if HealBot_Config_Buffs.NoAuraWhenRested then
         if HealBot_luVars["isResting"] then
             if not IsResting() then
@@ -4666,7 +4679,7 @@ function HealBot_PlayerCheck()
     end
     if not HealBot_Config_Cures.DebuffWatchWhenMounted then
         if HealBot_luVars["debuffMounted"] then
-            if not IsMounted() then
+            if HealBot_Data["UILOCK"] or not IsMounted() then
                 HealBot_luVars["debuffMounted"]=false
                 HealBot_luVars["CheckAuraFlags"]=true
             end
@@ -4688,7 +4701,7 @@ function HealBot_PlayerCheck()
     end
     if HealBot_luVars["CheckAuraFlags"] then
         HealBot_luVars["CheckAuraFlags"]=false
-        HealBot_Aura_SetAuraCheckFlags() 
+        HealBot_Aura_SetAuraCheckFlags(HealBot_luVars["PlayerDead"], HealBot_luVars["debuffMounted"], HealBot_luVars["buffMounted"], HealBot_luVars["onTaxi"], HealBot_luVars["isResting"]) 
     end
 end
 
@@ -5196,9 +5209,9 @@ function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spe
     -- Only registered for the Player!
     --if button.player then
         if (HealBot_Config_Cures.IgnoreOnCooldownDebuffs and HealBot_Options_retIsDebuffSpell(spellID)) then
-            HealBot_CheckAllActiveDebuffs()
+            HealBot_luVars["CheckAllActiveDebuffs"]=true
         elseif HealBot_Aura_IsBuffSpell(spellID) then  
-            HealBot_CheckAllActiveBuffs()
+            HealBot_luVars["CheckAllActiveBuffs"]=true
         end
     --end
 end
