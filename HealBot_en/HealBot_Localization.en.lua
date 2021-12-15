@@ -555,6 +555,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HOTTEXTDURATION         = "Duration"
     HEALBOT_OPTIONS_ICONSCALE               = "Icon Scale"
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
+    HEALBOT_OPTIONS_ICONSPACER              = "Icon Spacer"
     HEALBOT_OPTIONS_EMERGBUTTONUSE          = "Use the Emergency Bar"
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
@@ -637,6 +638,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_INDICATORS          = "Indicators"
     HEALBOT_OPTIONS_TAB_AGGROINDICATORS     = "Aggro indicators"
     HEALBOT_OPTIONS_TAB_LOWMANAINDICATORS   = "Low mana indicators"
+    HEALBOT_OPTIONS_TAB_SELFCASTINDICATORS  = "Self cast icon indicators"
     HEALBOT_OPTIONS_TAB_POWERINDICATORS     = "Power indicators"
     HEALBOT_OPTIONS_TAB_WARNING             = "Warning"
     HEALBOT_OPTIONS_SKINDEFAULTFOR          = "Skin default for"
@@ -724,6 +726,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_MAINASSISTON               = "Main Assist included with Tanks"
 
     HEALBOT_OPTIONS_SELFCASTS               = "Self casts only"
+    HEALBOT_OPTIONS_SELFINDICATOR           = "Self indicator"
     HEALBOT_OPTIONS_HOTSHOWICON             = "Show icon"
     HEALBOT_OPTIONS_ALLSPELLS               = "Buffs / HoTs"
     HEALBOT_OPTIONS_BUFFNAME                = "Buff Name"
@@ -1032,6 +1035,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LOWMANAINDICATOR5       = "*25% / **50% / ***75%"
     HEALBOT_OPTIONS_LOWMANAINDICATOR6       = "*30% / **60% / ***90%"
 
+    HEALBOT_OPTIONS_SELFCASTIND             = "Self cast"
     HEALBOT_OPTION_IGNORE_AURA_RESTED       = "Ignore aura events when resting"
 
     HEALBOT_WORD_ENABLE                     = "Enable"
@@ -1097,8 +1101,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ABOUT_AUTHORD                  = "Strife"
     HEALBOT_ABOUT_CATH                     = "Discord:"
     HEALBOT_ABOUT_CATD                     = "discord.gg/gwa6rdCeZ4"
-    HEALBOT_ABOUT_CREDITH                  = "Credits:"
-    HEALBOT_ABOUT_CREDITD                  = "Acirac, Kubik, Von, Aldetal, Brezza, Moonlight Han Xing, CTShammy, Hermis, Ariá, Snaomi"  -- Anyone taking on translations (if required), feel free to add yourself here.
+    HEALBOT_ABOUT_CREDITH                  = "Credits"
     HEALBOT_ABOUT_LOCALH                   = "Localizations:"
     HEALBOT_ABOUT_LOCALD                   = "deDE, enUK, esES, esMX, frFR, huHU, itIT, koKR, poBR, ruRU, zhCN, zhTW"
     HEALBOT_ABOUT_FAQH                     = "Frequently Asked Questions"
@@ -1402,21 +1405,19 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESET_COLOUR           = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
-    HEALBOT_SUPPORTERS_PEOPLE = {  
-                                 [01] = "Mythagos",  -- Mythago
-                                 [02] = "SUNET",
-                                 [03] = "killerdavy",
-                                 [04] = "zathrain",
-                                 [05] = "Pandamonia",
-                                 [06] = "Daydream",
-                                 [07] = "Mirandinn",
-                                 [08] = "jarmfield",
-                                 [09] = "piAwd",
-                                 [10] = "Slayybelle",
-                                 [11] = "Belcantor",
-                                 [12] = "Kamerth",
-                                 [13] = "dbsvok",
-                                }
+    HEALBOT_CREDITS_PEOPLE = {  
+                              [01] = "Acirac",
+                              [02] = "CTShammy",
+                              [03] = "Kubik",
+                              [04] = "Von",
+                              [05] = "Aldetal",
+                              [06] = "Brezza",
+                              [07] = "Moonlight",
+                              [08] = "Han Xing",
+                              [09] = "Hermis",
+                              [10] = "Ariá",
+                              [11] = "Snaomi",
+                             }
 end
 
 function HealBot_Lang_InitVars()

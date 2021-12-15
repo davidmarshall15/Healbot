@@ -69,7 +69,7 @@ function HealBot_Comms_About()
 
     linenum=1
     for x,v in pairs(hbcommver) do
-        if linenum<9 then
+        if linenum<21 then
             HealBot_Comms_Print_IncHealsSum(x,v,0,linenum)
             linenum=linenum+1
         end
@@ -88,27 +88,27 @@ end
 
 local sPeople={}
 function HealBot_Comms_Print_Supports()
-    if not HEALBOT_SUPPORTERS_PEOPLE[1] then return end
+    if not HEALBOT_CREDITS_PEOPLE[1] then return end
     local b=0
     for x,_ in pairs(sPeople) do
         sPeople[x]=false
     end 
     for x=1,20 do
         local s=HealBot_Globals.LastSupporter+x
-        if not HEALBOT_SUPPORTERS_PEOPLE[s] then
+        if not HEALBOT_CREDITS_PEOPLE[s] then
             b=b+1
             s=b
-            if not HEALBOT_SUPPORTERS_PEOPLE[s] then s=1 end
+            if not HEALBOT_CREDITS_PEOPLE[s] then s=1 end
         end
-        if not sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]] then
-            HealBot_Options_SetLabel("HBIncH"..x.."Supporter",HEALBOT_SUPPORTERS_PEOPLE[s])
-            sPeople[HEALBOT_SUPPORTERS_PEOPLE[s]]=true
+        if not sPeople[HEALBOT_CREDITS_PEOPLE[s]] then
+            HealBot_Options_SetLabel("HBIncH"..x.."Supporter",HEALBOT_CREDITS_PEOPLE[s])
+            sPeople[HEALBOT_CREDITS_PEOPLE[s]]=true
         end
     end
-    if HEALBOT_SUPPORTERS_PEOPLE[21] then
+    if HEALBOT_CREDITS_PEOPLE[21] then
         HealBot_Globals.LastSupporter=HealBot_Globals.LastSupporter+1
         local s=HealBot_Globals.LastSupporter+1
-        if not HEALBOT_SUPPORTERS_PEOPLE[s] then
+        if not HEALBOT_CREDITS_PEOPLE[s] then
             HealBot_Globals.LastSupporter=0
         end
     end

@@ -438,7 +438,7 @@ function HealBot_Text_TextNameColours(button)
                 atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCR"]
                 atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCG"]
                 atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCB"]
-            elseif not button.player and button.status.range>0 and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["RIP"] then
+            elseif button.status.range>0 and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["RIP"] then
                 atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCR"]
                 atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCG"]
                 atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDCB"]
@@ -929,7 +929,7 @@ end
 local prevTag=""
 function HealBot_Text_setNameTag(button)
     prevTag=button.text.tag
-    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if UnitExists(button.unit) and button.status.current<HealBot_Unit_Status["RESERVED"] then
         if UnitIsFriend("player",button.unit) then
             if button.status.current==HealBot_Unit_Status["DC"] then
                 button.text.tag=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGDC"];
@@ -958,7 +958,7 @@ end
 
 local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen,vHealthTextConcatIndex="","","",0,0,0
 function HealBot_Text_setNameText(button)
-    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+    if UnitExists(button.unit) and button.status.current<HealBot_Unit_Status["RESERVED"] then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] and UnitClass(button.unit) then
             if button.text.tag then
                 tConcat[1]=button.text.tag

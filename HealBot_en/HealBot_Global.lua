@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.1.0.12";
+﻿HEALBOT_VERSION_SC = "9.1.5.5";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -608,7 +608,7 @@ function HealBot_globalVars()
     HEALBOT_UNENDING_BREATH                 = 5697 --GetSpellInfo(5697) or "--Unending Breath"
     HEALBOT_UNENDING_RESOLVE                = 104773 --GetSpellInfo(104773) or "--Unending Resolve"
     HEALBOT_SOUL_LEECH                      = 108366 --GetSpellInfo(108370) or "--Soul Leech"
-    HBC_PHASE_SHIFT                         = GetSpellInfo(4511) or "Phase Shift"
+    HBC_PHASE_SHIFT                         = 4511 --GetSpellInfo(4511) or "Phase Shift"
     HBC_DETECT_LESSER_INVISIBILITY          = 132
     HBC_DETECT_INVISIBILITY                 = 2970
     HBC_DETECT_GREATER_INVISIBILITY         = 11743

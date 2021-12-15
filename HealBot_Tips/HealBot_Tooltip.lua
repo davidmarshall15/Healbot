@@ -76,6 +76,21 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
     return sName, 0, 1
 end
 
+function HealBot_Tooltip_GCDV1()
+    return 1.5
+end
+
+local gcdDUR=0
+function HealBot_Tooltip_GCDV4()
+    _, gcdDUR = GetSpellCooldown(61304) -- GCD
+    return gcdDUR
+end
+
+local HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV1
+if HEALBOT_GAME_VERSION>3 then
+    HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV4
+end
+
 function HealBot_Tooltip_setspellName(button, spellName)
     if spellName and string.len(spellName)>0 then
         local validSpellName=spellName
@@ -88,12 +103,7 @@ function HealBot_Tooltip_setspellName(button, spellName)
                     local z, x, _ = GetSpellCooldown(spellName);
                     local gcd=0
                     if HealBot_Globals.Tooltip_IgnoreGCD then
-                        if HEALBOT_GAME_VERSION>3 then
-                            local gcdSTART, gcdDUR = GetSpellCooldown(61304) -- GCD
-                            gcd=gcdDUR
-                        else
-                            gcd=1.5
-                        end
+                        gcd=HealBot_Tooltip_GCD()
                     end
                     if HealBot_Globals.Tooltip_ShowCD and x and x>gcd then 
                         z = HealBot_Comm_round(x-(GetTime()-z),0)

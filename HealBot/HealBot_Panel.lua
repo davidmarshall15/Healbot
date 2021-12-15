@@ -124,7 +124,7 @@ function HealBot_Panel_setCP(cpType, useCP)
     else
         HealBot_Panel_luVars["cpRaid"]=useCP
     end
-    HealBot_nextRecalcParty(6)
+    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
 end
 
 function HealBot_Panel_isSpecialUnit(unit)
@@ -373,7 +373,7 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
     end
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_nextRecalcParty(0)
+    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit, perm)
@@ -395,7 +395,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
     --HealBot_Panel_buildDataStore(true, true)
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_nextRecalcParty(0)
+    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -417,7 +417,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
     --HealBot_Panel_buildDataStore(true, true)
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_nextRecalcParty(0)
+    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)
@@ -1362,7 +1362,17 @@ function HealBot_Panel_TestBarsOn()
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en and hbCurrentFrame<6 then
             if HealBot_Globals.TestBars["PETS"]>0 and healGroups[gl]["STATE"] then
                 HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
-                xRaidBars=xRaidBars-HealBot_Globals.TestBars["TARGETS"]
+                xRaidBars=xRaidBars-HealBot_Globals.TestBars["PETS"]
+            end
+        elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en and hbCurrentFrame<6 then
+            if healGroups[gl]["STATE"] then
+                HealBot_Panel_testAddButton(HEALBOT_OPTIONS_TARGETHEALS,HEALBOT_OPTIONS_TARGETHEALS,1,1)
+                xRaidBars=xRaidBars-1
+            end
+        elseif healGroups[gl]["NAME"]==HEALBOT_FOCUS_en and hbCurrentFrame<6 then
+            if healGroups[gl]["STATE"] then
+                HealBot_Panel_testAddButton(HEALBOT_FOCUS,HEALBOT_FOCUS,1,1)
+                xRaidBars=xRaidBars-1
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
             if healGroups[gl]["STATE"] and xRaidBars>0 then
@@ -1437,7 +1447,7 @@ function HealBot_Panel_TestBarsOn()
     
     HealBot_Panel_SetupBars(true)
     
-    if healGroups[10]["STATE"] then
+    if healGroups[10]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then
         hbCurrentFrame=9
         for x,_ in pairs(HealBot_Action_HealButtons) do
             HealBot_Action_HealButtons[x]=nil;
@@ -1448,7 +1458,7 @@ function HealBot_Panel_TestBarsOn()
         HealBot_Action_HidePanel(9)
     end
     
-    if healGroups[9]["STATE"] then
+    if healGroups[9]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]==8 then
         hbCurrentFrame=8
         for x,_ in pairs(HealBot_Action_HealButtons) do
             HealBot_Action_HealButtons[x]=nil;
@@ -2664,8 +2674,29 @@ function HealBot_Panel_RaidUnitGUID(guid)
     return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] 
 end
 
+local ruxUnit, ruxButton, rupButton
+function HealBot_Panel_RaidUnitButton(guid)
+    ruxUnit=HealBot_Panel_RaidUnitGUID(guid)
+    if ruxUnit then
+        _, ruxButton, rupButton = HealBot_UnitID(ruxUnit)
+        return ruxButton, rupButton
+    else
+        return nil
+    end
+end
+
 function HealBot_Panel_AllUnitGUID(guid)
     return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] or hbPanel_dataExtraGUIDs[guid]
+end
+
+function HealBot_Panel_AllUnitButton(guid)
+    ruxUnit=HealBot_Panel_AllUnitGUID(guid)
+    if ruxUnit then
+        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit, true)
+        return ruxButton, rupButton
+    else
+        return nil
+    end
 end
 
 function HealBot_Panel_RaidUnitName(uName)
