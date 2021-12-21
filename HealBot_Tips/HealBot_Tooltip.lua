@@ -760,10 +760,6 @@ function HealBot_Action_DoRefreshTargetTooltip(button)
 end
 
 function HealBot_Action_RefreshTooltip()
-    if HealBot_Tooltip_luVars["doInit"] then
-        HealBot_Tooltip_luVars["doInit"]=false
-        HealBot_Tooltip_InitFont()
-    end
     HealBot_Action_DoRefreshTooltip()
 end
 
@@ -1000,10 +996,6 @@ function HealBot_Tooltip_Options_Show(noLines)
     if HealBot_Globals.UseGameTooltip then
         GameTooltip:Show();
     else
-        if HealBot_Tooltip_luVars["doInit"] then
-            HealBot_Tooltip_luVars["doInit"]=false
-            HealBot_Tooltip_InitFont()
-        end
         local height = 20 
         local width = 0
         for x = 1, noLines do

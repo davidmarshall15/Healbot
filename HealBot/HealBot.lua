@@ -15,7 +15,6 @@ local HealBot_UnitInVehicle={}
 local HealBot_Player_ButtonCache1={}
 local HealBot_Player_ButtonCache2={}
 local HealBot_Player_ButtonCache3={}
-local HealBot_Player_ButtonCache4={}
 local HealBot_BuffQueue={}
 local HealBot_BuffQueueList={}
 local HealBot_DebuffQueue={}
@@ -43,8 +42,9 @@ local HealBot_ClearIdQueue={}
 HealBot_AuxAssigns["CastBar"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_AuxAssigns["OORBar"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local HealBot_luVars={}
-HealBot_luVars["FPS"]={[1]={[1]=60,[2]=60,[0]=60},
-                       [2]={[1]=60,[2]=60,[0]=60},}
+HealBot_luVars["FPS"]={[1]={[1]=60,[2]=60,[3]=60,[0]=60},
+                       [2]={[1]=60,[2]=60,[3]=60,[0]=60},
+                       [3]={[1]=60,[2]=60,[3]=60,[0]=60},}
 HealBot_luVars["qaFRNext"]=TimeNow+45
 HealBot_luVars["IsSolo"]=true
 HealBot_luVars["MaskAuraDCheck"]=TimeNow
@@ -64,7 +64,7 @@ HealBot_luVars["VehicleType"]=1
 HealBot_luVars["PetType"]=2
 HealBot_luVars["TankUnit"]="x"
 HealBot_luVars["healthFactor"]=1
-HealBot_luVars["NextTipTime"]=TimeNow
+HealBot_luVars["NextTipUpdate"]=TimeNow
 HealBot_luVars["TipUpdateFreq"]=1
 HealBot_luVars["EnableErrorSpeech"]=false
 HealBot_luVars["EnableErrorText"]=false
@@ -190,9 +190,6 @@ function HealBot_ClearPlayerButtonCache()
     end
     for x,_ in pairs(HealBot_Player_ButtonCache3) do
         HealBot_Player_ButtonCache3[x]=nil
-    end
-    for x,_ in pairs(HealBot_Player_ButtonCache4) do
-        HealBot_Player_ButtonCache4[x]=nil
     end
     for x,_ in pairs(HealBot_SlowUpdateQueue) do
         HealBot_SlowUpdateQueue[x]=nil
@@ -497,7 +494,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="se4") then
         HealBot_luVars["EnableErrorText"]=true
     elseif (HBcmd=="" or HBcmd=="o" or HBcmd=="options" or HBcmd=="opt" or HBcmd=="config" or HBcmd=="cfg") then
-        if HealBot_Version_Target() then HealBot_TogglePanel(HealBot_Options, true); end
+        HealBot_TogglePanel(HealBot_Options, true)
     elseif (HBcmd=="d" or HBcmd=="defaults") then
         HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults, true);
     elseif (HBcmd=="ui") then
@@ -766,7 +763,8 @@ function HealBot_SlashCmd(cmd)
         end
     elseif (HBcmd=="zzz") then
         HealBot_AddDebug("Timers: Fast="..HealBot_Timers["fastUpdateFreq"].." Tip="..HealBot_luVars["TipUpdateFreq"].." Queue="..HealBot_luVars["MaxFastQueue"])
-
+        local zzx=HealBot_Data_SkinsDefaults("Frames", "Bars", "Bars", "Visibility", "ALERTIC") or "_nil"
+        HealBot_AddDebug("Skins Defaults="..zzx)
     --    _,xButton,pButton = HealBot_UnitID("player")
     --    local button=xButton or pButton
     else
@@ -1873,20 +1871,23 @@ function HealBot_IncHeals_ClearAll()
 end
 
 function HealBot_OnLoad(self)
-    HealBot:RegisterEvent("VARIABLES_LOADED");
-    HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
-    HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
-    HealBot:RegisterEvent("GET_ITEM_INFO_RECEIVED");
-    SLASH_HEALBOT1 = "/healbot";
-    SLASH_HEALBOT2 = "/hb";
-    SlashCmdList["HEALBOT"] = function(msg)
-        HealBot_SlashCmd(msg);
+    if not HealBot_Version_Target() then
+        HealBot_IncorrentVersion()
+    else
+        HealBot:RegisterEvent("VARIABLES_LOADED");
+        HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
+        HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
+        SLASH_HEALBOT1 = "/healbot";
+        SLASH_HEALBOT2 = "/hb";
+        SlashCmdList["HEALBOT"] = function(msg)
+            HealBot_SlashCmd(msg);
+        end
     end
       --HealBot_setCall("HealBot_OnLoad")
 end
 
 function HealBot_Update_QueueUsage()
-    HealBot_luVars["MaxFastQueue"]=HealBot_luVars["EventQueue"]+HealBot_Globals.CPUUsage+3
+    HealBot_luVars["MaxFastQueue"]=HealBot_luVars["EventQueue"]+HealBot_Globals.CPUUsage
 end
 
 local hbLTfps={[1]="<20",[2]="<30",[3]="<40",[4]="<55",[5]="<70",[6]="<85",[7]="<100",
@@ -1894,7 +1895,7 @@ local hbLTfps={[1]="<20",[2]="<30",[3]="<40",[4]="<55",[5]="<70",[6]="<85",[7]="
 HealBot_luVars["cpuAdj"]=0
 function HealBot_Update_CPUUsage()
     local prevCPU=HealBot_Globals.CPUUsage or 0
-    HealBot_Timers["FPS"]=HealBot_Comm_round((HealBot_luVars["FPS"][1][0]+HealBot_luVars["FPS"][2][0])/2, 2) 
+    HealBot_Timers["FPS"]=HealBot_Comm_round((HealBot_luVars["FPS"][1][0]+HealBot_luVars["FPS"][2][0]+HealBot_luVars["FPS"][3][0])/3, 2) 
     if HealBot_luVars["CPUProfilerOn"] then
         if HealBot_Timers["FPS"]<20 then
             HealBot_Globals.CPUUsage=1
@@ -1927,6 +1928,7 @@ function HealBot_Update_CPUUsage()
         else
             HealBot_Globals.CPUUsage=9
         end
+        HealBot_Globals.FPS=HealBot_Timers["FPS"]
         HealBot_Globals.CPUUsage=HealBot_Globals.CPUUsage+HealBot_luVars["cpuAdj"]
         if HealBot_Globals.CPUUsage<1 then 
             HealBot_Globals.CPUUsage=1
@@ -1950,11 +1952,11 @@ local TimersCPU={[1]=0.2,      -- <   20
                  [7]=0.0555,   -- <  100
                  [8]=0.05,     -- <  125
                  [9]=0.0454,   -- >= 125
-                [10]=0.0416,   -- >= 125 + Perf Plugin (7)
-                [11]=0.04,     -- >= 125 + Perf Plugin (8)
-                [12]=0.0384,   -- >= 125 + Perf Plugin (9)
-                [13]=0.0370,   -- >= 125 + Perf Plugin (0)
-                [14]=0.0357,   -- >= 125 + Perf Plugin (11)
+                [10]=0.0434,   -- >= 125 + Perf Plugin (7)
+                [11]=0.0416,   -- >= 125 + Perf Plugin (8)
+                [12]=0.04,     -- >= 125 + Perf Plugin (9)
+                [13]=0.0384,   -- >= 125 + Perf Plugin (0)
+                [14]=0.0370,   -- >= 125 + Perf Plugin (11)
                 }
 
 local fpsRow,fpsCol=1,1
@@ -1962,16 +1964,17 @@ function HealBot_Set_FPS()
     if HealBot_luVars["qaFRNext"]<TimeNow then
         local fpsCurRate=GetFramerate()
         if fpsCurRate>150 then fpsCurRate=150 end
-        if fpsCurRate<10 then fpsCurRate=10 end
+        if fpsCurRate<18 then fpsCurRate=18 end
         HealBot_luVars["FPS"][fpsRow][fpsCol]=fpsCurRate
         fpsCol=fpsCol+1
-        if fpsCol>2 then 
+        if fpsCol>3 then 
             fpsCol=1 
             fpsRow=fpsRow+1
-            if fpsRow>2 then fpsRow=1 end
-        elseif fpsCol==2 then
+            if fpsRow>3 then fpsRow=1 end
+        elseif fpsCol==3 then
             HealBot_luVars["FPS"][fpsRow][0]=HealBot_Comm_round((HealBot_luVars["FPS"][fpsRow][1]
-                                                                +HealBot_luVars["FPS"][fpsRow][2])/2, 2)
+                                                                +HealBot_luVars["FPS"][fpsRow][2]
+                                                                +HealBot_luVars["FPS"][fpsRow][3])/3, 2)
             HealBot_Update_CPUUsage()
         end
     end
@@ -2174,6 +2177,8 @@ function HealBot_Update_Skins(forceCheck)
                             else
                                 Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][i]["OORONBAR"]=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Skins[x]][i]["OORONBAR"]-2
                             end
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HLTHTXTANCHOR"]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"] or 2
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"]=nil
                         end
                         if Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]<12 then
                             Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]=Healbot_Config_Skins.General[Healbot_Config_Skins.Skins[x]]["FLUIDFREQ"]+5
@@ -2202,51 +2207,62 @@ function HealBot_Update_Skins(forceCheck)
                 Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][10]["POWERCNT"]=false
                 Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Skins[x]][10]["LOWMANA"]=1
             elseif tonumber(tMinor)<2 then
-                if tonumber(tPatch)<1 and tonumber(tHealbot)<8 then
-                    for f=1,10 do
-                        if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f] then
-                            local useEmerg=Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]["USE"]
-                            for k,v in pairs(Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]) do
-                                if k~="USE" then
-                                    if not HealBot_Config_Spells.EmergKeyCombo[k] then
-                                        HealBot_Config_Spells.EmergKeyCombo[k]=v
+                if tonumber(tPatch)<1 then
+                    if tonumber(tHealbot)<8 then
+                        for f=1,10 do
+                            if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f] then
+                                local useEmerg=Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]["USE"]
+                                for k,v in pairs(Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]) do
+                                    if k~="USE" then
+                                        if not HealBot_Config_Spells.EmergKeyCombo[k] then
+                                            HealBot_Config_Spells.EmergKeyCombo[k]=v
+                                        end
                                     end
                                 end
+                                Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]={}
+                                Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]["USE"]=useEmerg
                             end
-                            Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]={}
-                            Healbot_Config_Skins.Spells[Healbot_Config_Skins.Skins[x]][f]["USE"]=useEmerg
-                        end
-                        if Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]][f] then
-                            for k,v in pairs(Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]][f]) do
-                                if not HealBot_Config_Spells.EmergSpellTarget[k] then
-                                    HealBot_Config_Spells.EmergSpellTarget[k]=v
+                            if Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]][f] then
+                                for k,v in pairs(Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]][f]) do
+                                    if not HealBot_Config_Spells.EmergSpellTarget[k] then
+                                        HealBot_Config_Spells.EmergSpellTarget[k]=v
+                                    end
                                 end
+                                Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]]=nil
                             end
-                            Healbot_Config_Skins.SpellsTarget[Healbot_Config_Skins.Skins[x]]=nil
-                        end
-                        if Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]][f] then
-                            for k,v in pairs(Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]][f]) do
-                                if not HealBot_Config_Spells.EmergSpellTrinket1[k] then
-                                    HealBot_Config_Spells.EmergSpellTrinket1[k]=v
+                            if Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]][f] then
+                                for k,v in pairs(Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]][f]) do
+                                    if not HealBot_Config_Spells.EmergSpellTrinket1[k] then
+                                        HealBot_Config_Spells.EmergSpellTrinket1[k]=v
+                                    end
                                 end
+                                Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]]=nil
                             end
-                            Healbot_Config_Skins.SpellsTrinket1[Healbot_Config_Skins.Skins[x]]=nil
-                        end
-                        if Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]][f] then
-                            for k,v in pairs(Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]][f]) do
-                                if not HealBot_Config_Spells.EmergSpellTrinket2[k] then
-                                    HealBot_Config_Spells.EmergSpellTrinket2[k]=v
+                            if Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]][f] then
+                                for k,v in pairs(Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]][f]) do
+                                    if not HealBot_Config_Spells.EmergSpellTrinket2[k] then
+                                        HealBot_Config_Spells.EmergSpellTrinket2[k]=v
+                                    end
                                 end
+                                Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]]=nil
                             end
-                            Healbot_Config_Skins.SpellsTrinket2[Healbot_Config_Skins.Skins[x]]=nil
-                        end
-                        if Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]][f] then
-                            for k,v in pairs(Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]][f]) do
-                                if not HealBot_Config_Spells.EmergAvoidBlueCursor[k] then
-                                    HealBot_Config_Spells.EmergAvoidBlueCursor[k]=v
+                            if Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]] and Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]][f] then
+                                for k,v in pairs(Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]][f]) do
+                                    if not HealBot_Config_Spells.EmergAvoidBlueCursor[k] then
+                                        HealBot_Config_Spells.EmergAvoidBlueCursor[k]=v
+                                    end
                                 end
+                                Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]]=nil
                             end
-                            Healbot_Config_Skins.SpellsAvoidBlueCursor[Healbot_Config_Skins.Skins[x]]=nil
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HLTHTXTANCHOR"]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"] or 2
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"]=nil
+                        end
+                    end
+                else
+                    if tonumber(tHealbot)<6 then
+                        for f=1,10 do
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HLTHTXTANCHOR"]=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"] or 2
+                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["HALIGN"]=nil
                         end
                     end
                 end
@@ -2420,7 +2436,7 @@ function HealBot_setTooltipUpdateInterval()
     elseif HealBot_Globals.Tooltip_ShowCD then
         HealBot_luVars["TipUpdateFreq"]=0.1
     else
-        HealBot_luVars["TipUpdateFreq"]=1
+        HealBot_luVars["TipUpdateFreq"]=5
     end
       --HealBot_setCall("HealBot_setTooltipUpdateInterval")
 end
@@ -2446,113 +2462,115 @@ function HealBot_IncorrentVersion()
 end
 
 function HealBot_OnEvent_VariablesLoaded(self)
-    if not HealBot_Version_Target() then
-        HealBot_IncorrentVersion()
-    else
-        for i = 1, #HealBot_Default_Textures do
-            LSM:Register("statusbar", HealBot_Default_Textures[i].name, HealBot_Default_Textures[i].file)
-        end
-        for i = 1, #HealBot_Default_Sounds do
-            LSM:Register("sound", HealBot_Default_Sounds[i].name, HealBot_Default_Sounds[i].file)
-        end
-        for i = 1, #HealBot_Default_Fonts do
-            LSM:Register("font", HealBot_Default_Fonts[i].name, HealBot_Default_Fonts[i].file)
-        end
-        HealBot_globalVars()
-        HealBot_Lang_InitVars()
-        HealBot_Data_InitVars()
-        table.foreach(HealBot_ConfigDefaults, function (key,val)
-            if HealBot_Config[key]==nil then
-                HealBot_Config[key] = val;
-            end
-        end);
-        table.foreach(HealBot_GlobalsDefaults, function (key,val)
-            if HealBot_Globals[key]==nil then
-                HealBot_Globals[key] = val;
-            end
-        end);
-        table.foreach(HealBot_Config_SkinsDefaults, function (key,val)
-            if Healbot_Config_Skins[key]==nil then
-                Healbot_Config_Skins[key] = val;
-            end
-        end);
-        table.foreach(HealBot_Config_SpellsDefaults, function (key,val)
-            if HealBot_Config_Spells[key]==nil then
-                HealBot_Config_Spells[key] = val;
-            end
-        end);
-        table.foreach(HealBot_Config_BuffsDefaults, function (key,val)
-            if HealBot_Config_Buffs[key]==nil then
-                HealBot_Config_Buffs[key] = val;
-            end
-        end);
-        table.foreach(HealBot_Config_CuresDefaults, function (key,val)
-            if HealBot_Config_Cures[key]==nil then
-                HealBot_Config_Cures[key] = val;
-            end
-        end);
-        HealBot_Options_setClassEn()
-        local pClass, pClassEN=UnitClass("player")
-        HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
-        HealBot_Data["PLEVEL"]=UnitLevel("player")
-        local pRace, pRaceEN=UnitRace("player")
-        HealBot_Data["PRACE_EN"]=pRaceEN
-        HealBot_Data["PNAME"]=UnitName("player")
-        if UnitIsDeadOrGhost("player") and not UnitIsFeignDeath("player") then 
-            HealBot_Data["PALIVE"]=false
-        else
-            HealBot_Data["PALIVE"]=true
-        end
-        HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
-        HealBot_ResSpells={[GetSpellInfo(HEALBOT_MASS_RESURRECTION) or "x"]=2,
-                           [GetSpellInfo(HEALBOT_ABSOLUTION) or "x"]=2,
-                           [GetSpellInfo(HEALBOT_ANCESTRAL_VISION) or "x"]=2,
-                           [GetSpellInfo(HEALBOT_REAWAKEN) or "x"]=2,
-                           [GetSpellInfo(HEALBOT_REVITALIZE) or "x"]=2,
-                           [GetSpellInfo(HEALBOT_RESURRECTION) or "x"]=1,
-                           [GetSpellInfo(HEALBOT_ANCESTRALSPIRIT) or "x"]=1,
-                           [GetSpellInfo(HEALBOT_REBIRTH) or "x"]=1,
-                           [GetSpellInfo(HEALBOT_REDEMPTION) or "x"]=1,
-                           [GetSpellInfo(HEALBOT_REVIVE) or "x"]=1,
-                           [GetSpellInfo(HEALBOT_RESUSCITATE) or "x"]=1}
-        HealBot_Action_InitFrames()
-        HealBot_TooltipInit();
-        HealBot_Update_Skins()
-        HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
-        
-        if HealBot_Globals.AutoCacheSize>20 and (HealBot_Globals.AutoCacheTime or 0)<TimeNow then
-            HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
-            HealBot_Globals.AutoCacheTime=TimeNow+(60*60*20)
-        end
-        
-        if HealBot_Globals.localLang then
-            HealBot_Options_Lang(HealBot_Globals.localLang, false)
-        else
-            HealBot_Options_Lang(GetLocale(), false)
-        end
-        
-        if HealBot_Config.Profile==2 then
-            HealBot_Options_hbProfile_setClass()
-        end
-        C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
-        HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
-        HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
-        HealBot:RegisterEvent("PLAYER_LEAVING_WORLD");
-        HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
-        HealBot_Options_ShowBarsPanelVisibilityFocus(false)
-        HealBot_Options_ShowBarsPanelVisibilityTargets(false)
-        HealBot_Aura_SetIconUpdateInterval()
-        HealBot_setTooltipUpdateInterval()
-        --HealBot_Skins_ResetSkin("init")
-        if HealBot_Globals.CatchAltDebuffIDs["init"] then
-            HealBot_Reset_AutoUpdateDebuffIDs()
-        end
-        HealBot_Load("VarsLoaded")
-        HealBot_Comms_PerfLevel(hbLTfps[HealBot_Globals.CPUUsage])
+    HealBot:RegisterEvent("GET_ITEM_INFO_RECEIVED");
+    for i = 1, #HealBot_Default_Textures do
+        LSM:Register("statusbar", HealBot_Default_Textures[i].name, HealBot_Default_Textures[i].file)
     end
+    for i = 1, #HealBot_Default_Sounds do
+        LSM:Register("sound", HealBot_Default_Sounds[i].name, HealBot_Default_Sounds[i].file)
+    end
+    for i = 1, #HealBot_Default_Fonts do
+        LSM:Register("font", HealBot_Default_Fonts[i].name, HealBot_Default_Fonts[i].file)
+    end
+    HealBot_globalVars()
+    HealBot_Lang_InitVars()
+    HealBot_Data_InitVars()
+    table.foreach(HealBot_ConfigDefaults, function (key,val)
+        if HealBot_Config[key]==nil then
+            HealBot_Config[key] = val;
+        end
+    end);
+    table.foreach(HealBot_GlobalsDefaults, function (key,val)
+        if HealBot_Globals[key]==nil then
+            HealBot_Globals[key] = val;
+        end
+    end);
+    table.foreach(HealBot_Config_SkinsDefaults, function (key,val)
+        if Healbot_Config_Skins[key]==nil then
+            Healbot_Config_Skins[key] = val;
+        end
+    end);
+    table.foreach(HealBot_Config_SpellsDefaults, function (key,val)
+        if HealBot_Config_Spells[key]==nil then
+            HealBot_Config_Spells[key] = val;
+        end
+    end);
+    table.foreach(HealBot_Config_BuffsDefaults, function (key,val)
+        if HealBot_Config_Buffs[key]==nil then
+            HealBot_Config_Buffs[key] = val;
+        end
+    end);
+    table.foreach(HealBot_Config_CuresDefaults, function (key,val)
+        if HealBot_Config_Cures[key]==nil then
+            HealBot_Config_Cures[key] = val;
+        end
+    end);
+    for x=1,3 do
+        for z=0,3 do
+            HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
+        end
+    end
+    HealBot_Options_setClassEn()
+    local pClass, pClassEN=UnitClass("player")
+    HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
+    HealBot_Data["PLEVEL"]=UnitLevel("player")
+    local pRace, pRaceEN=UnitRace("player")
+    HealBot_Data["PRACE_EN"]=pRaceEN
+    HealBot_Data["PNAME"]=UnitName("player")
+    if UnitIsDeadOrGhost("player") and not UnitIsFeignDeath("player") then 
+        HealBot_Data["PALIVE"]=false
+    else
+        HealBot_Data["PALIVE"]=true
+    end
+    HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
+    HealBot_ResSpells={[GetSpellInfo(HEALBOT_MASS_RESURRECTION) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_ABSOLUTION) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_ANCESTRAL_VISION) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_REAWAKEN) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_REVITALIZE) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_RESURRECTION) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_ANCESTRALSPIRIT) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_REBIRTH) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_REDEMPTION) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_REVIVE) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_RESUSCITATE) or "x"]=1}
+    HealBot_Action_InitFrames()
+    HealBot_TooltipInit();
+    HealBot_Update_Skins()
+    HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
+    
+    if HealBot_Globals.AutoCacheSize>20 and (HealBot_Globals.AutoCacheTime or 0)<TimeNow then
+        HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
+        HealBot_Globals.AutoCacheTime=TimeNow+(60*60*20)
+    end
+    
+    if HealBot_Globals.localLang then
+        HealBot_Options_Lang(HealBot_Globals.localLang, false)
+    else
+        HealBot_Options_Lang(GetLocale(), false)
+    end
+    
+    if HealBot_Config.Profile==2 then
+        HealBot_Options_hbProfile_setClass()
+    end
+    C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
+    HealBot_Vers[HealBot_Data["PNAME"]]=HEALBOT_VERSION
+    HealBot:RegisterEvent("PLAYER_ENTERING_WORLD");
+    HealBot:RegisterEvent("PLAYER_LEAVING_WORLD");
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
+    HealBot_Options_ShowBarsPanelVisibilityFocus(false)
+    HealBot_Options_ShowBarsPanelVisibilityTargets(false)
+    HealBot_Aura_SetIconUpdateInterval()
+    HealBot_setTooltipUpdateInterval()
+    --HealBot_Skins_ResetSkin("init")
+    if HealBot_Globals.CatchAltDebuffIDs["init"] then
+        HealBot_Reset_AutoUpdateDebuffIDs()
+    end
+    HealBot_Load("VarsLoaded")
+    HealBot_Comms_PerfLevel(hbLTfps[HealBot_Globals.CPUUsage])
       --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
 
@@ -3766,6 +3784,9 @@ function HealBot_Update_Fast02()
     for _,xButton in pairs(HealBot_Vehicle_Button) do
         HealBot_UnitUpdateButton(xButton)
     end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_UnitUpdateButton(xButton)
+    end
 end
 
 function HealBot_Update_Fast03()
@@ -3787,30 +3808,18 @@ function HealBot_Update_Fast05()
 end
 
 function HealBot_Update_Fast06()
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_UnitUpdateButton(xButton)
-    end
-end
-
-function HealBot_Update_Fast07()
     for _,xButton in pairs(HealBot_Player_ButtonCache3) do
         HealBot_UnitUpdateButton(xButton)
     end
 end
 
-function HealBot_Update_Fast08()
+function HealBot_Update_Fast07()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_EnemyUpdateButton(xButton, false)
     end
 end
 
-function HealBot_Update_Fast09()
-    for _,xButton in pairs(HealBot_Player_ButtonCache4) do
-        HealBot_UnitUpdateButton(xButton)
-    end
-end
-
-function HealBot_Update_Fast10()
+function HealBot_Update_Fast08()
     if HealBot_luVars["slowUpdateStall"]>HealBot_luVars["slowUpdateMaxStall"] then 
         HealBot_IncSlowUpdate() 
     else
@@ -3820,7 +3829,7 @@ function HealBot_Update_Fast10()
     HealBot_luVars["fastSwitch"]=0
 end
 
-function HealBot_Update_Fast11()
+function HealBot_Update_Fast09()
     HealBot_luVars["fastSwitch"]=0
 end
 
@@ -3836,16 +3845,19 @@ end
 function HealBot_Update_Fast99()
     if HealBot_luVars["MovingFrame"]>0 then
         HealBot_Action_CheckForStickyFrame(HealBot_luVars["MovingFrame"],false)
-    elseif HealBot_Data["TIPBUTTON"] then 
-        HealBot_Action_RefreshTooltip()
-    elseif HealBot_Data["TIPICON"] then
-        HealBot_Tooltip_UpdateIconTooltip()
+    elseif HealBot_luVars["NextTipUpdate"]<TimeNow then
+        HealBot_luVars["NextTipUpdate"]=TimeNow+HealBot_luVars["TipUpdateFreq"]
+        if HealBot_Data["TIPBUTTON"] then 
+            HealBot_Action_RefreshTooltip()
+        elseif HealBot_Data["TIPICON"] then
+            HealBot_Tooltip_UpdateIconTooltip()
+        end
     end
 end
 
 local hbFastFuncs={[1]=HealBot_Update_Fast01,[2]=HealBot_Update_Fast02,[3]=HealBot_Update_Fast03,[4]=HealBot_Update_Fast04,
                    [5]=HealBot_Update_Fast05,[6]=HealBot_Update_Fast06,[7]=HealBot_Update_Fast07,[8]=HealBot_Update_Fast08,
-                   [9]=HealBot_Update_Fast09,[10]=HealBot_Update_Fast10,[11]=HealBot_Update_Fast11}
+                   [9]=HealBot_Update_Fast09}
 function HealBot_Update_Fast()
     HealBot_luVars["fastSwitch"]=HealBot_luVars["fastSwitch"]+1
     hbFastFuncs[HealBot_luVars["fastSwitch"]]()
@@ -3869,10 +3881,8 @@ function HealBot_Update_ResetRefreshLists()
             HealBot_Player_ButtonCache1[xUnit]=xButton
         elseif HealBot_luVars["UnitRefresh"]==2 then
             HealBot_Player_ButtonCache2[xUnit]=xButton
-        elseif HealBot_luVars["UnitRefresh"]==3 then
-            HealBot_Player_ButtonCache3[xUnit]=xButton
         else
-            HealBot_Player_ButtonCache4[xUnit]=xButton
+            HealBot_Player_ButtonCache3[xUnit]=xButton
             HealBot_luVars["UnitRefresh"]=0
         end
         HealBot_UnitSlowUpdateIds(xButton)
@@ -5101,15 +5111,11 @@ HealBot_luVars["massResAltUnit"]="-nil"
 function HealBot_UnitSummonsUpdate(button, state)
     if button.status.summons and not state then
         button.status.summons=false
-        button.text.nameupdate=true
         HealBot_Text_setNameTag(button)
-        HealBot_Text_UpdateText(button)
         HealBot_Aux_ClearSummonsBar(button)
     elseif not button.status.summons then
         button.status.summons=true
-        button.text.nameupdate=true
         HealBot_Text_setNameTag(button)
-        HealBot_Text_UpdateText(button)
         HealBot_Aux_UpdateSummonsBar(button, HEALBOT_WORD_SUMMONS, TimeNow*1000, (TimeNow+120)*1000, true)
     end
 end
@@ -5449,6 +5455,7 @@ function HealBot_UpdateUnitRange(button, doRefresh)
                 HealBot_AbsorbsEnemyUpdate(button)
                 if HealBot_Action_IsUnitDead(button) then
                     button.text.nameupdate=true
+                    button.text.tagupdate=true
                     HealBot_Text_UpdateText(button)
                 else
                     HealBot_Text_setNameTag(button)
@@ -5459,6 +5466,9 @@ function HealBot_UpdateUnitRange(button, doRefresh)
                     elseif button.status.unittype<9 then
                         HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
                     end
+                end
+                if button.mouseover and HealBot_Data["TIPBUTTON"] then 
+                    HealBot_Action_RefreshTooltip() 
                 end
             end
             if doRefresh then
@@ -5486,24 +5496,30 @@ function HealBot_UpdateUnitRange(button, doRefresh)
         --HealBot_setCall("HealBot_UpdateUnitRange")
 end
 
-local uRange=0
+local uRange,sRange=0,0
 function HealBot_UnitInRange(unit, spellName) -- added by Diacono of Ursin
     uRange=0
-    --spellName=(spellName or "x")
     if not HealBot_UnitInPhase(unit) then 
         uRange = -2
     elseif not UnitIsVisible(unit) then 
         uRange = -1
-    elseif IsSpellInRange((spellName or "x"), unit) then
-        uRange = IsSpellInRange(spellName, unit)
-    elseif IsItemInRange((spellName or "x"), unit) then
-        uRange = IsItemInRange(spellName, unit)
     elseif CheckInteractDistance(unit, 4) then
         uRange = 1
-    elseif UnitInRange(unit) then
-        uRange = 1
     else
-        uRange = 0
+        if spellName then
+            sRange=IsSpellInRange(spellName, unit) or IsItemInRange(spellName, unit)
+        else
+            sRange=false
+        end
+        if type(sRange)~="number" then
+            if sRange or UnitInRange(unit) then
+                uRange = 1
+            else
+                uRange = 0
+            end
+        else
+            uRange = sRange
+        end
     end
     --HealBot_setCall("HealBot_UnitInRange")
     return uRange

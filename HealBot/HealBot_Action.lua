@@ -1028,6 +1028,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
         elseif ripHasResEnd[button.id] then
             ripHasResEnd[button.id]=false
             button.text.nameupdate=true
+            button.text.tagupdate=true
             HealBot_Text_setNameTag(button)
             HealBot_Text_UpdateText(button)
             HealBot_Aux_ClearResBar(button)
@@ -1048,6 +1049,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
     elseif ripHasResEnd[button.id] then
         ripHasResEnd[button.id]=false
         button.text.nameupdate=true
+        button.text.tagupdate=true
         HealBot_Text_setNameTag(button)
         HealBot_Text_UpdateText(button)
         HealBot_Aux_ClearResBar(button)
@@ -1835,6 +1837,8 @@ function HealBot_Action_InitButton(button)
     end
     button.gref.txt["text"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text"]
     button.gref.txt["text2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text2"]
+    button.gref.txt["text3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text3"]
+    button.gref.txt["text4"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text4"]
     button.gref.icon["Icontm1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm1"]
     button.gref.icon["Icontm2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm2"]
     button.gref.icon["Icontm3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7Icontm3"]
@@ -2075,7 +2079,6 @@ function HealBot_Action_PrepButton(button)
     button.text.healthcomplete="100"
     button.text.inheallen=0
     button.text.overheallen=0
-    button.text.aggrolen=0
     button.text.name=""
     button.text.inheal=""
     button.text.overheal=""
@@ -2092,12 +2095,17 @@ function HealBot_Action_PrepButton(button)
     button.text.hg=1
     button.text.hb=1
     button.text.ha=1
+    button.text.sr=1
+    button.text.sg=1
+    button.text.sb=1
+    button.text.sa=1
     button.text.ar=0
     button.text.ag=0
     button.text.ab=0
     button.text.aa=0
     button.text.classtrim="XXXX"
     button.text.nameupdate=true
+    button.text.tagupdate=true
     button.text.healthupdate=true
     button.spec=" "
     button.specupdate=true
@@ -2108,6 +2116,8 @@ function HealBot_Action_PrepButton(button)
     button.gref["Absorb"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref.txt["text"]:SetText("")
     button.gref.txt["text2"]:SetText("")
+    button.gref.txt["text3"]:SetText("")
+    button.gref.txt["text4"]:SetText("")
     for x=1,9 do
         button.aux[x]["FLUID"]=-1
         button.aux[x]["TIMED"]=-1

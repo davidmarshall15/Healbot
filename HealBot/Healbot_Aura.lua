@@ -1287,6 +1287,9 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         else
             HealBot_Aux_ClearAuraBuffBars(button)
         end
+        if button.mouseover and HealBot_Data["TIPBUTTON"] then 
+            HealBot_Action_RefreshTooltip() 
+        end
         if buffWarnings and (not HealBot_Aura_WarningFilter[button.unit][buffName] or HealBot_Aura_WarningFilter[button.unit][buffName]<TimeNow) then
             if button.aura.buff.missingbuff and HealBot_BuffWatch[button.aura.buff.name] then
                 HealBot_Aura_WarningFilter[button.unit][buffName]=TimeNow+2
@@ -1306,7 +1309,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
 
-local curDebuffRange,curDebuffSpell=0
+local curDebuffRange,curDebuffSpell=0,""
 function HealBot_Aura_DebuffWarnings(button, debuffName, force)
     if button.aura.debuff.name~=debuffName or force then
         button.aura.debuff.name=debuffName
@@ -1321,6 +1324,9 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
             HealBot_Aux_UpdateAuraDebuffBars(button) 
         else
             HealBot_Aux_ClearAuraDebuffBars(button)
+        end
+        if button.mouseover and HealBot_Data["TIPBUTTON"] then 
+            HealBot_Action_RefreshTooltip() 
         end
         if debuffWarning and (not HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name] or HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]<TimeNow) then
             HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=HealBot_UnitDebuffIcons[button.id][51]["expirationTime"]
