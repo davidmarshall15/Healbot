@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.1.5.6.1";
+﻿HEALBOT_VERSION_SC = "9.1.5.7.2";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 

@@ -102,7 +102,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"]>1 then
             HealBot_Text_setNameText(button)
         end
-        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXTPCT"] then
+        if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGAGGROONLYTIP"] then
             HealBot_Text_setAggroText(button)
         end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
@@ -123,18 +123,23 @@ end
 
 function HealBot_Aggro_UpdateAggroText()
     for _,xButton in pairs(HealBot_Unit_Button) do
+        xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton, true)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
+        xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton, true)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
+        xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton, true)
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
+        xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton, true)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
+        xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton, true)
     end
 end

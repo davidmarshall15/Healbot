@@ -1256,7 +1256,7 @@ function HealBot_Skins_ResetAll()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Skins_ResetSkin("bar",xButton)
     end
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+    HealBot_Timers_nextRecalcAll()
 end
 
 function HealBot_Skins_Check_Skin(SkinName, fromImport)
@@ -1523,11 +1523,16 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
                 Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWBARSPCT"]=false
             end
         end
-        if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"]==nil then 
-            if Healbot_Config_Skins.Aggro and Healbot_Config_Skins.Aggro[SkinName] then 
-                Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"]=Healbot_Config_Skins.Aggro[SkinName]["SHOWTEXTPCT"] or true
+        if Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]==nil then
+            if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"] or Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"]==false then
+                if Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"] then
+                    Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]=false
+                else
+                    Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]=true
+                end
+                Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"]=nil
             else
-                Healbot_Config_Skins.BarAggro[SkinName][gl]["SHOWTEXTPCT"]=true
+                Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]=true
             end
         end
         if not Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERT"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERT"]=2 end
@@ -1764,8 +1769,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarText[SkinName][gl]["SEPARATEFORMAT"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["SEPARATEFORMAT"]=3 end
         if Healbot_Config_Skins.BarText[SkinName][gl]["SEPARATECOL"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["SEPARATECOL"]=1 end
         if Healbot_Config_Skins.BarText[SkinName][gl]["HLTHTXTANCHOR"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["HLTHTXTANCHOR"]=1 end
-        if Healbot_Config_Skins.BarText[SkinName][gl]["STATETXTANCHOR"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["STATETXTANCHOR"]=4 end
-        if Healbot_Config_Skins.BarText[SkinName][gl]["AGGROTXTANCHOR"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["AGGROTXTANCHOR"]=4 end
+        if Healbot_Config_Skins.BarText[SkinName][gl]["STATETXTANCHOR"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["STATETXTANCHOR"]=1 end
+        if Healbot_Config_Skins.BarText[SkinName][gl]["AGGROTXTANCHOR"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["AGGROTXTANCHOR"]=3 end
         if Healbot_Config_Skins.BarText[SkinName][gl]["NUMFORMAT1"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["NUMFORMAT1"]=1 end
         if Healbot_Config_Skins.BarText[SkinName][gl]["NUMFORMAT2"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["NUMFORMAT2"]=1 end
         if Healbot_Config_Skins.BarText[SkinName][gl]["OUTLINE"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["OUTLINE"]=1 end
@@ -2200,6 +2205,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]=false end
     if Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=10 end
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
+    if Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]==nil then Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]=true end
     if not Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"] then Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["FGDIMMING"] then Healbot_Config_Skins.General[SkinName]["FGDIMMING"]=2.5 end
     if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then Healbot_Config_Skins.General[SkinName]["OFREQ"]=0.07 end

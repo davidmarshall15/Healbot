@@ -1580,7 +1580,7 @@ end
 
 local vSubSortUnit,vSubSortGUID,vExists,vDup,vRole="","",false,false,3
 function HealBot_Panel_SubSort(doSubSort,unitType, preCombat)
-    if doSubSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then
+    if doSubSort then --and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then
         table.sort(subunits,function (a,b)
             if not suborder[a] or not suborder[b] then
                 return false
@@ -1735,11 +1735,23 @@ function HealBot_Panel_insSort(unit, mainSort)
         if mainSort then 
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
                 order[unit] = HealBot_Panel_sortOrder(unit, Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"], mainSort)
+            else
+                if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] and UnitIsUnit(unit, "player") then
+                    order[unit] = "!"
+                else
+                    order[unit] = unit
+                end
             end
             table.insert(units,unit)
         else
             if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"]<6 then
                 suborder[unit] = HealBot_Panel_sortOrder(unit, Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBORDER"], mainSort)
+            else
+                if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["SUBPF"] and UnitIsUnit(unit, "player") then
+                    suborder[unit] = "!"
+                else
+                    suborder[unit] = unit
+                end
             end
             table.insert(subunits,unit)
         end
@@ -1790,7 +1802,7 @@ end
 local vMainSortKey=""
 function HealBot_Panel_MainSort(doMainSort,unitType, preCombat)
     if #units>0 then
-        if doMainSort and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
+        if doMainSort then --and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
             --vMainSortIndex=0
             table.sort(units,function (a,b)
                 if order[a]<order[b] then return true end
@@ -2109,13 +2121,13 @@ function HealBot_Panel_raidHeals(preCombat)
         end
     end
 
-    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
+    --if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]<6 then
         table.sort(units,function (a,b)
             if order[a]<order[b] then return true end
             if order[a]>order[b] then return false end
             return a<b
         end)
-    end
+    --end
     vRaidPrevSort,vRaidHeadSort,vRaidSubSort,vRaidShowHeader="","","init",false
     if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 or
            Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 or

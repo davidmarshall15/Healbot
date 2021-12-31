@@ -1270,6 +1270,9 @@ end
 
 function HealBot_Action_setButtonManaBarCol(button)
     button.mana.r,button.mana.g,button.mana.b=HealBot_Action_GetManaBarCol(button)
+    if button.player and HealBot_Data["TIPUSE"] then
+        HealBot_Tooltip_setPlayerPowerCols(button.mana.r,button.mana.g,button.mana.b)
+    end
 end
 
 function HealBot_Action_hasPowerCounter(frame)
@@ -2242,7 +2245,7 @@ function HealBot_Action_ResetSkinAllButtons()
             end
         end
         HealBot_Panel_ResetHeaders()
-        HealBot_Timers_Set("SKINSSLOW","ResetAll")
+        HealBot_Timers_Set("SKINS","ResetAll")
         HealBot_Action_luVars["resetSkin"]=false
         HealBot_Action_luVars["resetIcon"]=false
         HealBot_Action_luVars["resetIndicator"]=false

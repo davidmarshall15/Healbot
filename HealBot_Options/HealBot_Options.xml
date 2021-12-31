@@ -12799,6 +12799,20 @@
                             </Layer>
                           </Layers>
                             <Frames>
+                              <CheckButton name="HealBot_Options_StateOnlyTooltip" inherits="OptionsCheckButtonTemplate">
+                                <Anchors>
+                                  <Anchor point="TOP">
+                                    <Offset>
+                                      <AbsDimension x="-65" y="-32" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_StateOnlyTooltip_OnClick(self)</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSTATEONLYTIP",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSTATEONLYTIP",false)</OnLeave>
+                                </Scripts>
+                              </CheckButton>
                               <EditBox name="HealBot_Options_DisconnectedTag" inherits="HealBot_Options_EditBoxTemplate">
                                 <Size>
                                   <AbsDimension x="120" y="20"/>
@@ -12806,7 +12820,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="80" y="-50" />
+                                      <AbsDimension x="80" y="-90" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12901,11 +12915,25 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTTAGSUM",false)</OnLeave>
                                 </Scripts>
                               </EditBox>
+                              <CheckButton name="HealBot_Options_StateUseNameFontString" inherits="OptionsCheckButtonTemplate">
+                                <Anchors>
+                                  <Anchor point="TOP" relativeTo="HealBot_Options_ResTag" relativePoint="BOTTOM">
+                                    <Offset>
+                                      <AbsDimension x="-58" y="-20" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_StateUseNameFontString_OnClick(self)</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSTATENAMEFONT",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSTATENAMEFONT",false)</OnLeave>
+                                </Scripts>
+                              </CheckButton>
                               <Frame name="HealBot_Options_BarStateTextPosition" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOP" relativeTo="HealBot_Options_ResTag" relativePoint="BOTTOM">
                                     <Offset>
-                                      <AbsDimension x="20" y="-40" />
+                                      <AbsDimension x="20" y="-58" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12935,7 +12963,7 @@
                                 <Anchors>
                                   <Anchor point="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="35" y="190" />
+                                      <AbsDimension x="35" y="158" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12952,7 +12980,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_StateFontName" relativePoint="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-75" />
+                                      <AbsDimension x="0" y="-58" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12986,7 +13014,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_StateFontHeight" relativePoint="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-75" />
+                                      <AbsDimension x="0" y="-58" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -13524,23 +13552,23 @@
                             <Frames>
                               <CheckButton name="HealBot_Options_AggroTxtPct" inherits="OptionsCheckButtonTemplate">
                                 <Anchors>
-                                  <Anchor point="TOPLEFT">
+                                  <Anchor point="TOP">
                                     <Offset>
-                                      <AbsDimension x="95" y="-50"/>
+                                      <AbsDimension x="-65" y="-32" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
                                 <Scripts>
                                   <OnClick>HealBot_Options_AggroTxtPct_OnClick(self)</OnClick>
-                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",true)</OnEnter>
-                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROPCTTXT",false)</OnLeave>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTSTATEONLYTIP",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSTATEONLYTIP",false)</OnLeave>
                                 </Scripts>
                               </CheckButton>
                               <Frame name="HealBot_Options_BarHealthNumFormatAggro" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroTxtPct" relativePoint="TOPRIGHT">
+                                  <Anchor point="TOP">
                                     <Offset>
-                                      <AbsDimension x="150" y="0" />
+                                      <AbsDimension x="0" y="-90" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -13567,7 +13595,7 @@
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
-                                      <AbsDimension x="34" y="-140" />
+                                      <AbsDimension x="0" y="-180" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -13575,9 +13603,9 @@
                                   <Layer level="OVERLAY">
                                     <FontString name="HealBot_BarAggroTextPositiontxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_AGGROTEXTANCHOR">
                                       <Anchors>
-                                        <Anchor point="RIGHT" relativeTo="HealBot_Options_BarAggroTextPosition" relativePoint="LEFT">
+                                        <Anchor point="BOTTOM" relativeTo="HealBot_Options_BarAggroTextPosition" relativePoint="TOP">
                                           <Offset>
-                                            <AbsDimension x="10" y="2"/>
+                                            <AbsDimension x="0" y="0"/>
                                           </Offset>
                                         </Anchor>
                                       </Anchors>
@@ -13597,7 +13625,7 @@
                                 <Anchors>
                                   <Anchor point="BOTTOMLEFT">
                                     <Offset>
-                                      <AbsDimension x="35" y="190" />
+                                      <AbsDimension x="35" y="158" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -13614,7 +13642,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroFontName" relativePoint="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-75" />
+                                      <AbsDimension x="0" y="-58" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -13648,7 +13676,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroFontHeight" relativePoint="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="0" y="-75" />
+                                      <AbsDimension x="0" y="-58" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
