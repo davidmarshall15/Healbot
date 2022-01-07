@@ -256,6 +256,8 @@ function HealBot_Timers_DoEnteringWorld()
     HealBot_Timers_Set("LAST","UpdateEmergBars")
     HealBot_Timers_Set("LAST","ReadyPlayerCheck")
     HealBot_Timers_Set("LAST","CheckDC")
+    HealBot_Timers_Set("LAST","TextResetState")
+    HealBot_Timers_Set("LAST","TextUpdateNames")
 end
 
 function HealBot_Timers_EnteringWorld()

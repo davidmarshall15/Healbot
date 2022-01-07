@@ -217,14 +217,12 @@ function HealBot_Options_InitFonts(id)
     local g=_G["UsedToInitFonts"]
     g:SetText("i"..id)
     g:SetFont(LSM:Fetch('font',fonts[id]),10)
-    g:SetText("o"..id)
-    g:SetFont(LSM:Fetch('font',fonts[id]),10)
     if id<#fonts then
-        C_Timer.After((0.1+(HealBot_Options_luVars["InitFontsRuns"]/8)), function() HealBot_Options_InitFonts(id+1) end)
-    elseif HealBot_Options_luVars["InitFontsRuns"]<4 then
+        C_Timer.After((0.1+(HealBot_Options_luVars["InitFontsRuns"]/10)), function() HealBot_Options_InitFonts(id+1) end)
+    elseif HealBot_Options_luVars["InitFontsRuns"]<10 then
         HealBot_Options_luVars["InitFontsRuns"]=HealBot_Options_luVars["InitFontsRuns"]+1
         HealBot_AddDebug("InitFontsRuns="..HealBot_Options_luVars["InitFontsRuns"],"Load",true)
-        C_Timer.After((5*HealBot_Options_luVars["InitFontsRuns"]), function() HealBot_Options_InitFonts(1) end)
+        C_Timer.After((2*HealBot_Options_luVars["InitFontsRuns"]), function() HealBot_Options_InitFonts(1) end)
     else
         HealBot_AddDebug("InitFontsRuns Complete","Load",true)
     end
@@ -11901,11 +11899,12 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
                     HealBot_Timers_Set("SKINS","ToggleMiniBossFrames")
                     HealBot_Timers_Set("SKINS","ToggleRaidFrames")
                     HealBot_Timers_Set("INITSLOW","CheckFramesOnCombat")
-                    HealBot_Timers_Set("LAST","TextResetState")
-                    HealBot_Timers_Set("LAST","TextUpdateNames")
                     HealBot_Skins_ResetSkin("init")
                     HealBot_Options_Frame_initCurFrame()
                     HealBot_Timers_Set("SKINS","RaidTargetUpdate")
+                    HealBot_Timers_Set("SKINS","SwitchStateFontString")
+                    HealBot_Timers_Set("LAST","TextResetState")
+                    HealBot_Timers_Set("LAST","TextUpdateNames")
                     if not ddRefresh then
                         DoneInitTab[305]=nil
                         HealBot_Options_InitSub(305)
