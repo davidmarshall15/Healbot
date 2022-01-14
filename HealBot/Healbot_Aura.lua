@@ -76,22 +76,21 @@ function HealBot_Aura_retRaidtargetIcon(id)
 end
 
 function HealBot_Aura_ResetBuffCache()
-    HealBot_Aura_ClearAllBuffs()
     for spellId,_ in pairs(HealBot_AuraBuffCache) do
         HealBot_AuraBuffCache[spellId].reset=true
     end
     HealBot_Timers_Set("AURA","CustomBuffFilterDisabled")
+    HealBot_Timers_Set("AURA","CheckUnits")
 end
 
 function HealBot_Aura_ResetDebuffCache()
-    HealBot_Aura_ClearAllDebuffs()
     for spellId,_ in pairs(HealBot_AuraDebuffCache) do
         HealBot_AuraDebuffCache[spellId].always=false
         HealBot_AuraDebuffCache[spellId].reset=true
     end
     HealBot_Aura_DeleteExcludeDebuffInCache()
-    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Timers_Set("AURA","CustomDebuffFilterDisabled")
+    HealBot_Timers_Set("AURA","CheckUnits")
 end
 
 function HealBot_Aura_DeleteExcludeDebuffInCache()
@@ -1282,7 +1281,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         button.aura.buff.name=buffName
         button.aura.buff.r,button.aura.buff.g,button.aura.buff.b=HealBot_Options_RetBuffRGB(button)
         if button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.name then
-            curBuffRange=HealBot_UnitInRange(button.unit, button.aura.buff.name)
+            curBuffRange=HealBot_UnitInRange(button, button.aura.buff.name)
         else
             curBuffRange=button.status.range
         end
@@ -1320,7 +1319,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
         curDebuffSpell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) or button.status.rangespell
         if button.status.rangespell~=curDebuffSpell then
-            curDebuffRange=HealBot_UnitInRange(button.unit, curDebuffSpell)
+            curDebuffRange=HealBot_UnitInRange(button, curDebuffSpell)
         else
             curDebuffRange=button.status.range
         end
@@ -2309,7 +2308,7 @@ function HealBot_Aura_BuffIdLookup()
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sID]=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]
             end
         end
-        C_Timer.After(0.22, HealBot_Aura_BuffIdLookup)
+        C_Timer.After(0.2, HealBot_Aura_BuffIdLookup)
     end
 end
 

@@ -329,7 +329,7 @@ local function HealBot_Options_ItemsInBagInitScan(bag)
 end
 
 function HealBot_Options_ItemsInBagsInitScan()
-    C_Timer.After(0.001, function() HealBot_Options_ItemsInBagInitScan(0) end)
+    C_Timer.After(0.01, function() HealBot_Options_ItemsInBagInitScan(0) end)
 end
 
 function HealBot_Options_setLists()
@@ -785,6 +785,9 @@ function HealBot_Options_setLists()
         HEALBOT_CMD_SUPPRESSSOUND,
         HEALBOT_CMD_TOGGLECUSTOMCURECASTBY,
         HEALBOT_CMD_TOGGLEMAINASSIST,
+        HEALBOT_CMD_RESETSKINGROUP,
+        HEALBOT_CMD_RESETSKINRAID25,
+        HEALBOT_CMD_RESETSKINRAID40,
     }
 
     HealBot_Options_EmergencyFClass_List = {
@@ -1146,10 +1149,9 @@ function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate)
         if iconUpdate then HealBot_Action_setLuVars("resetIcon", true) end
         if skinUpdate then HealBot_Action_setLuVars("resetSkin", true) end
         if indUpdate then HealBot_Action_setLuVars("resetIndicator", true) end
-        HealBot_Timers_Set("SKINS","ResetSkinAllButtons")
-    else
-        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("INIT","ResetSkinAllButtons")
     end
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Options_ToggleCustomCuresCastBy()
@@ -1995,19 +1997,13 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.DuplicateBars[newSkinName] = Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]
     Healbot_Config_Skins.Indicators[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Emerg[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin])
-    Healbot_Config_Skins.Spells[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Author[newSkinName] = HealBot_GetUnitName("Player").." "..HEALBOT_PLAYER_OF_REALM.." "..GetRealmName()
-    local unique=true;
-    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
-        if skin==newSkinName then unique=false; end
-    end)
-    if unique then
+    if not HealBot_Options_checkSkinName(newSkinName) then
         table.insert(Healbot_Config_Skins.Skins,2,newSkinName)
         Healbot_Config_Skins.Skin_ID = 2;
     end
-    HealBot_Options_Set_Current_Skin(newSkinName)
+    HealBot_Options_Set_Current_Skin(newSkinName, nil, nil, true)
     HealBot_Options_NewSkin:SetText("")
-    HealBot_Options_SetSkins();
 end
 
 function HealBot_Options_copyTable(t)
@@ -2026,43 +2022,43 @@ end
 function HealBot_Options_DeleteSkin_OnClick(self)
     if Healbot_Config_Skins.Current_Skin~=HEALBOT_SKINS_STD then
         local hbDelSkinName=HealBot_Options_SkinsText:GetText()
-        Healbot_Config_Skins.HealBar[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarTextCol[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarCol[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarIACol[hbDelSkinName] = nil
-        Healbot_Config_Skins.Frame[hbDelSkinName] = nil
-        Healbot_Config_Skins.StickyFrames[hbDelSkinName] = nil
-        Healbot_Config_Skins.HeadBar[hbDelSkinName] = nil
-        Healbot_Config_Skins.HeadText[hbDelSkinName] = nil
-        Healbot_Config_Skins.General[hbDelSkinName] = nil
-        Healbot_Config_Skins.AuxBarFrame[hbDelSkinName] = nil
-        Healbot_Config_Skins.AuxBar[hbDelSkinName] = nil
-        Healbot_Config_Skins.RaidIcon[hbDelSkinName] = nil
-        Healbot_Config_Skins.Icons[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarAggro[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarText[hbDelSkinName] = nil
-        Healbot_Config_Skins.AuxBarText[hbDelSkinName] = nil
-        Healbot_Config_Skins.IconText[hbDelSkinName] = nil
-        Healbot_Config_Skins.HealGroups[hbDelSkinName] = nil
-        Healbot_Config_Skins.Healing[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarVisibility[hbDelSkinName] = nil
-        Healbot_Config_Skins.Chat[hbDelSkinName] = nil
-        Healbot_Config_Skins.Anchors[hbDelSkinName] = nil
-        HealBot_Config.SkinDefault[hbDelSkinName] = nil
-        Healbot_Config_Skins.DuplicateBars[hbDelSkinName] = nil
-        Healbot_Config_Skins.BarVisibility[hbDelSkinName] = nil
-        Healbot_Config_Skins.Author[hbDelSkinName] = nil
-        Healbot_Config_Skins.FrameAlias[hbDelSkinName] = nil
-        Healbot_Config_Skins.FrameAliasBar[hbDelSkinName] = nil
-        Healbot_Config_Skins.FocusGroups[hbDelSkinName] = nil
-        Healbot_Config_Skins.Enemy[hbDelSkinName] = nil
-        Healbot_Config_Skins.Indicators[hbDelSkinName] = nil
-        Healbot_Config_Skins.Emerg[hbDelSkinName] = nil
-        Healbot_Config_Skins.Spells[hbDelSkinName] = nil
-        table.remove(Healbot_Config_Skins.Skins,Healbot_Config_Skins.Skin_ID)
-        local retryWithSkin = HealBot_getDefaultSkin()
-        HealBot_Options_Set_Current_Skin(retryWithSkin)
-        HealBot_Options_SetSkins();
+        if HealBot_Options_checkSkinName(hbDelSkinName) then
+            Healbot_Config_Skins.HealBar[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarTextCol[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarCol[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarIACol[hbDelSkinName] = nil
+            Healbot_Config_Skins.Frame[hbDelSkinName] = nil
+            Healbot_Config_Skins.StickyFrames[hbDelSkinName] = nil
+            Healbot_Config_Skins.HeadBar[hbDelSkinName] = nil
+            Healbot_Config_Skins.HeadText[hbDelSkinName] = nil
+            Healbot_Config_Skins.General[hbDelSkinName] = nil
+            Healbot_Config_Skins.AuxBarFrame[hbDelSkinName] = nil
+            Healbot_Config_Skins.AuxBar[hbDelSkinName] = nil
+            Healbot_Config_Skins.RaidIcon[hbDelSkinName] = nil
+            Healbot_Config_Skins.Icons[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarAggro[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarText[hbDelSkinName] = nil
+            Healbot_Config_Skins.AuxBarText[hbDelSkinName] = nil
+            Healbot_Config_Skins.IconText[hbDelSkinName] = nil
+            Healbot_Config_Skins.HealGroups[hbDelSkinName] = nil
+            Healbot_Config_Skins.Healing[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarVisibility[hbDelSkinName] = nil
+            Healbot_Config_Skins.Chat[hbDelSkinName] = nil
+            Healbot_Config_Skins.Anchors[hbDelSkinName] = nil
+            HealBot_Config.SkinDefault[hbDelSkinName] = nil
+            Healbot_Config_Skins.DuplicateBars[hbDelSkinName] = nil
+            Healbot_Config_Skins.BarVisibility[hbDelSkinName] = nil
+            Healbot_Config_Skins.Author[hbDelSkinName] = nil
+            Healbot_Config_Skins.FrameAlias[hbDelSkinName] = nil
+            Healbot_Config_Skins.FrameAliasBar[hbDelSkinName] = nil
+            Healbot_Config_Skins.FocusGroups[hbDelSkinName] = nil
+            Healbot_Config_Skins.Enemy[hbDelSkinName] = nil
+            Healbot_Config_Skins.Indicators[hbDelSkinName] = nil
+            Healbot_Config_Skins.Emerg[hbDelSkinName] = nil
+            table.remove(Healbot_Config_Skins.Skins,Healbot_Config_Skins.Skin_ID)
+            local retryWithSkin = HealBot_getDefaultSkin()
+            HealBot_Options_Set_Current_Skin(retryWithSkin, nil, nil, true)
+        end
     end
 end
 
@@ -5817,8 +5813,8 @@ function HealBot_IconOORArrowAlwaysEnabled_OnClick(self)
 end
 
 function HealBot_SkinsSpellsUse_OnClick(self)
-    if Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"]~=self:GetChecked() then
-        Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"] = self:GetChecked()
+    if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"]~=self:GetChecked() then
+        Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"] = self:GetChecked()
         HealBot_Options_framesChanged(true)
         HealBot_Timers_Set("EMERG","UpdateBars")
     end
@@ -8435,6 +8431,18 @@ function HealBot_Options_CommandsButton_OnClick(self)
         HealBot_Options_ToggleCustomCuresCastBy()
     elseif HealBot_Options_luVars["hbCommands"]==16 then
         HealBot_Options_ToggleMainAssist()
+    elseif HealBot_Options_luVars["hbCommands"]==17 then
+        if HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS) then
+            HealBot_Options_Set_Current_Skin(HEALBOT_OPTIONS_GROUPHEALS)
+        end
+    elseif HealBot_Options_luVars["hbCommands"]==18 then
+        if HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25) then
+            HealBot_Options_Set_Current_Skin(HEALBOT_OPTIONS_RAID25)
+        end
+    elseif HealBot_Options_luVars["hbCommands"]==19 then
+        if HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40) then
+            HealBot_Options_Set_Current_Skin(HEALBOT_OPTIONS_RAID40)
+        end
     end
 end
 
@@ -10346,7 +10354,6 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.AuxBar[s][x][frame]["OFFSET"]=Healbot_Config_Skins.AuxBar[s][x][f]["OFFSET"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["DEPTH"]=Healbot_Config_Skins.AuxBar[s][x][f]["DEPTH"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["SIZE"]=Healbot_Config_Skins.AuxBar[s][x][f]["SIZE"]
-            Healbot_Config_Skins.AuxBar[s][x][frame]["TEXT"]=Healbot_Config_Skins.AuxBar[s][x][f]["TEXT"]
             if j==10 and Healbot_Config_Skins.AuxBar[s][x][f]["USE"]>5 then
                 Healbot_Config_Skins.AuxBar[s][x][frame]["USE"]=1
             else
@@ -10383,10 +10390,12 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.BarText[s][frame]["TAGOOR"]=Healbot_Config_Skins.BarText[s][f]["TAGOOR"]
         Healbot_Config_Skins.BarText[s][frame]["TAGR"]=Healbot_Config_Skins.BarText[s][f]["TAGR"]
         Healbot_Config_Skins.BarText[s][frame]["STATETXTANCHOR"]=Healbot_Config_Skins.BarText[s][f]["STATETXTANCHOR"]
+        Healbot_Config_Skins.BarText[s][frame]["TAGSTATEONLYTIP"]=Healbot_Config_Skins.BarText[s][f]["TAGSTATEONLYTIP"]
         Healbot_Config_Skins.BarText[s][frame]["SFONT"]=Healbot_Config_Skins.BarText[s][f]["SFONT"]
         Healbot_Config_Skins.BarText[s][frame]["SHEIGHT"]=Healbot_Config_Skins.BarText[s][f]["SHEIGHT"]
         Healbot_Config_Skins.BarText[s][frame]["SOUTLINE"]=Healbot_Config_Skins.BarText[s][f]["SOUTLINE"]
         Healbot_Config_Skins.BarText[s][frame]["SOFFSET"]=Healbot_Config_Skins.BarText[s][f]["SOFFSET"]
+        Healbot_Config_Skins.BarText[s][frame]["SOFFSET2"]=Healbot_Config_Skins.BarText[s][f]["SOFFSET2"]
         Healbot_Config_Skins.BarTextCol[s][frame]["STATE"]=Healbot_Config_Skins.BarTextCol[s][f]["STATE"]
     elseif tab==10 then
         Healbot_Config_Skins.BarTextCol[s][frame]["NCR"]=Healbot_Config_Skins.BarTextCol[s][f]["NCR"]
@@ -10408,6 +10417,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.BarText[s][frame]["OUTLINE"]=Healbot_Config_Skins.BarText[s][f]["OUTLINE"]
         Healbot_Config_Skins.BarText[s][frame]["MAXCHARS"]=Healbot_Config_Skins.BarText[s][f]["MAXCHARS"]
         Healbot_Config_Skins.BarText[s][frame]["OFFSET"]=Healbot_Config_Skins.BarText[s][f]["OFFSET"]
+        Healbot_Config_Skins.BarText[s][frame]["OFFSET2"]=Healbot_Config_Skins.BarText[s][f]["OFFSET2"]
     elseif tab==11 then
         Healbot_Config_Skins.BarTextCol[s][frame]["HCR"]=Healbot_Config_Skins.BarTextCol[s][f]["HCR"]
         Healbot_Config_Skins.BarTextCol[s][frame]["HCG"]=Healbot_Config_Skins.BarTextCol[s][f]["HCG"]
@@ -10450,6 +10460,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.BarTextCol[s][frame]["AGGRO"]=Healbot_Config_Skins.BarTextCol[s][f]["AGGRO"]
     elseif tab==13 then
         for x=1,9 do
+            Healbot_Config_Skins.AuxBar[s][x][frame]["TEXT"]=Healbot_Config_Skins.AuxBar[s][x][f]["TEXT"]
             Healbot_Config_Skins.AuxBarText[s][x][frame]["FONT"]=Healbot_Config_Skins.AuxBarText[s][x][f]["FONT"]
             Healbot_Config_Skins.AuxBarText[s][x][frame]["HEIGHT"]=Healbot_Config_Skins.AuxBarText[s][x][f]["HEIGHT"]
             Healbot_Config_Skins.AuxBarText[s][x][frame]["ALIGN"]=Healbot_Config_Skins.AuxBarText[s][x][f]["ALIGN"]
@@ -10542,12 +10553,12 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.BarAggro[s][frame]["ALERT"]=Healbot_Config_Skins.BarAggro[s][f]["ALERT"]
             Healbot_Config_Skins.BarAggro[s][frame]["ALERTIND"]=Healbot_Config_Skins.BarAggro[s][f]["ALERTIND"]
             Healbot_Config_Skins.BarAggro[s][frame]["TEXTFORMAT"]=Healbot_Config_Skins.BarAggro[s][f]["TEXTFORMAT"]
-            Healbot_Config_Skins.BarAggro[s][frame]["SHOWIND"]=Healbot_Config_Skins.BarAggro[s][f]["SHOWIND"]
             Healbot_Config_Skins.BarAggro[s][frame]["SHOW"]=Healbot_Config_Skins.BarAggro[s][f]["SHOW"]
             Healbot_Config_Skins.BarAggro[s][frame]["SHOWBARS"]=Healbot_Config_Skins.BarAggro[s][f]["SHOWBARS"]
             Healbot_Config_Skins.BarAggro[s][frame]["SHOWTEXT"]=Healbot_Config_Skins.BarAggro[s][f]["SHOWTEXT"]
             Healbot_Config_Skins.BarAggro[s][frame]["SHOWBARSPCT"]=Healbot_Config_Skins.BarAggro[s][f]["SHOWBARSPCT"]
         elseif tab==17 then
+            Healbot_Config_Skins.BarAggro[s][frame]["SHOWIND"]=Healbot_Config_Skins.BarAggro[s][f]["SHOWIND"]
             Healbot_Config_Skins.Indicators[s][frame]["ACOL"]=Healbot_Config_Skins.Indicators[s][f]["ACOL"]
             Healbot_Config_Skins.Indicators[s][frame]["AANCHOR"]=Healbot_Config_Skins.Indicators[s][f]["AANCHOR"]
             Healbot_Config_Skins.Indicators[s][frame]["AVOFF"]=Healbot_Config_Skins.Indicators[s][f]["AVOFF"]
@@ -10576,7 +10587,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.Indicators[s][frame]["PSIZE"]=Healbot_Config_Skins.Indicators[s][f]["PSIZE"]
             Healbot_Config_Skins.Indicators[s][frame]["PSPACE"]=Healbot_Config_Skins.Indicators[s][f]["PSPACE"]
         elseif tab==20 then
-            Healbot_Config_Skins.Spells[s][frame]["USE"]=Healbot_Config_Skins.Spells[s][f]["USE"]
+            Healbot_Config_Skins.Emerg[s][frame]["USE"]=Healbot_Config_Skins.Emerg[s][f]["USE"]
             Healbot_Config_Skins.Emerg[s][frame]["TEXTURE"]=Healbot_Config_Skins.Emerg[s][f]["TEXTURE"]
             Healbot_Config_Skins.Emerg[s][frame]["ANCHOR"]=Healbot_Config_Skins.Emerg[s][f]["ANCHOR"]
             Healbot_Config_Skins.Emerg[s][frame]["VOFFSET"]=Healbot_Config_Skins.Emerg[s][f]["VOFFSET"]
@@ -11625,7 +11636,6 @@ local function HealBot_Options_AuxConfigTxtChange()
 end
 
 function HealBot_Options_clearAuxBars()
-    HealBot_Options_framesChanged(true)
     HealBot_Aux_clearAggroAssigned()
     HealBot_Aux_clearAuraAssigned()
     HealBot_Aux_clearHightlightAssigned()
@@ -11637,10 +11647,6 @@ function HealBot_Options_clearAuxBars()
     HealBot_Aux_clearPowerAssigned()
     HealBot_Aux_clearOverHealAssigned()
     HealBot_Aux_clearCastBarAssigned()
-    HealBot_Timers_Set("AUX","PrepBars")
-end
-
-function HealBot_Options_prepforAuxBars()
     HealBot_Aux_resetAllBars()
     HealBot_Options_AuxConfigBarChange()
     HealBot_Options_AuxConfigTxtChange()
@@ -11873,7 +11879,7 @@ function HealBot_Options_Skins_DropDown()
     end
 end
 
-function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
+function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
     if newSkin then
         HealBot_Panel_resetInitFrames()
         HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
@@ -11889,22 +11895,22 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
                 Healbot_Config_Skins.Skin_ID = j
                 Healbot_Config_Skins.Current_Skin = Healbot_Config_Skins.Skins[j]
                 if HealBot_Options_luVars["skinChange"] then
+                    optSetSkins=true
                     HealBot_setLuVars("showReloadMsg", true)
                     HealBot_Action_setLuVars("resetIcon", true)
                     HealBot_Action_setLuVars("resetSkin", true)
                     HealBot_Action_setLuVars("resetIndicator", true)
-                    HealBot_Action_ResetSkinAllButtons()
+                    --HealBot_Action_ResetSkinAllButtons()
                     HealBot_Action_ResetrCalls()
                     HealBot_Timers_Set("SKINS","TogglePartyFrames")
                     HealBot_Timers_Set("SKINS","ToggleMiniBossFrames")
                     HealBot_Timers_Set("SKINS","ToggleRaidFrames")
                     HealBot_Timers_Set("INITSLOW","CheckFramesOnCombat")
                     HealBot_Skins_ResetSkin("init")
-                    HealBot_Options_Frame_initCurFrame()
                     HealBot_Timers_Set("SKINS","RaidTargetUpdate")
-                    HealBot_Timers_Set("SKINS","SwitchStateFontString")
-                    HealBot_Timers_Set("LAST","TextResetState")
-                    HealBot_Timers_Set("LAST","TextUpdateNames")
+                    HealBot_Text_SwitchStateFontString() -- HealBot_Timers_Set("SKINS","SwitchStateFontString")
+                    --HealBot_Timers_Set("LAST","TextClearState")
+                    --HealBot_Timers_Set("LAST","TextUpdateNames")
                     if not ddRefresh then
                         DoneInitTab[305]=nil
                         HealBot_Options_InitSub(305)
@@ -11912,7 +11918,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
                     end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
-                    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+                    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                 end
             end
@@ -11930,20 +11936,30 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback)
             if not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
                 local retryWithSkin = HealBot_getDefaultSkin()
                 if not noCallback then
-                    HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
+                    HealBot_Options_DoSet_Current_Skin(retryWithSkin, nil, true, optSetSkins)
                 elseif newSkin~=HEALBOT_SKINS_STD then
-                    HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
+                    HealBot_Options_DoSet_Current_Skin(HEALBOT_SKINS_STD, nil, true, optSetSkins)
                 end
             end
         end
     elseif not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
         local retryWithSkin = HealBot_getDefaultSkin()
         if not noCallback then
-            HealBot_Options_Set_Current_Skin(retryWithSkin, nil, true)
+            HealBot_Options_DoSet_Current_Skin(retryWithSkin, nil, true, optSetSkins)
         elseif newSkin~=HEALBOT_SKINS_STD then
-            HealBot_Options_Set_Current_Skin(HEALBOT_SKINS_STD, nil, true)
+            HealBot_Options_DoSet_Current_Skin(HEALBOT_SKINS_STD, nil, true, optSetSkins)
         end
         HealBot_Timers_Set("RESET","Skins")
+    end
+    return optSetSkins
+end
+
+function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
+    if not InCombatLockdown() then
+        local initCurFrame=HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
+        if initCurFrame then HealBot_Options_Frame_initCurFrame() end
+    else
+        C_Timer.After(1, function() HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback) end)
     end
 end
 
@@ -12613,11 +12629,7 @@ end
 
 function HealBot_Options_ShareSkinComplete()
     HealBot_Skins_Check_Skin(hbOptGetSkinName)
-    local unique=true;
-    table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
-        if skin==hbOptGetSkinName then unique=false; end
-    end)
-    if unique then
+    if not HealBot_Options_checkSkinName(hbOptGetSkinName) then
         table.insert(Healbot_Config_Skins.Skins,2,hbOptGetSkinName)
         Healbot_Config_Skins.Skin_ID = 2;
     end
@@ -12631,7 +12643,7 @@ function HealBot_Options_ShareSkinComplete()
 end
 
 function HealBot_Options_checkSkinName(skinName)
-    local hbFoundSkin=nil
+    local hbFoundSkin=false
     table.foreach(Healbot_Config_Skins.Skins, function (index,skin)
         if skin==skinName then hbFoundSkin=true; end
     end)
@@ -16659,9 +16671,9 @@ function HealBot_Options_idleInit()
                 HealBot_Options_luVars["IdleInit"]=HealBot_Options_luVars["IdleInit"]+1
             end
             if HealBot_Globals.CPUUsage<4 then
-                C_Timer.After(0.05, HealBot_Options_idleInit)
-            else
                 C_Timer.After(0.025, HealBot_Options_idleInit)
+            else
+                C_Timer.After(0.01, HealBot_Options_idleInit)
             end
         end
     else
@@ -18801,7 +18813,7 @@ function HealBot_Options_InitSub1(subNo)
         if not DoneInitTab[314] then
             HealBot_Options_SetLabel("HealBot_Options_SkinsFrameEmergGeneralTxt",HEALBOT_OPTIONS_EMERGGENERAL)
             HealBot_Options_SetLabel("HealBot_Options_SkinsFrameEmergColTxt",HEALBOT_OPTIONS_EMERGCOLS)
-            HealBot_SkinsSpellsUse:SetChecked(Healbot_Config_Skins.Spells[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"])
+            HealBot_SkinsSpellsUse:SetChecked(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"])
             HealBot_Options_SetText(HealBot_SkinsSpellsUse,HEALBOT_OPTIONS_EMERGBUTTONUSE)
             HealBot_EmergBarColBuff:SetChecked(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["BUFFBARCOL"])
             HealBot_Options_SetText(HealBot_EmergBarColBuff,HEALBOT_OPTIONS_BUFFWARNINGS)
@@ -19451,9 +19463,8 @@ function HealBot_Options_SetSkins(force)
             HealBot_Aura_RemoveExtraIcons(92)
             HealBot_Aura_RemoveExtraIcons(93)
             HealBot_Aura_RemoveExtraIcons(94)
-            HealBot_Timers_Set("SKINS","SetSkinBars")
             HealBot_Timers_Set("SKINSSLOW","RaidTargetUpdateAll")
-            HealBot_Timers_Set("AUX","ClearBars")
+            HealBot_Options_clearAuxBars() --HealBot_Timers_Set("AUX","ClearBars")
         end
         HealBot_Timers_Set("SKINS","SkinColours")
         HealBot_Timers_Set("SKINS","SetSkinBars")
@@ -20474,6 +20485,8 @@ function HealBot_Options_UpdateUsedTextures(button)
         button.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
     end
     button.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_Emerg_Button[button.id].bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
+    HealBot_Emerg_Button[button.id].bar:GetStatusBarTexture():SetHorizTile(false)
 end
 
 function HealBot_Options_UpdateUsedAuxText(button)
