@@ -1938,7 +1938,7 @@ function HealBot_Action_Register_Aggro()
         HealBot_Action_luVars["regAggro"]=regAggro
         HealBot_setLuVars("regAggro", regAggro)
         HealBot_Timers_Set("PARTYSLOW","ResetAllButtons")
-        HealBot_Timers_Set("LAST","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -3616,7 +3616,7 @@ function HealBot_Action_DoDeleteMarkedButtons()
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end
     else
-        HealBot_Timers_Set("LAST","DeleteMarkedButtons")
+        HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
     end
 end
 
@@ -3662,7 +3662,7 @@ function HealBot_Action_MarkDeleteButton(button)
     button.status.enabled=false
     table.insert(hbMarkedDeleteButtons, button.id)
     if not HealBot_Action_luVars["DeleteMarkedButtonsActive"] then
-        HealBot_Timers_Set("LAST","DeleteMarkedButtons")
+        HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
     end
 end
 

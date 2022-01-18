@@ -1425,12 +1425,10 @@ function HealBot_Load(hbCaller)
         HealBot_Text_sethbNumberFormat()
         HealBot_Text_sethbAggroNumberFormat()
         HealBot_Options_ItemsInBagsInitScan()
-        HealBot_Options_InitVars()
-        HealBot_Options_setLists()
         HealBot_Panel_InitOptBars()
         HealBot_Options_Init(11)
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
-        HealBot_Timers_Set("WHEEL","WheelUpdate")
+        HealBot_Timers_Set("DELAYED","WheelUpdate")
         HealBot_Timers_Set("SKINS","UpdateIconFreq")
         HealBot_Options_LoadTips()
         HealBot_Timers_Set("INITSLOW","InitPlugins")
@@ -1441,7 +1439,7 @@ function HealBot_Load(hbCaller)
         HealBot_Timers_Set("SKINSSLOW","OverrideFramesUseToggle")
         HealBot_Timers_Set("AURA","ConfigClassHoT")
         HealBot_Timers_Set("AURA","ResetBuffCache")
-        HealBot_Timers_Set("LAST","DeleteMarkedButtons")
+        HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
         local x=HealBot_Globals.ttalpha+0.12
         if x>1 then x=1 end
         HealBot_Tooltip:SetBackdrop({
@@ -1454,9 +1452,7 @@ function HealBot_Load(hbCaller)
         HealBot_Tooltip:SetBackdropBorderColor(0.32,0.32,0.4, x)
         HealBot_Panel_SetNumBars(80)
         HealBot_Panel_SethbTopRole(HealBot_Globals.TopRole)
-        HealBot_Timers_Set("AURA","CheckPlayer")
         HealBot_Timers_Set("PARTYSLOW","LowManaTrig")
-        --
         HealBot_Timers_Set("INITSLOW","OptionsInit")
         HealBot_Timers_Set("AURA","CheckPlayer")
         HealBot_Data["POWERTYPE"]=UnitPowerType("player") or 0
@@ -1488,7 +1484,6 @@ function HealBot_Load(hbCaller)
             HealBot_trackHiddenFrames["RAID"]=true
             HealBot_Options_DisableRaidFrame()
         end
-        HealBot_PlayerCheckExtended()
         HealBot_Timers_Set("INIT","InitSpells")
         HealBot_Timers_Set("SKINS","TogglePartyFrames")
         HealBot_Timers_Set("SKINS","ToggleMiniBossFrames")
@@ -1502,7 +1497,8 @@ function HealBot_Load(hbCaller)
         HealBot_Timers_Set("SKINSSLOW","SeparateInHealsAbsorbs")
         HealBot_Timers_Set("PLAYERSLOW","PowerIndicator")
         HealBot_Timers_Set("INITSLOW","SetTimers")
-        HealBot_Timers_Set("LAST","LastLoad")
+        HealBot_Timers_Set("DELAYED","LastLoad")
+        HealBot_Timers_Set("PLAYERSLOW","PlayerCheckExtended")
         --HealBot_Timers_RunInitTimers()
         HealBot_Register_Events()
         HealBot_luVars["Loaded"]=true
@@ -2539,6 +2535,8 @@ function HealBot_OnEvent_VariablesLoaded(self)
             HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
         end
     end
+    HealBot_Options_InitVars()
+    HealBot_Options_setLists()
     HealBot_Options_setClassEn()
     local pClass, pClassEN=UnitClass("player")
     HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
@@ -2942,7 +2940,6 @@ function HealBot_Timer_ZoneUpdate()
     HealBot_Options_SetEnableDisableCDBtn()
     HealBot_Options_SetEnableDisableBuffBtn()
     HealBot_SetAddonComms()
-    HealBot_Timers_Set("LAST","ReadyPlayerCheck")
 end
 
 function HealBot_Timer_EmoteOOM()
@@ -5066,7 +5063,7 @@ function HealBot_OnEvent_PlayerEnteringWorld()
     HealBot_luVars["CheckAuraFlags"]=true
     HealBot_luVars["DropCombat"]=true
     HealBot_Options_clearAuxBars() --HealBot_Timers_Set("AUX","ClearBars")
-    HealBot_Timers_Set("LAST","EnteringWorld")
+    HealBot_Timers_Set("DELAYED","EnteringWorld")
     HealBot_luVars["qaFRNext"]=TimeNow+5
       --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
 end

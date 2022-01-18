@@ -4,7 +4,7 @@ local HealBot_Timers={
                       ["RESET"]={},
                       ["PARTY"]={},
                       ["PLAYER"]={},
-                      ["WHEEL"]={},
+                      ["DELAYED"]={},
                       ["SKINS"]={},
                       ["AUX"]={},
                       ["EMERG"]={},
@@ -21,7 +21,7 @@ local HealBot_Timers_NoDups={
                       ["RESET"]={},
                       ["PARTY"]={},
                       ["PLAYER"]={},
-                      ["WHEEL"]={},
+                      ["DELAYED"]={},
                       ["SKINS"]={},
                       ["AUX"]={},
                       ["EMERG"]={},
@@ -97,7 +97,7 @@ function HealBot_Timers_MouseWheelUpdate()
             end
         end
     else
-        HealBot_Timers_Set("WHEEL","WheelUpdate")
+        HealBot_Timers_Set("DELAYED","WheelUpdate")
     end
 end
 
@@ -225,8 +225,8 @@ end
 
 function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("INITSLOW","InitSpells")
-    HealBot_Timers_Set("LAST","SpellsLoaded")
-    HealBot_Timers_Set("LAST","PowerIndicator")
+    HealBot_Timers_Set("DELAYED","SpellsLoaded")
+    HealBot_Timers_Set("DELAYED","PowerIndicator")
 end
 
 function HealBot_Timers_OnLoad()
@@ -322,9 +322,6 @@ local hbTimerFuncs={["INIT"]={
                     },
                     ["PLAYER"]={
                         ["PlayerTargetChanged"]=HealBot_OnEvent_PlayerTargetChanged,
-                    },
-                    ["WHEEL"]={
-                        ["WheelUpdate"]=HealBot_Timers_MouseWheelUpdate,
                     },
                     ["SKINS"]={
                         ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,
@@ -443,20 +440,22 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllDebuffIcons"]=HealBot_Aura_Update_UnitAllDebuffIcons,
                     },
                     ["LAST"]={
-                        ["DeleteMarkedButtons"]=HealBot_Action_DeleteMarkedButtons,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
                         ["InitItemsData"]=HealBot_Aura_InitItemsData,
-                        ["RefreshPartyNextRecalcAll"]=HealBot_Timers_nextRecalcAll,
-                        ["SpellsLoaded"]=HealBot_Timers_SpellsLoaded,
-                        ["LastLoad"]=HealBot_Timers_LastLoad,
-                        ["PowerIndicator"]=HealBot_Timers_PowerIndicator,
                         ["ReadyPlayerCheck"]=HealBot_ReadyPlayerCheck,
-                        ["EnteringWorld"]=HealBot_Timers_EnteringWorld,
                         ["CheckDC"]=HealBot_Timers_CheckDC,
                         ["UpdateEmergBars"]=HealBot_UpdateAllEmergBars,
                         ["TextResetState"]=HealBot_Text_ResetState,
                         ["TextUpdateNames"]=HealBot_Text_UpdateNames,
                         ["TextUpdateHealth"]=HealBot_Text_UpdateHealth,
+                    },
+                    ["DELAYED"]={
+                        ["DeleteMarkedButtons"]=HealBot_Action_DeleteMarkedButtons,
+                        ["LastLoad"]=HealBot_Timers_LastLoad,
+                        ["WheelUpdate"]=HealBot_Timers_MouseWheelUpdate,
+                        ["PowerIndicator"]=HealBot_Timers_PowerIndicator,
+                        ["SpellsLoaded"]=HealBot_Timers_SpellsLoaded,
+                        ["EnteringWorld"]=HealBot_Timers_EnteringWorld,
                     },
                    }
 
@@ -512,9 +511,6 @@ function HealBot_Timers_Run()
     elseif HealBot_Timers["PLAYER"][1] then
         HealBot_Timers_RunTimer("PLAYER", HealBot_Timers["PLAYER"][1])
         table.remove(HealBot_Timers["PLAYER"],1)
-    elseif HealBot_Timers["WHEEL"][1] then
-        HealBot_Timers_RunDelayedTimer("WHEEL", HealBot_Timers["WHEEL"][1],0.5)
-        table.remove(HealBot_Timers["WHEEL"],1)
     elseif HealBot_Timers["SKINS"][1] then
         HealBot_Timers_RunTimer("SKINS", HealBot_Timers["SKINS"][1])
         table.remove(HealBot_Timers["SKINS"],1)
@@ -550,6 +546,9 @@ function HealBot_Timers_Run()
         --HealBot_Timers_RunDelayedTimer("LAST", HealBot_Timers["LAST"][1], 0.02)
         HealBot_Timers_RunTimer("LAST", HealBot_Timers["LAST"][1])
         table.remove(HealBot_Timers["LAST"],1)
+    elseif HealBot_Timers["DELAYED"][1] then
+        HealBot_Timers_RunDelayedTimer("DELAYED", HealBot_Timers["DELAYED"][1],1)
+        table.remove(HealBot_Timers["DELAYED"],1)
     else
         HealBot_setLuVars("HealBot_RunTimers", false)
     end
