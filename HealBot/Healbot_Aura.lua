@@ -9,8 +9,7 @@ local HealBot_AuraDebuffCache={}
 local HealBot_AuraDebuffIconCache={}
 local libCD=nil
 local TimeNow=GetTime()
-local HealBot_ExcludeBuffInCache={[true]={},[false]={}}
-local HealBot_ExcludeDebuffInCache={}
+local HealBot_ExcludeBuffInCache={}
 local HealBot_ExcludeEnemyInCache={}
 local HealBot_Aura_WarningFilter={}
 local HealBot_iconUpdate={["DEBUFF"]={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,},
@@ -80,7 +79,6 @@ function HealBot_Aura_ResetBuffCache()
         HealBot_AuraBuffCache[spellId].reset=true
     end
     HealBot_Timers_Set("AURA","CustomBuffFilterDisabled")
-    HealBot_Timers_Set("AURA","CheckUnits")
 end
 
 function HealBot_Aura_ResetDebuffCache()
@@ -88,23 +86,13 @@ function HealBot_Aura_ResetDebuffCache()
         HealBot_AuraDebuffCache[spellId].always=false
         HealBot_AuraDebuffCache[spellId].reset=true
     end
-    HealBot_Aura_DeleteExcludeDebuffInCache()
     HealBot_Timers_Set("AURA","CustomDebuffFilterDisabled")
     HealBot_Timers_Set("AURA","CheckUnits")
 end
 
-function HealBot_Aura_DeleteExcludeDebuffInCache()
-    for id,_ in pairs(HealBot_ExcludeDebuffInCache) do
-        HealBot_ExcludeDebuffInCache[id]=nil
-    end
-end
-
 function HealBot_Aura_DeleteExcludeBuffInCache()
-    for id,_ in pairs(HealBot_ExcludeBuffInCache[true]) do
-        HealBot_ExcludeBuffInCache[true][id]=nil
-    end
-    for id,_ in pairs(HealBot_ExcludeBuffInCache[false]) do
-        HealBot_ExcludeBuffInCache[false][id]=nil
+    for id,_ in pairs(HealBot_ExcludeBuffInCache) do
+        HealBot_ExcludeBuffInCache[id]=nil
     end
     HealBot_Timers_Set("AURA","CheckUnits")
 end
@@ -921,26 +909,28 @@ function HealBot_Aura_ShowCustomBuff()
     buffCustomType=HealBot_Watch_HoT[uaSpellId] or HealBot_Watch_HoT[uaName] or false
     if buffCustomType then
         if buffCustomType=="A" then
-            return true
+            return true, false
         elseif buffCustomType=="S" then
             if uaUnitCaster=="player" then 
-                return true
+                return true, false
             end
         elseif buffCustomType=="C" then
             _, scbUnitClassEN = UnitClass(uaUnitCaster)
             if scbUnitClassTrim then
                 if HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
-                    return true
+                    return true, false
                 end
             end
         end
+    else
+        return false, true
     end
-    return false
+    return false, false
 end
 
-local ciCustomBuff=false
+local ciCustomBuff,ciCanExclude=false,true
 function HealBot_Aura_CheckCurBuff()
-    ciCustomBuff=HealBot_Aura_ShowCustomBuff()
+    ciCustomBuff,ciCanExclude=HealBot_Aura_ShowCustomBuff()
     if ciCustomBuff or HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName] then
         if not HealBot_AuraBuffCache[uaSpellId] or HealBot_AuraBuffCache[uaSpellId].reset then
             if not HealBot_AuraBuffCache[uaSpellId] then HealBot_AuraBuffCache[uaSpellId]={} end
@@ -982,9 +972,9 @@ function HealBot_Aura_CheckCurBuff()
         elseif HealBot_AuraBuffCache[uaSpellId].reset then 
             HealBot_AuraBuffCache[uaSpellId].reset=false
         end
-        return true, ciCustomBuff
+        return true, ciCustomBuff, ciCanExclude
     else
-        return false, false
+        return false, false, ciCanExclude
     end
 end
 
@@ -1027,7 +1017,6 @@ end
 function HealBot_Aura_SetBuffIcon()
     if (hbCustomBuffsDisabled[uaSpellId] and (hbCustomBuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]] or hbCustomBuffsDisabled[uaSpellId]["ALL"])) or
        (hbCustomBuffsDisabled[uaName] and (hbCustomBuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]] or hbCustomBuffsDisabled[uaName]["ALL"])) then
-        if not generalBuffs then HealBot_ExcludeBuffInCache[generalBuffs][uaSpellId]=true end
         return
     elseif HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"] then
         buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["count"]=uaCount
@@ -1122,7 +1111,7 @@ end
 local cureSpellsOnCD={}
 local cureSpellCD, cureSpellName=0, ""
 local dNamePriority, dTypePriority=99,99
-local debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsNever, debuffIsAuto=true, 15, false, debuffType, false, false
+local debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 15, false, debuffType, false
 local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
 local ccdbWatchTarget={}
 function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
@@ -1170,12 +1159,11 @@ function HealBot_Aura_CacheDebuff(spellId, spellName, debuffIsAlways, debuffText
 end
 
 function HealBot_Aura_CheckCurDebuff(button)
-    debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsNever, debuffIsAuto=true, 20, false, uaDebuffType, false, false
+    debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 20, false, uaDebuffType, false
     dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaName, uaDebuffType)
     if (hbCustomDebuffsDisabled[uaSpellId] and (hbCustomDebuffsDisabled[uaSpellId][HealBot_Aura_luVars["hbInsName"]] or hbCustomDebuffsDisabled[uaSpellId]["ALL"])) or
        (hbCustomDebuffsDisabled[uaName] and (hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["hbInsName"]] or hbCustomDebuffsDisabled[uaName]["ALL"])) then
         debuffIsCurrent=false
-        if not HealBot_Spell_Names[uaName] then debuffIsNever=true end
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
         HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
@@ -1235,9 +1223,6 @@ function HealBot_Aura_CheckCurDebuff(button)
             cDebuffPrio=20
         else
             debuffIsCurrent=false
-            if dTypePriority>20 and not HealBot_Spell_Names[uaName] then 
-                debuffIsNever=true
-            end
         end
     end
     if debuffIsCurrent then
@@ -1261,7 +1246,7 @@ function HealBot_Aura_CheckCurDebuff(button)
         end
     end
       --HealBot_setCall("HealBot_Aura_CheckCurDebuff")
-    return debuffIsCurrent, debuffIsNever
+    return debuffIsCurrent
 end
 
 function HealBot_Aura_SetCurDebuffIconCache(button)
@@ -1390,20 +1375,21 @@ end
 local uaIsCurrent, uaIsCustom, uaNever, uaZ, tGeneralBuffs=false, false, false, 1, true
 local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
-    if not HealBot_ExcludeBuffInCache[generalBuffs][uaSpellId] and uaExpirationTime then
+    if button.player and uaSpellId==HEALBOT_SPIRIT_OF_REDEMPTION then
+        HealBot_Data["PSPIRITRED"]=true
+    end
+    if not HealBot_ExcludeBuffInCache[uaSpellId] and uaExpirationTime then
         if not uaUnitCaster then uaUnitCaster="nil" end
-        if uaSpellId==HEALBOT_SPIRIT_OF_REDEMPTION then
+        if not HealBot_Data["PALIVE"] or HealBot_Data["PSPIRITRED"] then
             tGeneralBuffs=false
         elseif HealBot_Buff_Aura2Item[uaName] then
             uaName=GetItemInfo(HealBot_Buff_Aura2Item[uaName]) or uaName
         end
-        uaIsCurrent, uaIsCustom=HealBot_Aura_CheckCurBuff()
+        uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff()
         if uaIsCurrent then
             curBuffxTime=uaExpirationTime
             if uaIsCustom then
                 HealBot_Aura_SetBuffIcon()
-            elseif not generalBuffs then 
-                HealBot_ExcludeBuffInCache[generalBuffs][uaSpellId]=true 
             end
             if tGeneralBuffs and onlyPlayers and (HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName]) then
                 if HealBot_BuffNameTypes[uaName] and (not button.aura.buff.recheck[uaName] or button.aura.buff.recheck[uaName]>TimeNow) then
@@ -1420,8 +1406,8 @@ function HealBot_Aura_CheckUnitBuff(button)
                     button.aura.buff.nextcheck=1
                 end
             end
-        elseif not HealBot_Watch_HoT[uaSpellId] and not HealBot_Watch_HoT[uaName] then
-            HealBot_ExcludeBuffInCache[generalBuffs][uaSpellId]=true
+        elseif uaNever and not HealBot_BuffWatch[uaName] and not HealBot_BuffNameTypes[uaName] then
+            HealBot_ExcludeBuffInCache[uaSpellId]=true
         end
     end
     if button.player and (uaExpirationTime or 1)==0 then
@@ -1438,33 +1424,18 @@ function HealBot_Aura_CheckUnitDebuff(button)
     --end
     if not uaUnitCaster then uaUnitCaster="nil" end
     if not HealBot_AuraDebuffCache[uaSpellId] or not HealBot_AuraDebuffCache[uaSpellId].always then
-        uaIsCurrent, uaNever=HealBot_Aura_CheckCurDebuff(button)
+        uaIsCurrent=HealBot_Aura_CheckCurDebuff(button)
     else
-        uaIsCurrent, uaNever=true, false
+        uaIsCurrent=true
         if not HealBot_AuraDebuffIconCache[uaUnitCaster] then HealBot_AuraDebuffIconCache[uaUnitCaster]={} end
         if not HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId] then
             HealBot_Aura_SetCurDebuffIconCache(button)
         end
     end
     if uaIsCurrent then
-        if not HealBot_Aura_SetDebuffIcon() then
-            HealBot_Aura_ExcludeDebuffInCache(button)
-        end
-    elseif uaNever then
-        HealBot_Aura_ExcludeDebuffInCache(button)
+        HealBot_Aura_SetDebuffIcon()
     end
 end
-
-function HealBot_Aura_ExcludeDebuffInCache(button)
-    HealBot_ExcludeDebuffInCache[uaSpellId]=true
-    if not HealBot_Spell_IDs[uaSpellId] or not HealBot_Spell_IDs[uaSpellId].known then
-        if HealBot_AuraDebuffCache[uaSpellId] then 
-            HealBot_AuraDebuffCache[uaSpellId]=nil 
-        end
-    end
-end
-
-local hbClassicAbsorbTotal=0
 
 function HealBot_Aura_GetBuffsV1(button)
     uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HELPFUL")
@@ -1478,6 +1449,8 @@ local HealBot_Aura_GetBuffs=HealBot_Aura_GetBuffsV2
 if HEALBOT_GAME_VERSION<2 and libCD then
     HealBot_Aura_GetBuffs=HealBot_Aura_GetBuffsV1
 end
+
+local hbClassicAbsorbTotal=0
 function HealBot_Aura_CheckBuffsV1(button)
     uaZ=1
     hbClassicAbsorbTotal=0
@@ -1515,7 +1488,8 @@ function HealBot_Aura_CheckUnitBuffs(button)
     refreshUnit=false
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
-    if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then 
+    if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
+        if button.player then HealBot_Data["PSPIRITRED"]=false end
         button.aura.buff.colbar=false
         highestBuffPrio=21
         curBuffName=false;
@@ -1609,7 +1583,7 @@ function HealBot_Aura_CheckDebuffsV1(button)
         HealBot_Aura_GetDebuffs(button)
         if uaSpellId then
             uaZ=uaZ+1
-            if not HealBot_ExcludeDebuffInCache[uaSpellId] and uaExpirationTime then
+            if uaExpirationTime then
                 HealBot_Aura_CheckUnitDebuff(button)
             end
         else
@@ -1621,7 +1595,7 @@ end
 function HealBot_Aura_CheckDebuffsV9(button)
     AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, function(...)
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff = ...
-        if not HealBot_ExcludeDebuffInCache[uaSpellId] and uaExpirationTime then
+        if uaExpirationTime then
             if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
                 cureSpellCD, cureSpellName=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType, TimeNow)
                 HealBot_Aura_luVars["cureOffCd"]=true
@@ -1864,7 +1838,7 @@ function HealBot_Aura_RefreshEnemyAura(button)
                 button.icon.debuff.count=button.icon.debuff.count+1
                 HealBot_Aura_SetEnemyDebuffIcon(button, 50+button.icon.debuff.count)
             end
-        elseif not HealBot_Spell_IDs[eaSpellId] or not HealBot_Spell_IDs[eaSpellId].known then
+        elseif not HealBot_Spell_Names[eaName] then
             HealBot_ExcludeEnemyInCache[eaSpellId]=true
         end
     end
@@ -2397,7 +2371,10 @@ function HealBot_Aura_InitItemsDataReady()
     HealBot_Options_BuffWeaponEnchantSetAura(1)
     HealBot_Options_BuffWeaponEnchantSetAura(2)
     --HealBot_AddDebug("InitItemsDataReady","Buff",true)
+    HealBot_Timers_Set("AURA","DeleteExcludeBuffInCache")
+    HealBot_Timers_Set("AURA","ResetBuffCache")
     HealBot_Timers_Set("AURA","CheckPlayer")
+    
 end
 
 function HealBot_Aura_InitItemsData()

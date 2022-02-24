@@ -1,8 +1,8 @@
-## Interface: 90105
+## Interface: 90200
 ## Title: HealBot English Localization
 ## Author: Strife
 ## Notes: HealBot localization for enUS and enUK
-## Version: 9.1.5.11
+## Version: 9.2.0.1
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

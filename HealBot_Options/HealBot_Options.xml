@@ -126,8 +126,7 @@
     </Scripts>
   </EditBox>
  
-  <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG"
-    movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="BackdropTemplate">
+  <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG" movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="BackdropTemplate">
     <Size>
       <AbsDimension x="860" y="750"/>
     </Size>
@@ -8924,6 +8923,281 @@
                       </Layer>
                     </Layers>
                   </Frame>
+                  <Frame name="HealBot_Options_SkinsFramesBarsColoursCustom" hidden="true" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="495"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="0" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_SkinsFramesBarsColoursCustom_Text" text="HEALBOT_OPTIONS_TABNOTAVAIL" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Button name="HealBot_BarHealthyCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-70"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinCustomColoursColorpick_OnClick("Healthy")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_BarHealthyCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarHealthyCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_BarHealthyCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_HEALTHY">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_BarHealthyCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinBarHealthyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarHealthyCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_BarInjuredCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-140"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinCustomColoursColorpick_OnClick("Injured")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_BarInjuredCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarInjuredCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_BarInjuredCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_INJURED">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_BarInjuredCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinBarInjuredPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarInjuredCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_BarCriticalCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-210"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinCustomColoursColorpick_OnClick("Critical")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_BarCriticalCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCriticalCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_BarCriticalCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_CRITICAL">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_BarCriticalCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinBarCriticalPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_BarCriticalCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Slider name="HealBot_Options_CustomColourInjured" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="440" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-290"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_CustomColourInjured_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("COLINJUREDTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLINJUREDTHR",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_CustomColourCritical" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="440" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-370"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_CustomColourCritical_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("COLCRITICALTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLCRITICALTHR",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Button name="HealBot_Options_BarCustomColourDone" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_DONE">
+                        <Size>
+                          <AbsDimension x="175" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-445"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_SkinsFramesBarsColoursCustom:Hide();HealBot_Options_SkinsFramesBarsColours:Show()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BARCOLCUSTOMDONE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BARCOLCUSTOMDONE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
                   <Frame name="HealBot_Options_SkinsFramesBarsGeneral" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
@@ -9129,78 +9403,73 @@
                           </Layer>
                         </Layers>
                       </Frame>
-                      <Button name="HealBot_BarCustomColourb">
+                      <Button name="HealBot_BarCustomHealthColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="101" y="22"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthColour"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="-5" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_SkinColorpick_OnClick("CustomBar")</OnClick>
+                          <OnClick>HealBot_BarCustomColours_OnClick("Health")</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                         </Scripts>
                       </Button>
-                      <StatusBar name="HealBot_BarCustomColour" inherits="TextStatusBar">
+                      <StatusBar name="HealBot_BarCustomHealthColourCritical" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthColour"  relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomHealthColour"  relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="HealBot_BarCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                              <Anchors>
-                                <Anchor point="CENTER" relativeTo="HealBot_BarCustomColour" relativePoint="CENTER">
-                                  <Offset>
-                                    <AbsDimension x="0" y="1"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="1" g="0" b="0"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_BarCustomHealthColourInjured" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="33" y="4"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_BarCustomHealthColour"  relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="1" g="1" b="0"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_BarCustomHealthColourHealthy" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="33" y="4"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT" relativeTo="HealBot_BarCustomHealthColour"  relativePoint="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
-                      <Button name="HealBot_Options_SkinBarHealthPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
-                        <Size>
-                          <AbsDimension x="22" y="22"/>
-                        </Size>
-                        <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_BarCustomColour" relativePoint="RIGHT">
-                            <Offset>
-                              <AbsDimension x="2" y="1"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                        </Scripts>
-                      </Button>
                       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomColour" relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomHealthColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="15" y="-5" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9239,78 +9508,75 @@
                           </Layer>
                         </Layers>
                       </Frame>
-                      <Button name="HealBot_Options_BarHealthBackColourb">
+
+                      <Button name="HealBot_BarCustomHealthBackColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="101" y="22"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColour"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="-5" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_SkinColorpick_OnClick("CustomBackBar")</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSBACKCOL",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSBACKCOL",false)</OnLeave>
+                          <OnClick>HealBot_BarCustomColours_OnClick("Back")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                         </Scripts>
                       </Button>
-                      <StatusBar name="HealBot_Options_BarHealthBackColourS" inherits="TextStatusBar">
+                      <StatusBar name="HealBot_BarCustomHealthBackColourCritical" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColour"  relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomHealthBackColour"  relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="HealBot_Options_BarHealthBackColourSt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                              <Anchors>
-                                <Anchor point="CENTER" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="CENTER">
-                                  <Offset>
-                                    <AbsDimension x="0" y="1"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                        </Scripts>
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                        <BarColor r="0" g="1" b="0"/>
+                        <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
-                      <Button name="HealBot_Options_SkinBarBackPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                      <StatusBar name="HealBot_BarCustomHealthBackColourInjured" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="22" y="22"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="RIGHT">
+                          <Anchor point="TOP" relativeTo="HealBot_BarCustomHealthBackColour"  relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="2" y="1"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                        </Scripts>
-                      </Button>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="1" g="1" b="0"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_BarCustomHealthBackColourHealthy" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="33" y="4"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT" relativeTo="HealBot_BarCustomHealthBackColour"  relativePoint="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+
                       <Slider name="HealBot_Options_BarOutlineBackGround" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="90" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthBackColourS" relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomHealthBackColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="15" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9365,78 +9631,75 @@
                           </Layer>
                         </Layers>
                       </Frame>
-                      <Button name="HealBot_BarIHCustomColourb">
+
+                      <Button name="HealBot_BarCustomIHColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="101" y="22"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarIncHealColour"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="-5" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_SkinColorpick_OnClick("CustomIHBar")</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSICCOL",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSICCOL",false)</OnLeave>
+                          <OnClick>HealBot_BarCustomColours_OnClick("InHeal")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                         </Scripts>
                       </Button>
-                      <StatusBar name="HealBot_BarIHCustomColour" inherits="TextStatusBar">
+                      <StatusBar name="HealBot_BarCustomIHColourCritical" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarIncHealColour"  relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomIHColour"  relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="HealBot_BarIHCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                              <Anchors>
-                                <Anchor point="CENTER" relativeTo="HealBot_BarIHCustomColour" relativePoint="CENTER">
-                                  <Offset>
-                                    <AbsDimension x="0" y="1"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                        </Scripts>
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                        <BarColor r="0" g="1" b="0"/>
+                        <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
-                      <Button name="HealBot_Options_SkinBarIncomingPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                      <StatusBar name="HealBot_BarCustomIHColourInjured" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="22" y="22"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_BarIHCustomColour" relativePoint="RIGHT">
+                          <Anchor point="TOP" relativeTo="HealBot_BarCustomIHColour"  relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="2" y="1"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                        </Scripts>
-                      </Button>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="1" g="1" b="0"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_BarCustomIHColourHealthy" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="33" y="4"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT" relativeTo="HealBot_BarCustomIHColour"  relativePoint="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+
                       <Slider name="HealBot_Options_BarAlphaInHeal" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarIHCustomColour" relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomIHColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="15" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -9474,78 +9737,76 @@
                           </Layer>
                         </Layers>
                       </Frame>
-                      <Button name="HealBot_BarAbsorbCustomColourb">
+
+
+                      <Button name="HealBot_BarCustomAbsorbColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="101" y="22"/>
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AbsorbColour"  relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="-5" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_SkinColorpick_OnClick("CustomAbsorbBar")</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAECOL",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAECOL",false)</OnLeave>
+                          <OnClick>HealBot_BarCustomColours_OnClick("Absorb")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                         </Scripts>
                       </Button>
-                      <StatusBar name="HealBot_BarAbsorbCustomColour" inherits="TextStatusBar">
+                      <StatusBar name="HealBot_BarCustomAbsorbColourCritical" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="80" y="20"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AbsorbColour"  relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomAbsorbColour"  relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-5" y="-4"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="HealBot_BarAbsorbCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                              <Anchors>
-                                <Anchor point="CENTER" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="CENTER">
-                                  <Offset>
-                                    <AbsDimension x="0" y="1"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                        </Scripts>
                         <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                        <BarColor r="0" g="1" b="0"/>
+                        <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
-                      <Button name="HealBot_Options_SkinBarAbsorbPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                      <StatusBar name="HealBot_BarCustomAbsorbColourInjured" inherits="TextStatusBar">
                         <Size>
-                          <AbsDimension x="22" y="22"/>
+                          <AbsDimension x="33" y="4"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="RIGHT">
+                          <Anchor point="TOP" relativeTo="HealBot_BarCustomAbsorbColour"  relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="2" y="1"/>
+                              <AbsDimension x="0" y="-1"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                        </Scripts>
-                      </Button>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="1" g="1" b="0"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_BarCustomAbsorbColourHealthy" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="33" y="4"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT" relativeTo="HealBot_BarCustomAbsorbColour"  relativePoint="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+
                       <Slider name="HealBot_Options_BarAlphaAbsorb" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="320" y="16" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarAbsorbCustomColour" relativePoint="TOPRIGHT">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_BarCustomAbsorbColour" relativePoint="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="35" y="0" />
+                              <AbsDimension x="15" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -10944,7 +11205,6 @@
                 </Frames>
               </Frame>
 
-
               <Frame name="HealBot_Options_TextSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>
@@ -11107,7 +11367,281 @@
                     <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                     <BarColor r="0.2" g="0.2" b="0.2"/>
                   </StatusBar>
-
+                  <Frame name="HealBot_Options_SkinsFramesTextColoursCustom" hidden="true" inherits="BackdropTemplate">
+                      <Size>
+                        <AbsDimension y="450"/>
+                      </Size>
+                      <Anchors>
+                        <Anchor point="TOPLEFT">
+                          <Offset>
+                            <AbsDimension x="0" y="-90"/>
+                          </Offset>
+                        </Anchor>
+                        <Anchor point="TOPRIGHT">
+                          <Offset>
+                            <AbsDimension x="0" y="-90"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_SkinsFramesTextColoursCustom_Text" text="HEALBOT_OPTIONS_TABNOTAVAIL" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Button name="HealBot_TextHealthyCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-70"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinTextCustomColoursColorpick_OnClick("Healthy")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_TextHealthyCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_TextHealthyCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_TextHealthyCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_HEALTHY">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_TextHealthyCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinTextHealthyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_TextHealthyCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_TextInjuredCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-130"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinTextCustomColoursColorpick_OnClick("Injured")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_TextInjuredCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_TextInjuredCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_TextInjuredCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_INJURED">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_TextInjuredCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinTextInjuredPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_TextInjuredCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_TextCriticalCustomColourb">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-190"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_SkinTextCustomColoursColorpick_OnClick("Critical")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXT",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <StatusBar name="HealBot_TextCriticalCustomColour" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="20"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_TextCriticalCustomColourb"  relativePoint="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="HealBot_TextCriticalCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_WORDS_CRITICAL">
+                              <Anchors>
+                                <Anchor point="CENTER" relativeTo="HealBot_TextCriticalCustomColour" relativePoint="CENTER">
+                                  <Offset>
+                                    <AbsDimension x="0" y="1"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="0" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinTextCriticalPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="22" y="22"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_TextCriticalCustomColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Slider name="HealBot_Options_TextCustomColourInjured" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="440" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-260"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_TextCustomColourInjured_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("COLINJUREDTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLINJUREDTHR",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_TextCustomColourCritical" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="440" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-330"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_TextCustomColourCritical_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("COLCRITICALTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLCRITICALTHR",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Button name="HealBot_Options_TextCustomColourDone" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_DONE">
+                        <Size>
+                          <AbsDimension x="175" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-395"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_TextCustomColourDone_OnClick()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("TEXTCOLCUSTOMDONE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("TEXTCOLCUSTOMDONE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
                   <Frame name="HealBot_Options_SkinsFrameTextName" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
@@ -11461,7 +11995,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="125" y="-95" />
+                                  <AbsDimension x="155" y="-95" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -11488,7 +12022,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="95" y="-12"/>
+                                  <AbsDimension x="75" y="-12"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -11498,70 +12032,67 @@
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSNAMETEXTDEBUFF",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <Button name="HealBot_NameTextCustomColourb">
+
+                          <Button name="HealBot_NameTextCustomColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="101" y="22"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="-5" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_SkinColorpick_OnClick("CustomNameText")</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTNAME",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTNAME",false)</OnLeave>
+                              <OnClick>HealBot_TextCustomColours_OnClick("Name")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <StatusBar name="HealBot_NameTextCustomColour" inherits="TextStatusBar">
+                          <StatusBar name="HealBot_NameTextCustomColourCritical" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_NameTextColour"  relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_NameTextCustomColour"  relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Layers>
-                              <Layer level="OVERLAY">
-                                <FontString name="HealBot_NameTextCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                                  <Anchors>
-                                    <Anchor point="CENTER" relativeTo="HealBot_NameTextCustomColour" relativePoint="CENTER">
-                                      <Offset>
-                                        <AbsDimension x="0" y="1"/>
-                                      </Offset>
-                                    </Anchor>
-                                  </Anchors>
-                                </FontString>
-                              </Layer>
-                            </Layers>
-                            <Scripts>
-                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                            </Scripts>
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                            <BarColor r="0" g="0" b="0"/>
+                            <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
-                          <Button name="HealBot_Options_SkinBarNameTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                          <StatusBar name="HealBot_NameTextCustomColourInjured" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="22" y="22"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_NameTextCustomColour" relativePoint="RIGHT">
+                              <Anchor point="TOP" relativeTo="HealBot_NameTextCustomColour"  relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="2" y="1"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                            </Scripts>
-                          </Button>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="0"/>
+                          </StatusBar>
+                          <StatusBar name="HealBot_NameTextCustomColourHealthy" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="33" y="4"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT" relativeTo="HealBot_NameTextCustomColour"  relativePoint="BOTTOMRIGHT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
+                          </StatusBar>
+
                           <Slider name="HealBot_Options_NameTextAlpha" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="525" y="16" />
@@ -12227,7 +12758,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="125" y="-95" />
+                                  <AbsDimension x="155" y="-95" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -12250,70 +12781,65 @@
                               </Layer>
                             </Layers>
                           </Frame>
-                          <Button name="HealBot_HealthTextCustomColourb">
+                          <Button name="HealBot_HealthTextCustomColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="101" y="22"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealthTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="-5" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_SkinColorpick_OnClick("CustomHealthText")</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTHEALTH",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTHEALTH",false)</OnLeave>
+                              <OnClick>HealBot_TextCustomColours_OnClick("Health")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <StatusBar name="HealBot_HealthTextCustomColour" inherits="TextStatusBar">
+                          <StatusBar name="HealBot_HealthTextCustomColourCritical" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealthTextColour"  relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_HealthTextCustomColour"  relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Layers>
-                              <Layer level="OVERLAY">
-                                <FontString name="HealBot_HealthTextCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                                  <Anchors>
-                                    <Anchor point="CENTER" relativeTo="HealBot_HealthTextCustomColour" relativePoint="CENTER">
-                                      <Offset>
-                                        <AbsDimension x="0" y="1"/>
-                                      </Offset>
-                                    </Anchor>
-                                  </Anchors>
-                                </FontString>
-                              </Layer>
-                            </Layers>
-                            <Scripts>
-                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                            </Scripts>
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                            <BarColor r="0" g="0" b="0"/>
+                            <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
-                          <Button name="HealBot_Options_SkinBarHealthTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                          <StatusBar name="HealBot_HealthTextCustomColourInjured" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="22" y="22"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_HealthTextCustomColour" relativePoint="RIGHT">
+                              <Anchor point="TOP" relativeTo="HealBot_HealthTextCustomColour"  relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="2" y="1"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                            </Scripts>
-                          </Button>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="0"/>
+                          </StatusBar>
+                          <StatusBar name="HealBot_HealthTextCustomColourHealthy" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="33" y="4"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT" relativeTo="HealBot_HealthTextCustomColour"  relativePoint="BOTTOMRIGHT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
+                          </StatusBar>
                           <Slider name="HealBot_Options_HealthTextAlpha" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="525" y="16" />
@@ -12352,7 +12878,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealthTextColour" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="95" y="-12"/>
+                                  <AbsDimension x="75" y="-12"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -13077,7 +13603,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="125" y="-95" />
+                                  <AbsDimension x="155" y="-95" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -13100,70 +13626,65 @@
                               </Layer>
                             </Layers>
                           </Frame>
-                          <Button name="HealBot_StateTextCustomColourb">
+                          <Button name="HealBot_StateTextCustomColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="101" y="22"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_StateTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="-5" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_SkinColorpick_OnClick("CustomStateText")</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTSTATE",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTSTATE",false)</OnLeave>
+                              <OnClick>HealBot_TextCustomColours_OnClick("State")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <StatusBar name="HealBot_StateTextCustomColour" inherits="TextStatusBar">
+                          <StatusBar name="HealBot_StateTextCustomColourCritical" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_StateTextColour"  relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_StateTextCustomColour"  relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Layers>
-                              <Layer level="OVERLAY">
-                                <FontString name="HealBot_StateTextCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                                  <Anchors>
-                                    <Anchor point="CENTER" relativeTo="HealBot_StateTextCustomColour" relativePoint="CENTER">
-                                      <Offset>
-                                        <AbsDimension x="0" y="1"/>
-                                      </Offset>
-                                    </Anchor>
-                                  </Anchors>
-                                </FontString>
-                              </Layer>
-                            </Layers>
-                            <Scripts>
-                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                            </Scripts>
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                            <BarColor r="0" g="0" b="0"/>
+                            <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
-                          <Button name="HealBot_Options_SkinBarStateTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                          <StatusBar name="HealBot_StateTextCustomColourInjured" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="22" y="22"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_StateTextCustomColour" relativePoint="RIGHT">
+                              <Anchor point="TOP" relativeTo="HealBot_StateTextCustomColour"  relativePoint="BOTTOM">
                                 <Offset>
-                                  <AbsDimension x="2" y="1"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                            </Scripts>
-                          </Button>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="0"/>
+                          </StatusBar>
+                          <StatusBar name="HealBot_StateTextCustomColourHealthy" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="33" y="4"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT" relativeTo="HealBot_StateTextCustomColour"  relativePoint="BOTTOMRIGHT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
+                          </StatusBar>
                           <Slider name="HealBot_Options_StateTextAlpha" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="525" y="16" />
@@ -13739,7 +14260,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="125" y="-95" />
+                                  <AbsDimension x="155" y="-95" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -13762,52 +14283,64 @@
                               </Layer>
                             </Layers>
                           </Frame>
-                          <Button name="HealBot_AggroTextCustomColourb">
+                          <Button name="HealBot_AggroTextCustomColour" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CAT_CUSTOM">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="101" y="22"/>
                             </Size>
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroTextColour"  relativePoint="TOPRIGHT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="-5" y="0"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_SkinColorpick_OnClick("CustomAggroText")</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTAGGRO",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTAGGRO",false)</OnLeave>
+                              <OnClick>HealBot_TextCustomColours_OnClick("Aggro")</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLHEALTH",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <StatusBar name="HealBot_AggroTextCustomColour" inherits="TextStatusBar">
+                          <StatusBar name="HealBot_AggroTextCustomColourCritical" inherits="TextStatusBar">
                             <Size>
-                              <AbsDimension x="140" y="20"/>
+                              <AbsDimension x="33" y="4"/>
                             </Size>
                             <Anchors>
-                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AggroTextColour"  relativePoint="TOPRIGHT">
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="-5" y="-4"/>
+                                  <AbsDimension x="0" y="-1"/>
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <Layers>
-                              <Layer level="OVERLAY">
-                                <FontString name="HealBot_AggroTextCustomColourt" inherits="GameFontNormalSmall" text="HEALBOT_CUSTOM_CAT_CUSTOM">
-                                  <Anchors>
-                                    <Anchor point="CENTER" relativeTo="HealBot_AggroTextCustomColour" relativePoint="CENTER">
-                                      <Offset>
-                                        <AbsDimension x="0" y="1"/>
-                                      </Offset>
-                                    </Anchor>
-                                  </Anchors>
-                                </FontString>
-                              </Layer>
-                            </Layers>
-                            <Scripts>
-                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-                            </Scripts>
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
-                            <BarColor r="0" g="0" b="0"/>
+                            <BarColor r="1" g="0" b="0"/>
+                          </StatusBar>
+                          <StatusBar name="HealBot_AggroTextCustomColourInjured" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="33" y="4"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOP" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOM">
+                                <Offset>
+                                  <AbsDimension x="0" y="-1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="1" g="1" b="0"/>
+                          </StatusBar>
+                          <StatusBar name="HealBot_AggroTextCustomColourHealthy" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="33" y="4"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT" relativeTo="HealBot_AggroTextCustomColour"  relativePoint="BOTTOMRIGHT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_SkinBarAggroTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
                             <Size>
@@ -17724,8 +18257,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_EmergInjTrig_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("COLCUSTOMENABLED",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("COLCUSTOMENABLED",false)</OnLeave>
+                          <OnEnter>HealBot_Options_Show_Help("COLINJUREDTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLINJUREDTHR",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Slider name="HealBot_EmergBarCritTrig" inherits="HealBot_Options_SliderTemplate">
@@ -17741,8 +18274,8 @@
                         </Anchors>
                         <Scripts>
                           <OnValueChanged>HealBot_EmergBarCritTrig_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("COLCUSTOMDISABLED",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("COLCUSTOMDISABLED",false)</OnLeave>
+                          <OnEnter>HealBot_Options_Show_Help("COLCRITICALTHR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLCRITICALTHR",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <CheckButton name="HealBot_EmergBarColBuff" inherits="OptionsCheckButtonTemplate">
@@ -24002,23 +24535,6 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginPerformanceFrame" hidden="true">
-                <Size>
-                  <AbsDimension y="580"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-              </Frame>
-              <Frame name="HealBot_Options_PluginQuickSetFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

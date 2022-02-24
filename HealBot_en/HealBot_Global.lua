@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.1.5.11";
+﻿HEALBOT_VERSION_SC = "9.2.0.0.a1";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -494,7 +494,7 @@ function HealBot_globalVars()
     HBC_INNER_FIRE                          = 588
     HEALBOT_INSPIRATION                     = 14893 --GetSpellInfo(14893) or "--Inspiration";
     HEALBOT_LEAP_OF_FAITH                   = 73325 --GetSpellInfo(73325) or "--Leap of Faith";
-    HEALBOT_LEVITATE                        = 111759 --GetSpellInfo(1706) or "--Levitate";
+    HEALBOT_LEVITATE                        = 1706 --GetSpellInfo(1706) or "--Levitate";
     HEALBOT_LIGHTWELL_RENEW                 = 7001 --GetSpellInfo(7001) or "--Lightwell Renew";
     HEALBOT_LIGHT_OF_TUURE                  = 208065 --GetSpellInfo(208065) or "--Light of T'uure";
     HEALBOT_MIND_QUICKENING                 = 49868 --GetSpellInfo(49868) or "--Mind Quickening"

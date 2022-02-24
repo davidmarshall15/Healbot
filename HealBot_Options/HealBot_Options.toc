@@ -1,9 +1,9 @@
-## Interface: 90105
+## Interface: 90200
 ## Title: HealBot Options
 ## Author: Strife
 ## Notes: HealBot options and player settings
 ## RequiredDeps: HealBot_Data
 ## OptionalDeps: LibSharedMedia-3.0
-## Version: 9.1.5.11
+## Version: 9.2.0.1
 
 HealBot_Options.xml
