@@ -10481,7 +10481,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.AuxBar[s][x][frame]["OFFSET"]=Healbot_Config_Skins.AuxBar[s][x][f]["OFFSET"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["DEPTH"]=Healbot_Config_Skins.AuxBar[s][x][f]["DEPTH"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["SIZE"]=Healbot_Config_Skins.AuxBar[s][x][f]["SIZE"]
-            if j==10 and Healbot_Config_Skins.AuxBar[s][x][f]["USE"]>5 then
+            if j==10 and Healbot_Config_Skins.AuxBar[s][x][f]["USE"]>7 then
                 Healbot_Config_Skins.AuxBar[s][x][frame]["USE"]=1
             else
                 Healbot_Config_Skins.AuxBar[s][x][frame]["USE"]=Healbot_Config_Skins.AuxBar[s][x][f]["USE"]
@@ -11477,6 +11477,7 @@ function HealBot_Options_PagePrevCBuff()
     HealBot_Options_setCustomBuffList()
 end
 --------------------------------------------------------------------------------
+HealBot_Options_luVars["MaxClassicAuxBarAssign"]=16
 function HealBot_Options_Aux1Assign_GenList()
     local list={}
     if HealBot_Options_luVars["FramesSelFrame"]==10 then 
@@ -11493,7 +11494,7 @@ function HealBot_Options_Aux1Assign_GenList()
         list[11]=HEALBOT_OUTOFRANGE_LABEL
         list[12]=HEALBOT_RANGE30
     elseif HEALBOT_GAME_VERSION<4 then
-        for j=1, 16 do
+        for j=1, HealBot_Options_luVars["MaxClassicAuxBarAssign"] do
             list[j]=HealBot_Options_AuxAssign_List[j]
         end
     else
@@ -11509,7 +11510,7 @@ function HealBot_Options_AuxDefaultShowText(frame, use, id)
         else
             Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["TEXT"]=false
         end
-    elseif use==4 or use==9 or use==10 or use==11 or use==14 or use==15 then
+    elseif use==4 or use==9 or use==10 or use==11 or use==16 then
         Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["TEXT"]=true
     else
         Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["TEXT"]=false
@@ -19464,7 +19465,7 @@ function HealBot_Options_InitSub1(subNo)
                 local reset=false
                 for f=1,10 do
                     for x=1,9 do
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==15 then
+                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]>HealBot_Options_luVars["MaxClassicAuxBarAssign"] then
                             Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]=1
                             reset=true
                         end
@@ -21198,8 +21199,8 @@ function HealBot_Options_UnitFrameDisable(f)
     UnregisterUnitWatch(f)
     f:UnregisterAllEvents()
     f:Hide()
-    --f:ClearAllPoints()
-    --f:SetPoint("BOTTOMLEFT", UIParent, "TOPLEFT", -500, 500)
+    f:ClearAllPoints()
+    f:SetPoint("BOTTOMLEFT", UIParent, "TOPLEFT", -500, 500)
     local HealthBar = _G[f:GetName().."HealthBar"]
     if HealthBar then
         HealthBar:UnregisterAllEvents()
@@ -21212,8 +21213,8 @@ function HealBot_Options_UnitFrameDisable(f)
     if ToTFrame then
         ToTFrame:UnregisterAllEvents()
         ToTFrame:Hide()
-        --ToTFrame:ClearAllPoints()
-        --ToTFrame:SetPoint("BOTTOMLEFT", UIParent, "TOPLEFT", -500, 500)
+        ToTFrame:ClearAllPoints()
+        ToTFrame:SetPoint("BOTTOMLEFT", UIParent, "TOPLEFT", -500, 500)
     end
 end
 

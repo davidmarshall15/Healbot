@@ -1260,7 +1260,7 @@ function HealBot_Aura_SetCurDebuffIconCache(button)
     debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["spellId"]=uaSpellId
 end
 
-local refreshUnit,curBuffRange=false,0
+local curBuffRange=0
 function HealBot_Aura_BuffWarnings(button, buffName, force)
     if button.aura.buff.name~=buffName or force then
         button.aura.buff.name=buffName
@@ -1292,7 +1292,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
                 HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
             end
         end
-        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.aura.buffcol then refreshUnit=true end
+        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.aura.buffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
@@ -1336,7 +1336,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
             button.text.healthupdate=true
             HealBot_Text_UpdateText(button)
         end
-        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.aura.debuffcol then refreshUnit=true end
+        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.aura.debuffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
 end
@@ -1485,7 +1485,6 @@ if HEALBOT_GAME_VERSION>8 then
 end
 
 function HealBot_Aura_CheckUnitBuffs(button)
-    refreshUnit=false
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
     if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
@@ -1543,7 +1542,6 @@ function HealBot_Aura_CheckUnitBuffs(button)
     else
         HealBot_Aura_ClearBuff(button)
     end
-    if refreshUnit then HealBot_RefreshUnit(button) end
 end
 
 function HealBot_Aura_resetSpellCD()
@@ -1625,7 +1623,6 @@ if HEALBOT_GAME_VERSION>8 then
 end
 
 function HealBot_Aura_CheckUnitDebuffs(button)
-    refreshUnit=false
     HealBot_Aura_luVars["prevIconCount"]=button.icon.debuff.count
     if debuffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
         --button.aura.debuff.type=false
@@ -1670,7 +1667,6 @@ function HealBot_Aura_CheckUnitDebuffs(button)
     else
         HealBot_Aura_ClearDebuff(button)
     end
-    if refreshUnit then HealBot_RefreshUnit(button) end
     HealBot_Check_UnitBuff(button)
 end
 

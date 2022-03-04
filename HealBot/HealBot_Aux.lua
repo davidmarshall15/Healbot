@@ -51,16 +51,16 @@ local function HealBot_Aux_clearBar(button, id)
         button.aux[id]["ISFLUID"]=true
         HealBot_AuxFluid_ButtonsAlpha[button.id]=button
         if not HealBot_Aux_luVars["AuxFluidBarAlphaInUse"] then HealBot_Aux_UpdateFluidBarsAlpha() end
-        if not button.aux[id]["FIXED"] then
-            button.aux[id]["FLUID"]=0
-            HealBot_AuxFluid_Buttons[button.id]=button
-            if not HealBot_Aux_luVars["AuxFluidBarInUse"] then HealBot_Aux_UpdateFluidBars() end
-        end
+        --if not button.aux[id]["FIXED"] then
+        --    button.aux[id]["FLUID"]=0
+        --    HealBot_AuxFluid_Buttons[button.id]=button
+        --    if not HealBot_Aux_luVars["AuxFluidBarInUse"] then HealBot_Aux_UpdateFluidBars() end
+        --end
     else
         button.aux[id]["FLUIDSTATE"]=-1
         button.aux[id]["ISFLUID"]=false
         button.gref.aux[id]:SetStatusBarColor(1,1,1,0)
-        button.gref.aux[id]:SetValue(0)
+    --    button.gref.aux[id]:SetValue(0)
     end
 end
 
@@ -77,6 +77,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
     if isFluid and HealBot_Aux_luVars["FluidInUse"] and not button.mana.init then
         button.aux[id]["FLUID"]=value-- or 0
         button.aux[id]["FIXED"]=false
+        button.gref.aux[id]:SetValue(0)
         HealBot_AuxFluid_Buttons[button.id]=button
         if not HealBot_Aux_luVars["AuxFluidBarInUse"] then HealBot_Aux_UpdateFluidBars() end
     elseif endTime then
@@ -922,7 +923,7 @@ end
 function HealBot_Aux_setOORAssigned(frame, id)
     hbAuxOORAssigned[frame][id]=true
     HealBot_setAuxAssigns("OORBar", frame, true)
-    HealBot_Timers_Set("PARTYSLOW","ResetRange")
+    HealBot_Timers_Set("PARTYSLOW","AuxResetRange")
 end
 
 function HealBot_Aux_UpdateOORBar(button)
@@ -959,7 +960,7 @@ end
 function HealBot_Aux_setRange30Assigned(frame, id)
     hbAuxRange30Assigned[frame][id]=true
     HealBot_setAuxAssigns("Range30Bar", frame, true)
-    HealBot_Timers_Set("PARTYSLOW","ResetRange")
+    HealBot_Timers_Set("PARTYSLOW","AuxResetRange")
 end
 
 function HealBot_Aux_UpdateRange30Bar(button)

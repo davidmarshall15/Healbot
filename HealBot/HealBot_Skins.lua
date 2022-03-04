@@ -715,8 +715,12 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==13 then
                             b.gref.aux[x]:SetStatusBarColor(0,0,0,1)
                         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==14 then
-                            b.gref.aux[x]:SetStatusBarColor(1,0.2,0.2,1)
+                            b.gref.aux[x]:SetStatusBarColor(1,1,1,1)
                         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==15 then
+                            b.gref.aux[x]:SetStatusBarColor(0.1,1,0.2,1)
+                        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==16 then
+                            b.gref.aux[x]:SetStatusBarColor(1,0.2,0.2,1)
+                        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==17 then
                             b.gref.aux[x]:SetStatusBarColor(0.4,0.02,0.4,1)
                         end
                     end
@@ -2013,19 +2017,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["B"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["B"]=1 end
             if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["A"]=1 end
             if not Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"] then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["OTYPE"]=1 end
-            if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]==nil then
-                if gl==10 then
-                    if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["USE"]==5 then
-                        Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=true
-                    else
-                        Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=false
-                    end
-                elseif Healbot_Config_Skins.AuxBar[SkinName][g][gl]["USE"]==12 then
-                    Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=true
-                else
-                    Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=false
-                end
-            end
+            if Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]==nil then Healbot_Config_Skins.AuxBar[SkinName][g][gl]["TEXT"]=false end
         end
         if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAP"]=1 end
         if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OFREQ"] then

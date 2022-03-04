@@ -60,18 +60,8 @@ local hbRole={ [HEALBOT_MAINTANK]=3,
       }
 local HealBot_randomN=random(11)
 local prevCol=0
-local HealBot_randomClCol = {   [1] = { [1] = 0.77, [2] = 0.12, [3] = 0.23, [4]="DEAT"},  
-                                [2] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR"},  
-                                [3] = { [1] = 1.0,  [2] = 0.49, [3] = 0.04, [4]="DRUI"},   
-                                [4] = { [1] = 0,    [2] = 1.0,  [3] = 0.59, [4]="MONK"}, 
-                                [5] = { [1] = 0.96, [2] = 0.55, [3] = 0.73, [4]="PALA"},
-                                [6] = { [1] = 1.0,  [2] = 1.0,  [3] = 1.0,  [4]="PRIE"},
-                                [7] = { [1] = 0,    [2] = 0.44, [3] = 0.87, [4]="SHAM"},
-                                [8] = { [1] = 0.53, [2] = 0.53, [3] = 0.93, [4]="WARL"},
-                                [9] = { [1] = 0.67, [2] = 0.83, [3] = 0.45, [4]="HUNT"},
-                               [10] = { [1] = 0.25, [2] = 0.78, [3] = 0.92, [4]="MAGE"},
-                               [11] = { [1] = 1.0,  [2] = 0.96, [3] = 0.41, [4]="ROGU"},
-                            }
+local HealBot_randomClCol = {}
+local HealBot_randomClNames={}
 local HealBot_Action_HealGroup = {
     "player",
     "party1",
@@ -1125,26 +1115,72 @@ function HealBot_Panel_InitOptBars()
         vSetupBarsOptionsFrame:Hide()
     end
 end
-
-function HealBot_Panel_RandomClassColour(tRole)
-    local newCol=1
-    while newCol>0 do
-        if not tRole then
-            HealBot_randomN=random(11)
-        elseif tRole==HEALBOT_WORD_HEALER then
-            HealBot_randomN=random(3,7)
-        else
-            HealBot_randomN=random(1,5)
-        end
-        if HealBot_randomN~=prevCol then
-            prevCol=HealBot_randomN
-            newCol=0
+ 
+function HealBot_Panel_RandomClassColour(tRole,bClass)
+    if bClass then
+        HealBot_randomN=bClass
+    else
+        local newCol=1
+        while newCol>0 do
+            if not tRole then
+                HealBot_randomN=random(HealBot_randomClCol[0]["MAX"])
+            elseif tRole==HEALBOT_WORD_HEALER then
+                HealBot_randomN=random(HealBot_randomClCol[0]["HS"],HealBot_randomClCol[0]["HE"])
+            else
+                HealBot_randomN=random(1,HealBot_randomClCol[0]["TE"])
+            end
+            if HealBot_randomN~=prevCol then
+                prevCol=HealBot_randomN
+                newCol=0
+            end
         end
     end
     return HealBot_randomClCol[HealBot_randomN][1],
            HealBot_randomClCol[HealBot_randomN][2],
            HealBot_randomClCol[HealBot_randomN][3],
            HealBot_randomClCol[HealBot_randomN][4]
+end
+
+local RandomClassesAdj={}
+local rndClasses={}
+local curClass,tRnd=1,0
+function HealBot_Panel_RandomClassesRun()
+    for z=1,numNotSet do
+        if numNotSet>0 then
+            tRnd=random(5)
+            tClass=random(HealBot_randomClCol[0]["MAX"])
+            if tRnd>RandomClassesAdj[tClass] then
+                rndClasses[tClass]=rndClasses[tClass]+1
+                numNotSet=numNotSet-1
+                if RandomClassesAdj[tClass]<4 then 
+                    RandomClassesAdj[tClass]=RandomClassesAdj[tClass]+2
+                else
+                    RandomClassesAdj[tClass]=5
+                end
+            elseif RandomClassesAdj[tClass]>1 then
+                RandomClassesAdj[tClass]=RandomClassesAdj[tClass]-1
+            end
+        else
+            break
+        end
+    end
+end
+
+function HealBot_Panel_RandomClasses(nUnits)
+    for z=1,HealBot_randomClCol[0]["MAX"] do
+        RandomClassesAdj[z]=3
+        rndClasses[z]=0
+    end
+    curClass=1
+    numNotSet=nUnits
+    for x=1,20 do
+        if numNotSet>0 then
+            HealBot_Panel_RandomClassesRun()
+        else
+            break
+        end
+    end
+    return rndClasses
 end
 
 local hbHealButtonsConcat={[1]="", [2]="~", [3]="1"}
@@ -1246,11 +1282,11 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
     end
 end
 
-function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
+function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole,bClass)
     local k=i[hbCurrentFrame]
     for j=minBar,maxBar do
         if noBars>0 then
-            local tcR,tcG,tcB,tcC=HealBot_Panel_RandomClassColour(tRole)
+            local tcR,tcG,tcB,tcC=HealBot_Panel_RandomClassColour(tRole, bClass)
             local tstb=HealBot_Action_SetTestButton(hbCurrentFrame, HEALBOT_WORD_TEST.." "..bName.." "..j,tRole,tcC)
             if tstb then 
                 local bIndex=tstb.id
@@ -1264,7 +1300,7 @@ function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole)
     if i[hbCurrentFrame]>k and not tHeader[gName] then
         HeaderPos[hbCurrentFrame][k+1] = gName
         tHeader[gName]=true
-        if bName==HEALBOT_OPTIONS_EMERGENCYHEALS or bName==HEALBOT_OPTIONS_GROUPHEALS then
+        if not bClass and (bName==HEALBOT_OPTIONS_EMERGENCYHEALS or bName==HEALBOT_OPTIONS_GROUPHEALS) then
             grpNo=grpNo+1
         end
     end
@@ -1383,67 +1419,29 @@ function HealBot_Panel_TestBarsOn()
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
             if healGroups[gl]["STATE"] and xRaidBars>0 then
-                if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 then
-                    if xRaidBars<5 then
-                        if HealBot_Globals.TestBars["PROFILE"]>1 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,xRaidBars)
+                if HealBot_Globals.TestBars["PROFILE"]>1 then
+                    if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==3 then
+                        for x=1,8 do
+                            if xRaidBars>(5*(x-1)) then
+                                if xRaidBars<(5*x) then
+                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,xRaidBars)
+                                else
+                                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,(5*x)-4,(5*x))
+                                end
+                            end
+                        end
+                    elseif Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["RAIDORDER"]==2 then
+                        local rndClass=HealBot_Panel_RandomClasses(xRaidBars)
+                        local curBar=1
+                        for x=1,HealBot_randomClCol[0]["MAX"] do
+                            if rndClass[x]>0 then
+                                HealBot_Panel_testAddButton(HealBot_randomClNames[x],HEALBOT_OPTIONS_EMERGENCYHEALS,curBar,curBar+(rndClass[x]-1),nil,x)
+                                curBar=curBar+rndClass[x]
+                            end
                         end
                     else
-                        if HealBot_Globals.TestBars["PROFILE"]>1 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,5)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,5)
-                        end
+                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
                     end
-                    if xRaidBars>5 then
-                        if xRaidBars<10 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,6,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,6,10)
-                        end
-                    end
-                    if xRaidBars>10 then
-                        if xRaidBars<15 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,11,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,11,15)
-                        end
-                    end
-                    if xRaidBars>15 then
-                        if xRaidBars<20 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,16,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,16,20)
-                        end
-                    end
-                    if xRaidBars>20 then
-                        if xRaidBars<25 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,21,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,21,25)
-                        end
-                    end
-                    if xRaidBars>25 then
-                        if xRaidBars<30 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,26,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,26,30)
-                        end
-                    end
-                    if xRaidBars>30 then
-                        if xRaidBars<35 then
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,31,xRaidBars)
-                        else
-                            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,31,35)
-                        end
-                    end
-                    if xRaidBars>35 then
-                        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,36,xRaidBars)
-                    end
-                elseif HealBot_Globals.TestBars["PROFILE"]>1 then
-                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_EMERGENCYHEALS.." "..HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_EMERGENCYHEALS,1,xRaidBars)
                 else
                     HealBot_Panel_testAddButton(HEALBOT_OPTIONS_GROUPHEALS.." "..grpNo,HEALBOT_OPTIONS_GROUPHEALS,1,xRaidBars)
                 end
@@ -2856,4 +2854,80 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
     end
     HealBot_fastUpdateEveryFrame()
       --HealBot_setCall("HealBot_Panel_PartyChanged")
+end
+
+function HealBot_Panel_Init()
+    if HEALBOT_GAME_VERSION>3 then
+        HealBot_randomClCol = { [0] = { ["MAX"]=11, ["TE"]=5, ["HS"]=3, ["HE"]=7}, 
+                                [1] = { [1] = 0.77, [2] = 0.12, [3] = 0.23, [4]="DEAT"},  
+                                [2] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR"},  
+                                [3] = { [1] = 1.0,  [2] = 0.49, [3] = 0.04, [4]="DRUI"},   
+                                [4] = { [1] = 0,    [2] = 1.0,  [3] = 0.59, [4]="MONK"}, 
+                                [5] = { [1] = 0.96, [2] = 0.55, [3] = 0.73, [4]="PALA"},
+                                [6] = { [1] = 1.0,  [2] = 1.0,  [3] = 1.0,  [4]="PRIE"},
+                                [7] = { [1] = 0,    [2] = 0.44, [3] = 0.87, [4]="SHAM"},
+                                [8] = { [1] = 0.53, [2] = 0.53, [3] = 0.93, [4]="WARL"},
+                                [9] = { [1] = 0.67, [2] = 0.83, [3] = 0.45, [4]="HUNT"},
+                               [10] = { [1] = 0.25, [2] = 0.78, [3] = 0.92, [4]="MAGE"},
+                               [11] = { [1] = 1.0,  [2] = 0.96, [3] = 0.41, [4]="ROGU"},
+                              }
+        HealBot_randomClNames = { [1] = HEALBOT_DEATHKNIGHT,
+                                  [2] = HEALBOT_WARRIOR,
+                                  [3] = HEALBOT_DRUID,
+                                  [4] = HEALBOT_MONK,
+                                  [5] = HEALBOT_PALADIN,
+                                  [6] = HEALBOT_PRIEST,
+                                  [7] = HEALBOT_SHAMAN,
+                                  [8] = HEALBOT_WARLOCK,
+                                  [9] = HEALBOT_HUNTER,
+                                 [10] = HEALBOT_MAGE,
+                                 [11] = HEALBOT_ROGUE,
+                                }
+    elseif HEALBOT_GAME_VERSION>2 then
+        HealBot_randomClCol = { [0] = { ["MAX"]=10, ["TE"]=4, ["HS"]=3, ["HE"]=6}, 
+                                [1] = { [1] = 0.77, [2] = 0.12, [3] = 0.23, [4]="DEAT"},  
+                                [2] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR"},  
+                                [3] = { [1] = 1.0,  [2] = 0.49, [3] = 0.04, [4]="DRUI"},   
+                                [4] = { [1] = 0.96, [2] = 0.55, [3] = 0.73, [4]="PALA"},
+                                [5] = { [1] = 1.0,  [2] = 1.0,  [3] = 1.0,  [4]="PRIE"},
+                                [6] = { [1] = 0,    [2] = 0.44, [3] = 0.87, [4]="SHAM"},
+                                [7] = { [1] = 0.53, [2] = 0.53, [3] = 0.93, [4]="WARL"},
+                                [8] = { [1] = 0.67, [2] = 0.83, [3] = 0.45, [4]="HUNT"},
+                                [9] = { [1] = 0.25, [2] = 0.78, [3] = 0.92, [4]="MAGE"},
+                               [10] = { [1] = 1.0,  [2] = 0.96, [3] = 0.41, [4]="ROGU"},
+                              }
+        HealBot_randomClNames = { [1] = HEALBOT_DEATHKNIGHT,
+                                  [2] = HEALBOT_WARRIOR,
+                                  [3] = HEALBOT_DRUID,
+                                  [4] = HEALBOT_PALADIN,
+                                  [5] = HEALBOT_PRIEST,
+                                  [6] = HEALBOT_SHAMAN,
+                                  [7] = HEALBOT_WARLOCK,
+                                  [8] = HEALBOT_HUNTER,
+                                  [9] = HEALBOT_MAGE,
+                                 [10] = HEALBOT_ROGUE,
+                                }
+    else
+        HealBot_randomClCol = { [0] = { ["MAX"]=9, ["TE"]=3, ["HS"]=2, ["HE"]=5}, 
+                                [1] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR"},  
+                                [2] = { [1] = 1.0,  [2] = 0.49, [3] = 0.04, [4]="DRUI"},   
+                                [3] = { [1] = 0.96, [2] = 0.55, [3] = 0.73, [4]="PALA"},
+                                [4] = { [1] = 1.0,  [2] = 1.0,  [3] = 1.0,  [4]="PRIE"},
+                                [5] = { [1] = 0,    [2] = 0.44, [3] = 0.87, [4]="SHAM"},
+                                [6] = { [1] = 0.53, [2] = 0.53, [3] = 0.93, [4]="WARL"},
+                                [7] = { [1] = 0.67, [2] = 0.83, [3] = 0.45, [4]="HUNT"},
+                                [8] = { [1] = 0.25, [2] = 0.78, [3] = 0.92, [4]="MAGE"},
+                                [9] = { [1] = 1.0,  [2] = 0.96, [3] = 0.41, [4]="ROGU"},
+                              }
+        HealBot_randomClNames = { [1] = HEALBOT_WARRIOR,
+                                  [2] = HEALBOT_DRUID,
+                                  [3] = HEALBOT_PALADIN,
+                                  [4] = HEALBOT_PRIEST,
+                                  [5] = HEALBOT_SHAMAN,
+                                  [6] = HEALBOT_WARLOCK,
+                                  [7] = HEALBOT_HUNTER,
+                                  [8] = HEALBOT_MAGE,
+                                  [9] = HEALBOT_ROGUE,
+                                }
+    end
 end

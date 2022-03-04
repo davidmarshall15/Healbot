@@ -34,55 +34,38 @@ function HealBot_Action_retLuVars(vName)
     return HealBot_Action_luVars[vName]
 end
 
-function HealBot_Action_setpcClass()
-    local _,xButton,pButton = HealBot_UnitID("player")
-    if xButton or pButton then
-        for j=1,5 do
-            if HEALBOT_GAME_VERSION>3 and 
-               (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or 
-                HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] or
-                HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] or
-                HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE]) and 
-                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
-                local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"];
-                if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
-                    HealBot_pcClass[j]=9
-                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 9);
-                elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
-                    HealBot_pcClass[j]=4
-                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 4);
-                elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
-                    HealBot_pcClass[j]=7
-                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 7);
-                else
-                    HealBot_pcClass[j]=12
-                    HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 12);
-                end     
-                if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
-                    if xButton then
-                        xButton.skinreset=true
-                        xButton.icon.reset=true
-                    end
-                    if pButton then
-                        pButton.skinreset=true
-                        pButton.icon.reset=true
-                    end
-                    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
-                end
+function HealBot_Action_setpcClass(button)
+    for j=1,5 do
+        if HEALBOT_GAME_VERSION>3 and 
+           (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or 
+            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] or
+            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] or
+            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE]) and 
+            Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
+            local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"];
+            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
+                HealBot_pcClass[j]=9
+                HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 9);
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
+                HealBot_pcClass[j]=4
+                HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 4);
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
+                HealBot_pcClass[j]=7
+                HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 7);
             else
-                HealBot_pcClass[j]=false
-                if xButton then
-                    xButton.mana.power=0
-                    for y=1,5 do
-                        xButton.gref.indicator.power[y]:SetAlpha(0)
-                    end
-                end
-                if pButton then
-                    pButton.mana.power=0
-                    for y=1,5 do
-                        pButton.gref.indicator.power[y]:SetAlpha(0)
-                    end
-                end
+                HealBot_pcClass[j]=12
+                HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 12);
+            end     
+            if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
+                button.skinreset=true
+                button.icon.reset=true
+                HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
+            end
+        else
+            HealBot_pcClass[j]=false
+            button.mana.power=0
+            for y=1,5 do
+                button.gref.indicator.power[y]:SetAlpha(0)
             end
         end
     end
@@ -741,21 +724,20 @@ function HealBot_Action_UpdateBackgroundButton(button)
     --HealBot_setCall("HealBot_Action_UpdateBackgroundButton")
 end
 
-function HealBot_Action_stateChange(button)
-    HealBot_Aux_UpdBar(button)
-    HealBot_Aura_Update_AllIcons(button)
-    HealBot_Text_UpdateButton(button)
-end
-
-function HealBot_Action_setState(button, state)
+function HealBot_Action_setState(button, state, a)
     if button.status.enabled~=state then
         button.status.enabled=state
         HealBot_Action_ShowHideFrames(button) 
-        HealBot_Action_stateChange(button)
+        HealBot_Aura_Update_AllIcons(button)
+        HealBot_Text_UpdateButton(button)
         if not state then
             if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
             if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
         end
+    end
+    if button.status.alpha~=a then
+        button.status.alpha=a
+        HealBot_Aux_UpdBar(button)
     end
 end
 
@@ -782,27 +764,28 @@ function HealBot_Action_UpdateHealthStatusBarColor(button)
 end
 
 local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
+local curAlpha=0
 function HealBot_Action_UpdateDebuffButton(button)
     button.aura.debuffcol=false
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         erButton=HealBot_Emerg_Button[button.id]
         if button.aura.debuff.colbar then
             if button.icon.debuff.showcol then
-                if button.status.unittype<11 and HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) and button.status.rangespell~=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)then 
+                if button.status.unittype<11 and HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) and button.status.rangespell~=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) then 
                     button.status.rangespell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
-                    HealBot_UpdateUnitRange(button,false)
+                    HealBot_UpdateUnitRange(button,false,"DEBUFF")
                 end
                 if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
                     button.status.r,button.status.g,button.status.b=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
                     button.status.current=HealBot_Unit_Status["DEBUFFBARCOL"]
                     button.aura.debuffcol=true
                     if button.status.range==1 then  
-                        button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"],1)
+                        curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"],1)
                     else
-                        button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"],1)
+                        curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"],1)
                     end
+                    HealBot_Action_setState(button, true, curAlpha)
                     HealBot_Action_UpdateHealthStatusBarColor(button)
-                    HealBot_Action_setState(button, true)
                     if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["DEBUFFBARCOL"] then
                         erButton.debuff=true
                         HealBot_Action_EmergBarCheck(button)
@@ -836,19 +819,19 @@ function HealBot_Action_UpdateBuffButton(button)
         if button.aura.buff.showcol then
             if button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] and button.status.unittype<11 and button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.name then 
                 button.status.rangespell=button.aura.buff.name
-                HealBot_UpdateUnitRange(button,false)
+                HealBot_UpdateUnitRange(button,false,"BUFF")
             end
             if button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
                 button.status.current=HealBot_Unit_Status["BUFFBARCOL"]
                 button.aura.buffcol=true
                 button.status.r,button.status.g,button.status.b=button.aura.buff.r,button.aura.buff.g,button.aura.buff.b
                 if button.status.range==1 then  
-                    button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
                 else
-                    button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"], 1)
+                    curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"], 1)
                 end
+                HealBot_Action_setState(button, true, curAlpha)
                 HealBot_Action_UpdateHealthStatusBarColor(button)
-                HealBot_Action_setState(button, true)
                 if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFBARCOL"] then
                     erButton.buff=true
                     HealBot_Action_EmergBarCheck(button)
@@ -873,8 +856,10 @@ local ripHasResStart={}
 local ripHasResEnd={}
 local ripHadResStart={}
 local ripHadResEnd={}
+local ripHadResState={}
 function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
     if state==1 then
+        ripHadResState[button.id]=false
         ripHasResEnd[button.id]=true
         button.status.current=HealBot_Unit_Status["RES"]
         button.text.nameupdate=true
@@ -884,13 +869,15 @@ function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
         if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_WORD_RESURRECTION, ripHasResStart[button.guid]*1000, (ripHasResEnd[button.guid]+1.5)*1000, false)
     elseif state==2 then
+        ripHadResState[button.id]=false
         ripHasResEnd[button.guid]=nil
         button.text.nameupdate=true
         HealBot_Text_UpdateText(button)
         button.status.hasres=2
         if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
         HealBot_Aux_UpdateResBar(button, HEALBOT_WORD_RESURRECTION, ripHadResStart[button.guid]*1000, ripHadResEnd[button.guid]*1000, true)
-    else
+    elseif not ripHadResState[button.id] then
+        ripHadResState[button.id]=true
         ripHadResEnd[button.guid]=nil
         button.status.current=HealBot_Unit_Status["DEAD"]
         button.text.nameupdate=true
@@ -931,13 +918,14 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 button.status.current=HealBot_Unit_Status["CHECK"]
                 ripHasResEnd[button.guid]=nil
                 ripHadResEnd[button.guid]=nil
-                ripHasResEnd[button.id]=false
+                ripHasResEnd[button.id]=nil
+                ripHadResState[button.id]=nil
                 if button.player then 
                     HealBot_Data["PALIVE"]=true
                     HealBot_Action_ResetActiveUnitStatus()
                 end
                 button.status.rangespell=HealBot_RangeSpells["HEAL"]
-                HealBot_UpdateUnitRange(button,false)
+                HealBot_UpdateUnitRange(button,false,"DEATH")
                 HealBot_OnEvent_UnitHealth(button)
                 HealBot_Action_UpdateBackgroundButton(button)
                 button.status.hasres=false
@@ -962,9 +950,14 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 elseif not ripHasResEnd[button.id] then
                     if ripHasResEnd[button.guid] then 
                         local _,xButton,pButton = HealBot_UnitID(button.unit, true)
-                        if not ripHasResStart[button.guid] then HealBot_Action_SetResTimes(button, TimeNow) end
-                        if xButton then HealBot_Action_UpdateUnitDeadButtons(xButton, TimeNow, 1) end
-                        if pButton then HealBot_Action_UpdateUnitDeadButtons(pButton, TimeNow, 1) end
+                        if xButton then 
+                            if not ripHasResStart[xButton.guid] then HealBot_Action_SetResTimes(xButton, TimeNow) end
+                            HealBot_Action_UpdateUnitDeadButtons(xButton, TimeNow, 1) 
+                        end
+                        if pButton then 
+                            if not ripHasResStart[pButton.guid] then HealBot_Action_SetResTimes(pButton, TimeNow) end
+                            HealBot_Action_UpdateUnitDeadButtons(pButton, TimeNow, 1) 
+                        end
                     else
                         ripHadResEnd[button.guid]=nil
                     end
@@ -1002,13 +995,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 HealBot_UpdateUnitClear(button)
                 HealBot_Text_setNameTag(button)
                 HealBot_Text_UpdateText(button)
-                HealBot_Action_setState(button, true)
-                if button.aura.debuff.id>0 then  
-                    HealBot_Aura_ClearDebuff(button)
-                end
-                if button.aggro.status>0 then
-                    HealBot_Aggro_UpdateUnit(button,false,0,0,"",0,"")
-                end
+                HealBot_Action_setState(button, true, button.status.alpha)
                 if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCLASS"] then
                     HealBot_Action_SetClassIconTexture(button)
                 end
@@ -1017,7 +1004,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 end
                 if HealBot_Action_retResSpell(button) then 
                     button.status.rangespell=HealBot_Action_retResSpell(button)
-                    HealBot_UpdateUnitRange(button,false)
+                    HealBot_UpdateUnitRange(button,false,"DEATH")
                 end
                 HealBot_OnEvent_UnitHealth(button)
                 HealBot_Action_UpdateBackgroundButton(button)
@@ -1033,7 +1020,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 end
             end
         elseif ripHasResEnd[button.id] then
-            ripHasResEnd[button.id]=false
+            ripHasResEnd[button.id]=nil
             button.text.nameupdate=true
             button.text.tagupdate=true
             HealBot_Text_setNameTag(button)
@@ -1054,7 +1041,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             HealBot_RefreshUnit(button)
         end
     elseif ripHasResEnd[button.id] then
-        ripHasResEnd[button.id]=false
+        ripHasResEnd[button.id]=nil
         button.text.nameupdate=true
         button.text.tagupdate=true
         HealBot_Text_setNameTag(button)
@@ -1121,20 +1108,20 @@ function HealBot_Action_UpdateHealthButtonState(button)
             if button.aggro.status==3 or HealBot_AlwaysEnabled[button.guid] or button.health.ptc<=button.health.alert then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] and button.status.unittype<11 and button.status.rangespell~=HealBot_RangeSpells["HEAL"] then 
                     button.status.rangespell=HealBot_RangeSpells["HEAL"] 
-                    HealBot_UpdateUnitRange(button,false)
+                    HealBot_UpdateUnitRange(button,false,"HEAL")
                 end
                 if button.status.range==1 then
-                    button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
                     if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then button.status.current=HealBot_Unit_Status["ENABLEDIR"] end
                 else
-                    button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"], 1)
+                    curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"], 1)
                     if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then button.status.current=HealBot_Unit_Status["ENABLEDOOR"] end
                 end
-                HealBot_Action_setState(button, true)
+                HealBot_Action_setState(button, true, curAlpha)
             else
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then button.status.current=HealBot_Unit_Status["DISABLED"] end
-                button.status.alpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"], 1)
-                HealBot_Action_setState(button, false)
+                curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["DISA"], 1)
+                HealBot_Action_setState(button, false, curAlpha)
             end
             HealBot_Action_UpdateHealthStatusBarColor(button)
         end

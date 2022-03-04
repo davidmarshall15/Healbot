@@ -153,13 +153,14 @@ function HealBot_Timers_CheckTalentInfo()
 end
 
 function HealBot_Timers_PowerIndicator()
-    HealBot_Action_setpcClass()       
     local _,xButton,pButton = HealBot_UnitID("player")
     if xButton then
+        HealBot_Action_setpcClass(xButton)
         xButton.mana.power=-1
         HealBot_Action_setPowerIndicators(xButton)
     end
     if pButton then
+        HealBot_Action_setpcClass(pButton)
         pButton.mana.power=-1
         HealBot_Action_setPowerIndicators(pButton)
     end
@@ -258,21 +259,27 @@ function HealBot_Timers_BuffsReset()
     HealBot_Timers_Set("INIT","DebuffReset")
 end
 
+function HealBot_Timers_LastUpdate()
+    HealBot_Timers_Set("LAST","UpdateAllHealth")
+    HealBot_Timers_Set("LAST","PlayerCheckExtended")
+    HealBot_Timers_Set("DELAYED","AuraCheckUnits")
+	HealBot_Timers_Set("DELAYED","UpdateAllUnitBars")
+    HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
+end
+
 function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","ConfigClassHoT")
-    HealBot_Timers_Set("INITSLOW","InitSpells")
-    HealBot_Timers_Set("INITSLOW","InitPlugins")
-    HealBot_Timers_Set("INITSLOW","SpellsLoaded")
-    HealBot_Timers_Set("INITSLOW","PowerIndicator")
-    HealBot_Timers_Set("PLAYERSLOW","CheckZone")
-    HealBot_Timers_Set("PLAYERSLOW","InvChange")
-    HealBot_Timers_Set("DELAYED","PlayerCheckExtended")
-    HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
+    HealBot_Timers_Set("LAST","InitSpells")
+    HealBot_Timers_Set("LAST","SpellsLoaded")
+    HealBot_Timers_Set("DELAYED","CheckZone")
+    HealBot_Timers_Set("DELAYED","InvChange")
+    HealBot_Timers_Set("DELAYED","PowerIndicator")
+    HealBot_Timers_Set("DELAYED","LastUpdate")
 end
 
 function HealBot_Timers_EnteringWorld2()
     HealBot_Timers_Set("LAST","CheckDC")
-    HealBot_Timers_Set("DELAYED","UpdateAllHealth")
+    HealBot_Timers_Set("DELAYED","LastUpdate")
 end
 
 function HealBot_Timers_EnteringWorld()
@@ -280,7 +287,6 @@ function HealBot_Timers_EnteringWorld()
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
     HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
     HealBot_Timers_Set("LAST","UpdateEmergBars")
-    HealBot_Timers_Set("LAST","ReadyPlayerCheck")
     HealBot_Timers_Set("DELAYED","EnteringWorld2")
 end
 
@@ -425,12 +431,11 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetAllButtons"]=HealBot_Action_ResetAllButtons,
                         ["LowManaTrig"]=HealBot_Action_setLowManaTrig,
                         ["CheckLowMana"]=HealBot_Timers_CheckLowMana,
-                        ["ResetRange"]=HealBot_ResetRange,
+                        ["AuxResetRange"]=HealBot_AuxResetRange,
                         ["EndAggro"]=HealBot_EndAggro,
                         ["AfterCombatCleanup"]=HealBot_AfterCombatCleanup,
                         ["TargetFocusUpdate"]=HealBot_Timers_TargetFocusUpdate,
                         ["RegAggro"]=HealBot_Action_Register_Aggro,
-                        ["PowerIndicator"]=HealBot_Timers_PowerIndicator,
                         ["PlayerCheckExtended"]=HealBot_PlayerCheckExtended,
                         ["CheckZone"]=HealBot_CheckZone,
                         ["ZoneUpdate"]=HealBot_Timer_ZoneUpdate,
@@ -464,6 +469,7 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckDC"]=HealBot_Timers_CheckDC,
                         ["DeleteMarkedButtons"]=HealBot_Action_DeleteMarkedButtons,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
+                        ["LastUpdate"]=HealBot_Timers_LastUpdate,
                         ["WheelUpdate"]=HealBot_Timers_MouseWheelUpdate,
                         ["PowerIndicator"]=HealBot_Timers_PowerIndicator,
                         ["SpellsLoaded"]=HealBot_Timers_SpellsLoaded,
@@ -472,6 +478,8 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllHealth"]=HealBot_UpdateAllHealth,
                         ["InitAuraData"]=HealBot_Aura_InitData,
                         ["BuffsReset"]=HealBot_Timers_BuffsReset,
+                        ["AuraCheckUnits"]=HealBot_AuraCheck,
+                        ["UpdateAllUnitBars"]=HealBot_UpdateAllUnitBars,
                     },
                    }
 
