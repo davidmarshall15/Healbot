@@ -63,7 +63,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
         HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
         local ttText = getglobal("HealBot_ScanTooltipTextLeft2");
         if (ttText:GetText()) then
-            line = ttText:GetText();
+            local line = ttText:GetText();
             if line then 
                 hbMana = tonumber((gsub(line, "%D", "")))
             end

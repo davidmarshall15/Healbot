@@ -67,7 +67,7 @@ end
 function HealBot_Comms_About()
     local hbcommver=HealBot_GetInfo()
 
-    linenum=1
+    local linenum=1
     for x,v in pairs(hbcommver) do
         if linenum<21 then
             HealBot_Comms_Print_IncHealsSum(x,v,0,linenum)

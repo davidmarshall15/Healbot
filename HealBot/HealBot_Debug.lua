@@ -147,7 +147,7 @@ function HealBot_Debug_UpdateCalls()
     elseif debugCatText[debugCat]=="Calls" then    
         debugText["Calls"]={}
         msgs=HealBot_retCalls()
-        linenum = 0
+        local linenum = 0
         local maxcount=0
         for x,_ in pairs(order) do
             order[x]=nil;

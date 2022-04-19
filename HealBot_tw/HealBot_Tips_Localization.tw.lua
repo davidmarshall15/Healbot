@@ -396,7 +396,7 @@ function HealBot_Lang_Options_zhTW()
                                  ["TOOLTIPGAMETIP"]=HEALBOT_OPTIONS_USEGAMETOOLTIP,
                                  ["TOOLTIPMONBUFFS"]=HEALBOT_OPTIONS_TOOLTIPSHOWHOT,
                                  ["TOOLTIPFONTSIZE"]=HEALBOT_OPTIONS_SKINFHEIGHT,
-                                 ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
+                                 ["TOOLTIPPOSITIONLINK"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
                                  ["TOOLTIPALPHA"]=HEALBOT_OPTIONS_TTALPHA,
                         -- Mouse Wheel tab
                                  ["BUFFSMOUSEWHEELUSE"]=HEALBOT_OPTIONS_MOUSEWHEEL,
@@ -825,7 +825,7 @@ function HealBot_Lang_Options_zhTW()
                                ["TOOLTIPGAMETIP"]="Use the game tooltip, this includes tooltip addons.",
                                ["TOOLTIPMONBUFFS"]="On all monitored Buffs / HoT's\nshow who cast the spell and duration left.",
                                ["TOOLTIPFONTSIZE"]="Set the size using Blizzards standard font sizes.",
-                               ["TOOLTIPPOSITION"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
+                               ["TOOLTIPPOSITIONLINK"]="Links to the Skins Frame General tab,\nallowing for different positions per frame.",
                                ["TOOLTIPALPHA"]="Set the transparency of the tooltip.",
                         -- Mouse Wheel tab
                                ["BUFFSMOUSEWHEELUSE"]="Turn On/Off usage of the mouse wheel.\nNote: When this is on mouse over macros will not work on HealBot bars",

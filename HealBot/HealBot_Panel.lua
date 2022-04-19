@@ -13,16 +13,16 @@ local HealBot_TrackUnit={}
 local HealBot_SpecialUnit={}
 local HealBot_TrackPrivateUnit={}
 local HealBot_Panel_BlackList={};
-local backBarsSize={[1]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [2]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [3]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [4]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [5]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [6]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [7]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [8]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                    [9]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,
-                   [10]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0},["S2WIDTH"]=0,}
+local backBarsSize={[1]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [2]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [3]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [4]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [5]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [6]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [7]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [8]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                    [9]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},
+                   [10]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0, ["HEADHEIGHT"]=0, ["HEADWIDTH"]=0,["S2WIDTH"]=0},}
 local HealBot_MyHealTargets={}
 local HealBot_MyPrivateTanks={}
 local HealBot_MyPrivateHealers={}
@@ -53,6 +53,8 @@ local hbPanel_enemyUnits={}
 local grpNo=1
 local tHeader={}
 local erButton=nil
+local xUnit=""
+local xGUID=""
 local hbRole={ [HEALBOT_MAINTANK]=3,
                [HEALBOT_WORD_HEALER]=5,
                [HEALBOT_WORD_DPS]=7,
@@ -153,7 +155,7 @@ end
 function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
     if UnitExists(unit) then
         local dsGUID=UnitGUID(unit)
-        local dsName=HealBot_GetUnitName(unit)
+        local dsName=UnitName(unit)
         if dsGUID then
             if isPlayer then
                 --if UnitIsUnit(unit, "player") then unit="player" end
@@ -345,7 +347,7 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
         if HealBot_Globals.HealBot_PermMyTargets[xGUID] then
             HealBot_Globals.HealBot_PermMyTargets[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermMyTargets[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
+            HealBot_Globals.HealBot_PermMyTargets[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         local mti=0
@@ -373,7 +375,7 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         if HealBot_Globals.HealBot_PermPrivateTanks[xGUID] then
             HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
+            HealBot_Globals.HealBot_PermPrivateTanks[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyPrivateTanks[xGUID] then
@@ -395,7 +397,7 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         if HealBot_Globals.HealBot_PermPrivateHealers[xGUID] then
             HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=nil
         else
-            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=HealBot_GetUnitName(unit, xGUID) or "unKnown"
+            HealBot_Globals.HealBot_PermPrivateHealers[xGUID]=UnitName(unit) or "unKnown"
         end
     else
         if HealBot_MyPrivateHealers[xGUID] then
@@ -634,13 +636,18 @@ function HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
 end
 
 function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
-    backFrame:ClearAllPoints()
     if not relButton then
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
     elseif HealBot_SpecialUnit[button.unit] then
         HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
     else
         HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+    end
+end
+
+function HealBot_Panel_UpdateHeadersOpacity()
+    for _,header in pairs(HealBot_Header_Frames) do
+        HealBot_Action_UpdateHeaderOpacity(header)
     end
 end
 
@@ -653,6 +660,9 @@ function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preComb
             HealBot_Header_Frames[xHeader]=vPosParentHF
         end
         local backFrame=_G[vPosParentHF:GetName().."Bar5"]
+        vPosParentHF.bar=_G[vPosParentHF:GetName().."Bar"]
+        vPosParentHF.bar.txt=_G[vPosParentHF.bar:GetName().."_text"]
+        vPosParentHF.bar.txt2=_G[vPosParentHF.bar:GetName().."_text2"]
         if backFrame~=relButton then
             if vPosParentHF.frame~=button.frame then
                 local vPosFrameHF=_G["f"..button.frame.."_HealBot_Action"]
@@ -667,9 +677,9 @@ function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preComb
                 end
             end
             HealBot_Track_Headers[xHeader]=true
+            backFrame:ClearAllPoints()
             HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn)
-            local vPosFrameHB = _G[vPosParentHF:GetName().."Bar_text"]
-            vPosFrameHB:SetText(xHeader);
+            vPosParentHF.bar.txt:SetText(xHeader);
             vPosParentHF:Show();
         end
         return backFrame
@@ -753,23 +763,16 @@ function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
     HealBot_Action_setPoint(hbCurFrame)
 end
 
-local HealBot_noBars=25
+local HealBot_noBars=100
 local HealBot_setTestCols={}
 local HealBot_setTestBars=false
-function HealBot_Panel_SetNumBars(numTestBars)
-    if numTestBars>HealBot_noBars and HealBot_setTestBars then
-        HealBot_Panel_resetTestCols()
-    end
-    HealBot_noBars=numTestBars
-end
-
 function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBarsActive) do
         HealBot_Action_DeleterCallsUnit(b.unit)
         HealBot_Action_MarkDeleteButton(b)
         HealBot_TestBarsActive[x]=nil
     end
-    HealBot_Action_DeleteMarkedButtons()
+    HealBot_Action_ProcCacheButtons()
 end
 
 function HealBot_Panel_ToggleTestBars()
@@ -912,6 +915,7 @@ function HealBot_Panel_PositionBars(preCombat)
     end)
 end
 
+local vSetupFrameTag, vSetupBarsOptionsParent=nil, nil
 function HealBot_Panel_SetupExtraBars(frame, preCombat)
     if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] or
        Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["GRPCOLS"] then
@@ -975,7 +979,7 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
     end
 end
 
-local vSetupBarsOptionsFrame, vSetupBarsOptionsParent, vSetupFrameTag=nil, nil, nil
+local vSetupBarsOptionsFrame=nil
 function HealBot_Panel_SetupBars(preCombat)
     for j=1,5 do
         if hbBarsPerFrame[j] and hbBarsPerFrame[j]>0 then
@@ -1144,11 +1148,12 @@ end
 local RandomClassesAdj={}
 local rndClasses={}
 local curClass,tRnd=1,0
+local numNotSet=0
 function HealBot_Panel_RandomClassesRun()
     for z=1,numNotSet do
         if numNotSet>0 then
             tRnd=random(5)
-            tClass=random(HealBot_randomClCol[0]["MAX"])
+            local tClass=random(HealBot_randomClCol[0]["MAX"])
             if tRnd>RandomClassesAdj[tClass] then
                 rndClasses[tClass]=rndClasses[tClass]+1
                 numNotSet=numNotSet-1
@@ -1282,6 +1287,7 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b)
     end
 end
 
+local noBars=100
 function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole,bClass)
     local k=i[hbCurrentFrame]
     for j=minBar,maxBar do
@@ -2415,8 +2421,8 @@ function HealBot_Panel_TargetChangedCheckFocus()
                 HealBot_Action_OnLoad(vFocusFrame) 
                 vFocusFrame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
             end
-            if not HealBot_Data["UILOCK"] and UnitExists("target") and HealBot_Globals.FocusMonitor[HealBot_GetUnitName("target")] then
-                if UnitExists("focus") and HealBot_Globals.FocusMonitor[HealBot_GetUnitName("focus")] then
+            if not HealBot_Data["UILOCK"] and UnitExists("target") and HealBot_Globals.FocusMonitor[UnitName("target")] then
+                if UnitExists("focus") and HealBot_Globals.FocusMonitor[UnitName("focus")] then
                     vFocusFrame:Hide()
                 else
                     HealBot_Skins_ResetSkin("hbfocus",vFocusFrame,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][8]["NUMCOLS"])
@@ -2614,7 +2620,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
     end
     HealBot_Panel_luVars["NumPrivate"]=0
     for xUnit,xButton in pairs(HealBot_Private_Button) do
-        if xButton.status.unittype<5 then
+        if xButton.status.unittype>0 and xButton.status.unittype<5 then
             if HealBot_TrackPrivateUnit[xUnit] and not HealBot_Panel_BlackList[xButton.guid] then
                 xButton:Show()
                 if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][xButton.frame]["USE"] then
@@ -2847,12 +2853,14 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
     else
         HealBot_Panel_PrePartyChanged(preCombat, changeType)
     end
-    local nMembers=GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"]+15
+    local nMembers=GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"]+1
     if nMembers>HealBot_Globals.AutoCacheSize then    
         HealBot_Globals.AutoCacheSize=nMembers
-        HealBot_Timers_Set("DELAYED","DeleteMarkedButtons")
+        HealBot_Timers_Set("DELAYED","ProcCacheButtons")
     end
-    HealBot_fastUpdateEveryFrame()
+    if not preCombat then
+        HealBot_Timers_Set("PARTYSLOW","ReadyCheck")
+    end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end
 

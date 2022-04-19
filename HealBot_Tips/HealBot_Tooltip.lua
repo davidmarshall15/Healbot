@@ -429,7 +429,7 @@ function HealBot_Action_DoRefreshTooltip()
     xUnit=xButton.unit
     xGUID=UnitGUID(xUnit)
     if not xGUID then return end
-    local uName=HealBot_GetUnitName(xUnit, xGUID)
+    local uName=HealBot_GetUnitName(xButton)
     if not uName then return end;
     
     HealBot_ToolTip_SetTooltipPos(xButton.frame);
@@ -518,7 +518,13 @@ function HealBot_Action_DoRefreshTooltip()
                     uClass=HEALBOT_WORDS_UNKNOWN 
                 end
             end
-            if HEALBOT_GAME_VERSION>3 and xButton.spec==" " and xButton.isplayer and not HealBot_Data["INSPECT"] then
+            local uSpec=" "
+            if HealBot_Panel_RaidUnitGUID(xButton.guid) then
+                uSpec=HealBot_Action_getGuidData(xButton, "SPEC")
+            else
+                uSpec=xButton.spec
+            end
+            if HEALBOT_GAME_VERSION>3 and uSpec==" " and xButton.isplayer and not HealBot_Data["INSPECT"] then
                 HealBot_Data["INSPECT"]=true
                 HealBot_TalentQuery(xUnit)
             end
@@ -527,9 +533,9 @@ function HealBot_Action_DoRefreshTooltip()
                 HealBot_Tooltip_luVars["uGroup"]=xButton.group
             end
             if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
-                HealBot_Tooltip_SetLine(linenum,uName.." - "..UnitTag,r,g,b,1,uLvl..xButton.spec..uClass,r,g,b,1)
+                HealBot_Tooltip_SetLine(linenum,uName.." - "..UnitTag,r,g,b,1,uLvl..uSpec..uClass,r,g,b,1)
             else
-                HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl..xButton.spec..uClass,r,g,b,1)
+                HealBot_Tooltip_SetLine(linenum,uName,r,g,b,1,uLvl..uSpec..uClass,r,g,b,1)
             end
       
             local zone=HealBot_UnitZone(xButton)
@@ -561,7 +567,7 @@ function HealBot_Action_DoRefreshTooltip()
                         hlth=HealBot_Text_readNumber(hlth)
                         maxhlth=HealBot_Text_readNumber(maxhlth)
                         if UnitExists(vUnit) then
-                            HealBot_Tooltip_SetLine(linenum,"  "..HealBot_GetUnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
+                            HealBot_Tooltip_SetLine(linenum,"  "..UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                         else
                             HealBot_Tooltip_SetLine(linenum,"  "..HEALBOT_VEHICLE,lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                         end
@@ -750,9 +756,9 @@ function HealBot_Action_DoRefreshTargetTooltip(button)
     local r,g,b=button.text.r,button.text.g,button.text.b
 
     if UnitClass(button.unit) then
-        HealBot_Tooltip_SetLine(linenum,HealBot_GetUnitName(button.unit, button.guid),r,g,b,1,"Level "..UnitLevel(button.unit)..button.spec..UnitClass(button.unit),r,g,b,1)    
+        HealBot_Tooltip_SetLine(linenum,HealBot_GetUnitName(button),r,g,b,1,"Level "..UnitLevel(button.unit)..button.spec..UnitClass(button.unit),r,g,b,1)    
     else
-        HealBot_Tooltip_SetLine(linenum,HealBot_GetUnitName(button.unit, button.guid),r,g,b,1,rText,rR,rG,rB,ra)
+        HealBot_Tooltip_SetLine(linenum,HealBot_GetUnitName(button),r,g,b,1,rText,rR,rG,rB,ra)
     end
     linenum=linenum+1
     HealBot_Tooltip_SetLine(linenum,HEALBOT_TOOLTIP_TARGETBAR,1,1,0.5,1,HEALBOT_OPTIONS_TAB_SPELLS.." "..HEALBOT_SKIN_DISTEXT,1,1,0,1)

@@ -5138,19 +5138,36 @@
                       <OnLeave>HealBot_Options_Show_Help("UNITINCOMBAT",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Slider name="HealBot_Options_NotInUseOpacity" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="500" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="0" y="-315" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_NotInUseOpacity_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("FADEWHENNOMOUSE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FADEWHENNOMOUSE",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
                   <Frame name="HealBot_Options_GeneralSkinsFrameBlizz" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="245"/>
+                      <AbsDimension y="140"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-275"/>
+                          <AbsDimension x="20" y="-380"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-275"/>
+                          <AbsDimension x="-20" y="-380"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5160,7 +5177,7 @@
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
-                                <AbsDimension x="0" y="-25" />
+                                <AbsDimension x="0" y="-15" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -5170,9 +5187,9 @@
                     <Frames>
                       <CheckButton name="HealBot_Options_PartyFrames" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="-55" y="-70" />
+                              <AbsDimension x="50" y="-58" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5198,9 +5215,9 @@
                       </CheckButton>
                       <CheckButton name="HealBot_Options_MiniBossFrames" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PartyFrames" relativePoint="BOTTOMLEFT">>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PartyFrames" relativePoint="TOPRIGHT">>
                             <Offset>
-                              <AbsDimension x="0" y="-40" />
+                              <AbsDimension x="240" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5214,7 +5231,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MiniBossFrames" relativePoint="BOTTOMLEFT">>
                             <Offset>
-                              <AbsDimension x="0" y="-30" />
+                              <AbsDimension x="0" y="-10" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -14342,23 +14359,6 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
-                          <Button name="HealBot_Options_SkinBarAggroTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
-                            <Size>
-                              <AbsDimension x="22" y="22"/>
-                            </Size>
-                            <Anchors>
-                              <Anchor point="LEFT" relativeTo="HealBot_AggroTextCustomColour" relativePoint="RIGHT">
-                                <Offset>
-                                  <AbsDimension x="2" y="1"/>
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
-                            </Scripts>
-                          </Button>
                           <Slider name="HealBot_Options_AggroTextAlpha" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="525" y="16" />

@@ -1155,7 +1155,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
     elseif barType=="header" then
         h=button
-        bar = _G[h:GetName().."Bar"]
+        --bar = _G[h:GetName().."Bar"]
         local back = _G[h:GetName().."Bar5"]
         hwidth = ceil((bWidth+(bOutline*2))*Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["WIDTH"])
         hheight = ceil(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"]*frameScale)
@@ -1165,33 +1165,21 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         back:SetWidth(hwidth)
         HealBot_Action_SetBackHeaderHeightWidth(h.frame, hheight, hwidth)
         back:SetStatusBarColor(0,0,0,0)
-        bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
-        bar:GetStatusBarTexture():SetHorizTile(false)
-        bar:SetMinMaxValues(0,100);
-        bar:SetValue(100);
-        bar:SetStatusBarColor(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["R"],
-                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["G"],
-                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["B"],
-                              Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["A"]);
-        bar:SetHeight(hheight);
-        bar:SetWidth(hwidth);
-        tBarsConcat[1]=bar:GetName()
-        tBarsConcat[2]="_text"
-        bar.txt = _G[HealBot_Skins_Concat(2)];
-        tBarsConcat[2]="_text2"
-        bar.txt2 = _G[HealBot_Skins_Concat(2)];
-        bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
+        h.bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
+        h.bar:GetStatusBarTexture():SetHorizTile(false)
+        h.bar:SetMinMaxValues(0,100);
+        h.bar:SetValue(100);
+        HealBot_Action_UpdateHeaderOpacity(h)
+        h.bar:SetHeight(hheight);
+        h.bar:SetWidth(hwidth);
+        h.bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
                                 Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"],
                                 HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
-        bar.txt:SetTextColor(Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["R"],
-                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["G"],
-                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["B"],
-                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["A"]);
-        bar.txt:SetPoint("CENTER",bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
-        bar:EnableMouse(false)
-        bar.txt2:SetTextColor(0,0,0,0);
-        bar:ClearAllPoints()
-        bar:SetPoint("CENTER",back,"CENTER",0,0)
+        h.bar.txt:SetPoint("CENTER",h.bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
+        h.bar:EnableMouse(false)
+        h.bar.txt2:SetTextColor(0,0,0,0);
+        h.bar:ClearAllPoints()
+        h.bar:SetPoint("CENTER",back,"CENTER",0,0)
         h:Disable();
     elseif barType=="frameheader" then
         tBarsConcat[1]="f"
@@ -1941,8 +1929,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["A"] then Healbot_Config_Skins.Emerg[SkinName][gl]["A"]=1 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["OA"] then Healbot_Config_Skins.Emerg[SkinName][gl]["OA"]=0.5 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["DA"] then Healbot_Config_Skins.Emerg[SkinName][gl]["DA"]=0.2 end
-        if not Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"]=25 end
-        if not Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"] then Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"]=50 end
+        if not Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"] then Healbot_Config_Skins.Emerg[SkinName][gl]["CRITICAL"]=0.25 end
+        if not Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"] then Healbot_Config_Skins.Emerg[SkinName][gl]["INJURED"]=0.5 end
         if Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]==nil then 
             Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"]=false 
         elseif type(Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFBARCOL"])=="number" then
@@ -2245,6 +2233,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]==nil then Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]=true end
     if not Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"] then Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["FGDIMMING"] then Healbot_Config_Skins.General[SkinName]["FGDIMMING"]=2.5 end
+    if not Healbot_Config_Skins.General[SkinName]["GLOBALDIMMING"] then Healbot_Config_Skins.General[SkinName]["GLOBALDIMMING"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then Healbot_Config_Skins.General[SkinName]["OFREQ"]=0.07 end
     if not Healbot_Config_Skins.General[SkinName]["OMIN"] then Healbot_Config_Skins.General[SkinName]["OMIN"]=0.1 end
     if not Healbot_Config_Skins.General[SkinName]["OMAX"] then Healbot_Config_Skins.General[SkinName]["OMAX"]=0.95 end

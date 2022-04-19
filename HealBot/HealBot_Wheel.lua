@@ -139,7 +139,7 @@ function HealBot_Action_DoHealUnit_Wheel(self, delta)
         if HealBot_MouseWheelCmd==HEALBOT_HB_MENU then
             local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
             HBFriendsDropDown.unit = hbLastButton.unit
-            HBFriendsDropDown.name = HealBot_GetUnitName(hbLastButton.unit, hbLastButton.guid)
+            HBFriendsDropDown.name = HealBot_GetUnitName(hbLastButton)
             HBFriendsDropDown.initialize = HealBot_Action_hbmenuFrame_DropDown_Initialize
             HBFriendsDropDown.displayMode = "MENU"
             ToggleDropDownMenu(1, nil, HBFriendsDropDown, "cursor", 10, -8)

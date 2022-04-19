@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.2.0.2";
+﻿HEALBOT_VERSION_SC = "9.2.0.7";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -179,7 +179,8 @@ function HealBot_globalVars()
     HEALBOT_CHAIN_LIGHTNING                 = 421 --GetSpellInfo(421) or "--Chain Lightning"
     HEALBOT_EARTH_SHOCK                     = 8042 --GetSpellInfo(8042) or "--Earth Shock"
     HEALBOT_ELEMENTAL_BLAST                 = 117014 --GetSpellInfo(117014) or "--Elemental Blast"
-    HEALBOT_FLAME_SHOCK                     = 8050 --GetSpellInfo(8050) or "--Flame Shock"
+    HEALBOT_FLAME_SHOCK                     = 188389
+    HBC_FLAME_SHOCK                         = 8050 --GetSpellInfo(8050) or "--Flame Shock"
     HEALBOT_FROST_SHOCK                     = 8056 --GetSpellInfo(8056) or "--Frost Shock"
     HEALBOT_HEX                             = 51514 --GetSpellInfo(51514) or "--Hex"
     HEALBOT_LAVA_BLAST                      = 51505 --GetSpellInfo(51505) or "--Lava Blast"
@@ -635,6 +636,7 @@ function HealBot_globalVars()
     HEALBOT_DEADLY_POISON                   = 2823
     HEALBOT_CRIPPLING_POISON                = 3408
     HEALBOT_WOUND_POISON                    = 8679
+    HEALBOT_INSTANT_POISON                  = 315584
     
     
     --Resurrection Spells

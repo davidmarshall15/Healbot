@@ -80,6 +80,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
                                  ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
+                                 ["FADEWHENNOMOUSE"]=HEALBOT_OPTION_GLOBALDIMMING,
                         -- Skins Effects tab
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
                                  ["USEFOCUSGROUPS"]=HEALBOT_OPTION_USEFOCUSGROUPS,
@@ -116,7 +117,6 @@ function HealBot_Lang_Options_enALL()
                                  ["SFOFFSETV"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETV,
                                  ["FRAMEBACKCOL"]="Frame Background",
                                  ["FRAMEBORDERCOL"]="Frame Border",
-                                 ["TOOLTIPPOSITION"]=HEALBOT_OPTIONS_SETTOOLTIP_POSITION,
                         -- Skins Frames Heal Groups tab
                                  ["SELECTFRAMEFORGROUP"]=HEALBOT_OPTIONS_FRAME,
                                  ["ENABLEHEALGROUP"]=HEALBOT_OPTIONS_FRAME,
@@ -608,6 +608,7 @@ function HealBot_Lang_Options_enALL()
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option is only available at performance level 4+",
                                ["USEFOCUSGROUPS"]="Use if a raid leader requests the healer to focus on specific groups.\nThis option reduces the opacity on all groups not included.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies to the Raid Heal Group.",
                                ["UNITINCOMBAT"]="When a visible Group/Raid member enters combat and your out of combat, do the following:\n--\n* Do nothing - ".._G["GREEN_FONT_COLOR_CODE"].."Keep Healbot unlocked and do nothing.\n* Show enemy frame - ".._G["GREEN_FONT_COLOR_CODE"].."Show the enemy frame when used with HealBot out of combat mode.\n* Lockdown HealBot - ".._G["GREEN_FONT_COLOR_CODE"].."Lockdown HealBot in combat mode.", 
+                               ["FADEWHENNOMOUSE"]="Fades all frames when the mouse is not over any frame.",
                                ["FOCUSGROUPDIMMING"]="Set the intensity of the opacity reduction on unfocused groups.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The update frequency can be tweaked\n".._G["GREEN_FONT_COLOR_CODE"].."with the HealBot Performance Plugin.",
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The update frequency can be tweaked\n".._G["GREEN_FONT_COLOR_CODE"].."with the HealBot Performance Plugin.",

@@ -28,35 +28,36 @@ end
 
 function HealBot_Aggro_IndicatorUpdate(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 and button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
+        local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
         if button.aggro.status==1 then
             if button.aggro.ind~=1 then
                 button.aggro.ind=1
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
+                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
                 button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
                 button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(1)
+                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
                 button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
                 button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
             end
         elseif button.aggro.status==2 then
             if button.aggro.ind~=2 then
                 button.aggro.ind=2
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconal2"]:SetAlpha(1)
+                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
                 button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconar2"]:SetAlpha(1)
+                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
                 button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
             end
         elseif button.aggro.status==3 then
             if button.aggro.ind~=3 then
                 button.aggro.ind=3
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconal2"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconal3"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconar2"]:SetAlpha(1)
-                button.gref.indicator.aggro["Iconar3"]:SetAlpha(1)
+                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconal3"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
+                button.gref.indicator.aggro["Iconar3"]:SetAlpha(indAlpha)
             end
         end
     elseif button.aggro.ind~=0 then
@@ -87,7 +88,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
     if (button.aggro.status==3 or threatStatus==3) then
         if button.aggro.status~=threatStatus then
             button.aggro.status=threatStatus
-            HealBot_Action_UpdateHealthButtonState(button, true)
+            HealBot_Action_UpdateHealthButtonState(button)
         end
     end
     button.aggro.status=threatStatus
@@ -124,22 +125,22 @@ end
 function HealBot_Aggro_UpdateAggroText()
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.gref.txt["text4"]:SetText("")
-        HealBot_Text_setAggroText(xButton, true)
+        HealBot_Text_setAggroText(xButton)
     end
     for _,xButton in pairs(HealBot_Private_Button) do
         xButton.gref.txt["text4"]:SetText("")
-        HealBot_Text_setAggroText(xButton, true)
+        HealBot_Text_setAggroText(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
         xButton.gref.txt["text4"]:SetText("")
-        HealBot_Text_setAggroText(xButton, true)
+        HealBot_Text_setAggroText(xButton)
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
         xButton.gref.txt["text4"]:SetText("")
-        HealBot_Text_setAggroText(xButton, true)
+        HealBot_Text_setAggroText(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
         xButton.gref.txt["text4"]:SetText("")
-        HealBot_Text_setAggroText(xButton, true)
+        HealBot_Text_setAggroText(xButton)
     end
 end
