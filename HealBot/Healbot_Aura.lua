@@ -324,7 +324,7 @@ function HealBot_Aura_DebuffIcon_AlphaValue(secLeft, button, nextUpdate)
             retAlpha=button.status.alpha
         end
     else
-        HealBot_Check_UnitAura(button)
+        HealBot_Check_UnitDebuff(button)
     end
       --HealBot_setCall("HealBot_Aura_DebuffIcon_AlphaValue")
     return retAlpha, nextUpdate
@@ -356,7 +356,7 @@ function HealBot_Aura_BuffIcon_AlphaValue(secLeft, button, nextUpdate)
             retAlpha=button.status.alpha
         end
     else
-        button.aura.update=true
+        HealBot_Check_UnitBuff(button)
     end
       --HealBot_setCall("HealBot_Aura_BuffIcon_AlphaValue")
     return retAlpha, nextUpdate
@@ -686,7 +686,7 @@ function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
             end
             if dID~=name then 
                 HealBot_Options_CDebuffResetList()
-                HealBot_Check_UnitAura(button)
+                HealBot_Check_UnitDebuff(button)
             end
             break
         end
@@ -1296,7 +1296,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
                 HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
             end
         end
-        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.aura.buffcol then button.status.refresh=true end
+        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.aura.buffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
@@ -1341,7 +1341,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
             button.text.healthupdate=true
             HealBot_Text_UpdateText(button)
         end
-        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.aura.debuffcol then button.status.refresh=true end
+        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.aura.debuffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
 end
@@ -1380,12 +1380,9 @@ end
 local uaIsCurrent, uaIsCustom, uaNever, uaZ, tGeneralBuffs=false, false, false, 1, true
 local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
-    if button.player and uaSpellId==HEALBOT_SPIRIT_OF_REDEMPTION then
-        HealBot_Data["PSPIRITRED"]=true
-    end
     if not HealBot_ExcludeBuffInCache[uaSpellId] and uaExpirationTime then
         if not uaUnitCaster then uaUnitCaster="nil" end
-        if not HealBot_Data["PALIVE"] or HealBot_Data["PSPIRITRED"] then
+        if not HealBot_Data["PALIVE"] or (button.player and uaSpellId==HEALBOT_SPIRIT_OF_REDEMPTION) then
             tGeneralBuffs=false
         elseif HealBot_Buff_Aura2Item[uaName] then
             uaName=GetItemInfo(HealBot_Buff_Aura2Item[uaName]) or uaName
@@ -1493,7 +1490,6 @@ function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
     if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
-        if button.player then HealBot_Data["PSPIRITRED"]=false end
         button.aura.buff.colbar=false
         highestBuffPrio=21
         curBuffName=false;
@@ -1674,21 +1670,13 @@ function HealBot_Aura_CheckUnitDebuffs(button)
     end
 end
 
-function HealBot_Aura_CheckUnitAuras(button)
+function HealBot_Aura_CheckUnitAuras(button, debuff)
     if not UnitIsFriend("player",button.unit) then
-        button.aura.update=false
         HealBot_Aura_RefreshEnemyAuras(button)
+    elseif debuff then
+        HealBot_Aura_CheckUnitDebuffs(button)
     else
-        if button.aura.buffupdate then
-            button.aura.update=false
-            HealBot_Aura_CheckUnitBuffs(button)
-        else
-            HealBot_Aura_CheckUnitDebuffs(button)
-            button.aura.buffupdate=true
-        end
-        if button.status.refresh then
-            HealBot_Action_UpdateDebuffButton(button)
-        end
+        HealBot_Aura_CheckUnitBuffs(button)
     end
 end
 
@@ -1776,7 +1764,7 @@ function HealBot_Aura_ClearDebuff(button)
             button.text.healthupdate=true
             HealBot_Text_setHealthText(button)
         end
-        if button.aura.debuffcol then button.status.refresh=true end
+        if button.aura.debuffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_ClearDebuff")
 end
@@ -1788,7 +1776,7 @@ function HealBot_Aura_ClearBuff(button)
         button.aura.buff.missingbuff=false
         button.aura.buff.priority=99
         HealBot_Aux_ClearAuraBuffBars(button)
-        if button.aura.buffcol then button.status.refresh=true end
+        if button.aura.buffcol then HealBot_RefreshUnit(button) end
     end
         --HealBot_setCall("HealBot_Aura_ClearBuff")
 end

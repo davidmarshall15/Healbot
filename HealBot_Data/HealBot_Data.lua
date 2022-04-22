@@ -243,6 +243,7 @@ function HealBot_Data_InitVars()
         PluginPerformance=true,
         PluginEffectiveTanks=true,
         PluginEfficientHealers=true,
+        PluginMyCooldowns=true,
         NoRanks=false,
         CPUUsage=5,
         OptionsTheme=1,

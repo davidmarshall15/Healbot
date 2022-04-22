@@ -994,6 +994,7 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_EXTRABUTTONS,
     HEALBOT_PLUGIN_COMBATPROT,
     HEALBOT_PLUGIN_PERFORMANCE,
+    HEALBOT_PLUGIN_MYCOOLDOWNS,
     --HEALBOT_PLUGIN_EFFECTIVETANKS,
     --HEALBOT_PLUGIN_EFFICIENTHEALERS,
     }
@@ -1454,10 +1455,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_WATER_BREATHING,
         }
         local sName=HealBot_KnownSpell(HEALBOT_FLAMETONGUE_SPELL)
-        if sName then 
-            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) 
-            HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
-        end
+        if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) end
         sName=HealBot_KnownSpell(HEALBOT_WINDFURY_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         sName=HealBot_KnownSpell(HBC_ROCKBITER_WEAPON)
@@ -12296,14 +12294,16 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [4]="pluginExtraButtons",
                     [5]="pluginCombatProt",
                     [6]="pluginPerformance",
-                    [7]="pluginEffectiveTanks",
-                    [8]="pluginEfficientHealers",}
+                    [7]="pluginMyCooldowns",
+                    [8]="pluginEffectiveTanks",
+                    [9]="pluginEfficientHealers",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
     HealBot_Options_PluginExtraButtonsFrame:Hide()
     HealBot_Options_PluginCombatProtFrame:Hide()
     HealBot_Options_PluginPerformanceFrame:Hide()
+    HealBot_Options_PluginMyCooldownsFrame:Hide()
     HealBot_Options_PluginEffectiveTanksFrame:Hide()
     HealBot_Options_PluginEfficientHealersFrame:Hide()
     if not HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Loaded") then
@@ -12331,10 +12331,13 @@ local function HealBot_Options_Plugins_ShowFrame()
         elseif HealBot_Options_luVars["curPlugin"]==6 then
             HealBot_Plugin_Performance_Options()
             HealBot_Options_PluginPerformanceFrame:Show()
-        --elseif HealBot_Options_luVars["curPlugin"]==7 then
+        elseif HealBot_Options_luVars["curPlugin"]==7 then
+            HealBot_Plugin_MyCooldowns_Options()
+            HealBot_Options_PluginMyCooldownsFrame:Show()
+        --elseif HealBot_Options_luVars["curPlugin"]==8 then
         --    HealBot_Plugin_EffectiveTanks_Options()
         --    HealBot_Options_PluginEffectiveTanksFrame:Show()
-        --elseif HealBot_Options_luVars["curPlugin"]==8 then
+        --elseif HealBot_Options_luVars["curPlugin"]==9 then
         --    HealBot_Plugin_EfficientHealers_Options()
         --    HealBot_Options_PluginEfficientHealersFrame:Show()
         end

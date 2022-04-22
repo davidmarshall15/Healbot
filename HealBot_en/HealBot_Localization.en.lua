@@ -266,6 +266,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_SMALL                     = "Small"
     HEALBOT_WORDS_MEDIUM                    = "Medium"
     HEALBOT_WORDS_LARGE                     = "Large"
+    HEALBOT_WORDS_SHORT                     = "Short";
+    HEALBOT_WORDS_LONG                      = "Long";
     HEALBOT_WORDS_SEC                       = "sec";
     HEALBOT_WORDS_CAST                      = "Cast";
     HEALBOT_WORDS_UNKNOWN                   = "Unknown";
@@ -452,6 +454,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_EXTREME                    = "Extreme"
     HEALBOT_WORD_CASTER                     = "Caster"
     HEALBOT_WORD_TYPE                       = "Type"
+    
 
     HEALBOT_ASSIST                          = "Assist";
     HEALBOT_FOCUS                           = "Focus";
@@ -1107,6 +1110,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_PERFORMANCE              = "HealBot Performance"
     HEALBOT_PLUGIN_EFFECTIVETANKS           = "HealBot EffectiveTanks"
     HEALBOT_PLUGIN_EFFICIENTHEALERS         = "HealBot EfficientHealers"
+    HEALBOT_PLUGIN_MYCOOLDOWNS              = "HealBot MyCooldowns"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
     HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
     HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"

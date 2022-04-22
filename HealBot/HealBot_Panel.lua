@@ -1053,24 +1053,25 @@ function HealBot_Panel_SetupBars(preCombat)
         end
     elseif vSetupBarsFrame>0 and vSetupBarsOptionsFrame then
         vSetupBarsOptionsParent=_G["f"..vSetupBarsFrame.."_HealBot_Action"]
+        vSetupBarsOptionsFrame:ClearAllPoints()
         if vSetupBarsOptionsFrame.frame~=vSetupBarsFrame then
             vSetupBarsOptionsFrame:Hide()
-            vSetupBarsOptionsFrame:ClearAllPoints()
             vSetupBarsOptionsFrame:SetParent(vSetupBarsOptionsParent)
             vSetupBarsOptionsFrame.frame=vSetupBarsFrame
+            vSetupBarsOptionsFrame:SetWidth(ceil(backBarsSize[vSetupBarsFrame]["WIDTH"]*0.95))
+            vSetupBarsOptionsFrame:SetHeight(25)
         end
-        vSetupBarsOptionsFrame:ClearAllPoints()
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==4 then
             if hbMoveMe==vSetupBarsFrame then
-                vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-30);
+                vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-22);
             else
-                vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-10);
+                vSetupBarsOptionsFrame:SetPoint("TOP",vSetupBarsOptionsParent,"TOP",0,-2);
             end
         else
             if hbMoveMe==vSetupBarsFrame then
-                vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,30);
+                vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,27);
             else
-                vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,10);
+                vSetupBarsOptionsFrame:SetPoint("BOTTOM",vSetupBarsOptionsParent,"BOTTOM",0,7);
             end
         end
         vSetupBarsOptionsFrame:Show();
@@ -1101,14 +1102,16 @@ function HealBot_Panel_InitOptBars()
     vSetupBarsOptionsFrame=_G["HealBot_Action_OptionsButton"]
     if not vSetupBarsOptionsFrame then
         vSetupBarsOptionsParent=_G["f1_HealBot_Action"]
-        vSetupBarsOptionsFrame=CreateFrame("Button", "HealBot_Action_OptionsButton", vSetupBarsOptionsParent, "HealBotOptionsButtonTemplate") 
+        vSetupBarsOptionsFrame=CreateFrame("Button", "HealBot_Action_OptionsButton", vSetupBarsOptionsParent, "HealBotOptionsButtonTemplate")
         local bar = _G[vSetupBarsOptionsFrame:GetName().."Bar"]
         bar:SetStatusBarColor(0.1,0.1,0.4,0);
         bar:SetMinMaxValues(0,100);
         bar:SetValue(0);
         bar:UnregisterAllEvents()
-        vSetupBarsOptionsFrame.frame=1
+        vSetupBarsOptionsFrame.frame=0
         bar.txt = _G[bar:GetName().."_text"];
+        bar.txt:SetFont("Fonts\\FRIZQT__.TTF", 12)
+        bar.txt:SetPoint("CENTER",0,-2)
         bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
         bar.txt:SetText(HEALBOT_ACTION_OPTIONS);
         bar = _G[vSetupBarsOptionsFrame:GetName().."Bar5"]
