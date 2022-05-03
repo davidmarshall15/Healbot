@@ -3449,7 +3449,8 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 HealBot_Action_setRegisterForClicks(hButton)
                 HealBot_Action_setRegisterForClicks(erButton)
             end
-
+            
+            hButton.status.role=role
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then 
                 hButton.reset=false
                 if hButton.unit~=unit or hButton.guid~=guid then 
@@ -3476,7 +3477,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
                 HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
-                hButton.status.role=role
                 HealBot_HealthAlertLevel(preCombat, hButton)
                 if unitType>10 then 
                     HealBot_Enemy_Button[unit]=hButton

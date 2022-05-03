@@ -282,9 +282,6 @@ function HealBot_Options_InitVars()
     optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
     optionsButton:SetWidth(100)
     optionsButton:SetPoint("TOPLEFT", 14, -58)
-    optionsButton:SetScript('OnClick', function()
-        HealBot_TogglePanel(HealBot_Options, true)
-    end)
     fonts = LSM:List('font');
     if #fonts>0 then
         local g=_G["UsedToInitFonts"]
@@ -1697,8 +1694,8 @@ function HealBot_Options_setDebuffPriority()
         if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
             if HealBot_Globals.CustomDebuffIDMethod[id]==1 then
                 if id~=HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC then hbCustomDebuffPrio[id]=x end
-            else
-                if name then hbCustomDebuffPrio[name]=x end
+            elseif name then 
+                hbCustomDebuffPrio[name]=x
             end
         else
             if name then hbCustomDebuffPrio[name]=x end
@@ -2615,7 +2612,7 @@ function HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false, true)
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
         HealBot_Timers_Set("SKINSSLOW","RemoveUnusedDebuffIcons")
     end
 end
@@ -2677,7 +2674,7 @@ function HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Options_framesChanged(false, true)
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
         HealBot_Timers_Set("SKINSSLOW","RemoveUnusedBuffIcons")
     end
 end
@@ -4302,7 +4299,7 @@ function HealBot_Options_BuffTimer_OnValueChanged(self,bufftype)
             g=_G[self:GetName()]
             HealBot_Options_SetText(g,self.text .. ": " .. mins ..":".. secs .." mins")
         end
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
     end
 end
 
@@ -4960,7 +4957,7 @@ function HealBot_Options_CDCCol_ShowOnHealthBar_OnClick(self)
         HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
         HealBot_Options_framesChanged(false)
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
     end
 end
 
@@ -4970,7 +4967,7 @@ function HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)
         HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
         HealBot_Options_framesChanged(false)
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
     end
 end
 
@@ -4988,7 +4985,7 @@ function HealBot_Options_CDCCol_OnOff_OnClick(self)
         HealBot_setLuVars("UpdateAllAura", 3)
         HealBot_Aura_setLuVars("updateAll", true)
         HealBot_Aura_ClearAllDebuffs()
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
     end
 end
 
@@ -5018,8 +5015,8 @@ end
 function HealBot_Options_NoAuraWhenRested_OnClick(self)
     if HealBot_Config_Buffs.NoAuraWhenRested~=self:GetChecked() then
         HealBot_Config_Buffs.NoAuraWhenRested=self:GetChecked()
-        HealBot_Timers_Set("AURA","CheckUnits")
         HealBot_Timers_Set("PLAYERSLOW","PlayerCheckExtended")
+        HealBot_Timers_Set("LAST","AuraCheckUnits")
     end
 end
 
@@ -9044,8 +9041,8 @@ function HealBot_Options_SetFrames()
 end
 --------------------------------------------------------------------------------
 
-HealBot_Options_luVars["ActionBarsCombo"] = 1
-
+HealBot_Options_luVars["ActionBarsCombo"]=1
+HealBot_Options_luVars["hbIconHelpSelectID"]=0
 function HealBot_Options_ActionBarsCombo_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_ActionBarsCombo_List), 1 do
@@ -12294,9 +12291,7 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [4]="pluginExtraButtons",
                     [5]="pluginCombatProt",
                     [6]="pluginPerformance",
-                    [7]="pluginMyCooldowns",
-                    [8]="pluginEffectiveTanks",
-                    [9]="pluginEfficientHealers",}
+                    [7]="pluginMyCooldowns",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
@@ -12304,8 +12299,6 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginCombatProtFrame:Hide()
     HealBot_Options_PluginPerformanceFrame:Hide()
     HealBot_Options_PluginMyCooldownsFrame:Hide()
-    HealBot_Options_PluginEffectiveTanksFrame:Hide()
-    HealBot_Options_PluginEfficientHealersFrame:Hide()
     if not HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Loaded") then
         HealBot_Options_PluginNATxt:Show()
         HealBot_Options_PluginNAReasonTxt:Show()
@@ -12334,12 +12327,6 @@ local function HealBot_Options_Plugins_ShowFrame()
         elseif HealBot_Options_luVars["curPlugin"]==7 then
             HealBot_Plugin_MyCooldowns_Options()
             HealBot_Options_PluginMyCooldownsFrame:Show()
-        --elseif HealBot_Options_luVars["curPlugin"]==8 then
-        --    HealBot_Plugin_EffectiveTanks_Options()
-        --    HealBot_Options_PluginEffectiveTanksFrame:Show()
-        --elseif HealBot_Options_luVars["curPlugin"]==9 then
-        --    HealBot_Plugin_EfficientHealers_Options()
-        --    HealBot_Options_PluginEfficientHealersFrame:Show()
         end
     end
 end
@@ -14234,7 +14221,6 @@ function HealBot_Options_CDCIDMethod_DropDown()
                         end 
                         UIDropDownMenu_SetText(HealBot_Options_CDCIDMethod,HealBot_Options_Class_HoTctlIDMethod_List[j])
                         HealBot_Timers_Set("AURA","DebuffPriority")
-                        HealBot_Timers_Set("AURA","ResetDebuffCache")
                     end
         info.checked = false;
         if (HealBot_Globals.CustomDebuffIDMethod[HealBot_Options_luVars["CDebuffcustomSpellID"]] or 3)==j then info.checked = true; end 
@@ -14328,7 +14314,7 @@ function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
   --  UIDropDownMenu_SetSelectedValue(HealBot_Options_CDebuffTxt1, useId);
     HealBot_Options_CDebuffResetList()
     HealBot_Timers_Set("AURA","DebuffPriority")
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("DELAYED","AuraCheckUnits")
     HealBot_Globals.CatchAltDebuffIDs[name]=true
 end
 
@@ -14480,7 +14466,6 @@ function HealBot_Options_DeleteCDebuff(dId, dName)
     HealBot_Options_InitSub(403)
     HealBot_Options_InitSub(404)
     HealBot_Timers_Set("AURA","DebuffPriority")
-    HealBot_Timers_Set("AURA","ResetDebuffCache")
     HealBot_SetCDCBarColours();
     HealBot_Options_CDebuffResetList()
 end
@@ -15335,7 +15320,6 @@ function HealBot_Options_Debuff_Reset()
     end
     HealBot_Options_ResetDoInittab(4)
     HealBot_Timers_Set("AURA","DebuffPriority")
-    HealBot_Timers_Set("AURA","ResetDebuffCache")
     FirstDebuffLoad=nil
 end
 
@@ -17431,6 +17415,7 @@ HealBot_Options_luVars["IdleInit"]=0
 function HealBot_Options_idleInit()
     if not DoneInitTab[0] then
         DoneInitTab[0]=100
+        HealBot_Timers_Set("INITSLOW","SetLang")
         HealBot_Options_idleInit()
     elseif DoneInitTab[0]>0 then
         if not UIDROPDOWNMENU_OPEN_MENU then
@@ -17466,7 +17451,6 @@ function HealBot_Options_idleInit()
         HealBot_Options_luVars["cSkin"]=Healbot_Config_Skins.Current_Skin
         HealBot_AddDebug("Timer 8000 called #"..HealBot_Options_luVars["IdleInit"], "Load", true)
         HealBot_Options_luVars["IdleInit"]=0
-        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -20561,10 +20545,7 @@ function HealBot_Options_ShowPanel(self, tabNo, subTabNo)
     if tabNo==0 then
         HealBot_Comms_Print_Supports()
     end
-    if not DoneInitTab[0] then
-        DoneInitTab[0]=100
-        HealBot_Timers_Set("INITSLOW","OptionsInit") 
-    end
+    if not DoneInitTab[0] then HealBot_Options_idleInit() end
     if HealBot_Options_luVars["PrevTabNo"] and HealBot_Options_luVars["PrevTabNo"]~=tabNo then
         g=_G["HealBot_Options_Panel"..HealBot_Options_luVars["PrevTabNo"]]
         g:Hide();

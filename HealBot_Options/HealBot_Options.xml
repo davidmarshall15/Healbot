@@ -24568,40 +24568,6 @@
                   </Anchor>
                 </Anchors>
               </Frame>
-              <Frame name="HealBot_Options_PluginEffectiveTanksFrame" hidden="true" inherits="BackdropTemplate">
-                <Size>
-                  <AbsDimension y="580"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-              </Frame>
-              <Frame name="HealBot_Options_PluginEfficientHealersFrame" hidden="true" inherits="BackdropTemplate">
-                <Size>
-                  <AbsDimension y="580"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-              </Frame>
             </Frames>
           </Frame>
         </Frames>

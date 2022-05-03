@@ -85,8 +85,6 @@ HealBot_luVars["ChatMSG"]=""
 HealBot_luVars["ChatNOTIFY"]=0
 HealBot_luVars["pluginThreat"]=false
 HealBot_luVars["pluginTimeToDie"]=false
-HealBot_luVars["pluginEffectiveTanks"]=false
-HealBot_luVars["pluginEfficientHealers"]=false
 HealBot_luVars["adjMaxHealth"]=0
 HealBot_luVars["slowUpdateID"]=1
 HealBot_luVars["UpdateMaxUnits"]=5
@@ -104,6 +102,7 @@ HealBot_luVars["UpdateSlowNext"]=TimeNow+1
 HealBot_luVars["cpuAdj"]=0
 HealBot_luVars["rangeCheckAdj"]=0.5
 HealBot_luVars["pluginCDsCheckExisting"]=TimeNow+1
+HealBot_luVars["pluginCDsCheckIncoming"]=TimeNow+1
 
 local HealBot_Calls={}
 HealBot_luVars["MaxCount"]=0
@@ -1525,7 +1524,7 @@ function HealBot_Load(hbCaller)
         HealBot_Options_Override_FramesUse_Toggle()
         HealBot_Action_StickyFrameIndCols()
         HealBot_Register_IncHeals()
-        HealBot_resetLuVars()
+        HealBot_Timers_Set("INIT","InitPlugins")
         HealBot_Timers_Set("INIT","CheckTalentInfo")
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
         HealBot_Timers_Set("INIT","WheelUpdate")
@@ -1539,7 +1538,6 @@ function HealBot_Load(hbCaller)
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
         HealBot_Timers_Set("SKINS","UpdateIconFreq")
-        HealBot_Timers_Set("INITSLOW","InitPlugins")
         HealBot_Timers_Set("INITSLOW","CheckFramesOnCombat")
         HealBot_Timers_Set("INITSLOW","PowerIndicator")
         HealBot_Timers_Set("PARTYSLOW","LowManaTrig")
@@ -1927,7 +1925,7 @@ function HealBot_IncHeals_ClearAll()
       --HealBot_setCall("HealBot_IncHeals_ClearAll")
 end
 
-function HealBot_OnLoad(self)
+function HealBot_OnLoad()
     if not HealBot_Version_Target() then
         HealBot_IncorrentVersion()
     else
@@ -2003,20 +2001,20 @@ function HealBot_Update_CPUUsage()
 end
 
 function HealBot_UpdateMaxUnitsAdj()
-    HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage-3
+    HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage-2
     if HealBot_luVars["UpdateMaxUnits"]<2 then HealBot_luVars["UpdateMaxUnits"]=2 end
     HealBot_UpdateNumUnits()
     HealBot_AddDebug("UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"], "Perf", true)
-    HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*1.5)
+    HealBot_luVars["MaxFastQueue"]=HealBot_Globals.CPUUsage*2
     if HealBot_luVars["MaxFastQueue"]<5 then
         HealBot_luVars["MaxFastQueue"]=5 
-    elseif HealBot_luVars["MaxFastQueue"]>15 then 
-        HealBot_luVars["MaxFastQueue"]=15 
+    elseif HealBot_luVars["MaxFastQueue"]>12 then 
+        HealBot_luVars["MaxFastQueue"]=12
     end
 end
 
 function HealBot_UpdateNumUnits()
-    HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue/5)
+    HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue/4)
     if HealBot_luVars["UpdateNumUnits"]>HealBot_luVars["UpdateMaxUnits"] then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateMaxUnits"]
     end
@@ -2058,10 +2056,6 @@ function HealBot_runOptions_Timer(value)
         HealBot_Plugin_TimeToDie_TogglePanel()
     elseif value==3300 then
         HealBot_Plugin_TimeToLive_TogglePanel()
-    elseif value==3400 then
-        HealBot_Plugin_EffectiveTanks_TogglePanel()
-    elseif value==3500 then
-        HealBot_Plugin_EfficientHealers_TogglePanel()
     elseif value==3600 then
         HealBot_Plugin_ExtraButtons_Options_Timer()
     end
@@ -2608,15 +2602,10 @@ function HealBot_OnEvent_AddOnLoaded(addonName)
         HealBot_Update_Skins()
         HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
         
-        if HealBot_Globals.AutoCacheSize>25 and (HealBot_Globals.AutoCacheTime or 0)<TimeNow then
+        HealBot_luVars["RunDate"]=tonumber(date("%y%m%d"))
+        if HealBot_Globals.AutoCacheSize>25 and (HealBot_Globals.AutoCacheTime or 0)<HealBot_luVars["RunDate"] then
             HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
-            HealBot_Globals.AutoCacheTime=TimeNow+(60*60*20)
-        end
-        
-        if HealBot_Globals.localLang then
-            HealBot_Options_Lang(HealBot_Globals.localLang, false)
-        else
-            HealBot_Options_Lang(GetLocale(), false)
+            HealBot_Globals.AutoCacheTime=HealBot_luVars["RunDate"]
         end
         
         if HealBot_Config.Profile==2 then
@@ -2801,7 +2790,7 @@ function HealBot_GetTalentInfo(button)
                     button.spec = " "..s.." "
                     HealBot_Action_setButtonManaBarCol(button)
                     if button.spec~=" " and button.frame<6 then
-                        HealBot_Timers_Set("DELAYED","RefreshPartyNextRecalcPlayers")
+                        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
                     end
                 end
             end
@@ -2908,6 +2897,7 @@ function HealBot_InitPlugins()
         HealBot_luVars["pluginCombatProt"]=true
     else
         HealBot_luVars["pluginCombatProt"]=false
+        HealBot_Globals.CrashProtTime=0
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_Performance")
@@ -2930,25 +2920,6 @@ function HealBot_InitPlugins()
         HealBot_luVars["pluginMyCooldowns"]=false
     end
 
-    --loaded, reason = LoadAddOn("HealBot_Plugin_EffectiveTanks")
-    --HealBot_luVars["pluginEffectiveTanksReason"]=reason or ""
-    --HealBot_luVars["pluginEffectiveTanksLoaded"]=loaded
-    --if loaded and HealBot_Globals.PluginEffectiveTanks then 
-    --    HealBot_Plugin_EffectiveTanks_Init()
-    --    HealBot_luVars["pluginEffectiveTanks"]=true
-    --else
-    --    HealBot_luVars["pluginEffectiveTanks"]=false
-    --end
-    
-    --loaded, reason = LoadAddOn("HealBot_Plugin_EfficientHealers")
-    --HealBot_luVars["pluginEfficientHealersReason"]=reason or ""
-    --HealBot_luVars["pluginEfficientHealersLoaded"]=loaded
-    --if loaded and HealBot_Globals.PluginEfficientHealers then 
-    --    HealBot_Plugin_EfficientHealers_Init()
-    --    HealBot_luVars["pluginEfficientHealers"]=true
-    --else
-    --    HealBot_luVars["pluginEfficientHealers"]=false
-    --end
     HealBot_Timers_Set("PARTYSLOW","RegAggro")
 end
 
@@ -3126,16 +3097,14 @@ function HealBot_OnEvent_UnitHealth(button)
             button.health.updhlth=true
         end
         if (health~=button.health.current) or (healthMax~=button.health.max) then
-            --if healthMax~=100 or not HealBot_Panel_RaidUnitGUID(button.guid) or button.health.max<2000 then
-                if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then 
-                    HealBot_Plugin_TimeToDie_UnitUpdate(button, health) 
-                end
-                if not HealBot_Data["UILOCK"] and HealBot_luVars["regAggro"] and health<button.health.current then
-                    HealBot_OnEvent_UnitThreat(button)
-                end
-                button.health.current=health
-                button.health.max=healthMax
-            --end
+            if HealBot_luVars["pluginTimeToDie"] and button.status.plugin then 
+                HealBot_Plugin_TimeToDie_UnitUpdate(button, health) 
+            end
+            if not HealBot_Data["UILOCK"] and HealBot_luVars["regAggro"] and health<button.health.current then
+                HealBot_OnEvent_UnitThreat(button)
+            end
+            button.health.current=health
+            button.health.max=healthMax
             if button.status.current<HealBot_Unit_Status["DEAD"] then 
                 if health>0 then
                     HealBot_OverHeal(button)
@@ -3212,7 +3181,7 @@ function HealBot_DoVehicleChange(button, enterVehicle)
     end
 end
 
-function HealBot_OnEvent_VehicleChange(self, unit, enterVehicle)
+function HealBot_OnEvent_VehicleChange(unit, enterVehicle)
     _,xButton,pButton = HealBot_UnitID(unit, true)
     if xButton then
         HealBot_DoVehicleChange(xButton, enterVehicle)
@@ -3771,6 +3740,13 @@ function HealBot_Update_Slow()
       --HealBot_setCall("HealBot_Update_Slow")
 end
 
+function HealBot_Queue_Cooldown(SpellId)
+    if HealBot_luVars["pluginMyCooldowns"] then
+        scName=GetSpellInfo(SpellId)
+        if scName then HealBot_CDQueue[scName]=SpellId end
+    end
+end
+
 local LogSourceGUID, LogDestGUID, LogEvent, LogUnit, LogAbsorbAmount, Log12, Log14, Log15, Log17 = "","","","",0,"",0,"",0
 local tButton
 function HealBot_OnEvent_Combat_Log()
@@ -3798,28 +3774,9 @@ function HealBot_OnEvent_Combat_Log()
             if xButton then HealBot_Update_RecentHealsBar(xButton) end
             if pButton then HealBot_Update_RecentHealsBar(pButton) end
         end
-        if HealBot_luVars["pluginMyCooldowns"] then
-            scName=GetSpellInfo(Log12)
-            if scName then HealBot_CDQueue[scName]=Log12 end
-        end
+        if type(Log12)=="number" then HealBot_Queue_Cooldown(Log12) end
     end
-    
-    --if HealBot_luVars["pluginEffectiveTanks"] then 
-    --    xButton,pButton = HealBot_Panel_RaidUnitButton(LogDestGUID)
-    --    if xButton and xButton.status.plugin then
-    --        HealBot_Plugin_EffectiveTanks_UnitUpdate(xButton, ???)
-    --    elseif pButton and pButton.status.plugin then
-    --        HealBot_Plugin_EffectiveTanks_UnitUpdate(pButton, ???)
-    --    end
-    --end
-    --if HealBot_luVars["pluginEfficientHealers"] then 
-    --    xButton,pButton = HealBot_Panel_RaidUnitButton(LogSourceGUID)
-    --    if xButton and xButton.status.plugin then
-    --        HealBot_Plugin_EfficientHealers_UnitUpdate(xButton, ...)
-    --    elseif pButton and pButton.status.plugin then
-    --        HealBot_Plugin_EfficientHealers_UnitUpdate(pButton, ...)
-    --    end
-    --end
+
       --HealBot_setCall("HealBot_OnEvent_Combat_Log")
 end
 
@@ -4018,7 +3975,7 @@ function HealBot_Update_Fast98()
 end
 
 function HealBot_MyCooldowns_PlayerUpdateAll()
-    HealBot_luVars["pluginCDsCheckExisting"]=TimeNow+5
+    HealBot_luVars["pluginCDsCheckExisting"]=TimeNow+15
     HealBot_Plugin_MyCooldowns_PlayerUpdateAll()
 end
 
@@ -4036,7 +3993,8 @@ function HealBot_Update_Fast99()
     if HealBot_luVars["pluginMyCooldowns"] then
         if HealBot_luVars["pluginCDsCheckExisting"]<TimeNow then
             HealBot_MyCooldowns_PlayerUpdateAll()
-        else
+        elseif HealBot_luVars["pluginCDsCheckIncoming"]<TimeNow then
+            HealBot_luVars["pluginCDsCheckIncoming"]=TimeNow+0.25
             for spellName, spellId in pairs(HealBot_CDQueue) do
                 HealBot_Plugin_MyCooldowns_PlayerUpdate(spellName, spellId)
                 HealBot_CDQueue[spellName]=nil
@@ -4346,7 +4304,7 @@ function HealBot_UnitNameOnly(unitName)
 end
 
 local amSenderId=false
-function HealBot_OnEvent_AddonMsg(self,addon_id,msg,distribution,sender_id)
+function HealBot_OnEvent_AddonMsg(addon_id,msg,distribution,sender_id)
     amSenderId = HealBot_UnitNameOnly(sender_id)
     if amSenderId and msg and addon_id==HEALBOT_HEALBOT then
         local datatype, datamsg = string.split(":", msg)
@@ -4550,7 +4508,7 @@ function HealBot_OnEvent_SpecChange(button)
         HealBot_Player_TalentsChanged()
     else
         HealBot_GetTalentInfo(button)
-        HealBot_Timers_Set("DELAYED","RefreshPartyNextRecalcPlayers")
+        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
     end
 end
 
@@ -5006,17 +4964,15 @@ function HealBot_UnitPet(unit)
     return upUnit
 end
 
-function HealBot_OnEvent_PartyMembersChanged(self)
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+function HealBot_OnEvent_PartyMembersChanged()
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
     if HealBot_Data["UILOCK"] then 
-        HealBot_Timers_Set("SKINSSLOW","ResetClassIconTexture")
         HealBot_CheckAllPartyGUIDs()
     end
       --HealBot_setCall("HealBot_OnEvent_PartyMembersChanged")
 end
 
-function HealBot_OnEvent_PetsChanged(self)
+function HealBot_OnEvent_PetsChanged()
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
         HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
     end
@@ -5077,7 +5033,7 @@ function HealBot_ReadyCheck()
     end
 end
 
-function HealBot_OnEvent_ReadyCheck(self,unitName,timer)
+function HealBot_OnEvent_ReadyCheck(unitName,timer)
     if HealBot_UnitNameOnly(unitName) then
         local lUnit=HealBot_Panel_RaidUnitName(HealBot_UnitNameOnly(unitName))
         HealBot_luVars["rcEnd"]=TimeNow+timer
@@ -5100,7 +5056,7 @@ function HealBot_OnEvent_ReadyCheck(self,unitName,timer)
       --HealBot_setCall("HealBot_OnEvent_ReadyCheck")
 end
 
-function HealBot_OnEvent_ReadyCheckConfirmed(self,unit,response)
+function HealBot_OnEvent_ReadyCheckConfirmed(unit,response)
     _,xButton,pButton = HealBot_UnitID(unit)
     if xButton then HealBot_OnEvent_ReadyCheckUpdate(xButton,response) end
     if pButton then HealBot_OnEvent_ReadyCheckUpdate(pButton,response) end
@@ -5155,7 +5111,7 @@ function HealBot_FocusChanged()
     end
 end
 
-function HealBot_OnEvent_FocusChanged(self)
+function HealBot_OnEvent_FocusChanged()
     HealBot_FocusChanged()
       --HealBot_setCall("HealBot_OnEvent_FocusChanged")
 end
@@ -5169,7 +5125,7 @@ function HealBot_Player_TalentsChanged()
       --HealBot_setCall("HealBot_OnEvent_TalentsChanged")
 end
 
-function HealBot_OnEvent_SpellsChanged(self, arg1)
+function HealBot_OnEvent_SpellsChanged(arg1)
     if arg1==0 then return; end
     HealBot_Timers_Set("INIT","InitSpells")
     HealBot_Timers_Set("INIT","SpellsLoaded")
@@ -5199,7 +5155,7 @@ function HealBot_OnEvent_PlayerEnteringWorld()
       --HealBot_setCall("HealBot_OnEvent_PlayerEnteringWorld")
 end
 
-function HealBot_OnEvent_PlayerLeavingWorld(self)
+function HealBot_OnEvent_PlayerLeavingWorld()
     HealBot_luVars["qaFRNext"]=TimeNow+90
     if HealBot_Config.Profile==2 then
         HealBot_Options_hbProfile_saveClass()
@@ -5273,10 +5229,7 @@ function HealBot_OnEvent_UnitSpellChanStart(button, unitTarget, castGUID, spellI
             HealBot_Aux_UpdateCastBar(button, scName, scStartTime, scEndTime, true)
         end
     end
-    if button.player and HealBot_luVars["pluginMyCooldowns"] and spellID then
-        scName=GetSpellInfo(spellID)
-        if scName then HealBot_CDQueue[scName]=spellID end
-    end
+    if button.player then HealBot_Queue_Cooldown(spellID) end
 end
 
 function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID)
@@ -5302,10 +5255,7 @@ function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID
 
     if HealBot_luVars["massResUnit"]==button.unit then HealBot_luVars["massResUnit"]="-nil" end
     if HealBot_luVars["massResAltUnit"]==button.unit then HealBot_luVars["massResAltUnit"]="-nil" end
-    if button.player and HealBot_luVars["pluginMyCooldowns"] and spellID then
-        scName=GetSpellInfo(spellID)
-        if scName then HealBot_CDQueue[scName]=spellID end
-    end
+    if button.player then HealBot_Queue_Cooldown(spellID) end
 end
 
 function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spellID)
@@ -5316,10 +5266,7 @@ function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spe
         elseif HealBot_Aura_IsBuffSpell(spellID) then  
             HealBot_luVars["CheckAllActiveBuffs"]=true
         end
-        if HealBot_luVars["pluginMyCooldowns"] and spellID then
-            scName=GetSpellInfo(spellID)
-            if scName then HealBot_CDQueue[scName]=spellID end
-        end
+        HealBot_Queue_Cooldown(spellID)
     --end
 end
 
@@ -5342,7 +5289,7 @@ function HealBot_MassRes()
 end
 
 local uscUnit, uscUnitName, uscSpellName=nil,false,false
-function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID)
+function HealBot_OnEvent_UnitSpellCastSent(caster,unitName,castGUID,spellID)
     if UnitIsUnit("player",caster) then
         uscUnit=nil
         uscUnitName = HealBot_UnitNameOnly(unitName)
@@ -5385,9 +5332,7 @@ function HealBot_OnEvent_UnitSpellCastSent(self,caster,unitName,castGUID,spellID
             end
         end
 
-        if HealBot_luVars["pluginMyCooldowns"] and uscSpellName then
-            HealBot_CDQueue[uscSpellName]=spellID
-        end
+        HealBot_Queue_Cooldown(spellID)
     end
     --HealBot_setCall("HealBot_OnEvent_UnitSpellCastSent")
 end
@@ -5970,7 +5915,7 @@ local arg1,arg2,arg3,arg4,eButton,ePrivate,eUnit = false,false,false,false,false
 function HealBot_OnEvent(self, event, ...)
     arg1,arg2,arg3,arg4 = ...;
     if (event=="UNIT_SPELLCAST_SENT") then
-        HealBot_OnEvent_UnitSpellCastSent(self,arg1,arg2,arg3,arg4);  
+        HealBot_OnEvent_UnitSpellCastSent(arg1,arg2,arg3,arg4);  
     elseif (event=="SPELL_UPDATE_COOLDOWN") then
         if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
         if HealBot_luVars["pluginMyCooldowns"] then 
@@ -5984,14 +5929,15 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="PLAYER_REGEN_ENABLED") then
         HealBot_luVars["UILOCK"]=false
     elseif (event=="GROUP_ROSTER_UPDATE") or (event=="RAID_ROSTER_UPDATE") then
-        HealBot_OnEvent_PartyMembersChanged(self);
+        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        HealBot_OnEvent_PartyMembersChanged();
     elseif (event=="RAID_TARGET_UPDATE") then
         HealBot_OnEvent_RaidTargetUpdateAll()
     elseif (event=="PLAYER_TARGET_CHANGED") then
         HealBot_luVars["TargetNeedReset"]=true
         HealBot_OnEvent_PlayerTargetChanged();
     elseif (event=="PLAYER_FOCUS_CHANGED") then
-        HealBot_OnEvent_FocusChanged(self);
+        HealBot_OnEvent_FocusChanged();
     elseif (event=="MODIFIER_STATE_CHANGED") then
         if HealBot_Data["TIPBUTTON"] then 
             HealBot_Action_RefreshTooltip()
@@ -6005,15 +5951,15 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_Timers_Set("PLAYERSLOW","PlayerCheckExtended")
     elseif (event=="ROLE_CHANGED_INFORM") or (event=="PLAYER_ROLES_ASSIGNED") then
         HealBot_OnEvent_PartyMembersChanged()
-        HealBot_ResetClassIconTexture()
+        HealBot_Timers_Set("LAST","ResetClassIconTexture")
     elseif (event=="INCOMING_SUMMON_CHANGED") then
         HealBot_OnEvent_IncomingSummons(arg1)
     elseif (event=="UNIT_ENTERED_VEHICLE") then
-        HealBot_OnEvent_VehicleChange(self, arg1, true)
+        HealBot_OnEvent_VehicleChange(arg1, true)
     elseif (event=="UNIT_EXITED_VEHICLE") then
-        HealBot_OnEvent_VehicleChange(self, arg1, nil)
+        HealBot_OnEvent_VehicleChange(arg1, nil)
     elseif (event=="UNIT_EXITING_VEHICLE") then
-        HealBot_OnEvent_LeavingVehicle(self, arg1)
+        HealBot_OnEvent_LeavingVehicle(arg1)
     elseif (event=="INSPECT_READY") then
         eButton,ePrivate = HealBot_Panel_AllUnitButton(arg1)
         if eButton then
@@ -6027,24 +5973,24 @@ function HealBot_OnEvent(self, event, ...)
             HealBot_Timers_Set("PLAYERSLOW","CheckZone")
         end
     elseif (event=="CHAT_MSG_ADDON") then
-        HealBot_OnEvent_AddonMsg(self,arg1,arg2,arg3,arg4);
+        HealBot_OnEvent_AddonMsg(arg1,arg2,arg3,arg4);
     elseif (event=="BAG_UPDATE") then
         HealBot_OnEvent_InvChange()
     elseif (event=="PET_BATTLE_OPENING_START") or (event=="PET_BATTLE_OVER") then
         HealBot_luVars["lastPetBattleEvent"]=event
         HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
     elseif (event=="READY_CHECK") then
-        HealBot_OnEvent_ReadyCheck(self,arg1,arg2);
+        HealBot_OnEvent_ReadyCheck(arg1,arg2);
     elseif (event=="READY_CHECK_CONFIRM") then
-        HealBot_OnEvent_ReadyCheckConfirmed(self,arg1,arg2);
+        HealBot_OnEvent_ReadyCheckConfirmed(arg1,arg2);
     elseif (event=="READY_CHECK_FINISHED") then
         HealBot_luVars["rcEnd"]=TimeNow+3
     elseif (event=="PLAYER_ENTERING_WORLD") then
         HealBot_OnEvent_PlayerEnteringWorld();
     elseif (event=="PLAYER_LEAVING_WORLD") then
-        HealBot_OnEvent_PlayerLeavingWorld(self);
+        HealBot_OnEvent_PlayerLeavingWorld();
     elseif (event=="LEARNED_SPELL_IN_TAB") then
-        HealBot_OnEvent_SpellsChanged(self,arg1);
+        HealBot_OnEvent_SpellsChanged(arg1);
         HealBot_Timers_Set("INITSLOW","MountsPetsUse")
         HealBot_Player_TalentsChanged()
     elseif (event=="PLAYER_TALENT_UPDATE") or (event=="CHARACTER_POINTS_CHANGED") then
@@ -6056,7 +6002,7 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="ADDON_LOADED") then
         HealBot_OnEvent_AddOnLoaded(arg1)
     elseif (event=="GET_ITEM_INFO_RECEIVED") then
-        HealBot_OnEvent_ItemInfoReceived(self,arg1);
+        HealBot_OnEvent_ItemInfoReceived(arg1);
     else
         HealBot_AddDebug("Missing OnEvent (" .. event .. ")", "Events", false);
     end

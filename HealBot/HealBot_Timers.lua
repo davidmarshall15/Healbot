@@ -235,7 +235,7 @@ function HealBot_Timers_SpellsLoaded()
     HealBot_Timers_Set("INIT","InitBuffList")
     HealBot_Timers_Set("INIT","SpellsTabText")
     HealBot_Timers_Set("INIT","FluidFlash")
-    HealBot_Timers_Set("INITSLOW","BuffsReset")
+    HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("PARTYSLOW","ResetAllButtons")
     HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
     HealBot_Timers_Set("DELAYED","InitAuraData")
@@ -263,10 +263,19 @@ end
 function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("LAST","UpdateAllHealth")
     HealBot_Timers_Set("LAST","PlayerCheckExtended")
+    HealBot_Timers_Set("LAST","BuffsReset")
     HealBot_Timers_Set("DELAYED","AuraCheckUnits")
 	HealBot_Timers_Set("DELAYED","UpdateAllUnitBars")
     HealBot_Timers_Set("DELAYED","ProcCacheButtons")
     HealBot_Timers_Set("DELAYED","LoadComplete")
+end
+
+function HealBot_Timers_Lang()
+    if HealBot_Globals.localLang then
+        HealBot_Options_Lang(HealBot_Globals.localLang, false)
+    else
+        HealBot_Options_Lang(GetLocale(), false)
+    end
 end
 
 function HealBot_Timers_LastLoad()
@@ -361,6 +370,7 @@ local hbTimerFuncs={["INIT"]={
                         ["RegEvents"]=HealBot_Register_Events,
                         ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
                         ["RefreshPartyNextRecalcAll"]=HealBot_Timers_nextRecalcAll,
+                        ["InitPlugins"]=HealBot_InitPlugins,
                     },
                     ["RESET"]={
                         ["Full"]=HealBot_Reset_Full,
@@ -422,6 +432,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetDebuffCache"]=HealBot_Aura_ResetDebuffCache,
                         ["CustomDebuffFilterDisabled"]=HealBot_Aura_setCustomDebuffFilterDisabled,
                         ["SetIconUpdateInterval"]=HealBot_Aura_SetIconUpdateInterval,
+                        ["BuffsReset"]=HealBot_Timers_BuffsReset,
                     },
                     ["CHAT"]={
                         ["OverrideChatUseToggle"]=HealBot_Options_Override_ChatUse_Toggle,
@@ -434,7 +445,6 @@ local hbTimerFuncs={["INIT"]={
                         ["MountsPetsInit"]=HealBot_MountsPets_InitMount,
                         ["BuffBarColours"]=HealBot_SetBuffBarColours,
                         ["RegisterForClicks"]=HealBot_Action_setRegisterForClicks,
-                        ["InitPlugins"]=HealBot_InitPlugins,
                         ["HealBotLoaded"]=HealBot_Timers_Loaded,
                         ["OptionsInit"]=HealBot_Options_idleInit,
                         ["OptionsMainPanel"]=HealBot_Options_MainPanel,
@@ -513,6 +523,7 @@ local hbTimerFuncs={["INIT"]={
                         ["IndicatorFramesChanged"]=HealBot_Timers_IndicatorFramesChanged,
                         ["AllFramesChanged"]=HealBot_Timers_AllFramesChanged,
                         ["UpdateMaxUnitsAdj"]=HealBot_UpdateMaxUnitsAdj,
+                        ["SetLang"]=HealBot_Timers_Lang,
                     },
                    }
 
