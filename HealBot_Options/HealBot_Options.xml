@@ -2785,9 +2785,9 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Frame name="HealBot_Options_OverrideFluidBarsPanel" inherits="BackdropTemplate">
+                  <Frame name="HealBot_Options_OverrideHealthDropPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="140"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -2803,11 +2803,91 @@
                     </Anchors>
                     <Layers>
                       <Layer level="BACKGROUND">
+                        <FontString name="HealBot_OverrideHealthDrop_FontStr" text="HEALBOT_OPTION_HEALTHDROPALERT" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="20" y="-15" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <CheckButton name="HealBot_Options_OverrideUseHealthDrop" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-45" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_OverrideUseHealthDrop_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("USEHEALTHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("USEHEALTHDROP",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Slider name="HealBot_Options_OverrideHealthDropPct" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="285" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="47" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_OverrideHealthDropPct_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPTHRESHOLD",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPTHRESHOLD",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_OverrideHealthDropSpeed" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="180" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="-47" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_OverrideHealthDropSpeed_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPSPEED",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPSPEED",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_OverrideFluidBarsPanel" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="90"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-200"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-200"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
                         <FontString name="HealBot_OverrideEffectsFluid_FontStr" text="HEALBOT_OPTION_FLUIDBARS" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="TOPLEFT">
                               <Offset>
-                                <AbsDimension x="20" y="-25" />
+                                <AbsDimension x="20" y="-15" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -2819,7 +2899,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-40" y="-20" />
+                              <AbsDimension x="-45" y="-10" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2836,7 +2916,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-80" />
+                              <AbsDimension x="0" y="-55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2855,12 +2935,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-250"/>
+                          <AbsDimension x="20" y="-310"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-250"/>
+                          <AbsDimension x="-20" y="-310"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2880,9 +2960,9 @@
                     <Frames>
                       <Frame name="HealBot_Options_UseOverrideFocusGroups" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="110" y="-20" />
+                              <AbsDimension x="-20" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2896,7 +2976,7 @@
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_UseOverrideFocusGroups" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="10"/>
+                              <AbsDimension x="0" y="10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2956,7 +3036,7 @@
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_UseOverrideFocusGroups" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="-10"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -3033,7 +3113,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_OverrideFlashEffectPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="210"/>
+                      <AbsDimension y="150"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -3070,6 +3150,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_OverrideGoToAuxBarConfig" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_GOTOAUXCONFIG">
+                        <Size>
+                          <AbsDimension x="200" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="-8" y="-15"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb"); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_OverrideAuxBarFlashFreq" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="500" y="16" />
@@ -3121,23 +3218,6 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMAX",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <Button name="HealBot_Options_OverrideGoToAuxBarConfig" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_GOTOAUXCONFIG">
-                        <Size>
-                          <AbsDimension x="280" y="28"/>
-                        </Size>
-                        <Anchors>
-                          <Anchor point="BOTTOM">
-                            <Offset>
-                              <AbsDimension x="0" y="15"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb"); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb")</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
-                        </Scripts>
-                      </Button>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -5834,19 +5914,99 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <Frame name="HealBot_Options_FluidBarsPanel" inherits="BackdropTemplate">
+                  <Frame name="HealBot_Options_HealthDropPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="120"/>
+                      <AbsDimension y="90"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-40"/>
+                          <AbsDimension x="20" y="-35"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-40"/>
+                          <AbsDimension x="-20" y="-35"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_HealthDrop_FontStr" text="HEALBOT_OPTION_HEALTHDROPALERT" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="20" y="-15" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <CheckButton name="HealBot_Options_UseHealthDrop" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-45" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_UseHealthDrop_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("USEHEALTHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("USEHEALTHDROP",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Slider name="HealBot_Options_HealthDropPct" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="285" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="32" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_HealthDropPct_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPTHRESHOLD",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPTHRESHOLD",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_HealthDropSpeed" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="180" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="-32" y="-55" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_HealthDropSpeed_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPSPEED",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPSPEED",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                    </Frames>
+                  </Frame>
+                  <Frame name="HealBot_Options_FluidBarsPanel" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="90"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-140"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-140"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5868,7 +6028,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-40" y="-15" />
+                              <AbsDimension x="-45" y="-10" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5885,7 +6045,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-75" />
+                              <AbsDimension x="0" y="-55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5904,12 +6064,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-180"/>
+                          <AbsDimension x="20" y="-245"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-180"/>
+                          <AbsDimension x="-20" y="-245"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -5929,9 +6089,9 @@
                     <Frames>
                       <Frame name="HealBot_Options_UseFocusGroups" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOPLEFT">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="110" y="-20" />
+                              <AbsDimension x="-20" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -5945,7 +6105,7 @@
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_UseFocusGroups" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="10"/>
+                              <AbsDimension x="0" y="10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6005,7 +6165,7 @@
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_UseFocusGroups" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="20" y="-10"/>
+                              <AbsDimension x="0" y="-10"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6082,17 +6242,17 @@
                   </Frame>
                   <Frame name="HealBot_Options_FlashEffectPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="200"/>
+                      <AbsDimension y="150"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-320"/>
+                          <AbsDimension x="20" y="-380"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-320"/>
+                          <AbsDimension x="-20" y="-380"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -6119,6 +6279,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_GoToAuxBarConfig" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_GOTOAUXCONFIG">
+                        <Size>
+                          <AbsDimension x="200" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="-8" y="-15"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb"); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_AuxBarFlashFreq" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="500" y="16" />
@@ -6170,23 +6347,6 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARFLASHMAX",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <Button name="HealBot_Options_GoToAuxBarConfig" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_GOTOAUXCONFIG">
-                        <Size>
-                          <AbsDimension x="280" y="28"/>
-                        </Size>
-                        <Anchors>
-                          <Anchor point="BOTTOM">
-                            <Offset>
-                              <AbsDimension x="0" y="15"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_ShowPanel(self, 3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb"); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb")</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
-                        </Scripts>
-                      </Button>
                     </Frames>
                   </Frame>
                 </Frames>
@@ -6224,7 +6384,7 @@
                 <Frames>
                   <Frame name="HealBot_Options_EnemySkinsFrameTop" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="320"/>
+                      <AbsDimension y="355"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -6307,11 +6467,53 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWSELF",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="OptionsCheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncFocus" inherits="OptionsCheckButtonTemplate">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-25" />
+                              <AbsDimension x="0" y="-20" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowEnemyIncFocus_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYINCFOCUS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYINCFOCUS",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Frame name="HealBot_Options_EnemyExistsFocus" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ShowEnemyIncFocus" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="170" y="-2" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWFOCUS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWFOCUS",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Frame name="HealBot_Options_EnemyCombatFocus" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_EnemyExistsFocus" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="-10" y="" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWFOCUS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWFOCUS",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="OptionsCheckButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncFocus" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6353,7 +6555,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-25" />
+                              <AbsDimension x="0" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6395,7 +6597,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-25" />
+                              <AbsDimension x="0" y="-20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6454,7 +6656,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-270" />
+                              <AbsDimension x="0" y="-300" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6482,7 +6684,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_EnemySkinsFrameBottom" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="140"/>
+                      <AbsDimension y="110"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -6501,7 +6703,7 @@
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="95" y="85" />
+                              <AbsDimension x="95" y="70" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6515,7 +6717,7 @@
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="320" y="85" />
+                              <AbsDimension x="320" y="70" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -6532,7 +6734,7 @@
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="30" />
+                              <AbsDimension x="0" y="20" />
                             </Offset>
                           </Anchor>
                         </Anchors>

@@ -207,6 +207,7 @@ local HealBot_Fluid_EmergButtonsAlpha={}
 local HealBot_Fluid_InHealButtons={}
 local HealBot_Fluid_BarButtons={}
 local HealBot_Fluid_BarButtonsAlpha={}
+local HealBot_Fluid_BarHealthDropAlpha={}
 local aufbButtonActive=false
 local aufbBarValue,aufbSetValue,aufbAlphaValue=0,0,0
 local aufbRValue,aufbGValue,aufbBValue=0,0,0
@@ -311,6 +312,75 @@ function HealBot_Action_UpdateFluidBars()
     end
     --HealBot_Aux_setLuVars("FluidBarInUse", HealBot_Action_luVars["FluidBarInUse"])
       --HealBot_setCall("HealBot_Action_UpdateFluidBars")
+end
+
+local hdaAlphaValue, hdaSetValue, hdaRValue, hdaGValue, hdaBValue, hdaAdjValue=0,0,0,0,0,0
+local hdaRSetValue, hdaGSetValue, hdaBSetValue, hdaButtonActive=0,0,0,false
+function HealBot_Action_UpdateHealthDropAlertBarsAlpha()
+    HealBot_Action_luVars["HealthDropAlphaInUse"]=false
+    for id,xButton in pairs(HealBot_Fluid_BarHealthDropAlpha) do
+        hdaButtonActive=true
+        if xButton.health.abalert>-1 then
+            hdaRValue, hdaGValue, hdaBValue, hdaAlphaValue=xButton.gref["Absorb"]:GetStatusBarColor()
+            hdaRValue=HealBot_Comm_round(hdaRValue, 3)
+            hdaGValue=HealBot_Comm_round(hdaGValue, 3)
+            hdaBValue=HealBot_Comm_round(hdaBValue, 3)
+            hdaAlphaValue=HealBot_Comm_round(hdaAlphaValue, 3)
+            hdaAdjValue=HealBot_Action_luVars["HealthDropSpeed"]+(hdaAlphaValue/25)
+            if xButton.health.abalert==0 then
+                hdaRSetValue=hdaRValue-hdaAdjValue
+                hdaGSetValue=hdaGValue-hdaAdjValue
+                hdaBSetValue=hdaBValue-hdaAdjValue
+                hdaSetValue=hdaAlphaValue-hdaAdjValue
+                if hdaRSetValue<xButton.health.abr then hdaRSetValue=xButton.health.abr end
+                if hdaGSetValue<xButton.health.abg then hdaGSetValue=xButton.health.abg end
+                if hdaBSetValue<xButton.health.abb then hdaBSetValue=xButton.health.abb end
+                if hdaSetValue<0.02 then 
+                    hdaSetValue=0
+                    hdaButtonActive=false
+                end
+            else
+                hdaRSetValue=hdaRValue+hdaAdjValue
+                hdaGSetValue=hdaGValue+hdaAdjValue
+                hdaBSetValue=hdaBValue+hdaAdjValue
+                hdaSetValue=hdaAlphaValue+hdaAdjValue+0.01
+                if hdaRSetValue>1 then hdaRSetValue=1 end
+                if hdaGSetValue>1 then hdaGSetValue=1 end
+                if hdaBSetValue>1 then hdaBSetValue=1 end
+                if hdaSetValue>1 then 
+                    hdaSetValue=1
+                    if (hdaSetValue+hdaBSetValue+hdaGSetValue+hdaRSetValue)>3.9 then
+                        xButton.health.abalert=0
+                    end
+                end
+            end
+            xButton.gref["Absorb"]:SetStatusBarColor(hdaRSetValue, hdaGSetValue, hdaBSetValue, hdaSetValue)
+        end
+        if not hdaButtonActive then
+            HealBot_Fluid_BarHealthDropAlpha[id]=nil
+            xButton.health.abalert=-1
+            xButton.gref["Absorb"]:SetValue(0)
+            HealBot_OnEvent_AbsorbsUpdate(xButton, true)
+        else
+            HealBot_Action_luVars["HealthDropAlphaInUse"]=true
+        end
+    end
+    if HealBot_Action_luVars["HealthDropAlphaInUse"] then
+        C_Timer.After(0.02, HealBot_Action_UpdateHealthDropAlertBarsAlpha)
+    end
+end
+
+function HealBot_Action_HealthDropAlertBarsAlpha(button)
+    HealBot_Fluid_BarHealthDropAlpha[button.id]=button
+    button.health.abalert=1
+    button.health.abr=button.status.r
+    button.health.abg=button.status.g
+    button.health.abb=button.status.b
+    button.gref["Absorb"]:SetStatusBarColor(button.health.abr,button.health.abg,button.health.abb,0.7)
+    button.gref["Absorb"]:SetValue(button.gref["Bar"]:GetValue())
+    if not HealBot_Action_luVars["HealthDropAlphaInUse"] then
+        HealBot_Action_UpdateHealthDropAlertBarsAlpha()
+    end
 end
 
 function HealBot_Action_UpdateFluidBarsAlpha()
@@ -670,64 +740,66 @@ end
 
 local auaHaPct, auaUnitHealsIn, auaUnitAbsorbsIn=1,0,0
 function HealBot_Action_UpdateAbsorbsButton(button)
-    auaUnitAbsorbsIn=button.health.absorbs
-    if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"]<2 then auaUnitAbsorbsIn=0 end
-    
-    if auaUnitAbsorbsIn>0 and button.status.current>HealBot_Unit_Status["ENABLEDOOR"] and button.status.current<HealBot_Unit_Status["DEAD"] then
-        if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"]<2 then 
-            auaUnitHealsIn=0 
-        else
-            auaUnitHealsIn=button.health.incoming
-        end
-        auaHaPct = button.health.current+auaUnitHealsIn+auaUnitAbsorbsIn
-        if auaHaPct<button.health.max then
-            auaHaPct=auaHaPct/button.health.max
-        else
-            auaHaPct=1;
-        end
-        button.health.abptc=floor(auaHaPct*1000)
-        if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 4) then -- Incoming Heal Bar Colour = "Custom"
-            if auaHaPct>Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIT"] then
-                button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AR"]
-                button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AG"]
-                button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AB"]
-            elseif auaHaPct>Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACT"] then
-                button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIR"]
-                button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIG"]
-                button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIB"]
+    if button.health.abalert<0 then 
+        auaUnitAbsorbsIn=button.health.absorbs
+        if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"]<2 then auaUnitAbsorbsIn=0 end
+        
+        if auaUnitAbsorbsIn>0 and button.status.current>HealBot_Unit_Status["ENABLEDOOR"] and button.status.current<HealBot_Unit_Status["DEAD"] then
+            if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"]<2 then 
+                auaUnitHealsIn=0 
             else
-                button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"]
-                button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"]
-                button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACB"]
+                auaUnitHealsIn=button.health.incoming
             end
-        elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 5) then -- Incoming Heal Bar Colour = "Class Health Mix"
-            button.health.absorbr,button.health.absorbg,button.health.absorbb = button.health.mixcolr, button.health.mixcolg, button.health.mixcolb
-        elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 3) then -- Incoming Heal Bar Colour = "Future Health"
-            button.health.absorbr, button.health.absorbg = HealBot_Action_BarColourPct(auaHaPct)
-            button.health.absorbb=0
-        else
-            button.health.absorbr,button.health.absorbg,button.health.absorbb = button.health.rcol, button.health.gcol,0
-        end
-        button.health.absorba=HealBot_Action_BarColourAlpha(button, (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]*button.status.alpha),2)
-        HealBot_Action_UpdateAbsorbStatusBarColor(button)
-        if not HealBot_Action_luVars["FluidInUse"] then
-            button.gref["Absorb"]:SetValue(button.health.abptc);
-        else
-            if button.gref["Absorb"]:GetValue() < button.gref["InHeal"]:GetValue() then
-                button.gref["Absorb"]:SetValue(button.gref["InHeal"]:GetValue())
-            elseif button.gref["Absorb"]:GetValue() < button.gref["Bar"]:GetValue() then
-                button.gref["Absorb"]:SetValue(button.gref["Bar"]:GetValue())
+            auaHaPct = button.health.current+auaUnitHealsIn+auaUnitAbsorbsIn
+            if auaHaPct<button.health.max then
+                auaHaPct=auaHaPct/button.health.max
+            else
+                auaHaPct=1;
             end
-            HealBot_Action_setFluid_Aborbs_BarButtons(button)
+            button.health.abptc=floor(auaHaPct*1000)
+            if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 4) then -- Incoming Heal Bar Colour = "Custom"
+                if auaHaPct>Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIT"] then
+                    button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AR"]
+                    button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AG"]
+                    button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AB"]
+                elseif auaHaPct>Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACT"] then
+                    button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIR"]
+                    button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIG"]
+                    button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AIB"]
+                else
+                    button.health.absorbr=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"]
+                    button.health.absorbg=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"]
+                    button.health.absorbb=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["ACB"]
+                end
+            elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 5) then -- Incoming Heal Bar Colour = "Class Health Mix"
+                button.health.absorbr,button.health.absorbg,button.health.absorbb = button.health.mixcolr, button.health.mixcolg, button.health.mixcolb
+            elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 3) then -- Incoming Heal Bar Colour = "Future Health"
+                button.health.absorbr, button.health.absorbg = HealBot_Action_BarColourPct(auaHaPct)
+                button.health.absorbb=0
+            else
+                button.health.absorbr,button.health.absorbg,button.health.absorbb = button.health.rcol, button.health.gcol,0
+            end
+            button.health.absorba=HealBot_Action_BarColourAlpha(button, (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AA"]*button.status.alpha),2)
+            HealBot_Action_UpdateAbsorbStatusBarColor(button)
+            if not HealBot_Action_luVars["FluidInUse"] then
+                button.gref["Absorb"]:SetValue(button.health.abptc);
+            else
+                if button.gref["Absorb"]:GetValue() < button.gref["InHeal"]:GetValue() then
+                    button.gref["Absorb"]:SetValue(button.gref["InHeal"]:GetValue())
+                elseif button.gref["Absorb"]:GetValue() < button.gref["Bar"]:GetValue() then
+                    button.gref["Absorb"]:SetValue(button.gref["Bar"]:GetValue())
+                end
+                HealBot_Action_setFluid_Aborbs_BarButtons(button)
+            end
+        else
+            button.health.absorba=0
+            button.health.abptc=0
+            if not HealBot_Action_luVars["FluidInUse"] or button.status.current<HealBot_Unit_Status["ENABLEDIR"] or button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] then
+                button.gref["Absorb"]:SetValue(0)
+            end
+            HealBot_Action_UpdateAbsorbStatusBarColor(button)
+            HealBot_Aux_ClearAbsorbBar(button)
         end
-    else
-        button.health.absorba=0
-        button.health.abptc=0
-        if not HealBot_Action_luVars["FluidInUse"] or button.status.current<HealBot_Unit_Status["ENABLEDIR"] or button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] then
-            button.gref["Absorb"]:SetValue(0)
-        end
-        HealBot_Action_UpdateAbsorbStatusBarColor(button)
-        HealBot_Aux_ClearAbsorbBar(button)
     end
     --HealBot_setCall("HealBot_Action_UpdateAbsorbsButton")
 end
@@ -1158,7 +1230,7 @@ function HealBot_Action_UpdateHealthButtonState(button)
     end
     HealBot_Text_setHealthText(button)
     if button.gref["Bar"]:GetValue()~=button.health.hptc then
-        if button.health.init or not HealBot_Action_luVars["FluidInUse"] then
+        if button.health.init or not HealBot_Action_luVars["FluidInUse"] or button.health.abalert>-1 then
             button.gref["Bar"]:SetValue(button.health.hptc)
             button.health.init=false
         else
@@ -1705,28 +1777,6 @@ function HealBot_Action_ResetUnitOpacity()
     --HealBot_Action_ResetUnitStatus()
 end
 
-function HealBot_Action_InstantResetUnitStatus()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    for _,xButton in pairs(HealBot_Enemy_Button) do
-        HealBot_Action_UpdateDebuffButton(xButton)
-    end
-    --HealBot_setCall("HealBot_Action_ResetUnitStatus")
-end
-
 function HealBot_Action_ResetUnitStatus()
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_RefreshUnit(xButton)
@@ -2108,6 +2158,7 @@ function HealBot_Action_PrepButton(button)
     button.health.absorbs=0
     button.health.auraabsorbs=0
     button.health.abptc=0
+    button.health.abalert=-1
     button.health.overheal=0
     button.health.updhlth=true
     button.health.updincoming=false
@@ -2149,6 +2200,7 @@ function HealBot_Action_PrepButton(button)
     button.status.enabled=false
     button.status.summons=false
     button.status.playerlastheal=0
+    button.status.lasthealthdrop=0
     button.status.r=0
     button.status.g=0
     button.status.b=0
@@ -3520,6 +3572,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             end
             HealBot_Action_SetHealButtonAuraCols(hButton)
             hButton.group=HealBot_RetUnitGroups(unit)
+            if hButton.player then
+                HealBot_Data["PLAYERGROUP"]=hButton.group
+            end
             if hButton.skinreset or hButton.icon.reset or hButton.indreset then
                 HealBot_Skins_ResetSkin("bar",hButton)
             elseif frame==10 then

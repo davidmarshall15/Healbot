@@ -2228,6 +2228,9 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.General[SkinName]["UNITINCOMBAT"] then Healbot_Config_Skins.General[SkinName]["UNITINCOMBAT"]=2 end
     if Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]=true end
     if Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]=false end
+    if Healbot_Config_Skins.General[SkinName]["HEALTHDROP"]==nil then Healbot_Config_Skins.General[SkinName]["HEALTHDROP"]=false end
+    if not Healbot_Config_Skins.General[SkinName]["HEALTHDROPPCT"] then Healbot_Config_Skins.General[SkinName]["HEALTHDROPPCT"]=350 end
+    if not Healbot_Config_Skins.General[SkinName]["HEALTHDROPSPEED"] then Healbot_Config_Skins.General[SkinName]["HEALTHDROPSPEED"]=40 end
     if not Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"] then Healbot_Config_Skins.General[SkinName]["FLUIDFREQ"]=10 end
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]==nil then Healbot_Config_Skins.General[SkinName]["TAGSTATENAMEFONT"]=true end
@@ -2245,6 +2248,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.DuplicateBars[SkinName]==nil then Healbot_Config_Skins.DuplicateBars[SkinName]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCSELF"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCSELF"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCTANKS"]=true end
+    if Healbot_Config_Skins.Enemy[SkinName]["INCFOCUS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCFOCUS"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCARENA"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCARENA"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["INCARENAPETS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCARENAPETS"]=false end
@@ -2260,6 +2264,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     elseif Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWSELF"]==true then
         Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWSELF"]=1
     end
+    if not Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWFOCUS"] then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWFOCUS"]=2 end
     if not Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"] then 
         Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]=2 
     elseif Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]==true then
@@ -2280,6 +2285,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     elseif Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWPTAR"]==true then
         Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWPTAR"]=2
     end
+    if not Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWFOCUS"] then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWFOCUS"]=1 end 
     if not Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWARENA"] then 
         Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWARENA"]=2
     elseif Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWARENA"]==true then

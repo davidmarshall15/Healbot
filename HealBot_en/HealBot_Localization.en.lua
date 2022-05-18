@@ -498,10 +498,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_MANAONLY                 = "Show mana only"
     HEALBOT_OPTION_BARUPDFREQ               = "Refresh Speed"
     HEALBOT_OPTION_USEFLUIDBARS             = "Use fluid bars"
+    HEALBOT_OPTION_HEALTHDROP               = "Health drop"
+    HEALBOT_OPTION_USEHEALTHDROP            = "Show on Health bar"
+    HEALBOT_OPTION_HEALTHDROPPCT            = "Alert threshold "
+    HEALBOT_OPTION_HEALTHDROPSPEED          = "Flash speed"
     HEALBOT_OPTION_USEFOCUSGROUPS           = "Use focus groups"
     HEALBOT_OPTION_FOCUSGROUPDIMMING        = "Unfocused groups - Opacity reduction"
     HEALBOT_OPTION_GLOBALDIMMING            = "Mouse not over frames - Opacity reduction"
     HEALBOT_OPTION_FLUIDBARS                = "Fluid Bars"
+    HEALBOT_OPTION_HEALTHDROPALERT          = "Health Drop Alert"
     HEALBOT_OPTIONS_RELOADUIMSG             = "This option requires a UI Reload, Reload now?"
 
     HEALBOT_BUFF_PVP                        = "PvP"
@@ -1382,7 +1387,8 @@ function HealBot_Lang_enALL()
     HEALBOT_INOUT_STATUS_SPELLINIT          = "Spells can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_PRESETCOLINIT      = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_ENEMY_USE_FRAME                 = "Use frame"
-    HEALBOT_ENEMY_INCLUDE_SELF              = "Include My target"
+    HEALBOT_ENEMY_INCLUDE_SELF              = "Include Target"
+    HEALBOT_ENEMY_INCLUDE_FOCUS             = "Include Focus"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include Tank targets"
     HEALBOT_OPTIONS_ENEMY_OPT               = "Enemy Visibility";
     HEALBOT_OPTIONS_SHARE_OPT               = "Share Options";

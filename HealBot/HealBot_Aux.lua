@@ -1132,3 +1132,39 @@ function HealBot_Aux_ClearSummonsBar(button)
         HealBot_Aux_clearBar(button, id)
     end
 end
+
+-- Health Drop
+
+local hbAuxHealthDropAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+function HealBot_Aux_clearHealthDropAssigned()
+    for f=1,10 do
+        hbAuxHealthDropAssigned[f]={};
+        HealBot_setAuxAssigns("HealthDrop", f, false)
+    end
+end
+
+function HealBot_Aux_setHealthDropAssigned(frame, id)
+    hbAuxHealthDropAssigned[frame][id]=true
+    HealBot_setAuxAssigns("HealthDrop", frame, true)
+end
+
+function HealBot_Aux_UpdateHealthDropBar(button)
+    for id in pairs(hbAuxHealthDropAssigned[button.frame]) do
+        if button.status.current<HealBot_Unit_Status["DC"] then
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+                button.aux[id]["R"]=1
+                button.aux[id]["G"]=0.58
+                button.aux[id]["B"]=0.2
+            end
+            HealBot_Aux_setBar(button, id, 1000, false)
+        else
+            HealBot_Aux_clearBar(button, id)
+        end
+    end
+end
+
+function HealBot_Aux_ClearHealthDropBar(button)
+    for id in pairs(hbAuxHealthDropAssigned[button.frame]) do
+        HealBot_Aux_clearBar(button, id)
+    end
+end

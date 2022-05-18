@@ -189,9 +189,6 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                             hbFRole="TANK"
                         end
                     end
-                    if UnitIsUnit(unit,"player") then
-                        HealBot_Data["PLAYERGROUP"]=hbSubgroup
-                    end
                 end
                 if not hbFRole then
                     HealBot_Panel_SetRole(unit,dsGUID)
@@ -228,7 +225,6 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             hbPanel_dataUnits[x]=false
         end
         hbPlayerRaidID=0
-        HealBot_Data["PLAYERGROUP"]=1
         HealBot_setLuVars("TankUnit", "x")
         HealBot_Aura_setLuVars("TankUnit", "x")
         HealBot_Panel_luVars["TankHealth"]=0
@@ -1870,6 +1866,12 @@ function HealBot_Panel_enemyTargets(preCombat)
                                     Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
                                     Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
     end
+    if HEALBOT_GAME_VERSION>1 and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] then
+        HealBot_Panel_checkEnemyBar("focus", "player", preCombat, 
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWFOCUS"],
+                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWFOCUS"])
+    end
+    
     _,vEnemyLocation = IsInInstance()
     if vEnemyLocation == "arena" then
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCARENA"] then
@@ -1905,7 +1907,7 @@ function HealBot_Panel_enemyTargets(preCombat)
         end)
     end
     
-    if HEALBOT_GAME_VERSION>1 then
+    if HEALBOT_GAME_VERSION>2 then
         vEnemyBossNum=Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"]
         if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWBOSS"] then
             vEnemyBossExist=2

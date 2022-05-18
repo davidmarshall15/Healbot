@@ -839,7 +839,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true;
                 elseif buffWatchTarget["Self"] and button.player then
                     buffCheckThis=true
-                elseif buffWatchTarget["Party"] and (UnitInParty(button.unit) or button.player) then 
+                elseif buffWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
                     buffCheckThis=true
                 elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
@@ -1179,7 +1179,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                 if ccdbWatchTarget["Raid"] then
                     ccdbCheckthis=true;
                     if not HealBot_Config_Cures.IgnoreOnCooldownDebuffs then debuffIsAlways=true end
-                elseif ccdbWatchTarget["Party"] and (UnitInParty(button.unit) or button.player) then 
+                elseif ccdbWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
                     ccdbCheckthis=true;
                 elseif ccdbWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     ccdbCheckthis=true;
