@@ -26,3 +26,5 @@ jobs:
           fetch-depth: 0  # gets git history for changelogs
       - name: Package and release
         uses: BigWigsMods/packager@v2
+        with:
+          t: "HealBot"
