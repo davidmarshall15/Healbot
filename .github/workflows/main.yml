@@ -25,6 +25,8 @@ jobs:
         with:
           fetch-depth: 0  # gets git history for changelogs
       - name: Package and release
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
         uses: BigWigsMods/packager@v2
         # with:
          # args: -t HealBot
