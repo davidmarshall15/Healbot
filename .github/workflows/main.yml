@@ -5,10 +5,10 @@ name: CI
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+ # push:
+ #   branches: [ master ]
+ # pull_request:
+ #   branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,7 +22,7 @@ jobs:
     
     env:
       GITHUB_OAUTH: ${{ secrets.UPDATE_SECRET }}
-      WOWI_API_TOKEN: "testndksalödfhasiök"
+      WAGO_API_TOKEN : "testndksalödfhasiök"
     steps:
       - name: Clone project
         uses: actions/checkout@v2
