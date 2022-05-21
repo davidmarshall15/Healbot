@@ -1,7 +1,0 @@
-## Interface: 90200
-## Title: HealBot
-## Author: Strife
-## Notes: Adds a panel with skinable bars for healing, decursive, buffing, ressing, range checking and aggro tracking
-## RequiredDeps: HealBot_Options, HealBot
-## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
-## Version: 9.2.0.10
