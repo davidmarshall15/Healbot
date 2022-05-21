@@ -1,0 +1,23 @@
+package-as: HealBot
+
+move-folders:
+# languages
+  HealBot/HealBot_br: HealBot_br
+  HealBot/HealBot_cn: HealBot_cn
+  HealBot/HealBot_de: HealBot_de
+  HealBot/HealBot_en: HealBot_en
+  HealBot/HealBot_es: HealBot_es
+  HealBot/HealBot_fr: HealBot_fr
+  HealBot/HealBot_gr: HealBot_gr
+  HealBot/HealBot_hu: HealBot_hu
+  HealBot/HealBot_it: HealBot_it
+  HealBot/HealBot_kr: HealBot_kr
+  HealBot/HealBot_ru: HealBot_ru
+  HealBot/HealBot_tw: HealBot_tw
+# main components
+  HealBot/HealBot_Data: HealBot_Data
+  HealBot/HealBot_ExtraSkins: HealBot_ExtraSkins
+  HealBot/HealBot_Options: HealBot_Options
+  HealBot/HealBot_Tips: HealBot_Tips
+# healbot itself
+  HealBot/HealBot: HealBot
