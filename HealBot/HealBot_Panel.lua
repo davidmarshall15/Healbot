@@ -842,7 +842,6 @@ function HealBot_Panel_PositionBars(preCombat)
             vPosButton=HealBot_Unit_Button[xUnit] or "nil"
         end
         if vPosButton~="nil" and hbBarsPerFrame[vPosButton.frame] then
-            vPosButton.group=HealBot_UnitGroups[vPosButton.unit] or 1
             vFrame=vPosButton.frame
             rowNo[vFrame]=rowNo[vFrame]+1
             barNo[vFrame]=barNo[vFrame]+1
@@ -961,9 +960,8 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
             HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
             if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==1 or preCombat) then
                 HealBot_Action_ShowPanel(frame)
-            --else
-            --    HealBot_Action_HidePanel(frame)
             end
+            HealBot_Action_setFrameHeader(frame)
         else
             HealBot_Action_HidePanel(frame)
         end
@@ -1088,6 +1086,7 @@ function HealBot_Panel_SetupBars(preCombat)
                     HealBot_Action_ShowPanel(j)
                 end
                 HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
+                HealBot_Action_setFrameHeader(j)
             else
                 HealBot_Action_HidePanel(j)
             end
@@ -2088,7 +2087,7 @@ function HealBot_Panel_petHeals(preCombat)
     end
 end
 
-local vRaidTargetNum,vRaidUnit,vRaidIndex,vCrashProdData,vCrashProdTmp=0,"",0,"",""
+local vRaidTargetNum,vRaidTargetGroup,vRaidUnit,vRaidIndex,vCrashProtData,vCrashProtTmp=0,8,"",0,"",""
 local vRaidPrevSort,vRaidHeadSort,vRaidSubSort,vRaidShowHeader="","","init",false
 function HealBot_Panel_raidHeals(preCombat)
     vRaidIndex=i[hbCurrentFrame]
@@ -2097,15 +2096,19 @@ function HealBot_Panel_raidHeals(preCombat)
     end
     
     vRaidTargetNum = nraid
-    if HealBot_Panel_luVars["cpUse"] and preCombat and nraid>0 and HealBot_Panel_luVars["cpRaid"] then 
+    if HealBot_Panel_luVars["cpUse"] and preCombat and nraid>0 and HealBot_Panel_luVars["cpRaid"] then
         if vRaidTargetNum<11 then
             vRaidTargetNum=10
+            vRaidTargetGroup=2
         elseif vRaidTargetNum<16 then
             vRaidTargetNum=15
+            vRaidTargetGroup=3
         elseif vRaidTargetNum<26 then
             vRaidTargetNum=25
+            vRaidTargetGroup=5
         else
             vRaidTargetNum=40
+            vRaidTargetGroup=8
         end
     end
 
@@ -2121,8 +2124,8 @@ function HealBot_Panel_raidHeals(preCombat)
             end
             if hbPanel_dataUnits[vRaidUnit] then
                 HealBot_Panel_addUnit(vRaidUnit, 5, hbPanel_dataUnits[vRaidUnit], true)
-            elseif HealBot_Panel_luVars["cpUse"] and (HealBot_Panel_luVars["cpCrash"] or HealBot_Panel_luVars["cpRaid"]) then 
-                HealBot_UnitGroups[vRaidUnit]=ceil(j/5)
+            elseif preCombat and HealBot_Panel_luVars["cpUse"] and (HealBot_Panel_luVars["cpCrash"] or HealBot_Panel_luVars["cpRaid"]) then
+                HealBot_UnitGroups[vRaidUnit]=vRaidTargetGroup
                 HealBot_Panel_addUnit(vRaidUnit, 5, vRaidUnit, true)
             end
         end
@@ -2739,6 +2742,10 @@ function HealBot_Panel_RaidUnitName(uName)
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 
+function HealBot_Panel_resetCrashProt()
+    vCrashProtTmp=""
+end
+
 function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     for xHeader in pairs(HealBot_Track_Headers) do
         HealBot_Track_Headers[xHeader]=false
@@ -2793,19 +2800,19 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
         HealBot_Panel_PlayersChanged(preCombat)
         if not preCombat and HealBot_Globals.CrashProtTime>0 then
             if nraid>0 then
-                vCrashProdTmp="r:"..nraid
+                vCrashProtTmp="r:"..nraid
             elseif IsInGroup() then
-                vCrashProdTmp="g:"..GetNumGroupMembers()
+                vCrashProtTmp="g:"..GetNumGroupMembers()
             else
-                vCrashProdTmp="Solo:0"
+                vCrashProtTmp="Solo:0"
             end
-            if vCrashProdTmp~=vCrashProdData then
-                vCrashProdData=vCrashProdTmp            
+            if vCrashProtTmp~=vCrashProtData then
+                vCrashProtData=vCrashProtTmp            
                 local z=GetMacroIndexByName(HealBot_Panel_luVars["cpMacro"])
                 if (z or 0) == 0 then
-                    z = CreateMacro(HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProdData, true)
+                    z = CreateMacro(HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProtData, true)
                 else
-                    z = EditMacro(z, HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProdData)
+                    z = EditMacro(z, HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProtData)
                 end
             end
         end

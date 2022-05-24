@@ -1048,7 +1048,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 if ripHasResEnd[button.guid]<TimeNow then
                     ripHadResStart[button.guid]=TimeNow
                     button.status.resstart=TimeNow
-                    ripHadResEnd[button.guid]=TimeNow+58
+                    ripHadResEnd[button.guid]=TimeNow+30
                     HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 2)
                 else
                     HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 3)
@@ -1637,24 +1637,18 @@ function HealBot_Action_HideDirectionArrow(button)
     --HealBot_setCall("HealBot_Action_HideDirectionArrow")
 end
 
-function HealBot_Action_setFrameHeader(f, frameScale)
+function HealBot_Action_setFrameHeader(f)
     if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][f]["SHOW"] then
         local fWidth=grpFrame[f]:GetRight()-grpFrame[f]:GetLeft()
         local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
-        grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*frameScale));
+        grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["SCALE"]));
         grpFrameBar[f]:SetWidth(hwidth);
         grpFrameBar[f]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"]));
         grpFrameBar[f]:GetStatusBarTexture():SetHorizTile(false)
-        grpFrameBar[f]:SetMinMaxValues(0,100);
-        grpFrameBar[f]:SetValue(100);
         HealBot_Action_UpdateFrameHeaderOpacity(f)
     else
         grpFrameBar[f]:SetStatusBarColor(0,0,0,0);
     end
-    grpFrameBar[f]:EnableMouse(false)
-    local barScale = grpFrameBar[f]:GetScale();
-    grpFrameBar[f]:SetScale(barScale + 0.01);
-    grpFrameBar[f]:SetScale(barScale);
 end
 
 function HealBot_Action_InitFrames()
@@ -1682,6 +1676,12 @@ function HealBot_Action_InitFrames()
             grpFrame[x]:SetScript("OnMouseUp", function(self, button) HealBot_Action_OnMouseUp(self, button) end)
             grpFrameBar[x]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_HeaderBar", grpFrame[x], "TextStatusBar")
             grpFrameBar[x]:SetPoint("BOTTOM",grpFrame[x],"TOP",0,-2)
+            grpFrameBar[x]:SetMinMaxValues(0,100);
+            grpFrameBar[x]:SetValue(100);
+            local barScale = grpFrameBar[x]:GetScale();
+            grpFrameBar[x]:SetScale(barScale + 0.01);
+            grpFrameBar[x]:SetScale(barScale);
+            grpFrameBar[x]:EnableMouse(false)
             grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
             local StickIndPoints={[1]="BOTTOMLEFT",[2]="BOTTOM",[3]="BOTTOMRIGHT",[4]="TOPLEFT",[5]="LEFT",[6]="BOTTOMLEFT",[7]="TOPRIGHT",[8]="TOP",[9]="TOPLEFT",[10]="BOTTOMRIGHT",[11]="RIGHT",[12]="TOPRIGHT"}
             local FrameStickIndPoints={[1]="TOPLEFT",[2]="TOP",[3]="TOPRIGHT",[4]="TOPRIGHT",[5]="RIGHT",[6]="BOTTOMRIGHT",[7]="BOTTOMRIGHT",[8]="BOTTOM",[9]="BOTTOMLEFT",[10]="BOTTOMLEFT",[11]="LEFT",[12]="TOPLEFT"}
@@ -1719,7 +1719,6 @@ function HealBot_Action_ShowPanel(frame)
                 PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
             end
         end
-        HealBot_Skins_ResetSkin("frameheader",nil,frame)
     end
     --HealBot_setCall("HealBot_Action_ShowPanel"..frame)
 end
@@ -4723,7 +4722,6 @@ function HealBot_Action_SetAlias(hbCurFrame)
     else
         grpFrameText[hbCurFrame]:SetText("")
     end
-    HealBot_Skins_ResetSkin("frameheader",nil,hbCurFrame)
 end
 
 function HealBot_Action_SetAliasFontSize(hbCurFrame)

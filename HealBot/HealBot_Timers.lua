@@ -296,8 +296,8 @@ function HealBot_Timers_EnteringWorld2()
 end
 
 function HealBot_Timers_EnteringWorld()
-    HealBot_Timers_Set("PARTYSLOW","TargetFocusUpdate")
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("PARTYSLOW","TargetFocusUpdate")
     HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
     HealBot_Timers_Set("LAST","UpdateEmergBars")
     HealBot_Timers_Set("DELAYED","EnteringWorld2")
@@ -673,38 +673,38 @@ function HealBot_Timers_Run()
         table.remove(HealBot_Timers["RUNDELAYED"],1)
     elseif HealBot_Timers["INITSLOW"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.05
-            HealBot_Timers_RunDelayedTimer("INITSLOW", HealBot_Timers["INITSLOW"][1],0.025)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.025
+            HealBot_Timers_RunDelayedTimer("INITSLOW", HealBot_Timers["INITSLOW"][1],0.01)
             table.remove(HealBot_Timers["INITSLOW"],1)
         end
     elseif HealBot_Timers["PARTYSLOW"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.05
-            HealBot_Timers_RunDelayedTimer("PARTYSLOW", HealBot_Timers["PARTYSLOW"][1],0.025)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.025
+            HealBot_Timers_RunDelayedTimer("PARTYSLOW", HealBot_Timers["PARTYSLOW"][1],0.01)
             table.remove(HealBot_Timers["PARTYSLOW"],1)
         end
     elseif HealBot_Timers["PLAYERSLOW"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.05
-            HealBot_Timers_RunDelayedTimer("PLAYERSLOW", HealBot_Timers["PLAYERSLOW"][1],0.025)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.025
+            HealBot_Timers_RunDelayedTimer("PLAYERSLOW", HealBot_Timers["PLAYERSLOW"][1],0.01)
             table.remove(HealBot_Timers["PLAYERSLOW"],1)
         end
     elseif HealBot_Timers["SKINSSLOW"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.05
-            HealBot_Timers_RunDelayedTimer("SKINSSLOW", HealBot_Timers["SKINSSLOW"][1],0.025)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.025
+            HealBot_Timers_RunDelayedTimer("SKINSSLOW", HealBot_Timers["SKINSSLOW"][1],0.01)
             table.remove(HealBot_Timers["SKINSSLOW"],1)
         end
     elseif HealBot_Timers["LAST"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.1
-            HealBot_Timers_RunDelayedTimer("LAST", HealBot_Timers["LAST"][1],0.05)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.05
+            HealBot_Timers_RunDelayedTimer("LAST", HealBot_Timers["LAST"][1],0.01)
             table.remove(HealBot_Timers["LAST"],1)
         end
     elseif HealBot_Timers["DELAYED"][1] then
         if HealBot_Timers_luVars["SlowDelayedTime"]<GetTime() then
-            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.2
-            HealBot_Timers_RunDelayedTimer("DELAYED", HealBot_Timers["DELAYED"][1],0.1)
+            HealBot_Timers_luVars["SlowDelayedTime"]=GetTime()+0.1
+            HealBot_Timers_RunDelayedTimer("DELAYED", HealBot_Timers["DELAYED"][1],0.01)
             table.remove(HealBot_Timers["DELAYED"],1)
         end
     else

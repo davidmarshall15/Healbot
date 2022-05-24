@@ -17505,7 +17505,7 @@
                         </Anchors>
                         <Layers>
                           <Layer level="OVERLAY">
-                            <FontString name="healbotaggroindcoltxt" inherits="GameFontNormalSmall" text="HEALBOT_WORD_COLOUR">
+                            <FontString name="healbotselfcastindcoltxt" inherits="GameFontNormalSmall" text="HEALBOT_WORD_COLOUR">
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
@@ -17532,7 +17532,7 @@
                         </Anchors>
                         <Layers>
                           <Layer level="OVERLAY">
-                            <FontString name="healbotaggroindanchortxt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_AUXBARANCHOR">
+                            <FontString name="healbotselfcastindanchortxt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_AUXBARANCHOR">
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
@@ -19670,7 +19670,7 @@
                       </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CDCCastByCustomText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_CDCCastByCustomTxt" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
@@ -19787,7 +19787,7 @@
                   <Frame name="HealBot_Options_CDCPriorityC" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CustomDebuff_PriorityText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_CustomDebuff_PriorityTxt" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
@@ -19817,7 +19817,7 @@
                     </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CDCPriorityCustomText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_CDCPriorityCustomTxt" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
@@ -22652,7 +22652,7 @@
                   <Frame name="HealBot_Options_BuffPriorityC" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CustomBuff_PriorityText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_CustomBuff_PriorityTxt" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
@@ -24053,8 +24053,8 @@
                     </Layers>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_ExtraSkinsHelp("INEXTRASKIN",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_ExtraSkinsHelp("INEXTRASKIN",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("INEXTRASKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("INEXTRASKIN",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <Button name="HealBot_Options_LoadSkinb" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUTTONIMPORT">

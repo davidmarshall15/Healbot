@@ -1,6 +1,7 @@
 local libLSM = LibStub and LibStub:GetLibrary("LibSharedMedia-3.0", true)
 local libLDB11 = LibStub and LibStub("LibDataBroker-1.1", true)
 local libLDBIcon = LibStub and LibStub("LibDBIcon-1.0", true)
+local LibDeflate = LibStub and LibStub:GetLibrary("LibDeflate")
 local libCHC = nil
 local libCD = nil
 
@@ -22,6 +23,10 @@ end
 
 function HealBot_Libs_CD()
     return libCD
+end
+
+function HealBot_Libs_LibC()
+    return LibDeflate
 end
 
 if HealBot_Version_Target() and HEALBOT_GAME_VERSION<4 then

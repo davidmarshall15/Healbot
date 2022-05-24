@@ -907,7 +907,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
       --HealBot_setCall("HealBot_Aura_CheckGeneralBuff")
 end
 
-local buffCustomType,scbUnitClassEN,scbUnitClassTrim=false,"XXXX","XXXX"
+local buffCustomType,scbUnitClassEN=false,"XXXX"
 function HealBot_Aura_ShowCustomBuff()
     buffCustomType=HealBot_Watch_HoT[uaSpellId] or HealBot_Watch_HoT[uaName] or false
     if buffCustomType then
@@ -919,10 +919,8 @@ function HealBot_Aura_ShowCustomBuff()
             end
         elseif buffCustomType=="C" then
             _, scbUnitClassEN = UnitClass(uaUnitCaster)
-            if scbUnitClassTrim then
-                if HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
-                    return true, false
-                end
+            if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
+                return true, false
             end
         end
     else

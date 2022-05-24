@@ -1540,6 +1540,7 @@ function HealBot_Load(hbCaller)
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
         HealBot_Timers_Set("SKINS","UpdateIconFreq")
+        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
         HealBot_Timers_Set("INITSLOW","PowerIndicator")
         HealBot_Timers_Set("PARTYSLOW","LowManaTrig")
         HealBot_Timers_Set("LAST","CheckFramesOnCombat")
@@ -2561,6 +2562,7 @@ function HealBot_OnEvent_AddOnLoaded(addonName)
             end
         end);
         if stdSkinCheck then HealBot_Include_Skin(HEALBOT_SKINS_STD) end
+        HealBot_Config.LastAutoSkinChangeTime=0
         table.foreach(HealBot_Config_SpellsDefaults, function (key,val)
             if HealBot_Config_Spells[key]==nil then
                 HealBot_Config_Spells[key] = val;
@@ -3292,7 +3294,7 @@ end
 function HealBot_getDefaultSkin()
     local _,z = IsInInstance()
     local LastAutoSkinChangeType="None"
-    local newSkinName="_-none-_"
+    local newSkinName=HEALBOT_SKINS_STD
     if z == "arena" then
         for x in pairs (Healbot_Config_Skins.Skins) do
             if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
@@ -3402,7 +3404,7 @@ end
 function HealBot_PartyUpdate_CheckSkin()
     local newSkinName,LastAutoSkinChangeType=HealBot_getDefaultSkin()
     if LastAutoSkinChangeType~=HealBot_Config.LastAutoSkinChangeType or HealBot_Config.LastAutoSkinChangeTime<TimeNow then
-        if newSkinName~="_-none-_" and newSkinName~=Healbot_Config_Skins.Current_Skin then
+        if newSkinName~=Healbot_Config_Skins.Current_Skin then
             HealBot_Options_Set_Current_Skin(newSkinName)
         end
         HealBot_Config.LastAutoSkinChangeType=LastAutoSkinChangeType
@@ -4381,6 +4383,7 @@ function HealBot_ShareSkinSendMsg(cmd, msg)
             for j=2,#extShareSkin do
                 ssStr=ssStr.."\n"..extShareSkin[j] 
             end
+            ssStr=HealBot_Options_Compress(ssStr)
             HealBot_Options_ShareExternalEditBox:SetText(ssStr)
         end
     end
