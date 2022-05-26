@@ -184,7 +184,8 @@ function HealBot_globalVars()
     HEALBOT_FROST_SHOCK                     = 8056 --GetSpellInfo(8056) or "--Frost Shock"
     HEALBOT_HEX                             = 51514 --GetSpellInfo(51514) or "--Hex"
     HEALBOT_LAVA_BLAST                      = 51505 --GetSpellInfo(51505) or "--Lava Blast"
-    HEALBOT_LIGHTNING_BOLT                  = 403 --GetSpellInfo(403) or "--Lightning Bolt"
+    HEALBOT_LIGHTNING_BOLT                  = 188196
+    HBC_LIGHTNING_BOLT                      = 403
     HEALBOT_PRIMAL_STRIKE                   = 73899 --GetSpellInfo(73899) or "--Primal Strike"
     HEALBOT_PURGE                           = 370 --GetSpellInfo(370) or "--Purge"
     HEALBOT_WIND_SHEAR                      = 57994 --GetSpellInfo(57994) or "--Wind Shear" 

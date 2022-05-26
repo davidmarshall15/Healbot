@@ -9363,6 +9363,7 @@ function HealBot_Options_FullHealSpellsCombo_list(sType)
             HEALBOT_EARTH_SHOCK,
             HEALBOT_LAVA_BLAST,
             HEALBOT_LIGHTNING_BOLT,
+            HBC_LIGHTNING_BOLT,
             HEALBOT_FAERIE_SWARM,
             HEALBOT_MOONFIRE,
             HEALBOT_PRIMAL_STRIKE,

@@ -130,7 +130,7 @@ function HealBot_Action_SetrSpell()
         end
         if sName then HealBot_RangeSpells["RANGE30"]=sName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        sName=HealBot_KnownSpell(HEALBOT_LIGHTNING_BOLT)
+        sName=HealBot_KnownSpell(HEALBOT_LIGHTNING_BOLT) or HealBot_KnownSpell(HBC_LIGHTNING_BOLT)
         if sName then HealBot_RangeSpells["HARM"]=sName end
         sName=HealBot_KnownSpell(HEALBOT_HEALING_WAVE) or HealBot_KnownSpell(HEALBOT_HEALING_SURGE) or HealBot_KnownSpell(HBC_HEALING_WAVE)
         if sName then HealBot_RangeSpells["HEAL"]=sName end
@@ -1012,7 +1012,7 @@ function HealBot_Action_UpdateUnitNotDead(button)
         HealBot_Data["PALIVE"]=true
         HealBot_Action_ResetActiveUnitStatus()
     end
-    button.status.rangespell=HealBot_RangeSpells["HEAL"]
+    HealBot_Action_SetRangeSpell(button)
     HealBot_UpdateUnitRange(button,false,"DEATH")
     HealBot_OnEvent_UnitHealth(button)
     HealBot_Action_UpdateBackgroundButton(button)
@@ -1180,7 +1180,7 @@ function HealBot_Action_UpdateHealthButtonState(button)
         if not button.aura.buffcol and not button.aura.debuffcol then 
             if button.aggro.status==3 or HealBot_AlwaysEnabled[button.guid] or button.health.ptc<=button.health.alert then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] and button.status.unittype<11 and button.status.rangespell~=HealBot_RangeSpells["HEAL"] then 
-                    button.status.rangespell=HealBot_RangeSpells["HEAL"] 
+                    HealBot_Action_SetRangeSpell(button)
                     HealBot_UpdateUnitRange(button,false,"HEAL")
                 end
                 if button.status.range==1 then
@@ -3454,7 +3454,7 @@ function HealBot_Action_setGuidData(button, attrib, value, callback)
 end
 
 function HealBot_Action_SetRangeSpell(button)
-    if button.frame==10 then
+    if UnitIsEnemy("player",button.unit) then
         button.status.rangespell=HealBot_RangeSpells["HARM"]
     else
         button.status.rangespell=HealBot_RangeSpells["HEAL"]

@@ -957,6 +957,7 @@ function HealBot_UpdateUnit(button)
         HealBot_Text_UpdateButton(button)
         HealBot_OnEvent_UnitManaUpdate(button)
         HealBot_Aux_UpdBar(button)
+        HealBot_Action_SetRangeSpell(button)
         button.status.postupdate=true
         button.status.slowupdate=true
     else
@@ -3295,6 +3296,9 @@ function HealBot_getDefaultSkin()
     local _,z = IsInInstance()
     local LastAutoSkinChangeType="None"
     local newSkinName=HEALBOT_SKINS_STD
+    for x in pairs (Healbot_Config_Skins.Skins) do
+        if Healbot_Config_Skins.Skins[x]==Healbot_Config_Skins.Current_Skin then newSkinName=Healbot_Config_Skins.Current_Skin end
+    end
     if z == "arena" then
         for x in pairs (Healbot_Config_Skins.Skins) do
             if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
@@ -3578,7 +3582,6 @@ function HealBot_UnitSlowUpdateFriendly(button)
         if button.status.slowupdate then
             if button.status.postchange then
                 button.status.postchange=false
-                HealBot_Action_SetRangeSpell(button)
                 HealBot_UpdateUnitRange(button, false,"UPDATE")
                 HealBot_Action_UpdateBackgroundButton(button)
                 HealBot_CheckUnitStatus(button)
