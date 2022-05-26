@@ -1,8 +1,9 @@
 HealBot Continued
 -----------------
 
-Visit the Healbot website for additional skins and information: https://healbot.dpm15.net
-Issues and bug reports go here:  https://healbot.dpm15.net/forum/bug
+  - Visit the Healbot website for information: https://healbot.dpm15.net.
+  - Issues and bug reports go here:  https://healbot.dpm15.net/forum/bug
+  - Fod extra skins, in-game check the Import/Export Extra Skins dropdown.
 
 
 Installing and Updating
