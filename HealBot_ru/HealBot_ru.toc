@@ -1,10 +1,10 @@
-## Interface: 90200
+## Interface: 90205
 ## Title: HealBot Russian Localization
 ## Author: Strife
 ## Notes: HealBot localization for ruRU
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.2.0.0
+## Version: 9.2.5.0
 
 HealBot_Localization.ru.lua
 HealBot_Tips_Localization.ru.lua

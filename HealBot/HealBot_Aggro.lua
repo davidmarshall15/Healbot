@@ -1,5 +1,8 @@
 local HealBot_Aggro_rCalls={}
 local tConcat={}
+local HealBot_Aggro_AuxAssigns={}
+HealBot_Aggro_AuxAssigns["NameOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
+HealBot_Aggro_AuxAssigns["HealthOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local HealBot_Aggro_luVars={}
 HealBot_Aggro_luVars["pluginThreat"]=false
 
@@ -10,6 +13,10 @@ end
 
 function HealBot_Aggro_retLuVars(vName)
     return HealBot_Aggro_luVars[vName]
+end
+
+function HealBot_Aggro_setAuxAssigns(vName, frame, vValue)
+    HealBot_Aggro_AuxAssigns[vName][frame]=vValue
 end
 
 function HealBot_Aggro_Concat(elements)
@@ -27,7 +34,9 @@ function HealBot_Aggro_IndicatorClear(button)
 end
 
 function HealBot_Aggro_IndicatorUpdate(button)
-    if button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 and button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
+    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
+       button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 and 
+       button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
         local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
         if button.aggro.status==1 then
             if button.aggro.ind~=1 then
@@ -66,20 +75,40 @@ function HealBot_Aggro_IndicatorUpdate(button)
       --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
+local function HealBot_Aggro_AuxSetAggroBar(button)
+    HealBot_Aux_UpdateAggroBar(button)
+    if HealBot_Aggro_AuxAssigns["NameOverlayAggro"][button.frame] then
+        HealBot_Aux_UpdateNameOverLay(button, 4, true)
+    end
+    if HealBot_Aggro_AuxAssigns["HealthOverlayAggro"][button.frame] then
+        HealBot_Aux_UpdateHealthOverLay(button, 4, true)
+    end
+end
+
+local function HealBot_Aggro_AuxClearAggroBar(button)
+    HealBot_Aux_ClearAggroBar(button)
+    if HealBot_Aggro_AuxAssigns["NameOverlayAggro"][button.frame] then
+        HealBot_Aux_UpdateNameOverLay(button, 4, false)
+    end
+    if HealBot_Aggro_AuxAssigns["HealthOverlayAggro"][button.frame] then
+        HealBot_Aux_UpdateHealthOverLay(button, 4, false)
+    end
+end
+
 function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
             if threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
-                HealBot_Aux_UpdateAggroBar(button)
+                HealBot_Aggro_AuxSetAggroBar(button)
             else
-                HealBot_Aux_ClearAggroBar(button)
+                HealBot_Aggro_AuxClearAggroBar(button)
             end
         else
             threatStatus=0
-            HealBot_Aux_ClearAggroBar(button)
+            HealBot_Aggro_AuxClearAggroBar(button)
         end
     else
-        HealBot_Aux_ClearAggroBar(button)
+        HealBot_Aggro_AuxClearAggroBar(button)
         threatPct=0
         threatStatus=0
         threatValue=0

@@ -94,6 +94,7 @@ HealBot_Panel_luVars["FirstLoad"]=true
 HealBot_Panel_luVars["LoadTime"]=GetTime()+5
 HealBot_Panel_luVars["cpMacro"]="hb-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
+HealBot_Panel_luVars["resetAuxText"]=false
 
 function HealBot_Panel_retLuVars(vName)
     return HealBot_Panel_luVars[vName]
@@ -637,7 +638,7 @@ end
 function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
     if not relButton then
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
-    elseif HealBot_SpecialUnit[button.unit] then
+    elseif button.frame==10 and HealBot_SpecialUnit[button.unit] then
         HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
     else
         HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
@@ -685,7 +686,7 @@ function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preComb
     else
         HealBot_Panel_AnchorButton(button, button.gref["Back"], relButton, newColumn)
         
-        if HealBot_SpecialUnit[button.unit] then
+        if button.frame==10 and HealBot_SpecialUnit[button.unit] then
             local eGUID=UnitGUID(button.unit.."target") or button.unit.."target"
             local eButton=HealBot_Action_SetHealButton(button.unit.."target",eGUID,10,11,false,3,preCombat) 
             if eButton then
@@ -707,8 +708,13 @@ function HealBot_Action_SetBackBarHeightWidth(frame, height, width)
     local vSetAddHWScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["SCALE"]
     backBarsSize[frame]["HEIGHT"]=height
     backBarsSize[frame]["WIDTH"]=width
-    backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"]*vSetAddHWScale)
-    backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"]*vSetAddHWScale)
+    if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][frame]["BORDER"]>1 then
+        backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"] * vSetAddHWScale)
+        backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"] * vSetAddHWScale)
+    else
+        backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"]*vSetAddHWScale)
+        backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"]*vSetAddHWScale)
+    end
 end
 
 function HealBot_Action_SetBackSpecialWidth(frame, width)
@@ -2507,6 +2513,9 @@ function HealBot_Panel_EnemyChanged(preCombat)
     for x,_ in pairs(hbPanel_enemyUnits) do
         hbPanel_enemyUnits[x]=nil;
     end
+    --for _,xButton in pairs(HealBot_Enemy_Button) do
+    --    HealBot_Action_MarkDeleteButton(xButton)
+    --end
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
         i[hbCurrentFrame]=0
         HeaderPos[hbCurrentFrame]={};
@@ -2917,6 +2926,10 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
     end
     if not preCombat then
         HealBot_Timers_Set("PARTYSLOW","ReadyCheck")
+    end
+    if HealBot_Panel_luVars["resetAuxText"] then
+        HealBot_Panel_luVars["resetAuxText"]=false
+        HealBot_Aux_ResetTextButtons()
     end
       --HealBot_setCall("HealBot_Panel_PartyChanged")
 end

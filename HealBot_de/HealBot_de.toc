@@ -1,10 +1,10 @@
-## Interface: 90200
+## Interface: 90205
 ## Title: HealBot German Localization
 ## Author: Snaomi
 ## Notes: HealBot localization for deDE
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.2.0.0
+## Version: 9.2.5.0
 
 HealBot_Localization.de.lua
 HealBot_Tips_Localization.de.lua

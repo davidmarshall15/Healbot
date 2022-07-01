@@ -5,8 +5,13 @@ local HealBotAddonSummaryNoCommsSort={}
 local _
 
 local qAddonMsg={}
-function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
-    local aMsg=addon_id.."~"..msg.."~"..aType.."~"..pName
+function HealBot_Comms_SendAddonMsg(msg, aType, pName)
+    local aMsg=""
+    if pName then
+        aMsg=msg.."~"..aType.."~"..pName
+    else
+        aMsg=msg.."~"..aType
+    end
     local unique=true;
     table.foreach(qAddonMsg, function (index,msg)
         if msg==aMsg then unique=false; end
@@ -16,38 +21,35 @@ function HealBot_Comms_SendAddonMsg(addon_id, msg, aType, pName)
     end
 end
 
+local function HealBot_Comms_SendInstantAddonMsg(addon_id, msg)
+    if IsInInstance() and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) then
+        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT");
+    elseif IsInRaid() then
+        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "RAID")
+    elseif IsInGroup() then
+        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "PARTY")
+    end
+end
+
 function HealBot_Comms_SendAddonMessage()
     if #qAddonMsg>0 then
         local aMsg=qAddonMsg[1]
         table.remove(qAddonMsg,1)
+        HealBot_AddDebug(aMsg,"Comms",true)
         
-        local addon_id, msg, aType, pName=string.split("~", aMsg)
+        local msg, aType, pName=string.split("~", aMsg)
         aType=tonumber(aType)
-        if aType<4 then
-            if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-                C_ChatInfo.SendAddonMessage(addon_id, msg, "INSTANCE_CHAT" );
-            elseif IsInRaid() then
-                C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
-            elseif IsInGroup() then
-                C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
-            end
-        elseif aType==4 and pName then
+        if aType==1 then
+            HealBot_Comms_SendInstantAddonMsg(HEALBOT_HEALBOT, msg)
+        elseif aType==2 and pName then
             local xUnit=HealBot_Panel_RaidUnitName(pName)
-            if xUnit and UnitIsPlayer(xUnit) then
-                C_ChatInfo.SendAddonMessage(addon_id, msg, "WHISPER", pName );
+            if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit)==pName then
+                C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", pName );
             end
-        elseif aType==5 then
-            C_ChatInfo.SendAddonMessage(addon_id, msg, "GUILD" );
+        elseif aType==3 and IsInGuild() then
+            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD" );
         end
         --HealBot_AddDebug("comms="..aMsg)
-    end
-end
-
-function HealBot_Comms_SendInstantAddonMsg(addon_id, msg)
-    if IsInRaid() then
-        C_ChatInfo.SendAddonMessage(addon_id, msg, "RAID" );
-    elseif IsInGroup() then
-        C_ChatInfo.SendAddonMessage(addon_id, msg, "PARTY" );
     end
 end
 
@@ -114,21 +116,6 @@ function HealBot_Comms_Print_Supports()
     end
 end
 
-function HealBot_Comms_Zone()
-    local HealBotAddonMsgType=HealBot_retLuVars("AddonMsgType")
-    HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Zone="..GetRealZoneText())
-    if HealBotAddonMsgType==1 then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=INSTANCE_CHAT")
-    elseif HealBotAddonMsgType==2 then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=RAID")
-    elseif HealBotAddonMsgType==3 then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=PARTY")
-    elseif HealBotAddonMsgType==4 then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."AddonComms=WHISPER")
-    end
-    HealBot_AddChat(HEALBOT_CHAT_ADDONID.."#Group="..GetNumGroupMembers())
-end
-
 local mult=0
 function HealBot_Comm_round(num, idp)
     mult = 10^(idp or 0)
@@ -159,7 +146,6 @@ function HealBot_Comms_CheckVer(userName, version)
             hbHealbot=tHealbot
             if not HealBot_Globals.OneTimeMsg["VERSION"] then
                 HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION1)
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION2)
                 HealBot_Globals.OneTimeMsg["VERSION"]=true
             end
             HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot

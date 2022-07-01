@@ -101,6 +101,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK            = "Background bar opacity";
+    HEALBOT_OPTIONS_BARALPHABOR             = "Background border opacity";
     HEALBOT_OPTIONS_BARALPHAEOR             = "Out of range opacity";
     HEALBOT_OPTIONS_ACTIONLOCKED            = "Lock frame";
     HEALBOT_OPTIONS_UNITINCOMBAT            = "Group/Raid member enters combat"
@@ -397,10 +398,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HLTHTXTANCHORLEFT       = "Left of Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHORBELOW      = "Below Name Text"
     HEALBOT_OPTIONS_HLTHTXTANCHORABOVE      = "Above Name Text"
-    HEALBOT_OPTIONS_AGGROTXTANCHORRIGHT     = "Right of Health Text"
-    HEALBOT_OPTIONS_AGGROTXTANCHORBELOW     = "Below Health Text"
-    HEALBOT_OPTIONS_AGGROTXTANCHORABOVE     = "Above Health Text"
-    
+    HEALBOT_OPTIONS_STATECOLNOTAVAIL        = "State col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are inherited from the Name text\nwhen "..HEALBOT_OPTIONS_STATETEXTANCHOR.." is set to "..HEALBOT_OPTIONS_HLTHTXTANCHORLEFT;
+
     HEALBOT_OPTIONS_AUXBARANCHOR            = "Anchor"
     HEALBOT_OPTIONS_AUXBARANCHOR01          = "Below Health Bar"
     HEALBOT_OPTIONS_AUXBARANCHOR02          = "Above Health Bar"
@@ -454,6 +453,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_EXTREME                    = "Extreme"
     HEALBOT_WORD_CASTER                     = "Caster"
     HEALBOT_WORD_TYPE                       = "Type"
+    HEALBOT_WORD_FROM                       = "From"
     
 
     HEALBOT_ASSIST                          = "Assist";
@@ -541,14 +541,14 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MYFRIEND                = "My Friend"
 
     HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
-    HEALBOT_DISCONNECTED_TAG                = "DC-"
+    HEALBOT_DISCONNECTED_TAG                = "DC "
     HEALBOT_DEAD_LABEL                      = "Dead"
-    HEALBOT_DEAD_TAG                        = "RIP-"
-    HEALBOT_RES_TAG                         = "RES-"
-    HEALBOT_SUMMONS_TAG                     = "SUM-"
-    HEALBOT_OUTOFRANGE_LABEL                = "Out Of Range"
+    HEALBOT_DEAD_TAG                        = "RIP "
+    HEALBOT_RES_TAG                         = "RES "
+    HEALBOT_SUMMONS_TAG                     = "SUM "
+    HEALBOT_OUTOFRANGE_LABEL                = "Out of range"
     HEALBOT_RANGE30                         = "In Range 30"
-    HEALBOT_RECENTHEALS                     = "Your recent heals"
+    HEALBOT_RECENTHEALS                     = "Recent heals"
     HEALBOT_OUTOFRANGE_TAG                  = "OOR-"
     HEALBOT_RESERVED_LABEL                  = "Reserved"
     HEALBOT_RESERVED_TAG                    = "R-"
@@ -590,6 +590,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CUSTOMCOLBACK           = "Background bar custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CUSTOMCOLINHEAL         = "Incoming heals bar custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CUSTOMCOLABSORB         = "Absorb effects bar custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_CUSTOMCOLBACKBOR        = "Background border custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CUSTOMTEXTCOLNAME       = "Name text custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CUSTOMTEXTCOLHEALTH     = "Health text custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_CUSTOMTEXTCOLSTATE      = "State text bar custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
@@ -688,6 +689,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_COMBOAUTOTARGET         = "Auto\nTarget"
     HEALBOT_OPTIONS_COMBOAUTOTRINKET        = "Auto Trinket"
     HEALBOT_OPTIONS_GROUPSPERCOLUMN         = "Use Groups per Column"
+    HEALBOT_WORD_WHISPER                    = "Whisper"
+    HEALBOT_WORD_GUILD                      = "Guild"
 
     HEALBOT_OPTIONS_MAINSORT                = "Main sort"
     HEALBOT_OPTIONS_SUBSORT                 = "Sub sort"
@@ -718,15 +721,17 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_EXPORTSKIN              = "Select Skin"
     HEALBOT_OPTIONS_EXTRASKINS              = "Extra Skins"
     HEALBOT_OPTIONS_BUTTONEXPORT            = "Export"
+    HEALBOT_OPTIONS_BUTTONPOSTLINK          = "Post Link"
+    HEALBOT_OPTIONS_BUTTONPOST              = "Post"
     HEALBOT_OPTIONS_BUTTONIMPORT            = "Import"
     HEALBOT_OPTIONS_BUTTONIMPORTMETHOD      = "Import Method"
-    HEALBOT_IMPORT_OVERWRITEALL             = "Overwrite All (Delete existing then insert all)"
-    HEALBOT_IMPORT_MERGEALL                 = "Merge All (Update existing and insert new)"
-    HEALBOT_IMPORT_MERGENEW                 = "Merge New (Only insert new)"
+    HEALBOT_IMPORT_OVERWRITEALL             = "Overwrite All"
+    HEALBOT_IMPORT_MERGEALL                 = "Merge All"
+    HEALBOT_IMPORT_MERGENEW                 = "Merge New"
+    HEALBOT_IMPORT_CREATEORREPLACE          = "Create or Replace"
 
     HEALBOT_CHAT_ADDONID                    = "[HealBot]  "
-    HEALBOT_CHAT_NEWVERSION1                = "A newer version is available"
-    HEALBOT_CHAT_NEWVERSION2                = "at "..HEALBOT_ABOUT_URL
+    HEALBOT_CHAT_NEWVERSION1                = "A new version is available"
     HEALBOT_CHAT_SHARESKINERR1              = " Skin not found for Sharing"
     HEALBOT_CHAT_SHARESKINERR3              = " not found for Skin Sharing"
     HEALBOT_CHAT_SHARESKINACPT              = "Share Skin accepted from "
@@ -744,7 +749,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_CONFIRMCURESRESET          = "Cures have been reset"
     HEALBOT_CHAT_CONFIRMBUFFSRESET          = "Buffs have been reset"
     HEALBOT_CHAT_CONFIRMICONRESET           = "Icons have been reset"
-    HEALBOT_CHAT_POSSIBLEMISSINGMEDIA       = "Unable to receive all Skin settings - Possibly missing SharedMedia, download from curse.com"
+    HEALBOT_CHAT_POSSIBLEMISSINGMEDIA       = "Unable to receive all Skin settings - Possibly missing SharedMedia"
     HEALBOT_CHAT_MACROSOUNDON               = "Sound not suppressed when using auto trinkets"
     HEALBOT_CHAT_MACROSOUNDOFF              = "Sound suppressed when using auto trinkets"
     HEALBOT_CHAT_MACROERRORON               = "Errors not suppressed when using auto trinkets"
@@ -900,13 +905,19 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SAME_AS_HLTH_FUTURE     = "Same as health (future health)"
     HEALBOT_OPTIONS_FUTURE_HLTH             = "Future health"
     HEALBOT_OPTIONS_CLASSHLTHMIX            = "Class Health mix"
+    HEALBOT_OPTIONS_ADAPTIVE                = "Adaptive"
+    HEALBOT_OPTIONS_ADAPTIVECLASSMIX        = "Adaptive Class mix"
+    HEALBOT_OPTIONS_ADAPTIVECUSTOMMIX       = "Adaptive Custom mix"
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar";
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
+    HEALBOT_SKIN_BACKBORDERCOL_TEXT         = "Background border";
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
     HEALBOT_OPTIONS_OWN_PET_WITH_SELF       = "Own pet: with self"
-    HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use Game Tooltip"
+    HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use game tooltip style"
+    HEALBOT_OPTIONS_SHOWWOWTOOLTIP          = "Show game tooltip information"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_ROGU   = "Show combo points"
@@ -1313,12 +1324,30 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_LANG_ADDON_FAIL3        = "Note in the current version, this is the only warning for"
     HEALBOT_OPTIONS_IMPORT_FAIL1            = "Failed to Import"
     HEALBOT_OPTIONS_IMPORT_FAIL2            = "Reason for failure is:"
+    HEALBOT_OPTIONS_IMPORT_VALID1           = "Valid Import"
+    HEALBOT_OPTIONS_IMPORT_VALID2           = " data ready to be loaded\n\nContinue?"
+    HEALBOT_OPTIONS_LINK_REQUEST_DENIED     = "Link Request Denied\n\nPlease wait a few seconds before sending another request."
+    HEALBOT_OPTIONS_LINK_REQUEST1           = "HealBot Share Request"
+    HEALBOT_OPTIONS_LINK_CREATELR           = "Create HealBot Share Request Link"
+    HEALBOT_OPTIONS_LINK_REQUEST2           = "This is how your share request is presented."
+    HEALBOT_OPTIONS_LINK_REQUESTSENDQ       = "Send Request?"
+    HEALBOT_OPTIONS_LINK_WAITQUEUE          = "Waiting in queue";
+    HEALBOT_OPTIONS_LINK_TRANSCOMPLETE      = "Transfer complete";
+    HEALBOT_OPTIONS_LINK_TRANSSTARTED       = "Transfer started";
+    HEALBOT_OPTIONS_LINK_TRANSINPROGRESS    = "Transfer in progress ";
+    HEALBOT_OPTIONS_LINK_POSTCHANNEL        = "Post to channel";
+    HEALBOT_OPTIONS_LINK_POSTWHISPER        = "Whisper other HealBot users.";
+    HEALBOT_OPTIONS_LINK_CHAN1              = "Comms are sent using the addon channels. This means:"
+    HEALBOT_OPTIONS_LINK_CHAN2              = "-  Only HealBot users will receive your link."
+    HEALBOT_OPTIONS_LINK_CHAN3              = "-  Your link is displayed in their default chat channel."
+    HEALBOT_OPTIONS_LINK_CHAN4              = "-  You can whisper yourself to see how this works."
     
     HEALBOT_OPTIONS_ADDON_FAIL              = "Failed to load headbot addon"
     
-    HEALBOT_OPTIONS_IN_A_GROUP              = "Only when in a Group or Raid"
+    HEALBOT_OPTIONS_IN_A_GROUP              = "Only in a Group or Raid"
     HEALBOT_OPTIONS_ALSO_WHEN_MOUNTED       = "also when mounted"
     HEALBOT_OPTIONS_PALADIN_BLESSINGS       = "View all my blessings as same"
+    HEALBOT_OPTIONS_ONLY_IN_INSTANCE        = "Only in instance"
     
     HEALBOT_OPTIONS_TAB_EFFECTS              = "Effects"
     HEALBOT_OPTIONS_TAB_EMERG                = "Emergency"
@@ -1380,7 +1409,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_PROFILE                   = "Profile"
     HEALBOT_WORDS_GLOBALPROFILE             = "Global profile"
     HEALBOT_SHARE_SCREENSHOT                = "ScreenShot taken"
-    HEALBOT_SHARE_INSTRUCTION               = "Go to the website for instructions on sharing at "..HEALBOT_ABOUT_URL
+    HEALBOT_SHARE_EXPORTED                  = "Successfully Exported"
     HEALBOT_INOUT_STATUS_SKINSINIT          = "Skins can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_CDEBUFFINIT        = "Custom Debuffs can be shared at "..HEALBOT_ABOUT_URL
     HEALBOT_INOUT_STATUS_BUFFINIT           = "Custom Buffs can be shared at "..HEALBOT_ABOUT_URL

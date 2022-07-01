@@ -1,10 +1,10 @@
-## Interface: 90200
+## Interface: 90205
 ## Title: HealBot Extra Skins
 ## Author: Strife
 ## Notes: Large store of extra skins for HealBot.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
-## Version: 9.2.0.1
+## Version: 9.2.5.0
 
 HealBot_ExtraSkins.lua
 
