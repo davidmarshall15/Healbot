@@ -320,6 +320,15 @@
             </Offset>
           </Anchor>
         </Anchors>
+      </StatusBar>
+      <StatusBar name="$parentBar8" inherits="HealBot_StatusBar">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+            <Offset>
+              <AbsDimension x="0" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
         <Layers>
           <Layer level="ARTWORK">
             <Texture name="$parentIcon1">

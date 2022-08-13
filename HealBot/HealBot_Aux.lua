@@ -1,3 +1,4 @@
+local LSM = HealBot_Libs_LSM()
 local HealBot_Aux_Buttons={}
 local HealBot_AuxStatic_Buttons={}
 local HealBot_AuxFluid_Buttons={}
@@ -15,6 +16,7 @@ HealBot_Aux_luVars["AuxFluidBarOpacityUpdate"]=0.02
 HealBot_Aux_luVars["AuxFluidBarOpacityFreq"]=0.088
 HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
+HealBot_Aux_luVars["TestBarsOn"]=false
 
 function HealBot_Aux_setLuVars(vName, vValue)
     HealBot_Aux_luVars[vName]=vValue
@@ -165,7 +167,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
         end
     end
     if text then
-        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["ANCHOR"]>2 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["ANCHOR"]>2 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["ANCHOR"]<5 then
             text=HealBot_Aux_VerticalText(text)
         end
         if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==2 then
@@ -181,14 +183,14 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             text=HealBot_Text_Sub(text,1,hbAuxTextMaxChars[button.frame][id])
         end
         button.gref.auxtxt[id]:SetText(text)
-        if isFluid and HealBot_Aux_luVars["FluidInUse"] then
-            if button.status.enabled then
+        if isFluid and HealBot_Aux_luVars["FluidAlphaInUse"] then
+            if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
                 button.aux[id]["FLUIDTEXT"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLA"], 1)
             else
                 button.aux[id]["FLUIDTEXT"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLDA"], 1)
             end
         else
-            if button.status.enabled then
+            if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
                 button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLA"], 1))
             else
                 button.gref.auxtxt[id]:SetTextColor(button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"],HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLDA"], 1))
@@ -223,14 +225,14 @@ function HealBot_Aux_UpdBar(button, noFluid)
             end
         end
         if button.auxtxt[x]["TEXT"] then
-            if not noFluid and HealBot_Aux_luVars["FluidInUse"] then
-                if button.status.enabled then
+            if not noFluid and HealBot_Aux_luVars["FluidAlphaInUse"] then
+                if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
                     button.aux[x]["FLUIDTEXT"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLA"], 1)
                 else
                     button.aux[x]["FLUIDTEXT"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLDA"], 1)
                 end
             else
-                if button.status.enabled then
+                if button.status.enabled or HealBot_Aux_luVars["TestBarsOn"] then
                     button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLA"], 1))
                 else
                     button.gref.auxtxt[x]:SetTextColor(button.auxtxt[x]["R"],button.auxtxt[x]["G"],button.auxtxt[x]["B"],HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLDA"], 1))
@@ -259,7 +261,7 @@ function HealBot_Aux_resetBars()
         HealBot_Timers_Set("AUX","UpdateAllAuxBars")
         HealBot_Timers_Set("AUX","UpdateAllAuxByType")
         HealBot_Timers_Set("PLAYER","PlayerTargetChanged")
-        HealBot_Timers_Set("INITSLOW","SkinsFramesChanged")
+        HealBot_Timers_Set("INITSLOW","AuxFramesChanged")
         HealBot_Timers_Set("INITSLOW","UpdateAllUnitBars")
         HealBot_Timers_Set("INITSLOW","AuraCheckUnits")
     else
@@ -563,7 +565,7 @@ function HealBot_Aux_setPowerBars(button)
                 end
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
                     if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                        button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.2),(button.mana.g+0.2),(button.mana.b+0.2)
+                        button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.5),(button.mana.g+0.5),(button.mana.b+0.5)
                     end
                     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
                         HealBot_Aux_setBar(button, id, floor((button.mana.current/button.mana.max)*1000), true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
@@ -791,7 +793,7 @@ function HealBot_Aux_setInHealsAssigned(aType, frame, id)
 end
 
 local hbAuxHlth10=0
-function HealBot_Aux_UpdateAbsorbBar(button, value)
+function HealBot_Aux_UpdateAbsorbBar(button)
     for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DEAD"] then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
@@ -799,16 +801,20 @@ function HealBot_Aux_UpdateAbsorbBar(button, value)
                 button.aux[id]["G"]=button.health.absorbg
                 button.aux[id]["B"]=button.health.absorbb
             end
-            hbAuxHlth10=floor(1000/((button.health.max/10)/value))
-            if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
+            if button.health.auxabsorbs>0 then
+                hbAuxHlth10=floor(1000/((button.health.max/10)/button.health.auxabsorbs))
+                if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
+            else
+                hbAuxHlth10=0
+            end
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
                 if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
                     button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.absorbr+0.2),(button.health.absorbg+0.2),(button.health.absorbb+0.2)
                 end
                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==3 then
-                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, floor((button.health.absorbs/button.health.max)*100).."%")
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, floor((button.health.auxabsorbs/button.health.max)*100).."%")
                 else
-                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.absorbs, button.frame))
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.auxabsorbs, button.frame))
                 end
             else
                 HealBot_Aux_setBar(button, id, hbAuxHlth10, true)
@@ -825,7 +831,7 @@ function HealBot_Aux_ClearAbsorbBar(button)
     end
 end
 
-function HealBot_Aux_UpdateHealInBar(button, value)
+function HealBot_Aux_UpdateHealInBar(button)
     for id in pairs(hbAuxHealInAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DEAD"] then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
@@ -833,16 +839,20 @@ function HealBot_Aux_UpdateHealInBar(button, value)
                 button.aux[id]["G"]=button.health.inhealg
                 button.aux[id]["B"]=button.health.inhealb
             end
-            hbAuxHlth10=floor(1000/((button.health.max/10)/value))
-            if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
+            if button.health.auxincoming>0 then
+                hbAuxHlth10=floor(1000/((button.health.max/10)/button.health.auxincoming))
+                if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
+            else
+                hbAuxHlth10=0
+            end
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
                 if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
                     button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.inhealr+0.2),(button.health.inhealg+0.2),(button.health.inhealb+0.2)
                 end
                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==3 then
-                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, floor((button.health.incoming/button.health.max)*100).."%")
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, floor((button.health.auxincoming/button.health.max)*100).."%")
                 else
-                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.incoming, button.frame))
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.auxincoming, button.frame))
                 end
             else
                 HealBot_Aux_setBar(button, id, hbAuxHlth10, true)
@@ -882,6 +892,7 @@ function HealBot_Aux_setOverHealAssigned(frame, id)
     hbAuxOverHealAssigned[frame][id]=true
 end
 
+local ohValue=0
 function HealBot_Aux_UpdateOverHealBar(button)
     for id in pairs(hbAuxOverHealAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DEAD"] then
@@ -890,17 +901,22 @@ function HealBot_Aux_UpdateOverHealBar(button)
                 button.aux[id]["G"]=0.2
                 button.aux[id]["B"]=0.2
             end
+            if button.health.auxincoming>0 then
+                ohValue=floor((button.health.auxoverheal/button.health.auxincoming)*1000)
+            else
+                ohValue=0
+            end
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
                 if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
                     button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
                 end
                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==3 then
-                    HealBot_Aux_setBar(button, id, floor((button.health.overheal/button.health.incoming)*1000), true, floor((button.health.overheal/button.health.incoming)*100).."%")
+                    HealBot_Aux_setBar(button, id, ohValue, true, ceil(ohValue/10).."%")
                 else
-                    HealBot_Aux_setBar(button, id, floor((button.health.overheal/button.health.incoming)*1000), true, HealBot_Text_shortHealTxt(button.health.overheal, button.frame))
+                    HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.auxoverheal, button.frame))
                 end
             else
-                HealBot_Aux_setBar(button, id, floor((button.health.overheal/button.health.incoming)*1000), true)
+                HealBot_Aux_setBar(button, id, ohValue, true)
             end
         else
             HealBot_Aux_clearBar(button, id)
@@ -1426,10 +1442,10 @@ function HealBot_Aux_CheckOverLays(button)
         nameLastOverlayType[button.id][2]=false
     end
     if nameLastOverlayType[button.id][3] then
-        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] or button.status.range<0 or not button.aura.debuff.colbar then
+        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] or button.status.range<0 or button.aura.debuff.colbar==0 then
             nameLastOverlayType[button.id][3]=false
         end
-    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] and button.status.range>-1 and button.aura.debuff.colbar then
+    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] and button.status.range>-1 and button.aura.debuff.colbar>0 then
         nameLastOverlayType[button.id][3]=true
     end
     if nameLastOverlayType[button.id][4] then
@@ -1454,10 +1470,10 @@ function HealBot_Aux_CheckOverLays(button)
         nameLastOverlayType[button.id][7]=true
     end
     if nameLastOverlayType[button.id][8] then
-        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] or button.status.range<0 or not button.aura.buff.colbar then
+        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] or button.status.range<0 or button.aura.buff.colbar==0 then
             nameLastOverlayType[button.id][8]=false
         end
-    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] and button.status.range>-1 and button.aura.buff.colbar then
+    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] and button.status.range>-1 and button.aura.buff.colbar>0 then
         nameLastOverlayType[button.id][8]=true
     end
     
@@ -1468,10 +1484,10 @@ function HealBot_Aux_CheckOverLays(button)
         healthLastOverlayType[button.id][2]=false
     end
     if healthLastOverlayType[button.id][3] then
-        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] or button.status.range<0 or not button.aura.debuff.colbar then
+        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] or button.status.range<0 or button.aura.debuff.colbar==0 then
             healthLastOverlayType[button.id][3]=false
         end
-    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] and button.status.range>-1 and button.aura.debuff.colbar then
+    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYDEBUFF"] and button.status.range>-1 and button.aura.debuff.colbar>0 then
         healthLastOverlayType[button.id][3]=true
     end
     if healthLastOverlayType[button.id][4] then
@@ -1496,10 +1512,10 @@ function HealBot_Aux_CheckOverLays(button)
         healthLastOverlayType[button.id][7]=true
     end
     if healthLastOverlayType[button.id][8] then
-        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] or button.status.range<0 or not button.aura.buff.colbar then
+        if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] or button.status.range<0 or button.aura.buff.colbar==0 then
             healthLastOverlayType[button.id][8]=false
         end
-    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] and button.status.range>-1 and button.aura.buff.colbar then
+    elseif Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYBUFF"] and button.status.range>-1 and button.aura.buff.colbar>0 then
         healthLastOverlayType[button.id][8]=true
     end
     
@@ -1609,6 +1625,13 @@ function HealBot_Aux_UpdateNameBar(button, colSet, oType)
     end
 end
 
+function HealBot_Aux_ResetNameBar(button)
+    for id in pairs(hbAuxNameAssigned[button.frame]) do
+        button.gref.auxtxt[id]:SetText("")
+    end
+    HealBot_Aux_UpdateNameBar(button)
+end
+
 function HealBot_Aux_ClearNameBar(button)
     for id in pairs(hbAuxNameAssigned[button.frame]) do
         HealBot_Aux_clearBar(button, id)
@@ -1715,6 +1738,13 @@ function HealBot_Aux_UpdateHealthBar(button, colSet, oType)
     end
 end
 
+function HealBot_Aux_ResetHealthBar(button)
+    for id in pairs(hbAuxHealthAssigned[button.frame]) do
+        button.gref.auxtxt[id]:SetText("")
+    end
+    HealBot_Aux_UpdateHealthBar(button)
+end
+
 function HealBot_Aux_ClearHealthBar(button)
     for id in pairs(hbAuxHealthAssigned[button.frame]) do
         HealBot_Aux_clearBar(button, id)
@@ -1783,7 +1813,7 @@ local function HealBot_Aux_UpdateAllAuxByTypeById(f, x)
         HealBot_Timers_Set("INITSLOW","TextUpdateHealth")
         HealBot_Timers_Set("AUX","CheckAllAuxOverLays")
     elseif hbAuxStateAssigned[f][x] then
-        HealBot_Timers_Set("INITSLOW","TextResetState")
+        HealBot_Timers_Set("INITSLOW","TextUpdateState")
     elseif hbAuxPowerAssigned[f][x] then
         HealBot_Timers_Set("INITSLOW","UpdateAllAuxPowerBars")
     elseif hbAuxBuffAssigned[f][x] then
@@ -1796,6 +1826,14 @@ local function HealBot_Aux_UpdateAllAuxByTypeById(f, x)
         HealBot_Timers_Set("INITSLOW","updAllAuxRangeBars")
     elseif hbAuxRange30Assigned[f][x] then
         HealBot_Timers_Set("INITSLOW","updAllAuxRange30Bars")
+    elseif hbAuxOverHealAssigned[f][x] then
+        HealBot_Timers_Set("INITSLOW","UpdateAllAuxOverHealsBars")
+    elseif hbAuxHealInAssigned[f][x] then
+        HealBot_Timers_Set("INITSLOW","UpdateAllAuxInHealsBars")
+    elseif hbAuxAbsorbAssigned[f][x] then
+        HealBot_Timers_Set("INITSLOW","UpdateAllAuxAbsorbBars")
+    elseif hbAuxThreatAssigned[f][x] then
+        HealBot_Timers_Set("INITSLOW","UpdateAllAuxThreatBars")
     end
 end
 
@@ -1856,5 +1894,348 @@ function HealBot_Aux_ResetTextButtons()
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Aux_ResetTextByTypeById(xButton)
+    end
+end
+
+local auxTestText, auxTestCol, auxTestNonTextBarSize, auxTestNonTextTxtSize="", false, 0, 0
+local function HealBot_Aux_SetTestButton(button)
+    for x=1,9 do
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
+            button.gref.auxtxt[x]:SetText("")
+            button.gref.aux[x]:SetValue(1000)
+            auxTestCol=false
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==2 then
+                button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b,1)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==3 then
+                button.gref.aux[x]:SetStatusBarColor(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["R"],
+                                                Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["G"],
+                                                Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["B"],1)
+            end
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==2 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 4) then
+                        button.gref.aux[x]:SetStatusBarColor(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AR"],
+                                                             Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AG"],
+                                                             Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AB"],1)
+                    elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 5) then
+                        button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b, 1)
+                    else
+                        button.gref.aux[x]:SetStatusBarColor(0,1,0,1)
+                    end
+                end
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 4) then
+                        button.gref.auxtxt[x]:SetTextColor(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AR"]+0.2,
+                                                           Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AG"]+0.2,
+                                                           Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AB"]+0.2,1)
+                    elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"] == 5) then
+                        button.gref.auxtxt[x]:SetTextColor(button.text.r+0.2,button.text.g+0.2,button.text.b+0.2, 1)
+                    else
+                        button.gref.auxtxt[x]:SetTextColor(0.2,1,0.2,1)
+                    end
+                end
+                auxTestCol=true
+                auxTestText=HEALBOT_classicABSORBHOTUP
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==3 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 4) then
+                        button.gref.aux[x]:SetStatusBarColor(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IR"],
+                                                             Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IG"],
+                                                             Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IB"],1)
+                    elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 5) then
+                        button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b, 1)
+                    else
+                        button.gref.aux[x]:SetStatusBarColor(0,1,0,1)
+                    end
+                end
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                    if (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 4) then
+                        button.gref.auxtxt[x]:SetTextColor(Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IR"]+0.2,
+                                                           Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IG"]+0.2,
+                                                           Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IB"]+0.2,1)
+                    elseif (Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"] == 5) then
+                        button.gref.auxtxt[x]:SetTextColor(button.text.r+0.2,button.text.g+0.2,button.text.b+0.2, 1)
+                    else
+                        button.gref.auxtxt[x]:SetTextColor(0.2,1,0.2,1)
+                    end
+                end
+                auxTestCol=true
+                auxTestText=HEALBOT_OPTIONS_INCHEAL
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==4 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(button.mana.r,button.mana.g,button.mana.b,1)
+                end
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                    button.gref.auxtxt[x]:SetTextColor(button.mana.r+0.5,button.mana.g+0.5,button.mana.b+0.5,1)
+                end
+                auxTestCol=true
+                auxTestText=HEALBOT_OPTIONS_POWER
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==5 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_OPTIONS_TAB_AGGRO
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,0,0,1)
+                    end
+                else
+                    auxTestText=HEALBOT_OPTIONS_CASTBAR
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0.8,0.7,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+                    end
+                    auxTestCol=true
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==6 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_WORD_THREAT
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,1,0.2,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+                    end
+                    auxTestCol=true
+                else
+                    auxTestText=HEALBOT_OUTOFRANGE_LABEL
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0,1)
+                    end
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==7 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_WORD_OVERHEALS
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,0.2,0.2,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+                    end
+                    auxTestCol=true
+                else
+                    auxTestText=HEALBOT_RANGE30
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,1,1,1)
+                    end
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==8 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_OPTION_HIGHLIGHTACTIVEBAR
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0.4,1,1,1)
+                    end
+                else
+                    auxTestText=HEALBOT_OPTION_HEALTHDROP
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,0.58,0.2,1)
+                    end
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==9 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_OPTIONS_TAB_BUFFS
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,1,1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+                    end
+                    auxTestCol=true
+                else
+                    auxTestText=HEALBOT_OPTIONS_TAB_NAMETEXT
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==10 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_OPTIONS_TAB_DEBUFFS
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].R,
+                                                             HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].G,
+                                                             HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].B,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].R+0.2,
+                                                           HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].G+0.2,
+                                                           HealBot_Globals.CDCBarColour[HEALBOT_CUSTOM_en.."15"].B+0.2,1)
+                    end
+                    auxTestCol=true
+                else
+                    auxTestText=HEALBOT_WORD_HEALTH
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==11 then
+                if button.frame<10 then
+                    auxTestText=HEALBOT_OPTIONS_CASTBAR
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0.8,0.7,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+                    end
+                    auxTestCol=true
+                else
+                    auxTestText=HEALBOT_OPTIONS_TAB_STATETEXT
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                end
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==12 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(1,0.9,0.2,1)
+                end
+                auxTestText=HEALBOT_OPTIONS_TARGETHEALS
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==13 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(0,0,0,1)
+                end
+                auxTestText=HEALBOT_OUTOFRANGE_LABEL
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==14 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(1,1,1,1)
+                end
+                auxTestText=HEALBOT_RANGE30
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==15 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(0.1,1,0.2,1)
+                end
+                auxTestText=HEALBOT_RECENTHEALS
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==16 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                    button.gref.aux[x]:SetStatusBarColor(0.8,0.1,0.1,1)
+                end
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                    button.gref.auxtxt[x]:SetTextColor(1,0.4,0.4,1)
+                end
+                auxTestCol=true
+                auxTestText=HEALBOT_WORD_RESURRECTION
+            elseif HEALBOT_GAME_VERSION<4 then
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==17 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,0.58,0.2,1)
+                    end
+                    auxTestText=HEALBOT_OPTION_HEALTHDROP
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==18 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_OPTIONS_TAB_NAMETEXT
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==19 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_WORD_HEALTH
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==20 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_OPTIONS_TAB_STATETEXT
+                end
+            else
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==17 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCR"]-0.1,
+                                                             Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCG"]-0.1,
+                                                             Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCB"]-0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCR"]+0.1,
+                                                           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCG"]+0.1,
+                                                           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCB"]+0.1,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_WORD_SUMMONS
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==18 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(1,0.58,0.2,1)
+                    end
+                    auxTestText=HEALBOT_OPTION_HEALTHDROP
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==19 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_OPTIONS_TAB_NAMETEXT
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==20 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_WORD_HEALTH
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==21 then
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
+                        button.gref.aux[x]:SetStatusBarColor(0,0,0.1,1)
+                    end
+                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==1 then
+                        button.gref.auxtxt[x]:SetTextColor(0.9,0.9,0.9,1)
+                    end
+                    auxTestCol=true
+                    auxTestText=HEALBOT_OPTIONS_TAB_STATETEXT
+                end
+            end
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]>2 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<5 then
+                auxTestText=""
+            elseif auxTestCol then
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==2 then
+                    button.gref.auxtxt[x]:SetTextColor(button.text.r,button.text.g,button.text.b,1)
+                elseif Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLTYPE"]==3 then
+                    button.gref.auxtxt[x]:SetTextColor(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLR"],
+                                                       Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLG"],
+                                                       Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLB"],1)
+                end
+            else
+                auxTestNonTextBarSize=ceil(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])
+                auxTestNonTextTxtSize=ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])
+                if auxTestNonTextTxtSize>auxTestNonTextBarSize then
+                    if auxTestNonTextBarSize<7 then
+                        auxTestNonTextTxtSize=7
+                    else
+                        auxTestNonTextTxtSize=auxTestNonTextBarSize
+                    end
+                    button.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["FONT"]),
+                          auxTestNonTextTxtSize, HealBot_Font_Outline[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"]])
+                end
+                button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
+            end
+            button.gref.auxtxt[x]:SetText(auxTestText)
+        end
+    end
+end
+
+function HealBot_Aux_TestUpdate()
+    for _,xButton in pairs(HealBot_Test_Button) do
+        HealBot_Aux_SetTestButton(xButton)
     end
 end

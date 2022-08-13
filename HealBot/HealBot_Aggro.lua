@@ -137,11 +137,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
         if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
-        if threatPct<1 then
-            HealBot_Aux_ClearThreatBar(button)
-        else
-            HealBot_Aux_UpdateThreatBar(button)
-        end
+        HealBot_Aux_UpdateThreatBar(button)
     end
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end

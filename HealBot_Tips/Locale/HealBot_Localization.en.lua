@@ -80,14 +80,20 @@ function HealBot_Lang_Options_enALL()
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
                                  ["HIDEBLIZRAIDFRAMES"]=HEALBOT_OPTIONS_HIDERAIDFRAMES,
+                                 ["HIDEBLIZFOCUSFRAMES"]=HEALBOT_OPTIONS_HIDEFOCUSFRAME,
                                  ["FADEWHENNOMOUSE"]=HEALBOT_OPTION_GLOBALDIMMING,
+                                 ["ALWAYRUNEVENTS"]=HEALBOT_OPTIONS_ALWAYRUNEVENTS,
                         -- Skins Effects tab
                                  ["USEFLUIDBARS"]=HEALBOT_OPTION_USEFLUIDBARS,
+                                 ["FLUIDBARSINCALPHA"]=HEALBOT_OPTION_FLUIDBARSINCALPHA,
                                  ["USEHEALTHDROP"]=HEALBOT_OPTION_USEHEALTHDROP,
                                  ["USEFOCUSGROUPS"]=HEALBOT_OPTION_USEFOCUSGROUPS,
+                                 ["HOTBARSDEBUFFPRIO"]=HEALBOT_OPTION_HOTBARSDEBUFFPRIO,
                                  ["UNITINCOMBAT"]=HEALBOT_OPTIONS_UNITINCOMBAT,
                                  ["FOCUSGROUPDIMMING"]=HEALBOT_OPTION_FOCUSGROUPDIMMING,
+                                 ["NONHOTBARSDIMMING"]=HEALBOT_OPTION_NONHOTBARSDIMMING,
                                  ["FLUIDBARSREFRESHSPEED"]=HEALBOT_OPTION_BARUPDFREQ,
+                                 ["HOTBARSMINHLTH"]=HEALBOT_OPTION_HOTBARHEALTHPCT,
                                  ["HEALTHDROPTHRESHOLD"]=HEALBOT_OPTION_HEALTHDROPPCT,
                                  ["HEALTHDROPSPEED"]=HEALBOT_OPTION_HEALTHDROPSPEED,
                                  ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
@@ -367,9 +373,11 @@ function HealBot_Lang_Options_enALL()
                         -- Skins Frames Icons Extra tabs
                                  ["ICONSCLASSROLE"]="Icons Extras Class / Role",
                                  ["ICONSRAIDTARGET"]="Icons Extras Raid Target",
-                                 ["ICONSREADYCHECK"]="Icons Extras Ready Check",
+                                 ["ICONSREADYCHECK"]="Icons Extras State",
                                  ["ICONSOORARROW"]="Icons Extras Out of Range Arrow.",
                                  ["ICONSHOWRC"]=HEALBOT_OPTIONS_SHOWREADYCHECK,
+                                 ["ICONSHOWCOMBAT"]=HEALBOT_OPTIONS_SHOWCOMBATSTATE,
+                                 ["ICONSHOWRESTING"]=HEALBOT_OPTIONS_SHOWRESTING,
                                  ["ICONSHOWCLASS"]=HEALBOT_OPTIONS_SHOWCLASSICON,
                                  ["ICONSHOWRT"]=HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON,
                                  ["ICONSHOWDIR"]=HEALBOT_OPTIONS_SHOWDIRECTION,
@@ -427,6 +435,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMNEWSAVE"]=HEALBOT_OPTIONS_SAVESKIN,
                                  ["DEBUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
                                  ["DEBUFFSCUSTOMPRIORITY"]=HEALBOT_WORD_PRIORITY,
+                                 ["DEBUFFSCUSTOMBARCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["DEBUFFSCUSTOMCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["DEBUFFSCUSTOMCOLOURSHOW"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["DEBUFFSCUSTOMRESET"]=HEALBOT_WORD_RESET,
@@ -470,6 +479,7 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSBARS"]=HEALBOT_OPTIONS_CDCBARS,
                                  ["BUFFSTIMER"]=HEALBOT_OPTIONS_BUFFSTEXTTIMER,
                         -- Buffs Custom tab
+                                 ["BUFFSCUSTOMBARCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["BUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
                                  ["BUFFSCUSTOMBUFF"]=HEALBOT_OPTIONS_ALLSPELLS,
                                  ["BUFFSCUSTOMIDMETHOD"]=HEALBOT_OPTIONS_CUSTOM_IDMETHOD,
@@ -533,6 +543,7 @@ function HealBot_Lang_Options_enALL()
                                  ["INOUTPOSTSKIN"]=HEALBOT_OPTIONS_BUTTONPOSTLINK,
                                  ["INOUTEXPORTSKIN"]=HEALBOT_OPTIONS_BUTTONEXPORT,
                                  ["INOUTIMPORTSKIN"]=HEALBOT_OPTIONS_BUTTONIMPORT,
+                                 ["INOUTIMPORTSKINCLOSEIMG"]=HEALBOT_OPTIONS_CLOSE,
                         -- Import/Export Custom Debuffs tab
                                  ["INOUTPOSTCDEBUFF"]=HEALBOT_OPTIONS_BUTTONPOSTLINK,
                                  ["INOUTEXPORTCDEBUFF"]=HEALBOT_OPTIONS_BUTTONEXPORT,
@@ -578,7 +589,7 @@ function HealBot_Lang_Options_enALL()
                                ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
                                ["SETPROFILE"]="Set the profile selected.",
                                ["OPTTHEME"]="Set the options Title Box, Borders and Contents text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
-                               ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- Bars Visibility\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
+                               ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
                         -- Overrides tab
                                ["OVERRIDESEFFECTS"]="Show the Overrides Effects tab.",
                                ["OVERRIDESCHAT"]="Show the Overrides Chat tab.",
@@ -618,19 +629,25 @@ function HealBot_Lang_Options_enALL()
                         -- Skins General tab
                                ["SKINDEFAULTFOR"]="Set when the skin is displayed.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting is Per Character.",
                                ["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\n".."|cff77c8ff".."TIP: Use the 1st frame as your main frame\n".."|cff77c8ff".."move other frames to your main frame\n".."|cff77c8ff".."and when stuck lock them.",
-                               ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player and pet frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Changing this setting requires a UI Reload.",
-                               ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Changing this setting requires a UI Reload.",
-                               ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Changing this setting requires a UI Reload.",
+                               ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player, pet and target frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Unless always run events is turned on, if target exist\n".._G["YELLOW_FONT_COLOR_CODE"].."when unhiding the frame, target a different unit to show.",
+                               ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.",
+                               ["HIDEBLIZRAIDFRAMES"]="Hide the standard Blizzard raid frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Unless always run events is turned on, if the frames\n".._G["YELLOW_FONT_COLOR_CODE"].."exist when unhiding, a UI reload might be required to update.",
+                               ["HIDEBLIZFOCUSFRAMES"]="Hide the standard Blizzard focus frame.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Unless always run events is turned on, if focus exist\n".._G["YELLOW_FONT_COLOR_CODE"].."when unhiding the frame, focus on a different unit to show.",
+                               ["ALWAYRUNEVENTS"]="Always run Blizzard frame events.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: This option results in unnecessary resource usage\n".._G["ORANGE_FONT_COLOR_CODE"].."Only use if there is a good reason\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Pros:\n".._G["GREEN_FONT_COLOR_CODE"].."- Frames always up to date and shown when unhidden\n".._G["GREEN_FONT_COLOR_CODE"].."- UI reload never required.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Cons:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Additional CPU use might result in lower FPS.",
                         -- Skins Effects tab
                                ["USEFLUIDBARS"]="Bar updates due to health changes are done in a fluid motion.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option is only available at performance level 3+",
+                               ["FLUIDBARSINCALPHA"]="Include col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and alpha changes.",
                                ["USEHEALTHDROP"]="When health drops by the threshold or greater,\nthe delta is briefly shown using a flash effect.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option is only available at performance level 3+",
                                ["USEFOCUSGROUPS"]="Use if a raid leader requests the healer to focus on specific groups.\nThis option reduces the opacity on all groups not included.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies to the Raid Heal Group.",
+                               ["HOTBARSDEBUFFPRIO"]="Mark the bar as hot when the debuff priority is at the level set or higher.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Recommendation: Use priority 1 for debuff hot bars.",
                                ["UNITINCOMBAT"]="When a visible Group/Raid member enters combat and your out of combat, do the following:\n--\n* Do nothing - ".._G["GREEN_FONT_COLOR_CODE"].."Keep Healbot unlocked and do nothing.\n* Show enemy frame - ".._G["GREEN_FONT_COLOR_CODE"].."Show the enemy frame when used with HealBot out of combat mode.\n* Lockdown HealBot - ".._G["GREEN_FONT_COLOR_CODE"].."Lockdown HealBot in combat mode.", 
                                ["FADEWHENNOMOUSE"]="Fades all frames when the mouse is not over any frame.",
                                ["FOCUSGROUPDIMMING"]="Set the intensity of the opacity reduction on unfocused groups.",
+                               ["NONHOTBARSDIMMING"]="Set the intensity of the opacity reduction on non hot bars.",
                                ["HEALTHDROPTHRESHOLD"]="Show effect when health drop by at least the Alert Threshold.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: This setting applies to the Health bar and Aux bars.",
                                ["HEALTHDROPSPEED"]="Control how quickly the flash effect is shown.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: This setting only applies to the Health bar.",
                                ["FLUIDBARSREFRESHSPEED"]="Controls how fast the bar updates.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The update frequency can be tweaked\n".._G["GREEN_FONT_COLOR_CODE"].."with the HealBot Performance Plugin.",
+                               ["HOTBARSMINHLTH"]="Mark the bar as hot when health is below the threshold.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Note: To turn off, set to 0.",
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The update frequency can be tweaked\n".._G["GREEN_FONT_COLOR_CODE"].."with the HealBot Performance Plugin.",
                                ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Min - The minimum opacity.",
                                ["HEALBARSAGGROBARFLASHMAX"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Max - The maximum opacity.",
@@ -704,7 +721,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSBCSPACE"]="Set the space between each column.",
                                ["HEALBARSPOWERCOUNT"]="Show an indicator on the heal bar when a player has a power counter.",
                                ["HEALBARSLOWMANA"]="Set if and when indicators are\ndisplayed to show a player is low on mana.",
-                               ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.",
+                               ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
                         -- Skins Frames Bars Colours tab
                                ["BARSCOLOUR"]="Show the Skins Frames Bars col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab.",
                                ["HEALBARSCOLHEALTHTYPE"]="Set the col"..HEALBOT_enWORD_COLOUR_SUFFIX.." of the heal bar.\n".._G["GREEN_FONT_COLOR_CODE"].."When custom is used click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
@@ -811,7 +828,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSSTATETEXTDISCOLALPHA"]="Set the transparency of the\nstate text when in a disabled state.",
                                ["HEALBARSNAMETEXTDEBUFF"]="Always use the Custom col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\nwhen the player has a debuff.",
                                ["HEALBARSTXTSHOWNAME"]="Show the players name on the bar.",
-                               ["HEALBARSTXTUTF8"]="Improve compatibility with international characters.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: when on an English only server it is recommended to turn this off.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: Ensure your using a compatible font for your locale.\n".._G["ORANGE_FONT_COLOR_CODE"].."If you see squares or question marks then select a different font.",
+                               ["HEALBARSTXTUTF8"]="Improve compatibility with international characters.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: when on an English only server it is recommended to turn this off.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is a global settings, applies to all Skins and Frames.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."NOTE: Ensure your using a compatible font for your locale.\n".._G["ORANGE_FONT_COLOR_CODE"].."If you see squares or question marks then select a different font.",
                                ["HEALBARSTXTSHOWCLASS"]="Include the class on the bar.",
                                ["HEALBARSTXTSHOWROLE"]="Show the players role in the group/raid when available.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This replaces the class.",
                                ["HEALBARSTXTSHOWCLASSICON"]="Show the class/role as an icon.",
@@ -910,10 +927,12 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSRAIDTARGET"]="Show the Skins Frames Icons Extras Raid Target tab.",
                                ["ICONSHOWCLASS"]="Shows the Class or Role when set.",
                                ["ICONSHOWRC"]="Shows the ready check status.",
+                               ["ICONSHOWCOMBAT"]="Shows when a player is in combat.",
+                               ["ICONSHOWRESTING"]="Shows when you are resting.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies to you.",
                                ["ICONSHOWRT"]="Show the raid target when assigned to a player.\nThe target types can be individually filtered.",
                                ["ICONSHOWDIR"]="Show a direction arrow pointing at players out of range.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only works outside.",
                                ["ICONSHOWDIRMO"]="Only show the direction arrow\nwhen the mouse is over the bar.",
-                               ["ICONSREADYCHECK"]="Show the Skins Frames Icons Extras Ready Check tab.",
+                               ["ICONSREADYCHECK"]="Show the Skins Frames Icons Extras State tab.",
                                ["ICONSOORARROW"]="Show the Skins Frames Icons Extras Out of Range Arrow tab.",
                                ["ICONOFFSET"]="Offset the icon relative to the anchor.",
                                ["EXTRAICONSCALE"]="The icon scale relative to the bar.",
@@ -968,6 +987,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMNEWSAVE"]="Save the new custom debuff.",
                                ["DEBUFFSCUSTOMENDIS"]="Disable the selected custom debuff in the current zone.",
                                ["DEBUFFSCUSTOMPRIORITY"]="Priority of the selected custom debuff.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["DEBUFFSCUSTOMBARCOLOUR"]="Set how the custom debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border",
                                ["DEBUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["DEBUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom debuff.",
                                ["DEBUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom debuff.",
@@ -1011,6 +1031,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
+                               ["BUFFSCUSTOMBARCOLOUR"]="Set how the custom buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border",
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the category dropdown.",
                                ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
                                ["BUFFSCUSTOMIDMETHOD"]="Check buffs using Spell ID, Spell Name or Both.",
@@ -1019,7 +1040,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCUSTOMNEWNAME"]="Add a new buff to the current category.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The Spell Name or Spell ID can be used.\n".._G["YELLOW_FONT_COLOR_CODE"].."Using Spell ID is recommended.",
                                ["BUFFSCUSTOMNEWSAVE"]="Save the new custom buff.",
                                ["BUFFSCUSTOMENDIS"]="Disable the selected custom buff in the current zone.",
-                               ["BUFFSCUSTOMPRIORITY"]="Priority of the selected custom buff.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["BUFFSCUSTOMPRIORITY"]="Priority of the selected custom buff.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
                                ["BUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["BUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom buff.",
                                ["BUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom buff.",
@@ -1069,10 +1090,11 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTPRESETCOLS"]="Show the Import/Export Preset Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s tab.",
                         -- Import/Export Skins tab
                                ["INOUTSELECTSKIN"]="Select the skin to be exported.",
-                               ["INEXTRASKIN"]="Select an extra skin to import.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: After importing extra skins, delete any that are not used.\n".._G["YELLOW_FONT_COLOR_CODE"].."This will reduce the addons main memory usage.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Images can be viewed at "..HEALBOT_ABOUT_URL,
+                               ["INEXTRASKIN"]="Select an extra skin to import.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: After importing extra skins, delete any that are not used.\n".._G["YELLOW_FONT_COLOR_CODE"].."This will reduce the addons main memory usage.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Selecting Extra Skins from the dropdown will show the\n".._G["YELLOW_FONT_COLOR_CODE"].."information frame. The image in the frame is a large thumbnail,\n".._G["YELLOW_FONT_COLOR_CODE"].."meaning when imported the frames will be larger in your UI.",
                                ["INOUTPOSTSKIN"]="Post a link in chat to share the selected skin.",
                                ["INOUTEXPORTSKIN"]="Export populates the large text box with data for the selected skin.\nThis can then be copied and saved outside the game.",
-                               ["INOUTIMPORTSKIN"]="Import reads the text from the large text box and sets the skin.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This will overwrite any existing skin with the same name.",
+                               ["INOUTIMPORTSKIN"]="Import reads the text from the large text box and sets the skin.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This will overwrite any existing skin with the same name.\n--\n".."|cff77c8ff".."Tip: After import, use the Test bars to position the skin.",
+                               ["INOUTIMPORTSKINCLOSEIMG"]="Close the Extra Skins information frame.",
                         -- Import/Export Custom Debuffs tab
                                ["INOUTPOSTCDEBUFF"]="Post a link in chat to share all your current custom debuffs.",
                                ["INOUTEXPORTCDEBUFF"]="Export populates the large text box with data of all current custom debuffs.\nThis can then be copied and saved outside the game.",
@@ -1096,10 +1118,6 @@ function HealBot_Lang_Options_enALL()
                                ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.",  
                               }
 
-    if HEALBOT_GAME_VERSION<4 then
-        HEALBOT_OPTIONS_HELP_TEXT["HEALBARSTXTCHANGESUMMONTEXTCOL"]="Change the text col"..HEALBOT_enWORD_COLOUR_SUFFIX.."when the player is being summoned.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."This setting is only recommended in Retail."
-        HEALBOT_OPTIONS_HELP_TEXT["HEALBARSCOLSUMMONTEXTNAME"]="Set the name text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is being summoned.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."This setting is only recommended in Retail."
-    end
 end
 
 if HealBot_Version_Target() then

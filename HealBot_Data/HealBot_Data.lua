@@ -39,8 +39,14 @@ HealBot_Default_Fonts={
     [8]= {name="Star Jedi", file=[[Interface\AddOns\HealBot\Fonts\Star_Jedi_Rounded.ttf]]},
     [9]= {name="Swansea", file=[[Interface\AddOns\HealBot\Fonts\SWANSE__.ttf]]},
     [10]= {name="Swansea Bold", file=[[Interface\AddOns\HealBot\Fonts\SWANSE_B.ttf]]},
+    [11]= {name="Cognosis", file=[[Interface\AddOns\HealBot\Fonts\Cognosis.ttf]]},
+    [12]= {name="Myriad", file=[[Interface\AddOns\HealBot\Fonts\Myriad.ttf]]},
+    [13]= {name="NotoSans Bold", file=[[Interface\AddOns\HealBot\Fonts\NotoSans-Bold.ttf]]},
+    [14]= {name="Roboto Bold", file=[[Interface\AddOns\HealBot\Fonts\Roboto-Bold.ttf]]},
+    [15]= {name="Roboto Medium", file=[[Interface\AddOns\HealBot\Fonts\Roboto-Medium.ttf]]},
 };
-HealBot_Default_Font= "Friz Quadrata TT";
+--HealBot_Default_Font= "Friz Quadrata TT";
+HealBot_Default_Font=HealBot_Default_Fonts[15].name
 HealBot_Font_Outline={
     [1]= "",
     [2]= "OUTLINE",
@@ -268,7 +274,6 @@ function HealBot_Data_InitVars()
         Tooltip_IgnoreGCD=false,
         Tooltip_TextSize=2,
         ttalpha=0.8,
-        tsadjmod=5,
         DisableToolTipInCombat=false,
         HideOptions = false,
         ProtectPvP = false,
@@ -288,7 +293,6 @@ function HealBot_Data_InitVars()
         MacroSuppressError = 1,
         AcceptSkins = 1,
         HealBot_Enable_MouseWheel=true,
-        PowerChargeTxtSizeMod=7,
         FocusMonitor = {},
         OneTimeMsg={},
         dislikeMount={},
@@ -317,11 +321,12 @@ function HealBot_Data_InitVars()
                        [8]={R = 0.9, G = 0.7, B = 0.5, A = 1 },
                        [9]={R = 1, G = 1, B = 1, A = 1 },
                        [10]={R = 0.7, G = 0.7, B = 0.7, A = 1 },},
-        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=1,["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,
-                         ["OMAX"]=0.95, ["FGDIMMING"]=2.5,["HEALTHDROP"]=true,["HEALTHDROPPCT"]=350,["HEALTHDROPSPEED"]=40},
+        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=1,["FLUIDBARS"]=true,["FLUIDALPHA"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,
+                         ["HOTBARHLTH"]=0,["HOTBARDEBUFF"]=1,["FGDIMMING"]=2.5,["HEALTHDROP"]=true,["HEALTHDROPPCT"]=350,["HEALTHDROPSPEED"]=40},
         OverrideFocusGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
         OverrideChat={["USE"]=1,["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=10},
-        OverrideFrames={["USE"]=1,["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEBOSSF"]=true,["HIDERAIDF"]=true,},
+        OverrideFrames={["USE"]=1,["RUNBLIZZEVENTS"]=false,["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEFOCUSF"]=false,["HIDEBOSSF"]=true,["HIDERAIDF"]=true,},
+        AuxTextPrefs={},
         HealBot_customPermUserName={},
         HealBot_PermMyTargets={},
         HealBot_PermPrivateTanks={},
@@ -368,11 +373,11 @@ function HealBot_Data_InitVars()
             [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = { R = 0.45, G = 0.34, B = 0.0, },
         },
         HealBot_Custom_Debuffs_ShowBarCol={  
-            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = true,
-            [HEALBOT_SHROUD_OF_PURGATORY] = true,
-            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = true,
-            [HEALBOT_DEBUFF_FORBEARANCE] = false,
-            [HEALBOT_DEBUFF_WEAKENED_SOUL] = false,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 3,
+            [HEALBOT_SHROUD_OF_PURGATORY] = 3,
+            [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK] = 3,
+            [HEALBOT_DEBUFF_FORBEARANCE] = 1,
+            [HEALBOT_DEBUFF_WEAKENED_SOUL] = 1,
         },
         IgnoreCustomDebuff={},
         FilterCustomDebuff={
@@ -4204,4 +4209,5 @@ HealBot_Pet_Button={};
 HealBot_Vehicle_Button={};
 HealBot_Emerg_Button={};
 HealBot_Buttons={};
+HealBot_Test_Button={};
 

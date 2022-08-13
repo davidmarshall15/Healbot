@@ -417,6 +417,39 @@ function HealBot_Action_GetTimeOffline(button)
     return timeOffline;
 end
 
+function HealBot_Tooltip_addPlayerDebuffLine(uName, debuffId, debuffName)
+    linenum=linenum+1
+    if HealBot_Globals.CDCBarColour[debuffId] then
+        HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..debuffName,
+                                    (HealBot_Globals.CDCBarColour[debuffId].R or 0.4)+0.2,
+                                    (HealBot_Globals.CDCBarColour[debuffId].G or 0.05)+0.2,
+                                    (HealBot_Globals.CDCBarColour[debuffId].B or 0.2)+0.2,
+                                    1," ",0,0,0,0)
+    elseif HealBot_Globals.CDCBarColour[debuffName] then
+        HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..debuffName,
+                                    (HealBot_Globals.CDCBarColour[debuffName].R or 0.4)+0.2,
+                                    (HealBot_Globals.CDCBarColour[debuffName].G or 0.05)+0.2,
+                                    (HealBot_Globals.CDCBarColour[debuffName].B or 0.2)+0.2,
+                                    1," ",0,0,0,0)
+    else
+        local DebuffType=HealBot_Aura_retDebufftype(debuffId)
+        if HealBot_Config_Cures.CDCBarColour[DebuffType] then
+            HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..debuffName,
+                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].R or 0.5)+0.2,
+                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2,
+                                        (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,
+                                        1," ",0,0,0,0)
+        else
+            local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
+            HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..debuffName,
+                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
+                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
+                                        (HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2,
+                                        1," ",0,0,0,0)
+        end
+    end
+end
+
 function HealBot_Tooltip_setPlayerPowerCols(r,g,b)
     playerPowerCols.r,playerPowerCols.g,playerPowerCols.b=r,g,b
 end
@@ -625,41 +658,17 @@ function HealBot_Action_DoRefreshTooltip()
                 UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
                 if UnitDebuffIcons then
                     for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+50 do
-                        if UnitDebuffIcons[i].current and UnitDebuffIcons[i].spellId>0 then
+                        if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
-                                linenum=linenum+1
-                                if HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId] then
-                                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..ttName,
-                                                                (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].R or 0.4)+0.2,
-                                                                (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].G or 0.05)+0.2,
-                                                                (HealBot_Globals.CDCBarColour[UnitDebuffIcons[i].spellId].B or 0.2)+0.2,
-                                                                1," ",0,0,0,0)
-                                elseif HealBot_Globals.CDCBarColour[ttName] then
-                                    HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..ttName,
-                                                                (HealBot_Globals.CDCBarColour[ttName].R or 0.4)+0.2,
-                                                                (HealBot_Globals.CDCBarColour[ttName].G or 0.05)+0.2,
-                                                                (HealBot_Globals.CDCBarColour[ttName].B or 0.2)+0.2,
-                                                                1," ",0,0,0,0)
-                                else
-                                    local DebuffType=HealBot_Aura_retDebufftype(UnitDebuffIcons[i].spellId)
-                                    if HealBot_Config_Cures.CDCBarColour[DebuffType] then
-                                        HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..ttName,
-                                                                    (HealBot_Config_Cures.CDCBarColour[DebuffType].R or 0.5)+0.2,
-                                                                    (HealBot_Config_Cures.CDCBarColour[DebuffType].G or 0.2)+0.2,
-                                                                    (HealBot_Config_Cures.CDCBarColour[DebuffType].B or 0.4)+0.2,
-                                                                    1," ",0,0,0,0)
-                                    else
-                                        local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
-                                        HealBot_Tooltip_SetLine(linenum,uName.." suffers from "..ttName,
-                                                                    (HealBot_Globals.CDCBarColour[customDebuffPriority].R or 0.5)+0.2,
-                                                                    (HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.2)+0.2,
-                                                                    (HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.4)+0.2,
-                                                                    1," ",0,0,0,0)
-                                    end
-                                end
+                                HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
                             end
+                        else
+                            break
                         end
+                    end
+                    if not UnitDebuffIcons[51].current and xButton.aura.debuff.id>0 then
+                        HealBot_Tooltip_addPlayerDebuffLine(uName, xButton.aura.debuff.id, xButton.aura.debuff.name)
                     end
                 end
                 linenum=linenum+1
@@ -868,7 +877,7 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         end
         HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_PRIORITY,1,1,1,1,bPrio,1,1,0,1)
         linenum=linenum+1
-        if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[details.spellId] or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[name] then
+        if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[details.spellId]==3 or HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[name]==3 then
             HealBot_Tooltip_SetLine(linenum,HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_ON,0.2,1,0.5,1)
         else
             HealBot_Tooltip_SetLine(linenum,HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
@@ -878,7 +887,7 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
     else
         HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_PRIORITY,1,1,1,1,HealBot_Options_retDebuffPriority(details.spellId, name, details.type) or 20,1,1,0,1)
         linenum=linenum+1
-        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[details.spellId] or HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name] then
+        if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[details.spellId]==3 or HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name]==3 then
             HealBot_Tooltip_SetLine(linenum,HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_ON,0.2,1,0.5,1)
         else
             HealBot_Tooltip_SetLine(linenum,HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
