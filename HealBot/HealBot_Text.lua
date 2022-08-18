@@ -1552,7 +1552,7 @@ function HealBot_Text_UpdateNames()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
-   -- HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
+   -- HealBot_Timers_Set("LAST","ResetUnitStatus")
 end
 
 function HealBot_Text_UpdateHealthButton(button)
@@ -1580,7 +1580,7 @@ function HealBot_Text_UpdateHealth()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_UpdateHealthButton(xButton)
     end
-   -- HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
+   -- HealBot_Timers_Set("LAST","ResetUnitStatus")
 end
 
 function HealBot_Text_UpdateStateButton(button)
@@ -1612,7 +1612,7 @@ function HealBot_Text_UpdateState()
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
-   -- HealBot_Timers_Set("PARTYSLOW","ResetUnitStatus")
+   -- HealBot_Timers_Set("LAST","ResetUnitStatus")
 end
 
 function HealBot_Text_UpdateButton(button)

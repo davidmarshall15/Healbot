@@ -17350,11 +17350,25 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="OptionsCheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowResting" inherits="OptionsCheckButtonTemplate">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
                                   <AbsDimension x="50" y="-35" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowResting_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWRESTING",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWRESTING",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="OptionsCheckButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="110" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17364,18 +17378,18 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWCOMBAT",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowResting" inherits="OptionsCheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowHostile" inherits="OptionsCheckButtonTemplate">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="-90" y="-70" />
+                                  <AbsDimension x="50" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_Options_ShowResting_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWRESTING",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWRESTING",false)</OnLeave>
+                              <OnClick>HealBot_Options_ShowHostile_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWHOSTILE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWHOSTILE",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
                           <Frame name="HealBot_Options_IconRCPosition" inherits="UIDropDownMenuTemplate">

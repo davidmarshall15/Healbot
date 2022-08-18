@@ -113,6 +113,8 @@ function HealBot_Aura_DeleteExcludeBuffInCache()
     for id,_ in pairs(HealBot_ExcludeBuffInCache) do
         HealBot_ExcludeBuffInCache[id]=nil
     end
+    HealBot_setLuVars("UpdateAllAura", 5)
+    HealBot_Aura_luVars["updateAll"]=true
     HealBot_Timers_Set("AURA","CheckUnits")
 end
 
@@ -632,7 +634,11 @@ end
 
 function HealBot_Aura_UpdateState(button, texture)
     if HealBot_UnitExtraIcons[button.id] then
-        if button.status.incombat then
+        if button.status.hostile then
+            HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
+            HealBot_UnitExtraIcons[button.id][93].current=true
+            HealBot_Aura_AddExtraIcon(button, 93)
+        elseif button.status.incombat then
             HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
@@ -848,7 +854,6 @@ end
 
 local curBuffName,curBuffxTime=false,0
 local buffCheckThis, buffWatchTarget, buffSpellStart, buffSpellDur=false,false,0,0
-local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
 function HealBot_Aura_SetGeneralBuff(button, bName)
     curBuffName=bName
     button.aura.buff.missingbuff=true
@@ -997,7 +1002,7 @@ function HealBot_Aura_CheckCurBuff()
                 HealBot_SpellID_LookupData[uaName]["CHECK"]=false
                 HealBot_SpellID_LookupData[uaName]["ID"]=uaSpellId
                 table.insert(HealBot_SpellID_LookupIdx,uaName)
-                HealBot_Timers_Set("DELAYED","BuffIdLookup")
+                HealBot_Timers_Set("AURA","BuffIdLookup",1)
             end
         end
         if ciCustomBuff then
@@ -1869,6 +1874,7 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
                 HealBot_Timers_Set("AURA","RemoveAllBuffIcons")
                 HealBot_Timers_Set("AURA","RemoveAllDebuffIcons")
             end
+            HealBot_Timers_Set("AURA","CheckUnits")
         else
             if debuffMounted or buffMounted or onTaxi or resting then
                 HealBot_Aura_RemoveAllBuffIcons()
@@ -1878,7 +1884,6 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
         end
         HealBot_Timers_Set("PLAYER","SetRestingState")
     end
-    HealBot_Timers_Set("LAST","AuraCheckUnits")
 end
 
 function HealBot_Aura_ClearDebuff(button)
@@ -2481,9 +2486,9 @@ end
 
 function HealBot_Aura_InitItemsData()
     if HealBot_retLuVars("BagsScanned") then
-        HealBot_Timers_Set("INITSLOW","InitItemsDataReady")
+        HealBot_Timers_Set("AURA","InitItemsDataReady")
     else
-        HealBot_Timers_Set("DELAYED","InitItemsData")
+        HealBot_Timers_Set("LAST","InitItemsData")
         --HealBot_AddDebug("InitItemsData","Buff",true)
     end
 end

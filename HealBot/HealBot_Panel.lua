@@ -325,14 +325,14 @@ function HealBot_Panel_ClearBlackList()
     for x,_ in pairs(HealBot_Panel_BlackList) do
         HealBot_Panel_BlackList[x]=nil
     end 
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_AddBlackList(unit)
     xGUID=UnitGUID(unit)
     if xGUID then
         HealBot_Panel_BlackList[xGUID]=true;
-        HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+        HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
     end
 end
 
@@ -363,9 +363,9 @@ function HealBot_Panel_ToggelHealTarget(unit, perm)
             table.insert(HealBot_MyHealTargets,xGUID)
         end
     end
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets")
+    --HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_ToggelPrivateTanks(unit, perm)
@@ -385,9 +385,9 @@ function HealBot_Panel_ToggelPrivateTanks(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets")
+    --HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_ToggelPrivateHealers(unit, perm)
@@ -407,9 +407,9 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
         end
     end
     --HealBot_Panel_buildDataStore(true, true)
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPlayers")
-    HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcPets")
-    --HealBot_Timers_Set("PARTYSLOW","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets")
+    --HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
 function HealBot_Panel_RetMyHealTarget(unit, perm)
@@ -930,7 +930,7 @@ function HealBot_Panel_PositionBars(preCombat)
                 end
             end
         elseif vPosButton.id and hbAnchoredButtons[vPosButton.id] then
-            HealBot_Timers_Set("DELAYED","RefreshPartyNextRecalcAll")
+            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
             HealBot_AddDebug("AnchorButton button and relButton as the same - unit="..(xUnit or "nil"), "Panel", true)
         end
     end)
@@ -1560,7 +1560,7 @@ function HealBot_Panel_TestBarsOn()
     HealBot_Text_UpdateButtons()
     HealBot_Panel_TestBarColUpdate()
     HealBot_Aux_TestUpdate()
-    --HealBot_Timers_Set("INITSLOW","TextUpdateHealth")
+    --HealBot_Timers_Set("SKINS","TextUpdateHealth")
 end
 
 function HealBot_Panel_resetTestCols(force)
@@ -2387,6 +2387,9 @@ function HealBot_Panel_PetsChanged(preCombat)
             end
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
+        if HealBot_Panel_luVars["NumPets"]>HealBot_retLuVars("NumPetUnits") then
+            HealBot_setLuVars("NumPetUnits", HealBot_Panel_luVars["NumPets"])
+        end
     else
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if xButton.status.unittype==8 then
@@ -2670,6 +2673,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
             HealBot_Action_MarkDeleteButton(xButton)
         end
     end
+    if HealBot_Panel_luVars["NumPrivate"]>HealBot_retLuVars("NumPrivateUnits") then
+        HealBot_setLuVars("NumPrivateUnits", HealBot_Panel_luVars["NumPrivate"])
+    end
     if vPetsWithPlayers then
         for xUnit,xButton in pairs(HealBot_Pet_Button) do
             if HealBot_TrackUnit[xUnit] then
@@ -2695,6 +2701,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 HealBot_Action_MarkDeleteButton(xButton)
             end
         end
+    end
+    if HealBot_Panel_luVars["NumPets"]>HealBot_retLuVars("NumPetUnits") then
+        HealBot_setLuVars("NumPetUnits", HealBot_Panel_luVars["NumPets"])
     end
     if vTargetWithPlayers and HealBot_Extra_Button["target"] then
         if HealBot_TrackUnit["target"] then
@@ -2918,11 +2927,6 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then HealBot_Panel_DoPartyChanged(preCombat, 4) end
         HealBot_Panel_DoPartyChanged(preCombat, 6)
     end 
-    
-    local nMembers=GetNumGroupMembers()+HealBot_Panel_luVars["NumPrivate"]+HealBot_Panel_luVars["NumPets"]+1
-    if nMembers>HealBot_Globals.AutoCacheSize then    
-        HealBot_Globals.AutoCacheSize=nMembers
-    end
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)

@@ -114,13 +114,15 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         threatValue=0
         mobName=""
     end
-    if (button.aggro.status==3 or threatStatus==3) then
-        if button.aggro.status~=threatStatus then
+    if button.aggro.status~=threatStatus then
+        if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or 
+           threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
             button.aggro.status=threatStatus
             HealBot_Action_UpdateHealthButtonState(button)
+        else
+            button.aggro.status=threatStatus
         end
     end
-    button.aggro.status=threatStatus
     if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
        Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] then
         HealBot_Aggro_IndicatorUpdate(button)

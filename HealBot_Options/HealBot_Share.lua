@@ -463,6 +463,7 @@ function HealBot_Share_ExportBuffs_OnClick()
     HealBot_Share_ExportBuffs()
 end
 
+local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
 function HealBot_Share_LoadBuffs(sIn)
     local scbStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
@@ -601,6 +602,7 @@ function HealBot_Share_ExportDebuffs_OnClick()
     HealBot_Share_ExportDebuffs()
 end
 
+local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
 function HealBot_Share_LoadDebuffs(sIn)
     local scdStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
@@ -833,7 +835,7 @@ function HealBot_Share_BuildSkinData(cmd, msg, lData)
     if cmd=="Init" then
         HealBot_Share_ExportComplete(HEALBOT_OPTIONS_SKIN, msg)
         if tonumber(msg) then msg=UnitName("player").."-"..msg end
-        if msg==HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
+        --if msg==HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
         ssData=validType[1].."\n"..msg
     elseif cmd and msg then
         ssData=ssData.."\n"..cmd.."!"..msg
@@ -947,7 +949,7 @@ end
 
 local hbOptGetSkinName=" "
 local hbWarnSharedMedia=false
-function HealBot_Share_SkinLoad(sIn)
+function HealBot_Share_SkinLoad(sIn, internal)
     local ssStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -969,10 +971,12 @@ function HealBot_Share_SkinLoad(sIn)
         Healbot_Config_Skins.Skin_ID = 2;
     end
     HealBot_Skins_Check_Skin(hbOptGetSkinName, true)
-    HealBot_Options_Set_Current_Skin(hbOptGetSkinName, nil, nil, true)
-    HealBot_Options_NewSkin:SetText("")
-    hbWarnSharedMedia=false
-    HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
+    if not internal then
+        HealBot_Options_Set_Current_Skin(hbOptGetSkinName, nil, nil, true)
+        HealBot_Options_NewSkin:SetText("")
+        hbWarnSharedMedia=false
+        HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
+    end
 end
 
 function HealBot_Share_ImportSkin_OnClick()

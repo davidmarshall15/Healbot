@@ -34,7 +34,7 @@ function HealBot_MountsPets_Mount(mount)
             end
         end
     else
-        HealBot_Timers_Set("INITSLOW","MountsPetsUse")
+        HealBot_Timers_Set("LAST","MountsPetsUse")
         HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_ON.." "..mount)
     end
 end
@@ -184,7 +184,7 @@ end
 
 function HealBot_MountsPets_InitUse()
     if HealBot_Globals.HealBot_Enable_MouseWheel and HEALBOT_GAME_VERSION>2 then
-        HealBot_Timers_Set("INITSLOW","MountsPetsInit")
+        HealBot_Timers_Set("LAST","MountsPetsInit")
     end
 end
 
@@ -326,7 +326,7 @@ function HealBot_MountsPets_DislikeMount(action)
                 HealBot_AddChat(HEALBOT_OPTION_EXCLUDEMOUNT_ON.." "..mount)
                 HealBot_Globals.excludeMount[mount]=true
             end
-            HealBot_Timers_Set("INITSLOW","MountsPetsUse")
+            HealBot_Timers_Set("LAST","MountsPetsUse")
         else
             if HealBot_Globals.dislikeMount[mount] then
                 HealBot_AddChat(HEALBOT_OPTION_DISLIKEMOUNT_OFF.." "..mount)
