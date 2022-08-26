@@ -14,9 +14,15 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                      [strlower(HEALBOT_MENU)]=true,
                      [strlower(HEALBOT_HBMENU)]=true,
                      [strlower(HEALBOT_STOP)]=true,
-                     [strlower(HEALBOT_TELL)]=true,
                      [strlower(HEALBOT_IGNOREAURAALL)]=true,
                     }  
+local hbPlayerCommands = {}
+if HEALBOT_GAME_VERSION>3 then
+    hbPlayerCommands = { [strlower(HEALBOT_MOUNTSPETS)]=true }
+elseif HEALBOT_GAME_VERSION>1 then
+    hbPlayerCommands = { [strlower(HEALBOT_MOUNTS)]=true }
+end
+
 local hbCustomTipAnchor=nil
 local hbCustomTipAnchorText={}
 local hbCustomTipAnchorObjects={}
@@ -69,7 +75,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
 
-    if button.status.range<1 then
+    if HealBot_UnitInRangeExc30(button,sName)<1 then
         return sName, 1,0.5
     end
  
@@ -95,7 +101,9 @@ function HealBot_Tooltip_setspellName(button, spellName)
     if spellName and string.len(spellName)>0 then
         local validSpellName=spellName
         local spellAR,spellAG=0,1
-        if not hbCommands[strlower(spellName)] then
+        if hbCommands[strlower(spellName)] or (button.player and hbPlayerCommands[strlower(spellName)]) then
+            spellAR,spellAG=1,1
+        else
             local mIdx=GetMacroIndexByName(spellName)
             if mIdx==0 then 
                 validSpellName, spellAR, spellAG = HealBot_Tooltip_GetHealSpell(button,spellName) 
@@ -501,11 +509,12 @@ function HealBot_Action_DoRefreshTooltip()
         if UnitOffline then UnitTag="" end
         local DebuffType=xButton.aura.debuff.type;
 
-        local spellLeft = HealBot_Action_SpellPattern("Left");
-        local spellMiddle = HealBot_Action_SpellPattern("Middle");
-        local spellRight = HealBot_Action_SpellPattern("Right");
-        local spellButton4 = HealBot_Action_SpellPattern("Button4");
-        local spellButton5 = HealBot_Action_SpellPattern("Button5");
+        local uType=string.upper(HealBot_Data["TIPTYPE"])
+        local spellLeft = HealBot_Action_SpellPattern("Left", uType);
+        local spellMiddle = HealBot_Action_SpellPattern("Middle", uType);
+        local spellRight = HealBot_Action_SpellPattern("Right", uType);
+        local spellButton4 = HealBot_Action_SpellPattern("Button4", uType);
+        local spellButton5 = HealBot_Action_SpellPattern("Button5", uType);
         linenum = 1
 
         if not IsModifierKeyDown() and not InCombatLockdown() and HealBot_Globals.SmartCast and xButton.status.current<HealBot_Unit_Status["DC"] and UnitIsFriend("player",xButton.unit) then 
@@ -833,7 +842,7 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
     linenum=linenum+1
     if details.unitCaster and UnitName(details.unitCaster) then
         linenum=linenum+1
-        if UnitIsEnemy("player",details.unitCaster) then
+        if not UnitIsFriend("player",details.unitCaster) then
             HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_CASTER,1,1,1,1,UnitName(details.unitCaster),1,0.5,0.2,1)
         else
             HealBot_Tooltip_SetLine(linenum,HEALBOT_WORD_CASTER,1,1,1,1,UnitName(details.unitCaster),0.2,1,0.5,1)
@@ -896,11 +905,11 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         HealBot_Tooltip_SetLine(linenum,HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame]["DSCALE"],1,1,0,1)
     end
 
-    local spellLeft = HealBot_Action_IconSpellPattern("Left");
-    local spellMiddle = HealBot_Action_IconSpellPattern("Middle");
-    local spellRight = HealBot_Action_IconSpellPattern("Right");
-    local spellButton4 = HealBot_Action_IconSpellPattern("Button4");
-    local spellButton5 = HealBot_Action_IconSpellPattern("Button5");
+    local spellLeft = HealBot_Action_SpellPattern("Left", "ICON");
+    local spellMiddle = HealBot_Action_SpellPattern("Middle", "ICON");
+    local spellRight = HealBot_Action_SpellPattern("Right", "ICON");
+    local spellButton4 = HealBot_Action_SpellPattern("Button4", "ICON");
+    local spellButton5 = HealBot_Action_SpellPattern("Button5", "ICON");
     
     linenum=linenum+1
     if aType=="Auto Debuff" then

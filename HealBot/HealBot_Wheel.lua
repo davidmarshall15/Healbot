@@ -12,8 +12,21 @@ function HealBot_MountsPets_lastbutton(button)
     hbLastButton=button
 end
 
+function HealBot_MountsPets_Dismount()
+    if IsMounted() then
+        Dismount()
+    elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+        VehicleExit()
+    end
+end
+
 function HealBot_MountsPets_FavMount()
     if not InCombatLockdown() then
+        if IsMounted() then
+            Dismount()
+        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+            VehicleExit()
+        end
         C_MountJournal.SummonByID(0)
     end
 end
@@ -41,64 +54,67 @@ end
 
 local vToggleMountIndex=0
 function HealBot_MountsPets_ToggelMount(mountType)
-    if IsMounted() then
-        Dismount()
-    elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
-        VehicleExit()
-    elseif HealBot_mountData["ValidUse"] and IsOutdoors() and not HealBot_IsFighting then
-        local mount = nil
-        vToggleMountIndex=0
-        if mountType=="all" and not IsSwimming() and IsFlyableArea() and #HealBot_FMount>0 then
-            for x=1,20 do
-                vToggleMountIndex = math.random(1, #HealBot_FMount);
-                mount = HealBot_FMount[vToggleMountIndex];
-                if not HealBot_Globals.dislikeMount[mount] then
-                    break
-                else
-                    if HealBot_Globals.dislikeMount[mount]>0 then
-                        HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
-                    else
-                        HealBot_Globals.dislikeMount[mount]=500
-                        break
-                    end
-                end
-            end
-            if HealBot_mountData["PrevFlying#"]>0 then
-                table.insert(HealBot_PrevFMounts, HealBot_FMount[vToggleMountIndex]);
-                table.remove(HealBot_FMount,vToggleMountIndex)
-            end
-            if #HealBot_PrevFMounts>HealBot_mountData["PrevFlying#"] then
-                table.insert(HealBot_FMount, HealBot_PrevFMounts[1]);
-                table.remove(HealBot_PrevFMounts,1)
-            end
-        elseif IsSwimming() and #HealBot_SMount>0 then
-            vToggleMountIndex = math.random(1, #HealBot_SMount);
-            mount = HealBot_SMount[vToggleMountIndex];
-        elseif #HealBot_GMount>0 then
-            for x=1,20 do
-                vToggleMountIndex = math.random(1, #HealBot_GMount);
-                mount = HealBot_GMount[vToggleMountIndex];
-                if not HealBot_Globals.dislikeMount[mount] then
-                    break
-                else
-                    if HealBot_Globals.dislikeMount[mount]>0 then
-                        HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
-                    else
-                        HealBot_Globals.dislikeMount[mount]=500
-                        break
-                    end
-                end
-            end
-            if HealBot_mountData["PrevGround#"]>0 then
-                table.insert(HealBot_PrevGMounts, HealBot_GMount[vToggleMountIndex]);
-                table.remove(HealBot_GMount,vToggleMountIndex)
-            end
-            if #HealBot_PrevGMounts>HealBot_mountData["PrevGround#"] then
-                table.insert(HealBot_GMount, HealBot_PrevGMounts[1]);
-                table.remove(HealBot_PrevGMounts,1)
-            end
+    if not InCombatLockdown() then
+        if IsMounted() then
+            Dismount()
+        elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
+            VehicleExit()
         end
-        if mount then HealBot_MountsPets_Mount(mount) end
+        if HealBot_mountData["ValidUse"] and IsOutdoors() then
+            local mount = nil
+            vToggleMountIndex=0
+            if mountType=="all" and not IsSwimming() and IsFlyableArea() and #HealBot_FMount>0 then
+                for x=1,20 do
+                    vToggleMountIndex = math.random(1, #HealBot_FMount);
+                    mount = HealBot_FMount[vToggleMountIndex];
+                    if not HealBot_Globals.dislikeMount[mount] then
+                        break
+                    else
+                        if HealBot_Globals.dislikeMount[mount]>0 then
+                            HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
+                        else
+                            HealBot_Globals.dislikeMount[mount]=500
+                            break
+                        end
+                    end
+                end
+                if HealBot_mountData["PrevFlying#"]>0 then
+                    table.insert(HealBot_PrevFMounts, HealBot_FMount[vToggleMountIndex]);
+                    table.remove(HealBot_FMount,vToggleMountIndex)
+                end
+                if #HealBot_PrevFMounts>HealBot_mountData["PrevFlying#"] then
+                    table.insert(HealBot_FMount, HealBot_PrevFMounts[1]);
+                    table.remove(HealBot_PrevFMounts,1)
+                end
+            elseif IsSwimming() and #HealBot_SMount>0 then
+                vToggleMountIndex = math.random(1, #HealBot_SMount);
+                mount = HealBot_SMount[vToggleMountIndex];
+            elseif #HealBot_GMount>0 then
+                for x=1,20 do
+                    vToggleMountIndex = math.random(1, #HealBot_GMount);
+                    mount = HealBot_GMount[vToggleMountIndex];
+                    if not HealBot_Globals.dislikeMount[mount] then
+                        break
+                    else
+                        if HealBot_Globals.dislikeMount[mount]>0 then
+                            HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
+                        else
+                            HealBot_Globals.dislikeMount[mount]=500
+                            break
+                        end
+                    end
+                end
+                if HealBot_mountData["PrevGround#"]>0 then
+                    table.insert(HealBot_PrevGMounts, HealBot_GMount[vToggleMountIndex]);
+                    table.remove(HealBot_GMount,vToggleMountIndex)
+                end
+                if #HealBot_PrevGMounts>HealBot_mountData["PrevGround#"] then
+                    table.insert(HealBot_GMount, HealBot_PrevGMounts[1]);
+                    table.remove(HealBot_PrevGMounts,1)
+                end
+            end
+            if mount then HealBot_MountsPets_Mount(mount) end
+        end
     end
 end
 
@@ -168,7 +184,7 @@ function HealBot_Action_DoHealUnit_Wheel(self, delta)
         elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMPET and hbLastButton.player then
             HealBot_MountsPets_RandomPet(false)   
         elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVMOUNT and hbLastButton.player then
-            HealBot_MountsPets_FavMount()   
+            HealBot_MountsPets_FavMount()
         elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and hbLastButton.player then
             HealBot_MountsPets_RandomPet(true)   
         elseif HealBot_MouseWheelCmd==HEALBOT_EMOTE then
@@ -183,7 +199,7 @@ function HealBot_Action_HealUnit_Wheel(self, delta)
 end
 
 function HealBot_MountsPets_InitUse()
-    if HealBot_Globals.HealBot_Enable_MouseWheel and HEALBOT_GAME_VERSION>2 then
+    if HEALBOT_GAME_VERSION>2 then
         HealBot_Timers_Set("LAST","MountsPetsInit")
     end
 end

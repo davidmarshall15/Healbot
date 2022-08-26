@@ -230,6 +230,7 @@ end
 function HealBot_Timers_EnableHealBot()
     HealBot_Register_Events()
     HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
     HealBot_Timers_ToggleBlizzardFrames()
 end
 
@@ -301,8 +302,8 @@ end
 
 function HealBot_Timers_SetPlayerRestingState()
     local _,xButton,pButton = HealBot_UnitID("player")
-    if xButton then HealBot_Aura_UpdateState(xButton, xButton.icon.extra.readycheck) end
-    if pButton then HealBot_Aura_UpdateState(pButton, pButton.icon.extra.readycheck) end
+    if xButton then HealBot_Aura_UpdateState(xButton) end
+    if pButton then HealBot_Aura_UpdateState(pButton) end
 end
 
 function HealBot_Timers_UpdateUsedIndex(mType)
@@ -319,10 +320,12 @@ function HealBot_Timers_UpdateMediaIndex()
 end
 
 function HealBot_Timers_LastLoad()
+    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
     HealBot_Timers_Set("SKINS","EmergHealthCol")
     HealBot_Timers_Set("AURA","ConfigClassHoT")
-    HealBot_Timers_Set("INIT","InitSpells",0.1)
-    HealBot_Timers_Set("INIT","SpellsLoaded",0.15)
+    HealBot_Timers_Set("INIT","InitSpells",0.02)
+    HealBot_Timers_Set("INIT","SpellsLoaded",0.05)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
     HealBot_Timers_Set("LAST","CheckZone",0.15)
     HealBot_Timers_Set("PLAYER","InvChange",0.2)
     HealBot_Timers_Set("SKINS","PowerIndicator",0.25)
@@ -339,7 +342,6 @@ function HealBot_Timers_EnteringWorld2()
 end
 
 function HealBot_Timers_EnteringWorld()
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
     HealBot_Timers_Set("LAST","TargetFocusUpdate")
     HealBot_Timers_Set("LAST","ResetUnitStatus")
     HealBot_Timers_Set("SKINS","UpdateEmergBars",0.2)
@@ -370,7 +372,7 @@ end
 
 function HealBot_Timers_GetVersion()
     HealBot_Comms_SendAddonMsg("R", 1)
-    HealBot_Timers_Set("LAST","GetGuildVersion",15)
+    HealBot_Timers_Set("LAST","GetGuildVersion")
 end
 
 function HealBot_Timers_SendVersion()
@@ -482,6 +484,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PlayerTargetChanged"]=HealBot_OnEvent_PlayerTargetChanged,
                         ["SetRestingState"]=HealBot_Timers_SetPlayerRestingState,
                         ["InitSmartCast"]=HealBot_InitSmartCast,
+                        ["SetRangeSpells"]=HealBot_Action_SetrSpell,
                         ["InvChange"]=HealBot_Player_InvChange,
                         ["EmoteOOM"]=HealBot_Timer_EmoteOOM,
                         ["SpecUpdate"]=HealBot_Timers_PlayerSpecUpdate,
@@ -632,6 +635,7 @@ local hbTimerFuncs={["INIT"]={
                         ["OptionsInitExtraTabs"]=HealBot_Options_InitExtras,
                         ["VarsLoaded"]=HealBot_OnEvent_VariablesLoaded,
                         ["TimerTurboOff"]=HealBot_Timers_TurboOff,
+                        ["IconNotInCombat"]=HealBot_updAllStateIconNotInCombat,
                     },
                    }
 

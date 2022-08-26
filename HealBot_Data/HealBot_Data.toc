@@ -4,7 +4,7 @@
 ## Notes: HealBot data, localizations, player saved variables and libraries
 ## SavedVariablesPerCharacter:  HealBot_Config, HealBot_Config_Spells, HealBot_Config_Buffs, HealBot_Config_Cures
 ## SavedVariables: Healbot_Config_Skins, HealBot_Globals, HealBot_Class_Spells, HealBot_Class_Buffs, HealBot_Class_Cures
-## Version: 9.2.7.0
+## Version: 9.2.7.1
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml

@@ -621,29 +621,19 @@ function HealBot_Aura_ClassUpdate(button, texture)
         --HealBot_setCall("HealBot_Aura_ClassUpdate")
 end
 
-function HealBot_Aura_RCUpdate(button, texture)
-    button.icon.extra.readycheck=texture
-    HealBot_UnitExtraIcons[button.id][93]["texture"]=button.icon.extra.readycheck
-    HealBot_UnitExtraIcons[button.id][93].current=true
-    HealBot_Aura_AddExtraIcon(button, 93)
-    if HealBot_Panel_RaidUnitGUID(button.guid) then
-        HealBot_Action_setGuidData(button, "READYCHECK", texture)
-    end
-        --HealBot_setCall("HealBot_Aura_RCUpdate")
-end
-
-function HealBot_Aura_UpdateState(button, texture)
+function HealBot_Aura_UpdateState(button)
     if HealBot_UnitExtraIcons[button.id] then
-        if button.status.hostile then
-            HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
+        if button.status.hostile or button.status.incombat or button.icon.extra.readycheck then
+            if button.status.hostile then
+                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
+            elseif button.status.incombat then
+                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
+            else
+                HealBot_UnitExtraIcons[button.id][93]["texture"]=button.icon.extra.readycheck
+                if HealBot_Panel_RaidUnitGUID(button.guid) then HealBot_Action_setGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
+            end
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
-        elseif button.status.incombat then
-            HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
-            HealBot_UnitExtraIcons[button.id][93].current=true
-            HealBot_Aura_AddExtraIcon(button, 93)
-        elseif button.isplayer and texture then
-            HealBot_Aura_RCUpdate(button, texture)
         elseif button.player and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRESTING"] and IsResting() then 
             HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\rested.tga"
             HealBot_UnitExtraIcons[button.id][93].current=true
@@ -856,7 +846,7 @@ local curBuffName,curBuffxTime=false,0
 local buffCheckThis, buffWatchTarget, buffSpellStart, buffSpellDur=false,false,0,0
 function HealBot_Aura_SetGeneralBuff(button, bName)
     curBuffName=bName
-    button.aura.buff.missingbuff=true
+    button.aura.buff.missingbuff=bName
     button.aura.buff.colbar=2
     button.aura.buff.priority=45
 end
@@ -1263,7 +1253,7 @@ function HealBot_Aura_CheckCurDebuff(button)
         end
         if ccdbCheckthis then
             cDebuffPrio=dTypePriority
-        elseif (UnitIsEnemy("player",uaUnitCaster) and uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
+        elseif (not UnitIsFriend("player",uaUnitCaster) and uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
                (HealBot_Config_Cures.AlwaysShowTimed and uaDuration>0 and uaDuration<HealBot_Config_Cures.ShowTimeMaxDuration) or 
                (HealBot_Config_Cures.HealBot_Custom_Defuffs_All[uaDebuffType]) then
             debuff_Type=HEALBOT_CUSTOM_en
@@ -1400,7 +1390,8 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
         button.aura.debuff.name=debuffName
         HealBot_Emerg_Button[button.id].debuffupdate=true
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
-        curDebuffSpell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type) or button.status.rangespell
+        button.aura.debuff.curespell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
+        curDebuffSpell=button.aura.debuff.curespell or button.status.rangespell
         if button.status.rangespell~=curDebuffSpell then
             curDebuffRange=HealBot_UnitInRangeExc30(button, curDebuffSpell)
         else
@@ -1890,6 +1881,7 @@ function HealBot_Aura_ClearDebuff(button)
     if button.aura.debuff.name then
         button.aura.debuff.type = false;
         button.aura.debuff.name = false;
+        button.aura.debuff.curespell = false
         button.aura.debuff.colbar=0
         button.aura.debuff.id=0
         button.aura.debuff.priority = 99;

@@ -462,7 +462,6 @@ function HealBot_Lang_enALL()
     HEALBOT_MENU                            = "Menu";
     HEALBOT_MAINTANK                        = "MainTank";
     HEALBOT_STOP                            = "Stop";
-    HEALBOT_TELL                            = "Tell";
     HEALBOT_IGNOREAURAALL                   = "Disable - Ignore in all zones";
     HEALBOT_ICONRAISEPRIO1                  = "Priority raise x1";
     HEALBOT_ICONRAISEPRIO3                  = "Priority raise x3";
@@ -554,7 +553,7 @@ function HealBot_Lang_enALL()
     HEALBOT_RES_TAG                         = "RES "
     HEALBOT_SUMMONS_TAG                     = "SUM "
     HEALBOT_OUTOFRANGE_LABEL                = "Out of range"
-    HEALBOT_RANGE30                         = "In Range 30"
+    HEALBOT_RANGE30                         = "In Range 27"
     HEALBOT_RECENTHEALS                     = "Recent heals"
     HEALBOT_OUTOFRANGE_TAG                  = "OOR-"
     HEALBOT_RESERVED_LABEL                  = "Reserved"
@@ -695,6 +694,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_COLOUR                     = "Col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_OPTIONS_COMBOAUTOTARGET         = "Auto\nTarget"
     HEALBOT_OPTIONS_COMBOAUTOTRINKET        = "Auto Trinket"
+    HEALBOT_OPTIONS_COMBOBINDS              = "Binds"
     HEALBOT_OPTIONS_GROUPSPERCOLUMN         = "Use Groups per Column"
     HEALBOT_WORD_WHISPER                    = "Whisper"
     HEALBOT_WORD_GUILD                      = "Guild"
@@ -961,6 +961,8 @@ function HealBot_Lang_enALL()
     HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
     HEALBOT_RESET_BAR                       = "Reset bar"
     HEALBOT_HIDE_BARS                       = "Hide bars over 100 yards"
+    HEALBOT_MOUNTSPETS                      = "Mounts and Pets"
+    HEALBOT_MOUNTS                          = "Mounts"
     HEALBOT_RANDOMMOUNT                     = "Random Mount"
     HEALBOT_RANDOMGOUNDMOUNT                = "Random Ground Mount"
     HEALBOT_RANDOMPET                       = "Random Pet"
@@ -1504,6 +1506,12 @@ function HealBot_Lang_enALL()
                               [10] = "Ariá",
                               [11] = "Snaomi",
                              }
+                             
+    HEALBOT_WORD_TOGGLE                    = "Toggle"
+    BINDING_CATEGORY_HEALBOT = HEALBOT_HEALBOT
+    BINDING_HEADER_HBBUTTONS = HEALBOT_HEALBOT
+    _G["BINDING_NAME_HEALBOTTOGGLEOPTIONS"] = HEALBOT_WORD_TOGGLE.." "..HEALBOT_ACTION_OPTIONS
+    _G["BINDING_NAME_HEALBOTTOGGLEENABLED"] = HEALBOT_WORD_TOGGLE.." "..HEALBOT_SKIN_ENTEXT
 end
 
 function HealBot_Lang_InitVars()

@@ -14,8 +14,6 @@
     </Size>
     <Scripts>
       <OnLoad>HealBot_Action_OnLoad(self)</OnLoad>
-      <OnEnter>HealBot_Action_HealUnit_OnEnter(self);</OnEnter>
-      <OnLeave>HealBot_Action_HealUnit_OnLeave(self);</OnLeave>
     </Scripts>
     <Frames>
       <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
@@ -1194,8 +1192,6 @@
     </Size>
     <Scripts>
       <OnLoad>HealBot_Action_EmergOnLoad(self)</OnLoad>
-      <OnEnter>HealBot_Action_EmergUnit_OnEnter(self);</OnEnter>
-      <OnLeave>HealBot_Action_EmergUnit_OnLeave(self);</OnLeave>
     </Scripts>
     <Frames>
       <StatusBar name="$parentBar" inherits="HealBot_StatusBar">
