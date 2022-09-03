@@ -35,26 +35,34 @@ local HealBot_Timers_luVars={}
 HealBot_Timers_luVars["UpdateAllBuffIcons"]=false
 HealBot_Timers_luVars["DoneBuffReset"]=false
 HealBot_Timers_luVars["nCalls"]=0
-HealBot_Timers_luVars["nProcs"]=3
-HealBot_Timers_luVars["turboEnd"]=0
-HealBot_Timers_luVars["turboEndTimer"]=false
+HealBot_Timers_luVars["nProcs"]=5
+HealBot_Timers_luVars["turboEndTimer"]=0
 
 function HealBot_Timers_TurboOn(duration)
-    HealBot_Timers_luVars["nProcs"]=9
-    HealBot_Timers_luVars["turboEnd"]=GetTime()+duration
-    if not HealBot_Timers_luVars["turboEndTimer"] then
-        HealBot_Timers_luVars["turboEndTimer"]=true
+    HealBot_Timers_luVars["nProcs"]=HealBot_Globals.CPUUsage
+    if HealBot_Timers_luVars["nProcs"]<4 then
+        HealBot_Timers_luVars["nProcs"]=4
+    end
+    HealBot_Timers_SetTurboOff(duration)
+end
+
+function HealBot_Timers_SetTurboOff(duration)
+    if HealBot_Timers_luVars["turboEndTimer"]<GetTime()+duration then
+        HealBot_Timers_luVars["turboEndTimer"]=GetTime()+duration
         HealBot_Timers_Set("LAST","TimerTurboOff",duration)
     end
 end
 
 function HealBot_Timers_TurboOff()
-    if GetTime()<HealBot_Timers_luVars["turboEnd"] then
+    if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1)
     else
-        HealBot_Timers_luVars["turboEndTimer"]=false
-        HealBot_Timers_luVars["nProcs"]=3
+        HealBot_Timers_luVars["nProcs"]=floor(HealBot_Globals.CPUUsage/2)
+        if HealBot_Timers_luVars["nProcs"]<2 then
+            HealBot_Timers_luVars["nProcs"]=2
+        end
     end
+    HealBot_AddDebug("nProcs="..HealBot_Timers_luVars["nProcs"], "Perf", true)
 end
 
 function HealBot_Timers_setLuVars(vName, vValue)
@@ -109,26 +117,6 @@ end
 
 function HealBot_Timers_nextRecalcEnemy()
     HealBot_nextRecalcParty(5)
-end
-
-function HealBot_Timers_MouseWheelUpdate()
-    local g = _G["f1_HealBot_Action"]
-    if not InCombatLockdown() and g then
-        for i=1, 10 do
-            local g = _G["f"..i.."_HealBot_Action"]
-            if HealBot_Globals.HealBot_Enable_MouseWheel then
-                g:EnableMouseWheel(1)  
-                g:SetScript("OnMouseWheel", function(self, delta)
-                    HealBot_Action_HealUnit_Wheel(self, delta)
-                end)
-            else
-                g:SetScript("OnMouseWheel", nil)
-                g:EnableMouseWheel(false)
-            end
-        end
-    else
-        HealBot_Timers_Set("INIT","WheelUpdate")
-    end
 end
 
 function HealBot_Timers_HealthAlertLevel_OC()
@@ -329,6 +317,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","CheckZone",0.15)
     HealBot_Timers_Set("PLAYER","InvChange",0.2)
     HealBot_Timers_Set("SKINS","PowerIndicator",0.25)
+    HealBot_Timers_Set("LAST","SetResSpells",0.25)
     HealBot_Timers_Set("LAST","LastUpdate",0.3)
     C_Timer.After(2, HealBot_Timers_UpdateMediaIndex)
 end
@@ -460,7 +449,6 @@ local hbTimerFuncs={["INIT"]={
                         ["HealthAlertLevel"]=HealBot_Timers_HealthAlertLevel_OC,
                         ["RefreshParty"]=HealBot_Timer_FramesRefresh,
                         ["SeparateInHealsAbsorbs"]=HealBot_Text_setSeparateInHealsAbsorbs,
-                        ["WheelUpdate"]=HealBot_Timers_MouseWheelUpdate,
                         ["RegEvents"]=HealBot_Register_Events,
                         ["RefreshPartyNextRecalcAll"]=HealBot_Timers_nextRecalcAll,
                         ["RefreshPartyNextRecalcPlayers"]=HealBot_Timers_nextRecalcPlayers,
@@ -468,7 +456,6 @@ local hbTimerFuncs={["INIT"]={
                         ["RefreshPartyNextRecalcVehicle"]=HealBot_Timers_nextRecalcVehicle,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
                         ["InitPlugins"]=HealBot_InitPlugins,
-                        ["LoadHealBot"]=HealBot_Load,
                         ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
                         ["RegisterForClicks"]=HealBot_Action_setRegisterForClicks,
                         ["AddonLoaded"]=HealBot_Load,
@@ -633,9 +620,11 @@ local hbTimerFuncs={["INIT"]={
                         ["SendGuildVersion"]=HealBot_Timers_SendGuildVersion,
                         ["CheckVersions"]=HealBot_CheckVersions,
                         ["OptionsInitExtraTabs"]=HealBot_Options_InitExtras,
-                        ["VarsLoaded"]=HealBot_OnEvent_VariablesLoaded,
+                        ["VarsNotLoaded"]=HealBot_OnEvent_VariablesLoaded,
+                        ["VarsLoaded"]=HealBot_VariablesLoaded,
                         ["TimerTurboOff"]=HealBot_Timers_TurboOff,
                         ["IconNotInCombat"]=HealBot_updAllStateIconNotInCombat,
+                        ["SetResSpells"]=HealBot_SetResSpells,
                     },
                    }
 
@@ -715,7 +704,7 @@ end
 function HealBot_Timers_PlayerRegenDisabled()
     if not HealBot_Timers_luVars["DoneBuffReset"] then
         if not HealBot_retLuVars("Loaded") then
-            HealBot_OnEvent_VariablesLoaded()
+            HealBot_VariablesLoaded()
             HealBot_Timers_Set("LAST","FullReload",5)
             if not HealBot_retLuVars("AddonLoaded") then
                 HealBot_Options_InitVars()

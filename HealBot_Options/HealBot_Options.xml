@@ -340,12 +340,44 @@
             <BarColor r="0.2" g="0.2" b="0.2"/>
           </StatusBar>
  
-          <StatusBar name="HealBot_Contents_ButtonT3">
+          <StatusBar name="HealBot_Contents_ButtonT7">
             <Size>
               <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
               <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT2"  relativePoint="TOPLEFT">
+                <Offset>
+                  <AbsDimension x="0" y="-22"/>
+                </Offset>
+              </Anchor>
+            </Anchors>
+            <Layers>
+              <Layer level="OVERLAY">
+                <FontString name= "HealBot_Contents_ButtonT7Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_BINDS">
+                  <Anchors>
+                    <Anchor point="LEFT" relativeTo="HealBot_Contents_ButtonT7" relativePoint="LEFT">
+                      <Offset>
+                        <AbsDimension x="0" y="1"/>
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+              </Layer>
+            </Layers>
+            <Scripts>
+              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
+              <OnMouseDown>HealBot_Options_UpdateTab(7, nil, "Binds")</OnMouseDown>
+            </Scripts>
+            <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+            <BarColor r="0.2" g="0.2" b="0.2"/>
+          </StatusBar>
+          
+          <StatusBar name="HealBot_Contents_ButtonT3">
+            <Size>
+              <AbsDimension x="173" y="20"/>
+            </Size>
+            <Anchors>
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT7"  relativePoint="TOPLEFT">
                 <Offset>
                   <AbsDimension x="0" y="-22"/>
                 </Offset>
@@ -998,44 +1030,13 @@
             <BarColor r="0.2" g="0.2" b="0.2"/>
           </StatusBar>
 
-          <StatusBar name="HealBot_Contents_ButtonT7">
-            <Size>
-              <AbsDimension x="173" y="20"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT6"  relativePoint="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="0" y="-22"/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-            <Layers>
-              <Layer level="OVERLAY">
-                <FontString name= "HealBot_Contents_ButtonT7Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_MOUSEWHEEL">
-                  <Anchors>
-                    <Anchor point="LEFT" relativeTo="HealBot_Contents_ButtonT7" relativePoint="LEFT">
-                      <Offset>
-                        <AbsDimension x="0" y="1"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-              </Layer>
-            </Layers>
-            <Scripts>
-              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(7, nil, "MouseWheel")</OnMouseDown>
-            </Scripts>
-            <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
-            <BarColor r="0.2" g="0.2" b="0.2"/>
-          </StatusBar>
 
           <StatusBar name="HealBot_Contents_ButtonT8">
             <Size>
               <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT7"  relativePoint="TOPLEFT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT6"  relativePoint="TOPLEFT">
                 <Offset>
                   <AbsDimension x="0" y="-22"/>
                 </Offset>
@@ -4639,7 +4640,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-180" />
+                          <AbsDimension x="80" y="-170" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4686,7 +4687,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-245" />
+                          <AbsDimension x="80" y="-230" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4733,7 +4734,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-315" />
+                          <AbsDimension x="80" y="-290" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4780,7 +4781,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-385" />
+                          <AbsDimension x="80" y="-350" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4823,6 +4824,53 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Frame name="HealBot_Options_SelectEmotesCombo" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="80" y="-410" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Size>
+                      <AbsDimension x="270" y="20"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotspellshelpemotesfontstr" inherits="GameFontNormalSmall" text="HEALBOT_EMOTES">
+                          <Anchors>
+                            <Anchor point="TOPLEFT">
+                              <Offset>
+                                <AbsDimension x="25" y="10"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 245)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTEMOTES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTEMOTES",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Button name="HealBot_Options_CmdsSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
+                    <Size>
+                      <AbsDimension x="115" y="27"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelectEmotesCombo" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="5" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_SpellsSelect_OnClick(self,"Emote")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTEMOTES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTEMOTES",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Button name="HealBot_Options_CancelHelpSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_CANCEL">
                     <Size>
                       <AbsDimension x="175" y="24"/>
@@ -4830,7 +4878,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-445"/>
+                          <AbsDimension x="0" y="-458"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23833,7 +23881,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23861,7 +23909,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23875,7 +23923,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23885,25 +23933,11 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipMouseWheel" inherits="OptionsCheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="OptionsCheckButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipMouseWheel_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPWHEELCMD",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPWHEELCMD",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="OptionsCheckButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMouseWheel" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23931,7 +23965,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23975,7 +24009,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-125" y="105" />
+                          <AbsDimension x="-125" y="120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23992,7 +24026,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="125" y="105" />
+                          <AbsDimension x="125" y="120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24009,7 +24043,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="40" />
+                          <AbsDimension x="0" y="50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24023,45 +24057,62 @@
           </Frame>
       
           <Frame name="HealBot_Options_Panel7" hidden="true" setAllPoints="true">
+            <Layers>
+              <Layer level="OVERLAY">
+                <FontString name="bindtoclickfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK">
+                  <Anchors>
+                    <Anchor point="TOP">
+                      <Offset>
+                        <AbsDimension x="0" y="-50"/>
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="bindtoclick1fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK1">
+                  <Anchors>
+                    <Anchor point="BOTTOM">
+                      <Offset>
+                        <AbsDimension x="0" y="100"/>
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="bindtoclick2fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK2">
+                  <Anchors>
+                    <Anchor point="BOTTOM">
+                      <Offset>
+                        <AbsDimension x="0" y="75"/>
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="bindtoclick3fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK3">
+                  <Anchors>
+                    <Anchor point="BOTTOM">
+                      <Offset>
+                        <AbsDimension x="0" y="25"/>
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+              </Layer>
+            </Layers>
             <Frames>
-              <CheckButton name="HealBot_Options_EnableMouseWheel" inherits="OptionsCheckButtonTemplate">
+              <Frame name="HealBot_Options_Bind1" inherits="UIDropDownMenuTemplate">
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="-50" y="-80" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnClick>HealBot_Options_EnableMouseWheel_OnClick(self)</OnClick>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELUSE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELUSE",false)</OnLeave>
-                </Scripts>
-              </CheckButton>
-              <Frame name="HealBot_Options_MouseWheelUp" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="120" y="-158" />
+                      <AbsDimension x="0" y="-140" />
                     </Offset>
                   </Anchor>
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="healbotmwmouseupfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_MOUSEUP">
+                    <FontString name="healbotbinds1fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONLEFT">
                       <Anchors>
-                        <Anchor point="TOP">
+                        <Anchor point="TOPLEFT">
                           <Offset>
-                            <AbsDimension x="0" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="healbotmwnonefontstr" inherits="GameFontNormal" text="HEALBOT_WORDS_NONE">
-                      <Anchors>
-                        <Anchor point="RIGHT" relativeTo="HealBot_Options_MouseWheelUp" relativePoint="LEFT">
-                          <Offset>
-                            <AbsDimension x="10" y="4"/>
+                            <AbsDimension x="25" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -24069,40 +24120,26 @@
                   </Layer>
                 </Layers>
                 <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_MouseWheelUpEmotes" inherits="UIDropDownMenuTemplate">
+              <Frame name="HealBot_Options_Bind2" inherits="UIDropDownMenuTemplate">
                 <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelUp" relativePoint="BOTTOM">
+                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind1" relativePoint="BOTTOM">
                     <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelDown" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelUp" relativePoint="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-5" y="0" />
+                      <AbsDimension x="0" y="-50" />
                     </Offset>
                   </Anchor>
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="healbotmwmousedownfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_MOUSEDOWN">
+                    <FontString name="healbotbinds2fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONMIDDLE">
                       <Anchors>
-                        <Anchor point="TOP">
+                        <Anchor point="TOPLEFT">
                           <Offset>
-                            <AbsDimension x="0" y="14"/>
+                            <AbsDimension x="25" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -24110,40 +24147,26 @@
                   </Layer>
                 </Layers>
                 <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_MouseWheelDownEmotes" inherits="UIDropDownMenuTemplate">
+              <Frame name="HealBot_Options_Bind3" inherits="UIDropDownMenuTemplate">
                 <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelDown" relativePoint="BOTTOM">
+                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind2" relativePoint="BOTTOM">
                     <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelShiftUp" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelUp" relativePoint="BOTTOMLEFT">
-                    <Offset>
-                      <AbsDimension x="0" y="-55" />
+                      <AbsDimension x="0" y="-50" />
                     </Offset>
                   </Anchor>
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="healbotmwmouseshiftfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_SHIFT">
+                    <FontString name="healbotbinds3fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONRIGHT">
                       <Anchors>
-                        <Anchor point="RIGHT" relativeTo="HealBot_Options_MouseWheelShiftUp" relativePoint="LEFT">
+                        <Anchor point="TOPLEFT">
                           <Offset>
-                            <AbsDimension x="10" y="4"/>
+                            <AbsDimension x="25" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -24151,68 +24174,26 @@
                   </Layer>
                 </Layers>
                 <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_MouseWheelShiftUpEmotes" inherits="UIDropDownMenuTemplate">
+              <Frame name="HealBot_Options_Bind4" inherits="UIDropDownMenuTemplate">
                 <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelShiftUp" relativePoint="BOTTOM">
+                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind3" relativePoint="BOTTOM">
                     <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelShiftDown" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelShiftUp" relativePoint="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-5" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelShiftDownEmotes" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelShiftDown" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelCtrlUp" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelShiftUp" relativePoint="BOTTOMLEFT">
-                    <Offset>
-                      <AbsDimension x="0" y="-55" />
+                      <AbsDimension x="0" y="-50" />
                     </Offset>
                   </Anchor>
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="healbotmwmousectrlfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_CTRL">
+                    <FontString name="healbotbinds4fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTON4">
                       <Anchors>
-                        <Anchor point="RIGHT" relativeTo="HealBot_Options_MouseWheelCtrlUp" relativePoint="LEFT">
+                        <Anchor point="TOPLEFT">
                           <Offset>
-                            <AbsDimension x="10" y="4"/>
+                            <AbsDimension x="25" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -24220,68 +24201,26 @@
                   </Layer>
                 </Layers>
                 <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_MouseWheelCtrlUpEmotes" inherits="UIDropDownMenuTemplate">
+              <Frame name="HealBot_Options_Bind5" inherits="UIDropDownMenuTemplate">
                 <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelCtrlUp" relativePoint="BOTTOM">
+                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind4" relativePoint="BOTTOM">
                     <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelCtrlDown" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelCtrlUp" relativePoint="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-5" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelCtrlDownEmotes" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelCtrlDown" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelAltUp" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelCtrlUp" relativePoint="BOTTOMLEFT">
-                    <Offset>
-                      <AbsDimension x="0" y="-55" />
+                      <AbsDimension x="0" y="-50" />
                     </Offset>
                   </Anchor>
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="healbotmwmousealtfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ALT">
+                    <FontString name="healbotbinds5fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTON5">
                       <Anchors>
-                        <Anchor point="RIGHT" relativeTo="HealBot_Options_MouseWheelAltUp" relativePoint="LEFT">
+                        <Anchor point="TOPLEFT">
                           <Offset>
-                            <AbsDimension x="10" y="4"/>
+                            <AbsDimension x="25" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -24289,53 +24228,12 @@
                   </Layer>
                 </Layers>
                 <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
                 </Scripts>
               </Frame>
-              <Frame name="HealBot_Options_MouseWheelAltUpEmotes" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelAltUp" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelAltDown" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MouseWheelAltUp" relativePoint="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-5" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELCMD",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_MouseWheelAltDownEmotes" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_MouseWheelAltDown" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="0" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BUFFSMOUSEWHEELEMOTE",false)</OnLeave>
-                </Scripts>
-              </Frame>
+
             </Frames>
           </Frame>
           

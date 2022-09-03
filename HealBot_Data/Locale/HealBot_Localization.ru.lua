@@ -467,7 +467,6 @@ function HealBot_Lang_ruRU()
     HEALBOT_WORD_OFF                        = "Выкл";
     HEALBOT_WORD_ON                         = "Вкл";
 
-    HEALBOT_OPTIONS_TAB_PROTECTION          = "Защита";
     HEALBOT_OPTIONS_TAB_CHAT                = "Чат";
     HEALBOT_OPTIONS_TAB_HEADERS             = "Заголовки";
     HEALBOT_OPTIONS_TAB_BARS                = "Панели";
@@ -975,7 +974,6 @@ function HealBot_Lang_ruRU()
     HEALBOT_OPTIONS_CONTENT_SKINS_BARS      = "        " .. HEALBOT_OPTIONS_TAB_BARS;
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONS     = "        " .. HEALBOT_OPTIONS_TAB_ICONS;
     HEALBOT_OPTIONS_CONTENT_SKINS_AGGRO     = "    " .. HEALBOT_OPTIONS_TAB_AGGRO;
-    HEALBOT_OPTIONS_CONTENT_SKINS_PROT      = "    " .. HEALBOT_OPTIONS_TAB_PROTECTION;
     HEALBOT_OPTIONS_CONTENT_SKINS_CHAT      = "    " .. HEALBOT_OPTIONS_TAB_CHAT;
     HEALBOT_OPTIONS_CONTENT_SKINS_TEXT      = "        " .. HEALBOT_OPTIONS_TAB_TEXT;
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONTEXT  = "        " .. HEALBOT_OPTIONS_TAB_ICONTEXT;

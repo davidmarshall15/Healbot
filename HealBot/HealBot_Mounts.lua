@@ -1,4 +1,3 @@
-local HealBot_MouseWheelCmd=nil
 local HealBot_GMount = {}
 local HealBot_PrevGMounts = {}
 local HealBot_FMount = {}
@@ -6,11 +5,6 @@ local HealBot_PrevFMounts = {}
 local HealBot_SMount = {}
 local HealBot_mountData = {}
 local HealBot_MountIndex = {}
-local hbLastButton=false
-
-function HealBot_MountsPets_lastbutton(button)
-    hbLastButton=button
-end
 
 function HealBot_MountsPets_Dismount()
     if IsMounted() then
@@ -26,8 +20,13 @@ function HealBot_MountsPets_FavMount()
             Dismount()
         elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
             VehicleExit()
+        elseif HEALBOT_GAME_VERSION>3 then 
+            C_MountJournal.SummonByID(0)
+        elseif IsFlyableArea() and HealBot_Config.FavMount and HealBot_MountIndex[HealBot_Config.FavMount] then
+            CallCompanion("MOUNT", HealBot_MountIndex[HealBot_Config.FavMount])
+        elseif HealBot_Config.FavGroundMount and HealBot_MountIndex[HealBot_Config.FavGroundMount] then
+            CallCompanion("MOUNT", HealBot_MountIndex[HealBot_Config.FavGroundMount])
         end
-        C_MountJournal.SummonByID(0)
     end
 end
 
@@ -59,8 +58,7 @@ function HealBot_MountsPets_ToggelMount(mountType)
             Dismount()
         elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
             VehicleExit()
-        end
-        if HealBot_mountData["ValidUse"] and IsOutdoors() then
+        elseif HealBot_mountData["ValidUse"] and IsOutdoors() then
             local mount = nil
             vToggleMountIndex=0
             if mountType=="all" and not IsSwimming() and IsFlyableArea() and #HealBot_FMount>0 then
@@ -118,86 +116,6 @@ function HealBot_MountsPets_ToggelMount(mountType)
     end
 end
 
-function HealBot_Action_DoHealUnit_Wheel(self, delta)
-    --local xButton=hbLastButton
-    if hbLastButton and hbLastButton.status.current<HealBot_Unit_Status["DC"] then
-        --local xUnit=xButton.unit
-        local y="None"
-        if IsShiftKeyDown() then
-            if not IsControlKeyDown() and not IsAltKeyDown() then 
-                y="Shift" 
-            else
-                y=""
-            end
-        elseif IsControlKeyDown() then
-            if not IsShiftKeyDown() and not IsAltKeyDown() then 
-                y="Ctrl" 
-            else
-                y=""
-            end
-        elseif IsAltKeyDown() then
-            if not IsControlKeyDown() and not IsShiftKeyDown() then 
-                y="Alt" 
-            else
-                y=""
-            end
-        end    
-        if delta>0 then
-            y=y.."Up"
-        else
-            y=y.."Down"
-        end
-        if HealBot_Globals.HealBot_MouseWheelTxt[y] then
-            HealBot_MouseWheelCmd=HealBot_Globals.HealBot_MouseWheelTxt[y]
-        else
-            HealBot_MouseWheelCmd=HEALBOT_WORDS_NONE
-        end
-        if HealBot_MouseWheelCmd==HEALBOT_HB_MENU then
-            local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
-            HBFriendsDropDown.unit = hbLastButton.unit
-            HBFriendsDropDown.name = HealBot_GetUnitName(hbLastButton)
-            HBFriendsDropDown.initialize = HealBot_Action_hbmenuFrame_DropDown_Initialize
-            HBFriendsDropDown.displayMode = "MENU"
-            ToggleDropDownMenu(1, nil, HBFriendsDropDown, "cursor", 10, -8)
-        elseif HealBot_MouseWheelCmd==HEALBOT_FOLLOW then
-            FollowUnit(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_TRADE then
-            InitiateTrade(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_PROMOTE_RA then
-            PromoteToAssistant(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_DEMOTE_RA then
-            DemoteAssistant(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_ENABLED then
-            HealBot_Action_Toggle_Enabled(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_MYTARGETS then
-            HealBot_Panel_ToggelHealTarget(hbLastButton.unit)
-        elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_PRIVATETANKS then
-            HealBot_Panel_ToggelPrivateTanks(hbLastButton.unit, false)
-        elseif HealBot_MouseWheelCmd==HEALBOT_TOGGLE_PRIVATEHEALERS then
-            HealBot_Panel_ToggelPrivateHealers(hbLastButton.unit, false)
-        elseif HealBot_MouseWheelCmd==HEALBOT_RESET_BAR then
-            HealBot_Reset_Unit(hbLastButton.unit)
-        elseif (HealBot_MouseWheelCmd==HEALBOT_RANDOMMOUNT or HealBot_MouseWheelCmd==HEALBOT_CMD_DISMOUNT) and hbLastButton.player and not UnitAffectingCombat("player") then
-            HealBot_MountsPets_ToggelMount("all")
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMGOUNDMOUNT and hbLastButton.player and not UnitAffectingCombat("player") then
-            HealBot_MountsPets_ToggelMount("ground")
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMPET and hbLastButton.player then
-            HealBot_MountsPets_RandomPet(false)   
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVMOUNT and hbLastButton.player then
-            HealBot_MountsPets_FavMount()
-        elseif HealBot_MouseWheelCmd==HEALBOT_RANDOMFAVPET and hbLastButton.player then
-            HealBot_MountsPets_RandomPet(true)   
-        elseif HealBot_MouseWheelCmd==HEALBOT_EMOTE then
-            DoEmote(HealBot_Globals.HealBot_Emotes[y], hbLastButton.unit)
-        end
-    end
-end
-
-                                  
-function HealBot_Action_HealUnit_Wheel(self, delta)
-    HealBot_Action_DoHealUnit_Wheel(self, delta)
-end
-
 function HealBot_MountsPets_InitUse()
     if HEALBOT_GAME_VERSION>2 then
         HealBot_Timers_Set("LAST","MountsPetsInit")
@@ -250,7 +168,7 @@ function HealBot_MountsPets_InitMount()
             mount, sID, _, _, isUsable, _, _, _, faction, _, isCollected = C_MountJournal.GetMountInfoByID(z)
             _, _, _, _, mountType = C_MountJournal.GetMountInfoExtraByID(z)
         else
-            _, mount, sID, _, _, mountType = GetCompanionInfo("mount", z)
+            _, mount, sID, _, _, mountType = GetCompanionInfo("MOUNT", z)
         end
         if faction and isUsable and isCollected then
             local englishFaction = UnitFactionGroup("player")
@@ -258,21 +176,24 @@ function HealBot_MountsPets_InitMount()
                 isUsable=nil
             end
         end
-        
+
         if isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
             if HEALBOT_GAME_VERSION<4 then
                 if not mountType then
-                    if sID<30000 then
+                    if sID<30000 or sID==34896 or sID==43688 then
                         table.insert(HealBot_GMount, mount);
                         HealBot_MountIndex[mount]=z
+                        HealBot_Config.FavGroundMount=HealBot_Config.FavGroundMount or mount
                     elseif IsFlyableArea() then
                         table.insert(HealBot_FMount, mount);
                         HealBot_MountIndex[mount]=z
+                        HealBot_Config.FavMount=HealBot_Config.FavMount or mount
                     end
                 elseif (mountType==15 or mountType==31) then
                     if IsFlyableArea() then
                         table.insert(HealBot_FMount, mount);
                         HealBot_MountIndex[mount]=z
+                        HealBot_Config.FavMount=HealBot_Config.FavMount or mount
                     end
                 elseif (mountType==12) then
                     table.insert(HealBot_SMount, mount);
@@ -280,7 +201,9 @@ function HealBot_MountsPets_InitMount()
                 elseif (mountType==29) then
                     table.insert(HealBot_GMount, mount);
                     HealBot_MountIndex[mount]=z
+                    HealBot_Config.FavGroundMount=HealBot_Config.FavGroundMount or mount
                 end
+                --HealBot_AddDebug("mount "..mount.."="..sID.." mountType="..(mountType or "nil"),"Wheel",true)
             else
                 if (mountType==248 or mountType==247 or mountType==242) then
                     if IsFlyableArea() then
@@ -323,16 +246,56 @@ function HealBot_MountsPets_InitMount()
     end
 end
 
-function HealBot_MountsPets_DislikeMount(action)
-    local z = C_MountJournal.GetNumMounts()
-    local mount=nil
+function HealBot_MountsPets_FavClassicMount()
+    local z = GetNumCompanions("MOUNT")
+    local mount=false
     for i=1,z do
-         local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
-         if active then
-             mount=creatureName
+        local _, creatureName, sID, icon, active, mountType = GetCompanionInfo("MOUNT", i)
+        if active then
+            mount=creatureName
             break
-         end
-     end
+        end
+    end
+    if mount then
+        for z,_ in pairs(HealBot_FMount) do
+            if HealBot_FMount[z]==mount then
+                HealBot_Config.FavMount=mount
+                HealBot_AddChat(mount.." set as Favourite flying mount")
+                mount=nil
+                break
+            end
+        end
+    end
+    if mount then
+        for z,_ in pairs(HealBot_GMount) do
+            if HealBot_GMount[z]==mount then
+                HealBot_Config.FavGroundMount=mount
+                HealBot_AddChat(mount.." set as Favourite ground mount")
+                break
+            end
+        end
+    end
+end
+
+function HealBot_MountsPets_DislikeMount(action)
+    local z = 0
+    local mount=nil
+    if HEALBOT_GAME_VERSION>3 then
+        z = C_MountJournal.GetNumMounts()
+    else
+        z = GetNumCompanions("MOUNT")
+    end
+    for i=1,z do
+        if HEALBOT_GAME_VERSION>3 then
+            local creatureName, sID, _, active, isUsable, _, _, _, _, _, isCollected = C_MountJournal.GetMountInfoByID(i)
+        else
+            local _, creatureName, sID, _, active, mountType = GetCompanionInfo("mount", z)
+        end
+        if active then
+            mount=creatureName
+            break
+        end
+    end
     if mount then
         if action=="Exclude" then
             if HealBot_Globals.excludeMount[mount] then

@@ -276,7 +276,6 @@ function HealBot_Lang_grGR()
     HEALBOT_WORD_OFF                        = "-Απενεργοποιηση";
     HEALBOT_WORD_ON                         = "-Ενεργοποιηση";
 
-    HEALBOT_OPTIONS_TAB_PROTECTION          = "Προστασια";
     HEALBOT_OPTIONS_TAB_HEADERS             = "Κεφαλιδες";
     HEALBOT_OPTIONS_TAB_ICONS               = "Εικονιδια";
     HEALBOT_OPTIONS_TAB_WARNING             = "Προειδοποιήση";
@@ -468,7 +467,6 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_CONTENT_GENERAL         = "        " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SPELLS          = "        " .. HEALBOT_OPTIONS_TAB_SPELLS
     HEALBOT_OPTIONS_CONTENT_SKINS           = "        " .. HEALBOT_OPTIONS_TAB_SKIN
-    HEALBOT_OPTIONS_CONTENT_CURE            = "        " .. HEALBOT_OPTIONS_TAB_CDC
     HEALBOT_OPTIONS_CONTENT_BUFFS           = "        " .. HEALBOT_OPTIONS_TAB_BUFFS
     HEALBOT_OPTIONS_CONTENT_TIPS            = "        " .. HEALBOT_OPTIONS_TAB_TIPS
     HEALBOT_OPTIONS_CONTENT_USAGE           = "        Χρηση"
@@ -507,7 +505,6 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_CONTENT_SKINS_BARS      = "        " .. HEALBOT_OPTIONS_TAB_BARS
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONS     = "        " .. HEALBOT_OPTIONS_TAB_ICONS
     HEALBOT_OPTIONS_CONTENT_SKINS_AGGRO     = "    " .. HEALBOT_OPTIONS_TAB_AGGRO
-    HEALBOT_OPTIONS_CONTENT_SKINS_PROT      = "    " .. HEALBOT_OPTIONS_TAB_PROTECTION
     HEALBOT_OPTIONS_CONTENT_SKINS_CHAT      = "    " .. HEALBOT_OPTIONS_TAB_CHAT
     HEALBOT_OPTIONS_CONTENT_SKINS_TEXT      = "        " .. HEALBOT_OPTIONS_TAB_TEXT
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONTEXT  = "        " .. HEALBOT_OPTIONS_TAB_ICONTEXT

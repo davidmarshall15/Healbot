@@ -1,4 +1,4 @@
-## Interface: 90207
+## Interface: 30400
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
@@ -14,6 +14,7 @@ Libs\LibDBIcon-1.0\lib.xml
 Libs\LibDeflate\lib.xml
 Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
+Libs\LibHealComm-4.0\LibHealComm-4.0.xml
 
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua
@@ -31,3 +32,4 @@ Locale\HealBot_Localization.it.lua
 Locale\HealBot_Localization.kr.lua
 Locale\HealBot_Localization.ru.lua
 Locale\HealBot_Localization.tw.lua
+

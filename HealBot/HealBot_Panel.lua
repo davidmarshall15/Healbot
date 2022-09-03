@@ -26,6 +26,7 @@ local backBarsSize={[1]={["HEIGHT"]=0, ["WIDTH"]=0, ["RMARGIN"]=0, ["CMARGIN"]=0
 local HealBot_MyHealTargets={}
 local HealBot_MyPrivateTanks={}
 local HealBot_MyPrivateHealers={}
+local HealBot_MyPrivateDamagers={}
 local HealBot_MainTanks={};
 local HealBot_MainHealers={};
 local HealBot_UnitGroups={}
@@ -96,6 +97,7 @@ HealBot_Panel_luVars["cpMacro"]="hb-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
 
+local tClass={["WARR"]=true,["PALA"]=true,["DRUI"]=true,["DEAT"]=true}
 function HealBot_Panel_retLuVars(vName)
     return HealBot_Panel_luVars[vName]
 end
@@ -177,6 +179,8 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                 hbPanel_dataRoles[unit]="TANK"
             elseif HealBot_MyPrivateHealers[dsGUID] or HealBot_Globals.HealBot_PermPrivateHealers[dsGUID] then
                 hbPanel_dataRoles[unit]="HEALER"
+            elseif HealBot_MyPrivateDamagers[dsGUID] or  HealBot_Globals.HealBot_PermPrivateDamagers[dsGUID] then
+                hbPanel_dataRoles[unit]="DAMAGER"
             end
             if nRaidID>0 then
                 local hbFRole=false
@@ -184,10 +188,15 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                 HealBot_UnitGroups[unit]=hbSubgroup
                 if isPlayer then
                     if hbPanel_dataRoles[unit]==HEALBOT_WORDS_UNKNOWN then
-                        if hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
-                            hbFRole = hbCombatRole
-                        elseif hbRRole and (string.lower(hbRRole)=="maintank" or (HealBot_Globals.IncMainAssist and string.lower(hbRRole)=="mainassist")) then
+                        if hbRRole and (string.lower(hbRRole)=="maintank" or (HealBot_Globals.IncMainAssist and string.lower(hbRRole)=="mainassist")) then
                             hbFRole="TANK"
+                            if HEALBOT_GAME_VERSION==3 then
+                                hbFRole=HealBot_Panel_CheckRole(unit)
+                            end
+                        elseif HEALBOT_GAME_VERSION>3 and hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
+                            hbFRole = hbCombatRole
+                        elseif HEALBOT_GAME_VERSION==3 and hbCombatRole and hbCombatRole=="HEALER" then
+                            hbFRole = hbCombatRole
                         end
                     end
                 end
@@ -412,6 +421,28 @@ function HealBot_Panel_ToggelPrivateHealers(unit, perm)
     --HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
 end
 
+function HealBot_Panel_ToggelPrivateDamagers(unit, perm)
+    if unit=="target" then return end
+    local xGUID=UnitGUID(unit)
+    if perm then
+        if HealBot_Globals.HealBot_PermPrivateDamagers[xGUID] then
+            HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]=nil
+        else
+            HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]=UnitName(unit) or "unKnown"
+        end
+    else
+        if HealBot_MyPrivateDamagers[xGUID] then
+            HealBot_MyPrivateDamagers[xGUID]=nil
+        else
+            HealBot_MyPrivateDamagers[xGUID]=true
+        end
+    end
+    --HealBot_Panel_buildDataStore(true, true)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets")
+    --HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+end
+
 function HealBot_Panel_RetMyHealTarget(unit, perm)
     local xGUID=UnitGUID(unit) or unit
     local mti=0
@@ -449,6 +480,15 @@ function HealBot_Panel_RetPrivateHealers(unit, perm)
         return HealBot_Globals.HealBot_PermPrivateHealers[xGUID]
     else
         return HealBot_MyPrivateHealers[xGUID]
+    end
+end
+
+function HealBot_Panel_RetPrivateDamagers(unit, perm)
+    local xGUID=UnitGUID(unit) or unit
+    if perm then
+        return HealBot_Globals.HealBot_PermPrivateDamagers[xGUID]
+    else
+        return HealBot_MyPrivateDamagers[xGUID]
     end
 end
 
@@ -496,11 +536,26 @@ function HealBot_Panel_classEN(unit)
     end
 end
 
+function HealBot_Panel_CheckRole(unit)
+    local _,classEN = UnitClass(unit)
+    if classEN and not tClass[strsub(classEN,1,4)] then
+        return "DAMAGER"
+    end
+    return "TANK"
+end
+
 function HealBot_Panel_UnitRole(unit)
     local role = hbPanel_dataRoles[unit]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>2 then 
             role=UnitGroupRolesAssigned(unit) or "DAMAGER"
+            if HEALBOT_GAME_VERSION==3 then
+                if GetPartyAssignment('MAINTANK', unit) then 
+                    role=HealBot_Panel_CheckRole(unit)
+                elseif role=="TANK" then
+                    role="DAMAGER"
+                end
+            end
         else
             role="DAMAGER" 
         end

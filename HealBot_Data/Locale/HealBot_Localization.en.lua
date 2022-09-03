@@ -202,6 +202,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";
     HEALBOT_OPTIONS_PRIVATETANKS            = "Private tanks";
     HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private healers";
+    HEALBOT_OPTIONS_PRIVATEDAMAGERS         = "Private damagers";
     HEALBOT_OPTIONS_TARGETHEALS             = "Target";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";
     HEALBOT_OPTIONS_RAID10                  = HEALBOT_OPTIONS_EMERGENCYHEALS.." 10";
@@ -229,6 +230,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTON13                = "Button 13";
     HEALBOT_OPTIONS_BUTTON14                = "Button 14";
     HEALBOT_OPTIONS_BUTTON15                = "Button 15";
+    
+    HEALBOT_OPTIONS_BINDKEYTOCLICK          = "Bind a key to a Button Click"
+    HEALBOT_OPTIONS_BINDKEYTOCLICK1         = "NOTE: Depending on OS/WoW config, some binds will not work with specific modifier keys"
+    HEALBOT_OPTIONS_BINDKEYTOCLICK2         = "If intending to use key modifiers with key binds, test the key modifiers work"
+    HEALBOT_OPTIONS_BINDKEYTOCLICK3         = "Additional binds are available in the Extra Buttons plugin"
 
     HEALBOT_CLASSES_ALL                     = "All classes";
     HEALBOT_CLASSES_MELEE                   = "Melee";
@@ -511,7 +517,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_FLUIDBARS                = "Fluid Bars"
     HEALBOT_OPTION_HEALTHDROPALERT          = "Health Drop Alert"
     HEALBOT_OPTION_HOTBARS                  = "Hot Bars"
-    HEALBOT_OPTION_HOTBARSDEBUFFPRIO        = "Lowest Debuff Priority"           
+    HEALBOT_OPTION_HOTBARSDEBUFFPRIO        = "Debuff Priority threshold"           
     HEALBOT_OPTIONS_RELOADUIMSG             = "This option requires a UI Reload, Reload now?"
     HEALBOT_OPTION_USE                      = "Use"
 
@@ -859,9 +865,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_SUPPRESSERRORS              = "Toggle suppress errors when using auto trinkets"
     HEALBOT_OPTIONS_COMMANDS                = "HealBot Commands"
     HEALBOT_WORD_RUN                        = "Run"
-    HEALBOT_OPTIONS_MOUSEWHEEL              = "Use mouse wheel"
-    HEALBOT_OPTIONS_MOUSEUP                 = "Wheel up"
-    HEALBOT_OPTIONS_MOUSEDOWN               = "Wheel down"
+    HEALBOT_OPTIONS_BINDTOCLICK             = "Bind to Click"
     HEALBOT_CMD_DELCUSTOMDEBUFF9            = "Delete custom debuffs on priority 9"
     HEALBOT_CMD_DELCUSTOMDEBUFF10           = "Delete custom debuffs on priority 10"
     HEALBOT_CMD_DELCUSTOMDEBUFF11           = "Delete custom debuffs on priority 11"
@@ -961,18 +965,21 @@ function HealBot_Lang_enALL()
     HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
     HEALBOT_RESET_BAR                       = "Reset bar"
     HEALBOT_HIDE_BARS                       = "Hide bars over 100 yards"
-    HEALBOT_MOUNTSPETS                      = "Mounts and Pets"
+    HEALBOT_MOUNTSPETS                      = "Mounts and Pets menu"
+    HEALBOT_FAVMOUNT                        = "Favourite Mount"
+    HEALBOT_FAVPET                          = "Favourite Pet"
     HEALBOT_MOUNTS                          = "Mounts"
     HEALBOT_RANDOMMOUNT                     = "Random Mount"
     HEALBOT_RANDOMGOUNDMOUNT                = "Random Ground Mount"
     HEALBOT_RANDOMPET                       = "Random Pet"
-    HEALBOT_RANDOMFAVMOUNT                  = "Random Favorite Mount"
-    HEALBOT_RANDOMFAVPET                    = "Random Favorite Pet"        
+    HEALBOT_RANDOMFAVMOUNT                  = "Random Favourite Mount"
+    HEALBOT_RANDOMFAVPET                    = "Random Favourite Pet"        
     HEALBOT_EXTRASKINS_CAT_GROUP            = "Group"
     HEALBOT_EXTRASKINS_CAT_SRAID            = "Small Raid"
     HEALBOT_EXTRASKINS_CAT_LRAID            = "Large Raid"
     HEALBOT_MACRO                           = "Macro"
     HEALBOT_EMOTE                           = "Emote"
+    HEALBOT_EMOTES                          = "Emotes"
     HEALBOT_EMOTE_CAT_COMBAT                = "Combat"
     HEALBOT_EMOTE_CAT_EMOTION               = "Emotion"
     HEALBOT_EMOTE_CAT_HAPPY                 = "Happy"
@@ -1103,7 +1110,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_CURE            = "        " .. HEALBOT_OPTIONS_TAB_DEBUFFS
     HEALBOT_OPTIONS_CONTENT_BUFFS           = "        " .. HEALBOT_OPTIONS_TAB_BUFFS
     HEALBOT_OPTIONS_CONTENT_TIPS            = "        " .. HEALBOT_OPTIONS_TAB_TIPS
-    HEALBOT_OPTIONS_CONTENT_MOUSEWHEEL      = "        Mouse Wheel"
+    HEALBOT_OPTIONS_CONTENT_BINDS           = "        Binds"
     HEALBOT_OPTIONS_CONTENT_TEST            = "        Test"
     HEALBOT_OPTIONS_CONTENT_INOUT           = "        Import / Export"
     HEALBOT_OPTIONS_CONTENT_PLUGINS         = "        " .. HEALBOT_OPTIONS_PLUGINS
@@ -1409,6 +1416,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_EXCLUDEMOUNT_ON          = "Now Excluding Mount"
     HEALBOT_OPTION_EXCLUDEMOUNT_OFF         = "No longer Excluding Mount"
     HEALBOT_CMD_TOGGLEEXCLUDEMOUNT          = "Toggle Exclude Mount"
+    HEALBOT_CMD_SETFAVMOUNT                 = "Set Favourite Mount"
     HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES      = "Hide mini boss frames";
     HEALBOT_OPTIONS_HIDERAIDFRAMES          = "Hide raid frames";
     HEALBOT_OPTIONS_HIDEFOCUSFRAME          = "Hide focus frame";

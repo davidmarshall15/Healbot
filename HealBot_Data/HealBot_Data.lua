@@ -333,6 +333,7 @@ function HealBot_Data_InitVars()
         HealBot_PermMyTargets={},
         HealBot_PermPrivateTanks={},
         HealBot_PermPrivateHealers={},
+        HealBot_PermPrivateDamagers={},
         HealBot_MouseWheelIndex={ ["AltUp"]=2, ["AltDown"]=3 },
         HealBot_MouseWheelTxt={ ["AltUp"]=HEALBOT_BLIZZARD_MENU, ["AltDown"]=HEALBOT_HB_MENU },
         HealBot_Emotes={ ["NoneUp"]=HEALBOT_EMOTE_HELLO,  ["NoneDown"]=HEALBOT_EMOTE_HELLO,

@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.2.7.1";
+﻿HEALBOT_VERSION_SC = "9.2.7.4";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -557,6 +557,7 @@ function HealBot_globalVars()
     HBC_ROCKBITER_WEAPON                    = 8017
     HBC_FLAMETONGUE_WEAPON                  = 8024
     HBC_WINDFURY_WEAPON                     = 8232
+    HBC_EARTHLIVING_WEAPON                  = 51730
     HBC_WATER_SHIELD                        = 24398
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";

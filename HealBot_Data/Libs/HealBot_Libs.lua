@@ -29,7 +29,7 @@ function HealBot_Libs_LibC()
     return LibDeflate
 end
 
-if HealBot_Version_Target() and HEALBOT_GAME_VERSION<4 then
+if HEALBOT_GAME_VERSION<4 then
     if HEALBOT_GAME_VERSION==1 then 
         libCD = libCD or (LibStub and LibStub("LibClassicDurations")) 
     end

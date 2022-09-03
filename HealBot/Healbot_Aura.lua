@@ -316,38 +316,41 @@ function HealBot_Aura_RemoveExtraIcons(index)
     end
 end
 
-local retAlpha, nextDebuffUpdate, nextBuffUpdate=0,1,1
+local retAlpha, fadeDiff, nextDebuffUpdate, nextBuffUpdate=0,0,1,1
 function HealBot_Aura_DebuffIcon_AlphaValue(secLeft, button)
     nextDebuffUpdate=999
     if secLeft>-2 then
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] and 
-            secLeft<=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"] then
-            if secLeft<1 then
-                if secLeft>-1 then
-                    secLeft=0.75
-                else
-                    secLeft=0.5
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] then 
+            if secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"] then
+                if secLeft<1 then
+                    if secLeft>-1 then
+                        secLeft=0.75
+                    else
+                        secLeft=0.5
+                    end
                 end
-            end
-            retAlpha=(secLeft/Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"])+.08
-            nextDebuffUpdate=0.2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
-                if retAlpha>HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1) then
+                fadeDiff=secLeft/Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"]
+                retAlpha=fadeDiff+((1-fadeDiff)/3)
+                nextDebuffUpdate=0.2
+                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
+                    if retAlpha>HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1) then
+                        retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    end
+                elseif retAlpha>button.status.alpha then
+                    retAlpha=button.status.alpha
+                end
+            else
+                nextDebuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"]
+                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
                     retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                else
+                    retAlpha=button.status.alpha
                 end
-            elseif retAlpha>button.status.alpha then
-                retAlpha=button.status.alpha
             end
         elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["I15EN"] then
             retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] then
-                nextDebuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"]
-            end
         else
             retAlpha=button.status.alpha
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADE"] then
-                nextDebuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["FADESECS"]
-            end
         end
     else
         HealBot_Check_UnitDebuff(button)
@@ -359,34 +362,37 @@ end
 function HealBot_Aura_BuffIcon_AlphaValue(secLeft, button)
     nextBuffUpdate=999
     if secLeft>-2 then
-        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADE"] and 
-           secLeft<=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"] then
-            if secLeft<1 then
-                if secLeft>-1 then
-                    secLeft=0.75
-                else
-                    secLeft=0.5
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADE"] then
+            if secLeft<Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"] then
+                if secLeft<1 then
+                    if secLeft>-1 then
+                        secLeft=0.75
+                    else
+                        secLeft=0.5
+                    end
                 end
-            end
-            retAlpha=(secLeft/Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"])+.08
-            nextBuffUpdate=0.2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFI15EN"] then
-                if retAlpha>HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1) then
+                fadeDiff=secLeft/Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"]
+                retAlpha=fadeDiff+((1-fadeDiff)/3)
+                nextBuffUpdate=0.2
+                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFI15EN"] then
+                    if retAlpha>HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1) then
+                        retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    end
+                elseif retAlpha>button.status.alpha then
+                    retAlpha=button.status.alpha
+                end
+            else
+                nextBuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"]
+                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFI15EN"] then
                     retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                else
+                    retAlpha=button.status.alpha
                 end
-            elseif retAlpha>button.status.alpha then
-                retAlpha=button.status.alpha
             end
         elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFI15EN"] then
             retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADE"] then
-                nextBuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"]
-            end
         else
             retAlpha=button.status.alpha
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADE"] then
-                nextBuffUpdate=secLeft-Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFFADESECS"]
-            end
         end
     else
         HealBot_Check_UnitBuff(button)
@@ -885,8 +891,12 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true
                 elseif buffWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
                     buffCheckThis=true
-                elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
+                elseif buffWatchTarget["MainTanks"] then
+                    HealBot_AddDebug("MainTanks","Buffs",true)
+                    if HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
+                    HealBot_AddDebug("Check This","Buffs",true)
+                    end
                 elseif buffWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
                     buffCheckThis=true
                 elseif buffWatchTarget[button.text.classtrim] then
@@ -2397,6 +2407,8 @@ local hbWeaponEnchants={}
 function HealBot_Aura_WeaponEnchants(spell, x)
     if hbWeaponEnchants[spell] and GetSpellInfo(spell) then
         HealBot_Weapon_Enchant[x]=GetSpellInfo(spell)
+    elseif hbWeaponEnchants[spell] and GetItemInfo(spell) then
+        HealBot_Weapon_Enchant[x]=GetItemInfo(spell)
     else
         HealBot_Weapon_Enchant[x]=false
     end
@@ -2542,6 +2554,8 @@ function HealBot_Aura_InitData()
         sName=GetSpellInfo(HEALBOT_WINDFURY_SPELL)
         if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HBC_ROCKBITER_WEAPON)
+        if sName then hbWeaponEnchants[sName]=true end
+        sName=GetSpellInfo(HBC_EARTHLIVING_WEAPON)
         if sName then hbWeaponEnchants[sName]=true end
         sName=GetSpellInfo(HBC_FLAMETONGUE_WEAPON)
         if sName then hbWeaponEnchants[sName]=true end

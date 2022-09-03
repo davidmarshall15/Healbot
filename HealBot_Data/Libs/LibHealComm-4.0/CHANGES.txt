@@ -1,0 +1,22 @@
+lightweight tag f8050a47ee8952d531696ba42a55953b1d7f33b7 v1.8.5
+Author:	Azilroka <darktemplar9900@yahoo.com>
+Date:	Tue Nov 9 20:06:29 2021 -0600
+
+commit f8050a47ee8952d531696ba42a55953b1d7f33b7
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Tue Nov 9 20:06:29 2021 -0600
+
+    Minor 100 from Ivaria
+
+commit 59dec962fd79a22db1d41d7e1b397cbe9e44accf
+Author: Ivaria <ivaria@vuhdo.io>
+Date:   Tue Nov 9 13:02:37 2021 -0800
+
+    Avoid nil assignment error as spell ID 37563 does not exist in Classic Era
+
+commit 59dec962fd79a22db1d41d7e1b397cbe9e44accf
+Author: Ivaria <ivaria@vuhdo.io>
+Date:   Tue Nov 9 13:02:37 2021 -0800
+
+    Avoid nil assignment error as spell ID 37563 does not exist in Classic Era
+

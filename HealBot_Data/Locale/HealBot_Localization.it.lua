@@ -48,7 +48,6 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_TAB_GENERAL             = "Generale";
     HEALBOT_OPTIONS_TAB_SPELLS              = "Incantesimi";
     HEALBOT_OPTIONS_TAB_HEALING             = "Cura";
-    HEALBOT_OPTIONS_TAB_CDC                 = "Dissoluzioni";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Benefici";
 
     HEALBOT_OPTIONS_BARALPHA                = "Opacità abilitato";
@@ -350,7 +349,6 @@ function HealBot_Lang_itIT()
     HEALBOT_WORD_OFF                        = "Off";
     HEALBOT_WORD_ON                         = "On";
 
-    HEALBOT_OPTIONS_TAB_PROTECTION          = "Protezione"
     HEALBOT_OPTIONS_TAB_CHAT                = "Chat"
     HEALBOT_OPTIONS_TAB_HEADERS             = "Intestazioni"
     HEALBOT_OPTIONS_TAB_BARS                = "Barre"
@@ -581,7 +579,6 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_CONTENT_GENERAL         = "        " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SPELLS          = "        " .. HEALBOT_OPTIONS_TAB_SPELLS
     HEALBOT_OPTIONS_CONTENT_SKINS           = "        " .. HEALBOT_OPTIONS_TAB_SKIN
-    HEALBOT_OPTIONS_CONTENT_CURE            = "        " .. HEALBOT_OPTIONS_TAB_CDC
     HEALBOT_OPTIONS_CONTENT_BUFFS           = "        " .. HEALBOT_OPTIONS_TAB_BUFFS
     HEALBOT_OPTIONS_CONTENT_TIPS            = "        " .. HEALBOT_OPTIONS_TAB_TIPS
     HEALBOT_OPTIONS_CONTENT_MOUSEWHEEL      = "        Rotellina Mouse"
@@ -789,7 +786,6 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_CONTENT_SKINS_BARS      = "        " .. HEALBOT_OPTIONS_TAB_BARS
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONS     = "        " .. HEALBOT_OPTIONS_TAB_ICONS
     HEALBOT_OPTIONS_CONTENT_SKINS_AGGRO     = "    " .. HEALBOT_OPTIONS_TAB_AGGRO
-    HEALBOT_OPTIONS_CONTENT_SKINS_PROT      = "    " .. HEALBOT_OPTIONS_TAB_PROTECTION
     HEALBOT_OPTIONS_CONTENT_SKINS_CHAT      = "    " .. HEALBOT_OPTIONS_TAB_CHAT
     HEALBOT_OPTIONS_CONTENT_SKINS_TEXT      = "        " .. HEALBOT_OPTIONS_TAB_TEXT
     HEALBOT_OPTIONS_CONTENT_SKINS_ICONTEXT  = "        " .. HEALBOT_OPTIONS_TAB_ICONTEXT
