@@ -48,7 +48,7 @@ local function HealBot_Aux_clearBar(button, id)
     button.aux[id]["FLUIDTEXT"]=-1
     button.auxtxt[id]["TEXT"]=false
     button.gref.auxtxt[id]:SetText("")
-    if HealBot_Aux_luVars["FluidInUse"] then
+    if HealBot_Aux_luVars["FluidAlphaInUse"] then
         button.aux[id]["FLUIDSTATE"]=0
         button.aux[id]["ISFLUID"]=true
         HealBot_AuxFluid_ButtonsAlpha[button.id]=button
@@ -56,7 +56,7 @@ local function HealBot_Aux_clearBar(button, id)
     else
         button.aux[id]["FLUIDSTATE"]=-1
         button.aux[id]["ISFLUID"]=false
-        button.gref.aux[id]:SetStatusBarColor(1,1,1,0)
+        button.gref.aux[id]:SetStatusBarColor(0,0,0,0)
         button.gref.aux[id]:SetValue(0)
     end
 end
@@ -151,7 +151,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
     else
         button.aux[id]["STATIC"]=true
         HealBot_AuxStatic_Buttons[button.id]=button
-        if HealBot_Aux_luVars["FluidInUse"] then
+        if HealBot_Aux_luVars["FluidAlphaInUse"] then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OTYPE"]==3 then
                 button.aux[id]["FLUIDSTATE"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["A"], 1)
             else
@@ -210,7 +210,7 @@ function HealBot_Aux_UpdBar(button, noFluid)
     for x=1,9 do
         if button.aux[x]["STATIC"] then
             hbStaticOn=true
-            if not noFluid and HealBot_Aux_luVars["FluidInUse"] then
+            if not noFluid and HealBot_Aux_luVars["FluidAlphaInUse"] then
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OTYPE"]==3 then
                     button.aux[x]["FLUIDSTATE"]=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["A"], 1)
                 else
@@ -275,7 +275,7 @@ function HealBot_Aux_resetAllBars()
             if xButton.aux[x]["STATIC"] then
                 xButton.aux[x]["STATIC"]=false
                 xButton.aux[x]["ISFLUID"]=false
-                xButton.gref.aux[x]:SetStatusBarColor(1,1,1,0)
+                xButton.gref.aux[x]:SetStatusBarColor(0,0,0,0)
             end
             if xButton.auxtxt[x]["TEXT"] then
                 xButton.gref.auxtxt[x]:SetText("")
@@ -287,7 +287,7 @@ function HealBot_Aux_resetAllBars()
         for x=1,9 do
             if xButton.aux[x]["FLASH"] then
                 xButton.aux[x]["FLASH"]=false
-                xButton.gref.aux[x]:SetStatusBarColor(1,1,1,0)
+                xButton.gref.aux[x]:SetStatusBarColor(0,0,0,0)
             end
             if xButton.auxtxt[x]["TEXT"] then
                 xButton.gref.auxtxt[x]:SetText("")
@@ -568,14 +568,14 @@ function HealBot_Aux_setPowerBars(button)
                         button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.5),(button.mana.g+0.5),(button.mana.b+0.5)
                     end
                     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-                        HealBot_Aux_setBar(button, id, floor((button.mana.current/button.mana.max)*1000), true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
+                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
                     elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
-                        HealBot_Aux_setBar(button, id, floor((button.mana.current/button.mana.max)*1000), true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
+                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
                     else
-                        HealBot_Aux_setBar(button, id, floor((button.mana.current/button.mana.max)*1000), true, floor((button.mana.current/button.mana.max)*100).."%")
+                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, button.mana.pct.."%")
                     end
                 else
-                    HealBot_Aux_setBar(button, id, floor((button.mana.current/button.mana.max)*1000), true)
+                    HealBot_Aux_setBar(button, id, button.mana.pct*10, true)
                 end
             end
         else
@@ -1603,8 +1603,10 @@ function HealBot_Aux_DoUpdateNameOverLay(button)
 end
 
 function HealBot_Aux_UpdateNameOverLay(button, oType, state)
-    nameLastOverlayType[button.id][oType]=state
-    HealBot_Aux_DoUpdateNameOverLay(button)
+    if nameLastOverlayType[button.id][oType]~=state then
+        nameLastOverlayType[button.id][oType]=state
+        HealBot_Aux_DoUpdateNameOverLay(button)
+    end
 end
 
 function HealBot_Aux_UpdateNameBar(button, colSet, oType)
@@ -1864,7 +1866,7 @@ local function HealBot_Aux_ResetTextByTypeById(button)
             HealBot_Aux_setBar(button, x, 1000, false, button.text.tag)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["TEXT"] then
             if hbAuxPowerAssigned[button.frame][x] then
-                HealBot_Aux_setBar(button, x, floor((button.mana.current/button.mana.max)*1000), true, " ")
+                HealBot_Aux_setBar(button, x, button.mana.pct*10, true, " ")
                 HealBot_Aux_setPowerBars(button)
             elseif button.aura.buff.name and hbAuxBuffAssigned[button.frame][x] then
                 HealBot_Aux_setBar(button, x, 1000, false, button.aura.buff.name.." ")

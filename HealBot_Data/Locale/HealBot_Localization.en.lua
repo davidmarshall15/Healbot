@@ -90,6 +90,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_EXTRAS              = "Extras"
     
     HEALBOT_STRING_MATCH_WELLFED            = "become well fed"
+    HEALBOT_STRING_MATCH_RESTOREMANA        = "(%d+)(%%*) (%u*)(%l*)ana over (%d+) sec"
+    HEALBOT_WELL_FED                        = "Well Fed"
+    HEALBOT_MANA_DRINK                      = "Mana Drink"
+    HEALBOT_MANA_LOWTHRESHOLD               = "Low mana threshold"
 
     HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_ALPHA                   = "Opacity";
@@ -179,6 +183,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFMISSING             = "Missing buffs";
     HEALBOT_OPTIONS_BUFFEXTRA               = "Extra Buffs";
     HEALBOT_OPTIONS_CHECKWELLFED            = "Check well fed";
+    HEALBOT_OPTIONS_CHECKLOWMANA            = "Check low mana"
     HEALBOT_OPTIONS_DEBUFFDISPELL           = "Dispellable debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
@@ -230,6 +235,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTON13                = "Button 13";
     HEALBOT_OPTIONS_BUTTON14                = "Button 14";
     HEALBOT_OPTIONS_BUTTON15                = "Button 15";
+    HEALBOT_OPTIONS_BUTTON16                = "Button 16";
+    HEALBOT_OPTIONS_BUTTON17                = "Button 17";
+    HEALBOT_OPTIONS_BUTTON18                = "Button 18";
+    HEALBOT_OPTIONS_BUTTON19                = "Button 19";
+    HEALBOT_OPTIONS_BUTTON20                = "Button 20";
     
     HEALBOT_OPTIONS_BINDKEYTOCLICK          = "Bind a key to a Button Click"
     HEALBOT_OPTIONS_BINDKEYTOCLICK1         = "NOTE: Depending on OS/WoW config, some binds will not work with specific modifier keys"
@@ -814,6 +824,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_MAX                       = "max"
     HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
     HEALBOT_CHAT_SELFPETSOFF                = "Self Pet switched off"
+    HEALBOT_CHAT_PLAYERROLESON              = "Allow player roles switched on"
+    HEALBOT_CHAT_PLAYERROLESOFF             = "Allow player roles switched off"
     HEALBOT_WORD_PRIORITY                   = "Priority"
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
     HEALBOT_SPELL_RANGE                     = "Within spell range"
@@ -1139,6 +1151,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_COMBATPROT               = "HealBot CombatProt"
     HEALBOT_PLUGIN_PERFORMANCE              = "HealBot Performance"
     HEALBOT_PLUGIN_MYCOOLDOWNS              = "HealBot MyCooldowns"
+    HEALBOT_PLUGIN_TWEAKS                   = "HealBot Tweaks"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
     HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
     HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"
@@ -1159,12 +1172,24 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_USECPRAID               = "Use Combat Protection in raids"
     HEALBOT_OPTIONS_CPLOGONDURATION         = "Crash Protection duration after logon"
     HEALBOT_PLUGIN_EXTRABUTTONS_0610        = "Buttons 6 - 10"
-    HEALBOT_PLUGIN_EXTRABUTTONS_1115        = "Buttons 11 - 15"    
+    HEALBOT_PLUGIN_EXTRABUTTONS_1115        = "Buttons 11 - 15"
+    HEALBOT_PLUGIN_EXTRABUTTONS_1620        = "Buttons 16 - 20"
     HEALBOT_PLUGIN_INTTIMER                 = "Internal timers and Range checks"
     HEALBOT_PLUGIN_FLUIDFREQ                = "Effects - Fuild Updates"
     HEALBOT_PLUGIN_FLASHFREQ                = "Effects - Flash Updates"
     HEALBOT_PLUGIN_STATEFREQ                = "Effects - State Updates"
     HEALBOT_PLUGIN_CPMACRO                  = "Macro name: "
+    HEALBOT_PLUGIN_AGGRO2THRESHOLD          = "Aggro level 2 threshold"
+    HEALBOT_PLUGIN_AGGRO3THRESHOLD          = "Aggro level 3 threshold"
+    HEALBOT_PLUGIN_AUTOTIMEDDURATION        = "Custom debuff - auto All Timed duration less than"
+    HEALBOT_PLUGIN_ENABLEDALLBUFFS          = "Enable all custom buffs"
+    HEALBOT_PLUGIN_DISABLEALLBUFFS          = "Disable all custom buffs"
+    HEALBOT_PLUGIN_ENABLEDALLDEBUFFS        = "Enable all custom debuffs"
+    HEALBOT_PLUGIN_DISABLEALLDEBUFFS        = "Disable all custom debuffs"
+    HEALBOT_PLUGIN_SORTBYTOPROLE            = "Sort by role - Top role"
+    HEALBOT_PLUGIN_USETRINKET10             = "Auto trinket includes gloves"
+    HEALBOT_PLUGIN_CLASSICPLAYERROLES       = "Allow player roles in groups and raids"
+    HEALBOT_PLUGIN_CLASSICNORANKS           = "Do not show ranks for Healing spells"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

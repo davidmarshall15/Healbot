@@ -857,7 +857,7 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
     button.aura.buff.priority=45
 end
 
-local buffWatchName=""
+local buffWatchName,manaDrinkItem="",""
 function HealBot_Aura_CheckGeneralBuff(button)  
     PlayerBuffsList=button.aura.buff.recheck
     for bName,nexttime in pairs (PlayerBuffsList) do
@@ -888,15 +888,13 @@ function HealBot_Aura_CheckGeneralBuff(button)
                 if buffWatchTarget["Raid"] then
                     buffCheckThis=true;
                 elseif buffWatchTarget["Self"] and button.player then
-                    buffCheckThis=true
+                    if manaDrinkItem~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
+                        buffCheckThis=true
+                    end
                 elseif buffWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
                     buffCheckThis=true
-                elseif buffWatchTarget["MainTanks"] then
-                    HealBot_AddDebug("MainTanks","Buffs",true)
-                    if HealBot_Panel_IsTank(button.guid) then
+                elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
-                    HealBot_AddDebug("Check This","Buffs",true)
-                    end
                 elseif buffWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
                     buffCheckThis=true
                 elseif buffWatchTarget[button.text.classtrim] then
@@ -904,6 +902,10 @@ function HealBot_Aura_CheckGeneralBuff(button)
                 elseif buffWatchTarget["Name"] and button.guid==HealBot_Config.MyFriend then
                     buffCheckThis=true
                 elseif buffWatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
+                    buffCheckThis=true
+                elseif buffWatchTarget["PvP"] and UnitIsPVP(button.unit) then
+                    buffCheckThis=true
+                elseif buffWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
                     buffCheckThis=true
                 elseif buffWatchTarget["MyTargets"] then
                     local myhTargets=HealBot_GetMyHealTargets();
@@ -913,10 +915,6 @@ function HealBot_Aura_CheckGeneralBuff(button)
                             break;
                         end
                     end
-                elseif buffWatchTarget["PvP"] and UnitIsPVP(button.unit) then
-                    buffCheckThis=true
-                elseif buffWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
-                    buffCheckThis=true
                 end
                 if buffCheckThis then
                     HealBot_Aura_SetGeneralBuff(button, buffWatchName)
@@ -1170,7 +1168,7 @@ local dNamePriority, dTypePriority=99,99
 local debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 15, false, debuffType, false
 local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
 local ccdbWatchTarget={}
-function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
+function HealBot_Aura_CheckCurCustomDebuff(canBeAlways)
     ccdbCasterID=hbCustomDebuffsCastBy[uaSpellId] or hbCustomDebuffsCastBy[uaName] or HealBot_Globals.CureCustomDefaultCastBy
     if ccdbCasterID~=castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] then
         if UnitIsUnit(uaUnitCaster,"player") then
@@ -1221,7 +1219,7 @@ function HealBot_Aura_CheckCurDebuff(button)
        (hbCustomDebuffsDisabled[uaName] and (hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaName]["ALL"])) then
         debuffIsCurrent=false
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
-        HealBot_Aura_CheckCurCustomDebuff(button, true)
+        HealBot_Aura_CheckCurCustomDebuff(true)
     else
         ccdbCheckthis=false
         if dTypePriority<21 and HealBot_Aura_luVars["cureOffCd"] and 
@@ -1246,6 +1244,10 @@ function HealBot_Aura_CheckCurDebuff(button)
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["Focus"] and UnitIsUnit(button.unit, "focus") then
                     ccdbCheckthis=true;
+                elseif ccdbWatchTarget["PvP"] and UnitIsPVP(button.unit) then
+                    ccdbCheckthis=true
+                elseif ccdbWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
+                    ccdbCheckthis=true
                 elseif ccdbWatchTarget["MyTargets"] then
                     local myhTargets=HealBot_GetMyHealTargets();
                     for i=1, #myhTargets do
@@ -1254,10 +1256,6 @@ function HealBot_Aura_CheckCurDebuff(button)
                             break
                         end
                     end
-                elseif ccdbWatchTarget["PvP"] and UnitIsPVP(button.unit) then
-                    ccdbCheckthis=true
-                elseif ccdbWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
-                    ccdbCheckthis=true
                 end
             end
         end
@@ -1273,7 +1271,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                 debuffIsAlways=true 
             end
         elseif dNamePriority<21 then
-            HealBot_Aura_CheckCurCustomDebuff(button, false)
+            HealBot_Aura_CheckCurCustomDebuff(false)
         elseif uaUnitCaster=="player" and not UnitIsFriend("player",button.unit) then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=20
@@ -1854,8 +1852,14 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
            (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and
             not buffMounted and not UnitIsDeadOrGhost("player") then
             generalBuffs=true
+            if HealBot_Config_Buffs.CheckManaDrink then
+                HealBot_Action_setLuVars("CheckManaDrink", true)
+            else
+                HealBot_Action_setLuVars("CheckManaDrink", false)
+            end
         else
             generalBuffs=false
+            HealBot_Action_setLuVars("CheckManaDrink", false)
         end
     end
     
@@ -2418,10 +2422,8 @@ function HealBot_Aura_UpdateItemData(iName, id)
     if iName then
         if HealBot_IsItemInBag(id) then 
             hbWeaponEnchants[iName]=true
-        --    HealBot_AddDebug("Item "..iName.." in bag","Buff",true)
         else
             hbWeaponEnchants[iName]=false 
-        --    HealBot_AddDebug("Item "..iName.." NOT in bag","Buff",true)
         end
         HealBot_Aura_WeaponEnchants(iName, 1)
     end
@@ -2442,8 +2444,23 @@ function HealBot_Aura_InitItemsDataReady()
     for x,_ in pairs(HealBot_Buff_Aura2Item) do
         HealBot_Buff_Aura2Item[x]=nil;
     end
+    
+    manaDrinkItem=""
+    if HealBot_Config_Buffs.CheckManaDrink and HealBot_Config_Buffs.ManaDrinkItem then
+        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem) or 0
+        if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
+            HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK] = hbCustomItemID
+            manaDrinkItem=HealBot_Config_Buffs.ManaDrinkItem
+            if not HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then
+                HealBot_Aura_SetBuffWatch(HealBot_Config_Buffs.ManaDrinkItem)
+                HealBot_Aura_DeleteExcludeBuffInCache()
+            end
+        elseif HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then
+            HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.ManaDrinkItem)
+        end
+    end
 
-    if HealBot_Config_Buffs.CheckWellFed then
+    if HealBot_Config_Buffs.CheckWellFed and HealBot_Config_Buffs.WellFedItem then
         hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.WellFedItem) or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             HealBot_Buff_Aura2Item[HEALBOT_WELL_FED] = hbCustomItemID
@@ -2506,8 +2523,10 @@ function HealBot_Aura_InitData()
         if sName then HealBot_ShortBuffs[sName]=true end
         sName=GetSpellInfo(HEALBOT_FEAR_WARD)
         if sName then HealBot_ShortBuffs[sName]=true end
-        sName=GetSpellInfo(HBC_INNER_FIRE)
-        if sName then HealBot_ShortBuffs[sName]=true end
+        if HEALBOT_GAME_VERSION<3 then
+            sName=GetSpellInfo(HBC_INNER_FIRE)
+            if sName then HealBot_ShortBuffs[sName]=true end
+        end
     elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
         sName=GetSpellInfo(HBC_THORNS)
         if sName then HealBot_ShortBuffs[sName]=true end

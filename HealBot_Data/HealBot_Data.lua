@@ -1,5 +1,5 @@
-HealBot_lastVerSkinUpdate="9.2.0.0"
-HealBot_lastVerUpdate="9.2.0.0"
+HealBot_lastVerSkinUpdate="9.2.7.0"
+HealBot_lastVerUpdate="9.2.7.0"
 
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
@@ -58,7 +58,7 @@ HealBot_ConfigDefaults = {
   MyFriend="x",
   CurrentSpec=9,
   Skin_ID = -1,
-  MacroUse10 = 0,
+  MacroUse10 = false,
   DisableHealBot=false,
   DisableSolo=false,
   DisabledNow=0,
@@ -127,7 +127,7 @@ HealBot_Config_SpellsDefaults = {
   EmergSpellTrinket2={},
   EmergAvoidBlueCursor={},
   ButtonCastMethod = 2,
-  Binds={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1,[15]=1,}
+  Binds={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1,[11]=1,[12]=1,[13]=1,[14]=1,[15]=1,[16]=1,[17]=1,[18]=1,[19]=1,[20]=1,}
 };
 
 HealBot_Config_BuffsDefaults = {
@@ -156,6 +156,9 @@ HealBot_Config_BuffsDefaults = {
   CustomBuffCheck={[1]=false, [2]=false, [3]=false},
   CustomBuffName={[1]="", [2]="", [3]=""},
   CustomItemName={[1]="", [2]="", [3]=""},
+  ManaDrinkThreshold=50,
+  ManaDrinkItem="",
+  WellFedItem="",
 };
 
 HealBot_Config_CuresDefaults = {
@@ -253,6 +256,8 @@ function HealBot_Data_InitVars()
         PluginTimeToLive=true,
         PluginPerformance=true,
         PluginMyCooldowns=true,
+        PluginTweaks=true,
+        AllowPlayerRoles=false,
         CrashProtTime=0,
         NoRanks=false,
         CPUUsage=5,
@@ -291,8 +296,8 @@ function HealBot_Data_InitVars()
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},
         TestBars={["PETS"]=4,["TARGETS"]=5,["HEALERS"]=3,["TANKS"]=2,["PROFILE"]=3,["ENEMY"]=2},
         EmergencyFClass = 4,
-        MacroSuppressSound = 1,
-        MacroSuppressError = 1,
+        MacroSuppressSound = true,
+        MacroSuppressError = true,
         AcceptSkins = 1,
         HealBot_Enable_MouseWheel=true,
         FocusMonitor = {},
@@ -301,7 +306,6 @@ function HealBot_Data_InitVars()
         excludeMount={},
         aggro2pct=55,
         aggro3pct=100,
-        cHoTinHealDur=30,
         RaidHideMethod=0,
         useUTF8=false,
         CustomCuresReset="6.0.0",

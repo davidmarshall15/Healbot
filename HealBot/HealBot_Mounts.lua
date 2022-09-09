@@ -247,31 +247,35 @@ function HealBot_MountsPets_InitMount()
 end
 
 function HealBot_MountsPets_FavClassicMount()
-    local z = GetNumCompanions("MOUNT")
-    local mount=false
-    for i=1,z do
-        local _, creatureName, sID, icon, active, mountType = GetCompanionInfo("MOUNT", i)
-        if active then
-            mount=creatureName
-            break
-        end
-    end
-    if mount then
-        for z,_ in pairs(HealBot_FMount) do
-            if HealBot_FMount[z]==mount then
-                HealBot_Config.FavMount=mount
-                HealBot_AddChat(mount.." set as Favourite flying mount")
-                mount=nil
+    if not IsMounted() then
+        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."ERROR: Not Mounted\nMount first before setting favourite mount")
+    else
+        local z = GetNumCompanions("MOUNT")
+        local mount=false
+        for i=1,z do
+            local _, creatureName, sID, icon, active, mountType = GetCompanionInfo("MOUNT", i)
+            if active then
+                mount=creatureName
                 break
             end
         end
-    end
-    if mount then
-        for z,_ in pairs(HealBot_GMount) do
-            if HealBot_GMount[z]==mount then
-                HealBot_Config.FavGroundMount=mount
-                HealBot_AddChat(mount.." set as Favourite ground mount")
-                break
+        if mount then
+            for z,_ in pairs(HealBot_FMount) do
+                if HealBot_FMount[z]==mount then
+                    HealBot_Config.FavMount=mount
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite flying mount")
+                    mount=nil
+                    break
+                end
+            end
+        end
+        if mount then
+            for z,_ in pairs(HealBot_GMount) do
+                if HealBot_GMount[z]==mount then
+                    HealBot_Config.FavGroundMount=mount
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite ground mount")
+                    break
+                end
             end
         end
     end

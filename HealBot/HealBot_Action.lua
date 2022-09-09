@@ -644,8 +644,6 @@ function HealBot_Action_EmergBarCheck(button, force)
 			erButton.state=0
 			HealBot_Action_EmergBarUpdate(button, erButton, HealBot_RangeSpells["HEAL"])
 		end
-    elseif HealBot_Action_luVars["GlobalDimming"]==1000 then
-        HealBot_Emerg_Button[button.id].bar:SetStatusBarColor(0,0,0,0)
     end
 end
 
@@ -1711,28 +1709,26 @@ function HealBot_Action_setLowManaTrig()
     --HealBot_setCall("HealBot_Action_setLowManaTrig")
 end
 
-local tCheckLowManaPct=0
 function HealBot_Action_CheckUnitLowMana(button)
     if button.mana.type==0 and button.frame<10 then
         if button.status.current<HealBot_Unit_Status["DEAD"] and button.mana.max>0 and 
            Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["LOWMANA"]>1 then
-            tCheckLowManaPct=floor((button.mana.current/button.mana.max)*100)
             local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
-            if tCheckLowManaPct<hbLowManaTrig[button.frame][1] then
+            if button.mana.pct<hbLowManaTrig[button.frame][1] then
                 if button.mana.ind~=1 then
                     button.mana.ind=1
                     button.gref.indicator.mana[1]:SetAlpha(indAlpha)
                     button.gref.indicator.mana[2]:SetAlpha(0)
                     button.gref.indicator.mana[3]:SetAlpha(0)
                 end
-            elseif tCheckLowManaPct<hbLowManaTrig[button.frame][2] then
+            elseif button.mana.pct<hbLowManaTrig[button.frame][2] then
                 if button.mana.ind~=2 then
                     button.mana.ind=2
                     button.gref.indicator.mana[1]:SetAlpha(indAlpha)
                     button.gref.indicator.mana[2]:SetAlpha(indAlpha)
                     button.gref.indicator.mana[3]:SetAlpha(0)
                 end
-            elseif tCheckLowManaPct<hbLowManaTrig[button.frame][3] then
+            elseif button.mana.pct<hbLowManaTrig[button.frame][3] then
                 if button.mana.ind~=3 then
                     button.mana.ind=3
                     button.gref.indicator.mana[1]:SetAlpha(indAlpha)
@@ -1756,6 +1752,9 @@ function HealBot_Action_CheckUnitLowMana(button)
         button.gref.indicator.mana[1]:SetAlpha(0)
         button.gref.indicator.mana[2]:SetAlpha(0)
         button.gref.indicator.mana[3]:SetAlpha(0)
+    end
+    if button.player and HealBot_Action_luVars["CheckManaDrink"] then
+        HealBot_Check_UnitBuff(button)
     end
     --HealBot_setCall("HealBot_Action_CheckUnitLowMana")
 end
@@ -1791,6 +1790,7 @@ end
 
 function HealBot_Action_setFrameHeader(f)
     if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][f]["SHOW"] then
+        grpFrameBar[f]:SetPoint("BOTTOM",grpFrame[f],"TOP",0,Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["OFFSET"])
         local fWidth=grpFrame[f]:GetRight()-grpFrame[f]:GetLeft()
         local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
         grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["SCALE"]));
@@ -2158,7 +2158,7 @@ function HealBot_Action_InitButton(button)
                                            edgeSize = 1, 
                                            insets = { left = 0, right = 0, top = 0, bottom = 0}
                                           })
-    button.gref["BackBorder"].tex=button.gref["BackBorder"]:CreateTexture("Interface\\Buttons\\WHITE8X8", "ARTWORK", 7)
+    button.gref["BackBorder"].tex=button.gref["BackBorder"]:CreateTexture("Interface\\Buttons\\WHITE8X8", "ARTWORK")
     button.gref["BackBorder"].tex:SetAllPoints(button.gref["BackBorder"])
     button.gref["BackBorder"].mask=button.gref["BackBorder"]:CreateMaskTexture()
     button.gref["BackBorder"].mask:SetAllPoints(button.gref["BackBorder"].tex)
@@ -2228,10 +2228,8 @@ function HealBot_Action_InitButton(button)
     end
     button.frame=0
     erButton.r,erButton.g,erButton.b,erButton.a=0,0,0,0
-    erButton:RegisterForClicks(nil)
     erButton:EnableMouse(false)
     erButton.regClicks=false
-    button:RegisterForClicks(nil)
     button:EnableMouse(false)
     button.regClicks=false
     HealBot_Aura_setButtonIcons(button.id)
@@ -3405,24 +3403,24 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
     if cType=="Enemy" then spellType="harm" end
     local scText="/cast [@"..unit..","..spellType.."] "..spellName.."\n"
 
-    if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se3\n' end
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName..'/hb se1\n' end
+    if HealBot_Globals.MacroSuppressError then smName=smName..'/hb se3\n' end
+    if HealBot_Globals.MacroSuppressSound then smName=smName..'/hb se1\n' end
     if spellTar then smName=smName.."/target "..unit.."\n" end
     if spellTrin1 then smName=smName.."/use 13\n" end
     if spellTrin2 then smName=smName.."/use 14\n" end
-    if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10\n" end
-    if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
-    if HealBot_Globals.MacroSuppressError==1 then smName=smName..'/hb se4\n' end
+    if HealBot_Config.MacroUse10 then smName=smName.."/use 10\n" end
+    if HealBot_Globals.MacroSuppressSound then smName=smName.."/hb se2\n" end
+    if HealBot_Globals.MacroSuppressError then smName=smName..'/hb se4\n' end
     smName=smName..scText
     if spellAvoidBC then smName=smName.."/use 4\n" end
     if strlen(smName)>255 then
         smName=""
-        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se1\n" end
+        if HealBot_Globals.MacroSuppressSound then smName=smName.."/hb se1\n" end
         if spellTar then smName=smName.."/target "..unit.."\n" end
         if spellTrin1 then smName=smName.."/use 13\n" end
         if spellTrin2 then smName=smName.."/use 14\n" end
-        if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10\n" end
-        if HealBot_Globals.MacroSuppressSound==1 then smName=smName.."/hb se2\n" end
+        if HealBot_Config.MacroUse10 then smName=smName.."/use 10\n" end
+        if HealBot_Globals.MacroSuppressSound then smName=smName.."/hb se2\n" end
         smName=smName..scText
         if spellAvoidBC then smName=smName.."/use 4\n" end
         if strlen(smName)>255 then
@@ -3430,7 +3428,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
             if spellTar then smName=smName.."/target "..unit.."\n" end
             if spellTrin1 then smName=smName.."/use 13\n" end
             if spellTrin2 then smName=smName.."/use 14\n" end
-            if HealBot_Config.MacroUse10==1 then smName=smName.."/use 10\n" end
+            if HealBot_Config.MacroUse10 then smName=smName.."/use 10\n" end
             smName=smName..scText
             if spellAvoidBC then smName=smName.."/use 4\n" end
             if strlen(smName)>255 then
@@ -3645,7 +3643,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,cType,j,unit)
     return HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonType,sName,sTar,sTrin1,sTrin2,AvoidBC,sType)
 end
 
-local hbMaxMouseButtons={["Enemy"]=15,["Enabled"]=15,["Emerg"]=5}
+local hbMaxMouseButtons={["Enemy"]=20,["Enabled"]=20,["Emerg"]=5}
 local hbBindTxt={}
 function HealBot_Action_DefaultBinds(button)
     button:SetAttribute("_onleave", "self:ClearBindings();");
@@ -3702,7 +3700,7 @@ function HealBot_Action_SetAllButtonAttribs(button,cType,prep)
             end
             if hasSpells then
                 hbMaxMouseButtons[cType]=x
-            elseif x==15 and hbMaxMouseButtons[cType]==15 then 
+            elseif x==15 and hbMaxMouseButtons[cType]==20 then 
                 hbMaxMouseButtons[cType]=0
             end
             if not button.binds[cType].set then
@@ -3748,7 +3746,7 @@ function HealBot_Action_PrepSetEnabledAttribs()
                 ehb.binds["Enabled"]={}
             end
         end
-        hbMaxMouseButtons["Enabled"]=15
+        hbMaxMouseButtons["Enabled"]=20
         HealBot_Timers_Set("INIT","SetEnabledAttribs")
     end
 end
@@ -3768,7 +3766,7 @@ function HealBot_Action_PrepSetEnemyAttribs()
                 ehb.binds["Enemy"]={}
             end
         end
-        hbMaxMouseButtons["Enemy"]=15
+        hbMaxMouseButtons["Enemy"]=20
         HealBot_Timers_Set("INIT","SetEnemyAttribs")
         HealBot_Timers_Set("INIT","PrepSetEnabledAttribs")
     end
@@ -3809,8 +3807,8 @@ function HealBot_Action_PrepSetAllAttribs()
                 ehb.binds={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
             end
         end
-        hbMaxMouseButtons["Enemy"]=15
-        hbMaxMouseButtons["Enabled"]=15
+        hbMaxMouseButtons["Enemy"]=20
+        hbMaxMouseButtons["Enabled"]=20
         hbMaxMouseButtons["Emerg"]=5
         HealBot_Timers_Set("INIT","SetEnemyAttribs")
         HealBot_Timers_Set("INIT","SetEnabledAttribs")
@@ -4421,7 +4419,7 @@ function HealBot_Action_MarkDeleteButton(button)
 end
 
 function HealBot_Action_Reset()
-    HealBot_Timers_TurboOn(2)
+    HealBot_Timers_TurboOn(3,1)
     if HealBot_Config.DisabledNow==1 then
         HealBot_Options_DisableHealBotOpt:SetChecked(false)
         HealBot_Options_DisableHealBot(false)
@@ -4454,7 +4452,7 @@ function HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, setPoint)
     else
         hbFrameGetCoords[hbCurFrame]=true
     end
-    HealBot_Timers_Set("INIT","CheckFrameSetPoint")
+    HealBot_Timers_Set("INIT","CheckFrameSetPoint",1)
 end
 
 function HealBot_Action_CheckFrameSetPoint()
@@ -5510,8 +5508,12 @@ function HealBot_Action_SmartCast(button)
         scSpell=button.aura.debuff.curespell
     elseif button.aura.buff.missingbuff and HealBot_Globals.SmartCastBuff then
         if button.aura.buff.missingbuff==HEALBOT_WELL_FED then
-            if IsUsableItem(HealBot_Config_Buffs.WellFedItem) then
+            if HealBot_Config_Buffs.WellFedItem and IsUsableItem(HealBot_Config_Buffs.WellFedItem) then
                 scSpell=HealBot_Config_Buffs.WellFedItem
+            end
+        elseif button.aura.buff.missingbuff==HEALBOT_MANA_DRINK then
+            if HealBot_Config_Buffs.ManaDrinkItem and IsUsableItem(HealBot_Config_Buffs.ManaDrinkItem) then
+                scSpell=HealBot_Config_Buffs.ManaDrinkItem
             end
         else
             scSpell=button.aura.buff.missingbuff
@@ -5660,7 +5662,7 @@ function HealBot_Action_CheckForStickyFrame(frame,stick)
     vStickyFrameBottom=grpFrame[frame]:GetBottom()
     for x=1,frame-1 do
         if HealBot_Action_FrameIsVisible(x) and HealBot_Action_FrameIsVisible(frame) then
-            if grpFrame[x]:GetLeft() then
+            if vStickyFrameLeft and grpFrame[x]:GetLeft() then
                 if grpFrame[x]:GetLeft()>(vStickyFrameRight-vStickyFrameSen) and grpFrame[x]:GetLeft()<(vStickyFrameRight+vStickyFrameSen) then
                     if grpFrame[x]:GetTop()>(vStickyFrameTop-vStickyFrameSen) and grpFrame[x]:GetTop()<(vStickyFrameTop+vStickyFrameSen) then
                         if stick then
@@ -5772,6 +5774,8 @@ function HealBot_Action_CheckForStickyFrame(frame,stick)
                     vStickyFrameIsSticky=true
                     break
                 end
+            else
+                HealBot_Action_DelayCheckFrameSetPoint(frame, true)
             end
         end
     end

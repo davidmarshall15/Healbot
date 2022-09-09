@@ -861,18 +861,5 @@
                 
         </Layer>
       </Layers>
-    <Backdrop tile="true"
-      bgFile="Interface\Buttons\WHITE8X8"
-      edgeFile="Interface\Tooltips\UI-Tooltip-Border">
-      <EdgeSize>
-        <AbsValue val="10"/>
-      </EdgeSize>
-      <TileSize>
-        <AbsValue val="8"/>
-      </TileSize>
-      <BackgroundInsets>
-        <AbsInset left="3" right="3" top="3" bottom="3"/>
-      </BackgroundInsets>
-    </Backdrop>
    </Frame>
 </Ui>

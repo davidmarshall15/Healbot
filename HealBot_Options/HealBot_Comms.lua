@@ -154,7 +154,7 @@ function HealBot_Comms_CheckVer(userName, version)
 end
 
 function HealBot_Comms_MacroSuppressError()
-    if HealBot_Globals.MacroSuppressError==1 then
+    if HealBot_Globals.MacroSuppressError then
         HealBot_Info_SuppressErrorsVal:SetText("ON")
         HealBot_Info_SuppressErrorsVal:SetTextColor(0.1,1,0.1)
     else
@@ -164,7 +164,7 @@ function HealBot_Comms_MacroSuppressError()
 end
 
 function HealBot_Comms_MacroSuppressSound()
-    if HealBot_Globals.MacroSuppressSound==1 then
+    if HealBot_Globals.MacroSuppressSound then
         HealBot_Info_SuppressSoundsVal:SetText("ON")
         HealBot_Info_SuppressSoundsVal:SetTextColor(0.1,1,0.1)
     else

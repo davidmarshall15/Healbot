@@ -654,10 +654,7 @@ function HealBot_Action_DoRefreshTooltip()
                             end
                         else
                             linenum=linenum+1
-                            local mPct=100
-                            if maxmana>0 then
-                                mPct=floor((mana/maxmana)*100)
-                            end
+                            local mPct=xButton.mana.pct
                             mana=HealBot_Text_readNumber(mana)
                             maxmana=HealBot_Text_readNumber(maxmana)
                             if xButton.aggro.threatpct<1 then

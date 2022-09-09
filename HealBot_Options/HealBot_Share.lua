@@ -298,7 +298,7 @@ function HealBot_Share_ExportSpells(lData)
     local ssStr=validType[4].."\n"
     local sName, sTar, sTrin1, sTrin2, AvoidBC, HB_button, HB_combo_prefix, sText, sId=nil,nil,nil,nil,nil,nil,nil,nil,nil
     for z=1,4 do
-        for x=1,5 do
+        for x=1,20 do
             HB_button = HealBot_Options_ComboClass_Button(x)
             -- Menu~1,1,7~2,4,false,false,false,false,
             for y=1, getn(HealBot_Keys_List), 1 do

@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.2.7.4";
+﻿HEALBOT_VERSION_SC = "9.2.7.7";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -85,7 +85,6 @@ function HealBot_globalVars()
     HEALBOT_SHADOW_TOUCHED                  = 284556 --GetSpellInfo(284556) or "--Shadow-Touched"
     HEALBOT_INGENIOUS_MANA_BATTERY          = 169344 
     
-    HEALBOT_WELL_FED                        = "Well Fed"
     --Procs
     HEALBOT_CONCORDANCE_OF_THE_LEGIONFALL   = 242586 --GetSpellInfo(242586) or "--Concordance of the Legionfall";
     HEALBOT_BRACING_CHILL                   = 272276 --GetSpellInfo(267884) or "--Bracing Chill";
@@ -443,9 +442,11 @@ function HealBot_globalVars()
     HBC_FROST_RESISTANCE_AURA               = 19888
     HBC_SHADOW_RESISTANCE_AURA              = 19876
     HEALBOT_RIGHTEOUS_FURY                  = 25780 --GetSpellInfo(25780) or "--Righteous Fury";
+    HBC_RIGHTEOUS_DEFENSE                   = 31789
     HEALBOT_SACRED_SHIELD                   = 20925 --GetSpellInfo(20925) or "--Sacred Shield";
     HEALBOT_SANCTITY_AURA                   = 167187 --GetSpellInfo(167187) or "--Sanctity Aura";
     HEALBOT_SEAL_OF_COMMAND                 = 105361 --GetSpellInfo(105361) or "--Seal of Command";
+    HBC_SEAL_OF_COMMAND                     = 20375
     HEALBOT_SEAL_OF_JUSTICE                 = 20164 --GetSpellInfo(20164) or "--Seal of Justice";
     HEALBOT_SEAL_OF_INSIGHT                 = 20165 --GetSpellInfo(20165) or "--Seal of Insight";
     HEALBOT_SEAL_OF_RIGHTEOUSNESS           = 20154 --GetSpellInfo(20154) or "--Seal of Righteousness";

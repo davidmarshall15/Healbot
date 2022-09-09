@@ -472,6 +472,8 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSWEAPONENCHANT2"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
                                  ["BUFFSCHECKWELLFED"]=HEALBOT_OPTIONS_CHECKWELLFED,
+                                 ["BUFFSCHECKMANADRINK"]=HEALBOT_OPTIONS_CHECKLOWMANA,
+                                 ["BUFFSCHECKMANATHRESHOLD"]=HEALBOT_OPTIONS_CHECKLOWMANA,
                                  ["BUFFSCHECKEXTRA"]=HEALBOT_OPTIONS_BUFFEXTRA,
                                  ["BUFFSWELLFEDITEM"]=HEALBOT_OPTIONS_ITEMNAME,
                                  ["BUFFSEXTRABUFF"]=HEALBOT_OPTIONS_BUFFNAME,
@@ -1023,13 +1025,15 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSWEAPONENCHANT1"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Main Hand and 2H Weapons.",
                                ["BUFFSWEAPONENCHANT2"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Off Hand Weapons.",
                                ["BUFFSMEMBERS"]="The members to monitor.",
-                               ["BUFFSCHECKWELLFED"]="Check for missing well fed",
-                               ["BUFFSWELLFEDITEM"]="Type the food item to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is currently only on En clients\n".._G["YELLOW_FONT_COLOR_CODE"].."Non En clients can use the below Extras to track Well Fed.",
+                               ["BUFFSCHECKWELLFED"]="Check for missing well fed.",
+                               ["BUFFSCHECKMANADRINK"]="Check for low mana.",
+                               ["BUFFSCHECKMANATHRESHOLD"]="Warn when mana is below the threshold.",
+                               ["BUFFSWELLFEDITEM"]="Type the food item to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is currently only on En clients.",
                                ["BUFFSEXTRABUFF"]="Type the buff name to track.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."There is no validation on the Buff Name, ensure it is correct.",
                                ["BUFFSEXTRAITEM"]="Type the item name to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.",
                                ["BUFFSWELLFEDITEMSELECTOR"]="Toggle between the item text and the item selector.",
                                ["BUFFSCHECKEXTRA"]="Check for missing extra buffs",
-                               ["BUFFSWELLFEDITEMS"]="Items found in your bad may show in this list.\nSelect an item to update or None to do nothing.",
+                               ["BUFFSWELLFEDITEMS"]="Items found in your bag may show in this list.\nSelect an item to update or None to do nothing.",
                                ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
@@ -1115,7 +1119,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 15\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.",  
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.",  
                               }
 
 end
