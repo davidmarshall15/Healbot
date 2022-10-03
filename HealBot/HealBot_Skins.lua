@@ -2356,10 +2356,10 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]~=9 then
         Healbot_Config_Skins.HealGroups[SkinName][10]["FRAME"]=9
     end
-    if Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]>8 or Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]==6 or Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]==7 then
+    if Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]~=8 then
         Healbot_Config_Skins.HealGroups[SkinName][9]["FRAME"]=8
     end
-    if Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]>7 or Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]==6 then
+    if Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]>5 and Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]~=7 then
         Healbot_Config_Skins.HealGroups[SkinName][8]["FRAME"]=7
     end
     if Healbot_Config_Skins.HealGroups[SkinName][7]["FRAME"]>6 then

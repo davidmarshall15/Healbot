@@ -9,6 +9,7 @@ local subunits = {};
 local MyGroup={["GROUP"]=0,["FRAME"]=1}
 local HeaderPos={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local HealBot_ActiveHeaders={[0]=1}
+local HealBot_AutoCloseFrame={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
 local HealBot_TrackUnit={}
 local HealBot_SpecialUnit={}
 local HealBot_TrackPrivateUnit={}
@@ -46,6 +47,8 @@ local hbPanel_dataUnits={}
 local hbPanel_dataNames={}
 local hbPanel_dataGUIDs={}
 local hbPanel_dataRoles={}
+local hbPanel_dataRanks={}
+local hbPanel_dataPlayerRoles={}
 local hbPanel_dataPetUnits={}
 local hbPanel_dataPetNames={}
 local hbPanel_dataPetGUIDs={}
@@ -115,6 +118,10 @@ function HealBot_Panel_retHeadersCols(frame)
     return ceil(hbPanelNoRows[frame]/5)
 end
 
+function HealBot_Panel_setAutoClose(frame)
+    HealBot_AutoCloseFrame[frame]=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]
+end
+
 function HealBot_Panel_setCP(cpType, useCP)
     if cpType=="MAIN" then
         HealBot_Panel_luVars["cpUse"]=useCP
@@ -137,16 +144,18 @@ function HealBot_Panel_TankRole(unit,guid)
         HealBot_setLuVars("TankUnit", unit)
         HealBot_Aura_setLuVars("TankUnit", unit)
     end
+    if hbPanel_dataPlayerRoles[unit]==0 or hbPanel_dataPlayerRoles[unit]>5 then hbPanel_dataPlayerRoles[unit]=2 end
 end
  
 function HealBot_Panel_HealerRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
     HealBot_MainHealers[guid]=unit
+    if hbPanel_dataPlayerRoles[unit]==0 or hbPanel_dataPlayerRoles[unit]>5 then hbPanel_dataPlayerRoles[unit]=3 end
 end
 
 local aRole = nil
 function HealBot_Panel_SetRole(unit,guid)
-    aRole = HealBot_Panel_UnitRole(unit)
+    aRole = HealBot_Panel_UnitRole(unit,guid)
     if aRole=="TANK" then
         HealBot_Panel_TankRole(unit,guid)
     elseif aRole=="HEALER" then
@@ -163,6 +172,8 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
         local dsGUID=UnitGUID(unit)
         local dsName=UnitName(unit)
         if dsGUID then
+            hbPanel_dataRanks[unit]=0
+            hbPanel_dataPlayerRoles[unit]=0
             if isPlayer then
                 --if UnitIsUnit(unit, "player") then unit="player" end
                 hbPanel_dataNames[dsName]=unit
@@ -177,19 +188,23 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
             hbPanel_dataRoles[unit]=HEALBOT_WORDS_UNKNOWN
             if HealBot_MyPrivateTanks[dsGUID] or HealBot_Globals.HealBot_PermPrivateTanks[dsGUID] then
                 hbPanel_dataRoles[unit]="TANK"
+                hbPanel_dataPlayerRoles[unit]=4
             elseif HealBot_MyPrivateHealers[dsGUID] or HealBot_Globals.HealBot_PermPrivateHealers[dsGUID] then
                 hbPanel_dataRoles[unit]="HEALER"
+                hbPanel_dataPlayerRoles[unit]=5
             elseif HealBot_MyPrivateDamagers[dsGUID] or  HealBot_Globals.HealBot_PermPrivateDamagers[dsGUID] then
                 hbPanel_dataRoles[unit]="DAMAGER"
             end
             if nRaidID>0 then
                 local hbFRole=false
-                local _, _, hbSubgroup, _, _, _, _, _, _, hbRRole, _, hbCombatRole = GetRaidRosterInfo(nRaidID);
+                local _, rank, hbSubgroup, _, _, _, _, _, _, hbRRole, isML, hbCombatRole = GetRaidRosterInfo(nRaidID);
                 HealBot_UnitGroups[unit]=hbSubgroup
                 if isPlayer then
+                    if hbPanel_dataPlayerRoles[unit]==0 then hbPanel_dataPlayerRoles[unit]=7 end
                     if hbPanel_dataRoles[unit]==HEALBOT_WORDS_UNKNOWN then
                         if hbRRole and (string.lower(hbRRole)=="maintank" or (HealBot_Globals.IncMainAssist and string.lower(hbRRole)=="mainassist")) then
                             hbFRole="TANK"
+                            if string.lower(hbRRole)=="maintank" then hbPanel_dataPlayerRoles[unit]=1 end
                         elseif hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
                             if HEALBOT_GAME_VERSION>3 then
                                 hbFRole = hbCombatRole
@@ -201,6 +216,15 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                                 end
                             end
                         end
+                    end
+                    if HEALBOT_GAME_VERSION>3 and rank>0 and GetLFGMode(LE_LFG_CATEGORY_LFR) then
+                        if UnitIsGroupLeader(unit) then
+                            hbPanel_dataRanks[unit]=2
+                        end
+                    elseif isML then
+                        hbPanel_dataRanks[unit]=3
+                    elseif rank>0 then
+                        hbPanel_dataRanks[unit]=rank
                     end
                 end
                 if not hbFRole then
@@ -216,6 +240,10 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
             else
                 HealBot_UnitGroups[unit]=1
                 HealBot_Panel_SetRole(unit,dsGUID)
+                if IsInGroup() then
+                    if UnitIsGroupLeader(unit) then hbPanel_dataRanks[unit]=4 end
+                    if hbPanel_dataPlayerRoles[unit]==0 then hbPanel_dataPlayerRoles[unit]=6 end
+                end
             end
         end
     end
@@ -524,6 +552,7 @@ local classTextures={
     ["SHAM"]="Interface\\Addons\\HealBot\\Images\\Shaman-round",
     ["WARL"]="Interface\\Addons\\HealBot\\Images\\Warlock-round",
     ["WARR"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
+    ["EVOK"]="Interface\\Addons\\HealBot\\Images\\Warrior-round",
     }
 
 function HealBot_Panel_retClassRoleIcon(id)
@@ -547,7 +576,7 @@ function HealBot_Panel_CheckRole(unit)
     return "TANK"
 end
 
-function HealBot_Panel_UnitRole(unit)
+function HealBot_Panel_UnitRole(unit,guid)
     local role = hbPanel_dataRoles[unit]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>2 then
@@ -555,6 +584,9 @@ function HealBot_Panel_UnitRole(unit)
             if HEALBOT_GAME_VERSION==3 and not HealBot_Globals.AllowPlayerRoles then
                 if GetPartyAssignment('MAINTANK', unit) then 
                     role=HealBot_Panel_CheckRole(unit)
+                elseif HealBot_Panel_RaidUnitGUID(guid) then
+                    local s=HealBot_Action_getGuidData(guid, "SPEC")
+                    role=HealBot_Init_ClassicRoles(s)
                 else
                     role="DAMAGER"
                 end
@@ -1040,14 +1072,14 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
         end
         if HealBot_Config.DisabledNow==0 then
             HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
-            if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]==1 or preCombat) then
+            if HealBot_setTestBars or (HealBot_AutoCloseFrame[frame]==1 or preCombat) then
                 HealBot_Action_ShowPanel(frame)
             end
             HealBot_Action_setFrameHeader(frame)
         else
             HealBot_Action_HidePanel(frame)
         end
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["AUTOCLOSE"]>1 then
+        if HealBot_AutoCloseFrame[frame]>1 then
             HealBot_CheckActiveFrames(frame, true)
         else
             HealBot_CheckActiveFrames(frame, false)
@@ -1115,7 +1147,7 @@ function HealBot_Panel_SetupBars(preCombat)
             if vSetupBarsFrame==0 then 
                 vSetupBarsFrame=j
             end
-            if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]>1 then
+            if HealBot_AutoCloseFrame[j]>1 then
                 HealBot_CheckActiveFrames(j, true)
             else
                 HealBot_CheckActiveFrames(j, false)
@@ -1137,7 +1169,9 @@ function HealBot_Panel_SetupBars(preCombat)
             vSetupBarsOptionsFrame:Hide()
             vSetupBarsOptionsFrame:SetParent(vSetupBarsOptionsParent)
             vSetupBarsOptionsFrame.frame=vSetupBarsFrame
-            vSetupBarsOptionsFrame:SetWidth(ceil(backBarsSize[vSetupBarsFrame]["WIDTH"]*0.95))
+            local oWidth=ceil(backBarsSize[vSetupBarsFrame]["WIDTH"]*0.95)
+            if oWidth>70 then oWidth=70 end
+            vSetupBarsOptionsFrame:SetWidth(oWidth)
             vSetupBarsOptionsFrame:SetHeight(25)
         end
         if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==2 or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][vSetupBarsFrame]["BARS"]==4 then
@@ -1164,7 +1198,7 @@ function HealBot_Panel_SetupBars(preCombat)
         if hbBarsPerFrame[j]>0 then
             if HealBot_Config.DisabledNow==0 then
                 HealBot_Text_setTextLen(j)
-                if HealBot_setTestBars or (Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][j]["AUTOCLOSE"]==1 or preCombat) then
+                if HealBot_setTestBars or (HealBot_AutoCloseFrame[j]==1 or preCombat) then
                     HealBot_Action_ShowPanel(j)
                 end
                 HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
@@ -1934,9 +1968,15 @@ function HealBot_Panel_enemyTargets(preCombat)
     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
     vEnemyIndex=i[hbCurrentFrame]
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] then
-        HealBot_Panel_checkEnemyBar("playertarget", "player", preCombat, 
-                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
-                                    Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
+        if HEALBOT_GAME_VERSION>9 then
+            HealBot_Panel_checkEnemyBar("anyenemy", "player", preCombat, 
+                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
+                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
+        else
+            HealBot_Panel_checkEnemyBar("playertarget", "player", preCombat, 
+                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
+                                        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])
+        end
     end
     if HEALBOT_GAME_VERSION>1 and Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCFOCUS"] then
         HealBot_Panel_checkEnemyBar("focus", "player", preCombat, 
@@ -2793,6 +2833,14 @@ function HealBot_RetUnitGroups(unit)
     return HealBot_UnitGroups[unit] or 1
 end
 
+function HealBot_RetUnitRank(unit)
+    return hbPanel_dataRanks[unit] or 0
+end
+
+function HealBot_RetUnitPlayerRole(unit)
+    return hbPanel_dataPlayerRoles[unit] or 0
+end
+
 local focusHeal=true
 function HealBot_Panel_focusHeal(isOn)
     focusHeal=isOn
@@ -3004,18 +3052,20 @@ end
 
 function HealBot_Panel_Init()
     if HEALBOT_GAME_VERSION>3 then
-        HealBot_randomClCol = { [0] = { ["MAX"]=11, ["TE"]=5, ["HS"]=3, ["HE"]=7}, 
+        HealBot_randomClCol = { [0] = { ["MAX"]=11, ["TE"]=5, ["HS"]=3, ["HE"]=7}, -- Correct mana colour for 12 and 13 before setting MAX=13 - Move Evoker to 8 and set HE=8
                                 [1] = { [1] = 0.77, [2] = 0.12, [3] = 0.23, [4]="DEAT", [5]=1, [6]=0, [7]=0},  
                                 [2] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR", [5]=1, [6]=0, [7]=0},  
-                                [3] = { [1] = 1.0,  [2] = 0.49, [3] = 0.04, [4]="DRUI", [5]=0, [6]=0, [7]=1},   
-                                [4] = { [1] = 0,    [2] = 1.0,  [3] = 0.59, [4]="MONK", [5]=1, [6]=1, [7]=0}, 
+                                [3] = { [1] = 1,    [2] = 0.49, [3] = 0.04, [4]="DRUI", [5]=0, [6]=0, [7]=1},   
+                                [4] = { [1] = 0,    [2] = 1,    [3] = 0.59, [4]="MONK", [5]=1, [6]=1, [7]=0}, 
                                 [5] = { [1] = 0.96, [2] = 0.55, [3] = 0.73, [4]="PALA", [5]=0, [6]=0, [7]=1},
-                                [6] = { [1] = 1.0,  [2] = 1.0,  [3] = 1.0,  [4]="PRIE", [5]=0, [6]=0, [7]=1},
+                                [6] = { [1] = 1,    [2] = 1,    [3] = 1,    [4]="PRIE", [5]=0, [6]=0, [7]=1},
                                 [7] = { [1] = 0,    [2] = 0.44, [3] = 0.87, [4]="SHAM", [5]=0, [6]=0, [7]=1},
                                 [8] = { [1] = 0.53, [2] = 0.53, [3] = 0.93, [4]="WARL", [5]=0, [6]=0, [7]=1},
                                 [9] = { [1] = 0.67, [2] = 0.83, [3] = 0.45, [4]="HUNT", [5]=1, [6]=0.5, [7]=0.25},
                                [10] = { [1] = 0.25, [2] = 0.78, [3] = 0.92, [4]="MAGE", [5]=0, [6]=0, [7]=1},
-                               [11] = { [1] = 1.0,  [2] = 0.96, [3] = 0.41, [4]="ROGU", [5]=1, [6]=1, [7]=0},
+                               [11] = { [1] = 1,    [2] = 0.96, [3] = 0.41, [4]="ROGU", [5]=1, [6]=1, [7]=0},
+                               [12] = { [1] = 0.8,  [2] = 0.1,  [3] = 0.8,  [4]="DEMO", [5]=0, [6]=0, [7]=1},
+                               [13] = { [1] = 0.22, [2] = 0.59, [3] = 0.49, [4]="EVOK", [5]=0, [6]=0, [7]=1},
                               }
         HealBot_randomClNames = { [1] = HEALBOT_DEATHKNIGHT,
                                   [2] = HEALBOT_WARRIOR,
@@ -3028,6 +3078,8 @@ function HealBot_Panel_Init()
                                   [9] = HEALBOT_HUNTER,
                                  [10] = HEALBOT_MAGE,
                                  [11] = HEALBOT_ROGUE,
+                                 [12] = HEALBOT_DEMONHUNTER,
+                                 [13] = HEALBOT_EVOKER,
                                 }
     elseif HEALBOT_GAME_VERSION>2 then
         HealBot_randomClCol = { [0] = { ["MAX"]=10, ["TE"]=4, ["HS"]=3, ["HE"]=6}, 

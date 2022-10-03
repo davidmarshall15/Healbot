@@ -292,11 +292,10 @@ function HealBot_Share_ImportPresetCols_OnClick()
 end
 
 -- Spells
-local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
-
 function HealBot_Share_ExportSpells(lData)
     local ssStr=validType[4].."\n"
     local sName, sTar, sTrin1, sTrin2, AvoidBC, HB_button, HB_combo_prefix, sText, sId=nil,nil,nil,nil,nil,nil,nil,nil,nil
+    local HealBot_Keys_List=HealBot_Action_retComboKeysList()
     for z=1,4 do
         for x=1,20 do
             HB_button = HealBot_Options_ComboClass_Button(x)
@@ -360,6 +359,7 @@ function HealBot_Share_LoadSpells(sIn)
     local sStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
+    local HealBot_Keys_List=HealBot_Action_retComboKeysList()
     HealBot_Action_ClearSpellCache()
     for l in string.gmatch(sStr, "[^\n]+") do
         local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
@@ -405,10 +405,7 @@ function HealBot_Share_LoadSpells(sIn)
             end
         end
     end
-    if HealBot_Config.Profile==2 then 
-        HealBot_Class_Spells[HealBot_Data["PCLASSTRIM"]]=nil 
-        HealBot_Options_hbProfile_setClass()
-    end
+    HealBot_Options_SaveProfile()
     HealBot_Timers_InitExtraOptions()
     HealBot_Options_ComboClass_Text()
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
@@ -479,7 +476,7 @@ function HealBot_Share_LoadBuffs(sIn)
     if HealBot_Share_luVars["InMethodBuff"]==1 then
         HealBot_Share_luVars["custombufftextpage"]=1
         HealBot_Globals.WatchHoT={ ["DRUI"]={}, ["HUNT"]={}, ["MAGE"]={}, ["PALA"]={}, ["PRIE"]={}, ["ROGU"]={}, ["SHAM"]={},
-                                   ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["ALL"]={} }
+                                   ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["EVOK"]={}, ["ALL"]={} }
         HealBot_Globals.HealBot_Custom_Buffs={}
         HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
         local r=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["R"]
@@ -627,7 +624,6 @@ function HealBot_Share_LoadDebuffs(sIn)
         local b=HealBot_Globals.CDCBarColour[customDebuffPriority]["B"]
         HealBot_Globals.CDCBarColour={ [customDebuffPriority] = { ["R"] = r, ["G"] = g, ["B"] = b, }, }
         HealBot_Globals.IgnoreCustomDebuff={}
-        HealBot_Globals.CatchAltDebuffIDs={}
     end
     for e=2,#ssTab do 
         local _,c,d = string.split("~", ssTab[e])
@@ -645,7 +641,6 @@ function HealBot_Share_LoadDebuffs(sIn)
             idMethod=tonumber(idMethod) or 3
             if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Share_luVars["InMethodDebuff"]<3 then
                 local dName=GetSpellInfo(dId) or dId
-                if dName==dId then HealBot_Globals.CatchAltDebuffIDs[dName]=true end
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
                 HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
                 if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end
@@ -686,7 +681,8 @@ function HealBot_Share_LoadDebuffs(sIn)
         end
     end
     HealBot_Timers_InitExtraOptions()
-    HealBot_Options_setCustomDebuffList()
+    HealBot_Aura_ClearCustomDebuffsDone()
+    HealBot_Timers_Set("AURA","CustomDebuffList")
 end
 
 function HealBot_Share_ImportDebuffs_OnClick()
@@ -973,6 +969,7 @@ function HealBot_Share_SkinLoad(sIn, internal)
     HealBot_Skins_Check_Skin(hbOptGetSkinName, true)
     if not internal then
         HealBot_Options_Set_Current_Skin(hbOptGetSkinName, nil, nil, true)
+        HealBot_SetResetFlag("SOFT")
         HealBot_Options_NewSkin:SetText("")
         hbWarnSharedMedia=false
         HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)

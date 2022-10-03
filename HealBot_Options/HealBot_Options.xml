@@ -54,78 +54,103 @@
             </Slider>
         </Frames>
     </ScrollFrame>
-  <Slider name="HealBot_Options_SliderTemplate" inherits="OptionsSliderTemplate" virtual="true">
-    <Size>
-      <AbsDimension x="240" y="16" />
-    </Size>
-  </Slider>
-  <EditBox name="HealBot_Options_EditBoxTemplate" autoFocus="false" historyLines="32" justifyH="LEFT" virtual="true">
-    <Layers>
-      <Layer level="BORDER">
-        <Texture name="$parentLeft" file="Interface\Common\Common-Input-Border">
-          <Size>
-            <AbsDimension x="8" y="20"/>
-          </Size>
-          <Anchors>
-            <Anchor point="TOPLEFT">
-              <Offset>
-                <AbsDimension x="-5" y="0"/>
-              </Offset>
-            </Anchor>
-          </Anchors>
-          <TexCoords left="0" right="0.0625" top="0" bottom="0.625"/>
-        </Texture>
-        <Texture name="$parentRight" file="Interface\Common\Common-Input-Border">
-          <Size>
-            <AbsDimension x="8" y="20"/>
-          </Size>
-          <Anchors>
-            <Anchor point="RIGHT">
-              <Offset>
-                <AbsDimension x="5" y="0"/>
-              </Offset>
-            </Anchor>
-          </Anchors>
-          <TexCoords left="0.9375" right="1.0" top="0" bottom="0.625"/>
-        </Texture>
-        <Texture name="$parentMiddle" file="Interface\Common\Common-Input-Border">
-          <Size>
-            <AbsDimension x="10" y="20"/>
-          </Size>
-          <Anchors>
-            <Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
-            <Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
-          </Anchors>
-          <TexCoords left="0.0625" right="0.9375" top="0" bottom="0.625"/>
-        </Texture>
-      </Layer>
-    </Layers>
-    <Size>
-      <AbsDimension x="240" y="20"/>
-    </Size>
-    <FontString inherits="GameFontHighlightSmall"/>
-    <Layers>
-      <Layer level="ARTWORK">
-        <FontString name="$parentText" text=" " inherits="GameFontNormalSmall">
-          <Size>
-            <AbsDimension x="0" y="10"/>
-          </Size>
-          <Anchors>
-            <Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
-              <Offset>
-                <AbsDimension x="0" y="4"/>
-              </Offset>
-            </Anchor>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
-    <Scripts>
-      <OnEscapePressed>self:ClearFocus();</OnEscapePressed>
-      <OnEditFocusLost>self:HighlightText(0, 0);</OnEditFocusLost>
-      <OnEditFocusGained>self:HighlightText();</OnEditFocusGained>
-    </Scripts>
-  </EditBox>
+	<CheckButton name="HealBotUICheckButtonArtTemplate" virtual="true">
+		<NormalTexture file="Interface\Buttons\UI-CheckBox-Up"/>
+		<PushedTexture file="Interface\Buttons\UI-CheckBox-Down"/>
+		<HighlightTexture file="Interface\Buttons\UI-CheckBox-Highlight" alphaMode="ADD"/>
+		<CheckedTexture file="Interface\Buttons\UI-CheckBox-Check"/>
+		<DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/>
+	</CheckButton>
+    <CheckButton name="HealBotUIPanelCheckButton" virtual="true" inherits="HealBotUICheckButtonArtTemplate">
+        <Size x="26" y="26"/>  
+        <HitRectInsets>
+            <AbsInset left="0" right="-40" top="0" bottom="0"/>
+        </HitRectInsets>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontNormalSmall" parentKey="Text">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" x="0" y="1"/>
+					</Anchors>
+					<Scripts>
+						<OnLoad function="UICheckButtonFontString_SetParentKeyAlias"/>
+					</Scripts>
+				</FontString>
+			</Layer>
+		</Layers>
+    </CheckButton>
+    <Slider name="HealBot_Options_SliderTemplate" inherits="OptionsSliderTemplate" virtual="true">
+        <Size>
+          <AbsDimension x="240" y="16" />
+        </Size>
+    </Slider>
+    <EditBox name="HealBot_Options_EditBoxTemplate" autoFocus="false" historyLines="32" justifyH="LEFT" virtual="true">
+        <Layers>
+          <Layer level="BORDER">
+            <Texture name="$parentLeft" file="Interface\Common\Common-Input-Border">
+              <Size>
+                <AbsDimension x="8" y="20"/>
+              </Size>
+              <Anchors>
+                <Anchor point="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="-5" y="0"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <TexCoords left="0" right="0.0625" top="0" bottom="0.625"/>
+            </Texture>
+            <Texture name="$parentRight" file="Interface\Common\Common-Input-Border">
+              <Size>
+                <AbsDimension x="8" y="20"/>
+              </Size>
+              <Anchors>
+                <Anchor point="RIGHT">
+                  <Offset>
+                    <AbsDimension x="5" y="0"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <TexCoords left="0.9375" right="1.0" top="0" bottom="0.625"/>
+            </Texture>
+            <Texture name="$parentMiddle" file="Interface\Common\Common-Input-Border">
+              <Size>
+                <AbsDimension x="10" y="20"/>
+              </Size>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+                <Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+              </Anchors>
+              <TexCoords left="0.0625" right="0.9375" top="0" bottom="0.625"/>
+            </Texture>
+          </Layer>
+        </Layers>
+        <Size>
+          <AbsDimension x="240" y="20"/>
+        </Size>
+        <FontString inherits="GameFontHighlightSmall"/>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="$parentText" text=" " inherits="GameFontNormalSmall">
+              <Size>
+                <AbsDimension x="0" y="10"/>
+              </Size>
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+                  <Offset>
+                    <AbsDimension x="0" y="4"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnEscapePressed>self:ClearFocus();</OnEscapePressed>
+          <OnEditFocusLost>self:HighlightText(0, 0);</OnEditFocusLost>
+          <OnEditFocusGained>self:HighlightText();</OnEditFocusGained>
+        </Scripts>
+    </EditBox>
  
   <Frame name="HealBot_Options" toplevel="true" frameStrata="DIALOG" movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="BackdropTemplate">
     <Size>
@@ -162,6 +187,7 @@
             </Anchor>
           </Anchors>
         </FontString>
+        <FontString name="UsedToInitFonts" inherits="GameFontNormalSmall"><Anchors><Anchor point="LEFT" relativeTo="HealBot_Options_TitleBoxText" relativePoint="RIGHT"/></Anchors></FontString>
       </Layer>
     </Layers>
     <Frames>
@@ -2121,7 +2147,6 @@
                     <FontString name="HBIncH17Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH16Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH18Healer" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH17Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                     <FontString name="HBIncH18Ver" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH17Ver" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
-                    <FontString name="UsedToInitFonts" inherits="GameFontNormalSmall"><Anchors><Anchor point="TOPLEFT" relativeTo="HBIncH18Healer" relativePoint="BOTTOMLEFT"/></Anchors></FontString>
                 </Layer>
               </Layers>     
               </Frame>
@@ -2146,7 +2171,7 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
-                  <CheckButton name="HealBot_Options_HideOptions" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HideOptions" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -2160,7 +2185,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HIDEOPTIONBUTTON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_RightButtonOptions" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_RightButtonOptions" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="TOPRIGHT">
                         <Offset>
@@ -2174,7 +2199,7 @@
                       <OnLeave>HealBot_Options_Show_Help("RIGHTTOOPENOPTIONS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_HideUnlocked" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HideUnlocked" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -2188,7 +2213,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HIDEUNLOCKEDTAG",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_NoAuraWhenRested" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_NoAuraWhenRested" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideUnlocked" relativePoint="TOPRIGHT">
                         <Offset>
@@ -2202,7 +2227,7 @@
                       <OnLeave>HealBot_Options_Show_Help("IGNOREAURAEVENTS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowMinimapButton" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowMinimapButton" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideUnlocked" relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -2216,7 +2241,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SHOWMINIMAPBUTTON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_DisableHealBotOpt" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_DisableHealBotOpt" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="TOPRIGHT">
                         <Offset>
@@ -2910,7 +2935,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_OverrideUseHealthDrop" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideUseHealthDrop" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
@@ -2990,7 +3015,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_OverrideUseFluidBars" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideUseFluidBars" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
@@ -3021,7 +3046,7 @@
                           <OnLeave>HealBot_Options_Show_Help("FLUIDBARSREFRESHSPEED",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <CheckButton name="HealBot_Options_OverrideUseFluidBarsAlpha" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideUseFluidBarsAlpha" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
@@ -3524,7 +3549,7 @@
                           <OnLeave>HealBot_Options_Show_Help("CHATMSG",false)</OnLeave>
                         </Scripts>
                       </EditBox>
-                      <CheckButton name="HealBot_Options_OverrideCastNotifyResOnly" inherits="UICheckButtonTemplate" id="7">
+                      <CheckButton name="HealBot_Options_OverrideCastNotifyResOnly" inherits="HealBotUIPanelCheckButton" id="7">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_OverrideNotifyOtherMsg" relativePoint="BOTTOM">
                             <Offset>
@@ -3557,7 +3582,7 @@
                       </Anchor>
                     </Anchors>
                     <Frames>
-                      <CheckButton name="HealBot_Options_OverrideAfterCombatOOM" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideAfterCombatOOM" inherits="HealBotUIPanelCheckButton">
                         <Anchors>_
                           <Anchor point="BOTTOM">
                             <Offset>
@@ -3679,7 +3704,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_OverrideAlwaysRunEvents" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideAlwaysRunEvents" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
@@ -3693,7 +3718,7 @@
                           <OnLeave>HealBot_Options_Show_Help("ALWAYRUNEVENTS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_OverridePartyFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverridePartyFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
@@ -3721,7 +3746,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideFocusFrame" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideFocusFrame" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverridePartyFrames" relativePoint="BOTTOMLEFT">>
                             <Offset>
@@ -3735,7 +3760,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZFOCUSFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideMiniBossFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideMiniBossFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideFocusFrame" relativePoint="BOTTOMLEFT">>
                             <Offset>
@@ -3749,7 +3774,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_OverrideRaidFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_OverrideRaidFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_OverrideMiniBossFrames" relativePoint="BOTTOMLEFT">>
                             <Offset>
@@ -3846,7 +3871,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCAST",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_UseIconCmds" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_UseIconCmds" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -3860,7 +3885,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSUSEICONCMDS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ModKeyShift" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ModKeyShift" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -3890,7 +3915,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ModKeyCtrl" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ModKeyCtrl" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_ModKeyShift" relativePoint="RIGHT">
                         <Offset>
@@ -3907,7 +3932,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ModKeyAlt" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ModKeyAlt" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_Options_ModKeyCtrl" relativePoint="RIGHT">
                         <Offset>
@@ -4908,7 +4933,7 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
-                  <CheckButton name="HealBot_Options_EnableSmartCast" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_EnableSmartCast" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -4935,7 +4960,7 @@
                       </Layer>
                     </Layers>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ProtectPvP" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ProtectPvP" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_EnableSmartCast" relativePoint="TOPLEFT">
                         <Offset>
@@ -5361,7 +5386,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SKINDEFAULTFOR",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_UseStickyFrames" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_UseStickyFrames" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
@@ -5449,7 +5474,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_AlwaysRunEvents" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_AlwaysRunEvents" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
@@ -5463,7 +5488,7 @@
                           <OnLeave>HealBot_Options_Show_Help("ALWAYRUNEVENTS",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_PartyFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_PartyFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -5491,7 +5516,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZPARTYFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_FocusFrame" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_FocusFrame" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PartyFrames" relativePoint="BOTTOMLEFT">>
                             <Offset>
@@ -5505,7 +5530,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZFOCUSFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_MiniBossFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_MiniBossFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_PartyFrames" relativePoint="TOPRIGHT">>
                             <Offset>
@@ -5519,7 +5544,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HIDEBLIZBOSSFRAMES",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_RaidFrames" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_RaidFrames" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MiniBossFrames" relativePoint="BOTTOMLEFT">>
                             <Offset>
@@ -5555,7 +5580,7 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
-                  <CheckButton name="HealBot_Options_HealGroups1" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups1" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -5628,7 +5653,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups2" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups2" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups1" relativePoint="TOPLEFT">
                         <Offset>
@@ -5694,7 +5719,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups3" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups3" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups2" relativePoint="TOPLEFT">
                         <Offset>
@@ -5760,7 +5785,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups4" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups4" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups3" relativePoint="TOPLEFT">
                         <Offset>
@@ -5826,7 +5851,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups5" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups5" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups4" relativePoint="TOPLEFT">
                         <Offset>
@@ -5892,7 +5917,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPDOWN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups6" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups6" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups5" relativePoint="TOPLEFT">
                         <Offset>
@@ -5939,7 +5964,7 @@
                       <OnLeave>HealBot_Options_Show_Help("HEALGROUPUP",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_HealGroups7" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups7" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups6" relativePoint="TOPLEFT">
                         <Offset>
@@ -5967,7 +5992,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroups8" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups8" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups7" relativePoint="TOPLEFT">
                         <Offset>
@@ -5995,7 +6020,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroups9" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups9" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups8" relativePoint="TOPLEFT">
                         <Offset>
@@ -6023,7 +6048,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroups10" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups10" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups9" relativePoint="TOPLEFT">
                         <Offset>
@@ -6051,7 +6076,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroups11" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroups11" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HealGroups10" relativePoint="TOPLEFT">
                         <Offset>
@@ -6079,7 +6104,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_HealGroupsAllowDups" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_HealGroupsAllowDups" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -6249,7 +6274,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_UseHealthDrop" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_UseHealthDrop" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
@@ -6329,7 +6354,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_UseFluidBars" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_UseFluidBars" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
@@ -6360,7 +6385,7 @@
                           <OnLeave>HealBot_Options_Show_Help("FLUIDBARSREFRESHSPEED",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <CheckButton name="HealBot_Options_UseFluidBarsAlpha" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_UseFluidBarsAlpha" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
@@ -6718,7 +6743,7 @@
                       </Anchor>
                     </Anchors>
                     <Frames>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncSelf" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncSelf" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -6786,7 +6811,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWSELF",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncFocus" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncFocus" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -6828,7 +6853,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWFOCUS",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncTanks" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncFocus" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -6870,7 +6895,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWTANK",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncMyTargets" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -6912,7 +6937,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSCOMBATENEMYSHOWMYTARGETS",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ShowEnemyIncArena" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyIncArena" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -7018,7 +7043,7 @@
                       </Anchor>
                     </Anchors>
                     <Frames>
-                      <CheckButton name="HealBot_Options_ShowEnemyTargets" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowEnemyTargets" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
@@ -7032,7 +7057,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWTARGET",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_DoubleEnemyBarWidth" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_DoubleEnemyBarWidth" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
@@ -7234,7 +7259,7 @@
                           <OnLeave>HealBot_Options_Show_Help("CHATMSG",false)</OnLeave>
                         </Scripts>
                       </EditBox>
-                      <CheckButton name="HealBot_Options_CastNotifyResOnly" inherits="UICheckButtonTemplate" id="7">
+                      <CheckButton name="HealBot_Options_CastNotifyResOnly" inherits="HealBotUIPanelCheckButton" id="7">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_NotifyOtherMsg" relativePoint="BOTTOM">
                             <Offset>
@@ -7267,7 +7292,7 @@
                       </Anchor>
                     </Anchors>
                     <Frames>
-                      <CheckButton name="HealBot_Options_AfterCombatOOM" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_AfterCombatOOM" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
@@ -7393,7 +7418,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_CopyTab1" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab1" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -7414,16 +7439,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab2" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab2" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab1" relativePoint="BOTTOM">
                             <Offset>
@@ -7444,16 +7466,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab3" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab3" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab2" relativePoint="RIGHT">
                             <Offset>
@@ -7461,16 +7480,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab4" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab4" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab2" relativePoint="BOTTOM">
                             <Offset>
@@ -7491,16 +7507,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab5" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab5" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab4" relativePoint="RIGHT">
                             <Offset>
@@ -7508,16 +7521,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab6" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab6" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab5" relativePoint="RIGHT">
                             <Offset>
@@ -7525,16 +7535,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab7" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab7" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab6" relativePoint="RIGHT">
                             <Offset>
@@ -7542,16 +7549,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab8" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab8" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab7" relativePoint="RIGHT">
                             <Offset>
@@ -7559,16 +7563,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab9" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab9" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab8" relativePoint="RIGHT">
                             <Offset>
@@ -7576,16 +7577,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab23" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab23" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab4" relativePoint="BOTTOM">
                             <Offset>
@@ -7606,16 +7604,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab10" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab10" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab23" relativePoint="RIGHT">
                             <Offset>
@@ -7623,16 +7618,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab11" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab11" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab10" relativePoint="RIGHT">
                             <Offset>
@@ -7640,16 +7632,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab12" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab12" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab11" relativePoint="RIGHT">
                             <Offset>
@@ -7657,16 +7646,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab13" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab13" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab12" relativePoint="RIGHT">
                             <Offset>
@@ -7674,16 +7660,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab14" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab14" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab23" relativePoint="BOTTOM">
                             <Offset>
@@ -7704,16 +7687,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab15" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab15" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab14" relativePoint="RIGHT">
                             <Offset>
@@ -7721,16 +7701,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab16" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab16" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab15" relativePoint="RIGHT">
                             <Offset>
@@ -7738,16 +7715,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab17" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab17" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab14" relativePoint="BOTTOM">
                             <Offset>
@@ -7768,16 +7742,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab18" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab18" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab17" relativePoint="RIGHT">
                             <Offset>
@@ -7785,16 +7756,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab22" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab22" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab18" relativePoint="RIGHT">
                             <Offset>
@@ -7802,16 +7770,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab19" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab19" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab22" relativePoint="RIGHT">
                             <Offset>
@@ -7819,16 +7784,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab20" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab20" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab17" relativePoint="BOTTOM">
                             <Offset>
@@ -7849,16 +7811,13 @@
                             </FontString>
                           </Layer>
                         </Layers>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYTAB",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyTab21" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyTab21" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab20" relativePoint="RIGHT">
                             <Offset>
@@ -7866,9 +7825,6 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYTAB",true)</OnEnter>
@@ -7937,7 +7893,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_CopyFrame1" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame1" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -7945,16 +7901,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame2" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame2" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame1" relativePoint="BOTTOM">
                             <Offset>
@@ -7962,16 +7915,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame3" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame3" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame2" relativePoint="BOTTOM">
                             <Offset>
@@ -7979,16 +7929,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame4" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame4" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame3" relativePoint="BOTTOM">
                             <Offset>
@@ -7996,16 +7943,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame5" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame5" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame4" relativePoint="BOTTOM">
                             <Offset>
@@ -8013,16 +7957,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame6" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame6" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame5" relativePoint="BOTTOM">
                             <Offset>
@@ -8030,16 +7971,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame7" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame7" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_CopyFrame4" relativePoint="RIGHT">
                             <Offset>
@@ -8047,16 +7985,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame8" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame8" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame7" relativePoint="BOTTOM">
                             <Offset>
@@ -8064,16 +7999,13 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COPYFRAME",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_CopyFrame9" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_CopyFrame9" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_CopyFrame8" relativePoint="BOTTOM">
                             <Offset>
@@ -8081,9 +8013,6 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <HitRectInsets>
-                            <AbsInset left="0" right="-40" top="0" bottom="0"/>
-                        </HitRectInsets>
                         <Scripts>
                           <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("COPYFRAME",true)</OnEnter>
@@ -8657,7 +8586,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_ShowHeaders" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowHeaders" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -8964,7 +8893,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEADERFRAMESTITLE",false)</OnLeave>
                         </Scripts>
                       </EditBox>
-                      <CheckButton name="HealBot_Options_FrameAliasShow" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_FrameAliasShow" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FrameTitle" relativePoint="TOPRIGHT">
                             <Offset>
@@ -10586,7 +10515,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTMAIN",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_SortOutOfRangeLast" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSort" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -10627,7 +10556,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSUB",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_SubSortPlayerFirst" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_SubSortPlayerFirst" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ExtraSubSort" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -10641,7 +10570,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSORTSELF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_SelfPet" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_SelfPet" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SubSortPlayerFirst" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -10655,7 +10584,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSSELFPET",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_Options_GroupPetsByFive" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_GroupPetsByFive" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelfPet" relativePoint="BOTTOMLEFT">
                             <Offset>
@@ -10735,7 +10664,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISALERTOC",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <CheckButton name="HealBot_Options_HideBars" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_HideBars" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_AlertLevelOC" relativePoint="BOTTOM">
                             <Offset>
@@ -10935,7 +10864,7 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_AggroTrack" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_AggroTrack" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">>
                             <Offset>
@@ -11727,7 +11656,7 @@
                               <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                             </Scripts>
                           </Button>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarManaOnly" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarManaOnly" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11741,7 +11670,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXMANAONLY",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayRecentHeals" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayRecentHeals" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11768,7 +11697,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayHealthDrop" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayHealthDrop" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11782,7 +11711,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayDebuff" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayDebuff" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11796,7 +11725,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayAggro" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayAggro" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11810,7 +11739,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayHighlight" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayHighlight" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11824,7 +11753,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayTarget" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayTarget" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11838,7 +11767,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayOOR" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayOOR" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -11852,7 +11781,7 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayBuff" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayBuff" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
                                 <Offset>
@@ -12468,7 +12397,7 @@
                             </Layer>
                           </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_ShowNameOnBar" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_ShowNameOnBar" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
@@ -12496,7 +12425,7 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTUTF8",false)</OnLeave>
                                 </Scripts>
                               </CheckButton>
-                              <CheckButton name="HealBot_Options_ShowClassOnBar" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_ShowClassOnBar" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowNameOnBar" relativePoint="TOPLEFT">
                                     <Offset>
@@ -12895,7 +12824,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_NameTextDeadCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_NameTextDeadCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_NameTextDeadCol" relativePoint="LEFT">
                                 <Offset>
@@ -12976,7 +12905,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_NameTextResCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_NameTextResCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_NameTextResCol" relativePoint="LEFT">
                                 <Offset>
@@ -13057,7 +12986,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_NameTextSummonCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_NameTextSummonCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_NameTextSummonCol" relativePoint="LEFT">
                                 <Offset>
@@ -13258,7 +13187,7 @@
                             </Layer>
                           </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_ShowHealthOnBar" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_ShowHealthOnBar" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
@@ -13718,7 +13647,7 @@
                             </Layer>
                           </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_IgnoreIncomingHealOnFull" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_IgnoreIncomingHealOnFull" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
@@ -14123,7 +14052,7 @@
                             </Layer>
                           </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_StateOnlyTooltip" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_StateOnlyTooltip" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
@@ -14559,7 +14488,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_StateTextDeadCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_StateTextDeadCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_StateTextDeadCol" relativePoint="LEFT">
                                 <Offset>
@@ -14640,7 +14569,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_StateTextResCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_StateTextResCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_StateTextResCol" relativePoint="LEFT">
                                 <Offset>
@@ -14721,7 +14650,7 @@
                             <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
-                          <CheckButton name="HealBot_Options_StateTextSummonCol" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_StateTextSummonCol" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="RIGHT" relativeTo="HealBot_StateTextSummonCol" relativePoint="LEFT">
                                 <Offset>
@@ -14864,7 +14793,7 @@
                             </Layer>
                           </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_AggroTxtPct" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_AggroTxtPct" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
@@ -15323,7 +15252,7 @@
                                   </Layer>
                                 </Layers>
                               </Frame>
-                              <CheckButton name="HealBot_Options_ShowTextOnAuxBar" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_ShowTextOnAuxBar" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
@@ -16023,7 +15952,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSPACER",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_BarButtonShowDebuffx2Bar" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonShowDebuffx2Bar" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
@@ -16037,7 +15966,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_BarButtonIconAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonIconAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
@@ -16051,7 +15980,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONALWAYSEN",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_BarButtonIconFadeOnExpire" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonIconFadeOnExpire" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_BarButtonIconAlwaysEnabled" relativePoint="RIGHT">
                                 <Offset>
@@ -16502,7 +16431,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSPACER",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_BarButtonShowBuffx2Bar" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonShowBuffx2Bar" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
@@ -16516,7 +16445,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONDOUBLE",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_BarButtonIconBuffAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonIconBuffAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="BOTTOM">
                                 <Offset>
@@ -16530,7 +16459,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONALWAYSEN",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_BarButtonIconBuffFadeOnExpire" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_BarButtonIconBuffFadeOnExpire" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_BarButtonIconBuffAlwaysEnabled" relativePoint="RIGHT">
                                 <Offset>
@@ -16943,7 +16872,7 @@
                           </Layer>
                         </Layers>
                         <Frames>
-                          <CheckButton name="HealBot_Options_ShowClassIcon" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowClassIcon" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
@@ -17076,7 +17005,7 @@
                               <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_IconClassAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_IconClassAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_IconClassScale" relativePoint="TOPLEFT">
                                 <Offset>
@@ -17123,7 +17052,7 @@
                           </Layer>
                         </Layers>
                         <Frames>
-                          <CheckButton name="HealBot_Options_BarButtonShowRaidIcon" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_BarButtonShowRaidIcon" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
@@ -17354,7 +17283,7 @@
                               <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_IconTargetAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_IconTargetAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_IconTargetScale" relativePoint="TOPLEFT">
                                 <Offset>
@@ -17401,7 +17330,7 @@
                           </Layer>
                         </Layers>
                         <Frames>
-                          <CheckButton name="HealBot_Options_ShowReadyCheck" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowReadyCheck" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
@@ -17415,7 +17344,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowResting" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowResting" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
@@ -17429,7 +17358,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWRESTING",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
@@ -17443,7 +17372,7 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWCOMBAT",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-                          <CheckButton name="HealBot_Options_ShowHostile" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowHostile" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
@@ -17562,7 +17491,7 @@
                               <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_IconRCAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_IconRCAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_IconRCScale" relativePoint="TOPLEFT">
                                 <Offset>
@@ -17609,7 +17538,7 @@
                           </Layer>
                         </Layers>
                         <Frames>
-                          <CheckButton name="HealBot_Options_ShowDirection" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_Options_ShowDirection" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
@@ -17742,7 +17671,7 @@
                               <OnLeave>HealBot_Options_Show_Help("EXTRAICONSCALE",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <CheckButton name="HealBot_IconOORArrowAlwaysEnabled" inherits="UICheckButtonTemplate">
+                          <CheckButton name="HealBot_IconOORArrowAlwaysEnabled" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_IconOORArrowScale" relativePoint="TOPLEFT">
                                 <Offset>
@@ -17956,7 +17885,7 @@
                       </Layer>
                     </Layers>
                      <Frames>
-                      <CheckButton name="HealBot_Options_AggroInd" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_AggroInd" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
@@ -18124,7 +18053,7 @@
                       </Layer>
                     </Layers>
                      <Frames>
-                      <CheckButton name="HealBot_Options_SelfCastIndicator" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_SelfCastIndicator" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
@@ -18302,7 +18231,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSLOWMANA",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <CheckButton name="HealBot_Options_ManaIndicatorInCombat" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ManaIndicatorInCombat" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ManaIndicator" relativePoint="RIGHT">
                             <Offset>
@@ -18470,7 +18399,7 @@
                       </Layer>
                     </Layers>
                      <Frames>
-                      <CheckButton name="HealBot_Options_ShowPowerCounter" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_Options_ShowPowerCounter" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
@@ -18746,7 +18675,7 @@
                     </Layers>
                     <Frames>
 
-                      <CheckButton name="HealBot_SkinsSpellsUse" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_SkinsSpellsUse" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -19123,7 +19052,7 @@
                           <OnLeave>HealBot_Options_Show_Help("COLCRITICALTHR",false)</OnLeave>
                         </Scripts>
                       </Slider>
-                      <CheckButton name="HealBot_EmergBarColBuff" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_EmergBarColBuff" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
@@ -19137,7 +19066,7 @@
                           <OnLeave>HealBot_Options_Show_Help("EMERGBARCOLBUFF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
-                      <CheckButton name="HealBot_EmergBarColDebuff" inherits="UICheckButtonTemplate">
+                      <CheckButton name="HealBot_EmergBarColDebuff" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_EmergBarColBuff" relativePoint="RIGHT">
                             <Offset>
@@ -19212,7 +19141,7 @@
           
           <Frame name="HealBot_Options_Panel4" hidden="true" setAllPoints="true">
             <Frames>
-              <CheckButton name="HealBot_Options_MonitorDebuffs" inherits="UICheckButtonTemplate">
+              <CheckButton name="HealBot_Options_MonitorDebuffs" inherits="HealBotUIPanelCheckButton">
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
@@ -20650,7 +20579,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_CDCAllDisease" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllDisease" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -20664,7 +20593,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLDISEASE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_CDCAllMagic" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllMagic" inherits="HealBotUIPanelCheckButton">
                     <Layers>
                       <Layer level="BACKGROUND">
                         <FontString name="HealBot_Options_CustomAuto" text="HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC" inherits="GameFontNormal">
@@ -20691,7 +20620,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLMAGIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_CDCAllPoison" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllPoison" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -20705,7 +20634,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLPOISON",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_CDCAllCurse" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllCurse" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -20719,7 +20648,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLCURSE",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_CDCAllBoss" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllBoss" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -20733,7 +20662,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMALLBOSS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_CDCAllTimed" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCAllTimed" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
@@ -20779,7 +20708,7 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <CheckButton name="HealBot_Options_CDCCol_ShowOnHealthBar" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_CDCCol_ShowOnHealthBar" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -20807,7 +20736,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGBARRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowDebuffWarning" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -20835,7 +20764,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGSHOWRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_SoundDebuffWarning" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_SoundDebuffWarning" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -21058,7 +20987,7 @@
                   </Anchor>
                 </Anchors>
                 <Frames>
-                  <CheckButton name="HealBot_Options_MonitorBuffs" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_MonitorBuffs" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -22182,7 +22111,7 @@
                               </Layer>
                             </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_BuffCheckWellFed" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_BuffCheckWellFed" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
@@ -22353,7 +22282,7 @@
                               </Layer>
                             </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_BuffCheckManaDrink" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_BuffCheckManaDrink" inherits="HealBotUIPanelCheckButton">
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
@@ -22541,7 +22470,7 @@
                               </Layer>
                             </Layers>
                             <Frames>
-                              <CheckButton name="HealBot_Options_BuffExtraCheck1" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_BuffExtraCheck1" inherits="HealBotUIPanelCheckButton">
                                 <Size>
                                   <AbsDimension x="27" y="27"/>
                                 </Size>
@@ -22682,7 +22611,7 @@
                                   <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                                 </Scripts>
                               </Button>
-                              <CheckButton name="HealBot_Options_BuffExtraCheck2" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_BuffExtraCheck2" inherits="HealBotUIPanelCheckButton">
                                 <Size>
                                   <AbsDimension x="27" y="27"/>
                                 </Size>
@@ -22784,7 +22713,7 @@
                                   <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
                                 </Scripts>
                               </Button>
-                              <CheckButton name="HealBot_Options_BuffExtraCheck3" inherits="UICheckButtonTemplate">
+                              <CheckButton name="HealBot_Options_BuffExtraCheck3" inherits="HealBotUIPanelCheckButton">
                                 <Size>
                                   <AbsDimension x="27" y="27"/>
                                 </Size>
@@ -23779,7 +23708,7 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <CheckButton name="HealBot_Options_BuffCol_ShowOnHealthBar" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_BuffCol_ShowOnHealthBar" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
@@ -23807,7 +23736,7 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGBARRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_ShowBuffWarning" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowBuffWarning" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -23835,7 +23764,7 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGSHOWRANGE",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <CheckButton name="HealBot_Options_SoundBuffWarning" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_SoundBuffWarning" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowBuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
@@ -24054,7 +23983,7 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <CheckButton name="HealBot_Options_ShowTooltip" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
@@ -24072,7 +24001,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-5"/>
+                          <AbsDimension x="170" y="-9"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24082,7 +24011,7 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
@@ -24100,7 +24029,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-5"/>
+                          <AbsDimension x="170" y="6"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24110,7 +24039,49 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipSpellCoolDown" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipRanks" inherits="SendMailRadioButtonTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="170" y="-9"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipRanks_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPRANKS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPRANKS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipRoles" inherits="SendMailRadioButtonTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="170" y="-24"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipRoles_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPROLES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPROLES",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipHideRoleWhenRank" inherits="SendMailRadioButtonTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="188" y="-39"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipHideRoleWhenRank_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellCoolDown" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
@@ -24124,7 +24095,7 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
@@ -24138,7 +24109,7 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
                         <Offset>
@@ -24156,7 +24127,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-5"/>
+                          <AbsDimension x="170" y="-9"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24166,7 +24137,7 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWGAMEUNIT",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="UICheckButtonTemplate">
+                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPLEFT">
                         <Offset>
@@ -24180,11 +24151,28 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <Frame name="HealBot_Options_TooltipTextSize" inherits="UIDropDownMenuTemplate">
+                  <Slider name="HealBot_Options_TipMaxButtons" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="270" y="16" />
+                    </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-70" />
+                          <AbsDimension x="0" y="-70" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TipMaxButtons_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Frame name="HealBot_Options_TooltipTextSize" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOP" relativeTo="HealBot_Options_TipMaxButtons" relativePoint="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="-40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24214,7 +24202,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-125" y="120" />
+                          <AbsDimension x="-125" y="90" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24231,7 +24219,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="125" y="120" />
+                          <AbsDimension x="125" y="90" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24248,7 +24236,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="50" />
+                          <AbsDimension x="0" y="30" />
                         </Offset>
                       </Anchor>
                     </Anchors>

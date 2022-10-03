@@ -1,22 +1,34 @@
-lightweight tag f8050a47ee8952d531696ba42a55953b1d7f33b7 v1.8.5
+lightweight tag 9a5cf2fb3bad57e6950a6154cb5f0dbbf7cba9b1 v1.8.8
 Author:	Azilroka <darktemplar9900@yahoo.com>
-Date:	Tue Nov 9 20:06:29 2021 -0600
+Date:	Mon Sep 12 03:33:20 2022 -0500
 
-commit f8050a47ee8952d531696ba42a55953b1d7f33b7
+commit 9a5cf2fb3bad57e6950a6154cb5f0dbbf7cba9b1
 Author: Azilroka <darktemplar9900@yahoo.com>
-Date:   Tue Nov 9 20:06:29 2021 -0600
+Date:   Mon Sep 12 03:33:20 2022 -0500
 
-    Minor 100 from Ivaria
+    Minor 108
 
-commit 59dec962fd79a22db1d41d7e1b397cbe9e44accf
+commit db1b49ec7ebabd630634fd6d265e9a2020b3d45d
+Author: Azilroka <darktemplar9900@yahoo.com>
+Date:   Sun Sep 4 11:11:59 2022 -0500
+
+    Minor 107
+
+commit 32b8dde207d00d2b7940b6c0afd0a728b8dd6cf3
 Author: Ivaria <ivaria@vuhdo.io>
-Date:   Tue Nov 9 13:02:37 2021 -0800
+Date:   Sat Sep 3 16:38:15 2022 -0700
 
-    Avoid nil assignment error as spell ID 37563 does not exist in Classic Era
+    Sync up misc fixes from Aviana et al
 
-commit 59dec962fd79a22db1d41d7e1b397cbe9e44accf
+commit 32b8dde207d00d2b7940b6c0afd0a728b8dd6cf3
 Author: Ivaria <ivaria@vuhdo.io>
-Date:   Tue Nov 9 13:02:37 2021 -0800
+Date:   Sat Sep 3 16:38:15 2022 -0700
 
-    Avoid nil assignment error as spell ID 37563 does not exist in Classic Era
+    Sync up misc fixes from Aviana et al
+
+commit 5ad3b495fea9b183bcf9a4a8c9b54a096996420d
+Author: Ivaria <ivaria@vuhdo.io>
+Date:   Fri Sep 2 15:08:03 2022 -0700
+
+    Sync up misc fixes from Aviana et al
 

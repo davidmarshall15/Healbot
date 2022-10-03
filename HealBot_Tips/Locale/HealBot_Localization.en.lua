@@ -14,6 +14,9 @@
 --
 
 function HealBot_Lang_Options_enALL()
+    local hbSpellsTips1="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will\n".."|cff77c8ff".."change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."and show up in the tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes"
+    local hbSpellsTips2="\n--\n".."|cff77c8ff".."TIP: With the current modifier keys\n".."|cff77c8ff".."set spells with the same range as Left click.\n"
+    local hbSpellsTips3="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: When using the Global profile:\n".._G["GREEN_FONT_COLOR_CODE"].."- Macros, Items, Commands and Emotes are saved for all characters.\n".._G["GREEN_FONT_COLOR_CODE"].."- Spells are saved for all characters of the same class."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -511,6 +514,10 @@ function HealBot_Lang_Options_enALL()
                                  ["TOOLTIPHIDEIC"]=HEALBOT_OPTIONS_DISABLETOOLTIPINCOMBAT,
                                  ["TOOLTIPTARGETINFO"]=HEALBOT_OPTIONS_SHOWUNITTOOLTIP,
                                  ["TOOLTIPMYBUFFS"]=HEALBOT_OPTIONS_SHOWUNITBUFFTIME,
+                                 ["TOOLTIPRANKS"]=HEALBOT_SHOW_RAIDRANK,
+                                 ["TOOLTIPROLES"]=HEALBOT_SHOW_PLAYERROLE,
+                                 ["TOOLTIPHIDEROLEWHENRANK"]=HEALBOT_SHOW_HIDEROLEWHENRANK,
+                                 ["TOOLTIPMAXBUTTONS"]=HEALBOT_OPTIONS_TTMAXBUTTONS,
                                  ["TOOLTIPSPELLCD"]=HEALBOT_OPTIONS_SHOWCDTOOLTIP,
                                  ["TOOLTIPIGNORESPELLGCD"]=HEALBOT_OPTIONS_IGNOREGCDTOOLTIP,
                                  ["TOOLTIPWHEELCMD"]=HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP,
@@ -588,7 +595,7 @@ function HealBot_Lang_Options_enALL()
                                ["SETLANG"]="Set the language selected.",
                                ["CMDS"]="Select a command to run.\nMany commands allow for resetting parts of\nhealbot without the need to reset to defaults.",
                                ["RUNCMDS"]="Run the command selected.",
-                               ["PROFILE"]="Select to use Class or Character for saving\nsettings related to Spells, Buffs and Debuffs.",
+                               ["PROFILE"]="Select to use Global, Class or Character for saving\nsettings related to Binds, Spells, Buffs and Debuffs.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Note: Global only saves Binds and Spells that are Macros, Items, Commands or Emotes\n".._G["GREEN_FONT_COLOR_CODE"].."Everything else defaults to the Class profile.",
                                ["SETPROFILE"]="Set the profile selected.",
                                ["OPTTHEME"]="Set the options Title Box, Borders and Contents text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
@@ -597,7 +604,7 @@ function HealBot_Lang_Options_enALL()
                                ["OVERRIDESCHAT"]="Show the Overrides Chat tab.",
                                ["OVERRIDESFRAMES"]="Show the Overrides Frames tab.",
                                ["OVERRIDESEFFECTSUSE"]="Select to use the skin settings or\nalways override with settings on this tab.",
-                        -- Spells tab
+                        -- Spells tab 
                                ["SETSPELLSFOR"]="Set spells that can be used on Friendly and Hostile characters:\n--\n".._G["GREEN_FONT_COLOR_CODE"].."* Health Bars - Spells that can be cast on the health bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Emergency Bars - Spells that can be cast on the emergency bars.\n".._G["GREEN_FONT_COLOR_CODE"].."* Icons - Commands that can be used on icons.",
                                ["SPELLSUSEICONCMDS"]="Turn On/Off the use of Icon Commands set on this tab.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."On: Click on buff/debuff icons to run commands with icon tooltips.\n".._G["GREEN_FONT_COLOR_CODE"].."Off: Click through icons to cast spells on the health/emergancy bar with normal tooltips.",
                                ["SPELLSBUTTON"]="Modifier key held when casting.\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
@@ -605,11 +612,11 @@ function HealBot_Lang_Options_enALL()
                                ["SPELLSAVOIDBLUE"]="Cast an invalid spell and ended up with\na blue cursor? this option is your friend.",
                                ["SPELLSAUTOTARGET"]="Set the healers target to the character\nreceiving the current spell cast.",
                                ["SPELLSAUTOTRINKET"]="Attempt to use trinkets automatically when casting spells.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."Some trinkets break the cast using this method\n".._G["ORANGE_FONT_COLOR_CODE"].."ensure the trinket works with the spell selected.",
-                               ["SPELLSBUTTONCLICK"]="Spell to cast on the Left Button.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n".."|cff77c8ff".."and show up in Healbot's tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: For each modifier key combination, range checking is done on the Left click.\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: On the Left click, range checking is only done when a spell is set.\n".."|cff77c8ff".."TIP: Do not set a macro, item or command on the Left click.\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
-                               ["SPELLSBUTTONSHIFTCLICK"]="Spell to cast on the Middle Button.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n".."|cff77c8ff".."and show up in Healbot's tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
-                               ["SPELLSBUTTONCTRLCLICK"]="Spell to cast on the Right Button.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n".."|cff77c8ff".."and show up in Healbot's tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
-                               ["SPELLSBUTTONALTCLICK"]="Spell to cast on Button 4.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n".."|cff77c8ff".."and show up in Healbot's tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
-                               ["SPELLSBUTTONSHIFTCTRLCLICK"]="Spell to cast on Button 5.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n".."|cff77c8ff".."and show up in Healbot's tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes\n--\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination.",
+                               ["SPELLSBUTTONCLICK"]="Spell to cast on the Left Button."..hbSpellsTips1.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: For each modifier key combination, range checking is done on the Left click.\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: On the Left click, range checking is only done when a spell is set.\n".."|cff77c8ff".."TIP: Do not set a macro, item or command on the Left click.\n".."|cff77c8ff".."TIP: Set spells with the same range on the same modifier keys combination."..hbSpellsTips3,
+                               ["SPELLSBUTTONSHIFTCLICK"]="Spell to cast on the Middle Button."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
+                               ["SPELLSBUTTONCTRLCLICK"]="Spell to cast on the Right Button."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
+                               ["SPELLSBUTTONALTCLICK"]="Spell to cast on Button 4."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
+                               ["SPELLSBUTTONSHIFTCTRLCLICK"]="Spell to cast on Button 5."..hbSpellsTips1..hbSpellsTips2..hbSpellsTips3,
                                ["SPELLSHELPSELECT"]="Displays dropdowns for selecting various\nspells, macros and other commands.",
                                ["SPELLSSELECTSPELL"]="Select a spell for the spells tab.",
                                ["SPELLSSELECTMACRO"]="Select a macro for the spells tab.",
@@ -618,7 +625,7 @@ function HealBot_Lang_Options_enALL()
                                ["SPELLSSELECTEMOTES"]="Select an emote for the spells tab.",
                                ["SPELLSSELECTCANCEL"]="Do not select anything and\nreturn to the spells tab.",
                                ["SMARTCAST"]="Select and cast an appropriate spell for the situation.\nThis only works out of combat.",
-                               ["SMARTCASTAVOIDPVP"]="Do not use SmartCast\non PVP flagged players.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."Note: This will also block all spells when out of combat.",
+                               ["SMARTCASTAVOIDPVP"]="Show PVP flagged players in the tooltip.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Note: This is only shown when your not PVP flagged.",
                                ["SMARTCASTDEBUFF"]="Use SmartCast to remove debuffs.",
                                ["SMARTCASTBUFF"]="Use SmartCast to apply buffs.",
                                ["SMARTCASTRES"]="Use SmartCast to cast resurrection type spells.",
@@ -1065,6 +1072,10 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPHIDEIC"]="Hide the tooltip when in combat.",
                                ["TOOLTIPTARGETINFO"]="Show the name, class and spec if relevant,\nlocation, health and mana/power.",
                                ["TOOLTIPMYBUFFS"]="Show buffs and duration cast by you.",
+                               ["TOOLTIPRANKS"]="Show ranks such as Raid Leader or Master Looter.",
+                               ["TOOLTIPROLES"]="Show roles in groups and raids.",
+                               ["TOOLTIPHIDEROLEWHENRANK"]="Only show roles when the palyer has no rank such as Raid Leader.",
+                               ["TOOLTIPMAXBUTTONS"]="Maximum number of buttons to show\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Includes unassigned buttons.\n".._G["YELLOW_FONT_COLOR_CODE"].."Example: When set to 3 only Left, Middle and Right\n".._G["YELLOW_FONT_COLOR_CODE"].."will show when assigned, Button 4 will never show.",
                                ["TOOLTIPSPELLCD"]="Show the cooldown remaining on the spell.",
                                ["TOOLTIPIGNORESPELLGCD"]="Ignore the global cooldown on the spell.",
                                ["TOOLTIPWHEELCMD"]="Show the commands defined on the Mouse Wheel tab.",

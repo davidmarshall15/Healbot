@@ -552,6 +552,9 @@ function HealBot_Aux_setPowerBars(button)
     for id in pairs(hbAuxPowerAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DEAD"] then
             if button.mana.max==0 or (Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] and button.mana.type~=0) then
+                button.aux[id]["R"]=0
+                button.aux[id]["G"]=0
+                button.aux[id]["B"]=0
                 HealBot_Aux_setBar(button, id, 0, true)
             else
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
@@ -1603,7 +1606,7 @@ function HealBot_Aux_DoUpdateNameOverLay(button)
 end
 
 function HealBot_Aux_UpdateNameOverLay(button, oType, state)
-    if nameLastOverlayType[button.id][oType]~=state then
+    if state or nameLastOverlayType[button.id][oType] then
         nameLastOverlayType[button.id][oType]=state
         HealBot_Aux_DoUpdateNameOverLay(button)
     end

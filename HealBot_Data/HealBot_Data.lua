@@ -1,6 +1,3 @@
-HealBot_lastVerSkinUpdate="9.2.7.0"
-HealBot_lastVerUpdate="9.2.7.0"
-
 HealBot_Default_Textures={
     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
     [2]= {name="Waves", file=[[Interface\Addons\HealBot\Images\bar2.tga]]},
@@ -54,7 +51,7 @@ HealBot_Font_Outline={
 };
 
 HealBot_ConfigDefaults = {
-  LastVersionUpdate=HealBot_lastVerUpdate,
+  LastVersionUpdate=HEALBOT_VERSION_SC,
   MyFriend="x",
   CurrentSpec=9,
   Skin_ID = -1,
@@ -214,6 +211,7 @@ HealBot_Class_En = {
                 [HEALBOT_SHAMAN]="SHAM",
                 [HEALBOT_WARLOCK]="WARL",
                 [HEALBOT_WARRIOR]="WARR",
+                [HEALBOT_EVOKER]="EVOK",
                 [HEALBOT_DEATHKNIGHT]="DEAT",
                 [HEALBOT_MONK]="MONK",
                 [HEALBOT_DEMONHUNTER]="DEMO",
@@ -247,7 +245,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
-        LastVersionSkinUpdate=HealBot_lastVerSkinUpdate,
+        LastVersionSkinUpdate=HEALBOT_VERSION_SC,
         FirstLoad = true,
         PluginThreat=true,
         PluginTimeToDie=true,
@@ -266,18 +264,21 @@ function HealBot_Data_InitVars()
         DebugOut=false,
         Debug01=false, -- Currently not used
         VersionResetDone={["ICONS"]="9.1.0.0",["BUFF"]="9.1.0.0",["CBUFF"]="9.1.0.0",["DEBUFF"]="9.1.0.0",["CDEBUFF"]="9.1.0.0"},
-        CatchAltDebuffIDs={["init"]=true},
         CureCustomDefaultCastBy=1,
         TopRole="TANK",
         TargetBarRestricted=0,
         ShowTooltip = true,
         Tooltip_ShowTarget = true,
         Tooltip_ShowMyBuffs = false,
+        Tooltip_ShowRank = true,
+        Tooltip_ShowRole = true,
+        Tooltip_HideRoleWhenRank = false,
         Tooltip_MouseWheel = false,
         UseGameTooltip=false,
         ShowGameUnitInfo=false,
         Tooltip_ShowHoT=false,
         Tooltip_ShowCD=false,
+        Tooltip_MaxButtons=5,
         Tooltip_IgnoreGCD=false,
         Tooltip_TextSize=2,
         ttalpha=0.8,
@@ -585,6 +586,9 @@ function HealBot_Data_InitVars()
                 [HEALBOT_TOUCH_OF_KARMA]=2,
                 [HEALBOT_ESSENCE_FONT]=2,
             },
+            ["EVOK"] = {
+
+            }, 
             ["ALL"] = {
                 [HEALBOT_GIFT_OF_THE_NAARU]=2,
                 [HEALBOT_DARKFLIGHT]=2,

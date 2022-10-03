@@ -21,7 +21,7 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
     end
 end
 
-local function HealBot_Comms_SendInstantAddonMsg(addon_id, msg)
+function HealBot_Comms_SendInstantAddonMsg(msg)
     if IsInInstance() and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT");
     elseif IsInRaid() then
@@ -40,7 +40,7 @@ function HealBot_Comms_SendAddonMessage()
         local msg, aType, pName=string.split("~", aMsg)
         aType=tonumber(aType)
         if aType==1 then
-            HealBot_Comms_SendInstantAddonMsg(HEALBOT_HEALBOT, msg)
+            HealBot_Comms_SendInstantAddonMsg(msg)
         elseif aType==2 and pName then
             local xUnit=HealBot_Panel_RaidUnitName(pName)
             if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit)==pName then

@@ -48,6 +48,35 @@ function HealBot_Lang_enALL()
     HEALBOT_DEATHKNIGHT                     = "Death Knight";
     HEALBOT_DEMONHUNTER                     = "Demon Hunter";
     HEALBOT_MONK                            = "Monk";
+    HEALBOT_EVOKER                          = "Evoker"
+
+    HEALBOT_BALANCE       = "Balance"
+    HEALBOT_FERAL         = "Feral"
+    HEALBOT_RESTORATION   = "Restoration"
+    HEALBOT_SHAMAN_RESTORATION = "Restoration"
+    HEALBOT_ARCANE        = "Arcane"
+    HEALBOT_FIRE          = "Fire"
+    HEALBOT_FROST         = "Frost"
+    HEALBOT_DISCIPLINE    = "Discipline"
+    HEALBOT_HOLY          = "Holy"
+    HEALBOT_SHADOW        = "Shadow"
+    HEALBOT_ASSASSINATION = "Assassination"
+    HEALBOT_COMBAT        = "Combat"
+    HEALBOT_SUBTLETY      = "Subtlety"
+    HEALBOT_ARMS          = "Arms"
+    HEALBOT_FURY          = "Fury"
+    HEALBOT_PROTECTION    = "Protection"
+    HEALBOT_BEASTMASTERY  = "Beast Mastery"
+    HEALBOT_MARKSMANSHIP  = "Marksmanship"
+    HEALBOT_SURVIVAL      = "Survival"
+    HEALBOT_RETRIBUTION   = "Retribution"
+    HEALBOT_ELEMENTAL     = "Elemental"
+    HEALBOT_ENHANCEMENT   = "Enhancement"
+    HEALBOT_AFFLICTION    = "Affliction"
+    HEALBOT_DEMONOLOGY    = "Demonology"
+    HEALBOT_DESTRUCTION   = "Destruction"
+    HEALBOT_BLOOD         = "Blood"
+    HEALBOT_UNHOLY        = "Unholy"
 
     HEALBOT_DISEASE                         = "Disease";
     HEALBOT_MAGIC                           = "Magic";
@@ -558,6 +587,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_RESURRECTION               = "Resurrection"
 
     HEALBOT_OPTIONS_TTALPHA                 = "Opacity"
+    HEALBOT_OPTIONS_TTMAXBUTTONS            = "Max buttons"
     HEALBOT_TOOLTIP_TARGETBAR               = "Target Bar"
     HEALBOT_OPTIONS_MYTARGET                = "Private List"
     HEALBOT_OPTIONS_MYFRIEND                = "My Friend"
@@ -636,6 +666,9 @@ function HealBot_Lang_enALL()
     HEALBOT_SHOW_CLASS_AS_ICON              = "as icon";
     HEALBOT_SHOW_CLASS_AS_TEXT              = "as text";
     HEALBOT_SHOW_ROLE                       = "show role when set";
+    HEALBOT_SHOW_PLAYERROLE                 = "Show role";
+    HEALBOT_SHOW_RAIDRANK                   = "Show rank";
+    HEALBOT_SHOW_HIDEROLEWHENRANK           = "Hide role when rank exists";
 
     HEALBOT_SHOW_INCHEALS                   = "Show incoming heals";
     
@@ -723,10 +756,21 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTONCASTPRESSED       = "Pressed"
     HEALBOT_OPTIONS_BUTTONCASTRELEASED      = "Released"
 
+    HEALBOT_WORD_EXPLORING                  = "Exploring"
+    HEALBOT_WORD_INCOMBAT                   = "In Combat"
+    HEALBOT_WORD_NEUTRAL                    = "Neutral"
+    HEALBOT_WORD_RESTING                    = "Resting"
+    HEALBOT_WORD_RAIDER                     = "Raider"
     HEALBOT_WORD_HEALER                     = "Healer"
     HEALBOT_WORD_DAMAGER                    = "Damager"
     HEALBOT_WORD_TANK                       = "Tank"
-    HEALBOT_WORD_LEADER                     = "Leader"
+    HEALBOT_WORD_MAINTANK                   = "Main Tank"
+    HEALBOT_WORD_PRIVATETANK                = "Private Tank"
+    HEALBOT_WORD_PRIVATEHEALER              = "Private Healer"
+    HEALBOT_WORD_GROUPLEADER                = "Group Leader"
+    HEALBOT_WORD_RAIDLEADER                 = "Raid Leader"
+    HEALBOT_WORD_RAIDASSISTANT              = "Raid Assistant"
+    HEALBOT_WORD_MASTERLOOTER               = "Master Looter"
     HEALBOT_WORD_VERSION                    = "Version"
     HEALBOT_WORD_CLIENT                     = "Client"
 
@@ -780,8 +824,9 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_USE10ON                    = "Auto Trinket - Use10 is on - You must enable an existing auto trinket for use10 to work"
     HEALBOT_CHAT_USE10OFF                   = "Auto Trinket - Use10 is off"
     HEALBOT_CHAT_SKINREC                    = " skin imported" 
-    HEALBOT_CHAT_MAINASSISTOFF              = "Main Assist excluded from Tanks"
-    HEALBOT_CHAT_MAINASSISTON               = "Main Assist included with Tanks"
+    HEALBOT_CHAT_MAINASSISTOFF              = "Off Tanks excluded from Main Tanks"
+    HEALBOT_CHAT_MAINASSISTON               = "Off Tanks included with Main Tanks"
+    HEALBOT_OPTIONS_OFFTANKS                = "Include Off Tanks with Main Tanks"
 
     HEALBOT_OPTIONS_SELFCASTS               = "Self casts only"
     HEALBOT_OPTIONS_SELFINDICATOR           = "Self indicator"
@@ -1181,6 +1226,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_CPMACRO                  = "Macro name: "
     HEALBOT_PLUGIN_AGGRO2THRESHOLD          = "Aggro level 2 threshold"
     HEALBOT_PLUGIN_AGGRO3THRESHOLD          = "Aggro level 3 threshold"
+    HEALBOT_PLUGIN_INHEALHOTTIME            = "Incoming heals HoT time"
     HEALBOT_PLUGIN_AUTOTIMEDDURATION        = "Custom debuff - auto All Timed duration less than"
     HEALBOT_PLUGIN_ENABLEDALLBUFFS          = "Enable all custom buffs"
     HEALBOT_PLUGIN_DISABLEALLBUFFS          = "Disable all custom buffs"
