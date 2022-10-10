@@ -208,11 +208,15 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                         elseif hbCombatRole and (hbCombatRole=="HEALER" or hbCombatRole=="TANK") then
                             if HEALBOT_GAME_VERSION>3 then
                                 hbFRole = hbCombatRole
-                            elseif HealBot_Globals.AllowPlayerRoles then
-                                if hbCombatRole=="HEALER" then
-                                    hbFRole = "HEALER"
+                            else
+                                if HealBot_Globals.AllowPlayerRoles then
+                                    if hbCombatRole=="HEALER" then
+                                        hbFRole = "HEALER"
+                                    else
+                                        hbFRole=HealBot_Panel_CheckRole(unit)
+                                    end
                                 else
-                                    hbFRole=HealBot_Panel_CheckRole(unit)
+                                    hbFRole=HealBot_Panel_UnitRoleOnSpec(dsGUID, hbFRole)
                                 end
                             end
                         end
@@ -576,23 +580,37 @@ function HealBot_Panel_CheckRole(unit)
     return "TANK"
 end
 
+function HealBot_Panel_UnitRoleOnSpec(guid, role)
+    if HealBot_Panel_RaidUnitGUID(guid) then
+        local s=HealBot_Action_getGuidData(guid, "SPEC")
+        if s==" "..HEALBOT_RESTORATION.." " or s==" "..HEALBOT_DISCIPLINE.." " or s==" "..HEALBOT_HOLY.." " or s==" "..HEALBOT_SHAMAN_RESTORATION.." " then
+            return "HEALER"
+        elseif s==" "..HEALBOT_PROTECTION.." " or (role=="TANK" and s==" "..HEALBOT_FERAL.." ") then
+            return "TANK"
+        else
+            return "DAMAGER"
+        end
+    else
+        return role
+    end
+end
+
 function HealBot_Panel_UnitRole(unit,guid)
     local role = hbPanel_dataRoles[unit]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>2 then
             role=UnitGroupRolesAssigned(unit) or "DAMAGER"
-            if HEALBOT_GAME_VERSION==3 and not HealBot_Globals.AllowPlayerRoles then
-                if GetPartyAssignment('MAINTANK', unit) then 
-                    role=HealBot_Panel_CheckRole(unit)
-                elseif HealBot_Panel_RaidUnitGUID(guid) then
-                    local s=HealBot_Action_getGuidData(guid, "SPEC")
-                    role=HealBot_Init_ClassicRoles(s)
+            if HEALBOT_GAME_VERSION==3 then
+                if HealBot_Globals.AllowPlayerRoles then
+                    if GetPartyAssignment('MAINTANK', unit) or role=="TANK" then 
+                        role=HealBot_Panel_CheckRole(unit)
+                    end
                 else
-                    role="DAMAGER"
+                    role=HealBot_Panel_UnitRoleOnSpec(guid, role)
                 end
             end
         else
-            role="DAMAGER" 
+            role="DAMAGER"
         end
         hbPanel_dataRoles[unit]=role
     end

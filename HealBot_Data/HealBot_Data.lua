@@ -258,6 +258,7 @@ function HealBot_Data_InitVars()
         AllowPlayerRoles=false,
         CrashProtTime=0,
         NoRanks=false,
+        ClassicHoTTime=6,
         CPUUsage=5,
         OptionsTheme=1,
         OptionsOpacityAdj=35,

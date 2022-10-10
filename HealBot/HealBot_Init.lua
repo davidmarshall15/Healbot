@@ -313,25 +313,37 @@ function HealBot_Init_Spells_Defaults()
 end
 
 function HealBot_Init_SmartCast()
+    local rName=""
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        if HEALBOT_GAME_VERSION>3 and HealBot_Spell_IDs[HEALBOT_MASS_RESURRECTION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_MASS_RESURRECTION].name end
-        if HealBot_Spell_IDs[HEALBOT_RESURRECTION] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESURRECTION].name end
+        rName=GetSpellInfo(HEALBOT_MASS_RESURRECTION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_RESURRECTION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        if HEALBOT_GAME_VERSION>3 and HealBot_Spell_IDs[HEALBOT_REVITALIZE] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REVITALIZE].name end
-        if HealBot_Spell_IDs[HEALBOT_REVIVE] then 
-            SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REVIVE].name 
-        elseif HealBot_Spell_IDs[HEALBOT_REBIRTH] then 
-            SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REBIRTH].name
+        rName=GetSpellInfo(HEALBOT_REVITALIZE)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_REVIVE)
+        if rName and HealBot_Spell_Names[rName] then 
+            SmartCast_Res=rName
+        else
+            rName=GetSpellInfo(HEALBOT_REBIRTH)
+            if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        if HealBot_Spell_IDs[HEALBOT_REAWAKEN] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_REAWAKEN].name end
-        if HealBot_Spell_IDs[HEALBOT_RESUSCITATE] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_RESUSCITATE].name end
+        rName=GetSpellInfo(HEALBOT_REAWAKEN)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_RESUSCITATE)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        if HEALBOT_GAME_VERSION>3 and HealBot_Spell_IDs[HEALBOT_ABSOLUTION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_ABSOLUTION].name end
-        if HealBot_Spell_IDs[HEALBOT_REDEMPTION] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_REDEMPTION].name end
+        rName=GetSpellInfo(HEALBOT_ABSOLUTION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_REDEMPTION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        if HEALBOT_GAME_VERSION>3 and HealBot_Spell_IDs[HEALBOT_ANCESTRAL_VISION] then SmartCast_MassRes=HealBot_Spell_IDs[HEALBOT_ANCESTRAL_VISION].name end
-        if HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT] then SmartCast_Res=HealBot_Spell_IDs[HEALBOT_ANCESTRALSPIRIT].name end
+        rName=GetSpellInfo(HEALBOT_ANCESTRAL_VISION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_REDEMPTION)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     end
 end
 
@@ -349,16 +361,6 @@ function HealBot_Init_ClassicSpecs()
         ["WARL"] = { [1] = HEALBOT_AFFLICTION,    [2] = HEALBOT_DEMONOLOGY,   [3] = HEALBOT_DESTRUCTION, },
         ["DEAT"] = { [1] = HEALBOT_BLOOD,         [2] = HEALBOT_FROST,        [3] = HEALBOT_UNHOLY, },
         }
-end
-
-function HealBot_Init_ClassicRoles(s)
-    if s==" "..HEALBOT_RESTORATION.." " or s==" "..HEALBOT_DISCIPLINE.." " or s==" "..HEALBOT_HOLY.." " or s==" "..HEALBOT_SHAMAN_RESTORATION.." " then
-        return "HEALER"
-    elseif s==" "..HEALBOT_PROTECTION.." " then
-        return "TANK"
-    else
-        return "DAMAGER"
-    end
 end
 
 function HealBot_Init_retSpec(class,tab)

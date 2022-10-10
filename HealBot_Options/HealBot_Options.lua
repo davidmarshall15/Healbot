@@ -365,28 +365,6 @@ function HealBot_Options_cacheNames(list)
     end
 end
 
-function HealBot_Options_GetContainerNumSlots(bag)
-    --if HEALBOT_GAME_VERSION>9 then
-        --return C_Container.GetContainerNumSlots(bag)
-    --else
-        return GetContainerNumSlots(bag)
-    --end
-end
-
-function HealBot_Options_ItemsInBagInitScan(bag)
-    local itemId,itemName=0,""
-    local numSlots=HealBot_Options_GetContainerNumSlots(bag)
-    for slot = 1,numSlots do
-        itemId=GetContainerItemID(bag,slot) or 0
-        if itemId>0 then
-            itemName=GetItemInfo(itemId)
-        end
-    end
-    if bag<NUM_BAG_SLOTS then
-        C_Timer.After(0.01, function() HealBot_Options_ItemsInBagInitScan(bag+1) end)
-    end
-end
-
 function HealBot_Options_setLists()
     HealBot_Options_BuffTxt_List = {
         HEALBOT_WORDS_NONE,
@@ -404,6 +382,7 @@ function HealBot_Options_setLists()
         HEALBOT_FOCUS,
         HEALBOT_OPTIONS_MYFRIEND,
         HEALBOT_OPTIONS_SINGLETANK,
+        HEALBOT_WORD_SOLO,
     }
     
     if HEALBOT_GAME_VERSION>3 then 
@@ -3942,7 +3921,6 @@ function HealBot_Options_TipMaxButtons_OnValueChanged(self)
         HealBot_Globals.Tooltip_MaxButtons = val;
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
-        if HealBot_Data["TIPUSE"] then HealBot_Tooltip_setAllMaxButtons() end
     end
 end
 
@@ -9090,6 +9068,7 @@ function HealBot_Options_FullHealSpellsCombo_list(sType)
             HEALBOT_DOWNPOUR,
             HEALBOT_REGROWTH,
             HEALBOT_NOURISH,
+            HBC_NOURISH,
             HEALBOT_RENEW,
             HEALBOT_DIVINE_HYMN,
             HEALBOT_HEALING_RAIN,
@@ -9710,6 +9689,8 @@ function HealBot_Options_SelectCmds_List(cType)
                 HEALBOT_STOP,
                 HEALBOT_MOUNTSPETS,
                 HEALBOT_FAVMOUNT,
+                HEALBOT_RANDOMMOUNT,
+                HEALBOT_RANDOMGOUNDMOUNT,
                 HEALBOT_FAVPET,
             }
     elseif HEALBOT_GAME_VERSION>2 then
@@ -9722,6 +9703,8 @@ function HealBot_Options_SelectCmds_List(cType)
                 HEALBOT_STOP,
                 HEALBOT_MOUNTS,
                 HEALBOT_FAVMOUNT,
+                HEALBOT_RANDOMMOUNT,
+                HEALBOT_RANDOMGOUNDMOUNT,
             }
     else
         HealBot_Options_SelectCmdsCombo_List = {
@@ -10195,7 +10178,7 @@ function HealBot_Options_FramesSelFrame_DropDown()
         info.func = function(self)
                         if HealBot_Options_luVars["FramesSelFrame"]~=self:GetID() then
                             HealBot_Options_luVars["FramesSelFrame"]=self:GetID()
-                            if HEALBOT_GAME_VERSION<4 then 
+                            if HEALBOT_GAME_VERSION<3 then 
                                 if HealBot_Options_luVars["FramesSelFrame"]==6 then HealBot_Options_luVars["FramesSelFrame"]=7 end
                                 if HEALBOT_GAME_VERSION<2 then 
                                     if HealBot_Options_luVars["FramesSelFrame"]==9 then HealBot_Options_luVars["FramesSelFrame"]=10 end
@@ -14131,6 +14114,10 @@ function HealBot_Options_Debuff_Reset()
                         HealBot_DebuffWatchTargetSpell["Focus"]=true
                     elseif dropdownID==14 then
                         HealBot_DebuffWatchTargetSpell["Name"]=true
+                    elseif dropdownID==15 then
+                        HealBot_DebuffWatchTargetSpell["SingleTank"]=true
+                    elseif dropdownID==16 then
+                        HealBot_DebuffWatchTargetSpell["Solo"]=true;
                     end        
                 end)
             end
@@ -14353,6 +14340,8 @@ function HealBot_Options_Buff_Reset()
                     HealBot_BuffWatchTargetSpell["Name"]=true
                 elseif dropdownID==15 then
                     HealBot_BuffWatchTargetSpell["SingleTank"]=true
+                elseif dropdownID==16 then
+                    HealBot_BuffWatchTargetSpell["Solo"]=true;
                 end
                 HealBot_buffbarcolr[sName]=buffbarcolrClass[k];
                 HealBot_buffbarcolg[sName]=buffbarcolgClass[k];

@@ -825,6 +825,8 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     end
                 elseif buffWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
                     buffCheckThis=true
+                elseif buffWatchTarget["Solo"] and not IsInRaid() and not IsInGroup() then
+                    buffCheckThis=true
                 elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
                 elseif buffWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
@@ -1166,6 +1168,8 @@ function HealBot_Aura_CheckCurDebuff(button)
                 elseif ccdbWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["Self"] and button.player then
+                    ccdbCheckthis=true
+                elseif ccdbWatchTarget["Solo"] and not IsInRaid() and not IsInGroup() then
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget[button.text.classtrim] then
                     ccdbCheckthis=true;

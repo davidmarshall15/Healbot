@@ -20,11 +20,15 @@ local hbPlayerCommands = {}
 if HEALBOT_GAME_VERSION>3 then
     hbPlayerCommands = { [strlower(HEALBOT_MOUNTSPETS)]=true,
                          [strlower(HEALBOT_FAVMOUNT)]=true,
+                         [strlower(HEALBOT_RANDOMMOUNT)]=true,
+                         [strlower(HEALBOT_RANDOMGOUNDMOUNT)]=true,
                          [strlower(HEALBOT_FAVPET)]=true,
                        }
 elseif HEALBOT_GAME_VERSION>2 then
     hbPlayerCommands = { [strlower(HEALBOT_MOUNTS)]=true,
                          [strlower(HEALBOT_FAVMOUNT)]=true,
+                         [strlower(HEALBOT_RANDOMMOUNT)]=true,
+                         [strlower(HEALBOT_RANDOMGOUNDMOUNT)]=true,
                        }
 end
 

@@ -1845,7 +1845,6 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["PARTY_MEMBER_ENABLE"]=HealBot_CheckUnitStatus,
                     ["PARTY_MEMBER_DISABLE"]=HealBot_CheckUnitStatus,
                     ["PLAYER_SPECIALIZATION_CHANGED"]=HealBot_OnEvent_SpecChange,
-                    ["ACTIVE_TALENT_GROUP_CHANGED"]=HealBot_OnEvent_SpecChange,
                     ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                    }
 
@@ -2279,9 +2278,6 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE")
     button:UnregisterEvent("UNIT_THREAT_LIST_UPDATE")
     button:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED")
-    if HEALBOT_GAME_VERSION==3 then
-        --button:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-    end
     if HEALBOT_GAME_VERSION>3 then
         button:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
@@ -2340,8 +2336,6 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("PARTY_MEMBER_DISABLE", button.unit)
         if HEALBOT_GAME_VERSION==1 and HealBot_Action_luVars["regAggro"] then
             button:RegisterUnitEvent("PLAYER_TARGET_SET_ATTACKING", button.unit)
-        elseif HEALBOT_GAME_VERSION==3 then
-            --button:RegisterUnitEvent("ACTIVE_TALENT_GROUP_CHANGED", button.unit)
         elseif HEALBOT_GAME_VERSION>3 then
             button:RegisterUnitEvent("PLAYER_SPECIALIZATION_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_POWER_POINT_CHARGE", button.unit)
@@ -2724,6 +2718,10 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
             cID="H"
         elseif HEALBOT_GAME_VERSION>3 and cText == HEALBOT_FAVPET then
             cID="I"
+        elseif HEALBOT_GAME_VERSION>2 and cText == HEALBOT_RANDOMMOUNT then
+            cID="J"
+        elseif HEALBOT_GAME_VERSION>2 and cText == HEALBOT_RANDOMGOUNDMOUNT then
+            cID="K"
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdCodes")
@@ -2781,6 +2779,10 @@ function HealBot_Action_SpellCmdText(cType, cID)
             cText=HEALBOT_FAVMOUNT
         elseif HEALBOT_GAME_VERSION>3 and cID == "I" then
             cText=HEALBOT_FAVPET
+        elseif HEALBOT_GAME_VERSION>2 and cID == "J" then
+            cText=HEALBOT_RANDOMMOUNT
+        elseif HEALBOT_GAME_VERSION>2 and cID == "K" then
+            cText=HEALBOT_RANDOMGOUNDMOUNT
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdText")
@@ -3560,15 +3562,32 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             if UnitIsUnit(unit, "player") then
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
-                if HEALBOT_GAME_VERSION>3 then
-                    button:SetAttribute(HB_prefix.."macrotext"..j, "/run C_MountJournal.SummonByID(0)")
-                elseif HealBot_Config.FavMount and string.len(HealBot_Config.FavMount)>3 and HealBot_Config.FavGroundMount and string.len(HealBot_Config.FavGroundMount)>3 then
-                    button:SetAttribute(HB_prefix.."macrotext"..j, "/use [flyable] "..HealBot_Config.FavMount.."; "..HealBot_Config.FavGroundMount.."; /dismount [mounted]")
-                elseif HealBot_Config.FavMount and string.len(HealBot_Config.FavMount)>3 then
-                    button:SetAttribute(HB_prefix.."macrotext"..j, "/use [flyable] "..HealBot_Config.FavMount.."; /dismount [mounted]")
-                elseif HealBot_Config.FavGroundMount and string.len(HealBot_Config.FavGroundMount)>3 then
-                    button:SetAttribute(HB_prefix.."macrotext"..j, "/use "..HealBot_Config.FavGroundMount.."; /dismount [mounted]")
-                end
+                button:SetAttribute(HB_prefix.."macrotext"..j, "/run HealBot_MountsPets_FavMount()")
+                --if HEALBOT_GAME_VERSION>3 then
+                    --button:SetAttribute(HB_prefix.."macrotext"..j, "/run C_MountJournal.SummonByID(0)")
+                --elseif HealBot_Config.FavMount and string.len(HealBot_Config.FavMount)>3 and HealBot_Config.FavGroundMount and string.len(HealBot_Config.FavGroundMount)>3 then
+                    --button:SetAttribute(HB_prefix.."macrotext"..j, "/use [flyable] "..HealBot_Config.FavMount.."; "..HealBot_Config.FavGroundMount.."; /dismount [mounted]")
+                --elseif HealBot_Config.FavMount and string.len(HealBot_Config.FavMount)>3 then
+                    --button:SetAttribute(HB_prefix.."macrotext"..j, "/use [flyable] "..HealBot_Config.FavMount.."; /dismount [mounted]")
+                --elseif HealBot_Config.FavGroundMount and string.len(HealBot_Config.FavGroundMount)>3 then
+                    --button:SetAttribute(HB_prefix.."macrotext"..j, "/use "..HealBot_Config.FavGroundMount.."; /dismount [mounted]")
+                --end
+            else
+                button:SetAttribute(HB_prefix..buttonType..j, nil)
+            end
+        elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_RANDOMMOUNT) then
+            if UnitIsUnit(unit, "player") then
+                button:SetAttribute(HB_prefix..buttonType..j, nil);
+                button:SetAttribute(HB_prefix.."type"..j, "macro")
+                button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_MountsPets_ToggelMount("all")')
+            else
+                button:SetAttribute(HB_prefix..buttonType..j, nil)
+            end
+        elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_RANDOMGOUNDMOUNT) then
+            if UnitIsUnit(unit, "player") then
+                button:SetAttribute(HB_prefix..buttonType..j, nil);
+                button:SetAttribute(HB_prefix.."type"..j, "macro")
+                button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_MountsPets_ToggelMount("ground")')
             else
                 button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
@@ -3873,7 +3892,8 @@ end
 
 local hbGuidData={}
 local hbGuidDefault={["OFFLINE"]=false,
-                     ["SPEC"]=" ", 
+                     ["SPEC"]=" ",
+                     ["TMPSPEC"]=" ",
                      ["READYCHECK"]=false,
                      ["CLASSKNOWN"]=false,
                      ["PLAYER"]=false,
@@ -3889,6 +3909,7 @@ function HealBot_Action_initGuidData(button)
             hbGuidData[button.guid]={}
             hbGuidData[button.guid]["OFFLINE"]=false
             hbGuidData[button.guid]["SPEC"]=" "
+            hbGuidData[button.guid]["TMPSPEC"]=" "
             hbGuidData[button.guid]["READYCHECK"]=false
             hbGuidData[button.guid]["CLASSKNOWN"]=false
             hbGuidData[button.guid]["PLAYER"]=false
@@ -3919,8 +3940,10 @@ function HealBot_Action_setGuidData(button, attrib, value, callback)
 end
 
 function HealBot_Action_setGuidSpec(button, spec)
-    HealBot_Action_setGuidData(button, "SPEC", " "..spec.." ")
-    if button.frame<6 then HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers",1.25) end
+    button.spec = " "..spec.." "
+    HealBot_Action_setGuidData(button, "SPEC", button.spec)
+    HealBot_Action_setGuidData(button, "TMPSPEC", button.spec)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers",1.25)
 end
 
 function HealBot_Action_SetRangeSpellType(button, hostile)
@@ -5116,6 +5139,7 @@ function HealBot_Action_UseSmartCast(self,button)
             self:SetAttribute("helpbutton1", "heal1");
             self:SetAttribute("type-heal1", "spell");
             self:SetAttribute("spell-heal1", sName);
+            HealBot_AddDebug("Casting spell="..sName,"SmartCast",true)
         else
             local mId=GetMacroIndexByName(sName)
             if mId ~= 0 then
@@ -5131,10 +5155,12 @@ function HealBot_Action_UseSmartCast(self,button)
                 mText=string.gsub(mText,"hbtargettargettarget",button.unit.."targettarget")
                 self:SetAttribute("type1","macro")
                 self:SetAttribute("macrotext1", mText)
+                HealBot_AddDebug("[NON HB] Using macro="..sName,"SmartCast",true)
             else
                 self:SetAttribute("helpbutton1", "item1");
                 self:SetAttribute("type-item1", "item");
                 self:SetAttribute("item-item1", sName);
+                HealBot_AddDebug("[NON HB] Casting macro="..sName,"SmartCast",true)
             end
         end
         usedSmartCast=true;
@@ -5501,7 +5527,7 @@ local arResSpell=false
 HealBot_Action_luVars["lastMassRes"]=0
 function HealBot_Action_retResSpell(button)
     arResSpell=false
-    if HEALBOT_GAME_VERSION>3 and HealBot_Init_retSmartCast_MassRes() then
+    if HealBot_Init_retSmartCast_MassRes() then
         if HealBot_Action_luVars["lastMassRes"]>(GetTime()-2) then
             arResSpell=HealBot_Init_retSmartCast_MassRes()
         else
@@ -5525,6 +5551,7 @@ function HealBot_Action_SmartCast(button)
  
     if HealBot_Globals.SmartCastRes and HealBot_Action_IsUnitDead(button) then
         scSpell=HealBot_Action_retResSpell(button)
+        HealBot_AddDebug("Res spell="..(scSpell or "nil"),"SmartCast",true)
     elseif button.aura.debuff.curespell and HealBot_Globals.SmartCastDebuff then
         scSpell=button.aura.debuff.curespell
     elseif button.aura.buff.missingbuff and HealBot_Globals.SmartCastBuff then
@@ -5542,8 +5569,12 @@ function HealBot_Action_SmartCast(button)
     end
 
     if scSpell and HealBot_UnitInRangeExc30(button, scSpell)>0 then
+        HealBot_AddDebug("In Range spell="..scSpell,"SmartCast",true)
         return scSpell
     else
+        if scSpell then 
+            HealBot_AddDebug("Out of Range spell="..scSpell,"SmartCast",true)   
+        end
         return nil
     end
 end

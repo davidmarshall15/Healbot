@@ -205,6 +205,7 @@ function HealBot_globalVars()
     HEALBOT_SWIFTMEND                       = 18562 --GetSpellInfo(18562) or "--Swiftmend";
     HEALBOT_TRANQUILITY                     = 157982 --GetSpellInfo(740) or "--Tranquility";
     HEALBOT_WILD_GROWTH                     = 48438 --GetSpellInfo(48438) or "--Wild Growth";
+    HBC_NOURISH                             = 50464
     HEALBOT_NOURISH                         = 289022
     HEALBOT_OVERGROWTH                      = 203651
     --Monk

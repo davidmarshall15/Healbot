@@ -305,6 +305,7 @@ function HealBot_Timers_InitSpells()
 end
 
 function HealBot_Timers_LastLoad()
+    HealBot_Timers_Set("LAST","MountsPetsUse")
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.1)
     HealBot_Timers_Set("SKINS","EmergHealthCol",0.15)
     HealBot_Timers_Set("AURA","ConfigClassHoT",0.2)
@@ -376,7 +377,7 @@ function HealBot_Timers_SkinsFramesChanged()
 end
 
 function HealBot_Timers_IconsFramesChanged()
-    HealBot_Options_framesChanged(false, true)
+    HealBot_Options_framesChanged(true, true)
 end
 
 function HealBot_Timers_IndicatorFramesChanged()
@@ -576,6 +577,7 @@ local hbTimerFuncs={["INIT"]={
                     },
                     ["LAST"]={
                         ["MountsPetsUse"]=HealBot_MountsPets_InitUse,
+                        ["MountsPetsZone"]=HealBot_MountsPets_ZoneChange,
                         ["MountsPetsInit"]=HealBot_MountsPets_InitMount,
                         ["HealBotLoaded"]=HealBot_Timers_Loaded,
                         ["OptionsMainPanel"]=HealBot_Options_MainPanel,
