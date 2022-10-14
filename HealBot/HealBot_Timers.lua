@@ -631,6 +631,7 @@ local hbTimerFuncs={["INIT"]={
                         ["InitLoadSpells"]=HealBot_Timers_InitSpells,
                         ["SetAutoClose"]=HealBot_Action_setAutoClose,
                         ["CheckHideFrames"]=HealBot_Action_CheckHideFrames,
+                        ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
                     },
                    }
                    

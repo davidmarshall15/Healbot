@@ -594,7 +594,7 @@ function HealBot_Action_DoRefreshTooltip()
                     uSpec=xButton.spec
                 end
                 if HEALBOT_GAME_VERSION>2 and uSpec==" " then
-                    HealBot_QueueSpecUpdate(xButton)
+                    HealBot_QueueSpecSlowUpdate(xButton)
                 end
                 HealBot_Tooltip_luVars["uGroup"]=0
                 if IsInRaid() then 

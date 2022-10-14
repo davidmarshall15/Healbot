@@ -122,6 +122,17 @@ function HealBot_MountsPets_InitUse()
     end
 end
 
+function HealBot_MountsPets_ClassicDalaranCheck()
+    local mapPos = C_Map.GetPlayerMapPosition(125, "player")
+    local x, y = mapPos:GetXY()
+    if x>0.6 and y<0.5 then
+        HealBot_mountData["incFlying"]=true
+    else
+        HealBot_mountData["incFlying"]=false
+    end
+    --HealBot_AddDebug("Zone x="..x.." y="..y,"Mount",true)
+end
+
 function HealBot_MountsPets_ZoneChange()
     if IsFlyableArea() then
         if HEALBOT_GAME_VERSION>3 then
@@ -137,14 +148,7 @@ function HealBot_MountsPets_ZoneChange()
                 --HealBot_AddDebug("In Outlands no Expert Flying")
             elseif mapAreaID>0 then
                 if mapAreaID==125 then
-                    local mapPos = C_Map.GetPlayerMapPosition(mapAreaID, "player")
-                    local x, y = mapPos:GetXY()
-                    if x>0.5975 then
-                        HealBot_mountData["incFlying"]=true
-                    else
-                        HealBot_mountData["incFlying"]=false
-                    end
-                    --HealBot_AddDebug("Zone x="..x.." y="..y,"Mount",true)
+                    HealBot_Timers_Set("LAST","MountsPetsDalaran",1)
                 else
                     HealBot_mountData["incFlying"]=true
                 end

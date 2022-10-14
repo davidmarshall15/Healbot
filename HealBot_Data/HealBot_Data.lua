@@ -102,6 +102,7 @@ HealBot_ConfigDefaults = {
                                                  [HEALBOT_WORD_BG40]=false, 
                                                  [HEALBOT_WORD_PETBATTLE]=false},
                 },
+  SkinZoneEnabled={},
   EnableHealthy = true,
   Profile=1,
   BuffReset="6.0.0",

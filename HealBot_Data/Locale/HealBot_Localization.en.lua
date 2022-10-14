@@ -883,6 +883,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_HBFOCUS                    = "HealBot Focus"
     HEALBOT_WORD_OUTSIDE                    = "Outside"
     HEALBOT_WORD_ALLZONE                    = "All zones"
+    HEALBOT_WORD_ZONE                       = "Zone"
     HEALBOT_OPTIONS_TAB_ALERT               = "Alert"
     HEALBOT_OPTIONS_TAB_SORT                = "Sort"
     HEALBOT_OPTIONS_TAB_HIDE                = "Hide"

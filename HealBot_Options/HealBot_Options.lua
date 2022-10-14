@@ -239,6 +239,7 @@ HealBot_Options_luVars["cSkin"]=""
 HealBot_Options_luVars["HeaderSwitchNumColsHdrOn"]=0
 HealBot_Options_luVars["HeaderSwitchNumColsHdrOff"]=0
 HealBot_Options_luVars["TestBarsOn"]=false
+HealBot_Options_luVars["mapName"]=""
 
 function HealBot_Options_setLuVars(vName, vValue)
     HealBot_Options_luVars[vName]=vValue
@@ -5421,6 +5422,33 @@ function HealBot_Options_SkinDefault_OnClick(self, gType)
     end
 end
 
+function HealBot_Options_SkinDefaultZone_SetText()
+    HealBot_Options_SetText(HealBot_Options_SkinDefaultZone,HEALBOT_WORD_ZONE..": "..HealBot_Options_luVars["mapName"])
+    if HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] and HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]==Healbot_Config_Skins.Current_Skin then
+        HealBot_Options_SkinDefaultZone:SetChecked(true)
+    else
+        HealBot_Options_SkinDefaultZone:SetChecked(false)
+    end
+end
+
+function HealBot_Options_SkinDefaultZone_OnClick(self)
+    if HealBot_Config_Buffs.PalaBlessingsAsOne~=self:GetChecked() then
+        HealBot_Config_Buffs.PalaBlessingsAsOne = self:GetChecked()
+        HealBot_Timers_Set("AURA","BuffReset")
+    end
+    if self:GetChecked() then
+        if not HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] or HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]~=Healbot_Config_Skins.Current_Skin then
+            HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]=Healbot_Config_Skins.Current_Skin
+            HealBot_Options_SkinDefaultZone_SetText()
+            HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        end
+    elseif HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] and HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]==Healbot_Config_Skins.Current_Skin then
+        HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]=nil
+        HealBot_Options_SkinDefaultZone_SetText()
+        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    end
+end
+
 function HealBot_Options_ManaIndicatorInCombat_OnClick(self)
     Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"] = self:GetChecked()
 end
@@ -5636,6 +5664,13 @@ end
 function HealBot_Options_TargetOnlyFriend_OnClick(self)
     if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"]~=self:GetChecked() then
         Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"] = self:GetChecked()
+        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+    end
+end
+
+function HealBot_Options_VehicleInCombat_OnClick(self)
+    if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"]~=self:GetChecked() then
+        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"] = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
     end
 end
@@ -6662,41 +6697,31 @@ end
 
 function HealBot_Options_TargetInCombat_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    if HealBot_Options_luVars["FramesSelFrame"]~=8 then
-        info.text = " "
+    for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
+        info.text = HealBot_Options_TargetFocusInCombat_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
+                        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
-    else
-        for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
-            info.text = HealBot_Options_TargetFocusInCombat_List[j];
-            info.func = function(self)
-                            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"] = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
-                            HealBot_Timers_Set("SKINS","QuickFramesChanged")
-                        end
-            info.checked = false;
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]==j then info.checked = true end
-            UIDropDownMenu_AddButton(info);
-        end
     end
 end
 
 function HealBot_Options_FocusInCombat_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    if HealBot_Options_luVars["FramesSelFrame"]~=9 then
-        info.text = " "
+    for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
+        info.text = HealBot_Options_TargetFocusInCombat_List[j];
+        info.func = function(self)
+                        Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] = self:GetID()
+                        UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
+                        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
-    else
-        for j=1, getn(HealBot_Options_TargetFocusInCombat_List), 1 do
-            info.text = HealBot_Options_TargetFocusInCombat_List[j];
-            info.func = function(self)
-                            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"] = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
-                            HealBot_Timers_Set("SKINS","QuickFramesChanged")
-                        end
-            info.checked = false;
-            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]==j then info.checked = true end
-            UIDropDownMenu_AddButton(info);
-        end
     end
 end
 
@@ -10151,26 +10176,6 @@ end
 
 --------------------------------------------------------------------------------
 
-function HealBot_Options_ShowBarsPanelVisibilityFocus(oShow)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusOnlyFriend",oShow)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_FocusExcludeRaid",oShow)
-    if oShow then
-        HealBot_Options_FocusInCombat:SetAlpha(1)
-    else
-        HealBot_Options_FocusInCombat:SetAlpha(0.4)
-    end
-end
-
-function HealBot_Options_ShowBarsPanelVisibilityTargets(oShow)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_TargetOnlyFriend",oShow)
-    HealBot_Options_ObjectsEnableDisable("HealBot_Options_TargetExcludeRaid",oShow)
-    if oShow then
-        HealBot_Options_TargetInCombat:SetAlpha(1)
-    else
-        HealBot_Options_TargetInCombat:SetAlpha(0.4)
-    end
-end
-
 function HealBot_Options_FramesSelFrame_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1,10, 1 do
@@ -10206,7 +10211,6 @@ function HealBot_Options_FramesSelFrame_DropDown()
                                 HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
                                 HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
                             end
-                            HealBot_Options_DoVisibility_DropDowns()
                             HealBot_Options_DoEffects_DropDowns()
                             if HealBot_Options_luVars["FramesSelFrame"]>5 then
                                 HealBot_Options_ObjectsEnableDisable("HealBot_Options_SubSortPlayerFirst",false)
@@ -10221,16 +10225,6 @@ function HealBot_Options_FramesSelFrame_DropDown()
                                 HealBot_Options_ObjectsEnableDisable("HealBot_Options_SubSortPlayerFirst",true)
                                 HealBot_Options_ObjectsEnableDisable("HealBot_Options_GroupPetsByFive",false)
                                 HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelfPet",false)
-                            end
-                            if HealBot_Options_luVars["FramesSelFrame"]==9 then  -- Focus Frame
-                                HealBot_Options_ShowBarsPanelVisibilityTargets(false)
-                                HealBot_Options_ShowBarsPanelVisibilityFocus(true)
-                            elseif HealBot_Options_luVars["FramesSelFrame"]==8 then  -- Target Frame
-                                HealBot_Options_ShowBarsPanelVisibilityFocus(false)
-                                HealBot_Options_ShowBarsPanelVisibilityTargets(true)
-                            else
-                                HealBot_Options_ShowBarsPanelVisibilityFocus(false)
-                                HealBot_Options_ShowBarsPanelVisibilityTargets(false)
                             end
                             HealBot_Timers_InitExtraOptions()
                         end
@@ -11984,25 +11978,6 @@ function HealBot_Options_DoEffects_DropDowns()
     end
 end
 
-function HealBot_Options_DoVisibility_DropDowns()     
-    HealBot_Options_FocusInCombat.initialize = HealBot_Options_FocusInCombat_DropDown
-    HealBot_Options_TargetInCombat.initialize = HealBot_Options_TargetInCombat_DropDown
-    if HealBot_Options_luVars["FramesSelFrame"]>7 then
-        if HealBot_Options_luVars["FramesSelFrame"]==8 then
-            UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
-        else
-            UIDropDownMenu_SetText(HealBot_Options_TargetInCombat," ")
-        end
-        if HealBot_Options_luVars["FramesSelFrame"]==9 then
-            UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
-        else
-            UIDropDownMenu_SetText(HealBot_Options_FocusInCombat," ")
-        end
-    else
-        UIDropDownMenu_SetText(HealBot_Options_TargetInCombat," ")
-        UIDropDownMenu_SetText(HealBot_Options_FocusInCombat," ")
-    end
-end
 --------------------------------------------------------------------------------
 
 function HealBot_Options_Skins_DropDown()
@@ -17198,6 +17173,7 @@ function HealBot_Options_SkinsGeneralTab(tab)
         g=_G["HealBot_GeneralSkinBlizz_FontStr"]
         g:SetText(HEALBOT_OPTIONS_BLIZZARD_FRAMES)
         HealBot_Options_SetLabel("HealBot_GeneralDefaultSkin_FontStr",HEALBOT_OPTIONS_SKINDEFAULTFOR)
+        HealBot_Options_SkinDefaultZone_SetText()
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -17618,7 +17594,10 @@ end
 HealBot_Options_luVars["OnLoadBarsVisibility"]=true
 function HealBot_Options_SkinsFramesBarsVisibilityTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Options_DoVisibility_DropDowns()
+        HealBot_Options_FocusInCombat.initialize = HealBot_Options_FocusInCombat_DropDown
+        HealBot_Options_TargetInCombat.initialize = HealBot_Options_TargetInCombat_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_TargetInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TARGETINCOMBAT"]]) 
+        UIDropDownMenu_SetText(HealBot_Options_FocusInCombat,HealBot_Options_TargetFocusInCombat_List[Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FOCUSINCOMBAT"]]) 
         HealBot_Options_Pct_OnLoad(HealBot_Options_AlertLevelIC,HEALBOT_OPTIONS_INCOMBATALERTLEVEL)
         HealBot_Options_AlertLevelIC:SetValue(Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALERTIC"])
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_AlertLevelIC)
@@ -17629,6 +17608,8 @@ function HealBot_Options_SkinsFramesBarsVisibilityTab(tab)
         HealBot_Options_SetText(HealBot_Options_HideBars,HEALBOT_HIDE_BARS)            
         HealBot_Options_TargetOnlyFriend:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TONLYFRIEND"])
         HealBot_Options_SetText(HealBot_Options_TargetOnlyFriend,HEALBOT_OPTIONS_SHOW_ONLY_FRIEND)
+        HealBot_Options_VehicleInCombat:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"])
+        HealBot_Options_SetText(HealBot_Options_VehicleInCombat,HEALBOT_OPTIONS_ALWAYSINCOMBAT.." "..HEALBOT_VEHICLE.." "..HEALBOT_OPTIONS_ENTERINGCOMBAT)
         HealBot_Options_TargetExcludeRaid:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["TEXRAID"])
         HealBot_Options_SetText(HealBot_Options_TargetExcludeRaid,HEALBOT_OPTIONS_EXCLUDE_RAID)
         HealBot_Options_FocusOnlyFriend:SetChecked(Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["FONLYFRIEND"])

@@ -770,7 +770,7 @@ HealBot_ExtraSkinDesc[78]=[[Large Raid Skin
 
 Aux Combo 25 is an example of combining multiple aux bars in a
 single row. The skin is placed on the right of the screen.]]
-HealBot_ExtraSkinDesc[78]=[[Small Raid Skin
+HealBot_ExtraSkinDesc[79]=[[Small Raid Skin
 
 Aux Combo 10 is an example of combining multiple aux bars in a
 single row. The skin is placed on the right of the screen.]]

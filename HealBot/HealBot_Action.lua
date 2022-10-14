@@ -1429,6 +1429,9 @@ function HealBot_Action_BarColourAlpha(button, a, dMult)
     elseif HealBot_Action_luVars["HotBarsEnabled"] and not button.hotbars.state then
         a=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
     end
+    if button.status.current==HealBot_Unit_Status["RESERVED"] then
+        a=a/2
+    end
     return a
 end
 
