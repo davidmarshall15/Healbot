@@ -433,9 +433,19 @@ function HealBot_TalentQuery(button)
             else
                 button.specupdate=TimeNow+3
             end
-        elseif HEALBOT_GAME_VERSION==3 then
-            if CheckInteractDistance(button.unit, 1) then 
-                hbInspect=true 
+        elseif HEALBOT_GAME_VERSION==3 and not HealBot_Globals.DenyTalentQuery then
+            if CheckInteractDistance(button.unit, 1) then
+                local g,p,ip,t,tp,tpc="",false,false,false,false,false
+                if _G["PaperDollFrame"] then g=_G["PaperDollFrame"]; p=g:IsVisible() end
+                if _G["InspectPaperDollFrame"] then g=_G["InspectPaperDollFrame"]; ip=g:IsVisible() end
+                if _G["TalentFrame"] then g=_G["TalentFrame"]; t=g:IsVisible() end
+                if _G["InspectTalentFrame"] then g=_G["InspectTalentFrame"]; tp=g:IsVisible() end
+                if _G["InspectTalentFrameScrollChildFrame"] then g=_G["InspectTalentFrameScrollChildFrame"]; tpc=g:IsVisible() end
+                if not p and not ip and not t and not tp and not tpc then 
+                    hbInspect=true 
+                else
+                    button.specupdate=TimeNow+5
+                end
             elseif UnitIsVisible(button.unit) then 
                 button.specupdate=TimeNow+1
             else
@@ -639,6 +649,17 @@ function HealBot_SlashCmd(cmd)
             else
                 HealBot_Globals.AllowPlayerRoles=true
                 HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_PLAYERROLESON)
+            end
+            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+        end
+    elseif (HBcmd=="ttq") then 
+        if HEALBOT_GAME_VERSION==3 then
+            if HealBot_Globals.DenyTalentQuery then
+                HealBot_Globals.DenyTalentQuery=nil
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYON)
+            else
+                HealBot_Globals.DenyTalentQuery=true
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYOFF)
             end
             HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
         end
@@ -3976,7 +3997,9 @@ end
 
 function HealBot_UnitSlowUpdate(button)
     if button.status.current<HealBot_Unit_Status["RESERVED"] then
-        if button.status.postchange then
+        if button.guid~=UnitGUID(button.unit) then
+            HealBot_UpdateUnitGUIDChange(button)
+        elseif button.status.postchange then
             button.status.postchange=false
             HealBot_CheckUnitStatus(button)
             HealBot_OnEvent_UnitHealth(button)
@@ -6492,15 +6515,17 @@ function HealBot_OnEvent(self, event, ...)
     elseif (event=="UNIT_EXITING_VEHICLE") then
         HealBot_OnEvent_LeavingVehicle(arg1)
     elseif (event=="INSPECT_READY") then
-        eButton,ePrivate = HealBot_Panel_AllUnitButton(arg1)
-        if eButton then
-            HealBot_GetTalentInfo(eButton) 
-        end
-        if ePrivate then
-            if eButton and HealBot_Panel_RaidUnitGUID(eButton.guid) then
-                ePrivate.specupdate=TimeNow+1
-            else
-                HealBot_GetTalentInfo(ePrivate)
+        if HealBot_luVars["talentUpdate"] then
+            eButton,ePrivate = HealBot_Panel_AllUnitButton(arg1)
+            if eButton then
+                HealBot_GetTalentInfo(eButton) 
+            end
+            if ePrivate then
+                if eButton and HealBot_Panel_RaidUnitGUID(eButton.guid) then
+                    ePrivate.specupdate=TimeNow+1
+                else
+                    HealBot_GetTalentInfo(ePrivate)
+                end
             end
         end
     elseif (event=="ACTIVE_TALENT_GROUP_CHANGED") then

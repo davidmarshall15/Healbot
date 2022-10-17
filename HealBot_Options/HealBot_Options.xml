@@ -17358,25 +17358,11 @@
                           </Layer>
                         </Layers>
                         <Frames>
-                          <CheckButton name="HealBot_Options_ShowReadyCheck" inherits="HealBotUIPanelCheckButton">
-                            <Anchors>
-                              <Anchor point="TOPLEFT">
-                                <Offset>
-                                  <AbsDimension x="110" y="-35" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Scripts>
-                              <OnClick>HealBot_Options_ShowReadyCheck_OnClick(self)</OnClick>
-                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWRC",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
-                            </Scripts>
-                          </CheckButton>
                           <CheckButton name="HealBot_Options_ShowResting" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="50" y="-35" />
+                                  <AbsDimension x="95" y="-5" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17386,11 +17372,39 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWRESTING",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowReadyCheck" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="110" y="-45" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowReadyCheck_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWRC",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWRC",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowLeader" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="50" y="-45" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowLeader_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWLEADER",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="110" y="-70" />
+                                  <AbsDimension x="110" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17404,7 +17418,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="50" y="-70" />
+                                  <AbsDimension x="50" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>

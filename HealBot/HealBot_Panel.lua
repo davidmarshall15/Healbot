@@ -910,7 +910,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Skins_isTestBars(false)
         HealBot_Aura_ClearAllBuffs()
         HealBot_Aura_ClearAllDebuffs()
-        HealBot_SetResetFlag("SOFT")
+        --HealBot_SetResetFlag("SOFT")
         HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
@@ -1502,11 +1502,15 @@ function HealBot_Panel_TestBarsOn()
     grpNo=1
     local gNo=5
     local healGroups=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin]
-    local xRaidBars,vRaidBars=40,30
-    if HealBot_Globals.TestBars["PROFILE"]==3 then xRaidBars=25; vRaidBars=20 end
-    if HealBot_Globals.TestBars["PROFILE"]==2 then xRaidBars=10; vRaidBars=8 end
-    if HealBot_Globals.TestBars["PROFILE"]==1 then xRaidBars=5; vRaidBars=4 end
-
+    local xRaidBars=40
+    if HealBot_Globals.TestBars["PROFILE"]==3 then 
+        xRaidBars=25
+    elseif HealBot_Globals.TestBars["PROFILE"]==2 then 
+        xRaidBars=10
+    elseif HealBot_Globals.TestBars["PROFILE"]==1 then 
+        xRaidBars=5 
+    end
+    local vRaidBars=xRaidBars
     for gl=1,11 do
         hbCurrentFrame=healGroups[gl]["FRAME"]
         if HealBot_Action_hasPowerCounter(gl)>0 then

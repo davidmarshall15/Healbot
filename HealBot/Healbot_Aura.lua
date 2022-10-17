@@ -565,6 +565,11 @@ function HealBot_Aura_ClassUpdate(button, texture)
         --HealBot_setCall("HealBot_Aura_ClassUpdate")
 end
 
+local hbIconRanks={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
+                   [2]="Interface\\Addons\\HealBot\\Images\\assist.tga",
+                   [3]="Interface\\Addons\\HealBot\\Images\\looter.tga",
+                   [4]="Interface\\Addons\\HealBot\\Images\\leader.tga",
+                   }
 function HealBot_Aura_UpdateState(button)
     if HealBot_UnitExtraIcons[button.id] then
         if button.status.hostile or button.status.incombat or button.icon.extra.readycheck then
@@ -576,6 +581,10 @@ function HealBot_Aura_UpdateState(button)
                 HealBot_UnitExtraIcons[button.id][93]["texture"]=button.icon.extra.readycheck
                 if HealBot_Panel_RaidUnitGUID(button.guid) then HealBot_Action_setGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
             end
+            HealBot_UnitExtraIcons[button.id][93].current=true
+            HealBot_Aura_AddExtraIcon(button, 93)
+        elseif button.rank>0 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRANK"] then
+            HealBot_UnitExtraIcons[button.id][93]["texture"]=hbIconRanks[button.rank]
             HealBot_UnitExtraIcons[button.id][93].current=true
             HealBot_Aura_AddExtraIcon(button, 93)
         elseif button.player and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRESTING"] and IsResting() then 
@@ -895,7 +904,7 @@ end
 
 local buffCustomType,scbUnitClassEN=false,"XXXX"
 function HealBot_Aura_ShowCustomBuff()
-    buffCustomType=HealBot_Watch_HoT[uaSpellId] or HealBot_Watch_HoT[uaName] or false
+    buffCustomType=HealBot_Watch_HoT[uaName] or HealBot_Watch_HoT[uaSpellId] or false
     if buffCustomType then
         if buffCustomType=="A" then
             return true, false
@@ -2215,6 +2224,19 @@ function HealBot_Aura_RemoveIcons(button)
       --HealBot_setCall("HealBot_Aura_RemoveIcons")
 end
 
+function HealBot_Aura_ConfigClassAllHoT(id, sName, wType)
+    if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
+        if HealBot_Globals.CustomBuffIDMethod[id]==2 and sName then
+            HealBot_Watch_HoT[sName]=wType
+        else
+            HealBot_Watch_HoT[id]=wType
+        end
+    else
+        HealBot_Watch_HoT[id]=wType
+        if sName then HealBot_Watch_HoT[sName]=wType end
+    end
+end
+
 function HealBot_Aura_ConfigClassHoT()
     local hbClassHoTwatch=HealBot_Globals.WatchHoT
     for id,_ in pairs(HealBot_Watch_HoT) do
@@ -2231,48 +2253,12 @@ function HealBot_Aura_ConfigClassHoT()
             elseif GetSpellInfo(id) then
                 sName=GetSpellInfo(id)
             end
-            --local giftNaaru=false
-            --if sName==HealBot_Spell_IDs[HEALBOT_GIFT_OF_THE_NAARU] or (HealBot_Spell_Names[sName] or 0)==HEALBOT_GIFT_OF_THE_NAARU then
-            --    giftNaaru=true
-            --end
-            if xClass=="ALL" and x==3 then
-                if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-                    if HealBot_Globals.CustomBuffIDMethod[id]==2 and sName then
-                        HealBot_Watch_HoT[sName]="C"
-                    else
-                        HealBot_Watch_HoT[id]="C"
-                    end
-                else
-                    HealBot_Watch_HoT[id]="C"
-                    if sName then HealBot_Watch_HoT[sName]="C" end
-                end
-              --  if giftNaaru and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="C" end
-            elseif (x==4) or (x==3 and xClass==HealBot_Data["PCLASSTRIM"]) then
-                if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-                    if HealBot_Globals.CustomBuffIDMethod[id]==2 and sName then
-                        HealBot_Watch_HoT[sName]="A"
-                    else
-                        HealBot_Watch_HoT[id]="A"
-                    end
-                else
-                    HealBot_Watch_HoT[id]="A"
-                    if sName then HealBot_Watch_HoT[sName]="A" end
-                end
-            --    if giftNaaru and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="A" end
+            if x==4 then
+                HealBot_Aura_ConfigClassAllHoT(id, sName, "A")
+            elseif x==3 then
+                HealBot_Aura_ConfigClassAllHoT(id, sName, "C")
             elseif x==2 then
-                if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-                    if HealBot_Globals.CustomBuffIDMethod[id]==2 and sName then
-                        HealBot_Watch_HoT[sName]="S"
-                    else
-                        HealBot_Watch_HoT[id]="S"
-                    end
-                else
-                    HealBot_Watch_HoT[id]="S"
-                    if sName then HealBot_Watch_HoT[sName]="S" end
-                end
-            --    if giftNaaru and HealBot_Data["PRACE_EN"]=="Draenei" then HealBot_Watch_HoT[sName]="S" end
-            --else
-            --    HealBot_Watch_HoT[sName]="H"
+                HealBot_Aura_ConfigClassAllHoT(id, sName, "S")
             end
         end
     end

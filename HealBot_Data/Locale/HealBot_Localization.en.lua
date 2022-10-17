@@ -854,6 +854,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWREADYCHECK          = "Show Ready Check";
     HEALBOT_OPTIONS_SHOWCOMBATSTATE         = "Show Combat State";
     HEALBOT_OPTIONS_SHOWHOSTILE             = "Show Hostile";
+    HEALBOT_OPTIONS_SHOWLEADER              = "Show Leader";
     HEALBOT_OPTIONS_SHOWRESTING             = "Show Resting (Player only)";
     HEALBOT_OPTIONS_SHOWCLASSICON           = "Show Class";
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
@@ -871,6 +872,8 @@ function HealBot_Lang_enALL()
     HEALBOT_CHAT_SELFPETSOFF                = "Self Pet switched off"
     HEALBOT_CHAT_PLAYERROLESON              = "Allow player roles switched on"
     HEALBOT_CHAT_PLAYERROLESOFF             = "Allow player roles switched off"
+    HEALBOT_ALLOWTALENTQUERYON              = "Allow querying player talents On"
+    HEALBOT_ALLOWTALENTQUERYOFF             = "Allow querying player talents Off"
     HEALBOT_WORD_PRIORITY                   = "Priority"
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
     HEALBOT_SPELL_RANGE                     = "Within spell range"

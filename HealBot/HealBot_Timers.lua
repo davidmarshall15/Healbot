@@ -312,6 +312,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","InitLoadSpells",0.25)
     HealBot_Timers_Set("LAST","CheckZone",0.4)
     HealBot_Timers_Set("PLAYER","InvChange",0.5)
+    HealBot_Timers_Set("LAST","ConfigClassHoT",5)
     HealBot_Timers_Set("LAST","LastUpdate",1) 
     C_Timer.After(2, HealBot_Timers_UpdateMediaIndex)
 end
@@ -632,6 +633,7 @@ local hbTimerFuncs={["INIT"]={
                         ["SetAutoClose"]=HealBot_Action_setAutoClose,
                         ["CheckHideFrames"]=HealBot_Action_CheckHideFrames,
                         ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
+                        ["ConfigClassHoT"]=HealBot_Aura_ConfigClassHoT,
                     },
                    }
                    

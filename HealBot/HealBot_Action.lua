@@ -76,30 +76,35 @@ end
 
 function HealBot_Action_setpcClass(button)
     for j=1,5 do
-        if HEALBOT_GAME_VERSION>3 and 
-           (HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or 
-            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] or
-            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] or
-            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE]) and 
-            Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
-            local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"];
+        if HEALBOT_GAME_VERSION>3 and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j] and Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["POWERCNT"] then
+            local prevHealBot_pcMax=HealBot_Action_luVars["UnitPowerMax"]
             if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
                 HealBot_pcClass[j]=9
                 HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 9);
-            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] then
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_ROGUE] or HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
                 HealBot_pcClass[j]=4
                 HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 4);
             elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
                 HealBot_pcClass[j]=7
                 HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 7);
-            else
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] then
                 HealBot_pcClass[j]=12
                 HealBot_Action_luVars["UnitPowerMax"] = UnitPowerMax("player" , 12);
-            end     
+            else
+                HealBot_Action_luVars["UnitPowerMax"]=0
+            end
             if prevHealBot_pcMax~=HealBot_Action_luVars["UnitPowerMax"] then
-                button.skinreset=true
-                button.icon.reset=true
-                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+                if HealBot_Action_luVars["UnitPowerMax"]==0 then
+                    HealBot_pcClass[j]=false
+                    button.mana.power=0
+                    for y=1,5 do
+                        button.gref.indicator.power[y]:SetAlpha(0)
+                    end
+                else
+                    button.skinreset=true
+                    button.icon.reset=true
+                    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers",0.1)
+                end
             end
         else
             HealBot_pcClass[j]=false
@@ -5711,10 +5716,10 @@ function HealBot_Action_CheckForStickyFrame(frame,stick)
     vStickyFrameIsSticky=false
     vStickyFrameCurAnchor=0
     vStickyFrameParAnchor=0
-    vStickyFrameLeft=grpFrame[frame]:GetLeft()
-    vStickyFrameRight=grpFrame[frame]:GetRight()
-    vStickyFrameTop=grpFrame[frame]:GetTop()
-    vStickyFrameBottom=grpFrame[frame]:GetBottom()
+    vStickyFrameLeft=grpFrame[frame]:GetLeft() or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["LEFT"] or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]
+    vStickyFrameRight=grpFrame[frame]:GetRight() or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RIGHT"] or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["X"]
+    vStickyFrameTop=grpFrame[frame]:GetTop() or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["TOP"] or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]
+    vStickyFrameBottom=grpFrame[frame]:GetBottom() or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["BOTTOM"] or Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["Y"]
     for x=1,frame-1 do
         if HealBot_Action_FrameIsVisible(x) and HealBot_Action_FrameIsVisible(frame) then
             if vStickyFrameLeft and grpFrame[x]:GetLeft() then
@@ -5832,6 +5837,10 @@ function HealBot_Action_CheckForStickyFrame(frame,stick)
             else
                 HealBot_Action_DelayCheckFrameSetPoint(frame, true)
             end
+            if vStickyFrameLeft then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["LEFT"]=vStickyFrameLeft end
+            if vStickyFrameRight then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["RIGHT"]=vStickyFrameRight end
+            if vStickyFrameTop then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["TOP"]=vStickyFrameTop end
+            if vStickyFrameBottom then Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["BOTTOM"]=vStickyFrameBottom end
         end
     end
     if not vStickyFrameIsSticky and not stick then
