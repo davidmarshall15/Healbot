@@ -11698,6 +11698,20 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXMANAONLY",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <CheckButton name="HealBot_Options_SkinBarAuxBarHealersManaOnly" inherits="SendMailRadioButtonTemplate">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SkinBarAuxBarManaOnly" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="25" y="0"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_SkinBarAuxBarHealersManaOnly_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("BARSAUXHEALERMANAONLY",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("BARSAUXHEALERMANAONLY",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_Options_SkinBarAuxBarOverlayRecentHeals" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="LEFT" relativeTo="HealBot_Options_SkinBarAuxBarPresetColour" relativePoint="RIGHT">
@@ -22561,7 +22575,7 @@
                               </EditBox>
                               <EditBox name="HealBot_Options_BuffExtraItem1" inherits="HealBot_Options_EditBoxTemplate">
                                 <Size>
-                                  <AbsDimension x="158" y="20"/>
+                                  <AbsDimension x="145" y="20"/>
                                 </Size>
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
@@ -22589,14 +22603,45 @@
                                   <OnLeave>HealBot_Options_Show_Help("BUFFSEXTRAITEM",false)</OnLeave>
                                 </Scripts>
                               </EditBox>
+                              <Frame name="HealBot_Options_BuffExtraItems1" hidden="true" inherits="UIDropDownMenuTemplate">
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem1" relativePoint="LEFT">
+                                    <Offset>
+                                      <AbsDimension x="-22" y="-3" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",false)</OnLeave>
+                                </Scripts>
+                              </Frame>
+                              <Button name="HealBot_Options_BuffExtraItems1_HelpItemSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                                <Size>
+                                  <AbsDimension x="22" y="19"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem1" relativePoint="RIGHT">
+                                    <Offset>
+                                      <AbsDimension x="7" y="-1" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_BuffExtraItems1_HelpItemSelect_OnClick()</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",false)</OnLeave>
+                                </Scripts>
+                              </Button>
                               <Button name="HealBot_Buff12Colourb">
                                 <Size>
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem1"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems1_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22624,9 +22669,9 @@
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem1"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems1_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22689,7 +22734,7 @@
                               </EditBox>
                               <EditBox name="HealBot_Options_BuffExtraItem2" inherits="HealBot_Options_EditBoxTemplate">
                                 <Size>
-                                  <AbsDimension x="158" y="20"/>
+                                  <AbsDimension x="145" y="20"/>
                                 </Size>
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem1"  relativePoint="BOTTOMLEFT">>
@@ -22704,14 +22749,45 @@
                                   <OnLeave>HealBot_Options_Show_Help("BUFFSEXTRAITEM",false)</OnLeave>
                                 </Scripts>
                               </EditBox>
+                              <Frame name="HealBot_Options_BuffExtraItems2" hidden="true" inherits="UIDropDownMenuTemplate">
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem2" relativePoint="LEFT">
+                                    <Offset>
+                                      <AbsDimension x="-22" y="-3" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",false)</OnLeave>
+                                </Scripts>
+                              </Frame>
+                              <Button name="HealBot_Options_BuffExtraItems2_HelpItemSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                                <Size>
+                                  <AbsDimension x="22" y="19"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem2" relativePoint="RIGHT">
+                                    <Offset>
+                                      <AbsDimension x="7" y="-1" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_BuffExtraItems2_HelpItemSelect_OnClick()</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",false)</OnLeave>
+                                </Scripts>
+                              </Button>
                               <Button name="HealBot_Buff13Colourb">
                                 <Size>
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem2"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems2_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22726,9 +22802,9 @@
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem2"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems2_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22791,7 +22867,7 @@
                               </EditBox>
                               <EditBox name="HealBot_Options_BuffExtraItem3" inherits="HealBot_Options_EditBoxTemplate">
                                 <Size>
-                                  <AbsDimension x="158" y="20"/>
+                                  <AbsDimension x="145" y="20"/>
                                 </Size>
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem2"  relativePoint="BOTTOMLEFT">>
@@ -22806,14 +22882,45 @@
                                   <OnLeave>HealBot_Options_Show_Help("BUFFSEXTRAITEM",false)</OnLeave>
                                 </Scripts>
                               </EditBox>
+                              <Frame name="HealBot_Options_BuffExtraItems3" hidden="true" inherits="UIDropDownMenuTemplate">
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem3" relativePoint="LEFT">
+                                    <Offset>
+                                      <AbsDimension x="-22" y="-3" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMS",false)</OnLeave>
+                                </Scripts>
+                              </Frame>
+                              <Button name="HealBot_Options_BuffExtraItems3_HelpItemSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_QUESTION">
+                                <Size>
+                                  <AbsDimension x="22" y="19"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="LEFT" relativeTo="HealBot_Options_BuffExtraItem3" relativePoint="RIGHT">
+                                    <Offset>
+                                      <AbsDimension x="7" y="-1" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_BuffExtraItems3_HelpItemSelect_OnClick()</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("BUFFSWELLFEDITEMSELECTOR",false)</OnLeave>
+                                </Scripts>
+                              </Button>
                               <Button name="HealBot_Buff14Colourb">
                                 <Size>
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem3"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems3_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -22828,9 +22935,9 @@
                                   <AbsDimension x="110" y="20"/>
                                 </Size>
                                 <Anchors>
-                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItem3"  relativePoint="TOPRIGHT">
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffExtraItems3_HelpItemSelect"  relativePoint="TOPRIGHT">
                                     <Offset>
-                                      <AbsDimension x="20" y="-1"/>
+                                      <AbsDimension x="10" y="-1"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -23717,6 +23824,47 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Frame name="HealBot_Options_BuffAuto" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffAutoTxt" text="HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="CENTER">
+                              <Offset>
+                                <AbsDimension x="85" y="30" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-85" y="5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMAUTO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMAUTO",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_BuffAutoCastBy" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="85" y="5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMAUTOCASTBY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMAUTOCASTBY",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                 </Frames>
               </Frame>
 
@@ -24057,7 +24205,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24127,7 +24275,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24141,7 +24289,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24151,25 +24299,11 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipUseGameTip" inherits="HealBotUIPanelCheckButton">
+                  <CheckButton name="HealBot_Options_ShowTooltipShowUnitTip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipUseGameTip_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPGAMETIP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPGAMETIP",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipShowUnitTip" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="170" y="-9"/>
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24181,9 +24315,9 @@
                   </CheckButton>
                   <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipUseGameTip" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowUnitTip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24195,12 +24329,12 @@
                   </CheckButton>
                   <Slider name="HealBot_Options_TipMaxButtons" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="270" y="16" />
+                      <AbsDimension x="320" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
+                      <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="-70" />
+                          <AbsDimension x="0" y="255" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24210,33 +24344,6 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",false)</OnLeave>
                     </Scripts>
                   </Slider>
-                  <Frame name="HealBot_Options_TooltipTextSize" inherits="UIDropDownMenuTemplate">
-                    <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_TipMaxButtons" relativePoint="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="-40" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="healbottooltiptextsizefontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_SKINFHEIGHT">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="0" y="14"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",false)</OnLeave>
-                    </Scripts>
-                  </Frame>
                   <Button name="HealBot_Options_TooltipPosSettings" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_POSITION">
                     <Size>
                       <AbsDimension x="220" y="24"/>
@@ -24244,7 +24351,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-125" y="90" />
+                          <AbsDimension x="-125" y="180" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24261,7 +24368,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="125" y="90" />
+                          <AbsDimension x="125" y="180" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24271,19 +24378,64 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPCUSTOMANCHOR",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Slider name="HealBot_Options_TTAlpha" inherits="HealBot_Options_SliderTemplate">
-                    <Size>
-                      <AbsDimension x="540" y="16" />
-                    </Size>
+                  <CheckButton name="HealBot_Options_TooltipSetScale" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="30" />
+                          <AbsDimension x="-220" y="99" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnValueChanged>HealBot_Options_TTAlpha_OnValueChanged(self)</OnValueChanged>
+                      <OnClick>HealBot_Options_TooltipSetScale_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSETSCALE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSETSCALE",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Slider name="HealBot_Options_TooltipScale" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="320" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="40" y="105" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipScale_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSCALE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSCALE",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <CheckButton name="HealBot_Options_TooltipSetAlpha" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-220" y="34" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_TooltipSetAlpha_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSETALPHA",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSETALPHA",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Slider name="HealBot_Options_TooltipAlpha" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="320" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="40" y="40" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipAlpha_OnValueChanged(self)</OnValueChanged>
                       <OnEnter>HealBot_Options_Show_Help("TOOLTIPALPHA",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPALPHA",false)</OnLeave>
                     </Scripts>

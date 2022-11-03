@@ -1,4 +1,4 @@
-﻿HEALBOT_VERSION_SC = "9.2.7.10";
+﻿HEALBOT_VERSION_SC = "10.0.0.2";
 HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
@@ -246,6 +246,7 @@ function HealBot_globalVars()
     HEALBOT_RENEW                           = 139 --GetSpellInfo(139) or "--Renew";
     HEALBOT_PLEA                            = 200829 --GetSpellInfo(200829) or "--Plea";    
     HEALBOT_POWER_WORD_RADIANCE             = 194509 --GetSpellInfo(194509) or "--Power Word: Radiance";
+    HEALBOT_POWER_WORD_LIFE                 = 373481
     HEALBOT_SHADOW_MEND                     = 186263 --GetSpellInfo(186263) or "--Shadow Mend;"
     HEALBOT_HOLY_WORD_SANCTIFY              = 34861 --GetSpellInfo(34861) or "--Holy Word: Sanctify";
     HEALBOT_SPIRIT_OF_REDEMPTION            = 27827 --GetSpellInfo(20711) or "--Spirit of Redemption";
@@ -261,6 +262,7 @@ function HealBot_globalVars()
     HEALBOT_HEALING_TIDE_TOTEM              = 108280 --GetSpellInfo(108280) or "--Healing Tide Totem";
     HEALBOT_HEALING_WAVE                    = 77472 --GetSpellInfo(77472) or "--Healing Wave";
     HBC_LESSER_HEALING_WAVE                 = 8004
+    HBC_RU_LESSER_HEALING_WAVE              = 49275
     HBC_HEALING_WAVE                        = 331
     HEALBOT_PRIMORDIAL_WAVE                 = 326059
     HEALBOT_RIPTIDE                         = 61295 --GetSpellInfo(61295) or "--Riptide";
@@ -565,6 +567,7 @@ function HealBot_globalVars()
     HBC_WINDFURY_WEAPON                     = 8232
     HBC_EARTHLIVING_WEAPON                  = 51730
     HBC_WATER_SHIELD                        = 24398
+    HEALBOT_EARTHLIVING_WEAPON              = 382021
     HEALBOT_SHAMANISTIC_RAGE                = 30823 --GetSpellInfo(30823) or "--Shamanistic Rage";
     HEALBOT_SPIRITWALKERS_GRACE             = 79206 --GetSpellInfo(79206) or "--Spiritwalker's Grace";
     HEALBOT_SPIRIT_LINK_TOTEM               = 98008 --GetSpellInfo(98008) or "--Spirit Link Totem";
@@ -663,6 +666,7 @@ function HealBot_globalVars()
     HEALBOT_RESURRECTION                    = 2006 --GetSpellInfo(2006) or "--Resurrection";
     HEALBOT_RESUSCITATE                     = 115178 --GetSpellInfo(115178) or "--Resuscitate"
     HEALBOT_REVIVE                          = 50769 --GetSpellInfo(50769) or "--Revive";
+    HEALBOT_INTERCESSION                    = 391054
     
     --Cure Spells
     HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or 64127
@@ -681,6 +685,7 @@ function HealBot_globalVars()
     HEALBOT_DETOX                           = GetSpellInfo(115450) or 115450
     HEALBOT_NATURES_CURE                    = GetSpellInfo(88423) or 88423
     HEALBOT_PURIFY                          = GetSpellInfo(527) or 527
+    HEALBOT_IMPROVED_PURIFY                 = GetSpellInfo(390632) or 390632
     HBC_PURIFY                              = GetSpellInfo(1152) or 1152
     HEALBOT_PURIFY_SPIRIT                   = GetSpellInfo(77130) or 77130
     HEALBOT_PURIFY_DISEASE                  = GetSpellInfo(213634) or 213634

@@ -1,4 +1,4 @@
-## Interface: 90207
+## Interface: 100000
 ## Title: HealBot Tooltips
 ## Author: Strife
 ## Notes: HealBot Tooltips, used on HealBot frames and in HealBot options.

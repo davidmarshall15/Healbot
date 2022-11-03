@@ -48,7 +48,7 @@ local function HealBot_Aux_clearBar(button, id)
     button.aux[id]["FLUIDTEXT"]=-1
     button.auxtxt[id]["TEXT"]=false
     button.gref.auxtxt[id]:SetText("")
-    if HealBot_Aux_luVars["FluidAlphaInUse"] then
+    if HealBot_Aux_luVars["FluidAlphaInUse"] and button.aux[id]["FLUIDSTATE"]>-1 then
         button.aux[id]["FLUIDSTATE"]=0
         button.aux[id]["ISFLUID"]=true
         HealBot_AuxFluid_ButtonsAlpha[button.id]=button
@@ -551,7 +551,15 @@ end
 function HealBot_Aux_setPowerBars(button)
     for id in pairs(hbAuxPowerAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DEAD"] then
-            if button.mana.max==0 or (Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] and button.mana.type~=0) then
+            local noPowerbar=false
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] then
+                if button.mana.type~=0 then
+                    noPowerbar=true
+                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["HEALERSMANAONLY"] and button.role~=3 and button.role~=5 then
+                    noPowerbar=true
+                end
+            end
+            if button.mana.max==0 or noPowerbar then
                 button.aux[id]["R"]=0
                 button.aux[id]["G"]=0
                 button.aux[id]["B"]=0

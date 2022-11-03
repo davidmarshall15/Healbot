@@ -1856,6 +1856,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             if not Healbot_Config_Skins.AuxBarText[SkinName][x][gl]["COLA"] then Healbot_Config_Skins.AuxBarText[SkinName][x][gl]["COLA"]=0.98 end
             if not Healbot_Config_Skins.AuxBarText[SkinName][x][gl]["COLDA"] then Healbot_Config_Skins.AuxBarText[SkinName][x][gl]["COLDA"]=0.5 end
             if Healbot_Config_Skins.AuxBar[SkinName][x][gl]["MANAONLY"]==nil then Healbot_Config_Skins.AuxBar[SkinName][x][gl]["MANAONLY"]=false end
+            if Healbot_Config_Skins.AuxBar[SkinName][x][gl]["HEALERSMANAONLY"]==nil then Healbot_Config_Skins.AuxBar[SkinName][x][gl]["HEALERSMANAONLY"]=false end
         end
         if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYRECENTHEALS"]==nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYRECENTHEALS"]=false end
         if Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHEALTHDROP"]==nil then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]["OVERLAYHEALTHDROP"]=false end

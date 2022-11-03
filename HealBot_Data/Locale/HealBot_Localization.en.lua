@@ -120,12 +120,14 @@ function HealBot_Lang_enALL()
     
     HEALBOT_STRING_MATCH_WELLFED            = "become well fed"
     HEALBOT_STRING_MATCH_RESTOREMANA        = "(%d+)(%%*) (%u*)(%l*)ana over (%d+) sec"
+    HEALBOT_STRING_MATCH_EXTRABUFFS         = {"Flask", "Elixir", "Scroll", "Potion", "Rune$"}
     HEALBOT_WELL_FED                        = "Well Fed"
     HEALBOT_MANA_DRINK                      = "Mana Drink"
     HEALBOT_MANA_LOWTHRESHOLD               = "Low mana threshold"
 
     HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_ALPHA                   = "Opacity";
+    HEALBOT_OPTIONS_SETALPHA                = "Set Opacity";
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK            = "Background bar opacity";
@@ -541,6 +543,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_AGGROTXT                 = ">> Text <<"
     HEALBOT_OPTION_AGGROIND                 = "Show indicator"
     HEALBOT_OPTION_MANAONLY                 = "Show mana only"
+    HEALBOT_OPTION_HEALERSMANAONLY          = "Healers only"
     HEALBOT_OPTION_BARUPDFREQ               = "Refresh Speed"
     HEALBOT_OPTION_USEFLUIDBARS             = "Use fluid bars"
     HEALBOT_OPTION_FLUIDBARSINCALPHA        = "Include col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and alpha"
@@ -559,6 +562,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_HOTBARSDEBUFFPRIO        = "Debuff Priority threshold"           
     HEALBOT_OPTIONS_RELOADUIMSG             = "This option requires a UI Reload, Reload now?"
     HEALBOT_OPTION_USE                      = "Use"
+    HEALBOT_OPTION_TOOLTIPSCALE             = "Scale"
 
     HEALBOT_BUFF_PVP                        = "PvP"
     HEALBOT_BUFF_PVE                        = "PvE"
@@ -630,6 +634,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
     HEALBOT_OPTIONS_ICONSPACER              = "Icon Spacer"
     HEALBOT_OPTIONS_EMERGBUTTONUSE          = "Use the Emergency Bar"
+    HEALBOT_OPTIONS_BUFFSAUTOTIMED          = "Timed Buffs"
+    HEALBOT_OPTIONS_BUFFSAUTOALL            = "All Buffs"
 
     HEALBOT_OPTIONS_AGGROBARSIZE            = "Aggro bar size"
     HEALBOT_OPTIONS_DOUBLETEXTLINES         = "Double text lines"
@@ -672,7 +678,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_SHOW_INCHEALS                   = "Show incoming heals";
     
-    HEALBOT_FORHELP    = "For help use: "
+    HEALBOT_FORHELP    = "For options use: "
     HEALBOT_HELP={ [1] = "[HealBot] /hb h -- Display help",
                    [2] = "[HealBot] /hb o -- Toggles options",
                    [3] = "[HealBot] /hb t -- Toggle Healbot between disabled and enabled",
@@ -690,11 +696,7 @@ function HealBot_Lang_enALL()
                     [3] = "[HealBot] /hb aggro 3 <n> -- Set aggro level 3 on threat percentage <n>",
                     [4] = "[HealBot] /hb tr <Role> -- Set highest role priority for SubSort by Role. Valid Roles are 'TANK', 'HEALER' or 'DPS'",
                     [5] = "[HealBot] /hb use10 -- Automatically use Engineering slot 10",
-                    [6] = "[HealBot] /hb pcs <n> -- Adjust the size of the Holy power charge indicator by <n>, Default value is 7 ",
-                    [7] = "[HealBot] /hb hrfm -- Toggle method for hiding Blizzard raid frames, disable completely or just hide",
-                    [8] = "[HealBot] /hb ws -- Toggle Hide/Show the Weaken Soul icon instead of the PW:S with a -",
-                    [9] = "[HealBot] /hb rld <n> -- In seconds, how long the players name stays green after a res",
-                    [10] = "[HealBot] - Also see Commands on the General tab in Options",
+                    [6] = "[HealBot] - Also see Commands on the General tab in Options",
                   }
                   
                   
@@ -866,6 +868,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AGGROALERT              = "Aux bar alert level"
     HEALBOT_OPTIONS_AGGROINDALERT           = "Indicator alert level"
     HEALBOT_OPTIONS_TOOLTIPSHOWHOT          = "Show active monitored HoT details"
+    HEALBOT_OPTIONS_TOOLTIPSETSCALE         = "Set Scale"
     HEALBOT_WORDS_MIN                       = "min"
     HEALBOT_WORDS_MAX                       = "max"
     HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
@@ -993,7 +996,6 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
     HEALBOT_OPTIONS_OWN_PET_WITH_SELF       = "Own pet: with self"
-    HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use game tooltip style"
     HEALBOT_OPTIONS_SHOWWOWTOOLTIP          = "Show game tooltip information"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
@@ -1159,7 +1161,6 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_ENABLE                     = "Enable"
     HEALBOT_WORD_DISABLE                    = "Disable"
 
-    HEALBOT_OPTIONS_MYCLASS                 = "My Class"
     HEALBOT_OPTIONS_PLUGINS                 = "Plugins"
     HEALBOT_OPTIONS_PLUGIN_NA               = "Plugin not available"
 
@@ -1231,6 +1232,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AGGRO2THRESHOLD          = "Aggro level 2 threshold"
     HEALBOT_PLUGIN_AGGRO3THRESHOLD          = "Aggro level 3 threshold"
     HEALBOT_PLUGIN_INHEALHOTTIME            = "Incoming heals HoT time"
+    HEALBOT_PLUGIN_AUTOTIMEDBUFFDURATION    = "Custom buff - auto All Timed duration less than"
     HEALBOT_PLUGIN_AUTOTIMEDDURATION        = "Custom debuff - auto All Timed duration less than"
     HEALBOT_PLUGIN_ENABLEDALLBUFFS          = "Enable all custom buffs"
     HEALBOT_PLUGIN_DISABLEALLBUFFS          = "Disable all custom buffs"
@@ -1244,8 +1246,13 @@ function HealBot_Lang_enALL()
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
     HEALBOT_CUSTOM_CASTBY_FRIEND            = "Friend"
+    HEALBOT_OPTIONS_MYCLASS                 = "My Class"
+    HEALBOT_OPTIONS_CASTBYSELF              = "Cast by Self"
+    HEALBOT_OPTIONS_CASTBYMYCLASS           = "Cast by My Class"
+    HEALBOT_OPTIONS_CASTBYEVERYONE          = "Cast by Everyone"
     
     HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC     = "Automatic Debuffs"
+    HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS     = "Automatic Buffs"
     HEALBOT_CUSTOM_DEBUFF_CATS = {}
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
@@ -1285,8 +1292,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_ABOUT_FAQ_SPELLS_ANSWER01       = "This is due to options set on the Spells tab \n" ..
                                               "try changing the following and testing: \n\n" ..
-                                              "1: On the Spells tab: Turn off Unset spells on disabled bars \n" ..
-                                              "2: On the Spells tab: Turn off SmartCast \n\n" ..
+                                              "On the Spells tab: Turn off SmartCast \n\n" ..
                                               "Note: It is expected that most users will want to \n" ..
                                               "turn SmartCast back on"
                                               
@@ -1303,8 +1309,7 @@ function HealBot_Lang_enALL()
                                               "Visit "..HEALBOT_ABOUT_URL.." for examples",
                                       [4]   = "Yes \n\n"..
                                               "Visit "..HEALBOT_ABOUT_URL.." for examples",
-                                      [5]   = "1: On the Mouse Wheel tab: Turn off Use Mouse Wheel \n" ..
-                                              "2: Create a macro using [@mouseover] \n\n\n" ..
+                                      [5]   = "Create a macro using [@mouseover] \n\n\n" ..
                                               "Eample macro: \n\n" ..
                                               "#showtooltip Flash Heal \n" ..
                                               "/cast [@mouseover] Flash Heal \n",
@@ -1326,7 +1331,7 @@ function HealBot_Lang_enALL()
                                               "6: On the Debuff tabs, Turn on debuff monitoring",
                                       [8]   = "Yes \n\n"..
                                               "1: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nset Incoming Heals to Don't Show\n" ..
-                                              "2: On the Skins>Frame>Bar Text>Extras tab, \n" ..
+                                              "2: On the Skins>Frame>Bar Text>Health>Incoming Heals tab, \n" ..
                                               "Turn off Incoming Heals",
                                       [9]   = "This has been present since a change in WoW 3.2, \n" ..
                                               "it can affects characters with weird letters in their name \n\n" ..
@@ -1347,15 +1352,15 @@ function HealBot_Lang_enALL()
                                               "want to group separately from others, similar to the\nTank group \n\n" ..
                                               "The following options are available to \n" .. 
                                               "add/remove players to/from the Private List \n\n" ..
-                                              "- The Healbot Menu, enter 'hbmenu' on the Spells tab \n" ..
-                                              "- The Mouse Wheel, set on the Mouse Wheel tab",
+                                              "- The Healbot Menu, enter 'HealBot Menu' on the Spells tab \n" ..
+                                              "- Create a macro with text '/hb tpl hbtarget'",
                                       [14]  = "Private Tanks can be added to the Main Tanks list, \n" ..
                                               "the Private tanks are only visible in your Healbot \n" ..
                                               "and do not affect other players or addons \n\n" ..
                                               "The following options are available to \n" ..
                                               "add/remove players to/from the Tanks list \n\n" ..
-                                              "- The Healbot Menu, enter 'hbmenu' on the Spells tab \n" ..
-                                              "- The Mouse Wheel, set on the Mouse Wheel tab",                                     
+                                              "- The Healbot Menu, enter 'HealBot Menu' on the Spells tab \n" ..
+                                              "- Create a macro with text '/hb tpt hbtarget'",                                     
                                       [15]  = "Yes \n\n"..
                                               "1: On the Skins>Frames>Heal Group tab, turn on Focus \n" ..
                                               "2: Set your focus on the NPC \n" ..
@@ -1367,9 +1372,8 @@ function HealBot_Lang_enALL()
                                               "Note: The HealBot Menu has the option\n'Set HealBot Focus' \n" ..
                                               "This can make setting focus easy on NPC's and \n" ..
                                               "serves as a reminder to set focus. \n\n" ..
-                                              "Enter 'hbmenu' on the Spells tab to use HealBot Menu \n" ..
-                                              "or use the Mouse Wheel tab and set HealBot Menu",
-                                      [16]  = "1: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nadjust the disabled bar opacity \n" ..
+                                              "Enter 'HealBot Menu' on the Spells tab to use HealBot Menu",
+                                      [16]  = "1: On the Skins>Frame>Bars>Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." tab, \nadjust the out of range bar opacity \n" ..
                                               "2: On the Skins>Frame>Bars Text tabs, \nadjust the disabled text opacity\n\n" ..
                                               "Also check out setting the Alert Levels to 100 \n" ..
                                               "on the Skins>Frame>Bars>Visibility tab",

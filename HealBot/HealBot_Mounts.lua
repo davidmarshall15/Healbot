@@ -124,9 +124,13 @@ end
 
 function HealBot_MountsPets_ClassicDalaranCheck()
     local mapPos = C_Map.GetPlayerMapPosition(125, "player")
-    local x, y = mapPos:GetXY()
-    if x>0.6 and y<0.5 then
-        HealBot_mountData["incFlying"]=true
+    if mapPos then
+        local x, y = mapPos:GetXY()
+        if x>0.6 and y<0.5 then
+            HealBot_mountData["incFlying"]=true
+        else
+            HealBot_mountData["incFlying"]=false
+        end
     else
         HealBot_mountData["incFlying"]=false
     end
@@ -226,7 +230,7 @@ function HealBot_MountsPets_InitMount()
             if HEALBOT_GAME_VERSION<4 then
                 --HealBot_AddDebug("mountType="..(mountType or "nil"),"Mount",true)
                 if not mountType then
-                    if sID<25900 or sID==34896 or sID==43688 or sID==348459 then
+                    if sID<25900 or sID==34896 or sID==43688 or sID==348459 or sID==46628 then
                         if sID<10000 then
                             table.insert(HealBot_SlowMount, mount);
                             HealBot_AddDebug("Slow Ground Mount id="..sID.." Name="..mount,"Mount",true)
