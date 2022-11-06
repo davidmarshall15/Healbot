@@ -277,10 +277,10 @@ function HealBot_Share_LoadPresetCols(sIn)
             HealBot_Options_ImportFail("Preset Colours", "Data corruption")
         else
             HealBot_Globals.PresetColoursAlias[x]=alias
-            HealBot_Globals.PresetColours[x]["R"]=r
-            HealBot_Globals.PresetColours[x]["G"]=g
-            HealBot_Globals.PresetColours[x]["B"]=b
-            HealBot_Globals.PresetColours[x]["A"]=a
+            HealBot_Globals.PresetColours[x]["R"]=tonumber(r)
+            HealBot_Globals.PresetColours[x]["G"]=tonumber(g)
+            HealBot_Globals.PresetColours[x]["B"]=tonumber(b)
+            HealBot_Globals.PresetColours[x]["A"]=tonumber(a)
         end
     end
     HealBot_Timers_InitExtraOptions()

@@ -340,6 +340,10 @@ function HealBot_Panel_IsTank(xGUID)
     return HealBot_MainTanks[xGUID]
 end
 
+function HealBot_Panel_IsHealer(xGUID)
+    return HealBot_MainHealers[xGUID]
+end
+
 function HealBot_Panel_SethbTopRole(Role)
     if not Role then return end
     Role=strupper(strtrim(Role))
@@ -585,7 +589,7 @@ function HealBot_Panel_UnitRoleOnSpec(guid, role)
         local s=HealBot_Action_getGuidData(guid, "SPEC")
         if s==" "..HEALBOT_RESTORATION.." " or s==" "..HEALBOT_DISCIPLINE.." " or s==" "..HEALBOT_HOLY.." " or s==" "..HEALBOT_SHAMAN_RESTORATION.." " then
             return "HEALER"
-        elseif s==" "..HEALBOT_PROTECTION.." " or (role=="TANK" and s==" "..HEALBOT_FERAL.." ") then
+        elseif s==" "..HEALBOT_PROTECTION.." " or (role=="TANK" and s==" "..HEALBOT_FERAL.." ") or (role=="TANK" and s==" "..HEALBOT_BLOOD.." ") then
             return "TANK"
         else
             return "DAMAGER"
@@ -814,14 +818,19 @@ end
 
 function HealBot_Action_SetBackBarHeightWidth(frame, height, width)
     local vSetAddHWScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["SCALE"]
-    backBarsSize[frame]["HEIGHT"]=height
-    backBarsSize[frame]["WIDTH"]=width
     if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][frame]["BORDER"]>1 then
         backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"] * vSetAddHWScale)
         backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"] * vSetAddHWScale)
     else
         backBarsSize[frame]["RMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["RMARGIN"]*vSetAddHWScale)
         backBarsSize[frame]["CMARGIN"]=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["CMARGIN"]*vSetAddHWScale)
+    end
+    if backBarsSize[frame]["HEIGHT"]~=height or backBarsSize[frame]["WIDTH"]~=width then
+        backBarsSize[frame]["HEIGHT"]=height
+        backBarsSize[frame]["WIDTH"]=width
+        return true
+    else
+        return false
     end
 end
 

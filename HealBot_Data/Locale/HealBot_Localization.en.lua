@@ -128,6 +128,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_ALPHA                   = "Opacity";
     HEALBOT_OPTIONS_SETALPHA                = "Set Opacity";
+    HEALBOT_OPTIONS_MINALPHA                = "Min opacity";
+    HEALBOT_OPTIONS_MAXALPHA                = "Max opacity";
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
     HEALBOT_OPTIONS_BARALPHAINHEAL          = "Incoming heals opacity";
     HEALBOT_OPTIONS_BARALPHABACK            = "Background bar opacity";
@@ -401,6 +403,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSTEXTWEMAIN         = "Main hand / 2H";
     HEALBOT_OPTIONS_BUFFSTEXTWEOFF          = "Off hand";
     HEALBOT_OPTIONS_ITEMNAME                = "Item name";
+    HEALBOT_OPTIONS_PRIMARYITEM             = "Primary Item";
+    HEALBOT_OPTIONS_BACKUPITEM              = "Backup Item";
     HEALBOT_OPTIONS_BUFFSTEXT2              = "check members";
     HEALBOT_OPTIONS_BUFFSTEXT3              = "bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
     HEALBOT_OPTIONS_EMERGCOLS               = "Emergency col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
@@ -509,6 +513,7 @@ function HealBot_Lang_enALL()
     HEALBOT_MENU                            = "Menu";
     HEALBOT_MAINTANK                        = "MainTank";
     HEALBOT_STOP                            = "Stop";
+    HEALBOT_CANCELREQUEST                   = "Cancel Request";
     HEALBOT_IGNOREAURAALL                   = "Disable - Ignore in all zones";
     HEALBOT_ICONRAISEPRIO1                  = "Priority raise x1";
     HEALBOT_ICONRAISEPRIO3                  = "Priority raise x3";
@@ -539,6 +544,7 @@ function HealBot_Lang_enALL()
     end
 
     HEALBOT_OPTION_AGGROTRACK               = "Monitor Aggro"
+    HEALBOT_OPTION_AGGROHAZARD              = "Show border hazard on tanking"
     HEALBOT_OPTION_AGGROBAR                 = "Bar"
     HEALBOT_OPTION_AGGROTXT                 = ">> Text <<"
     HEALBOT_OPTION_AGGROIND                 = "Show indicator"
@@ -911,7 +917,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_FOCUSGROUPS3            = "ON: Hide unfocused groups"
     HEALBOT_OPTIONS_SHOWDURATIONFROM        = "Show duration from"
     HEALBOT_OPTIONS_SHOWDURATIONWARN        = "Duration warning from"
-    HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Set Aux Bar Opacity Type"
+    HEALBOT_OPTIONS_GOTOAUXCONFIG           = "Set Aux Bar Type"
     HEALBOT_CMD_RESETCUSTOMDEBUFFS          = "Reset custom debuffs"
     HEALBOT_CMD_RESETSKINS                  = "Reset skins"
     HEALBOT_CMD_CLEARBLACKLIST              = "Clear BlackList"
@@ -979,6 +985,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
+    HEALBOT_OPTIONS_HAZARDONLY              = "Hazard Only"
     HEALBOT_OPTIONS_SAME_AS_HLTH_CURRENT    = "Same as health (current health)"
     HEALBOT_OPTIONS_SAME_AS_HLTH_FUTURE     = "Same as health (future health)"
     HEALBOT_OPTIONS_FUTURE_HLTH             = "Future health"
@@ -989,6 +996,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ADAPTIVEONLY            = "Adaptive only"
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar"
     HEALBOT_SKIN_BORDER_HAZARD              = "Border hazard"
+    HEALBOT_SKIN_BORDER_HAZARDU             = "Border Hazard"
+    HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
@@ -1202,6 +1211,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_PERFORMANCE              = "HealBot Performance"
     HEALBOT_PLUGIN_MYCOOLDOWNS              = "HealBot MyCooldowns"
     HEALBOT_PLUGIN_TWEAKS                   = "HealBot Tweaks"
+    HEALBOT_PLUGIN_REQUESTS                 = "HealBot Requests"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
     HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
     HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"
@@ -1242,6 +1252,14 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_USETRINKET10             = "Auto trinket includes gloves"
     HEALBOT_PLUGIN_CLASSICPLAYERROLES       = "Allow player roles in groups and raids"
     HEALBOT_PLUGIN_CLASSICNORANKS           = "Do not show ranks for Healing spells"
+    HEALBOT_PLUGIN_REQUESTTEXT              = "Request text"
+    HEALBOT_PLUGIN_FILTER                   = "Filter"
+    HEALBOT_PLUGIN_REQUESTTABILITY          = "Request ability"
+    HEALBOT_PLUGIN_REQUESTTTIMEOUT          = "Request timeout"
+    HEALBOT_PLUGIN_BUFFCANCELSREQUEST       = "Buff cancels request"
+    HEALBOT_PLUGIN_RANGECANCELSREQUEST      = "Player visible cancels request"
+    HEALBOT_PLUGIN_DUPCANCELSREQUEST        = "Duplicate request cancels request"
+    HEALBOT_PLUGIN_REQUEST                  = "Request"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

@@ -33,46 +33,61 @@ function HealBot_Aggro_IndicatorClear(button)
     button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
 end
 
-function HealBot_Aggro_IndicatorUpdate(button)
-    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
-       button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 and 
-       button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
-        local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
-        if button.aggro.status==1 then
-            if button.aggro.ind~=1 then
-                button.aggro.ind=1
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+function HealBot_Aggro_HazardClear(button)
+    HealBot_Action_DisableBorderHazardType(button, "AGGRO")
+end
+
+function HealBot_Aggro_IndicatorHazardUpdate(button)
+    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
+       button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 then
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
+           button.aggro.status>=Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIND"] then
+            local indAlpha=HealBot_Action_BarColourAlpha(button, 1, 1)
+            if button.aggro.status==1 then
+                if button.aggro.ind~=1 then
+                    button.aggro.ind=1
+                    button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
+                    button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
+                    button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar2"]:SetAlpha(0)
+                    button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+                end
+            elseif button.aggro.status==2 then
+                if button.aggro.ind~=2 then
+                    button.aggro.ind=2
+                    button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
+                    button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
+                end
+            elseif button.aggro.status==3 then
+                if button.aggro.ind~=3 then
+                    button.aggro.ind=3
+                    button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconal3"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
+                    button.gref.indicator.aggro["Iconar3"]:SetAlpha(indAlpha)
+                end
             end
-        elseif button.aggro.status==2 then
-            if button.aggro.ind~=2 then
-                button.aggro.ind=2
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconal3"]:SetAlpha(0)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar3"]:SetAlpha(0)
-            end
-        elseif button.aggro.status==3 then
-            if button.aggro.ind~=3 then
-                button.aggro.ind=3
-                button.gref.indicator.aggro["Iconal1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconal2"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconal3"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar1"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar2"]:SetAlpha(indAlpha)
-                button.gref.indicator.aggro["Iconar3"]:SetAlpha(indAlpha)
-            end
+        elseif button.aggro.ind~=0 then
+            HealBot_Aggro_IndicatorClear(button)
         end
-    elseif button.aggro.ind~=0 then
-        HealBot_Aggro_IndicatorClear(button)
+        if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["HAZARD"] and button.aggro.status==3 then
+            HealBot_Action_EnableBorderHazardType(button, 1, 0, 0, "AGGRO")
+        elseif button.aggro.hazard then
+            HealBot_Aggro_HazardClear(button)
+        end
+    else
+        if button.aggro.ind~=0 then HealBot_Aggro_IndicatorClear(button) end
+        if button.aggro.hazard then HealBot_Aggro_HazardClear(button) end
     end
-      --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
+    
+      --HealBot_setCall("HealBot_Aggro_IndicatorHazardUpdate")
 end
 
 local function HealBot_Aggro_AuxSetAggroBar(button)
@@ -122,10 +137,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         else
             button.aggro.status=threatStatus
         end
-    end
-    if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
-       Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] then
-        HealBot_Aggro_IndicatorUpdate(button)
+        HealBot_Aggro_IndicatorHazardUpdate(button)
     end
     if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct

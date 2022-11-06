@@ -104,6 +104,8 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROBARFLASHFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
                                  ["HEALBARSAGGROBARFLASHMIN"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MIN,
                                  ["HEALBARSAGGROBARFLASHMAX"]=HEALBOT_OPTIONS_AGGROFLASHALPHA.." "..HEALBOT_WORDS_MAX,
+                                 ["BORDERHAZARDFREQ"]=HEALBOT_OPTIONS_AGGROFLASHFREQ,
+                                 ["BORDERHAZARDLOWA"]=HEALBOT_OPTIONS_MINALPHA,
                         -- Skins Chat tab
                                  ["CHATNONE"]=HEALBOT_OPTIONS_CASTNOTIFY1,
                                  ["CHATSELF"]=HEALBOT_OPTIONS_CASTNOTIFY2,
@@ -242,6 +244,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROINDALERT"]=HEALBOT_OPTIONS_AGGROINDALERT,
                                  ["HEALBARSAGGROBARALERT"]=HEALBOT_OPTIONS_AGGROALERT,
                                  ["HEALBARSAGGROINDLINK"]=HEALBOT_OPTIONS_TAB_AGGROINDICATORS,
+                                 ["HEALBARSAGGROHAZARD"]=HEALBOT_OPTION_AGGROHAZARD,
                         -- Skins Frames Bars Aux tab
                                  ["BARSAUX"]="Bars Aux",
                                  ["BARSAUXASSIGN"]=HEALBOT_OPTIONS_AUXASSIGN,
@@ -669,6 +672,8 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROBARFLASHFREQ"]="Set the speed the aux bars flash.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."The update frequency can be tweaked\n".._G["GREEN_FONT_COLOR_CODE"].."with the HealBot Performance Plugin.",
                                ["HEALBARSAGGROBARFLASHMIN"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Min - The minimum opacity.",
                                ["HEALBARSAGGROBARFLASHMAX"]="To give the effect of flashing, aux bars increase and decrease transparency in steps.\n".._G["GREEN_FONT_COLOR_CODE"].."Max - The maximum opacity.",
+                               ["BORDERHAZARDFREQ"]="The frequency of the flash effect.",
+                               ["BORDERHAZARDLOWA"]="The opacity of the border when set to the low value.",
                         -- Skins Chat tab
                                ["CHATNONE"]="Do not send chat messages.",
                                ["CHATSELF"]="Send chat messages only to yourself, good for testing.",
@@ -808,6 +813,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSAGGROINDALERT"]="When using the indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROBARALERT"]="When using the aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROINDLINK"]="Links to the Indicators Aggro tab\nallowing for aggro indicators to be set on bars.",
+                               ["HEALBARSAGGROHAZARD"]="Use the Border Hazard when aggro level is 3 (Tanking).",
                         -- Skins Frames Bars Aux tab
                                ["BARSAUX"]="Show the Skins Frames Aux tab.",
                                ["BARSAUXASSIGN"]="Assign a bar type to the auxiliary bar.",
@@ -1046,12 +1052,12 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCHECKWELLFED"]="Check for missing well fed.",
                                ["BUFFSCHECKMANADRINK"]="Check for low mana.",
                                ["BUFFSCHECKMANATHRESHOLD"]="Warn when mana is below the threshold.",
-                               ["BUFFSWELLFEDITEM"]="Type the food item to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is currently only on En clients.",
+                               ["BUFFSWELLFEDITEM"]="Type the food item to buff.\n--\n".."|cff517fff".."The text will turn blue for valid usable items in your bags.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This is currently only on En clients.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: The backup is used when the primary doesn't exist",
                                ["BUFFSEXTRABUFF"]="Type the buff name to track.\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING\n".._G["ORANGE_FONT_COLOR_CODE"].."-------------\n".._G["ORANGE_FONT_COLOR_CODE"].."There is no validation on the Buff Name, ensure it is correct.",
                                ["BUFFSEXTRAITEM"]="Type the item name to buff.\n--\n".."|cff517fff".."The text will turn blue for\n".."|cff517fff".."valid usable items in your bags.",
                                ["BUFFSWELLFEDITEMSELECTOR"]="Toggle between the item text and the item selector.",
                                ["BUFFSCHECKEXTRA"]="Check for missing extra buffs",
-                               ["BUFFSWELLFEDITEMS"]="Items found in your bag may show in this list.\nSelect an item to update or None to do nothing.",
+                               ["BUFFSWELLFEDITEMS"]="Items found in your bag may show in this list.\nSelect an item to update or None to clear the current item.",
                                ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
@@ -1144,7 +1150,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.",  
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Requests: ".._G["FONT_COLOR_CODE_CLOSE"].."Players can whisper you to request a buff or ability.",  
                               }
 
 end

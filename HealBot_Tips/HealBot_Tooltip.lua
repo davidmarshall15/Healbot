@@ -14,6 +14,7 @@ local hbCommands = { [strlower(HEALBOT_DISABLED_TARGET)]=true,
                      [strlower(HEALBOT_HBMENU)]=true,
                      [strlower(HEALBOT_STOP)]=true,
                      [strlower(HEALBOT_IGNOREAURAALL)]=true,
+                     [strlower(HEALBOT_CANCELREQUEST)]=true,
                     }  
 local hbPlayerCommands = {}
 if HEALBOT_GAME_VERSION>3 then

@@ -49,6 +49,8 @@ HealBot_Action_luVars["ScreenHeight"]=0
 HealBot_Action_luVars["ScreenWidth"]=0
 HealBot_Action_luVars["CurrentModKey"]=""
 HealBot_Action_luVars["FGroups"]={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[6]=true,[7]=true,[8]=true}
+HealBot_Action_luVars["HazardFreq"]=0.3
+HealBot_Action_luVars["HazardMinAlpha"]=0.25
 
 local sConcat={}
 local tabconcat=table.concat
@@ -358,42 +360,99 @@ function HealBot_Action_UpdateFluidBars()
       --HealBot_setCall("HealBot_Action_UpdateFluidBars")
 end
 
-local HealBot_Hazard_DebuffButtons={}
+local HealBot_Hazard_Buttons={}
+function HealBot_Action_UpdateHazardBordersColours(button, alpha)
+    button.gref["BackBorder"]:SetBackdropBorderColor(button.aura.hazard.r,button.aura.hazard.g,button.aura.hazard.b,HealBot_Action_BarColourAlpha(button, alpha, 1))
+end
+
+function HealBot_Action_UpdateHazardBordersColoursNew(button, r, g, b)
+    button.aura.hazard.r,button.aura.hazard.g,button.aura.hazard.b=r,g,b
+    if HealBot_Action_luVars["HazardAltAlpha"] then
+        HealBot_Action_UpdateHazardBordersColours(button, 1)
+    else
+        HealBot_Action_UpdateHazardBordersColours(button, HealBot_Action_luVars["HazardMinAlpha"])
+    end
+end
+
 function HealBot_Action_UpdateHazardBorders()
     HealBot_Action_luVars["HazardInUse"]=false
     if HealBot_Action_luVars["HazardAltAlpha"] then
         HealBot_Action_luVars["HazardAltAlpha"]=false
-        for id,xButton in pairs(HealBot_Hazard_DebuffButtons) do
+        for id,xButton in pairs(HealBot_Hazard_Buttons) do
             HealBot_Action_luVars["HazardInUse"]=true
-            xButton.gref["BackBorder"]:SetBackdropBorderColor(xButton.aura.debuff.r,xButton.aura.debuff.g,xButton.aura.debuff.b,HealBot_Action_BarColourAlpha(xButton, 1, 1))
+            HealBot_Action_UpdateHazardBordersColours(xButton, 1)
         end
     else
         HealBot_Action_luVars["HazardAltAlpha"]=true
-        for id,xButton in pairs(HealBot_Hazard_DebuffButtons) do
+        for id,xButton in pairs(HealBot_Hazard_Buttons) do
             HealBot_Action_luVars["HazardInUse"]=true
-            xButton.gref["BackBorder"]:SetBackdropBorderColor(xButton.aura.debuff.r,xButton.aura.debuff.g,xButton.aura.debuff.b,HealBot_Action_BarColourAlpha(xButton, 0.25, 1))
+            HealBot_Action_UpdateHazardBordersColours(xButton, HealBot_Action_luVars["HazardMinAlpha"])
         end
     end
 
     if HealBot_Action_luVars["HazardInUse"] then
-        C_Timer.After(0.25, function() HealBot_Action_UpdateHazardBorders() end)
+        C_Timer.After(HealBot_Action_luVars["HazardFreq"], function() HealBot_Action_UpdateHazardBorders() end)
     end
       --HealBot_setCall("HealBot_Action_UpdateHazardBorders")
 end
 
-function HealBot_Action_EnableBorderHazard(button)
-    HealBot_Hazard_DebuffButtons[button.id]=button
-    button.aura.debuff.hazard=true
-    button.gref["BackBorder"]:SetBackdropBorderColor(button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b,HealBot_Action_BarColourAlpha(button, 1, 1))
+function HealBot_Action_EnableBorderHazard(button, r, g, b)
+    HealBot_Hazard_Buttons[button.id]=button
+    button.aura.hazard.r,button.aura.hazard.g,button.aura.hazard.b=r,g,b
+    button.gref["BackBorder"]:SetBackdropBorderColor(button.aura.hazard.r,button.aura.hazard.g,button.aura.hazard.b,HealBot_Action_BarColourAlpha(button, 1, 1))
     if not HealBot_Action_luVars["HazardInUse"] then
+        HealBot_Action_luVars["HazardAltAlpha"]=true
         HealBot_Action_UpdateHazardBorders()
     end
 end
 
+function HealBot_Action_EnableBorderHazardType(button, r, g, b, hType)
+    if hType=="PLUGIN" then
+        button.status.pluginhazard=true
+        HealBot_Action_EnableBorderHazard(button, r, g, b)
+    elseif hType=="DEBUFF" then
+        button.aura.debuff.hazard=true
+        if not button.status.pluginhazard then
+            HealBot_Action_EnableBorderHazard(button, r, g, b)
+        end
+    elseif hType=="AGGRO" then
+        button.aggro.hazard=true
+        if not button.status.pluginhazard and not button.aura.debuff.hazard then
+            HealBot_Action_EnableBorderHazard(button, r, g, b)
+        end
+    end
+end
+
 function HealBot_Action_DisableBorderHazard(button)
-    HealBot_Hazard_DebuffButtons[button.id]=nil
-    button.aura.debuff.hazard=false
+    HealBot_Hazard_Buttons[button.id]=nil
     HealBot_Action_UpdateBackgroundBorder(button)
+end
+
+function HealBot_Action_DisableBorderHazardType(button, hType)
+    if hType=="PLUGIN" then
+        button.status.pluginhazard=false
+        if button.aura.debuff.hazard then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
+        elseif button.aggro.hazard then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
+    elseif hType=="DEBUFF" then
+        button.aura.debuff.hazard=false
+        if button.aggro.hazard then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
+    elseif hType=="AGGRO" then
+        button.aggro.hazard=false
+        HealBot_Action_DisableBorderHazard(button)
+    end
+end
+
+function HealBot_Action_DisableBorderHazardTypeGUID(guid)
+    if HealBot_retLuVars("pluginRequestsLoaded") then HealBot_Plugin_Requests_CancelGUID(guid) end
 end
 
 local hdaAlphaValue, hdaSetValue, hdaAdjValue=0,0,0
@@ -883,7 +942,7 @@ function HealBot_Action_UpdateHealthBackgroundBorder(button)
 end
 
 function HealBot_Action_UpdateBackgroundBorder(button)
-    if not HealBot_Hazard_DebuffButtons[button.id] then
+    if not HealBot_Hazard_Buttons[button.id] then
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]>1 then
             if button.status.current<HealBot_Unit_Status["DEAD"] and Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]~=3 then
                 HealBot_Action_UpdateHealthBackgroundBorder(button) 
@@ -961,7 +1020,10 @@ function HealBot_Action_setState(button, state)
     button.status.current=state
     if button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] then 
         if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
-        if HealBot_Hazard_DebuffButtons[button.id] then HealBot_Action_DisableBorderHazard(button) end
+        if HealBot_Hazard_Buttons[button.id] then 
+            HealBot_Action_DisableBorderHazard(button)
+            if button.aura.debuff.hazard then button.aura.debuff.hazard=false end
+        end
     end
 end
 
@@ -1363,7 +1425,7 @@ function HealBot_Action_UpdateHealthButtonState(button)
             HealBot_Action_UpdateHealthStatusBarColor(button)
         end
         HealBot_Action_UpdateHealthBackground(button)
-        if not HealBot_Hazard_DebuffButtons[button.id] then
+        if not HealBot_Hazard_Buttons[button.id] then
             HealBot_Action_UpdateHealthBackgroundBorder(button)
         end
     else
@@ -1572,7 +1634,7 @@ end
 function HealBot_Action_UpdateAllIndicators(button)
     HealBot_Action_setPowerIndicators(button)
     button.mana.lowcheck=true
-    HealBot_Aggro_IndicatorUpdate(button)
+    HealBot_Aggro_IndicatorHazardUpdate(button)
 end
 
 local hbPowerIndicator=0
@@ -1982,7 +2044,7 @@ function HealBot_Action_ResetUnitButtonOpacity(button)
     HealBot_Aura_Update_AllIcons(button)
     HealBot_Action_setPowerIndicators(button)
     HealBot_Action_CheckUnitLowMana(button)
-    HealBot_Aggro_IndicatorUpdate(button)
+    HealBot_Aggro_IndicatorHazardUpdate(button)
 end
 
 function HealBot_Action_ResetUnitOpacity()
@@ -2102,6 +2164,7 @@ function HealBot_Action_InitButton(button)
     button.aura.buff={}
     button.aura.buff.recheck={}
     button.aura.debuff={}
+    button.aura.hazard={}
     button.status={}
     erButton.status={}
     button.update={}
@@ -2484,6 +2547,9 @@ function HealBot_Action_PrepButton(button)
     button.aura.debuff.r=1
     button.aura.debuff.g=1
     button.aura.debuff.b=1
+    button.aura.hazard.r=1
+    button.aura.hazard.g=1
+    button.aura.hazard.b=1
     button.icon.extra.targeticon=0
     button.icon.extra.classtexture=false
     button.icon.extra.oorarrow=false
@@ -2740,6 +2806,8 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
             cID="J"
         elseif HEALBOT_GAME_VERSION>2 and cText == HEALBOT_RANDOMGOUNDMOUNT then
             cID="K"
+        elseif cText == HEALBOT_CANCELREQUEST then
+            cID="L"
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdCodes")
@@ -2801,6 +2869,8 @@ function HealBot_Action_SpellCmdText(cType, cID)
             cText=HEALBOT_RANDOMMOUNT
         elseif HEALBOT_GAME_VERSION>2 and cID == "K" then
             cText=HEALBOT_RANDOMGOUNDMOUNT
+        elseif cID == "L" then
+            cText=HEALBOT_CANCELREQUEST
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdText")
@@ -3617,6 +3687,10 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             else
                 button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
+        elseif strlower(sName)==strlower(HEALBOT_CANCELREQUEST) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            button:SetAttribute(HB_prefix.."type"..j, "macro")
+            button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Action_DisableBorderHazardTypeGUID("'..button.guid..'", "PLUGIN")')
         elseif HealBot_Spell_Names[sName] then
             if sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, unit, cType)
@@ -4476,7 +4550,7 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Fluid_BarButtonsAlpha[button.id] then HealBot_Fluid_BarButtonsAlpha[button.id]=nil end
     if HealBot_Fluid_InHealButtons[button.id] then HealBot_Fluid_InHealButtons[button.id]=nil end
     if HealBot_Fluid_AbsorbButtons[button.id] then HealBot_Fluid_AbsorbButtons[button.id]=nil end
-    if HealBot_Hazard_DebuffButtons[button.id] then HealBot_Hazard_DebuffButtons[button.id]=nil end
+    if HealBot_Hazard_Buttons[button.id] then HealBot_Hazard_Buttons[button.id]=nil end
     button.status.enabled=false
     table.insert(hbMarkedDeleteButtons, button.id)
     HealBot_Timers_Set("LAST","ProcCacheButtons",5)
@@ -5630,10 +5704,14 @@ function HealBot_Action_SmartCast(button)
         if button.aura.buff.missingbuff==HEALBOT_WELL_FED then
             if HealBot_Config_Buffs.WellFedItem and IsUsableItem(HealBot_Config_Buffs.WellFedItem) then
                 scSpell=HealBot_Config_Buffs.WellFedItem
+            elseif HealBot_Config_Buffs.BackupWellFedItem and IsUsableItem(HealBot_Config_Buffs.BackupWellFedItem) then
+                scSpell=HealBot_Config_Buffs.BackupWellFedItem
             end
         elseif button.aura.buff.missingbuff==HEALBOT_MANA_DRINK then
             if HealBot_Config_Buffs.ManaDrinkItem and IsUsableItem(HealBot_Config_Buffs.ManaDrinkItem) then
                 scSpell=HealBot_Config_Buffs.ManaDrinkItem
+            elseif HealBot_Config_Buffs.BackupManaDrinkItem and IsUsableItem(HealBot_Config_Buffs.BackupManaDrinkItem) then
+                scSpell=HealBot_Config_Buffs.BackupManaDrinkItem
             end
         else
             scSpell=button.aura.buff.missingbuff

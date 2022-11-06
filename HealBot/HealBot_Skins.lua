@@ -21,6 +21,18 @@ local maxScale=0
 local tBarsConcat={}
 local erButton=nil
 local iAnchors={["ICON"]="", ["BUTTON"]="", ["DOUBLE"]="", ["RELATIVE"]="", ["TXTCOUNT"]="", ["TXTEXPIRE"]="", ["INDSELFCAST"]="", ["TXTEXPIREX"]=1, ["TXTCOUNTX"]=1}
+local HealBot_Skins_luVars={}
+HealBot_Skins_luVars["AuxReset"]=false
+
+function HealBot_Skins_setLuVars(vName, vValue)
+    HealBot_Skins_luVars[vName]=vValue
+      --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
+end
+
+function HealBot_Skins_retLuVars(vName)
+    --HealBot_setCall("HealBot_Action_retLuVars")
+    return HealBot_Skins_luVars[vName]
+end
 
 local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicator_gold]],
                     [3]=[[Interface\Addons\HealBot\Images\indicator_silver]],
@@ -474,7 +486,12 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                     pWidth=pWidth*(2-(pWidth/7800))
                 end
             end
-            HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+bIconHeight+(bOutline*2)), (pWidth+auxWidth+lIconWidth+rIconWidth+(bOutline*2)))
+            if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+bIconHeight+(bOutline*2)), (pWidth+auxWidth+lIconWidth+rIconWidth+(bOutline*2))) then
+                HealBot_Skins_luVars["AuxReset"]=true
+            end
+            if HealBot_Skins_luVars["AuxReset"] then
+                b.auxreset=true
+            end
 
             b.gref["Bar"]:SetHeight(bheight);
             b.gref["Bar"]:SetWidth(bWidth)
@@ -510,21 +527,17 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
             b.gref["Bar"]:ClearAllPoints()
             b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",auxOffsetLeft+bOutline+lIconWidth,auxOffsetBelow+bOutline+bIconHeight)
-            if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORDER"]>1 then
-                if b.gref["BackBorder"].size~=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale) then
-                    b.gref["BackBorder"]:SetBackdrop({
-                                                edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                                edgeSize = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale),
-                                                })
-                    b.gref["BackBorder"]:SetPoint("TOPLEFT", b.gref["Back"], "TOPLEFT",0,0)
-                    b.gref["BackBorder"]:SetPoint("BOTTOMRIGHT", b.gref["Back"], "BOTTOMRIGHT",0,0)
-                    b.gref["BackBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
-                    b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
-                end
-                HealBot_Action_UpdateBackgroundBorder(button)
-            else
+            if b.gref["BackBorder"].size~=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale) then
+                b.gref["BackBorder"]:SetBackdrop({
+                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                            edgeSize = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale),
+                                            })
+                b.gref["BackBorder"]:SetPoint("TOPLEFT", b.gref["Back"], "TOPLEFT",0,0)
+                b.gref["BackBorder"]:SetPoint("BOTTOMRIGHT", b.gref["Back"], "BOTTOMRIGHT",0,0)
                 b.gref["BackBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
+                b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
             end
+            HealBot_Action_UpdateBackgroundBorder(button)
             
             erButton=HealBot_Emerg_Button[b.id]
             if b.frame<10 and Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["USE"] then
@@ -2249,6 +2262,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]==nil then Healbot_Config_Skins.General[SkinName]["STICKYFRAME"]=false end
     if not Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"] then Healbot_Config_Skins.General[SkinName]["FOCUSGROUPS"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["FGDIMMING"] then Healbot_Config_Skins.General[SkinName]["FGDIMMING"]=2.5 end
+    if not Healbot_Config_Skins.General[SkinName]["HAZARDFREQ"] then Healbot_Config_Skins.General[SkinName]["HAZARDFREQ"]=0.3 end
+    if not Healbot_Config_Skins.General[SkinName]["HAZARDMINALPHA"] then Healbot_Config_Skins.General[SkinName]["HAZARDMINALPHA"]=0.25 end
     if not Healbot_Config_Skins.General[SkinName]["GLOBALDIMMING"] then Healbot_Config_Skins.General[SkinName]["GLOBALDIMMING"]=1 end
     if not Healbot_Config_Skins.General[SkinName]["OFREQ"] then Healbot_Config_Skins.General[SkinName]["OFREQ"]=0.07 end
     if not Healbot_Config_Skins.General[SkinName]["OMIN"] then Healbot_Config_Skins.General[SkinName]["OMIN"]=0.1 end

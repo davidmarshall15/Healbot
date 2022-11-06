@@ -424,7 +424,7 @@ function HealBot_TalentQuery(button)
         button.specupdate=0
         button.spec=s
         --HealBot_AddDebug("Cache unit="..button.unit,"Talent",true)
-    elseif UnitIsConnected(button.unit) then
+    elseif button.isplayer and UnitExists(button.unit) and UnitIsConnected(button.unit) then
         if HealBot_Action_IsUnitDead(button) then
             button.specupdate=TimeNow+5
         elseif HEALBOT_GAME_VERSION>3 then
@@ -454,6 +454,8 @@ function HealBot_TalentQuery(button)
         else
             button.specupdate=0
         end
+    else
+        button.specupdate=0
     end
     if hbInspect and CanInspect(button.unit) then
         HealBot_luVars["talentUpdate"]=TimeNow+3
@@ -799,11 +801,16 @@ function HealBot_SlashCmd(cmd)
             HealBot_OnEvent_UnitHealth(pButton)
         end
     elseif (HBcmd=="zzz") then
+        _,xButton,pButton = HealBot_UnitID("player")
+        local button=xButton or pButton
+        if x and button then
+            if x=="s" then
+                HealBot_Action_EnableBorderHazardType(button, 1, 1, 0, "PLUGIN")
+            else
+                HealBot_Action_DisableBorderHazardType(button, "PLUGIN")
+            end
+        end
         HealBot_AddDebug("#: UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"].." UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." MaxFastQueue="..HealBot_luVars["MaxFastQueue"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
-        --_,xButton,pButton = HealBot_UnitID("player")
-        --local button=xButton or pButton
-        local talentID, name, texture, selected, available, spellID = GetTalentInfo(1, 2, GetActiveSpecGroup())
-        HealBot_AddDebug("Talent name is "..(name or "nil"))
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -2572,14 +2579,14 @@ function HealBot_Update_CPUUsage()
 end
 
 function HealBot_UpdateMaxUnitsAdj()
-    HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage
+    HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage-1
     if HealBot_luVars["UpdateMaxUnits"]<2 then
         HealBot_luVars["UpdateMaxUnits"]=2
     elseif HealBot_luVars["UpdateMaxUnits"]>7 then
         HealBot_luVars["UpdateMaxUnits"]=7
     end
     HealBot_UpdateNumUnits()
-    HealBot_luVars["MaxFastQueue"]=HealBot_Globals.CPUUsage*2
+    HealBot_luVars["MaxFastQueue"]=(HealBot_Globals.CPUUsage*2)-2
     if HealBot_luVars["MaxFastQueue"]<5 then
         HealBot_luVars["MaxFastQueue"]=5
     elseif HealBot_luVars["MaxFastQueue"]>15 then 
@@ -2675,12 +2682,6 @@ function HealBot_UpdateBuffItem(buff, item)
     end
 end
 
-function HealBot_Check_Skins()
-    for x in pairs (Healbot_Config_Skins.Skins) do
-        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
-    end
-end
-
 function HealBot_Update_Skins(forceCheck)
     if HealBot_Config.LastVersionSkinUpdate then
         HealBot_Config.LastVersionUpdate=HealBot_Config.LastVersionSkinUpdate
@@ -2711,7 +2712,7 @@ function HealBot_Update_Skins(forceCheck)
     if not HealBot_Globals.AutoCacheSize then HealBot_Globals.AutoCacheSize=25 end
 
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
-    if tonumber(tMajor)<9 or (tonumber(tMajor)==9 and tonumber(tMinor)<2) then
+    if tonumber(tMajor)<9 or (tonumber(tMajor)==9 and tonumber(tMinor)<2) or (tonumber(tMajor)==9 and tonumber(tMinor)==2 and tonumber(tPatch)<5) then
         HealBot_Options_SetDefaults(true);
         HealBot_Options_ReloadUI("HealBot Requires UI Reload\n\nDue to updating from a very old version")
     elseif HealBot_Globals.LastVersionSkinUpdate~=HEALBOT_VERSION_SC or forceCheck then
@@ -2719,71 +2720,7 @@ function HealBot_Update_Skins(forceCheck)
             HealBot_Globals.OneTimeMsg["VERSION"]=false
         end
         for x in pairs (Healbot_Config_Skins.Skins) do
-            if tonumber(tMinor)==2 then
-                if tonumber(tPatch)<1 then
-                    if tonumber(tHealbot)<8 then
-                        for f=1,10 do
-                            if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["INJURED"]>0.99 then
-                                Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["INJURED"]=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["INJURED"]/100
-                            end
-                            if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["CRITICAL"]>0.99 then
-                                Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["CRITICAL"]=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["CRITICAL"]/100
-                            end
-                        end
-                    end
-                    if tonumber(tHealbot)<10 then
-                        HealBot_Config_Cures.IgnoreFriendDebuffs=false
-                    end
-                    for f=1,10 do
-                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["AGGROTXTANCHOR"]==6 then
-                            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["AGGROTXTANCHOR"]=5
-                        end
-                    end
-                elseif tonumber(tPatch)<6 then
-                    if tonumber(tHealbot)<3 then
-                        for f=1,10 do
-                            if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["AGGROTXTANCHOR"]==6 then
-                                Healbot_Config_Skins.BarText[Healbot_Config_Skins.Skins[x]][f]["AGGROTXTANCHOR"]=5
-                            end
-                        end
-                    end
-                end
-            end
-            for f=1,10 do
-                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["ORA"]<0.25 then 
-                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["ORA"]=0.25
-                elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["ORA"]>0.75 then
-                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["ORA"]=0.75
-                end
-                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["DISA"]>0.75 then 
-                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["DISA"]=0.75
-                end
-                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["HA"]<0.75 then 
-                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["HA"]=0.75
-                end
-                if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IA"]<0.2 then 
-                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IA"]=0.2
-                elseif Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IA"]>0.8 then
-                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IA"]=0.8
-                end
-                if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AA"]<0.2 then 
-                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AA"]=0.2
-                elseif Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AA"]>0.8 then
-                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AA"]=0.8
-                end
-                if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["A"]<0.75 then 
-                    Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["A"]=0.75
-                end
-                if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["OA"]<0.25 then 
-                    Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["OA"]=0.25
-                elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["OA"]>0.75 then
-                    Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["OA"]=0.75
-                end
-                if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["DA"]>0.75 then 
-                    Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["DA"]=0.75
-                end
-            end
-            HealBot_AddDebug("Check Skins")
+            HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
         end
         if tonumber(tMajor)==9 then
             if not HealBot_Globals.OverrideEffects["FGDIMMING"] then HealBot_Globals.OverrideEffects["FGDIMMING"]=2.5 end
@@ -2854,7 +2791,6 @@ function HealBot_Update_Skins(forceCheck)
             end
             HealBot_Options_ResetSetting("ICONS")
         end
-        HealBot_Check_Skins()
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
     if HealBot_Config.LastVersionUpdate~=HEALBOT_VERSION_SC or forceCheck then 
@@ -3122,7 +3058,7 @@ function HealBot_GetTalentInfo(button)
         if UnitIsUnit(button.unit, "player") then
             isNotPlayer=false
             canInspect=true
-        elseif CheckInteractDistance(button.unit, 1) and UnitGUID(button.unit)==button.guid and HealBot_luVars["inspectGUID"]==button.guid and CanInspect(button.unit) then
+        elseif button.isplayer and UnitExists(button.unit) and CheckInteractDistance(button.unit, 1) and UnitGUID(button.unit)==button.guid and HealBot_luVars["inspectGUID"]==button.guid and CanInspect(button.unit) then
             canInspect=true
         end
         if canInspect then
@@ -3265,6 +3201,16 @@ function HealBot_InitPlugins()
         HealBot_luVars["pluginTweaks"]=true
     else
         HealBot_luVars["pluginTweaks"]=false
+    end
+    
+    loaded, reason = LoadAddOn("HealBot_Plugin_Requests")
+    HealBot_luVars["pluginRequestsReason"]=reason or ""
+    HealBot_luVars["pluginRequestsLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginRequests then 
+        HealBot_Plugin_Requests_Init()
+        HealBot_luVars["pluginRequests"]=true
+    else
+        HealBot_luVars["pluginRequests"]=false
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_MyCooldowns")
@@ -4141,6 +4087,7 @@ function HealBot_ProcessRefreshTypes()
             if not HealBot_luVars["TestBarsOn"] then
                 HealBot_Timers_Set("LAST","CheckHideUnusedFrames")
             end
+            HealBot_Skins_setLuVars("AuxReset", false)
             return
         end
         C_Timer.After(0.02, HealBot_ProcessRefreshTypes)
@@ -6264,6 +6211,20 @@ function HealBot_setFuncUnitInRange()
     end
 end
 
+local hbRangeRequests={}
+function HealBot_Requests(guid, state)
+    if state then
+        hbRangeRequests[guid]=true
+    else
+        hbRangeRequests[guid]=nil
+    end
+end
+
+function HealBot_RequestsClear()
+    hbRangeRequests={}
+end
+
+
 local newRange,oldRange,newRange30=-99,99,false
 function HealBot_UpdateUnitRange(button) 
     if button.status.current<HealBot_Unit_Status["DC"] then
@@ -6275,6 +6236,10 @@ function HealBot_UpdateUnitRange(button)
             if button.status.range<0 or oldRange<0 then 
                 HealBot_OnEvent_HealsInUpdate(button)
                 HealBot_OnEvent_AbsorbsUpdate(button)
+            end
+            if hbRangeRequests[button.guid] and button.status.range>-1 then
+                HealBot_Plugin_Requests_CancelGUID(button.guid)
+                hbRangeRequests[button.guid]=nil
             end
             if button.status.enabled or button.status.range==1 or oldRange==1 then
                 if button.status.dirarrowshown>0 or (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and button.status.range==0) then

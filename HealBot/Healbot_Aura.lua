@@ -57,6 +57,8 @@ HealBot_Aura_luVars["mapName"]=HEALBOT_WORD_OUTSIDE
 HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]=-1
 HealBot_Aura_luVars["cureOffCd"]=true
 HealBot_Aura_luVars["HotBarDebuff"]=0
+HealBot_Aura_luVars["ManaDrink"]=""
+HealBot_Aura_luVars["WellFed"]=""
 local unitCurrentDebuff={}
 unitCurrentDebuff.active=false
 unitCurrentDebuff.id=0
@@ -801,7 +803,7 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
     button.aura.buff.priority=45
 end
 
-local buffWatchName,manaDrinkItem="",""
+local buffWatchName=""
 function HealBot_Aura_CheckGeneralBuff(button)  
     PlayerBuffsList=button.aura.buff.recheck
     for bName,nexttime in pairs (PlayerBuffsList) do
@@ -832,7 +834,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                 if buffWatchTarget["Raid"] then
                     buffCheckThis=true;
                 elseif buffWatchTarget["Self"] and button.player then
-                    if manaDrinkItem~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
+                    if HealBot_Aura_luVars["ManaDrink"]~=buffWatchName or button.mana.pct<HealBot_Config_Buffs.ManaDrinkThreshold then
                         buffCheckThis=true
                     end
                 elseif buffWatchTarget["Party"] and button.group==HealBot_Data["PLAYERGROUP"] then 
@@ -912,9 +914,11 @@ function HealBot_Aura_ShowCustomBuff()
         if buffCustomType=="A" then
             HealBot_Options_MissingBuffPrio(uaSpellId)
             return true, false
-        elseif buffCustomType=="S" and uaUnitCaster=="player" then
-            HealBot_Options_MissingBuffPrio(uaSpellId)
-            return true, false
+        elseif buffCustomType=="S" then
+            if uaUnitCaster=="player" then
+                HealBot_Options_MissingBuffPrio(uaSpellId)
+                return true, false
+            end
         elseif buffCustomType=="C" then
             _, scbUnitClassEN = UnitClass(uaUnitCaster)
             if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
@@ -925,9 +929,11 @@ function HealBot_Aura_ShowCustomBuff()
     else
         if uaExpirationTime>0 then
             if HealBot_Config_Buffs.AutoBuff==3 or (HealBot_Config_Buffs.AutoBuff==2 and uaDuration<HealBot_Config_Buffs.AutoBuffExpireTime) then
-                if HealBot_Config_Buffs.AutoBuffCastBy==3 then
-                    return true, false
-                elseif HealBot_Config_Buffs.AutoBuffCastBy==1 and uaUnitCaster=="player" then
+                if HealBot_Config_Buffs.AutoBuffCastBy==1 then
+                    if uaUnitCaster=="player" then
+                        return true, false
+                    end
+                elseif HealBot_Config_Buffs.AutoBuffCastBy==3 then
                     return true, false
                 else
                     _, scbUnitClassEN = UnitClass(uaUnitCaster)
@@ -1359,9 +1365,9 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
             curDebuffRange=button.status.range
         end
         if curDebuffRange>-1 and button.aura.debuff.colbar==3 then
-            HealBot_Action_EnableBorderHazard(button)
+            HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
         elseif button.aura.debuff.hazard then
-            HealBot_Action_DisableBorderHazard(button)
+            HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
         end
         if curDebuffRange>-1 and button.aura.debuff.colbar>0 then 
             HealBot_Aura_AuxSetAuraDebuffBars(button) 
@@ -1424,6 +1430,19 @@ function HealBot_Aura_CheckUnitBuffIcons(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitBuffIcons")
 end
 
+local hbAuraRequests={}
+function HealBot_Aura_Requests(guid, buff)
+    if buff then
+        hbAuraRequests[guid]=buff
+    else
+        hbAuraRequests[guid]=nil
+    end
+end
+
+function HealBot_Aura_RequestsClear()
+    hbAuraRequests={}
+end
+
 local uaIsCurrent, uaIsCustom, uaNever, uaZ, tGeneralBuffs=false, false, false, 1, true
 local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
@@ -1433,6 +1452,10 @@ function HealBot_Aura_CheckUnitBuff(button)
             tGeneralBuffs=false
         elseif HealBot_Buff_Aura2Item[uaName] then
             uaName=GetItemInfo(HealBot_Buff_Aura2Item[uaName]) or uaName
+        end
+        if hbAuraRequests[button.guid] and hbAuraRequests[button.guid]==uaName then
+            HealBot_Plugin_Requests_CancelGUID(button.guid)
+            hbAuraRequests[button.guid]=nil
         end
         uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff()
         if uaIsCurrent then
@@ -1856,7 +1879,7 @@ function HealBot_Aura_ClearDebuff(button)
             HealBot_Action_BarHotDisable(button, "DEBUFF")
         end
         if button.aura.debuff.hazard then
-            HealBot_Action_DisableBorderHazard(button)
+            HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
         end
         HealBot_RefreshUnit(button)
     end
@@ -2357,34 +2380,57 @@ function HealBot_Aura_InitItemsDataReady()
         HealBot_Buff_Aura2Item[x]=nil;
     end
     
-    manaDrinkItem=""
-    if HealBot_Config_Buffs.CheckManaDrink and HealBot_Config_Buffs.ManaDrinkItem then
-        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem) or 0
+    HealBot_Aura_luVars["ManaDrink"]=""
+    if HealBot_Config_Buffs.CheckManaDrink then
+        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem or "x") or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK] = hbCustomItemID
-            manaDrinkItem=HealBot_Config_Buffs.ManaDrinkItem
-            if not HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then
-                HealBot_Aura_SetBuffWatch(HealBot_Config_Buffs.ManaDrinkItem)
+            HealBot_Aura_luVars["ManaDrink"]=HealBot_Config_Buffs.ManaDrinkItem
+            if not HealBot_BuffWatch[HealBot_Aura_luVars["ManaDrink"]] then
+                HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["ManaDrink"])
                 HealBot_Aura_DeleteExcludeBuffInCache()
             end
-        elseif HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then
-            HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.ManaDrinkItem)
+        else
+            if HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.ManaDrinkItem) end
+            hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.BackupManaDrinkItem or "x") or 0
+            if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
+                HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK] = hbCustomItemID
+                HealBot_Aura_luVars["ManaDrink"]=HealBot_Config_Buffs.BackupManaDrinkItem
+                if not HealBot_BuffWatch[HealBot_Aura_luVars["ManaDrink"]] then
+                    HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["ManaDrink"])
+                    HealBot_Aura_DeleteExcludeBuffInCache()
+                end
+            elseif HealBot_BuffWatch[HealBot_Config_Buffs.BackupManaDrinkItem] then
+                HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupManaDrinkItem)
+            end
         end
     end
 
-    if HealBot_Config_Buffs.CheckWellFed and HealBot_Config_Buffs.WellFedItem then
-        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.WellFedItem) or 0
+    if HealBot_Config_Buffs.CheckWellFed then
+        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.WellFedItem or "x") or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             HealBot_Buff_Aura2Item[HEALBOT_WELL_FED] = hbCustomItemID
-            if not HealBot_BuffWatch[HealBot_Config_Buffs.WellFedItem] then
-                HealBot_Aura_SetBuffWatch(HealBot_Config_Buffs.WellFedItem)
+            HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.WellFedItem
+            if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
+                HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])
                 HealBot_Aura_DeleteExcludeBuffInCache()
             end
-        elseif HealBot_BuffWatch[HealBot_Config_Buffs.WellFedItem] then
-            HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.WellFedItem)
+        else
+            if HealBot_BuffWatch[HealBot_Config_Buffs.WellFedItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.WellFedItem) end
+            hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.BackupWellFedItem or "x") or 0
+            if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
+                HealBot_Buff_Aura2Item[HEALBOT_WELL_FED] = hbCustomItemID
+                HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.BackupWellFedItem
+                if not HealBot_BuffWatch[HealBot_Aura_luVars["WellFed"]] then
+                    HealBot_Aura_SetBuffWatch(HealBot_Aura_luVars["WellFed"])
+                    HealBot_Aura_DeleteExcludeBuffInCache()
+                end
+            elseif HealBot_BuffWatch[HealBot_Config_Buffs.BackupWellFedItem] then
+                HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupWellFedItem)
+            end
         end
     end
-    
+
     for x=1,3 do
         if string.len(HealBot_Config_Buffs.CustomBuffName[x])>0 then
             hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.CustomItemName[x]) or 0
