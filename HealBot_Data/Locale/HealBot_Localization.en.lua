@@ -127,7 +127,6 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_GLOBAL                  = "Global"
     HEALBOT_OPTIONS_ALPHA                   = "Opacity";
-    HEALBOT_OPTIONS_SETALPHA                = "Set Opacity";
     HEALBOT_OPTIONS_MINALPHA                = "Min opacity";
     HEALBOT_OPTIONS_MAXALPHA                = "Max opacity";
     HEALBOT_OPTIONS_BARALPHA                = "Enabled opacity";
@@ -306,6 +305,10 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_CD                      = "  (";
     HEALBOT_TOOLTIP_SECS                    = " sec)";
     HEALBOT_TOOLTIP_MINS                    = " min)";
+    HEALBOT_TOOLTIP_HEADERFONT              = "Header font";
+    HEALBOT_TOOLTIP_DETAILFONT              = "Detail font";
+    HEALBOT_TOOLTIP_HEADERFONTSIZE          = "Header font size";
+    HEALBOT_TOOLTIP_DETAILFONTSIZE          = "Detail font size";
     HEALBOT_WORDS_SMALL                     = "Small"
     HEALBOT_WORDS_MEDIUM                    = "Medium"
     HEALBOT_WORDS_LARGE                     = "Large"
@@ -556,7 +559,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_HEALTHDROP               = "Health drop"
     HEALBOT_OPTION_USEHEALTHDROP            = "Show on Health bar"
     HEALBOT_OPTION_HEALTHDROPPCT            = "Alert threshold "
-    HEALBOT_OPTION_HOTBARHEALTHPCT          = "Min Health threshold "
+    HEALBOT_OPTION_HOTBARHEALTHPCT          = "Min Health+Absorbs threshold "
     HEALBOT_OPTION_HEALTHDROPSPEED          = "Flash speed"
     HEALBOT_OPTION_USEFOCUSGROUPS           = "Use focus groups"
     HEALBOT_OPTION_FOCUSGROUPDIMMING        = "Unfocused groups - Opacity reduction"
@@ -874,7 +877,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AGGROALERT              = "Aux bar alert level"
     HEALBOT_OPTIONS_AGGROINDALERT           = "Indicator alert level"
     HEALBOT_OPTIONS_TOOLTIPSHOWHOT          = "Show active monitored HoT details"
-    HEALBOT_OPTIONS_TOOLTIPSETSCALE         = "Set Scale"
     HEALBOT_WORDS_MIN                       = "min"
     HEALBOT_WORDS_MAX                       = "max"
     HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
@@ -1005,6 +1007,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
     HEALBOT_OPTIONS_GROUP_PETS_BY_FIVE      = "Pets: Groups of five"
     HEALBOT_OPTIONS_OWN_PET_WITH_SELF       = "Own pet: with self"
+    HEALBOT_OPTIONS_USEGAMETOOLTIP          = "Use game tooltip"
     HEALBOT_OPTIONS_SHOWWOWTOOLTIP          = "Show game tooltip information"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER        = "Show power counter"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_PALA   = "Show holy power"
@@ -1260,6 +1263,10 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_RANGECANCELSREQUEST      = "Player visible cancels request"
     HEALBOT_PLUGIN_DUPCANCELSREQUEST        = "Duplicate request cancels request"
     HEALBOT_PLUGIN_REQUEST                  = "Request"
+    HEALBOT_PLUGIN_REQUESTTOOLTIP           = "Show in tooltip";
+    HEALBOT_PLUGIN_REQUESTWARN              = "Show warning text";
+    HEALBOT_PLUGIN_REQUESTCOL               = "Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_PLUGIN_REQUESTSOUND             = "Play sound on request";
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

@@ -542,6 +542,7 @@ local hbTimerFuncs={["INIT"]={
                     ["AURA"]={
                         ["CheckUnits"]=HealBot_AuraCheck,
                         ["BuffReset"]=HealBot_Options_Buff_Reset,
+                        ["ExtraBuffReset"]=HealBot_Options_ExtraBuff_Reset,
                         ["DebuffReset"]=HealBot_Options_Debuff_Reset,
                         ["CheckPlayer"]=HealBot_Timers_CheckPlayerAura,
                         ["SetAuraWarningFlags"]=HealBot_Aura_SetAuraWarningFlags,
@@ -638,6 +639,7 @@ local hbTimerFuncs={["INIT"]={
                         ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
                         ["ConfigClassHoT"]=HealBot_Aura_ConfigClassHoT,
                         ["SendClassicAuraData"]=HealBot_Aura_SendClassicData,
+                        ["LoadTips"]=HealBot_Options_LoadTips,
                     },
                    }
 

@@ -5,6 +5,8 @@ local HealBot_PrevFMounts = {}
 local HealBot_SMount = {}
 local HealBot_mountData = {}
 local HealBot_MountIndex = {}
+local HealBot_MountsPets_luVars={}
+HealBot_MountsPets_luVars["dislikeRetry"]=75
 
 function HealBot_MountsPets_Dismount()
     if IsMounted() then
@@ -71,7 +73,8 @@ function HealBot_MountsPets_ToggelMount(mountType)
                         if HealBot_Globals.dislikeMount[mount]>0 then
                             HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
                         else
-                            HealBot_Globals.dislikeMount[mount]=500
+                            HealBot_AddDebug("Mounting a disliked mount")
+                            HealBot_Globals.dislikeMount[mount]=HealBot_MountsPets_luVars["dislikeRetry"]
                             break
                         end
                     end
@@ -97,7 +100,7 @@ function HealBot_MountsPets_ToggelMount(mountType)
                         if HealBot_Globals.dislikeMount[mount]>0 then
                             HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
                         else
-                            HealBot_Globals.dislikeMount[mount]=500
+                            HealBot_Globals.dislikeMount[mount]=HealBot_MountsPets_luVars["dislikeRetry"]
                             break
                         end
                     end
@@ -401,7 +404,7 @@ function HealBot_MountsPets_DislikeMount(action)
                     HealBot_Globals.dislikeMount[mount]=nil
                 else
                     HealBot_AddChat(HEALBOT_OPTION_DISLIKEMOUNT_ON.." "..mount)
-                    HealBot_Globals.dislikeMount[mount]=275
+                    HealBot_Globals.dislikeMount[mount]=HealBot_MountsPets_luVars["dislikeRetry"]
                 end
             end
         end

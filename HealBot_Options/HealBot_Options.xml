@@ -20996,12 +20996,12 @@
                   </Slider>
                   <Button name="HealBot_Options_PlaySound" text="">
                     <Size>
-                      <AbsDimension x="16" y="16"/>
+                      <AbsDimension x="20" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_WarningSound" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="15" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24252,12 +24252,12 @@
                   </Slider>
                   <Button name="HealBot_Options_PlayBuffSound" text="">
                     <Size>
-                      <AbsDimension x="16" y="16"/>
+                      <AbsDimension x="20" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarningSound" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="10" y="0"/>
+                          <AbsDimension x="15" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24428,7 +24428,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-75" />
+                          <AbsDimension x="170" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24442,7 +24442,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-9"/>
+                          <AbsDimension x="170" y="-5"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24456,7 +24456,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24470,7 +24470,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="6"/>
+                          <AbsDimension x="170" y="8"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24484,7 +24484,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-9"/>
+                          <AbsDimension x="170" y="-7"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24498,7 +24498,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-24"/>
+                          <AbsDimension x="170" y="-22"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24512,7 +24512,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="188" y="-39"/>
+                          <AbsDimension x="188" y="-35"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24526,7 +24526,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24540,7 +24540,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24554,7 +24554,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24568,7 +24568,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowUnitTip" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-50" />
+                          <AbsDimension x="0" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24585,7 +24585,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="255" />
+                          <AbsDimension x="0" y="320" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24602,7 +24602,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-125" y="180" />
+                          <AbsDimension x="-125" y="265" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24619,7 +24619,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="125" y="180" />
+                          <AbsDimension x="125" y="265" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24629,28 +24629,96 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPCUSTOMANCHOR",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <CheckButton name="HealBot_Options_TooltipSetScale" inherits="HealBotUIPanelCheckButton">
+                  <CheckButton name="HealBot_Options_UseGameTooltip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="BOTTOM">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-220" y="99" />
+                          <AbsDimension x="75" y="-148" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_TooltipSetScale_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSETSCALE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSETSCALE",false)</OnLeave>
+                      <OnClick>HealBot_Options_UseGameTooltip_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPUSEGAME",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPUSEGAME",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <Slider name="HealBot_Options_TooltipScale" inherits="HealBot_Options_SliderTemplate">
+                  <Slider name="HealBot_Options_TooltipHeaderFont" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="320" y="16" />
+                      <AbsDimension x="365" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="40" y="105" />
+                          <AbsDimension x="-105" y="170" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipHeaderFont_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHEADERFONT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHEADERFONT",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Slider name="HealBot_Options_TooltipHeaderFontSize" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="170" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="195" y="170" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipHeaderFontSize_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHEADERFONTSIZE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHEADERFONTSIZE",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Slider name="HealBot_Options_TooltipDetailFont" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="365" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-105" y="105" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipDetailFont_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPFONT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPFONT",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Slider name="HealBot_Options_TooltipDetailFontSize" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="170" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="195" y="105" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TooltipDetailFontSize_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPFONTSIZE",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                  <Slider name="HealBot_Options_TooltipScale" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="280" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-150" y="40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24660,28 +24728,14 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPSCALE",false)</OnLeave>
                     </Scripts>
                   </Slider>
-                  <CheckButton name="HealBot_Options_TooltipSetAlpha" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="-220" y="34" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_TooltipSetAlpha_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSETALPHA",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSETALPHA",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                   <Slider name="HealBot_Options_TooltipAlpha" inherits="HealBot_Options_SliderTemplate">
                     <Size>
-                      <AbsDimension x="320" y="16" />
+                      <AbsDimension x="280" y="16" />
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="40" y="40" />
+                          <AbsDimension x="150" y="40" />
                         </Offset>
                       </Anchor>
                     </Anchors>

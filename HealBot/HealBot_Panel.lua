@@ -2590,7 +2590,7 @@ function HealBot_Panel_TargetChangedCheckFocus()
                 HealBot_Action_OnLoad(vFocusFrame) 
                 vFocusFrame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
             end
-            if not HealBot_Data["UILOCK"] and UnitExists("target") and HealBot_Globals.FocusMonitor[UnitName("target")] then
+            if not InCombatLockdown() and UnitExists("target") and HealBot_Globals.FocusMonitor[UnitName("target")] then
                 if UnitExists("focus") and HealBot_Globals.FocusMonitor[UnitName("focus")] then
                     vFocusFrame:Hide()
                 else

@@ -41,5 +41,6 @@
     </Scripts>
   </Frame>
     
-  <GameTooltip name="HealBot_ScanTooltip" frameStrata="TOOLTIP" hidden="true" parent="UIParent" inherits="GameTooltipTemplate" />
+  <GameTooltip name="HealBot_ScanTooltip" frameStrata="TOOLTIP" hidden="true" parent="UIParent" inherits="SharedTooltipTemplate" />
+  <GameTooltip name="HealBot_GameTooltip" frameStrata="TOOLTIP" hidden="true" parent="UIParent" inherits="SharedTooltipTemplate" />
 </Ui>

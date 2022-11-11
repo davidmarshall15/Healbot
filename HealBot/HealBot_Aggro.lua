@@ -79,12 +79,12 @@ function HealBot_Aggro_IndicatorHazardUpdate(button)
         end
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["HAZARD"] and button.aggro.status==3 then
             HealBot_Action_EnableBorderHazardType(button, 1, 0, 0, "AGGRO")
-        elseif button.aggro.hazard then
+        elseif button.hazard.aggro then
             HealBot_Aggro_HazardClear(button)
         end
     else
         if button.aggro.ind~=0 then HealBot_Aggro_IndicatorClear(button) end
-        if button.aggro.hazard then HealBot_Aggro_HazardClear(button) end
+        if button.hazard.aggro then HealBot_Aggro_HazardClear(button) end
     end
     
       --HealBot_setCall("HealBot_Aggro_IndicatorHazardUpdate")
