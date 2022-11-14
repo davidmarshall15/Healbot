@@ -984,6 +984,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_TEAL                       = "Teal"
     HEALBOT_WORD_BROWN                      = "Brown"
     HEALBOT_WORD_BLACK                      = "Black"
+    HEALBOT_WORD_AND                        = "and"
     HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
@@ -1215,6 +1216,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_MYCOOLDOWNS              = "HealBot MyCooldowns"
     HEALBOT_PLUGIN_TWEAKS                   = "HealBot Tweaks"
     HEALBOT_PLUGIN_REQUESTS                 = "HealBot Requests"
+    HEALBOT_PLUGIN_BUFFWATCH                = "HealBot BuffWatch"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
     HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
     HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"
@@ -1267,6 +1269,22 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTWARN              = "Show warning text";
     HEALBOT_PLUGIN_REQUESTCOL               = "Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND             = "Play sound on request";
+    HEALBOT_PLUGIN_BUFFWATCHTARGETPLAYER    = "Target player";
+    HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT    = "Only in combat";
+    HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFF    = "My buff";
+    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFF  = "Target player buff";
+    HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFFH   = "Alert when buff cooldown ends";
+    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFFH = "Wait for buff to be seen and expire";
+    HEALBOT_PLUGIN_BUFFWATCHSTATE1          = "Inactive"
+    HEALBOT_PLUGIN_BUFFWATCHSTATE2          = "Waiting on cooldown for "
+    HEALBOT_PLUGIN_BUFFWATCHSTATE3          = "Waiting on "
+    HEALBOT_PLUGIN_BUFFWATCHSTATE4          = " to be seen and expire"
+    HEALBOT_PLUGIN_BUFFWATCHSTATE5          = "Waiting on combat"
+    HEALBOT_PLUGIN_BUFFWATCHSTATE6          = "Active"
+    HEALBOT_PLUGIN_BUFFWATCHTTIMEOUT        = "Alert timeout"
+    HEALBOT_PLUGIN_BUFFWATCHCOL             = "Alert col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_PLUGIN_BUFFWATCHSOUND           = "Play sound on alert";
+    HEALBOT_PLUGIN_BUFFWATCH                = "Buff Watch"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

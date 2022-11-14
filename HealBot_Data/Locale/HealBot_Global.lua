@@ -1,10 +1,12 @@
-﻿HEALBOT_VERSION_SC = "10.0.0.4";
-HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "9.x"
+﻿HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "10.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
 local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
+function HealBot_Global_Version()
+    return "10.0.0.4"
+end
 function HealBot_globalVars()
     --Consumables
     --Bandages

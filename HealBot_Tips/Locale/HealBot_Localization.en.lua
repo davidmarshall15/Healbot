@@ -135,6 +135,10 @@ function HealBot_Lang_Options_enALL()
                                  ["FRAMEBORDERCOL"]="Frame Border",
                         -- Skins Frames Heal Groups tab
                                  ["SELECTFRAMEFORGROUP"]=HEALBOT_OPTIONS_FRAME,
+                                 ["SELECTFRAMEFORGROUPVEHICLE"]=HEALBOT_OPTIONS_FRAME,
+                                 ["SELECTFRAMEFORGROUPPETS"]=HEALBOT_OPTIONS_FRAME,
+                                 ["SELECTFRAMEFORGROUPTARGET"]=HEALBOT_OPTIONS_FRAME,
+                                 ["SELECTFRAMEFORGROUPFOCUS"]=HEALBOT_OPTIONS_FRAME,
                                  ["ENABLEHEALGROUP"]=HEALBOT_OPTIONS_FRAME,
                                  ["HEALGROUPDOWN"]="Heal Group Down",
                                  ["HEALGROUPUP"]="Heal Group Up",
@@ -707,6 +711,10 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPPOSITION"]="The location of the tooltip relative to the frame.",
                         -- Skins Frames Heal Groups tab
                                ["SELECTFRAMEFORGROUP"]="Select a frame for the group.",
+                               ["SELECTFRAMEFORGROUPVEHICLE"]="Select a frame for the group.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using the Vehicle frame is more efficient.",
+                               ["SELECTFRAMEFORGROUPPETS"]="Select a frame for the group.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using the Pets frame is more efficient.",
+                               ["SELECTFRAMEFORGROUPTARGET"]="Select a frame for the group.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using the Target frame is more efficient.",
+                               ["SELECTFRAMEFORGROUPFOCUS"]="Select a frame for the group.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using the Focus frame is more efficient.",
                                ["ENABLEHEALGROUP"]="Include/Exclude the heal group.",
                                ["HEALGROUPDOWN"]="Move the heal group down.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                                ["HEALGROUPUP"]="Move the heal group up.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
@@ -1156,7 +1164,7 @@ function HealBot_Lang_Options_enALL()
                                ["INOUTEXPORTPRESETCOLS"]="Export populates the large text box with data of all preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nThis can then be copied and saved outside the game.",
                                ["INOUTIMPORTPRESETCOLS"]="Import loads in the data from the large text box.",
                         -- Plugin Tab
-                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Requests: ".._G["FONT_COLOR_CODE_CLOSE"].."Players can whisper you to request a buff or ability.",  
+                               ["SELECTPLUGIN"]="Select plugin.\n--\nInformation on plugins can be found at "..HEALBOT_ABOUT_URL.."\n--\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Threat: ".._G["FONT_COLOR_CODE_CLOSE"].."See threat for all players on multiple mobs.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToDie: ".._G["FONT_COLOR_CODE_CLOSE"].."Player damage tracker showing how soon players will die.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot TimeToLive: ".._G["FONT_COLOR_CODE_CLOSE"].."Resurrection monitor tracking incoming and pending resurrections.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot ExtraButtons: ".._G["FONT_COLOR_CODE_CLOSE"].."Set spells for use with an MMO mouse on buttons 6 - 20\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot CombatProt: ".._G["FONT_COLOR_CODE_CLOSE"].."Reserve bars for missing players, protects against missing bars in combat.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Performance: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal timers and effects.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot MyCooldowns: ".._G["FONT_COLOR_CODE_CLOSE"].."Track cooldowns for your spells and abilities.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Tweaks: ".._G["FONT_COLOR_CODE_CLOSE"].."Tweak internal settings.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot Requests: ".._G["FONT_COLOR_CODE_CLOSE"].."Players can whisper you to request a buff or ability.\n".._G["GREEN_FONT_COLOR_CODE"].."- HealBot BuffWatch: ".._G["FONT_COLOR_CODE_CLOSE"].."Target a player for your buffs coming off cooldown and optionally when the player buffs expire.",  
                               }
 
 end

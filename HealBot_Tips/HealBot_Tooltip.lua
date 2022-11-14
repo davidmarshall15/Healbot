@@ -232,6 +232,23 @@ function HealBot_Tooltip_RequestsClear()
     tipsRequests={}
 end
 
+local tipsBuffWatch={}
+function HealBot_Tooltip_BuffWatch(guid, buff, r, g, b)
+    if buff then
+        tipsBuffWatch[guid]="      Ready for "..buff
+        tipsBuffWatch.r=r
+        tipsBuffWatch.g=g
+        tipsBuffWatch.b=b
+    else
+        tipsBuffWatch[guid]=nil
+    end
+    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+end
+
+function HealBot_Tooltip_BuffWatchClear()
+    tipsBuffWatch={}
+end
+
 function HealBot_Tooltip_SetLine(lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
     if rText then
         hbTip:AddDoubleLine(lText,rText,lR,lG,lB,rR,rG,rB)
@@ -667,6 +684,10 @@ function HealBot_Action_DoRefreshTooltip()
                 if tipsRequests[xButton.guid] then
                     HealBot_Tooltip_SetLine("  ",0,0,0,0)
                     HealBot_Tooltip_SetLine(tipsRequests[xButton.guid],tipsRequests.r,tipsRequests.g,tipsRequests.b,1," ",0,0,0,0)
+                end
+                if tipsBuffWatch[xButton.guid] then
+                    HealBot_Tooltip_SetLine("  ",0,0,0,0)
+                    HealBot_Tooltip_SetLine(tipsBuffWatch[xButton.guid],tipsBuffWatch.r,tipsBuffWatch.g,tipsBuffWatch.b,1," ",0,0,0,0)
                 end
                 local d=false
                 if HealBot_Globals.Tooltip_ShowMyBuffs then

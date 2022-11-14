@@ -1443,18 +1443,24 @@ function HealBot_Aura_RequestsClear()
     hbAuraRequests={}
 end
 
-local hbAuraAbilityReady={}
-function HealBot_Aura_AbilityReady(guid, buff)
+local hbAuraBuffWatch={}
+function HealBot_Aura_BuffWatch(guid, buff, state)
     if buff then
-        hbAuraAbilityReady[guid]={}
-        hbAuraAbilityReady[guid][buff]=true
-    else
-        hbAuraAbilityReady[guid]=nil
+        if state then
+            if not hbAuraBuffWatch[guid] then 
+                hbAuraBuffWatch[guid]={} 
+            end
+            hbAuraBuffWatch[guid][buff]=true
+        elseif hbAuraBuffWatch[guid] and hbAuraBuffWatch[guid][buff] then
+            hbAuraBuffWatch[guid][buff]=false
+        end
+    elseif hbAuraBuffWatch[guid] then
+        hbAuraBuffWatch[guid]=nil
     end
 end
 
-function HealBot_Aura_AbilityReadyClear()
-    hbAuraAbilityReady={}
+function HealBot_Aura_BuffWatchClear()
+    hbAuraBuffWatch={}
 end
 
 local uaIsCurrent, uaIsCustom, uaNever, uaZ, tGeneralBuffs=false, false, false, 1, true
@@ -1465,8 +1471,9 @@ function HealBot_Aura_CheckUnitBuff(button)
             HealBot_Plugin_Requests_CancelGUID(button.guid)
             hbAuraRequests[button.guid]=nil
         end
-        if hbAuraAbilityReady[button.guid] and hbAuraAbilityReady[button.guid][uaName] then
-            -- HealBot_Plugin_AbilityReady_ReadyTime(button.guid, uaName, uaExpirationTime-TimeNow)
+        if hbAuraBuffWatch[button.guid] and hbAuraBuffWatch[button.guid][uaName] then
+            hbAuraBuffWatch[button.guid][uaName]=false
+            HealBot_Plugin_BuffWatch_ReadyTime(button.guid, uaName, uaExpirationTime-TimeNow)
         end
         if not HealBot_ExcludeBuffInCache[uaSpellId] then
             if not uaUnitCaster then uaUnitCaster="nil" end

@@ -73,7 +73,7 @@ function HealBot_MountsPets_ToggelMount(mountType)
                         if HealBot_Globals.dislikeMount[mount]>0 then
                             HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
                         else
-                            HealBot_AddDebug("Mounting a disliked mount")
+                            HealBot_AddDebug("Mounting a disliked mount "..mount,"Mount",true)
                             HealBot_Globals.dislikeMount[mount]=HealBot_MountsPets_luVars["dislikeRetry"]
                             break
                         end
@@ -101,6 +101,7 @@ function HealBot_MountsPets_ToggelMount(mountType)
                             HealBot_Globals.dislikeMount[mount]=HealBot_Globals.dislikeMount[mount]-1
                         else
                             HealBot_Globals.dislikeMount[mount]=HealBot_MountsPets_luVars["dislikeRetry"]
+                            HealBot_AddDebug("Mounting a disliked mount "..mount,"Mount",true)
                             break
                         end
                     end

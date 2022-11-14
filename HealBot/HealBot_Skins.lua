@@ -2280,7 +2280,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCMYTAR"]=false end
     if Healbot_Config_Skins.Enemy[SkinName]["INCARENA"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCARENA"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["INCARENAPETS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["INCARENAPETS"]=false end
-    if not Healbot_Config_Skins.Enemy[SkinName]["NUMBOSS"] then Healbot_Config_Skins.Enemy[SkinName]["NUMBOSS"]=2 end
+    if not Healbot_Config_Skins.Enemy[SkinName]["NUMBOSS"] then Healbot_Config_Skins.Enemy[SkinName]["NUMBOSS"]=8 end
     if Healbot_Config_Skins.Enemy[SkinName]["HIDE"] then 
         Healbot_Config_Skins.Frame[SkinName][10]["AUTOCLOSE"]=2
         Healbot_Config_Skins.Enemy[SkinName]["HIDE"]=nil

@@ -2523,6 +2523,7 @@ function HealBot_Action_PrepButton(button)
     button.health.dropalert=0
     button.mana.current=0
     button.mana.max=0
+    button.mana.pct=0
     button.mana.type=0
     button.mana.ind=-1
     button.mana.power=-1
@@ -4564,6 +4565,7 @@ function HealBot_Action_MarkDeleteButton(button)
 end
 
 function HealBot_Action_Reset()
+    HealBot_Update_Skins(true)
     HealBot_Timers_TurboOn(1)
     if HealBot_Config.DisabledNow==1 then
         HealBot_Options_DisableHealBotOpt:SetChecked(false)

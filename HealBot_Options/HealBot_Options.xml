@@ -6060,8 +6060,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPVEHICLE",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups8" inherits="HealBotUIPanelCheckButton">
@@ -6088,8 +6088,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPPETS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups9" inherits="HealBotUIPanelCheckButton">
@@ -6116,8 +6116,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPTARGET",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups10" inherits="HealBotUIPanelCheckButton">
@@ -6144,8 +6144,8 @@
                     </Anchors>
                     <Scripts>
                       <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUP",false)</OnLeave>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTFRAMEFORGROUPFOCUS",false)</OnLeave>
                     </Scripts>
                   </Frame>
                   <CheckButton name="HealBot_Options_HealGroups11" inherits="HealBotUIPanelCheckButton">
@@ -26149,6 +26149,23 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginRequestsFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginBuffWatchFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

@@ -1062,6 +1062,7 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_MYCOOLDOWNS,
     HEALBOT_PLUGIN_TWEAKS,
     HEALBOT_PLUGIN_REQUESTS,
+    HEALBOT_PLUGIN_BUFFWATCH,
     --HEALBOT_PLUGIN_EFFECTIVETANKS,
     --HEALBOT_PLUGIN_EFFICIENTHEALERS,
     }
@@ -12405,7 +12406,8 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [6]="pluginPerformance",
                     [7]="pluginMyCooldowns",
                     [8]="pluginTweaks",
-                    [9]="pluginRequests",}
+                    [9]="pluginRequests",
+                   [10]="pluginBuffWatch",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
@@ -12414,6 +12416,7 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginPerformanceFrame:Hide()
     HealBot_Options_PluginTweaksFrame:Hide()
     HealBot_Options_PluginRequestsFrame:Hide()
+    HealBot_Options_PluginBuffWatchFrame:Hide()
     HealBot_Options_PluginMyCooldownsFrame:Hide()
     if not HealBot_retLuVars(pluginId[HealBot_Options_luVars["curPlugin"]].."Loaded") then
         HealBot_Options_PluginNATxt:Show()
@@ -12449,6 +12452,9 @@ local function HealBot_Options_Plugins_ShowFrame()
         elseif HealBot_Options_luVars["curPlugin"]==9 then
             HealBot_Plugin_Requests_Options()
             HealBot_Options_PluginRequestsFrame:Show()
+        elseif HealBot_Options_luVars["curPlugin"]==10 then
+            HealBot_Plugin_BuffWatch_Options()
+            HealBot_Options_PluginBuffWatchFrame:Show()
         end
     end
 end
@@ -16269,6 +16275,8 @@ function HealBot_Options_Reset_OnClick(self,mode)
 end
 
 function HealBot_Options_SetDefaults(global)
+    HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
+    HealBot_Config.LastVersionUpdate=HealBot_Global_Version()
     if global then
         HealBot_Config = HealBot_Options_copyTable(HealBot_ConfigDefaults)
         HealBot_Globals = HealBot_Options_copyTable(HealBot_GlobalsDefaults)
@@ -16300,8 +16308,6 @@ function HealBot_Options_SetDefaults(global)
     DoneInitTab={}
     HealBot_Timers_InitExtraOptions()
     HealBot_Timers_Set("AURA","CheckPlayer")
-    HealBot_Globals.LastVersionSkinUpdate=HEALBOT_VERSION_SC
-    HealBot_Config.LastVersionUpdate=HEALBOT_VERSION_SC
     HealBot_Options_OnLoad(nil, "Defaults")
 end
 
@@ -17668,7 +17674,7 @@ function HealBot_Options_SkinsEnemyTab(tab)
         HealBot_Options_SetText(HealBot_Options_ShowEnemyIncArenaPets,HEALBOT_ENEMY_INCLUDE_ARENAPETS)
         HealBot_Options_ShowEnemyIncMyTargets:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCMYTAR"])
         HealBot_Options_SetText(HealBot_Options_ShowEnemyIncMyTargets,HEALBOT_ENEMY_INCLUDE_MYTARGETS)
-        HealBot_Options_val_OnLoad(HealBot_Options_ShowEnemyNumBoss,HEALBOT_ENEMY_NUMBER_BOSSES,0,4,1,1)
+        HealBot_Options_val_OnLoad(HealBot_Options_ShowEnemyNumBoss,HEALBOT_ENEMY_NUMBER_BOSSES,0,8,1,1)
         HealBot_Options_ShowEnemyNumBoss:SetValue(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"])
         HealBot_Options_SetText(HealBot_Options_ShowEnemyNumBoss,HEALBOT_ENEMY_NUMBER_BOSSES..": "..Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["NUMBOSS"])
         HealBot_Options_val_OnLoad(HealBot_Options_EnemyTargetSize,HEALBOT_ENEMY_TARGET_SIZE,20,80,1,5)

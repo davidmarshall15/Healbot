@@ -50,8 +50,9 @@ HealBot_Font_Outline={
     [3]= "THICKOUTLINE",
 };
 
+local Version=HealBot_Global_Version()
 HealBot_ConfigDefaults = {
-  LastVersionUpdate=HEALBOT_VERSION_SC,
+  LastVersionUpdate=Version,
   MyFriend="x",
   CurrentSpec=9,
   Skin_ID = -1,
@@ -253,8 +254,9 @@ HealBot_HealGroupsTrans = { [HEALBOT_OPTIONS_SELFHEALS_en] = HEALBOT_OPTIONS_SEL
 HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
+    local Version=HealBot_Global_Version()
     HealBot_GlobalsDefaults = {
-        LastVersionSkinUpdate=HEALBOT_VERSION_SC,
+        LastVersionSkinUpdate=Version,
         FirstLoad = true,
         PluginThreat=true,
         PluginTimeToDie=true,
@@ -263,6 +265,7 @@ function HealBot_Data_InitVars()
         PluginTimeToLive=true,
         PluginPerformance=true,
         PluginMyCooldowns=true,
+        PluginBuffWatch=true,
         PluginTweaks=true,
         PluginRequests=true,
         AllowPlayerRoles=false,
