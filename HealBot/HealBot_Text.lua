@@ -744,6 +744,14 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
             tHealthConcat[4]=hbNumFormats["SurroundRight"][button.frame]
             vHealthTextConcatIndex=4
         end
+        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHINCPTC"] then
+            tHealthConcat[vHealthTextConcatIndex+1]="  "
+            tHealthConcat[vHealthTextConcatIndex+2]=hbNumFormats["SurroundLeft"][button.frame]
+            tHealthConcat[vHealthTextConcatIndex+3]=floor((button.health.current/button.health.max)*100)
+            tHealthConcat[vHealthTextConcatIndex+4]="%"
+            tHealthConcat[vHealthTextConcatIndex+5]=hbNumFormats["SurroundRight"][button.frame]
+            vHealthTextConcatIndex=vHealthTextConcatIndex+5
+        end
         vHealthTextConcatResult=HealBot_Text_HealthConcat(vHealthTextConcatIndex)
     end
     

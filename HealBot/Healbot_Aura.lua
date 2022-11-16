@@ -855,14 +855,8 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true
                 elseif buffWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
                     buffCheckThis=true
-                elseif buffWatchTarget["MyTargets"] then
-                    local myhTargets=HealBot_GetMyHealTargets();
-                    for i=1, #myhTargets do
-                        if button.guid==myhTargets[i] then
-                            buffCheckThis=true;
-                            break;
-                        end
-                    end
+                elseif buffWatchTarget["MyTargets"] and HealBot_Panel_IsMyTarget(button.guid) then
+                    buffCheckThis=true;
                 end
                 if buffCheckThis then
                     HealBot_Aura_SetGeneralBuff(button, buffWatchName)
@@ -1210,14 +1204,8 @@ function HealBot_Aura_CheckCurDebuff(button)
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["PvE"] and not UnitIsPVP(button.unit) then
                     ccdbCheckthis=true
-                elseif ccdbWatchTarget["MyTargets"] then
-                    local myhTargets=HealBot_GetMyHealTargets();
-                    for i=1, #myhTargets do
-                        if button.guid==myhTargets[i] then
-                            ccdbCheckthis=true;
-                            break
-                        end
-                    end
+                elseif ccdbWatchTarget["MyTargets"] and HealBot_Panel_IsMyTarget(button.guid) then
+                    ccdbCheckthis=true
                 end
             end
         end
@@ -2317,6 +2305,7 @@ function HealBot_Aura_ConfigClassHoT()
                 HealBot_SpellID_LookupData[id]={}
                 HealBot_SpellID_LookupData[id]["CHECK"]=true
                 HealBot_SpellID_LookupData[id]["CLASS"]=xClass
+                sName=id
             elseif GetSpellInfo(id) then
                 sName=GetSpellInfo(id)
             end

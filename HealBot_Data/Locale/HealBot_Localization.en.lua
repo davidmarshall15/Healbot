@@ -333,6 +333,7 @@ function HealBot_Lang_enALL()
     HEALBOT_DISABLED_TARGET                 = "Target";
     HEALBOT_OPTIONS_SHOWCLASSONBAR          = "Show class on bar";
     HEALBOT_OPTIONS_SHOWHEALTHONBAR         = "Show health on bar";
+    HEALBOT_OPTIONS_HEALTHINCPERCENT        = "Include percent";
     HEALBOT_OPTIONS_SHOWTEXT                = "Show text";
     HEALBOT_OPTIONS_IGNOREINCOMINGONFULL    = "On full health ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s";
     HEALBOT_OPTIONS_TEXTONLYTIP             = "Only show in tooltip";
@@ -516,7 +517,7 @@ function HealBot_Lang_enALL()
     HEALBOT_MENU                            = "Menu";
     HEALBOT_MAINTANK                        = "MainTank";
     HEALBOT_STOP                            = "Stop";
-    HEALBOT_CANCELREQUEST                   = "Cancel Request";
+    HEALBOT_CANCELPLUGINALERT               = "Cancel Plugin Alert";
     HEALBOT_IGNOREAURAALL                   = "Disable - Ignore in all zones";
     HEALBOT_ICONRAISEPRIO1                  = "Priority raise x1";
     HEALBOT_ICONRAISEPRIO3                  = "Priority raise x3";
@@ -1040,7 +1041,7 @@ function HealBot_Lang_enALL()
     HEALBOT_TOGGLE_PRIVATETANKS             = "Toggle private tanks"
     HEALBOT_TOGGLE_PRIVATEHEALERS           = "Toggle private healers"
     HEALBOT_RESET_BAR                       = "Reset bar"
-    HEALBOT_HIDE_BARS                       = "Hide bars over 100 yards"
+    HEALBOT_HIDE_BARS                       = "Hide bars when player not visible (over 100 yards)"
     HEALBOT_MOUNTSPETS                      = "Mounts and Pets menu"
     HEALBOT_FAVMOUNT                        = "Favourite Mount"
     HEALBOT_FAVPET                          = "Favourite Pet"
@@ -1270,21 +1271,23 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTCOL               = "Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND             = "Play sound on request";
     HEALBOT_PLUGIN_BUFFWATCHTARGETPLAYER    = "Target player";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERBUFFSTATE = "Target player buff state";
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT    = "Only in combat";
     HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFF    = "My buff";
     HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFF  = "Target player buff";
     HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFFH   = "Alert when buff cooldown ends";
-    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFFH = "Wait for buff to be seen and expire";
+    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFFH = "Wait for buff";
     HEALBOT_PLUGIN_BUFFWATCHSTATE1          = "Inactive"
     HEALBOT_PLUGIN_BUFFWATCHSTATE2          = "Waiting on cooldown for "
     HEALBOT_PLUGIN_BUFFWATCHSTATE3          = "Waiting on "
-    HEALBOT_PLUGIN_BUFFWATCHSTATE4          = " to be seen and expire"
     HEALBOT_PLUGIN_BUFFWATCHSTATE5          = "Waiting on combat"
     HEALBOT_PLUGIN_BUFFWATCHSTATE6          = "Active"
     HEALBOT_PLUGIN_BUFFWATCHTTIMEOUT        = "Alert timeout"
     HEALBOT_PLUGIN_BUFFWATCHCOL             = "Alert col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_BUFFWATCHSOUND           = "Play sound on alert";
     HEALBOT_PLUGIN_BUFFWATCH                = "Buff Watch"
+    HEALBOT_PLUGIN_BUFFWATCHBUFFSHOWN       = " to be seen"
+    HEALBOT_PLUGIN_BUFFWATCHBUFFEXPIRE      = " to be seen and expire"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

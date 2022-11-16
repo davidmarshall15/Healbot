@@ -117,6 +117,7 @@ HealBot_luVars["DropCombat"]=0
 HealBot_luVars["CurrentSpec"]=1
 HealBot_luVars["talentUpdateFreq"]=0.2
 HealBot_luVars["inspectGUID"]=""
+HealBot_luVars["pluginClearDown"]=-1
 if HEALBOT_GAME_VERSION<4 then HealBot_luVars["talentUpdateFreq"]=1 end
 
 local HealBot_Calls={}
@@ -858,8 +859,13 @@ function HealBot_OnEvent_UnitMana(button)
             button.mana.max=hbManaMax
             if button.mana.max>0 then
                 button.mana.pct=floor((button.mana.current/button.mana.max)*100)
+                button.mana.pctc=button.mana.pct*10
             else
                 button.mana.pct=0
+                button.mana.pctc=0
+            end
+            if HealBot_luVars["pluginManaWatch"] then
+                HealBot_Plugin_ManaWatch_Update(button)
             end
             HealBot_Aux_setPowerBars(button)
             if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
@@ -1787,8 +1793,13 @@ function HealBot_DoReset_Cures(pClassTrim)
       --HealBot_setCall("HealBot_DoReset_Cures")
 end
 
-local HealBot_GetContainerNumSlots=_G["C_Container.GetContainerNumSlots"] or _G["GetContainerNumSlots"]
-local HealBot_GetContainerItemID=_G["C_Container.GetContainerItemID"] or _G["GetContainerItemID"]
+local HealBot_GetContainerNumSlots=GetContainerNumSlots
+local HealBot_GetContainerItemID=GetContainerItemID
+if C_Container then
+    HealBot_GetContainerNumSlots=C_Container.GetContainerNumSlots or GetContainerNumSlots
+    HealBot_GetContainerItemID=C_Container.GetContainerItemID or GetContainerItemID
+end
+
 local function HealBot_ItemIdsInBag(bag)
     local itemId=0
     local numSlots=HealBot_GetContainerNumSlots(bag)
@@ -1799,9 +1810,9 @@ local function HealBot_ItemIdsInBag(bag)
         end
     end
     if bag<NUM_BAG_SLOTS then
-        C_Timer.After(0.05, function() HealBot_ItemIdsInBag(bag+1) end)
+        C_Timer.After(0.04, function() HealBot_ItemIdsInBag(bag+1) end)
     else
-        C_Timer.After(0.05, HealBot_CheckWellFedItems)
+        C_Timer.After(0.04, HealBot_CheckWellFedItems)
     end
 end
 
@@ -1809,7 +1820,7 @@ function HealBot_ItemIdsInBags()
     for x,_ in pairs(HealBot_ItemsInBags) do
         HealBot_ItemsInBags[x]=nil;
     end
-    C_Timer.After(0.05, function() HealBot_ItemIdsInBag(0) end)
+    HealBot_ItemIdsInBag(0)
       --HealBot_setCall("HealBot_retItemIdsInBag")
 end
 
@@ -2246,7 +2257,7 @@ end
 
 function HealBot_OverHealText(button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEAL"]>1 then
-        if button.status.current<HealBot_Unit_Status["ENABLEDOOR"] or button.status.current>HealBot_Unit_Status["REQUESTBARCOL"] or button.status.range<1 then
+        if button.status.current<HealBot_Unit_Status["ENABLEDOOR"] or button.status.current>HealBot_Unit_Status["PLUGINBARCOL"] or button.status.range<1 then
             button.health.overheal=0
         end
         HealBot_Text_setOverHealText(button)
@@ -2361,7 +2372,7 @@ function HealBot_Classic_AbsorbsUpdate(button, amount)
 end
 
 function HealBot_AbsorbsAmountV1(button)
-    if button.status.current>HealBot_Unit_Status["REQUESTBARCOL"] then
+    if button.status.current>HealBot_Unit_Status["PLUGINBARCOL"] then
         button.health.auraabsorbs=0
     end
     abuAbsorbAmount=button.health.auraabsorbs
@@ -2713,7 +2724,6 @@ function HealBot_Update_Skins(forceCheck)
     if not HealBot_luVars["ResetOld"] and tonumber(tMajor)<9 or (tonumber(tMajor)==9 and tonumber(tMinor)<2) or (tonumber(tMajor)==9 and tonumber(tMinor)==2 and tonumber(tPatch)<5) then
         HealBot_luVars["ResetOld"]=true
         HealBot_Options_SetDefaults(true);
-        HealBot_Options_ReloadUI("HealBot Requires UI Reload\n\nDue to updating from a very old version")
     elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() or forceCheck then
         HealBot_AddDebug("In HealBot_Update_Skins version="..HealBot_Globals.LastVersionSkinUpdate)
         if HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
@@ -3233,6 +3243,28 @@ function HealBot_InitPlugins()
         HealBot_luVars["pluginBuffWatch"]=true
     else
         HealBot_luVars["pluginBuffWatch"]=false
+    end
+    
+    loaded, reason = LoadAddOn("HealBot_Plugin_HealthWatch")
+    HealBot_luVars["pluginHealthWatchReason"]=reason or ""
+    HealBot_luVars["pluginHealthWatchLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginHealthWatch then 
+        HealBot_Plugin_HealthWatch_Init()
+        HealBot_Action_setLuVars("pluginHealthWatch", true)
+        HealBot_luVars["pluginHealthWatch"]=true
+    else
+        HealBot_Action_setLuVars("pluginHealthWatch", false)
+        HealBot_luVars["pluginHealthWatch"]=false
+    end
+    
+    loaded, reason = LoadAddOn("HealBot_Plugin_ManaWatch")
+    HealBot_luVars["pluginManaWatchReason"]=reason or ""
+    HealBot_luVars["pluginManaWatchLoaded"]=loaded
+    if loaded and HealBot_Globals.PluginManaWatch then 
+        HealBot_Plugin_ManaWatch_Init()
+        HealBot_luVars["pluginManaWatch"]=true
+    else
+        HealBot_luVars["pluginManaWatch"]=false
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_MyCooldowns")
@@ -4092,12 +4124,19 @@ function HealBot_ProcessRefreshTypes()
             HealBot_RecalcParty(4)
         elseif HealBot_RefreshTypes[5] then 
             HealBot_RecalcParty(5)
-        elseif HealBot_luVars["pluginClearDown"] then
-            HealBot_luVars["pluginClearDown"]=false
-            if HealBot_luVars["pluginTimeToDie"] then HealBot_Plugin_TimeToDie_Cleardown() end
-            if HealBot_luVars["pluginTimeToLive"] then HealBot_Plugin_TimeToLive_Cleardown() end
-            if HealBot_luVars["pluginThreat"] then HealBot_Plugin_Threat_Cleardown() end
-            if HealBot_luVars["pluginBuffWatch"] then HealBot_Plugin_BuffWatch_Startup() end
+        elseif HealBot_luVars["pluginClearDown"]>-1 then
+            HealBot_luVars["pluginClearDown"]=HealBot_luVars["pluginClearDown"]+1
+            if HealBot_luVars["pluginClearDown"]==1 and HealBot_luVars["pluginTimeToDie"] then 
+                HealBot_Plugin_TimeToDie_Cleardown()
+            elseif HealBot_luVars["pluginClearDown"]==2 and HealBot_luVars["pluginTimeToLive"] then 
+                HealBot_Plugin_TimeToLive_Cleardown()
+            elseif HealBot_luVars["pluginClearDown"]==3 and HealBot_luVars["pluginThreat"] then 
+                HealBot_Plugin_Threat_Cleardown()
+            elseif HealBot_luVars["pluginClearDown"]==4 and HealBot_luVars["pluginBuffWatch"] then 
+                HealBot_Plugin_BuffWatch_Validate()
+            else
+                HealBot_luVars["pluginClearDown"]=-1
+            end
         else
             HealBot_luVars["ProcessRefresh"]=false
             HealBot_Timers_Set("LAST","ProcCacheButtons",5)
@@ -4926,7 +4965,7 @@ function HealBot_BagScanBuffExtra(bag)
         end
     end
     if bag<4 then
-        C_Timer.After(0.05, function() HealBot_BagScanBuffExtra(bag+1) end)
+        C_Timer.After(0.04, function() HealBot_BagScanBuffExtra(bag+1) end)
     else
         HealBot_Options_SetBuffExtraItemText()
         HealBot_luVars["BagsScanned"]=true
@@ -4953,9 +4992,9 @@ function HealBot_BagScanManaDrink(bag)
         end
     end
     if bag<4 then
-        C_Timer.After(0.05, function() HealBot_BagScanManaDrink(bag+1) end)
+        C_Timer.After(0.04, function() HealBot_BagScanManaDrink(bag+1) end)
     else
-        C_Timer.After(0.05, HealBot_CheckBuffExtraItems)
+        C_Timer.After(0.04, HealBot_CheckBuffExtraItems)
     end
 end
 
@@ -4978,9 +5017,9 @@ function HealBot_BagScanWellFed(bag)
         end
     end
     if bag<4 then
-        C_Timer.After(0.05, function() HealBot_BagScanWellFed(bag+1) end)
+        C_Timer.After(0.04, function() HealBot_BagScanWellFed(bag+1) end)
     else
-        C_Timer.After(0.05, HealBot_CheckManaDrinkItems)
+        C_Timer.After(0.04, HealBot_CheckManaDrinkItems)
     end
 end
 
@@ -5274,6 +5313,15 @@ function HealBot_OnEvent_PlayerRegenDisabled()
                 HealBot_RefreshTypes[1]=true
             end
         elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["VEHICLEINCOMBAT"] then
+            HealBot_RefreshTypes[6]=true
+        end
+    end
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["PRIVLISTPETSINCOMBAT"] then
+                HealBot_RefreshTypes[2]=true
+            end
+        elseif Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["PRIVLISTPETSINCOMBAT"] then
             HealBot_RefreshTypes[6]=true
         end
     end
@@ -6259,7 +6307,7 @@ end
 
 function HealBot_RequestsClearButton(button)
     if button.request.colbar>0 then
-        if button.request.colbar==3 then HealBot_Action_DisableBorderHazard(button) end
+        if button.request.colbar==3 then HealBot_Action_DisableBorderHazardType(button, "PLUGIN") end
         button.request.colbar=0
         HealBot_Action_UpdateRequestButton(button)
     end

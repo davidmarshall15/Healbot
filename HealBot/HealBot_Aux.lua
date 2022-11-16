@@ -579,14 +579,14 @@ function HealBot_Aux_setPowerBars(button)
                         button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.5),(button.mana.g+0.5),(button.mana.b+0.5)
                     end
                     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
+                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
                     elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
-                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
+                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
                     else
-                        HealBot_Aux_setBar(button, id, button.mana.pct*10, true, button.mana.pct.."%")
+                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, button.mana.pct.."%")
                     end
                 else
-                    HealBot_Aux_setBar(button, id, button.mana.pct*10, true)
+                    HealBot_Aux_setBar(button, id, button.mana.pctc, true)
                 end
             end
         else
@@ -1877,7 +1877,7 @@ local function HealBot_Aux_ResetTextByTypeById(button)
             HealBot_Aux_setBar(button, x, 1000, false, button.text.tag)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["TEXT"] then
             if hbAuxPowerAssigned[button.frame][x] then
-                HealBot_Aux_setBar(button, x, button.mana.pct*10, true, " ")
+                HealBot_Aux_setBar(button, x, button.mana.pctc, true, " ")
                 HealBot_Aux_setPowerBars(button)
             elseif button.aura.buff.name and hbAuxBuffAssigned[button.frame][x] then
                 HealBot_Aux_setBar(button, x, 1000, false, button.aura.buff.name.." ")

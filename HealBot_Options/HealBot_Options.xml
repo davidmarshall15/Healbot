@@ -10797,7 +10797,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_AlertLevelOC" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="-75" y="-40"/>
+                              <AbsDimension x="-150" y="-30"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -10811,7 +10811,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_HideBars" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-25"/>
+                              <AbsDimension x="0" y="-15"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -10819,6 +10819,20 @@
                           <OnClick>HealBot_Options_VehicleInCombat_OnClick(self)</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSVISVEHICLEIC",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSVISVEHICLEIC",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_PrivListPetsInCombat" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_VehicleInCombat" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-15"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PrivListPetsInCombat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISPLISTPETSIC",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISPLISTPETSIC",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
                       <Frame name="HealBot_Options_TargetInCombat" inherits="UIDropDownMenuTemplate" id="1">
@@ -13414,6 +13428,20 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTHEALTHFORMAT",false)</OnLeave>
                                 </Scripts>
                               </Frame>
+                              <CheckButton name="HealBot_Options_HealthIncludePercent" inherits="HealBotUIPanelCheckButton">
+                                <Anchors>
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthType" relativePoint="TOPLEFT">
+                                    <Offset>
+                                      <AbsDimension x="35" y="-35" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_HealthIncludePercent_OnClick(self)</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTINCPTC",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTINCPTC",false)</OnLeave>
+                                </Scripts>
+                              </CheckButton>
                               <Frame name="HealBot_Options_BarHealthTextPosition" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOP" relativeTo="HealBot_Options_BarHealthNumFormat1" relativePoint="BOTTOM">
