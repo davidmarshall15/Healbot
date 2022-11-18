@@ -1626,6 +1626,15 @@ function HealBot_DoReset_Spells(pClassTrim)
         HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_UPLIFT))
         HealBot_Action_SetSpell("ENABLED", "CtrlMiddle", GetSpellInfo(HEALBOT_LIFE_COCOON))
         HealBot_Action_SetSpell("ENABLED", "AltMiddle", GetSpellInfo(HEALBOT_ZEN_MEDITATION))
+    elseif pClassTrim=="EVOK" then
+        HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_LIVING_FLAME))
+        HealBot_Action_SetSpell("ENABLED", "ShiftLeft", GetSpellInfo(HEALBOT_REVERSION))
+        HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_REWIND))
+        HealBot_Action_SetSpell("ENABLED", "CtrlLeft", GetSpellInfo(HEALBOT_NATURALIZE))
+        HealBot_Action_SetSpell("ENABLED", "CtrlRight", GetSpellInfo(HEALBOT_CAUTERIZING_FLAME))
+        HealBot_Action_SetSpell("ENABLED", "Right", GetSpellInfo(HEALBOT_SPIRITBLOOM))
+        HealBot_Action_SetSpell("ENABLED", "Middle", GetSpellInfo(HEALBOT_ECHO))
+        HealBot_Action_SetSpell("ENABLED", "ShiftMiddle", GetSpellInfo(HEALBOT_EMERALD_BLOSSOM))
     elseif pClassTrim=="PALA" then
         HealBot_Action_SetSpell("ENABLED", "Left", GetSpellInfo(HEALBOT_FLASH_OF_LIGHT))
         HealBot_Action_SetSpell("ENABLED", "ShiftRight", GetSpellInfo(HEALBOT_LIGHT_OF_DAWN))
@@ -1788,6 +1797,14 @@ function HealBot_DoReset_Cures(pClassTrim)
     elseif pClassTrim=="MAGE" then
         if HealBot_Spell_Names[HEALBOT_REMOVE_CURSE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_REMOVE_CURSE]) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CURSE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+        end
+    elseif pClassTrim=="EVOK" then
+        if HealBot_Spell_Names[HEALBOT_NATURALIZE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_NATURALIZE]) then
+            if HealBot_Spell_Names[HEALBOT_CAUTERIZING_FLAME] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CAUTERIZING_FLAME]) then
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURALIZE,[2]=HEALBOT_CAUTERIZING_FLAME,[3]=HEALBOT_WORDS_NONE}
+            else 
+                HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURALIZE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
+            end
         end
     end
       --HealBot_setCall("HealBot_DoReset_Cures")
@@ -2049,11 +2066,13 @@ end
 
 function HealBot_SetResSpells()
     HealBot_ResSpells={[GetSpellInfo(HEALBOT_MASS_RESURRECTION) or "x"]=2,
+                       [GetSpellInfo(HEALBOT_MASS_RETURN) or "x"]=2,
                        [GetSpellInfo(HEALBOT_ABSOLUTION) or "x"]=2,
                        [GetSpellInfo(HEALBOT_ANCESTRAL_VISION) or "x"]=2,
                        [GetSpellInfo(HEALBOT_REAWAKEN) or "x"]=2,
                        [GetSpellInfo(HEALBOT_REVITALIZE) or "x"]=2,
                        [GetSpellInfo(HEALBOT_RESURRECTION) or "x"]=1,
+                       [GetSpellInfo(HEALBOT_RETURN) or "x"]=1,
                        [GetSpellInfo(HEALBOT_ANCESTRALSPIRIT) or "x"]=1,
                        [GetSpellInfo(HEALBOT_REBIRTH) or "x"]=1,
                        [GetSpellInfo(HEALBOT_REDEMPTION) or "x"]=1,
@@ -2811,6 +2830,13 @@ function HealBot_Update_Skins(forceCheck)
                 HealBot_Globals.Tooltip_SetAlpha=nil
             else
                 HealBot_Globals.Tooltip_Alpha=HealBot_Globals.Tooltip_SetAlphaValue or 1
+            end
+        end
+        if not HealBot_Globals.WatchHoT["EVOK"] then HealBot_Globals.WatchHoT["EVOK"]={} end
+        if not HealBot_Globals.WatchHoT["EVOK"][HEALBOT_REVERSION] then
+            local HealBot_EvokHoTClass=HealBot_GlobalsDefaults.WatchHoT["EVOK"]
+            for id,x  in pairs(HealBot_EvokHoTClass) do
+                HealBot_Globals.WatchHoT["EVOK"][id]=x
             end
         end
     end

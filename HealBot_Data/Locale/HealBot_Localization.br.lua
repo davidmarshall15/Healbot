@@ -755,3 +755,7 @@ function HealBot_Lang_ptBR()
     HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. HEALBOT_OPTIONS_TAB_FRAMES
     
 end
+
+if (GetLocale() == "ptBR") then
+    HealBot_Lang_ptBR()
+end

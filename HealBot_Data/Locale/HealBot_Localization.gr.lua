@@ -560,8 +560,6 @@ function HealBot_Lang_grGR()
     HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE      = "Μονο σε Mouse Over"
 end
 
-if (GetLocale() == "enUK") then
-    HealBot_Lang_enUK()
-else
-    HealBot_Lang_enUS()
+if (GetLocale() == "grGR") then
+    HealBot_Lang_grGR()
 end

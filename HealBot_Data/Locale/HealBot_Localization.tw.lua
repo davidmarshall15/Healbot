@@ -906,3 +906,7 @@ HEALBOT_PLAYER_OF_REALM                  = "的"
     HEALBOT_OPTIONS_INCOMBATALERTLEVEL      = "警報級別 - 在戰鬥中";
     HEALBOT_OPTIONS_OUTCOMBATALERTLEVEL     = "警報級別 - 脫離戰鬥";
 end
+
+if (GetLocale() == "zhTW") then
+    HealBot_Lang_zhTW()
+end

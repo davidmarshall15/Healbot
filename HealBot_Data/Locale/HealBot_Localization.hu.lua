@@ -463,3 +463,7 @@ function HealBot_Lang_huHU()
     HEALBOT_OPTIONS_CONTENT_SKINS_FRAMES    = "    " .. HEALBOT_OPTIONS_TAB_FRAMES
 
 end
+
+if (GetLocale() == "huHU") then
+    HealBot_Lang_huHU()
+end

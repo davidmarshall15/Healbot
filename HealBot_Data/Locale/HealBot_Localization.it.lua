@@ -851,3 +851,7 @@ function HealBot_Lang_itIT()
     HEALBOT_OPTIONS_SHOWDIRECTION           = "Mostra la direzione fuori portata"
     HEALBOT_OPTIONS_SHOWDIRECTIONMOUSE      = "Solo al passaggio del mouse"
 end
+
+if (GetLocale() == "itIT") then
+    HealBot_Lang_itIT()
+end

@@ -1081,36 +1081,7 @@ function HealBot_Lang_ruRU()
     HEALBOT_WORD_SUPPORTERS                 = "Помощники"
 
 end
-function HealBot_Lang_InitVars()
-    HEALBOT_CUSTOM_DEBUFF_CATS = {
-         -- Defaults
-        [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1,
 
-        --Class Profession & Harmful Debuffs
-        --[HEALBOT_DEBUFF_SAVING_GRACE]      = 11, --Priest
-        --[HEALBOT_DARK_BARGAIN]             = 3, --Warlock
-        [HEALBOT_SHROUD_OF_PURGATORY]      = 11, --Death Knight
-        [HEALBOT_DEBUFF_ROCKET_FUEL_LEAK]  = 10, --Engineering
-        
-        [HEALBOT_DEBUFF_FORBEARANCE]              = 4,
-        [HEALBOT_DEBUFF_WEAKENED_SOUL]            = 13,
-        [HEALBOT_SHADOW_TOUCHED]                  = 11,
-
-    --[[
-	A-B 2
-	C-D 3
-	E-F 4
-	G-H 5
-	I-J 6
-	K-L 7
-	M-N 8
-	O-P 9
-	Q-R 10
-	S-T 11
-	U-V 12
-	W-X 13
-	Y-Z 14
-	]]
-
-	}
+if (GetLocale() == "ruRU") then
+    HealBot_Lang_ruRU()
 end

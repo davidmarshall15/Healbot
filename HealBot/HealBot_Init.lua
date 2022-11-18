@@ -355,6 +355,11 @@ function HealBot_Init_SmartCast()
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
         rName=GetSpellInfo(HEALBOT_ANCESTRALSPIRIT)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+    elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
+        rName=GetSpellInfo(HEALBOT_MASS_RETURN)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        rName=GetSpellInfo(HEALBOT_RETURN)
+        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     end
 end
 

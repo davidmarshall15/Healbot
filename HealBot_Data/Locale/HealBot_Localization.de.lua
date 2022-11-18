@@ -797,3 +797,7 @@ HEALBOT_PLAYER_OF_REALM                 = "von"
     HEALBOT_ENEMY_INCLUDE_ARENAPETS         = "Begleiter anzeigen"
     HEALBOT_ENEMY_EXISTS_SHOW_ARENA         = "Arena Gegner Balken"
 end
+
+if (GetLocale() == "deDE") then
+    HealBot_Lang_deDE()
+end

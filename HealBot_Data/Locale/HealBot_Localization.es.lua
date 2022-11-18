@@ -620,3 +620,11 @@ HEALBOT_PLAYER_OF_REALM                 = "de"
     HEALBOT_OPTIONS_PROFILE_CLASS           = "Clase"
     HEALBOT_OPTION_NUMENEMYS                = "Numero de enemigos"
 end
+
+if (GetLocale() == "esES") then
+    HealBot_Lang_esES()
+end
+
+if (GetLocale() == "esMX") then
+    HealBot_Lang_esMX()
+end

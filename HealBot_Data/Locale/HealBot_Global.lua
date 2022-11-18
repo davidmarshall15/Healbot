@@ -5,7 +5,7 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.0.0.6"
+    return "10.0.2.0"
 end
 function HealBot_globalVars()
     --Consumables
@@ -210,6 +210,20 @@ function HealBot_globalVars()
     HBC_NOURISH                             = 50464
     HEALBOT_NOURISH                         = 289022
     HEALBOT_OVERGROWTH                      = 203651
+    -- Evoker
+    HEALBOT_DREAM_BREATH                    = 355936
+    HEALBOT_DREAM_FLIGHT                    = 359816
+    HEALBOT_DREAM_PROJECTION                = 377509
+    HEALBOT_ECHO                            = 364343
+    HEALBOT_EMERALD_BLOSSOM                 = 365261
+    HEALBOT_EMERALD_COMMUNION               = 370960
+    HEALBOT_LIVING_FLAME                    = 361469
+    HEALBOT_REVERSION                       = 367364
+    HEALBOT_REWIND                          = 363534
+    HEALBOT_SPIRITBLOOM                     = 367226
+    HEALBOT_VERDANT_EMBRACE                 = 360995
+    HEALBOT_RESCUE                          = 370665
+    HEALBOT_ZEPHYR                          = 374227
     --Monk
     HEALBOT_CHI_WAVE                        = 132463 --GetSpellInfo(132463) or "--Chi Wave"
     HEALBOT_CHI_BURST                       = 130651 --GetSpellInfo(130651) or "--Chi Burst"
@@ -322,8 +336,25 @@ function HealBot_globalVars()
     HEALBOT_SPRING_BLOSSOMS                 = 207386 --GetSpellInfo(207385) or "--Spring Blossoms";
     HEALBOT_ESSENCE_OF_GHANIR               = 208253 --GetSpellInfo(208253) or "--Essence of G'Hanir"
     HEALBOT_FOCUSED_GROWTH                  = 203554 --GetSpellInfo(203554) or "--Focused Growth"
-    HEALBOT_GROVE_TENDING                    = 279793 --GetSpellInfo(279793) or "--Grove Tending";
+    HEALBOT_GROVE_TENDING                   = 279793 --GetSpellInfo(279793) or "--Grove Tending";
     HBC_THORNS                              = 467
+    --Evoker
+    HEALBOT_BLESSING_OF_THE_BRONZE          = 364342
+    HEALBOT_SOURCE_OF_MAGIC                 = 369459
+    HEALBOT_LIFEBIND                        = 373270
+    HEALBOT_TIME_DILATION                   = 357170
+    HEALBOT_OBSIDIAN_SCALES                 = 363916
+    HEALBOT_RENEWING_BLAZE                  = 374348
+    HEALBOT_TIME_STOP                       = 378441
+    HEALBOT_STASIS                          = 370537
+    HEALBOT_FURY_OF_THE_ASPECTS             = 390386
+    HEALBOT_VISAGE                          = 372014
+    HEALBOT_EXHILARATING_BURST              = 377102
+    HEALBOT_ESSENCE_BURST                   = 369299
+    HEALBOT_TEMPRAL_ANOMALY                 = 373861
+    HEALBOT_TEMPRAL_COMPRESSION             = 362877
+    HEALBOT_NULLIFYING_SHROUD               = 378464
+    HEALBOT_CALL_OF_YSERA                   = 373835
     --Hunter
     HEALBOT_A_CHEETAH                       = 5118 --GetSpellInfo(5118) or "--Aspect of the Cheetah"
     HEALBOT_A_PACK                          = 13159 --GetSpellInfo(13159) or "--Aspect of the Pack"
@@ -662,6 +693,7 @@ function HealBot_globalVars()
     HEALBOT_MASS_RESURRECTION               = 212036 --GetSpellInfo(212036) or "--Mass Resurrection";
     HEALBOT_REAWAKEN                        = 212051 --GetSpellInfo(212051) or "--Reawaken";
     HEALBOT_REVITALIZE                      = 212040 --GetSpellInfo(212040) or "--Revitalize";
+    HEALBOT_MASS_RETURN                     = 361178
     
     HEALBOT_REDEMPTION                      = 7328 --GetSpellInfo(7328) or "--Redemption";
     HEALBOT_REBIRTH                         = 20484 --GetSpellInfo(20484) or "--Rebirth";
@@ -669,6 +701,7 @@ function HealBot_globalVars()
     HEALBOT_RESUSCITATE                     = 115178 --GetSpellInfo(115178) or "--Resuscitate"
     HEALBOT_REVIVE                          = 50769 --GetSpellInfo(50769) or "--Revive";
     HEALBOT_INTERCESSION                    = 391054
+    HEALBOT_RETURN                          = 361227
     
     --Cure Spells
     HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or 64127
@@ -695,6 +728,8 @@ function HealBot_globalVars()
     HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or 475
     HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or 2782
     HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or 53551
+    HEALBOT_NATURALIZE                      = GetSpellInfo(360823) or 360823
+    HEALBOT_CAUTERIZING_FLAME               = GetSpellInfo(374251) or 374251
     
     --[[END OF SPELL LIST]]--
 
@@ -730,19 +765,6 @@ function HealBot_globalVars()
     --Common Buffs
    -- HEALBOT_ZAMAELS_PRAYER                  = 88663 --GetSpellInfo(88663) or "--Zamael's Prayer";
     HEALBOT_FLESHCRAFT                      = 324631
-    
-    --Harmful Debuffs
-    --Debuffs
-    HEALBOT_DEBUFF_ROCKET_FUEL_LEAK         = 94794 --GetSpellInfo(94794) or "--Rocket Fuel Leak"; --Engineering 
-    --HEALBOT_DEBUFF_SAVING_GRACE             = GetSpellInfo(155274) or "--Saving Grace"; --DO NOT REMOVE
-
-    
-    --Unit Max Health Modifier Debuffs
-    HEALBOT_DEBUFF_AURA_OF_CONTEMPT         = 179986 --GetSpellInfo(179986) or "--Aura of Contempt";
-
-    -- Debuffs restricting spell casts
-    HEALBOT_DEBUFF_FORBEARANCE              = 25771 --GetSpellInfo(25771) or "--Forbearance";
-    HEALBOT_DEBUFF_WEAKENED_SOUL            = 6788 --GetSpellInfo(6788) or "--Weakened Soul";
 end
 HealBot_globalVars()
 

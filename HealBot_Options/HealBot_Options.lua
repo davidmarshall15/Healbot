@@ -41,6 +41,7 @@ local HealBot_Options_FilterHoTctl_List = {
         HEALBOT_DEATHKNIGHT,
         HEALBOT_DEMONHUNTER,
         HEALBOT_DRUID,
+        HEALBOT_EVOKER,
         HEALBOT_PALADIN,
         HEALBOT_MONK,
         HEALBOT_PRIEST,
@@ -331,6 +332,8 @@ function HealBot_Options_InitDebuffTypes()
             [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_POTION_OF_SOUL_PURITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_PHIAL_OF_SERENITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [HEALBOT_NATURALIZE] = {HEALBOT_MAGIC_en, HEALBOT_POISON_en},
+            [HEALBOT_CAUTERIZING_FLAME] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
         }
         if HealBot_Options_luVars["HEALBOT_IMPROVED_PURIFY"] then
             HealBot_Debuff_Types[HEALBOT_PURIFY] =  {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en}
@@ -398,6 +401,7 @@ function HealBot_Options_setLists()
             HEALBOT_DEATHKNIGHT,
             HEALBOT_DEMONHUNTER,
             HEALBOT_DRUID,
+            HEALBOT_EVOKER,
             HEALBOT_PALADIN,
             HEALBOT_MONK,
             HEALBOT_PRIEST,
@@ -1415,6 +1419,11 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HBC_THORNS,
             HBC_NATURE_GRASP,
         }
+    elseif tClass=="EVOK" then
+        Buff_Spells_List = {
+            HEALBOT_BLESSING_OF_THE_BRONZE,
+            HEALBOT_SOURCE_OF_MAGIC,
+        }
     elseif tClass=="HUNT" then
         Buff_Spells_List = {
             HEALBOT_A_CHEETAH,
@@ -1666,7 +1675,7 @@ function HealBot_Options_GetDebuffSpells_List(class)
           ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
           ["WARL"] = {},
           ["WARR"] = {},
-          ["EVOK"] = {},
+          ["EVOK"] = {HEALBOT_NATURALIZE,HEALBOT_CAUTERIZING_FLAME,},
         }
     end
     --if (strsub(GetLocale(),1,2)~="en") then
@@ -9276,7 +9285,19 @@ function HealBot_Options_FullHealSpellsCombo_list(sType)
             HEALBOT_BEACON_OF_VIRTUE,     
             HEALBOT_HAND_OF_THE_PROTECTOR,   
             HEALBOT_ESSENCE_FONT,
-            HEALBOT_LIGHT_OF_TUURE, --Priest          
+            HEALBOT_LIGHT_OF_TUURE, --Priest       
+            HEALBOT_LIVING_FLAME,
+            HEALBOT_EMERALD_BLOSSOM,
+            HEALBOT_ECHO,
+            HEALBOT_DREAM_FLIGHT,
+            HEALBOT_REVERSION,
+            HEALBOT_REWIND,
+            HEALBOT_DREAM_BREATH,
+            HEALBOT_SPIRITBLOOM,
+            HEALBOT_VERDANT_EMBRACE,
+            HEALBOT_RENEWING_BLAZE,
+            HEALBOT_DREAM_PROJECTION,
+            HEALBOT_EMERALD_COMMUNION,
         }
     end
     return HealBot_Options_SelectHealSpellsCombo_List
@@ -9446,12 +9467,16 @@ function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_ABSOLUTION,
             HEALBOT_ANCESTRAL_VISION,
             HEALBOT_MASS_RESURRECTION,
+            HEALBOT_MASS_RETURN,
+            HEALBOT_RETURN,
             HEALBOT_REAWAKEN,
             HEALBOT_REVITALIZE,
             HEALBOT_CLEANSE,
             HEALBOT_REMOVE_CURSE,
             HEALBOT_CLEANSE_TOXIN,
             HEALBOT_REMOVE_CORRUPTION,
+            HEALBOT_NATURALIZE,
+            HEALBOT_CAUTERIZING_FLAME,
             HEALBOT_NATURES_CURE,
             HEALBOT_PURIFY_DISEASE,
             HEALBOT_PURIFY,
@@ -9488,13 +9513,22 @@ function HealBot_Options_SelectOtherSpellsCombo_DDlist()
             HEALBOT_DETONATE_CHI,
             HEALBOT_BEACON_OF_FAITH,
             HEALBOT_BEACON_OF_INSIGHT,
-            --Legion Added
             HEALBOT_RAPTURE,
             HEALBOT_APOTHEOSIS,
             HEALBOT_SYMBOL_OF_HOPE,
             HEALBOT_BODY_AND_MIND,
             HEALBOT_BLESSING_OF_SACRIFICE, --Paladin
             HEALBOT_HOLY_WARD,
+            HEALBOT_RESCUE,
+            HEALBOT_ZEPHYR,
+            HEALBOT_OBSIDIAN_SCALES,
+            HEALBOT_TIME_DILATION,
+            HEALBOT_TIME_STOP,
+            HEALBOT_STASIS,
+            HEALBOT_FURY_OF_THE_ASPECTS,
+            HEALBOT_VISAGE,
+            HEALBOT_TEMPRAL_ANOMALY,
+            HEALBOT_NULLIFYING_SHROUD,
         }
         if HEALBOT_GAME_VERSION<4 then 
             table.insert(HealBot_Options_SelectOtherSpellsCombo_List, HBC_PRIEST_CURE_DISEASE)
@@ -14806,37 +14840,37 @@ end
 
 function HealBot_Options_RetDebuffRGB(button)
     if button.aura.debuff.type~=HEALBOT_CUSTOM_en and HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type] then
-        return HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R,
-               HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G,
-               HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B
+        return HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].R or 1,
+               HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].G or 0.25,
+               HealBot_Config_Cures.CDCBarColour[button.aura.debuff.type].B or 0.25
     elseif HealBot_Globals.CDCBarColour[button.aura.debuff.id] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.id].R,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].G,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.id].B
+        return HealBot_Globals.CDCBarColour[button.aura.debuff.id].R or 1,
+               HealBot_Globals.CDCBarColour[button.aura.debuff.id].G or 0.25,
+               HealBot_Globals.CDCBarColour[button.aura.debuff.id].B or 0.25
     elseif HealBot_Globals.CDCBarColour[button.aura.debuff.name] then
-        return HealBot_Globals.CDCBarColour[button.aura.debuff.name].R,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].G,
-               HealBot_Globals.CDCBarColour[button.aura.debuff.name].B
+        return HealBot_Globals.CDCBarColour[button.aura.debuff.name].R or 1,
+               HealBot_Globals.CDCBarColour[button.aura.debuff.name].G or 0.25,
+               HealBot_Globals.CDCBarColour[button.aura.debuff.name].B or 0.25
     else
-        return HealBot_Globals.CDCBarColour[customDebuffPriority].R,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].G,
-               HealBot_Globals.CDCBarColour[customDebuffPriority].B
+        return HealBot_Globals.CDCBarColour[customDebuffPriority].R or 1,
+               HealBot_Globals.CDCBarColour[customDebuffPriority].G or 0.25,
+               HealBot_Globals.CDCBarColour[customDebuffPriority].B or 0.25
     end
 end
 
 function HealBot_Options_RetBuffRGB(button)
     if button.aura.buff.missingbuff and HealBot_buffbarcolr[button.aura.buff.missingbuff] then
-        return HealBot_buffbarcolr[button.aura.buff.missingbuff],
-               HealBot_buffbarcolg[button.aura.buff.missingbuff],
-               HealBot_buffbarcolb[button.aura.buff.missingbuff]
+        return HealBot_buffbarcolr[button.aura.buff.missingbuff] or 1,
+               HealBot_buffbarcolg[button.aura.buff.missingbuff] or 1,
+               HealBot_buffbarcolb[button.aura.buff.missingbuff] or 1
     elseif HealBot_Globals.CustomBuffBarColour[button.aura.buff.id] then
-        return HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["R"],
-               HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["G"],
-               HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["B"]
+        return HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["R"] or 1,
+               HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["G"] or 1,
+               HealBot_Globals.CustomBuffBarColour[button.aura.buff.id]["B"] or 1
     elseif HealBot_Globals.CustomBuffBarColour[button.aura.buff.name] then
-        return HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["R"],
-               HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["G"],
-               HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["B"]
+        return HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["R"] or 1,
+               HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["G"] or 1,
+               HealBot_Globals.CustomBuffBarColour[button.aura.buff.name]["B"] or 1
     elseif button.aura.buff.missingbuff then
         return 1,1,1
     else
