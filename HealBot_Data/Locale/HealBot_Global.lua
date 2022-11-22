@@ -582,6 +582,8 @@ function HealBot_globalVars()
     HEALBOT_ANACESTRAL_SWIFTNESS            = 16188 --GetSpellInfo(16188) or "--Ancestral Swiftness";
     HEALBOT_ASCENDANCE                      = 114049 --GetSpellInfo(114049) or "--Ascendance";
     HEALBOT_ASTRAL_SHIFT                    = 108271 --GetSpellInfo(108271) or "--Astral Shift";
+    HEALBOT_BLOODLUST                       = 2825
+    HEALBOT_HEROISM                         = 32182
     HEALBOT_CLOUDBURST_TOTEM                = 157153 --GetSpellInfo(157153) or "--Cloudburst Totem";
     HEALBOT_EARTH_SHIELD                    = 204288 --GetSpellInfo(204288) or "--Earth Shield";
     HEALBOT_ELEMENTAL_FUSION                = 152257 --GetSpellInfo(152257) or "--Elemental Fusion";
@@ -730,6 +732,7 @@ function HealBot_globalVars()
     HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or 53551
     HEALBOT_NATURALIZE                      = GetSpellInfo(360823) or 360823
     HEALBOT_CAUTERIZING_FLAME               = GetSpellInfo(374251) or 374251
+    HEALBOT_EXPUNGE                         = GetSpellInfo(365585) or 365585
     
     --[[END OF SPELL LIST]]--
 

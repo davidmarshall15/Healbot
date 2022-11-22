@@ -249,6 +249,40 @@ function HealBot_Tooltip_BuffWatchClear()
     tipsBuffWatch={}
 end
 
+local tipsHealthWatch={}
+function HealBot_Tooltip_HealthWatch(guid, buff, r, g, b)
+    if buff then
+        tipsHealthWatch[guid]="      Health Low"
+        tipsHealthWatch.r=r
+        tipsHealthWatch.g=g
+        tipsHealthWatch.b=b
+    else
+        tipsHealthWatch[guid]=nil
+    end
+    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+end
+
+function HealBot_Tooltip_HealthWatchClear()
+    tipsHealthWatch={}
+end
+
+local tipsManaWatch={}
+function HealBot_Tooltip_ManaWatch(guid, buff, r, g, b)
+    if buff then
+        tipsManaWatch[guid]="      Mana Low"
+        tipsManaWatch.r=r
+        tipsManaWatch.g=g
+        tipsManaWatch.b=b
+    else
+        tipsManaWatch[guid]=nil
+    end
+    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+end
+
+function HealBot_Tooltip_ManaWatchClear()
+    tipsManaWatch={}
+end
+
 function HealBot_Tooltip_SetLine(lText,lR,lG,lB,la,rText,rR,rG,rB,ra)
     if rText then
         hbTip:AddDoubleLine(lText,rText,lR,lG,lB,rR,rG,rB)
@@ -1021,6 +1055,13 @@ end
 
 function HealBot_Tooltip_Hide()
     hbTip:Hide()
+end
+
+function HealBot_Tooltip_ClearGUID(guid)
+    tipsRequests[guid]=nil
+    tipsBuffWatch[guid]=nil
+    tipsHealthWatch[guid]=nil
+    tipsManaWatch[guid]=nil
 end
 
 local function HealBot_Tooltip_CustomAnchor_SetPoint()    

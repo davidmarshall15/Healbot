@@ -278,7 +278,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BINDKEYTOCLICK2         = "If intending to use key modifiers with key binds, test the key modifiers work"
     HEALBOT_OPTIONS_BINDKEYTOCLICK3         = "Additional binds are available in the Extra Buttons plugin"
 
-    HEALBOT_CLASSES_ALL                     = "All classes";
+    HEALBOT_CLASSES_ALL                     = "All (Non class specific)";
     HEALBOT_CLASSES_MELEE                   = "Melee";
     HEALBOT_CLASSES_RANGES                  = "Ranged";
     HEALBOT_CLASSES_HEALERS                 = "Healers";
@@ -419,7 +419,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSELF                = "on self";
     HEALBOT_OPTIONS_BUFFPARTY               = "on party";
     HEALBOT_OPTIONS_BUFFRAID                = "on raid";
-    HEALBOT_OPTIONS_MONITORBUFFS            = "Monitor for buffs";
+    HEALBOT_OPTIONS_MONITORBUFFS            = "Monitor buffs";
     HEALBOT_OPTIONS_MONITORBUFFSC           = "also in combat";
     HEALBOT_OPTIONS_ENABLESMARTCAST         = "SmartCast out of combat";
     HEALBOT_OPTIONS_SMARTCASTSPELLS         = "Include spells";
@@ -432,7 +432,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ENABLEDBARS             = "Health Bars - Helpful spells on friendly characters";
     HEALBOT_OPTIONS_EMERGBARS               = "Emergency Bars - All spells on all characters";
     HEALBOT_OPTIONS_ICONS                   = "Icons: Commands that can be used on icons";
-    HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor for debuffs";
+    HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
     
     HEALBOT_OPTIONS_POWER                   = "Power"
@@ -867,6 +867,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCOMBATSTATE         = "Show Combat State";
     HEALBOT_OPTIONS_SHOWHOSTILE             = "Show Hostile";
     HEALBOT_OPTIONS_SHOWLEADER              = "Show Leader";
+    HEALBOT_OPTIONS_SHOWAFK                 = "Show AFK";
     HEALBOT_OPTIONS_SHOWRESTING             = "Show Resting (Player only)";
     HEALBOT_OPTIONS_SHOWCLASSICON           = "Show Class";
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
@@ -986,6 +987,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_BROWN                      = "Brown"
     HEALBOT_WORD_BLACK                      = "Black"
     HEALBOT_WORD_AND                        = "and"
+    HEALBOT_WORD_PLAYERS                    = "Players"
     HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
@@ -1218,6 +1220,8 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKS                   = "HealBot Tweaks"
     HEALBOT_PLUGIN_REQUESTS                 = "HealBot Requests"
     HEALBOT_PLUGIN_BUFFWATCH                = "HealBot BuffWatch"
+    HEALBOT_PLUGIN_HEALTHWATCH              = "HealBot HealthWatch"
+    HEALBOT_PLUGIN_MANAWATCH                = "HealBot ManaWatch"
     HEALBOT_PLUGIN_THREATPCT                = "Minimum threat"
     HEALBOT_PLUGIN_THREATMOBBARCOL          = "Mob bar colour"
     HEALBOT_PLUGIN_THREATMOBTEXTCOL         = "Mob text colour"
@@ -1250,10 +1254,6 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_INHEALHOTTIME            = "Incoming heals HoT time"
     HEALBOT_PLUGIN_AUTOTIMEDBUFFDURATION    = "Custom buff - auto All Timed duration less than"
     HEALBOT_PLUGIN_AUTOTIMEDDURATION        = "Custom debuff - auto All Timed duration less than"
-    HEALBOT_PLUGIN_ENABLEDALLBUFFS          = "Enable all custom buffs"
-    HEALBOT_PLUGIN_DISABLEALLBUFFS          = "Disable all custom buffs"
-    HEALBOT_PLUGIN_ENABLEDALLDEBUFFS        = "Enable all custom debuffs"
-    HEALBOT_PLUGIN_DISABLEALLDEBUFFS        = "Disable all custom debuffs"
     HEALBOT_PLUGIN_SORTBYTOPROLE            = "Sort by role - Top role"
     HEALBOT_PLUGIN_USETRINKET10             = "Auto trinket includes gloves"
     HEALBOT_PLUGIN_CLASSICPLAYERROLES       = "Allow player roles in groups and raids"
@@ -1270,13 +1270,13 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTWARN              = "Show warning text";
     HEALBOT_PLUGIN_REQUESTCOL               = "Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND             = "Play sound on request";
-    HEALBOT_PLUGIN_BUFFWATCHTARGETPLAYER    = "Target player";
-    HEALBOT_PLUGIN_BUFFWATCHPLAYERBUFFSTATE = "Target player buff state";
+    HEALBOT_PLUGIN_BUFFWATCHTARGETPLAYERS   = "Target players";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERBUFFSTATE = "Target players buff state";
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT    = "Only in combat";
-    HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFF    = "My buff";
-    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFF  = "Target player buff";
-    HEALBOT_PLUGIN_BUFFWATCHONLYSELFBUFFH   = "Alert when buff cooldown ends";
-    HEALBOT_PLUGIN_BUFFWATCHONLYPLAYERBUFFH = "Wait for buff";
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFF        = "My buff";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF     = "Target players buff";
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH       = "Alert when buff cooldown ends";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFFH    = "Wait for players buff";
     HEALBOT_PLUGIN_BUFFWATCHSTATE1          = "Inactive"
     HEALBOT_PLUGIN_BUFFWATCHSTATE2          = "Waiting on cooldown for "
     HEALBOT_PLUGIN_BUFFWATCHSTATE3          = "Waiting on "
@@ -1285,9 +1285,22 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BUFFWATCHTTIMEOUT        = "Alert timeout"
     HEALBOT_PLUGIN_BUFFWATCHCOL             = "Alert col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_BUFFWATCHSOUND           = "Play sound on alert";
-    HEALBOT_PLUGIN_BUFFWATCH                = "Buff Watch"
+    HEALBOT_PLUGIN_BUFFWATCHT               = "Buff Watch"
     HEALBOT_PLUGIN_BUFFWATCHBUFFSHOWN       = " to be seen"
     HEALBOT_PLUGIN_BUFFWATCHBUFFEXPIRE      = " to be seen and expire"
+    HEALBOT_PLUGIN_TWEAKSDELETEALL          = "Delete All"
+    HEALBOT_PLUGIN_TWEAKSENABLEALL          = "Enable All"
+    HEALBOT_PLUGIN_TWEAKSDISABLEALL         = "Disable All"
+    HEALBOT_PLUGIN_TWEAKSRESETALL           = "Reset All"
+    HEALBOT_PLUGIN_TWEAKSCASTBYALL          = "Set Cast By to Everyone for all"
+    HEALBOT_PLUGIN_TWEAKSCASTBYSELF         = "Set Cast By to Self for all"
+    HEALBOT_PLUGIN_HEALTHALERTLEVEL         = "Health alert level"
+    HEALBOT_PLUGIN_MANAALERTLEVEL           = "Mana alert level"
+    HEALBOT_PLUGIN_RECEIVEFROMBW            = "Receive from BuffWatch"
+    HEALBOT_PLUGIN_ALERTMETHOD              = "Alert method"
+    HEALBOT_PLUGIN_FORWARDTOHW              = "Forward to HealthWatch"
+    HEALBOT_PLUGIN_FORWARDTOMW              = "Forward to ManaWatch"
+    HEALBOT_PLUGIN_RETRYDURATION            = "Received from BuffWatch - Retry duration"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

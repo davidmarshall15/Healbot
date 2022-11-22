@@ -577,8 +577,10 @@ local hbIconRanks={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
                    }
 function HealBot_Aura_UpdateState(button)
     if HealBot_UnitExtraIcons[button.id] then
-        if button.status.hostile or button.status.incombat or button.icon.extra.readycheck then
-            if button.status.hostile then
+        if button.status.hostile or button.status.incombat or button.icon.extra.readycheck or button.status.afk then
+            if button.status.afk then
+                HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\afk.tga"
+            elseif button.status.hostile then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
             elseif button.status.incombat then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
@@ -1432,18 +1434,26 @@ function HealBot_Aura_RequestsClear()
 end
 
 local hbAuraBuffWatch={}
+local hbAuraBuffWatchActive={}
+local hbAuraBuffWatchAlert={}
 function HealBot_Aura_BuffWatch(guid, buff, state)
     if buff then
         if state then
             if not hbAuraBuffWatch[guid] then 
-                hbAuraBuffWatch[guid]={} 
+                hbAuraBuffWatch[guid]={}
+                hbAuraBuffWatchActive[guid]={}
+                hbAuraBuffWatchAlert[guid]={}
             end
-            hbAuraBuffWatch[guid][buff]=true
+            if not hbAuraBuffWatchActive[guid][buff] then
+                hbAuraBuffWatch[guid][buff]=true
+            end
         elseif hbAuraBuffWatch[guid] and hbAuraBuffWatch[guid][buff] then
             hbAuraBuffWatch[guid][buff]=false
         end
     elseif hbAuraBuffWatch[guid] then
         hbAuraBuffWatch[guid]=nil
+        hbAuraBuffWatchActive[guid]=nil
+        hbAuraBuffWatchAlert[guid]=nil
     end
 end
 
@@ -1459,9 +1469,15 @@ function HealBot_Aura_CheckUnitBuff(button)
             HealBot_Plugin_Requests_CancelGUID(button.guid)
             hbAuraRequests[button.guid]=nil
         end
-        if hbAuraBuffWatch[button.guid] and hbAuraBuffWatch[button.guid][uaName] then
-            hbAuraBuffWatch[button.guid][uaName]=false
-            HealBot_Plugin_BuffWatch_ReadyTime(button.guid, uaName, uaExpirationTime-TimeNow)
+        if hbAuraBuffWatch[button.guid] then
+            if hbAuraBuffWatch[button.guid][uaName] then
+                hbAuraBuffWatchActive[button.guid][uaName]=true
+                hbAuraBuffWatch[button.guid][uaName]=false
+                HealBot_Plugin_BuffWatch_ReadyTime(button.guid, uaName, true)
+            end
+            if hbAuraBuffWatchActive[button.guid][uaName] then
+                hbAuraBuffWatchAlert[button.guid][uaName]=false
+            end
         end
         if not HealBot_ExcludeBuffInCache[uaSpellId] then
             if not uaUnitCaster then uaUnitCaster="nil" end
@@ -1509,6 +1525,7 @@ function HealBot_Aura_CheckUnitDebuff(button)
     --    uaDebuffType=HEALBOT_DISEASE_en
     --    uaDebuffType=HEALBOT_MAGIC_en
     --    uaDebuffType=HEALBOT_CURSE_en
+    --    uaDebuffType=HEALBOT_POISON_en
     --    HealBot_AddDebug("Strange Aura")
     --end
     if not uaUnitCaster then uaUnitCaster="nil" end
@@ -1592,6 +1609,11 @@ function HealBot_Aura_CheckUnitBuffs(button)
         button.aura.buff.priority=99
         HealBot_Aura_luVars["prevBuffIconCount"]=button.icon.buff.count
         tGeneralBuffs=generalBuffs
+        if hbAuraBuffWatch[button.guid] then 
+            for buff,_ in pairs(hbAuraBuffWatch[button.guid]) do
+                hbAuraBuffWatchAlert[button.guid][buff]=true
+            end
+        end
         if tGeneralBuffs then
             if button.player then
                 onlyPlayers=true
@@ -1619,7 +1641,15 @@ function HealBot_Aura_CheckUnitBuffs(button)
         end
         HealBot_Aura_SortBuffIcons(button)
         HealBot_Aura_CheckUnitBuffIcons(button)
-        
+       
+        if hbAuraBuffWatch[button.guid] then 
+            for buff,_ in pairs(hbAuraBuffWatchAlert[button.guid]) do
+                if hbAuraBuffWatchAlert[button.guid][buff] and hbAuraBuffWatchActive[button.guid][buff] then
+                    hbAuraBuffWatchActive[button.guid][buff]=false
+                    HealBot_Plugin_BuffWatch_ReadyTime(button.guid, buff, false)
+                end
+            end
+        end 
         if not curBuffName then
             if HealBot_UnitBuffIcons[button.id][1].current then
                 button.aura.buff.id=HealBot_UnitBuffIcons[button.id][1]["spellId"]
@@ -2323,6 +2353,13 @@ function HealBot_Aura_ConfigClassHoT()
     end
     HealBot_Aura_setCustomBuffFilterDisabled()
       --HealBot_setCall("HealBot_configClassHoT")
+end
+
+function HealBot_Aura_ClearGUID(guid)
+    hbAuraRequests[guid]=nil
+    hbAuraBuffWatch[guid]=nil
+    hbAuraBuffWatchActive[guid]=nil
+    hbAuraBuffWatchAlert[guid]=nil
 end
 
 function HealBot_Aura_BuffIdLookup()

@@ -268,6 +268,8 @@ function HealBot_Data_InitVars()
         PluginBuffWatch=true,
         PluginTweaks=true,
         PluginRequests=true,
+        PluginHealthWatch=true,
+        PluginManaWatch=true,
         AllowPlayerRoles=false,
         CrashProtTime=0,
         NoRanks=false,
@@ -402,7 +404,7 @@ function HealBot_Data_InitVars()
         CustomDebuffIDMethod = {},
         HealBot_Custom_Debuffs = {
             -- Defaults
-            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 15,
         },
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS,
         IgnoreCustomBuff={},
@@ -547,6 +549,8 @@ function HealBot_Data_InitVars()
                 [HEALBOT_CLOUDBURST_TOTEM]=1,
                 [HEALBOT_EARTH_SHIELD]=1,
                 [HEALBOT_SPIRIT_LINK_TOTEM]=1,
+                [HEALBOT_BLOODLUST]=1,
+                [HEALBOT_HEROISM]=1,
             },
             ["WARL"] = {
                 [HEALBOT_UNENDING_RESOLVE]=1,

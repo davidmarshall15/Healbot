@@ -3871,6 +3871,19 @@
                     </Offset>
                   </Anchor>
                 </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name="healbotSelfCastWarning" inherits="GameFontNormal" text="">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-80"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
                 <Frames>
                   <Frame name="HealBot_Options_ActionBarsCombo" inherits="UIDropDownMenuTemplate" id="1">
                     <Anchors>
@@ -17547,7 +17560,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="110" y="-45" />
+                                  <AbsDimension x="100" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17561,7 +17574,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="50" y="-45" />
+                                  <AbsDimension x="0" y="-45" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17571,11 +17584,25 @@
                               <OnLeave>HealBot_Options_Show_Help("ICONSHOWLEADER",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
+                          <CheckButton name="HealBot_Options_ShowAFK" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="140" y="-45" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ShowAFK_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ICONSHOWAFK",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONSHOWAFK",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <CheckButton name="HealBot_Options_ShowCombatState" inherits="HealBotUIPanelCheckButton">
                             <Anchors>
                               <Anchor point="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="110" y="-75" />
+                                  <AbsDimension x="100" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -17589,7 +17616,7 @@
                             <Anchors>
                               <Anchor point="TOP">
                                 <Offset>
-                                  <AbsDimension x="50" y="-75" />
+                                  <AbsDimension x="0" y="-75" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -26194,6 +26221,40 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginBuffWatchFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginHealthWatchFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginManaWatchFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

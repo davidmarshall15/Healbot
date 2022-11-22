@@ -255,7 +255,7 @@ end
 local hbPlayerRaidID=0
 function HealBot_Panel_buildDataStore(doPlayers, doPets)
     if doPlayers then
-        HealBot_setLuVars("pluginClearDown", 0)
+        HealBot_setLuVars("pluginClearDown", 1)
         for x,_ in pairs(hbPanel_dataNames) do
             hbPanel_dataNames[x]=nil
         end
@@ -1395,7 +1395,7 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
     button.health.mixcolr,button.health.mixcolg,button.health.mixcolb=button.text.r,button.text.g,button.text.b
     button.mana.r,button.mana.g,button.mana.b=HealBot_colIndex["hctr5"..index],HealBot_colIndex["hctg5"..index],HealBot_colIndex["hctb5"..index]
     button.health.rcol,button.health.gcol=0,1
-    button.health.ptc=1000
+    button.health.pct=1000
     HealBot_Action_UpdateBackground(button)
     button:Show()
     if button.frame<10 and Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["USE"] then
@@ -2873,13 +2873,20 @@ function HealBot_Panel_RaidUnitName(uName)
     return hbPanel_dataNames[uName] or hbPanel_dataPetNames[uName]
 end
 
+function HealBot_Panel_RaidUnitNameGetPlayerButton(uName)
+    if hbPanel_dataNames[uName] then
+        _, ruxButton, rupButton = HealBot_UnitID(hbPanel_dataNames[uName])
+        return ruxButton, rupButton
+    else
+        return nil
+    end
+end
+
 function HealBot_Panel_RaidUnitNameGetPlayerGUID(uName)
-    if uName==HEALBOT_WORD_MAINTANK then
-        return HealBot_Panel_luVars["MainTankGUID"]
-    elseif hbPanel_dataNames[uName] then
+    if hbPanel_dataNames[uName] then
         return UnitGUID(hbPanel_dataNames[uName])
     else
-        return ""
+        return nil
     end
 end
 

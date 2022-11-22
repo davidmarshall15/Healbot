@@ -249,6 +249,18 @@ end
 
 function HealBot_Timers_LoadComplete()
     HealBot_Timers_luVars["LoadComplete"]=true
+    local autoSelfCast=C_CVar.GetCVar("autoSelfCast")
+    if autoSelfCast then
+        HealBot_AddDebug("autoSelfCast is "..autoSelfCast,"Load",true)
+    else
+        HealBot_AddDebug("autoSelfCast is FASLE","Load",true)
+    end
+    local selfCastKey=C_CVar.GetCVar("selfCastKey")
+    if selfCastKey then
+        HealBot_AddDebug("selfCastKey is "..selfCastKey,"Load",true)
+    else
+        HealBot_AddDebug("selfCastKey is FASLE","Load",true)
+    end
 end
 
 function HealBot_Timers_LastUpdate()
@@ -517,6 +529,7 @@ local hbTimerFuncs={["INIT"]={
                         ["AuxFramesChanged"]=HealBot_Timers_AuxFramesChanged,
                         ["SkinsAuxFramesChanged"]=HealBot_Timers_SkinsAuxFramesChanged,
                         ["AllFramesChanged"]=HealBot_Timers_AllFramesChanged,
+                        ["UpdateAFK"]=HealBot_updAllStateIconAFK,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,

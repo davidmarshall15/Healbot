@@ -293,17 +293,9 @@ function HealBot_MountsPets_InitMount()
             HealBot_FMount[z]=HealBot_SlowFMount[z]
         end
     end
-    if #HealBot_FMount<4 then
-        HealBot_mountData["PrevFlying#"]=0
-    else
-        HealBot_mountData["PrevFlying#"]=ceil(#HealBot_FMount/3) 
-    end
-    if #HealBot_GMount<4 then
-        HealBot_mountData["PrevGround#"]=0
-    else
-        HealBot_mountData["PrevGround#"]=ceil(#HealBot_GMount/3) 
-    end
-    
+    HealBot_mountData["PrevFlying#"]=floor(#HealBot_FMount/3) 
+    HealBot_mountData["PrevGround#"]=floor(#HealBot_GMount/3)
+
     if #HealBot_GMount==0 and #HealBot_FMount==0 then
         HealBot_mountData["ValidUse"]=false
     else

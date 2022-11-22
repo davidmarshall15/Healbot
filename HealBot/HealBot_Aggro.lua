@@ -1,5 +1,4 @@
 local HealBot_Aggro_rCalls={}
-local tConcat={}
 local HealBot_Aggro_AuxAssigns={}
 HealBot_Aggro_AuxAssigns["NameOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Aggro_AuxAssigns["HealthOverlayAggro"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
@@ -17,10 +16,6 @@ end
 
 function HealBot_Aggro_setAuxAssigns(vName, frame, vValue)
     HealBot_Aggro_AuxAssigns[vName][frame]=vValue
-end
-
-function HealBot_Aggro_Concat(elements)
-    return table.concat(tConcat,"",1,elements)
 end
 
 function HealBot_Aggro_IndicatorClear(button)
