@@ -366,44 +366,12 @@
             <BarColor r="0.2" g="0.2" b="0.2"/>
           </StatusBar>
  
-          <StatusBar name="HealBot_Contents_ButtonT7">
-            <Size>
-              <AbsDimension x="173" y="20"/>
-            </Size>
-            <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT2"  relativePoint="TOPLEFT">
-                <Offset>
-                  <AbsDimension x="0" y="-22"/>
-                </Offset>
-              </Anchor>
-            </Anchors>
-            <Layers>
-              <Layer level="OVERLAY">
-                <FontString name= "HealBot_Contents_ButtonT7Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_BINDS">
-                  <Anchors>
-                    <Anchor point="LEFT" relativeTo="HealBot_Contents_ButtonT7" relativePoint="LEFT">
-                      <Offset>
-                        <AbsDimension x="0" y="1"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-              </Layer>
-            </Layers>
-            <Scripts>
-              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(7, nil, "Binds")</OnMouseDown>
-            </Scripts>
-            <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
-            <BarColor r="0.2" g="0.2" b="0.2"/>
-          </StatusBar>
-          
           <StatusBar name="HealBot_Contents_ButtonT3">
             <Size>
               <AbsDimension x="173" y="20"/>
             </Size>
             <Anchors>
-              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT7"  relativePoint="TOPLEFT">
+              <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_ButtonT2"  relativePoint="TOPLEFT">
                 <Offset>
                   <AbsDimension x="0" y="-22"/>
                 </Offset>
@@ -4022,12 +3990,12 @@
                   </CheckButton>
                   <EditBox name="HealBot_Options_Button1" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="150" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="185" y="-180"/>
+                          <AbsDimension x="135" y="-180"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4085,7 +4053,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-110" y="-2"/>
+                          <AbsDimension x="-105" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4176,9 +4144,36 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_Bind1" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="115" y="3" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotbinds1fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_COMBOBINDS">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="12"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <EditBox name="HealBot_Options_Button2" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="150" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="BOTTOMLEFT">
@@ -4241,7 +4236,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-110" y="-2"/>
+                          <AbsDimension x="-105" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4293,9 +4288,23 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_Bind2" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button2" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="115" y="3" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <EditBox name="HealBot_Options_Button3" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="150" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button2" relativePoint="BOTTOMRIGHT">
@@ -4358,7 +4367,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-110" y="-2"/>
+                          <AbsDimension x="-105" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4410,9 +4419,23 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_Bind3" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="115" y="3" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <EditBox name="HealBot_Options_Button4" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="150" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="BOTTOMLEFT">
@@ -4475,7 +4498,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-110" y="-2"/>
+                          <AbsDimension x="-105" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4527,9 +4550,23 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_Bind4" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button4" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="115" y="3" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <EditBox name="HealBot_Options_Button5" inherits="HealBot_Options_EditBoxTemplate">
                     <Size>
-                      <AbsDimension x="230" y="20"/>
+                      <AbsDimension x="150" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button4" relativePoint="BOTTOMRIGHT">
@@ -4592,7 +4629,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-110" y="-2"/>
+                          <AbsDimension x="-105" y="-2"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -4644,6 +4681,20 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSAUTOTRINKET",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Frame name="HealBot_Options_Bind5" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button5" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="115" y="3" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                 </Frames>
               </Frame>
               <Frame name="HealBot_Options_SelectSpellsFrame" inherits="BackdropTemplate">
@@ -24801,187 +24852,6 @@
                     </Scripts>
                   </Slider>
                 </Frames>
-          </Frame>
-      
-          <Frame name="HealBot_Options_Panel7" hidden="true" setAllPoints="true">
-            <Layers>
-              <Layer level="OVERLAY">
-                <FontString name="bindtoclickfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK">
-                  <Anchors>
-                    <Anchor point="TOP">
-                      <Offset>
-                        <AbsDimension x="0" y="-50"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-                <FontString name="bindtoclick1fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK1">
-                  <Anchors>
-                    <Anchor point="BOTTOM">
-                      <Offset>
-                        <AbsDimension x="0" y="100"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-                <FontString name="bindtoclick2fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK2">
-                  <Anchors>
-                    <Anchor point="BOTTOM">
-                      <Offset>
-                        <AbsDimension x="0" y="75"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-                <FontString name="bindtoclick3fontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_BINDKEYTOCLICK3">
-                  <Anchors>
-                    <Anchor point="BOTTOM">
-                      <Offset>
-                        <AbsDimension x="0" y="25"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-              </Layer>
-            </Layers>
-            <Frames>
-              <Frame name="HealBot_Options_Bind1" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP">
-                    <Offset>
-                      <AbsDimension x="0" y="-140" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name="healbotbinds1fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONLEFT">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="25" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_Bind2" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind1" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="-50" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name="healbotbinds2fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONMIDDLE">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="25" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_Bind3" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind2" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="-50" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name="healbotbinds3fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTONRIGHT">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="25" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_Bind4" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind3" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="-50" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name="healbotbinds4fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTON4">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="25" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
-                </Scripts>
-              </Frame>
-              <Frame name="HealBot_Options_Bind5" inherits="UIDropDownMenuTemplate">
-                <Anchors>
-                  <Anchor point="TOP" relativeTo="HealBot_Options_Bind4" relativePoint="BOTTOM">
-                    <Offset>
-                      <AbsDimension x="0" y="-50" />
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-                <Layers>
-                  <Layer level="OVERLAY">
-                    <FontString name="healbotbinds5fontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_BUTTON5">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="25" y="14"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 200)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("BINDTOCLICK",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("BINDTOCLICK",false)</OnLeave>
-                </Scripts>
-              </Frame>
-
-            </Frames>
           </Frame>
           
           <Frame name="HealBot_Options_Panel8" hidden="true" setAllPoints="true">

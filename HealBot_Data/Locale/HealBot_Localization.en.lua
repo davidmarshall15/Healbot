@@ -274,9 +274,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUTTON20                = "Button 20";
     
     HEALBOT_OPTIONS_BINDKEYTOCLICK          = "Bind a key to a Button Click"
-    HEALBOT_OPTIONS_BINDKEYTOCLICK1         = "NOTE: Depending on OS/WoW config, some binds will not work with specific modifier keys"
-    HEALBOT_OPTIONS_BINDKEYTOCLICK2         = "If intending to use key modifiers with key binds, test the key modifiers work"
-    HEALBOT_OPTIONS_BINDKEYTOCLICK3         = "Additional binds are available in the Extra Buttons plugin"
 
     HEALBOT_CLASSES_ALL                     = "All (Non class specific)";
     HEALBOT_CLASSES_MELEE                   = "Melee";

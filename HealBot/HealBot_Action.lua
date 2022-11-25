@@ -1719,7 +1719,7 @@ end
 function HealBot_Action_UpdateAllIndicators(button)
     HealBot_Action_setPowerIndicators(button)
     button.mana.lowcheck=true
-    HealBot_Aggro_IndicatorHazardUpdate(button)
+    HealBot_Aggro_IndicatorUpdate(button)
 end
 
 local hbPowerIndicator=0
@@ -2131,7 +2131,7 @@ function HealBot_Action_ResetUnitButtonOpacity(button)
     HealBot_Aura_Update_AllIcons(button)
     HealBot_Action_setPowerIndicators(button)
     HealBot_Action_CheckUnitLowMana(button)
-    HealBot_Aggro_IndicatorHazardUpdate(button)
+    HealBot_Aggro_IndicatorUpdate(button)
 end
 
 function HealBot_Action_ResetUnitOpacity()
@@ -4624,7 +4624,7 @@ function HealBot_Action_MarkDeleteButton(button)
 end
 
 function HealBot_Action_Reset()
-    HealBot_Update_Skins(true)
+    HealBot_Update_Skins()
     HealBot_Timers_TurboOn(1)
     if HealBot_Config.DisabledNow==1 then
         HealBot_Options_DisableHealBotOpt:SetChecked(false)

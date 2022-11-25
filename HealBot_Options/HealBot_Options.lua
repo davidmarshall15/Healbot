@@ -16430,7 +16430,7 @@ function HealBot_Options_SetDefaults(global)
         HealBot_Reset_Cures()
         HealBot_Reset_Buffs()
     end
-    HealBot_Update_Skins(true)
+    HealBot_Update_Skins()
     HealBot_runDefaults()
     HealBot_Options_luVars["Options_Opened"]=false;
     HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
@@ -16574,7 +16574,6 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT52Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT53Txt"])
     HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT6"], _G["HealBot_Contents_ButtonT6Txt"])
-    HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT7"], _G["HealBot_Contents_ButtonT7Txt"])
     HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT8"], _G["HealBot_Contents_ButtonT8Txt"])
     HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT9"], _G["HealBot_Contents_ButtonT9Txt"])
     HealBot_Options_Content_Colour(_G["HealBot_Contents_ButtonT99"], _G["HealBot_Contents_ButtonT99Txt"])
@@ -16963,8 +16962,6 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetText(HEALBOT_OPTIONS_CONTENT_CURE_WARNING)
         g=_G["HealBot_Contents_ButtonT6Txt"] 
         g:SetText(HEALBOT_OPTIONS_CONTENT_TIPS)
-        g=_G["HealBot_Contents_ButtonT7Txt"] 
-        g:SetText(HEALBOT_OPTIONS_CONTENT_BINDS)
         g=_G["HealBot_Contents_ButtonT8Txt"] 
         g:SetText(HEALBOT_OPTIONS_CONTENT_TEST)
         g=_G["HealBot_Contents_ButtonT9Txt"] 
@@ -17275,9 +17272,6 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Panel6_1"]
         g:SetText(HEALBOT_OPTIONS_TIPTEXT)
-        g:SetTextColor(1,1,1,1)
-        g=_G["bindtoclickfontstr"]
-        g:SetText(HEALBOT_OPTIONS_BINDKEYTOCLICK)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_PrioDebuffDisease_FontStr"]
         g:SetText(HEALBOT_DISEASE)
@@ -17674,6 +17668,8 @@ function HealBot_Options_SpellsTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_SelectIconCmds5Combo, HEALBOT_WORD_COMMANDS)
         healbotSelfCastWarning:SetTextColor(1,0.55,0.2,1)
         healbotSelfCastWarning:SetText("")
+        HealBot_Options_InitBinds()
+        HealBot_Options_SetLabel("healbotbinds1fontstr",HEALBOT_OPTIONS_COMBOBINDS)
         HealBot_Options_TabRunOnce[tab]=true
     end
     if HEALBOT_GAME_VERSION>9 then
@@ -19476,15 +19472,6 @@ end
 
 function HealBot_Options_BindsTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Options_InitBinds()
-        HealBot_Options_SetLabel("bindtoclick1fontstr",HEALBOT_OPTIONS_BINDKEYTOCLICK1)
-        HealBot_Options_SetLabel("bindtoclick2fontstr",HEALBOT_OPTIONS_BINDKEYTOCLICK2)
-        HealBot_Options_SetLabel("bindtoclick3fontstr",HEALBOT_OPTIONS_BINDKEYTOCLICK3)
-        HealBot_Options_SetLabel("healbotbinds1fontstr",HEALBOT_OPTIONS_BUTTONLEFT)
-        HealBot_Options_SetLabel("healbotbinds2fontstr",HEALBOT_OPTIONS_BUTTONMIDDLE)
-        HealBot_Options_SetLabel("healbotbinds3fontstr",HEALBOT_OPTIONS_BUTTONRIGHT)
-        HealBot_Options_SetLabel("healbotbinds4fontstr",HEALBOT_OPTIONS_BUTTON4)
-        HealBot_Options_SetLabel("healbotbinds5fontstr",HEALBOT_OPTIONS_BUTTON5)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end

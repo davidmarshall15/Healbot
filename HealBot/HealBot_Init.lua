@@ -44,7 +44,6 @@ function HealBot_Init_SetSpell(spellId, cKey)
     end
 end
 
-
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local cRank=false
     if ( not id ) then return false; end

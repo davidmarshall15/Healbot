@@ -773,7 +773,9 @@ function HealBot_Action_DoRefreshTargetTooltip(button)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
-    HealBot_TooltipInit();
+    if not hbTip:IsOwned(HealBot) then
+        hbTip:SetOwner(HealBot, 'ANCHOR_NONE')
+    end
     hbTip:ClearLines()
     local r,g,b=button.text.r,button.text.g,button.text.b
 

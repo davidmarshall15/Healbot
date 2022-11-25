@@ -32,7 +32,7 @@ function HealBot_Aggro_HazardClear(button)
     HealBot_Action_DisableBorderHazardType(button, "AGGRO")
 end
 
-function HealBot_Aggro_IndicatorHazardUpdate(button)
+function HealBot_Aggro_IndicatorUpdate(button)
     if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
        button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 then
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
@@ -82,7 +82,7 @@ function HealBot_Aggro_IndicatorHazardUpdate(button)
         if button.hazard.aggro then HealBot_Aggro_HazardClear(button) end
     end
     
-      --HealBot_setCall("HealBot_Aggro_IndicatorHazardUpdate")
+      --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
 local function HealBot_Aggro_AuxSetAggroBar(button)
@@ -132,7 +132,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
         else
             button.aggro.status=threatStatus
         end
-        HealBot_Aggro_IndicatorHazardUpdate(button)
+        HealBot_Aggro_IndicatorUpdate(button)
     end
     if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct

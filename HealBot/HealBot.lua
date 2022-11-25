@@ -215,13 +215,6 @@ function HealBot_SetResetFlag(mode)
       --HealBot_setCall("HealBot_SetResetFlag")
 end
 
-function HealBot_TooltipInit()
-    if ( HealBot_ScanTooltip:IsOwned(HealBot) ) then return; end;
-    HealBot_ScanTooltip:SetOwner(HealBot, 'ANCHOR_NONE' );
-    HealBot_ScanTooltip:ClearLines();
-      --HealBot_setCall("HealBot_TooltipInit")
-end
-
 local uzText=""
 function HealBot_UnitZone(button)
     if button.player or UnitIsVisible(button.unit) then
@@ -566,7 +559,7 @@ function HealBot_SlashCmd(cmd)
     elseif (HBcmd=="tma") then
         HealBot_Options_ToggleMainAssist()
     elseif (HBcmd=="cs") then
-        HealBot_Update_Skins(true)
+        HealBot_Update_Skins()
         HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_SKIN_CHECK_DONE)
     elseif (HBcmd=="disable") then
         HealBot_Options_DisableHealBotOpt:SetChecked(true)
@@ -2241,7 +2234,6 @@ function HealBot_EndAggro()
 end
 
 function HealBot_Reset_Full()
-    HealBot_Update_Skins(true)
     HealBot_luVars["Loaded"]=false
     HealBot_UnRegister_Events()
     HealBot_Panel_ClearBlackList()
@@ -2475,7 +2467,7 @@ function HealBot_ResetSkins()
     HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
     HealBot_Include_Skin(HEALBOT_SKINS_STD, false)
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMSKINDEFAULTS)
-    HealBot_Update_Skins(true)
+    HealBot_Update_Skins()
       --HealBot_setCall("HealBot_ResetSkins")
 end
 
@@ -2730,7 +2722,7 @@ function HealBot_UpdateBuffItem(buff, item)
     end
 end
 
-function HealBot_Update_Skins(forceCheck)
+function HealBot_Update_Skins()
     if HealBot_Config.LastVersionSkinUpdate then
         HealBot_Config.LastVersionUpdate=HealBot_Config.LastVersionSkinUpdate
         HealBot_Config.LastVersionSkinUpdate=nil
@@ -2763,7 +2755,7 @@ function HealBot_Update_Skins(forceCheck)
     if not HealBot_luVars["ResetOld"] and tonumber(tMajor)<9 or (tonumber(tMajor)==9 and tonumber(tMinor)<2) or (tonumber(tMajor)==9 and tonumber(tMinor)==2 and tonumber(tPatch)<5) then
         HealBot_luVars["ResetOld"]=true
         HealBot_Options_SetDefaults(true);
-    elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() or forceCheck then
+    else
         HealBot_AddDebug("In HealBot_Update_Skins version="..HealBot_Globals.LastVersionSkinUpdate)
         if HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
             HealBot_Globals.OneTimeMsg["VERSION"]=false
@@ -2861,7 +2853,7 @@ function HealBot_Update_Skins(forceCheck)
         end    
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
-    if HealBot_Config.LastVersionUpdate~=HealBot_Global_Version() or forceCheck then 
+    if HealBot_Config.LastVersionUpdate~=HealBot_Global_Version() then 
         if HealBot_Config.ActionVisible then HealBot_Config.ActionVisible=nil end
         if HealBot_Config.CrashProtMacroName or HealBot_Globals.OverrideProt then 
             HealBot_Options_DeleteAllCpMacros()
@@ -2943,11 +2935,9 @@ function HealBot_OnEvent_AddOnLoaded(addonName, reset)
                 HealBot_luVars["FPS"][x][z]=HealBot_Globals.FPS
             end
         end
-        HealBot_Timers_Set("LAST","SetAutoClose", 12)
         HealBot_luVars["FPS"][0]=HealBot_Globals.FPS
         HealBot_Options_setClassEn()
         HealBot_Options_setLists()
-        HealBot_TooltipInit();
         HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
         HealBot_luVars["RunDate"]=tonumber(date("%y%m%d"))
         if HealBot_Globals.AutoCacheSize>25 and (HealBot_Globals.AutoCacheTime or 0)<HealBot_luVars["RunDate"] then
@@ -3002,7 +2992,6 @@ function HealBot_VariablesLoaded()
     HealBot_Update_Skins()
     HealBot_Config.LastAutoSkinChangeTime=0
     HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
-    HealBot_Aura_SetIconUpdateInterval()
     HealBot_Options_InitVars()
     HealBot_Action_InitCacheButtons()
     HealBot_Panel_SethbTopRole(HealBot_Globals.TopRole)
@@ -3012,6 +3001,8 @@ function HealBot_VariablesLoaded()
     HealBot_Text_sethbAggroNumberFormat()
     HealBot_Options_SetFrames()
     HealBot_Init_ClassicSpecs()
+    HealBot_Timers_Set("AURA","SetIconUpdateInterval")
+    HealBot_Timers_Set("LAST","SetAutoClose", 12)
     HealBot_Timers_Set("LAST","LoadTips")
     HealBot_Load()
       --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
@@ -4029,7 +4020,9 @@ function HealBot_Not_Fighting()
             HealBot_luVars["TargetNeedReset"]=true
             HealBot_Timers_Set("LAST","AfterCombatCleanup")
             if HealBot_luVars["pluginTimeToLive"] then HealBot_Plugin_TimeToLive_TogglePanel() end
-            if HealBot_luVars["pluginBuffWatch"] then HealBot_Plugin_BuffWatch_CombatState(false) end
+            if HealBot_luVars["pluginBuffWatch"] then C_Timer.After(0.025, function() HealBot_Plugin_BuffWatch_CombatState(false) end) end
+            if HealBot_luVars["pluginHealthWatch"] then C_Timer.After(0.05, function() HealBot_Plugin_HealthWatch_CombatState(false) end) end
+            if HealBot_luVars["pluginManaWatch"] then C_Timer.After(0.075, function() HealBot_Plugin_ManaWatch_CombatState(false) end) end
         elseif not HealBot_luVars["UpdateEnemyFrame"] then
             HealBot_UnlockEnemyFrame()
         end
@@ -4991,11 +4984,9 @@ function HealBot_retIsInVehicle(unit)
     return HealBot_UnitInVehicle[unit]
 end
 
-local HealBot_BagScanTooltip=CreateFrame("GameTooltip", "hbBagScanerTooltip", nil, "GameTooltipTemplate")
 local HealBot_WellFedItems={}
 local HealBot_ManaDrinkItems={}
 local HealBot_BuffExtraItems={}
-HealBot_BagScanTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
 
 function HealBot_retWellFedItems()
     return HealBot_WellFedItems
@@ -5031,11 +5022,11 @@ function HealBot_BagScanBuffExtra(bag)
     local itemText=false
     local numSlots=HealBot_GetContainerNumSlots(bag)
     for slot = 1,numSlots do
-        HealBot_BagScanTooltip:SetBagItem(bag, slot)
+        HealBot_ScanTooltip:SetBagItem(bag, slot)
         itemText=false
         for j=1, #HEALBOT_STRING_MATCH_EXTRABUFFS do
             if not itemText then
-                itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_EXTRABUFFS[j], HealBot_BagScanTooltip:GetRegions())
+                itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_EXTRABUFFS[j], HealBot_ScanTooltip:GetRegions())
             end
         end
         if itemText then
@@ -5063,8 +5054,8 @@ function HealBot_BagScanManaDrink(bag)
     local itemText=""
     local numSlots=HealBot_GetContainerNumSlots(bag)
     for slot = 1,numSlots do
-        HealBot_BagScanTooltip:SetBagItem(bag, slot)
-        itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_RESTOREMANA, HealBot_BagScanTooltip:GetRegions())
+        HealBot_ScanTooltip:SetBagItem(bag, slot)
+        itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_RESTOREMANA, HealBot_ScanTooltip:GetRegions())
         if itemText then
             HealBot_ManaDrinkItems[itemText]=true
         end
@@ -5088,8 +5079,8 @@ function HealBot_BagScanWellFed(bag)
     local itemText=""
     local numSlots=HealBot_GetContainerNumSlots(bag)
     for slot = 1,numSlots do
-        HealBot_BagScanTooltip:SetBagItem(bag, slot)
-        itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_WELLFED, HealBot_BagScanTooltip:GetRegions())
+        HealBot_ScanTooltip:SetBagItem(bag, slot)
+        itemText=EnumerateTooltipLines_helper(HEALBOT_STRING_MATCH_WELLFED, HealBot_ScanTooltip:GetRegions())
         if itemText then
             HealBot_WellFedItems[itemText]=true
         end
@@ -5446,8 +5437,10 @@ function HealBot_OnEvent_PlayerRegenDisabled()
         HealBot_OnEvent_ReadyCheckClear(true)
     end
     
-    if HealBot_luVars["pluginTimeToLive"] then HealBot_Plugin_TimeToLive_EnteringCombat() end
-    if HealBot_luVars["pluginBuffWatch"] then HealBot_Plugin_BuffWatch_CombatState(true) end
+    if HealBot_luVars["pluginTimeToLive"] then C_Timer.After(0.1, function() HealBot_Plugin_TimeToLive_EnteringCombat() end) end
+    if HealBot_luVars["pluginBuffWatch"] then C_Timer.After(0.2, function() HealBot_Plugin_BuffWatch_CombatState(true) end) end
+    if HealBot_luVars["pluginHealthWatch"] then C_Timer.After(0.3, function() HealBot_Plugin_HealthWatch_CombatState(true) end) end
+    if HealBot_luVars["pluginManaWatch"] then C_Timer.After(0.4, function() HealBot_Plugin_ManaWatch_CombatState(true) end) end
     --HealBot_Options_RaidTargetUpdate()
       --HealBot_setCall("HealBot_OnEvent_PlayerRegenDisabled")
 end

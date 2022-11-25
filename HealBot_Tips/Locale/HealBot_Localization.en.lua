@@ -1128,7 +1128,7 @@ function HealBot_Lang_Options_enALL()
                                ["TOOLTIPSCALE"]="Scale the tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Scale is not available when using the game tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Reset the custom anchor after changing the scale.",
                                ["TOOLTIPALPHA"]="Scale the tooltip.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Opacity is not available when using the game tooltip.",
                         -- Binds tab
-                               ["BINDTOCLICK"]="Select a key to bind to a button click.",
+                               ["BINDTOCLICK"]="Select a key to bind to a button click.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Depending on OS/WoW config, some\n".._G["YELLOW_FONT_COLOR_CODE"].."binds will not work with specific modifier keys.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."If intending to use key modifiers with\n".._G["YELLOW_FONT_COLOR_CODE"].."key binds, test the key modifiers work.",
                         -- Test tab
                                ["TESTUSE"]="Click to Turn On/Turn Off the test bars.\n--\n".."|cff77c8ff".."Tip: Turn on the test bars to easily move frames.",
                                ["TESTPROFILE"]="Profile limits the total number of bars for Groups or Raids.",
