@@ -460,6 +460,13 @@ function HealBot_Action_DisableBorderHazardTypeGUID(guid)
     if HealBot_retLuVars("pluginManaWatch") then HealBot_Plugin_ManaWatch_CancelGUID(guid) end
 end
 
+function HealBot_Action_DisableBorderHazardTypeButton(button)
+    --if HealBot_retLuVars("pluginRequests") then HealBot_Plugin_Requests_CancelButton(button) end
+    if HealBot_retLuVars("pluginBuffWatch") then HealBot_Plugin_BuffWatch_Cancel(button) end
+    if HealBot_retLuVars("pluginHealthWatch") then HealBot_Plugin_HealthWatch_Cancel(button) end
+    if HealBot_retLuVars("pluginManaWatch") then HealBot_Plugin_ManaWatch_Cancel(button) end
+end
+
 local hdaAlphaValue, hdaSetValue, hdaAdjValue=0,0,0
 local hdaButtonActive=false
 function HealBot_Action_UpdateHealthDropAlertBarsAlpha()
@@ -955,7 +962,7 @@ function HealBot_Action_UpdateHealthBackgroundBorder(button)
 end
 
 function HealBot_Action_UpdateBackgroundBorder(button)
-    if not HealBot_Hazard_Buttons[button.id] then
+    if not HealBot_Hazard_Buttons[button.id] and button.frame>0 then
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]>1 then
             if button.status.current<HealBot_Unit_Status["DEAD"] and Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]~=3 then
                 HealBot_Action_UpdateHealthBackgroundBorder(button) 
@@ -1114,7 +1121,7 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
             HealBot_Action_UpdateHealthStatusBarColor(button)
             HealBot_Action_UpdateBackground(button)
         end
-    else
+    elseif UnitExists(button.unit) then
         if button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] then HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"]) end
         HealBot_Action_UpdateDebuffButton(button)
     end
@@ -4534,6 +4541,7 @@ function HealBot_Action_CacheButton()
             if not ghb then 
                 HealBot_ActiveButtons[cButtonId]=true
                 ghb=HealBot_Action_CreateNewButton(1, cButtonId)
+                HealBot_Action_PrepButton(ghb)
                 HealBot_Action_MarkDeleteButton(ghb)
             end
         end
@@ -4582,6 +4590,7 @@ end
 function HealBot_Action_MarkDeleteButton(button)
     HealBot_QueueClearGUID(button.guid)
     HealBot_Action_UnregisterUnitEvents(button)
+    if button.frame>0 then HealBot_Action_DisableBorderHazardTypeButton(button) end
     button.status.markdel=true
     if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
         HealBot_Enemy_Button[button.unit]=nil 

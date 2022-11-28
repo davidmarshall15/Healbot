@@ -18,6 +18,22 @@ HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
 HealBot_Aux_luVars["TestBarsOn"]=false
 
+HealBot_Aux_luVars["InHealAbsorbDiv"]=6
+if HEALBOT_GAME_VERSION>9 then
+    HealBot_Aux_luVars["InHealAbsorbMax"]=12000
+else
+    HealBot_Aux_luVars["InHealAbsorbMax"]=3000
+end
+function HealBot_Aux_setInHealAbsorbMax(maxHealth)
+    HealBot_Aux_luVars["InHealAbsorbMax"]=floor(maxHealth/HealBot_Aux_luVars["InHealAbsorbDiv"])
+    HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
+    HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
+end
+function HealBot_Aux_setInHealAbsorbDiv(div)
+    HealBot_Aux_luVars["InHealAbsorbDiv"]=div
+    HealBot_SetPlayerData()
+end
+
 function HealBot_Aux_setLuVars(vName, vValue)
     HealBot_Aux_luVars[vName]=vValue
       --HealBot_setCall("HealBot_Aux_setLuVars - "..vName)
@@ -813,7 +829,7 @@ function HealBot_Aux_UpdateAbsorbBar(button)
                 button.aux[id]["B"]=button.health.absorbb
             end
             if button.health.auxabsorbs>0 then
-                hbAuxHlth10=floor(1000/((button.health.max/10)/button.health.auxabsorbs))
+                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["InHealAbsorbMax"]/button.health.auxabsorbs))
                 if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
             else
                 hbAuxHlth10=0
@@ -851,7 +867,7 @@ function HealBot_Aux_UpdateHealInBar(button)
                 button.aux[id]["B"]=button.health.inhealb
             end
             if button.health.auxincoming>0 then
-                hbAuxHlth10=floor(1000/((button.health.max/10)/button.health.auxincoming))
+                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["InHealAbsorbMax"]/button.health.auxincoming))
                 if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
             else
                 hbAuxHlth10=0

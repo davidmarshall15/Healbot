@@ -798,6 +798,7 @@ end
 
 local curBuffName,curBuffxTime=false,0
 local buffCheckThis, buffWatchTarget, buffSpellStart, buffSpellDur=false,false,0,0
+local weaponEnchantState={[1]={["Active"]=false,["Expire"]=0},[2]={["Active"]=false,["Expire"]=0}}
 function HealBot_Aura_SetGeneralBuff(button, bName)
     curBuffName=bName
     button.aura.buff.missingbuff=bName
@@ -871,31 +872,26 @@ function HealBot_Aura_CheckGeneralBuff(button)
         end
     end
     if not button.aura.buff.missingbuff and button.player and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
-        for x=1,2 do
-            if HealBot_Weapon_Enchant[x] then
-                local hasMainHandEnchant, mainHandExpiration, _, mainHandEnchantID, hasOffHandEnchant, offHandExpiration, _, offHandEnchantID = GetWeaponEnchantInfo()
-                if hasMainHandEnchant and x==1 then
-                    if (mainHandExpiration/1000)<HealBot_Config_Buffs.LongBuffTimer then
-                        HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
-                    else
-                        button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=ceil(TimeNow+(mainHandExpiration/1000)-HealBot_Config_Buffs.LongBuffTimer)
-                        if not button.aura.buff.nextcheck or button.aura.buff.nextcheck>button.aura.buff.recheck[HealBot_Weapon_Enchant[x]] then
-                            HealBot_Aura_MarkCheckBuffsTime(button)
+        if HealBot_Weapon_Enchant[1] or HealBot_Weapon_Enchant[2] then
+            weaponEnchantState[1]["Active"], weaponEnchantState[1]["Expire"], _, _, weaponEnchantState[2]["Active"], weaponEnchantState[2]["Expire"] = GetWeaponEnchantInfo()
+            -- local hasMainHandEnchant, mainHandExpiration, _, mainHandEnchantID, hasOffHandEnchant, offHandExpiration, _, offHandEnchantID = GetWeaponEnchantInfo()
+            for x=1,2 do
+                if HealBot_Weapon_Enchant[x] then
+                    if weaponEnchantState[x]["Active"] then
+                        if not weaponEnchantState[x]["Expire"] then weaponEnchantState[x]["Expire"]=30*60*1000 end
+                        if (weaponEnchantState[x]["Expire"]/1000)<HealBot_Config_Buffs.LongBuffTimer then
+                            HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
+                        else
+                            button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=ceil(TimeNow+(weaponEnchantState[x]["Expire"]/1000)-HealBot_Config_Buffs.LongBuffTimer)
+                            if not button.aura.buff.nextcheck or button.aura.buff.nextcheck>button.aura.buff.recheck[HealBot_Weapon_Enchant[x]] then
+                                HealBot_Aura_MarkCheckBuffsTime(button)
+                            end
                         end
-                    end
-                elseif hasOffHandEnchant and x==2 then
-                    if (offHandExpiration/1000)<HealBot_Config_Buffs.LongBuffTimer then
-                        HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
                     else
-                        button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=ceil(TimeNow+(offHandExpiration/1000)-HealBot_Config_Buffs.LongBuffTimer)
-                        if not button.aura.buff.nextcheck or button.aura.buff.nextcheck>button.aura.buff.recheck[HealBot_Weapon_Enchant[x]] then
-                            HealBot_Aura_MarkCheckBuffsTime(button)
-                        end
+                        HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
+                        button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=nil
+                        HealBot_Aura_MarkCheckBuffsTime(button)
                     end
-                else
-                    HealBot_Aura_SetGeneralBuff(button, HealBot_Weapon_Enchant[x])
-                    button.aura.buff.recheck[HealBot_Weapon_Enchant[x]]=nil
-                    HealBot_Aura_MarkCheckBuffsTime(button)
                 end
             end
         end

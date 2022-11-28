@@ -641,6 +641,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ConfigClassHoT"]=HealBot_Aura_ConfigClassHoT,
                         ["SendClassicAuraData"]=HealBot_Aura_SendClassicData,
                         ["LoadTips"]=HealBot_Options_LoadTips,
+                        ["SetPlayerData"]=HealBot_SetPlayerData,
                     },
                    }
 
