@@ -8,6 +8,14 @@ local HealBot_MountIndex = {}
 local HealBot_MountsPets_luVars={}
 HealBot_MountsPets_luVars["dislikeRetry"]=75
 
+local function HealBot_MountsPets_CanMount()
+    if not HealBot_Data["UILOCK"] and not IsIndoors() then
+        return true
+    else
+        return false
+    end
+end
+
 function HealBot_MountsPets_Dismount()
     if IsMounted() then
         Dismount()
@@ -17,7 +25,7 @@ function HealBot_MountsPets_Dismount()
 end
 
 function HealBot_MountsPets_FavMount()
-    if not HealBot_Data["UILOCK"] then
+    if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
         elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
@@ -40,7 +48,7 @@ end
 
 function HealBot_MountsPets_Mount(mount)
     if HealBot_MountIndex[mount] then 
-        if not HealBot_Data["UILOCK"] then
+        if HealBot_MountsPets_CanMount() then
             if HEALBOT_GAME_VERSION>3 then
                 C_MountJournal.SummonByID(HealBot_MountIndex[mount]) 
             else
@@ -55,7 +63,7 @@ end
 
 local vToggleMountIndex=0
 function HealBot_MountsPets_ToggelMount(mountType)
-    if not HealBot_Data["UILOCK"] then
+    if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
         elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    

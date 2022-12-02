@@ -17554,6 +17554,22 @@ function HealBot_Options_OverrideFramesTab(tab)
     end
 end
 
+function HealBot_Options_WarnOnSelfCast(wId)
+    if HealBot_Options:IsVisible() and HealBot_Options_luVars["WarnId"]==wId then 
+        if GetModifiedClick("SELFCAST")~="NONE" then
+            healbotSelfCastWarning:SetText("WARNING: Self Cast Key is set to modifier "..GetModifiedClick("SELFCAST").." in your UI settings")
+        else
+            local autoSelfCast=C_CVar.GetCVar("autoSelfCast")
+            if autoSelfCast and tonumber(autoSelfCast)==1 then
+                healbotSelfCastWarning:SetText("WARNING: Auto Self Cast is turned on in your UI settings")
+            else
+                healbotSelfCastWarning:SetText("")
+            end
+        end
+        C_Timer.After(1, function() HealBot_Options_WarnOnSelfCast(wId) end)
+    end
+end
+
 function HealBot_Options_SpellsTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_ComboClass_Text()
@@ -17673,14 +17689,8 @@ function HealBot_Options_SpellsTab(tab)
         HealBot_Options_TabRunOnce[tab]=true
     end
     if HEALBOT_GAME_VERSION>9 then
-        --local autoSelfCast=C_CVar.GetCVar("autoSelfCast")
-        --if autoSelfCast and tonumber(autoSelfCast)==1 then
-        --    healbotSelfCastWarning:SetText("WARNING: Auto Self Cast is turned on in your UI settings")
-        if GetModifiedClick("SELFCAST")~="NONE" then
-            healbotSelfCastWarning:SetText("WARNING: Self Cast Key is set to modifier "..GetModifiedClick("SELFCAST").." in your UI settings")
-        else
-            healbotSelfCastWarning:SetText("")
-        end
+        HealBot_Options_luVars["WarnId"]=GetTime()
+        HealBot_Options_WarnOnSelfCast(HealBot_Options_luVars["WarnId"])
     end
 end
 
@@ -19662,6 +19672,7 @@ function HealBot_Options_UpdateTab(tabNo, subTabNo, tab, isParent, subTab)
     end
     HealBot_Options_luVars["CurrentTab"]=tab or HealBot_Options_luVars["CurrentTab"] or "About"
     HealBot_Options_TabFuncs[HealBot_Options_luVars["CurrentTab"]](HealBot_Options_luVars["CurrentTab"])
+    if tab and tab~="Spells" then HealBot_Options_luVars["WarnId"]=0 end
     if tabNo then
         HealBot_Options_ShowPanel(tabNo, subTabNo)
     end

@@ -721,7 +721,7 @@ HealBot_Unit_Status={   ["DISABLED"]=0,
                         ["PLUGINBARCOL"]=15,
                         ["DEAD"]=18,
                         ["RES"]=19,
-                        ["DC"]=20,
+                        ["DC"]=50,
                         ["RESERVED"]=99,
 }
 

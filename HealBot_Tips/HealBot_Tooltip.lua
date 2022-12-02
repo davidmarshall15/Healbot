@@ -751,16 +751,16 @@ function HealBot_Action_DoRefreshTooltip()
             HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_TAB_SPELLS,1,1,1,1," ",0,0,0,0)
         end
         
-        local bId, bName, sName, bR, bG, bB
+        local bId, bName, sName, sDisplayName, bR, bG, bB
         for x=1,HealBot_Globals.Tooltip_MaxButtons do
             bId, bName=HealBot_Options_ComboClass_Button(x)
             sName = HealBot_Action_SpellPattern(bId, string.upper(HealBot_Data["TIPTYPE"]))
             if x==1 and HealBot_Globals.SmartCast and xButton.status.current<HealBot_Unit_Status["DC"] and not IsModifierKeyDown() and UnitIsFriend("player",xButton.unit) and not InCombatLockdown() then 
                 sName=HealBot_Action_SmartCast(xButton) or sName
             end
-            sName, bR, bG, bB=HealBot_Tooltip_setspellName(xButton, sName)
-            if sName then
-                HealBot_Tooltip_SetLine(bName..": "..sName, bR, bG, bB,1,HealBot_Tooltip_SpellSummary(sName),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
+            sDisplayName, bR, bG, bB=HealBot_Tooltip_setspellName(xButton, sName)
+            if sDisplayName then
+                HealBot_Tooltip_SetLine(bName..": "..sDisplayName, bR, bG, bB,1,HealBot_Tooltip_SpellSummary(sName),playerPowerCols.r,playerPowerCols.g,playerPowerCols.b,1)
             end
         end
 
@@ -773,9 +773,7 @@ function HealBot_Action_DoRefreshTargetTooltip(button)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
-    if not hbTip:IsOwned(HealBot) then
-        hbTip:SetOwner(HealBot, 'ANCHOR_NONE')
-    end
+    HealBot_SetToolTip(hbTip)
     hbTip:ClearLines()
     local r,g,b=button.text.r,button.text.g,button.text.b
 
