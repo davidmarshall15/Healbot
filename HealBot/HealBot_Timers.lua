@@ -311,7 +311,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","ConfigClassHoT",0.05)
     HealBot_Timers_Set("LAST","InitLoadSpells",0.07)
     HealBot_Timers_Set("LAST","CheckZone",0.08)
-    HealBot_Timers_Set("PLAYER","InvChange",0.1)
+    HealBot_Timers_Set("PLAYER","InvReady",0.2)
     HealBot_Timers_Set("LAST","ConfigClassHoT",0.25)
     HealBot_Timers_Set("LAST","LastUpdate",0.5) 
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
@@ -472,11 +472,14 @@ local hbTimerFuncs={["INIT"]={
                         ["InitSmartCast"]=HealBot_InitSmartCast,
                         ["SetRangeSpells"]=HealBot_Action_SetrSpell,
                         ["InvChange"]=HealBot_Player_InvChange,
+                        ["InvReady"]=HealBot_Player_InvReady,
                         ["EmoteOOM"]=HealBot_Timer_EmoteOOM,
                         ["SpecUpdate"]=HealBot_ResetOnSpecChange,
                         ["PlayerCheck"]=HealBot_PlayerCheck,
                         ["LoadProfile"]=HealBot_Options_LoadProfile,
                         ["SaveProfile"]=HealBot_Options_SaveProfile,
+                        ["TalentsChanged"]=HealBot_Player_TalentsChanged,
+                        ["CheckSpellsValid"]=HealBot_Options_SpellsCheckTextValid,
                     },
                     ["SKINS"]={
                         ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,

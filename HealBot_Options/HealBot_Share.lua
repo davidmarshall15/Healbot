@@ -301,7 +301,7 @@ function HealBot_Share_ExportSpells(lData)
             HB_button = HealBot_Options_ComboClass_Button(x)
             -- Menu~1,1,7~2,4,false,false,false,false,
             for y=1, getn(HealBot_Keys_List), 1 do
-                HB_combo_prefix = HealBot_Keys_List[y]..HB_button..HealBot_Config.CurrentSpec;
+                HB_combo_prefix = HealBot_Action_GetComboSpec(HealBot_Keys_List[y], HB_button)
                 if z==1 then
                     sName, sTar, sTrin1, sTrin2, AvoidBC = HealBot_Action_AttribSpellPattern(HB_combo_prefix)
                     sText = HealBot_Config_Spells.EnabledKeyCombo[HB_combo_prefix]
@@ -394,9 +394,9 @@ function HealBot_Share_LoadSpells(sIn)
                 cType = "EMERG"
             end
             local button = HealBot_Options_ComboClass_Button(Buttons_Button)
-            local cText=HealBot_Action_GetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec)
+            local cText=HealBot_Action_GetSpell(cType, HealBot_Action_GetComboSpec(HealBot_Keys_List[KeyPress], button))
             if not cText or (cText and strlen(cText)<2) or HealBot_Share_luVars["InMethodSpell"]<3 then
-                HealBot_Action_SetSpell(cType, HealBot_Keys_List[KeyPress]..button..HealBot_Config.CurrentSpec, sName)
+                HealBot_Action_SetSpell(cType, HealBot_Action_GetComboSpec(HealBot_Keys_List[KeyPress], button), sName)
                 HealBot_Options_KnownSpellCheck(nil, sName,cType,HealBot_Keys_List[KeyPress],Buttons_Button)
                 HealBot_SpellAutoButton_Update("Target", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTar)
                 HealBot_SpellAutoButton_Update("Trinket1", HealBot_Keys_List[KeyPress], ActionBarsCombo, Buttons_Button, sTrin1)

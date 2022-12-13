@@ -33,7 +33,7 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
 end
 
 local ssName,ssRank="x", 0
-function HealBot_Init_SetSpell(spellId, cKey)
+function HealBot_Init_SetSpell_OLD(spellId, cKey)
     ssName=GetSpellInfo(spellId)
     if ssName then
         ssRank=HealBot_Init_ClassicHealSpellMaxRank(ssName)

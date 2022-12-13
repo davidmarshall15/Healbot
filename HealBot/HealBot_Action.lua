@@ -130,7 +130,7 @@ function HealBot_Action_SetrSpell()
     local x=HealBot_GetBandageType() or HEALBOT_LINEN_BANDAGE
     local y=GetInventoryItemID("player", INVSLOT_MAINHAND) or HEALBOT_WORDS_UNKNOWN
     if y~=HEALBOT_WORDS_UNKNOWN then y=GetItemInfo(y) or y end
-    local sName=HealBot_Action_GetSpell("ENEMY", "Left"..HealBot_Config.CurrentSpec)
+    local sName=HealBot_Action_GetSpell("ENEMY", HealBot_Action_GetComboSpec("", "Left"))
     if sName and HealBot_Spell_Names[sName] then
         HealBot_RangeSpells["HARM"]=sName
     else
@@ -173,7 +173,7 @@ function HealBot_Action_SetrSpell()
         elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
         end
     end
-    sName=HealBot_Action_GetSpell("ENABLED", "Left"..HealBot_Config.CurrentSpec)
+    sName=HealBot_Action_GetSpell("ENABLED", HealBot_Action_GetComboSpec("", "Left"))
     if sName and HealBot_Spell_Names[sName] then
         HealBot_RangeSpells["HEAL"]=sName
     else
@@ -199,17 +199,14 @@ function HealBot_Action_SetrSpell()
     end
     if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
     if (HealBot_RangeSpells["HARM"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HARM"]=y end
-    
-    sConcat[2]="Left"
-    sConcat[3]=HealBot_Config.CurrentSpec
+
     for y=1, getn(HealBot_Keys_List), 1 do
-        sConcat[1]=HealBot_Keys_List[y]
-        sName=HealBot_Action_GetSpell("ENABLED", HealBot_Action_Concat(3))
+        sName=HealBot_Action_GetSpell("ENABLED", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
         if not sName or not HealBot_Spell_Names[sName] then
             sName=HealBot_RangeSpells["HEAL"]
         end
         HealBot_RangeSpellsKeysFriendly[HealBot_Keys_List[y]]=sName
-        sName=HealBot_Action_GetSpell("ENEMY", HealBot_Action_Concat(3))
+        sName=HealBot_Action_GetSpell("ENEMY", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
         if not sName or not HealBot_Spell_Names[sName] then
             sName=HealBot_RangeSpells["HARM"]
         end
@@ -1359,7 +1356,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
                 HealBot_Timers_Set("AURA","PlayerCheckExtended")
                 HealBot_Action_ResetActiveUnitStatus()
                 HealBot_setLuVars("pluginCDsCheckExisting", 0)
-                --if HealBot_retLuVars("pluginRequests") then HealBot_Plugin_Requests_PlayerDead() end
+                if HealBot_retLuVars("pluginRequests") then HealBot_Plugin_Requests_PlayerDead() end
                 if HealBot_retLuVars("pluginBuffWatch") then HealBot_Plugin_BuffWatch_PlayerDead() end
                 if HealBot_retLuVars("pluginHealthWatch") then HealBot_Plugin_HealthWatch_PlayerDead() end
                 if HealBot_retLuVars("pluginManaWatch") then HealBot_Plugin_ManaWatch_PlayerDead() end
@@ -3031,6 +3028,63 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
     --HealBot_setCall("HealBot_Action_SetSpell")
 end
 
+HealBot_Action_luVars["LastLoadoutName"]="."
+HealBot_Action_luVars["LastLoadoutID"]=0
+HealBot_Action_luVars["defaultLoadoutID"]=0
+function HealBot_Action_GetLoadoutId()
+    if HEALBOT_GAME_VERSION>9 then
+        local spec = PlayerUtil.GetCurrentSpecID()
+        local loadout = spec and C_ClassTalents.GetLastSelectedSavedConfigID(spec)
+        local configId="x"
+        if loadout then
+            local configInfo = C_Traits.GetConfigInfo(loadout)
+            if configInfo then
+                configId=configInfo.ID
+                local name=configInfo.name or ""
+                --if name~=HealBot_Action_luVars["LastLoadoutName"] then
+                    HealBot_AddDebug("Loadout name "..name, "Loadout", true)
+                    HealBot_Action_luVars["LastLoadoutName"]=name
+                --end
+            end
+        else--if HealBot_Action_luVars["LastLoadoutName"]~="" then
+            HealBot_AddDebug("No Loadout name", "Loadout", true)
+            HealBot_Action_luVars["LastLoadoutName"]=""
+        end
+        if not configId or type(configId)~="number" then
+            configId=C_ClassTalents.GetActiveConfigID()
+            if configId and type(configId)=="number" and configId>0 then
+                HealBot_Action_luVars["defaultLoadoutID"]=configId
+            else
+                configId=HealBot_Action_luVars["defaultLoadoutID"]
+            end
+        end
+        --if HealBot_Action_luVars["LastLoadoutID"]~=configId then
+            HealBot_AddDebug("Loadout ID "..configId, "Loadout", true)
+        --end
+        HealBot_Action_luVars["LastLoadoutID"]=configId or 0
+        HealBot_Config.KnownLoadouts[HealBot_Action_luVars["LastLoadoutID"]]=true
+    else
+        HealBot_Action_luVars["LastLoadoutID"]=0
+    end
+    return HealBot_Action_luVars["LastLoadoutID"]
+end
+
+function HealBot_Action_GetComboWithSpec(key, button, spec)
+    sConcat[1]=key
+    sConcat[2]=button
+    sConcat[3]=spec or 1
+    if HealBot_Config.SpellsUpdatedToV10 then
+        sConcat[4]=HealBot_Action_luVars["LastLoadoutID"]
+        return HealBot_Action_Concat(4)
+    else
+        return HealBot_Action_Concat(3)
+    end
+end
+
+function HealBot_Action_GetComboSpec(key, button)
+    return HealBot_Action_GetComboWithSpec(key, button, HealBot_Config.CurrentSpec)
+end
+
 local HealBot_Action_SpellCache={}
 HealBot_Action_SpellCache["ENABLED"]={}
 HealBot_Action_SpellCache["ENEMY"]={}
@@ -3049,7 +3103,7 @@ function HealBot_Action_ClearSpellCache(cType)
     --HealBot_setCall("HealBot_Action_ClearSpellCache")
 end
 
-local vSpellText=nil
+local vSpellText,cSpellText=nil,nil
 function HealBot_Action_GetSpell(cType, cKey)
     vSpellText=HealBot_Action_SpellCache[cType][cKey]
     if not vSpellText then
@@ -3072,16 +3126,17 @@ function HealBot_Action_GetSpell(cType, cKey)
                 elseif sType == "I" then
                     vSpellText=GetItemInfo(sID)
                 else
-                    vSpellText=GetSpellInfo(sID)
-                    if HEALBOT_GAME_VERSION<3 then
+                    cSpellText=GetSpellInfo(sID)
+                    if HEALBOT_GAME_VERSION<3 and cSpellText then
                         local rank = GetSpellSubtext(sID)
                         if rank then
                             local knownHealSpells=HealBot_Init_retFoundHealSpells()
-                            if knownHealSpells[vSpellText] then
-                                vSpellText=vSpellText.."("..rank..")"
+                            if knownHealSpells[cSpellText] then
+                                cSpellText=cSpellText.."("..rank..")"
                             end
                         end
                     end
+                    vSpellText=cSpellText or vSpellText
                 end
             end
             if vSpellText then 
@@ -3117,10 +3172,11 @@ function HealBot_Action_SetCurrentModKeys()
 end
 
 function HealBot_Action_SpellPattern(click, cType)
-    sConcat[1]=HealBot_Action_luVars["CurrentModKey"]
-    sConcat[2]=click
-    sConcat[3]=HealBot_Config.CurrentSpec
-    return HealBot_Action_GetSpell(cType, HealBot_Action_Concat(3))
+    return HealBot_Action_GetSpell(cType, HealBot_Action_GetComboSpec(HealBot_Action_luVars["CurrentModKey"], click))
+end
+
+function HealBot_Action_IconSpellPattern(click)
+    return HealBot_Action_GetSpell("ICON", HealBot_Action_GetComboSpec(HealBot_Action_luVars["CurrentModKey"], click))
 end
 
 local vAttribSpellName=""
@@ -3135,7 +3191,6 @@ function HealBot_Action_AttribSpellPattern(HB_combo_prefix)
     else
         return false, false, false, false, false 
     end
-    --HealBot_setCall("HealBot_Action_AttribSpellPattern")
 end
 
 function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
@@ -3149,7 +3204,6 @@ function HealBot_Action_AttribEnemySpellPattern(HB_combo_prefix)
     else
         return false, false, false, false, false 
     end
-    --HealBot_setCall("HealBot_Action_AttribEnemySpellPattern")
 end
 
 function HealBot_Action_AttribEmergSpellPattern(HB_combo_prefix)
@@ -3163,7 +3217,6 @@ function HealBot_Action_AttribEmergSpellPattern(HB_combo_prefix)
     else
         return false, false, false, false, false 
     end
-    --HealBot_setCall("HealBot_Action_AttribEnemySpellPattern")
 end
 
 function HealBot_Action_AttribIconSpellPattern(HB_combo_prefix)
@@ -3173,7 +3226,6 @@ function HealBot_Action_AttribIconSpellPattern(HB_combo_prefix)
     else
         return false, false, false, false, false
     end
-    --HealBot_setCall("HealBot_Action_AttribEnemySpellPattern")
 end
 
 local hbCustomName={}
@@ -3832,7 +3884,7 @@ function HealBot_Action_SetButtonAttrib(button,bbutton,bkey,cType,j,unit)
     if strlen(bkey)>1 then
         HB_prefix = strlower(bkey).."-"
     end
-    local HB_combo_prefix = bkey..bbutton..HealBot_Config.CurrentSpec;
+    local HB_combo_prefix = HealBot_Action_GetComboSpec(bkey, bbutton)
     local sName,sTar,sTrin1,sTrin2,AvoidBC=false,false,false,false,false
     HealBot_Action_UpdateAttribsMinReset(button, HB_prefix, cType, j, false)
     if cType=="Emerg" then
@@ -3898,7 +3950,7 @@ function HealBot_Action_SetAllButtonAttribs(button,cType,prep)
                         HB_button="Button"..x
                     end
                     if HealBot_Action_SetButtonAttrib(button,HB_button,HealBot_Keys_List[y],cType,x,button.unit) then
-                        hasSpells=true 
+                        hasSpells=true
                     end
                 elseif attribSet==2 then
                     hasSpells=true
@@ -4554,7 +4606,7 @@ function HealBot_Action_CacheButton()
 end
 
 function HealBot_Action_InitCacheButtons()
-    for x=1,5 do
+    for x=1,3 do
         HealBot_Action_CacheButton()
         HealBot_Action_DeleteMarkedButton()
     end
@@ -4574,7 +4626,7 @@ function HealBot_Action_DoProcCacheButtons()
     if not InCombatLockdown() then
         HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if HealBot_Action_DeleteMarkedButton() or HealBot_Action_CacheButton() then
-            C_Timer.After(0.05, HealBot_Action_DoProcCacheButtons)
+            C_Timer.After(0.1, HealBot_Action_DoProcCacheButtons)
         else
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end

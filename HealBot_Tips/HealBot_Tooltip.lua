@@ -884,11 +884,11 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame]["DSCALE"],1,1,0,1)
     end
 
-    local spellLeft = HealBot_Action_SpellPattern("Left", "ICON");
-    local spellMiddle = HealBot_Action_SpellPattern("Middle", "ICON");
-    local spellRight = HealBot_Action_SpellPattern("Right", "ICON");
-    local spellButton4 = HealBot_Action_SpellPattern("Button4", "ICON");
-    local spellButton5 = HealBot_Action_SpellPattern("Button5", "ICON");
+    local spellLeft = HealBot_Action_IconSpellPattern("Left");
+    local spellMiddle = HealBot_Action_IconSpellPattern("Middle");
+    local spellRight = HealBot_Action_IconSpellPattern("Right");
+    local spellButton4 = HealBot_Action_IconSpellPattern("Button4");
+    local spellButton5 = HealBot_Action_IconSpellPattern("Button5");
 
     if aType=="Auto Debuff" then
         HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_BUTTONANY,1,1,1,1,HEALBOT_OPTIONS_DEBUFFAUTOTOCUSTOM,1,1,0,1)

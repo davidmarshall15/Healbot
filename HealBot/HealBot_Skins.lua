@@ -346,26 +346,26 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]>1 then
                 auxTmp=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["DEPTH"]+Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["OFFSET"]
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]<3 or Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]>4 then
-                    if auxTmp>0 then
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==1 or
-                           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==5 or
-                           Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==6 then
-                            auxOffsetBelow=auxOffsetBelow+auxTmp
-                        end
-                        auxHeight=auxHeight+auxTmp
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==1 or
+                       Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==5 or
+                       Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==6 then
+                        auxOffsetBelow=auxOffsetBelow+auxTmp
                     end
+                    auxHeight=auxHeight+auxTmp
                 else
-                    if auxTmp>0 then
-                        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==3 then
-                            auxOffsetLeft=auxOffsetLeft+auxTmp
-                        else
-                            auxOffsetRight=auxOffsetRight+auxTmp
-                        end
-                        auxWidth=auxWidth+auxTmp
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["ANCHOR"]==3 then
+                        auxOffsetLeft=auxOffsetLeft+auxTmp
+                    else
+                        auxOffsetRight=auxOffsetRight+auxTmp
                     end
+                    auxWidth=auxWidth+auxTmp
                 end
             end
         end
+        if auxHeight<0 then auxHeight=0 end
+        if auxWidth<0 then auxWidth=0 end
+        if auxOffsetBelow<0 then auxOffsetBelow=0 end
+        if auxOffsetRight<0 then auxOffsetRight=0 end
         auxOffsetBelow=ceil(auxOffsetBelow*frameScale)
         auxOffsetLeft=ceil(auxOffsetLeft*frameScale)
         auxOffsetRight=ceil(auxOffsetRight*frameScale)

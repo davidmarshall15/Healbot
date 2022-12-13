@@ -72,9 +72,6 @@
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="RIGHT" x="0" y="1"/>
 					</Anchors>
-					<Scripts>
-						<OnLoad function="UICheckButtonFontString_SetParentKeyAlias"/>
-					</Scripts>
 				</FontString>
 			</Layer>
 		</Layers>
@@ -4027,7 +4024,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 218)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTCMDS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>
@@ -4210,7 +4207,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 218)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTCMDS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>
@@ -4341,7 +4338,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 218)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTCMDS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>
@@ -4472,7 +4469,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 218)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTCMDS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>
@@ -4603,7 +4600,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 218)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTCMDS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTCMDS",false)</OnLeave>
                     </Scripts>

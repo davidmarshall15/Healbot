@@ -2647,7 +2647,7 @@ function HealBot_Aura_InitData()
                 [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
                 [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "x")] = HBC_SP_ID,
             }
-            if HealBot_Data["PLEVEL"]>70 and HealBot_Data["PLEVEL"]<80 then
+            if HealBot_Data["PLEVEL"]<80 then
                 HealBot_BuffNameTypes[(GetSpellInfo(HBC_FEL_INTELLIGENCE) or "Fel Intelligence")] = HBC_SPIRIT_ID
             end
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
