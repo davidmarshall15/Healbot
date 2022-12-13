@@ -2469,9 +2469,9 @@ end
 
 function HealBot_HealsInAmountV1(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        --hiuHealAmount=hiuHealAmount+(UnitGetIncomingHeals(button.unit) or 0)
+        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuHealAmount=hiuHealAmount+(UnitGetIncomingHeals(button.unit) or 0)
     else
         hiuHealAmount=0
     end
@@ -3024,6 +3024,7 @@ function HealBot_Update_Skins()
     if not HealBot_Config.SpellsUpdatedToV10 then  -- When removing this check, also remove from HealBot_Action_GetComboWithSpec
         if not HealBot_Config_Spells.EnabledKeyCombo["New"] then
             HealBot_Share_ExportSpells()
+            HealBot_Config.SpellsUpdatedToV10=true
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EnabledKeyCombo,20)
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EnemyKeyCombo,20)
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EmergKeyCombo,5)
@@ -3039,7 +3040,6 @@ function HealBot_Update_Skins()
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EnabledAvoidBlueCursor,20)
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EnemyAvoidBlueCursor,20)
             HealBot_UpdateSpellsOnVersionChange(HealBot_Config_Spells.EmergAvoidBlueCursor,5)
-            HealBot_Config.SpellsUpdatedToV10=true
             HealBot_Share_LoadSpells(HealBot_Options_ShareSpellsExternalEditBox:GetText())
             HealBot_Options_ShareSpellsExternalEditBox:SetText("")
             StaticPopupDialogs["SpellsUpdatedToV10"] = {

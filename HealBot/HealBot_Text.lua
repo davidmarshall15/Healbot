@@ -619,8 +619,12 @@ function HealBot_Text_shortHealTxt(amount, hbCurFrame)
 end
 
 local vHealthTextConcatIndex,vHealthTextConcatResult,vSetHealthTextStrLen,vSetHealthTextBtnLen=0,"",0,0
-local vHealthTextTotal,sepHealTxt,absorbinTxt,ahtNumSuffix,ahitNumSuffix,ignoreInHeals=0,0,0,"","",false
+local vHealthTextTotal,sepHealTxt,absorbinTxt,ahtNumSuffix,ahitNumSuffix,ignoreInHeals,finalHealthTxt=0,0,0,"","",false,""
 function HealBot_Text_ConcatHealthText(button)
+    tHealthConcat[1]=button.text.health
+    tHealthConcat[2]=button.text.inheal
+    tHealthConcat[3]=button.text.overheal
+    finalHealthTxt=HealBot_Text_HealthConcat(3)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HMAXCHARS"]>0 then
         vSetHealthTextStrLen=hbStringLen(hbutf8sub(button.text.health, "%s+", ""))
         if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
@@ -629,13 +633,10 @@ function HealBot_Text_ConcatHealthText(button)
             vSetHealthTextBtnLen=hbBarHealthTextLen[button.frame]
         end
         if (vSetHealthTextStrLen+button.text.inheallen+button.text.overheallen)<vSetHealthTextBtnLen then
-            tHealthConcat[1]=button.text.health
-            tHealthConcat[2]=button.text.inheal
-            tHealthConcat[3]=button.text.overheal
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]==4 then
-                button.text.namehealth=HealBot_Text_HealthConcat(3)
+                button.text.namehealth=finalHealthTxt
             else
-                button.text.healthcomplete=HealBot_Text_HealthConcat(3)
+                button.text.healthcomplete=finalHealthTxt
             end
         elseif (vSetHealthTextStrLen+button.text.inheallen)<vSetHealthTextBtnLen then
             tHealthConcat[1]=button.text.health
@@ -663,9 +664,9 @@ function HealBot_Text_ConcatHealthText(button)
             button.text.healthcomplete=button.text.health
         end
     elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]==4 then
-        button.text.namehealth=button.text.health
+        button.text.namehealth=finalHealthTxt
     else
-        button.text.healthcomplete=button.text.health
+        button.text.healthcomplete=finalHealthTxt
     end
     
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]==4 then
