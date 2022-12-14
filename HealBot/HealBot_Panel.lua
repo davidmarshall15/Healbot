@@ -1227,7 +1227,7 @@ function HealBot_Panel_InitOptBars()
         bar:UnregisterAllEvents()
         vSetupBarsOptionsFrame.frame=0
         bar.txt = _G[bar:GetName().."_text"];
-        bar.txt:SetFont("Fonts\\FRIZQT__.TTF", 12)
+        bar.txt:SetFont(HealBot_Default_Fonts[15].file, 12)
         bar.txt:SetPoint("CENTER",0,-2)
         bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
         bar.txt:SetText(HEALBOT_ACTION_OPTIONS);

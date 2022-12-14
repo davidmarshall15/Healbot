@@ -2469,9 +2469,9 @@ end
 
 function HealBot_HealsInAmountV1(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        hiuHealAmount=hiuHealAmount+(UnitGetIncomingHeals(button.unit) or 0)
+        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        --hiuHealAmount=hiuHealAmount+(UnitGetIncomingHeals(button.unit) or 0)
     else
         hiuHealAmount=0
     end
@@ -2836,10 +2836,10 @@ function HealBot_setOptions_Timer(value)
     if HealBot_luVars["WarnOutOfDatePlugin"]<TimeNow then
         HealBot_luVars["WarnOutOfDatePlugin"]=TimeNow+1
         HealBot_AddChat(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. "WARNING: Out of date plugin requires update.")
-        C_Timer.After(0.7, function() HealBot_runOptions_Timer(value) end)
-        HealBot_luVars["IncOutOfDateDelay"]=0.7
+        C_Timer.After(0.5, function() HealBot_runOptions_Timer(value) end)
+        HealBot_luVars["IncOutOfDateDelay"]=0.5
     else
-        HealBot_luVars["IncOutOfDateDelay"]=HealBot_luVars["IncOutOfDateDelay"]+0.05
+        HealBot_luVars["IncOutOfDateDelay"]=HealBot_luVars["IncOutOfDateDelay"]+0.25
         C_Timer.After(HealBot_luVars["IncOutOfDateDelay"], function() HealBot_runOptions_Timer(value) end)
     end
 end
@@ -2903,7 +2903,8 @@ function HealBot_Update_Skins()
         HealBot_Options_SetDefaults(true);
     else
         HealBot_AddDebug("In HealBot_Update_Skins version="..HealBot_Globals.LastVersionSkinUpdate)
-        if HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
+        if not HealBot_luVars["UpdateMsg"] then
+            HealBot_luVars["UpdateMsg"]=true
             HealBot_Globals.OneTimeMsg["VERSION"]=false
         end
         for x in pairs (Healbot_Config_Skins.Skins) do

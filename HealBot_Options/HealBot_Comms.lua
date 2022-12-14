@@ -130,25 +130,27 @@ function HealBot_Comms_CheckVer(userName, version)
         local tNewVer=nil
         hbVersionChecked[userName]=true
         local tMajor, tMinor, tPatch, tHealbot = string.split(".", version)
-        if tonumber(tMajor)>tonumber(hbMajor) then 
-            tNewVer=true
-        elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)>tonumber(hbMinor) then 
-            tNewVer=true
-        elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)>tonumber(hbPatch) then 
-            tNewVer=true
-        elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)==tonumber(hbPatch) and tonumber(tHealbot)>tonumber(hbHealbot) then 
-            tNewVer=true
-        end
-        if tNewVer then
-            hbMajor=tMajor
-            hbMinor=tMinor
-            hbPatch=tPatch
-            hbHealbot=tHealbot
-            if not HealBot_Globals.OneTimeMsg["VERSION"] then
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION1)
-                HealBot_Globals.OneTimeMsg["VERSION"]=true
+        if tonumber(tMajor)==HEALBOT_GAME_VERSION then
+            if tonumber(tMajor)>tonumber(hbMajor) then 
+                tNewVer=true
+            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)>tonumber(hbMinor) then 
+                tNewVer=true
+            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)>tonumber(hbPatch) then 
+                tNewVer=true
+            elseif tonumber(tMajor)==tonumber(hbMajor) and tonumber(tMinor)==tonumber(hbMinor) and tonumber(tPatch)==tonumber(hbPatch) and tonumber(tHealbot)>tonumber(hbHealbot) then 
+                tNewVer=true
             end
-            HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
+            if tNewVer then
+                hbMajor=tMajor
+                hbMinor=tMinor
+                hbPatch=tPatch
+                hbHealbot=tHealbot
+                if not HealBot_Globals.OneTimeMsg["VERSION"] then
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION1)
+                    HealBot_Globals.OneTimeMsg["VERSION"]=true
+                end
+                HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot
+            end
         end
     end
 end
