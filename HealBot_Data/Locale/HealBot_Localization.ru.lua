@@ -28,10 +28,10 @@ function HealBot_Lang_ruRU()
     HEALBOT_DEMONHUNTER                     = "Охотник на демонов";
     HEALBOT_MONK                            = "Монах";
 
-    HEALBOT_DISEASE                         = "Болезнь";
-    HEALBOT_MAGIC                           = "Магия";
+    HEALBOT_DISEASE                         = "болезни";
+    HEALBOT_MAGIC                           = "Магии";
     HEALBOT_CURSE                           = "Проклятие";
-    HEALBOT_POISON                          = "Яд";
+    HEALBOT_POISON                          = "Яда";
 
     HB_TOOLTIP_OFFLINE                      = "Оффлайн";
 

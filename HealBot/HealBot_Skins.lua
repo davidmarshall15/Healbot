@@ -493,6 +493,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.auxreset=true
             end
 
+            b:SetHeight(bheight); 
+            b:SetWidth(bWidth)
             b.gref["Bar"]:SetHeight(bheight);
             b.gref["Bar"]:SetWidth(bWidth)
             b.gref["Top"]:SetHeight(bheight)
@@ -506,6 +508,11 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["InHeal"]:SetWidth(bWidth)
             b.gref["Absorb"]:SetHeight(bheight);
             b.gref["Absorb"]:SetWidth(bWidth)
+            
+            b.gref["InHeal"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
+            b.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
+            b.gref["Absorb"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
+            b.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
 
             if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["OFIX"]==1 then
                 b.gref["Bar"]:SetOrientation("HORIZONTAL");
@@ -518,26 +525,6 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 b.gref["Back"]:SetOrientation("VERTICAL");
                 b.gref["Absorb"]:SetOrientation("VERTICAL");
             end
-
-            tBarsConcat[1]="f"
-            tBarsConcat[2]=b.frame
-            tBarsConcat[3]="_HealBot_Action"
-            local gaf = _G[HealBot_Skins_Concat(3)]
-            b.gref["Bar"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
-            b.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
-            b.gref["Bar"]:ClearAllPoints()
-            b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",auxOffsetLeft+bOutline+lIconWidth,auxOffsetBelow+bOutline+bIconHeight)
-            if b.gref["BackBorder"].size~=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale) then
-                b.gref["BackBorder"]:SetBackdrop({
-                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                            edgeSize = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale),
-                                            })
-                b.gref["BackBorder"]:SetPoint("TOPLEFT", b.gref["Back"], "TOPLEFT",0,0)
-                b.gref["BackBorder"]:SetPoint("BOTTOMRIGHT", b.gref["Back"], "BOTTOMRIGHT",0,0)
-                b.gref["BackBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
-                b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
-            end
-            HealBot_Action_UpdateBackgroundBorder(button)
             
             erButton=HealBot_Emerg_Button[b.id]
             if b.frame<10 and Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["USE"] then
@@ -564,13 +551,26 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 erButton.bar:ClearAllPoints()
                 erButton.bar:SetStatusBarColor(0,0,0,0)
             end
-            
-            b.gref["InHeal"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
-            b.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
-            b.gref["Absorb"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
-            b.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
-            b:SetHeight(bheight); 
-            b:SetWidth(bWidth)
+
+            tBarsConcat[1]="f"
+            tBarsConcat[2]=b.frame
+            tBarsConcat[3]="_HealBot_Action"
+            local gaf = _G[HealBot_Skins_Concat(3)]
+            b.gref["Bar"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][b.frame]["TEXTURE"]));
+            b.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
+            b.gref["Bar"]:ClearAllPoints()
+            b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",auxOffsetLeft+bOutline+lIconWidth,auxOffsetBelow+bOutline+bIconHeight)
+            if b.gref["BackBorder"].size~=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale) then
+                b.gref["BackBorder"]:SetBackdrop({
+                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                            edgeSize = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale),
+                                            })
+                b.gref["BackBorder"]:SetPoint("TOPLEFT", b.gref["Back"], "TOPLEFT",0,0)
+                b.gref["BackBorder"]:SetPoint("BOTTOMRIGHT", b.gref["Back"], "BOTTOMRIGHT",0,0)
+                b.gref["BackBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
+                b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
+            end
+            HealBot_Action_UpdateBackgroundBorder(button)
 
             b.skinreset=false
         end

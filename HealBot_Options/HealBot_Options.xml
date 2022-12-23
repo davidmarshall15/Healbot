@@ -20109,272 +20109,11 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List1" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_DebuffCustomShare_Text" text="HEALBOT_OPTIONS_CDEBUFFS_DISCORD" inherits="GameFontNormal">
                       <Anchors>
-                        <Anchor point="TOPLEFT">
+                        <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="20" y="-290" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List2" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List1" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List3" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List2" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List4" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List3" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List5" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List4" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List6" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List5" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List7" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List6" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List8" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List7" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List9" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List8" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List10" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List9" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List11" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List10" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List12" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List11" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List13" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List12" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List14" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List13" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List15" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List14" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List16" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="300" y="-290" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List17" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List16" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List18" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List17" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List19" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List18" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List20" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List19" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List21" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List20" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List22" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List21" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List23" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List22" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List24" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List23" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List25" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List24" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List26" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List25" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List27" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List26" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List28" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List27" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List29" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List28" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomDebuff_List30" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomDebuff_List29" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
+                            <AbsDimension x="0" y="-18" />
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -20399,7 +20138,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-30" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20426,7 +20165,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="10" y="-140" />
+                          <AbsDimension x="10" y="-125" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20436,6 +20175,36 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDEBUFF",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <EditBox name="HealBot_Options_CDebuffTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="180" y="20"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_CDebuffTagTxt" text="HEALBOT_WORD_TAG" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_CDebuffTag" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="-14" y="0" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOP" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="TOP">
+                        <Offset>
+                          <AbsDimension x="17" y="-36" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_CDebuffTag_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMTAG",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMTAG",false)</OnLeave>
+                    </Scripts>
+                  </EditBox>
                   <Frame name="HealBot_Options_CDCIDMethod" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -20542,12 +20311,12 @@
                   </Button>
                   <Button name="HealBot_Options_ResetCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
                     <Size>
-                      <AbsDimension x="70" y="22"/>
+                      <AbsDimension x="80" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="15" y="-8"/>
+                          <AbsDimension x="12" y="-4"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20555,23 +20324,6 @@
                       <OnClick>HealBot_Options_ResetCDebuff()</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMRESET",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMRESET",false)</OnLeave>
-                    </Scripts>
-                  </Button>
-                  <Button name="HealBot_Options_DeleteCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
-                    <Size>
-                      <AbsDimension x="70" y="22"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_ResetCDebuffBtn" relativePoint="RIGHT">
-                        <Offset>
-                          <AbsDimension x="10" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_DeleteCDebuffBtn_OnClick()</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <EditBox name="HealBot_Options_NewCDebuff" inherits="HealBot_Options_EditBoxTemplate">
@@ -20594,7 +20346,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_CDebuffCat" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-35" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20605,6 +20357,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMNEWNAME",false)</OnLeave>
                     </Scripts>
                   </EditBox>
+
                   <Button name="HealBot_Options_NewCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
                     <Size>
                       <AbsDimension x="120" y="22"/>
@@ -20627,9 +20380,9 @@
                       <Layer level="BACKGROUND">
                         <FontString name="HealBot_Options_EnableDisableCDText" text="HEALBOT_WORDS_NONE" inherits="GameFontNormal">
                           <Anchors>
-                            <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableCDBtn" relativePoint="RIGHT">
+                            <Anchor point="TOP" relativeTo="HealBot_Options_EnableDisableCDBtn" relativePoint="BOTTOM">
                               <Offset>
-                                <AbsDimension x="15" y="0"/>
+                                <AbsDimension x="0" y="-4"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -20637,10 +20390,10 @@
                       </Layer>
                     </Layers>
                     <Size>
-                      <AbsDimension x="70" y="22"/>
+                      <AbsDimension x="80" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_DeleteCDebuffBtn" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_ResetCDebuffBtn" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="10" y="0"/>
                         </Offset>
@@ -20650,6 +20403,23 @@
                       <OnClick>HealBot_Options_EnableDisableCDBtn_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMENDIS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMENDIS",false)</OnLeave>
+                    </Scripts>
+                  </Button>
+                  <Button name="HealBot_Options_DeleteCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
+                    <Size>
+                      <AbsDimension x="80" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableCDBtn" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="10" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_DeleteCDebuffBtn_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMDELETE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_CDCPriorityC" inherits="UIDropDownMenuTemplate">
@@ -20669,7 +20439,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-70"/>
+                          <AbsDimension x="40" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20699,7 +20469,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="52" y="-73"/>
+                          <AbsDimension x="52" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20711,7 +20481,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="355" y="-73"/>
+                          <AbsDimension x="355" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20728,7 +20498,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="355" y="-73"/>
+                          <AbsDimension x="355" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20785,7 +20555,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="190" y="-70"/>
+                          <AbsDimension x="190" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20815,11 +20585,38 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-72"/>
+                          <AbsDimension x="205" y="-62"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                   </Button>
+                  <Frame name="HealBot_Options_DebuffSort" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_DebuffSortTxt" text="HEALBOT_OPTIONS_TAB_SORT" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_DebuffSort" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="8" y="3" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-188" y="73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMSORT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMSORT",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <Button name="HealBot_Options_PagePrevCDebuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PREV">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -20867,6 +20664,33 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Frame name="HealBot_Options_DebuffFilter" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_DebuffFilterTxt" text="HEALBOT_PLUGIN_FILTER" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_DebuffFilter" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="8" y="3" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="187" y="73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMFILTER",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMFILTER",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <CheckButton name="HealBot_Options_CDCAllDisease" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="BOTTOM">
@@ -23420,272 +23244,11 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List1" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_BuffCustomShare_Text" text="HEALBOT_OPTIONS_CBUFFS_DISCORD" inherits="GameFontNormal">
                       <Anchors>
-                        <Anchor point="TOPLEFT">
+                        <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="20" y="-290" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List2" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List1" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List3" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List2" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List4" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List3" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List5" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List4" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List6" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List5" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List7" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List6" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List8" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List7" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List9" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List8" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List10" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List9" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List11" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List10" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List12" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List11" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List13" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List12" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List14" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List13" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List15" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List14" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List16" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="300" y="-290" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List17" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List16" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List18" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List17" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List19" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List18" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List20" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List19" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List21" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List20" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List22" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List21" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List23" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List22" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List24" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List23" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List25" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List24" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List26" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List25" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List27" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List26" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List28" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List27" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List29" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List28" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CustomBuff_List30" text="HEALBOT_CUSTOM_CAT_CUSTOM" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CustomBuff_List29" relativePoint="BOTTOMLEFT">
-                          <Offset>
-                            <AbsDimension x="0" y="-2"/>
+                            <AbsDimension x="0" y="-18" />
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -23710,7 +23273,7 @@
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-30" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23740,7 +23303,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_FilterHoTctl" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-40" />
+                          <AbsDimension x="0" y="-35" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23751,6 +23314,7 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMNEWNAME",false)</OnLeave>
                     </Scripts>
                   </EditBox>
+
                   <Button name="HealBot_Options_NewBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SAVESKIN">
                     <Size>
                       <AbsDimension x="120" y="22"/>
@@ -23785,7 +23349,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="10" y="-140" />
+                          <AbsDimension x="10" y="-125" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23795,6 +23359,36 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBUFF",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <EditBox name="HealBot_Options_BuffHoTTag" inherits="HealBot_Options_EditBoxTemplate">
+                    <Size>
+                      <AbsDimension x="180" y="20"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffTag" text="HEALBOT_WORD_TAG" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_BuffHoTTag" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="-14" y="0" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOP" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="TOP">
+                        <Offset>
+                          <AbsDimension x="17" y="-36" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnTextChanged>HealBot_Options_HoTBuffTag_OnTextChanged(self)</OnTextChanged>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMTAG",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMTAG",false)</OnLeave>
+                    </Scripts>
+                  </EditBox>
                   <Frame name="HealBot_Options_Class_HoTctlIDMethod" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -23901,12 +23495,12 @@
                   </Button>
                   <Button name="HealBot_Options_ResetBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
                     <Size>
-                      <AbsDimension x="70" y="22"/>
+                      <AbsDimension x="80" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="15" y="-8"/>
+                          <AbsDimension x="12" y="-4"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -23916,31 +23510,14 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMRESET",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
-                    <Size>
-                      <AbsDimension x="70" y="22"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_ResetBuffBtn" relativePoint="RIGHT">
-                        <Offset>
-                          <AbsDimension x="15" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick()</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",false)</OnLeave>
-                    </Scripts>
-                  </Button>
                   <Button name="HealBot_Options_EnableDisableBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_ENABLE">
                     <Layers>
                       <Layer level="BACKGROUND">
                         <FontString name="HealBot_Options_EnableDisableBuffText" text="HEALBOT_WORDS_NONE" inherits="GameFontNormal">
                           <Anchors>
-                            <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableBuffBtn" relativePoint="RIGHT">
+                            <Anchor point="TOP" relativeTo="HealBot_Options_EnableDisableBuffBtn" relativePoint="BOTTOM">
                               <Offset>
-                                <AbsDimension x="15" y="0"/>
+                                <AbsDimension x="0" y="-4"/>
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -23948,10 +23525,10 @@
                       </Layer>
                     </Layers>
                     <Size>
-                      <AbsDimension x="70" y="22"/>
+                      <AbsDimension x="80" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="LEFT" relativeTo="HealBot_Options_DeleteBuffHoTBtn" relativePoint="RIGHT">
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_ResetBuffBtn" relativePoint="RIGHT">
                         <Offset>
                           <AbsDimension x="10" y="0"/>
                         </Offset>
@@ -23961,6 +23538,23 @@
                       <OnClick>HealBot_Options_EnableDisableBuffBtn_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",false)</OnLeave>
+                    </Scripts>
+                  </Button>
+                  <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
+                    <Size>
+                      <AbsDimension x="80" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_EnableDisableBuffBtn" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="10" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_DeleteBuffHoTBtn_OnClick()</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMDELETE",false)</OnLeave>
                     </Scripts>
                   </Button>
                   <Frame name="HealBot_Options_BuffPriorityC" inherits="UIDropDownMenuTemplate">
@@ -23980,7 +23574,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-70"/>
+                          <AbsDimension x="40" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24010,7 +23604,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="52" y="-73"/>
+                          <AbsDimension x="52" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24022,7 +23616,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="355" y="-73"/>
+                          <AbsDimension x="355" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24039,7 +23633,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="355" y="-73"/>
+                          <AbsDimension x="355" y="-63"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24096,7 +23690,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="190" y="-70"/>
+                          <AbsDimension x="190" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24126,11 +23720,38 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="205" y="-72"/>
+                          <AbsDimension x="205" y="-62"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                   </Button>
+                  <Frame name="HealBot_Options_BuffSort" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffSortTxt" text="HEALBOT_OPTIONS_TAB_SORT" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_BuffSort" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="8" y="3" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="-188" y="73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMSORT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMSORT",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <Button name="HealBot_Options_PagePrevCBuffBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PREV">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -24151,7 +23772,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-85" y="70"/>
+                          <AbsDimension x="-85" y="80"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24168,7 +23789,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="40" y="70"/>
+                          <AbsDimension x="40" y="80"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24178,6 +23799,33 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPAGE",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Frame name="HealBot_Options_BuffFilter" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_BuffFilterTxt" text="HEALBOT_PLUGIN_FILTER" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_BuffFilter" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="8" y="3" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="187" y="73"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMFILTER",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMFILTER",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <Frame name="HealBot_Options_BuffAuto" inherits="UIDropDownMenuTemplate">
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -25172,6 +24820,15 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <FontString name="HealBot_InOut_ShareSkins_Text" text="HEALBOT_OPTIONS_SKINS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="14" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
                   </Layer>
                 </Layers>
                 <Frames>
@@ -25371,6 +25028,15 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <FontString name="HealBot_InOut_ShareCDbuffs_Text" text="HEALBOT_OPTIONS_CDEBUFFS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="14" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
                   </Layer>
                 </Layers>
                 <Frames>
@@ -25513,6 +25179,15 @@
                         <Anchor point="BOTTOM">
                           <Offset>
                             <AbsDimension x="0" y="20"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_InOut_ShareBuffs_Text" text="HEALBOT_OPTIONS_CBUFFS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="14" />
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -25663,6 +25338,15 @@
                         </Anchor>
                       </Anchors>
                     </FontString>
+                    <FontString name="HealBot_InOut_ShareSpells_Text" text="HEALBOT_OPTIONS_SPELLS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="14" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
                   </Layer>
                 </Layers>
                 <Frames>
@@ -25805,6 +25489,15 @@
                         <Anchor point="BOTTOM">
                           <Offset>
                             <AbsDimension x="0" y="20"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                    <FontString name="HealBot_InOut_SharePresetCols_Text" text="HEALBOT_OPTIONS_PRECOLS_DISCORD" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="BOTTOM">
+                          <Offset>
+                            <AbsDimension x="0" y="14" />
                           </Offset>
                         </Anchor>
                       </Anchors>

@@ -439,6 +439,11 @@ function HealBot_Share_ExportBuffs(lData)
                 ssStr=ssStr..",,,"
             end
             ssStr=ssStr..(HealBot_Globals.CustomBuffIDMethod[bId] or 3).."," 
+            if HealBot_Globals.CustomBuffTag[bId] then
+                ssStr=ssStr..HealBot_Globals.CustomBuffTag[bId]..","
+            else
+                ssStr=ssStr..","
+            end
             if HealBot_Globals.IgnoreCustomBuff[bId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomBuff[bId]) do
                     ssStr=ssStr..(instName)..","
@@ -487,7 +492,7 @@ function HealBot_Share_LoadBuffs(sIn)
     end
     for e=2,#ssTab do 
         local _,c,d = string.split("~", ssTab[e])
-        local bId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
+        local bId,prio,filter,show,r,g,b,idMethod,tag,i1,i2,i3,i4=string.split(",", d)
         if not c or not bId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
         else
@@ -511,12 +516,9 @@ function HealBot_Share_LoadBuffs(sIn)
                 elseif show=="false" then 
                     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
                     if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=1 end
-                elseif type(show)=="number" then
-                    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=show
-                    if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=show end
                 else
-                    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
-                    if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=1 end
+                    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=tonumber(show) or 1
+                    if bName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=tonumber(show) or 1 end
                 end
                 if r then
                     HealBot_Globals.CustomBuffBarColour[bId]={}
@@ -529,6 +531,7 @@ function HealBot_Share_LoadBuffs(sIn)
                 if idMethod>0 and idMethod<3 then
                     HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
                 end
+                HealBot_Globals.CustomBuffTag[bId]=tag
                 if string.len(i1 or "")>0 then 
                     if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
                     HealBot_Globals.IgnoreCustomBuff[bId][i1]=true 
@@ -549,7 +552,7 @@ function HealBot_Share_LoadBuffs(sIn)
         end
     end
     HealBot_Timers_InitExtraOptions()
-    HealBot_Options_setCustomBuffList()
+    HealBot_Timers_Set("AURA","CustomBuffListPrep")
 end
 
 function HealBot_Share_ImportBuffs_OnClick()
@@ -577,7 +580,12 @@ function HealBot_Share_ExportDebuffs(lData)
             else
                 ssStr=ssStr..",,,"
             end
-            ssStr=ssStr..(HealBot_Globals.CustomDebuffIDMethod[dId] or 3).."," 
+            ssStr=ssStr..(HealBot_Globals.CustomDebuffIDMethod[dId] or 3)..","
+            if HealBot_Globals.CDCTag[dId] then
+                ssStr=ssStr..HealBot_Globals.CDCTag[dId]..","
+            else
+                ssStr=ssStr..","
+            end
             if HealBot_Globals.IgnoreCustomDebuff[dId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomDebuff[dId]) do
                     ssStr=ssStr..(instName)..","
@@ -627,7 +635,7 @@ function HealBot_Share_LoadDebuffs(sIn)
     end
     for e=2,#ssTab do 
         local _,c,d = string.split("~", ssTab[e])
-        local dId,prio,filter,show,r,g,b,idMethod,i1,i2,i3,i4=string.split(",", d)
+        local dId,prio,filter,show,r,g,b,idMethod,tag,i1,i2,i3,i4=string.split(",", d)
         if not c or not dId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
         else
@@ -648,10 +656,8 @@ function HealBot_Share_LoadDebuffs(sIn)
                     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
                 elseif show=="false" then
                     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
-                elseif type(show)=="number" then
-                    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=show
                 else
-                    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
+                    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=tonumber(show) or 1
                 end
                 if r then
                     HealBot_Globals.CDCBarColour[dId]={}
@@ -664,6 +670,7 @@ function HealBot_Share_LoadDebuffs(sIn)
                 if idMethod>0 and idMethod<3 then
                     HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
                 end
+                HealBot_Globals.CDCTag[dId]=tag
                 if string.len(i1 or "")>0 then 
                     if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
                     HealBot_Globals.IgnoreCustomDebuff[dId][i1]=true 

@@ -32,6 +32,21 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
     end
 end
 
+local function EnumerateTooltipLines_helper(pattern, ...)
+    local region=nil,nil
+    for i = 1, select("#", ...) do
+        region = select(i, ...)
+        if region and region:GetObjectType() == "FontString" then
+            if region:GetText() then
+                if string.find(region:GetText(), pattern) then
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local cRank=false
     if ( not id ) then return false; end
@@ -56,16 +71,22 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             local _, rank = GetSpellBookItemName(spellBookId, BOOKTYPE_SPELL)
             cRank = rank
         elseif spellName==HEALBOT_PURIFY and HealBot_Data["PCLASSTRIM"]=="PRIE" then
-            ttText = getglobal("HealBot_ScanTooltipTextLeft4")
-            if (ttText:GetText()) then
-                local line = ttText:GetText()
-                if line then 
-                    if string.find(line,HEALBOT_DISEASE) then
-                        HealBot_Options_setLuVars("HEALBOT_IMPROVED_PURIFY", true)
-                    else
-                        HealBot_Options_setLuVars("HEALBOT_IMPROVED_PURIFY", false)
-                    end
-                end
+            if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("PriestImprovedPurify", true)
+            else
+                HealBot_Options_setLuVars("PriestImprovedPurify", false)
+            end
+        elseif spellName==HEALBOT_CLEANSE and HealBot_Data["PCLASSTRIM"]=="PALA" then
+            if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
+            else
+                HealBot_Options_setLuVars("PaladinImprovedCleanse", false)
+            end
+        elseif spellName==HEALBOT_PURIFY_SPIRIT and HealBot_Data["PCLASSTRIM"]=="SHAM" then
+            if EnumerateTooltipLines_helper(HEALBOT_CURSE, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
+            else
+                HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", false)
             end
         end
     end

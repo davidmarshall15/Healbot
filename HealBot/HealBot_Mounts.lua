@@ -240,7 +240,6 @@ function HealBot_MountsPets_InitMount()
 
         if isUsable and isCollected and not HealBot_Globals.excludeMount[mount] then
             if HEALBOT_GAME_VERSION<4 then
-                --HealBot_AddDebug("mountType="..(mountType or "nil"),"Mount",true)
                 if not mountType then
                     if sID<25900 or sID==34896 or sID==43688 or sID==348459 or sID==46628 then
                         if sID<10000 then

@@ -690,7 +690,7 @@ function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
             break
         end
     end
-    HealBot_Timers_Set("AURA","CustomDebuffList")
+    HealBot_Timers_Set("AURA","CustomDebuffListPrep")
 end
 
 function HealBot_Aura_CacheDebuffIcon(button, id, spellId, index)

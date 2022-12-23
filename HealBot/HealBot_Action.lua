@@ -3028,7 +3028,6 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
     --HealBot_setCall("HealBot_Action_SetSpell")
 end
 
-HealBot_Action_luVars["LastLoadoutName"]="."
 HealBot_Action_luVars["LastLoadoutID"]=0
 HealBot_Action_luVars["defaultLoadoutID"]=0
 function HealBot_Action_GetLoadoutId()
@@ -3041,14 +3040,7 @@ function HealBot_Action_GetLoadoutId()
             if configInfo then
                 configId=configInfo.ID
                 local name=configInfo.name or ""
-                --if name~=HealBot_Action_luVars["LastLoadoutName"] then
-                    HealBot_AddDebug("Loadout name "..name, "Loadout", true)
-                    HealBot_Action_luVars["LastLoadoutName"]=name
-                --end
             end
-        else--if HealBot_Action_luVars["LastLoadoutName"]~="" then
-            HealBot_AddDebug("No Loadout name", "Loadout", true)
-            HealBot_Action_luVars["LastLoadoutName"]=""
         end
         if not configId or type(configId)~="number" then
             configId=C_ClassTalents.GetActiveConfigID()
@@ -3058,9 +3050,6 @@ function HealBot_Action_GetLoadoutId()
                 configId=HealBot_Action_luVars["defaultLoadoutID"]
             end
         end
-        --if HealBot_Action_luVars["LastLoadoutID"]~=configId then
-            HealBot_AddDebug("Loadout ID "..configId, "Loadout", true)
-        --end
         HealBot_Action_luVars["LastLoadoutID"]=configId or 0
         HealBot_Config.KnownLoadouts[HealBot_Action_luVars["LastLoadoutID"]]=true
     else
@@ -3845,7 +3834,7 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j,"macro")
             button:SetAttribute(HB_prefix.."macrotext"..j, mText)
-        elseif IsUsableItem(sName) then
+        elseif HealBot_IsKnownItem(sName) then
             button:SetAttribute(HB_prefix..buttonType..j, "item"..j);
             button:SetAttribute(HB_prefix.."type-item"..j, "item");
             button:SetAttribute(HB_prefix.."item-item"..j, sName);
@@ -3916,7 +3905,16 @@ function HealBot_Action_InitBinds(button)
 end
 
 function HealBot_Action_Binds(bNo)
-    hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "Button]] .. bNo .. [[");]]
+    --hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "Button]] .. bNo .. [[");]]
+    if bNo==1 then
+        hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "LeftButton");]]
+    elseif bNo==2 then
+        hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "MiddleButton");]]
+    elseif bNo==3 then
+        hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "RightButton");]]
+    else
+        hbBindTxt[bNo]=[[self:SetBindingClick(1, "]] .. HealBot_Options_retBindKey(HealBot_Config_Spells.Binds[bNo]) .. [[", self, "Button]] .. bNo .. [[");]]
+    end
 end
 
 function HealBot_Action_SetBinds(button, maxButton)
@@ -3966,7 +3964,13 @@ function HealBot_Action_SetAllButtonAttribs(button,cType,prep)
                     if maxBinds==0 then
                         HealBot_Action_InitBinds(button)
                     end
-                    HealBot_Action_Binds(x)
+                    if x==30 then
+                        HealBot_Action_Binds(2)
+                    elseif x==29 then
+                        HealBot_Action_Binds(3)
+                    else
+                        HealBot_Action_Binds(x)
+                    end
                     maxBinds=x
                 else
                     hbBindTxt[x]=""
@@ -4219,7 +4223,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
         end
         if hButton.status.markdel then
             hButton=HealBot_Action_CreateButton(frame)
-            HealBot_AddDebug("hButton has marked delete - unit="..(unit or "nil"), "Panel", true)
+            --HealBot_AddDebug("hButton has marked delete - unit="..(unit or "nil"), "Panel", true)
         end
         if hButton then
             hButton.gref["Back"]:ClearAllPoints()
@@ -4579,7 +4583,6 @@ function HealBot_Action_DeleteButton(hbBarID)
     elseif hbBarID<HealBot_ActiveButtons[0] then 
         HealBot_ActiveButtons[0]=hbBarID
     end
-    --HealBot_AddDebug("Deleted button "..hbBarID)
       --HealBot_setCall("HealBot_Action_DeleteButton")
 end
 
@@ -5034,7 +5037,6 @@ function HealBot_Action_setAutoClose(reset)
             HealBot_Action_ShowHideFrameOption(x)
             HealBot_Timers_Set("LAST","CheckFramesOnCombat")
             HealBot_Timers_Set("LAST","CheckHideFrames")
-            HealBot_AddDebug("Auto Hide for frame "..x.." = "..HealBot_AutoCloseFrame[x],"AutoClose",true)
         end
     end
 end
@@ -5417,7 +5419,6 @@ function HealBot_Action_UseSmartCast(self,button)
             self:SetAttribute("helpbutton1", "heal1");
             self:SetAttribute("type-heal1", "spell");
             self:SetAttribute("spell-heal1", sName);
-            HealBot_AddDebug("Casting spell="..sName,"SmartCast",true)
         else
             local mId=GetMacroIndexByName(sName)
             if mId ~= 0 then
@@ -5433,12 +5434,10 @@ function HealBot_Action_UseSmartCast(self,button)
                 mText=string.gsub(mText,"hbtargettargettarget",button.unit.."targettarget")
                 self:SetAttribute("type1","macro")
                 self:SetAttribute("macrotext1", mText)
-                HealBot_AddDebug("[NON HB] Using macro="..sName,"SmartCast",true)
             else
                 self:SetAttribute("helpbutton1", "item1");
                 self:SetAttribute("type-item1", "item");
                 self:SetAttribute("item-item1", sName);
-                HealBot_AddDebug("[NON HB] Casting macro="..sName,"SmartCast",true)
             end
         end
         usedSmartCast=true;
@@ -5833,15 +5832,15 @@ function HealBot_Action_SmartCast(button)
         scSpell=button.aura.debuff.curespell
     elseif button.aura.buff.missingbuff and HealBot_Globals.SmartCastBuff then
         if button.aura.buff.missingbuff==HEALBOT_WELL_FED then
-            if HealBot_Config_Buffs.WellFedItem and IsUsableItem(HealBot_Config_Buffs.WellFedItem) then
+            if HealBot_Config_Buffs.WellFedItem and HealBot_IsKnownItem(HealBot_Config_Buffs.WellFedItem) then
                 scSpell=HealBot_Config_Buffs.WellFedItem
-            elseif HealBot_Config_Buffs.BackupWellFedItem and IsUsableItem(HealBot_Config_Buffs.BackupWellFedItem) then
+            elseif HealBot_Config_Buffs.BackupWellFedItem and HealBot_IsKnownItem(HealBot_Config_Buffs.BackupWellFedItem) then
                 scSpell=HealBot_Config_Buffs.BackupWellFedItem
             end
         elseif button.aura.buff.missingbuff==HEALBOT_MANA_DRINK then
-            if HealBot_Config_Buffs.ManaDrinkItem and IsUsableItem(HealBot_Config_Buffs.ManaDrinkItem) then
+            if HealBot_Config_Buffs.ManaDrinkItem and HealBot_IsKnownItem(HealBot_Config_Buffs.ManaDrinkItem) then
                 scSpell=HealBot_Config_Buffs.ManaDrinkItem
-            elseif HealBot_Config_Buffs.BackupManaDrinkItem and IsUsableItem(HealBot_Config_Buffs.BackupManaDrinkItem) then
+            elseif HealBot_Config_Buffs.BackupManaDrinkItem and HealBot_IsKnownItem(HealBot_Config_Buffs.BackupManaDrinkItem) then
                 scSpell=HealBot_Config_Buffs.BackupManaDrinkItem
             end
         else

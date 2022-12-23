@@ -423,7 +423,6 @@ function HealBot_TalentQuery(button)
         end
         button.specupdate=0
         button.spec=s
-        --HealBot_AddDebug("Cache unit="..button.unit,"Talent",true)
     elseif button.isplayer and UnitExists(button.unit) and UnitIsConnected(button.unit) then
         if HealBot_Action_IsUnitDead(button) then
             button.specupdate=TimeNow+5
@@ -462,7 +461,6 @@ function HealBot_TalentQuery(button)
         HealBot_luVars["inspectGUID"]=button.guid
         NotifyInspect(button.unit); 
         button.specupdate=0
-        --HealBot_AddDebug("Query unit="..button.unit,"Talent",true)
     end
       --HealBot_setCall("HealBot_TalentQuery")
 end
@@ -1908,15 +1906,25 @@ end
 
 local hbBagScanExcludeItems={[82800]=true}
 local hbBagScanIncludeItems={}
+local hbCacheItemNames={}
 local function HealBot_IncludeScanItem(id, name, iType)
     if not hbBagScanIncludeItems[id] then hbBagScanIncludeItems[id]={} end
     hbBagScanIncludeItems[id][iType]=name
+end
+local function HealBot_CacheItemIdsInBag(id)
+    HealBot_ItemsInBags[id]=true
+    if not hbCacheItemNames[id] then
+        hbCacheItemNames[id]=GetItemInfo(id)
+    end
+    if hbCacheItemNames[id] then
+        HealBot_ItemsInBags[hbCacheItemNames[id]]=true
+    end
 end
 local function HealBot_ItemIdsInBag(bag, slot, firstScan)
     if slot<=HealBot_luVars["MaxBagSlots"] then
         local itemId=HealBot_GetContainerItemID(bag,slot) or 0
         if itemId>0 then
-            HealBot_ItemsInBags[itemId]=true
+            HealBot_CacheItemIdsInBag(itemId)
             if not hbBagScanExcludeItems[itemId] then
                 if not hbBagScanIncludeItems[itemId] then
                     HealBot_SetToolTip(HealBot_ScanTooltip)
@@ -1931,7 +1939,7 @@ local function HealBot_ItemIdsInBag(bag, slot, firstScan)
                     if itemText then
                         HealBot_ManaDrinkItems[itemText]=true
                         HealBot_IncludeScanItem(itemId, itemText, "ManaDrink")
-                    end            
+                    end
                     itemText=false
                     for j=1, #HEALBOT_STRING_MATCH_EXTRABUFFS do
                         if not itemText then
@@ -2299,14 +2307,12 @@ function HealBot_FullReload()
     HealBot_OnEvent_AddOnLoaded("HealBot", true)
     HealBot_VariablesLoaded()
     HealBot_Timers_Set("RESET","Full")
-    HealBot_AddDebug("Full Reload","Reset",true)
 end
 
 function HealBot_Reload()
     HealBot_luVars["Loaded"]=false
     HealBot_Timers_Set("INIT","AddonLoaded")
     HealBot_Timers_Set("RESET","Quick")
-    HealBot_AddDebug("Reload","Reset",true)
 end
 
 function HealBot_UnRegister_Events()
@@ -2467,11 +2473,18 @@ function HealBot_HealsInEnemyUpdate(button)
     button.health.updincoming=true
 end
 
+local hiuCHCAmount, hiuBlizzAmount=0,0
 function HealBot_HealsInAmountV1(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        --hiuHealAmount=hiuHealAmount+(UnitGetIncomingHeals(button.unit) or 0)
+        --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS+libCHC.BOMB_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuCHCAmount=(libCHC:GetHealAmount(button.guid, libCHC.CASTED_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuBlizzAmount=UnitGetIncomingHeals(button.unit) or 0
+        if hiuCHCAmount>hiuBlizzAmount then
+            hiuHealAmount=hiuHealAmount+hiuCHCAmount
+        else
+            hiuHealAmount=hiuHealAmount+hiuBlizzAmount
+        end
     else
         hiuHealAmount=0
     end
@@ -2599,11 +2612,14 @@ function HealBot_ResetCustomDebuffs()
     HealBot_Globals.CDCBarColour=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCBarColour)
     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol=HealBot_Options_copyTable(HealBot_GlobalsDefaults.HealBot_Custom_Debuffs_ShowBarCol)
     HealBot_Globals.IgnoreCustomDebuff=HealBot_Options_copyTable(HealBot_GlobalsDefaults.IgnoreCustomDebuff)
+    HealBot_Globals.CDCTag=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CDCTag)
     HealBot_Options_NewCDebuff:SetText("")
+    HealBot_Options_setLuVars("customdebufftextpage", 1)
     HealBot_Options_ResetUpdate()
     HealBot_SetCDCBarColours();
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMCUSTOMDEFAULTS)
     HealBot_Aura_ClearCustomDebuffsDone()
+    HealBot_Timers_Set("AURA","CustomDebuffListPrep")
       --HealBot_setCall("HealBot_ResetCustomDebuffs")
 end
 
@@ -2869,6 +2885,7 @@ function HealBot_UpdateBuffItem(buff, item)
 end
 
 function HealBot_Update_Skins()
+    local oldVersion=9
     if HealBot_Config.LastVersionSkinUpdate then
         HealBot_Config.LastVersionUpdate=HealBot_Config.LastVersionSkinUpdate
         HealBot_Config.LastVersionSkinUpdate=nil
@@ -2898,11 +2915,10 @@ function HealBot_Update_Skins()
     if not HealBot_Globals.AutoCacheSize then HealBot_Globals.AutoCacheSize=30 end
 
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
-    if not HealBot_luVars["ResetOld"] and tonumber(tMajor)<9 then
-        HealBot_luVars["ResetOld"]=true
+    if not HealBot_luVars["ResetGlobalOld"] and tonumber(tMajor)<oldVersion then
+        HealBot_luVars["ResetGlobalOld"]=true
         HealBot_Options_SetDefaults(true);
-    else
-        HealBot_AddDebug("In HealBot_Update_Skins version="..HealBot_Globals.LastVersionSkinUpdate)
+    elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
         if not HealBot_luVars["UpdateMsg"] then
             HealBot_luVars["UpdateMsg"]=true
             HealBot_Globals.OneTimeMsg["VERSION"]=false
@@ -3006,7 +3022,10 @@ function HealBot_Update_Skins()
         end
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
-    if HealBot_Config.LastVersionUpdate~=HealBot_Global_Version() then
+    if not HealBot_luVars["ResetLocalOld"] and tonumber(tMajor)<oldVersion then
+        HealBot_luVars["ResetLocalOld"]=true
+        HealBot_Options_SetDefaults(false);
+    elseif HealBot_Config.LastVersionUpdate~=HealBot_Global_Version() then
         if tonumber(tMajor)==9 then
             if HealBot_Config.ActionVisible then HealBot_Config.ActionVisible=nil end
             if HealBot_Config.CrashProtMacroName or HealBot_Globals.OverrideProt then 
@@ -3015,10 +3034,6 @@ function HealBot_Update_Skins()
                 HealBot_Globals.OverrideProt=nil
             end
             if HealBot_Config.CrashProtStartTime then HealBot_Config.CrashProtStartTime=nil end
-            tMajor=10
-            tMinor=0
-            tPatch=0
-            tHealbot=0
         end
         -- Character specific checks
     end
@@ -3189,6 +3204,14 @@ end
 
 function HealBot_VariablesLoaded()
     HealBot_SetToolTip(HealBot_ScanTooltip)
+    local g
+    for x=1,8 do
+        HealBot_ScanTooltip:AddDoubleLine(" "," ",1,1,1,1,1,1)
+        g=_G["HealBot_ScanTooltipTextLeft"..x]
+        g:SetFont(HealBot_Default_Fonts[15].file, 12)
+        g=_G["HealBot_ScanTooltipTextRight"..x]
+        g:SetFont(HealBot_Default_Fonts[15].file, 12)
+    end
     if LSM then
         for i = 1, #HealBot_Default_Textures do
             LSM:Register("statusbar", HealBot_Default_Textures[i].name, HealBot_Default_Textures[i].file)
@@ -5159,7 +5182,6 @@ function HealBot_OnEvent_AddonMsg(addon_id,msg,distribution,sender_id)
                 if datamsg then
                     HealBot_Vers[amSenderId]=datamsg
                     HealBot_AddDebug("AddonMsg="..datatype.." from "..amSenderId.." Version="..datamsg,"Comms",true)
-                    HealBot_AddDebug(amSenderId..": "..datamsg, "Version", false);
                     HealBot_Comms_CheckVer(amSenderId, datamsg)
                 end
             elseif datatype=="U" then
@@ -6048,7 +6070,6 @@ function HealBot_OnEvent_UnitSpellCastStart(button, unitTarget, castGUID, spellI
             scName=GetSpellInfo(spellID) or spellID or "x"
         end
         if HealBot_ResSpells[scName] then
-            --HealBot_AddDebug("CastStart res "..scName, "Spell Cast", true)
             if HealBot_ResSpells[scName]==2 then
                 if HealBot_luVars["massResTime"]<TimeNow then
                     HealBot_luVars["massResUnit"]=button.unit
@@ -6765,6 +6786,7 @@ function HealBot_Reset_Icons()
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
     HealBot_Globals.CustomBuffBarColour = {[HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },}
     HealBot_Globals.WatchHoT=HealBot_Options_copyTable(HealBot_GlobalsDefaults.WatchHoT)
+    HealBot_Globals.CustomBuffTag=HealBot_Options_copyTable(HealBot_GlobalsDefaults.CustomBuffTag)
     HealBot_Timers_InitExtraOptions()
     HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CONFIRMICONRESET)
       --HealBot_setCall("HealBot_Reset_Icons")
@@ -6774,6 +6796,14 @@ function HealBot_IsItemInBag(itemID)
       --HealBot_setCall("HealBot_IsItemInBag")
     if itemID then
         return HealBot_ItemsInBags[itemID]
+    else
+        return false
+    end
+end
+
+function HealBot_IsKnownItem(name)
+    if HealBot_IsItemInBag(name) or IsUsableItem(name) then
+        return true
     else
         return false
     end

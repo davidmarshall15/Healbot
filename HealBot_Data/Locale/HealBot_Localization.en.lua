@@ -111,6 +111,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_DEBUFFS             = "Debuffs"
     HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS      = "Custom Debuffs";
     HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS        = "Custom Buffs";
+    HEALBOT_OPTIONS_CDEBUFFS_DISCORD        = "Custom debuffs can be shared on discord in the #share channel";
+    HEALBOT_OPTIONS_CBUFFS_DISCORD          = "Custom buffs can be shared on discord in the #share channel";
+    HEALBOT_OPTIONS_SKINS_DISCORD           = "Skins can be shared on discord in the #share channel";
+    HEALBOT_OPTIONS_SPELLS_DISCORD          = "Spells can be shared on discord in the #share channel";
+    HEALBOT_OPTIONS_PRECOLS_DISCORD         = "Preset col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be shared on discord in the #share channel";
     HEALBOT_OPTIONS_TAB_BUFFS               = "Buffs"
     HEALBOT_OPTIONS_TAB_GENERALBUFFS        = "General Buffs"
     HEALBOT_OPTIONS_TAB_STATETEXT           = "State";
@@ -165,6 +170,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SORTBY_UNITID                   = "Unit ID"
     HEALBOT_OPTIONS_NEWDEBUFFTEXT           = "New Debuff"
     HEALBOT_OPTIONS_NEWHOTBUFFTEXT          = "New Buff"
+    HEALBOT_WORD_TAG                        = "Tag"
     HEALBOT_OPTIONS_DELSKIN                 = "Delete"
     HEALBOT_OPTIONS_NEWSKINTEXT             = "New skin"
     HEALBOT_OPTIONS_SAVESKIN                = "Save"
