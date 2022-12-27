@@ -2391,5 +2391,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             Healbot_Config_Skins.HealGroups[SkinName][id]["FRAME"]=1
         end
     end
+    Healbot_Config_Skins.General[SkinName]["VC"]=HealBot_Global_Version()
       --HealBot_setCall("HealBot_Skins_Check_Skin")
 end

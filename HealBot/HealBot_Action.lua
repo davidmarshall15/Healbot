@@ -2702,11 +2702,11 @@ function HealBot_Action_PrepButton(button)
     button.hazard.r=1
     button.hazard.g=1
     button.hazard.b=1
-    button.plugin.colbar=0
-    button.request.colbar=0
-    button.buffwatch.colbar=0
-    button.healthwatch.colbar=0
-    button.manawatch.colbar=0
+    button.plugin.colbar=button.plugin.colbar or 0
+    button.request.colbar=button.request.colbar or 0
+    button.buffwatch.colbar=button.buffwatch.colbar or 0
+    button.healthwatch.colbar=button.healthwatch.colbar or 0
+    button.manawatch.colbar=button.manawatch.colbar or 0
     button.plugin.r=1
     button.plugin.g=1
     button.plugin.b=1
@@ -3964,13 +3964,7 @@ function HealBot_Action_SetAllButtonAttribs(button,cType,prep)
                     if maxBinds==0 then
                         HealBot_Action_InitBinds(button)
                     end
-                    if x==30 then
-                        HealBot_Action_Binds(2)
-                    elseif x==29 then
-                        HealBot_Action_Binds(3)
-                    else
-                        HealBot_Action_Binds(x)
-                    end
+                    HealBot_Action_Binds(x)
                     maxBinds=x
                 else
                     hbBindTxt[x]=""

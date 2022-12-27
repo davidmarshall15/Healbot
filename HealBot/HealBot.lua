@@ -845,7 +845,6 @@ function HealBot_TestBars()
 end
 
 local hbManaWatch={}
-local hbManaWatchTmp={}
 function HealBot_ManaWatch(guid, state)
     if state then
         hbManaWatch[guid]=true
@@ -855,16 +854,11 @@ function HealBot_ManaWatch(guid, state)
 end
 
 function HealBot_ManaWatchTmp(guid, state)
-    if state then
-        hbManaWatchTmp[guid]=true
-    else
-        hbManaWatchTmp[guid]=nil
-    end
+    -- Remove after next release of ManaWatch
 end
 
 function HealBot_ManaWatchClear()
     hbManaWatch={}
-    hbManaWatchTmp={}
 end
 
 local hbManaCurrent, hbManaMax, pLowManaDrinkNeed=0,0,false
@@ -888,8 +882,6 @@ function HealBot_OnEvent_UnitMana(button)
             end
             if hbManaWatch[button.guid] then
                 HealBot_Plugin_ManaWatch_UnitUpdate(button)
-            elseif hbManaWatchTmp[button.guid] then
-                HealBot_Plugin_ManaWatch_ProcessRetry(button)
             end
             HealBot_Aux_setPowerBars(button)
             if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
@@ -2396,8 +2388,8 @@ function HealBot_Reset_Full()
     HealBot_Timers_Set("SKINS","AllFramesChanged")
     HealBot_Timers_Set("LAST","ZoneUpdate")
     HealBot_Timers_AuraReset()
-    HealBot_Register_Events()
     HealBot_Timers_Set("INIT","AddonLoaded")
+    HealBot_Timers_Set("INIT","RegEvents")
       --HealBot_setCall("HealBot_Reset_Full")
 end
 
@@ -2913,7 +2905,6 @@ function HealBot_Update_Skins()
     end
     if HealBot_Globals.CacheSize then HealBot_Globals.CacheSize=nil end
     if not HealBot_Globals.AutoCacheSize then HealBot_Globals.AutoCacheSize=30 end
-
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
     if not HealBot_luVars["ResetGlobalOld"] and tonumber(tMajor)<oldVersion then
         HealBot_luVars["ResetGlobalOld"]=true
@@ -3020,6 +3011,8 @@ function HealBot_Update_Skins()
                 end
             end
         end
+    else
+        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Current_Skin)
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
     if not HealBot_luVars["ResetLocalOld"] and tonumber(tMajor)<oldVersion then
@@ -3803,7 +3796,6 @@ function HealBot_EnglishClass(unit)
 end
 
 local hbHealthWatch={}
-local hbHealthWatchTmp={}
 function HealBot_HealthWatch(guid, state)
     if state then
         hbHealthWatch[guid]=true
@@ -3813,16 +3805,11 @@ function HealBot_HealthWatch(guid, state)
 end
 
 function HealBot_HealthWatchTmp(guid, state)
-    if state then
-        hbHealthWatchTmp[guid]=true
-    else
-        hbHealthWatchTmp[guid]=nil
-    end
+    -- Remove after next release of HealthWatch
 end
 
 function HealBot_HealthWatchClear()
     hbHealthWatch={}
-    hbHealthWatchTmp={}
 end
 
 local HealBot_Health80 = {
@@ -3887,8 +3874,6 @@ function HealBot_OnEvent_UnitHealth(button)
             HealBot_Action_UpdateHealthButton(button, true)
             if hbHealthWatch[button.guid] then
                 HealBot_Plugin_HealthWatch_UnitUpdate(button)
-            elseif hbHealthWatchTmp[button.guid] then
-                HealBot_Plugin_HealthWatch_ProcessRetry(button)
             end
             if button.status.current<HealBot_Unit_Status["DEAD"] then 
                 if health>0 then
@@ -4385,6 +4370,12 @@ function HealBot_UnitSlowUpdate(button)
             HealBot_OnEvent_RaidTargetUpdate(button)
             HealBot_Action_SetClassIconTexture(button)
             HealBot_Text_setNameTag(button)
+            if HealBot_luVars["pluginHealthWatch"] then
+                HealBot_Plugin_HealthWatch_UnitUpdate(button)
+            end
+            if HealBot_luVars["pluginManaWatch"] then
+                HealBot_Plugin_ManaWatch_UnitUpdate(button)
+            end
         elseif button.frame<10 then
             if button.status.castend>0 and button.status.castend<(TimeNow*1000) then
                 HealBot_Aux_ClearCastBar(button)

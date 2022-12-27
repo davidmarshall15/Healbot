@@ -286,13 +286,17 @@ function HealBot_Options_InitFonts(id)
 end
 
 function HealBot_Options_InitDebuffTypes()
+    local hbPURIFICATION_POTION=GetItemInfoInstant(HEALBOT_PURIFICATION_POTION) or "Purification Potion"
+    local hbANTI_VENOM=GetItemInfoInstant(HEALBOT_ANTI_VENOM) or "Anti-Venom"
+    local hbPOWERFUL_ANTI_VENOM=GetItemInfoInstant(HEALBOT_POWERFUL_ANTI_VENOM) or "Powerful Anti-Venom"
+    local hbSTONEFORM=GetSpellInfo(HEALBOT_STONEFORM)
     if HEALBOT_GAME_VERSION<4 then 
         HealBot_Debuff_Types = {
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
-            [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
-            [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
-            [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbPURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbANTI_VENOM] = {HEALBOT_POISON_en},
+            [hbPOWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
+            [hbSTONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HBC_SHAMAN_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_ABOLISH_POISON] = {HEALBOT_POISON_en},
@@ -313,6 +317,9 @@ function HealBot_Options_InitDebuffTypes()
         end
         HealBot_Options_luVars["HEALBOT_LAY_ON_HANDS"]=GetSpellInfo(HEALBOT_LAY_ON_HANDS)
     else
+        local hbELIXIR_OF_POISON_RES=GetItemInfoInstant(HEALBOT_ELIXIR_OF_POISON_RES) or "Potion of Curing"
+        local hbPOTION_OF_SOUL_PURITY=GetItemInfoInstant(HEALBOT_POTION_OF_SOUL_PURITY) or "Potion of Soul Purity"
+        local hbPHIAL_OF_SERENITY=GetItemInfoInstant(HEALBOT_PHIAL_OF_SERENITY) or "Phial of Serenity"
         HealBot_Debuff_Types = {
             [HEALBOT_CLEANSE] = {HEALBOT_MAGIC_en},
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
@@ -320,18 +327,18 @@ function HealBot_Options_InitDebuffTypes()
             [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
             [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
             [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en},
-            [HEALBOT_PURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HEALBOT_ANTI_VENOM] = {HEALBOT_POISON_en},
-            [HEALBOT_POWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
+            [hbPURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbANTI_VENOM] = {HEALBOT_POISON_en},
+            [hbPOWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HEALBOT_ELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
-            [HEALBOT_STONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
+            [hbSTONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en},
             [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
             [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
             [HEALBOT_DETOX] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HEALBOT_POTION_OF_SOUL_PURITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
-            [HEALBOT_PHIAL_OF_SERENITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbPOTION_OF_SOUL_PURITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbPHIAL_OF_SERENITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_NATURALIZE] = {HEALBOT_MAGIC_en, HEALBOT_POISON_en},
             [HEALBOT_CAUTERIZING_FLAME] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_EXPUNGE] = {HEALBOT_POISON_en},
@@ -12640,9 +12647,13 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
         for j=1, getn(Healbot_Config_Skins.Skins), 1 do
             if newSkin==Healbot_Config_Skins.Skins[j] then
                 hbFoundSkin=true
-                Healbot_Config_Skins.Skin_ID = j
+                Healbot_Config_Skins.Skin_ID=j
                 if Healbot_Config_Skins.Current_Skin~=Healbot_Config_Skins.Skins[j] then
-                    Healbot_Config_Skins.Current_Skin = Healbot_Config_Skins.Skins[j]
+                    Healbot_Config_Skins.Current_Skin=Healbot_Config_Skins.Skins[j]
+                    if not Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["VC"] or 
+                      Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["VC"]~=HealBot_Global_Version() then
+                        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Current_Skin)
+                    end
                     HealBot_Action_setAutoClose(true)
                     HealBot_Timers_Set("LAST","SetAutoClose", 3)
                     HealBot_Timers_TurboOn(1)
@@ -14831,7 +14842,6 @@ function HealBot_Options_Debuff_Reset()
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)] or "x"
-            sName = GetItemInfoInstant(sName) or sName  -- Items are not stored in table HealBot_Debuff_Types
 
             if HealBot_Debuff_Types[sName] then
                 table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
