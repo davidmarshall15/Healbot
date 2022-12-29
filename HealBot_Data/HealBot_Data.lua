@@ -279,6 +279,7 @@ function HealBot_Data_InitVars()
         PluginHealthWatch=true,
         PluginManaWatch=true,
         AllowPlayerRoles=false,
+        VehicleFontSizeReduction=4,
         CrashProtTime=0,
         NoRanks=false,
         ClassicHoTTime=6,

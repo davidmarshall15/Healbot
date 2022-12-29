@@ -13503,6 +13503,20 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTINCPTC",false)</OnLeave>
                                 </Scripts>
                               </CheckButton>
+                              <CheckButton name="HealBot_Options_HealthInVehicleShowPlayer" inherits="HealBotUIPanelCheckButton">
+                                <Anchors>
+                                  <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHealthNumFormat1" relativePoint="TOPLEFT">
+                                    <Offset>
+                                      <AbsDimension x="35" y="-35" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnClick>HealBot_Options_HealthInVehicleShowPlayer_OnClick(self)</OnClick>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTINVEHSHOWPLAYER",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTINVEHSHOWPLAYER",false)</OnLeave>
+                                </Scripts>
+                              </CheckButton>
                               <Frame name="HealBot_Options_BarHealthTextPosition" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOP" relativeTo="HealBot_Options_BarHealthNumFormat1" relativePoint="BOTTOM">
@@ -15863,6 +15877,7 @@
                  </Frame>
                 </Frames>
               </Frame>
+
               <Frame name="HealBot_Options_IconsSkinsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
                   <AbsDimension y="540"/>

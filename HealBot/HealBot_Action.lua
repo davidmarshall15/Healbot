@@ -2249,6 +2249,12 @@ end
 
 function HealBot_Action_InitButton(button)
     erButton=HealBot_Emerg_Button[button.id]
+    button:SetAttribute("checkselfcast", false)
+    erButton:SetAttribute("checkselfcast", false)
+    if HEALBOT_GAME_VERSION>1 then
+        button:SetAttribute("checkfocuscast", false)
+        erButton:SetAttribute("checkfocuscast", false)
+    end
     button.guid="nil"
     button.unit="nil"
     erButton.unit="nil"
@@ -2376,6 +2382,8 @@ function HealBot_Action_InitButton(button)
     button.gref.txt["text3"]:SetWordWrap(false)
     button.gref.txt["text4"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text4"]
     button.gref.txt["text4"]:SetWordWrap(false)
+    button.gref.txt["text5"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text5"]
+    button.gref.txt["text5"]:SetWordWrap(false)
     button.gref.icon["Icontm1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm1"]
     button.gref.icon["Icontm2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm2"]
     button.gref.icon["Icontm3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm3"]
@@ -2413,11 +2421,57 @@ function HealBot_Action_InitButton(button)
         button.gref.indicator.power[x]:SetAlpha(0);
     end
     button.frame=0
+    button:SetAttribute("toggleForVehicle", true)
     erButton.r,erButton.g,erButton.b,erButton.a=0,0,0,0
     erButton:EnableMouse(false)
     erButton.regClicks=false
     button:EnableMouse(false)
     button.regClicks=false
+    button.text.r=1
+    button.text.g=1
+    button.text.b=1
+    button.text.nr=1
+    button.text.ng=1
+    button.text.nb=1
+    button.text.na=1
+    button.text.hr=1
+    button.text.hg=1
+    button.text.hb=1
+    button.text.ha=1
+    button.text.sr=1
+    button.text.sg=1
+    button.text.sb=1
+    button.text.sa=1
+    button.text.ar=0
+    button.text.ag=0
+    button.text.ab=0
+    button.text.aa=0
+    button.hazard.r=1
+    button.hazard.g=1
+    button.hazard.b=1
+    button.plugin.colbar=button.plugin.colbar or 0
+    button.request.colbar=button.request.colbar or 0
+    button.buffwatch.colbar=button.buffwatch.colbar or 0
+    button.healthwatch.colbar=button.healthwatch.colbar or 0
+    button.manawatch.colbar=button.manawatch.colbar or 0
+    button.plugin.r=1
+    button.plugin.g=1
+    button.plugin.b=1
+    button.aggro.mobname=""
+    button.text.health=""
+    button.text.vphealth=""
+    button.text.healthcomplete=""
+    button.text.inheallen=0
+    button.text.overheallen=0
+    button.text.name=""
+    button.text.nameonly=""
+    button.text.namecomplete=""
+    button.text.namehealth=""
+    button.text.nametag=""
+    button.text.inheal=""
+    button.text.overheal=""
+    button.text.aggro=""
+    button.text.tag=""
     HealBot_Aura_setButtonIcons(button.id)
     HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_InitButton")
@@ -2659,39 +2713,6 @@ function HealBot_Action_PrepButton(button)
     button.aggro.status=-1
     button.aggro.threatpct=0
     button.aggro.threatvalue=0
-    button.aggro.mobname=""
-    button.text.health=""
-    button.text.healthcomplete=""
-    button.text.inheallen=0
-    button.text.overheallen=0
-    button.text.name=""
-    button.text.nameonly=""
-    button.text.namecomplete=""
-    button.text.namehealth=""
-    button.text.nametag=""
-    button.text.inheal=""
-    button.text.overheal=""
-    button.text.aggro=""
-    button.text.tag=""
-    button.text.r=1
-    button.text.g=1
-    button.text.b=1
-    button.text.nr=1
-    button.text.ng=1
-    button.text.nb=1
-    button.text.na=1
-    button.text.hr=1
-    button.text.hg=1
-    button.text.hb=1
-    button.text.ha=1
-    button.text.sr=1
-    button.text.sg=1
-    button.text.sb=1
-    button.text.sa=1
-    button.text.ar=0
-    button.text.ag=0
-    button.text.ab=0
-    button.text.aa=0
     button.text.classtrim="XXXX"
     button.text.nameupdate=true
     button.text.tagupdate=true
@@ -2699,17 +2720,6 @@ function HealBot_Action_PrepButton(button)
     button.text.aggroupdate=true
     button.spec=" "
     button.specupdate=0
-    button.hazard.r=1
-    button.hazard.g=1
-    button.hazard.b=1
-    button.plugin.colbar=button.plugin.colbar or 0
-    button.request.colbar=button.request.colbar or 0
-    button.buffwatch.colbar=button.buffwatch.colbar or 0
-    button.healthwatch.colbar=button.healthwatch.colbar or 0
-    button.manawatch.colbar=button.manawatch.colbar or 0
-    button.plugin.r=1
-    button.plugin.g=1
-    button.plugin.b=1
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Bar"]:SetValue(1000)
     button.gref["InHeal"]:SetStatusBarColor(0, 0, 0, 0)
@@ -2921,6 +2931,8 @@ function HealBot_Action_SpellCmdCodes(cType, cText)
             cID="K"
         elseif cText == HEALBOT_CANCELPLUGINALERT then
             cID="L"
+        elseif HEALBOT_GAME_VERSION>2 and cText == HEALBOT_TARGETVEHICLE then
+            cID="M"
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdCodes")
@@ -2984,6 +2996,8 @@ function HealBot_Action_SpellCmdText(cType, cID)
             cText=HEALBOT_RANDOMGOUNDMOUNT
         elseif cID == "L" then
             cText=HEALBOT_CANCELPLUGINALERT
+        elseif cID == "M" then
+            cText=HEALBOT_TARGETVEHICLE
         end
     end
     --HealBot_setCall("HealBot_Action_SpellCmdText")
@@ -3724,7 +3738,13 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             button:SetAttribute(HB_prefix..buttonType..j, "target"..j);
             button:SetAttribute(HB_prefix.."type"..j, "target")
             button:SetAttribute(HB_prefix.."type-target"..j, "target")
-            HealBot_Action_UpdateAttribsMinReset(button, HB_prefix, cType, j, 2)
+        elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_TARGETVEHICLE) then
+            local pet=HealBot_UnitPet(unit)
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
+            if pet then
+                button:SetAttribute(HB_prefix.."type"..j, "macro")
+                button:SetAttribute(HB_prefix.."macrotext"..j, "/target "..pet..";")
+            end
         elseif strlower(sName)==strlower(HEALBOT_FOCUS) then
             button:SetAttribute(HB_prefix..buttonType..j, "focus"..j);
             button:SetAttribute(HB_prefix.."type"..j, "focus")
@@ -3759,8 +3779,8 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             end
             button.showhbmenu = showHBmenu
         elseif HEALBOT_GAME_VERSION>2 and (strlower(sName)==strlower(HEALBOT_MOUNTS) or strlower(sName)==strlower(HEALBOT_MOUNTSPETS)) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
-                button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "showhbmountmenu")
                 showhbmountmenu = function()
                     local HBFriendsDropDown = CreateFrame("Frame", "HealBot_Action_hbmountmenuFrame_DropDown", UIParent, "UIDropDownMenuTemplate");
@@ -3769,40 +3789,30 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
                     ToggleDropDownMenu(1, nil, HBFriendsDropDown, "cursor", 10, -8)
                 end
                 button.showhbmountmenu = showhbmountmenu
-            else
-                button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
         elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_FAVMOUNT) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
-                button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/run HealBot_MountsPets_FavMount()")
-            else
-                button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
         elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_RANDOMMOUNT) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
-                button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_MountsPets_ToggelMount("all")')
-            else
-                button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
         elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_RANDOMGOUNDMOUNT) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
-                button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_MountsPets_ToggelMount("ground")')
-            else
-                button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
         elseif HEALBOT_GAME_VERSION>3 and strlower(sName)==strlower(HEALBOT_FAVPET) then
+            button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
-                button:SetAttribute(HB_prefix..buttonType..j, nil);
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/run C_PetJournal.SummonRandomPet(true)")
-            else
-                button:SetAttribute(HB_prefix..buttonType..j, nil)
             end
         elseif strlower(sName)==strlower(HEALBOT_CANCELPLUGINALERT) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
@@ -4264,7 +4274,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     elseif unitType>8 then
                         HealBot_Extra_Button[unit]=hButton
                     else
-                        HealBot_Unit_Button[unit]=hButton 
+                        HealBot_Unit_Button[unit]=hButton
                         hbShouldHealSomePlayerFrames[frame]=true
                     end
                 end

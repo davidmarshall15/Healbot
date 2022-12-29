@@ -1318,6 +1318,7 @@ function HealBot_Panel_TestBarColUpdate()
         xButton.gref.txt["text2"]:SetTextColor(HealBot_colIndex["hctr2"..xButton.id],HealBot_colIndex["hctg2"..xButton.id],HealBot_colIndex["hctb2"..xButton.id],1);
         xButton.gref.txt["text3"]:SetTextColor(HealBot_colIndex["hctr3"..xButton.id],HealBot_colIndex["hctg3"..xButton.id],HealBot_colIndex["hctb3"..xButton.id],1)
         xButton.gref.txt["text4"]:SetTextColor(HealBot_colIndex["hctr4"..xButton.id],HealBot_colIndex["hctg4"..xButton.id],HealBot_colIndex["hctb4"..xButton.id],1)
+        xButton.gref.txt["text5"]:SetTextColor(HealBot_colIndex["hctr2"..xButton.id],HealBot_colIndex["hctg2"..xButton.id],HealBot_colIndex["hctb2"..xButton.id],1);
     end
 end
 

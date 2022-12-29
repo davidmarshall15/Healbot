@@ -1853,7 +1853,7 @@ function HealBot_Aura_SetAuraWarningFlags()
     end
 end
 
-function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, resting)
+function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, resting, inVehicle)
     tmpBCheck=buffCheck
     tmpGBuffs=generalBuffs
     tmpDCheck=debuffCheck
@@ -1865,7 +1865,7 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
         buffCheck=true
         if (not HealBot_Config_Buffs.BuffWatchWhenGrouped or GetNumGroupMembers()>0) and 
            (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and
-            not buffMounted and not UnitIsDeadOrGhost("player") then
+            not inVehicle and not buffMounted and not UnitIsDeadOrGhost("player") then
             generalBuffs=true
             if HealBot_Config_Buffs.CheckManaDrink then
                 HealBot_Action_setLuVars("CheckManaDrink", true)

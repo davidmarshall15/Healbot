@@ -337,6 +337,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWCLASSONBAR          = "Show class on bar";
     HEALBOT_OPTIONS_SHOWHEALTHONBAR         = "Show health on bar";
     HEALBOT_OPTIONS_HEALTHINCPERCENT        = "Include percent";
+    HEALBOT_OPTIONS_HEALTHINVEHSHOWPLAYER   = "When in vehicle also show player";
     HEALBOT_OPTIONS_SHOWTEXT                = "Show text";
     HEALBOT_OPTIONS_IGNOREINCOMINGONFULL    = "On full health ignore all incoming heals and "..HEALBOT_classicABSORBHOT.."s";
     HEALBOT_OPTIONS_TEXTONLYTIP             = "Only show in tooltip";
@@ -991,6 +992,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_BLACK                      = "Black"
     HEALBOT_WORD_AND                        = "and"
     HEALBOT_WORD_PLAYERS                    = "Players"
+    HEALBOT_WORD_PLAYER                     = "Player"
     HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
@@ -1036,10 +1038,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_BLIZZARD_MENU                   = "Blizzard menu"
     HEALBOT_HB_MENU                         = "Healbot menu"
-    HEALBOT_FOLLOW                          = "Follow"
-    HEALBOT_TRADE                           = "Trade"
-    HEALBOT_PROMOTE_RA                      = "Promote raid assistant"
-    HEALBOT_DEMOTE_RA                       = "Demote raid assistant"
+    HEALBOT_TARGETVEHICLE                   = "Target Vehicle or Pet"
     HEALBOT_TOGGLE_ENABLED                  = "Toggle enabled"
     HEALBOT_TOGGLE_MYTARGETS                = "Toggle Private List"
     HEALBOT_WORD_PERMANENT                  = "Permanent"

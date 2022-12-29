@@ -11,7 +11,6 @@ local LSM = HealBot_Libs_LSM()
 local LDB11 = HealBot_Libs_LDB11()
 local LDBIcon = HealBot_Libs_LDBIcon()
 local libCHC = HealBot_Libs_CHC()
-local HealBot_VehicleUnit={}
 local HealBot_UnitInVehicle={}
 local HealBot_BuffQueue={}
 local HealBot_BuffQueueList={}
@@ -2162,7 +2161,6 @@ function HealBot_Register_Events()
         if HEALBOT_GAME_VERSION>2 then
             HealBot:RegisterEvent("UNIT_ENTERED_VEHICLE");
             HealBot:RegisterEvent("UNIT_EXITED_VEHICLE");
-            HealBot:RegisterEvent("UNIT_EXITING_VEHICLE");
             if HEALBOT_GAME_VERSION==3 then
                 HealBot:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
             end
@@ -2315,7 +2313,6 @@ function HealBot_UnRegister_Events()
         if HEALBOT_GAME_VERSION>2 then
             HealBot:UnregisterEvent("UNIT_ENTERED_VEHICLE");
             HealBot:UnregisterEvent("UNIT_EXITED_VEHICLE");
-            HealBot:UnregisterEvent("UNIT_EXITING_VEHICLE");
             if HEALBOT_GAME_VERSION==3 then
                 HealBot:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
             end
@@ -2908,111 +2905,109 @@ function HealBot_Update_Skins()
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
     if not HealBot_luVars["ResetGlobalOld"] and tonumber(tMajor)<oldVersion then
         HealBot_luVars["ResetGlobalOld"]=true
-        HealBot_Options_SetDefaults(true);
-    elseif HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
-        if not HealBot_luVars["UpdateMsg"] then
-            HealBot_luVars["UpdateMsg"]=true
-            HealBot_Globals.OneTimeMsg["VERSION"]=false
-        end
-        for x in pairs (Healbot_Config_Skins.Skins) do
-            HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
-        end
-        if tonumber(tMajor)==9 then
-            if not HealBot_Globals.OverrideEffects["FGDIMMING"] then HealBot_Globals.OverrideEffects["FGDIMMING"]=2.5 end
-            if HealBot_Globals.OverrideEffects["HEALTHDROP"]==nil then HealBot_Globals.OverrideEffects["HEALTHDROP"]=false end
-            if not HealBot_Globals.OverrideEffects["HEALTHDROPPCT"] then HealBot_Globals.OverrideEffects["HEALTHDROPPCT"]=350 end
-            if not HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"] then HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"]=40 end
-            if not HealBot_Globals.OverrideEffects["HOTBARHLTH"] then HealBot_Globals.OverrideEffects["HOTBARHLTH"]=0 end
-            if not HealBot_Globals.OverrideEffects["HOTBARDEBUFF"] then HealBot_Globals.OverrideEffects["HOTBARDEBUFF"]=1 end
-            if not HealBot_Globals.OverrideEffects["HBDIMMING"] then HealBot_Globals.OverrideEffects["HBDIMMING"]=2.2 end
-            if HealBot_Globals.OverrideEffects["FLUIDALPHA"]==nil then HealBot_Globals.OverrideEffects["FLUIDALPHA"]=false end
-            if not HealBot_Config_Buffs.ShowGroups then 
-                HealBot_Config_Buffs.ShowGroups={}
-                for x=1,8 do
-                    HealBot_Config_Buffs.ShowGroups[x]=true
-                end
-            end
-            if not HealBot_Config_Cures.ShowGroups then 
-                HealBot_Config_Cures.ShowGroups={}
-                for x=1,8 do
-                    HealBot_Config_Cures.ShowGroups[x]=true
-                end
-            end
-            for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol) do
-                if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
-                    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
-                elseif HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==true then
-                    HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
-                end
-            end
-            for bId, x in pairs(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol) do
-                if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] then
-                    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
-                elseif HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]==true then
-                    HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=3
-                end
-            end
-            HealBot_Globals.ResLagDuration=nil
-
-            if HEALBOT_GAME_VERSION==3 and not HealBot_Config.InitWotLKSpells then
-                HealBot_Config.InitWotLKSpells=true
-                HealBot_Copy_SpellCombos()
-            end
-            
-            if HealBot_Globals.HealBot_Emotes then HealBot_Globals.HealBot_Emotes=nil end
-            HealBot_Globals.Tooltip_MouseWheel=nil
-            if HealBot_Config.MacroUse10==1 then
-                HealBot_Config.MacroUse10=true
-            elseif HealBot_Config.MacroUse10==0 then
-                HealBot_Config.MacroUse10=false
-            end
-            if HealBot_Globals.MacroSuppressSound==1 then
-                HealBot_Globals.MacroSuppressSound=true
-            elseif HealBot_Globals.MacroSuppressSound==0 then
-                HealBot_Globals.MacroSuppressSound=false
-            end
-            if HealBot_Globals.MacroSuppressError==1 then
-                HealBot_Globals.MacroSuppressError=true
-            elseif HealBot_Globals.MacroSuppressError==0 then
-                HealBot_Globals.MacroSuppressError=false
-            end
-            HealBot_Globals.CatchAltDebuffIDs=nil
-            local hbClassHoTwatch=HealBot_Globals.WatchHoT
-            for xClass,_  in pairs(hbClassHoTwatch) do
-                local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
-                for id,x  in pairs(HealBot_configClassHoTClass) do
-                    if HealBot_configClassHoTClass[id]==4 then HealBot_configClassHoTClass[id]=3 end
-                end
-            end
-            HealBot_Options_ResetSetting("ICONS")
-        end
-        if tonumber(tMajor)==10 then
-            if tonumber(tMinor)==0 then
-                if tonumber(tPatch)==0 then
-                    if tonumber(tHealbot)<4 then
-                        if HealBot_Globals.Tooltip_SetScale==false then 
-                            HealBot_Globals.Tooltip_Scale=1
-                            HealBot_Globals.Tooltip_SetScale=nil
-                        end
-                        if HealBot_Globals.Tooltip_SetAlpha==false then 
-                            HealBot_Globals.Tooltip_Alpha=1
-                            HealBot_Globals.Tooltip_SetAlpha=nil
-                        else
-                            HealBot_Globals.Tooltip_Alpha=HealBot_Globals.Tooltip_SetAlphaValue or 1
-                        end
-                    end
-                end
-                if not HealBot_Globals.WatchHoT["EVOK"] then HealBot_Globals.WatchHoT["EVOK"]={} end
-                if not HealBot_Globals.WatchHoT["EVOK"][HEALBOT_REVERSION] then
-                    local HealBot_EvokHoTClass=HealBot_GlobalsDefaults.WatchHoT["EVOK"]
-                    for id,x  in pairs(HealBot_EvokHoTClass) do
-                        HealBot_Globals.WatchHoT["EVOK"][id]=x
-                    end
-                end
-            end
-        end
+        HealBot_Options_SetDefaults(true)
     else
-        HealBot_Skins_Check_Skin(Healbot_Config_Skins.Current_Skin)
+        HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
+        if HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
+            if not HealBot_luVars["UpdateMsg"] then
+                HealBot_luVars["UpdateMsg"]=true
+                HealBot_Globals.OneTimeMsg["VERSION"]=false
+            end
+            if tonumber(tMajor)==9 then
+                if not HealBot_Globals.OverrideEffects["FGDIMMING"] then HealBot_Globals.OverrideEffects["FGDIMMING"]=2.5 end
+                if HealBot_Globals.OverrideEffects["HEALTHDROP"]==nil then HealBot_Globals.OverrideEffects["HEALTHDROP"]=false end
+                if not HealBot_Globals.OverrideEffects["HEALTHDROPPCT"] then HealBot_Globals.OverrideEffects["HEALTHDROPPCT"]=350 end
+                if not HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"] then HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"]=40 end
+                if not HealBot_Globals.OverrideEffects["HOTBARHLTH"] then HealBot_Globals.OverrideEffects["HOTBARHLTH"]=0 end
+                if not HealBot_Globals.OverrideEffects["HOTBARDEBUFF"] then HealBot_Globals.OverrideEffects["HOTBARDEBUFF"]=1 end
+                if not HealBot_Globals.OverrideEffects["HBDIMMING"] then HealBot_Globals.OverrideEffects["HBDIMMING"]=2.2 end
+                if HealBot_Globals.OverrideEffects["FLUIDALPHA"]==nil then HealBot_Globals.OverrideEffects["FLUIDALPHA"]=false end
+                if not HealBot_Config_Buffs.ShowGroups then 
+                    HealBot_Config_Buffs.ShowGroups={}
+                    for x=1,8 do
+                        HealBot_Config_Buffs.ShowGroups[x]=true
+                    end
+                end
+                if not HealBot_Config_Cures.ShowGroups then 
+                    HealBot_Config_Cures.ShowGroups={}
+                    for x=1,8 do
+                        HealBot_Config_Cures.ShowGroups[x]=true
+                    end
+                end
+                for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol) do
+                    if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
+                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
+                    elseif HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==true then
+                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
+                    end
+                end
+                for bId, x in pairs(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol) do
+                    if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] then
+                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
+                    elseif HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]==true then
+                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=3
+                    end
+                end
+                HealBot_Globals.ResLagDuration=nil
+
+                if HEALBOT_GAME_VERSION==3 and not HealBot_Config.InitWotLKSpells then
+                    HealBot_Config.InitWotLKSpells=true
+                    HealBot_Copy_SpellCombos()
+                end
+                
+                if HealBot_Globals.HealBot_Emotes then HealBot_Globals.HealBot_Emotes=nil end
+                HealBot_Globals.Tooltip_MouseWheel=nil
+                if HealBot_Config.MacroUse10==1 then
+                    HealBot_Config.MacroUse10=true
+                elseif HealBot_Config.MacroUse10==0 then
+                    HealBot_Config.MacroUse10=false
+                end
+                if HealBot_Globals.MacroSuppressSound==1 then
+                    HealBot_Globals.MacroSuppressSound=true
+                elseif HealBot_Globals.MacroSuppressSound==0 then
+                    HealBot_Globals.MacroSuppressSound=false
+                end
+                if HealBot_Globals.MacroSuppressError==1 then
+                    HealBot_Globals.MacroSuppressError=true
+                elseif HealBot_Globals.MacroSuppressError==0 then
+                    HealBot_Globals.MacroSuppressError=false
+                end
+                HealBot_Globals.CatchAltDebuffIDs=nil
+                local hbClassHoTwatch=HealBot_Globals.WatchHoT
+                for xClass,_  in pairs(hbClassHoTwatch) do
+                    local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
+                    for id,x  in pairs(HealBot_configClassHoTClass) do
+                        if HealBot_configClassHoTClass[id]==4 then HealBot_configClassHoTClass[id]=3 end
+                    end
+                end
+                HealBot_Options_ResetSetting("ICONS")
+            end
+            if tonumber(tMajor)==10 then
+                if tonumber(tMinor)==0 then
+                    if tonumber(tPatch)==0 then
+                        if tonumber(tHealbot)<4 then
+                            if HealBot_Globals.Tooltip_SetScale==false then 
+                                HealBot_Globals.Tooltip_Scale=1
+                                HealBot_Globals.Tooltip_SetScale=nil
+                            end
+                            if HealBot_Globals.Tooltip_SetAlpha==false then 
+                                HealBot_Globals.Tooltip_Alpha=1
+                                HealBot_Globals.Tooltip_SetAlpha=nil
+                            else
+                                HealBot_Globals.Tooltip_Alpha=HealBot_Globals.Tooltip_SetAlphaValue or 1
+                            end
+                        end
+                    end
+                    if not HealBot_Globals.WatchHoT["EVOK"] then HealBot_Globals.WatchHoT["EVOK"]={} end
+                    if not HealBot_Globals.WatchHoT["EVOK"][HEALBOT_REVERSION] then
+                        local HealBot_EvokHoTClass=HealBot_GlobalsDefaults.WatchHoT["EVOK"]
+                        for id,x  in pairs(HealBot_EvokHoTClass) do
+                            HealBot_Globals.WatchHoT["EVOK"][id]=x
+                        end
+                    end
+                end
+            end
+        end
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
     if not HealBot_luVars["ResetLocalOld"] and tonumber(tMajor)<oldVersion then
@@ -3030,7 +3025,7 @@ function HealBot_Update_Skins()
         end
         -- Character specific checks
     end
-    if not HealBot_Config.SpellsUpdatedToV10 then  -- When removing this check, also remove from HealBot_Action_GetComboWithSpec
+    if not HealBot_Config.SpellsUpdatedToV10 then  -- When removing this check, also remove from HealBot_Action_GetComboWithSpec - This is old when 10.0 is old.
         if not HealBot_Config_Spells.EnabledKeyCombo["New"] then
             HealBot_Share_ExportSpells()
             HealBot_Config.SpellsUpdatedToV10=true
@@ -3702,15 +3697,6 @@ function HealBot_Timer_EmoteOOM()
     end
 end
 
-function HealBot_NoVehicle(unit)
-    local HBvUnits=HealBot_VehicleUnit[unit]
-    for xUnit,_ in pairs(HBvUnits) do
-        if HealBot_UnitInVehicle[xUnit] then HealBot_UnitInVehicle[xUnit]=nil end
-    end
-    if HealBot_VehicleUnit[unit] then HealBot_VehicleUnit[unit]=nil end
-      --HealBot_setCall("HealBot_NoVehicle")
-end
-
 local hbCombatState=false
 function HealBot_UnitAffectingCombat(button)
     if button.isplayer and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCOMBAT"] then
@@ -3824,7 +3810,7 @@ local HealBot_Health80 = {
   ["WARRIOR"] = 18000,
   ["DEATHKNIGHT"] = 18000,
 } 
-local health,healthMax,mhHealthPercent=0,0,0
+local health,healthMax=0,0
 function HealBot_OnEvent_UnitHealth(button)
     button.health.updhlth=false
     if button.status.current<HealBot_Unit_Status["DC"] then
@@ -3837,7 +3823,12 @@ function HealBot_OnEvent_UnitHealth(button)
             end
             if healthMax==0 then healthMax=1 end
         else
-            health,healthMax=UnitHealth(button.unit),UnitHealthMax(button.unit)
+            if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
+                health,healthMax=UnitHealth(HealBot_UnitInVehicle[button.unit]),UnitHealthMax(HealBot_UnitInVehicle[button.unit])
+                button.health.updhlth=true
+            else
+                health,healthMax=UnitHealth(button.unit),UnitHealthMax(button.unit)
+            end
             if health==0 then health=1 end
             if healthMax==100 and (button.unit=="target" or button.unit=="focus" or not button.isplayer) then
                 local class = HealBot_EnglishClass(button.unit)
@@ -3919,6 +3910,32 @@ function HealBot_Plugin_TTDUpdate(guid)
     end
 end
 
+function HealBot_NoVehicle(unit)
+    if HealBot_UnitInVehicle[unit] then 
+        HealBot_UnitInVehicle[unit]=nil 
+        if UnitIsUnit(button.unit,"player") then HealBot_PlayerCheck() end
+    end
+      --HealBot_setCall("HealBot_NoVehicle")
+end
+
+function HealBot_retIsInVehicle(unit)
+      --HealBot_setCall("HealBot_retIsInVehicle")
+    return HealBot_UnitInVehicle[unit]
+end
+
+function HealBot_UnitInVehicleUpdate(button)
+    if HEALBOT_GAME_VERSION>2 then
+        local vUnit=HealBot_UnitPet(button.unit)
+        if vUnit and UnitHasVehicleUI(button.unit) then
+            if not HealBot_UnitInVehicle[button.unit] then
+                HealBot_DoVehicleChange(button, true)
+            end
+        elseif HealBot_UnitInVehicle[button.unit] then
+            HealBot_DoVehicleChange(button, nil)
+        end
+    end
+end
+
 function HealBot_DoVehicleChange(button, enterVehicle)
     --HealBot_Text_setHealthText(button)
     local doRefresh=false
@@ -3926,26 +3943,28 @@ function HealBot_DoVehicleChange(button, enterVehicle)
         local vUnit=HealBot_UnitPet(button.unit)
         if vUnit and UnitHasVehicleUI(button.unit) then
             _,xButton,pButton = HealBot_UnitID(vUnit)
-            if not HealBot_VehicleUnit[vUnit] then HealBot_VehicleUnit[vUnit]={} end
-            HealBot_VehicleUnit[vUnit][button.unit]=true
-            HealBot_UnitInVehicle[button.unit]=vUnit
+            if not HealBot_UnitInVehicle[unit] or HealBot_UnitInVehicle[unit]~=vUnit then
+                HealBot_UnitInVehicle[button.unit]=vUnit
+                doRefresh=true
+            end
             if xButton then 
                 HealBot_OnEvent_UnitHealth(xButton)
             end
             if pButton then 
                 HealBot_OnEvent_UnitHealth(pButton)
             end
-            doRefresh=true
         end
     elseif HealBot_UnitInVehicle[button.unit] then
-        HealBot_NoVehicle(HealBot_UnitInVehicle[button.unit])
+        HealBot_UnitInVehicle[button.unit]=nil 
         doRefresh=true
     end
     if doRefresh then
-        HealBot_RefreshUnit(button)
+        button.health.updhlth=true
+        --HealBot_RefreshUnit(button)
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
             HealBot_Timers_Set("INIT","RefreshPartyNextRecalcVehicle")
         end
+        if UnitIsUnit(button.unit,"player") then HealBot_PlayerCheck() end
     end
 end
 
@@ -4370,15 +4389,18 @@ function HealBot_UnitSlowUpdate(button)
             HealBot_OnEvent_RaidTargetUpdate(button)
             HealBot_Action_SetClassIconTexture(button)
             HealBot_Text_setNameTag(button)
-            if HealBot_luVars["pluginHealthWatch"] then
+            HealBot_UnitInVehicleUpdate(button)
+            if hbHealthWatch[button.guid] then
                 HealBot_Plugin_HealthWatch_UnitUpdate(button)
             end
-            if HealBot_luVars["pluginManaWatch"] then
+            if hbManaWatch[button.guid] then
                 HealBot_Plugin_ManaWatch_UnitUpdate(button)
             end
         elseif button.frame<10 then
             if button.status.castend>0 and button.status.castend<(TimeNow*1000) then
                 HealBot_Aux_ClearCastBar(button)
+            elseif button.health.updhlth then
+                HealBot_OnEvent_UnitHealth(button)
             elseif not HealBot_Data["UILOCK"] then
                 if not HealBot_luVars["onTaxi"] and button.aura.buff.nextcheck and button.aura.buff.nextcheck<TimeNow then
                     if button.aura.buff.resetcheck then
@@ -5202,28 +5224,6 @@ function HealBot_GetInfo()
     return HealBot_Vers
 end
 
-function HealBot_VehicleHealth(unit)
-    xGUID=UnitGUID(unit)
-    if not xGUID then
-        HealBot_NoVehicle(unit)
-        return 100,100
-    end
-      --HealBot_setCall("HealBot_VehicleHealth")
-    return UnitHealth(unit), UnitHealthMax(unit)  
-end
-
-function HealBot_OnEvent_LeavingVehicle(unit)
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
-        HealBot_Timers_Set("INIT","RefreshPartyNextRecalcVehicle")
-    end
-      --HealBot_setCall("HealBot_OnEvent_LeavingVehicle")
-end
-
-function HealBot_retIsInVehicle(unit)
-      --HealBot_setCall("HealBot_retIsInVehicle")
-    return HealBot_UnitInVehicle[unit]
-end
-
 function HealBot_Player_InvCheck()
     HealBot_luVars["invCheck"]=false
     HealBot_luVars["BagsScanned"]=false
@@ -5623,9 +5623,18 @@ function HealBot_PlayerCheck()
             HealBot_luVars["CheckAuraFlags"]=true
         end
     end
+    if HealBot_luVars["inVehicle"] then
+        if not HealBot_UnitInVehicle["player"] then
+            HealBot_luVars["inVehicle"]=false
+            HealBot_luVars["CheckAuraFlags"]=true
+        end
+    elseif HealBot_UnitInVehicle["player"] then
+        HealBot_luVars["inVehicle"]=true
+        HealBot_luVars["CheckAuraFlags"]=true
+    end
     if HealBot_luVars["CheckAuraFlags"] then
         HealBot_luVars["CheckAuraFlags"]=false
-        HealBot_Aura_SetAuraCheckFlags(HealBot_luVars["debuffMounted"], HealBot_luVars["buffMounted"], HealBot_luVars["onTaxi"], HealBot_luVars["isResting"])
+        HealBot_Aura_SetAuraCheckFlags(HealBot_luVars["debuffMounted"], HealBot_luVars["buffMounted"], HealBot_luVars["onTaxi"], HealBot_luVars["isResting"], HealBot_luVars["inVehicle"])
     end
 end
 
@@ -6878,8 +6887,6 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_OnEvent_VehicleChange(arg1, true)
     elseif (event=="UNIT_EXITED_VEHICLE") then
         HealBot_OnEvent_VehicleChange(arg1, nil)
-    elseif (event=="UNIT_EXITING_VEHICLE") then
-        HealBot_OnEvent_LeavingVehicle(arg1)
     elseif (event=="INSPECT_READY") then
         if HealBot_luVars["talentUpdate"] then
             eButton,ePrivate = HealBot_Panel_AllUnitButton(arg1)

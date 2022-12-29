@@ -21,6 +21,7 @@
       <FontString name="$parent_text2" inherits="GameFontNormalSmall" />
       <FontString name="$parent_text3" inherits="GameFontNormalSmall" />
       <FontString name="$parent_text4" inherits="GameFontNormalSmall" />
+      <FontString name="$parent_text5" inherits="GameFontNormalSmall" />
     </Layer>
     </Layers>
     <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>

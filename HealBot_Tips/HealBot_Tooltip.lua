@@ -22,12 +22,14 @@ if HEALBOT_GAME_VERSION>3 then
                          [strlower(HEALBOT_RANDOMMOUNT)]=true,
                          [strlower(HEALBOT_RANDOMGOUNDMOUNT)]=true,
                          [strlower(HEALBOT_FAVPET)]=true,
+                         [strlower(HEALBOT_TARGETVEHICLE)]=true,
                        }
 elseif HEALBOT_GAME_VERSION>2 then
     hbPlayerCommands = { [strlower(HEALBOT_MOUNTS)]=true,
                          [strlower(HEALBOT_FAVMOUNT)]=true,
                          [strlower(HEALBOT_RANDOMMOUNT)]=true,
                          [strlower(HEALBOT_RANDOMGOUNDMOUNT)]=true,
+                         [strlower(HEALBOT_TARGETVEHICLE)]=true,
                        }
 end
 local hbTip = HealBot_GameTooltip
@@ -643,24 +645,22 @@ function HealBot_Action_DoRefreshTooltip()
                         end
                         hlth=HealBot_Text_readNumber(hlth)
                         maxhlth=HealBot_Text_readNumber(maxhlth)
-                        if zone and not strfind(zone,"Level") then
-                            HealBot_Tooltip_SetLine(zone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                        else
-                            HealBot_Tooltip_SetLine(" ",1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                        end
                         local vUnit=HealBot_retIsInVehicle(xUnit)
-                        if vUnit then
+                        local vExists=false
+                        local pZone=" "
+                        if zone and not strfind(zone,"Level") then
+                            pZone=zone
+                        end
+                        if vUnit and UnitExists(vUnit) then 
                             local lr,lg,lb=HealBot_Action_ClassColour(vUnit)
-                            hlth,maxhlth=HealBot_VehicleHealth(vUnit)
-                            local hPct=floor((hlth/maxhlth)*100)
+                            HealBot_Tooltip_SetLine(UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
+                            hlth,maxhlth=UnitHealth(xButton.unit),UnitHealthMax(xButton.unit)
+                            hPct=floor((hlth/maxhlth)*100)
                             hlth=HealBot_Text_readNumber(hlth)
                             maxhlth=HealBot_Text_readNumber(maxhlth)
-                            if UnitExists(vUnit) then
-                                HealBot_Tooltip_SetLine("  "..UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                            else
-                                HealBot_Tooltip_SetLine("  "..HEALBOT_VEHICLE,lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
-                            end
+                            pZone="  "..uName
                         end
+                        HealBot_Tooltip_SetLine(pZone,1,1,1,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                     end
                     if xButton.aggro.threatpct>0 or mana or HealBot_Tooltip_luVars["uGroup"]>0 or string.len(UnitTag)>0 then
                         if not mana or (maxmana and maxmana==0) then
