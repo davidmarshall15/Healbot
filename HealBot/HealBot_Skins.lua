@@ -686,9 +686,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt["text4"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["AFONT"]),
                             btextheight4,
                             HealBot_Font_Outline[btextoutline4]);
-            b.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
-                            btextheight2-HealBot_Globals.VehicleFontSizeReduction,
-                            HealBot_Font_Outline[btextoutline2]);
+            if btextheight2-HealBot_Globals.VehicleFontSizeReduction<2 then
+                b.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
+                                2,
+                                HealBot_Font_Outline[btextoutline2]);
+            else
+                b.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
+                                btextheight2-HealBot_Globals.VehicleFontSizeReduction,
+                                HealBot_Font_Outline[btextoutline2]);
+            end
 
             b.gref.txt["text"]:SetWidth(bWidth)
             b.gref.txt["text2"]:SetWidth(bWidth)
@@ -1267,7 +1273,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
 end
 
 function HealBot_Skins_Check(SkinName)
-    if not Healbot_Config_Skins.General[SkinName]["VC"] or Healbot_Config_Skins.General[SkinName]["VC"]~=HealBot_Global_Version() then
+    if not Healbot_Config_Skins.General[SkinName] or not Healbot_Config_Skins.General[SkinName]["VC"] or Healbot_Config_Skins.General[SkinName]["VC"]~=HealBot_Global_Version() then
         HealBot_Skins_Check_Skin(SkinName)
     end
 end
@@ -1550,6 +1556,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             Healbot_Config_Skins.Frame[SkinName][gl]["LOCKED"]=2
         end
         if Healbot_Config_Skins.Frame[SkinName][gl]["SCALE"]==nil then Healbot_Config_Skins.Frame[SkinName][gl]["SCALE"]=1 end
+        if Healbot_Config_Skins.Frame[SkinName][gl]["GLOW"]==nil then Healbot_Config_Skins.Frame[SkinName][gl]["GLOW"]=3 end
         if Healbot_Config_Skins.Frame[SkinName][gl]["BACKR"]==nil then Healbot_Config_Skins.Frame[SkinName][gl]["BACKR"]=0.2 end
         if Healbot_Config_Skins.Frame[SkinName][gl]["BACKG"]==nil then Healbot_Config_Skins.Frame[SkinName][gl]["BACKG"]=0.2 end
         if Healbot_Config_Skins.Frame[SkinName][gl]["BACKB"]==nil then Healbot_Config_Skins.Frame[SkinName][gl]["BACKB"]=0.7 end

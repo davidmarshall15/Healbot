@@ -12,6 +12,7 @@ Libs\LibSharedMedia-3.0\lib.xml
 Libs\libdatabroker-1-1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\lib.xml
 Libs\LibDeflate\lib.xml
+Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.xml
 Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.xml

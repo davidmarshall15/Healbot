@@ -315,6 +315,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","CheckZone")
     HealBot_Timers_Set("PLAYER","InvReady")
     HealBot_Timers_Set("LAST","ConfigClassHoT")
+    HealBot_Timers_Set("LAST","UpdateButtonGlow")
     HealBot_Timers_Set("LAST","LastUpdate") 
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
 end
@@ -651,6 +652,8 @@ local hbTimerFuncs={["INIT"]={
                         ["SendClassicAuraData"]=HealBot_Aura_SendClassicData,
                         ["LoadTips"]=HealBot_Options_LoadTips,
                         ["SetPlayerData"]=HealBot_SetPlayerData,
+                        ["UpdateButtonGlow"]=HealBot_Action_UpdateButtonGlow,
+                        ["DisableAllButtonGlow"]=HealBot_Action_DisableAllButtonGlow,
                     },
                    }
 

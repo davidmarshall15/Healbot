@@ -145,6 +145,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_UNITINCOMBAT02          = "Show enemy frame"
     HEALBOT_OPTIONS_UNITINCOMBAT03          = "Lockdown HealBot"
     HEALBOT_OPTIONS_AUTOSHOW                = "Close automatically";
+    HEALBOT_OPTIONS_FRAMEGLOWSIZE           = "Frame glow size";
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
     HEALBOT_OPTIONS_HIDEUNLOCKEDTAG         = "Hide unlocked tag"
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
@@ -312,9 +313,11 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_DETAILFONT              = "Detail font";
     HEALBOT_TOOLTIP_HEADERFONTSIZE          = "Header font size";
     HEALBOT_TOOLTIP_DETAILFONTSIZE          = "Detail font size";
+    HEALBOT_WORDS_TINY                      = "Tiny"
     HEALBOT_WORDS_SMALL                     = "Small"
     HEALBOT_WORDS_MEDIUM                    = "Medium"
     HEALBOT_WORDS_LARGE                     = "Large"
+    HEALBOT_WORDS_HUGE                      = "Huge"
     HEALBOT_WORDS_SHORT                     = "Short";
     HEALBOT_WORDS_LONG                      = "Long";
     HEALBOT_WORDS_SEC                       = "sec";
@@ -1005,9 +1008,12 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ADAPTIVECLASSMIX        = "Adaptive Class mix"
     HEALBOT_OPTIONS_ADAPTIVECUSTOMMIX       = "Adaptive Custom mix"
     HEALBOT_OPTIONS_ADAPTIVEONLY            = "Adaptive only"
+    HEALBOT_OPTIONS_ADAPTIVEHEALTHBAR       = "Adaptive and Health bar"
+    HEALBOT_OPTIONS_HEALTHBARONLY           = "Health bar only"
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar"
     HEALBOT_SKIN_BORDER_HAZARD              = "Border hazard"
     HEALBOT_SKIN_BORDER_HAZARDU             = "Border Hazard"
+    HEALBOT_SKIN_FRAME_GLOW                 = "Frame glow"
     HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX
@@ -1303,6 +1309,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_FORWARDTOHW              = "Forward to HealthWatch"
     HEALBOT_PLUGIN_FORWARDTOMW              = "Forward to ManaWatch"
     HEALBOT_PLUGIN_RETRYDURATION            = "Received from BuffWatch - Retry duration"
+    HEALBOT_PLUGIN_REPEATONCD               = "Repeat on timeout x2";
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

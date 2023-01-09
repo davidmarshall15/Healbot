@@ -521,7 +521,7 @@ function HealBot_Aura_AddExtraIcon(button, index)
     HealBot_Aura_UpdateExtraIcon(button, HealBot_UnitExtraIcons[button.id][index], index)
       --HealBot_setCall("HealBot_Aura_AddExtraIcon")
 end
-
+local lGlow=HealBot_Libs_LibGlow()
 function HealBot_Aura_AddBuffIcon(button, index)
     button.gref.icon[index]:SetTexture(HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][index]["spellId"]]["texture"])
     button.gref.iconf[index]:SetFrameLevel(1000)
@@ -802,7 +802,7 @@ local weaponEnchantState={[1]={["Active"]=false,["Expire"]=0},[2]={["Active"]=fa
 function HealBot_Aura_SetGeneralBuff(button, bName)
     curBuffName=bName
     button.aura.buff.missingbuff=bName
-    button.aura.buff.colbar=2
+    button.aura.buff.colbar=3
     button.aura.buff.priority=45
 end
 
@@ -1290,10 +1290,22 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         else
             curBuffRange=button.status.range
         end
-        if curBuffRange>-1 and button.aura.buff.colbar>0 then 
-            HealBot_Aura_AuxSetAuraBuffBars(button)
-        else
-            HealBot_Aura_AuxClearAuraBuffBars(button)
+        if curBuffRange>-1 then
+            if button.aura.buff.colbar==4 then
+                HealBot_Action_EnableBorderHazardType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF")
+            elseif button.hazard.buff then
+                HealBot_Action_DisableBorderHazardType(button, "BUFF")
+            end
+            if button.aura.buff.colbar==5 then
+                HealBot_Action_EnableButtonGlowType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF")
+            elseif button.glow.buff then
+                HealBot_Action_DisableButtonGlowType(button, "BUFF")
+            end
+            if button.aura.buff.colbar>0 then 
+                HealBot_Aura_AuxSetAuraBuffBars(button)
+            else
+                HealBot_Aura_AuxClearAuraBuffBars(button)
+            end
         end
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_Action_RefreshTooltip() 
@@ -1350,15 +1362,22 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
         else
             curDebuffRange=button.status.range
         end
-        if curDebuffRange>-1 and button.aura.debuff.colbar==3 then
-            HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
-        elseif button.hazard.debuff then
-            HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
-        end
-        if curDebuffRange>-1 and button.aura.debuff.colbar>0 then 
-            HealBot_Aura_AuxSetAuraDebuffBars(button) 
-        else
-            HealBot_Aura_AuxClearAuraDebuffBars(button)
+        if curDebuffRange>-1 then
+            if button.aura.debuff.colbar==4 then
+                HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
+            elseif button.hazard.debuff then
+                HealBot_Action_DisableButtonGlowType(button, "DEBUFF")
+            end
+            if button.aura.debuff.colbar==5 then
+                HealBot_Action_EnableButtonGlowType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
+            elseif button.glow.debuff then
+                HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
+            end
+            if button.aura.debuff.colbar>0 then 
+                HealBot_Aura_AuxSetAuraDebuffBars(button) 
+            else
+                HealBot_Aura_AuxClearAuraDebuffBars(button)
+            end
         end
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_Action_RefreshTooltip() 
@@ -1469,7 +1488,7 @@ function HealBot_Aura_CheckUnitBuff(button)
             if hbAuraBuffWatch[button.guid][uaName] then
                 hbAuraBuffWatchActive[button.guid][uaName]=true
                 hbAuraBuffWatch[button.guid][uaName]=false
-                HealBot_Plugin_BuffWatch_ReadyTime(button.guid, uaName, true)
+                HealBot_Plugin_BuffWatch_PlayerReady(button.guid, uaName, true)
             end
             if hbAuraBuffWatchActive[button.guid][uaName] then
                 hbAuraBuffWatchAlert[button.guid][uaName]=false
@@ -1642,7 +1661,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
             for buff,_ in pairs(hbAuraBuffWatchAlert[button.guid]) do
                 if hbAuraBuffWatchAlert[button.guid][buff] and hbAuraBuffWatchActive[button.guid][buff] then
                     hbAuraBuffWatchActive[button.guid][buff]=false
-                    HealBot_Plugin_BuffWatch_ReadyTime(button.guid, buff, false)
+                    HealBot_Plugin_BuffWatch_PlayerReady(button.guid, buff, false)
                 end
             end
         end 
@@ -1918,6 +1937,9 @@ function HealBot_Aura_ClearDebuff(button)
         if button.hotbars.debuff then
             HealBot_Action_BarHotDisable(button, "DEBUFF")
         end
+        if button.glow.debuff then
+            HealBot_Action_DisableButtonGlowType(button, "DEBUFF")
+        end
         if button.hazard.debuff then
             HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
         end
@@ -1932,6 +1954,9 @@ function HealBot_Aura_ClearBuff(button)
         button.aura.buff.colbar=0
         button.aura.buff.missingbuff=false
         button.aura.buff.priority=99
+        if button.glow.buff then
+            HealBot_Action_DisableButtonGlowType(button, "BUFF")
+        end
         HealBot_Aura_AuxClearAuraBuffBars(button)
         HealBot_RefreshUnit(button)
     end

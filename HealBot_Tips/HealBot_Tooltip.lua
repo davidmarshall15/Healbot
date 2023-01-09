@@ -638,7 +638,6 @@ function HealBot_Action_DoRefreshTooltip()
                     HealBot_Tooltip_SetLine(HB_TOOLTIP_OFFLINE,1,0.5,0,1,UnitOffline,1,1,1,1)
                 else
                     if hlth and maxhlth then
-                        local inHeal, inAbsorb = HealBot_IncHeals_retHealsIn(xUnit, xButton)
                         local hPct=100
                         if maxhlth>0 then
                             hPct=floor((hlth/maxhlth)*100)
@@ -646,7 +645,6 @@ function HealBot_Action_DoRefreshTooltip()
                         hlth=HealBot_Text_readNumber(hlth)
                         maxhlth=HealBot_Text_readNumber(maxhlth)
                         local vUnit=HealBot_retIsInVehicle(xUnit)
-                        local vExists=false
                         local pZone=" "
                         if zone and not strfind(zone,"Level") then
                             pZone=zone

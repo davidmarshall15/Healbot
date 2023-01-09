@@ -601,11 +601,11 @@ function HealBot_SlashCmd(cmd)
         HealBot_luVars["Help"]=true
     elseif (HBcmd=="iht" and x) then
         if HEALBOT_GAME_VERSION<4 then
-            if (tonumber(x)>2) and (tonumber(x)<22) then
+            if (tonumber(x)>0) and (tonumber(x)<22) then
                 HealBot_Globals.ClassicHoTTime=tonumber(x)+0.5
                 HealBot_AddChat("HoT Time set to "..x.."s")
             else
-                HealBot_AddChat("Invalid Value for HoT Time. valid range from 3 to 21")
+                HealBot_AddChat("Invalid Value for HoT Time. valid range from 1 to 21")
             end
         end
     elseif (HBcmd=="skin" and x) then
@@ -802,6 +802,7 @@ function HealBot_SlashCmd(cmd)
         local button=xButton or pButton
         HealBot_AddDebug("#: UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"].." UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." MaxFastQueue="..HealBot_luVars["MaxFastQueue"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
         HealBot_AddDebug("health.hpct="..button.health.hpct.."  health.absorbspctc="..button.health.absorbspctc,"Hot",true)
+        HealBot_Action_EnableButtonGlowType(button, 1,0,0, "PLUGIN", "ZZZ")
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -1349,6 +1350,7 @@ function HealBot_UpdateUnitClear(button)
     HealBot_Aura_RemoveIcons(button)
     HealBot_Aux_clearAllBars(button)
     HealBot_Aggro_ClearUnitAggro(button)
+    HealBot_Action_DisableButtonGlowType(button, "ALL")
     button.status.incombat=false
     button.status.hostile=false
     button.spec=" "
@@ -2466,7 +2468,7 @@ local hiuCHCAmount, hiuBlizzAmount=0,0
 function HealBot_HealsInAmountV1(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         --hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.ALL_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
-        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS+libCHC.BOMB_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
+        hiuHealAmount=(libCHC:GetHealAmount(button.guid, libCHC.HOT_HEALS+libCHC.BOMB_HEALS, TimeNow+HealBot_Globals.ClassicHoTTime) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
         hiuCHCAmount=(libCHC:GetHealAmount(button.guid, libCHC.CASTED_HEALS) or 0) * (libCHC:GetHealModifier(button.guid) or 1)
         hiuBlizzAmount=UnitGetIncomingHeals(button.unit) or 0
         if hiuCHCAmount>hiuBlizzAmount then
@@ -2652,15 +2654,6 @@ function HealBot_KnownSpell(spellID)
     end
       --HealBot_setCall("HealBot_KnownSpell")
     return nil;
-end
-
-function HealBot_IncHeals_retHealsIn(unit, button)
-    local ihretX=button.health.incoming
-    local ihretY=button.health.absorbs
-    if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["AC"]<2 then ihretY=0 end
-    if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Current_Skin][button.frame]["IC"]<2 then ihretX=0 end
-      --HealBot_setCall("HealBot_IncHeals_retHealsIn")
-    return ihretX, ihretY
 end
 
 function HealBot_IncHeals_ClearUnit(button)
@@ -3215,12 +3208,12 @@ function HealBot_VariablesLoaded()
     HealBot_Lang_InitVars()
     HealBot_Data_InitVars()
     HealBot_SetPlayerData()
+    HealBot_Include_Skin(HEALBOT_SKINS_STD, true)
     if HealBot_Globals.FirstLoad then
         HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, true)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
     end
-    HealBot_Include_Skin(HEALBOT_SKINS_STD, true)
     HealBot_Action_GetLoadoutId()
     HealBot_Update_Skins()
     HealBot_Config.LastAutoSkinChangeTime=0
@@ -3910,14 +3903,6 @@ function HealBot_Plugin_TTDUpdate(guid)
     end
 end
 
-function HealBot_NoVehicle(unit)
-    if HealBot_UnitInVehicle[unit] then 
-        HealBot_UnitInVehicle[unit]=nil 
-        if UnitIsUnit(button.unit,"player") then HealBot_PlayerCheck() end
-    end
-      --HealBot_setCall("HealBot_NoVehicle")
-end
-
 function HealBot_retIsInVehicle(unit)
       --HealBot_setCall("HealBot_retIsInVehicle")
     return HealBot_UnitInVehicle[unit]
@@ -4485,7 +4470,7 @@ function HealBot_ProcessRefreshTypes()
             end
         else
             HealBot_luVars["ProcessRefresh"]=false
-            HealBot_Timers_Set("LAST","ProcCacheButtons",5)
+            HealBot_Timers_Set("LAST","ProcCacheButtons",1)
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
                 HealBot_Aux_ResetTextButtons()
@@ -4499,7 +4484,7 @@ function HealBot_ProcessRefreshTypes()
             HealBot_Skins_setLuVars("AuxReset", false)
             return
         end
-        C_Timer.After(0.02, HealBot_ProcessRefreshTypes)
+        C_Timer.After(0.05, HealBot_ProcessRefreshTypes)
     else
         HealBot_luVars["ProcessRefresh"]=false
         HealBot_Timers_Set("INIT","RefreshParty")
@@ -6529,7 +6514,11 @@ end
 
 function HealBot_RequestsClearButton(button)
     if button.request.colbar>0 then
-        if button.request.colbar==3 then HealBot_Action_DisableBorderHazardType(button, "PLUGIN") end
+        if button.request.colbar==4 then 
+            HealBot_Action_DisableBorderHazardType(button, "PLUGIN") 
+        elseif button.request.colbar==5 then
+            HealBot_Action_DisableButtonGlowType(button, "PLUGIN", "R")
+        end
         button.request.colbar=0
         HealBot_Action_UpdateRequestButton(button)
     end
@@ -6556,6 +6545,11 @@ function HealBot_UpdateUnitRange(button)
             if button.status.range<0 or oldRange<0 then 
                 HealBot_OnEvent_HealsInUpdate(button)
                 HealBot_OnEvent_AbsorbsUpdate(button)
+            end
+            if button.status.range>0 then
+                if HealBot_luVars["pluginBuffWatch"] then HealBot_Plugin_BuffWatch_InRange(button) end
+                if hbHealthWatch[button.guid] then HealBot_Plugin_HealthWatch_UnitUpdate(button) end
+                if hbManaWatch[button.guid] then HealBot_Plugin_ManaWatch_UnitUpdate(button) end
             end
             if hbRangeRequests[button.guid] and button.status.range>-1 then
                 HealBot_Plugin_Requests_CancelGUID(button.guid)
@@ -6823,6 +6817,7 @@ function HealBot_ClearGUID(guid)
         HealBot_Action_ClearGUID(guid)
         HealBot_Aura_ClearGUID(guid)
         if HealBot_Data["TIPUSE"] then HealBot_Tooltip_ClearGUID(guid) end
+        --if HealBot_luVars["pluginBuffWatch"] then HealBot_Plugin_BuffWatch_ClearGUID(guid) end
     end
 end
 

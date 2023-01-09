@@ -66,6 +66,13 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             if line then 
                 hbMana = tonumber((gsub(line, "%D", "")))
             end
+            if not hbMana then
+                ttText = getglobal("HealBot_ScanTooltipTextLeft3")
+                line = ttText:GetText()
+                if line then 
+                    hbMana = tonumber((gsub(line, "%D", "")))
+                end
+            end
         end
         if HEALBOT_GAME_VERSION<4 then 
             local _, rank = GetSpellBookItemName(spellBookId, BOOKTYPE_SPELL)

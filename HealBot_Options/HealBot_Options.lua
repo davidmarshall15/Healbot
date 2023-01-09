@@ -57,7 +57,6 @@ local HealBot_Options_BarsGrowDirection_List={}
 local HealBot_Options_BarsOrientation_List={}
 local HealBot_Options_ActionAnchor_List={}
 local HealBot_Options_ActionLocked_List={}
-local HealBot_Options_AutoShow_List={}
 local HealBot_Options_ActionBarsCombo_List={}
 local HealBot_Options_UseOverrides_List={}
 local HealBot_Options_Sort_List={}
@@ -954,11 +953,20 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_LOCKCTRLALT,
     }
     
-    HealBot_Options_AutoShow_List = {
+    HealBot_Options_Lists["AutoShow"] = {
         HEALBOT_WORD_OFF,
         HEALBOT_WORD_ONWITHOUTSOUND,
         HEALBOT_WORD_ONWITHSOUND,
     }
+    
+    HealBot_Options_Lists["GlowFrame"] = {
+        HEALBOT_WORDS_TINY,
+        HEALBOT_WORDS_SMALL,
+        HEALBOT_WORDS_MEDIUM,
+        HEALBOT_WORDS_LARGE,
+        HEALBOT_WORDS_HUGE,
+    }
+    
     HealBot_Options_ActionAnchor_List = {
         HEALBOT_OPTIONS_TOPLEFT,
         HEALBOT_OPTIONS_BOTTOMLEFT,
@@ -1197,14 +1205,19 @@ function HealBot_Options_setLists()
     HealBot_Options_Lists["CDCBarCol"] = {
         HEALBOT_WORDS_NONE,
         HEALBOT_OPTIONS_ADAPTIVEONLY,
-        HEALBOT_SKIN_HEALTHBARCOL_TEXT,
+        HEALBOT_OPTIONS_ADAPTIVEHEALTHBAR,
+        HEALBOT_OPTIONS_HEALTHBARONLY,
         HEALBOT_SKIN_BORDER_HAZARD,
+        HEALBOT_SKIN_FRAME_GLOW,
     }
 
     HealBot_Options_Lists["BuffBarCol"] = {
         HEALBOT_WORDS_NONE,
         HEALBOT_OPTIONS_ADAPTIVEONLY,
-        HEALBOT_SKIN_HEALTHBARCOL_TEXT,
+        HEALBOT_OPTIONS_ADAPTIVEHEALTHBAR,
+        HEALBOT_OPTIONS_HEALTHBARONLY,
+        HEALBOT_SKIN_BORDER_HAZARD,
+        HEALBOT_SKIN_FRAME_GLOW,
     }
 
     HealBot_Options_Lists["Themes"] = {
@@ -2970,6 +2983,7 @@ function HealBot_FrameScale_OnValueChanged(self)
             local g=_G[self:GetName().."Text"]
             g:SetText(self.text .. ": " .. val);
             HealBot_Timers_Set("SKINS","AllFramesChanged")
+            HealBot_Timers_Set("LAST","UpdateButtonGlow")
         end
     end
 end
@@ -3444,6 +3458,7 @@ function HealBot_Options_BarWidthS_OnValueChanged(self)
         HealBot_Text_setTextLen(HealBot_Options_luVars["FramesSelFrame"])
         HealBot_Timers_Set("SKINS","TextUpdateNames")
         HealBot_Timers_Set("SKINS","TextUpdateHealth")
+        HealBot_Timers_Set("LAST","UpdateButtonGlow")
     end
 end
 
@@ -10514,17 +10529,34 @@ end
 
 function HealBot_Options_AutoShow_DropDown()
     local info = UIDropDownMenu_CreateInfo()
-    for j=1, getn(HealBot_Options_AutoShow_List), 1 do
-        info.text = HealBot_Options_AutoShow_List[j];
+    for j=1, getn(HealBot_Options_Lists["AutoShow"]), 1 do
+        info.text = HealBot_Options_Lists["AutoShow"][j];
         info.func = function(self)
                         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"] ~= self:GetID() then
                             Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"] = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_AutoShow,HealBot_Options_AutoShow_List[Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"]]) 
+                            UIDropDownMenu_SetText(HealBot_Options_AutoShow,HealBot_Options_Lists["AutoShow"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"]]) 
                             HealBot_Timers_Set("LAST","SetAutoClose")
                         end
                     end
         info.checked = false;
         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_GlowFrame_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_Lists["GlowFrame"]), 1 do
+        info.text = HealBot_Options_Lists["GlowFrame"][j];
+        info.func = function(self)
+                        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] ~= self:GetID() then
+                            Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_GlowFrame,HealBot_Options_Lists["GlowFrame"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"]]) 
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                        end
+                    end
+        info.checked = false;
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -11972,7 +12004,7 @@ function HealBot_Options_prepCustomBuffList()
                     if cusPrio>16 then
                         HealBot_Options_sortCustomBuffList(bID, bName, cusPrio)
                     end
-                elseif HealBot_Globals.CustomBuffTag[bID] and HealBot_Config_Buffs.ListSortFilterTag==HealBot_Globals.CustomBuffTag[bID] then
+                elseif HealBot_Globals.CustomBuffTag[bID] and strtrim(HealBot_Config_Buffs.ListSortFilterTag)==strtrim(HealBot_Globals.CustomBuffTag[bID]) then
                     HealBot_Options_sortCustomBuffList(bID, bName, cusPrio)
                 end
             else
@@ -11986,13 +12018,17 @@ function HealBot_Options_prepCustomBuffList()
         else
             if hbCustomBuffOrder[a]<hbCustomBuffOrder[b] then return true end
             if hbCustomBuffOrder[a]>hbCustomBuffOrder[b] then return false end
-            return a<b
+            if type(a)==type(b) then
+                return a<b
+            else
+                return false
+            end
         end
     end)
     HealBot_Options_setCustomBuffList()
 end
 
-function HealBot_Options_setCustomBuffList()    
+function HealBot_Options_setCustomBuffList()
     local startEntry=((HealBot_Options_luVars["custombufftextpage"]-1)*15)+1
     local endEntry=HealBot_Options_luVars["custombufftextpage"]*15
     local x=1
@@ -12008,34 +12044,37 @@ function HealBot_Options_setCustomBuffList()
             hbCustomBuff_Text[x]["Name"]:SetText(hbCustomBuffList[hbCustomBuffIDs[j]]["Name"])
             hbCustomBuff_Text[x]["Tag"]:SetText(hbCustomBuffList[hbCustomBuffIDs[j]]["Tag"])
             local z=hbCustomBuffIDs[j]
-
-                    local r,g,b=0,0,0
-                    if HealBot_Globals.CustomBuffBarColour[z] then
-                        r=HealBot_Globals.CustomBuffBarColour[z].R or 0.45
-                        g=HealBot_Globals.CustomBuffBarColour[z].G or 0
-                        b=HealBot_Globals.CustomBuffBarColour[z].B or 0.26
-                    else
-                        r=HealBot_Globals.CustomBuffBarColour[customBuffPriority].R or 0.45
-                        g=HealBot_Globals.CustomBuffBarColour[customBuffPriority].G or 0
-                        b=HealBot_Globals.CustomBuffBarColour[customBuffPriority].B or 0.26
-                    end
-                    if r<0.2 and g<0.2 and b<0.2 then
-                        r=r+0.4
-                        g=g+0.4
-                        b=b+0.4
-                    elseif r<0.3 and g<0.3 and b<0.3 then
-                        r=r+0.3
-                        g=g+0.3
-                        b=b+0.3
-                    elseif r<0.4 and g<0.4 and b<0.4 then
-                        r=r+0.2
-                        g=g+0.2
-                        b=b+0.2
-                    elseif r<0.5 and g<0.5 and b<0.5 then
-                        r=r+0.1
-                        g=g+0.1
-                        b=b+0.1
-                    end
+            local r,g,b=0,0,0
+            if HealBot_Globals.CustomBuffBarColour[z] then
+                r=HealBot_Globals.CustomBuffBarColour[z].R or 0.45
+                g=HealBot_Globals.CustomBuffBarColour[z].G or 0
+                b=HealBot_Globals.CustomBuffBarColour[z].B or 0.26
+            else
+                r=HealBot_Globals.CustomBuffBarColour[customBuffPriority].R or 0.45
+                g=HealBot_Globals.CustomBuffBarColour[customBuffPriority].G or 0
+                b=HealBot_Globals.CustomBuffBarColour[customBuffPriority].B or 0.26
+            end
+            if r<0.2 and g<0.2 and b<0.2 then
+                r=r+0.4
+                g=g+0.4
+                b=b+0.4
+            elseif r<0.3 and g<0.3 and b<0.3 then
+                r=r+0.3
+                g=g+0.3
+                b=b+0.3
+            elseif r<0.4 and g<0.4 and b<0.4 then
+                r=r+0.2
+                g=g+0.2
+                b=b+0.2
+            elseif r<0.5 and g<0.5 and b<0.5 then
+                r=r+0.1
+                g=g+0.1
+                b=b+0.1
+            end
+            hbCustomBuff_Text[x]["Prio"]:SetTextColor(r,g,b,1)
+            hbCustomBuff_Text[x]["ID"]:SetTextColor(r,g,b,1)
+            hbCustomBuff_Text[x]["Name"]:SetTextColor(r,g,b,1)
+            hbCustomBuff_Text[x]["Tag"]:SetTextColor(r,g,b,1)
         else
             hbCustomBuff_Text[x]["Prio"]:SetText("")
             hbCustomBuff_Text[x]["ID"]:SetText("")
@@ -12653,9 +12692,11 @@ function HealBot_Options_Skins_DropDown()
     for j=1, getn(Healbot_Config_Skins.Skins), 1 do
         info.text = Healbot_Config_Skins.Skins[j];
         info.func = function(self)
-                        Healbot_Config_Skins.Skin_ID = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_Skins,Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
-                        if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), true) end
+                        if Healbot_Config_Skins.Skin_ID~=self:GetID() then
+                            Healbot_Config_Skins.Skin_ID = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_Skins,Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
+                            if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), true) end
+                        end
                     end
         info.checked = false;
         if Healbot_Config_Skins.Skin_ID==j then info.checked = true end
@@ -12676,7 +12717,8 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     Healbot_Config_Skins.Current_Skin=Healbot_Config_Skins.Skins[j]
                     HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
                     HealBot_Action_setAutoClose(true)
-                    HealBot_Timers_Set("LAST","SetAutoClose", 3)
+                    HealBot_Timers_Set("LAST","SetAutoClose", 1)
+                    HealBot_Timers_Set("LAST","DisableAllButtonGlow")
                     HealBot_Timers_TurboOn(1)
                     HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
                     optSetSkins=true
@@ -14692,7 +14734,7 @@ function HealBot_Options_prepCustomDebuffList()
                 if x>16 then
                     HealBot_Options_sortCustomDebuffList(dID, dName, x)
                 end
-            elseif HealBot_Globals.CDCTag[dID] and HealBot_Config_Cures.ListSortFilterTag==HealBot_Globals.CDCTag[dID] then
+            elseif HealBot_Globals.CDCTag[dID] and strtrim(HealBot_Config_Cures.ListSortFilterTag)==strtrim(HealBot_Globals.CDCTag[dID]) then
                 HealBot_Options_sortCustomDebuffList(dID, dName, x)
             end
         else
@@ -14710,7 +14752,11 @@ function HealBot_Options_prepCustomDebuffList()
         else
             if hbCustomDebuffOrder[a]<hbCustomDebuffOrder[b] then return true end
             if hbCustomDebuffOrder[a]>hbCustomDebuffOrder[b] then return false end
-            return a<b
+            if type(a)==type(b) then
+                return a<b
+            else
+                return false
+            end
         end
     end)
     HealBot_Options_setCustomDebuffList()
@@ -17304,83 +17350,84 @@ end
 
 HealBot_Options_luVars["hbrCode"]=""
 function HealBot_Options_Lang(region, msgchat)
-    local validCode = true
-    local loaded, reason = nil,nil
-    if region=="ptBR" then
-        HealBot_Lang_ptBR()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_ptBR() end
-        if msgchat then HealBot_AddChat("Switching Lang to ptBR") end
-        HealBot_Options_luVars["hbLangs"]=11
-    elseif region=="zhCN" then
-        HealBot_Lang_zhCN()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_zhCN() end
-        if msgchat then HealBot_AddChat("Switching Lang to zhCN") end
-        HealBot_Options_luVars["hbLangs"]=1
-    elseif region=="deDE" then
-        HealBot_Lang_deDE()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_deDE() end
-        if msgchat then HealBot_AddChat("Switching Lang to deDE") end
-        HealBot_Options_luVars["hbLangs"]=5
-    elseif region=="esES" then
-        HealBot_Lang_esES()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_esALL() end
-        if msgchat then HealBot_AddChat("Switching Lang to esES") end
-        HealBot_Options_luVars["hbLangs"]=13
-    elseif region=="esMX" then
-        HealBot_Lang_esMX()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_esALL() end
-        if msgchat then HealBot_AddChat("Switching Lang to esMX") end
-        HealBot_Options_luVars["hbLangs"]=10
-    elseif region=="frFR" then
-        HealBot_Lang_frFR()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_frFR() end
-        if msgchat then HealBot_AddChat("Switching Lang to frFR") end
-        HealBot_Options_luVars["hbLangs"]=4
-    elseif region=="huHU" then
-        HealBot_Lang_huHU()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_huHU() end
-        if msgchat then HealBot_AddChat("Switching Lang to huHU") end
-        HealBot_Options_luVars["hbLangs"]=7
-    elseif region=="koKR" then
-        HealBot_Lang_koKR()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_koKR() end
-        if msgchat then HealBot_AddChat("Switching Lang to koKR") end
-        HealBot_Options_luVars["hbLangs"]=9
-    elseif region=="ruRU" then
-        HealBot_Lang_ruRU()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_ruRU() end
-        if msgchat then HealBot_AddChat("Switching Lang to ruRU") end
-        HealBot_Options_luVars["hbLangs"]=12
-    elseif region=="zhTW" then
-        HealBot_Lang_zhTW()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_zhTW() end
-        if msgchat then HealBot_AddChat("Switching Lang to zhTW") end
-        HealBot_Options_luVars["hbLangs"]=14
-    elseif region=="itIT" then
-        HealBot_Lang_itIT()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_itIT() end
-        if msgchat then HealBot_AddChat("Switching Lang to itIT") end
-        HealBot_Options_luVars["hbLangs"]=9
-    elseif region=="grGR" then
-        HealBot_Lang_grGR()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_grGR() end
-        if msgchat then HealBot_AddChat("Switching Lang to grGR") end
-        HealBot_Options_luVars["hbLangs"]=7
-    elseif region=="enUK" then
-        HealBot_Lang_enUK()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_enALL() end
-        if msgchat then HealBot_AddChat("Switching Lang to enUK") end
-        HealBot_Options_luVars["hbLangs"]=2
-    elseif region=="enUS" then
-        HealBot_Lang_enUS()
-        if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_enALL() end
-        if msgchat then HealBot_AddChat("Switching Lang to enUS") end
-        HealBot_Options_luVars["hbLangs"]=3
-    else
-        validCode=nil
-        HealBot_AddChat("Invalid Region code "..region)
-    end
     if region~=HealBot_Options_luVars["hbrCode"] then
+        HealBot_Options_luVars["hbrCode"]=region
+        local validCode = true
+        local loaded, reason = nil,nil
+        if region=="ptBR" then
+            HealBot_Lang_ptBR()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_ptBR() end
+            if msgchat then HealBot_AddChat("Switching Lang to ptBR") end
+            HealBot_Options_luVars["hbLangs"]=11
+        elseif region=="zhCN" then
+            HealBot_Lang_zhCN()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_zhCN() end
+            if msgchat then HealBot_AddChat("Switching Lang to zhCN") end
+            HealBot_Options_luVars["hbLangs"]=1
+        elseif region=="deDE" then
+            HealBot_Lang_deDE()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_deDE() end
+            if msgchat then HealBot_AddChat("Switching Lang to deDE") end
+            HealBot_Options_luVars["hbLangs"]=5
+        elseif region=="esES" then
+            HealBot_Lang_esES()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_esALL() end
+            if msgchat then HealBot_AddChat("Switching Lang to esES") end
+            HealBot_Options_luVars["hbLangs"]=13
+        elseif region=="esMX" then
+            HealBot_Lang_esMX()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_esALL() end
+            if msgchat then HealBot_AddChat("Switching Lang to esMX") end
+            HealBot_Options_luVars["hbLangs"]=10
+        elseif region=="frFR" then
+            HealBot_Lang_frFR()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_frFR() end
+            if msgchat then HealBot_AddChat("Switching Lang to frFR") end
+            HealBot_Options_luVars["hbLangs"]=4
+        elseif region=="huHU" then
+            HealBot_Lang_huHU()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_huHU() end
+            if msgchat then HealBot_AddChat("Switching Lang to huHU") end
+            HealBot_Options_luVars["hbLangs"]=7
+        elseif region=="koKR" then
+            HealBot_Lang_koKR()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_koKR() end
+            if msgchat then HealBot_AddChat("Switching Lang to koKR") end
+            HealBot_Options_luVars["hbLangs"]=9
+        elseif region=="ruRU" then
+            HealBot_Lang_ruRU()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_ruRU() end
+            if msgchat then HealBot_AddChat("Switching Lang to ruRU") end
+            HealBot_Options_luVars["hbLangs"]=12
+        elseif region=="zhTW" then
+            HealBot_Lang_zhTW()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_zhTW() end
+            if msgchat then HealBot_AddChat("Switching Lang to zhTW") end
+            HealBot_Options_luVars["hbLangs"]=14
+        elseif region=="itIT" then
+            HealBot_Lang_itIT()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_itIT() end
+            if msgchat then HealBot_AddChat("Switching Lang to itIT") end
+            HealBot_Options_luVars["hbLangs"]=9
+        elseif region=="grGR" then
+            HealBot_Lang_grGR()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_grGR() end
+            if msgchat then HealBot_AddChat("Switching Lang to grGR") end
+            HealBot_Options_luVars["hbLangs"]=7
+        elseif region=="enUK" then
+            HealBot_Lang_enUK()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_enALL() end
+            if msgchat then HealBot_AddChat("Switching Lang to enUK") end
+            HealBot_Options_luVars["hbLangs"]=2
+        elseif region=="enUS" then
+            HealBot_Lang_enUS()
+            if HealBot_Options_luVars["TIPLOADED"] then HealBot_Lang_Options_enALL() end
+            if msgchat then HealBot_AddChat("Switching Lang to enUS") end
+            HealBot_Options_luVars["hbLangs"]=3
+        else
+            validCode=nil
+            HealBot_AddChat("Invalid Region code "..region)
+        end
         HealBot_HealGroupsTrans = { [HEALBOT_OPTIONS_SELFHEALS_en] = HEALBOT_OPTIONS_SELFHEALS,
                                     [HEALBOT_OPTIONS_TANKHEALS_en] = HEALBOT_OPTIONS_TANKHEALS,
                                     [HEALBOT_CLASSES_HEALERS_en] = HEALBOT_CLASSES_HEALERS,
@@ -17393,7 +17440,6 @@ function HealBot_Options_Lang(region, msgchat)
                                     [HEALBOT_OPTIONS_TARGETHEALS_en] = HEALBOT_OPTIONS_TARGETHEALS,
                                     [HEALBOT_CUSTOM_CASTBY_ENEMY_en] = HEALBOT_CUSTOM_CASTBY_ENEMY,
                                     }
-        HealBot_Options_luVars["hbrCode"]=region
         HealBot_Options_SetSkins()
         local g=_G["HealBot_Contents_ButtonT0Txt"] 
         g:SetText(HEALBOT_HEALBOT)
@@ -18399,6 +18445,7 @@ function HealBot_Options_SkinsFramesGeneralTab(tab)
         HealBot_Options_SetLabel("healbotframelockedfontstr",HEALBOT_OPTIONS_ACTIONLOCKED)
         HealBot_Options_SetLabel("HealBot_Options_FrameAliasFixedFrame",HealBot_Options_HealGroupsFrame_List[HealBot_Options_luVars["FramesSelFrame"]])
         HealBot_Options_SetLabel("healbotframeautoshowfontstr",HEALBOT_OPTIONS_AUTOSHOW)
+        HealBot_Options_SetLabel("healbotframeglowfontstr",HEALBOT_OPTIONS_FRAMEGLOWSIZE)
         HealBot_Options_SetLabel("healbotframeanchorfontstr",HEALBOT_OPTIONS_ANCHOR)
         HealBot_Options_SetLabel("healbotbarsanchorfontstr",HEALBOT_OPTIONS_BARSANCHOR)
         HealBot_Options_SetLabel("healbotbarsgrowdirectionfontstr",HEALBOT_OPTIONS_GROW_DIRECTION)
@@ -18416,7 +18463,9 @@ function HealBot_Options_SkinsFramesGeneralTab(tab)
         HealBot_Options_ActionLocked.initialize = HealBot_Options_ActionLocked_DropDown
         UIDropDownMenu_SetText(HealBot_Options_ActionLocked, HealBot_Options_ActionLocked_List[Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCKED"]])
         HealBot_Options_AutoShow.initialize = HealBot_Options_AutoShow_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_AutoShow, HealBot_Options_AutoShow_List[Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"]])
+        UIDropDownMenu_SetText(HealBot_Options_AutoShow, HealBot_Options_Lists["AutoShow"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AUTOCLOSE"]])
+        HealBot_Options_GlowFrame.initialize = HealBot_Options_GlowFrame_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_GlowFrame, HealBot_Options_Lists["GlowFrame"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"]])
         HealBot_Options_SetText(HealBot_Options_FrameAlias,HEALBOT_OPTIONS_FRAME_ALIAS)
         if HealBot_Options_luVars["FramesSelFrame"]<6 then
             local aliasText=HEALBOT_OPTIONS_FRAME.." "..HealBot_Options_luVars["FramesSelFrame"]
@@ -20433,7 +20482,8 @@ function HealBot_Options_IndicatorsTab()
            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] or
            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] or
            HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MONK] or
-           HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
+           HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] or
+           HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_EVOKER] then
             showPowerTab=true
         end
     end
@@ -21906,10 +21956,17 @@ function HealBot_Options_UpdateUsedButtonText(button)
                                 ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AHEIGHT"]*
                                      Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
                                 HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AOUTLINE"]]);
-    button.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
-                                ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
-                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])-HealBot_Globals.VehicleFontSizeReduction,
-                                     HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
+    if ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])-HealBot_Globals.VehicleFontSizeReduction<2 then
+        button.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
+                                         2,
+                                         HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
+
+    else
+        button.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
+                                    ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
+                                         Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])-HealBot_Globals.VehicleFontSizeReduction,
+                                         HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
+    end
 end
 
 function HealBot_Options_UpdateUsedTextures(button)

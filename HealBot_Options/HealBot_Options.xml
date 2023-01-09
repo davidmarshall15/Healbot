@@ -8304,7 +8304,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FrameAlias" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-23" y="-85" />
+                          <AbsDimension x="-23" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8331,13 +8331,40 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionLocked" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-85" />
+                          <AbsDimension x="0" y="-58" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Layers>
                       <Layer level="OVERLAY">
                         <FontString name="healbotframeautoshowfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_AUTOSHOW">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEAUTOSHOW",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEAUTOSHOW",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_GlowFrame" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AutoShow" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-58" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotframeglowfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_FRAMEGLOWSIZE">
                           <Anchors>
                             <Anchor point="TOP">
                               <Offset>
@@ -8494,7 +8521,7 @@
                       <AbsDimension x="450" y="16" />
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AutoShow" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_GlowFrame" relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="47" y="-75" />
                         </Offset>
