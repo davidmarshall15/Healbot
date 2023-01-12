@@ -214,7 +214,11 @@ function HealBot_Share_ValidateData(sType, sIn)
     for l in string.gmatch(sStr, "[^\n]+") do
         local t=(string.gsub(l, "^%s*(.-)%s*$", "%1"))
         if string.len(t)>1 and not id then
-            id=t
+            if string.len(t)>40 then
+                id="Invalid string, unable to decompress"
+            else
+                id=t
+            end
         elseif string.len(t)>1  then
             if sType==1 then extra=t end
             break
@@ -242,7 +246,9 @@ function HealBot_Share_ExportPresetCols(lData)
         ssStr=ssStr..HealBot_Globals.PresetColours[x]["B"]..","
         ssStr=ssStr..HealBot_Globals.PresetColours[x]["A"].."\n"
     end
-    ssStr=HealBot_Share_Compress(ssStr)
+    if lData or HealBot_Globals.CompressExport then
+        ssStr=HealBot_Share_Compress(ssStr)
+    end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
     else
@@ -342,7 +348,9 @@ function HealBot_Share_ExportSpells(lData)
             end
         end
     end
-    ssStr=HealBot_Share_Compress(ssStr)
+    if lData or HealBot_Globals.CompressExport then
+        ssStr=HealBot_Share_Compress(ssStr)
+    end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
     else
@@ -452,7 +460,9 @@ function HealBot_Share_ExportBuffs(lData)
             ssStr=ssStr..",,,\n"
         end
     end
-    ssStr=HealBot_Share_Compress(ssStr)
+    if lData or HealBot_Globals.CompressExport then
+        ssStr=HealBot_Share_Compress(ssStr)
+    end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
     else
@@ -594,7 +604,9 @@ function HealBot_Share_ExportDebuffs(lData)
             ssStr=ssStr..",,,\n"
         end
     end
-    ssStr=HealBot_Share_Compress(ssStr)
+    if lData or HealBot_Globals.CompressExport then
+        ssStr=HealBot_Share_Compress(ssStr)
+    end
     if lData then
         HealBot_Share_ProcessLinkData(ssStr)
     else
@@ -838,12 +850,14 @@ function HealBot_Share_BuildSkinData(cmd, msg, lData)
     if cmd=="Init" then
         HealBot_Share_ExportComplete(HEALBOT_OPTIONS_SKIN, msg)
         if tonumber(msg) then msg=UnitName("player").."-"..msg end
-        --if msg==HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
+        if msg==HEALBOT_SKINS_STD then msg=UnitName("player").."-"..HEALBOT_SKINS_STD end
         ssData=validType[1].."\n"..msg
     elseif cmd and msg then
         ssData=ssData.."\n"..cmd.."!"..msg
         if cmd=="Complete" then
-            ssData=HealBot_Share_Compress(ssData)
+            if lData or HealBot_Globals.CompressExport then
+                ssData=HealBot_Share_Compress(ssData)
+            end
             if lData then
                 HealBot_Share_ProcessLinkData(ssData)
             else

@@ -81,6 +81,7 @@ function HealBot_Lang_Options_enALL()
                         -- Skins General tab
                                  ["SKINDEFAULTFOR"]=HEALBOT_OPTIONS_SKINDEFAULTFOR,
                                  ["SKINDEFAULTZONE"]=HEALBOT_OPTIONS_SKINDEFAULTFOR.." "..HEALBOT_WORD_ZONE,
+                                 ["SKINDEFAULTSPEC"]=HEALBOT_OPTIONS_SKINDEFAULTFOR.." "..HEALBOT_WORD_SPEC,
                                  ["STICKFRAMES"]=HEALBOT_OPTIONS_STICKYFRAMES,
                                  ["HIDEBLIZPARTYFRAMES"]=HEALBOT_OPTIONS_HIDEPARTYFRAMES,
                                  ["HIDEBLIZBOSSFRAMES"]=HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES,
@@ -569,6 +570,7 @@ function HealBot_Lang_Options_enALL()
                                  ["TESTNUMENEMY"]=HEALBOT_OPTION_NUMENEMYS,
                         -- Import/Export tab
                                  ["INOUTSKINS"]="Import/Export Skins tab.",
+                                 ["INOUTCOMPRESS"]=HEALBOT_OPTION_COMPRESSEXPORT,
                                  ["INOUTCUSTOMDEBUFFS"]="Import/Export Custom Debuffs tab.",
                                  ["INOUTCUSTOMBUFFS"]="Import/Export Custom Buffs tab.",
                                  ["INOUTSPELLS"]="Import/Export Spells tab.",
@@ -665,7 +667,8 @@ function HealBot_Lang_Options_enALL()
                                ["FRAMEAPPLYTAB"]="An easy way to set the current tab options to all frames.",
                         -- Skins General tab
                                ["SKINDEFAULTFOR"]="Set when the skin is displayed.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting is Per Character.",
-                               ["SKINDEFAULTZONE"]="Set the skin as default in the current zone.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting is Per Character.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting overrides all other skin default for settings.",
+                               ["SKINDEFAULTZONE"]="Set the skin as default in the current zone.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting is Per Character.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Except for Spec, this setting overrides other skin default for settings.",
+                               ["SKINDEFAULTSPEC"]="Set the skin as default for the current spec.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting is Per Character.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting overrides all other skin default for settings.",
                                ["STICKFRAMES"]="When turned on a frame will stick to\nanother frame higher up in the list.\nLocked frames will remain stuck.\nUnlocked frames can be moved away.\n--\n".."|cff77c8ff".."TIP: Use the 1st frame as your main frame\n".."|cff77c8ff".."move other frames to your main frame\n".."|cff77c8ff".."and when stuck lock them.",
                                ["HIDEBLIZPARTYFRAMES"]="Hide the standard Blizzard party frames\noptionally include the player, pet and target frames.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Unless always run events is turned on, if target exist\n".._G["YELLOW_FONT_COLOR_CODE"].."when unhiding the frame, target a different unit to show.",
                                ["HIDEBLIZBOSSFRAMES"]="Hide the standard Blizzard boss frames.",
@@ -1153,6 +1156,7 @@ function HealBot_Lang_Options_enALL()
                                ["TESTNUMENEMY"]="Set the number of bars to represent the Enemy.",
                         -- Import/Export tab
                                ["INOUTSKINS"]="Show the Import/Export Skins tab.",
+                               ["INOUTCOMPRESS"]="Turn on/off compression when exporting.",
                                ["INOUTCUSTOMDEBUFFS"]="Show the Import/Export Custom Debuffs tab.",
                                ["INOUTCUSTOMBUFFS"]="Show the Import/Export Custom Buffs tab.",
                                ["INOUTSPELLS"]="Show the Import/Export Spells tab.",

@@ -5700,6 +5700,28 @@ function HealBot_Options_SkinDefault_OnClick(self, gType)
     end
 end
 
+function HealBot_Options_SkinDefaultSpec_SetText()
+    HealBot_Options_SetText(HealBot_Options_SkinDefaultSpec,HEALBOT_WORD_SPEC..": "..HealBot_Config.Spec)
+    if HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] and HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]==Healbot_Config_Skins.Current_Skin then
+        HealBot_Options_SkinDefaultSpec:SetChecked(true)
+    else
+        HealBot_Options_SkinDefaultSpec:SetChecked(false)
+    end
+end
+
+function HealBot_Options_SkinDefaultSpec_OnClick(self)
+    if self:GetChecked() then
+        if not HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] or HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]~=Healbot_Config_Skins.Current_Skin then
+            HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]=Healbot_Config_Skins.Current_Skin
+            HealBot_Options_SkinDefaultSpec_SetText()
+        end
+    elseif HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] and HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]==Healbot_Config_Skins.Current_Skin then
+        HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]=nil
+        HealBot_Options_SkinDefaultSpec_SetText()
+        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    end
+end
+
 function HealBot_Options_SkinDefaultZone_SetText()
     HealBot_Options_SetText(HealBot_Options_SkinDefaultZone,HEALBOT_WORD_ZONE..": "..HealBot_Options_luVars["mapName"])
     if HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] and HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]==Healbot_Config_Skins.Current_Skin then
@@ -5710,15 +5732,10 @@ function HealBot_Options_SkinDefaultZone_SetText()
 end
 
 function HealBot_Options_SkinDefaultZone_OnClick(self)
-    if HealBot_Config_Buffs.PalaBlessingsAsOne~=self:GetChecked() then
-        HealBot_Config_Buffs.PalaBlessingsAsOne = self:GetChecked()
-        HealBot_Timers_Set("AURA","BuffReset")
-    end
     if self:GetChecked() then
         if not HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] or HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]~=Healbot_Config_Skins.Current_Skin then
             HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]=Healbot_Config_Skins.Current_Skin
             HealBot_Options_SkinDefaultZone_SetText()
-            HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
         end
     elseif HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]] and HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]==Healbot_Config_Skins.Current_Skin then
         HealBot_Config.SkinZoneEnabled[HealBot_Options_luVars["mapName"]]=nil
@@ -6321,6 +6338,10 @@ function HealBot_Options_ShowTooltip_OnClick(self)
         if self:GetChecked() then HealBot_Timers_Set("LAST","LoadTips") end
         HealBot_Options_SetTooltipState()
     end
+end
+
+function HealBot_Options_InOutCompressExport_OnClick(self)
+    HealBot_Globals.CompressExport = self:GetChecked()
 end
 
 function HealBot_Options_AddonFail(reason, addon)
@@ -10472,7 +10493,7 @@ function HealBot_Options_ActionAnchor_DropDown()
                         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FRAME"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_ActionAnchor,HealBot_Options_ActionAnchor_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FRAME"]]) 
                         --local g=_G["f"..HealBot_Options_luVars["FramesSelFrame"].."_HealBot_Action"]
-                        HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"])
+                        HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"], true)
                         HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
                     end
         info.checked = false;
@@ -10504,7 +10525,7 @@ function HealBot_Options_ActionBarsAnchor_DropDown()
                         Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["BARS"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_ActionBarsAnchor,HealBot_Options_ActionAnchor_List[Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["BARS"]]) 
                         --local g=_G["f"..HealBot_Options_luVars["FramesSelFrame"].."_HealBot_Action"]
-                        HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"])
+                        HealBot_Action_setPoint(HealBot_Options_luVars["FramesSelFrame"], true)
                         HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
                     end
         info.checked = false;
@@ -18294,7 +18315,20 @@ function HealBot_Options_SkinsGeneralTab(tab)
         g=_G["HealBot_GeneralSkinBlizz_FontStr"]
         g:SetText(HEALBOT_OPTIONS_BLIZZARD_FRAMES)
         HealBot_Options_SetLabel("HealBot_GeneralDefaultSkin_FontStr",HEALBOT_OPTIONS_SKINDEFAULTFOR)
-        HealBot_Options_SkinDefaultZone_SetText()
+        if strlen(HealBot_Config.Spec)>0 then
+            HealBot_Options_SkinDefaultZone:ClearAllPoints();
+            HealBot_Options_SkinDefaultZone:SetPoint("TOP",25,-120)
+            HealBot_Options_SkinDefaultSpec:ClearAllPoints();
+            HealBot_Options_SkinDefaultSpec:SetPoint("TOP",-125,-120)
+            HealBot_Options_SkinDefaultSpec:Show()
+            HealBot_Options_SkinDefaultZone_SetText()
+            HealBot_Options_SkinDefaultSpec_SetText()
+        else
+            HealBot_Options_SkinDefaultZone:ClearAllPoints();
+            HealBot_Options_SkinDefaultZone:SetPoint("TOP",-50,-120)
+            HealBot_Options_SkinDefaultSpec:Hide()
+            HealBot_Options_SkinDefaultZone_SetText()
+        end
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -20293,6 +20327,8 @@ function HealBot_Options_SkinsFramesInit()
                             HealBot_Globals.PresetColours[id].B,
                             HealBot_Globals.PresetColours[id].A)
     end
+    HealBot_Options_InOutCompressExport:SetChecked(HealBot_Globals.CompressExport)
+    HealBot_Options_SetText(HealBot_Options_InOutCompressExport,HEALBOT_OPTION_COMPRESSEXPORT)
     HealBot_Options_EFClass_Reset()
     HealBot_Comms_About()
     HealBot_Options_DisableHealBotOpt:SetChecked(HealBot_Config.DisableHealBot)

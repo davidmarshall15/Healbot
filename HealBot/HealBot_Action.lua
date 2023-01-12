@@ -474,9 +474,9 @@ local hbGlowLen={[1]=12, [2]=12, [3]=12, [4]=12, [5]=12, [6]=12, [7]=12, [8]=12,
 local hbGlowSize={[1]=4, [2]=4, [3]=4, [4]=4, [5]=4, [6]=4, [7]=4, [8]=4, [9]=4, [10]=4}
 function HealBot_Action_ButtonGlow(button, key, enable, col, freq)
     if enable then
-        lGlow.PixelGlow_Start(button, col, 8, freq, hbGlowLen[button.frame], hbGlowSize[button.frame], 0, 0, false, key)
+        lGlow.PixelGlow_Start(button.gref["BackBorder"], col, 8, freq, hbGlowLen[button.frame], hbGlowSize[button.frame], 0, 0, false, key)
     else
-        lGlow.PixelGlow_Stop(button, key)
+        lGlow.PixelGlow_Stop(button.gref["BackBorder"], key)
     end
 end
 
@@ -485,10 +485,10 @@ function HealBot_Action_FramesGlowLen()
     for x=1,10 do
         l=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["WIDTH"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==1 then
-            hbGlowLen[x]=ceil(l/18)
+            hbGlowLen[x]=ceil(l/20)
             hbGlowSize[x]=1
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==2 then
-            hbGlowLen[x]=ceil(l/14)
+            hbGlowLen[x]=ceil(l/15)
             hbGlowSize[x]=2
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==4 then
             hbGlowLen[x]=ceil(l/9)
@@ -541,7 +541,6 @@ function HealBot_Action_UpdateButtonDisable(button, enable)
         if button.buffwatch.colbar==4 then HealBot_Action_ButtonGlow(button, "BW", enable) end
         if button.healthwatch.colbar==4 then HealBot_Action_ButtonGlow(button, "HW", enable) end
         if button.manawatch.colbar==4 then HealBot_Action_ButtonGlow(button, "MW", enable) end
-        HealBot_Action_ButtonGlow(button, "ZZZ", enable)
     end
     if button.glow.debuff then
         HealBot_Action_ButtonGlow(button, "DEBUFF", enable)
@@ -1122,7 +1121,7 @@ function HealBot_Action_UpdateHealthBackgroundBorder(button)
 end
 
 function HealBot_Action_UpdateBackgroundBorder(button)
-    if not HealBot_Hazard_Buttons[button.id] and button.frame>0 then
+    if not HealBot_Hazard_Buttons[button.id] and not HealBot_Hazard_Buttons[button.id] and button.frame>0 then
         if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]>1 then
             if button.status.current<HealBot_Unit_Status["DEAD"] and Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]~=3 then
                 HealBot_Action_UpdateHealthBackgroundBorder(button) 
@@ -2646,6 +2645,19 @@ function HealBot_Action_InitButton(button)
     button.text.overheal=""
     button.text.aggro=""
     button.text.tag=""
+    
+    button.health.inhealr=0.2
+    button.health.inhealg=1
+    button.health.inhealb=0.2
+    button.health.inheala=0
+    button.health.absorbr=1
+    button.health.absorbg=1
+    button.health.absorbb=1
+    button.health.absorba=0
+    button.health.mixcolr=0
+    button.health.mixcolg=0
+    button.health.mixcolb=0
+    
     HealBot_Aura_setButtonIcons(button.id)
     HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_InitButton")
@@ -2800,17 +2812,6 @@ function HealBot_Action_PrepButton(button)
     button.health.updabsorbs=false
     button.health.rcol=0
     button.health.gcol=0
-    button.health.inhealr=0.2
-    button.health.inhealg=1
-    button.health.inhealb=0.2
-    button.health.inheala=0
-    button.health.absorbr=1
-    button.health.absorbg=1
-    button.health.absorbb=1
-    button.health.absorba=0
-    button.health.mixcolr=0
-    button.health.mixcolg=0
-    button.health.mixcolb=0
     button.health.dropalert=0
     button.mana.current=0
     button.mana.max=0
@@ -4889,6 +4890,7 @@ function HealBot_Action_Reset()
             HealBot_AutoCloseFrame[i]=1
             if HealBot_Action_FrameIsVisible(i) then
                 HealBot_Action_ShowPanel(i)
+                --HealBot_Action_FrameSetPoint(i, grpFrame[i])
                 HealBot_Action_setPoint(i)
             end
             HealBot_Action_unlockFrame(i)
@@ -4903,13 +4905,15 @@ function HealBot_Action_unlockFrame(hbCurFrame)
 end
 
 local hbFrameSetPoint={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
+local hbFrameSetPointCheck={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local hbFrameGetCoords={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
-function HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, setPoint)
+function HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, setPoint, check)
     if setPoint then
         hbFrameSetPoint[hbCurFrame]=true
     else
         hbFrameGetCoords[hbCurFrame]=true
     end
+    if check then hbFrameSetPointCheck[hbCurFrame]=true end
     HealBot_Timers_Set("INIT","CheckFrameSetPoint",1)
 end
 
@@ -4917,12 +4921,12 @@ function HealBot_Action_CheckFrameSetPoint()
     for x=1,10 do
         if hbFrameSetPoint[x] then
             hbFrameSetPoint[x]=false
-            hbFrameGetCoords[x]=false
-            HealBot_Action_setPoint(x)
+            HealBot_Action_setPoint(x, hbFrameSetPointCheck[x])
         elseif hbFrameGetCoords[x] then
-            hbFrameGetCoords[x]=false
             HealBot_Action_CheckFrame(x, grpFrame[x])
         end
+        hbFrameGetCoords[x]=false
+        hbFrameSetPointCheck[x]=false
     end
 end
 
@@ -4934,7 +4938,6 @@ function HealBot_Action_CheckStuckFrames(hbCurFrame)
         end
     end
 end
-
 
 function HealBot_Action_CheckFrame(hbCurFrame, HBframe)
     if HealBot_Action_luVars["ScreenHeight"]==GetScreenHeight() and HealBot_Action_luVars["ScreenWidth"]==GetScreenWidth() then
@@ -4996,7 +4999,7 @@ function HealBot_Action_FrameSetPoint(hbCurFrame, gaf, callback)
     if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin] and 
        Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame] and
        Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"] and
-       Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] then 
+       Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"] then
         gaf:ClearAllPoints();
         vFrameSetPointY=GetScreenHeight()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["Y"]/100)
         vFrameSetPointX=GetScreenWidth()*(Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["X"]/100)
@@ -5024,10 +5027,10 @@ function HealBot_Action_FrameSetPoint(hbCurFrame, gaf, callback)
     end
 end
 
-function HealBot_Action_setPoint(hbCurFrame)
+function HealBot_Action_setPoint(hbCurFrame, check)
     if not hbCurFrame then return end
     if not InCombatLockdown() then
-        HealBot_Action_CheckFrame(hbCurFrame, grpFrame[hbCurFrame])
+        if check then HealBot_Action_CheckFrame(hbCurFrame, grpFrame[hbCurFrame]) end
         if not HealBot_Action_StickyFrame(hbCurFrame) then
             HealBot_Action_FrameSetPoint(hbCurFrame, grpFrame[hbCurFrame])
         end
@@ -5035,7 +5038,7 @@ function HealBot_Action_setPoint(hbCurFrame)
             HealBot_Action_CheckStuckFrames(hbCurFrame)
         end
     else
-        HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true)
+        HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, true, check)
     end
 end
 
@@ -5175,7 +5178,7 @@ function HealBot_Action_ShowFramesOnSkinChange()
     for j=1,10 do
         if initFrame[j] and not HealBot_Action_FrameIsVisible(j) then
             HealBot_Action_ShowPanel(j)
-            HealBot_Action_setPoint(j)
+            HealBot_Action_setPoint(j, true)
         end
     end
     HealBot_Timers_Set("LAST","CheckHideUnusedFrames")

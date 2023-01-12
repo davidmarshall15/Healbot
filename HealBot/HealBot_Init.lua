@@ -57,6 +57,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     if not spellName then spellName=spell end
    
     local hbMana=nil
+    local hbCD=false
     if spellBookId then
         HealBot_SetToolTip(HealBot_ScanTooltip)
         HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
@@ -73,6 +74,9 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
                     hbMana = tonumber((gsub(line, "%D", "")))
                 end
             end
+        end
+        if EnumerateTooltipLines_helper(string.lower(HEALBOT_WORDS_COOLDOWN), HealBot_ScanTooltip:GetRegions()) then
+            hbCD=true
         end
         if HEALBOT_GAME_VERSION<4 then 
             local _, rank = GetSpellBookItemName(spellBookId, BOOKTYPE_SPELL)
@@ -107,6 +111,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     HealBot_Spell_IDs[id]={}
     HealBot_Spell_IDs[id].CastTime=hbCastTime;
     HealBot_Spell_IDs[id].Mana=hbMana or 0
+    HealBot_Spell_IDs[id].Cooldown=hbCD
     HealBot_Spell_IDs[id].texture=texture
     return cRank
 end

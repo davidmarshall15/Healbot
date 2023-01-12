@@ -313,6 +313,7 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_DETAILFONT              = "Detail font";
     HEALBOT_TOOLTIP_HEADERFONTSIZE          = "Header font size";
     HEALBOT_TOOLTIP_DETAILFONTSIZE          = "Detail font size";
+    HEALBOT_WORDS_COOLDOWN                  = "Cooldown"
     HEALBOT_WORDS_TINY                      = "Tiny"
     HEALBOT_WORDS_SMALL                     = "Small"
     HEALBOT_WORDS_MEDIUM                    = "Medium"
@@ -907,6 +908,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_OUTSIDE                    = "Outside"
     HEALBOT_WORD_ALLZONE                    = "All zones"
     HEALBOT_WORD_ZONE                       = "Zone"
+    HEALBOT_WORD_SPEC                       = "Spec"
     HEALBOT_OPTIONS_TAB_ALERT               = "Alert"
     HEALBOT_OPTIONS_TAB_SORT                = "Sort"
     HEALBOT_OPTIONS_TAB_HIDE                = "Hide"
@@ -1302,6 +1304,10 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKSRESETALL           = "Reset All"
     HEALBOT_PLUGIN_TWEAKSCASTBYALL          = "Set Cast By to Everyone for all"
     HEALBOT_PLUGIN_TWEAKSCASTBYSELF         = "Set Cast By to Self for all"
+    HEALBOT_PLUGIN_TWEAKSCOLOURNONE         = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to None for all"
+    HEALBOT_PLUGIN_TWEAKSCOLOURADAPTIVE     = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Adaptive Only for all"
+    HEALBOT_PLUGIN_TWEAKSCOLOURADAPTBAR     = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Adaptive and Health Bar for all"
+    HEALBOT_PLUGIN_TWEAKSCOLOURBARCOL       = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Only for all"
     HEALBOT_PLUGIN_HEALTHALERTLEVEL         = "Health alert level"
     HEALBOT_PLUGIN_MANAALERTLEVEL           = "Mana alert level"
     HEALBOT_PLUGIN_RECEIVEFROMBW            = "Receive from BuffWatch"
@@ -1309,7 +1315,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_FORWARDTOHW              = "Forward to HealthWatch"
     HEALBOT_PLUGIN_FORWARDTOMW              = "Forward to ManaWatch"
     HEALBOT_PLUGIN_RETRYDURATION            = "Received from BuffWatch - Retry duration"
-    HEALBOT_PLUGIN_REPEATONCD               = "Repeat on timeout x2";
+    HEALBOT_PLUGIN_REPEATONCD               = "Repeat after timeout";
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"
@@ -1605,6 +1611,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_OUTCOMBATALERTLEVEL     = "Alert Level - Out of Combat";
     HEALBOT_OPTIONS_SORTOORLAST             = "Sort out of range last"
     HEALBOT_OPTION_NUMENEMYS                = "Number of Enemies"
+    HEALBOT_OPTION_COMPRESSEXPORT           = "Compress export"
     HEALBOT_WORD_AUTO                       = "Auto"
     HEALBOT_WORDS_REMOVETEMPCUSTOMNAME      = "Remove temporary custom name"
     HEALBOT_WORDS_REMOVEPERMCUSTOMNAME      = "Remove permanent custom name"

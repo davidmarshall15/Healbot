@@ -5505,11 +5505,25 @@
                       <OnLeave>HealBot_Options_Show_Help("SKINDEFAULTFOR",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_SkinDefaultSpec" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="-125" y="-120" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_SkinDefaultSpec_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SKINDEFAULTSPEC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SKINDEFAULTSPEC",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_SkinDefaultZone" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-50" y="-120" />
+                          <AbsDimension x="25" y="-120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -20481,12 +20495,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-60"/>
+                          <AbsDimension x="10" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMPRIORITY",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMPRIORITY",false)</OnLeave>
                     </Scripts>
@@ -20597,12 +20611,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="190" y="-60"/>
+                          <AbsDimension x="135" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("DEBUFFSCUSTOMBARCOLOUR",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMBARCOLOUR",false)</OnLeave>
                     </Scripts>
@@ -23616,12 +23630,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-60"/>
+                          <AbsDimension x="10" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 90)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMPRIORITY",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPRIORITY",false)</OnLeave>
                     </Scripts>
@@ -23732,12 +23746,12 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Class_HoTctlName" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="190" y="-60"/>
+                          <AbsDimension x="135" y="-60"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 105)</OnLoad>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
                       <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMBARCOLOUR",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMBARCOLOUR",false)</OnLeave>
                     </Scripts>
@@ -24690,6 +24704,20 @@
               </Layer>
             </Layers>
             <Frames>
+              <CheckButton name="HealBot_Options_InOutCompressExport" inherits="HealBotUIPanelCheckButton">
+                <Anchors>
+                  <Anchor point="TOP">
+                    <Offset>
+                      <AbsDimension x="-52" y="-5" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_InOutCompressExport_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("INOUTCOMPRESS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("INOUTCOMPRESS",false)</OnLeave>
+                </Scripts>
+              </CheckButton>
               <StatusBar name="HealBot_Options_InOutSkinb">
                 <Size>
                   <AbsDimension x="115" y="24"/>
@@ -24697,7 +24725,7 @@
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="10" y="-10"/>
+                      <AbsDimension x="10" y="-35"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24837,17 +24865,17 @@
               </StatusBar>
               <Frame name="HealBot_Options_InOut_SkinFrame" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="621"/>
+                  <AbsDimension y="596"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24981,7 +25009,7 @@
                   </Button>
                   <Frame name="HealBot_Options_ShareExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="455"/>
+                      <AbsDimension y="430"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -25045,17 +25073,17 @@
 
               <Frame name="HealBot_Options_InOut_CDbuffsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="621"/>
+                  <AbsDimension y="596"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -25162,7 +25190,7 @@
                   </Button>
                   <Frame name="HealBot_Options_ShareCDebuffExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="485"/>
+                      <AbsDimension y="460"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -25200,17 +25228,17 @@
 
               <Frame name="HealBot_Options_InOut_BuffsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="621"/>
+                  <AbsDimension y="596"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -25317,7 +25345,7 @@
                   </Button>
                   <Frame name="HealBot_Options_ShareBuffsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="485"/>
+                      <AbsDimension y="460"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -25355,17 +25383,17 @@
               
               <Frame name="HealBot_Options_InOut_SpellsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="621"/>
+                  <AbsDimension y="596"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -25472,7 +25500,7 @@
                   </Button>
                   <Frame name="HealBot_Options_ShareSpellsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="485"/>
+                      <AbsDimension y="460"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -25510,17 +25538,17 @@
               
               <Frame name="HealBot_Options_InOut_PresetColsFrame" hidden="true" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="621"/>
+                  <AbsDimension y="596"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                   <Anchor point="TOPRIGHT">
                     <Offset>
-                      <AbsDimension x="0" y="-45"/>
+                      <AbsDimension x="0" y="-70"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -25600,7 +25628,7 @@
                   </Button>
                   <Frame name="HealBot_Options_SharePresetColsExternalEditBoxFrame" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="485"/>
+                      <AbsDimension y="460"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
