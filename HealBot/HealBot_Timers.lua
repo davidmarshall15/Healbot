@@ -406,6 +406,11 @@ function HealBot_Timers_AllFramesChanged()
     HealBot_Timers_Set("SKINS","ResetFrameAlias")
 end
 
+function HealBot_Timer_UpdateGlow()
+    HealBot_Action_DisableGlow()
+    C_Timer.After(0.01, HealBot_Action_UpdateGlow)
+end
+
 function HealBot_Timers_SetCurrentSkin()
     HealBot_Options_Set_Current_Skin(Healbot_Config_Skins.Current_Skin)
     HealBot_Options_SetSkins()
@@ -652,8 +657,8 @@ local hbTimerFuncs={["INIT"]={
                         ["SendClassicAuraData"]=HealBot_Aura_SendClassicData,
                         ["LoadTips"]=HealBot_Options_LoadTips,
                         ["SetPlayerData"]=HealBot_SetPlayerData,
-                        ["UpdateButtonGlow"]=HealBot_Action_UpdateButtonGlow,
-                        ["DisableAllButtonGlow"]=HealBot_Action_DisableAllButtonGlow,
+                        ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
+                        ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
                     },
                    }
 

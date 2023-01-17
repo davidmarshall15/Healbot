@@ -17,6 +17,7 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips1="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will\n".."|cff77c8ff".."change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."and show up in the tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes"
     local hbSpellsTips2="\n--\n".."|cff77c8ff".."TIP: With the current modifier keys\n".."|cff77c8ff".."set spells with the same range as Left click.\n"
     local hbSpellsTips3="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: When using the Global profile:\n".._G["GREEN_FONT_COLOR_CODE"].."- Macros, Items, Commands and Emotes are saved for all characters.\n".._G["GREEN_FONT_COLOR_CODE"].."- Spells are saved for all characters of the same class."
+    local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Frame glow lines and Frame glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -125,6 +126,7 @@ function HealBot_Lang_Options_enALL()
                                  ["FRAMEALIAS"]=HEALBOT_OPTIONS_FRAME_ALIAS,
                                  ["FRAMELOCKED"]="Lock Frame",
                                  ["FRAMEAUTOSHOW"]=HEALBOT_OPTIONS_AUTOSHOW,
+                                 ["FRAMEGLOWSIZE"]=HEALBOT_OPTIONS_FRAMEGLOWSIZE,
                                  ["FRAMEANCHOR"]=HEALBOT_OPTIONS_ANCHOR,
                                  ["BARANCHOR"]=HEALBOT_OPTIONS_BARSANCHOR,
                                  ["BARGROWDIRECTION"]=HEALBOT_OPTIONS_GROW_DIRECTION,
@@ -249,6 +251,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALBARSAGGROSHOWTEXT"]=HEALBOT_OPTION_AGGROTXT,
                                  ["HEALBARSAGGROINDALERT"]=HEALBOT_OPTIONS_AGGROINDALERT,
                                  ["HEALBARSAGGROBARALERT"]=HEALBOT_OPTIONS_AGGROALERT,
+                                 ["HEALBARSAGGROADAALERT"]=HEALBOT_OPTIONS_AGGROADAPALERT,
                                  ["HEALBARSAGGROINDLINK"]=HEALBOT_OPTIONS_TAB_AGGROINDICATORS,
                                  ["HEALBARSAGGROHAZARD"]=HEALBOT_OPTION_AGGROHAZARD,
                         -- Skins Frames Bars Aux tab
@@ -445,6 +448,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSSPELLCHECKMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
                                  ["DEBUFFSIGNOREDEBUFFS"]="Ignore Debuffs",
                                  ["DEBUFFSTYPEPRIORITY"]=HEALBOT_WORD_PRIORITY,
+                                 ["DEBUFFSDEFAULTBARCOLS"]=HEALBOT_OPTIONS_CDCBARS,
                                  ["DEBUFFSTYPECOLOUR"]=HEALBOT_OPTIONS_BUFFSTEXT3,
                         -- Debuffs Custom tab
                                  ["DEBUFFSCUSTOMCAT"]=HEALBOT_CUSTOM_CATEGORY,
@@ -490,6 +494,7 @@ function HealBot_Lang_Options_enALL()
                                  ["MONITORININSTANCE"]=HEALBOT_OPTIONS_ONLY_IN_INSTANCE,
                                  ["MONITORBUFFSPALABLESSING"]=HEALBOT_OPTIONS_PALADIN_BLESSINGS,
                                  ["BUFFSSPELL"]=HEALBOT_OPTIONS_BUFFSTEXT1,
+                                 ["BUFFSDEFAULTBARCOLS"]=HEALBOT_OPTIONS_CDCBARS,
                                  ["BUFFSWEAPONENCHANT1"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSWEAPONENCHANT2"]=HEALBOT_OPTIONS_BUFFSTEXTWE,
                                  ["BUFFSMEMBERS"]=HEALBOT_OPTIONS_BUFFSTEXT2,
@@ -712,6 +717,7 @@ function HealBot_Lang_Options_enALL()
                                ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
                                ["FRAMELOCKED"]="Lock the frame at the current position.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: If the frame is locked and stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."the frame will remain stuck and cannot be unstuck.\n--\n".."|cff77c8ff".."Tip: In Test mode the frames are always unlocked \n|cff77c8ffand the spells unregistered on the bars.\n--\n|cff77c8ffUse test mode to easily move the frames.",
                                ["FRAMEAUTOSHOW"]="Hide the frame when out of combat and\nnone of the bars are in an enabled state.",
+                               ["FRAMEGLOWSIZE"]="When bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s use Frame Glow Lines or Frame Glow Stars\nUse this option to set the size of the effect.",
                                ["FRAMEANCHOR"]="The position of the frame anchor relative to the screen.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: When the frame is stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."this setting is automatically updated\n".._G["YELLOW_FONT_COLOR_CODE"].."and used to store the frames location.",
                                ["BARANCHOR"]="The position of the bars anchor relative to the frame.",
                                ["BARGROWDIRECTION"]="The direction the bars grow away from the bars anchor.",
@@ -764,8 +770,8 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSGRPSPERCOLS"]="Sets using the number of groups for each column.",
                                ["HEALBARSHEIGHT"]="Set the height for the heal bars.",
                                ["HEALBARSWIDTH"]="Set the width for the heal bars.",
-                               ["HEALBARSBRSPACE"]="Set the space between each row.",
-                               ["HEALBARSBCSPACE"]="Set the space between each column.",
+                               ["HEALBARSBRSPACE"]="Set the space between each row.\nA large row spacer can be used when icons are positioned of the bar.",
+                               ["HEALBARSBCSPACE"]="Set the space between each column.\nA large column spacer can be used when icons are positioned off the bar.",
                                ["HEALBARSPOWERCOUNT"]="Show an indicator on the heal bar when a player has a power counter.",
                                ["HEALBARSLOWMANA"]="Set if and when indicators are\ndisplayed to show a player is low on mana.",
                                ["HEALBARSLOWMANAIC"]="Turn On/Off displaying the low\nmana indicator while in combat.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This setting applies to all frames.",
@@ -835,8 +841,9 @@ function HealBot_Lang_Options_enALL()
                                ["BARSAGGRO"]="Show the Skins Frames Aggro tab.",
                                ["HEALBARSAGGROSHOW"]="Turn On/Off monitoring aggro.",
                                ["HEALBARSAGGROSHOWTEXT"]="Display » text « when a player has aggro.",
-                               ["HEALBARSAGGROINDALERT"]="When using the indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
-                               ["HEALBARSAGGROBARALERT"]="When using the aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
+                               ["HEALBARSAGGROINDALERT"]="When using indicator.\nDisplay when the treat reaches the level selected in the dropdown.",
+                               ["HEALBARSAGGROBARALERT"]="When using aux aggro bars.\nDisplay when the treat reaches the level selected in the dropdown.",
+                               ["HEALBARSAGGROADAALERT"]="When using adaptive bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s.\nDisplay when the treat reaches the level selected in the dropdown.",
                                ["HEALBARSAGGROINDLINK"]="Links to the Indicators Aggro tab\nallowing for aggro indicators to be set on bars.",
                                ["HEALBARSAGGROHAZARD"]="Use the Border Hazard when aggro level is 3 (Tanking).",
                         -- Skins Frames Bars Aux tab
@@ -950,7 +957,7 @@ function HealBot_Lang_Options_enALL()
                                ["ICONSDEBUFFS"]="Show the Skins Frames Icons Debuffs tab",
                                ["ICONSBUFFS"]="Show the Skins Frames Icons Buffs tab",
                                ["ICONSEXTRA"]="Show the Skins Frames Icons Extras tab",
-                               ["ICONPOSITION"]="Set the position of icons",
+                               ["ICONPOSITION"]="Set the position of the icons.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Note: When off the bar, use the spacers on the Bars General tab to create space between the bars.",
                                ["ICONANCHOR"]="Set the location of icons based on the position",
                         -- Skins Frames Icons Aura General tab
                                ["ICONSDEBUFFGENERAL"]="Show the Skins Frames Icons Debuffs General tab.",
@@ -1032,6 +1039,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSSPELLCHECKMEMBERS"]="The members to monitor.\n".."|cff77c8ff".."Tip: Use on raid to cover All",
                                ["DEBUFFSIGNOREDEBUFFS"]="Debuffs with little or no effect can be ignored.\n".._G["GREEN_FONT_COLOR_CODE"].."- Short duration - Ignore debuffs that last for less time than the Duration slider\n".._G["GREEN_FONT_COLOR_CODE"].."- When cure spell CoolDown > 2secs - Ignore debuffs when its not possible to cast while the spell is on cooldown\n".._G["GREEN_FONT_COLOR_CODE"].."- When caster is known as friend - When the caster of the debuff is friendly",
                                ["DEBUFFSTYPEPRIORITY"]="Priority by debuff types.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
+                               ["DEBUFFSDEFAULTBARCOLS"]="Set how the general debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
                                ["DEBUFFSTYPECOLOUR"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player\nhas a debuff and settings on the Debuff Warning tab apply.",
                         -- Debuffs Custom tab
                                ["DEBUFFSCUSTOMCAT"]="Custom defaults and A-Z debuff categories\ncan be selected using the category dropdown.",
@@ -1044,7 +1052,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMNEWSAVE"]="Save the new custom debuff.",
                                ["DEBUFFSCUSTOMENDIS"]="Disable the selected custom debuff in the current zone.",
                                ["DEBUFFSCUSTOMPRIORITY"]="Priority of the selected custom debuff.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
-                               ["DEBUFFSCUSTOMBARCOLOUR"]="Set how the custom debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border",
+                               ["DEBUFFSCUSTOMBARCOLOUR"]="Set how the custom debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
                                ["DEBUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["DEBUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom debuff.",
                                ["DEBUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom debuff.",
@@ -1079,6 +1087,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSSPELL"]="Select the spell to monitor and cast.",
                                ["BUFFSWEAPONENCHANT1"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Main Hand and 2H Weapons.",
                                ["BUFFSWEAPONENCHANT2"]="Select the spell or item to enchant your weapon\n--\n.".._G["YELLOW_FONT_COLOR_CODE"].."Use this slot for Off Hand Weapons.",
+                               ["BUFFSDEFAULTBARCOLS"]="Set how the general buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
                                ["BUFFSMEMBERS"]="The members to monitor.",
                                ["BUFFSCHECKWELLFED"]="Check for missing well fed.",
                                ["BUFFSCHECKMANADRINK"]="Check for low mana.",
@@ -1092,7 +1101,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSBARS"]="Click to change.\n--\nBars are changed to the defined col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when the player is\nmissing a buff and settings on the Buff Warning tab apply.",
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
-                               ["BUFFSCUSTOMBARCOLOUR"]="Set how the custom buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border",
+                               ["BUFFSCUSTOMBARCOLOUR"]="Set how the custom buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the class dropdown.",
                                ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
                                ["BUFFSCUSTOMIDMETHOD"]="Check buffs using Spell ID, Spell Name or Both.",

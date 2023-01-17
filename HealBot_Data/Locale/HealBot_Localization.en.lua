@@ -742,6 +742,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_BUTTONS             = "Buttons"
     HEALBOT_OPTIONS_TAB_ICONS               = "Icons"
     HEALBOT_OPTIONS_TAB_INDICATORS          = "Indicators"
+    HEALBOT_OPTIONS_AGGROADAPALERT          = "Adaptive alert level"
     HEALBOT_OPTIONS_TAB_AGGROINDICATORS     = "Aggro indicators"
     HEALBOT_OPTIONS_TAB_LOWMANAINDICATORS   = "Low mana indicators"
     HEALBOT_OPTIONS_TAB_SELFCASTINDICATORS  = "Self cast icon indicators"
@@ -881,6 +882,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SUBSORTSELFFIRST        = "Sub Sort - Self First"
     HEALBOT_OPTION_AGGROPCTBAR              = "Move bar"
     HEALBOT_OPTION_AGGROPCTTRACK            = "Show aggro percentage" 
+    HEALBOT_OPTIONS_ALERTAGGROLEVEL0        = "0 - Off"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL1        = "1 - Low threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL2        = "2 - High threat"
     HEALBOT_OPTIONS_ALERTAGGROLEVEL3        = "3 - Tanking"
@@ -1015,7 +1017,9 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar"
     HEALBOT_SKIN_BORDER_HAZARD              = "Border hazard"
     HEALBOT_SKIN_BORDER_HAZARDU             = "Border Hazard"
-    HEALBOT_SKIN_FRAME_GLOW                 = "Frame glow"
+    HEALBOT_SKIN_FRAME_GLOW                 = "Frame glow lines"
+    HEALBOT_SKIN_FRAME_GLOWSTARS            = "Frame glow stars"
+    HEALBOT_SKIN_FRAME_GLOWBLIZZ            = "Alt Blizzard glow"
     HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX

@@ -56,7 +56,8 @@ HealBot_ConfigDefaults = {
   MyFriend="x",
   CurrentSpec=9,
   Spec="",
-  CurrentLoutout=0,
+  CurrentLoadout=0,
+  LastLoadout=0,
   Skin_ID = -1,
   MacroUse10 = false,
   DisableHealBot=false,
@@ -409,6 +410,7 @@ function HealBot_Data_InitVars()
         },
         HealBot_Custom_Debuffs_ShowBarCol={  
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 3,
+            ["DEFAULT"] = 3,
         },
         CDCTag={},
         IgnoreCustomDebuff={},
@@ -426,7 +428,7 @@ function HealBot_Data_InitVars()
         CustomBuffBarColour = {
             [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
         },
-        HealBot_Custom_Buffs_ShowBarCol={},
+        HealBot_Custom_Buffs_ShowBarCol={["DEFAULT"] = 3},
         CustomBuffIDMethod = {},
         IconKeyCombo={},
         UseIconCommands=false,

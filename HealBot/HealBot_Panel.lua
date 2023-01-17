@@ -866,11 +866,16 @@ local HealBot_setTestCols={}
 local HealBot_setTestBars=false
 function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBarsActive) do
+        for id=1,12 do
+            HealBot_Action_ClearTestIcon(b, id)
+        end
+        for id=51,58 do
+            HealBot_Action_ClearTestIcon(b, id)
+        end
         HealBot_Action_DeleterCallsUnit(b.unit)
         HealBot_Action_MarkDeleteButton(b)
         HealBot_TestBarsActive[x]=nil
     end
-    HealBot_Action_ProcCacheButtons()
 end
 
 function HealBot_Panel_ToggleTestBars()
@@ -895,7 +900,18 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Skins_isTestBars(false)
         HealBot_Aura_ClearAllBuffs()
         HealBot_Aura_ClearAllDebuffs()
-        --HealBot_SetResetFlag("SOFT")
+        local sReset=false
+        for y=1,10 do
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][y]["STATE"] then
+                for x=1,9 do
+                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][y]["USE"]>1 then
+                        sReset=true
+                        break
+                    end
+                end
+            end
+        end
+        if sReset then C_Timer.After(0.5, function() HealBot_SetResetFlag("SOFT") end) end
         HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
@@ -2449,7 +2465,7 @@ end
 function HealBot_Panel_VehicleChanged(preCombat)
     hbCurrentFrame=6
     hbBarsPerFrame[hbCurrentFrame]=0
-    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"]then
+    if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
         i[hbCurrentFrame]=0
         HeaderPos[hbCurrentFrame]={};
         HealBot_Panel_vehicleHeals(preCombat)
