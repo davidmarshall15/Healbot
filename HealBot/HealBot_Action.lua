@@ -472,10 +472,17 @@ end
 
 local hbGlowLen={[1]=12, [2]=12, [3]=12, [4]=12, [5]=12, [6]=12, [7]=12, [8]=12, [9]=12, [10]=12}
 local hbGlowSize={[1]=4, [2]=4, [3]=4, [4]=4, [5]=4, [6]=4, [7]=4, [8]=4, [9]=4, [10]=4}
-local hbGlowFreq={["BW"]=0.28, ["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22}
-local hbGlowStyle={["BW"]=5, ["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5}
-local hbGlowCol={["BW"]={},["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={},}
-hbGlowCol["BW"][4]=1
+local hbGlowFreq={["AW1"]=0.28, ["AW2"]=0.28, ["AW3"]=0.28, ["AW4"]=0.28, ["AW5"]=0.28, 
+                  ["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22}
+local hbGlowStyle={["AW1"]=0, ["AW2"]=0, ["AW3"]=0, ["AW4"]=0, ["AW5"]=0, 
+                   ["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5}
+local hbGlowCol={["AW1"]={},["AW2"]={},["AW3"]={},["AW4"]={},["AW5"]={},
+                 ["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={},}
+hbGlowCol["AW1"][4]=1
+hbGlowCol["AW2"][4]=1
+hbGlowCol["AW3"][4]=1
+hbGlowCol["AW4"][4]=1
+hbGlowCol["AW5"][4]=1
 hbGlowCol["HW"][4]=1
 hbGlowCol["MW"][4]=1
 hbGlowCol["DEBUFF"][4]=1
@@ -563,7 +570,8 @@ function HealBot_Action_EnableButtonGlowType(button, r, g, b, gType, pKey, gStyl
             HealBot_Action_ButtonGlowBall(button, gType, true)
         elseif gType=="PLUGIN" then
             HealBot_Action_ButtonGlowBlizz(button, gType, true)
-        elseif not button.glow.plugin or (hbGlowStyle["BW"]~=7 and hbGlowStyle["HW"]~=7 and hbGlowStyle["MW"]~=7) then
+        elseif not button.glow.plugin or (hbGlowStyle["AW1"]~=7 and hbGlowStyle["AW2"]~=7 and hbGlowStyle["AW3"]~=7 and hbGlowStyle["AW4"]~=7 and 
+                                          hbGlowStyle["AW5"]~=7 and hbGlowStyle["HW"]~=7 and hbGlowStyle["MW"]~=7) then
             if gType=="DEBUFF" or (not button.glow.debuff or hbGlowStyle["DEBUFF"]~=7) then
                 HealBot_Action_ButtonGlowBlizz(button, gType, true)
             end
@@ -617,11 +625,41 @@ function HealBot_Action_UpdateButtonGlow(button, enable)
     if enable then
         if button.glow.plugin then
             if button.buffwatch.colbar==5 then
-                HealBot_Action_ButtonGlow(button, "BW", enable)
+                if hbGlowStyle["AW1"]==5 then
+                    HealBot_Action_ButtonGlow(button, "AW1", enable)
+                elseif hbGlowStyle["AW2"]==5 then
+                    HealBot_Action_ButtonGlow(button, "AW2", enable)
+                elseif hbGlowStyle["AW3"]==5 then
+                    HealBot_Action_ButtonGlow(button, "AW3", enable)
+                elseif hbGlowStyle["AW4"]==5 then
+                    HealBot_Action_ButtonGlow(button, "AW4", enable)
+                elseif hbGlowStyle["AW5"]==5 then
+                    HealBot_Action_ButtonGlow(button, "AW5", enable)
+                end
             elseif button.buffwatch.colbar==6 then
-                HealBot_Action_ButtonGlowBall(button, "BW", enable)
+                if hbGlowStyle["AW1"]==6 then
+                    HealBot_Action_ButtonGlowBall(button, "AW1", enable)
+                elseif hbGlowStyle["AW2"]==6 then
+                    HealBot_Action_ButtonGlowBall(button, "AW2", enable)
+                elseif hbGlowStyle["AW3"]==6 then
+                    HealBot_Action_ButtonGlowBall(button, "AW3", enable)
+                elseif hbGlowStyle["AW4"]==6 then
+                    HealBot_Action_ButtonGlowBall(button, "AW4", enable)
+                elseif hbGlowStyle["AW5"]==6 then
+                    HealBot_Action_ButtonGlowBall(button, "AW5", enable)
+                end
             elseif button.buffwatch.colbar==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "BW", enable)
+                if hbGlowStyle["AW1"]==7 then
+                    HealBot_Action_ButtonGlowBlizz(button, "AW1", enable)
+                elseif hbGlowStyle["AW2"]==7 then
+                    HealBot_Action_ButtonGlowBlizz(button, "AW2", enable)
+                elseif hbGlowStyle["AW3"]==7 then
+                    HealBot_Action_ButtonGlowBlizz(button, "AW3", enable)
+                elseif hbGlowStyle["AW4"]==7 then
+                    HealBot_Action_ButtonGlowBlizz(button, "AW4", enable)
+                elseif hbGlowStyle["AW5"]==7 then
+                    HealBot_Action_ButtonGlowBlizz(button, "AW5", enable)
+                end
             end
             if button.healthwatch.colbar==5 then
                 HealBot_Action_ButtonGlow(button, "HW", enable)
@@ -658,10 +696,12 @@ function HealBot_Action_UpdateButtonGlow(button, enable)
         end
     else
         if button.glow.plugin then
-            if button.buffwatch.colbar>4 then 
-                HealBot_Action_ButtonGlow(button, "BW", enable) 
-                HealBot_Action_ButtonGlowBall(button, "BW", enable)
-                HealBot_Action_ButtonGlowBlizz(button, "BW", enable)
+            if button.buffwatch.colbar>4 then
+                for x=1,5 do
+                    HealBot_Action_ButtonGlow(button, "AW"..x, enable) 
+                    HealBot_Action_ButtonGlowBall(button, "AW"..x, enable)
+                    HealBot_Action_ButtonGlowBlizz(button, "AW"..x, enable)
+                end
             end
             if button.healthwatch.colbar>4 then
                 HealBot_Action_ButtonGlow(button, "HW", enable) 
@@ -1400,12 +1440,12 @@ function HealBot_Action_UpdateRequestButton(button, r, g, b)
     end
 end
 
-function HealBot_Action_UpdateBuffWatchButton(button, r, g, b)
+function HealBot_Action_UpdateBuffWatchButton(button, r, g, b, index)
     HealBot_Action_UpdatePluginBarCol(button, r, g, b)
     if button.buffwatch.colbar==4 then
         HealBot_Action_EnableBorderHazardType(button, r, g, b, "PLUGIN")
     elseif button.buffwatch.colbar>4 then
-        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "BW", button.buffwatch.colbar)
+        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "AW"..index, button.buffwatch.colbar)
     end
 end
 
@@ -2781,7 +2821,6 @@ function HealBot_Action_InitButton(button)
     HealBot_Action_SetAllButtonAttribs(button,"Enemy",true)
     HealBot_Action_SetAllButtonAttribs(button,"Enabled",true)
     HealBot_Action_SetAllButtonAttribs(erButton,"Emerg",true)
-    
     button.aura.update=false
     button.aura.buffcol=false
     button.aura.debuffcol=false
@@ -2815,6 +2854,22 @@ function HealBot_Action_InitButton(button)
     button.aggro.status=-1
     button.aggro.threatpct=0
     button.aggro.threatvalue=0
+
+    button.status.playerlastheal=0
+    button.status.lasthealthdrop=0
+    button.status.r=0
+    button.status.g=0
+    button.status.b=0
+    button.status.alpha=1
+    button.status.dirarrowcords=0 
+    button.status.dirarrowshown=0 
+    button.status.update=true
+    button.status.change=true
+    button.status.castend=-1
+    button.status.resstart=0
+    button.hotbars.state=false
+    button.hotbars.debuff=false
+    button.hotbars.health=false
     
     HealBot_Aura_setButtonIcons(button.id)
     HealBot_Aux_AssignLastOverlayType(button.id)
@@ -2998,21 +3053,6 @@ function HealBot_Action_PrepButton(button)
     button.status.summons=false
     button.status.incombat=false
     button.status.hostile=false
-    button.status.playerlastheal=0
-    button.status.lasthealthdrop=0
-    button.status.r=0
-    button.status.g=0
-    button.status.b=0
-    button.status.alpha=1
-    button.status.dirarrowcords=0 
-    button.status.dirarrowshown=0 
-    button.status.update=true
-    button.status.change=true
-    button.status.castend=-1
-    button.status.resstart=0
-    button.hotbars.state=false
-    button.hotbars.debuff=false
-    button.hotbars.health=false
     button.spec=" "
     button.specupdate=0
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
@@ -4568,6 +4608,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     end
                     HealBot_Action_ResetrCallsUnit(hButton)
                     HealBot_Aura_setUnitIcons(unit)
+                    if UnitExists(unit) then
+                        HealBot_Aura_InitUnitAuraCurrent(guid)
+                    end
                     hButton.status.range=1
                     if hButton.frame<10 then
                         hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEventFuncs[event](self, arg1, arg2, arg3) end)

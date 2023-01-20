@@ -613,7 +613,7 @@ function HealBot_Text_shortHealTxt(amount, hbCurFrame)
         tShortConcat[2]=vShortHealTxtSuffix
         return HealBot_Text_ShortConcat()
     else
-        return amount
+        return HealBot_Comm_round(amount, 0)
     end
       --HealBot_setCall("HealBot_Text_shortHealTxt")
 end

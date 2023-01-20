@@ -19994,6 +19994,7 @@ function HealBot_Options_BuffsGeneralBuffsTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_BuffGroups8, HealBot_Options_BuffTxt_List[BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(8)]])
         HealBot_Options_SetLabel("HealBot_Options_Panel5_1", HEALBOT_OPTIONS_BUFFSTEXT1)
         HealBot_Options_SetLabel("HealBot_Options_Panel5_2", HEALBOT_OPTIONS_BUFFSTEXT2)
+        HealBot_Options_SetLabel("HealBot_Options_BuffDefaultBarColourTxt", HEALBOT_OPTIONS_CDCBARS)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
