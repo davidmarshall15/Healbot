@@ -33,7 +33,7 @@ function HealBot_Init_ClassicHealSpellMaxRank(sName)
 end
 
 local function EnumerateTooltipLines_helper(pattern, ...)
-    local region=nil,nil
+    local region=nil
     for i = 1, select("#", ...) do
         region = select(i, ...)
         if region and region:GetObjectType() == "FontString" then

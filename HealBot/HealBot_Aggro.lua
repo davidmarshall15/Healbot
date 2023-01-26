@@ -105,6 +105,19 @@ local function HealBot_Aggro_AuxClearAggroBar(button)
     end
 end
 
+local hbAuraWatchAggro={}
+function HealBot_Aggro_AuraWatch(guid, state)
+    if state then
+        hbAuraWatchAggro[guid]=true
+    else
+        hbAuraWatchAggro[guid]=nil
+    end
+end
+
+function HealBot_Aggro_AuraWatchClear()
+    hbAuraWatchAggro={}
+end
+
 function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
@@ -133,6 +146,9 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
             button.aggro.status=threatStatus
         end
         HealBot_Aggro_IndicatorUpdate(button)
+        if hbAuraWatchAggro[button.guid] then
+            HealBot_Plugin_AuraWatch_AggroUpdate(button)
+        end
     end
     if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
         button.aggro.threatpct=threatPct

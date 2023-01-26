@@ -20335,7 +20335,7 @@
                   </Frame>
                   <Button name="HealBot_Options_CDCIDMethodCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
                       <Size>
-                          <AbsDimension x="110" y="22"/>
+                          <AbsDimension x="110" y="24"/>
                       </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -20387,7 +20387,7 @@
                   </Frame>
                   <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
                       <Size>
-                          <AbsDimension x="110" y="22"/>
+                          <AbsDimension x="110" y="24"/>
                       </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -20395,7 +20395,7 @@
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
-                                <AbsDimension x="0" y="20" />
+                                <AbsDimension x="0" y="18" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -20552,7 +20552,7 @@
                   </Frame>
                   <Button name="HealBot_Options_CDCPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
                     <Size>
-                      <AbsDimension x="125" y="22"/>
+                      <AbsDimension x="110" y="24"/>
                     </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
@@ -20570,7 +20570,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDebuffTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="52" y="-63"/>
+                          <AbsDimension x="25" y="-61"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -25722,8 +25722,7 @@
                   </Frame>
                 </Frames>
               </Frame>
-              
-              
+
             </Frames>
           </Frame>
           <Frame name="HealBot_Options_Panel99" hidden="true" setAllPoints="true">
@@ -25893,6 +25892,23 @@
                 </Anchors>
               </Frame>
               <Frame name="HealBot_Options_PluginRequestsFrame" hidden="true">
+                <Size>
+                  <AbsDimension y="580"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-20" y="-58"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+              </Frame>
+              <Frame name="HealBot_Options_PluginAuraWatchFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
                 </Size>

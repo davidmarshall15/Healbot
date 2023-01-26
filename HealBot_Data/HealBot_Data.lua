@@ -214,7 +214,7 @@ HealBot_Config_CuresDefaults = {
     [HEALBOT_POISON_en] = { R = 0.12, G = 0.46, B = 0.24, },
     [HEALBOT_CURSE_en] = { R = 0.83, G = 0.43, B = 0.09, },
   },
-  HealBot_Custom_Defuffs_All = {
+  HealBot_Custom_Debuffs_All = {
     [HEALBOT_DISEASE_en] = false,
     [HEALBOT_MAGIC_en]   = false,
     [HEALBOT_POISON_en]  = false,

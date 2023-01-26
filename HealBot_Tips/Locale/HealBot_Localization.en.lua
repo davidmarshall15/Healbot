@@ -18,6 +18,8 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips2="\n--\n".."|cff77c8ff".."TIP: With the current modifier keys\n".."|cff77c8ff".."set spells with the same range as Left click.\n"
     local hbSpellsTips3="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: When using the Global profile:\n".._G["GREEN_FONT_COLOR_CODE"].."- Macros, Items, Commands and Emotes are saved for all characters.\n".._G["GREEN_FONT_COLOR_CODE"].."- Spells are saved for all characters of the same class."
     local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Frame glow lines and Frame glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
+    local hbSpellsTips5="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are available under the Custom "..HEALBOT_CUSTOM_CATEGORY.."."
+    local hbSpellsTips6="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Automatic buffs only show an icon."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Preset Colours
                                  ["PRESETCOLS"]="Prefix Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -1059,12 +1061,12 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMSORT"]="Sort the debuff list by Priority, Name or Tag.",
                                ["DEBUFFSCUSTOMFILTER"]="Filter the debuff list on Priority, Tag or no filter.",
                                ["DEBUFFSCUSTOMPAGE"]="Page though the custom debuffs.",
-                               ["DEBUFFSCUSTOMALLDISEASE"]="Always show disease type debuffs.",
-                               ["DEBUFFSCUSTOMALLMAGIC"]="Always show magic type debuffs.",
-                               ["DEBUFFSCUSTOMALLPOISON"]="Always show poison type debuffs.",
-                               ["DEBUFFSCUSTOMALLCURSE"]="Always show curse type debuffs.",
-                               ["DEBUFFSCUSTOMALLBOSS"]="Always show debuffs cast by bosses.",
-                               ["DEBUFFSCUSTOMALLTIMED"]="Always show debuffs with a duration less than "..HealBot_Config_Cures.ShowTimeMaxDuration.." seconds.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes debuffs cast by friendly players.\n".._G["YELLOW_FONT_COLOR_CODE"].."Use '/hb atd n' to set the duration where n is the seconds.",
+                               ["DEBUFFSCUSTOMALLDISEASE"]="Always show disease type debuffs."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLMAGIC"]="Always show magic type debuffs."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLPOISON"]="Always show poison type debuffs."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLCURSE"]="Always show curse type debuffs."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLBOSS"]="Always show debuffs cast by bosses."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLTIMED"]="Always show debuffs with a duration less than "..HealBot_Config_Cures.ShowTimeMaxDuration.." seconds.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes debuffs cast by friendly players.\n".._G["YELLOW_FONT_COLOR_CODE"].."Use '/hb atd n' to set the duration where n is the seconds."..hbSpellsTips5,
                         -- Debuffs Warning tab
                                ["DEBUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom debuffs.",
                                ["DEBUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
@@ -1116,10 +1118,10 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom buff.",
                                ["BUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom buff.",
                                ["BUFFSCUSTOMPAGE"]="Page though the custom buffs.",
-                               ["BUFFSCUSTOMAUTO"]="Turn On or Off showing automatic buffs.\nTimed buffs are buff with a duration less than "..HealBot_Config_Buffs.AutoBuffExpireTime.."s.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded.",
+                               ["BUFFSCUSTOMAUTO"]="Turn On or Off showing automatic buffs.\nTimed buffs are buff with a duration less than "..HealBot_Config_Buffs.AutoBuffExpireTime.."s.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded.\n".._G["YELLOW_FONT_COLOR_CODE"].."Timed buffs: use '/hb atb n' to set the duration where n is the seconds."..hbSpellsTips6,
                                ["BUFFSCUSTOMSORT"]="Sort the buff list by Priority, Name or Tag.",
                                ["BUFFSCUSTOMFILTER"]="Filter the buff list on Priority, Tag or no filter.",
-                               ["BUFFSCUSTOMAUTOCASTBY"]="Filter automatic buffs by the caster.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded.",
+                               ["BUFFSCUSTOMAUTOCASTBY"]="Filter automatic buffs by the caster.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded."..hbSpellsTips6,
                         -- Buffs Warning tab
                                ["BUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom buffs.",
                                ["BUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",

@@ -234,21 +234,25 @@ function HealBot_Tooltip_RequestsClear()
     tipsRequests={}
 end
 
-local tipsBuffWatch={}
-function HealBot_Tooltip_BuffWatch(guid, buff, r, g, b)
+local tipsAuraWatch={}
+function HealBot_Tooltip_AuraWatch(guid, buff, r, g, b)
     if buff then
-        tipsBuffWatch[guid]="      Ready for "..buff
-        tipsBuffWatch.r=r
-        tipsBuffWatch.g=g
-        tipsBuffWatch.b=b
+        tipsAuraWatch[guid]="      Ready for "..buff
+        tipsAuraWatch.r=r
+        tipsAuraWatch.g=g
+        tipsAuraWatch.b=b
     else
-        tipsBuffWatch[guid]=nil
+        tipsAuraWatch[guid]=nil
     end
     if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
 end
 
-function HealBot_Tooltip_BuffWatchClear()
-    tipsBuffWatch={}
+function HealBot_Tooltip_BuffWatch(guid, buff, r, g, b)
+    HealBot_Tooltip_AuraWatch(guid, buff, r, g, b)
+end
+
+function HealBot_Tooltip_AuraWatchClear()
+    tipsAuraWatch={}
 end
 
 local tipsHealthWatch={}
@@ -717,9 +721,9 @@ function HealBot_Action_DoRefreshTooltip()
                     HealBot_Tooltip_SetLine("  ",0,0,0,0)
                     HealBot_Tooltip_SetLine(tipsRequests[xButton.guid],tipsRequests.r,tipsRequests.g,tipsRequests.b,1," ",0,0,0,0)
                 end
-                if tipsBuffWatch[xButton.guid] then
+                if tipsAuraWatch[xButton.guid] then
                     HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                    HealBot_Tooltip_SetLine(tipsBuffWatch[xButton.guid],tipsBuffWatch.r,tipsBuffWatch.g,tipsBuffWatch.b,1," ",0,0,0,0)
+                    HealBot_Tooltip_SetLine(tipsAuraWatch[xButton.guid],tipsAuraWatch.r,tipsAuraWatch.g,tipsAuraWatch.b,1," ",0,0,0,0)
                 end
                 local d=false
                 if HealBot_Globals.Tooltip_ShowMyBuffs then
@@ -1057,7 +1061,7 @@ end
 
 function HealBot_Tooltip_ClearGUID(guid)
     tipsRequests[guid]=nil
-    tipsBuffWatch[guid]=nil
+    tipsAuraWatch[guid]=nil
     tipsHealthWatch[guid]=nil
     tipsManaWatch[guid]=nil
 end

@@ -1189,9 +1189,10 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_MYCOOLDOWNS,
     HEALBOT_PLUGIN_TWEAKS,
     HEALBOT_PLUGIN_REQUESTS,
-    HEALBOT_PLUGIN_BUFFWATCH,
+    HEALBOT_PLUGIN_AURAWATCH,
     HEALBOT_PLUGIN_HEALTHWATCH,
     HEALBOT_PLUGIN_MANAWATCH,
+    HEALBOT_PLUGIN_BUFFWATCH,
     --HEALBOT_PLUGIN_EFFECTIVETANKS,
     --HEALBOT_PLUGIN_EFFICIENTHEALERS,
     }
@@ -12204,16 +12205,6 @@ function HealBot_Options_Aux1Assign_GenList()
         list[9]=HEALBOT_OPTIONS_TAB_NAMETEXT
         list[10]=HEALBOT_WORD_HEALTH
         list[11]=HEALBOT_OPTIONS_TAB_STATETEXT
-    elseif HealBot_Options_luVars["FramesSelFrame"]>7 then
-        for j=1, 10 do
-            list[j]=HealBot_Options_AuxAssign_List[j]
-        end
-        list[11]=HEALBOT_OUTOFRANGE_LABEL
-        list[12]=HEALBOT_RANGE30
-        list[13]=HEALBOT_OPTION_HEALTHDROP
-        list[14]=HEALBOT_OPTIONS_TAB_NAMETEXT
-        list[15]=HEALBOT_WORD_HEALTH
-        list[16]=HEALBOT_OPTIONS_TAB_STATETEXT
     elseif HEALBOT_GAME_VERSION<4 then
         for j=1, HealBot_Options_luVars["MaxClassicAuxBarAssign"] do
             list[j]=HealBot_Options_AuxAssign_List[j]
@@ -12544,54 +12535,40 @@ local function HealBot_Options_setAuxBarsByID(f,x)
             HealBot_Aux_setAuraAssigned("BUFF", f, x)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==10 then
             HealBot_Aux_setAuraAssigned("DEBUFF", f, x)
-        elseif f<8 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==11 then
-                HealBot_Aux_setCastBarAssigned(f, x)
-            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==12 then
-                HealBot_Aux_setTargetAssigned(f, x)
-            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==13 then
-                HealBot_Aux_setOORAssigned(f, x)
-            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==14 then
-                HealBot_Aux_setRange30Assigned(f, x)
-            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==15 then
-                HealBot_Aux_setRecentHealsAssigned(f, x)
-            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==16 then
-                HealBot_Aux_setResAssigned(f, x)
-            elseif HEALBOT_GAME_VERSION<4 then
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==17 then
-                    HealBot_Aux_setHealthDropAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==18 then
-                    HealBot_Aux_setNameAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==19 then
-                    HealBot_Aux_setHealthAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==20 then
-                    HealBot_Aux_setStateAssigned(f, x)
-                end
-            else
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==17 then
-                    HealBot_Aux_setSummonsAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==18 then
-                    HealBot_Aux_setHealthDropAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==19 then
-                    HealBot_Aux_setNameAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==20 then
-                    HealBot_Aux_setHealthAssigned(f, x)
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==21 then
-                    HealBot_Aux_setStateAssigned(f, x)
-                end
-            end
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==11 then
-            HealBot_Aux_setOORAssigned(f, x)
+            HealBot_Aux_setCastBarAssigned(f, x)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==12 then
-            HealBot_Aux_setRange30Assigned(f, x)
+            HealBot_Aux_setTargetAssigned(f, x)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==13 then
-            HealBot_Aux_setHealthDropAssigned(f, x)
-        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==13 then
-            HealBot_Aux_setNameAssigned(f, x)
+            HealBot_Aux_setOORAssigned(f, x)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==14 then
-            HealBot_Aux_setHealthAssigned(f, x)
+            HealBot_Aux_setRange30Assigned(f, x)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==15 then
-            HealBot_Aux_setStateAssigned(f, x)
+            HealBot_Aux_setRecentHealsAssigned(f, x)
+        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==16 then
+            HealBot_Aux_setResAssigned(f, x)
+        elseif HEALBOT_GAME_VERSION<4 then
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==17 then
+                HealBot_Aux_setHealthDropAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==18 then
+                HealBot_Aux_setNameAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==19 then
+                HealBot_Aux_setHealthAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==20 then
+                HealBot_Aux_setStateAssigned(f, x)
+            end
+        else
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==17 then
+                HealBot_Aux_setSummonsAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==18 then
+                HealBot_Aux_setHealthDropAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==19 then
+                HealBot_Aux_setNameAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==20 then
+                HealBot_Aux_setHealthAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==21 then
+                HealBot_Aux_setStateAssigned(f, x)
+            end
         end
     elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==5 then
         HealBot_Aux_setCastBarAssigned(f, x)
@@ -13022,9 +12999,10 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [7]="pluginMyCooldowns",
                     [8]="pluginTweaks",
                     [9]="pluginRequests",
-                   [10]="pluginBuffWatch",
+                   [10]="pluginAuraWatch",
                    [11]="pluginHealthWatch",
-                   [12]="pluginManaWatch",}
+                   [12]="pluginManaWatch",
+                   [13]="pluginBuffWatch",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
@@ -13033,6 +13011,7 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginPerformanceFrame:Hide()
     HealBot_Options_PluginTweaksFrame:Hide()
     HealBot_Options_PluginRequestsFrame:Hide()
+    HealBot_Options_PluginAuraWatchFrame:Hide()
     HealBot_Options_PluginBuffWatchFrame:Hide()
     HealBot_Options_PluginHealthWatchFrame:Hide()
     HealBot_Options_PluginManaWatchFrame:Hide()
@@ -13072,14 +13051,17 @@ local function HealBot_Options_Plugins_ShowFrame()
             HealBot_Plugin_Requests_Options()
             HealBot_Options_PluginRequestsFrame:Show()
         elseif HealBot_Options_luVars["curPlugin"]==10 then
-            HealBot_Plugin_BuffWatch_Options()
-            HealBot_Options_PluginBuffWatchFrame:Show()
+            HealBot_Plugin_AuraWatch_Options()
+            HealBot_Options_PluginAuraWatchFrame:Show()
         elseif HealBot_Options_luVars["curPlugin"]==11 then
             HealBot_Plugin_HealthWatch_Options()
             HealBot_Options_PluginHealthWatchFrame:Show()
         elseif HealBot_Options_luVars["curPlugin"]==12 then
             HealBot_Plugin_ManaWatch_Options()
             HealBot_Options_PluginManaWatchFrame:Show()
+        elseif HealBot_Options_luVars["curPlugin"]==13 then
+            HealBot_Plugin_BuffWatch_Options()
+            HealBot_Options_PluginBuffWatchFrame:Show()
         end
     end
 end
@@ -14735,8 +14717,8 @@ function HealBot_Options_SetEnableDisableBuffBtn()
 end
 
 function HealBot_Options_CDCAll_OnClick(self, debuffType)
-    if HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuffType]~=self:GetChecked() then
-        HealBot_Config_Cures.HealBot_Custom_Defuffs_All[debuffType]=self:GetChecked()
+    if HealBot_Config_Cures.HealBot_Custom_Debuffs_All[debuffType]~=self:GetChecked() then
+        HealBot_Config_Cures.HealBot_Custom_Debuffs_All[debuffType]=self:GetChecked()
         HealBot_Timers_Set("AURA","ResetDebuffCache")
     end
 end
@@ -19835,13 +19817,13 @@ function HealBot_Options_DebuffsCustomTab(tab)
         HealBot_Options_SetLabel("HealBot_Options_CDCPriorityCustomTxt",HEALBOT_WORD_PRIORITY)
         HealBot_Options_SetLabel("HealBot_Options_CDCColTxt", HEALBOT_SKIN_HEADERBARCOL)
         HealBot_Options_SetLabel("HealBot_Options_CDCColTxtC",HEALBOT_SKIN_HEADERBARCOL)
-        HealBot_Options_CDCAllDisease:SetChecked(HealBot_Config_Cures.HealBot_Custom_Defuffs_All[HEALBOT_DISEASE_en])
+        HealBot_Options_CDCAllDisease:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_DISEASE_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllDisease,HEALBOT_OPTIONS_CUSTOM_ALLDISEASE)
-        HealBot_Options_CDCAllMagic:SetChecked(HealBot_Config_Cures.HealBot_Custom_Defuffs_All[HEALBOT_MAGIC_en])
+        HealBot_Options_CDCAllMagic:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_MAGIC_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllMagic,HEALBOT_OPTIONS_CUSTOM_ALLMAGIC)
-        HealBot_Options_CDCAllPoison:SetChecked(HealBot_Config_Cures.HealBot_Custom_Defuffs_All[HEALBOT_POISON_en])
+        HealBot_Options_CDCAllPoison:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_POISON_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllPoison,HEALBOT_OPTIONS_CUSTOM_ALLPOISON)
-        HealBot_Options_CDCAllCurse:SetChecked(HealBot_Config_Cures.HealBot_Custom_Defuffs_All[HEALBOT_CURSE_en])
+        HealBot_Options_CDCAllCurse:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_CURSE_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllCurse,HEALBOT_OPTIONS_CUSTOM_ALLCURSE)
         HealBot_Options_CDCAllBoss:SetChecked(HealBot_Config_Cures.AlwaysShowBoss)
         HealBot_Options_SetText(HealBot_Options_CDCAllBoss,HEALBOT_OPTIONS_CUSTOM_ALLBOSS)
@@ -20676,7 +20658,7 @@ local HealBot_Options_ExtraTabFuncs={
 function HealBot_Options_DoInitExtras(tab)
     if HealBot_Options_ExtraTabFuncs[tab] then
         HealBot_Options_ExtraTabFuncs[tab]()
-        C_Timer.After(0.04, function() HealBot_Options_DoInitExtras(tab+1) end)
+        C_Timer.After(0.02, function() HealBot_Options_DoInitExtras(tab+1) end)
     else
         HealBot_Options_luVars["RunInitExtras"]=false
     end
