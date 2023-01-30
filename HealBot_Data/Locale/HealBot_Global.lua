@@ -732,6 +732,9 @@ function HealBot_globalVars()
     HEALBOT_NATURALIZE                      = GetSpellInfo(360823) or 360823
     HEALBOT_CAUTERIZING_FLAME               = GetSpellInfo(374251) or 374251
     HEALBOT_EXPUNGE                         = GetSpellInfo(365585) or 365585
+    HEALBOT_IMPROVEDPURIFY                  = GetSpellInfo(390632) or 390632
+    HEALBOT_IMPROVEDCLEANSE                 = GetSpellInfo(393024) or 393024
+    HEALBOT_IMPROVEDPURIFY_SPIRIT           = GetSpellInfo(383016) or 383016
     
     --[[END OF SPELL LIST]]--
 

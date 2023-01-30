@@ -1446,7 +1446,8 @@ end
 local hbAuraRequests={}
 function HealBot_Aura_Requests(guid, buff)
     if buff then
-        hbAuraRequests[guid]=buff
+        if not hbAuraRequests[guid] then hbAuraRequests[guid]={} end
+        hbAuraRequests[guid][buff]=true
     else
         hbAuraRequests[guid]=nil
     end
@@ -1458,19 +1459,15 @@ end
 
 local hbAuraBuffWatch={}
 local hbAuraDebuffWatch={}
-function HealBot_Aura_BuffWatch(guid, buff, state)
+function HealBot_Aura_BuffWatch(guid, buff)
     if buff then
-        if state then
-            if not hbAuraBuffWatch[guid] then 
-                hbAuraBuffWatch[guid]={}
-            end
-            if not hbAuraBuffWatch[guid][buff] then
-                hbAuraBuffWatch[guid][buff]=0
-            end
-        elseif hbAuraBuffWatch[guid] and hbAuraBuffWatch[guid][buff] then
-            hbAuraBuffWatch[guid][buff]=false
+        if not hbAuraBuffWatch[guid] then 
+            hbAuraBuffWatch[guid]={}
         end
-    elseif hbAuraBuffWatch[guid] then
+        if not hbAuraBuffWatch[guid][buff] then
+            hbAuraBuffWatch[guid][buff]=0
+        end
+    else
         hbAuraBuffWatch[guid]=nil
     end
 end
@@ -1480,19 +1477,15 @@ function HealBot_Aura_AuraWatchClear()
     hbAuraDebuffWatch={}
 end
 
-function HealBot_Aura_DebuffWatch(guid, debuff, state)
+function HealBot_Aura_DebuffWatch(guid, debuff)
     if debuff then
-        if state then
-            if not hbAuraDebuffWatch[guid] then 
-                hbAuraDebuffWatch[guid]={}
-            end
-            if not hbAuraDebuffWatch[guid][debuff] then
-                hbAuraDebuffWatch[guid][debuff]=0
-            end
-        elseif hbAuraDebuffWatch[guid] and hbAuraDebuffWatch[guid][debuff] then
-            hbAuraDebuffWatch[guid][debuff]=false
+        if not hbAuraDebuffWatch[guid] then 
+            hbAuraDebuffWatch[guid]={}
         end
-    elseif hbAuraDebuffWatch[guid] then
+        if not hbAuraDebuffWatch[guid][debuff] then
+            hbAuraDebuffWatch[guid][debuff]=0
+        end
+    else
         hbAuraDebuffWatch[guid]=nil
     end
 end
@@ -1518,9 +1511,9 @@ local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
     if uaExpirationTime then
         if HealBot_UnitBuffCurrent[button.guid] then
-            if hbAuraRequests[button.guid] and hbAuraRequests[button.guid]==uaName then
+            if hbAuraRequests[button.guid] and hbAuraRequests[button.guid][uaName] then
                 HealBot_Plugin_Requests_CancelGUID(button.guid)
-                hbAuraRequests[button.guid]=false
+                hbAuraRequests[button.guid][uaName]=false
             end
             if hbAuraBuffWatch[button.guid] and hbAuraBuffWatch[button.guid][uaName] and hbAuraBuffWatch[button.guid][uaName]==0 then
                 hbAuraBuffWatch[button.guid][uaName]=1

@@ -332,7 +332,6 @@ function HealBot_Data_InitVars()
         MacroSuppressSound = true,
         MacroSuppressError = true,
         AcceptSkins = 1,
-        HealBot_Enable_MouseWheel=true,
         FocusMonitor = {},
         OneTimeMsg={},
         dislikeMount={},

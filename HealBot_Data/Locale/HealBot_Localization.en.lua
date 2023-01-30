@@ -1287,11 +1287,12 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_REQUESTCOL               = "Request col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_PLUGIN_REQUESTSOUND             = "Play sound on request";
     HEALBOT_PLUGIN_AURAWATCHTARGETPLAYERS   = "Target players";
+    HEALBOT_PLUGIN_AURAWATCHPLAYERSFILTER   = "Target players filter";
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT    = "Only in combat";
-    HEALBOT_PLUGIN_BUFFWATCHSELFBUFF        = "My buff";
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFF        = "My spell";
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF     = "Target players buff";
-    HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF     = "Target players debuff";
-    HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH       = "Alert when buff cooldown ends";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF   = "Target players debuff";
+    HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH       = "Alert when spell cooldown ends";
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFFH    = "Wait for players buff";
     HEALBOT_PLUGIN_BUFFWATCHSTATE1          = "Inactive"
     HEALBOT_PLUGIN_BUFFWATCHSTATE2          = "Wait on cooldown for "
@@ -1324,7 +1325,6 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKSCOLOURBARCOL       = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Only for all"
     HEALBOT_PLUGIN_HEALTHALERTLEVEL         = "Health alert level"
     HEALBOT_PLUGIN_MANAALERTLEVEL           = "Mana alert level"
-    HEALBOT_PLUGIN_RECEIVEFROMBW            = "Receive from BuffWatch"
     HEALBOT_PLUGIN_ALERTMETHOD              = "Alert method"
     HEALBOT_PLUGIN_FORWARDTOHW              = "Forward to HealthWatch"
     HEALBOT_PLUGIN_FORWARDTOMW              = "Forward to ManaWatch"

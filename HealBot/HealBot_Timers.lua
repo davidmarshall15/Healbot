@@ -243,6 +243,11 @@ function HealBot_Timers_SpellsResetTabs()
     HealBot_Options_setDebuffTypes()
 end
 
+function HealBot_Timers_TalentsLookupImproved()
+    HealBot_Init_TalentLookupImproved()
+    HealBot_Options_setDebuffTypes()
+end
+
 function HealBot_Timers_BuffsReset()
     HealBot_Timers_Set("AURA","BuffReset")
     HealBot_Timers_Set("AURA","DebuffReset")
@@ -659,6 +664,7 @@ local hbTimerFuncs={["INIT"]={
                         ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
                         ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
+                        ["TalentsLookupImproved"]=HealBot_Timers_TalentsLookupImproved,
                     },
                    }
 

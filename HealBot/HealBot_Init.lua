@@ -47,6 +47,63 @@ local function EnumerateTooltipLines_helper(pattern, ...)
     return false
 end
 
+function HealBot_Init_TalentLookupImproved()
+    local pattern=false
+    local improved=false
+    if HealBot_Data["PCLASSTRIM"]=="PRIE" then
+        pattern=HEALBOT_IMPROVEDPURIFY
+    elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
+        pattern=HEALBOT_IMPROVEDCLEANSE
+    elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
+        pattern=HEALBOT_IMPROVEDPURIFY_SPIRIT
+    end
+    if pattern then
+        local specID = PlayerUtil.GetCurrentSpecID()
+        if specID then
+            local configID = C_ClassTalents.GetLastSelectedSavedConfigID(specID) or C_ClassTalents.GetActiveConfigID()
+            local configInfo = C_Traits.GetConfigInfo(configID)
+            local treeID = configInfo.treeIDs[1]
+            local nodes = C_Traits.GetTreeNodes(treeID)
+            for _, nodeID in ipairs(nodes) do
+                local nodeInfo = C_Traits.GetNodeInfo(configID, nodeID)
+                if nodeInfo.currentRank and nodeInfo.currentRank > 0 then
+                    local entryID = nodeInfo.activeEntry and nodeInfo.activeEntry.entryID and nodeInfo.activeEntry.entryID
+                    local entryInfo = entryID and C_Traits.GetEntryInfo(configID, entryID)
+                    local definitionInfo = entryInfo and entryInfo.definitionID and C_Traits.GetDefinitionInfo(entryInfo.definitionID)
+                    if definitionInfo ~= nil and nodeInfo.activeRank > 0 then
+                        local talentName = TalentUtil.GetTalentName(definitionInfo.overrideName, definitionInfo.spellID)
+                        if talentName==pattern then
+                            improved=true
+                            break
+                        end
+                    end
+                end
+            end
+            if HealBot_Data["PCLASSTRIM"]=="PRIE" then
+                if improved then
+                    HealBot_Options_setLuVars("PriestImprovedPurify", true)
+                else
+                    HealBot_Options_setLuVars("PriestImprovedPurify", false)
+                end
+            elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
+                if improved then
+                    HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
+                else
+                    HealBot_Options_setLuVars("PaladinImprovedCleanse", false)
+                end
+            elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
+                if improved then
+                    HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
+                else
+                    HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", false)
+                end
+            end
+        else
+            HealBot_Timers_Set("LAST","TalentsLookupImproved",5)
+        end
+    end
+end
+
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local cRank=false
     if ( not id ) then return false; end
@@ -81,19 +138,19 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
             if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("PriestImprovedPurify", true)
             else
-                HealBot_Options_setLuVars("PriestImprovedPurify", false)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
             end
         elseif spellName==HEALBOT_CLEANSE and HealBot_Data["PCLASSTRIM"]=="PALA" then
-            if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
+            if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
             else
-                HealBot_Options_setLuVars("PaladinImprovedCleanse", false)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
             end
         elseif spellName==HEALBOT_PURIFY_SPIRIT and HealBot_Data["PCLASSTRIM"]=="SHAM" then
             if EnumerateTooltipLines_helper(HEALBOT_CURSE, HealBot_ScanTooltip:GetRegions()) then
                 HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
             else
-                HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", false)
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
             end
         end
     end

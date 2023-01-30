@@ -810,7 +810,7 @@ end
 
 function HealBot_Action_DisableBorderHazardTypeButton(button)
     if HealBot_retLuVars("pluginRequests") then HealBot_Plugin_Requests_Cancel(button) end
-    if HealBot_retLuVars("pluginAuraWatch") then HealBot_Plugin_AuraWatch_Cancel(button) end
+    if HealBot_retLuVars("pluginAuraWatch") then HealBot_Plugin_AuraWatch_CancelGUID(button.guid) end
     if HealBot_retLuVars("pluginBuffWatch") then HealBot_Plugin_BuffWatch_Cancel(button) end
     if HealBot_retLuVars("pluginHealthWatch") then HealBot_Plugin_HealthWatch_Cancel(button) end
     if HealBot_retLuVars("pluginManaWatch") then HealBot_Plugin_ManaWatch_Cancel(button) end
@@ -2945,6 +2945,30 @@ function HealBot_Action_InitButton(button)
     button.mana.lowcheck=true
     button.guid="init"
     
+    button.status.range=1
+    button.status.rangespell=HealBot_RangeSpells["HEAL"]
+    button.status.rangespellspecial=false
+    button.status.rangenextcheck=0
+    button.status.unittype=0
+    button.status.enabled=false
+    button.status.summons=false
+    button.status.incombat=false
+    button.status.hostile=false
+    button.status.role=0
+    button.status.hasres=false
+    button.status.nextcheck=0
+    button.group=1
+    button.rank=0
+    button.role=0
+    button.player=false
+    button.isplayer=false
+    button.name=false
+    button.level=1
+    button.status.events=false
+    button.status.duplicate=false
+    button.status.classknown=false
+    button.status.plugin=false
+    
     HealBot_Aura_setButtonIcons(button.id)
     HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_InitButton")
@@ -3064,34 +3088,11 @@ end
 local tPrepButton=""
 function HealBot_Action_PrepButton(button)
     erButton=HealBot_Emerg_Button[button.id]
-    button.status.role=0
-    button.status.hasres=false
-    button.status.nextcheck=0
-    button.group=1
-    button.rank=0
-    button.role=0
-    button.player=false
-    button.isplayer=false
-    button.name=false
-    button.level=1
+    
     button.health.init=true
     button.mana.init=true
-    button.status.events=false
-    button.status.duplicate=false
-    button.status.classknown=false
-    button.status.plugin=false
     button.status.current=HealBot_Unit_Status["CHECK"]
-    button.status.range=1
     button.status.range30=true
-    button.status.rangespell=HealBot_RangeSpells["HEAL"]
-    button.status.rangespellspecial=false
-    button.status.rangenextcheck=0
-    button.status.unittype=0
-    button.status.enabled=false
-    button.status.summons=false
-    button.status.incombat=false
-    button.status.hostile=false
-    
     button.health.current=-1
     button.health.max=100
     button.health.alert=1
@@ -4632,7 +4633,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             hButton.status.duplicate=duplicate
             hButton.group=HealBot_RetUnitGroups(unit)
             hButton.rank=HealBot_RetUnitRank(unit)
-            hButton.role=HealBot_RetUnitPlayerRole(unit)
+            if hButton.role~=HealBot_RetUnitPlayerRole(unit) then
+                hButton.role=HealBot_RetUnitPlayerRole(unit)
+                HealBot_setLuVars("pluginClearDown", 1)
+            end
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
             end
@@ -4972,6 +4976,12 @@ function HealBot_Action_DeleteButton(hbBarID)
     if dg.frame>0 then 
         HealBot_UpdateUnitClear(dg)
     end
+    for x=1,12 do
+        dg.gref.iconf[x]:SetFrameLevel(0)
+    end
+    for x=51,58 do
+        dg.gref.iconf[x]:SetFrameLevel(0)
+    end
     HealBot_Action_PrepButton(dg)
     HealBot_ActiveButtons[hbBarID]=false
     if hbBarID>HealBot_Globals.AutoCacheSize then
@@ -5025,7 +5035,7 @@ function HealBot_Action_DoProcCacheButtons()
     if not InCombatLockdown() then
         HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if HealBot_Action_DeleteMarkedButton() or HealBot_Action_CacheButton() then
-            C_Timer.After(0.025, HealBot_Action_DoProcCacheButtons)
+            C_Timer.After(0.2, HealBot_Action_DoProcCacheButtons)
         else
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end
@@ -5068,12 +5078,6 @@ function HealBot_Action_MarkDeleteButton(button)
     end
     button:Hide()
     HealBot_Emerg_Button[button.id]:Hide()
-    for x=1,12 do
-        button.gref.iconf[x]:SetFrameLevel(0)
-    end
-    for x=51,58 do
-        button.gref.iconf[x]:SetFrameLevel(0)
-    end
     if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
     if HealBot_Fluid_BarButtons[button.id] then HealBot_Fluid_BarButtons[button.id]=nil end
     if HealBot_Fluid_BarButtonsAlpha[button.id] then HealBot_Fluid_BarButtonsAlpha[button.id]=nil end
