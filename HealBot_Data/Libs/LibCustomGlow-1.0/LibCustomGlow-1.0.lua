@@ -6,17 +6,19 @@ https://www.wowace.com/projects/libbuttonglow-1-0
 -- luacheck: globals CreateFromMixins ObjectPoolMixin CreateTexturePool CreateFramePool
 
 local MAJOR_VERSION = "LibCustomGlow-1.0"
-local MINOR_VERSION = 15
+local MINOR_VERSION = 16
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib, oldversion = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then return end
 local Masque = LibStub("Masque", true)
+
 local isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 local textureList = {
     empty = [[Interface\AdventureMap\BrokenIsles\AM_29]],
     white = [[Interface\BUTTONS\WHITE8X8]],
     shine = [[Interface\ItemSocketingFrame\UI-ItemSockets]]
 }
+
 local shineCoords = {0.3984375, 0.4453125, 0.40234375, 0.44921875}
 if isRetail then
     textureList.shine = [[Interface\Artifacts\Artifacts]]
@@ -49,10 +51,8 @@ GlowMaskPool.parent =  GlowParent
 
 local TexPoolResetter = function(pool,tex)
     local maskNum = tex:GetNumMaskTextures()
-    if maskNum>0 then
-        for i = maskNum,1 do
-            tex:RemoveMaskTexture(tex:GetMaskTexture(i))
-        end
+    for i = maskNum , 1, -1 do
+        tex:RemoveMaskTexture(tex:GetMaskTexture(i))
     end
     tex:Hide()
     tex:ClearAllPoints()
@@ -112,11 +112,11 @@ local function addFrameAndTex(r,color,name,key,N,xOffset,yOffset,texture,texCoor
     for i=1,N do
         if not f.textures[i] then
             f.textures[i] = GlowTexPool:Acquire()
-            f.textures[i]: SetTexture(texture)
-            f.textures[i]: SetTexCoord(texCoord[1],texCoord[2],texCoord[3],texCoord[4])
-            f.textures[i]: SetDesaturated(desaturated)
-            f.textures[i]: SetParent(f)
-            f.textures[i]: SetDrawLayer("ARTWORK",7)
+            f.textures[i]:SetTexture(texture)
+            f.textures[i]:SetTexCoord(texCoord[1],texCoord[2],texCoord[3],texCoord[4])
+            f.textures[i]:SetDesaturated(desaturated)
+            f.textures[i]:SetParent(f)
+            f.textures[i]:SetDrawLayer("ARTWORK",7)
             if not isRetail and name == "_AutoCastGlow" then
                 f.textures[i]:SetBlendMode("ADD")
             end
@@ -305,6 +305,7 @@ function lib.PixelGlow_Start(r,color,N,frequency,length,th,xOffset,yOffset,borde
         f.info.width = nil
         f.info.length = length
     end
+    pUpdate(f, 0)
     f:SetScript("OnUpdate",pUpdate)
 end
 
@@ -329,6 +330,7 @@ lib.stopList["Pixel Glow"] = lib.PixelGlow_Stop
 local function acUpdate(self,elapsed)
     local width,height = self:GetSize()
     if width ~= self.info.width or height ~= self.info.height then
+        if width*height == 0 then return end -- Avoid division by zero
         self.info.width = width
         self.info.height = height
         self.info.perimeter = 2*(width+height)
@@ -387,7 +389,7 @@ function lib.AutoCastGlow_Start(r,color,N,frequency,scale,xOffset,yOffset,key,fr
     yOffset = yOffset or 0
     key = key or ""
 
-    addFrameAndTex(r,color,"_AutoCastGlow",key,N*4,xOffset,yOffset,textureList.shine,shineCoords,true, frameLevel)
+    addFrameAndTex(r,color,"_AutoCastGlow",key,N*4,xOffset,yOffset,textureList.shine,shineCoords, true, frameLevel)
     local f = r["_AutoCastGlow"..key]
     local sizes = {7,6,5,4}
     for k,size in pairs(sizes) do

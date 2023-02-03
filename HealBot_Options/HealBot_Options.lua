@@ -1192,7 +1192,6 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_AURAWATCH,
     HEALBOT_PLUGIN_HEALTHWATCH,
     HEALBOT_PLUGIN_MANAWATCH,
-    HEALBOT_PLUGIN_BUFFWATCH,
     --HEALBOT_PLUGIN_EFFECTIVETANKS,
     --HEALBOT_PLUGIN_EFFICIENTHEALERS,
     }
@@ -13001,8 +13000,7 @@ local function HealBot_Options_Plugins_ShowFrame()
                     [9]="pluginRequests",
                    [10]="pluginAuraWatch",
                    [11]="pluginHealthWatch",
-                   [12]="pluginManaWatch",
-                   [13]="pluginBuffWatch",}
+                   [12]="pluginManaWatch",}
     HealBot_Options_PluginThreatFrame:Hide()
     HealBot_Options_PluginTimeToDieFrame:Hide()
     HealBot_Options_PluginTimeToLiveFrame:Hide()
@@ -13012,7 +13010,6 @@ local function HealBot_Options_Plugins_ShowFrame()
     HealBot_Options_PluginTweaksFrame:Hide()
     HealBot_Options_PluginRequestsFrame:Hide()
     HealBot_Options_PluginAuraWatchFrame:Hide()
-    HealBot_Options_PluginBuffWatchFrame:Hide()
     HealBot_Options_PluginHealthWatchFrame:Hide()
     HealBot_Options_PluginManaWatchFrame:Hide()
     HealBot_Options_PluginMyCooldownsFrame:Hide()
@@ -13059,9 +13056,6 @@ local function HealBot_Options_Plugins_ShowFrame()
         elseif HealBot_Options_luVars["curPlugin"]==12 then
             HealBot_Plugin_ManaWatch_Options()
             HealBot_Options_PluginManaWatchFrame:Show()
-        elseif HealBot_Options_luVars["curPlugin"]==13 then
-            HealBot_Plugin_BuffWatch_Options()
-            HealBot_Options_PluginBuffWatchFrame:Show()
         end
     end
 end

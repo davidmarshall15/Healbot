@@ -25925,23 +25925,6 @@
                   </Anchor>
                 </Anchors>
               </Frame>
-              <Frame name="HealBot_Options_PluginBuffWatchFrame" hidden="true">
-                <Size>
-                  <AbsDimension y="580"/>
-                </Size>
-                <Anchors>
-                  <Anchor point="TOPLEFT">
-                    <Offset>
-                      <AbsDimension x="20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                  <Anchor point="TOPRIGHT">
-                    <Offset>
-                      <AbsDimension x="-20" y="-58"/>
-                    </Offset>
-                  </Anchor>
-                </Anchors>
-              </Frame>
               <Frame name="HealBot_Options_PluginHealthWatchFrame" hidden="true">
                 <Size>
                   <AbsDimension y="580"/>
