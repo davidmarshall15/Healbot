@@ -726,10 +726,15 @@ end
 function HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn, child)
     if not relButton then
         HealBot_Panel_Anchor2ParentFrame(button, backFrame)
-    elseif button.frame==10 and HealBot_SpecialUnit[button.unit] then
-        HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
+    elseif backFrame~=relButton then
+        if button.frame==10 and HealBot_SpecialUnit[button.unit] then
+            HealBot_Panel_AnchorSpecialFrame(button, backFrame, relButton, newColumn, child)
+        else
+            HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+        end
     else
-        HealBot_Panel_AnchorFrame(button, backFrame, relButton, newColumn)
+        HealBot_Panel_Anchor2ParentFrame(button, backFrame)
+        HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",1)
     end
 end
 
@@ -1992,7 +1997,7 @@ function HealBot_Panel_enemyTargets(preCombat)
     HeaderPos[hbCurrentFrame][i[hbCurrentFrame]+1] = HEALBOT_OPTIONS_TARGETHEALS
     vEnemyIndex=i[hbCurrentFrame]
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"] then
-        if HEALBOT_GAME_VERSION>11 then
+        if HEALBOT_GAME_VERSION>9 then
             HealBot_Panel_checkEnemyBar("anyenemy", "player", preCombat, 
                                         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWPTAR"],
                                         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCOMBATSHOWSELF"])

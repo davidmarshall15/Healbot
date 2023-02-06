@@ -1290,6 +1290,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BUFFWATCHONLYINCOMBAT    = "Only in combat";
     HEALBOT_PLUGIN_BUFFWATCHSELFBUFF        = "My spell";
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSBUFF     = "Target players buff";
+    HEALBOT_PLUGIN_BUFFWATCHPLAYERSTAG      = "Target players tag";
     HEALBOT_PLUGIN_BUFFWATCHPLAYERSDEBUFF   = "Target players debuff";
     HEALBOT_PLUGIN_BUFFWATCHSELFBUFFH       = "Alert when spell cooldown ends";
     HEALBOT_PLUGIN_BUFFWATCHSTATE1          = "Inactive"
@@ -1301,9 +1302,11 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BUFFWATCHSOUND           = "Play sound on alert";
     HEALBOT_PLUGIN_AURAWATCHT               = "Watch"
     HEALBOT_PLUGIN_AURAWATCHBUFFEXISTS      = "Buff exists"
+    HEALBOT_PLUGIN_AURAWATCHBUFFEXISTSTAG   = "Buff exists with tag"
     HEALBOT_PLUGIN_AURAWATCHBUFFEXPIRE      = "Buff exists or not exists"
     HEALBOT_PLUGIN_AURAWATCHBUFFNOTEXIST    = "Buff does not exist"
     HEALBOT_PLUGIN_AURAWATCHDEBUFFEXISTS    = "Debuff exists"
+    HEALBOT_PLUGIN_AURAWATCHDEBUFFEXISTSTAG = "Debuff exists with tag"
     HEALBOT_PLUGIN_AURAWATCHDEBUFFEXPIRE    = "Debuff exists or not exists"
     HEALBOT_PLUGIN_AURAWATCHDEBUFFNOTEXIST  = "Debuff does not exist"
     HEALBOT_PLUGIN_AURAWATCHHEALTHBELOW     = "Health below"

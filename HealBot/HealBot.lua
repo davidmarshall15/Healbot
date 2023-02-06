@@ -1345,6 +1345,9 @@ function HealBot_UpdateUnitClear(button)
     HealBot_Aura_RemoveIcons(button)
     HealBot_Aux_clearAllBars(button)
     HealBot_Aggro_ClearUnitAggro(button)
+    if HealBot_luVars["pluginAuraWatch"] then
+        HealBot_Plugin_AuraWatch_CancelNoIndex(button)
+    end
     HealBot_Action_DisableButtonGlowType(button, "ALL")
     button.status.incombat=false
     button.status.hostile=false
@@ -1471,14 +1474,11 @@ function HealBot_UnitClass(button)
                     HealBot_Action_setGuidData(button, "CLASSB", button.text.b)
                     HealBot_Action_setGuidData(button, "NAME", guName)
                 end
-            elseif not button.isplayer then
-                button.name=UnitName(button.unit) or false
             end 
         elseif button.isplayer then
             button.status.classknown=false
         else
             button.status.classknown=true
-            button.name=UnitName(button.unit) or false
             button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit)
         end
     end
@@ -1487,7 +1487,7 @@ function HealBot_UnitClass(button)
 end
 
 function HealBot_UpdateUnitExists(button)
-    if button.status.current==HealBot_Unit_Status["RESERVED"] or not button.status.classknown or not button.name then 
+    if button.status.current==HealBot_Unit_Status["RESERVED"] or not button.status.classknown then 
         button.guid=button.unit
     else
         button.status.change=false
@@ -4387,7 +4387,6 @@ function HealBot_UnitSlowUpdate(button)
             HealBot_Aura_Update_AllIcons(button)
             HealBot_Text_setNameTag(button)
             HealBot_Text_setNameText(button)
-            HealBot_Aux_CheckOverLays(button)
         elseif button.specupdate>0 and button.specupdate<TimeNow and not HealBot_luVars["talentUpdate"] then
             if button.frame<10 then
                 if button.player then
@@ -4412,6 +4411,7 @@ function HealBot_UnitSlowUpdate(button)
             HealBot_Text_setNameTag(button)
             button.text.name=""
             HealBot_Text_setNameText(button)
+            HealBot_Aux_CheckOverLays(button)
             HealBot_UnitInVehicleUpdate(button)
             if hbHealthWatch[button.guid] then
                 HealBot_Plugin_HealthWatch_UnitUpdate(button)
@@ -4811,14 +4811,14 @@ function HealBot_EnemyUpdateButton(button, checkAura)
         end
         if button.guid~=UnitGUID(button.unit) then
             HealBot_UpdateUnitGUIDChange(button)
+            if hbAuraTargetWatch[button.id] then
+                button.awtarget=true
+            end
         elseif button.status.update then
             if button.status.change then
                 HealBot_UpdateUnitExists(button)
             else
                 HealBot_UpdateUnit(button)
-            end
-            if hbAuraTargetWatch[button.id] then
-                button.awtarget=true
             end
             HealBot_EnemyUpdateAura(button)
         elseif button.awtarget then
@@ -4846,8 +4846,8 @@ function HealBot_UpdateUnit_Button()
     HealBot_luVars["UpdateID"]=HealBot_luVars["UpdateID"]+1
     if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]] then
         HealBot_UnitUpdateButton(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]])
-    elseif HealBot_luVars["UpdateID"]>HealBot_luVars["maxButtinID"] then
-        HealBot_luVars["UpdateID"]=HealBot_luVars["minButtinID"]
+    elseif HealBot_luVars["UpdateID"]>#HealBot_UpdateQueue then
+        HealBot_luVars["UpdateID"]=0
     end
 end
 
@@ -5008,8 +5008,6 @@ function HealBot_Update_Fast()
     end
 end
 
-HealBot_luVars["minButtinID"]=1
-HealBot_luVars["maxButtinID"]=1
 HealBot_luVars["auraWatchIncEnemy"]=false
 function HealBot_Update_RefreshList(button, uQueue, pClear)
     table.insert(HealBot_SlowUpdateQueue,button.id)
@@ -5022,17 +5020,9 @@ function HealBot_Update_RefreshList(button, uQueue, pClear)
             hbPrevGUIDs[button.guid]=true
         end
     end
-    if button.id<HealBot_luVars["minButtinID"] then
-        HealBot_luVars["minButtinID"]=button.id
-    end
-    if button.id>HealBot_luVars["maxButtinID"] then
-        HealBot_luVars["maxButtinID"]=button.id
-    end
 end
 
 function HealBot_Update_ResetRefreshLists()
-    HealBot_luVars["minButtinID"]=998
-    HealBot_luVars["maxButtinID"]=1
     for guid,_ in pairs(hbPrevGUIDs) do
         if not HealBot_Panel_AllUnitGUID(guid) then
             HealBot_luVars["pluginClearDown"]=1
@@ -5061,7 +5051,6 @@ function HealBot_Update_ResetRefreshLists()
         HealBot_luVars["prevNumUnits"]=#HealBot_UpdateQueue
         HealBot_UpdateNumUnits()
     end
-    HealBot_luVars["minButtinID"]=HealBot_luVars["minButtinID"]-1
     HealBot_TestBarsState(HealBot_luVars["TestBarsOn"])
 end
 
@@ -6699,7 +6688,7 @@ function HealBot_UpdateUnitRange(button)
                 hbRangeRequests[button.guid]=nil
             end
             if button.status.range<0 or oldRange<0 then
-                if HealBot_luVars["pluginAuraWatch"] and button.status.unittype<7 then
+                if HealBot_luVars["pluginAuraWatch"] then
                     if button.status.range>-1 then
                         HealBot_Plugin_AuraWatch_IsVisible(button)
                     else

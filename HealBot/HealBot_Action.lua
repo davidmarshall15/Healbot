@@ -1686,6 +1686,7 @@ function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
             if button.status.range<1 then
                 HealBot_Update_OORBar(button)
             end
+            button.status.update=true
         elseif button.status.resstart>0 then
             HealBot_Action_UpdateUnitNotDead(button)
         end
@@ -2610,6 +2611,7 @@ function HealBot_Action_InitButton(button)
     button.gref.indicator.mana={}
     button.gref.indicator.selfcast={}
     button.gref.indicator.power={}
+    HealBot_Aura_InitUnitAuraCurrent(button.id)
     button.gref["Bar"]=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
     button.gref["Bar"]:UnregisterAllEvents()
     button.gref["Bar"]:SetMinMaxValues(0,1000)
@@ -2845,6 +2847,8 @@ function HealBot_Action_InitButton(button)
     button.hotbars.state=false
     button.hotbars.debuff=false
     button.hotbars.health=false
+    button.status.update=true
+    button.status.change=true
 
     button.mana.nextcheck=0
     button.health.rcol=0
@@ -2992,8 +2996,6 @@ function HealBot_Action_PrepButton(button)
     button.status.alpha=1
     button.status.dirarrowcords=0 
     button.status.dirarrowshown=0 
-    button.status.update=true
-    button.status.change=true
     button.status.castend=-1
     button.status.resstart=0
     button.status.range=1
@@ -4605,9 +4607,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     end
                     HealBot_Action_ResetrCallsUnit(hButton)
                     HealBot_Aura_setUnitIcons(unit)
-                    if UnitExists(unit) then
-                        HealBot_Aura_InitUnitAuraCurrent(hButton.id)
-                    end
                     hButton.status.range=1
                     if hButton.frame<10 then
                         hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEventFuncs[event](self, arg1, arg2, arg3) end)
@@ -4629,10 +4628,8 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
             end
             HealBot_Action_SetHealButtonAuraCols(hButton)
-            --if not hButton.name then
-            --    hButton.status.change=true
-            --    hButton.status.update=true
-            --end
+            hButton.status.change=true
+            hButton.status.update=true
             if hButton.skinreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)
             elseif frame==10 then
@@ -4972,7 +4969,7 @@ function HealBot_Action_DoProcCacheButtons()
     if not InCombatLockdown() then
         HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if HealBot_Action_DeleteMarkedButton() or HealBot_Action_CacheButton() then
-            C_Timer.After(0.2, HealBot_Action_DoProcCacheButtons)
+            C_Timer.After(0.1, HealBot_Action_DoProcCacheButtons)
         else
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end
