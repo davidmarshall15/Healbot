@@ -638,7 +638,7 @@ function HealBot_Share_LoadDebuffs(sIn)
         HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
         HealBot_Globals.FilterCustomDebuff={}
         HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol={}
-        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=3
+        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4
         local r=HealBot_Globals.CDCBarColour[customDebuffPriority]["R"]
         local g=HealBot_Globals.CDCBarColour[customDebuffPriority]["G"]
         local b=HealBot_Globals.CDCBarColour[customDebuffPriority]["B"]

@@ -249,8 +249,8 @@ function HealBot_Timers_TalentsLookupImproved()
 end
 
 function HealBot_Timers_BuffsReset()
-    HealBot_Timers_Set("AURA","BuffReset")
-    HealBot_Timers_Set("AURA","DebuffReset")
+    HealBot_Timers_Set("AURA","BuffReset",0.1)
+    HealBot_Timers_Set("AURA","DebuffReset",0.2)
     HealBot_Timers_luVars["DoneBuffReset"]=true
 end
 
@@ -260,16 +260,16 @@ end
 
 function HealBot_Timers_LastUpdate()
     HealBot_setLuVars("DoSendGuildVersion", true)
-    HealBot_Timers_Set("AUX","UpdateAllAuxByType")
-    HealBot_Timers_Set("LAST","DisableCheck")
-    HealBot_Timers_Set("LAST","UpdateAllHealth")
-    HealBot_Timers_Set("AURA","BuffsReset")
-    HealBot_Timers_Set("AURA","PlayerCheckExtended")
-    HealBot_Timers_Set("AURA","CheckUnits")
-	HealBot_Timers_Set("LAST","UpdateAllUnitBars")
-    HealBot_Timers_Set("LAST","ProcCacheButtons")
-    HealBot_Timers_Set("LAST","CheckVersions")
-    HealBot_Timers_Set("LAST","LoadComplete")
+    HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.5)
+    HealBot_Timers_Set("LAST","DisableCheck",1)
+    HealBot_Timers_Set("LAST","UpdateAllHealth",1.5)
+    HealBot_Timers_Set("AURA","BuffsReset",2)
+    HealBot_Timers_Set("AURA","PlayerCheckExtended",2.5)
+    HealBot_Timers_Set("AURA","CheckUnits",3)
+	HealBot_Timers_Set("LAST","UpdateAllUnitBars",4)
+    HealBot_Timers_Set("LAST","ProcCacheButtons",5)
+    HealBot_Timers_Set("LAST","CheckVersions",5)
+    HealBot_Timers_Set("LAST","LoadComplete",5)
     C_Timer.After(1, HealBot_Timers_nextRecalcAll)
 end
 
@@ -312,32 +312,32 @@ function HealBot_Timers_InitSpells()
 end
 
 function HealBot_Timers_LastLoad()
-    HealBot_Timers_Set("LAST","MountsPetsUse")
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
-    HealBot_Timers_Set("SKINS","EmergHealthCol")
-    HealBot_Timers_Set("AURA","ConfigClassHoT")
-    HealBot_Timers_Set("LAST","InitLoadSpells")
-    HealBot_Timers_Set("LAST","CheckZone")
-    HealBot_Timers_Set("PLAYER","InvReady")
-    HealBot_Timers_Set("LAST","ConfigClassHoT")
-    HealBot_Timers_Set("LAST","UpdateButtonGlow")
-    HealBot_Timers_Set("LAST","LastUpdate") 
+    HealBot_Timers_Set("LAST","MountsPetsUse",0.1)
+    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.2)
+    HealBot_Timers_Set("SKINS","EmergHealthCol",0.3)
+    HealBot_Timers_Set("AURA","ConfigClassHoT",0.4)
+    HealBot_Timers_Set("LAST","InitLoadSpells",0.5)
+    HealBot_Timers_Set("LAST","CheckZone",0.7)
+    HealBot_Timers_Set("PLAYER","InvReady",0.8)
+    HealBot_Timers_Set("LAST","ConfigClassHoT",0.9)
+    HealBot_Timers_Set("LAST","UpdateButtonGlow",1)
+    HealBot_Timers_Set("LAST","LastUpdate",1) 
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
 end
 
 function HealBot_Timers_EnteringWorld2()
-    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",1)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.5)
     HealBot_Timers_Set("LAST","CheckDC",2)
     if HealBot_Timers_luVars["DoneBuffReset"] then
-        HealBot_Timers_Set("LAST","LastUpdate")
+        HealBot_Timers_Set("LAST","LastUpdate",1)
     end
 end
 
 function HealBot_Timers_EnteringWorld()
-    HealBot_Timers_Set("LAST","TargetFocusUpdate")
-    HealBot_Timers_Set("LAST","ResetUnitStatus")
-    HealBot_Timers_Set("SKINS","UpdateEmergBars",0.1)
-    HealBot_Timers_Set("LAST","EnteringWorld2")
+    HealBot_Timers_Set("LAST","TargetFocusUpdate",0.1)
+    HealBot_Timers_Set("LAST","ResetUnitStatus",0.2)
+    HealBot_Timers_Set("SKINS","UpdateEmergBars",0.4)
+    HealBot_Timers_Set("LAST","EnteringWorld2",0.5)
 end
 
 function HealBot_Timer_Plugin_InitBinds()
@@ -413,7 +413,8 @@ end
 
 function HealBot_Timer_UpdateGlow()
     HealBot_Action_DisableGlow()
-    C_Timer.After(0.01, HealBot_Action_UpdateGlow)
+    C_Timer.After(0.05, HealBot_Action_UpdateGlow)
+    C_Timer.After(0.1, HealBot_UpdateAllIcons)
 end
 
 function HealBot_Timers_SetCurrentSkin()
@@ -582,7 +583,7 @@ local hbTimerFuncs={["INIT"]={
                         ["InitItemsDataReady"]=HealBot_Aura_InitItemsDataReady,
                         ["RemoveUnusedDebuffIcons"]=HealBot_Aura_RemoveUnusedDebuffIcons,
                         ["RemoveUnusedBuffIcons"]=HealBot_Aura_RemoveUnusedBuffIcons,
-                        ["UpdateAllIconsAlpha"]=HealBot_UpdateAllIconsAlpha,
+                        ["UpdateAllIcons"]=HealBot_UpdateAllIcons,
                         ["RaidTargetUpdateAll"]=HealBot_OnEvent_RaidTargetUpdateAll,
                         ["ResetClassIconTexture"]=HealBot_ResetClassIconTexture,
                         ["UpdateAllBuffIcons"]=HealBot_Aura_Update_UnitAllBuffIcons,

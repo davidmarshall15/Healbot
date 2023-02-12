@@ -410,6 +410,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PERCENTAGEFORMAT        = "Percentage format";
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
+    HEALBOT_SKIN_ICONGLOW                   = "Icon glow";
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
     HEALBOT_OPTIONS_BUFFSTEXTWE             = "Weapon enchants";
     HEALBOT_OPTIONS_BUFFSTEXTWEMAIN         = "Main hand / 2H";

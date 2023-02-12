@@ -470,15 +470,19 @@ function HealBot_Action_DisableBorderHazardType(button, hType)
     end
 end
 
+local hbIconGlowLen={[1]=3, [2]=3, [3]=3, [4]=3, [5]=3, [6]=3, [7]=3, [8]=3, [9]=3, [10]=3}
+local hbIconGlowSize={[1]=1, [2]=1, [3]=1, [4]=1, [5]=1, [6]=1, [7]=1, [8]=1, [9]=1, [10]=1}
 local hbGlowLen={[1]=12, [2]=12, [3]=12, [4]=12, [5]=12, [6]=12, [7]=12, [8]=12, [9]=12, [10]=12}
 local hbGlowSize={[1]=4, [2]=4, [3]=4, [4]=4, [5]=4, [6]=4, [7]=4, [8]=4, [9]=4, [10]=4}
-local hbGlowFreq={["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22}
-local hbGlowStyle={["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5}
-local hbGlowCol={["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={}}
+local hbGlowFreq={["HW"]=0.28, ["MW"]=0.28, ["DEBUFF"]=-0.22, ["BUFF"]=0.22, ["ICONDEBUFF"]=-0.22, ["ICONBUFF"]=0.22}
+local hbGlowStyle={["HW"]=5, ["MW"]=5, ["DEBUFF"]=5, ["BUFF"]=5, ["ICONDEBUFF"]=5, ["ICONBUFF"]=5}
+local hbGlowCol={["HW"]={},["MW"]={},["DEBUFF"]={},["BUFF"]={},["ICONDEBUFF"]={},["ICONBUFF"]={}}
 hbGlowCol["HW"][4]=1
 hbGlowCol["MW"][4]=1
 hbGlowCol["DEBUFF"][4]=1
 hbGlowCol["BUFF"][4]=1
+hbGlowCol["ICONDEBUFF"][4]=1
+hbGlowCol["ICONBUFF"][4]=1
 for x=1,8 do
     hbGlowFreq["AW"..x]=0.28
     hbGlowStyle["AW"..x]=0
@@ -486,51 +490,167 @@ for x=1,8 do
     hbGlowCol["AW"..x][4]=1
 end
 
-function HealBot_Action_ButtonGlow(button, key, enable)
-    if enable then
-        lGlow.PixelGlow_Start(button.gref["BackBorder"], hbGlowCol[key], 8, hbGlowFreq[key], hbGlowLen[button.frame], hbGlowSize[button.frame], 0, 0, false, key)
+local HealBot_Hazard_ButtonIcons={}
+local HealBot_Hazard_IconData={}
+function HealBot_Action_UpdateHazardIconBordersColours(icon, id, alpha)
+    icon:SetBackdropBorderColor(HealBot_Hazard_IconData[id].r,HealBot_Hazard_IconData[id].g,HealBot_Hazard_IconData[id].b,alpha)
+end
+
+function HealBot_Action_UpdateIconHazardBorders()
+    HealBot_Action_luVars["IconHazardCurrentInUse"]=false
+    if HealBot_Action_luVars["IconHazardAltAlpha"] then
+        HealBot_Action_luVars["IconHazardAltAlpha"]=false
+        for id,icon in pairs(HealBot_Hazard_ButtonIcons) do
+            HealBot_Action_luVars["IconHazardCurrentInUse"]=true
+            HealBot_Action_UpdateHazardIconBordersColours(icon, id, 1)
+        end
     else
-        lGlow.PixelGlow_Stop(button.gref["BackBorder"], key)
+        HealBot_Action_luVars["IconHazardAltAlpha"]=true
+        for id,icon in pairs(HealBot_Hazard_ButtonIcons) do
+            HealBot_Action_luVars["IconHazardCurrentInUse"]=true
+            HealBot_Action_UpdateHazardIconBordersColours(icon, id, HealBot_Action_luVars["HazardMinAlpha"])
+        end
+    end
+
+    if HealBot_Action_luVars["IconHazardCurrentInUse"] then
+        C_Timer.After(HealBot_Action_luVars["HazardFreq"], function() HealBot_Action_UpdateIconHazardBorders() end)
+    else
+        HealBot_Action_luVars["IconHazardInUse"]=false
+    end
+      --HealBot_setCall("HealBot_Action_UpdateIconHazardBorders")
+end
+
+function HealBot_Action_EnableIconBorderHazard(icon, id, r, g, b)
+    if not HealBot_Hazard_IconData[id] then HealBot_Hazard_IconData[id]={} end
+    HealBot_Hazard_IconData[id].r=r
+    HealBot_Hazard_IconData[id].g=g
+    HealBot_Hazard_IconData[id].b=b
+    HealBot_Hazard_ButtonIcons[id]=icon
+    if not HealBot_Action_luVars["IconHazardInUse"] then
+        HealBot_Action_luVars["IconHazardInUse"]=true
+        HealBot_Action_luVars["IconHazardAltAlpha"]=true
+        HealBot_Action_UpdateIconHazardBorders()
     end
 end
 
-function HealBot_Action_ButtonGlowBall(button, key, enable)
+function HealBot_Action_DisableIconBorderHazard(icon, id)
+    HealBot_Hazard_ButtonIcons[id]=nil
+    icon:SetBackdropBorderColor(0,0,0,0)
+end
+
+function HealBot_Action_IconGlow(frame, key, enable, frameID)
     if enable then
-        lGlow.AutoCastGlow_Start(button.gref["BackBorder"], hbGlowCol[key], 4, hbGlowFreq[key], hbGlowSize[button.frame], 0, 0, key)
+        lGlow.PixelGlow_Start(frame, hbGlowCol[key], 8, hbGlowFreq[key], hbIconGlowLen[frameID], hbIconGlowSize[frameID]*1.2, 1, 1, false, key)
     else
-        lGlow.AutoCastGlow_Stop(button.gref["BackBorder"], key)
+        lGlow.PixelGlow_Stop(frame, key)
     end
 end
 
-function HealBot_Action_ButtonGlowBlizz(button, key, enable)
+function HealBot_Action_IconGlowBall(frame, key, enable, frameID)
     if enable then
-        lGlow.ButtonGlow_Start(button.gref["BackBorder"], hbGlowCol[key], hbGlowFreq[key])
+        lGlow.AutoCastGlow_Start(frame, hbGlowCol[key], 4, hbGlowFreq[key], hbIconGlowSize[frameID], 1, 1, key)
     else
-        lGlow.ButtonGlow_Stop(button.gref["BackBorder"], key)
+        lGlow.AutoCastGlow_Stop(frame, key)
+    end
+end
+
+function HealBot_Action_IconGlowBlizz(frame, key, enable)
+    if enable then
+        lGlow.ButtonGlow_Start(frame, hbGlowCol[key], hbGlowFreq[key])
+    else
+        lGlow.ButtonGlow_Stop(frame)
+    end
+end
+
+function HealBot_Action_ButtonGlow(frame, key, enable, frameID)
+    if enable then
+        lGlow.PixelGlow_Start(frame, hbGlowCol[key], 8, hbGlowFreq[key], hbGlowLen[frameID], hbGlowSize[frameID], 0, 0, false, key)
+    else
+        lGlow.PixelGlow_Stop(frame, key)
+    end
+end
+
+function HealBot_Action_ButtonGlowBall(frame, key, enable, frameID)
+    if enable then
+        lGlow.AutoCastGlow_Start(frame, hbGlowCol[key], 4, hbGlowFreq[key], hbGlowSize[frameID], 0, 0, key)
+    else
+        lGlow.AutoCastGlow_Stop(frame, key)
+    end
+end
+
+function HealBot_Action_ButtonGlowBlizz(frame, key, enable)
+    if enable then
+        lGlow.ButtonGlow_Start(frame, hbGlowCol[key], hbGlowFreq[key])
+    else
+        lGlow.ButtonGlow_Stop(frame)
     end
 end
 
 function HealBot_Action_FramesGlowLen()
     local l=100
+    local i=10
     for x=1,10 do
         l=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["WIDTH"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
+        i=((Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==1 then
             hbGlowLen[x]=ceil(l/12)
             hbGlowSize[x]=1*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+            hbIconGlowLen[x]=i/12
+            hbIconGlowSize[x]=0.75*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==2 then
             hbGlowLen[x]=ceil(l/10)
             hbGlowSize[x]=2*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+            hbIconGlowLen[x]=i/11
+            hbIconGlowSize[x]=1*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==4 then
             hbGlowLen[x]=ceil(l/7)
             hbGlowSize[x]=4*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+            hbIconGlowLen[x]=i/9
+            hbIconGlowSize[x]=1.5*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==5 then
             hbGlowLen[x]=ceil(l/5)
             hbGlowSize[x]=5*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+            hbIconGlowLen[x]=i/8
+            hbIconGlowSize[x]=2*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         else
             hbGlowLen[x]=ceil(l/9)
             hbGlowSize[x]=3*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+            hbIconGlowLen[x]=i/10
+            hbIconGlowSize[x]=1.25*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         end
     end
+end
+
+function HealBot_Action_EnableIconGlow(button, r, g, b, iKey, gStyle, iconIdx)
+    hbGlowCol[iKey][1]=r
+    hbGlowCol[iKey][2]=g
+    hbGlowCol[iKey][3]=b
+    if button.glow.icon[iconIdx]>1 and button.glow.icon[iconIdx]~=gStyle then
+        HealBot_Action_DisableIconGlow(button, iKey, iconIdx)
+    end
+    button.glow.icon[iconIdx]=gStyle
+    if gStyle==2 then
+        HealBot_Action_EnableIconBorderHazard(button.gref.iconh[iconIdx], button.id..iconIdx, r, g, b)
+    elseif gStyle==3 then
+        HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, true, button.frame)
+    elseif gStyle==4 then
+        HealBot_Action_IconGlowBall(button.gref.iconf[iconIdx], iKey, true, button.frame)
+    else
+        HealBot_Action_IconGlowBlizz(button.gref.iconf[iconIdx], iKey, true)
+    end
+end
+
+function HealBot_Action_DisableIconGlow(button, iKey, iconIdx)
+    if button.glow.icon[iconIdx]==2 then
+        HealBot_Action_DisableIconBorderHazard(button.gref.iconh[iconIdx], button.id..iconIdx)
+    elseif button.glow.icon[iconIdx]==3 then
+        HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, false)
+    elseif button.glow.icon[iconIdx]==4 then
+        HealBot_Action_IconGlowBall(button.gref.iconf[iconIdx], iKey, false)
+    elseif button.glow.icon[iconIdx]==5 then
+        HealBot_Action_IconGlowBlizz(button.gref.iconf[iconIdx], iKey, false)
+    end
+    button.glow.icon[iconIdx]=0
 end
 
 function HealBot_Action_EnableButtonGlowType(button, r, g, b, gType, pKey, gStyle)
@@ -544,11 +664,11 @@ function HealBot_Action_EnableButtonGlowType(button, r, g, b, gType, pKey, gStyl
         hbGlowCol[pKey][3]=b
         hbGlowStyle[pKey]=gStyle
         if gStyle==5 then
-            HealBot_Action_ButtonGlow(button, pKey, true)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], pKey, true, button.frame)
         elseif gStyle==6 then
-            HealBot_Action_ButtonGlowBall(button, pKey, true)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], pKey, true, button.frame)
         else
-            HealBot_Action_ButtonGlowBlizz(button, pKey, true)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], pKey, true)
         end
     else
         if hbGlowStyle[gType]~=gStyle then
@@ -564,16 +684,16 @@ function HealBot_Action_EnableButtonGlowType(button, r, g, b, gType, pKey, gStyl
         hbGlowCol[gType][3]=b
         hbGlowStyle[gType]=gStyle
         if gStyle==5 then
-            HealBot_Action_ButtonGlow(button, gType, true)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], gType, true, button.frame)
         elseif gStyle==6 then
-            HealBot_Action_ButtonGlowBall(button, gType, true)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], gType, true, button.frame)
         elseif gType=="PLUGIN" then
-            HealBot_Action_ButtonGlowBlizz(button, gType, true)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], gType, true)
         elseif not button.glow.plugin or (hbGlowStyle["AW1"]~=7 and hbGlowStyle["AW2"]~=7 and hbGlowStyle["AW3"]~=7 and hbGlowStyle["AW4"]~=7 and 
                                           hbGlowStyle["AW5"]~=7 and hbGlowStyle["AW6"]~=7 and hbGlowStyle["AW7"]~=7 and hbGlowStyle["AW8"]~=7 and 
                                           hbGlowStyle["HW"]~=7 and hbGlowStyle["MW"]~=7) then
             if gType=="DEBUFF" or (not button.glow.debuff or hbGlowStyle["DEBUFF"]~=7) then
-                HealBot_Action_ButtonGlowBlizz(button, gType, true)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], gType, true)
             end
         else
         end
@@ -584,37 +704,37 @@ function HealBot_Action_DisableButtonGlowType(button, gType, pKey)
     if gType=="PLUGIN" then
         button.glow.plugin=false
         if hbGlowStyle[pKey]==5 then
-            HealBot_Action_ButtonGlow(button, pKey, false)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], pKey, false, button.frame)
         elseif hbGlowStyle[pKey]==6 then
-            HealBot_Action_ButtonGlowBall(button, pKey, false)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], pKey, false, button.frame)
         else
-            HealBot_Action_ButtonGlowBlizz(button, pKey, false)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], pKey, false)
             if button.glow.debuff and hbGlowStyle["DEBUFF"]==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "DEBUFF", true)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "DEBUFF", true)
             elseif button.glow.buff and hbGlowStyle["BUFF"]==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "BUFF", true)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "BUFF", true)
             end
         end
     elseif gType=="DEBUFF" then
         button.glow.debuff=false
         if hbGlowStyle[gType]==5 then
-            HealBot_Action_ButtonGlow(button, gType, false)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], gType, false, button.frame)
         elseif hbGlowStyle[gType]==6 then
-            HealBot_Action_ButtonGlowBall(button, gType, false)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], gType, false, button.frame)
         else
-            HealBot_Action_ButtonGlowBlizz(button, gType, false)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], gType, false)
             if button.glow.buff and hbGlowStyle["BUFF"]==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "BUFF", true)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "BUFF", true)
             end
         end
     elseif gType=="BUFF" then
         button.glow.buff=false
         if hbGlowStyle[gType]==5 then
-            HealBot_Action_ButtonGlow(button, gType, false)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], gType, false, button.frame)
         elseif hbGlowStyle[gType]==6 then
-            HealBot_Action_ButtonGlowBall(button, gType, false)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], gType, false, button.frame)
         else
-            HealBot_Action_ButtonGlowBlizz(button, gType, false)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], gType, false)
         end
     else
         HealBot_Action_UpdateButtonGlow(button, false)
@@ -627,84 +747,84 @@ function HealBot_Action_UpdateButtonGlow(button, enable)
             if button.aurawatch.colbar==5 then
                 for x=1,8 do
                     if hbGlowStyle["AW"..x]==5 then
-                        HealBot_Action_ButtonGlow(button, "AW"..x, enable)
+                        HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..x, enable, button.frame)
                     end
                 end
             elseif button.aurawatch.colbar==6 then
                 for x=1,8 do
                     if hbGlowStyle["AW"..x]==6 then
-                        HealBot_Action_ButtonGlowBall(button, "AW"..x, enable)
+                        HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..x, enable, button.frame)
                     end
                 end
             elseif button.aurawatch.colbar==7 then
                 for x=1,8 do
                     if hbGlowStyle["AW"..x]==7 then
-                        HealBot_Action_ButtonGlowBlizz(button, "AW"..x, enable)
+                        HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..x, enable)
                     end
                 end
             end
             if button.healthwatch.colbar==5 then
-                HealBot_Action_ButtonGlow(button, "HW", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "HW", enable, button.frame)
             elseif button.healthwatch.colbar==6 then
-                HealBot_Action_ButtonGlowBall(button, "HW", enable)
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "HW", enable, button.frame)
             elseif button.healthwatch.colbar==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "HW", enable)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "HW", enable)
             end
             if button.manawatch.colbar==5 then
-                HealBot_Action_ButtonGlow(button, "MW", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "MW", enable, button.frame)
             elseif button.manawatch.colbar==6 then
-                HealBot_Action_ButtonGlowBall(button, "MW", enable)
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "MW", enable, button.frame)
             elseif button.manawatch.colbar==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "MW", enable)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "MW", enable)
             end
         end
         if button.glow.debuff then
             if button.aura.debuff.colbar==5 then
-                HealBot_Action_ButtonGlow(button, "DEBUFF", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "DEBUFF", enable, button.frame)
             elseif button.aura.debuff.colbar==6 then
-                HealBot_Action_ButtonGlowBall(button, "DEBUFF", enable)
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "DEBUFF", enable, button.frame)
             elseif button.aura.debuff.colbar==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "DEBUFF", enable)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "DEBUFF", enable)
             end
         end
         if button.glow.buff then
             if button.aura.buff.colbar==5 then
-                HealBot_Action_ButtonGlow(button, "BUFF", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "BUFF", enable, button.frame)
             elseif button.aura.buff.colbar==6 then
-                HealBot_Action_ButtonGlowBall(button, "BUFF", enable)
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "BUFF", enable, button.frame)
             elseif button.aura.buff.colbar==7 then
-                HealBot_Action_ButtonGlowBlizz(button, "BUFF", enable)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "BUFF", enable)
             end
         end
     else
         if button.glow.plugin then
             if button.aurawatch.colbar>4 then
                 for x=1,8 do
-                    HealBot_Action_ButtonGlow(button, "AW"..x, enable) 
-                    HealBot_Action_ButtonGlowBall(button, "AW"..x, enable)
-                    HealBot_Action_ButtonGlowBlizz(button, "AW"..x, enable)
+                    HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..x, enable, button.frame) 
+                    HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..x, enable, button.frame)
+                    HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..x, enable)
                 end
             end
             if button.healthwatch.colbar>4 then
-                HealBot_Action_ButtonGlow(button, "HW", enable) 
-                HealBot_Action_ButtonGlowBall(button, "HW", enable)
-                HealBot_Action_ButtonGlowBlizz(button, "HW", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "HW", enable, button.frame) 
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "HW", enable, button.frame)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "HW", enable)
             end
             if button.manawatch.colbar>4 then
-                HealBot_Action_ButtonGlow(button, "MW", enable) 
-                HealBot_Action_ButtonGlowBall(button, "MW", enable)
-                HealBot_Action_ButtonGlowBlizz(button, "MW", enable)
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "MW", enable, button.frame) 
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "MW", enable, button.frame)
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "MW", enable)
             end
         end
         if button.glow.debuff then
-            HealBot_Action_ButtonGlow(button, "DEBUFF", enable)
-            HealBot_Action_ButtonGlowBall(button, "DEBUFF", enable)
-            HealBot_Action_ButtonGlowBlizz(button, "DEBUFF", enable)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], "DEBUFF", enable, button.frame)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "DEBUFF", enable, button.frame)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "DEBUFF", enable)
         end
         if button.glow.buff then
-            HealBot_Action_ButtonGlow(button, "BUFF", enable)
-            HealBot_Action_ButtonGlowBall(button, "BUFF", enable)
-            HealBot_Action_ButtonGlowBlizz(button, "BUFF", enable)
+            HealBot_Action_ButtonGlow(button.gref["BackBorder"], "BUFF", enable, button.frame)
+            HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "BUFF", enable, button.frame)
+            HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "BUFF", enable)
         end
     end
 end
@@ -2579,6 +2699,7 @@ function HealBot_Action_InitButton(button)
     button.hotbars={}
     button.hazard={}
     button.glow={}
+    button.glow.icon={}
     button.plugin={}
     button.request={}
     button.buffwatch={}
@@ -2606,6 +2727,7 @@ function HealBot_Action_InitButton(button)
     button.gref.txt.count={}
     button.gref.icon={}
     button.gref.iconf={}
+    button.gref.iconh={}
     button.gref.indicator={}
     button.gref.indicator.aggro={}
     button.gref.indicator.mana={}
@@ -2645,11 +2767,11 @@ function HealBot_Action_InitButton(button)
     button.gref["Absorb"]:UnregisterAllEvents()
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
     button.gref["Absorb"]:SetValue(0)            
-    button:SetFrameLevel(100); 
+    button:SetFrameLevel(20); 
     button.gref["Back"]:SetFrameLevel(button:GetFrameLevel()+ 1)
-    button.gref["Top"]:SetFrameLevel(button:GetFrameLevel()+50)
-    button.gref["BackBorder"]:SetFrameLevel(200)
-    button.gref["IconTop"]:SetFrameLevel(500)
+    button.gref["Top"]:SetFrameLevel(button:GetFrameLevel()+25)
+    button.gref["BackBorder"]:SetFrameLevel(50)
+    button.gref["IconTop"]:SetFrameLevel(75)
     button.gref["BackBorder"]:SetBackdrop({
                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
                                            edgeSize = 1, 
@@ -2695,10 +2817,32 @@ function HealBot_Action_InitButton(button)
     for x=1,12 do
         button.gref.icon[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icon"..x]
         button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
+        button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
+        button.gref.iconh[x]:SetFrameLevel(80)
+        button.gref.iconh[x]:SetBackdrop({
+                                           edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                           edgeSize = 2, 
+                                           insets = { left = 0, right = 0, top = 0, bottom = 0}
+                                          })
+        button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
+        button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
+        button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
+        button.glow.icon[x]=0
     end
     for x=51,58 do
         button.gref.icon[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icon"..x]
         button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
+        button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
+        button.gref.iconh[x]:SetFrameLevel(80)
+        button.gref.iconh[x]:SetBackdrop({
+                                           edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                           edgeSize = 2, 
+                                           insets = { left = 0, right = 0, top = 0, bottom = 0}
+                                          })
+        button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
+        button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
+        button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
+        button.glow.icon[x]=0
     end
     button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraClass"]
     button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraTarget"]
@@ -2867,6 +3011,39 @@ function HealBot_Action_InitButton(button)
     button.mana.change=false
     button.mana.lowcheck=true
     
+    button.guid="init"
+    button.status.playerlastheal=0
+    button.status.lasthealthdrop=0
+    button.status.r=0
+    button.status.g=0
+    button.status.b=0
+    button.status.alpha=1
+    button.status.dirarrowcords=0 
+    button.status.dirarrowshown=0 
+    button.status.castend=-1
+    button.status.resstart=0
+    button.status.range=1
+    button.status.rangespell=HealBot_RangeSpells["HEAL"]
+    button.status.rangespellspecial=false
+    button.status.rangenextcheck=0
+    button.status.unittype=0
+    button.status.enabled=false
+    button.status.summons=false
+    button.status.incombat=false
+    button.status.hostile=false
+    button.status.role=0
+    button.status.hasres=false
+    button.status.nextcheck=0
+    button.group=1
+    button.rank=0
+    button.role=0
+    button.player=false
+    button.isplayer=false
+    button.level=1
+    button.status.events=false
+    button.status.duplicate=false
+    button.name=false
+    
     HealBot_Aura_setButtonIcons(button.id)
     HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_InitButton")
@@ -2987,38 +3164,6 @@ local tPrepButton=""
 function HealBot_Action_PrepButton(button)
     erButton=HealBot_Emerg_Button[button.id]
     
-    button.guid="init"
-    button.status.playerlastheal=0
-    button.status.lasthealthdrop=0
-    button.status.r=0
-    button.status.g=0
-    button.status.b=0
-    button.status.alpha=1
-    button.status.dirarrowcords=0 
-    button.status.dirarrowshown=0 
-    button.status.castend=-1
-    button.status.resstart=0
-    button.status.range=1
-    button.status.rangespell=HealBot_RangeSpells["HEAL"]
-    button.status.rangespellspecial=false
-    button.status.rangenextcheck=0
-    button.status.unittype=0
-    button.status.enabled=false
-    button.status.summons=false
-    button.status.incombat=false
-    button.status.hostile=false
-    button.status.role=0
-    button.status.hasres=false
-    button.status.nextcheck=0
-    button.group=1
-    button.rank=0
-    button.role=0
-    button.player=false
-    button.isplayer=false
-    button.level=1
-    button.status.events=false
-    button.status.duplicate=false
-    button.name=false
     button.status.classknown=false
     button.status.plugin=false
     button.health.updincoming=false
@@ -4626,10 +4771,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 else
                     HealBot_UpdateUnitExists(hButton)
                 end
+                hButton.status.change=true
+                hButton.status.update=true
             end
             HealBot_Action_SetHealButtonAuraCols(hButton)
-            hButton.status.change=true
-            hButton.status.update=true
             if hButton.skinreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)
             elseif frame==10 then

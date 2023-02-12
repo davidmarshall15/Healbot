@@ -22,6 +22,7 @@ local HealBot_SlowUpdateQueue={}
 local HealBot_UpdateQueue={}
 local HealBot_SpecQueue={}
 local HealBot_SpecQueueList={}
+local HealBot_CDQueue={}
 local HealBot_notVisible={}
 local hbManaPlayers={}
 local HealBot_customTempUserName={}
@@ -105,8 +106,6 @@ HealBot_luVars["CheckFramesOnCombat"]=true
 HealBot_luVars["UpdateSlowNext"]=TimeNow+1
 HealBot_luVars["cpuAdj"]=0
 HealBot_luVars["rangeCheckAdj"]=0.5
-HealBot_luVars["pluginCDsCheckExisting"]=TimeNow+15
-HealBot_luVars["pluginCDsCheckIncoming"]=TimeNow+1
 HealBot_luVars["HealthDropPct"]=999
 HealBot_luVars["InInstance"]=false
 HealBot_luVars["DoSendGuildVersion"]=true
@@ -784,8 +783,6 @@ function HealBot_SlashCmd(cmd)
             HealBot_luVars["OORTest"]=true
         --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
         end
-        local n=GetSpellInfo(393024)
-        HealBot_AddDebug("Name="..(n or "nil"))
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -2181,7 +2178,7 @@ function HealBot_Register_Events()
             end
         end
         HealBot:RegisterEvent("PLAYER_MOUNT_DISPLAY_CHANGED")
-        --HealBot:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+        HealBot:RegisterEvent("SPELL_UPDATE_COOLDOWN")
         HealBot:RegisterEvent("PLAYER_REGEN_DISABLED");
         HealBot:RegisterEvent("PLAYER_REGEN_ENABLED");
         HealBot:RegisterEvent("PLAYER_TARGET_CHANGED");
@@ -2345,7 +2342,7 @@ function HealBot_UnRegister_Events()
         HealBot:UnregisterEvent("PET_BATTLE_OPENING_START");
         HealBot:UnregisterEvent("PET_BATTLE_OVER");
     end
-    --HealBot:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
+    HealBot:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
     HealBot:UnregisterEvent("RAID_TARGET_UPDATE")
     HealBot:UnregisterEvent("LEARNED_SPELL_IN_TAB");
     HealBot:UnregisterEvent("PLAYER_LEVEL_UP");
@@ -4640,39 +4637,19 @@ function HealBot_Update_Slow()
 end
         
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
-local hbHasCD={}
-function HealBot_SpellCooldown(spellName, spellId, retry1, retry2, retry3)
+function HealBot_SpellCooldown(spellName, spellId)
     hbStartTime, hbDuration=GetSpellCooldown(spellName)
     hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
     hbCDTime=hbCDEnd-TimeNow
     if hbCDTime>2 then
-        hbHasCD[spellName]=true
         if HealBot_luVars["pluginMyCooldowns"] then
             HealBot_Plugin_MyCooldowns_PlayerUpdate(spellName, spellId, hbStartTime, hbDuration)
         end
         if HealBot_luVars["pluginAuraWatch"] then
             HealBot_Plugin_AuraWatch_SelfCD(spellName, hbCDTime, hbCDEnd)
         end
-        --    HealBot_AddDebug("CD for spell "..spellName,"Cooldown",true)
-        --    HealBot_AddDebug("Start="..(hbStartTime or "nil").."  Dur="..(hbDuration or "nil").."  hbCDTime="..hbCDTime,"Cooldown",true)
-    elseif hbCDTime>0 then
-        if not retry1 then
-            C_Timer.After(0.1, function() HealBot_SpellCooldown(spellName, spellId, true) end)
-            --    HealBot_AddDebug("1st ReCheck CD for spell "..spellName,"Cooldown",true)
-        elseif hbHasCD[spellName] then
-            if not retry2 then
-                C_Timer.After(0.3, function() HealBot_SpellCooldown(spellName, spellId, true, true) end)
-            elseif not retry3 then
-                C_Timer.After(0.5, function() HealBot_SpellCooldown(spellName, spellId, true, true, true) end)
-            end
-            --    HealBot_AddDebug("2nd ReCheck CD for spell "..spellName,"Cooldown",true)
-        else
-            if HealBot_luVars["pluginAuraWatch"] then
-                HealBot_Plugin_AuraWatch_SelfCD(spellName, hbCDTime, hbCDEnd)
-            end
-            --    HealBot_AddDebug("No CD for spell "..spellName,"Cooldown",true)
-            --    HealBot_AddDebug("Start="..(hbStartTime or "nil").."  Dur="..(hbDuration or "nil").."  hbCDTime="..hbCDTime,"Cooldown",true)
-        end
+    --        HealBot_AddDebug("CD for spell "..spellName,"Cooldown",true)
+    --        HealBot_AddDebug("Start="..(hbStartTime or "nil").."  hbCDEnd="..hbCDEnd.."  floor="..floor(hbCDEnd),"Cooldown",true)
     end
 end
 
@@ -4680,9 +4657,7 @@ function HealBot_Check_SpellCooldown(spellId)
     if HealBot_luVars["pluginMyCooldowns"] or HealBot_luVars["pluginAuraWatch"] then
         if HealBot_Spell_IDs[spellId] then
             scName=GetSpellInfo(spellId)
-            if scName then
-                C_Timer.After(0.05, function() HealBot_SpellCooldown(scName, spellId) end)
-            end
+            if scName and not HealBot_CDQueue[scName] then HealBot_CDQueue[scName]=spellId end
         end
     end
 end
@@ -4714,7 +4689,7 @@ function HealBot_OnEvent_Combat_Log()
             if pButton then HealBot_Update_RecentHealsBar(pButton) end
         end
         --if type(Log12)=="number" then 
-            --HealBot_Check_SpellCooldown(Log12)
+        --    HealBot_Check_SpellCooldown(Log12)
         --end
     end
 
@@ -4890,11 +4865,6 @@ function HealBot_Update_Test()
     end
 end
 
-function HealBot_MyCooldowns_PlayerUpdateAll()
-    HealBot_luVars["pluginCDsCheckExisting"]=TimeNow+15
-    HealBot_Plugin_MyCooldowns_PlayerUpdateAll()
-end
-
 function HealBot_Update_Final()
     if HealBot_luVars["MovingFrame"]>0 then
         HealBot_Action_CheckForStickyFrame(HealBot_luVars["MovingFrame"],false)
@@ -4906,8 +4876,9 @@ function HealBot_Update_Final()
             HealBot_Tooltip_UpdateIconTooltip()
         end
     end
-    if HealBot_luVars["pluginMyCooldowns"] and HealBot_luVars["pluginCDsCheckExisting"]<TimeNow then
-        HealBot_MyCooldowns_PlayerUpdateAll()
+    for spellName, spellId in pairs(HealBot_CDQueue) do
+        HealBot_SpellCooldown(spellName, spellId)
+        HealBot_CDQueue[spellName]=nil
     end
     if HealBot_luVars["talentUpdate"] then
         if HealBot_luVars["talentUpdate"]<(TimeNow-HealBot_luVars["talentUpdateFreq"]) then HealBot_luVars["talentUpdate"]=false end
@@ -5867,7 +5838,7 @@ function HealBot_CheckAllActiveBuffs()
         --HealBot_setCall("HealBot_CheckAllActiveBuffs")
 end
 
-function HealBot_UpdateAllIconsAlpha()
+function HealBot_UpdateAllIcons()
     if not HealBot_luVars["TestBarsOn"] then
         for _,xButton in pairs(HealBot_Unit_Button) do
             HealBot_Aura_Update_AllIcons(xButton)
@@ -6317,7 +6288,7 @@ function HealBot_OnEvent_UnitSpellCastSent(caster,unitName,castGUID,spellID)
                 HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
             end
         end
-        C_Timer.After(0.05, function() HealBot_Check_SpellCooldown(spellID) end)
+        C_Timer.After(0.01, function() HealBot_Check_SpellCooldown(spellID) end)
     end
     --HealBot_setCall("HealBot_OnEvent_UnitSpellCastSent")
 end
@@ -6692,7 +6663,7 @@ function HealBot_UpdateUnitRange(button)
                     if button.status.range>-1 then
                         HealBot_Plugin_AuraWatch_IsVisible(button)
                     else
-                        HealBot_Plugin_AuraWatch_CancelNoIndex(button)
+                        HealBot_Plugin_AuraWatch_NotVisible(button)
                     end
                 end
             end
@@ -6978,11 +6949,14 @@ function HealBot_OnEvent(self, event, ...)
     --HealBot_AddDebug("Event "..event,"events",true)
     if (event=="UNIT_SPELLCAST_SENT") then
         HealBot_OnEvent_UnitSpellCastSent(arg1,arg2,arg3,arg4);  
-    --elseif (event=="SPELL_UPDATE_COOLDOWN") then
-    --    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
-    --    if HealBot_luVars["pluginMyCooldowns"] then 
-    --        HealBot_MyCooldowns_PlayerUpdateAll()
-    --    end
+    elseif (event=="SPELL_UPDATE_COOLDOWN") then
+        if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+        if HealBot_luVars["pluginMyCooldowns"] then 
+            HealBot_Plugin_MyCooldowns_PlayerUpdateAll()
+        end
+        if HealBot_luVars["pluginAuraWatch"] then
+            HealBot_Plugin_AuraWatch_UpdateAllCDs()
+        end
     elseif (event=="COMBAT_LOG_EVENT_UNFILTERED") then
         HealBot_OnEvent_Combat_Log()
     elseif (event=="PLAYER_REGEN_DISABLED") then

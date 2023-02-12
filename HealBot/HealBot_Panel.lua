@@ -2966,7 +2966,9 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
                 vCrashProtData=vCrashProtTmp            
                 local z=GetMacroIndexByName(HealBot_Panel_luVars["cpMacro"])
                 if (z or 0) == 0 then
-                    z = CreateMacro(HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProtData, true)
+                    if GetNumMacros()<120 then
+                        z = CreateMacro(HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProtData, false)
+                    end
                 else
                     z = EditMacro(z, HealBot_Panel_luVars["cpMacro"], "Spell_Holy_SealOfSacrifice", vCrashProtData)
                 end

@@ -464,6 +464,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMENDIS"]=HEALBOT_WORD_DISABLE,
                                  ["DEBUFFSCUSTOMPRIORITY"]=HEALBOT_WORD_PRIORITY,
                                  ["DEBUFFSCUSTOMBARCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["DEBUFFSCUSTOMICONGLOW"]=HEALBOT_SKIN_ICONGLOW,
                                  ["DEBUFFSCUSTOMCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["DEBUFFSCUSTOMCOLOURSHOW"]=HEALBOT_SKIN_HEADERBARCOL,
                                  ["DEBUFFSCUSTOMRESET"]=HEALBOT_WORD_RESET,
@@ -513,6 +514,7 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSTIMER"]=HEALBOT_OPTIONS_BUFFSTEXTTIMER,
                         -- Buffs Custom tab
                                  ["BUFFSCUSTOMBARCOLOUR"]=HEALBOT_SKIN_HEADERBARCOL,
+                                 ["BUFFSCUSTOMICONGLOW"]=HEALBOT_SKIN_ICONGLOW,
                                  ["BUFFSCUSTOMCAT"]=HEALBOT_SORTBY_CLASS,
                                  ["BUFFSCUSTOMBUFF"]=HEALBOT_OPTIONS_ALLSPELLS,
                                  ["BUFFSCUSTOMIDMETHOD"]=HEALBOT_OPTIONS_CUSTOM_IDMETHOD,
@@ -1055,6 +1057,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMENDIS"]="Disable the selected custom debuff in the current zone.",
                                ["DEBUFFSCUSTOMPRIORITY"]="Priority of the selected custom debuff.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Highest priority is 1 and lowest is 20, highest priority is always displayed first.",
                                ["DEBUFFSCUSTOMBARCOLOUR"]="Set how the custom debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
+                               ["DEBUFFSCUSTOMICONGLOW"]="Set a glow effect around the icon using the debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n--\n".."|cff77c8ff".."Tip: Use a light col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and large icons for better glow effects.",
                                ["DEBUFFSCUSTOMCOLOUR"]="Click on the custom bar to set the col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["DEBUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom debuff.",
                                ["DEBUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom debuff.",
@@ -1104,6 +1107,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSTIMER"]="Alert when a buff is required n mins/secs before it expires.\n".._G["GREEN_FONT_COLOR_CODE"].."- Show buffs - These are buffs with a duration of a few minutes or less.\n".._G["GREEN_FONT_COLOR_CODE"].."- Long buffs - These are buffs with a duration usually in the 10's of minutes or more.",
                         -- Buffs Custom tab
                                ["BUFFSCUSTOMBARCOLOUR"]="Set how the custom buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is used."..hbSpellsTips4,
+                               ["BUFFSCUSTOMICONGLOW"]="Set a glow effect around the icon using the buff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."\n--\n".."|cff77c8ff".."Tip: Use a light col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and large icons for better glow effects.",
                                ["BUFFSCUSTOMCAT"]="Custom class categories can be selected using the class dropdown.",
                                ["BUFFSCUSTOMBUFF"]="Lists custom buffs depending on the Category selected.",
                                ["BUFFSCUSTOMIDMETHOD"]="Check buffs using Spell ID, Spell Name or Both.",

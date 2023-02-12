@@ -408,8 +408,12 @@ function HealBot_Data_InitVars()
             [HEALBOT_CUSTOM_en.."15"] = { R = 0.45, G = 0, B = 0.28, },
         },
         HealBot_Custom_Debuffs_ShowBarCol={  
-            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 3,
-            ["DEFAULT"] = 3,
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 4,
+            ["DEFAULT"] = 4,
+        },
+        HealBot_Custom_Debuffs_IconGlow={  
+            [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 1,
+            ["DEFAULT"] = 1,
         },
         CDCTag={},
         IgnoreCustomDebuff={},
@@ -427,7 +431,8 @@ function HealBot_Data_InitVars()
         CustomBuffBarColour = {
             [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
         },
-        HealBot_Custom_Buffs_ShowBarCol={["DEFAULT"] = 3},
+        HealBot_Custom_Buffs_ShowBarCol={["DEFAULT"] = 4},
+        HealBot_Custom_Buffs_IconGlow = {},
         CustomBuffIDMethod = {},
         IconKeyCombo={},
         UseIconCommands=false,
