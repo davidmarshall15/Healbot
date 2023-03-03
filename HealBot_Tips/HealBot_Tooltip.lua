@@ -451,8 +451,7 @@ function HealBot_Action_GetTimeOffline(button)
     return timeOffline;
 end
 
-function HealBot_Tooltip_addPlayerDebuffLine(uName, debuffId, debuffName)
-    HealBot_Tooltip_SetLine("  ",0,0,0,0)
+local function HealBot_Tooltip_addPlayerDebuffLine(uName, debuffId, debuffName)
     if HealBot_Globals.CDCBarColour[debuffId] then
         HealBot_Tooltip_SetLine(uName.." suffers from "..debuffName,
                                     (HealBot_Globals.CDCBarColour[debuffId].R or 0.4)+0.2,
@@ -698,7 +697,8 @@ function HealBot_Action_DoRefreshTooltip()
 
                 UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
                 if UnitDebuffIcons then
-                    for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["MAXDICONS"]+50 do
+                    HealBot_Tooltip_SetLine("  ",0,0,0,0)
+                    for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][1]["MAXDICONS"]+50 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
@@ -708,8 +708,25 @@ function HealBot_Action_DoRefreshTooltip()
                             break
                         end
                     end
-                    if not UnitDebuffIcons[51].current and xButton.aura.debuff.id>0 then
-                        HealBot_Tooltip_addPlayerDebuffLine(uName, xButton.aura.debuff.id, xButton.aura.debuff.name)
+                    for i = 59,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][2]["MAXDICONS"]+58 do
+                        if UnitDebuffIcons[i].current then
+                            ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
+                            if ttName then
+                                HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                            end
+                        else
+                            break
+                        end
+                    end
+                    for i = 63,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][3]["MAXDICONS"]+62 do
+                        if UnitDebuffIcons[i].current then
+                            ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
+                            if ttName then
+                                HealBot_Tooltip_addPlayerDebuffLine(uName, UnitDebuffIcons[i].spellId, ttName)
+                            end
+                        else
+                            break
+                        end
                     end
                 end
                 if xButton.aura.buff.name and xButton.aura.buff.missingbuff then
@@ -826,7 +843,7 @@ function HealBot_Tooltip_Wrap(str, limit)
   return t
 end
 
-function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b)
+function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
@@ -875,7 +892,13 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         else
             HealBot_Tooltip_SetLine(HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
         end
-        HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame]["SCALE"],1,1,0,1)
+        if id<9 then
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][1]["SCALE"],1,1,0,1)
+        elseif id<13 then
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][2]["SCALE"],1,1,0,1)
+        else
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][3]["SCALE"],1,1,0,1)
+        end
     else
         HealBot_Tooltip_SetLine(HEALBOT_WORD_PRIORITY,1,1,1,1,HealBot_Options_retDebuffPriority(details.spellId, name, details.type) or 20,1,1,0,1)
         if HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[details.spellId]==3 or HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[name]==3 then
@@ -883,7 +906,13 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
         else
             HealBot_Tooltip_SetLine(HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
         end
-        HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame]["DSCALE"],1,1,0,1)
+        if id<59 then
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][1]["DSCALE"],1,1,0,1)
+        elseif id<63 then
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][2]["DSCALE"],1,1,0,1)
+        else
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][3]["DSCALE"],1,1,0,1)
+        end
     end
 
     local spellLeft = HealBot_Action_IconSpellPattern("Left");
@@ -914,11 +943,11 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
 end
 
 local hbIconTip={}
-function HealBot_Tooltip_AuraUpdateIconTooltip(frame, details, name, aType,  r, g, b)
+function HealBot_Tooltip_AuraUpdateIconTooltip(frame, details, name, aType,  r, g, b, id)
     local spell = Spell:CreateFromSpellID(details.spellId)
     spell:ContinueOnSpellLoad(function()
         local desc = spell:GetSpellDescription()
-        HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b)
+        HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)
     end)
 end
 
@@ -958,13 +987,15 @@ function HealBot_Tooltip_DebuffIconTooltip(button, id)
             hbIconTip["r"]=r
             hbIconTip["g"]=g
             hbIconTip["b"]=b
+            hbIconTip["id"]=id
             HealBot_Tooltip_AuraUpdateIconTooltip(hbIconTip["frame"], 
                                                   hbIconTip["details"], 
                                                   hbIconTip["name"],
                                                   hbIconTip["type"],
                                                   hbIconTip["r"], 
                                                   hbIconTip["g"], 
-                                                  hbIconTip["b"])
+                                                  hbIconTip["b"],
+                                                  hbIconTip["id"])
             HealBot_Data["TIPICON"]="DEBUFF"
         end
     end
@@ -984,13 +1015,15 @@ function HealBot_Tooltip_BuffIconTooltip(button, id)
             hbIconTip["r"]=r
             hbIconTip["g"]=g
             hbIconTip["b"]=b
+            hbIconTip["id"]=id
             HealBot_Tooltip_AuraUpdateIconTooltip(hbIconTip["frame"], 
                                                   hbIconTip["details"], 
                                                   hbIconTip["name"],
                                                   hbIconTip["type"],
                                                   hbIconTip["r"], 
                                                   hbIconTip["g"], 
-                                                  hbIconTip["b"])
+                                                  hbIconTip["b"],
+                                                  hbIconTip["id"])
             HealBot_Data["TIPICON"]="BUFF"
         end
     end
@@ -1003,7 +1036,8 @@ function HealBot_Tooltip_UpdateIconTooltip()
                                           hbIconTip["type"],
                                           hbIconTip["r"], 
                                           hbIconTip["g"], 
-                                          hbIconTip["b"])
+                                          hbIconTip["b"],
+                                          hbIconTip["id"])
 end
 
 function HealBot_Action_RefreshTargetTooltip(button)

@@ -641,6 +641,110 @@
                         </Anchor>
                     </Anchors>
                 </FontString>
+            <Texture name="$parentIcon13">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire13" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount13" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon14">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire14" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount14" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon15">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire15" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount15" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon16">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire16" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount16" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
             <Texture name="$parentIcon51">
               <Size> <AbsDimension x="16" y="16"/> </Size>                    
               <Anchors>
@@ -841,6 +945,214 @@
                     </Anchors>
                 </FontString> 
                 <FontString name="$parentCount58" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon59">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire59" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount59" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon60">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire60" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount60" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon61">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire61" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount61" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon62">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire62" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount62" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon63">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire63" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount63" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon64">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire64" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount64" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon65">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire65" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount65" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            <Texture name="$parentIcon66">
+              <Size> <AbsDimension x="16" y="16"/> </Size>                    
+              <Anchors>
+                <Anchor point="RIGHT" relativePoint="RIGHT">
+                  <Offset> <AbsDimension x="-35" y="0"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+                <FontString name="$parentExpire66" inherits="NumberFontNormalSmall">
+                    <Anchors>
+                        <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                                <AbsDimension x="-35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString> 
+                <FontString name="$parentCount66" inherits="NumberFontNormalSmall">
                     <Anchors>
                         <Anchor point="TOPLEFT">
                             <Offset>
@@ -1084,6 +1396,38 @@
               </Anchors>
             </Texture>
             <Texture name="$parentOwn12" file="Interface\AddOns\HealBot\Images\indicator_red">
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
+              <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+                  <Offset> <AbsDimension x="2" y="-3"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentOwn13" file="Interface\AddOns\HealBot\Images\indicator_red">
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
+              <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+                  <Offset> <AbsDimension x="2" y="-3"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentOwn14" file="Interface\AddOns\HealBot\Images\indicator_red">
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
+              <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+                  <Offset> <AbsDimension x="2" y="-3"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentOwn15" file="Interface\AddOns\HealBot\Images\indicator_red">
+              <Size> <AbsDimension x="7" y="7"/> </Size>                    
+              <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+                  <Offset> <AbsDimension x="2" y="-3"/> </Offset>
+                </Anchor>
+              </Anchors>
+            </Texture>
+            <Texture name="$parentOwn16" file="Interface\AddOns\HealBot\Images\indicator_red">
               <Size> <AbsDimension x="7" y="7"/> </Size>                    
               <Anchors>
                 <Anchor point="TOPLEFT" relativePoint="TOPLEFT">

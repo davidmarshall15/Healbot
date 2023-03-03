@@ -783,6 +783,7 @@ function HealBot_SlashCmd(cmd)
             HealBot_luVars["OORTest"]=true
         --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
         end
+        HealBot_Aura_Counts(button)
     else
         if x then HBcmd=HBcmd.." "..x end
         if y then HBcmd=HBcmd.." "..y end
@@ -2274,7 +2275,6 @@ function HealBot_Load()
         HealBot_Timers_Set("INIT","RegEvents")
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
-        HealBot_Timers_Set("SKINS","UpdateIconFreq")
         HealBot_Timers_Set("SKINS","PowerIndicator")
         HealBot_Timers_Set("AURA","InitAuraData")
         HealBot_Timers_Set("AURA","ConfigClassHoT")
@@ -2993,7 +2993,29 @@ function HealBot_Update_Skins()
                             HealBot_Globals.WatchHoT["EVOK"][id]=x
                         end
                     end
+                    if type(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC])~="number" then
+                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4
+                    end
+                    if type(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"])~="number" then
+                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"]=4
+                    end
+                    for id,_  in pairs(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol) do
+                        if type(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[id])~="number" then
+                            HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[id]=4
+                        end
+                    end
+                    for id,_  in pairs(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol) do
+                        if type(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[id])~="number" then
+                            HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[id]=4
+                        end
+                    end
                 end
+            end
+            if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"] then
+                HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"]=4
+            end
+            if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] then
+                HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=4
             end
         end
     end
@@ -3225,7 +3247,6 @@ function HealBot_VariablesLoaded()
     HealBot_Text_sethbAggroNumberFormat()
     HealBot_Options_SetFrames()
     HealBot_Init_ClassicSpecs()
-    HealBot_Timers_Set("AURA","SetIconUpdateInterval")
     HealBot_Timers_Set("LAST","SetAutoClose", 12)
     HealBot_Timers_Set("LAST","LoadTips")
     HealBot_FastFuncs()
@@ -3321,6 +3342,7 @@ function HealBot_ResetOnSpecChange()
         end
         HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
         HealBot_Timers_Set("PLAYER","CheckSpellsValid",0.5)
+        HealBot_Timers_Set("PLAYER","SaveProfile",2)
     end
     HealBot_Data["PLEVEL"]=UnitLevel("player")
     HealBot_Timers_InitSpells()

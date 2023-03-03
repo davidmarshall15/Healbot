@@ -1714,6 +1714,7 @@ if( playerClass == "SHAMAN" ) then
 		-- Lets a specific override on how many people this will hit
 		GetHealTargets = function(bitType, guid, spellID, amount)
 			local spellName = GetSpellInfo(spellID)
+            if not amount then return end
 			-- Glyph of Healing Wave, heals you for 20% of your heal when you heal someone else
 			if( glyphCache[55440] and guid ~= playerGUID and spellName == HealingWave ) then
 				if guidToUnit[guid] then

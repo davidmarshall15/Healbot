@@ -80,7 +80,6 @@ end
 function HealBot_Timers_SkinsFormat()
     HealBot_Text_sethbNumberFormat()
     HealBot_Text_sethbAggroNumberFormat()
-    HealBot_Aura_SetIconUpdateInterval()
     HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
     HealBot_Timers_Set("LAST","ResetUnitStatus")
 end
@@ -498,7 +497,6 @@ local hbTimerFuncs={["INIT"]={
                     },
                     ["SKINS"]={
                         ["PartyUpdateCheckSkin"]=HealBot_PartyUpdate_CheckSkin,
-                        ["UpdateIconFreq"]=HealBot_Aura_SetUpdateIconFreq,
                         ["SkinsFormat"]=HealBot_Timers_SkinsFormat,
                         ["TextExtraCustomCols"]=HealBot_Text_setExtraCustomCols,
                         ["SetBarsTextColour"]=HealBot_Options_SetBarsTextColour,
@@ -574,7 +572,6 @@ local hbTimerFuncs={["INIT"]={
                         ["CustomDebuffFilterCastBy"]=HealBot_Aura_setCustomDebuffFilterCastBy,
                         ["ResetDebuffCache"]=HealBot_Aura_ResetDebuffCache,
                         ["CustomDebuffFilterDisabled"]=HealBot_Aura_setCustomDebuffFilterDisabled,
-                        ["SetIconUpdateInterval"]=HealBot_Aura_SetIconUpdateInterval,
                         ["BuffsReset"]=HealBot_Timers_BuffsReset,
                         ["RemoveAllBuffIcons"]=HealBot_Aura_RemoveAllBuffIcons,
                         ["RemoveAllDebuffIcons"]=HealBot_Aura_RemoveAllDebuffIcons,

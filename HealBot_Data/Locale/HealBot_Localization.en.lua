@@ -411,6 +411,13 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEADERBARCOL               = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_ICONGLOW                   = "Icon glow";
+    HEALBOT_SKIN_ICONSET                    = "Icon set";
+    HEALBOT_SKIN_ICONBUFFSET01              = "Buff icon set 1";
+    HEALBOT_SKIN_ICONBUFFSET02              = "Buff icon set 2";
+    HEALBOT_SKIN_ICONBUFFSET03              = "Buff icon set 3";
+    HEALBOT_SKIN_ICONDEBUFFSET01            = "Debuff icon set 1";
+    HEALBOT_SKIN_ICONDEBUFFSET02            = "Debuff icon set 2";
+    HEALBOT_SKIN_ICONDEBUFFSET03            = "Debuff icon set 3";
     HEALBOT_OPTIONS_BUFFSTEXT1              = "Spell to buff";
     HEALBOT_OPTIONS_BUFFSTEXTWE             = "Weapon enchants";
     HEALBOT_OPTIONS_BUFFSTEXTWEMAIN         = "Main hand / 2H";

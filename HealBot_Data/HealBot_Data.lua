@@ -424,10 +424,12 @@ function HealBot_Data_InitVars()
             -- Defaults
             [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] = 15,
         },
+        HealBot_Custom_Debuffs_IconSet = {},
         Custom_Debuff_Categories=HEALBOT_CUSTOM_DEBUFF_CATS,
         CustomBuffTag={},
         IgnoreCustomBuff={},
         HealBot_Custom_Buffs={},
+        HealBot_Custom_Buffs_IconSet = {},
         CustomBuffBarColour = {
             [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
         },
