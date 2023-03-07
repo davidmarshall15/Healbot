@@ -8867,7 +8867,7 @@ function HealBot_Options_LoadProfile()
             HealBot_Timers_InitExtraOptions()
             HealBot_Timers_Set("INIT","PrepSetAllAttribs")
         else
-            HealBot_Timers_Set("PLAYER","LoadProfile",0.1)
+            HealBot_Timers_Set("PLAYER","LoadProfile",1)
         end
     end
 end

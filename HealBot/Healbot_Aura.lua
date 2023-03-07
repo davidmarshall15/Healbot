@@ -1416,22 +1416,6 @@ function HealBot_Aura_CheckCurCustomDebuff(canBeAlways)
     end
 end
 
-function HealBot_Aura_DebuffIsCustomAuto()
-    if (not UnitIsFriend("player",uaUnitCaster) and uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
-       (HealBot_Config_Cures.AlwaysShowTimed and uaDuration>0 and uaDuration<HealBot_Config_Cures.ShowTimeMaxDuration) or 
-       (HealBot_Config_Cures.HealBot_Custom_Debuffs_All[uaDebuffType]) then
-        debuff_Type=HEALBOT_CUSTOM_en
-        cDebuffPrio=15
-        debuffIsAuto=true
-        if dTypePriority>15 then
-            debuffIsAlways=true
-        end
-        return true
-    else
-        return false
-    end
-end
-
 local hbUpCustomDebuffsDone={}
 function HealBot_Aura_ClearCustomDebuffsDone()
     hbUpCustomDebuffsDone={}
@@ -1459,9 +1443,9 @@ function HealBot_Aura_CheckCurDebuff(button)
         debuffIsCurrent=false
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
         HealBot_Aura_CheckCurCustomDebuff(true)
-    elseif HealBot_Aura_CanDispell[uaSpellId] then
+    else
         ccdbCheckthis=false
-        if dTypePriority<21 and HealBot_Aura_luVars["cureOffCd"] and 
+        if HealBot_Aura_CanDispell[uaSpellId] and dTypePriority<21 and HealBot_Aura_luVars["cureOffCd"] and 
           (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaUnitCaster)) and
           (uaDuration==0 or uaDuration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
             ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffType);
@@ -1496,22 +1480,25 @@ function HealBot_Aura_CheckCurDebuff(button)
         end
         if ccdbCheckthis and dTypePriority<16 then
             cDebuffPrio=dTypePriority
-        elseif not HealBot_Aura_DebuffIsCustomAuto() then
-            if ccdbCheckthis then
-                cDebuffPrio=dTypePriority
-            elseif dNamePriority<21 then
-                HealBot_Aura_CheckCurCustomDebuff(false)
-            elseif uaUnitCasterIsPlayer and not UnitIsFriend("player",button.unit) then
-                debuff_Type=HEALBOT_CUSTOM_en
-                cDebuffPrio=20
-            else
-                debuffIsCurrent=false
+        elseif (not UnitIsFriend("player",uaUnitCaster) and uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
+           (HealBot_Config_Cures.AlwaysShowTimed and uaDuration>0 and uaDuration<HealBot_Config_Cures.ShowTimeMaxDuration) or 
+           (HealBot_Config_Cures.HealBot_Custom_Debuffs_All[uaDebuffType]) then
+            debuff_Type=HEALBOT_CUSTOM_en
+            cDebuffPrio=15
+            debuffIsAuto=true
+            if dTypePriority>15 then
+                debuffIsAlways=true
             end
+        elseif ccdbCheckthis then
+            cDebuffPrio=dTypePriority
+        elseif dNamePriority<21 then
+            HealBot_Aura_CheckCurCustomDebuff(false)
+        elseif uaUnitCasterIsPlayer and not UnitIsFriend("player",button.unit) then
+            debuff_Type=HEALBOT_CUSTOM_en
+            cDebuffPrio=20
         else
             debuffIsCurrent=false
         end
-    elseif not HealBot_Aura_DebuffIsCustomAuto() then
-        debuffIsCurrent=false
     end
     if debuffIsCurrent then
         if not HealBot_AuraDebuffCache[uaSpellId] or HealBot_AuraDebuffCache[uaSpellId].reset then
@@ -1958,7 +1945,7 @@ function HealBot_Aura_CheckUnitDebuff(button)
                     aId=aId+1
                     HealBot_Aura_CanDispell[aSpellId]=true
                 else
-                    if not HealBot_Aura_CanDispell[uaSpellId] then
+                    if HealBot_Aura_CanDispell[uaSpellId]==nil then
                         HealBot_Aura_CanDispell[uaSpellId]=false
                     end
                     break

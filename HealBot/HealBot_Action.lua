@@ -3296,12 +3296,14 @@ function HealBot_Action_CreateButton(hbCurFrame)
     if buttonId>0 then 
         HealBot_ActiveButtons[buttonId]=true 
         local ghb=_G["HealBot_Action_HealUnit"..buttonId]
-        if not ghb then 
+        if not ghb then
             ghb=HealBot_Action_CreateNewButton(hbCurFrame, buttonId)
-            HealBot_Action_PrepButton(ghb)
-            --ghb.frame=hbCurFrame
+            if ghb then
+                HealBot_Action_PrepButton(ghb)
+                ghb.reset=true
+                --ghb.frame=hbCurFrame
+            end
         end
-        ghb.reset=true
         return ghb
     else
         return nil
@@ -3313,9 +3315,11 @@ function HealBot_Action_ResetAllButtons()
     if HealBot_Action_luVars["ButtonHWM"]>0 then
         for i=1,HealBot_Action_luVars["ButtonHWM"] do
             local ghb=_G["HealBot_Action_HealUnit"..i]
-            ghb.reset=true
-            if HealBot_Action_luVars["resetEvents"] then
-                ghb.status.events=false
+            if ghb then
+                ghb.reset=true
+                if HealBot_Action_luVars["resetEvents"] then
+                    ghb.status.events=false
+                end
             end
         end
     end
@@ -4688,7 +4692,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
         else
             hButton=HealBot_Unit_Button[unit] or HealBot_Action_CreateButton(frame)
         end
-        if hButton.status.markdel then
+        if hButton and hButton.status.markdel then
             hButton=HealBot_Action_CreateButton(frame)
             --HealBot_AddDebug("hButton has marked delete - unit="..(unit or "nil"), "Panel", true)
         end
@@ -5187,10 +5191,8 @@ function HealBot_Action_CacheButton()
 end
 
 function HealBot_Action_InitCacheButtons()
-    for x=1,3 do
-        HealBot_Action_CacheButton()
-        HealBot_Action_DeleteMarkedButton()
-    end
+    HealBot_Action_CacheButton()
+    HealBot_Action_DeleteMarkedButton()
 end
 
 function HealBot_Action_DeleteMarkedButton()
@@ -5207,7 +5209,7 @@ function HealBot_Action_DoProcCacheButtons()
     if not InCombatLockdown() then
         HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if HealBot_Action_DeleteMarkedButton() or HealBot_Action_CacheButton() then
-            C_Timer.After(0.1, HealBot_Action_DoProcCacheButtons)
+            C_Timer.After(0.05, HealBot_Action_DoProcCacheButtons)
         else
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end

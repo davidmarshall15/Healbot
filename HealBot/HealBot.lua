@@ -3120,7 +3120,7 @@ function HealBot_SetPlayerData()
     if maxHlth and maxHlth>1 then
         HealBot_Aux_setInHealAbsorbMax(maxHlth)
     else
-        HealBot_Timers_Set("LAST", "SetPlayerData", 5)
+        HealBot_Timers_Set("LAST", "SetPlayerData", 1)
     end
 end
 
@@ -3194,7 +3194,7 @@ end
 HealBot_luVars["WaitedOnAddonLoaded"]=false
 function HealBot_OnEvent_VariablesLoaded()
     if HealBot_luVars["AddonLoaded"] then
-        C_Timer.After(0.1, HealBot_VariablesLoaded)
+        C_Timer.After(0.2, HealBot_VariablesLoaded)
     elseif not HealBot_luVars["WaitedOnAddonLoaded"] then
         HealBot_luVars["WaitedOnAddonLoaded"]=true
         C_Timer.After(2, HealBot_OnEvent_VariablesLoaded)
@@ -3204,6 +3204,7 @@ function HealBot_OnEvent_VariablesLoaded()
 end
 
 function HealBot_VariablesLoaded()
+    HealBot_SetPlayerData()
     HealBot_SetToolTip(HealBot_ScanTooltip)
     local g
     for x=1,8 do
@@ -3227,7 +3228,6 @@ function HealBot_VariablesLoaded()
     HealBot_globalVars()
     HealBot_Lang_InitVars()
     HealBot_Data_InitVars()
-    HealBot_SetPlayerData()
     HealBot_Include_Skin(HEALBOT_SKINS_STD, true)
     if HealBot_Globals.FirstLoad then
         HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, true)
@@ -3239,7 +3239,7 @@ function HealBot_VariablesLoaded()
     HealBot_Config.LastAutoSkinChangeTime=0
     HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
     HealBot_Options_InitVars()
-    HealBot_Action_InitCacheButtons()
+    C_Timer.After(0.3, HealBot_Action_InitCacheButtons)
     HealBot_Panel_SethbTopRole(HealBot_Globals.TopRole)
     HealBot_Options_IgnoreDebuffsDuration_setAura()
     HealBot_Timers_ToggleBlizzardFrames()
@@ -3342,7 +3342,7 @@ function HealBot_ResetOnSpecChange()
         end
         HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
         HealBot_Timers_Set("PLAYER","CheckSpellsValid",0.5)
-        HealBot_Timers_Set("PLAYER","SaveProfile",2)
+        HealBot_Timers_Set("PLAYER","SaveProfile",1)
     end
     HealBot_Data["PLEVEL"]=UnitLevel("player")
     HealBot_Timers_InitSpells()
@@ -5928,12 +5928,20 @@ function HealBot_UnitPet(unit)
     return upUnit
 end
 
-function HealBot_OnEvent_PartyMembersChanged()
+function HealBot_PartyMembersChanged()
+    HealBot_luVars["PartyMembersChanged"]=false
     HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
     if HealBot_Data["UILOCK"] then 
         HealBot_CheckAllPartyGUIDs()
     end
-      --HealBot_setCall("HealBot_OnEvent_PartyMembersChanged")
+      --HealBot_setCall("HealBot_PartyMembersChanged")
+end
+
+function HealBot_OnEvent_PartyMembersChanged()
+    if not HealBot_luVars["PartyMembersChanged"] then
+        HealBot_luVars["PartyMembersChanged"]=true
+        C_Timer.After(0.1, HealBot_PartyMembersChanged)
+    end
 end
 
 function HealBot_OnEvent_PetsChanged()
@@ -6680,14 +6688,8 @@ function HealBot_UpdateUnitRange(button)
                 HealBot_Plugin_Requests_CancelGUID(button.guid)
                 hbRangeRequests[button.guid]=nil
             end
-            if button.status.range<0 or oldRange<0 then
-                if HealBot_luVars["pluginAuraWatch"] then
-                    if button.status.range>-1 then
-                        HealBot_Plugin_AuraWatch_IsVisible(button)
-                    else
-                        HealBot_Plugin_AuraWatch_NotVisible(button)
-                    end
-                end
+            if HealBot_luVars["pluginAuraWatch"] then
+                HealBot_Plugin_AuraWatch_RangeUpdate(button)
             end
             if button.status.enabled or button.status.range==1 or oldRange==1 then
                 if hbHealthWatch[button.guid] then HealBot_Plugin_HealthWatch_UnitUpdate(button) end
@@ -6988,7 +6990,7 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_UpdateLocalUILock(false)
         --HealBot_Timers_TurboOn(1)
     elseif (event=="GROUP_ROSTER_UPDATE") or (event=="RAID_ROSTER_UPDATE") then
-        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+        HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.05)
         HealBot_OnEvent_PartyMembersChanged();
     elseif (event=="RAID_TARGET_UPDATE") then
         HealBot_OnEvent_RaidTargetUpdateAll()
@@ -7012,7 +7014,7 @@ function HealBot_OnEvent(self, event, ...)
         HealBot_Timers_Set("AURA","PlayerCheckExtended")
     elseif (event=="ROLE_CHANGED_INFORM") or (event=="PLAYER_ROLES_ASSIGNED") then
         HealBot_OnEvent_PartyMembersChanged()
-        HealBot_Timers_Set("AURA","ResetClassIconTexture")
+        HealBot_Timers_Set("AURA","ResetClassIconTexture",0.05)
     elseif (event=="INCOMING_SUMMON_CHANGED") then
         HealBot_OnEvent_IncomingSummons(arg1)
     elseif (event=="PLAYER_MOUNT_DISPLAY_CHANGED") then
