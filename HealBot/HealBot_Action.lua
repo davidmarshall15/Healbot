@@ -2672,6 +2672,7 @@ function HealBot_Action_ResetrCalls()
 end 
 
 function HealBot_Action_InitButton(button)
+    HealBot_ActiveButtons[button.id]=true
     erButton=HealBot_Emerg_Button[button.id]
     button:SetAttribute("checkselfcast", false)
     erButton:SetAttribute("checkselfcast", false)
@@ -2958,9 +2959,6 @@ function HealBot_Action_InitButton(button)
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
         button.gref.aux[x]:SetValue(0)
     end
-    HealBot_Action_SetAllButtonAttribs(button,"Enemy",true)
-    HealBot_Action_SetAllButtonAttribs(button,"Enabled",true)
-    HealBot_Action_SetAllButtonAttribs(erButton,"Emerg",true)
     button.aura.update=false
     button.aura.buffcol=false
     button.aura.debuffcol=false
@@ -3053,7 +3051,6 @@ function HealBot_Action_InitButton(button)
     button.name=false
     
     HealBot_Aura_setButtonIcons(button.id)
-    HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_InitButton")
 end
 
@@ -3171,7 +3168,8 @@ end
 local tPrepButton=""
 function HealBot_Action_PrepButton(button)
     erButton=HealBot_Emerg_Button[button.id]
-    
+    button.guid="nil"
+    button.unit="nil"
     button.status.classknown=false
     button.status.plugin=false
     button.health.updincoming=false
@@ -3217,6 +3215,8 @@ function HealBot_Action_PrepButton(button)
     erButton.bar:SetStatusBarColor(0,0,0,0)
     
     button.status.markdel=false
+    HealBot_ActiveButtons[button.id]=false
+    HealBot_Aux_AssignLastOverlayType(button.id)
     --HealBot_setCall("HealBot_Action_PrepButton")
 end
 
@@ -3240,12 +3240,16 @@ function HealBot_Action_FreeId()
             end
         end
     end
-    if freeId<998 then
+    if freeId<(HealBot_Globals.AutoCacheSize*2) then
         HealBot_ActiveButtons[0]=freeId+1
     else
         HealBot_ActiveButtons[0]=1
     end
     return freeId
+end
+
+function HealBot_Action_resetFreeId()
+    HealBot_ActiveButtons[0]=1
 end
 
 function HealBot_Action_CreateNewButton(hbCurFrame, buttonId)
@@ -3294,14 +3298,11 @@ end
 function HealBot_Action_CreateButton(hbCurFrame)
     buttonId=HealBot_Action_FreeId()
     if buttonId>0 then 
-        HealBot_ActiveButtons[buttonId]=true 
         local ghb=_G["HealBot_Action_HealUnit"..buttonId]
         if not ghb then
             ghb=HealBot_Action_CreateNewButton(hbCurFrame, buttonId)
             if ghb then
                 HealBot_Action_PrepButton(ghb)
-                ghb.reset=true
-                --ghb.frame=hbCurFrame
             end
         end
         return ghb
@@ -4404,7 +4405,7 @@ function HealBot_Action_SetBinds(button, maxButton)
     HealBot_Action_DefaultBinds(button)
 end
 
-function HealBot_Action_SetAllButtonAttribs(button,cType,prep)
+function HealBot_Action_SetAllButtonAttribs(button,cType)
     if hbMaxMouseButtons[cType]>0 then
         local hasSpells,attribSet,maxBinds=false,false,0
         for x=1, hbMaxMouseButtons[cType] do
@@ -4482,7 +4483,7 @@ function HealBot_Action_PrepSetEnabledAttribs()
             end
         end
         hbMaxMouseButtons["Enabled"]=20
-        HealBot_Timers_Set("INIT","SetEnabledAttribs")
+        HealBot_Timers_Set("INIT","SetEnabledAttribs",1)
     end
 end
 
@@ -4502,8 +4503,8 @@ function HealBot_Action_PrepSetEnemyAttribs()
             end
         end
         hbMaxMouseButtons["Enemy"]=20
-        HealBot_Timers_Set("INIT","SetEnemyAttribs")
-        HealBot_Timers_Set("INIT","PrepSetEnabledAttribs")
+        HealBot_Timers_Set("INIT","SetEnemyAttribs",2)
+        HealBot_Timers_Set("INIT","PrepSetEnabledAttribs",1)
     end
 end
 
@@ -4523,7 +4524,7 @@ function HealBot_Action_PrepSetEmergAttribs()
             end
         end
         hbMaxMouseButtons["Emerg"]=5
-        HealBot_Timers_Set("INIT","SetEmergAttribs")
+        HealBot_Timers_Set("INIT","SetEmergAttribs",1)
     end
 end
 
@@ -4545,9 +4546,9 @@ function HealBot_Action_PrepSetAllAttribs()
         hbMaxMouseButtons["Enemy"]=20
         hbMaxMouseButtons["Enabled"]=20
         hbMaxMouseButtons["Emerg"]=5
-        HealBot_Timers_Set("INIT","SetEnemyAttribs")
-        HealBot_Timers_Set("INIT","SetEnabledAttribs")
-        HealBot_Timers_Set("INIT","SetEmergAttribs")
+        HealBot_Timers_Set("INIT","SetEnemyAttribs",3)
+        HealBot_Timers_Set("INIT","SetEnabledAttribs",1)
+        HealBot_Timers_Set("INIT","SetEmergAttribs",2)
     end
 end
 
@@ -4676,27 +4677,37 @@ function HealBot_Action_SetRangeSpell(button)
 end
 
 local hButton=false
+function HealBot_Action_SetHealButtonType(aButton, frame)
+    if aButton then
+        if not aButton.status.markdel then
+            hButton=aButton
+        else
+            aButton=nil 
+            hButton=HealBot_Action_CreateButton(frame)
+        end
+    else
+        hButton=HealBot_Action_CreateButton(frame)
+    end
+end
+
 function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,preCombat)
     hButton=false
     if guid then
         if unitType<5 then
-            hButton=HealBot_Private_Button[unit] or HealBot_Action_CreateButton(frame)
+            HealBot_Action_SetHealButtonType(HealBot_Private_Button[unit], frame)
         elseif unitType==8 then
-            hButton=HealBot_Pet_Button[unit] or HealBot_Action_CreateButton(frame)
+            HealBot_Action_SetHealButtonType(HealBot_Pet_Button[unit], frame)
         elseif unitType==7 then
-            hButton=HealBot_Vehicle_Button[unit] or HealBot_Action_CreateButton(frame)
+            HealBot_Action_SetHealButtonType(HealBot_Vehicle_Button[unit], frame)
         elseif unitType>10 then
-            hButton=HealBot_Enemy_Button[unit] or HealBot_Action_CreateButton(frame)
+            HealBot_Action_SetHealButtonType(HealBot_Enemy_Button[unit], frame)
         elseif unitType>8 then
-            hButton=HealBot_Extra_Button[unit] or HealBot_Action_CreateButton(frame)
+            HealBot_Action_SetHealButtonType(HealBot_Extra_Button[unit], frame)
         else
-            hButton=HealBot_Unit_Button[unit] or HealBot_Action_CreateButton(frame)
-        end
-        if hButton and hButton.status.markdel then
-            hButton=HealBot_Action_CreateButton(frame)
-            --HealBot_AddDebug("hButton has marked delete - unit="..(unit or "nil"), "Panel", true)
+            HealBot_Action_SetHealButtonType(HealBot_Unit_Button[unit], frame)
         end
         if hButton then
+            HealBot_ActiveButtons[hButton.id]=true
             hButton.gref["Back"]:ClearAllPoints()
             hButton.test=false
             erButton=HealBot_Emerg_Button[hButton.id]
@@ -4733,6 +4744,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 if not duplicate then HealBot_Action_SmartCast_PlayerButtonID(hButton.id) end
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
+                hButton.reset=false
                 hButton.status.unittype = unitType            -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
                 if unitType>10 then                           -- 7=vehicle  8=pet  9=target  10=focus  11=enemy
                     HealBot_Enemy_Button[unit]=hButton
@@ -4755,8 +4767,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     hbShouldHealSomePlayerFrames[frame]=true
                     hButton:SetAttribute("toggleForVehicle", true)
                 end
-                if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then 
-                    hButton.reset=false
+                if hButton.unit~=unit or hButton.guid~=guid then 
                     hButton.unit=unit
                     erButton.unit=unit
                     if hButton.guid~=guid then 
@@ -4770,12 +4781,12 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     elseif hbEnemyEventFuncs[event] then
                         hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEnemyEventFuncs[event](self, arg1, arg2, arg3) end)
                     end
+                    hButton:SetAttribute("unit", unit);
+                    erButton:SetAttribute("unit", unit);
+                    HealBot_Action_SetAllButtonAttribs(hButton,"Enemy") 
+                    HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
+                    HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                 end
-                hButton:SetAttribute("unit", unit);
-                erButton:SetAttribute("unit", unit);
-                HealBot_Action_SetAllButtonAttribs(hButton,"Enemy") 
-                HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
-                HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
                 HealBot_HealthAlertLevel(preCombat, hButton)
                 if not UnitExists(unit) then
@@ -5151,6 +5162,8 @@ function HealBot_Action_DeleteButton(hbBarID)
     local dg=_G["HealBot_Action_HealUnit"..hbBarID]
     if dg.frame>0 then 
         HealBot_UpdateUnitClear(dg)
+        HealBot_Action_DisableBorderHazardTypeButton(dg) 
+        HealBot_QueueClearGUID(dg.guid)
     end
     for x=1,16 do
         dg.gref.iconf[x]:SetFrameLevel(0)
@@ -5159,8 +5172,7 @@ function HealBot_Action_DeleteButton(hbBarID)
         dg.gref.iconf[x]:SetFrameLevel(0)
     end
     HealBot_Action_PrepButton(dg)
-    HealBot_ActiveButtons[hbBarID]=false
-    if hbBarID>HealBot_Globals.AutoCacheSize then
+    if hbBarID>(HealBot_Globals.AutoCacheSize) then
         HealBot_ActiveButtons[0]=1
     elseif hbBarID<HealBot_ActiveButtons[0] then 
         HealBot_ActiveButtons[0]=hbBarID
@@ -5178,21 +5190,18 @@ function HealBot_Action_CacheButton()
         if cButtonId>0 then
             local ghb=_G["HealBot_Action_HealUnit"..cButtonId]
             if not ghb then 
-                HealBot_ActiveButtons[cButtonId]=true
                 ghb=HealBot_Action_CreateNewButton(1, cButtonId)
-                HealBot_Action_PrepButton(ghb)
                 HealBot_Action_MarkDeleteButton(ghb)
             end
         end
         return true
     else
+        if not HealBot_Action_luVars["PreCacheComplete"] then
+            HealBot_Action_luVars["PreCacheComplete"]=true
+            HealBot_ActiveButtons[0]=1
+        end
         return false
     end
-end
-
-function HealBot_Action_InitCacheButtons()
-    HealBot_Action_CacheButton()
-    HealBot_Action_DeleteMarkedButton()
 end
 
 function HealBot_Action_DeleteMarkedButton()
@@ -5209,7 +5218,7 @@ function HealBot_Action_DoProcCacheButtons()
     if not InCombatLockdown() then
         HealBot_Action_luVars["DeleteMarkedButtonsActive"]=true
         if HealBot_Action_DeleteMarkedButton() or HealBot_Action_CacheButton() then
-            C_Timer.After(0.05, HealBot_Action_DoProcCacheButtons)
+            C_Timer.After(0.1, HealBot_Action_DoProcCacheButtons)
         else
             HealBot_Action_luVars["DeleteMarkedButtonsActive"]=false
         end
@@ -5226,9 +5235,9 @@ end
 
 function HealBot_Action_MarkDeleteButton(button)
     button.status.markdel=true
-    HealBot_QueueClearGUID(button.guid)
     HealBot_Action_UnregisterUnitEvents(button)
-    if button.frame>0 then HealBot_Action_DisableBorderHazardTypeButton(button) end
+    button:Hide()
+    HealBot_Emerg_Button[button.id]:Hide()
     if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
         HealBot_Enemy_Button[button.unit]=nil 
     end
@@ -5250,8 +5259,6 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Test_Button[button.unit] and HealBot_Test_Button[button.unit].id==button.id then 
         HealBot_Test_Button[button.unit]=nil
     end
-    button:Hide()
-    HealBot_Emerg_Button[button.id]:Hide()
     if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
     if HealBot_Fluid_BarButtons[button.id] then HealBot_Fluid_BarButtons[button.id]=nil end
     if HealBot_Fluid_BarButtonsAlpha[button.id] then HealBot_Fluid_BarButtonsAlpha[button.id]=nil end

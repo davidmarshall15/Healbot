@@ -754,6 +754,10 @@ function HealBot_SlashCmd(cmd)
             HealBot_Globals.DebugOut=true
             HealBot_AddChat("Debug ON")
         end
+    elseif (HBcmd=="debugtip") then
+        if HealBot_Data["TIPUSE"] then
+            HealBot_ToolTip_ToggleDebug()
+        end
     elseif (HBcmd=="resetcalls") then
         HealBot_AddChat("Calls Reset")
         HealBot_Calls={}
@@ -815,7 +819,7 @@ function HealBot_ToggleSuppressSetting(settingType)
         end
         HealBot_Comms_MacroSuppressError()
     end
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
       --HealBot_setCall("HealBot_ToggleSuppressSetting")
 end
 
@@ -2240,6 +2244,7 @@ end
 
 function HealBot_Load()
     if not HealBot_luVars["Loaded"] then
+        HealBot_FastFuncs()
         HealBot_Timers_TurboOn(5)
         HealBot_Init_Spells_Defaults()
         HealBot_InitNewChar()
@@ -3120,7 +3125,7 @@ function HealBot_SetPlayerData()
     if maxHlth and maxHlth>1 then
         HealBot_Aux_setInHealAbsorbMax(maxHlth)
     else
-        HealBot_Timers_Set("LAST", "SetPlayerData", 1)
+        --HealBot_Timers_Set("LAST", "SetPlayerData", 1)
     end
 end
 
@@ -3180,6 +3185,7 @@ function HealBot_OnEvent_AddOnLoaded(addonName, reset)
             HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
             HealBot_Globals.AutoCacheTime=HealBot_luVars["RunDate"]
         end
+        HealBot_AddDebug("AutoCacheSize="..HealBot_Globals.AutoCacheSize,"Perf",true)
         C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
         HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetHorizontal",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_FrameStickyOffsetVertical",false)
@@ -3194,7 +3200,7 @@ end
 HealBot_luVars["WaitedOnAddonLoaded"]=false
 function HealBot_OnEvent_VariablesLoaded()
     if HealBot_luVars["AddonLoaded"] then
-        C_Timer.After(0.2, HealBot_VariablesLoaded)
+        C_Timer.After(0.025, HealBot_VariablesLoaded)
     elseif not HealBot_luVars["WaitedOnAddonLoaded"] then
         HealBot_luVars["WaitedOnAddonLoaded"]=true
         C_Timer.After(2, HealBot_OnEvent_VariablesLoaded)
@@ -3239,7 +3245,6 @@ function HealBot_VariablesLoaded()
     HealBot_Config.LastAutoSkinChangeTime=0
     HealBot_luVars["CPUProfilerOn"]=GetCVarBool("scriptProfile")
     HealBot_Options_InitVars()
-    C_Timer.After(0.3, HealBot_Action_InitCacheButtons)
     HealBot_Panel_SethbTopRole(HealBot_Globals.TopRole)
     HealBot_Options_IgnoreDebuffsDuration_setAura()
     HealBot_Timers_ToggleBlizzardFrames()
@@ -3248,9 +3253,10 @@ function HealBot_VariablesLoaded()
     HealBot_Options_SetFrames()
     HealBot_Init_ClassicSpecs()
     HealBot_Timers_Set("LAST","SetAutoClose", 12)
-    HealBot_Timers_Set("LAST","LoadTips")
-    HealBot_FastFuncs()
-    HealBot_Load()
+    HealBot_Timers_Set("LAST","LoadTips", 2)
+    C_Timer.After(0.025, HealBot_Action_CacheButton)
+    C_Timer.After(0.05, HealBot_Action_DeleteMarkedButton)
+    C_Timer.After(0.1, HealBot_Load)
       --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
 
@@ -4531,8 +4537,9 @@ function HealBot_ProcessRefreshTypes()
                 HealBot_Panel_setLuVars("resetAuxText", false)
                 HealBot_Aux_ResetTextButtons()
             end
-            if (GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+10)>HealBot_Globals.AutoCacheSize then    
-                HealBot_Globals.AutoCacheSize=(GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+10)
+            if (GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+15)>HealBot_Globals.AutoCacheSize then    
+                HealBot_Globals.AutoCacheSize=(GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+15)
+                HealBot_AddDebug("AutoCacheSize="..HealBot_Globals.AutoCacheSize,"Perf",true)
             end
             if not HealBot_luVars["TestBarsOn"] then
                 HealBot_Timers_Set("LAST","CheckHideUnusedFrames")
@@ -4581,6 +4588,10 @@ function HealBot_Update_Slow()
                 end
             end
         else
+            if HealBot_luVars["resetFromID"] then
+                HealBot_luVars["resetFromID"]=false
+                HealBot_Action_resetFreeId()
+            end
             if HealBot_luVars["MaxCount"]>0 then
                 HealBot_Debug_UpdateCalls()
                 HealBot_AddDebug("#Calls active")
@@ -5007,11 +5018,12 @@ function HealBot_Update_RefreshList(button, uQueue, pClear)
     if uQueue then
         table.insert(HealBot_UpdateQueue,button.id)
     end
-    if pClear then
-        if not hbPrevGUIDs[button.guid] then
-            HealBot_luVars["pluginClearDown"]=1
-            hbPrevGUIDs[button.guid]=true
-        end
+    if pClear and not hbPrevGUIDs[button.guid] then
+        HealBot_luVars["pluginClearDown"]=1
+        hbPrevGUIDs[button.guid]=true
+    end
+    if button.id>HealBot_Globals.AutoCacheSize then
+        HealBot_luVars["resetFromID"]=true
     end
 end
 
@@ -5492,9 +5504,10 @@ function HealBot_AuxSetTargetBar()
 end
 
 function HealBot_PlayerTargetChanged()
-    if not HealBot_luVars["PlayerTargetChanged"] then
-        HealBot_luVars["PlayerTargetChanged"]=true
+    if UnitExists("target") then
         C_Timer.After(0.02, function() HealBot_nextRecalcParty(3) end)
+    else
+        HealBot_nextRecalcParty(3)
     end
 end
 

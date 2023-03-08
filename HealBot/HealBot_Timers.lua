@@ -226,15 +226,15 @@ function HealBot_Timers_DisableHealBot()
 end
 
 function HealBot_Timers_SpellsLoaded()
-    HealBot_Timers_Set("INIT","InitBuffList")
-    HealBot_Timers_Set("INIT","SpellsTabText")
-    HealBot_Timers_Set("INIT","FluidFlash")
-    HealBot_Timers_Set("AURA","BuffsReset")
-    HealBot_Timers_Set("LAST","ResetAllButtons")
-    HealBot_Timers_Set("SKINS","PowerIndicator",0.025)
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.05)
+    HealBot_Timers_Set("INIT","InitBuffList",0.025)
+    HealBot_Timers_Set("INIT","SpellsTabText",0.05)
+    HealBot_Timers_Set("INIT","FluidFlash",0.1)
+    HealBot_Timers_Set("AURA","BuffsReset",0.2)
+    HealBot_Timers_Set("LAST","ResetAllButtons",0.3)
+    HealBot_Timers_Set("SKINS","PowerIndicator",0.4)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
     HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.75)
-    HealBot_Timers_Set("AURA","InitAuraData",0.1)
+    HealBot_Timers_Set("AURA","InitAuraData",1)
 end
 
 function HealBot_Timers_SpellsResetTabs()
@@ -691,7 +691,7 @@ function HealBot_Timers_PluginsSet(tId)
     elseif tId==2 then
         HealBot_Timers_Set("AURA","CheckUnits",0.5)
     elseif tId==3 then
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",2)
     elseif tId==4 then
         HealBot_Timers_Set("LAST","InitBinds",0.1)
     elseif tId==5 then

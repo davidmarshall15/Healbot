@@ -8865,7 +8865,7 @@ function HealBot_Options_LoadProfile()
                 end
             end
             HealBot_Timers_InitExtraOptions()
-            HealBot_Timers_Set("INIT","PrepSetAllAttribs")
+            HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
         else
             HealBot_Timers_Set("PLAYER","LoadProfile",1)
         end
@@ -16971,7 +16971,7 @@ function HealBot_Options_CheckBindsOnChange(newBind, index)
             end
         end
     end
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
 end
 
 function HealBot_Options_DoSpellsOnTextChanged(self, cType, bNo, key, spellText)

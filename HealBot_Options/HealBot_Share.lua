@@ -71,25 +71,71 @@ local function HealBot_Comms_SendShareAddonMsg(msg, pName)
     C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", pName);
 end
 
-local function HealBot_Share_ClearExportComplete(sText)
-    local g=_G["HealBot_Options_InOutSkinStatust"]
-    local cText=g:GetText()
-    if sText==cText then
+local function HealBot_Share_ClearExportComplete(sType)
+    local g
+    if sType==HEALBOT_OPTIONS_SKIN then
+        g=_G["HealBot_Options_ShareSkinStatusf"]
         g:SetText("")
+        g=_G["HealBot_InOut_ShareSkins_Text"]
+        g:SetText(HEALBOT_OPTIONS_SKINS_DISCORD)
+    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
+        g=_G["HealBot_Options_ShareCDbuffStatusf"]
+        g:SetText("")
+        g=_G["HealBot_InOut_ShareCDbuffs_Text"]
+        g:SetText(HEALBOT_OPTIONS_CDEBUFFS_DISCORD)
+    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
+        g=_G["HealBot_Options_ShareBuffsStatusf"]
+        g:SetText("")
+        g=_G["HealBot_InOut_ShareBuffs_Text"]
+        g:SetText(HEALBOT_OPTIONS_CBUFFS_DISCORD)
+    elseif sType==HEALBOT_OPTIONS_TAB_SPELLS then
+        g=_G["HealBot_Options_ShareSpellsStatusf"]
+        g:SetText("")
+        g=_G["HealBot_InOut_ShareSpells_Text"]
+        g:SetText(HEALBOT_OPTIONS_SPELLS_DISCORD)
+    elseif sType==HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
+        g=_G["HealBot_Options_SharePresetColsStatusf"]
+        g:SetText("")
+        g=_G["HealBot_InOut_SharePresetCols_Text"]
+        g:SetText(HEALBOT_OPTIONS_PRECOLS_DISCORD)
     end
 end
 
 local function HealBot_Share_ExportComplete(sType, sExtra)
-    local g=_G["HealBot_Options_InOutSkinStatust"]
+    local g
     local sText=""
     if sExtra then
         sText=" |cff77c8ff"..sType.." |cffffffff"..sExtra.." |cff77c8ff"..HEALBOT_SHARE_EXPORTED
     else
         sText=" |cff77c8ff"..sType.." "..HEALBOT_SHARE_EXPORTED
     end
-    --HealBot_AddChat(HEALBOT_CHAT_ADDONID..sText)
-    g:SetText(sText)
-    C_Timer.After(15, function() HealBot_Share_ClearExportComplete(sText) end)
+    if sType==HEALBOT_OPTIONS_SKIN then
+        g=_G["HealBot_Options_ShareSkinStatusf"]
+        g:SetText(sText)
+        g=_G["HealBot_InOut_ShareSkins_Text"]
+        g:SetText("")
+    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_DEBUFFS then
+        g=_G["HealBot_Options_ShareCDbuffStatusf"]
+        g:SetText(sText)
+        g=_G["HealBot_InOut_ShareCDbuffs_Text"]
+        g:SetText("")
+    elseif sType==HEALBOT_OPTIONS_TAB_CUSTOM_BUFFS then
+        g=_G["HealBot_Options_ShareBuffsStatusf"]
+        g:SetText(sText)
+        g=_G["HealBot_InOut_ShareBuffs_Text"]
+        g:SetText("")
+    elseif sType==HEALBOT_OPTIONS_TAB_SPELLS then
+        g=_G["HealBot_Options_ShareSpellsStatusf"]
+        g:SetText(sText)
+        g=_G["HealBot_InOut_ShareSpells_Text"]
+        g:SetText("")
+    elseif sType==HEALBOT_OPTIONS_CONTENT_INOUT_PRESETCOL then
+        g=_G["HealBot_Options_SharePresetColsStatusf"]
+        g:SetText(sText)
+        g=_G["HealBot_InOut_SharePresetCols_Text"]
+        g:SetText("")
+    end
+    C_Timer.After(15, function() HealBot_Share_ClearExportComplete(sType) end)
 end
 
 local function HealBot_Share_SendLinkRequest()
@@ -416,7 +462,7 @@ function HealBot_Share_LoadSpells(sIn)
     HealBot_Options_SaveProfile()
     HealBot_Timers_InitExtraOptions()
     HealBot_Options_ComboClass_Text()
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs")
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
 end
 
 function HealBot_Share_ImportSpells_OnClick()

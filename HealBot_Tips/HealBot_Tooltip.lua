@@ -40,6 +40,7 @@ local hbCustomTipAnchorObjects={}
 local HealBot_Tooltip_luVars={}
 HealBot_Tooltip_luVars["uGroup"]=false
 HealBot_Tooltip_luVars["doInit"]=true
+HealBot_Tooltip_luVars["debug"]=false
 
 function HealBot_Tooltip_setLuVars(vName, vValue)
     HealBot_Tooltip_luVars[vName]=vValue
@@ -327,10 +328,10 @@ local UnitBuffIcons=nil
 local UnitDebuffIcons=nil
 local ttCaster,ttHoTd,ttHoTc,ttHoTright,ttName=nil,nil,nil,nil,HEALBOT_WORDS_UNKNOWN
 local hbHoTline1,ttHoTdt=true,0
-function HealBot_ToolTip_ShowHoT(buttonId, unit)
+function HealBot_ToolTip_ShowHoT(button)
     if HealBot_Globals.Tooltip_ShowHoT then
         hbHoTline1=true
-        UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(buttonId)
+        UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(button.id)
         if UnitBuffIcons then
             for i = 1,10 do
                 if UnitBuffIcons[i].current and UnitBuffIcons[i].unitCaster and UnitBuffIcons[i].spellId>0 then
@@ -376,6 +377,20 @@ function HealBot_ToolTip_ShowHoT(buttonId, unit)
                 end
             end
         end
+    end
+end
+
+function HealBot_ToolTip_ShowDebug(button)
+    HealBot_Tooltip_SetLine("  ",0,0,0,0)
+    HealBot_Tooltip_SetLine("Debug On - Turn off in Tip with /hb debugtip",1,1,1,1)
+    HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
+end
+
+function HealBot_ToolTip_ToggleDebug()
+    if HealBot_Tooltip_luVars["debug"] then
+        HealBot_Tooltip_luVars["debug"]=false
+    else
+        HealBot_Tooltip_luVars["debug"]=true
     end
 end
 
@@ -783,7 +798,11 @@ function HealBot_Action_DoRefreshTooltip()
             end
         end
 
-        HealBot_ToolTip_ShowHoT(xButton.id, xUnit)
+        HealBot_ToolTip_ShowHoT(xButton)
+        
+        if HealBot_Tooltip_luVars["debug"] then
+            HealBot_ToolTip_ShowDebug(xButton)
+        end
     end
     HealBot_Tooltip_Show()
 end

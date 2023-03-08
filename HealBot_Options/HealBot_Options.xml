@@ -24983,19 +24983,6 @@
           </Frame>
 
           <Frame name="HealBot_Options_Panel9" hidden="true" setAllPoints="true">
-            <Layers>
-              <Layer level="OVERLAY">
-                <FontString name="HealBot_Options_InOutSkinStatust" inherits="GameFontNormal">
-                  <Anchors>
-                    <Anchor point="BOTTOM">
-                      <Offset>
-                        <AbsDimension x="0" y="14"/>
-                      </Offset>
-                    </Anchor>
-                  </Anchors>
-                </FontString>
-              </Layer>
-            </Layers>
             <Frames>
               <CheckButton name="HealBot_Options_InOutCompressExport" inherits="HealBotUIPanelCheckButton">
                 <Anchors>
@@ -25174,11 +25161,11 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="HealBot_Options_ShareSkinStatusf" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_Options_ShareSkinStatusf" inherits="GameFontNormal">
                       <Anchors>
                         <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="0" y="20"/>
+                            <AbsDimension x="0" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -25382,11 +25369,11 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="HealBot_Options_ShareCDbuffStatusf" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_Options_ShareCDbuffStatusf" inherits="GameFontNormal">
                       <Anchors>
                         <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="0" y="20"/>
+                            <AbsDimension x="0" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -25537,11 +25524,11 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="HealBot_Options_ShareBuffsStatusf" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_Options_ShareBuffsStatusf" inherits="GameFontNormal">
                       <Anchors>
                         <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="0" y="20"/>
+                            <AbsDimension x="0" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -25692,11 +25679,11 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="HealBot_Options_ShareSpellsStatusf" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_Options_ShareSpellsStatusf" inherits="GameFontNormal">
                       <Anchors>
                         <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="0" y="20"/>
+                            <AbsDimension x="0" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
@@ -25847,11 +25834,11 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name="HealBot_Options_SharePresetColsStatusf" inherits="GameFontNormalSmall">
+                    <FontString name="HealBot_Options_SharePresetColsStatusf" inherits="GameFontNormal">
                       <Anchors>
                         <Anchor point="BOTTOM">
                           <Offset>
-                            <AbsDimension x="0" y="20"/>
+                            <AbsDimension x="0" y="14"/>
                           </Offset>
                         </Anchor>
                       </Anchors>
