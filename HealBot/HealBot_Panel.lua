@@ -905,18 +905,6 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Skins_isTestBars(false)
         HealBot_Aura_ClearAllBuffs()
         HealBot_Aura_ClearAllDebuffs()
-        local sReset=false
-        for y=1,10 do
-            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][y]["STATE"] then
-                for x=1,9 do
-                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][y]["USE"]>1 then
-                        sReset=true
-                        break
-                    end
-                end
-            end
-        end
-        if sReset then C_Timer.After(0.5, function() HealBot_SetResetFlag("SOFT") end) end
         HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)

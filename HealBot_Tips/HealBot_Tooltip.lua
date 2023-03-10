@@ -713,7 +713,7 @@ function HealBot_Action_DoRefreshTooltip()
                 UnitDebuffIcons=HealBot_Aura_ReturnDebuffdetails(xButton.id)
                 if UnitDebuffIcons then
                     HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                    for i = 51,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][1]["MAXDICONS"]+50 do
+                    for i = 51,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][1]["MAXDICONS"]+50 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
@@ -723,7 +723,7 @@ function HealBot_Action_DoRefreshTooltip()
                             break
                         end
                     end
-                    for i = 59,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][2]["MAXDICONS"]+58 do
+                    for i = 59,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][2]["MAXDICONS"]+58 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
@@ -733,7 +733,7 @@ function HealBot_Action_DoRefreshTooltip()
                             break
                         end
                     end
-                    for i = 63,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame][3]["MAXDICONS"]+62 do
+                    for i = 63,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][3]["MAXDICONS"]+62 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
@@ -912,11 +912,11 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
             HealBot_Tooltip_SetLine(HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
         end
         if id<9 then
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][1]["SCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][1]["BSCALE"],1,1,0,1)
         elseif id<13 then
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][2]["SCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][2]["BSCALE"],1,1,0,1)
         else
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][3]["SCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][3]["BSCALE"],1,1,0,1)
         end
     else
         HealBot_Tooltip_SetLine(HEALBOT_WORD_PRIORITY,1,1,1,1,HealBot_Options_retDebuffPriority(details.spellId, name, details.type) or 20,1,1,0,1)
@@ -926,11 +926,11 @@ function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r
             HealBot_Tooltip_SetLine(HEALBOT_SKIN_HEADERBARCOL,1,1,1,1,HEALBOT_WORD_OFF,1,0.5,0.2,1)
         end
         if id<59 then
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][1]["DSCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][1]["DSCALE"],1,1,0,1)
         elseif id<63 then
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][2]["DSCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][2]["DSCALE"],1,1,0,1)
         else
-            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][frame][3]["DSCALE"],1,1,0,1)
+            HealBot_Tooltip_SetLine(HEALBOT_OPTIONS_ICONSCALE,1,1,1,1,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][frame][3]["DSCALE"],1,1,0,1)
         end
     end
 

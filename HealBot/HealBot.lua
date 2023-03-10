@@ -1962,7 +1962,7 @@ local function HealBot_ItemIdsInBag(bag, slot, firstScan)
                 end
             end
         end
-        C_Timer.After(0.001, function() HealBot_ItemIdsInBag(bag, slot+1, firstScan) end)
+        C_Timer.After(0.01, function() HealBot_ItemIdsInBag(bag, slot+1, firstScan) end)
     elseif bag<NUM_BAG_SLOTS then
         HealBot_luVars["MaxBagSlots"]=HealBot_GetContainerNumSlots(bag+1)
         C_Timer.After(0.01, function() HealBot_ItemIdsInBag(bag+1, 1, firstScan) end)
@@ -3184,6 +3184,8 @@ function HealBot_OnEvent_AddOnLoaded(addonName, reset)
         if HealBot_Globals.AutoCacheSize>30 and (HealBot_Globals.AutoCacheTime or 0)<HealBot_luVars["RunDate"] then
             HealBot_Globals.AutoCacheSize=HealBot_Globals.AutoCacheSize-1
             HealBot_Globals.AutoCacheTime=HealBot_luVars["RunDate"]
+        elseif HealBot_Globals.AutoCacheSize<30 then
+            HealBot_Globals.AutoCacheSize=30
         end
         HealBot_AddDebug("AutoCacheSize="..HealBot_Globals.AutoCacheSize,"Perf",true)
         C_ChatInfo.RegisterAddonMessagePrefix(HEALBOT_HEALBOT)
@@ -4540,6 +4542,7 @@ function HealBot_ProcessRefreshTypes()
             if (GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+15)>HealBot_Globals.AutoCacheSize then    
                 HealBot_Globals.AutoCacheSize=(GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+15)
                 HealBot_AddDebug("AutoCacheSize="..HealBot_Globals.AutoCacheSize,"Perf",true)
+                HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",1)
             end
             if not HealBot_luVars["TestBarsOn"] then
                 HealBot_Timers_Set("LAST","CheckHideUnusedFrames")
@@ -5362,7 +5365,7 @@ function HealBot_Player_InvChange()
     if HealBot_luVars["InvReady"] then
         if not HealBot_luVars["invCheck"] then
             HealBot_luVars["invCheck"]=true
-            C_Timer.After(0.25, HealBot_Player_InvCheck)
+            C_Timer.After(0.05, HealBot_Player_InvCheck)
         end
     else
         HealBot_Timers_Set("PLAYER","InvChange",0.2)

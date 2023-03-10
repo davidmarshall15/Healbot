@@ -685,19 +685,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         if b.icon.reset then
         
             -- Buff IconSet 1
-            iScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["SCALE"])-2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFDOUBLE"] then
-                iScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["SCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFDOUBLE"] then
+                iScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BSCALE"])-2)*0.485)
+            else
+                iScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BSCALE"])-2
             end
             for x=1,8 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -708,19 +709,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Buff IconSet 2
-            iScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["SCALE"])-2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFDOUBLE"] then
-                iScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["SCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFDOUBLE"] then
+                iScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BSCALE"])-2)*0.485)
+            else
+                iScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BSCALE"])-2
             end
             for x=9,12 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -731,19 +733,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Buff IconSet 3
-            iScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["SCALE"])-2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFDOUBLE"] then
-                iScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["SCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFDOUBLE"] then
+                iScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BSCALE"])-2)*0.485)
+            else
+                iScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BSCALE"])-2
             end
             for x=13,16 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -754,20 +757,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Debuff IconSet 1
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFDOUBLE"] then
-                diScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFDOUBLE"] then
+                diScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2)*0.485)
             else
-                diScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2
+                diScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2
             end
             for x=51,58 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["OUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][1]["OUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -778,20 +781,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Debuff IconSet 2
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFDOUBLE"] then
-                diScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DSCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFDOUBLE"] then
+                diScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DSCALE"])-2)*0.485)
             else
-                diScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DSCALE"])-2
+                diScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DSCALE"])-2
             end
             for x=59,62 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["OUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][2]["OUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -802,20 +805,20 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
 
             -- Debuff IconSet 3
-            if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFDOUBLE"] then
-                diScale=floor(((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DSCALE"])-2)*0.485)
+            if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFDOUBLE"] then
+                diScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DSCALE"])-2)*0.485)
             else
-                diScale=(bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DSCALE"])-2
+                diScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DSCALE"])-2
             end
             for x=63,66 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["OUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["FONT"]),
-                                                Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["HEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][b.frame][3]["OUTLINE"]]);
+                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"]]);
+                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"]),
+                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
+                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"]]);
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -826,15 +829,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Buff IconSet 1
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BICONSPACER"])
 
             b.gref.icon[1]:ClearAllPoints();
             b.gref.icon[1]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BHOFFSET"]*frameScale),
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BVOFFSET"]*frameScale));
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BHOFFSET"]*frameScale),
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BVOFFSET"]*frameScale));
             b.gref.iconf[1]:ClearAllPoints()
             b.gref.iconf[1]:SetPoint("TOPLEFT",b.gref.icon[1],"TOPLEFT")
             b.gref.txt.expire[1]:ClearAllPoints()
@@ -843,7 +846,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[1]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[1],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=2,8 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -861,15 +864,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Buff IconSet 2
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BICONSPACER"])
 
             b.gref.icon[9]:ClearAllPoints();
             b.gref.icon[9]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BHOFFSET"]*frameScale),
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BVOFFSET"]*frameScale));
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BHOFFSET"]*frameScale),
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BVOFFSET"]*frameScale));
             b.gref.iconf[9]:ClearAllPoints()
             b.gref.iconf[9]:SetPoint("TOPLEFT",b.gref.icon[9],"TOPLEFT")
             b.gref.txt.expire[9]:ClearAllPoints()
@@ -878,7 +881,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[9]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[9],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=10,12 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -896,15 +899,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Buff IconSet 3
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BICONSPACER"])
 
             b.gref.icon[13]:ClearAllPoints();
             b.gref.icon[13]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BHOFFSET"]*frameScale),
-                                    ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BVOFFSET"]*frameScale));
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BHOFFSET"]*frameScale),
+                                    ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BVOFFSET"]*frameScale));
             b.gref.iconf[13]:ClearAllPoints()
             b.gref.iconf[13]:SetPoint("TOPLEFT",b.gref.icon[13],"TOPLEFT")
             b.gref.txt.expire[13]:ClearAllPoints()
@@ -913,7 +916,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[13]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[13],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=14,16 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -931,15 +934,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Debuff IconSet 1
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DICONSPACER"])
                                          
             b.gref.icon[51]:ClearAllPoints()
             b.gref.icon[51]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DHOFFSET"]*frameScale),
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DVOFFSET"]*frameScale))
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DHOFFSET"]*frameScale),
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DVOFFSET"]*frameScale))
             b.gref.iconf[51]:ClearAllPoints()
             b.gref.iconf[51]:SetPoint("TOPLEFT",b.gref.icon[51],"TOPLEFT")
             b.gref.txt.expire[51]:ClearAllPoints()
@@ -948,7 +951,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[51]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[51],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=52,58 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DEBUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -966,15 +969,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
             
             -- Debuff IconSet 2
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DICONSPACER"])
                                          
             b.gref.icon[59]:ClearAllPoints()
             b.gref.icon[59]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DHOFFSET"]*frameScale),
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DVOFFSET"]*frameScale))
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DHOFFSET"]*frameScale),
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DVOFFSET"]*frameScale))
             b.gref.iconf[59]:ClearAllPoints()
             b.gref.iconf[59]:SetPoint("TOPLEFT",b.gref.icon[59],"TOPLEFT")
             b.gref.txt.expire[59]:ClearAllPoints()
@@ -983,7 +986,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[59]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[59],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=60,62 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["DEBUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -1001,15 +1004,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             end
 
             -- Debuff IconSet 3
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFONBAR"], 
-                                         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFANCHOR"])
-            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFANCHOR"],
-                                        Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DICONSPACER"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFONBAR"], 
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFANCHOR"])
+            HealBot_Skins_setIconSpacer(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFANCHOR"],
+                                        Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DICONSPACER"])
                                          
             b.gref.icon[63]:ClearAllPoints()
             b.gref.icon[63]:SetPoint(iAnchors["ICON"],b,iAnchors["BUTTON"],
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DHOFFSET"]*frameScale),
-                                     ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DVOFFSET"]*frameScale))
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DHOFFSET"]*frameScale),
+                                     ceil(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DVOFFSET"]*frameScale))
             b.gref.iconf[63]:ClearAllPoints()
             b.gref.iconf[63]:SetPoint("TOPLEFT",b.gref.icon[63],"TOPLEFT")
             b.gref.txt.expire[63]:ClearAllPoints()
@@ -1018,7 +1021,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt.count[63]:SetPoint(iAnchors["TXTCOUNT"],b.gref.icon[63],iAnchors["TXTCOUNT"],iAnchors["TXTCOUNTX"],0)
             for x=64,66 do
                 b.gref.icon[x]:ClearAllPoints()
-                if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFDOUBLE"] then
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["DEBUFFDOUBLE"] then
                     if (x/2)==floor(x/2) then
                         b.gref.icon[x]:SetPoint(iAnchors["ICON"],b.gref.icon[x-1],iAnchors["DOUBLE"],0,iAnchors["ICONVSPACE"])
                     else
@@ -1251,8 +1254,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                                                                       Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][b.frame]["PVOFF"],
                                                                                       button.frame))
 
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFONBAR"],
-                             Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFONBAR"],
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFANCHOR"])
 
             b.gref.indicator.selfcast[1]:ClearAllPoints()
             b.gref.indicator.selfcast[1]:SetPoint(iAnchors["INDSELFCAST"],b.gref.icon[1],iAnchors["INDSELFCAST"],
@@ -1269,8 +1272,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                                                                  button.frame))
             end
 
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFONBAR"],
-                             Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFONBAR"],
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFANCHOR"])
 
             b.gref.indicator.selfcast[9]:ClearAllPoints()
             b.gref.indicator.selfcast[9]:SetPoint(iAnchors["INDSELFCAST"],b.gref.icon[9],iAnchors["INDSELFCAST"],
@@ -1287,8 +1290,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                                                                  button.frame))
             end
 
-            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFONBAR"],
-                             Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"])
+            HealBot_Skins_setIconAnchors(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFONBAR"],
+                                         Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFANCHOR"])
 
             b.gref.indicator.selfcast[13]:ClearAllPoints()
             b.gref.indicator.selfcast[13]:SetPoint(iAnchors["INDSELFCAST"],b.gref.icon[13],iAnchors["INDSELFCAST"],
@@ -1450,6 +1453,75 @@ function HealBot_Skins_Check(SkinName)
     end
 end
 
+local nVal={[1]="", [2]="", [3]=""}
+local function HealBot_Skins_Check_IconSets(SkinName, frame, oVar, nVar, v1, v2, v3)
+    nVal[1]=v1
+    nVal[2]=v2 or v1
+    nVal[3]=v3 or v2 or v1
+    for i=1,3 do
+        if not Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar] then 
+            if Healbot_Config_Skins.Icons[SkinName][frame][oVar] then
+                if type(Healbot_Config_Skins.Icons[SkinName][frame][oVar])==type(nVal[i]) then
+                    Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar]=Healbot_Config_Skins.Icons[SkinName][frame][oVar]
+                else
+                    Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar]=nVal[i]
+                end
+                Healbot_Config_Skins.Icons[SkinName][frame][oVar]=nil
+            elseif Healbot_Config_Skins.Icons[SkinName][frame][i] and Healbot_Config_Skins.Icons[SkinName][frame][i][oVar] then
+                if type(Healbot_Config_Skins.Icons[SkinName][frame][i][oVar])==type(nVal[i]) then
+                    Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar]=Healbot_Config_Skins.Icons[SkinName][frame][i][oVar]
+                else
+                    Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar]=nVal[i]
+                end
+                Healbot_Config_Skins.Icons[SkinName][frame][i][oVar]=nil
+            else
+                Healbot_Config_Skins.IconSets[SkinName][frame][i][nVar]=nVal[i]
+            end
+        else
+            if Healbot_Config_Skins.Icons[SkinName][frame][oVar] then
+                Healbot_Config_Skins.Icons[SkinName][frame][oVar]=nil
+            end
+            if Healbot_Config_Skins.Icons[SkinName][frame][i] then
+                Healbot_Config_Skins.Icons[SkinName][frame][i]=nil
+            end
+        end
+    end
+end
+
+local function HealBot_Skins_Check_IconSetsText(SkinName, frame, oVar, nVar, v1, v2, v3)
+    nVal[1]=v1
+    nVal[2]=v2 or v1
+    nVal[3]=v3 or v2 or v1
+    for i=1,3 do
+        if not Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar] then 
+            if Healbot_Config_Skins.IconText[SkinName][frame][oVar] then
+                if type(Healbot_Config_Skins.IconText[SkinName][frame][oVar])==type(nVal[i]) then
+                    Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=Healbot_Config_Skins.IconText[SkinName][frame][oVar]
+                else
+                    Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=nVal[i]
+                end
+                Healbot_Config_Skins.IconText[SkinName][frame][oVar]=nil
+            elseif Healbot_Config_Skins.IconText[SkinName][frame][i] and Healbot_Config_Skins.IconText[SkinName][frame][i][oVar] then
+                if type(Healbot_Config_Skins.IconText[SkinName][frame][i][oVar])==type(nVal[i]) then
+                    Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=Healbot_Config_Skins.IconText[SkinName][frame][i][oVar]
+                else
+                    Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=nVal[i]
+                end
+                Healbot_Config_Skins.IconText[SkinName][frame][i][oVar]=nil
+            else
+                Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=nVal[i]
+            end
+        else
+            if Healbot_Config_Skins.IconText[SkinName][frame][oVar] then
+                Healbot_Config_Skins.IconText[SkinName][frame][oVar]=nil
+            end
+            if Healbot_Config_Skins.IconText[SkinName][frame][i] then
+                Healbot_Config_Skins.IconText[SkinName][frame][i]=nil
+            end
+        end
+    end
+end
+
 function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.ExtraIncGroup then Healbot_Config_Skins.ExtraIncGroup=nil end
     if Healbot_Config_Skins.BarsHide then Healbot_Config_Skins.BarsHide=nil end
@@ -1519,6 +1591,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.Icons[SkinName] then Healbot_Config_Skins.Icons[SkinName]={} end
     if not Healbot_Config_Skins.RaidIcon[SkinName] then Healbot_Config_Skins.RaidIcon[SkinName]={} end
     if not Healbot_Config_Skins.IconText[SkinName] then Healbot_Config_Skins.IconText[SkinName]={} end
+    if not Healbot_Config_Skins.IconSets[SkinName] then Healbot_Config_Skins.IconSets[SkinName]={} end
+    if not Healbot_Config_Skins.IconSetsText[SkinName] then Healbot_Config_Skins.IconSetsText[SkinName]={} end
     if not Healbot_Config_Skins.Frame[SkinName] then Healbot_Config_Skins.Frame[SkinName]={} end
     if not Healbot_Config_Skins.StickyFrames[SkinName] then Healbot_Config_Skins.StickyFrames[SkinName]={} end
     if not Healbot_Config_Skins.Healing[SkinName] then Healbot_Config_Skins.Healing[SkinName]={} end
@@ -1552,9 +1626,11 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.BarTextCol[SkinName][gl] then Healbot_Config_Skins.BarTextCol[SkinName][gl]={} end
         if not Healbot_Config_Skins.Icons[SkinName][gl] then Healbot_Config_Skins.Icons[SkinName][gl]={} end
         if not Healbot_Config_Skins.IconText[SkinName][gl] then Healbot_Config_Skins.IconText[SkinName][gl]={} end
+        if not Healbot_Config_Skins.IconSets[SkinName][gl] then Healbot_Config_Skins.IconSets[SkinName][gl]={} end
+        if not Healbot_Config_Skins.IconSetsText[SkinName][gl] then Healbot_Config_Skins.IconSetsText[SkinName][gl]={} end
         for g=1,3 do
-            if not Healbot_Config_Skins.Icons[SkinName][gl][g] then Healbot_Config_Skins.Icons[SkinName][gl][g]={} end
-            if not Healbot_Config_Skins.IconText[SkinName][gl][g] then Healbot_Config_Skins.IconText[SkinName][gl][g]={} end
+            if not Healbot_Config_Skins.IconSets[SkinName][gl][g] then Healbot_Config_Skins.IconSets[SkinName][gl][g]={} end
+            if not Healbot_Config_Skins.IconSetsText[SkinName][gl][g] then Healbot_Config_Skins.IconSetsText[SkinName][gl][g]={} end
         end
         if not Healbot_Config_Skins.RaidIcon[SkinName][gl] then Healbot_Config_Skins.RaidIcon[SkinName][gl]={} end
         if not Healbot_Config_Skins.Frame[SkinName][gl] then Healbot_Config_Skins.Frame[SkinName][gl]={} end
@@ -1723,145 +1799,23 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTO"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTO"]=0 end
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKPOINT"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKPOINT"]="NONE" end
         if Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTOPOINT"]==nil then Healbot_Config_Skins.StickyFrames[SkinName][gl]["STUCKTOPOINT"]="NONE" end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["DURTHRH"]==nil then
-            if Healbot_Config_Skins.IconText[SkinName][gl]["DURTHRH"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["DURTHRH"]=Healbot_Config_Skins.IconText[SkinName][gl]["DURTHRH"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["DURTHRH"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["DURTHRH"]=9
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["DURTHRH"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["DURTHRH"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["DURTHRH"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["DURTHRH"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURTHRH"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURTHRH"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURTHRH"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURTHRH"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURTHRH"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURTHRH"]=9
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFDURTHRH"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFDURTHRH"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFDURTHRH"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFDURTHRH"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["DURWARN"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["DURWARN"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["DURWARN"]=Healbot_Config_Skins.IconText[SkinName][gl]["DURWARN"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["DURWARN"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["DURWARN"]=3
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["DURWARN"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["DURWARN"]=3 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["DURWARN"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["DURWARN"]=3 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURWARN"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURWARN"] then 
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURWARN"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURWARN"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFDURWARN"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFDURWARN"]=3
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFDURWARN"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFDURWARN"]=3 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFDURWARN"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFDURWARN"]=3 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["SCNT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["SCNT"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["SCNT"]=Healbot_Config_Skins.IconText[SkinName][gl]["SCNT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["SCNT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["SCNT"]=true
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["SCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["SCNT"]=true end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["SCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["SCNT"]=true end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSCNT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSCNT"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSCNT"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSCNT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSCNT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSCNT"]=true
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSCNT"]=true end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSCNT"]=true end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSCNT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSCNT"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSCNT"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSCNT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSCNT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSCNT"]=false
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSSCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSSCNT"]=false end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSSCNT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSSCNT"]=false end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["SDUR"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["SDUR"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["SDUR"]=Healbot_Config_Skins.IconText[SkinName][gl]["SDUR"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["SDUR"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["SDUR"]=false
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSDUR"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSDUR"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSDUR"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSDUR"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSDUR"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSDUR"]=true
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSDUR"]=true end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSDUR"]=true end
+
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "DURTHRH", "DBDURTHRH", 9)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFDURTHRH", "BUFFDURTHRH", 9)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "DURWARN", "DBDURWARN", 3)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFDURWARN", "BUFFDURWARN", 3)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "SCNT", "DBSCNT", true)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFSCNT", "BUFFSCNT", true)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFSSCNT", "BUFFSSCNT", false)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "SDUR", "DBSDUR", false)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFSDUR", "BUFFSDUR", true)
         if Healbot_Config_Skins.IconText[SkinName][gl]["SELFIND"]==nil then Healbot_Config_Skins.IconText[SkinName][gl]["SELFIND"]=false end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSDUR"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSDUR"]~=nil then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSDUR"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSDUR"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFSSDUR"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFSSDUR"]=false
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSSDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFSSDUR"]=false end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSSDUR"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFSSDUR"]=false end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["FONT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["FONT"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["FONT"]=Healbot_Config_Skins.IconText[SkinName][gl]["FONT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["FONT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["FONT"]=HealBot_Default_Font
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["FONT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["FONT"]=HealBot_Default_Font end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["FONT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["FONT"]=HealBot_Default_Font end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFFONT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFFONT"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFFONT"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFFONT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFFONT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFFONT"]=HealBot_Default_Font
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFFONT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFFONT"]=HealBot_Default_Font end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFFONT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFFONT"]=HealBot_Default_Font end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["OUTLINE"]==nil then
-            if Healbot_Config_Skins.IconText[SkinName][gl]["OUTLINE"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["OUTLINE"]=Healbot_Config_Skins.IconText[SkinName][gl]["OUTLINE"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["OUTLINE"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["OUTLINE"]=2
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["OUTLINE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["OUTLINE"]=2 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["OUTLINE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["OUTLINE"]=2 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFOUTLINE"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFOUTLINE"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFOUTLINE"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFOUTLINE"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFOUTLINE"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFOUTLINE"]=2
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFOUTLINE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFOUTLINE"]=2 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFOUTLINE"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFOUTLINE"]=2 end
+
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFSSDUR", "BUFFSSDUR", false)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "FONT", "DBFONT", HealBot_Default_Font)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFFONT", "BUFFFONT", HealBot_Default_Font)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "OUTLINE", "DBOUTLINE", 2)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFOUTLINE", "BUFFOUTLINE", 2)
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["SHOW"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["SHOW"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["STAR"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["STAR"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["CIRCLE"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["CIRCLE"]=true end
@@ -1871,25 +1825,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["SQUARE"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["SQUARE"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["CROSS"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["CROSS"]=true end
         if Healbot_Config_Skins.RaidIcon[SkinName][gl]["SKULL"]==nil then Healbot_Config_Skins.RaidIcon[SkinName][gl]["SKULL"]=true end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFONBAR"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFONBAR"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFONBAR"]=Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFONBAR"]
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFONBAR"]=1
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["DEBUFFONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["DEBUFFONBAR"]=1 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["DEBUFFONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["DEBUFFONBAR"]=1 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFONBAR"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFONBAR"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFONBAR"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFONBAR"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFONBAR"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFONBAR"]=1
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFONBAR"]=1 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFONBAR"]=1 end
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DEBUFFONBAR", "DEBUFFONBAR", 1)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFONBAR", "BUFFONBAR", 1)
         if fromImport then
             Healbot_Config_Skins.Icons[SkinName][gl]["CLASSONBAR"]=1 
             Healbot_Config_Skins.Icons[SkinName][gl]["TARGETONBAR"]=1 
@@ -1901,177 +1838,35 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             if Healbot_Config_Skins.Icons[SkinName][gl]["RCONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCONBAR"]=1 end
             if Healbot_Config_Skins.Icons[SkinName][gl]["OORONBAR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OORONBAR"]=1 end
         end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFDOUBLE"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFDOUBLE"]~=nil then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFDOUBLE"]=Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFDOUBLE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFDOUBLE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFDOUBLE"]=false
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFDOUBLE"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFDOUBLE"]~=nil then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFDOUBLE"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFDOUBLE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFDOUBLE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFDOUBLE"]=false
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFDOUBLE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFDOUBLE"]=false end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFDOUBLE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFDOUBLE"]=false end
+
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DEBUFFDOUBLE", "DEBUFFDOUBLE", false)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFDOUBLE", "BUFFDOUBLE", false)
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWRC"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWRC"]=true end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWCOMBAT"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWCOMBAT"]=false end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWHOSTILE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWHOSTILE"]=false end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWRESTING"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWRESTING"]=false end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWDIR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWDIR"]=false end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWDIRMOUSE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWDIRMOUSE"]=false end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["SCALE"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["SCALE"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["SCALE"]=Healbot_Config_Skins.Icons[SkinName][gl]["SCALE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["SCALE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["SCALE"]=0.3
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["SCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["SCALE"]=0.4 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["SCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["SCALE"]=0.4 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["DSCALE"]==nil then
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DSCALE"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DSCALE"]=Healbot_Config_Skins.Icons[SkinName][gl]["DSCALE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DSCALE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DSCALE"]=0.3
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["DSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["DSCALE"]=0.4 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["DSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["DSCALE"]=0.4 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["I15EN"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["I15EN"]~=false then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["I15EN"]=Healbot_Config_Skins.Icons[SkinName][gl]["I15EN"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["I15EN"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl]["I15EN"]=true
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["I15EN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["I15EN"]=true end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["I15EN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["I15EN"]=true end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFI15EN"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFI15EN"]~=nil then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFI15EN"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFI15EN"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFI15EN"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFI15EN"]=true
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFI15EN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFI15EN"]=true end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFI15EN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFI15EN"]=true end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFANCHOR"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFANCHOR"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFANCHOR"]=Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFANCHOR"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DEBUFFANCHOR"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DEBUFFANCHOR"]=1
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["DEBUFFANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["DEBUFFANCHOR"]=3 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["DEBUFFANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["DEBUFFANCHOR"]=7 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFANCHOR"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFANCHOR"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFANCHOR"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFANCHOR"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFANCHOR"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFANCHOR"]=2
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFANCHOR"]=4 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFANCHOR"]=8 end
+        HealBot_Skins_Check_IconSets(SkinName, gl, "SCALE", "BSCALE", 0.3, 0.4)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DSCALE", "DSCALE", 0.3, 0.4)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "I15EN", "DI15EN", true)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFI15EN", "BUFFI15EN", true)
+
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DEBUFFANCHOR", "DEBUFFANCHOR", 1, 3, 7)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFANCHOR", "BUFFANCHOR", 2, 4, 8)
         if Healbot_Config_Skins.Icons[SkinName][gl]["CLASSANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSANCHOR"]=1 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETANCHOR"]=1 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCANCHOR"]=1 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["OORANCHOR"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OORANCHOR"]=1 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["FADE"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]~=nil then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["FADE"]=Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["FADE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["FADE"]=false
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["FADE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["FADE"]=false end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["FADE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["FADE"]=false end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADE"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADE"]~=nil then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADE"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADE"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADE"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADE"]=false
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFFADE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFFADE"]=false end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["FADESECS"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["FADESECS"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["FADESECS"]=Healbot_Config_Skins.Icons[SkinName][gl]["FADESECS"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["FADESECS"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["FADESECS"]=15
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["FADESECS"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["FADESECS"]=15 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["FADESECS"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["FADESECS"]=15 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADESECS"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADESECS"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADESECS"]=Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADESECS"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BUFFFADESECS"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BUFFFADESECS"]=15
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFFADESECS"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["BUFFFADESECS"]=15 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFFADESECS"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["BUFFFADESECS"]=15 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXDICONS"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXDICONS"]=Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["MAXDICONS"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXDICONS"]=4
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["MAXDICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["MAXDICONS"]=2 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["MAXDICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["MAXDICONS"]=2 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXBICONS"]==nil then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"] then 
-                if Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]>8 then
-                    Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXBICONS"]=8
-                else
-                    Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXBICONS"]=Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]
-                end
-                Healbot_Config_Skins.Icons[SkinName][gl]["MAXBICONS"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["MAXBICONS"]=4
-            end
-        end
-        if Healbot_Config_Skins.Icons[SkinName][gl][2]["MAXBICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][2]["MAXBICONS"]=2 end
-        if Healbot_Config_Skins.Icons[SkinName][gl][3]["MAXBICONS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl][3]["MAXBICONS"]=2 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["BICONSPACER"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BICONSPACER"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BICONSPACER"]=Healbot_Config_Skins.Icons[SkinName][gl]["BICONSPACER"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BICONSPACER"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BICONSPACER"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["BICONSPACER"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["BICONSPACER"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["BICONSPACER"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["BICONSPACER"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["DICONSPACER"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DICONSPACER"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DICONSPACER"]=Healbot_Config_Skins.Icons[SkinName][gl]["DICONSPACER"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DICONSPACER"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DICONSPACER"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["DICONSPACER"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["DICONSPACER"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["DICONSPACER"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["DICONSPACER"]=0 end
+
+        HealBot_Skins_Check_IconSets(SkinName, gl, "FADE", "DFADE", false)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFFADE", "BUFFFADE", false)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "FADESECS", "DFADESECS", 15)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BUFFFADESECS", "BUFFFADESECS", 15)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "MAXDICONS", "MAXDICONS", 4, 2)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "MAXBICONS", "MAXBICONS", 4, 2)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BICONSPACER", "BICONSPACER", 0)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DICONSPACER", "DICONSPACER", 0)
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWCLASS"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWCLASS"]=false end
         if Healbot_Config_Skins.Icons[SkinName][gl]["SHOWROLE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["SHOWROLE"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["CLASSVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSVOFFSET"]=0 end
@@ -2084,46 +1879,11 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["DVOFFSET"] then
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DVOFFSET"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DVOFFSET"]=Healbot_Config_Skins.Icons[SkinName][gl]["DVOFFSET"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DVOFFSET"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DVOFFSET"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["DVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["DVOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["DVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["DVOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["DHOFFSET"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["DHOFFSET"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DHOFFSET"]=Healbot_Config_Skins.Icons[SkinName][gl]["DHOFFSET"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["DHOFFSET"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["DHOFFSET"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["DHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["DHOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["DHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["DHOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["BVOFFSET"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BVOFFSET"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BVOFFSET"]=Healbot_Config_Skins.Icons[SkinName][gl]["BVOFFSET"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BVOFFSET"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BVOFFSET"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["BVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["BVOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["BVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["BVOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][1]["BHOFFSET"] then 
-            if Healbot_Config_Skins.Icons[SkinName][gl]["BHOFFSET"] then
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BHOFFSET"]=Healbot_Config_Skins.Icons[SkinName][gl]["BHOFFSET"]
-                Healbot_Config_Skins.Icons[SkinName][gl]["BHOFFSET"]=nil
-            else
-                Healbot_Config_Skins.Icons[SkinName][gl][1]["BHOFFSET"]=0
-            end
-        end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][2]["BHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][2]["BHOFFSET"]=0 end
-        if not Healbot_Config_Skins.Icons[SkinName][gl][3]["BHOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl][3]["BHOFFSET"]=0 end
+
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DVOFFSET", "DVOFFSET", 0)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DHOFFSET", "DHOFFSET", 0)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BVOFFSET", "BVOFFSET", 0)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BHOFFSET", "BHOFFSET", 0)
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]=0.5 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"]=0 end
@@ -2576,26 +2336,9 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
             Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]=HealBot_Comm_round(((Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]/GetScreenHeight())*100),2)
             Healbot_Config_Skins.Anchors[SkinName][gl]["X"]=HealBot_Comm_round(((Healbot_Config_Skins.Anchors[SkinName][gl]["X"]/GetScreenWidth())*100),2)
         end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["HEIGHT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["HEIGHT"]=Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["HEIGHT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["HEIGHT"]=9
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["HEIGHT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["HEIGHT"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["HEIGHT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["HEIGHT"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFHEIGHT"]==nil then 
-            if Healbot_Config_Skins.IconText[SkinName][gl]["BUFFHEIGHT"] then
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFHEIGHT"]=Healbot_Config_Skins.IconText[SkinName][gl]["BUFFHEIGHT"]
-                Healbot_Config_Skins.IconText[SkinName][gl]["BUFFHEIGHT"]=nil
-            else
-                Healbot_Config_Skins.IconText[SkinName][gl][1]["BUFFHEIGHT"]=9
-            end
-        end
-        if Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFHEIGHT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][2]["BUFFHEIGHT"]=9 end
-        if Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFHEIGHT"]==nil then Healbot_Config_Skins.IconText[SkinName][gl][3]["BUFFHEIGHT"]=9 end
+
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "HEIGHT", "DBHEIGHT", 9)
+        HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFHEIGHT", "BUFFHEIGHT", 9)
         if Healbot_Config_Skins.BarText[SkinName][gl]["INCHEALS"]>3 then
             if Healbot_Config_Skins.BarText[SkinName][gl]["INCHEALS"]==4 then
                 Healbot_Config_Skins.BarText[SkinName][gl]["INCHEALS"]=2

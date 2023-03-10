@@ -261,12 +261,13 @@ function HealBot_Timers_LastUpdate()
     HealBot_setLuVars("DoSendGuildVersion", true)
     HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.5)
     HealBot_Timers_Set("LAST","DisableCheck",1)
+    HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",1)
     HealBot_Timers_Set("LAST","UpdateAllHealth",1.5)
     HealBot_Timers_Set("AURA","BuffsReset",2)
     HealBot_Timers_Set("AURA","PlayerCheckExtended",2.5)
     HealBot_Timers_Set("AURA","CheckUnits",3)
+    HealBot_Timers_Set("PLAYER","InvChange",3.5)
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",4)
-    HealBot_Timers_Set("LAST","ProcCacheButtons",5)
     HealBot_Timers_Set("LAST","CheckVersions",5)
     HealBot_Timers_Set("LAST","LoadComplete",5)
     C_Timer.After(1, HealBot_Timers_nextRecalcAll)
@@ -622,7 +623,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ModKey"]=HealBot_Action_ModKey,
                         ["InitItemsData"]=HealBot_Aura_InitItemsData,
                         ["CheckDC"]=HealBot_Timers_CheckDC,
-                        ["ProcCacheButtons"]=HealBot_Action_ProcCacheButtons,
+                        ["ProcMarkedCacheButtons"]=HealBot_Action_MarkedCacheButtons,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
                         ["EnteringWorld"]=HealBot_Timers_EnteringWorld,
