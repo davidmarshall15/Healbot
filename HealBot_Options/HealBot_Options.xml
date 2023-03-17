@@ -1015,7 +1015,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(6, nil, "Tips")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_UpdateTab(6, nil, "Tips", true)</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -2646,7 +2646,7 @@
                 </Anchors>
                 <Layers>
                   <Layer level="OVERLAY">
-                    <FontString name= "HealBot_Options_OverrideEffectbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_CONTENT_SKINS_EFFECTS">
+                    <FontString name= "HealBot_Options_OverrideEffectbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TAB_EFFECTS">
                       <Anchors>
                         <Anchor point="CENTER"></Anchor>
                       </Anchors>
@@ -24510,6 +24510,110 @@
           </Frame>
 
           <Frame name="HealBot_Options_Panel6" hidden="true" setAllPoints="true">
+            <Frames>
+              <StatusBar name="HealBot_Options_TipsGeneralb">
+                <Size>
+                  <AbsDimension x="190" y="25"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="11" y="-11"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name= "HealBot_Options_TipsGeneralbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TAB_GENERAL">
+                      <Anchors>
+                        <Anchor point="CENTER"></Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                  <OnMouseDown>HealBot_Options_ShowTipsPanel("HealBot_Options_TipsGeneralFrame", "HealBot_Options_TipsGeneralb", "TipsGeneral")</OnMouseDown>
+                  <OnEnter>HealBot_Options_Show_Help("TIPSGENERAL",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TIPSGENERAL",false)</OnLeave>
+                </Scripts>
+                <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                <BarColor r="0.2" g="0.2" b="0.2"/>
+              </StatusBar>
+              <StatusBar name="HealBot_Options_TipsTargetb">
+                <Size>
+                  <AbsDimension x="190" y="25"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_Options_TipsGeneralb" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="17" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name= "HealBot_Options_TipsTargetbTxt" inherits="GameFontNormal" text="HEALBOT_DISABLED_TARGET">
+                      <Anchors>
+                        <Anchor point="CENTER"></Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                  <OnMouseDown>HealBot_Options_ShowTipsPanel("HealBot_Options_TipsTargetFrame", "HealBot_Options_TipsTargetb", "TipsTarget")</OnMouseDown>
+                  <OnEnter>HealBot_Options_Show_Help("TIPSTARGET",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TIPSTARGET",false)</OnLeave>
+                </Scripts>
+                <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                <BarColor r="0.2" g="0.2" b="0.2"/>
+              </StatusBar>
+              <StatusBar name="HealBot_Options_TipsSpellsb">
+                <Size>
+                  <AbsDimension x="190" y="25"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_Options_TipsTargetb" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="17" y="0"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name= "HealBot_Options_TipsSpellsbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_TAB_SPELLS">
+                      <Anchors>
+                        <Anchor point="CENTER"></Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Scripts>
+                  <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                  <OnMouseDown>HealBot_Options_ShowTipsPanel("HealBot_Options_TipsSpellsFrame", "HealBot_Options_TipsSpellsb", "TipsSpells")</OnMouseDown>
+                  <OnEnter>HealBot_Options_Show_Help("TIPSSPELLS",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TIPSSPELLS",false)</OnLeave>
+                </Scripts>
+                <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                <BarColor r="0.2" g="0.2" b="0.2"/>
+              </StatusBar>
+              <Frame name="HealBot_Options_TipsGeneralFrame" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="620"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
                 <Layers>
                   <Layer level="BACKGROUND">
                     <FontString name="HealBot_Options_Panel6_1" text="HEALBOT_OPTIONS_TIPTEXT" inherits="GameFontNormal">
@@ -24526,9 +24630,9 @@
                 <Frames>
                   <CheckButton name="HealBot_Options_ShowTooltip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Panel6" relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="170" y="-50" />
+                          <AbsDimension x="75" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24542,7 +24646,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="170" y="-5"/>
+                          <AbsDimension x="10" y="-25"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24552,174 +24656,14 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEIC",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipTarget_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipMyBuffs" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="170" y="8"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipMyBuffs_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipRanks" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="170" y="-7"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipRanks_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPRANKS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPRANKS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipRoles" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="170" y="-22"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipRoles_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPROLES",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPROLES",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipHideRoleWhenRank" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="188" y="-35"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipHideRoleWhenRank_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipSpellCoolDown" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipTarget" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipSpellCoolDown_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSPELLCD",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLCD",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipShowUnitTip" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipShowUnitTip_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWGAMEUNIT",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWGAMEUNIT",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowUnitTip" relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-45" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <Slider name="HealBot_Options_TipMaxButtons" inherits="HealBot_Options_SliderTemplate">
-                    <Size>
-                      <AbsDimension x="320" y="16" />
-                    </Size>
-                    <Anchors>
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="320" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnValueChanged>HealBot_Options_TipMaxButtons_OnValueChanged(self)</OnValueChanged>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",false)</OnLeave>
-                    </Scripts>
-                  </Slider>
-                  <Button name="HealBot_Options_TooltipPosSettings" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_POSITION">
-                    <Size>
-                      <AbsDimension x="220" y="24"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="-125" y="265" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_UpdateTab(3, 309, "SkinsFramesGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",false)</OnLeave>
-                    </Scripts>
-                  </Button>
                   <Button name="HealBot_Options_TooltipCustomAnchor" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_CUSTOMANCHOR">
                     <Size>
                       <AbsDimension x="220" y="24"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="BOTTOM">
+                      <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="125" y="265" />
+                          <AbsDimension x="-50" y="-85" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24729,11 +24673,28 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPCUSTOMANCHOR",false)</OnLeave>
                     </Scripts>
                   </Button>
+                  <Button name="HealBot_Options_TooltipPosSettings" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SETTOOLTIP_POSITION">
+                    <Size>
+                      <AbsDimension x="220" y="24"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_TooltipCustomAnchor" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-58" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_UpdateTab(3, 309, "SkinsFramesGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <CheckButton name="HealBot_Options_UseGameTooltip" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipShowHoT" relativePoint="TOPLEFT">
+                      <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="75" y="-148" />
+                          <AbsDimension x="-50" y="358" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24743,6 +24704,20 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPUSEGAME",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipShowUnitTip" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltip" relativePoint="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-75" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipShowUnitTip_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWGAMEUNIT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWGAMEUNIT",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <Slider name="HealBot_Options_TooltipHeaderFont" inherits="HealBot_Options_SliderTemplate">
                     <Size>
                       <AbsDimension x="365" y="16" />
@@ -24750,7 +24725,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-105" y="170" />
+                          <AbsDimension x="-105" y="270" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24767,7 +24742,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="195" y="170" />
+                          <AbsDimension x="195" y="270" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24784,7 +24759,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-105" y="105" />
+                          <AbsDimension x="-105" y="175" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24801,7 +24776,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="195" y="105" />
+                          <AbsDimension x="195" y="175" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24818,7 +24793,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="-150" y="40" />
+                          <AbsDimension x="-150" y="80" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24835,7 +24810,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="150" y="40" />
+                          <AbsDimension x="150" y="80" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -24846,6 +24821,299 @@
                     </Scripts>
                   </Slider>
                 </Frames>
+              </Frame>
+              <Frame name="HealBot_Options_TipsTargetFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="620"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_Options_Panel6_2" text="HEALBOT_OPTIONS_TIPTEXT2" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-18" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <CheckButton name="HealBot_Options_ShowTooltipTarget" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="75" y="-75" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipTarget_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPTARGETINFO",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipMyBuffs" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="-50" y="-120"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipMyBuffs_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMYBUFFS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipRequiredBuffs" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipMyBuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipRequiredBuffs_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPREQUIREDBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPREQUIREDBUFFS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipLevel" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRequiredBuffs" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipLevel_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWLEVEL",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWLEVEL",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpec" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipLevel" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpec_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWSPEC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWSPEC",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipHealthLine" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpec" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipHealthLine_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHEALTHLINE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHEALTHLINE",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipManaLine" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipHealthLine" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipManaLine_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMANALINE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMANALINE",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipRanks" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipManaLine" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipRanks_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPRANKS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPRANKS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipRoles" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRanks" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-30"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipRoles_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPROLES",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPROLES",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipHideRoleWhenRank" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipRoles" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="10" y="-25"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipHideRoleWhenRank_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPHIDEROLEWHENRANK",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                </Frames>
+              </Frame>
+              <Frame name="HealBot_Options_TipsSpellsFrame" hidden="true" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="620"/>
+                </Size>
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="0" y="-45"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Layers>
+                  <Layer level="BACKGROUND">
+                    <FontString name="HealBot_Options_Panel6_3" text="HEALBOT_OPTIONS_TIPTEXT3" inherits="GameFontNormal">
+                      <Anchors>
+                        <Anchor point="TOP">
+                          <Offset>
+                            <AbsDimension x="0" y="-18" />
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+                <Frames>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellInfo" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="75" y="-75" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpellInfo_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSHOWSPELLCLICK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSHOWSPELLCLICK",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellExtra" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="-70" y="-140"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpellExtra_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSPELLEXTRA",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLEXTRA",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellCoolDown" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellExtra" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-40"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpellCoolDown_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPSPELLCD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPSPELLCD",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowTooltipSpellCoolDown" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-40"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipSpellIgnoreGlobalCoolDown_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPIGNORESPELLGCD",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_ShowTooltipShowHoT" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="75" y="-475" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTooltipShowHoT_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMONBUFFS",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <Slider name="HealBot_Options_TipMaxButtons" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="320" y="16" />
+                    </Size>
+                    <Anchors>
+                      <Anchor point="BOTTOM">
+                        <Offset>
+                          <AbsDimension x="0" y="225" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnValueChanged>HealBot_Options_TipMaxButtons_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TOOLTIPMAXBUTTONS",false)</OnLeave>
+                    </Scripts>
+                  </Slider>
+                </Frames>
+              </Frame>
+            </Frames>
           </Frame>
           
           <Frame name="HealBot_Options_Panel8" hidden="true" setAllPoints="true">
@@ -24901,7 +25169,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-165" />
+                      <AbsDimension x="0" y="-155" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24918,7 +25186,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-260" />
+                      <AbsDimension x="0" y="-235" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24935,7 +25203,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-355" />
+                      <AbsDimension x="0" y="-315" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24952,7 +25220,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-450" />
+                      <AbsDimension x="0" y="-395" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24969,7 +25237,7 @@
                 <Anchors>
                   <Anchor point="TOP">
                     <Offset>
-                      <AbsDimension x="0" y="-545" />
+                      <AbsDimension x="0" y="-475" />
                     </Offset>
                   </Anchor>
                 </Anchors>
@@ -24979,6 +25247,48 @@
                   <OnLeave>HealBot_Options_Show_Help("TESTNUMENEMY",false)</OnLeave>
                 </Scripts>
               </Slider>
+              <CheckButton name="HealBot_Options_TestShowDebuffIcons" inherits="HealBotUIPanelCheckButton">
+                <Anchors>
+                  <Anchor point="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="-55" y="110" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_TestShowDebuffIcons_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("TESTDEBUFFICON",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTDEBUFFICON",false)</OnLeave>
+                </Scripts>
+              </CheckButton>
+              <CheckButton name="HealBot_Options_TestShowBuffIcons" inherits="HealBotUIPanelCheckButton">
+                <Anchors>
+                  <Anchor point="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="-55" y="70" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_TestShowBuffIcons_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("TESTBUFFICON",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTBUFFICON",false)</OnLeave>
+                </Scripts>
+              </CheckButton>
+              <CheckButton name="HealBot_Options_TestShowExtraIcons" inherits="HealBotUIPanelCheckButton">
+                <Anchors>
+                  <Anchor point="BOTTOM">
+                    <Offset>
+                      <AbsDimension x="-55" y="30" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnClick>HealBot_Options_TestShowExtraIcons_OnClick(self)</OnClick>
+                  <OnEnter>HealBot_Options_Show_Help("TESTEXTRAICON",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("TESTEXTRAICON",false)</OnLeave>
+                </Scripts>
+              </CheckButton>
             </Frames>
           </Frame>
 

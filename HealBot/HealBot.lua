@@ -2763,18 +2763,18 @@ function HealBot_Update_CPUUsage()
 end
 
 function HealBot_UpdateMaxUnitsAdj()
-    HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage
+    HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage/3)
     if HealBot_luVars["UpdateMaxUnits"]<2 then
         HealBot_luVars["UpdateMaxUnits"]=2
-    elseif HealBot_luVars["UpdateMaxUnits"]>9 then
-        HealBot_luVars["UpdateMaxUnits"]=9
+    elseif HealBot_luVars["UpdateMaxUnits"]>5 then
+        HealBot_luVars["UpdateMaxUnits"]=5
     end
     HealBot_UpdateNumUnits()
     HealBot_luVars["MaxFastQueue"]=HealBot_Globals.CPUUsage*2
-    if HealBot_luVars["MaxFastQueue"]<4 then
-        HealBot_luVars["MaxFastQueue"]=4
-    elseif HealBot_luVars["MaxFastQueue"]>15 then 
-        HealBot_luVars["MaxFastQueue"]=15
+    if HealBot_luVars["MaxFastQueue"]<3 then
+        HealBot_luVars["MaxFastQueue"]=3
+    elseif HealBot_luVars["MaxFastQueue"]>12 then 
+        HealBot_luVars["MaxFastQueue"]=12
     end
     HealBot_Timers_TurboOff()
     HealBot_AddDebug("UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"], "Perf", true)
@@ -2782,7 +2782,7 @@ function HealBot_UpdateMaxUnitsAdj()
 end
 
 function HealBot_UpdateNumUnits()
-    HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue/3)
+    HealBot_luVars["UpdateNumUnits"]=ceil(#HealBot_UpdateQueue/4)
     if HealBot_luVars["UpdateNumUnits"]>HealBot_luVars["UpdateMaxUnits"] then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateMaxUnits"]
     end
@@ -3256,8 +3256,8 @@ function HealBot_VariablesLoaded()
     HealBot_Init_ClassicSpecs()
     HealBot_Timers_Set("LAST","SetAutoClose", 12)
     HealBot_Timers_Set("LAST","LoadTips", 2)
-    C_Timer.After(0.025, HealBot_Action_CacheButton)
-    C_Timer.After(0.05, HealBot_Action_DeleteMarkedButton)
+    HealBot_Action_CacheButton()
+    HealBot_Action_MarkedCacheButtons()
     C_Timer.After(0.1, HealBot_Load)
       --HealBot_setCall("HealBot_OnEvent_VariablesLoaded")
 end
@@ -4591,10 +4591,6 @@ function HealBot_Update_Slow()
                 end
             end
         else
-            if HealBot_luVars["resetFromID"] then
-                HealBot_luVars["resetFromID"]=false
-                HealBot_Action_resetFreeId()
-            end
             if HealBot_luVars["MaxCount"]>0 then
                 HealBot_Debug_UpdateCalls()
                 HealBot_AddDebug("#Calls active")
@@ -4887,8 +4883,8 @@ function HealBot_UpdateEnemyHealth_Buttons()
 end
 
 function HealBot_UpdateLast()
-    HealBot_Update_Final()
     HealBot_luVars["fastSwitch"]=0
+    HealBot_Update_Final()
 end
 
 HealBot_luVars["TestFramesRefresh"]=0
@@ -5025,12 +5021,10 @@ function HealBot_Update_RefreshList(button, uQueue, pClear)
         HealBot_luVars["pluginClearDown"]=1
         hbPrevGUIDs[button.guid]=true
     end
-    if button.id>HealBot_Globals.AutoCacheSize then
-        HealBot_luVars["resetFromID"]=true
-    end
 end
 
-function HealBot_Update_ResetRefreshLists()
+local hbFastCur=HealBot_Update_Fast
+function HealBot_Update_ResetRefreshLists1()
     for guid,_ in pairs(hbPrevGUIDs) do
         if not HealBot_Panel_AllUnitGUID(guid) then
             HealBot_luVars["pluginClearDown"]=1
@@ -5040,6 +5034,10 @@ function HealBot_Update_ResetRefreshLists()
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Update_RefreshList(xButton, true, true)
     end
+    hbFastCur=HealBot_Update_ResetRefreshLists2
+end
+
+function HealBot_Update_ResetRefreshLists2()
     for _,xButton in pairs(HealBot_Private_Button) do
         HealBot_Update_RefreshList(xButton, true, true)
     end
@@ -5062,9 +5060,8 @@ function HealBot_Update_ResetRefreshLists()
     HealBot_TestBarsState(HealBot_luVars["TestBarsOn"])
 end
 
-local hbFastCur=HealBot_Update_Fast
 function HealBot_RefreshLists()
-    hbFastCur=HealBot_Update_ResetRefreshLists
+    hbFastCur=HealBot_Update_ResetRefreshLists1
 end
 
 function HealBot_TestBarsState(state)
@@ -6474,7 +6471,7 @@ end
 
 function HealBot_MMButton_Toggle()
     if LDBIcon then
-        if HealBot_Globals.MinimapIcon.hide==false then
+        if not HealBot_Globals.MinimapIcon.hide then
             LDBIcon:Show(HEALBOT_HEALBOT)
         else
             LDBIcon:Hide(HEALBOT_HEALBOT)

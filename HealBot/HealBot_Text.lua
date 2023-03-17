@@ -1575,7 +1575,7 @@ function HealBot_Text_UpdateTestText(button)
     end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-            button.gref.txt["text2"]:SetText("10K");
+            button.gref.txt["text2"]:SetText("10K") --  "..button.id.. "  "..button.unit);
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
             button.gref.txt["text2"]:SetText("(0)");
         else

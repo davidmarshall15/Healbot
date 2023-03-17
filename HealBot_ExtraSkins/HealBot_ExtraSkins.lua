@@ -248,9 +248,9 @@ local HealBot_ExtraSkinImages={[0]=[[Interface\AddOns\HealBot_ExtraSkins\Images\
                               [77]=[[Interface\AddOns\HealBot_ExtraSkins\Images\AuxCombo5.jpg]],
                               [78]=[[Interface\AddOns\HealBot_ExtraSkins\Images\AuxCombo25.jpg]],
                               [79]=[[Interface\AddOns\HealBot_ExtraSkins\Images\AuxCombo10.jpg]],
-                              [80]=[[Interface\AddOns\HealBot_ExtraSkins\Images\noimage.jpg]],
-                              [81]=[[Interface\AddOns\HealBot_ExtraSkins\Images\noimage.jpg]],
-                              [82]=[[Interface\AddOns\HealBot_ExtraSkins\Images\noimage.jpg]],
+                              [80]=[[Interface\AddOns\HealBot_ExtraSkins\Images\Groupv22.jpg]],
+                              [81]=[[Interface\AddOns\HealBot_ExtraSkins\Images\Raid25v22.jpg]],
+                              [82]=[[Interface\AddOns\HealBot_ExtraSkins\Images\Raid40v22.jpg]],
                              }
 local HealBot_ExtraSkinData={}
 local HealBot_ExtraSkinDesc={}

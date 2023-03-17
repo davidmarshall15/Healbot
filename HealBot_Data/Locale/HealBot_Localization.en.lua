@@ -192,6 +192,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONANCHOR              = "Icon Anchor"
 
     HEALBOT_OPTIONS_ITEMS                   = "Items";
+    HEALBOT_OPTIONS_ITEM                    = "Item";
+    HEALBOT_OPTIONS_SPELL                   = "Spell";
 
     HEALBOT_OPTIONS_COMBOCLASS              = "Key combos for";
     HEALBOT_OPTIONS_CLICK                   = "Click";
@@ -313,6 +315,12 @@ function HealBot_Lang_enALL()
     HEALBOT_TOOLTIP_DETAILFONT              = "Detail font";
     HEALBOT_TOOLTIP_HEADERFONTSIZE          = "Header font size";
     HEALBOT_TOOLTIP_DETAILFONTSIZE          = "Detail font size";
+    HEALBOT_TOOLTIP_SHOWASSIGNEDSPELLS      = "Show assigned spells"
+    HEALBOT_TOOLTIP_SHOWSPELLEXTRA          = "Show additional info"
+    HEALBOT_TOOLTIP_SHOWHEALTH              = "Show health"
+    HEALBOT_TOOLTIP_SHOWMANA                = "Show mana"
+    HEALBOT_TOOLTIP_SHOWLEVEL               = "Show level"
+    HEALBOT_TOOLTIP_SHOWSPEC                = "Show spec"
     HEALBOT_WORDS_COOLDOWN                  = "Cooldown"
     HEALBOT_WORDS_TINY                      = "Tiny"
     HEALBOT_WORDS_SMALL                     = "Small"
@@ -354,7 +362,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BARHEALTHALLOVERHEALS   = "Show all overheals";
     HEALBOT_OPTIONS_BARHEALTH1              = "as delta";
     HEALBOT_OPTIONS_BARHEALTH2              = "as percentage";
-    HEALBOT_OPTIONS_TIPTEXT                 = "Tooltips";
+    HEALBOT_OPTIONS_TIPTEXT                 = "Tooltip General";
+    HEALBOT_OPTIONS_TIPTEXT2                = "Tooltip Unit Information";
+    HEALBOT_OPTIONS_TIPTEXT3                = "Tooltip Spell Information";
     HEALBOT_OPTIONS_POSTOOLTIP              = "Position tooltip";
     HEALBOT_OPTIONS_SHOWNAMEONBAR           = "Show name on bar";
     HEALBOT_OPTIONS_BARTEXTCLASSCOLOUR1     = "Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class";
@@ -543,6 +553,12 @@ function HealBot_Lang_enALL()
     HEALBOT_ICONLOWERSCALE                  = "Scale decrease";
     HEALBOT_ICONBARCOLOURON                 = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." on"
     HEALBOT_ICONBARCOLOUROFF                = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." off"
+    HEALBOT_ICONBARCOLOURCYCLE              = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." cycle"
+    HEALBOT_ICONGLOWON                      = "Icon glow on"
+    HEALBOT_ICONGLOWOFF                     = "Icon glow off"
+    HEALBOT_ICONGLOWCYCLE                   = "Icon glow cycle"
+    HEALBOT_ICONNEXTSET                     = "Icon set next";
+    HEALBOT_ICONPREVSET                     = "Icon set prev";
     
     HEALBOT_OPTIONS_SHOWMINIMAPBUTTON       = "Show minimap button";
     HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON   = "Show Raid Target";
@@ -636,6 +652,7 @@ function HealBot_Lang_enALL()
     HEALBOT_RESERVED_TAG                    = "R-"
     
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
+    HEALBOT_OPTIONS_SHOWUNITBUFFREQUIRED    = "Show required buffs";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER          = "Show buff before it expires";
     HEALBOT_OPTIONS_SHORTBUFFTIMER          = "Short buffs"
     HEALBOT_OPTIONS_LONGBUFFTIMER           = "Long buffs"
@@ -736,6 +753,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_NUMMYTARGETS             = "Number of MyTargets"
     HEALBOT_OPTION_NUMHEALERS               = "Number of Healers"
     HEALBOT_OPTION_NUMPETS                  = "Number of Pets"
+    HEALBOT_OPTION_DEBUFFICONS              = "Show debuff icons"
+    HEALBOT_OPTION_BUFFICONS                = "Show buff icons"
+    HEALBOT_OPTION_EXTRAICONS               = "Show extra icons"
     HEALBOT_WORD_TEST                       = "Test";
     HEALBOT_OPTION_TESTMODE                 = "Test mode";
     HEALBOT_WORD_TEXT                       = "Text";
@@ -873,6 +893,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_CANCEL                     = "Cancel"
     HEALBOT_WORD_DONE                       = "Done"
     HEALBOT_WORD_COMMANDS                   = "Commands"
+    HEALBOT_WORD_COMMAND                    = "Command"
     HEALBOT_OPTIONS_BARHEALTH3              = "as health";
     HEALBOT_SORTBY_ROLE                     = "Role"
     HEALBOT_WORD_DPS                        = "DPS"

@@ -878,7 +878,7 @@ function HealBot_Panel_TestBarsOff()
             HealBot_Action_ClearTestIcon(b, id)
         end
         HealBot_Action_DeleterCallsUnit(b.unit)
-        HealBot_Action_MarkDeleteButton(b)
+        b:Hide()
         HealBot_TestBarsActive[x]=nil
     end
 end
@@ -1452,9 +1452,9 @@ function HealBot_Panel_TestBarsOn()
     HealBot_Action_resetTestBarsCounters()
     if HealBot_Panel_luVars["TestBarsDelAll"] then
         HealBot_Panel_luVars["TestBarsDelAll"]=false
-        for _,xButton in pairs(HealBot_Test_Button) do
-            HealBot_Action_MarkDeleteButton(xButton)
-        end
+        --for _,xButton in pairs(HealBot_Test_Button) do
+            --HealBot_Action_MarkDeleteButton(xButton)
+        --end
         for xHeader,xButton in pairs(HealBot_Header_Frames) do
             HealBot_Panel_DeleteHeader(xButton.id, xHeader)
         end
@@ -1489,11 +1489,9 @@ function HealBot_Panel_TestBarsOn()
     for gl=1,10 do
         HeaderPos[gl]={};
         hbBarsPerFrame[gl]=0
-    end
-    noBars=tonumber(HealBot_noBars)
-    for gl=1,10 do
         i[gl]=0
     end
+    noBars=tonumber(HealBot_noBars)
     grpNo=1
     local gNo=5
     local healGroups=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin]
@@ -1554,17 +1552,14 @@ function HealBot_Panel_TestBarsOn()
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en and hbCurrentFrame<6 then
             if HealBot_Globals.TestBars["PETS"]>0 and healGroups[gl]["STATE"] then
                 HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
-                xRaidBars=xRaidBars-HealBot_Globals.TestBars["PETS"]
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en and hbCurrentFrame<6 then
             if healGroups[gl]["STATE"] then
                 HealBot_Panel_testAddButton(HEALBOT_OPTIONS_TARGETHEALS,HEALBOT_OPTIONS_TARGETHEALS,1,1)
-                xRaidBars=xRaidBars-1
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_FOCUS_en and hbCurrentFrame<6 then
             if healGroups[gl]["STATE"] then
                 HealBot_Panel_testAddButton(HEALBOT_FOCUS,HEALBOT_FOCUS,1,1)
-                xRaidBars=xRaidBars-1
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
             if healGroups[gl]["STATE"] and xRaidBars>0 then
@@ -1659,7 +1654,8 @@ function HealBot_Panel_TestBarsOn()
     for _,xButton in pairs(HealBot_Test_Button) do
         if not HealBot_TestBarsActive[xButton.id] then
             HealBot_setTestCols[xButton.id]=false
-            HealBot_Action_MarkDeleteButton(xButton)
+    --        HealBot_Action_MarkDeleteButton(xButton)
+            xButton:Hide()
         end
     end
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
@@ -3067,6 +3063,8 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)
+    HealBot_Action_setLuVars("CreatedButtons",0)
+    HealBot_Action_setLuVars("PartyChangedType",changeType)
     if HealBot_setTestBars then
         if not preCombat then
             HealBot_Panel_TestBarsOn()
