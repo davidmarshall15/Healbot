@@ -2264,8 +2264,12 @@ local function HealBot_Aux_SetTestButton(button)
     end
 end
 
+function HealBot_Aux_TestUpdateButton(button)
+    HealBot_Aux_SetTestButton(button)
+end
+
 function HealBot_Aux_TestUpdate()
     for _,xButton in pairs(HealBot_Test_Button) do
-        HealBot_Aux_SetTestButton(xButton)
+        HealBot_Aux_TestUpdateButton(xButton)
     end
 end

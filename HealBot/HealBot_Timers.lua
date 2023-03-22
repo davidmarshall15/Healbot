@@ -692,7 +692,7 @@ function HealBot_Timers_PluginsSet(tId)
     elseif tId==2 then
         HealBot_Timers_Set("AURA","CheckUnits",0.5)
     elseif tId==3 then
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",2)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
     elseif tId==4 then
         HealBot_Timers_Set("LAST","InitBinds",0.1)
     elseif tId==5 then

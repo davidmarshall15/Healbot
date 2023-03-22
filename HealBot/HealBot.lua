@@ -594,7 +594,7 @@ function HealBot_SlashCmd(cmd)
             HealBot_Config.MacroUse10=true
             HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_USE10ON)
         end
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
+        HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
     elseif (HBcmd=="suppress" and x) then
         x=string.lower(x)
         HealBot_ToggleSuppressSetting(x)
@@ -819,7 +819,7 @@ function HealBot_ToggleSuppressSetting(settingType)
         end
         HealBot_Comms_MacroSuppressError()
     end
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
       --HealBot_setCall("HealBot_ToggleSuppressSetting")
 end
 
@@ -4543,9 +4543,6 @@ function HealBot_ProcessRefreshTypes()
                 HealBot_Globals.AutoCacheSize=(GetNumGroupMembers()+HealBot_luVars["NumPrivateUnits"]+HealBot_luVars["NumPetUnits"]+15)
                 HealBot_AddDebug("AutoCacheSize="..HealBot_Globals.AutoCacheSize,"Perf",true)
                 HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",1)
-            end
-            if not HealBot_luVars["TestBarsOn"] then
-                HealBot_Timers_Set("LAST","CheckHideUnusedFrames")
             end
             HealBot_Skins_setLuVars("AuxReset", false)
             return

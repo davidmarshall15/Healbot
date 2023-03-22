@@ -462,7 +462,7 @@ function HealBot_Share_LoadSpells(sIn)
     HealBot_Options_SaveProfile()
     HealBot_Timers_InitExtraOptions()
     HealBot_Options_ComboClass_Text()
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.2)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs")
 end
 
 function HealBot_Share_ImportSpells_OnClick()

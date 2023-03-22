@@ -234,7 +234,7 @@ function HealBot_Tooltip_Requests(guid, buff, text, r, g, b)
     else
         tipsRequests[guid]=nil
     end
-    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+    if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
 end
 
 function HealBot_Tooltip_RequestsClear()
@@ -251,7 +251,7 @@ function HealBot_Tooltip_AuraWatch(guid, buff, r, g, b)
     else
         tipsAuraWatch[guid]=nil
     end
-    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+    if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
 end
 
 function HealBot_Tooltip_BuffWatch(guid, buff, r, g, b)
@@ -272,7 +272,7 @@ function HealBot_Tooltip_HealthWatch(guid, buff, r, g, b)
     else
         tipsHealthWatch[guid]=nil
     end
-    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+    if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
 end
 
 function HealBot_Tooltip_HealthWatchClear()
@@ -289,7 +289,7 @@ function HealBot_Tooltip_ManaWatch(guid, buff, r, g, b)
     else
         tipsManaWatch[guid]=nil
     end
-    if HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+    if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
 end
 
 function HealBot_Tooltip_ManaWatchClear()
@@ -424,13 +424,13 @@ function HealBot_ToolTip_SetTooltipPos(frame)
         elseif Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin] then
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
             hbTip:SetPoint(Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
-                                     "WorldFrame",
+                                     "UIParent",
                                      Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORPOINT"],
                                      Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORX"],
                                      Healbot_Config_Skins.ToolTip[Healbot_Config_Skins.Current_Skin]["ANCHORY"])
         else
             hbTip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
-            hbTip:SetPoint("BOTTOMRIGHT","WorldFrame","BOTTOMRIGHT",-275,175);
+            hbTip:SetPoint("BOTTOMRIGHT","UIParent","BOTTOMRIGHT",-275,175);
         end
     else
         hbTip:SetOwner(hbtPosFrm, "ANCHOR_NONE")
@@ -743,7 +743,7 @@ function HealBot_Action_DoRefreshTooltip()
                             break
                         end
                     end
-                    for i = 59,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][2]["MAXDICONS"]+58 do
+                    for i = 56,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][2]["MAXDICONS"]+55 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then
@@ -753,7 +753,7 @@ function HealBot_Action_DoRefreshTooltip()
                             break
                         end
                     end
-                    for i = 63,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][3]["MAXDICONS"]+62 do
+                    for i = 58,Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][xButton.frame][3]["MAXDICONS"]+57 do
                         if UnitDebuffIcons[i].current then
                             ttName=HealBot_Aura_ReturnDebuffdetailsname(UnitDebuffIcons[i].spellId)
                             if ttName then

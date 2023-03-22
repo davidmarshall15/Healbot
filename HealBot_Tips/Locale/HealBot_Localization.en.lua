@@ -17,7 +17,7 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips1="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will\n".."|cff77c8ff".."change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."and show up in the tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes"
     local hbSpellsTips2="\n--\n".."|cff77c8ff".."TIP: With the current modifier keys\n".."|cff77c8ff".."set spells with the same range as Left click.\n"
     local hbSpellsTips3="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: When using the Global profile:\n".._G["GREEN_FONT_COLOR_CODE"].."- Macros, Items, Commands and Emotes are saved for all characters.\n".._G["GREEN_FONT_COLOR_CODE"].."- Spells are saved for all characters of the same class."
-    local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Frame glow lines and Frame glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
+    local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Bar glow lines and Bar glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
     local hbSpellsTips5="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are available under the Custom "..HEALBOT_CUSTOM_CATEGORY.."."
     local hbSpellsTips6="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Automatic buffs only show an icon."
     HEALBOT_OPTIONS_HELP_TITLES={
@@ -138,6 +138,7 @@ function HealBot_Lang_Options_enALL()
                                  ["SFOFFSETV"]=HEALBOT_OPTIONS_STICKFRAMEOFFSETV,
                                  ["FRAMEBACKCOL"]="Frame Background",
                                  ["FRAMEBORDERCOL"]="Frame Border",
+                                 ["FRAMEEDGEPAD"]=HEALBOT_OPTION_FRAMEPADDING,
                         -- Skins Frames Heal Groups tab
                                  ["SELECTFRAMEFORGROUP"]=HEALBOT_OPTIONS_FRAME,
                                  ["SELECTFRAMEFORGROUPVEHICLE"]=HEALBOT_OPTIONS_FRAME,
@@ -736,7 +737,7 @@ function HealBot_Lang_Options_enALL()
                                ["FRAMEALIAS"]="Give the frame a meaningful alias.\nAliases are shown on the Heal Groups tab",
                                ["FRAMELOCKED"]="Lock the frame at the current position.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: If the frame is locked and stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."the frame will remain stuck and cannot be unstuck.\n--\n".."|cff77c8ff".."Tip: In Test mode the frames are always unlocked \n|cff77c8ffand the spells unregistered on the bars.\n--\n|cff77c8ffUse test mode to easily move the frames.",
                                ["FRAMEAUTOSHOW"]="Hide the frame when out of combat and\nnone of the bars are in an enabled state.",
-                               ["FRAMEGLOWSIZE"]="When bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s use Frame Glow Lines or Frame Glow Stars\nUse this option to set the size of the effect.",
+                               ["FRAMEGLOWSIZE"]="When bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s use Bar glow lines or Bar glow stars\nUse this option to set the size of the effect.",
                                ["FRAMEANCHOR"]="The position of the frame anchor relative to the screen.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: When the frame is stuck to another frame\n".._G["YELLOW_FONT_COLOR_CODE"].."this setting is automatically updated\n".._G["YELLOW_FONT_COLOR_CODE"].."and used to store the frames location.",
                                ["BARANCHOR"]="The position of the bars anchor relative to the frame.",
                                ["BARGROWDIRECTION"]="The direction the bars grow away from the bars anchor.",
@@ -747,6 +748,7 @@ function HealBot_Lang_Options_enALL()
                                ["FRAMEBACKCOL"]="Set the background col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the frame.",
                                ["FRAMEBORDERCOL"]="Set the border for the frame.",
                                ["TOOLTIPPOSITION"]="The location of the tooltip relative to the frame.",
+                               ["FRAMEEDGEPAD"]="Pad the edges of the frame.",
                         -- Skins Frames Heal Groups tab
                                ["SELECTFRAMEFORGROUP"]="Select a frame for the group.",
                                ["SELECTFRAMEFORGROUPVEHICLE"]="Select a frame for the group.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Using the Vehicle frame is more efficient.",

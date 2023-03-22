@@ -145,7 +145,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_UNITINCOMBAT02          = "Show enemy frame"
     HEALBOT_OPTIONS_UNITINCOMBAT03          = "Lockdown HealBot"
     HEALBOT_OPTIONS_AUTOSHOW                = "Close automatically";
-    HEALBOT_OPTIONS_FRAMEGLOWSIZE           = "Frame glow size";
+    HEALBOT_OPTIONS_FRAMEGLOWSIZE           = "Bar glow size";
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
     HEALBOT_OPTIONS_HIDEUNLOCKEDTAG         = "Hide unlocked tag"
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
@@ -763,6 +763,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_ON                         = "On";
     HEALBOT_WORD_ONWITHOUTSOUND             = "On without sound";
     HEALBOT_WORD_ONWITHSOUND                = "On with sound";
+    HEALBOT_OPTION_FRAMEPADDING         = "Frame padding"
 
     HEALBOT_OPTIONS_TAB_CHAT                = "Chat"
     HEALBOT_OPTIONS_TAB_HEADERS             = "Headers"
@@ -1046,8 +1047,8 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEALTHBARCOL_TEXT          = "Health bar"
     HEALBOT_SKIN_BORDER_HAZARD              = "Border hazard"
     HEALBOT_SKIN_BORDER_HAZARDU             = "Border Hazard"
-    HEALBOT_SKIN_FRAME_GLOW                 = "Frame glow lines"
-    HEALBOT_SKIN_FRAME_GLOWSTARS            = "Frame glow stars"
+    HEALBOT_SKIN_FRAME_GLOW                 = "Bar glow lines"
+    HEALBOT_SKIN_FRAME_GLOWSTARS            = "Bar glow stars"
     HEALBOT_SKIN_FRAME_GLOWBLIZZ            = "Alt Blizzard glow"
     HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
