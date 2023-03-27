@@ -878,10 +878,10 @@ local HealBot_setTestCols={}
 local HealBot_setTestBars=false
 function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBarsActive) do
-        for id=1,9 do
+        for id=1,12 do
             HealBot_Action_ClearTestIcon(b, id)
         end
-        for id=51,59 do
+        for id=51,60 do
             HealBot_Action_ClearTestIcon(b, id)
         end
         HealBot_Action_DeleterCallsUnit(b.unit)

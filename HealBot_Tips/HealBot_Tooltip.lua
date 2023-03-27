@@ -339,7 +339,7 @@ function HealBot_ToolTip_ShowHoT(button)
         hbHoTline1=true
         UnitBuffIcons=HealBot_Aura_ReturnHoTdetails(button.id)
         if UnitBuffIcons then
-            for i = 1,10 do
+            for i = 1,12 do
                 if UnitBuffIcons[i].current and UnitBuffIcons[i].unitCaster and UnitBuffIcons[i].spellId>0 then
                     ttCaster=UnitName(UnitBuffIcons[i].unitCaster)
                     ttName=HealBot_Aura_ReturnHoTdetailsname(UnitBuffIcons[i].spellId)
