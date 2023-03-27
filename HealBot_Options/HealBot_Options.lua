@@ -19794,7 +19794,7 @@ function HealBot_Options_SkinsFramesIconsBuffsGeneralTab(tab)
         HealBot_BarButtonBuffIconHOffset:SetValue(Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][HealBot_Options_luVars["BuffIconSet"]]["BHOFFSET"] or 0)
         HealBot_Options_SetText(HealBot_BarButtonBuffIconHOffset,HEALBOT_OPTIONS_TEXTHOROFFSET..": "..Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][HealBot_Options_luVars["BuffIconSet"]]["BHOFFSET"])
         if HealBot_Options_luVars["BuffIconSet"]==1 then
-            HealBot_Options_val_OnLoad(HealBot_BarButtonMaxBuffIcons,HEALBOT_OPTIONS_MAXICONS,0,6,1,2)
+            HealBot_Options_val_OnLoad(HealBot_BarButtonMaxBuffIcons,HEALBOT_OPTIONS_MAXICONS,0,8,1,2)
         else
             HealBot_Options_val_OnLoad(HealBot_BarButtonMaxBuffIcons,HEALBOT_OPTIONS_MAXICONS,0,2,1,1)
         end
