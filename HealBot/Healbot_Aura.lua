@@ -946,7 +946,7 @@ function HealBot_Aura_SortDebuffIcons(button)
             button.icon.debuff.count[2]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"]
         end
         for j=1, button.icon.debuff.count[2], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, 55+j, debuffAuraCache[debuffSort[2][j]]["spellId"], debuffSort[2][j])
+            HealBot_Aura_CacheDebuffIcon(button, 56+j, debuffAuraCache[debuffSort[2][j]]["spellId"], debuffSort[2][j])
         end
     end
     button.icon.debuff.count[3]=#debuffSort[3]
@@ -956,7 +956,7 @@ function HealBot_Aura_SortDebuffIcons(button)
             button.icon.debuff.count[3]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"]
         end
         for j=1, button.icon.debuff.count[3], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, 57+j, debuffAuraCache[debuffSort[3][j]]["spellId"], debuffSort[3][j])
+            HealBot_Aura_CacheDebuffIcon(button, 58+j, debuffAuraCache[debuffSort[3][j]]["spellId"], debuffSort[3][j])
         end
     end
 end
