@@ -396,6 +396,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ICONOPTREADYCHECK       = "State icon options";
     HEALBOT_OPTIONS_ICONOPTOORARROW         = "Out of Range Arrow icon options";
     HEALBOT_OPTIONS_ICONOPTOORARROWBUTTON   = "OOR Arrow";
+    HEALBOT_OPTIONS_NAMEROLELABELTEXT       = "Role label text";
     HEALBOT_OPTIONS_STATEOPTTEXT            = "State text options";
     HEALBOT_OPTIONS_NAMEOPTTEXT             = "Name text options";
     HEALBOT_OPTIONS_HEALTHOPTTEXT           = "Health text options";

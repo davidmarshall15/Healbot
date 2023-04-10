@@ -259,6 +259,7 @@ end
 
 function HealBot_Timers_LastUpdate()
     HealBot_setLuVars("DoSendGuildVersion", true)
+    HealBot_Timers_Set("CHAT","SetChat")
     HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.5)
     HealBot_Timers_Set("LAST","DisableCheck",1)
     HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",1)
@@ -664,6 +665,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
                         ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
                         ["TalentsLookupImproved"]=HealBot_Timers_TalentsLookupImproved,
+                        ["UpdateFramesOpacity"]=HealBot_Action_UpdateFramesOpacity,
                     },
                    }
 

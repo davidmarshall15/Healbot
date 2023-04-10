@@ -12725,6 +12725,15 @@
                                   </Anchor>
                                 </Anchors>
                               </FontString>
+                              <FontString name="HealBot_Options_Skins_NameTextRoleLabelTxt" text="HEALBOT_OPTIONS_NAMEROLELABELTEXT" inherits="GameFontNormal">
+                                <Anchors>
+                                  <Anchor point="TOPRIGHT">
+                                    <Offset>
+                                      <AbsDimension x="-55" y="-35" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                              </FontString>
                             </Layer>
                           </Layers>
                             <Frames>
@@ -12732,7 +12741,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="95" y="-40" />
+                                      <AbsDimension x="40" y="-40" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12760,7 +12769,7 @@
                                 <Anchors>
                                   <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowNameOnBar" relativePoint="TOPLEFT">
                                     <Offset>
-                                      <AbsDimension x="230" y="0"/>
+                                      <AbsDimension x="200" y="0"/>
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12784,11 +12793,62 @@
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTSHOWROLE",false)</OnLeave>
                                 </Scripts>
                               </CheckButton>
+                              <EditBox name="HealBot_Options_RoleTankTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOP">
+                                    <Offset>
+                                      <AbsDimension x="200" y="-70" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_RoleTankTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
+                              <EditBox name="HealBot_Options_RoleHealerTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOP">
+                                    <Offset>
+                                      <AbsDimension x="200" y="-120" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_RoleHealerTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
+                              <EditBox name="HealBot_Options_RoleDamagerTag" inherits="HealBot_Options_EditBoxTemplate">
+                                <Size>
+                                  <AbsDimension x="120" y="20"/>
+                                </Size>
+                                <Anchors>
+                                  <Anchor point="TOP">
+                                    <Offset>
+                                      <AbsDimension x="200" y="-170" />
+                                    </Offset>
+                                  </Anchor>
+                                </Anchors>
+                                <Scripts>
+                                  <OnTextChanged>HealBot_Options_RoleDamagerTag_OnTextChanged(self)</OnTextChanged>
+                                  <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",true)</OnEnter>
+                                  <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTROLELABEL",false)</OnLeave>
+                                </Scripts>
+                              </EditBox>
                               <Frame name="HealBot_Options_AggroTextIndicator" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
                                   <Anchor point="TOP">
                                     <Offset>
-                                      <AbsDimension x="40" y="-110" />
+                                      <AbsDimension x="0" y="-110" />
                                     </Offset>
                                   </Anchor>
                                 </Anchors>
@@ -12806,7 +12866,7 @@
                                   </Layer>
                                 </Layers>
                                 <Scripts>
-                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 158)</OnLoad>
+                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                                   <OnEnter>HealBot_Options_Show_Help("HEALBARSEXTRAAGGRSHOWIND",true)</OnEnter>
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSEXTRAAGGRSHOWIND",false)</OnLeave>
                                 </Scripts>
@@ -12833,7 +12893,7 @@
                                   </Layer>
                                 </Layers>
                                 <Scripts>
-                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 158)</OnLoad>
+                                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
                                   <OnEnter>HealBot_Options_Show_Help("HEALBARSTXTNAMEANCHOR",true)</OnEnter>
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSTXTNAMEANCHOR",false)</OnLeave>
                                 </Scripts>

@@ -1164,11 +1164,11 @@ function HealBot_Text_setNameText(button)
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
                 vSetNameTextRole=HealBot_Panel_UnitRole(button.unit)
                 if vSetNameTextRole=="DAMAGER" then
-                    vSetNameTextClass=HEALBOT_WORD_DAMAGER
+                    vSetNameTextClass=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["ROLEDPS"] or HEALBOT_WORD_DAMAGER
                 elseif vSetNameTextRole=="HEALER" then
-                    vSetNameTextClass=HEALBOT_WORD_HEALER
+                    vSetNameTextClass=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["ROLEHEAL"] or HEALBOT_WORD_HEALER
                 elseif vSetNameTextRole=="TANK" then
-                    vSetNameTextClass=HEALBOT_WORD_TANK
+                    vSetNameTextClass=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["ROLETANK"] or HEALBOT_WORD_TANK
                 end
             end
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then

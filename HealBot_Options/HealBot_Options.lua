@@ -11250,6 +11250,9 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.BarText[s][frame]["MAXCHARS"]=Healbot_Config_Skins.BarText[s][f]["MAXCHARS"]
         Healbot_Config_Skins.BarText[s][frame]["OFFSET"]=Healbot_Config_Skins.BarText[s][f]["OFFSET"]
         Healbot_Config_Skins.BarText[s][frame]["OFFSET2"]=Healbot_Config_Skins.BarText[s][f]["OFFSET2"]
+        Healbot_Config_Skins.BarText[s][frame]["ROLETANK"]=Healbot_Config_Skins.BarText[s][f]["ROLETANK"]
+        Healbot_Config_Skins.BarText[s][frame]["ROLEHEAL"]=Healbot_Config_Skins.BarText[s][f]["ROLEHEAL"]
+        Healbot_Config_Skins.BarText[s][frame]["ROLEDPS"]=Healbot_Config_Skins.BarText[s][f]["ROLEDPS"]
     elseif tab==11 then
         Healbot_Config_Skins.BarTextCol[s][frame]["HCR"]=Healbot_Config_Skins.BarTextCol[s][f]["HCR"]
         Healbot_Config_Skins.BarTextCol[s][frame]["HCG"]=Healbot_Config_Skins.BarTextCol[s][f]["HCG"]
@@ -11438,6 +11441,8 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.Indicators[s][frame]["ASIZE"]=Healbot_Config_Skins.Indicators[s][f]["ASIZE"]
             Healbot_Config_Skins.Indicators[s][frame]["ASPACE"]=Healbot_Config_Skins.Indicators[s][f]["ASPACE"]
         elseif tab==18 then
+            Healbot_Config_Skins.HealBar[s][frame]["LOWMANA"]=Healbot_Config_Skins.HealBar[s][f]["LOWMANA"]
+            Healbot_Config_Skins.HealBar[s][frame]["LOWMANACOMBAT"]=Healbot_Config_Skins.HealBar[s][f]["LOWMANACOMBAT"]
             Healbot_Config_Skins.Indicators[s][frame]["MCOL"]=Healbot_Config_Skins.Indicators[s][f]["MCOL"]
             Healbot_Config_Skins.Indicators[s][frame]["MANCHOR"]=Healbot_Config_Skins.Indicators[s][f]["MANCHOR"]
             Healbot_Config_Skins.Indicators[s][frame]["MVOFF"]=Healbot_Config_Skins.Indicators[s][f]["MVOFF"]
@@ -13103,7 +13108,8 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_Set("SKINS","EmergHealthCol")
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
-                    HealBot_Timers_Set("LAST","ShowFramesOnSkinChange")
+                    HealBot_Timers_Set("LAST","ShowFramesOnSkinChange",0.1)
+                    HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.2)
                     HealBot_Skins_ResetSkin("init")
                     if not ddRefresh then
                         HealBot_Timers_Set("AURA","ResetClassIconTexture")
@@ -17274,6 +17280,22 @@ function HealBot_Options_BuffExtraItemOnTextChanged(self, id)
     end
 end
 
+function HealBot_Options_RoleTankTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLETANK"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextUpdateNames")
+end
+
+function HealBot_Options_RoleHealerTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEHEAL"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextUpdateNames")
+end
+
+
+function HealBot_Options_RoleDamagerTag_OnTextChanged(self)
+    Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEDPS"] = self:GetText()
+    HealBot_Timers_Set("SKINS","TextUpdateNames")
+end
+
 function HealBot_Options_DisconnectedTag_OnTextChanged(self)
     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TAGDC"] = self:GetText()
     HealBot_Timers_Set("SKINS","TextUpdateState")
@@ -18022,6 +18044,9 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetText(HEALBOT_OPTIONS_TAB_AGGRO)
         g=_G["HealBot_Options_Skins_NameTextOptTxt"]
         g:SetText(HEALBOT_OPTIONS_NAMEOPTTEXT)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Skins_NameTextRoleLabelTxt"]
+        g:SetText(HEALBOT_OPTIONS_NAMEROLELABELTEXT)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_StateTextOptTxt"]
         g:SetText(HEALBOT_OPTIONS_STATEOPTTEXT)
@@ -19378,6 +19403,12 @@ function HealBot_Options_SkinsFramesTextNameTextTab(tab)
         HealBot_Options_TextOutLine:SetValue(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
         HealBot_Options_SetText(HealBot_Options_TextOutLine, HEALBOT_OPTIONS_SKINFOUTLINE .. ": ".. HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]])
         HealBot_Options_SetLabel("HealBot_BarNameTextPositiontxt",HEALBOT_OPTIONS_TEXTALIGNMENT)
+        HealBot_Options_RoleTankTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLETANK"] or HEALBOT_WORD_TANK)
+        HealBot_Options_RoleHealerTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEHEAL"] or HEALBOT_WORD_HEALER)
+        HealBot_Options_RoleDamagerTag:SetText(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ROLEDPS"] or HEALBOT_WORD_DAMAGER)
+        HealBot_Options_SetText(HealBot_Options_RoleTankTag,HEALBOT_WORD_TANK)
+        HealBot_Options_SetText(HealBot_Options_RoleHealerTag,HEALBOT_WORD_HEALER)
+        HealBot_Options_SetText(HealBot_Options_RoleDamagerTag,HEALBOT_WORD_DAMAGER)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
