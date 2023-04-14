@@ -30,6 +30,7 @@ local HealBot_Action_Vehicle_Button={}
 local HealBot_Action_Enemy_Button={}
 local HealBot_Action_Extra_Button={}
 local HealBot_Action_Unit_Button={}
+local hbUpdateFramesOpacity={}
 local _
 local HealBot_Action_AuxAssigns={}
 HealBot_Action_AuxAssigns["NameOverlayHighlight"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
@@ -2529,7 +2530,6 @@ function HealBot_Action_InitFrames()
             HealBot_Panel_ParentFrameID(x)
         end
     end
-
     HealBot_Action_luVars["FrameInitDone"]=true
 end
 
@@ -2540,9 +2540,31 @@ function HealBot_Action_ShowPanel(frame)
             if HealBot_AutoCloseFrame[frame]==3 then
                 PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
             end
+            if hbUpdateFramesOpacity[frame] then
+                hbUpdateFramesOpacity[frame]=false
+                HealBot_Action_UpdateFrameOpacity(frame)
+            end
         end
     end
     --HealBot_setCall("HealBot_Action_ShowPanel"..frame)
+end
+
+function HealBot_Action_UpdateFrameOpacity(frame)
+    HealBot_Action_SetFrameColours(grpFrame[frame])
+    if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] then
+        HealBot_Action_UpdateFrameHeaderOpacity(frame)
+        HealBot_Action_SetFrameTextColours(frame)
+    end
+end
+
+function HealBot_Action_UpdateFramesOpacity()
+    for x=1,10 do
+        if grpFrame[x]:IsVisible() then
+            HealBot_Action_UpdateFrameOpacity(x)
+        else
+            hbUpdateFramesOpacity[x]=true
+        end
+    end
 end
 
 function HealBot_Action_FrameIsVisible(frame)
@@ -5810,18 +5832,6 @@ function HealBot_Action_ResetGlobalDimming()
         HealBot_Action_luVars["GlobalDimmingEnabled"]=false
     end
     HealBot_Action_ResetOpacity()
-end
-
-function HealBot_Action_UpdateFramesOpacity()
-    for x=1,10 do
-        if grpFrame[x]:IsVisible() then
-            HealBot_Action_SetFrameColours(grpFrame[x])
-            if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][x]["SHOW"] then
-                HealBot_Action_UpdateFrameHeaderOpacity(x)
-                HealBot_Action_SetFrameTextColours(x)
-            end
-        end
-    end
 end
 
 function HealBot_Action_UpdateFrameHeaderOpacity(f)

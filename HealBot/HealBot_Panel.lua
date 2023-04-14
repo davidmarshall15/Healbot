@@ -80,6 +80,9 @@ local HealBot_Action_HealButtons = {};
 local hbPanelShowhbFocus=nil
 local hbPanelNoCols={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
 local hbPanelNoRows={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
+local HealBot_noBars=100
+local HealBot_setTestCols={}
+local HealBot_setTestBars=false
 local HealBot_Panel_luVars={}
 HealBot_Panel_luVars["SelfPets"]=false
 HealBot_Panel_luVars["OptionsShown"]=false
@@ -631,9 +634,9 @@ function HealBot_Panel_CreateHeader(hbCurFrame)
     if freeId then 
         HealBot_ActiveHeaders[freeId]=true 
         local hn="HealBot_Action_Header"..freeId
-        local hp=_G["f"..hbCurFrame.."_HealBot_Action"]
         local hhb=_G[hn]
         if not hhb then 
+            local hp=_G["f"..hbCurFrame.."_HealBot_Action"]
             hhb=CreateFrame("Button", hn, hp, "HealingButtonTemplate3") 
             hhb.id=freeId
         end
@@ -755,31 +758,31 @@ function HealBot_Panel_PositionButton(button,xHeader,relButton,newColumn,preComb
         if not vPosParentHF then
             vPosParentHF=HealBot_Panel_CreateHeader(button.frame)
             HealBot_Header_Frames[xHeader]=vPosParentHF
+            vPosParentHF.back=_G[vPosParentHF:GetName().."Bar5"]
+            vPosParentHF.bar=_G[vPosParentHF:GetName().."Bar"]
+            vPosParentHF.bar.txt=_G[vPosParentHF.bar:GetName().."_text"]
+            vPosParentHF.bar.txt2=_G[vPosParentHF.bar:GetName().."_text2"]
         end
-        local backFrame=_G[vPosParentHF:GetName().."Bar5"]
-        vPosParentHF.bar=_G[vPosParentHF:GetName().."Bar"]
-        vPosParentHF.bar.txt=_G[vPosParentHF.bar:GetName().."_text"]
-        vPosParentHF.bar.txt2=_G[vPosParentHF.bar:GetName().."_text2"]
-        if backFrame~=relButton then
-            if vPosParentHF.frame~=button.frame then
-                local vPosFrameHF=_G["f"..button.frame.."_HealBot_Action"]
-                vPosParentHF:ClearAllPoints()
-                vPosParentHF:SetParent(vPosFrameHF)
-                vPosParentHF.frame=button.frame
-                HealBot_Skins_ResetSkin("header",vPosParentHF)
-                if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["GROW"]==1 then
-                    backFrame:SetHeight(backBarsSize[button.frame]["HEIGHT"])
-                else
-                    backFrame:SetWidth(backBarsSize[button.frame]["WIDTH"])
-                end
-            end
-            HealBot_Track_Headers[xHeader]=true
-            backFrame:ClearAllPoints()
-            HealBot_Panel_AnchorButton(button, backFrame, relButton, newColumn)
-            vPosParentHF.bar.txt:SetText(xHeader);
-            vPosParentHF:Show();
+        if vPosParentHF.frame~=button.frame then
+            vPosParentHF.parent=_G["f"..button.frame.."_HealBot_Action"]
+            vPosParentHF:ClearAllPoints()
+            vPosParentHF:SetParent(vPosParentHF.parent)
+            vPosParentHF.frame=button.frame
+            HealBot_Skins_ResetSkin("header",vPosParentHF)
+        elseif HealBot_setTestBars then
+            HealBot_Skins_ResetSkin("header",vPosParentHF)
         end
-        return backFrame
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][button.frame]["GROW"]==1 then
+            vPosParentHF.back:SetHeight(backBarsSize[button.frame]["HEIGHT"])
+        else
+            vPosParentHF.back:SetWidth(backBarsSize[button.frame]["WIDTH"])
+        end
+        HealBot_Track_Headers[xHeader]=true
+        vPosParentHF.back:ClearAllPoints()
+        HealBot_Panel_AnchorButton(button, vPosParentHF.back, relButton, newColumn)
+        vPosParentHF.bar.txt:SetText(xHeader);
+        vPosParentHF:Show();
+        return vPosParentHF.back
     else
         HealBot_Panel_AnchorButton(button, button.gref["Back"], relButton, newColumn)
         
@@ -873,9 +876,6 @@ function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
     HealBot_Action_setPoint(hbCurFrame)
 end
 
-local HealBot_noBars=100
-local HealBot_setTestCols={}
-local HealBot_setTestBars=false
 function HealBot_Panel_TestBarsOff()
     for x,b in pairs(HealBot_TestBarsActive) do
         for id=1,12 do

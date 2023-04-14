@@ -2801,11 +2801,11 @@ function HealBot_Options_ShowHeaders_OnClick(self)
 end
  
 function HealBot_Options_PlayBuffSound_OnClick(self)
-    PlaySoundFile(LSM:Fetch('sound',sounds[HealBot_Options_BuffWarningSound:GetValue()]));    
+    HealBot_PlaySound(sounds[HealBot_Options_BuffWarningSound:GetValue()])  
 end
     
 function HealBot_Options_PlaySound_OnClick(self)
-    PlaySoundFile(LSM:Fetch('sound',sounds[HealBot_Options_WarningSound:GetValue()]));    
+    HealBot_PlaySound(sounds[HealBot_Options_WarningSound:GetValue()])
 end
     
 function HealBot_Options_WarningSound_OnValueChanged(self)
@@ -14556,11 +14556,15 @@ function HealBot_Options_DeleteCDebuff(dId, dName)
     HealBot_Globals.FilterCustomDebuff[dId]=nil
     HealBot_Globals.IgnoreCustomDebuff[dId]=nil
     HealBot_Globals.CustomDebuffIDMethod[dId]=nil
+    HealBot_Globals.HealBot_Custom_Debuffs_IconSet[dId]=nil
+    HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[dId]=nil
     HealBot_Globals.HealBot_Custom_Debuffs[dName]=nil;
     HealBot_Globals.CDCBarColour[dName]=nil
     HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dName]=nil
     HealBot_Globals.FilterCustomDebuff[dName]=nil
     HealBot_Globals.IgnoreCustomDebuff[dName]=nil
+    HealBot_Globals.HealBot_Custom_Debuffs_IconSet[dName]=nil
+    HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[dName]=nil
     HealBot_AddDebug("Delete debuff id="..dId.." name="..(dName or "nil"), "Aura", true)
     local sName=HealBot_Options_SpellGetName(sId)
     if sName and sName~=dName then 
@@ -14569,6 +14573,8 @@ function HealBot_Options_DeleteCDebuff(dId, dName)
         HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[sName]=nil
         HealBot_Globals.FilterCustomDebuff[sName]=nil
         HealBot_Globals.IgnoreCustomDebuff[sName]=nil
+        HealBot_Globals.HealBot_Custom_Debuffs_IconSet[sName]=nil
+        HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[sName]=nil
     end
     HealBot_Options_setDebuffPriority()
     HealBot_SetCDCBarColours();
@@ -14593,12 +14599,18 @@ function HealBot_Options_DeleteBuffHoT(classTr, sId, bName)
     HealBot_Globals.CustomBuffBarColour[bName]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bName]=nil
+    HealBot_Globals.HealBot_Custom_Buffs_IconSet[sId]=nil
+    HealBot_Globals.HealBot_Custom_Buffs_IconSet[bName]=nil
+    HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sId]=nil
+    HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bName]=nil
     local sName=HealBot_Options_SpellGetName(sId)
     if sName and sName~=bName then 
         HealBot_Globals.IgnoreCustomBuff[sName]=nil
         HealBot_Globals.HealBot_Custom_Buffs[sName]=nil
         HealBot_Globals.CustomBuffBarColour[sName]=nil
         HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]=nil
+        HealBot_Globals.HealBot_Custom_Buffs_IconSet[sName]=nil
+        HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sName]=nil
     end
     HealBot_Timers_Set("AURA","BuffResetList")
     HealBot_Timers_Set("AURA","ConfigClassHoT")

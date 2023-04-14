@@ -1192,7 +1192,7 @@ function HealBot_Aura_CheckCurBuff()
     if ciCustomBuff or HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName] then
         if not HealBot_AuraBuffCache[uaSpellId] or HealBot_AuraBuffCache[uaSpellId].reset then
             if not HealBot_AuraBuffCache[uaSpellId] then HealBot_AuraBuffCache[uaSpellId]={} end
-            HealBot_AuraBuffCache[uaSpellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaName] or HealBot_Globals.HealBot_Custom_Buffs[uaSpellId] or 15
+            HealBot_AuraBuffCache[uaSpellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaName] or HealBot_Globals.HealBot_Custom_Buffs[uaSpellId] or 20
             HealBot_AuraBuffCache[uaSpellId]["texture"]=uaTexture
             HealBot_AuraBuffCache[uaSpellId]["name"]=uaName
             HealBot_AuraBuffCache[uaSpellId]["type"]=uaDebuffType
@@ -1963,14 +1963,14 @@ function HealBot_Aura_CheckUnitDebuff(button)
             end
         end
     end
-    if uaSpellId==32407 or uaName=="Strange Aura" then
+--    if uaSpellId==32407 or uaName=="Strange Aura" then
     --    uaDebuffType=HEALBOT_DISEASE_en
     --    uaDebuffType=HEALBOT_MAGIC_en
     --    uaDebuffType=HEALBOT_CURSE_en
     --    uaDebuffType=HEALBOT_POISON_en
     --    HealBot_Aura_CanDispell[uaSpellId]=true
-    --    HealBot_AddDebug("Strange Aura - IconSet="..HealBot_Aura_IconSet[uaSpellId])
-    end
+    --    HealBot_Aura_IconSet[uaSpellId]=3
+--    end
     if uaUnitCaster then
         if UnitIsUnit(uaUnitCaster,"player") then
             uaUnitCasterIsPlayer=true

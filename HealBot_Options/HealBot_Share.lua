@@ -540,6 +540,8 @@ function HealBot_Share_LoadBuffs(sIn)
                                    ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["EVOK"]={}, ["ALL"]={} }
         HealBot_Globals.HealBot_Custom_Buffs={}
         HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
+        HealBot_Globals.HealBot_Custom_Buffs_IconSet={}
+        HealBot_Globals.HealBot_Custom_Buffs_IconGlow={}
         local r=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["R"]
         local g=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["G"]
         local b=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["B"]
@@ -683,6 +685,8 @@ function HealBot_Share_LoadDebuffs(sIn)
         HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
         HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
         HealBot_Globals.FilterCustomDebuff={}
+        HealBot_Globals.HealBot_Custom_Debuffs_IconSet={}
+        HealBot_Globals.HealBot_Custom_Debuffs_IconGlow={}
         HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol={}
         HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]=4
         local r=HealBot_Globals.CDCBarColour[customDebuffPriority]["R"]
