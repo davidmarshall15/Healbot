@@ -2453,26 +2453,14 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["UNIT_FLAGS"]=HealBot_OnEvent_UnitFlagsChanged,
                    }
 
-local hbEnemyEventFuncs={["UNIT_AURA"]=HealBot_EnemyCheck_UnitAura,
-                         ["UNIT_HEALTH_FREQUENT"]=HealBot_OnEvent_EnemyUnitHealth,
-                         ["UNIT_HEALTH"]=HealBot_OnEvent_EnemyUnitHealth,
-                         ["UNIT_MAXHEALTH"]=HealBot_OnEvent_EnemyUnitHealth,
-                         ["UNIT_HEAL_PREDICTION"]=HealBot_HealsInEnemyUpdate,
-                         ["UNIT_ABSORB_AMOUNT_CHANGED"]=HealBot_AbsorbsEnemyUpdate,
-                         ["UNIT_POWER_UPDATE"]=HealBot_OnEvent_UnitMana,
-                         ["UNIT_MAXPOWER"]=HealBot_OnEvent_UnitMana,
-                         ["UNIT_SPELLCAST_START"]=HealBot_OnEvent_UnitSpellCastStart,
-                         ["UNIT_SPELLCAST_CHANNEL_START"]=HealBot_OnEvent_UnitSpellChanStart,
-                         ["UNIT_SPELLCAST_FAILED"]=HealBot_OnEvent_UnitSpellCastFailed,
-                         ["UNIT_SPELLCAST_INTERRUPTED"]=HealBot_OnEvent_UnitSpellCastFailed,
-                         ["UNIT_SPELLCAST_CHANNEL_STOP"]=HealBot_OnEvent_UnitSpellCastStop,
-                         ["UNIT_SPELLCAST_STOP"]=HealBot_OnEvent_UnitSpellCastStop,
-                         ["UNIT_PHASE"]=HealBot_OnEvent_UnitPhase,
+local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_OnEvent_UnitPhase,
                          ["UNIT_NAME_UPDATE"]=HealBot_CheckUpdateUnitGUIDChange,
-                         ["UNIT_DISPLAYPOWER"]=HealBot_OnEvent_UnitManaUpdate,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                    }
+                   
 function HealBot_Action_InitFrames()
+    local StickIndPoints={[1]="BOTTOMLEFT",[2]="BOTTOM",[3]="BOTTOMRIGHT",[4]="TOPLEFT",[5]="LEFT",[6]="BOTTOMLEFT",[7]="TOPRIGHT",[8]="TOP",[9]="TOPLEFT",[10]="BOTTOMRIGHT",[11]="RIGHT",[12]="TOPRIGHT"}
+    local FrameStickIndPoints={[1]="TOPLEFT",[2]="TOP",[3]="TOPRIGHT",[4]="TOPRIGHT",[5]="RIGHT",[6]="BOTTOMRIGHT",[7]="BOTTOMRIGHT",[8]="BOTTOM",[9]="BOTTOMLEFT",[10]="BOTTOMLEFT",[11]="LEFT",[12]="TOPLEFT"}
     for x=1,10 do
         grpFrame[x]=_G["f"..x.."_HealBot_Action"]
         if not grpFrame[x] then
@@ -2504,8 +2492,6 @@ function HealBot_Action_InitFrames()
             grpFrameBar[x]:SetScale(barScale);
             grpFrameBar[x]:EnableMouse(false)
             grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
-            local StickIndPoints={[1]="BOTTOMLEFT",[2]="BOTTOM",[3]="BOTTOMRIGHT",[4]="TOPLEFT",[5]="LEFT",[6]="BOTTOMLEFT",[7]="TOPRIGHT",[8]="TOP",[9]="TOPLEFT",[10]="BOTTOMRIGHT",[11]="RIGHT",[12]="TOPRIGHT"}
-            local FrameStickIndPoints={[1]="TOPLEFT",[2]="TOP",[3]="TOPRIGHT",[4]="TOPRIGHT",[5]="RIGHT",[6]="BOTTOMRIGHT",[7]="BOTTOMRIGHT",[8]="BOTTOM",[9]="BOTTOMLEFT",[10]="BOTTOMLEFT",[11]="LEFT",[12]="TOPLEFT"}
             for y=1,12 do
                 if not grpFrameStickyInd[x] then grpFrameStickyInd[x]={} end
                 grpFrameStickyInd[x][y]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_StickyInd"..y, grpFrame[x], "TextStatusBar")
@@ -2527,6 +2513,7 @@ function HealBot_Action_InitFrames()
             ShowUIPanel(grpFrame[x])
             HealBot_Action_FrameSetPoint(x, grpFrame[x])
             HideUIPanel(grpFrame[x])
+            grpFrame[x].visible=false
             HealBot_Panel_ParentFrameID(x)
         end
     end
@@ -2535,8 +2522,9 @@ end
 
 function HealBot_Action_ShowPanel(frame)
     if HealBot_Config.DisabledNow==0 then
-        if not grpFrame[frame]:IsVisible() then
+        if not HealBot_Action_FrameIsVisible(frame) then
             ShowUIPanel(grpFrame[frame])
+            grpFrame[frame].visible=true
             if HealBot_AutoCloseFrame[frame]==3 then
                 PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
             end
@@ -2550,7 +2538,7 @@ function HealBot_Action_ShowPanel(frame)
 end
 
 function HealBot_Action_UpdateFrameOpacity(frame)
-    HealBot_Action_SetFrameColours(grpFrame[frame])
+    HealBot_Action_SetFrameCols(frame)
     if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] then
         HealBot_Action_UpdateFrameHeaderOpacity(frame)
         HealBot_Action_SetFrameTextColours(frame)
@@ -2559,7 +2547,7 @@ end
 
 function HealBot_Action_UpdateFramesOpacity()
     for x=1,10 do
-        if grpFrame[x]:IsVisible() then
+        if HealBot_Action_FrameIsVisible(x) then
             HealBot_Action_UpdateFrameOpacity(x)
         else
             hbUpdateFramesOpacity[x]=true
@@ -2568,16 +2556,13 @@ function HealBot_Action_UpdateFramesOpacity()
 end
 
 function HealBot_Action_FrameIsVisible(frame)
-    if grpFrame[frame] and grpFrame[frame]:IsVisible() then 
-        return true
-    else
-        return false
-    end
+    return grpFrame[frame].visible
 end
 
 function HealBot_Action_HidePanel(frame)
-    if grpFrame[frame]:IsVisible() then 
+    if HealBot_Action_FrameIsVisible(frame) then 
         HideUIPanel(grpFrame[frame])
+        grpFrame[frame].visible=false
         if HealBot_AutoCloseFrame[frame]==3 then
             PlaySound(SOUNDKIT.IG_ABILITY_CLOSE)
         end
@@ -3206,9 +3191,9 @@ function HealBot_Action_RegisterUnitEvents(button)
     button:RegisterUnitEvent("UNIT_PHASE", button.unit)
     button:RegisterUnitEvent("UNIT_NAME_UPDATE", button.unit)
     button:RegisterUnitEvent("UNIT_CLASSIFICATION_CHANGED", button.unit)
-    button:RegisterUnitEvent("PLAYER_FLAGS_CHANGED", button.unit)
-    button:RegisterUnitEvent("UNIT_FLAGS", button.unit)
     if button.frame<10 then
+        button:RegisterUnitEvent("PLAYER_FLAGS_CHANGED", button.unit)
+        button:RegisterUnitEvent("UNIT_FLAGS", button.unit)
         button:RegisterUnitEvent("UNIT_AURA", button.unit)
         button:RegisterUnitEvent("UNIT_MAXHEALTH", button.unit)
         button:RegisterUnitEvent("UNIT_POWER_UPDATE", button.unit)
@@ -3346,6 +3331,16 @@ function HealBot_Action_ResetAllButtons()
         end
     end
     HealBot_Action_luVars["resetEvents"]=false
+end
+
+function HealBot_Action_ZeroHiddenButtons()
+    if HealBot_Action_luVars["ButtonHWM"]>0 then
+        for i=1,HealBot_Action_luVars["ButtonHWM"] do
+            if HealBot_Buttons[i] and not HealBot_Buttons[i].status.active then
+                HealBot_Buttons[i].frame=0
+            end
+        end
+    end
 end
 
 function HealBot_Action_ResetSkinButton(index)
@@ -4800,6 +4795,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 hButton.indreset=true
                 hButton.auxreset=true
                 hButton.reset=true
+                HealBot_Action_UpdateBackground(hButton)
             end
             
             if not hButton.regClicks then
@@ -6370,8 +6366,8 @@ function HealBot_Action_SetFrameTextColours(hbCurFrame)
     end
 end
 
-function HealBot_Action_SetFrameCols(frameID)
-    HealBot_Action_SetFrameColours(grpFrame[frameID])
+function HealBot_Action_SetFrameCols(frame)
+    HealBot_Action_SetFrameColours(grpFrame[frame])
 end
 
 local HealBot_Action_Init={}
@@ -6382,6 +6378,8 @@ function HealBot_Action_OnShow(self)
             HealBot_Action_Init[self.id]=true
             HealBot_Action_SetAlias(self.id)
             HealBot_Action_SetAliasFontSize(self.id)
+        elseif hbUpdateFramesOpacity[frame] then
+            HealBot_Action_SetFrameColours(self)
         end
     end
 end

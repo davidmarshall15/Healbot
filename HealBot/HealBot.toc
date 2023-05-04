@@ -1,10 +1,11 @@
-## Interface: 100007
+## Interface: 100100
 ## Title: HealBot
 ## Author: Strife
 ## Notes: Add multiple frames with customisable bars for healing, decursing, buffing, ressing, range checking and aggro tracking
 ## RequiredDeps: HealBot_Options
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
-## Version: 10.0.7.3
+## Version: 10.1.0.0
+## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 HealBot.xml
 HealBot_Action.xml

@@ -1,9 +1,10 @@
-## Interface: 100007
+## Interface: 100100
 ## Title: HealBot Extra Skins
 ## Author: Strife
 ## Notes: Large store of extra skins for HealBot.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
+## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 HealBot_ExtraSkins.lua
 

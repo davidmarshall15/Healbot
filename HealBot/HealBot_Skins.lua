@@ -1473,7 +1473,7 @@ local function HealBot_Skins_Check_IconSetsText(SkinName, frame, oVar, nVar, v1,
     nVal[2]=v2 or v1
     nVal[3]=v3 or v2 or v1
     for i=1,3 do
-        if not Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar] then 
+        if Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]==nil then 
             if Healbot_Config_Skins.IconText[SkinName][frame][oVar] then
                 if type(Healbot_Config_Skins.IconText[SkinName][frame][oVar])==type(nVal[i]) then
                     Healbot_Config_Skins.IconSetsText[SkinName][frame][i][nVar]=Healbot_Config_Skins.IconText[SkinName][frame][oVar]

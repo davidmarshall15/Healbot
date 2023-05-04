@@ -498,6 +498,8 @@ function HealBot_Share_ExportBuffs(lData)
             else
                 ssStr=ssStr..","
             end
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconSet[bId] or 1).."," 
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bId] or 1).."," 
             if HealBot_Globals.IgnoreCustomBuff[bId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomBuff[bId]) do
                     ssStr=ssStr..(instName)..","
@@ -540,6 +542,7 @@ function HealBot_Share_LoadBuffs(sIn)
                                    ["WARL"]={}, ["WARR"]={}, ["DEAT"]={}, ["DEMO"]={}, ["MONK"]={}, ["EVOK"]={}, ["ALL"]={} }
         HealBot_Globals.HealBot_Custom_Buffs={}
         HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol={}
+        HealBot_Globals.CustomBuffIDMethod={}
         HealBot_Globals.HealBot_Custom_Buffs_IconSet={}
         HealBot_Globals.HealBot_Custom_Buffs_IconGlow={}
         local r=HealBot_Globals.CustomBuffBarColour[customBuffPriority]["R"]
@@ -550,7 +553,7 @@ function HealBot_Share_LoadBuffs(sIn)
     end
     for e=2,#ssTab do 
         local _,c,d = string.split("~", ssTab[e])
-        local bId,prio,filter,show,r,g,b,idMethod,tag,i1,i2,i3,i4=string.split(",", d)
+        local bId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
         if not c or not bId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Buffs", "Data corruption - ensure it is exactly as the original file")
         else
@@ -561,6 +564,8 @@ function HealBot_Share_LoadBuffs(sIn)
             g=tonumber(g)
             b=tonumber(b)
             idMethod=tonumber(idMethod) or 3
+            iconSet=tonumber(iconSet) or 1
+            iconGlow=tonumber(iconGlow) or 1
             if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Share_luVars["InMethodBuff"]<3 then
                 local bName=GetSpellInfo(bId) or bId
                 HealBot_Globals.WatchHoT[c][bId]=filter
@@ -590,6 +595,12 @@ function HealBot_Share_LoadBuffs(sIn)
                     HealBot_Globals.CustomBuffIDMethod[bId]=idMethod
                 end
                 HealBot_Globals.CustomBuffTag[bId]=tag
+                if iconSet>1 then
+                    HealBot_Globals.HealBot_Custom_Buffs_IconSet[bId]=iconSet
+                end
+                if iconGlow>1 then
+                    HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bId]=iconGlow
+                end
                 if string.len(i1 or "")>0 then 
                     if not HealBot_Globals.IgnoreCustomBuff[bId] then HealBot_Globals.IgnoreCustomBuff[bId]={} end
                     HealBot_Globals.IgnoreCustomBuff[bId][i1]=true 
@@ -610,6 +621,7 @@ function HealBot_Share_LoadBuffs(sIn)
         end
     end
     HealBot_Timers_InitExtraOptions()
+    HealBot_Timers_Set("AURA","ConfigClassHoT")
     HealBot_Timers_Set("AURA","CustomBuffListPrep")
 end
 
@@ -644,6 +656,8 @@ function HealBot_Share_ExportDebuffs(lData)
             else
                 ssStr=ssStr..","
             end
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Debuffs_IconSet[dId] or 1)..","
+            ssStr=ssStr..(HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[dId] or 1)..","
             if HealBot_Globals.IgnoreCustomDebuff[dId] then
                 for instName, _ in pairs(HealBot_Globals.IgnoreCustomDebuff[dId]) do
                     ssStr=ssStr..(instName)..","
@@ -685,6 +699,7 @@ function HealBot_Share_LoadDebuffs(sIn)
         HealBot_Globals.Custom_Debuff_Categories={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1, }
         HealBot_Globals.HealBot_Custom_Debuffs={ [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]     = 15, }
         HealBot_Globals.FilterCustomDebuff={}
+        HealBot_Globals.CustomDebuffIDMethod={}
         HealBot_Globals.HealBot_Custom_Debuffs_IconSet={}
         HealBot_Globals.HealBot_Custom_Debuffs_IconGlow={}
         HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol={}
@@ -697,7 +712,7 @@ function HealBot_Share_LoadDebuffs(sIn)
     end
     for e=2,#ssTab do 
         local _,c,d = string.split("~", ssTab[e])
-        local dId,prio,filter,show,r,g,b,idMethod,tag,i1,i2,i3,i4=string.split(",", d)
+        local dId,prio,filter,show,r,g,b,idMethod,tag,iconSet,iconGlow,i1,i2,i3,i4=string.split(",", d)
         if not c or not dId or not prio or not filter or not show or not r or not g or not b then
             HealBot_Options_ImportFail("Debuffs", "Data corruption - ensure it is exactly as the original file")
         else
@@ -709,6 +724,8 @@ function HealBot_Share_LoadDebuffs(sIn)
             g=tonumber(g)
             b=tonumber(b)
             idMethod=tonumber(idMethod) or 3
+            iconSet=tonumber(iconSet) or 1
+            iconGlow=tonumber(iconGlow) or 1
             if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Share_luVars["InMethodDebuff"]<3 then
                 local dName=GetSpellInfo(dId) or dId
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
@@ -732,6 +749,12 @@ function HealBot_Share_LoadDebuffs(sIn)
                 if idMethod>0 and idMethod<3 then
                     HealBot_Globals.CustomDebuffIDMethod[dId]=idMethod
                 end
+                if iconSet>1 then
+                    HealBot_Globals.HealBot_Custom_Debuffs_IconSet[dId]=iconSet
+                end
+                if iconGlow>1 then
+                    HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[dId]=iconGlow
+                end
                 HealBot_Globals.CDCTag[dId]=tag
                 if string.len(i1 or "")>0 then 
                     if not HealBot_Globals.IgnoreCustomDebuff[dId] then HealBot_Globals.IgnoreCustomDebuff[dId]={} end
@@ -752,6 +775,7 @@ function HealBot_Share_LoadDebuffs(sIn)
     HealBot_Timers_InitExtraOptions()
     HealBot_Aura_ClearCustomDebuffsDone()
     HealBot_Timers_Set("AURA","CustomDebuffList")
+    HealBot_Timers_Set("AURA","ConfigDebuffs")
 end
 
 function HealBot_Share_ImportDebuffs_OnClick()

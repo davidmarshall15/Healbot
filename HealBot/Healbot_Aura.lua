@@ -31,6 +31,10 @@ local HealBot_Aura_ID={}
 local HealBot_Aura_IconSet={}
 local HealBot_SpellID_LookupData={}
 local HealBot_SpellID_LookupIdx={}
+local HealBot_BuffIconSet={}
+local HealBot_BuffIconGlow={}
+local HealBot_DebuffIconSet={}
+local HealBot_DebuffIconGlow={}
 local _
 local HealBot_Buff_Aura2Item={};
 local HealBot_Buff_ItemIDs={};
@@ -611,7 +615,7 @@ function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId, 
                                    false)
     if iAlpha and HealBot_AuraDebuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraDebuffCache[spellId]["name"] or "x"
-        hbGlowIdx=HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[spellId] or HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[hbGlowSpellName] or 1
+        hbGlowIdx=HealBot_DebuffIconGlow[spellId] or HealBot_DebuffIconGlow[hbGlowSpellName] or 1
     else
         hbGlowIdx=1
     end
@@ -665,7 +669,7 @@ function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId, ic
                                    true)
     if iAlpha and HealBot_AuraBuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraBuffCache[spellId]["name"] or "x"
-        hbGlowIdx=HealBot_Globals.HealBot_Custom_Buffs_IconGlow[spellId] or HealBot_Globals.HealBot_Custom_Buffs_IconGlow[hbGlowSpellName] or 1
+        hbGlowIdx=HealBot_BuffIconGlow[spellId] or HealBot_BuffIconGlow[hbGlowSpellName] or 1
     else
         hbGlowIdx=1
     end
@@ -1888,7 +1892,7 @@ local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
     if uaExpirationTime then
         if not HealBot_Aura_IconSet[uaSpellId] then
-            HealBot_Aura_IconSet[uaSpellId]=HealBot_Globals.HealBot_Custom_Buffs_IconSet[uaSpellId] or HealBot_Globals.HealBot_Custom_Buffs_IconSet[uaName] or 1
+            HealBot_Aura_IconSet[uaSpellId]=HealBot_BuffIconSet[uaSpellId] or HealBot_BuffIconSet[uaName] or 1
             HealBot_Aura_ID[uaName]=uaSpellId
         end
         if uaUnitCaster then
@@ -1945,7 +1949,7 @@ end
 
 function HealBot_Aura_CheckUnitDebuff(button)
     if not HealBot_Aura_IconSet[uaSpellId] then
-        HealBot_Aura_IconSet[uaSpellId]=HealBot_Globals.HealBot_Custom_Debuffs_IconSet[uaSpellId] or HealBot_Globals.HealBot_Custom_Debuffs_IconSet[uaName] or 1
+        HealBot_Aura_IconSet[uaSpellId]=HealBot_DebuffIconSet[uaSpellId] or HealBot_DebuffIconSet[uaName] or 1
         HealBot_Aura_ID[uaName]=uaSpellId
         if HealBot_Aura_CanDispell[uaSpellId]==nil then
             local aId=1
@@ -2850,10 +2854,12 @@ function HealBot_Aura_RemoveIcons(button)
       --HealBot_setCall("HealBot_Aura_RemoveIcons")
 end
 
-function HealBot_Aura_ConfigClassAllHoT(id, sName, wType)
+local function HealBot_Aura_ConfigClassAllHoT(id, sName, wType)
     if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
-        if HealBot_Globals.CustomBuffIDMethod[id]==2 and sName then
-            HealBot_Watch_HoT[sName]=wType
+        if HealBot_Globals.CustomBuffIDMethod[id]==2 then
+            if sName then
+                HealBot_Watch_HoT[sName]=wType
+            end
         else
             HealBot_Watch_HoT[id]=wType
         end
@@ -2863,10 +2869,46 @@ function HealBot_Aura_ConfigClassAllHoT(id, sName, wType)
     end
 end
 
+local function HealBot_Aura_ConfigBuffIconSetId(id, sName, set)
+    if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
+        if HealBot_Globals.CustomBuffIDMethod[id]==2 then
+            if sName then
+                HealBot_BuffIconSet[sName]=set
+            end
+        else
+            HealBot_BuffIconSet[id]=set
+        end
+    else
+        HealBot_BuffIconSet[id]=set
+        if sName then HealBot_BuffIconSet[sName]=set end
+    end
+end
+
+local function HealBot_Aura_ConfigBuffIconGlowId(id, sName, glow)
+    if (HealBot_Globals.CustomBuffIDMethod[id] or 3)<3 then
+        if HealBot_Globals.CustomBuffIDMethod[id]==2 then
+            if sName then
+                HealBot_BuffIconGlow[sName]=glow
+            end
+        else
+            HealBot_BuffIconGlow[id]=glow
+        end
+    else
+        HealBot_BuffIconGlow[id]=glow
+        if sName then HealBot_BuffIconGlow[sName]=glow end
+    end
+end
+
 function HealBot_Aura_ConfigClassHoT()
     local hbClassHoTwatch=HealBot_Globals.WatchHoT
     for id,_ in pairs(HealBot_Watch_HoT) do
-        HealBot_Watch_HoT[id]=false
+        HealBot_Watch_HoT[id]=nil
+    end
+    for id,_ in pairs(HealBot_BuffIconSet) do
+        HealBot_BuffIconSet[id]=nil
+    end
+    for id,_ in pairs(HealBot_BuffIconGlow) do
+        HealBot_BuffIconGlow[id]=nil
     end
     for xClass,_  in pairs(hbClassHoTwatch) do
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
@@ -2887,13 +2929,65 @@ function HealBot_Aura_ConfigClassHoT()
             else
                 HealBot_Aura_ConfigClassAllHoT(id, sName, "A")
             end
+            if HealBot_Globals.HealBot_Custom_Buffs_IconSet[id] then
+                HealBot_Aura_ConfigBuffIconSetId(id, sName, HealBot_Globals.HealBot_Custom_Buffs_IconSet[id])
+            end
+            if HealBot_Globals.HealBot_Custom_Buffs_IconGlow[id] then
+                HealBot_Aura_ConfigBuffIconGlowId(id, sName, HealBot_Globals.HealBot_Custom_Buffs_IconGlow[id])
+            end
         end
-    end
-    for id,_ in pairs(HealBot_Watch_HoT) do
-        if not HealBot_Watch_HoT[id] then HealBot_Watch_HoT[id]=nil end
     end
     HealBot_Aura_setCustomBuffFilterDisabled()
       --HealBot_setCall("HealBot_configClassHoT")
+end
+
+local function HealBot_Aura_ConfigDebuffIconSetId(id, sName, set)
+    if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
+        if HealBot_Globals.CustomDebuffIDMethod[id]==2 then
+            if sName then
+                HealBot_DebuffIconSet[sName]=set
+            end
+        else
+            HealBot_DebuffIconSet[id]=set
+        end
+    else
+        HealBot_DebuffIconSet[id]=set
+        if sName then HealBot_DebuffIconSet[sName]=set end
+    end
+end
+
+local function HealBot_Aura_ConfigDebuffIconSetGlow(id, sName, glow)
+    if (HealBot_Globals.CustomDebuffIDMethod[id] or 3)<3 then
+        if HealBot_Globals.CustomDebuffIDMethod[id]==2 then
+            if sName then
+                HealBot_DebuffIconGlow[sName]=glow
+            end
+        else
+            HealBot_DebuffIconGlow[id]=glow
+        end
+    else
+        HealBot_DebuffIconGlow[id]=glow
+        if sName then HealBot_DebuffIconGlow[sName]=glow end
+    end
+end
+
+function HealBot_Aura_ConfigDebuffs()
+    for id,_ in pairs(HealBot_DebuffIconGlow) do
+        HealBot_DebuffIconGlow[id]=nil
+    end
+    for id,_ in pairs(HealBot_DebuffIconSet) do
+        HealBot_DebuffIconSet[id]=nil
+    end
+    for id, _ in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
+        if HealBot_Globals.HealBot_Custom_Debuffs_IconSet[id] then
+            local sName=GetSpellInfo(id)
+            HealBot_Aura_ConfigDebuffIconSetId(id, sName, HealBot_Globals.HealBot_Custom_Debuffs_IconSet[id])
+        end
+        if HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id] then
+            local sName=GetSpellInfo(id)
+            HealBot_Aura_ConfigDebuffIconSetGlow(id, sName, HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id])
+        end
+    end
 end
 
 function HealBot_Aura_ClearGUID(guid)
