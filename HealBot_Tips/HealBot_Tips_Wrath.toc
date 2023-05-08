@@ -4,6 +4,7 @@
 ## Notes: Show tooltips on HealBot frames and in HealBot options.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
+## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 Locale\HealBot_Localization.en.lua
 HealBot_Tooltip.lua

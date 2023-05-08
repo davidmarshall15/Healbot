@@ -4,8 +4,8 @@
 ## Notes: Add multiple frames with customisable bars for healing, decursing, buffing, ressing, range checking and aggro tracking
 ## RequiredDeps: HealBot_Options
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
-## Version: 1.14.3.72
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
+## Version: 1.14.3.73
 
 HealBot.xml
 HealBot_Action.xml

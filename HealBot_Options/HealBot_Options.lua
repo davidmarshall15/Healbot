@@ -1934,13 +1934,13 @@ function HealBot_Options_retDebuffCureSpell(debuffType)
 end
 
 local hbDebuffSpellRemain,hbDebuffSpellStart,hbDebuffSpellDuration=0,0,0
-function HealBot_Options_retDebuffWatchTargetCD(debuffType, timeNow)
+function HealBot_Options_retDebuffWatchTargetCD(debuffType)
     hbDebuffSpellRemain=0
     if HealBot_DebuffSpell[debuffType] then
         hbDebuffSpellStart, hbDebuffSpellDuration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
         if hbDebuffSpellStart and hbDebuffSpellDuration then
             if hbDebuffSpellStart>0 and hbDebuffSpellDuration>1 then 
-                hbDebuffSpellRemain = hbDebuffSpellDuration-(timeNow-hbDebuffSpellStart)
+                hbDebuffSpellRemain = hbDebuffSpellDuration-(HealBot_TimeNow-hbDebuffSpellStart)
             end
             return hbDebuffSpellRemain, HealBot_DebuffSpell[debuffType]
         else

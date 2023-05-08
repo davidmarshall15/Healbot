@@ -1,11 +1,12 @@
-﻿HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "10.x"
+﻿local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
+HEALBOT_VERSION    = GetAddOnMetadata("HealBot", "Version") or "10.x"
 HEALBOT_ABOUT_URL  = "healbot.dpm15.net"
 
 local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.1.0.0"
+    return "10.1.0.1"
 end
 function HealBot_globalVars()
     --Consumables

@@ -36,9 +36,6 @@
       <OnEvent>
         HealBot_OnEvent(self,event,...);
       </OnEvent>
-      <OnUpdate>
-        HealBot_OnUpdate(self, elapsed);
-      </OnUpdate>
     </Scripts>
   </Frame>
     

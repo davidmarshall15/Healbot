@@ -415,18 +415,18 @@ local function HealBot_Aux_UpdateFluidBarsValue(button)
 end
 
 local utaElap=0
-local function HealBot_Aux_UpdateTimedBarsValue(button, TimeNow) 
+local function HealBot_Aux_UpdateTimedBarsValue(button) 
     ufaBarActive=false
     for x=1,9 do
         if button.aux[x]["TIMED"]>-1 then
             if button.aux[x]["TIMEDH2L"]>-1 then
-                utaElap=((TimeNow*1000)-button.aux[x]["TIMEDH2L"])
+                utaElap=((HealBot_TimeNow*1000)-button.aux[x]["TIMEDH2L"])
                 if utaElap<button.aux[x]["TIMED"] then
                     button.gref.aux[x]:SetValue(button.aux[x]["TIMED"]-utaElap)
                     ufaBarActive=true
                 end
             else
-                utaElap=((TimeNow*1000)-button.aux[x]["TIMEDL2H"])
+                utaElap=((HealBot_TimeNow*1000)-button.aux[x]["TIMEDL2H"])
                 if utaElap<button.aux[x]["TIMED"] then
                     button.gref.aux[x]:SetValue(utaElap)
                     ufaBarActive=true
@@ -507,7 +507,6 @@ function HealBot_Aux_UpdateFluidBars()
     end
 end
 
-local TimeNow=0
 HealBot_Aux_luVars["UpdateTimedFreq"]=0.02
 function HealBot_Aux_AdjUpdateTimedFreq(freq)
     HealBot_Aux_luVars["UpdateTimedFreq"]=freq
@@ -515,9 +514,8 @@ end
 
 function HealBot_Aux_UpdateTimedBars()
     HealBot_Aux_luVars["AuxCastBarInUse"]=false
-    TimeNow=GetTime()
     for id,xButton in pairs(HealBot_AuxTimed_Buttons) do
-        if not HealBot_Aux_UpdateTimedBarsValue(xButton, TimeNow) then
+        if not HealBot_Aux_UpdateTimedBarsValue(xButton) then
             HealBot_AuxTimed_Buttons[id]=nil
         else
             HealBot_Aux_luVars["AuxCastBarInUse"]=true

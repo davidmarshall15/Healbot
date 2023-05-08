@@ -4,5 +4,6 @@
 ## Notes: HealBot options and player settings
 ## RequiredDeps: HealBot_Data
 ## OptionalDeps: LibSharedMedia-3.0
+## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 HealBot_Options.xml

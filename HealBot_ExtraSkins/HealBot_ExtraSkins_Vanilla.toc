@@ -4,6 +4,7 @@
 ## Notes: Large store of extra skins for HealBot.
 ## RequiredDeps: HealBot
 ## LoadOnDemand: 1
+## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
 
 HealBot_ExtraSkins.lua
 

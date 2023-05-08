@@ -1671,7 +1671,7 @@ local ripHasResStart={}
 local ripHasResEnd={}
 local ripHadResStart={}
 local ripHadResEnd={}
-function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
+function HealBot_Action_UpdateUnitDeadButtons(button, state)
     if state==1 then
         HealBot_Action_setState(button, HealBot_Unit_Status["RES"])
         HealBot_Text_setNameTag(button)
@@ -1699,24 +1699,24 @@ function HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, state)
     HealBot_Text_UpdateButton(button)
 end
 
-function HealBot_Action_SetResTimes(button, TimeNow)
-    ripHasResStart[button.guid]=TimeNow
-    button.status.resstart=TimeNow
+function HealBot_Action_SetResTimes(button)
+    ripHasResStart[button.guid]=HealBot_TimeNow
+    button.status.resstart=HealBot_TimeNow
     if HealBot_Data["UILOCK"] then
         if HEALBOT_GAME_VERSION>3 then
-            ripHasResEnd[button.guid]=TimeNow+1.25
+            ripHasResEnd[button.guid]=HealBot_TimeNow+1.25
         elseif HEALBOT_GAME_VERSION>2 then
-            ripHasResEnd[button.guid]=TimeNow+1.5
+            ripHasResEnd[button.guid]=HealBot_TimeNow+1.5
         else
-            ripHasResEnd[button.guid]=TimeNow+1.75
+            ripHasResEnd[button.guid]=HealBot_TimeNow+1.75
         end
     else
         if HEALBOT_GAME_VERSION>3 then
-            ripHasResEnd[button.guid]=TimeNow+7
+            ripHasResEnd[button.guid]=HealBot_TimeNow+7
         elseif HEALBOT_GAME_VERSION>2 then
-            ripHasResEnd[button.guid]=TimeNow+8
+            ripHasResEnd[button.guid]=HealBot_TimeNow+8
         else
-            ripHasResEnd[button.guid]=TimeNow+9
+            ripHasResEnd[button.guid]=HealBot_TimeNow+9
         end
     end
 end
@@ -1745,37 +1745,37 @@ function HealBot_Action_UpdateUnitNotDead(button)
     HealBot_Aux_ClearResBar(button)
 end
 
-function HealBot_Action_UpdateTheDeadButton(button, TimeNow)
+function HealBot_Action_UpdateTheDeadButton(button)
     if button.frame<10 then
         if HealBot_Action_IsUnitDead(button) then
             if not UnitIsDeadOrGhost(button.unit) then
                 HealBot_Action_UpdateUnitNotDead(button)
             elseif not ripHadResEnd[button.guid] and (UnitHasIncomingResurrection(button.unit) or HealBot_MassRes()) then
                 if not ripHasResEnd[button.guid] and not ripHadResEnd[button.guid] then
-                    HealBot_Action_SetResTimes(button, TimeNow)
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 1) 
+                    HealBot_Action_SetResTimes(button)
+                    HealBot_Action_UpdateUnitDeadButtons(button, 1) 
                 elseif ripHasResStart[button.guid] and ripHasResStart[button.guid]~=button.status.resstart then
                     button.status.resstart=ripHasResStart[button.guid]
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 1) 
+                    HealBot_Action_UpdateUnitDeadButtons(button, 1) 
                 end
             elseif ripHasResEnd[button.guid] then
-                if ripHasResEnd[button.guid]<TimeNow then
-                    ripHadResStart[button.guid]=TimeNow
-                    button.status.resstart=TimeNow
-                    ripHadResEnd[button.guid]=TimeNow+30
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 2)
+                if ripHasResEnd[button.guid]<HealBot_TimeNow then
+                    ripHadResStart[button.guid]=HealBot_TimeNow
+                    button.status.resstart=HealBot_TimeNow
+                    ripHadResEnd[button.guid]=HealBot_TimeNow+30
+                    HealBot_Action_UpdateUnitDeadButtons(button, 2)
                 else
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 3)
+                    HealBot_Action_UpdateUnitDeadButtons(button, 3)
                 end
             elseif ripHadResEnd[button.guid] then
-                if ripHadResEnd[button.guid]<TimeNow then
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 3)
+                if ripHadResEnd[button.guid]<HealBot_TimeNow then
+                    HealBot_Action_UpdateUnitDeadButtons(button, 3)
                 elseif ripHadResStart[button.guid] and ripHadResStart[button.guid]~=button.status.resstart then
                     button.status.resstart=ripHadResStart[button.guid]
-                    HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 2)
+                    HealBot_Action_UpdateUnitDeadButtons(button, 2)
                 end
             elseif button.status.resstart>0 then
-                HealBot_Action_UpdateUnitDeadButtons(button, TimeNow, 3)
+                HealBot_Action_UpdateUnitDeadButtons(button, 3)
             end
         elseif UnitIsDeadOrGhost(button.unit) and not UnitIsFeignDeath(button.unit) then
             if HealBot_PluginUpdate_TimeToLive[button.guid] then
@@ -2374,7 +2374,7 @@ function HealBot_Action_CheckUnitLowMana(button)
 end
 
 local ooRhbX, ooRhbY, ooRhbD=0,0,-999
-function HealBot_Action_ShowDirectionArrow(button, TimeNow)
+function HealBot_Action_ShowDirectionArrow(button)
     if button.status.range==0 and (not Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIRMOUSE"] or button.mouseover) then
         ooRhbX, ooRhbY, ooRhbD = HealBot_Direction_Check(button.unit)
         if ooRhbD then
@@ -2382,7 +2382,7 @@ function HealBot_Action_ShowDirectionArrow(button, TimeNow)
                 button.status.dirarrowcords=ooRhbD
                 HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
             end
-            button.status.dirarrowshown=TimeNow+0.25
+            button.status.dirarrowshown=HealBot_TimeNow+0.25
         elseif button.status.dirarrowshown>0 then
             HealBot_Action_HideDirectionArrow(button)
         end
@@ -5908,7 +5908,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
     if not self.unit then return; end
     self.mouseover=true
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIR"] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then 
-        HealBot_Action_ShowDirectionArrow(self, GetTime()) 
+        HealBot_Action_ShowDirectionArrow(self) 
     end
     HealBot_Action_SetActiveButton(self.id)
     if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] and UnitExists(self.unit) then

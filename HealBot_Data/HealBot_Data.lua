@@ -768,4 +768,5 @@ HealBot_Vehicle_Button={};
 HealBot_Emerg_Button={};
 HealBot_Buttons={};
 HealBot_Test_Button={};
+HealBot_TimeNow=GetTime()
 
