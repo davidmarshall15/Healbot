@@ -19,6 +19,7 @@ local hbCurSkin=""
 local hbCurSkinSubFrameID=1001
 local _,g
 local HealBot_DebuffSpell = {};
+local HealBot_DebuffType = {};
 local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
 local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
 
@@ -348,6 +349,10 @@ function HealBot_Options_InitDebuffTypes()
             [HEALBOT_DETOX] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
         }
     end
+    HealBot_Debuff_Types[HEALBOT_POISON] =  {HEALBOT_POISON_en}
+    HealBot_Debuff_Types[HEALBOT_CURSE] =  {HEALBOT_CURSE_en}
+    HealBot_Debuff_Types[HEALBOT_MAGIC] =  {HEALBOT_MAGIC_en}
+    HealBot_Debuff_Types[HEALBOT_DISEASE] =  {HEALBOT_DISEASE_en}
 end
 
 local HealBot_ExtraSkins_Image
@@ -1152,6 +1157,13 @@ function HealBot_Options_setLists()
         HEALBOT_PURIFICATION_POTION,
     }
 
+    HealBot_Options_Lists["DebuffTypes"] = {
+        HEALBOT_DISEASE,
+        HEALBOT_MAGIC,
+        HEALBOT_CURSE,
+        HEALBOT_POISON,
+    }
+
     HealBot_Options_cacheNames(HealBot_Options_Lists["DebuffItems"])
     
     HealBot_Options_Lists["RangeWarning"] = {
@@ -1931,6 +1943,10 @@ end
 
 function HealBot_Options_retDebuffCureSpell(debuffType)
     return HealBot_DebuffSpell[debuffType]
+end
+
+function HealBot_Options_retDebuffCureType(debuffType)
+    return HealBot_DebuffType[debuffType]
 end
 
 local hbDebuffSpellRemain,hbDebuffSpellStart,hbDebuffSpellDuration=0,0,0
@@ -13892,6 +13908,18 @@ function HealBot_Options_CDCTxt_DropDown(object, id)
             UIDropDownMenu_AddButton(info);
         end
     end
+    for j=1, getn(HealBot_Options_Lists["DebuffTypes"]), 1 do
+        local tName = HealBot_Options_Lists["DebuffTypes"][j]
+        info.text = tName
+        info.func = function(self)
+                        HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(id)] = self:GetText()
+                        HealBot_Timers_Set("AURA","DebuffReset")
+                        UIDropDownMenu_SetText(object,tName)
+                    end
+        info.checked = false;
+        if HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(id)]==tName then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
 end
 
 function HealBot_Options_CDCTxt1_DropDown()
@@ -15343,6 +15371,9 @@ function HealBot_Options_Debuff_Reset()
     for x,_ in pairs(HealBot_DebuffSpell) do
         HealBot_DebuffSpell[x]=nil;
     end
+    for x,_ in pairs(HealBot_DebuffType) do
+        HealBot_DebuffType[x]=nil;
+    end
     local DebuffTextClass = HealBot_Config_Cures.HealBotDebuffText
     local DebuffDropDownClass = HealBot_Config_Cures.HealBotDebuffDropDown
     
@@ -15355,6 +15386,9 @@ function HealBot_Options_Debuff_Reset()
                 table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
                     if not HealBot_DebuffSpell[dName] then
                         HealBot_DebuffSpell[dName]=sName;
+                        if sName==HEALBOT_POISON or sName==HEALBOT_CURSE or sName==HEALBOT_MAGIC or sName==HEALBOT_DISEASE then
+                            HealBot_DebuffType[dName]=true
+                        end
                     end
                     local HealBot_DebuffWatchTargetSpell=HealBot_DebuffWatchTarget[dName];
                     if dropdownID==2 then

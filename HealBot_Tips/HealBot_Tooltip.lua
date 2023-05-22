@@ -166,7 +166,10 @@ function HealBot_Tooltip_setspellName(button, spellName)
                         if s and s>0 then
                             local e,_=string.find(mText, "\n")
                             if e and e>0 then
-                                 validSpellName=(string.sub(mText, s+1, e-1)) or validSpellName
+                                 local mSpellName=strtrim((string.sub(mText, s+1, e-1)) or "")
+                                 if string.len(mSpellName)>0 then
+                                    validSpellName=mSpellName
+                                end
                             end
                         end
                     end

@@ -112,6 +112,7 @@ function HealBot_Aura_ResetDebuffCache()
     for spellId,_ in pairs(HealBot_AuraDebuffCache) do
         HealBot_AuraDebuffCache[spellId].always=false
         HealBot_Aura_IconSet[spellId]=nil
+        HealBot_Aura_CanDispell[spellId]=nil
         HealBot_AuraDebuffCache[spellId].reset=true
     end
     HealBot_Timers_Set("AURA","CustomDebuffFilterDisabled")
@@ -1943,6 +1944,14 @@ function HealBot_Aura_CheckUnitBuff(button)
 end
 
 function HealBot_Aura_CheckUnitDebuff(button)
+    --if uaSpellId==32407 or uaName=="Strange Aura" then
+    --    uaDebuffType=HEALBOT_DISEASE_en
+    --    uaDebuffType=HEALBOT_MAGIC_en
+    --    uaDebuffType=HEALBOT_CURSE_en
+    --    uaDebuffType=HEALBOT_POISON_en
+    --    HealBot_Aura_CanDispell[uaSpellId]=true
+    --    HealBot_Aura_IconSet[uaSpellId]=3
+    --end
     if not HealBot_Aura_IconSet[uaSpellId] then
         HealBot_Aura_IconSet[uaSpellId]=HealBot_DebuffIconSet[uaSpellId] or HealBot_DebuffIconSet[uaName] or 1
         HealBot_Aura_ID[uaName]=uaSpellId
@@ -1955,21 +1964,17 @@ function HealBot_Aura_CheckUnitDebuff(button)
                     HealBot_Aura_CanDispell[aSpellId]=true
                 else
                     if HealBot_Aura_CanDispell[uaSpellId]==nil then
-                        HealBot_Aura_CanDispell[uaSpellId]=false
+                        if HealBot_Options_retDebuffCureType(uaDebuffType) then
+                            HealBot_Aura_CanDispell[uaSpellId]=true
+                        else
+                            HealBot_Aura_CanDispell[uaSpellId]=false
+                        end
                     end
                     break
                 end
             end
         end
     end
---    if uaSpellId==32407 or uaName=="Strange Aura" then
-    --    uaDebuffType=HEALBOT_DISEASE_en
-    --    uaDebuffType=HEALBOT_MAGIC_en
-    --    uaDebuffType=HEALBOT_CURSE_en
-    --    uaDebuffType=HEALBOT_POISON_en
-    --    HealBot_Aura_CanDispell[uaSpellId]=true
-    --    HealBot_Aura_IconSet[uaSpellId]=3
---    end
     if uaUnitCaster then
         if UnitIsUnit(uaUnitCaster,"player") then
             uaUnitCasterIsPlayer=true

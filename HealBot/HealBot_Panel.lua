@@ -938,7 +938,7 @@ local vBar={[1]={["BUTTON"]="",["PREVROW"]="",["PREVCOL"]=""},
             [9]={["BUTTON"]="",["PREVROW"]="",["PREVCOL"]=""},
            [10]={["BUTTON"]="",["PREVROW"]="",["PREVCOL"]=""},}
 local vPosButton,vFrame="",0
-local maxRows={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
+local maxRows={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local maxCols={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
 local maxHeaders={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
 local rowNo={[1]=0,[2]=0,[3]=0,[4]=0,[5]=0,[6]=0,[7]=0,[8]=0,[9]=0,[10]=0}
@@ -999,8 +999,8 @@ function HealBot_Panel_PositionBars(preCombat)
                         vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],HeaderPos[vFrame][barNo[vFrame]],vBar[vFrame]["PREVROW"],sameCol,preCombat)
                     end
                 end
-                if rowNo[vFrame]>maxRows[vFrame] then
-                    maxRows[vFrame]=rowNo[vFrame]
+                if rowNo[vFrame]>maxRows[vFrame][1] then
+                    maxRows[vFrame][1]=rowNo[vFrame]
                 end
                 if headerNo[vFrame]>maxHeaders[vFrame] then
                     maxHeaders[vFrame]=headerNo[vFrame]
@@ -1022,11 +1022,11 @@ function HealBot_Panel_PositionBars(preCombat)
                 else
                     vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,vBar[vFrame]["PREVROW"],sameCol,preCombat)
                 end
-                if rowNo[vFrame]>maxRows[vFrame] then
-                    maxRows[vFrame]=rowNo[vFrame]
+                if rowNo[vFrame]>maxRows[vFrame][1] then
+                    maxRows[vFrame][1]=rowNo[vFrame]
                 end
             else
-                if barNo[vFrame]==1 or rowNo[vFrame]>maxRows[vFrame] then
+                if barNo[vFrame]==1 or rowNo[vFrame]>maxRows[vFrame][maxCols[vFrame]] then
                     if barNo[vFrame]==1 then
                         vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat)
                     else
@@ -1046,13 +1046,21 @@ function HealBot_Panel_PositionBars(preCombat)
     end)
 end
 
-local vSetupFrameTag, vSetupBarsOptionsParent=nil, nil
+local vSetupFrameTag, vSetupBarsOptionsParent, vSetupBarsMaxRows, vSetupBarsOverflow=nil, nil, 1, 0
 function HealBot_Panel_SetupExtraBars(frame, preCombat)
     if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["SHOW"] or
        Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["GRPCOLS"] then
-        maxRows[frame]=1
+        maxRows[frame][1]=1
     else
-        maxRows[frame]=ceil(hbBarsPerFrame[frame]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["NUMCOLS"])
+        vSetupBarsMaxRows=floor(hbBarsPerFrame[frame]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["NUMCOLS"])
+        vSetupBarsOverflow=hbBarsPerFrame[frame]-(vSetupBarsMaxRows*Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["NUMCOLS"])
+        for x=1,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["NUMCOLS"] do
+            if x<=vSetupBarsOverflow then
+                maxRows[frame][x]=vSetupBarsMaxRows+1
+            else
+                maxRows[frame][x]=vSetupBarsMaxRows
+            end
+        end
     end
     barNo[frame]=0
     rowNo[frame]=0
@@ -1065,7 +1073,7 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
     HealBot_Panel_PositionBars(preCombat)
     
     hbPanelNoCols[frame]=maxCols[frame]
-    hbPanelNoRows[frame]=maxRows[frame]
+    hbPanelNoRows[frame]=maxRows[frame][1]
 
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
         if xButton.frame==frame and not HealBot_Track_Headers[xHeader] then
@@ -1090,7 +1098,7 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
             vSetupFrameTag:SetText("")
         end
         if HealBot_Config.DisabledNow==0 then
-            HealBot_Action_SetHeightWidth(maxRows[frame],maxCols[frame],maxHeaders[frame],frame)
+            HealBot_Action_SetHeightWidth(maxRows[frame][1],maxCols[frame],maxHeaders[frame],frame)
             if HealBot_setTestBars or (HealBot_AutoCloseFrame[frame]==1 or preCombat) then
                 HealBot_Action_ShowPanel(frame)
             end
@@ -1115,9 +1123,17 @@ function HealBot_Panel_SetupBars(preCombat)
         if hbBarsPerFrame[j] and hbBarsPerFrame[j]>0 then
             if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][j]["SHOW"] or
                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["GRPCOLS"] then
-                maxRows[j]=1
+                maxRows[j][1]=1
             else
-                maxRows[j]=ceil(hbBarsPerFrame[j]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["NUMCOLS"])
+                vSetupBarsMaxRows=floor(hbBarsPerFrame[j]/Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["NUMCOLS"])
+                vSetupBarsOverflow=hbBarsPerFrame[j]-(vSetupBarsMaxRows*Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["NUMCOLS"])
+                for x=1,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][j]["NUMCOLS"] do
+                    if x<=vSetupBarsOverflow then
+                        maxRows[j][x]=vSetupBarsMaxRows+1
+                    else
+                        maxRows[j][x]=vSetupBarsMaxRows
+                    end
+                end
             end
         end
     end
@@ -1136,7 +1152,7 @@ function HealBot_Panel_SetupBars(preCombat)
 
     for j=1,5 do
         hbPanelNoCols[j]=maxCols[j]
-        hbPanelNoRows[j]=maxRows[j]
+        hbPanelNoRows[j]=maxRows[j][1]
     end 
     
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
@@ -1220,7 +1236,7 @@ function HealBot_Panel_SetupBars(preCombat)
                 if HealBot_setTestBars or (HealBot_AutoCloseFrame[j]==1 or preCombat) then
                     HealBot_Action_ShowPanel(j)
                 end
-                HealBot_Action_SetHeightWidth(maxRows[j],maxCols[j],maxHeaders[j],j)
+                HealBot_Action_SetHeightWidth(maxRows[j][1],maxCols[j],maxHeaders[j],j)
                 HealBot_Action_setFrameHeader(j)
             else
                 HealBot_Action_HidePanel(j)
