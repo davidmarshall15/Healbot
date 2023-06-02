@@ -18,20 +18,16 @@ HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
 HealBot_Aux_luVars["TestBarsOn"]=false
 
-HealBot_Aux_luVars["InHealAbsorbDiv"]=6
 if HEALBOT_GAME_VERSION>9 then
     HealBot_Aux_luVars["InHealAbsorbMax"]=12000
 else
     HealBot_Aux_luVars["InHealAbsorbMax"]=3000
 end
 function HealBot_Aux_setInHealAbsorbMax(maxHealth)
-    HealBot_Aux_luVars["InHealAbsorbMax"]=floor(maxHealth/HealBot_Aux_luVars["InHealAbsorbDiv"])
+    HealBot_Aux_luVars["InHealAbsorbMax"]=ceil((maxHealth/HealBot_Globals.InHealAbsorbDiv)/1000)
+    HealBot_Aux_luVars["InHealAbsorbMax"]=HealBot_Aux_luVars["InHealAbsorbMax"]*1000
     HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
     HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
-end
-function HealBot_Aux_setInHealAbsorbDiv(div)
-    HealBot_Aux_luVars["InHealAbsorbDiv"]=div
-    HealBot_SetPlayerData()
 end
 
 function HealBot_Aux_setLuVars(vName, vValue)

@@ -493,305 +493,320 @@ end
 function HealBot_SlashCmd(cmd)
     if not cmd then cmd="" end
     local HBcmd, x, y, z = string.split(" ", cmd)
-    HBcmd=string.lower(HBcmd) 
-    if (HBcmd=="se1") then
-        SetCVar("Sound_EnableErrorSpeech", "0");
-    elseif (HBcmd=="se2") then
-        HealBot_luVars["EnableErrorSpeech"]=true
-    elseif (HBcmd=="se3") then
-        UIErrorsFrame:Hide()
-    elseif (HBcmd=="se4") then
-        HealBot_luVars["EnableErrorText"]=true
-    elseif (HBcmd=="" or HBcmd=="o" or HBcmd=="options" or HBcmd=="opt" or HBcmd=="config" or HBcmd=="cfg") then
-        HealBot_TogglePanel(HealBot_Options, true)
-    elseif (HBcmd=="d" or HBcmd=="defaults") then
-        HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults, true);
-    elseif (HBcmd=="ui") then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_HARDRELOAD)
-        HealBot_SetResetFlag("HARD")
-    elseif (HBcmd=="ri" or (HBcmd=="reset" and x and string.lower(x)=="healbot")) then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SOFTRELOAD)
-        HealBot_SetResetFlag("SOFT")
-    elseif (HBcmd=="rc" or (HBcmd=="reset" and x and string.lower(x)=="customdebuffs")) then
-        HealBot_Timers_Set("RESET","CustomDebuffs")
-    elseif (HBcmd=="rs" or (HBcmd=="reset" and x and string.lower(x)=="skin")) then
-        HealBot_Timers_Set("RESET","Skins")
-    elseif (HBcmd=="show") then
-        HealBot_SetResetFlag("FRAMES")
-    elseif (HBcmd=="cb") then
-        HealBot_Panel_ClearBlackList()
-    elseif (HBcmd=="cspells") then
-        HealBot_Copy_SpellCombos()
-    elseif (HBcmd=="rspells") then
-        HealBot_Reset_Spells()
-    elseif (HBcmd=="rcures") then
-        HealBot_Reset_Cures()
-    elseif (HBcmd=="rbuffs") then
-        HealBot_Reset_Buffs()
-    elseif (HBcmd=="ricons") then
-        HealBot_Reset_Icons()
-    elseif (HBcmd=="tma") then
-        HealBot_Options_ToggleMainAssist()
-    elseif (HBcmd=="cs") then
-        HealBot_Update_Skins()
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_SKIN_CHECK_DONE)
-    elseif (HBcmd=="disable") then
-        HealBot_Options_DisableHealBotOpt:SetChecked(true)
-        HealBot_Options_DisableHealBot(true)
-    elseif (HBcmd=="enable") then
-        HealBot_Options_DisableHealBotOpt:SetChecked(false)
-        HealBot_Options_DisableHealBot(false)
-    elseif (HBcmd=="eac" and x) then
-        if x=="buff" then
-            HealBot_Globals.IgnoreCustomBuff={}
-            HealBot_Options_BuffIconUpdate()
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ENABLE_CUSTOM_BUFFS)
-        elseif x=="debuff" then
-            HealBot_Globals.IgnoreCustomDebuff={}
-            HealBot_Options_DebuffIconUpdate()
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ENABLE_CUSTOM_DEBUFFS)
-        end
-    elseif (HBcmd=="tnr") and HEALBOT_GAME_VERSION<4 then
-        if HealBot_Globals.NoRanks then
-            HealBot_Globals.NoRanks=false
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Ranks will be shown")
-            HealBot_Options_ReloadUI()
-        else
-            HealBot_Globals.NoRanks=true
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Ranks will not be shown")
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."WARNING: This is not recommanded")
-            HealBot_Options_ReloadUI()
-        end
-    elseif (HBcmd=="t") then
-        HealBot_ToggleHealBot()
-    elseif (HBcmd=="help" or HBcmd=="h") then
-        HealBot_luVars["HelpCnt1"]=0
-        HealBot_luVars["Help"]=true
-    elseif (HBcmd=="hs") then
-        HealBot_luVars["HelpCnt2"]=0
-        HealBot_luVars["Help"]=true
-    elseif (HBcmd=="iht" and x) then
-        if HEALBOT_GAME_VERSION<4 then
-            if (tonumber(x)>0) and (tonumber(x)<22) then
-                HealBot_Globals.ClassicHoTTime=tonumber(x)+0.5
-                HealBot_AddChat("HoT Time set to "..x.."s")
-            else
-                HealBot_AddChat("Invalid Value for HoT Time. valid range from 1 to 21")
+    if type(HBcmd)=="string" then
+        HBcmd=string.lower(HBcmd) 
+        if (HBcmd=="se1") then
+            SetCVar("Sound_EnableErrorSpeech", "0");
+        elseif (HBcmd=="se2") then
+            HealBot_luVars["EnableErrorSpeech"]=true
+        elseif (HBcmd=="se3") then
+            UIErrorsFrame:Hide()
+        elseif (HBcmd=="se4") then
+            HealBot_luVars["EnableErrorText"]=true
+        elseif (HBcmd=="" or HBcmd=="o" or HBcmd=="options" or HBcmd=="opt" or HBcmd=="config" or HBcmd=="cfg") then
+            HealBot_TogglePanel(HealBot_Options, true)
+        elseif (HBcmd=="d" or HBcmd=="defaults") then
+            HealBot_Options_Defaults_OnClick(HealBot_Options_Defaults, true);
+        elseif (HBcmd=="ui") then
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_HARDRELOAD)
+            HealBot_SetResetFlag("HARD")
+        elseif (HBcmd=="ri" or (HBcmd=="reset" and x and string.lower(x)=="healbot")) then
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SOFTRELOAD)
+            HealBot_SetResetFlag("SOFT")
+        elseif (HBcmd=="rc" or (HBcmd=="reset" and x and string.lower(x)=="customdebuffs")) then
+            HealBot_Timers_Set("RESET","CustomDebuffs")
+        elseif (HBcmd=="rs" or (HBcmd=="reset" and x and string.lower(x)=="skin")) then
+            HealBot_Timers_Set("RESET","Skins")
+        elseif (HBcmd=="show") then
+            HealBot_SetResetFlag("FRAMES")
+        elseif (HBcmd=="cb") then
+            HealBot_Panel_ClearBlackList()
+        elseif (HBcmd=="cspells") then
+            HealBot_Copy_SpellCombos()
+        elseif (HBcmd=="rspells") then
+            HealBot_Reset_Spells()
+        elseif (HBcmd=="rcures") then
+            HealBot_Reset_Cures()
+        elseif (HBcmd=="rbuffs") then
+            HealBot_Reset_Buffs()
+        elseif (HBcmd=="ricons") then
+            HealBot_Reset_Icons()
+        elseif (HBcmd=="tma") then
+            HealBot_Options_ToggleMainAssist()
+        elseif (HBcmd=="cs") then
+            HealBot_Update_Skins()
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_SKIN_CHECK_DONE)
+        elseif (HBcmd=="disable") then
+            HealBot_Options_DisableHealBotOpt:SetChecked(true)
+            HealBot_Options_DisableHealBot(true)
+        elseif (HBcmd=="enable") then
+            HealBot_Options_DisableHealBotOpt:SetChecked(false)
+            HealBot_Options_DisableHealBot(false)
+        elseif (HBcmd=="eac" and x) then
+            if x=="buff" then
+                HealBot_Globals.IgnoreCustomBuff={}
+                HealBot_Options_BuffIconUpdate()
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ENABLE_CUSTOM_BUFFS)
+            elseif x=="debuff" then
+                HealBot_Globals.IgnoreCustomDebuff={}
+                HealBot_Options_DebuffIconUpdate()
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ENABLE_CUSTOM_DEBUFFS)
             end
-        end
-    elseif (HBcmd=="skin" and x) then
-        if y then x=x.." "..y end
-        if z then x=x.." "..z end
-        HealBot_Options_Set_Current_Skin(x, nil, nil, true)
-    elseif (HBcmd=="use10") then
-        if HealBot_Config.MacroUse10 then
-            HealBot_Config.MacroUse10=false
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_USE10OFF)
-        else
-            HealBot_Config.MacroUse10=true
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_USE10ON)
-        end
-        HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
-    elseif (HBcmd=="suppress" and x) then
-        x=string.lower(x)
-        HealBot_ToggleSuppressSetting(x)
-    elseif (HBcmd=="atd" and x) then
-        if (tonumber(x)>3) and (tonumber(x)<62) then
-            HealBot_Config_Cures.ShowTimeMaxDuration=tonumber(x)
-            HealBot_Lang_Options_enALL()
-            HealBot_AddChat("Auto Timed Debuff Duration set to "..x.."s")
-        else
-            HealBot_AddChat("Invalid Value for Auto Timed Debuff Duration. valid range from 4 to 61")
-        end
-    elseif (HBcmd=="atb" and x) then
-        if (tonumber(x)>3) and (tonumber(x)<62) then
-            HealBot_Config_Buffs.AutoBuffExpireTime=tonumber(x)
-            HealBot_Lang_Options_enALL()
-            HealBot_AddChat("Auto Timed Buff Duration set to "..x.."s")
-        else
-            HealBot_AddChat("Invalid Value for Auto Timed Buff Duration. valid range from 4 to 61")
-        end
-    elseif (HBcmd=="test") then
-        HealBot_TestBars()
-    elseif (HBcmd=="tr" and x) then
-        HealBot_Panel_SethbTopRole(x)
-    elseif (HBcmd=="tpr") then 
-        if HEALBOT_GAME_VERSION<4 then
-            if HealBot_Globals.AllowPlayerRoles then
-                HealBot_Globals.AllowPlayerRoles=false
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_PLAYERROLESOFF)
+        elseif (HBcmd=="tnr") and HEALBOT_GAME_VERSION<4 then
+            if HealBot_Globals.NoRanks then
+                HealBot_Globals.NoRanks=false
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Ranks will be shown")
+                HealBot_Options_ReloadUI()
             else
-                HealBot_Globals.AllowPlayerRoles=true
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_PLAYERROLESON)
+                HealBot_Globals.NoRanks=true
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Ranks will not be shown")
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."WARNING: This is not recommanded")
+                HealBot_Options_ReloadUI()
             end
-            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
-        end
-    elseif (HBcmd=="ttq") then 
-        if HEALBOT_GAME_VERSION==3 then
-            if HealBot_Globals.DenyTalentQuery then
-                HealBot_Globals.DenyTalentQuery=nil
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYON)
+        elseif (HBcmd=="t") then
+            HealBot_ToggleHealBot()
+        elseif (HBcmd=="help" or HBcmd=="h") then
+            HealBot_luVars["HelpCnt1"]=0
+            HealBot_luVars["Help"]=true
+        elseif (HBcmd=="hs") then
+            HealBot_luVars["HelpCnt2"]=0
+            HealBot_luVars["Help"]=true
+        elseif (HBcmd=="iht" and x) then
+            if HEALBOT_GAME_VERSION<4 then
+                if (tonumber(x)>0) and (tonumber(x)<22) then
+                    HealBot_Globals.ClassicHoTTime=tonumber(x)+0.5
+                    HealBot_AddChat("HoT Time set to "..x.."s")
+                else
+                    HealBot_AddChat("Invalid Value for HoT Time. valid range from 1 to 21")
+                end
+            end
+        elseif (HBcmd=="skin" and x) then
+            if y then x=x.." "..y end
+            if z then x=x.." "..z end
+            HealBot_Options_Set_Current_Skin(x, nil, nil, true)
+        elseif (HBcmd=="use10") then
+            if HealBot_Config.MacroUse10 then
+                HealBot_Config.MacroUse10=false
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_USE10OFF)
             else
-                HealBot_Globals.DenyTalentQuery=true
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYOFF)
+                HealBot_Config.MacroUse10=true
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_USE10ON)
             end
-            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
-        end
-    elseif (HBcmd=="spt") then
-        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
-            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=false
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSOFF)
-        else
-            Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=true
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSON)
-        end
-        HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
-    elseif (HBcmd=="bt") then
-        if HealBot_Config_Buffs.BuffWatch then
-            HealBot_Config_Buffs.BuffWatch=false
-        else
-            HealBot_Config_Buffs.BuffWatch=true
-        end
-        HealBot_Options_MonitorBuffs:SetChecked(HealBot_Config_Buffs.BuffWatch)
-        HealBot_Options_MonitorBuffs_Toggle()
-    elseif (HBcmd=="dt") then
-        if HealBot_Config_Cures.DebuffWatch then
-            HealBot_Config_Cures.DebuffWatch=false
-        else
-            HealBot_Config_Cures.DebuffWatch=true
-        end
-        HealBot_Options_MonitorDebuffs:SetChecked(HealBot_Config_Cures.DebuffWatch)
-        HealBot_Options_MonitorDebuffs_Toggle()
-    elseif (HBcmd=="rtb") then
-        if HealBot_Globals.TargetBarRestricted==1 then
-            HealBot_Globals.TargetBarRestricted=0
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_RESTRICTTARGETBAR_OFF)
-        else
-            HealBot_Globals.TargetBarRestricted=1
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_RESTRICTTARGETBAR_ON)
-        end
-    elseif (HBcmd=="dm") then
-        HealBot_MountsPets_DislikeMount("Dislike")
-    elseif (HBcmd=="em") then
-        HealBot_MountsPets_DislikeMount("Exclude")
-    elseif (HBcmd=="fm") then
-        if HEALBOT_GAME_VERSION==3 then
-            HealBot_MountsPets_FavClassicMount()
-        end
-    elseif (HBcmd=="cpu") then
-        if HealBot_luVars["CPUProfilerOn"] then
-            HealBot_AddChat("WARNING: cpu profiling is ON, to disable type:")
-            HealBot_AddChat("WARNING: /console scriptProfile 0")
-            HealBot_AddChat("WARNING: /reload")
-        end
-        HealBot_AddChat("Out of combat FPS="..HealBot_luVars["FPS"][0].." CPU Level="..HealBot_Globals.CPUUsage)
-    elseif (HBcmd=="aggro" and x and y) then
-        if tonumber(x) and tonumber(x)==2 then
-            if tonumber(y) and tonumber(y)>24 and tonumber(x)<96 then
-                HealBot_Globals.aggro2pct=tonumber(y)
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO2_SET_MSG..y)
+            HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
+        elseif (HBcmd=="suppress" and x) then
+            x=string.lower(x)
+            HealBot_ToggleSuppressSetting(x)
+        elseif (HBcmd=="atd" and x) then
+            if (tonumber(x)>3) and (tonumber(x)<62) then
+                HealBot_Config_Cures.ShowTimeMaxDuration=tonumber(x)
+                HealBot_Lang_Options_enALL()
+                HealBot_AddChat("Auto Timed Debuff Duration set to "..x.."s")
             else
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO2_ERROR_MSG)
+                HealBot_AddChat("Invalid Value for Auto Timed Debuff Duration. valid range from 4 to 61")
             end
-        elseif tonumber(x) and tonumber(x)==3 then
-            if tonumber(y) and tonumber(y)>74 and tonumber(y)<101 then
-                HealBot_Globals.aggro3pct=tonumber(y)
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO3_SET_MSG..y)
+        elseif (HBcmd=="atb" and x) then
+            if (tonumber(x)>3) and (tonumber(x)<62) then
+                HealBot_Config_Buffs.AutoBuffExpireTime=tonumber(x)
+                HealBot_Lang_Options_enALL()
+                HealBot_AddChat("Auto Timed Buff Duration set to "..x.."s")
             else
-                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO3_ERROR_MSG)
+                HealBot_AddChat("Invalid Value for Auto Timed Buff Duration. valid range from 4 to 61")
             end
+        elseif (HBcmd=="test") then
+            HealBot_TestBars()
+        elseif (HBcmd=="tr" and x) then
+            HealBot_Panel_SethbTopRole(x)
+        elseif (HBcmd=="tpr") then 
+            if HEALBOT_GAME_VERSION<4 then
+                if HealBot_Globals.AllowPlayerRoles then
+                    HealBot_Globals.AllowPlayerRoles=false
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_PLAYERROLESOFF)
+                else
+                    HealBot_Globals.AllowPlayerRoles=true
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_PLAYERROLESON)
+                end
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+            end
+        elseif (HBcmd=="ttq") then 
+            if HEALBOT_GAME_VERSION==3 then
+                if HealBot_Globals.DenyTalentQuery then
+                    HealBot_Globals.DenyTalentQuery=nil
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYON)
+                else
+                    HealBot_Globals.DenyTalentQuery=true
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_ALLOWTALENTQUERYOFF)
+                end
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+            end
+        elseif (HBcmd=="spt") then
+            if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
+                Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=false
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSOFF)
+            else
+                Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"]=true
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_SELFPETSON)
+            end
+            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
+        elseif (HBcmd=="bt") then
+            if HealBot_Config_Buffs.BuffWatch then
+                HealBot_Config_Buffs.BuffWatch=false
+            else
+                HealBot_Config_Buffs.BuffWatch=true
+            end
+            HealBot_Options_MonitorBuffs:SetChecked(HealBot_Config_Buffs.BuffWatch)
+            HealBot_Options_MonitorBuffs_Toggle()
+        elseif (HBcmd=="dt") then
+            if HealBot_Config_Cures.DebuffWatch then
+                HealBot_Config_Cures.DebuffWatch=false
+            else
+                HealBot_Config_Cures.DebuffWatch=true
+            end
+            HealBot_Options_MonitorDebuffs:SetChecked(HealBot_Config_Cures.DebuffWatch)
+            HealBot_Options_MonitorDebuffs_Toggle()
+        elseif (HBcmd=="rtb") then
+            if HealBot_Globals.TargetBarRestricted==1 then
+                HealBot_Globals.TargetBarRestricted=0
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_RESTRICTTARGETBAR_OFF)
+            else
+                HealBot_Globals.TargetBarRestricted=1
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_RESTRICTTARGETBAR_ON)
+            end
+        elseif (HBcmd=="dm") then
+            HealBot_MountsPets_DislikeMount("Dislike")
+        elseif (HBcmd=="em") then
+            HealBot_MountsPets_DislikeMount("Exclude")
+        elseif (HBcmd=="fm") then
+            if HEALBOT_GAME_VERSION==3 then
+                HealBot_MountsPets_FavClassicMount()
+            end
+        elseif (HBcmd=="cpu") then
+            if HealBot_luVars["CPUProfilerOn"] then
+                HealBot_AddChat("WARNING: cpu profiling is ON, to disable type:")
+                HealBot_AddChat("WARNING: /console scriptProfile 0")
+                HealBot_AddChat("WARNING: /reload")
+            end
+            HealBot_AddChat("Out of combat FPS="..HealBot_luVars["FPS"][0].." CPU Level="..HealBot_Globals.CPUUsage)
+        elseif (HBcmd=="aggro" and x and y) then
+            if tonumber(x) and tonumber(x)==2 then
+                if tonumber(y) and tonumber(y)>24 and tonumber(x)<96 then
+                    HealBot_Globals.aggro2pct=tonumber(y)
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO2_SET_MSG..y)
+                else
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO2_ERROR_MSG)
+                end
+            elseif tonumber(x) and tonumber(x)==3 then
+                if tonumber(y) and tonumber(y)>74 and tonumber(y)<101 then
+                    HealBot_Globals.aggro3pct=tonumber(y)
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO3_SET_MSG..y)
+                else
+                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO3_ERROR_MSG)
+                end
+            else
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO_ERROR_MSG)
+            end
+        elseif (HBcmd=="lang" and x) then
+            HealBot_Options_Lang(x, true)
+        elseif (HBcmd=="cw") then  -- Clear Warnings
+            HealBot_Globals.OneTimeMsg={}
+        elseif (HBcmd=="rau") then
+            HealBot_Reset_AutoUpdateSpellIDs()
+        elseif (HBcmd=="tdb01") then
+            if HealBot_Globals.Debug01 then
+                HealBot_Globals.Debug01=false
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned OFF")
+            else
+                HealBot_Globals.Debug01=true
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned ON")
+            end
+        elseif (HBcmd=="tpt" and x) then
+            if UnitExists(x) then
+                HealBot_Panel_ToggelPrivateTanks(x, false)
+            else
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
+            end
+        elseif (HBcmd=="tph" and x) then
+            if UnitExists(x) then
+                HealBot_Panel_ToggelPrivateHealers(x, false)
+            else
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
+            end
+        elseif (HBcmd=="tpd" and x) then
+            if UnitExists(x) then
+                HealBot_Panel_ToggelPrivateDamagers(x, false)
+            else
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
+            end
+        elseif (HBcmd=="tpl" and x) then
+            if UnitExists(x) then
+                HealBot_Panel_ToggelHealTarget(x, false)
+            else
+                HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
+            end
+        elseif (HBcmd=="debugshow") then
+            HealBot_Debug_HideShow()
+        elseif (HBcmd=="debug") then
+            if HealBot_Globals.DebugOut then
+                HealBot_Globals.DebugOut=false
+                HealBot_AddChat("Debug OFF")
+            else
+                HealBot_Globals.DebugOut=true
+                HealBot_AddChat("Debug ON")
+            end
+        elseif (HBcmd=="debugtip") then
+            if HealBot_Data["TIPUSE"] then
+                HealBot_ToolTip_ToggleDebug()
+            end
+        elseif (HBcmd=="resetcalls") then
+            HealBot_AddChat("Calls Reset")
+            HealBot_Calls={}
+        elseif (HBcmd=="ma" and x) then
+            x=tonumber(x)
+            if type(x)=="number" then
+                if x>0 and x<21 then
+                    HealBot_AddChat("Aux MAX In Heals and Absorb set to MaxHealth / "..x)
+                    HealBot_Globals.InHealAbsorbDiv=x
+                    HealBot_Timers_Set("LAST", "SetPlayerData")
+                else
+                    HealBot_AddChat("The divider must be between 1 and 20")
+                end
+            else
+                HealBot_AddChat("The divider must be a number between 1 and 20")
+            end
+        elseif (HBcmd=="trs") then
+            _,xButton,pButton = HealBot_UnitID("player")
+            if xButton then
+                xButton.health.init=false
+                xButton.health.current=1
+                xButton.gref["Bar"]:SetValue(0)
+                HealBot_OnEvent_UnitHealth(xButton)
+            end
+            if pButton then
+                pButton.health.init=false
+                pButton.health.current=1
+                pButton.gref["Bar"]:SetValue(0)
+                HealBot_OnEvent_UnitHealth(pButton)
+            end
+        elseif (HBcmd=="zzz") then
+            _,xButton,pButton = HealBot_UnitID("player")
+            local button=xButton or pButton
+            HealBot_AddDebug("#: UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"].." UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." MaxFastQueue="..HealBot_luVars["MaxFastQueue"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
+            --HealBot_Action_EnableButtonGlowType(button, 1,0,0, "PLUGIN", "AW1", 6)
+            if HealBot_luVars["OORTest"] then
+                HealBot_luVars["OORTest"]=false
+            --    HealBot_Plugin_AuraWatch_InRange(button)
+            else
+                HealBot_luVars["OORTest"]=true
+            --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
+            end
+            HealBot_Aura_Counts(button)
         else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_AGGRO_ERROR_MSG)
+            if x then HBcmd=HBcmd.." "..x end
+            if y then HBcmd=HBcmd.." "..y end
+            if z then HBcmd=HBcmd.." "..z end
+            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_UNKNOWNCMD..HBcmd)
+            HealBot_luVars["HelpCnt1"]=0
+            HealBot_luVars["Help"]=true
         end
-    elseif (HBcmd=="lang" and x) then
-        HealBot_Options_Lang(x, true)
-    elseif (HBcmd=="cw") then  -- Clear Warnings
-        HealBot_Globals.OneTimeMsg={}
-    elseif (HBcmd=="rau") then
-        HealBot_Reset_AutoUpdateSpellIDs()
-    elseif (HBcmd=="tdb01") then
-        if HealBot_Globals.Debug01 then
-            HealBot_Globals.Debug01=false
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned OFF")
-        else
-            HealBot_Globals.Debug01=true
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Debug 01 turned ON")
-        end
-    elseif (HBcmd=="tpt" and x) then
-        if UnitExists(x) then
-            HealBot_Panel_ToggelPrivateTanks(x, false)
-        else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
-        end
-    elseif (HBcmd=="tph" and x) then
-        if UnitExists(x) then
-            HealBot_Panel_ToggelPrivateHealers(x, false)
-        else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
-        end
-    elseif (HBcmd=="tpd" and x) then
-        if UnitExists(x) then
-            HealBot_Panel_ToggelPrivateDamagers(x, false)
-        else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
-        end
-    elseif (HBcmd=="tpl" and x) then
-        if UnitExists(x) then
-            HealBot_Panel_ToggelHealTarget(x, false)
-        else
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID.."Invalid Unit "..x)
-        end
-    elseif (HBcmd=="debugshow") then
-        HealBot_Debug_HideShow()
-    elseif (HBcmd=="debug") then
-        if HealBot_Globals.DebugOut then
-            HealBot_Globals.DebugOut=false
-            HealBot_AddChat("Debug OFF")
-        else
-            HealBot_Globals.DebugOut=true
-            HealBot_AddChat("Debug ON")
-        end
-    elseif (HBcmd=="debugtip") then
-        if HealBot_Data["TIPUSE"] then
-            HealBot_ToolTip_ToggleDebug()
-        end
-    elseif (HBcmd=="resetcalls") then
-        HealBot_AddChat("Calls Reset")
-        HealBot_Calls={}
-    elseif (HBcmd=="trs") then
-        _,xButton,pButton = HealBot_UnitID("player")
-        if xButton then
-            xButton.health.init=false
-            xButton.health.current=1
-            xButton.gref["Bar"]:SetValue(0)
-            HealBot_OnEvent_UnitHealth(xButton)
-        end
-        if pButton then
-            pButton.health.init=false
-            pButton.health.current=1
-            pButton.gref["Bar"]:SetValue(0)
-            HealBot_OnEvent_UnitHealth(pButton)
-        end
-    elseif (HBcmd=="zzz") then
-        _,xButton,pButton = HealBot_UnitID("player")
-        local button=xButton or pButton
-        HealBot_AddDebug("#: UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"].." UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." MaxFastQueue="..HealBot_luVars["MaxFastQueue"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
-        --HealBot_Action_EnableButtonGlowType(button, 1,0,0, "PLUGIN", "AW1", 6)
-        if HealBot_luVars["OORTest"] then
-            HealBot_luVars["OORTest"]=false
-        --    HealBot_Plugin_AuraWatch_InRange(button)
-        else
-            HealBot_luVars["OORTest"]=true
-        --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
-        end
-        HealBot_Aura_Counts(button)
-    else
-        if x then HBcmd=HBcmd.." "..x end
-        if y then HBcmd=HBcmd.." "..y end
-        if z then HBcmd=HBcmd.." "..z end
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_UNKNOWNCMD..HBcmd)
-        HealBot_luVars["HelpCnt1"]=0
-        HealBot_luVars["Help"]=true
     end
       --HealBot_setCall("HealBot_SlashCmd")
 end
@@ -3139,11 +3154,11 @@ function HealBot_SetPlayerData()
         HealBot_Data["PALIVE"]=true
     end
     HealBot_Data["PGUID"]=UnitGUID("player")
-    local _, maxHlth=UnitHealth("player")
+    local maxHlth=UnitHealthMax("player")
     if maxHlth and maxHlth>1 then
         HealBot_Aux_setInHealAbsorbMax(maxHlth)
     else
-        --HealBot_Timers_Set("LAST", "SetPlayerData", 1)
+        HealBot_Timers_Set("LAST", "SetPlayerData", 5)
     end
 end
 

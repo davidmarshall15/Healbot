@@ -4250,7 +4250,7 @@ function HealBot_Action_UpdateAttribsMinReset(button, prefix, cType, bno, value)
 end
 
 function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonType,sName,sTar,sTrin1,sTrin2,AvoidBC,sType)
-    if sName then
+    if sName and type(sName)=="string" then
         local mId=GetMacroIndexByName(sName)
         if strlower(sName)==strlower(HEALBOT_DISABLED_TARGET) then
             button:SetAttribute(HB_prefix..buttonType..j, "target"..j);
