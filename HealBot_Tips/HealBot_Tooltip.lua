@@ -515,6 +515,8 @@ function HealBot_Tooltip_setPlayerPowerCols(r,g,b)
     playerPowerCols.r,playerPowerCols.g,playerPowerCols.b=r+0.34,g+0.34,b+0.34
 end
 
+local tipsUnitBosses={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true,
+                      ["boss5"]=true,["boss6"]=true,["boss7"]=true,["boss8"]=true}
 function HealBot_Action_DoRefreshTooltip()
     if HealBot_Data["TIPTYPE"]=="NONE" then return end
     if HealBot_Globals.ShowTooltip==false then return end
@@ -567,7 +569,7 @@ function HealBot_Action_DoRefreshTooltip()
                         uLvl="Level "..uLvl
                     end
                     local uClassify=UnitClassification(xUnit) or " "
-                    if uClassify=="worldboss" or HealBot_UnitBosses(xUnit) then 
+                    if uClassify=="worldboss" or tipsUnitBosses[xUnit] then 
                         uClassify="Boss"
                     elseif uClassify=="rareelite" then 
                         uClassify="Rare Elite"
@@ -607,7 +609,7 @@ function HealBot_Action_DoRefreshTooltip()
                         uSpec=xButton.spec
                     end
                     if HEALBOT_GAME_VERSION>2 and uSpec==" " then
-                        HealBot_OnEvent_SpecChange(xButton)
+                        HealBot_SpecUpdate(xButton, HealBot_TimeNow)
                     end
                 else
                     uSpec=" "

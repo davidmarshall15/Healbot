@@ -313,7 +313,7 @@ end
 
 function HealBot_MountsPets_FavClassicMount()
     if not IsMounted() then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."ERROR: Not Mounted\nMount first before setting favourite mount")
+        HealBot_AddChat("ERROR: Not Mounted\nMount first before setting favourite mount")
     else
         local z = GetNumCompanions("MOUNT")
         local mount=false
@@ -328,7 +328,7 @@ function HealBot_MountsPets_FavClassicMount()
             for z,_ in pairs(HealBot_FMount) do
                 if HealBot_FMount[z]==mount then
                     HealBot_Config.FavMount=mount
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite flying mount")
+                    HealBot_AddChat(mount.." set as Favourite flying mount")
                     mount=nil
                     break
                 end
@@ -338,7 +338,7 @@ function HealBot_MountsPets_FavClassicMount()
             for z,_ in pairs(HealBot_PrevFMounts) do
                 if HealBot_PrevFMounts[z]==mount then
                     HealBot_Config.FavMount=mount
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite flying mount")
+                    HealBot_AddChat(mount.." set as Favourite flying mount")
                     mount=nil
                     break
                 end
@@ -348,7 +348,7 @@ function HealBot_MountsPets_FavClassicMount()
             for z,_ in pairs(HealBot_GMount) do
                 if HealBot_GMount[z]==mount then
                     HealBot_Config.FavGroundMount=mount
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite ground mount")
+                    HealBot_AddChat(mount.." set as Favourite ground mount")
                     mount=nil
                     break
                 end
@@ -358,7 +358,7 @@ function HealBot_MountsPets_FavClassicMount()
             for z,_ in pairs(HealBot_PrevGMounts) do
                 if HealBot_PrevGMounts[z]==mount then
                     HealBot_Config.FavGroundMount=mount
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..mount.." set as Favourite ground mount")
+                    HealBot_AddChat(mount.." set as Favourite ground mount")
                     break
                 end
             end
@@ -368,7 +368,7 @@ end
 
 function HealBot_MountsPets_DislikeMount(action)
     if not IsMounted() then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID.."ERROR: Not Mounted\nMount first before toggling exclude mount")
+        HealBot_AddChat("ERROR: Not Mounted\nMount first before toggling exclude mount")
     else
         local z = 0
         local mount,creatureName,active=nil,nil,nil

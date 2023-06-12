@@ -363,12 +363,12 @@ function HealBot_Panel_SethbTopRole(Role)
         hbRole[HEALBOT_WORD_HEALER]=2
         hbRole[HEALBOT_WORD_DPS]=7
     else
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..Role..HEALBOT_CHAT_TOPROLEERR)
+        HealBot_AddChat(Role..HEALBOT_CHAT_TOPROLEERR)
         return
     end
     if HealBot_Globals.TopRole~=Role then
         HealBot_Globals.TopRole=Role
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWTOPROLE..Role)
+        HealBot_AddChat(HEALBOT_CHAT_NEWTOPROLE..Role)
         HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
     end
 end

@@ -8798,10 +8798,10 @@ end
 function HealBot_Options_ToggleMainAssist()
     if HealBot_Globals.IncMainAssist then
         HealBot_Globals.IncMainAssist=false
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_MAINASSISTOFF)
+        HealBot_AddChat(HEALBOT_CHAT_MAINASSISTOFF)
     else
         HealBot_Globals.IncMainAssist=true
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_MAINASSISTON)
+        HealBot_AddChat(HEALBOT_CHAT_MAINASSISTON)
     end
     HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers")
 end
@@ -13137,8 +13137,8 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
             end
         end
         if not hbFoundSkin then
-            HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR1..newSkin)
-            if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
+            HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR1..newSkin)
+            if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
             if not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
                 local retryWithSkin = HealBot_getDefaultSkin()
                 if not noCallback then

@@ -146,7 +146,7 @@ function HealBot_Comms_CheckVer(userName, version)
                 hbPatch=tPatch
                 hbHealbot=tHealbot
                 if not HealBot_Globals.OneTimeMsg["VERSION"] then
-                    HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_NEWVERSION1)
+                    HealBot_AddChat(HEALBOT_CHAT_NEWVERSION1)
                     HealBot_Globals.OneTimeMsg["VERSION"]=true
                 end
                 HealBot_MsgUpdateAvail = hbMajor.."."..hbMinor.."."..hbPatch.."."..hbHealbot

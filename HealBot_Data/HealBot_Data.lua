@@ -290,7 +290,8 @@ function HealBot_Data_InitVars()
         CPUUsage=5,
         OptionsTheme=1,
         OptionsOpacityAdj=35,
-        InHealAbsorbDiv=10,
+        AbsorbDiv=10,
+        InHealDiv=10,
         DebugOut=false,
         Debug01=false, -- Currently not used
         VersionResetDone={["ICONS"]="9.1.0.0",["BUFF"]="9.1.0.0",["CBUFF"]="9.1.0.0",["DEBUFF"]="9.1.0.0",["CDEBUFF"]="9.1.0.0"},

@@ -19,15 +19,25 @@ HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
 HealBot_Aux_luVars["TestBarsOn"]=false
 
 if HEALBOT_GAME_VERSION>9 then
-    HealBot_Aux_luVars["InHealAbsorbMax"]=12000
+    HealBot_Aux_luVars["AbsorbMax"]=12000
+    HealBot_Aux_luVars["InHealMax"]=12000
 else
-    HealBot_Aux_luVars["InHealAbsorbMax"]=3000
+    HealBot_Aux_luVars["AbsorbMax"]=3000
+    HealBot_Aux_luVars["InHealMax"]=3000
 end
-function HealBot_Aux_setInHealAbsorbMax(maxHealth)
-    HealBot_Aux_luVars["InHealAbsorbMax"]=ceil((maxHealth/HealBot_Globals.InHealAbsorbDiv)/1000)
-    HealBot_Aux_luVars["InHealAbsorbMax"]=HealBot_Aux_luVars["InHealAbsorbMax"]*1000
-    HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
-    HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
+function HealBot_Aux_setInHealAbsorbMax()
+    local maxHlth=UnitHealthMax("player")
+    if maxHlth and maxHlth>1 then
+        HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/HealBot_Globals.AbsorbDiv)/1000)
+        HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/HealBot_Globals.InHealDiv)/1000)
+        HealBot_Aux_luVars["AbsorbMax"]=HealBot_Aux_luVars["AbsorbMax"]*1000
+        HealBot_Aux_luVars["InHealMax"]=HealBot_Aux_luVars["InHealMax"]*1000
+        
+        HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
+        HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
+    else
+        HealBot_Timers_Set("LAST", "SetInHealAbsorbMax", 5)
+    end
 end
 
 function HealBot_Aux_setLuVars(vName, vValue)
@@ -823,7 +833,7 @@ function HealBot_Aux_UpdateAbsorbBar(button)
                 button.aux[id]["B"]=button.health.absorbb
             end
             if button.health.auxabsorbs>0 then
-                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["InHealAbsorbMax"]/button.health.auxabsorbs))
+                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["AbsorbMax"]/button.health.auxabsorbs))
                 if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
             else
                 hbAuxHlth10=0
@@ -861,7 +871,7 @@ function HealBot_Aux_UpdateHealInBar(button)
                 button.aux[id]["B"]=button.health.inhealb
             end
             if button.health.auxincoming>0 then
-                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["InHealAbsorbMax"]/button.health.auxincoming))
+                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["InHealMax"]/button.health.auxincoming))
                 if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
             else
                 hbAuxHlth10=0

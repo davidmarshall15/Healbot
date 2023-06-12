@@ -848,7 +848,7 @@ function HealBot_Lang_enALL()
     HEALBOT_IMPORT_MERGENEW                 = "Merge New"
     HEALBOT_IMPORT_CREATEORREPLACE          = "Create or Replace"
 
-    HEALBOT_CHAT_ADDONID                    = "[HealBot]  "
+    HEALBOT_CHAT_ADDONID                    = "[HealBot] "
     HEALBOT_CHAT_NEWVERSION1                = "A new version is available"
     HEALBOT_CHAT_SHARESKINERR1              = " Skin not found for Sharing"
     HEALBOT_CHAT_SHARESKINERR3              = " not found for Skin Sharing"

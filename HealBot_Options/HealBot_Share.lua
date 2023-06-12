@@ -1077,7 +1077,7 @@ function HealBot_Share_SkinLoad(sIn, internal)
         HealBot_SetResetFlag("SOFT")
         HealBot_Options_NewSkin:SetText("")
         hbWarnSharedMedia=false
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
+        HealBot_AddChat(hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
     end
 end
 
@@ -1248,7 +1248,7 @@ end
 
 function HealBot_Share_WarnPossibleNoSharedMedia()
     if not hbWarnSharedMedia then
-        HealBot_AddChat(HEALBOT_CHAT_ADDONID..HEALBOT_CHAT_POSSIBLEMISSINGMEDIA)
+        HealBot_AddChat(HEALBOT_CHAT_POSSIBLEMISSINGMEDIA)
         hbWarnSharedMedia=true
     end
 end

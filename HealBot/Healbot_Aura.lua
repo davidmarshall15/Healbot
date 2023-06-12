@@ -2191,9 +2191,10 @@ function HealBot_Aura_CureSpellOnCD()
     HealBot_Aura_luVars["cureOffCd"]=false
 end
 
+local dbV1UnitBosses={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true}
 function HealBot_Aura_GetDebuffsV1(button)
     uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
-    if uaUnitCaster and (UnitClassification(uaUnitCaster)=="worldboss" or HealBot_UnitBosses(uaUnitCaster)) then
+    if uaUnitCaster and (UnitClassification(uaUnitCaster)=="worldboss" or dbV1UnitBosses[uaUnitCaster]) then
         uaIsBossDebuff=true
     else
         uaIsBossDebuff=false
