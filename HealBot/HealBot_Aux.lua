@@ -1880,7 +1880,6 @@ function HealBot_Aux_UpdateAllAuxByType(frame, id)
             end
         end
     end
-    
 end
 
 

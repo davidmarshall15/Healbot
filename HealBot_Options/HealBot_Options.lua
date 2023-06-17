@@ -2270,6 +2270,7 @@ function HealBot_Options_setNewSkin(newSkinName)
     Healbot_Config_Skins.DuplicateBars[newSkinName] = Healbot_Config_Skins.DuplicateBars[Healbot_Config_Skins.Current_Skin]
     Healbot_Config_Skins.Indicators[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Emerg[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin])
+    Healbot_Config_Skins.CustomCols[newSkinName] = HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin])
     Healbot_Config_Skins.Author[newSkinName] = UnitName("Player").." "..HEALBOT_PLAYER_OF_REALM.." "..GetRealmName()
     if not HealBot_Options_checkSkinName(newSkinName) then
         table.insert(Healbot_Config_Skins.Skins,2,newSkinName)
@@ -2330,6 +2331,7 @@ function HealBot_Options_DeleteSkin_OnClick(self)
             Healbot_Config_Skins.Enemy[hbDelSkinName] = nil
             Healbot_Config_Skins.Indicators[hbDelSkinName] = nil
             Healbot_Config_Skins.Emerg[hbDelSkinName] = nil
+            Healbot_Config_Skins.CustomCols[hbDelSkinName] = nil
             table.remove(Healbot_Config_Skins.Skins,Healbot_Config_Skins.Skin_ID)
             HealBot_Config.LastAutoSkinChangeTime=0
             local retryWithSkin = HealBot_getDefaultSkin()
@@ -12552,6 +12554,7 @@ function HealBot_Options_AuxAssign_DropDown(object, id)
                             UIDropDownMenu_SetText(object,list[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][HealBot_Options_luVars["FramesSelFrame"]]["USE"]]) 
                             HealBot_Options_AuxDefaultShowText(HealBot_Options_luVars["FramesSelFrame"], self:GetID(), id)
                             HealBot_Options_clearAuxBars(HealBot_Options_luVars["FramesSelFrame"],id)
+                            HealBot_Timers_Set("SKINS","SkinsAuxFramesChanged",0.5)
                         end
                     end
         info.checked = false;
@@ -13934,6 +13937,10 @@ function HealBot_Options_CDCTxt3_DropDown()
     HealBot_Options_CDCTxt_DropDown(HealBot_Options_CDCTxt3, 3)
 end
 
+function HealBot_Options_CDCTxt4_DropDown()
+    HealBot_Options_CDCTxt_DropDown(HealBot_Options_CDCTxt4, 4)
+end
+
 function HealBot_Options_CDCGroups_DropDown(object, id)
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_BuffTxt_List), 1 do
@@ -13960,6 +13967,10 @@ end
 
 function HealBot_Options_CDCGroups3_DropDown()
     HealBot_Options_CDCGroups_DropDown(HealBot_Options_CDCGroups3, 3)
+end
+
+function HealBot_Options_CDCGroups4_DropDown()
+    HealBot_Options_CDCGroups_DropDown(HealBot_Options_CDCGroups4, 4)
 end
 
 function HealBot_Options_CDCPriority_DropDown(object, dType)
@@ -15377,7 +15388,7 @@ function HealBot_Options_Debuff_Reset()
     local DebuffTextClass = HealBot_Config_Cures.HealBotDebuffText
     local DebuffDropDownClass = HealBot_Config_Cures.HealBotDebuffDropDown
     
-    for k=1,3 do
+    for k=1,4 do
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)] or "x"
@@ -20224,8 +20235,12 @@ function HealBot_Options_DebuffsGeneralTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_CDCGroups2, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(2)]])
         HealBot_Options_CDCTxt3.initialize = HealBot_Options_CDCTxt3_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCTxt3, HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(3)])
+        HealBot_Options_CDCTxt4.initialize = HealBot_Options_CDCTxt4_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCTxt4, HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(4)])
         HealBot_Options_CDCGroups3.initialize = HealBot_Options_CDCGroups3_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCGroups3, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(3)]])
+        HealBot_Options_CDCGroups4.initialize = HealBot_Options_CDCGroups4_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCGroups4, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(4)]])
         HealBot_Options_IgnoreDebuffsDuration:SetChecked(HealBot_Config_Cures.IgnoreFastDurDebuffs)
         HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsDuration,HEALBOT_OPTIONS_IGNOREDEBUFFDURATION)
         HealBot_Options_sliderlabels_Init(HealBot_Options_IgnoreDebuffsDurationSecs,HEALBOT_OPTIONS_HOTTEXTDURATION,1,5,1,1,"0.5","2.5")

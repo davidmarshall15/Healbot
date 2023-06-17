@@ -715,6 +715,7 @@ HealBot_Config_SkinsDefaults = {
   Indicators = {},
   Emerg = {},
   ToolTip = {},
+  CustomCols = {},
 };
 
 

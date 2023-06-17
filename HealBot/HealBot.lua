@@ -1607,7 +1607,7 @@ end
 function HealBot_Update_BuffsForSpec(buffType)
     if buffType then
         if buffType=="Debuff" then
-            for x=1,3 do
+            for x=1,4 do
                 HealBot_Update_BuffsForSpecDD(x,"Debuff")
             end
         else
@@ -1616,7 +1616,7 @@ function HealBot_Update_BuffsForSpec(buffType)
             end
         end
     else
-        for x=1,3 do
+        for x=1,4 do
             HealBot_Update_BuffsForSpecDD(x,"Debuff")
         end
         for x=1,8 do
@@ -1766,8 +1766,8 @@ function HealBot_DoReset_Spells(pClassTrim)
 end
 
 function HealBot_DoReset_Cures(pClassTrim)
-    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_WORDS_NONE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
-    HealBot_Config_Cures.HealBotDebuffDropDown = {[1]=4,[2]=4,[3]=4}
+    HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_WORDS_NONE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE,[4]=HEALBOT_WORDS_NONE}
+    HealBot_Config_Cures.HealBotDebuffDropDown = {[1]=4,[2]=4,[3]=4,[4]=4}
     local i=1
     if pClassTrim=="DRUI" then
         if HEALBOT_GAME_VERSION<4 then
@@ -3071,6 +3071,7 @@ function HealBot_Update_Skins()
             if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] then
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=4
             end
+            HealBot_Update_BuffsForSpec("Debuff")
         end
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)

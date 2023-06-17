@@ -19771,7 +19771,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -19799,7 +19799,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt2" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -19823,11 +19823,39 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Frame name="HealBot_Options_CDCTxt4" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt3" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-10" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 190)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLTOCURE",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_CDCGroups4" inherits="UIDropDownMenuTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt4" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-10" y="0" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSSPELLCHECKMEMBERS",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <CheckButton name="HealBot_Options_IgnoreDebuffsDuration" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt3" relativePoint="BOTTOMLEFT">>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCTxt4" relativePoint="BOTTOMLEFT">>
                         <Offset>
-                          <AbsDimension x="95" y="-65" />
+                          <AbsDimension x="95" y="-45" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -19858,7 +19886,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IgnoreDebuffsDuration" relativePoint="TOPLEFT">>
                         <Offset>
-                          <AbsDimension x="0" y="-32" />
+                          <AbsDimension x="0" y="-28" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -19885,7 +19913,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_IgnoreDebuffsCoolDown" relativePoint="TOPLEFT">>
                         <Offset>
-                          <AbsDimension x="0" y="-32" />
+                          <AbsDimension x="0" y="-28" />
                         </Offset>
                       </Anchor>
                     </Anchors>

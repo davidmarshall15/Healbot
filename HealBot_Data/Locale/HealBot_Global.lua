@@ -6,7 +6,7 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.1.0.3"
+    return "10.1.0.5.1"
 end
 function HealBot_globalVars()
     --Consumables

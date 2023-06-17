@@ -2122,9 +2122,30 @@ function HealBot_Action_ShouldHealSome(hbCurFrame)
     return false
 end
 
+local hbPowerCols= {
+          ["MANA"]           = {r=0.0,  g=0.0,  b=1.0, },
+          ["RAGE"]           = {r=1.0,  g=0.0,  b=0.0, },
+          ["FOCUS"]          = {r=1.0,  g=0.5,  b=0.25, },
+          ["ENERGY"]         = {r=1.0,  g=1.0,  b=0.0, },
+          ["HAPPINESS"]      = {r=1.0,  g=0.96, b=0.41, },
+          ["RUNES"]          = {r=0.5,  g=0.5,  b=0.5, },
+          ["RUNIC_POWER"]    = {r=0.0,  g=0.82, b=1.0,  },
+          ["SOUL_SHARDS"]    = {r=0.5,  g=0.32, b=0.55, },
+          ["ECLIPSE"]        = {r=0.3,  g=0.52, b=0.9,  },
+          ["HOLY_POWER"]     = {r=0.95, g=0.9,  b=0.6, },
+          ["AMMOSLOT"]       = {r=0.8,  g=0.6,  b=0.0, },
+          ["FUEL"]           = {r=0.0,  g=0.55, b=0.5, },
+          ["STAGGER"]        = {r=0.1,  g=0.98, b=0.72, },
+          ["CHI"]            = {r=0.71, g=1.0,  b=0.92, },
+          ["INSANITY"]       = {r=0.4,  g=0.0,  b=0.8, },
+          ["ARCANE_CHARGES"] = {r=0.1,  g=0.1,  b=0.98, },
+          ["FURY"]           = {r=0.79, g=0.26, b=0.99, },
+          ["PAIN"]           = {r=1.0,  g=0.61, b=0.0, },
+      }
+      
 local vPowerBarInfo={}
 local vPowerBarType,vPowerBarToken,vPowerBarR,vPowerBarG,vPowerBarB=0,"MANA",0,0,0
-function HealBot_Action_GetManaBarCol(button)
+function HealBot_Action_GetManaBarColour(button)
     vPowerBarType, vPowerBarToken, vPowerBarR, vPowerBarG, vPowerBarB=UnitPowerType(button.unit);
     if vPowerBarType then 
         button.mana.type=vPowerBarType 
@@ -2135,12 +2156,30 @@ function HealBot_Action_GetManaBarCol(button)
     end
     vPowerBarInfo=PowerBarColor[vPowerBarToken]
     if vPowerBarInfo then
-        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
+        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, vPowerBarToken
     elseif not vPowerBarR then
         vPowerBarInfo = PowerBarColor[vPowerBarType] or PowerBarColor["MANA"];
-        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b
+        return vPowerBarInfo.r, vPowerBarInfo.g, vPowerBarInfo.b, false
     else
-        return vPowerBarR, vPowerBarG, vPowerBarB
+        return vPowerBarR, vPowerBarG, vPowerBarB, false
+    end
+end
+
+local powerR, powerG, powerB, powerType=0,0,0,false
+function HealBot_Action_GetManaBarCol(button)
+    powerR, powerG, powerB, powerType=HealBot_Action_GetManaBarColour(button)
+    if powerType and not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType] then
+            Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType]={}
+            Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].r=powerR
+            Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].g=powerG
+            Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].b=powerB
+    end
+    if Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType] then
+        return Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].r,
+               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].g,
+               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][powerType].b
+    else
+        return powerR, powerG, powerB
     end
 end
 
@@ -5645,20 +5684,25 @@ local hbClassCols = {
       }
 
 function HealBot_Action_ClassColour(unit, cTrim)
-    if cTrim and cTrim~="XXXX" then
-        return hbClassCols[cTrim].r, hbClassCols[cTrim].g, hbClassCols[cTrim].b
-    else
-        local xClass=nil
+    if not cTrim or cTrim=="XXXX" then
         if unit and UnitClass(unit) then
-            _,xClass=UnitClass(unit)    
+            _,cTrim=UnitClass(unit)    
         end
-        if xClass then
-            xClass = strsub(xClass,1,4)
+        if cTrim then
+            cTrim = strsub(cTrim,1,4)
         else
-            xClass = "WARR"
+            cTrim = "WARR"
         end
-        return hbClassCols[xClass].r, hbClassCols[xClass].g, hbClassCols[xClass].b
     end
+    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim] then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim]={}
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].r=hbClassCols[cTrim].r
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].g=hbClassCols[cTrim].g
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].b=hbClassCols[cTrim].b
+    end
+    return Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].r,
+           Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].g,
+           Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][cTrim].b
 end
 
 function HealBot_Action_HideTooltip(self)
