@@ -600,6 +600,14 @@ function HealBot_Panel_UnitRole(unit,guid)
     return role
 end
 
+function HealBot_Panel_UnitRoleDefault(unit)
+    if hbPanel_dataRoles[unit] and (hbPanel_dataRoles[unit]=="TANK" or hbPanel_dataRoles[unit]=="HEALER") then
+        return hbPanel_dataRoles[unit]
+    else
+        return "DAMAGER"
+    end
+end
+
 function HealBot_Action_SetClassIconTexture(button)
     if UnitExists(button.unit) and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCLASS"] then
         local setRole=false
@@ -895,7 +903,7 @@ function HealBot_Panel_ToggleTestBars()
     HealBot_Action_setLuVars("resetSkin", true)
     HealBot_Action_setLuVars("resetIndicator", true)
     HealBot_Action_setLuVars("resetText", true)
-    HealBot_Action_setLuVars("resetAux", true)
+    --HealBot_Action_setLuVars("resetAux", true)
     HealBot_Action_ResetSkinAllButtons()
     if HealBot_setTestBars then
         HealBot_setTestBars=false

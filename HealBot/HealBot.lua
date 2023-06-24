@@ -237,7 +237,7 @@ end
 function HealBot_AddDebug(HBmsg, cat, incTime)
     if HealBot_Globals.DebugOut and HBmsg and (HealBot_SpamCut[HBmsg] or 0)<HealBot_TimeNow then
         HealBot_SpamCut[HBmsg]=HealBot_TimeNow+1
-        if cat then
+        if cat and HBmsg then
             HealBot_Debug_Add(cat, HBmsg, incTime)
         else
             HBmsg="["..date("%H:%M", time()).."] DEBUG: "..HBmsg;
@@ -809,7 +809,8 @@ function HealBot_SlashCmd(cmd)
                 HealBot_luVars["OORTest"]=true
             --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
             end
-            HealBot_Aura_Counts(button)
+            --HealBot_Aura_Counts(button)
+            HealBot_Options_SkinsColourRoleTab("ZZZ")
         else
             if x then HBcmd=HBcmd.." "..x end
             if y then HBcmd=HBcmd.." "..y end
@@ -1203,6 +1204,27 @@ function HealBot_updAllStateIconAFK()
     for _,xButton in pairs(HealBot_Private_Button) do
        HealBot_OnEvent_UnitFlagsChanged(xButton)
     end
+      --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
+end
+
+function HealBot_clearClassGuidData()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_Action_setGuidData(xButton, "CLASSKNOWN", false)
+    end
+    HealBot_Action_ResetAllButtons(true)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
       --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
 end
 
@@ -2283,12 +2305,18 @@ function HealBot_Load()
         if not HealBot_luVars["HelpNotice"] then
             HealBot_Timers_Set("LAST","HealBotLoaded")
             HealBot_luVars["HelpNotice"]=true
-        end      
+        end
+        HealBot_Action_SetCustomClassCols()
+        HealBot_Action_SetCustomRoleCols()
+        HealBot_Action_SetCustomPowerCols()
         HealBot_MMButton_Init()
         HealBot_Aura_SetAuraWarningFlags()
         HealBot_Options_Override_ChatUse_Toggle()
         HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_Override_FramesUse_Toggle()
+        HealBot_Options_Override_ColoursClassUse_Toggle()
+        HealBot_Options_Override_ColoursRoleUse_Toggle()
+        HealBot_Options_Override_ColoursPowerUse_Toggle()
         HealBot_Action_StickyFrameIndCols()
         HealBot_Register_IncHeals()
         HealBot_PartyUpdate_CheckSkin()
@@ -2918,7 +2946,7 @@ function HealBot_Update_Skins()
     if HealBot_Globals.CacheSize then HealBot_Globals.CacheSize=nil end
     if not HealBot_Globals.AutoCacheSize then HealBot_Globals.AutoCacheSize=30 end
     local tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Globals.LastVersionSkinUpdate)
-    if not HealBot_luVars["ResetGlobalOld"] and tonumber(tMajor)<oldVersion then
+    if not HealBot_luVars["ResetGlobalOld"] and tonumber(tMajor)<=oldVersion then
         HealBot_luVars["ResetGlobalOld"]=true
         HealBot_Options_SetDefaults(true)
     else
@@ -2927,75 +2955,6 @@ function HealBot_Update_Skins()
             if not HealBot_luVars["UpdateMsg"] then
                 HealBot_luVars["UpdateMsg"]=true
                 HealBot_Globals.OneTimeMsg["VERSION"]=false
-            end
-            if tonumber(tMajor)==9 then
-                if not HealBot_Globals.OverrideEffects["FGDIMMING"] then HealBot_Globals.OverrideEffects["FGDIMMING"]=2.5 end
-                if HealBot_Globals.OverrideEffects["HEALTHDROP"]==nil then HealBot_Globals.OverrideEffects["HEALTHDROP"]=false end
-                if not HealBot_Globals.OverrideEffects["HEALTHDROPPCT"] then HealBot_Globals.OverrideEffects["HEALTHDROPPCT"]=350 end
-                if not HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"] then HealBot_Globals.OverrideEffects["HEALTHDROPSPEED"]=40 end
-                if not HealBot_Globals.OverrideEffects["HOTBARHLTH"] then HealBot_Globals.OverrideEffects["HOTBARHLTH"]=0 end
-                if not HealBot_Globals.OverrideEffects["HOTBARDEBUFF"] then HealBot_Globals.OverrideEffects["HOTBARDEBUFF"]=1 end
-                if not HealBot_Globals.OverrideEffects["HBDIMMING"] then HealBot_Globals.OverrideEffects["HBDIMMING"]=2.2 end
-                if HealBot_Globals.OverrideEffects["FLUIDALPHA"]==nil then HealBot_Globals.OverrideEffects["FLUIDALPHA"]=false end
-                if not HealBot_Config_Buffs.ShowGroups then 
-                    HealBot_Config_Buffs.ShowGroups={}
-                    for x=1,8 do
-                        HealBot_Config_Buffs.ShowGroups[x]=true
-                    end
-                end
-                if not HealBot_Config_Cures.ShowGroups then 
-                    HealBot_Config_Cures.ShowGroups={}
-                    for x=1,8 do
-                        HealBot_Config_Cures.ShowGroups[x]=true
-                    end
-                end
-                for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol) do
-                    if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
-                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
-                    elseif HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]==true then
-                        HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=3
-                    end
-                end
-                for bId, x in pairs(HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol) do
-                    if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] then
-                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
-                    elseif HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]==true then
-                        HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=3
-                    end
-                end
-                HealBot_Globals.ResLagDuration=nil
-
-                if HEALBOT_GAME_VERSION==3 and not HealBot_Config.InitWotLKSpells then
-                    HealBot_Config.InitWotLKSpells=true
-                    HealBot_Copy_SpellCombos()
-                end
-                
-                if HealBot_Globals.HealBot_Emotes then HealBot_Globals.HealBot_Emotes=nil end
-                HealBot_Globals.Tooltip_MouseWheel=nil
-                if HealBot_Config.MacroUse10==1 then
-                    HealBot_Config.MacroUse10=true
-                elseif HealBot_Config.MacroUse10==0 then
-                    HealBot_Config.MacroUse10=false
-                end
-                if HealBot_Globals.MacroSuppressSound==1 then
-                    HealBot_Globals.MacroSuppressSound=true
-                elseif HealBot_Globals.MacroSuppressSound==0 then
-                    HealBot_Globals.MacroSuppressSound=false
-                end
-                if HealBot_Globals.MacroSuppressError==1 then
-                    HealBot_Globals.MacroSuppressError=true
-                elseif HealBot_Globals.MacroSuppressError==0 then
-                    HealBot_Globals.MacroSuppressError=false
-                end
-                HealBot_Globals.CatchAltDebuffIDs=nil
-                local hbClassHoTwatch=HealBot_Globals.WatchHoT
-                for xClass,_  in pairs(hbClassHoTwatch) do
-                    local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
-                    for id,x  in pairs(HealBot_configClassHoTClass) do
-                        if HealBot_configClassHoTClass[id]==4 then HealBot_configClassHoTClass[id]=3 end
-                    end
-                end
-                HealBot_Options_ResetSetting("ICONS")
             end
             if tonumber(tMajor)==10 then
                 if tonumber(tMinor)==0 then
@@ -3059,6 +3018,60 @@ function HealBot_Update_Skins()
                         end
                     end
                 end
+                if tonumber(tMinor)<2 then
+                    if tonumber(tMinor)==0 or tonumber(tHealbot)<6 then
+                        for x in pairs (Healbot_Config_Skins.Skins) do
+                            for f=1,10 do
+                                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]>2 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]+1
+                                end
+                                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]>5 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]+3
+                                elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]>4 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]+2
+                                elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]>2 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BACK"]+1
+                                end
+                                if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]>6 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]+3
+                                elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]>5 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]+2
+                                elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]>3 then
+                                    Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Skins[x]][f]["BORDER"]+1
+                                end
+                                if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IC"]>2 then
+                                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IC"]=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["IC"]+2
+                                end
+                                if Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AC"]>2 then
+                                    Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AC"]=Healbot_Config_Skins.BarIACol[Healbot_Config_Skins.Skins[x]][f]["AC"]+2
+                                end
+                                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]>2 then
+                                    Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]+1
+                                end
+                                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]>2 then
+                                    Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]+1
+                                end
+                                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["STATE"]>2 then
+                                    Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["STATE"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["STATE"]+1
+                                end
+                                if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["AGGRO"]>2 then
+                                    Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["AGGRO"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["AGGRO"]+1
+                                end
+                                if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["BARCOL"]>2 then
+                                    Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["BARCOL"]=Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Skins[x]][f]["BARCOL"]+1
+                                end
+                                for z=1,9 do
+                                    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Skins[x]][z][f]["COLOUR"]==3 then
+                                        Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Skins[x]][z][f]["COLOUR"]=4
+                                    end
+                                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Skins[x]][z][f]["COLTYPE"]==3 then
+                                        Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Skins[x]][z][f]["COLTYPE"]=4
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
                 if HealBot_Globals.InHealAbsorbDiv then
                     HealBot_Globals.AbsorbDiv=HealBot_Globals.InHealAbsorbDiv
                     HealBot_Globals.InHealDiv=HealBot_Globals.InHealAbsorbDiv
@@ -3072,23 +3085,16 @@ function HealBot_Update_Skins()
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=4
             end
             HealBot_Update_BuffsForSpec("Debuff")
+            HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
         end
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
-    if not HealBot_luVars["ResetLocalOld"] and tonumber(tMajor)<oldVersion then
+    if not HealBot_luVars["ResetLocalOld"] and tonumber(tMajor)<=oldVersion then
         HealBot_luVars["ResetLocalOld"]=true
         HealBot_Options_SetDefaults(false);
     elseif HealBot_Config.LastVersionUpdate~=HealBot_Global_Version() then
-        if tonumber(tMajor)==9 then
-            if HealBot_Config.ActionVisible then HealBot_Config.ActionVisible=nil end
-            if HealBot_Config.CrashProtMacroName or HealBot_Globals.OverrideProt then 
-                HealBot_Options_DeleteAllCpMacros()
-                HealBot_Config.CrashProtMacroName=nil 
-                HealBot_Globals.OverrideProt=nil
-            end
-            if HealBot_Config.CrashProtStartTime then HealBot_Config.CrashProtStartTime=nil end
-        end
         -- Character specific checks
+        HealBot_Config.LastVersionUpdate=HealBot_Global_Version()
     end
     if not HealBot_Config.SpellsUpdatedToV10 then  -- When removing this check, also remove from HealBot_Action_GetComboWithSpec - This is old when 10.0 is old.
         if not HealBot_Config_Spells.EnabledKeyCombo["New"] then
@@ -3127,8 +3133,31 @@ function HealBot_Update_Skins()
             HealBot_Config.SpellsUpdatedToV10=true
         end
     end
-    HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
-    HealBot_Config.LastVersionUpdate=HealBot_Global_Version()
+    if not HealBot_Globals.OverrideColours["TANK"] then HealBot_Skins_SetRoleCol(nil, "TANK", true) end
+    if not HealBot_Globals.OverrideColours["HEALER"] then HealBot_Skins_SetRoleCol(nil, "HEALER", true) end
+    if not HealBot_Globals.OverrideColours["DAMAGER"] then HealBot_Skins_SetRoleCol(nil, "DAMAGER", true) end
+    if not HealBot_Globals.OverrideColours["DEMO"] then HealBot_Skins_SetClassCol(nil, "DEMO", true) end
+    if not HealBot_Globals.OverrideColours["DRUI"] then HealBot_Skins_SetClassCol(nil, "DRUI", true) end
+    if not HealBot_Globals.OverrideColours["HUNT"] then HealBot_Skins_SetClassCol(nil, "HUNT", true) end
+    if not HealBot_Globals.OverrideColours["MAGE"] then HealBot_Skins_SetClassCol(nil, "MAGE", true) end
+    if not HealBot_Globals.OverrideColours["MONK"] then HealBot_Skins_SetClassCol(nil, "MONK", true) end
+    if not HealBot_Globals.OverrideColours["PALA"] then HealBot_Skins_SetClassCol(nil, "PALA", true) end
+    if not HealBot_Globals.OverrideColours["PRIE"] then HealBot_Skins_SetClassCol(nil, "PRIE", true) end
+    if not HealBot_Globals.OverrideColours["ROGU"] then HealBot_Skins_SetClassCol(nil, "ROGU", true) end
+    if not HealBot_Globals.OverrideColours["SHAM"] then HealBot_Skins_SetClassCol(nil, "SHAM", true) end
+    if not HealBot_Globals.OverrideColours["WARL"] then HealBot_Skins_SetClassCol(nil, "WARL", true) end
+    if not HealBot_Globals.OverrideColours["DEAT"] then HealBot_Skins_SetClassCol(nil, "DEAT", true) end
+    if not HealBot_Globals.OverrideColours["WARR"] then HealBot_Skins_SetClassCol(nil, "WARR", true) end
+    if not HealBot_Globals.OverrideColours["EVOK"] then HealBot_Skins_SetClassCol(nil, "EVOK", true) end
+    if not HealBot_Globals.OverrideColours["MANA"] then HealBot_Skins_SetPowerCol(nil, "MANA", true) end
+    if not HealBot_Globals.OverrideColours["RAGE"] then HealBot_Skins_SetPowerCol(nil, "RAGE", true) end
+    if not HealBot_Globals.OverrideColours["FOCUS"] then HealBot_Skins_SetPowerCol(nil, "FOCUS", true) end
+    if not HealBot_Globals.OverrideColours["ENERGY"] then HealBot_Skins_SetPowerCol(nil, "ENERGY", true) end
+    if not HealBot_Globals.OverrideColours["RUNIC_POWER"] then HealBot_Skins_SetPowerCol(nil, "RUNIC_POWER", true) end
+    if not HealBot_Globals.OverrideColours["INSANITY"] then HealBot_Skins_SetPowerCol(nil, "INSANITY", true) end
+    if not HealBot_Globals.OverrideColours["LUNAR_POWER"] then HealBot_Skins_SetPowerCol(nil, "LUNAR_POWER", true) end
+    if not HealBot_Globals.OverrideColours["MAELSTROM"] then HealBot_Skins_SetPowerCol(nil, "MAELSTROM", true) end
+    if not HealBot_Globals.OverrideColours["FURY"] then HealBot_Skins_SetPowerCol(nil, "FURY", true) end
       --HealBot_setCall("HealBot_Update_Skins")
 end
 

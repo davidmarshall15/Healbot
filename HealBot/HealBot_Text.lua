@@ -81,6 +81,19 @@ HealBot_Text_luVars["FluidTextAlphaUpdate"]=0.02
 HealBot_Text_luVars["FluidTextAlphaFreq"]=0.088
 HealBot_Text_luVars["TestBarsOn"]=false
 
+local hbCustomRoleCols={}
+function HealBot_Text_SetCustomRoleCols()
+    if HealBot_Globals.OverrideColours["USEROLE"]==1 then
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"])
+    else
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["DAMAGER"])
+    end
+end
+
 function HealBot_Text_setAuxAssigns(vName, frame, vValue)
     HealBot_Text_AuxAssigns[vName][frame]=vValue
 end
@@ -407,7 +420,7 @@ function HealBot_Text_TextStateColours(button)
         atscR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCR"]
         atscG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCG"]
         atscB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCB"]
-    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==3 then
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==4 then
         if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
             atscR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCR"];
             atscG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCG"];
@@ -425,14 +438,22 @@ function HealBot_Text_TextStateColours(button)
         atscR=button.text.r
         atscG=button.text.g
         atscB=button.text.b
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==3 then
+        atscR=hbCustomRoleCols[button.roletxt].r
+        atscG=hbCustomRoleCols[button.roletxt].g
+        atscB=hbCustomRoleCols[button.roletxt].b
     elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==1 then
         atscR=button.health.rcol
         atscG=button.health.gcol
         atscB=0
-    else
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==5 then
         atscR=button.health.mixcolr
         atscG=button.health.mixcolg
         atscB=button.health.mixcolb
+    else
+        atscR=button.health.rmixcolr
+        atscG=button.health.rmixcolg
+        atscB=button.health.rmixcolb
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return atscR,atscG,atscB
@@ -465,7 +486,7 @@ function HealBot_Text_TextNameColours(button)
         atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCR"]
         atcG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCG"]
         atcB=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCB"]
-    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==3 or
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==4 or
       ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NDEBUFF"] and button.aura.debuff.type) then
         if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NIT"] then
             atcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"];
@@ -484,14 +505,22 @@ function HealBot_Text_TextNameColours(button)
         atcR=button.text.r
         atcG=button.text.g
         atcB=button.text.b
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==3 then
+        atcR=hbCustomRoleCols[button.roletxt].r
+        atcG=hbCustomRoleCols[button.roletxt].g
+        atcB=hbCustomRoleCols[button.roletxt].b
     elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 then
         atcR=button.health.rcol
         atcG=button.health.gcol
         atcB=0
-    else
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==5 then
         atcR=button.health.mixcolr
         atcG=button.health.mixcolg
         atcB=button.health.mixcolb
+    else
+        atcR=button.health.rmixcolr
+        atcG=button.health.rmixcolg
+        atcB=button.health.rmixcolb
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return atcR,atcG,atcB
@@ -499,7 +528,7 @@ end
 
 local athcR, athcG, athcB=1,1,1
 function HealBot_Text_TextHealthColours(button,r,g,b)
-    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==3 or
+    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==4 or
       ( Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HDEBUFF"] and button.aura.debuff.type) then
         if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HIT"] then
             athcR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"];
@@ -518,14 +547,22 @@ function HealBot_Text_TextHealthColours(button,r,g,b)
         athcR=r
         athcG=g
         athcB=b
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==3 then
+        athcR=hbCustomRoleCols[button.roletxt].r
+        athcG=hbCustomRoleCols[button.roletxt].g
+        athcB=hbCustomRoleCols[button.roletxt].b
     elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==1 then
         athcR=button.health.rcol
         athcG=button.health.gcol
         athcB=0
-    else
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==5 then
         athcR=button.health.mixcolr
         athcG=button.health.mixcolg
         athcB=button.health.mixcolb
+    else
+        athcR=button.health.rmixcolr
+        athcG=button.health.rmixcolg
+        athcB=button.health.rmixcolb
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return athcR,athcG,athcB
@@ -533,7 +570,7 @@ end
 
 local atacR, atacG, atacB=1,1,1
 function HealBot_Text_TextAggroColours(button)
-    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==3  then
+    if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==4 then
         if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AIT"] then
             atacR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"];
             atacG=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"];
@@ -551,14 +588,22 @@ function HealBot_Text_TextAggroColours(button)
         atacR=button.text.r
         atacG=button.text.g
         atacB=button.text.b
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==3 then
+        atacR=hbCustomRoleCols[button.roletxt].r
+        atacG=hbCustomRoleCols[button.roletxt].g
+        atacB=hbCustomRoleCols[button.roletxt].b
     elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==1 then
         atacR=button.health.rcol
         atacG=button.health.gcol
         atacB=0
-    else
+    elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==5 then
         atacR=button.health.mixcolr
         atacG=button.health.mixcolg
         atacB=button.health.mixcolb
+    else
+        atacR=button.health.rmixcolr
+        atacG=button.health.rmixcolg
+        atacB=button.health.rmixcolb
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return atacR,atacG,atacB

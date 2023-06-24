@@ -286,6 +286,7 @@ function HealBot_Timer_BarsTextUpdate()
     HealBot_Timers_Set("SKINS","TextUpdateNames")
     HealBot_Timers_Set("SKINS","TextUpdateHealth")
     HealBot_Timers_Set("SKINS","TextUpdateState")
+    HealBot_Timers_Set("SKINS","UpdateTextButtons")
 end
 
 function HealBot_Timers_SetPlayerRestingState()
@@ -665,9 +666,16 @@ local hbTimerFuncs={["INIT"]={
                         ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["SetInHealAbsorbMax"]=HealBot_Aux_setInHealAbsorbMax,
                         ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
+                        ["ClearClassGuidData"]=HealBot_clearClassGuidData,
                         ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
                         ["TalentsLookupImproved"]=HealBot_Timers_TalentsLookupImproved,
                         ["UpdateFramesOpacity"]=HealBot_Action_UpdateFramesOpacity,
+                        ["ClassColourUpdate"]=HealBot_Options_ClassColourUpdate,
+                        ["RoleColourUpdate"]=HealBot_Options_RoleColourUpdate,
+                        ["PowerColourUpdate"]=HealBot_Options_PowerColourUpdate,
+                        ["OverrideClassColourUseToggle"]=HealBot_Options_Override_ColoursClassUse_Toggle,
+                        ["OverrideRoleColourUseToggle"]=HealBot_Options_Override_ColoursRoleUse_Toggle,
+                        ["OverridePowerColourUseToggle"]=HealBot_Options_Override_ColoursPowerUse_Toggle,
                     },
                    }
 

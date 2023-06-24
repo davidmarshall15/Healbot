@@ -611,16 +611,21 @@ function HealBot_Options_setLists()
     HealBot_Options_BarHealthColour_List = {
         HEALBOT_WORD_HEALTH,
         HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_CLASSES_CUSTOM,
         HEALBOT_OPTIONS_CLASSHLTHMIX,
+        HEALBOT_OPTIONS_ROLEHLTHMIX,
     }
 
     HealBot_Options_Lists["BarBack"] = {
         HEALBOT_WORD_HEALTH,
         HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_CLASSES_CUSTOM,
         HEALBOT_OPTIONS_CLASSHLTHMIX,
+        HEALBOT_OPTIONS_ROLEHLTHMIX,
         HEALBOT_OPTIONS_ADAPTIVECLASSMIX,
+        HEALBOT_OPTIONS_ADAPTIVEROLEMIX,
         HEALBOT_OPTIONS_ADAPTIVECUSTOMMIX,
         HEALBOT_OPTIONS_ADAPTIVE,
     }
@@ -629,9 +634,12 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_HAZARDONLY,
         HEALBOT_WORD_HEALTH,
         HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_CLASSES_CUSTOM,
         HEALBOT_OPTIONS_CLASSHLTHMIX,
+        HEALBOT_OPTIONS_ROLEHLTHMIX,
         HEALBOT_OPTIONS_ADAPTIVECLASSMIX,
+        HEALBOT_OPTIONS_ADAPTIVEROLEMIX,
         HEALBOT_OPTIONS_ADAPTIVECUSTOMMIX,
         HEALBOT_OPTIONS_ADAPTIVE,
     }
@@ -658,17 +666,23 @@ function HealBot_Options_setLists()
     HealBot_Options_BarIncHealColour_List = {
         HEALBOT_OPTIONS_DONT_SHOW,
         HEALBOT_WORD_HEALTH,
+        HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_OPTIONS_FUTURE_HLTH,
         HEALBOT_CLASSES_CUSTOM,
         HEALBOT_OPTIONS_CLASSHLTHMIX,
+        HEALBOT_OPTIONS_ROLEHLTHMIX,
     }
     
     HealBot_Options_AbsorbColour_List = {
         HEALBOT_OPTIONS_DONT_SHOW,
         HEALBOT_WORD_HEALTH,
+        HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_OPTIONS_FUTURE_HLTH,
         HEALBOT_CLASSES_CUSTOM,
         HEALBOT_OPTIONS_CLASSHLTHMIX,
+        HEALBOT_OPTIONS_ROLEHLTHMIX,
     }
 
     HealBot_Options_BarHealthType_List = {
@@ -1083,6 +1097,7 @@ function HealBot_Options_setLists()
     HealBot_Options_AuxBarColours_List = {
         HEALBOT_WORD_AUTO,
         HEALBOT_SORTBY_CLASS,
+        HEALBOT_SORTBY_ROLE,
         HEALBOT_CLASSES_CUSTOM,
     }
     
@@ -4270,6 +4285,104 @@ function HealBot_Options_ClassColours()
 end
 
 local HealBot_ColourObjWaiting, HealBot_ColourObjWaitingExtra=nil,nil
+function HealBot_OverrideColorpick_OnClick(SkinType)
+    HealBot_ColourObjWaiting=SkinType;
+
+    if SkinType=="OverrideRoleTank" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["TANK"].r,
+                              HealBot_Globals.OverrideColours["TANK"].g,
+                              HealBot_Globals.OverrideColours["TANK"].b)
+    elseif SkinType=="OverrideRoleHeal" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["HEALER"].r,
+                              HealBot_Globals.OverrideColours["HEALER"].g,
+                              HealBot_Globals.OverrideColours["HEALER"].b)
+    elseif SkinType=="OverrideRoleDPS" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["DAMAGER"].r,
+                              HealBot_Globals.OverrideColours["DAMAGER"].g,
+                              HealBot_Globals.OverrideColours["DAMAGER"].b)
+    elseif SkinType=="OverridePowerAstral" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["LUNAR_POWER"].r,
+                              HealBot_Globals.OverrideColours["LUNAR_POWER"].g,
+                              HealBot_Globals.OverrideColours["LUNAR_POWER"].b)
+    elseif SkinType=="OverridePowerEnergy" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["ENERGY"].r,
+                              HealBot_Globals.OverrideColours["ENERGY"].g,
+                              HealBot_Globals.OverrideColours["ENERGY"].b)
+    elseif SkinType=="OverridePowerFocus" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["FOCUS"].r,
+                              HealBot_Globals.OverrideColours["FOCUS"].g,
+                              HealBot_Globals.OverrideColours["FOCUS"].b)
+    elseif SkinType=="OverridePowerFury" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["FURY"].r,
+                              HealBot_Globals.OverrideColours["FURY"].g,
+                              HealBot_Globals.OverrideColours["FURY"].b)
+    elseif SkinType=="OverridePowerMana" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["MANA"].r,
+                              HealBot_Globals.OverrideColours["MANA"].g,
+                              HealBot_Globals.OverrideColours["MANA"].b)
+    elseif SkinType=="OverridePowerRage" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["RAGE"].r,
+                              HealBot_Globals.OverrideColours["RAGE"].g,
+                              HealBot_Globals.OverrideColours["RAGE"].b)
+    elseif SkinType=="OverridePowerRunic" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["RUNIC_POWER"].r,
+                              HealBot_Globals.OverrideColours["RUNIC_POWER"].g,
+                              HealBot_Globals.OverrideColours["RUNIC_POWER"].b)
+    elseif SkinType=="OverrideClassDeathKnight" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["DEAT"].r,
+                              HealBot_Globals.OverrideColours["DEAT"].g,
+                              HealBot_Globals.OverrideColours["DEAT"].b)
+    elseif SkinType=="OverrideClassDemonHunter" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["DEMO"].r,
+                              HealBot_Globals.OverrideColours["DEMO"].g,
+                              HealBot_Globals.OverrideColours["DEMO"].b)
+    elseif SkinType=="OverrideClassDruid" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["DRUI"].r,
+                              HealBot_Globals.OverrideColours["DRUI"].g,
+                              HealBot_Globals.OverrideColours["DRUI"].b)
+    elseif SkinType=="OverrideClassEvoker" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["EVOK"].r,
+                              HealBot_Globals.OverrideColours["EVOK"].g,
+                              HealBot_Globals.OverrideColours["EVOK"].b)
+    elseif SkinType=="OverrideClassHunter" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["HUNT"].r,
+                              HealBot_Globals.OverrideColours["HUNT"].g,
+                              HealBot_Globals.OverrideColours["HUNT"].b)
+    elseif SkinType=="OverrideClassMage" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["MAGE"].r,
+                              HealBot_Globals.OverrideColours["MAGE"].g,
+                              HealBot_Globals.OverrideColours["MAGE"].b)
+    elseif SkinType=="OverrideClassMonk" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["MONK"].r,
+                              HealBot_Globals.OverrideColours["MONK"].g,
+                              HealBot_Globals.OverrideColours["MONK"].b)
+    elseif SkinType=="OverrideClassPaladin" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["PALA"].r,
+                              HealBot_Globals.OverrideColours["PALA"].g,
+                              HealBot_Globals.OverrideColours["PALA"].b)
+    elseif SkinType=="OverrideClassPriest" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["PRIE"].r,
+                              HealBot_Globals.OverrideColours["PRIE"].g,
+                              HealBot_Globals.OverrideColours["PRIE"].b)
+    elseif SkinType=="OverrideClassRogue" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["ROGU"].r,
+                              HealBot_Globals.OverrideColours["ROGU"].g,
+                              HealBot_Globals.OverrideColours["ROGU"].b)
+    elseif SkinType=="OverrideClassShaman" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["SHAM"].r,
+                              HealBot_Globals.OverrideColours["SHAM"].g,
+                              HealBot_Globals.OverrideColours["SHAM"].b)
+    elseif SkinType=="OverrideClassWarlock" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["WARL"].r,
+                              HealBot_Globals.OverrideColours["WARL"].g,
+                              HealBot_Globals.OverrideColours["WARL"].b)
+    elseif SkinType=="OverrideClassWarrior" then
+        HealBot_UseColourPick(HealBot_Globals.OverrideColours["WARR"].r,
+                              HealBot_Globals.OverrideColours["WARR"].g,
+                              HealBot_Globals.OverrideColours["WARR"].b)
+    end
+end
+
 function HealBot_SkinColorpick_OnClick(SkinType)
     HealBot_ColourObjWaiting=SkinType;
 
@@ -4311,6 +4424,98 @@ function HealBot_SkinColorpick_OnClick(SkinType)
         HealBot_UseColourPick(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HR"],
                               Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HG"],
                               Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HB"])
+    elseif SkinType=="RoleTank" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].b)
+    elseif SkinType=="RoleHeal" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].b)
+    elseif SkinType=="RoleDPS" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].b)
+    elseif SkinType=="PowerAstral" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].b)
+    elseif SkinType=="PowerEnergy" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].b)
+    elseif SkinType=="PowerFocus" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].b)
+    elseif SkinType=="PowerFury" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].b)
+    elseif SkinType=="PowerMana" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].b)
+    elseif SkinType=="PowerRage" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].b)
+    elseif SkinType=="PowerRunic" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].b)
+    elseif SkinType=="ClassDeathKnight" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].b)
+    elseif SkinType=="ClassDemonHunter" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].b)
+    elseif SkinType=="ClassDruid" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].b)
+    elseif SkinType=="ClassEvoker" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].b)
+    elseif SkinType=="ClassHunter" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].b)
+    elseif SkinType=="ClassMage" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].b)
+    elseif SkinType=="ClassMonk" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].b)
+    elseif SkinType=="ClassPaladin" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].b)
+    elseif SkinType=="ClassPriest" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].b)
+    elseif SkinType=="ClassRogue" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].b)
+    elseif SkinType=="ClassShaman" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].b)
+    elseif SkinType=="ClassWarlock" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].b)
+    elseif SkinType=="ClassWarrior" then
+        HealBot_UseColourPick(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].r,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].g,
+                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].b)
     elseif SkinType=="CustomCriticalBar" then
         HealBot_UseColourPick(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HCR"],
                               Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HCG"],
@@ -9322,6 +9527,476 @@ function HealBot_Options_Override_EffectsUse_Toggle()
     --end
 end
 
+function HealBot_Options_Override_ColoursClassUse_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_UseOverrides_List), 1 do
+        info.text = HealBot_Options_UseOverrides_List[j];
+        info.func = function(self)
+                        if HealBot_Globals.OverrideColours["USECLASS"]~=self:GetID() then
+                            HealBot_Globals.OverrideColours["USECLASS"]=self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_Override_ColoursClassUse,HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USECLASS"]]) 
+                            HealBot_Timers_Set("LAST","OverrideClassColourUseToggle")
+                        end
+                    end
+        info.checked = false;
+        if HealBot_Globals.OverrideColours["USECLASS"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_Override_ColoursClassUse_Toggle()
+    if HealBot_Globals.OverrideColours["USECLASS"]==1 then
+        HealBot_Options_Override_ColClassTxt:SetAlpha(0.4)
+        HealBot_OverrideColClassDeathKnightpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassDeathKnightpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDeathKnightPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDeathKnightResetColour",false)
+        HealBot_OverrideColClassDemonHunterpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassDemonHunterpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDemonHunterPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDemonHunterResetColour",false)
+        HealBot_OverrideColClassDruidpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassDruidpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDruidPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDruidResetColour",false)
+        HealBot_OverrideColClassEvokerpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassEvokerpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassEvokerPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassEvokerResetColour",false)
+        HealBot_OverrideColClassHunterpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassHunterpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassHunterPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassHunterResetColour",false)
+        HealBot_OverrideColClassMagepickt:SetAlpha(0.4)
+        HealBot_OverrideColClassMagepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMagePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMageResetColour",false)
+        HealBot_OverrideColClassMonkpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassMonkpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMonkPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMonkResetColour",false)
+        HealBot_OverrideColClassPaladinpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassPaladinpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPaladinPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPaladinResetColour",false)
+        HealBot_OverrideColClassPriestpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassPriestpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPriestPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPriestResetColour",false)
+        HealBot_OverrideColClassRoguepickt:SetAlpha(0.4)
+        HealBot_OverrideColClassRoguepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassRoguePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassRogueResetColour",false)
+        HealBot_OverrideColClassShamanpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassShamanpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassShamanPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassShamanResetColour",false)
+        HealBot_OverrideColClassWarlockpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassWarlockpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarlockPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarlockResetColour",false)
+        HealBot_OverrideColClassWarriorpickt:SetAlpha(0.4)
+        HealBot_OverrideColClassWarriorpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarriorPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarriorResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassResetAllColour",false)
+    
+        HealBot_Options_Skins_ColClassTxt:SetAlpha(1)
+        HealBot_ColClassDeathKnightpickt:SetAlpha(1)
+        HealBot_ColClassDeathKnightpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassDeathKnight") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDeathKnightPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDeathKnightResetColour",true)
+        HealBot_ColClassDemonHunterpickt:SetAlpha(1)
+        HealBot_ColClassDemonHunterpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassDemonHunter") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDemonHunterPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDemonHunterResetColour",true)
+        HealBot_ColClassDruidpickt:SetAlpha(1)
+        HealBot_ColClassDruidpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassDruid") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDruidPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDruidResetColour",true)
+        HealBot_ColClassEvokerpickt:SetAlpha(1)
+        HealBot_ColClassEvokerpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassEvoker") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassEvokerPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassEvokerResetColour",true)
+        HealBot_ColClassHunterpickt:SetAlpha(1)
+        HealBot_ColClassHunterpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassHunter") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassHunterPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassHunterResetColour",true)
+        HealBot_ColClassMagepickt:SetAlpha(1)
+        HealBot_ColClassMagepick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassMage") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMagePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMageResetColour",true)
+        HealBot_ColClassMonkpickt:SetAlpha(1)
+        HealBot_ColClassMonkpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassMonk") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMonkPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMonkResetColour",true)
+        HealBot_ColClassPaladinpickt:SetAlpha(1)
+        HealBot_ColClassPaladinpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassPaladin") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPaladinPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPaladinResetColour",true)
+        HealBot_ColClassPriestpickt:SetAlpha(1)
+        HealBot_ColClassPriestpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassPriest") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPriestPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPriestResetColour",true)
+        HealBot_ColClassRoguepickt:SetAlpha(1)
+        HealBot_ColClassRoguepick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassRogue") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassRoguePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassRogueResetColour",true)
+        HealBot_ColClassShamanpickt:SetAlpha(1)
+        HealBot_ColClassShamanpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassShaman") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassShamanPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassShamanResetColour",true)
+        HealBot_ColClassWarlockpickt:SetAlpha(1)
+        HealBot_ColClassWarlockpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassWarlock") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarlockPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarlockResetColour",true)
+        HealBot_ColClassWarriorpickt:SetAlpha(1)
+        HealBot_ColClassWarriorpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("ClassWarrior") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarriorPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarriorResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassResetAllColour",true)
+    else
+        HealBot_Options_Override_ColClassTxt:SetAlpha(1)
+        HealBot_OverrideColClassDeathKnightpickt:SetAlpha(1)
+        HealBot_OverrideColClassDeathKnightpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassDeathKnight") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDeathKnightPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDeathKnightResetColour",true)
+        HealBot_OverrideColClassDemonHunterpickt:SetAlpha(1)
+        HealBot_OverrideColClassDemonHunterpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassDemonHunter") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDemonHunterPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDemonHunterResetColour",true)
+        HealBot_OverrideColClassDruidpickt:SetAlpha(1)
+        HealBot_OverrideColClassDruidpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassDruid") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDruidPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassDruidResetColour",true)
+        HealBot_OverrideColClassEvokerpickt:SetAlpha(1)
+        HealBot_OverrideColClassEvokerpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassEvoker") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassEvokerPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassEvokerResetColour",true)
+        HealBot_OverrideColClassHunterpickt:SetAlpha(1)
+        HealBot_OverrideColClassHunterpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassHunter") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassHunterPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassHunterResetColour",true)
+        HealBot_OverrideColClassMagepickt:SetAlpha(1)
+        HealBot_OverrideColClassMagepick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassMage") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMagePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMageResetColour",true)
+        HealBot_OverrideColClassMonkpickt:SetAlpha(1)
+        HealBot_OverrideColClassMonkpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassMonk") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMonkPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassMonkResetColour",true)
+        HealBot_OverrideColClassPaladinpickt:SetAlpha(1)
+        HealBot_OverrideColClassPaladinpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassPaladin") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPaladinPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPaladinResetColour",true)
+        HealBot_OverrideColClassPriestpickt:SetAlpha(1)
+        HealBot_OverrideColClassPriestpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassPriest") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPriestPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassPriestResetColour",true)
+        HealBot_OverrideColClassRoguepickt:SetAlpha(1)
+        HealBot_OverrideColClassRoguepick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassRogue") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassRoguePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassRogueResetColour",true)
+        HealBot_OverrideColClassShamanpickt:SetAlpha(1)
+        HealBot_OverrideColClassShamanpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassShaman") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassShamanPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassShamanResetColour",true)
+        HealBot_OverrideColClassWarlockpickt:SetAlpha(1)
+        HealBot_OverrideColClassWarlockpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassWarlock") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarlockPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarlockResetColour",true)
+        HealBot_OverrideColClassWarriorpickt:SetAlpha(1)
+        HealBot_OverrideColClassWarriorpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideClassWarrior") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarriorPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassWarriorResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColClassResetAllColour",true)
+    
+        HealBot_Options_Skins_ColClassTxt:SetAlpha(0.4)
+        HealBot_ColClassDeathKnightpickt:SetAlpha(0.4)
+        HealBot_ColClassDeathKnightpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDeathKnightPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDeathKnightResetColour",false)
+        HealBot_ColClassDemonHunterpickt:SetAlpha(0.4)
+        HealBot_ColClassDemonHunterpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDemonHunterPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDemonHunterResetColour",false)
+        HealBot_ColClassDruidpickt:SetAlpha(0.4)
+        HealBot_ColClassDruidpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDruidPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassDruidResetColour",false)
+        HealBot_ColClassEvokerpickt:SetAlpha(0.4)
+        HealBot_ColClassEvokerpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassEvokerPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassEvokerResetColour",false)
+        HealBot_ColClassHunterpickt:SetAlpha(0.4)
+        HealBot_ColClassHunterpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassHunterPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassHunterResetColour",false)
+        HealBot_ColClassMagepickt:SetAlpha(0.4)
+        HealBot_ColClassMagepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMagePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMageResetColour",false)
+        HealBot_ColClassMonkpickt:SetAlpha(0.4)
+        HealBot_ColClassMonkpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMonkPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassMonkResetColour",false)
+        HealBot_ColClassPaladinpickt:SetAlpha(0.4)
+        HealBot_ColClassPaladinpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPaladinPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPaladinResetColour",false)
+        HealBot_ColClassPriestpickt:SetAlpha(0.4)
+        HealBot_ColClassPriestpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPriestPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassPriestResetColour",false)
+        HealBot_ColClassRoguepickt:SetAlpha(0.4)
+        HealBot_ColClassRoguepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassRoguePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassRogueResetColour",false)
+        HealBot_ColClassShamanpickt:SetAlpha(0.4)
+        HealBot_ColClassShamanpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassShamanPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassShamanResetColour",false)
+        HealBot_ColClassWarlockpickt:SetAlpha(0.4)
+        HealBot_ColClassWarlockpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarlockPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarlockResetColour",false)
+        HealBot_ColClassWarriorpickt:SetAlpha(0.4)
+        HealBot_ColClassWarriorpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarriorPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassWarriorResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColClassResetAllColour",false)
+    end
+    HealBot_Timers_Set("LAST","ClassColourUpdate")
+end
+
+function HealBot_Options_Override_ColoursRoleUse_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_UseOverrides_List), 1 do
+        info.text = HealBot_Options_UseOverrides_List[j];
+        info.func = function(self)
+                        if HealBot_Globals.OverrideColours["USEROLE"]~=self:GetID() then
+                            HealBot_Globals.OverrideColours["USEROLE"]=self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_Override_ColoursRoleUse,HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USEROLE"]]) 
+                            HealBot_Timers_Set("LAST","OverrideRoleColourUseToggle")
+                        end
+                    end
+        info.checked = false;
+        if HealBot_Globals.OverrideColours["USEROLE"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_Override_ColoursRoleUse_Toggle()
+    if HealBot_Globals.OverrideColours["USEROLE"]==1 then
+        HealBot_Options_Override_ColRoleTxt:SetAlpha(0.4)
+        HealBot_OverrideColRoleTankpickt:SetAlpha(0.4)
+        HealBot_OverrideColRoleTankpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleTankPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleTankResetColour",false)
+        HealBot_OverrideColRoleHealpickt:SetAlpha(0.4)
+        HealBot_OverrideColRoleHealpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleHealPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleHealResetColour",false)
+        HealBot_OverrideColRoleDPSpickt:SetAlpha(0.4)
+        HealBot_OverrideColRoleDPSpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleDPSPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleDPSResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleResetAllColour",false)
+        
+        HealBot_Options_Skins_ColRoleTxt:SetAlpha(1)
+        HealBot_ColRoleTankpickt:SetAlpha(1)
+        HealBot_ColRoleTankpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("RoleTank") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleTankPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleTankResetColour",true)
+        HealBot_ColRoleHealpickt:SetAlpha(1)
+        HealBot_ColRoleHealpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("RoleHeal") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleHealPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleHealResetColour",true)
+        HealBot_ColRoleDPSpickt:SetAlpha(1)
+        HealBot_ColRoleDPSpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("RoleDPS") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleDPSPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleDPSResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleResetAllColour",true)
+    else
+        HealBot_Options_Override_ColRoleTxt:SetAlpha(1)
+        HealBot_OverrideColRoleTankpickt:SetAlpha(1)
+        HealBot_OverrideColRoleTankpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideRoleTank") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleTankPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleTankResetColour",true)
+        HealBot_OverrideColRoleHealpickt:SetAlpha(1)
+        HealBot_OverrideColRoleHealpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideRoleHeal") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleHealPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleHealResetColour",true)
+        HealBot_OverrideColRoleDPSpickt:SetAlpha(1)
+        HealBot_OverrideColRoleDPSpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverrideRoleDPS") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleDPSPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleDPSResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColRoleResetAllColour",true)
+        
+        HealBot_Options_Skins_ColRoleTxt:SetAlpha(0.4)
+        HealBot_ColRoleTankpickt:SetAlpha(0.4)
+        HealBot_ColRoleTankpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleTankPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleTankResetColour",false)
+        HealBot_ColRoleHealpickt:SetAlpha(0.4)
+        HealBot_ColRoleHealpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleHealPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleHealResetColour",false)
+        HealBot_ColRoleDPSpickt:SetAlpha(0.4)
+        HealBot_ColRoleDPSpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleDPSPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleDPSResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColRoleResetAllColour",false)
+    end
+    HealBot_Timers_Set("LAST","RoleColourUpdate")
+end
+
+function HealBot_Options_Override_ColoursPowerUse_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_UseOverrides_List), 1 do
+        info.text = HealBot_Options_UseOverrides_List[j];
+        info.func = function(self)
+                        if HealBot_Globals.OverrideColours["USEPOWER"]~=self:GetID() then
+                            HealBot_Globals.OverrideColours["USEPOWER"]=self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_Override_ColoursPowerUse,HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USEPOWER"]]) 
+                            HealBot_Timers_Set("LAST","OverridePowerColourUseToggle")
+                        end
+                    end
+        info.checked = false;
+        if HealBot_Globals.OverrideColours["USEPOWER"]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_Override_ColoursPowerUse_Toggle()
+    if HealBot_Globals.OverrideColours["USEPOWER"]==1 then
+        HealBot_Options_Override_ColPowerTxt:SetAlpha(0.4)
+        HealBot_OverrideColPowerAstralpickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerAstralpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerAstralPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerAstralResetColour",false)
+        HealBot_OverrideColPowerEnergypickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerEnergypick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerEnergyPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerEnergyResetColour",false)
+        HealBot_OverrideColPowerFocuspickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerFocuspick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFocusPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFocusResetColour",false)
+        HealBot_OverrideColPowerFurypickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerFurypick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFuryPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFuryResetColour",false)
+        HealBot_OverrideColPowerManapickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerManapick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerManaPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerManaResetColour",false)
+        HealBot_OverrideColPowerRagepickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerRagepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRagePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRageResetColour",false)
+        HealBot_OverrideColPowerRunicpickt:SetAlpha(0.4)
+        HealBot_OverrideColPowerRunicpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRunicPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRunicResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerResetAllColour",false)
+
+        HealBot_Options_Skins_ColPowerTxt:SetAlpha(1)
+        HealBot_ColPowerAstralpickt:SetAlpha(1)
+        HealBot_ColPowerAstralpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerAstral") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerAstralPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerAstralResetColour",true)
+        HealBot_ColPowerEnergypickt:SetAlpha(1)
+        HealBot_ColPowerEnergypick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerEnergy") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerEnergyPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerEnergyResetColour",true)
+        HealBot_ColPowerFocuspickt:SetAlpha(1)
+        HealBot_ColPowerFocuspick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerFocus") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFocusPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFocusResetColour",true)
+        HealBot_ColPowerFurypickt:SetAlpha(1)
+        HealBot_ColPowerFurypick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerFury") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFuryPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFuryResetColour",true)
+        HealBot_ColPowerManapickt:SetAlpha(1)
+        HealBot_ColPowerManapick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerMana") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerManaPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerManaResetColour",true)
+        HealBot_ColPowerRagepickt:SetAlpha(1)
+        HealBot_ColPowerRagepick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerRage") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRagePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRageResetColour",true)
+        HealBot_ColPowerRunicpickt:SetAlpha(1)
+        HealBot_ColPowerRunicpick:SetScript('OnMouseDown', function() HealBot_SkinColorpick_OnClick("PowerRunic") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRunicPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRunicResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerResetAllColour",true)
+    else
+        HealBot_Options_Override_ColPowerTxt:SetAlpha(1)
+        HealBot_OverrideColPowerAstralpickt:SetAlpha(1)
+        HealBot_OverrideColPowerAstralpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerAstral") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerAstralPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerAstralResetColour",true)
+        HealBot_OverrideColPowerEnergypickt:SetAlpha(1)
+        HealBot_OverrideColPowerEnergypick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerEnergy") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerEnergyPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerEnergyResetColour",true)
+        HealBot_OverrideColPowerFocuspickt:SetAlpha(1)
+        HealBot_OverrideColPowerFocuspick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerFocus") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFocusPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFocusResetColour",true)
+        HealBot_OverrideColPowerFurypickt:SetAlpha(1)
+        HealBot_OverrideColPowerFurypick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerFury") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFuryPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerFuryResetColour",true)
+        HealBot_OverrideColPowerManapickt:SetAlpha(1)
+        HealBot_OverrideColPowerManapick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerMana") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerManaPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerManaResetColour",true)
+        HealBot_OverrideColPowerRagepickt:SetAlpha(1)
+        HealBot_OverrideColPowerRagepick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerRage") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRagePresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRageResetColour",true)
+        HealBot_OverrideColPowerRunicpickt:SetAlpha(1)
+        HealBot_OverrideColPowerRunicpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("OverridePowerRunic") end)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRunicPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerRunicResetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideColPowerResetAllColour",true)
+
+        HealBot_Options_Skins_ColPowerTxt:SetAlpha(0.4)
+        HealBot_ColPowerAstralpickt:SetAlpha(0.4)
+        HealBot_ColPowerAstralpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerAstralPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerAstralResetColour",false)
+        HealBot_ColPowerEnergypickt:SetAlpha(0.4)
+        HealBot_ColPowerEnergypick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerEnergyPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerEnergyResetColour",false)
+        HealBot_ColPowerFocuspickt:SetAlpha(0.4)
+        HealBot_ColPowerFocuspick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFocusPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFocusResetColour",false)
+        HealBot_ColPowerFurypickt:SetAlpha(0.4)
+        HealBot_ColPowerFurypick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFuryPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerFuryResetColour",false)
+        HealBot_ColPowerManapickt:SetAlpha(0.4)
+        HealBot_ColPowerManapick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerManaPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerManaResetColour",false)
+        HealBot_ColPowerRagepickt:SetAlpha(0.4)
+        HealBot_ColPowerRagepick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRagePresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRageResetColour",false)
+        HealBot_ColPowerRunicpickt:SetAlpha(0.4)
+        HealBot_ColPowerRunicpick:SetScript('OnMouseDown', nil)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRunicPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerRunicResetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinColPowerResetAllColour",false)
+    end
+    HealBot_Timers_Set("LAST","PowerColourUpdate")
+end
+
 function HealBot_Options_Override_ChatUse_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_UseOverrides_List), 1 do
@@ -13115,14 +13790,23 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Action_setLuVars("resetSkin", true)
                     HealBot_Action_setLuVars("resetIndicator", true)
                     HealBot_Action_setLuVars("resetText", true)
-                    HealBot_Action_setLuVars("resetAux", true)
+                    --HealBot_Action_setLuVars("resetAux", true)
                     HealBot_Action_ResetrCalls()
                     HealBot_Timers_ToggleBlizzardFrames()
                     HealBot_Timers_Set("SKINS","EmergHealthCol")
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
                     HealBot_Timers_Set("LAST","ShowFramesOnSkinChange",0.1)
-                    HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.2)
+                    --HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.15)
+                    if HealBot_Globals.OverrideColours["USECLASS"]==1 then 
+                        HealBot_Timers_Set("LAST","ClassColourUpdate",0.2)
+                    end
+                    if HealBot_Globals.OverrideColours["USEROLE"]==1 then 
+                        HealBot_Timers_Set("LAST","RoleColourUpdate",0.24)
+                    end
+                    if HealBot_Globals.OverrideColours["USEPOWER"]==1 then
+                        HealBot_Timers_Set("LAST","PowerColourUpdate",0.28)
+                    end
                     HealBot_Skins_ResetSkin("init")
                     if not ddRefresh then
                         HealBot_Timers_Set("AURA","ResetClassIconTexture")
@@ -13140,8 +13824,6 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
             end
         end
         if not hbFoundSkin then
-            HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR1..newSkin)
-            if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
             if not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
                 local retryWithSkin = HealBot_getDefaultSkin()
                 if not noCallback then
@@ -13149,6 +13831,9 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                 elseif newSkin~=HEALBOT_SKINS_STD then
                     HealBot_Options_DoSet_Current_Skin(HEALBOT_SKINS_STD, nil, true, optSetSkins)
                 end
+            else
+                HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR1..newSkin)
+                if hbValidSkins then HealBot_AddChat(HEALBOT_CHAT_CHANGESKINERR2..hbValidSkins) end
             end
         end
     elseif not Healbot_Config_Skins.Author[Healbot_Config_Skins.Current_Skin] then 
@@ -15930,6 +16615,265 @@ function HealBot_Options_PresetColours_AliasSave(self,id)
     HealBot_Globals.PresetColoursAlias[id]=self:GetText()
 end
 
+function HealBot_Options_ResetColour(cType, cName, override)
+    if cType=="CLASS" then
+        if cName=="ALL" then
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEAT", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEMO", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DRUI", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "EVOK", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "HUNT", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MAGE", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MONK", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PALA", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PRIE", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "ROGU", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "SHAM", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARL", override)
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARR", override)
+        else
+            HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, cName, override)
+        end
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif cType=="ROLE" then
+        if cName=="ALL" then
+            HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "TANK", override)
+            HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "HEALER", override)
+            HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "DAMAGER", override)
+        else
+            HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, cName, override)
+        end
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    else
+        if cName=="ALL" then
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "ENERGY", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FOCUS", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FURY", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "INSANITY", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "LUNAR_POWER", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "MAELSTROM", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "MANA", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RAGE", override)
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RUNIC_POWER", override)
+        else
+            HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, cName, override)
+        end
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    end
+end
+
+function HealBot_Options_OverrideResetColourClick(self, cType, cName)
+    HealBot_Options_ResetColour(cType, cName, true)
+    if cType=="CLASS" then
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif cType=="ROLE" then
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    else
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    end
+end
+
+function HealBot_Options_ResetColourClick(self, cType, cName)
+    HealBot_Options_ResetColour(cType, cName, false)
+    if cType=="CLASS" then
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif cType=="ROLE" then
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    else
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    end
+end
+
+function HealBot_Options_ClassColourUpdate()
+    HealBot_Action_SetCustomClassCols()
+    HealBot_Timers_Set("LAST","ClearClassGuidData")
+    HealBot_Timers_Set("SKINS","UpdateTextButtons")
+    local a=1
+    if HealBot_Globals.OverrideColours["USECLASS"]==1 then a=0.2 end
+    HealBot_OverrideColClassDeathKnightpick:SetStatusBarColor(HealBot_Globals.OverrideColours["DEAT"].r,
+                                                              HealBot_Globals.OverrideColours["DEAT"].g,
+                                                              HealBot_Globals.OverrideColours["DEAT"].b,a)
+    HealBot_OverrideColClassDemonHunterpick:SetStatusBarColor(HealBot_Globals.OverrideColours["DEMO"].r,
+                                                              HealBot_Globals.OverrideColours["DEMO"].g,
+                                                              HealBot_Globals.OverrideColours["DEMO"].b,a)
+    HealBot_OverrideColClassDruidpick:SetStatusBarColor(      HealBot_Globals.OverrideColours["DRUI"].r,
+                                                              HealBot_Globals.OverrideColours["DRUI"].g,
+                                                              HealBot_Globals.OverrideColours["DRUI"].b,a)
+    HealBot_OverrideColClassEvokerpick:SetStatusBarColor(     HealBot_Globals.OverrideColours["EVOK"].r,
+                                                              HealBot_Globals.OverrideColours["EVOK"].g,
+                                                              HealBot_Globals.OverrideColours["EVOK"].b,a)
+    HealBot_OverrideColClassHunterpick:SetStatusBarColor(     HealBot_Globals.OverrideColours["HUNT"].r,
+                                                              HealBot_Globals.OverrideColours["HUNT"].g,
+                                                              HealBot_Globals.OverrideColours["HUNT"].b,a)
+    HealBot_OverrideColClassMagepick:SetStatusBarColor(       HealBot_Globals.OverrideColours["MAGE"].r,
+                                                              HealBot_Globals.OverrideColours["MAGE"].g,
+                                                              HealBot_Globals.OverrideColours["MAGE"].b,a)
+    HealBot_OverrideColClassMonkpick:SetStatusBarColor(       HealBot_Globals.OverrideColours["MONK"].r,
+                                                              HealBot_Globals.OverrideColours["MONK"].g,
+                                                              HealBot_Globals.OverrideColours["MONK"].b,a)
+    HealBot_OverrideColClassPaladinpick:SetStatusBarColor(    HealBot_Globals.OverrideColours["PALA"].r,
+                                                              HealBot_Globals.OverrideColours["PALA"].g,
+                                                              HealBot_Globals.OverrideColours["PALA"].b,a)
+    HealBot_OverrideColClassPriestpick:SetStatusBarColor(     HealBot_Globals.OverrideColours["PRIE"].r,
+                                                              HealBot_Globals.OverrideColours["PRIE"].g,
+                                                              HealBot_Globals.OverrideColours["PRIE"].b,a)
+    HealBot_OverrideColClassRoguepick:SetStatusBarColor(      HealBot_Globals.OverrideColours["ROGU"].r,
+                                                              HealBot_Globals.OverrideColours["ROGU"].g,
+                                                              HealBot_Globals.OverrideColours["ROGU"].b,a)
+    HealBot_OverrideColClassShamanpick:SetStatusBarColor(     HealBot_Globals.OverrideColours["SHAM"].r,
+                                                              HealBot_Globals.OverrideColours["SHAM"].g,
+                                                              HealBot_Globals.OverrideColours["SHAM"].b,a)
+    HealBot_OverrideColClassWarlockpick:SetStatusBarColor(    HealBot_Globals.OverrideColours["WARL"].r,
+                                                              HealBot_Globals.OverrideColours["WARL"].g,
+                                                              HealBot_Globals.OverrideColours["WARL"].b,a)
+    HealBot_OverrideColClassWarriorpick:SetStatusBarColor(    HealBot_Globals.OverrideColours["WARR"].r,
+                                                              HealBot_Globals.OverrideColours["WARR"].g,
+                                                              HealBot_Globals.OverrideColours["WARR"].b,a)
+    a=1
+    if HealBot_Globals.OverrideColours["USECLASS"]==2 then a=0.2 end
+    HealBot_ColClassDeathKnightpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].b,a)
+    HealBot_ColClassDemonHunterpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].b,a)
+    HealBot_ColClassDruidpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].b,a)
+    HealBot_ColClassEvokerpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].b,a)
+    HealBot_ColClassHunterpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].b,a)
+    HealBot_ColClassMagepick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].b,a)
+    HealBot_ColClassMonkpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].b,a)
+    HealBot_ColClassPaladinpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].b,a)
+    HealBot_ColClassPriestpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].b,a)
+    HealBot_ColClassRoguepick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].b,a)
+    HealBot_ColClassShamanpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].b,a)
+    HealBot_ColClassWarlockpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].b,a)
+    HealBot_ColClassWarriorpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].b,a)
+end
+
+function HealBot_Options_RoleColourUpdate()
+    HealBot_Action_SetCustomRoleCols()
+    HealBot_Timers_Set("SKINS","UpdateTextButtons")
+    local aux=false
+    for f=1,10 do
+        if HealBot_Action_FrameIsVisible(f) then
+            for x=1,9 do
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]>1 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["COLOUR"]==3 then
+                    aux=true
+                    break
+                end
+            end
+        end
+    end
+    if aux then HealBot_Timers_Set("AUX","ResetBars",2) end
+    HealBot_Timers_Set("LAST","ResetUnitStatus")
+    local a=1
+    if HealBot_Globals.OverrideColours["USEROLE"]==1 then a=0.2 end
+    HealBot_OverrideColRoleTankpick:SetStatusBarColor(HealBot_Globals.OverrideColours["TANK"].r,
+                                                      HealBot_Globals.OverrideColours["TANK"].g,
+                                                      HealBot_Globals.OverrideColours["TANK"].b,a)
+    HealBot_OverrideColRoleHealpick:SetStatusBarColor(HealBot_Globals.OverrideColours["HEALER"].r,
+                                                      HealBot_Globals.OverrideColours["HEALER"].g,
+                                                      HealBot_Globals.OverrideColours["HEALER"].b,a)
+    HealBot_OverrideColRoleDPSpick:SetStatusBarColor( HealBot_Globals.OverrideColours["DAMAGER"].r,
+                                                      HealBot_Globals.OverrideColours["DAMAGER"].g,
+                                                      HealBot_Globals.OverrideColours["DAMAGER"].b,a)
+    a=1
+    if HealBot_Globals.OverrideColours["USEROLE"]==2 then a=0.2 end
+    HealBot_ColRoleTankpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].b,a)
+    HealBot_ColRoleHealpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].b,a)
+    HealBot_ColRoleDPSpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].r,
+                                             Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].g,
+                                             Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].b,a)
+end
+
+function HealBot_Options_PowerColourUpdate()
+    HealBot_Action_SetCustomPowerCols()
+    local aux=false
+    for f=1,10 do
+        if HealBot_Action_FrameIsVisible(f) then
+            for x=1,9 do
+                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==4 then
+                    aux=true
+                    break
+                end
+            end
+        end
+    end
+    if aux then HealBot_Timers_Set("AUX","ResetBars",2) end
+    local a=1
+    if HealBot_Globals.OverrideColours["USEPOWER"]==1 then a=0.2 end
+    HealBot_OverrideColPowerAstralpick:SetStatusBarColor(HealBot_Globals.OverrideColours["LUNAR_POWER"].r,
+                                                         HealBot_Globals.OverrideColours["LUNAR_POWER"].g,
+                                                         HealBot_Globals.OverrideColours["LUNAR_POWER"].b,a)
+    HealBot_OverrideColPowerEnergypick:SetStatusBarColor(HealBot_Globals.OverrideColours["ENERGY"].r,
+                                                         HealBot_Globals.OverrideColours["ENERGY"].g,
+                                                         HealBot_Globals.OverrideColours["ENERGY"].b,a)
+    HealBot_OverrideColPowerFocuspick:SetStatusBarColor( HealBot_Globals.OverrideColours["FOCUS"].r,
+                                                         HealBot_Globals.OverrideColours["FOCUS"].g,
+                                                         HealBot_Globals.OverrideColours["FOCUS"].b,a)
+    HealBot_OverrideColPowerFurypick:SetStatusBarColor(  HealBot_Globals.OverrideColours["FURY"].r,
+                                                         HealBot_Globals.OverrideColours["FURY"].g,
+                                                         HealBot_Globals.OverrideColours["FURY"].b,a)
+    HealBot_OverrideColPowerManapick:SetStatusBarColor(  HealBot_Globals.OverrideColours["MANA"].r,
+                                                         HealBot_Globals.OverrideColours["MANA"].g,
+                                                         HealBot_Globals.OverrideColours["MANA"].b,a)
+    HealBot_OverrideColPowerRagepick:SetStatusBarColor(  HealBot_Globals.OverrideColours["RAGE"].r,
+                                                         HealBot_Globals.OverrideColours["RAGE"].g,
+                                                         HealBot_Globals.OverrideColours["RAGE"].b,a)
+    HealBot_OverrideColPowerRunicpick:SetStatusBarColor( HealBot_Globals.OverrideColours["RUNIC_POWER"].r,
+                                                         HealBot_Globals.OverrideColours["RUNIC_POWER"].g,
+                                                         HealBot_Globals.OverrideColours["RUNIC_POWER"].b,a)
+    a=1
+    if HealBot_Globals.OverrideColours["USEPOWER"]==2 then a=0.2 end
+    HealBot_ColPowerAstralpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].b,a)
+    HealBot_ColPowerEnergypick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].b,a)
+    HealBot_ColPowerFocuspick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].b,a)
+    HealBot_ColPowerFurypick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].b,a)
+    HealBot_ColPowerManapick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].b,a)
+    HealBot_ColPowerRagepick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].b,a)
+    HealBot_ColPowerRunicpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].r,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].g,
+                                              Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].b,a)
+end
+
 function HealBot_Options_PresetColourClick(self)
     HealBot_Options_luVars["PresetColourCaller"]=self:GetName()
     if HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_BuffHoTPresetColour" then
@@ -15948,6 +16892,9 @@ function HealBot_Options_PresetColourClick(self)
         HealBot_Options_PresetColours:Show()
     elseif strsub(HealBot_Options_luVars["PresetColourCaller"],1,20)=="HealBot_Options_Skin" then
         HealBot_Options_Panel3:Hide()
+        HealBot_Options_PresetColours:Show()
+    elseif strsub(HealBot_Options_luVars["PresetColourCaller"],1,24)=="HealBot_Options_Override" then
+        HealBot_Options_Panel10:Hide()
         HealBot_Options_PresetColours:Show()
     end
 end
@@ -16056,6 +17003,236 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HB"] = R, G, B;
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_BarCustomColours_SetStatusBars()
+    elseif HealBot_ColourObjWaiting=="RoleTank" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="RoleHeal" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="RoleDPS" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerAstral" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerEnergy" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerFocus" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerFury" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerMana" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerRage" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="PowerRunic" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassDeathKnight" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassDemonHunter" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassDruid" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassEvoker" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassHunter" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassMage" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassMonk" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassPaladin" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassPriest" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassRogue" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassShaman" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassWarlock" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="ClassWarrior" then
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].r,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].g,
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideRoleTank" then
+        HealBot_Globals.OverrideColours["TANK"].r,
+        HealBot_Globals.OverrideColours["TANK"].g,
+        HealBot_Globals.OverrideColours["TANK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideRoleHeal" then
+        HealBot_Globals.OverrideColours["HEALER"].r,
+        HealBot_Globals.OverrideColours["HEALER"].g,
+        HealBot_Globals.OverrideColours["HEALER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideRoleDPS" then
+        HealBot_Globals.OverrideColours["DAMAGER"].r,
+        HealBot_Globals.OverrideColours["DAMAGER"].g,
+        HealBot_Globals.OverrideColours["DAMAGER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","RoleColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerAstral" then
+        HealBot_Globals.OverrideColours["LUNAR_POWER"].r,
+        HealBot_Globals.OverrideColours["LUNAR_POWER"].g,
+        HealBot_Globals.OverrideColours["LUNAR_POWER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerEnergy" then
+        HealBot_Globals.OverrideColours["ENERGY"].r,
+        HealBot_Globals.OverrideColours["ENERGY"].g,
+        HealBot_Globals.OverrideColours["ENERGY"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerFocus" then
+        HealBot_Globals.OverrideColours["FOCUS"].r,
+        HealBot_Globals.OverrideColours["FOCUS"].g,
+        HealBot_Globals.OverrideColours["FOCUS"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerFury" then
+        HealBot_Globals.OverrideColours["FURY"].r,
+        HealBot_Globals.OverrideColours["FURY"].g,
+        HealBot_Globals.OverrideColours["FURY"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerMana" then
+        HealBot_Globals.OverrideColours["MANA"].r,
+        HealBot_Globals.OverrideColours["MANA"].g,
+        HealBot_Globals.OverrideColours["MANA"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerRage" then
+        HealBot_Globals.OverrideColours["RAGE"].r,
+        HealBot_Globals.OverrideColours["RAGE"].g,
+        HealBot_Globals.OverrideColours["RAGE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverridePowerRunic" then
+        HealBot_Globals.OverrideColours["RUNIC_POWER"].r,
+        HealBot_Globals.OverrideColours["RUNIC_POWER"].g,
+        HealBot_Globals.OverrideColours["RUNIC_POWER"].b = R, G, B;
+        HealBot_Timers_Set("LAST","PowerColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassDeathKnight" then
+        HealBot_Globals.OverrideColours["DEAT"].r,
+        HealBot_Globals.OverrideColours["DEAT"].g,
+        HealBot_Globals.OverrideColours["DEAT"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassDemonHunter" then
+        HealBot_Globals.OverrideColours["DEMO"].r,
+        HealBot_Globals.OverrideColours["DEMO"].g,
+        HealBot_Globals.OverrideColours["DEMO"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassDruid" then
+        HealBot_Globals.OverrideColours["DRUI"].r,
+        HealBot_Globals.OverrideColours["DRUI"].g,
+        HealBot_Globals.OverrideColours["DRUI"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassEvoker" then
+        HealBot_Globals.OverrideColours["EVOK"].r,
+        HealBot_Globals.OverrideColours["EVOK"].g,
+        HealBot_Globals.OverrideColours["EVOK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassHunter" then
+        HealBot_Globals.OverrideColours["HUNT"].r,
+        HealBot_Globals.OverrideColours["HUNT"].g,
+        HealBot_Globals.OverrideColours["HUNT"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassMage" then
+        HealBot_Globals.OverrideColours["MAGE"].r,
+        HealBot_Globals.OverrideColours["MAGE"].g,
+        HealBot_Globals.OverrideColours["MAGE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassMonk" then
+        HealBot_Globals.OverrideColours["MONK"].r,
+        HealBot_Globals.OverrideColours["MONK"].g,
+        HealBot_Globals.OverrideColours["MONK"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassPaladin" then
+        HealBot_Globals.OverrideColours["PALA"].r,
+        HealBot_Globals.OverrideColours["PALA"].g,
+        HealBot_Globals.OverrideColours["PALA"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassPriest" then
+        HealBot_Globals.OverrideColours["PRIE"].r,
+        HealBot_Globals.OverrideColours["PRIE"].g,
+        HealBot_Globals.OverrideColours["PRIE"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassRogue" then
+        HealBot_Globals.OverrideColours["ROGU"].r,
+        HealBot_Globals.OverrideColours["ROGU"].g,
+        HealBot_Globals.OverrideColours["ROGU"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassShaman" then
+        HealBot_Globals.OverrideColours["SHAM"].r,
+        HealBot_Globals.OverrideColours["SHAM"].g,
+        HealBot_Globals.OverrideColours["SHAM"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassWarlock" then
+        HealBot_Globals.OverrideColours["WARL"].r,
+        HealBot_Globals.OverrideColours["WARL"].g,
+        HealBot_Globals.OverrideColours["WARL"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
+    elseif HealBot_ColourObjWaiting=="OverrideClassWarrior" then
+        HealBot_Globals.OverrideColours["WARR"].r,
+        HealBot_Globals.OverrideColours["WARR"].g,
+        HealBot_Globals.OverrideColours["WARR"].b = R, G, B;
+        HealBot_Timers_Set("LAST","ClassColourUpdate")
     elseif HealBot_ColourObjWaiting=="CustomInjuredBar" then
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HIR"],
         Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HIG"],
@@ -16878,6 +18055,56 @@ function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
         end
         HealBot_Options_PresetColours:Hide()
         HealBot_Options_Panel4:Show()
+    elseif strsub(HealBot_Options_luVars["PresetColourCaller"],1,24)=="HealBot_Options_Override" then
+        if HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassDeathKnightPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassDeathKnight"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassDemonHunterPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassDemonHunter"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassDruidPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassDruid"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassEvokerPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassEvoker"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassHunterPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassHunter"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassMagePresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassMage"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassMonkPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassMonk"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassPaladinPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassPaladin"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassPriestPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassPriest"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassRoguePresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassRogue"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassShamanPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassShaman"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassWarlockPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassWarlock"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColClassWarriorPresetColour" then
+            HealBot_ColourObjWaiting="OverrideClassWarrior"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColRoleTankPresetColour" then
+            HealBot_ColourObjWaiting="OverrideRoleTank"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColRoleHealPresetColour" then
+            HealBot_ColourObjWaiting="OverrideRoleHeal"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColRoleDPSPresetColour" then
+            HealBot_ColourObjWaiting="OverrideRoleDPS"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerAstralPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerAstral"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerEnergyPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerEnergy"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerFocusPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerFocus"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerFuryPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerFury"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerManaPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerMana"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerRagePresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerRage"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_OverrideColPowerRunicPresetColour" then
+            HealBot_ColourObjWaiting="OverridePowerRunic"
+        end
+        HealBot_Options_PresetColours:Hide()
+        HealBot_Options_Panel10:Show()
     elseif strsub(HealBot_Options_luVars["PresetColourCaller"],1,20)=="HealBot_Options_Skin" then
         if HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinBarHealthyPresetColour" then
             if HealBot_Options_luVars["BarCustomColoursCaller"]=="Health" then
@@ -16947,6 +18174,52 @@ function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
             end
         elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinStateDeadColPresetColour" then
             HealBot_ColourObjWaiting="DeadStateText"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColRoleTankPresetColour" then
+            HealBot_ColourObjWaiting="RoleTank"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColRoleHealPresetColour" then
+            HealBot_ColourObjWaiting="RoleHeal"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColRoleDPSPresetColour" then
+            HealBot_ColourObjWaiting="RoleDPS"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerAstralPresetColour" then
+            HealBot_ColourObjWaiting="PowerAstral"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerEnergyPresetColour" then
+            HealBot_ColourObjWaiting="PowerEnergy"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerFocusPresetColour" then
+            HealBot_ColourObjWaiting="PowerFocus"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerFuryPresetColour" then
+            HealBot_ColourObjWaiting="PowerFury"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerManaPresetColour" then
+            HealBot_ColourObjWaiting="PowerMana"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerRagePresetColour" then
+            HealBot_ColourObjWaiting="PowerRage"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColPowerRunicPresetColour" then
+            HealBot_ColourObjWaiting="PowerRunic"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassDeathKnightPresetColour" then
+            HealBot_ColourObjWaiting="ClassDeathKnight"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassDemonHunterPresetColour" then
+            HealBot_ColourObjWaiting="ClassDemonHunter"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassDruidPresetColour" then
+            HealBot_ColourObjWaiting="ClassDruid"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassEvokerPresetColour" then
+            HealBot_ColourObjWaiting="ClassEvoker"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassHunterPresetColour" then
+            HealBot_ColourObjWaiting="ClassHunter"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassMagePresetColour" then
+            HealBot_ColourObjWaiting="ClassMage"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassMonkPresetColour" then
+            HealBot_ColourObjWaiting="ClassMonk"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassPaladinPresetColour" then
+            HealBot_ColourObjWaiting="ClassPaladin"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassPriestPresetColour" then
+            HealBot_ColourObjWaiting="ClassPriest"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassRoguePresetColour" then
+            HealBot_ColourObjWaiting="ClassRogue"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassShamanPresetColour" then
+            HealBot_ColourObjWaiting="ClassShaman"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassWarlockPresetColour" then
+            HealBot_ColourObjWaiting="ClassWarlock"
+        elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinColClassWarriorPresetColour" then
+            HealBot_ColourObjWaiting="ClassWarrior"
         elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinDeadColPresetColour" then
             HealBot_ColourObjWaiting="DeadNameText"
         elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinStateResColPresetColour" then
@@ -17590,6 +18863,7 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT301Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT303Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT304Txt"])
+    HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT305Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT307Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT308Txt"])
     HealBot_Options_Content_Colour(nil, _G["HealBot_Contents_ButtonT309Txt"])
@@ -17627,6 +18901,10 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsOverrideFocusGroups"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsOverrideBorderHazard"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideFlashEffectPanel"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_Override_ColourFrame"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideColoursClass"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideColoursRole"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideColoursPower"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_Override_ChatFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideChatPanel"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_OverrideChatSkinsOOMFrame"], 0.7)
@@ -17640,6 +18918,10 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_HealGroupsSkinsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EffectsSkinsFrame"], 0.7)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrame"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_ColourSkinsFrame"], 0.7)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursClass"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursRole"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursPower"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrameTop"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrameBottom"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_FluidBarsPanel"], 0.5)
@@ -17749,6 +19031,7 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_Colour(nil,_G["HealBot_AuxTextConfigAssign2_FontStr2"],true)
 
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideEffectb"],_G["HealBot_Options_OverrideEffectbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColourb"],_G["HealBot_Options_OverrideColourbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideChatb"],_G["HealBot_Options_OverrideChatbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_Overrideframesb"],_G["HealBot_Options_OverrideframesbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentOverridePanelButton"]],
@@ -17758,6 +19041,19 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_TipsSpellsb"],_G["HealBot_Options_TipsSpellsbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentTipsPanelButton"]],
                                    _G[HealBot_Options_luVars["CurrentTipsPanelButton"].."Txt"],true)
+                                   
+
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursClassb"],_G["HealBot_Options_OverrideColoursClassbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursRoleb"],_G["HealBot_Options_OverrideColoursRolebTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_OverrideColoursPowerb"],_G["HealBot_Options_OverrideColoursPowerbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"].."Txt"],true)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsColoursClassb"],_G["HealBot_Options_SkinsColoursClassbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsColoursRoleb"],_G["HealBot_Options_SkinsColoursRolebTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsColoursPowerb"],_G["HealBot_Options_SkinsColoursPowerbTxt"],false)
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"].."Txt"],true)
+                                   
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameHeadersBarb"],_G["HealBot_Options_SkinsFrameHeadersBarbTxt"],false)
     HealBot_Options_InnerContent_Colour(_G["HealBot_Options_SkinsFrameHeadersFrameb"],_G["HealBot_Options_SkinsFrameHeadersFramebTxt"],false)
     HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentSkinsHeaderPanelButton"]],
@@ -17973,6 +19269,8 @@ function HealBot_Options_Lang(region, msgchat)
         g=_G["HealBot_Contents_ButtonT303Txt"]
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_EFFECTS)
         g=_G["HealBot_Contents_ButtonT304Txt"]
+        g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_COLOUR)
+        g=_G["HealBot_Contents_ButtonT305Txt"]
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY)
         g=_G["HealBot_Contents_ButtonT307Txt"]
         g:SetText(HEALBOT_OPTIONS_CONTENT_SKINS_CHAT)
@@ -18078,6 +19376,14 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetText(HEALBOT_WORD_TEXT)
         g=_G["HealBot_Options_SkinsFrameTextAggroTextbTxt"] 
         g:SetText(HEALBOT_WORD_TEXT)
+        g=_G["HealBot_Options_OverrideEffectbTxt"] 
+        g:SetText(HEALBOT_OPTIONS_TAB_EFFECTS)
+        g=_G["HealBot_Options_OverrideColourbTxt"] 
+        g:SetText(HEALBOT_WORD_COLOURS)
+        g=_G["HealBot_Options_OverrideChatbTxt"] 
+        g:SetText(HEALBOT_OPTIONS_TAB_CHAT)
+        g=_G["HealBot_Options_OverrideframesbTxt"] 
+        g:SetText(HEALBOT_OPTIONS_TAB_FRAMES)
         g=_G["HealBot_Options_SkinsFrameTextStateColourbTxt"] 
         g:SetText(HEALBOT_WORD_COLOURS)
         g=_G["HealBot_Options_SkinsFrameTextNameColourbTxt"] 
@@ -18113,6 +19419,15 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_HealthTextColOptTxt"]
         g:SetText(HEALBOT_OPTIONS_HEALTHOPTCOLOUR)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Override_ColClassTxt"]
+        g:SetText(HEALBOT_OPTIONS_CLASSCOLOURS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Override_ColRoleTxt"]
+        g:SetText(HEALBOT_OPTIONS_ROLECOLOURS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Override_ColPowerTxt"]
+        g:SetText(HEALBOT_OPTIONS_POWERCOLOURS)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_AggroTextColOptTxt"]
         g:SetText(HEALBOT_OPTIONS_AGGROOPTCOLOUR)
@@ -18264,6 +19579,15 @@ function HealBot_Options_Lang(region, msgchat)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_fhbTxt"]
         g:SetText(HEALBOT_OPTIONS_BARHEADEROPTTEXT)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Skins_ColClassTxt"]
+        g:SetText(HEALBOT_OPTIONS_CLASSCOLOURS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Skins_ColRoleTxt"]
+        g:SetText(HEALBOT_OPTIONS_ROLECOLOURS)
+        g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_Skins_ColPowerTxt"]
+        g:SetText(HEALBOT_OPTIONS_POWERCOLOURS)
         g:SetTextColor(1,1,1,1)
         g=_G["HealBot_Options_Skins_fhfTxt"]
         g:SetText(HEALBOT_OPTIONS_FRAMEHEADEROPTTEXT)
@@ -18563,6 +19887,136 @@ function HealBot_Options_OverridesEffectsTab(tab)
         HealBot_Options_DoEffects_DropDowns()
         HealBot_Options_SetEFGroups()
         HealBot_Options_TabRunOnce[tab]=true
+    end
+end
+
+function HealBot_Options_OverridesColourClassTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_Override_ColoursClassUse.initialize = HealBot_Options_Override_ColoursClassUse_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_Override_ColoursClassUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USECLASS"]])
+        HealBot_Options_SetLabel("healbotOverride_ColoursClassfontstr",HEALBOT_OPTIONS_OVERRIDE_CLASSCOLS)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassDeathKnightpickt",HEALBOT_DEATHKNIGHT)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassDemonHunterpickt",HEALBOT_DEMONHUNTER)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassDruidpickt",HEALBOT_DRUID)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassEvokerpickt",HEALBOT_EVOKER)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassHunterpickt",HEALBOT_HUNTER)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassMagepickt",HEALBOT_MAGE)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassMonkpickt",HEALBOT_MONK)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassPaladinpickt",HEALBOT_PALADIN)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassPriestpickt",HEALBOT_PRIEST)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassRoguepickt",HEALBOT_ROGUE)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassShamanpickt",HEALBOT_SHAMAN)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassWarlockpickt",HEALBOT_WARLOCK)
+        HealBot_Options_SetLabel("HealBot_OverrideColClassWarriorpickt",HEALBOT_WARRIOR)
+        HealBot_OverrideColClassDeathKnightpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassDemonHunterpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassDruidpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassEvokerpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassHunterpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassMagepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassMonkpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassPaladinpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassPriestpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassRoguepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassShamanpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassWarlockpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColClassWarriorpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_OverrideColClassMonkpick:Hide()
+            HealBot_Options_OverrideColClassMonkPresetColour:Hide()
+            HealBot_Options_OverrideColClassMonkResetColour:Hide()
+            HealBot_OverrideColClassEvokerpick:Hide()
+            HealBot_Options_OverrideColClassEvokerPresetColour:Hide()
+            HealBot_Options_OverrideColClassEvokerResetColour:Hide()
+            HealBot_OverrideColClassDemonHunterpick:Hide()
+            HealBot_Options_OverrideColClassDemonHunterPresetColour:Hide()
+            HealBot_Options_OverrideColClassDemonHunterResetColour:Hide()
+            if HEALBOT_GAME_VERSION<3 then
+                HealBot_OverrideColClassDeathKnightpick:Hide()
+                HealBot_Options_OverrideColClassDeathKnightPresetColour:Hide()
+                HealBot_Options_OverrideColClassDeathKnightResetColour:Hide()
+                HealBot_OverrideColClassDruidpick:SetPoint("TOPLEFT",120,-165)
+                HealBot_OverrideColClassHunterpick:SetPoint("TOPLEFT",120,-220)
+                HealBot_OverrideColClassMagepick:SetPoint("TOPLEFT",120,-275)
+                HealBot_OverrideColClassPaladinpick:SetPoint("TOPLEFT",120,-330)
+                HealBot_OverrideColClassPriestpick:SetPoint("TOPLEFT",120,-385)
+                HealBot_OverrideColClassRoguepick:SetPoint("TOPLEFT",400,-165)
+                HealBot_OverrideColClassShamanpick:SetPoint("TOPLEFT",400,-220)
+                HealBot_OverrideColClassWarlockpick:SetPoint("TOPLEFT",400,-275)
+                HealBot_OverrideColClassWarriorpick:SetPoint("TOPLEFT",400,-330)
+            else
+                HealBot_OverrideColClassDeathKnightpick:SetPoint("TOPLEFT",120,-165)
+                HealBot_OverrideColClassHunterpick:SetPoint("TOPLEFT",120,-275)
+                HealBot_OverrideColClassMagepick:SetPoint("TOPLEFT",120,-330)
+                HealBot_OverrideColClassPaladinpick:SetPoint("TOPLEFT",120,-385)
+            end
+        end
+        HealBot_Options_Override_ColoursClassUse_Toggle()
+    end
+end
+
+function HealBot_Options_OverridesColourRoleTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_Override_ColoursRoleUse.initialize = HealBot_Options_Override_ColoursRoleUse_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_Override_ColoursRoleUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USEROLE"]])
+        HealBot_Options_SetLabel("healbotOverride_ColoursRolefontstr",HEALBOT_OPTIONS_OVERRIDE_ROLECOLS)
+        HealBot_Options_SetLabel("HealBot_OverrideColRoleTankpickt",HEALBOT_WORD_TANK)
+        HealBot_Options_SetLabel("HealBot_OverrideColRoleHealpickt",HEALBOT_WORD_HEALER)
+        HealBot_Options_SetLabel("HealBot_OverrideColRoleDPSpickt",HEALBOT_WORD_DAMAGER)
+        HealBot_OverrideColRoleTankpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColRoleHealpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColRoleDPSpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_Options_Override_ColoursRoleUse_Toggle()
+    end
+end
+
+function HealBot_Options_OverridesColourPowerTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_Override_ColoursPowerUse.initialize = HealBot_Options_Override_ColoursPowerUse_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_Override_ColoursPowerUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideColours["USEPOWER"]])
+        HealBot_Options_SetLabel("healbotOverride_ColoursPowerfontstr",HEALBOT_OPTIONS_OVERRIDE_POWERCOLS)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerAstralpickt",HEALBOT_ASTRALPOWER)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerEnergypickt",HEALBOT_ENERGY)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerFocuspickt",HEALBOT_FOCUS)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerFurypickt",HEALBOT_FURY)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerManapickt",HEALBOT_MANA)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerRagepickt",HEALBOT_RAGE)
+        HealBot_Options_SetLabel("HealBot_OverrideColPowerRunicpickt",HEALBOT_RUNICPOWER)
+        HealBot_OverrideColPowerAstralpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerEnergypick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerFocuspick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerFurypick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerManapick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerRagepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_OverrideColPowerRunicpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_OverrideColPowerAstralpick:Hide()
+            HealBot_Options_OverrideColPowerAstralPresetColour:Hide()
+            HealBot_Options_OverrideColPowerAstralResetColour:Hide()
+            HealBot_OverrideColPowerFocuspick:Hide()
+            HealBot_Options_OverrideColPowerFocusPresetColour:Hide()
+            HealBot_Options_OverrideColPowerFocusResetColour:Hide()
+            HealBot_OverrideColPowerFurypick:Hide()
+            HealBot_Options_OverrideColPowerFuryPresetColour:Hide()
+            HealBot_Options_OverrideColPowerFuryResetColour:Hide()
+            if HEALBOT_GAME_VERSION<3 then
+                HealBot_OverrideColPowerRunicpick:Hide()
+                HealBot_Options_OverrideColPowerRunicPresetColour:Hide()
+                HealBot_Options_OverrideColPowerRunicResetColour:Hide()
+                HealBot_OverrideColPowerEnergypick:SetPoint("TOPLEFT",180,-190)
+                HealBot_OverrideColPowerManapick:SetPoint("TOPLEFT",180,-270)
+                HealBot_OverrideColPowerRagepick:SetPoint("TOPLEFT",180,-350)
+            else
+                HealBot_OverrideColPowerEnergypick:SetPoint("TOPLEFT",180,-170)
+                HealBot_OverrideColPowerManapick:SetPoint("TOPLEFT",180,-240)
+                HealBot_OverrideColPowerRagepick:SetPoint("TOPLEFT",180,-310)
+                HealBot_OverrideColPowerRunicpick:SetPoint("TOPLEFT",180,-380)
+            end
+        end
+        HealBot_Options_Override_ColoursPowerUse_Toggle()
     end
 end
 
@@ -18889,6 +20343,127 @@ function HealBot_Options_SkinsEffectsTab(tab)
     end
 end
 
+function HealBot_Options_SkinsColourClassTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_SetLabel("HealBot_ColClassDeathKnightpickt",HEALBOT_DEATHKNIGHT)
+        HealBot_Options_SetLabel("HealBot_ColClassDemonHunterpickt",HEALBOT_DEMONHUNTER)
+        HealBot_Options_SetLabel("HealBot_ColClassDruidpickt",HEALBOT_DRUID)
+        HealBot_Options_SetLabel("HealBot_ColClassEvokerpickt",HEALBOT_EVOKER)
+        HealBot_Options_SetLabel("HealBot_ColClassHunterpickt",HEALBOT_HUNTER)
+        HealBot_Options_SetLabel("HealBot_ColClassMagepickt",HEALBOT_MAGE)
+        HealBot_Options_SetLabel("HealBot_ColClassMonkpickt",HEALBOT_MONK)
+        HealBot_Options_SetLabel("HealBot_ColClassPaladinpickt",HEALBOT_PALADIN)
+        HealBot_Options_SetLabel("HealBot_ColClassPriestpickt",HEALBOT_PRIEST)
+        HealBot_Options_SetLabel("HealBot_ColClassRoguepickt",HEALBOT_ROGUE)
+        HealBot_Options_SetLabel("HealBot_ColClassShamanpickt",HEALBOT_SHAMAN)
+        HealBot_Options_SetLabel("HealBot_ColClassWarlockpickt",HEALBOT_WARLOCK)
+        HealBot_Options_SetLabel("HealBot_ColClassWarriorpickt",HEALBOT_WARRIOR)
+        HealBot_ColClassDeathKnightpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassDemonHunterpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassDruidpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassEvokerpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassHunterpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassMagepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassMonkpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassPaladinpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassPriestpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassRoguepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassShamanpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassWarlockpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColClassWarriorpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_ColClassMonkpick:Hide()
+            HealBot_Options_SkinColClassMonkPresetColour:Hide()
+            HealBot_Options_SkinColClassMonkResetColour:Hide()
+            HealBot_ColClassEvokerpick:Hide()
+            HealBot_Options_SkinColClassEvokerPresetColour:Hide()
+            HealBot_Options_SkinColClassEvokerResetColour:Hide()
+            HealBot_ColClassDemonHunterpick:Hide()
+            HealBot_Options_SkinColClassDemonHunterPresetColour:Hide()
+            HealBot_Options_SkinColClassDemonHunterResetColour:Hide()
+            if HEALBOT_GAME_VERSION<3 then
+                HealBot_ColClassDeathKnightpick:Hide()
+                HealBot_Options_SkinColClassDeathKnightPresetColour:Hide()
+                HealBot_Options_SkinColClassDeathKnightResetColour:Hide()
+                HealBot_ColClassDruidpick:SetPoint("TOPLEFT",120,-125)
+                HealBot_ColClassHunterpick:SetPoint("TOPLEFT",120,-175)
+                HealBot_ColClassMagepick:SetPoint("TOPLEFT",120,-225)
+                HealBot_ColClassPaladinpick:SetPoint("TOPLEFT",120,-275)
+                HealBot_ColClassPriestpick:SetPoint("TOPLEFT",120,-325)
+                HealBot_ColClassRoguepick:SetPoint("TOPLEFT",400,-125)
+                HealBot_ColClassShamanpick:SetPoint("TOPLEFT",400,-175)
+                HealBot_ColClassWarlockpick:SetPoint("TOPLEFT",400,-225)
+                HealBot_ColClassWarriorpick:SetPoint("TOPLEFT",400,-275)
+            else
+                HealBot_ColClassDeathKnightpick:SetPoint("TOPLEFT",120,-125)
+                HealBot_ColClassHunterpick:SetPoint("TOPLEFT",120,-225)
+                HealBot_ColClassMagepick:SetPoint("TOPLEFT",120,-275)
+                HealBot_ColClassPaladinpick:SetPoint("TOPLEFT",120,-325)
+            end
+        end
+        HealBot_Options_Override_ColoursClassUse_Toggle()
+    end
+end
+
+function HealBot_Options_SkinsColourRoleTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_SetLabel("HealBot_ColRoleTankpickt",HEALBOT_WORD_TANK)
+        HealBot_Options_SetLabel("HealBot_ColRoleHealpickt",HEALBOT_WORD_HEALER)
+        HealBot_Options_SetLabel("HealBot_ColRoleDPSpickt",HEALBOT_WORD_DAMAGER)
+        HealBot_ColRoleTankpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColRoleHealpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColRoleDPSpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_Options_Override_ColoursRoleUse_Toggle()
+    end
+end
+
+function HealBot_Options_SkinsColourPowerTab(tab)
+    if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_TabRunOnce[tab]=true
+        HealBot_Options_SetLabel("HealBot_ColPowerAstralpickt",HEALBOT_ASTRALPOWER)
+        HealBot_Options_SetLabel("HealBot_ColPowerEnergypickt",HEALBOT_ENERGY)
+        HealBot_Options_SetLabel("HealBot_ColPowerFocuspickt",HEALBOT_FOCUS)
+        HealBot_Options_SetLabel("HealBot_ColPowerFurypickt",HEALBOT_FURY)
+        HealBot_Options_SetLabel("HealBot_ColPowerManapickt",HEALBOT_MANA)
+        HealBot_Options_SetLabel("HealBot_ColPowerRagepickt",HEALBOT_RAGE)
+        HealBot_Options_SetLabel("HealBot_ColPowerRunicpickt",HEALBOT_RUNICPOWER)
+        HealBot_ColPowerAstralpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerEnergypick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerFocuspick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerFurypick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerManapick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerRagepick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        HealBot_ColPowerRunicpick:SetStatusBarTexture(HealBot_Default_Textures[20].file)
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_ColPowerAstralpick:Hide()
+            HealBot_Options_SkinColPowerAstralPresetColour:Hide()
+            HealBot_Options_SkinColPowerAstralResetColour:Hide()
+            HealBot_ColPowerFocuspick:Hide()
+            HealBot_Options_SkinColPowerFocusPresetColour:Hide()
+            HealBot_Options_SkinColPowerFocusResetColour:Hide()
+            HealBot_ColPowerFurypick:Hide()
+            HealBot_Options_SkinColPowerFuryPresetColour:Hide()
+            HealBot_Options_SkinColPowerFuryResetColour:Hide()
+            if HEALBOT_GAME_VERSION<3 then
+                HealBot_ColPowerRunicpick:Hide()
+                HealBot_Options_SkinColPowerRunicPresetColour:Hide()
+                HealBot_Options_SkinColPowerRunicResetColour:Hide()
+                HealBot_ColPowerEnergypick:SetPoint("TOPLEFT",180,-140)
+                HealBot_ColPowerManapick:SetPoint("TOPLEFT",180,-220)
+                HealBot_ColPowerRagepick:SetPoint("TOPLEFT",180,-300)
+            else
+                HealBot_ColPowerEnergypick:SetPoint("TOPLEFT",180,-100)
+                HealBot_ColPowerManapick:SetPoint("TOPLEFT",180,-180)
+                HealBot_ColPowerRagepick:SetPoint("TOPLEFT",180,-260)
+                HealBot_ColPowerRunicpick:SetPoint("TOPLEFT",180,-340)
+            end
+        end
+        HealBot_Options_Override_ColoursPowerUse_Toggle()
+    end
+end
+
 function HealBot_Options_SkinsEnemyTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_ShowEnemyIncSelf:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"])
@@ -19161,7 +20736,7 @@ function HealBot_Options_SkinsFramesBarsGeneralTab(tab)
     end
 end
 
-HealBot_Options_luVars["OnLoadBarsColours"]=true
+HealBot_Options_luVars["FramesBarsOnLoadBarsColours"]=true
 function HealBot_Options_SkinsFramesBarsColourTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Options_BarHealthColour.initialize = HealBot_Options_BarHealthColour_DropDown
@@ -19208,7 +20783,7 @@ function HealBot_Options_SkinsFramesBarsColourTab(tab)
         HealBot_Options_SetLabel("HealBot_BarIncHealColourt",HEALBOT_SKIN_INCHEALBARCOL_TEXT)
         HealBot_Options_TabRunOnce[tab]=true
     end
-    if HealBot_Options_luVars["OnLoadBarsColours"] then
+    if HealBot_Options_luVars["FramesBarsOnLoadBarsColours"] then
         HealBot_BarCustomHealthColourCritical:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
         HealBot_BarCustomHealthColourInjured:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
         HealBot_BarCustomHealthColourHealthy:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
@@ -19224,7 +20799,7 @@ function HealBot_Options_SkinsFramesBarsColourTab(tab)
         HealBot_BarCustomAbsorbColourCritical:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
         HealBot_BarCustomAbsorbColourInjured:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
         HealBot_BarCustomAbsorbColourHealthy:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[8]))
-        HealBot_Options_TabRunOnce[tab.."OnLoadBarsColours"]=false
+        HealBot_Options_TabRunOnce["FramesBarsOnLoadBarsColours"]=false
     end
 end
 
@@ -20802,11 +22377,17 @@ local HealBot_Options_TabFuncs={
                                 ["About"]=HealBot_Options_AboutTab,
                                 ["General"]=HealBot_Options_GeneralTab,
                                 ["OverridesEffects"]=HealBot_Options_OverridesEffectsTab,
+                                ["OverridesColourClass"]=HealBot_Options_OverridesColourClassTab,
+                                ["OverridesColourRole"]=HealBot_Options_OverridesColourRoleTab,
+                                ["OverridesColourPower"]=HealBot_Options_OverridesColourPowerTab,
                                 ["OverrideChat"]=HealBot_Options_OverrideChatTab,
                                 ["OverrideFrames"]=HealBot_Options_OverrideFramesTab,
                                 ["Spells"]=HealBot_Options_SpellsTab,
                                 ["SkinsGeneral"]=HealBot_Options_SkinsGeneralTab,
                                 ["SkinsEffects"]=HealBot_Options_SkinsEffectsTab,
+                                ["SkinsColourClass"]=HealBot_Options_SkinsColourClassTab,
+                                ["SkinsColourRole"]=HealBot_Options_SkinsColourRoleTab,
+                                ["SkinsColourPower"]=HealBot_Options_SkinsColourPowerTab,
                                 ["SkinsEnemy"]=HealBot_Options_SkinsEnemyTab,
                                 ["SkinsChat"]=HealBot_Options_SkinsChatTab,
                                 ["SkinsFramesGeneral"]=HealBot_Options_SkinsFramesGeneralTab,
@@ -20867,6 +22448,7 @@ local HealBot_Options_TabFuncs={
                                }
 local HealBot_Options_SubTabs={
                                ["Overrides"]="OverridesEffects",
+                               ["SkinsColour"]="SkinsColourClass",
                                ["SkinsFramesHeaders"]="SkinsFramesHeadersBars",
                                ["SkinsFramesBars"]="SkinsFramesBarsGeneral",
                                ["SkinsFramesBarsAux"]="SkinsFramesBarsAuxSettings",
@@ -21366,7 +22948,7 @@ function HealBot_Options_SetSkins(force)
             HealBot_Action_setLuVars("resetSkin", true)
             HealBot_Action_setLuVars("resetIndicator", true)
             HealBot_Action_setLuVars("resetText", true)
-            HealBot_Action_setLuVars("resetAux", true)
+            --HealBot_Action_setLuVars("resetAux", true)
             HealBot_Aura_RemoveExtraIcons(91)
             HealBot_Aura_RemoveExtraIcons(92)
             HealBot_Aura_RemoveExtraIcons(93)
@@ -21509,6 +23091,9 @@ function HealBot_Options_SetSkinBars()
     HealBot_Buff15Colour:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCustomHealthColourHealthy:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCustomHealthColourCritical:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_ColRoleTankpick:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_ColRoleHealpick:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_ColRoleDPSpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCustomHealthColourInjured:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextCustomColourCritical:GetStatusBarTexture():SetHorizTile(false)
     HealBot_NameTextCustomColourInjured:GetStatusBarTexture():SetHorizTile(false)
@@ -21552,6 +23137,12 @@ function HealBot_Options_SetSkinBars()
     HealBot_BarInjuredCustomColour:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BarCriticalCustomColour:GetStatusBarTexture():SetHorizTile(false)
     local barScale = HealBot_BarCustomHealthColourHealthy:GetScale();
+    HealBot_ColRoleTankpick:SetScale(barScale + 0.01);
+    HealBot_ColRoleTankpick:SetScale(barScale);
+    HealBot_ColRoleHealpick:SetScale(barScale + 0.01);
+    HealBot_ColRoleHealpick:SetScale(barScale);
+    HealBot_ColRoleDPSpick:SetScale(barScale + 0.01);
+    HealBot_ColRoleDPSpick:SetScale(barScale);
     HealBot_BarCustomHealthColourHealthy:SetScale(barScale + 0.01);
     HealBot_BarCustomHealthColourHealthy:SetScale(barScale);
     HealBot_BarCustomHealthColourCritical:SetScale(barScale + 0.01);
@@ -21979,6 +23570,33 @@ function HealBot_Options_ShowBuffPanel(frameName)
     HealBot_Options_luVars["CurrentBuffPanel"]=frameName
 end
 
+HealBot_Options_luVars["CurrentOverrideColourPanel"]="HealBot_Options_OverrideColoursClass"
+HealBot_Options_luVars["CurrentOverrideColourPanelButton"]="HealBot_Options_OverrideColoursClassb"
+function HealBot_Options_ShowOverrideColourPanel(frameName, buttonName, tab)
+    HealBot_Options_UpdateTab(nil, nil, "SkinsColour", true, tab)
+    HealBot_Options_ObjectsShowHide(HealBot_Options_luVars["CurrentOverrideColourPanel"],false)
+    HealBot_Options_ObjectsShowHide(frameName,true)
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"].."Txt"],false)
+    HealBot_Options_luVars["CurrentOverrideColourPanel"]=frameName
+    HealBot_Options_luVars["CurrentOverrideColourPanelButton"]=buttonName
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentOverrideColourPanelButton"].."Txt"],true)
+end
+
+HealBot_Options_luVars["CurrentSkinsColourPanel"]="HealBot_Options_SkinsColoursClass"
+HealBot_Options_luVars["CurrentSkinsColourPanelButton"]="HealBot_Options_SkinsColoursClassb"
+function HealBot_Options_ShowColourPanel(frameName, buttonName, tab)
+    HealBot_Options_UpdateTab(nil, nil, "SkinsColour", true, tab)
+    HealBot_Options_ObjectsShowHide(HealBot_Options_luVars["CurrentSkinsColourPanel"],false)
+    HealBot_Options_ObjectsShowHide(frameName,true)
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"].."Txt"],false)
+    HealBot_Options_luVars["CurrentSkinsColourPanel"]=frameName
+    HealBot_Options_luVars["CurrentSkinsColourPanelButton"]=buttonName
+    HealBot_Options_InnerContent_Colour(_G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"]],
+                                        _G[HealBot_Options_luVars["CurrentSkinsColourPanelButton"].."Txt"],true)
+end
 
 HealBot_Options_luVars["CurrentSkinsHeaderPanel"]="HealBot_Options_SkinsFrameHeadersBar"
 HealBot_Options_luVars["CurrentSkinsHeaderPanelButton"]="HealBot_Options_SkinsFrameHeadersBarb"

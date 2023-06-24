@@ -2570,6 +2570,32 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if Healbot_Config_Skins.Enemy[SkinName]["FRAME"] then Healbot_Config_Skins.Enemy[SkinName]["FRAME"]=nil end
     if Healbot_Config_Skins.General[SkinName]["LOWMANA"] then Healbot_Config_Skins.General[SkinName]["LOWMANA"]=nil end
     if Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"] then Healbot_Config_Skins.General[SkinName]["LOWMANACOMBAT"]=nil end
+
+    if not Healbot_Config_Skins.CustomCols[SkinName]["TANK"] then HealBot_Skins_SetRoleCol(SkinName, "TANK", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["HEALER"] then HealBot_Skins_SetRoleCol(SkinName, "HEALER", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["DAMAGER"] then HealBot_Skins_SetRoleCol(SkinName, "DAMAGER", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["DEMO"] then HealBot_Skins_SetClassCol(SkinName, "DEMO", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["DRUI"] then HealBot_Skins_SetClassCol(SkinName, "DRUI", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["HUNT"] then HealBot_Skins_SetClassCol(SkinName, "HUNT", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["MAGE"] then HealBot_Skins_SetClassCol(SkinName, "MAGE", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["MONK"] then HealBot_Skins_SetClassCol(SkinName, "MONK", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["PALA"] then HealBot_Skins_SetClassCol(SkinName, "PALA", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["PRIE"] then HealBot_Skins_SetClassCol(SkinName, "PRIE", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["ROGU"] then HealBot_Skins_SetClassCol(SkinName, "ROGU", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["SHAM"] then HealBot_Skins_SetClassCol(SkinName, "SHAM", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["WARL"] then HealBot_Skins_SetClassCol(SkinName, "WARL", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["DEAT"] then HealBot_Skins_SetClassCol(SkinName, "DEAT", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["WARR"] then HealBot_Skins_SetClassCol(SkinName, "WARR", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["EVOK"] then HealBot_Skins_SetClassCol(SkinName, "EVOK", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["MANA"] then HealBot_Skins_SetPowerCol(SkinName, "MANA", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["RAGE"] then HealBot_Skins_SetPowerCol(SkinName, "RAGE", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["FOCUS"] then HealBot_Skins_SetPowerCol(SkinName, "FOCUS", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["ENERGY"] then HealBot_Skins_SetPowerCol(SkinName, "ENERGY", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["RUNIC_POWER"] then HealBot_Skins_SetPowerCol(SkinName, "RUNIC_POWER", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["INSANITY"] then HealBot_Skins_SetPowerCol(SkinName, "INSANITY", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["LUNAR_POWER"] then HealBot_Skins_SetPowerCol(SkinName, "LUNAR_POWER", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["MAELSTROM"] then HealBot_Skins_SetPowerCol(SkinName, "MAELSTROM", false) end
+    if not Healbot_Config_Skins.CustomCols[SkinName]["FURY"] then HealBot_Skins_SetPowerCol(SkinName, "FURY", false) end
     -- Fix Frames
     for id=1,10 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]==HEALBOT_CUSTOM_CASTBY_ENEMY_en then
@@ -2627,3 +2653,88 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     Healbot_Config_Skins.General[SkinName]["VC"]=HealBot_Global_Version()
       --HealBot_setCall("HealBot_Skins_Check_Skin")
 end
+local hbRoleCols= {
+          ["TANK"]           = {r=0.82, g=0.65,  b=0.48, },
+          ["HEALER"]         = {r=0.45, g=0.85,  b=0.99, },
+          ["DAMAGER"]        = {r=1.0,  g=0.55,  b=0.1, },
+      }
+function HealBot_Skins_SetRoleCol(SkinName, role, override)
+    if override then
+        HealBot_Globals.OverrideColours[role]={}
+        HealBot_Globals.OverrideColours[role].r=hbRoleCols[role].r
+        HealBot_Globals.OverrideColours[role].g=hbRoleCols[role].g
+        HealBot_Globals.OverrideColours[role].b=hbRoleCols[role].b
+    else
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role]={}
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].r=hbRoleCols[role].r
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].g=hbRoleCols[role].g
+        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].b=hbRoleCols[role].b
+    HealBot_AddDebug("Missing role "..role,"Import",true)
+    end
+end
+
+local hbClassCols = {
+          ["DEAT"] = {r=0.78, g=0.04, b=0.04, },
+          ["DEMO"] = {r=0.8,  g=0.1,  b=0.8, },
+          ["DRUI"] = {r=1.0,  g=0.49, b=0.04, },
+          ["EVOK"] = {r=0.22, g=0.59, b=0.49, },
+          ["HUNT"] = {r=0.67, g=0.83, b=0.45, },
+          ["MAGE"] = {r=0.41, g=0.8,  b=0.94, },
+          ["MONK"] = {r=0.0,  g=1.0,  b=0.59, },
+          ["PALA"] = {r=0.96, g=0.55, b=0.73, },
+          ["PRIE"] = {r=1.0,  g=1.0,  b=1.0,  },
+          ["ROGU"] = {r=1.0,  g=0.96, b=0.41, },
+          ["SHAM"] = {r=0.14, g=0.35, b=1.0,  },
+          ["WARL"] = {r=0.58, g=0.51, b=0.79, },
+          ["WARR"] = {r=0.78, g=0.61, b=0.43, },
+      }
+function HealBot_Skins_SetClassCol(SkinName, class, override)
+    if override then
+        HealBot_Globals.OverrideColours[class]={}
+        HealBot_Globals.OverrideColours[class].r=hbClassCols[class].r
+        HealBot_Globals.OverrideColours[class].g=hbClassCols[class].g
+        HealBot_Globals.OverrideColours[class].b=hbClassCols[class].b
+    else
+        Healbot_Config_Skins.CustomCols[SkinName][class]={}
+        Healbot_Config_Skins.CustomCols[SkinName][class].r=hbClassCols[class].r
+        Healbot_Config_Skins.CustomCols[SkinName][class].g=hbClassCols[class].g
+        Healbot_Config_Skins.CustomCols[SkinName][class].b=hbClassCols[class].b
+    end
+end
+
+
+local hbPowerCols= {
+          ["ENERGY"]         = {r=1.0,  g=1.0,  b=0.0, },
+          ["FOCUS"]          = {r=1.0,  g=0.5,  b=0.25, },
+          ["FURY"]           = {r=0.79, g=0.26, b=0.99, },
+          ["INSANITY"]       = {r=0.4,  g=0.0,  b=0.8, },
+          ["LUNAR_POWER"]    = {r=0.3,  g=0.52, b=0.9, },
+          ["MAELSTROM"]      = {r=0.0,  g=0.5,  b=1.0, },
+          ["MANA"]           = {r=0.0,  g=0.0,  b=1.0, },
+          ["RAGE"]           = {r=1.0,  g=0.0,  b=0.0, },
+          ["RUNIC_POWER"]    = {r=0.0,  g=0.82, b=1.0,  },
+      }
+function HealBot_Skins_SetPowerCol(SkinName, powerType, override)
+    if override then
+        HealBot_Globals.OverrideColours[powerType]={}
+        HealBot_Globals.OverrideColours[powerType].r=hbPowerCols[powerType].r
+        HealBot_Globals.OverrideColours[powerType].g=hbPowerCols[powerType].g
+        HealBot_Globals.OverrideColours[powerType].b=hbPowerCols[powerType].b
+    else
+        Healbot_Config_Skins.CustomCols[SkinName][powerType]={}
+        Healbot_Config_Skins.CustomCols[SkinName][powerType].r=hbPowerCols[powerType].r
+        Healbot_Config_Skins.CustomCols[SkinName][powerType].g=hbPowerCols[powerType].g
+        Healbot_Config_Skins.CustomCols[SkinName][powerType].b=hbPowerCols[powerType].b
+    end
+end
+--          ["AMMOSLOT"]       = {r=0.8,  g=0.6,  b=0.0, },
+--          ["ARCANE_CHARGES"] = {r=0.1,  g=0.1,  b=0.98, },
+--          ["CHI"]            = {r=0.71, g=1.0,  b=0.92, },
+--          ["ECLIPSE"]        = {r=0.3,  g=0.52, b=0.9,  },
+--          ["FUEL"]           = {r=0.0,  g=0.55, b=0.5, },
+--          ["HAPPINESS"]      = {r=1.0,  g=0.96, b=0.41, },
+--          ["HOLY_POWER"]     = {r=0.95, g=0.9,  b=0.6, },
+--          ["PAIN"]           = {r=1.0,  g=0.61, b=0.0, },
+--          ["RUNES"]          = {r=0.5,  g=0.5,  b=0.5, },
+--          ["SOUL_SHARDS"]    = {r=0.5,  g=0.32, b=0.55, },
+--          ["STAGGER"]        = {r=0.1,  g=0.98, b=0.72, },

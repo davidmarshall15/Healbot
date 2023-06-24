@@ -5,7 +5,7 @@
 ## RequiredDeps: HealBot_Options
 ## OptionalDeps: LibSharedMedia-3.0, LibDataBroker-1.1, LibDBIcon-1.0
 ## IconTexture: Interface\AddOns\HealBot\Images\HealBot.tga
-## Version: 10.1.0.5
+## Version: 10.1.0.6
 
 HealBot.xml
 HealBot_Action.xml

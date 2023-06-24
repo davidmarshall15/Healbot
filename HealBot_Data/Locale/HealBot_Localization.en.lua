@@ -465,6 +465,12 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_POWER                   = "Power"
     HEALBOT_OPTIONS_CASTBAR                 = "Cast bar"
     
+    HEALBOT_ASTRALPOWER                     = "Astral Power"
+    HEALBOT_ENERGY                          = "Energy"
+    HEALBOT_MANA                            = "Mana"
+    HEALBOT_RAGE                            = "Rage"
+    HEALBOT_RUNICPOWER                      = "Runic Power"
+    
     HEALBOT_OPTIONS_HLTHTXTANCHORINDL       = "Independent Left"
     HEALBOT_OPTIONS_HLTHTXTANCHORINDC       = "Independent Center"
     HEALBOT_OPTIONS_HLTHTXTANCHORINDR       = "Independent Right"
@@ -1039,8 +1045,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SAME_AS_HLTH_FUTURE     = "Same as health (future health)"
     HEALBOT_OPTIONS_FUTURE_HLTH             = "Future health"
     HEALBOT_OPTIONS_CLASSHLTHMIX            = "Class Health mix"
+    HEALBOT_OPTIONS_ROLEHLTHMIX             = "Role Health mix"
     HEALBOT_OPTIONS_ADAPTIVE                = "Adaptive"
     HEALBOT_OPTIONS_ADAPTIVECLASSMIX        = "Adaptive Class mix"
+    HEALBOT_OPTIONS_ADAPTIVEROLEMIX         = "Adaptive Role mix"
     HEALBOT_OPTIONS_ADAPTIVECUSTOMMIX       = "Adaptive Custom mix"
     HEALBOT_OPTIONS_ADAPTIVEONLY            = "Adaptive only"
     HEALBOT_OPTIONS_ADAPTIVEHEALTHBAR       = "Adaptive and Health bar"
@@ -1513,6 +1521,9 @@ function HealBot_Lang_enALL()
     HEALBOT_PLAYER_OF_REALM                 = "of"
     
     HEALBOT_OPTIONS_OVERRIDE_EFFECTS        = "Override Effects"
+    HEALBOT_OPTIONS_OVERRIDE_CLASSCOLS      = "Override Class Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_OVERRIDE_ROLECOLS       = "Override Role Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_OVERRIDE_POWERCOLS      = "Override Power Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_OVERRIDE_CHAT           = "Override Chat"
     HEALBOT_OPTIONS_OVERRIDE_FRAMES         = "Override Frames"
     HEALBOT_USE_OVERRIDE_NO                 = "Use current skin settings."
@@ -1569,6 +1580,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_EMERG                = "Emergency"
     HEALBOT_OPTIONS_CONTENT_SKINS_GENERAL    = "    " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SKINS_EFFECTS    = "    " .. HEALBOT_OPTIONS_TAB_EFFECTS
+    HEALBOT_OPTIONS_CONTENT_SKINS_COLOUR      = "    " .. HEALBOT_WORD_COLOURS
     HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY      = "    " .. HEALBOT_CUSTOM_CASTBY_ENEMY
     HEALBOT_OPTIONS_CONTENT_SKINSF_GENERAL   = "        " .. HEALBOT_OPTIONS_TAB_GENERAL
     HEALBOT_OPTIONS_CONTENT_SKINS_HEALING    = "    " .. HEALBOT_OPTIONS_TAB_HEALING
@@ -1635,7 +1647,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ENEMY_OPT               = "Enemy Visibility";
     HEALBOT_OPTIONS_SHARE_OPT               = "Share Options";
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"
-    HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY     = "    " .. "Enemy"
 
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
     HEALBOT_OPTIONS_ENEMYBARS               = "Health Bars - Harmful spells on hostile characters";
@@ -1697,6 +1708,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PREV                    = "<<"    
     HEALBOT_OPTIONS_NEXT                    = ">>"
     HEALBOT_OPTIONS_PRESET_COLOUR           = HEALBOT_OPTIONS_PRESET.." Col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    
+    HEALBOT_OPTIONS_CLASSCOLOURS            = HEALBOT_SORTBY_CLASS.." "..HEALBOT_WORD_COLOURS
+    HEALBOT_OPTIONS_ROLECOLOURS             = HEALBOT_SORTBY_ROLE.." "..HEALBOT_WORD_COLOURS
+    HEALBOT_OPTIONS_POWERCOLOURS            = HEALBOT_OPTIONS_POWER.." "..HEALBOT_WORD_COLOURS
     
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
     HEALBOT_CREDITS_PEOPLE = {  

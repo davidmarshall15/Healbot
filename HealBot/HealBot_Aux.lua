@@ -18,6 +18,19 @@ HealBot_Aux_luVars["AuxFluidBarFreq"]=0.088
 HealBot_Aux_luVars["FluidBarSmoothAdj"]=5
 HealBot_Aux_luVars["TestBarsOn"]=false
 
+local hbCustomRoleCols={}
+function HealBot_Aux_SetCustomRoleCols()
+    if HealBot_Globals.OverrideColours["USEROLE"]==1 then
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"])
+    else
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["DAMAGER"])
+    end
+end
+
 if HEALBOT_GAME_VERSION>9 then
     HealBot_Aux_luVars["AbsorbMax"]=12000
     HealBot_Aux_luVars["InHealMax"]=12000
@@ -133,6 +146,10 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.aux[id]["G"]=button.text.g
             button.aux[id]["B"]=button.text.b
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==3 then
+            button.aux[id]["R"]=hbCustomRoleCols[button.roletxt].r
+            button.aux[id]["G"]=hbCustomRoleCols[button.roletxt].g
+            button.aux[id]["B"]=hbCustomRoleCols[button.roletxt].b
+        elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==4 then
             button.aux[id]["R"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["R"]
             button.aux[id]["G"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["G"]
             button.aux[id]["B"]=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["B"]
@@ -197,6 +214,10 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.auxtxt[id]["G"]=button.text.g
             button.auxtxt[id]["B"]=button.text.b
         elseif Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==3 then
+            button.auxtxt[id]["R"]=hbCustomRoleCols[button.roletxt].r
+            button.auxtxt[id]["G"]=hbCustomRoleCols[button.roletxt].g
+            button.auxtxt[id]["B"]=hbCustomRoleCols[button.roletxt].b
+        elseif Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==4 then
             button.auxtxt[id]["R"]=Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLR"]
             button.auxtxt[id]["G"]=Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLG"]
             button.auxtxt[id]["B"]=Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLB"]
