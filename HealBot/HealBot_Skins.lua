@@ -2665,10 +2665,10 @@ function HealBot_Skins_SetRoleCol(SkinName, role, override)
         HealBot_Globals.OverrideColours[role].g=hbRoleCols[role].g
         HealBot_Globals.OverrideColours[role].b=hbRoleCols[role].b
     else
-        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role]={}
-        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].r=hbRoleCols[role].r
-        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].g=hbRoleCols[role].g
-        Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin][role].b=hbRoleCols[role].b
+        Healbot_Config_Skins.CustomCols[SkinName][role]={}
+        Healbot_Config_Skins.CustomCols[SkinName][role].r=hbRoleCols[role].r
+        Healbot_Config_Skins.CustomCols[SkinName][role].g=hbRoleCols[role].g
+        Healbot_Config_Skins.CustomCols[SkinName][role].b=hbRoleCols[role].b
     HealBot_AddDebug("Missing role "..role,"Import",true)
     end
 end

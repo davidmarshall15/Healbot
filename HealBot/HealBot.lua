@@ -2950,8 +2950,10 @@ function HealBot_Update_Skins()
         HealBot_luVars["ResetGlobalOld"]=true
         HealBot_Options_SetDefaults(true)
     else
-        HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
         if HealBot_Globals.LastVersionSkinUpdate~=HealBot_Global_Version() then
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                HealBot_Skins_Check_Skin(Healbot_Config_Skins.Skins[x])
+            end
             if not HealBot_luVars["UpdateMsg"] then
                 HealBot_luVars["UpdateMsg"]=true
                 HealBot_Globals.OneTimeMsg["VERSION"]=false
@@ -3086,6 +3088,10 @@ function HealBot_Update_Skins()
             end
             HealBot_Update_BuffsForSpec("Debuff")
             HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
+        else
+            for x in pairs (Healbot_Config_Skins.Skins) do
+                HealBot_Skins_Check(Healbot_Config_Skins.Skins[x])
+            end
         end
     end
     tMajor, tMinor, tPatch, tHealbot = string.split(".", HealBot_Config.LastVersionUpdate)
