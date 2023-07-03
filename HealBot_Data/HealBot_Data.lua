@@ -281,6 +281,7 @@ function HealBot_Data_InitVars()
         PluginRequests=true,
         PluginHealthWatch=true,
         PluginManaWatch=true,
+        FrameStrata="LOW",
         CompressExport=true,
         AllowPlayerRoles=false,
         VehicleFontSizeReduction=4,
@@ -292,6 +293,7 @@ function HealBot_Data_InitVars()
         OptionsOpacityAdj=35,
         AbsorbDiv=10,
         InHealDiv=10,
+        HealAbsorbsDiv=10,
         DebugOut=false,
         Debug01=false, -- Currently not used
         VersionResetDone={["ICONS"]="9.1.0.0",["BUFF"]="9.1.0.0",["CBUFF"]="9.1.0.0",["DEBUFF"]="9.1.0.0",["CDEBUFF"]="9.1.0.0"},
@@ -332,7 +334,6 @@ function HealBot_Data_InitVars()
         SmartCastDebuff = true,
         SmartCastBuff = true,
         SmartCastRes = true,
-        AutoCacheSize=20,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},

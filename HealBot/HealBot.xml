@@ -11,7 +11,7 @@
   <!-- Comment Syntax -->
 
     
-  <StatusBar name="HealBot_StatusBar" virtual="true" frameStrata="MEDIUM" hidden="false">
+  <StatusBar name="HealBot_StatusBar" virtual="true" hidden="false">
     <Size>
       <AbsDimension y="18"/>
     </Size>
@@ -28,7 +28,7 @@
   </StatusBar>
   
 
-  <Frame name="HealBot" parent="UIParent" frameStrata="LOW" toplevel="true" inherits="SecureFrameTemplate">
+  <Frame name="HealBot" parent="UIParent" inherits="SecureFrameTemplate">
     <Scripts>
       <OnLoad>
         HealBot_OnLoad(self);

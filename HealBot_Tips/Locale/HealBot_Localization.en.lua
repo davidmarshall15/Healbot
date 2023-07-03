@@ -44,6 +44,7 @@ function HealBot_Lang_Options_enALL()
                                  ["RUNCMDS"]=HEALBOT_OPTIONS_COMMANDS,
                                  ["PROFILE"]="Profile",
                                  ["SETPROFILE"]="Profile",
+                                 ["FRAMESTRATA"]=HEALBOT_OPTIONS_FRAMESTRATA,
                                  ["OPTTHEME"]=HEALBOT_OPTIONS_THEME,
                                  ["CLASSTYPES"]="Class type configuration",
                         -- Overrides tab
@@ -684,6 +685,7 @@ function HealBot_Lang_Options_enALL()
                                ["RUNCMDS"]="Run the command selected.",
                                ["PROFILE"]="Select to use Global, Class or Character for saving\nsettings related to Binds, Spells, General Buffs and General Debuffs.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."Note: Global only saves Binds and Spells that are Macros, Items, Commands or Emotes\n".._G["GREEN_FONT_COLOR_CODE"].."Everything else defaults to the Class profile.",
                                ["SETPROFILE"]="Set the profile selected.",
+                               ["FRAMESTRATA"]="Set the frame strata for all healbot healing frames\nfrom the lowest (BACKGOUND) to the highest (DIALOG).\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only LOW or MEDIUM is recommended.",
                                ["OPTTHEME"]="Set the options Title Box, Borders and Contents text Col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["CLASSTYPES"]="Classes can be grouped as Melee, Ranged, Healers and Custom.\nGroups of classes are available in options:\n- General Debuffs\n- General Buffs\n--\nThese settings date back to Classic and have little use in today's WoW.\nThey have near zero overhead and so are kept as some might find them useful.",
                         -- Overrides tab

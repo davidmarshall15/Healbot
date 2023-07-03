@@ -903,7 +903,7 @@ function HealBot_Panel_ToggleTestBars()
     HealBot_Action_setLuVars("resetSkin", true)
     HealBot_Action_setLuVars("resetIndicator", true)
     HealBot_Action_setLuVars("resetText", true)
-    --HealBot_Action_setLuVars("resetAux", true)
+    HealBot_Action_setLuVars("resetAux", true)
     HealBot_Action_ResetSkinAllButtons()
     if HealBot_setTestBars then
         HealBot_setTestBars=false

@@ -454,111 +454,101 @@ function HealBot_Aura_RemoveExtraIcons(index)
     end
 end
 
-local auSecsLeft,iconAlpha=0,0
+local exIconAlpha=0
 function HealBot_Aura_UpdateExtraIcon(button, iconData, index)
     if (index==91 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSEN"]) or
        (index==92 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["TARGETEN"]) or
        (index==93 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["RCEN"]) or
        (index==94 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["OOREN"]) then
-        iconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+        exIconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
     else
-        iconAlpha=button.status.alpha
+        exIconAlpha=button.status.alpha
     end
-    button.gref.icon[index]:SetAlpha(iconAlpha)
+    button.gref.icon[index]:SetAlpha(exIconAlpha)
       --HealBot_setCall("HealBot_Aura_UpdateExtraIcon")
 end
 
-local retAlpha, fadeDiff, nextAuraUpdate=0,0,1
-function HealBot_Aura_IconAlphaValue(secLeft, button, fade, fadeSecs, alwaysEnabled, buffIcon)
-    nextAuraUpdate=999
-    if secLeft>-2 then
-        if fade then
-            if secLeft<fadeSecs then
-                nextAuraUpdate=0.2
-                if secLeft<1 then
-                    if secLeft>-1 then
-                        secLeft=0.75
-                    else
-                        secLeft=0.5
-                    end
+local dbSecsLeft, dbRetAlpha, dbFadeDiff, dbNextAuraUpdate, dbMaxAlpha=0,0,0,1,1
+function HealBot_Aura_DebuffIconAlphaValue(button, iconData)
+    dbNextAuraUpdate=999
+    if dbSecsLeft>-2 then
+        if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DFADE"] then
+            if dbSecsLeft<Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DFADESECS"] then
+                dbNextAuraUpdate=0.2
+                if dbSecsLeft<1 then
+                    dbFadeDiff=0.5/Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DFADESECS"]
+                else
+                    dbFadeDiff=dbSecsLeft/Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DFADESECS"]
                 end
-                fadeDiff=secLeft/fadeSecs
-                retAlpha=fadeDiff+((1-fadeDiff)/3)
-                if alwaysEnabled then
-                    if retAlpha>HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1) then
-                        retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                dbRetAlpha=dbFadeDiff+((1-dbFadeDiff)/3)
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
+                    dbMaxAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    if dbRetAlpha>dbMaxAlpha then
+                        dbRetAlpha=dbMaxAlpha
                     end
-                elseif retAlpha>button.status.alpha then
-                    retAlpha=button.status.alpha
+                elseif dbRetAlpha>button.status.alpha then
+                    dbRetAlpha=button.status.alpha
                 end
             else
-                nextAuraUpdate=secLeft-fadeSecs
-                if alwaysEnabled then
-                    retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                dbNextAuraUpdate=dbSecsLeft-Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DFADESECS"]
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
+                    dbRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
                 else
-                    retAlpha=button.status.alpha
+                    dbRetAlpha=button.status.alpha
                 end
             end
-        elseif alwaysEnabled then
-            retAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+        elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
+            dbRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
         else
-            retAlpha=button.status.alpha
+            dbRetAlpha=button.status.alpha
         end
     else
-        retAlpha=0
-        if buffIcon then
-            HealBot_Check_UnitBuff(button)
-        else
-            HealBot_Check_UnitDebuff(button)
-        end
+        dbRetAlpha=0
+        HealBot_Check_UnitDebuff(button)
     end
-      --HealBot_setCall("HealBot_Aura_IconAlphaValue")
-    return retAlpha, nextAuraUpdate
+      --HealBot_setCall("HealBot_Aura_DebuffIconAlphaValue")
+    return dbRetAlpha, dbNextAuraUpdate
 end
 
-local alphaNextUpdate, durNextUpdate=0,0
-function HealBot_Aura_UpdateIcon(button, iconData, index, timer, lastSpellId, fade, fadeSecs, alwaysEnabled, showDur, showSelfDur, durThrh, durWarn, showCnt, showSelfCnt, selfInd, buffIcon, srcTimer)
-    if iconData.current and lastSpellId==iconData["spellId"] then
-        alphaNextUpdate=999
-        durNextUpdate=999
-        auSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
+local dbAlphaNextUpdate, dbDurNextUpdate, dbiconAlpha=0,0,0
+function HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, lastSpellId, srcTimer)
+    if iconData.current and lastSpellId==iconData.spellId then
+        dbAlphaNextUpdate=999
+        dbDurNextUpdate=999
+        dbSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
         if iconData.expirationTime>0 then
-            iconAlpha, alphaNextUpdate=HealBot_Aura_IconAlphaValue(auSecsLeft, button, fade, fadeSecs, alwaysEnabled, buffIcon)
-        elseif alwaysEnabled then
-            iconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+            dbiconAlpha, dbAlphaNextUpdate=HealBot_Aura_DebuffIconAlphaValue(button, iconData)
+        elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DI15EN"] then
+            dbiconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
         else
-            iconAlpha=button.status.alpha
+            dbiconAlpha=button.status.alpha
         end
-        button.gref.icon[index]:SetAlpha(iconAlpha)
-        if auSecsLeft>-2 and showDur and (not showSelfDur or UnitIsUnit(iconData.unitCaster,"player")) then
-            if auSecsLeft<=durThrh then
-                if auSecsLeft<=durWarn then
+        button.gref.icon[index]:SetAlpha(dbiconAlpha)
+        if dbSecsLeft>-2 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBSDUR"] then
+            if dbSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"] then
+                if dbSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURWARN"] then
                     if UnitIsFriend("player",button.unit) then
-                        if buffIcon then
-                            button.gref.txt.expire[index]:SetTextColor(1,0.5,0,iconAlpha)
-                        else
-                            button.gref.txt.expire[index]:SetTextColor(0,1,0,iconAlpha)
-                        end
+                        button.gref.txt.expire[index]:SetTextColor(0,1,0,dbiconAlpha)
                     else
-                        button.gref.txt.expire[index]:SetTextColor(1,0,0,iconAlpha);
+                        button.gref.txt.expire[index]:SetTextColor(1,0,0,dbiconAlpha);
                     end
-                    if auSecsLeft>-1 then
-                        button.gref.txt.expire[index]:SetText(auSecsLeft);
+                    if dbSecsLeft>-1 then
+                        button.gref.txt.expire[index]:SetText(dbSecsLeft);
                     else
                         button.gref.txt.expire[index]:SetText("0")
                     end
                 else
-                    button.gref.txt.expire[index]:SetTextColor(1,1,1,iconAlpha);
-                    button.gref.txt.expire[index]:SetText(auSecsLeft)
+                    button.gref.txt.expire[index]:SetTextColor(1,1,1,dbiconAlpha);
+                    button.gref.txt.expire[index]:SetText(dbSecsLeft)
                 end
-                durNextUpdate=1
+                dbDurNextUpdate=1
             else
                 button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.expire[index]:SetText(" ");
-                if (iconData.expirationTime-HealBot_TimeNow-1)>durThrh then
-                    durNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-durThrh
+                if (iconData.expirationTime-HealBot_TimeNow-1)>Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"] then
+                    dbDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBDURTHRH"]
                 else
-                    durNextUpdate=1
+                    dbDurNextUpdate=1
                 end
             end
         else
@@ -566,50 +556,30 @@ function HealBot_Aura_UpdateIcon(button, iconData, index, timer, lastSpellId, fa
             button.gref.txt.expire[index]:SetText(" ");
         end
         if not srcTimer then
-            if buffIcon then
-                if selfInd and UnitIsUnit(iconData.unitCaster,"player") then
-                    button.gref.indicator.selfcast[index]:SetAlpha(HealBot_Action_BarColourAlpha(button, 1, 1))
-                else
-                    button.gref.indicator.selfcast[index]:SetAlpha(0)
-                end
-            end
-            if iconData.count > 1 and showCnt and (not showSelfCnt or UnitIsUnit(iconData.unitCaster,"player")) then
+            if iconData.count > 1 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["DBSCNT"] then
                 button.gref.txt.count[index]:SetText(iconData.count);
-                button.gref.txt.count[index]:SetTextColor(1,1,1,iconAlpha);
+                button.gref.txt.count[index]:SetTextColor(1,1,1,dbiconAlpha);
             else
                 button.gref.txt.count[index]:SetTextColor(1,1,1,0)
                 button.gref.txt.count[index]:SetText(" ");
             end
         end
         if timer then
-            if alphaNextUpdate<durNextUpdate then
-                C_Timer.After(alphaNextUpdate, function() HealBot_Aura_UpdateIcon(button, iconData, index, true, lastSpellId, fade, fadeSecs, alwaysEnabled, showDur, showSelfDur, durThrh, durWarn, showCnt, showSelfCnt, selfInd, buffIcon, true) end)
-            elseif durNextUpdate<999 then
-                C_Timer.After(durNextUpdate, function() HealBot_Aura_UpdateIcon(button, iconData, index, true, lastSpellId, fade, fadeSecs, alwaysEnabled, showDur, showSelfDur, durThrh, durWarn, showCnt, showSelfCnt, selfInd, buffIcon, true) end)
+            if dbAlphaNextUpdate<dbDurNextUpdate then
+                C_Timer.After(dbAlphaNextUpdate, function() HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, true, lastSpellId, true) end)
+            elseif dbDurNextUpdate<999 then
+                C_Timer.After(dbDurNextUpdate, function() HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, true, lastSpellId, true) end)
             end
         end
-        return iconAlpha
     end
-      --HealBot_setCall("HealBot_Aura_UpdateDebuffIcon")
+      --HealBot_setCall("HealBot_Aura_DoUpdateDebuffIcon")
 end
 
 local hbGlowSpellName,hbGlowIdx="",1
 local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
-local iAlpha=1
-function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId, iconSet)
-    iAlpha=HealBot_Aura_UpdateIcon(button, iconData, index, timer, spellId,
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DFADE"],
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DFADESECS"],
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DI15EN"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DBSDUR"],
-                                   false,
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DBDURTHRH"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DBDURWARN"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["DBSCNT"],
-                                   false,
-                                   false,
-                                   false)
-    if iAlpha and HealBot_AuraDebuffCache[spellId] then
+function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
+    HealBot_Aura_DoUpdateDebuffIcon(button, iconData, index, timer, spellId, false)
+    if HealBot_AuraDebuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraDebuffCache[spellId]["name"] or "x"
         hbGlowIdx=HealBot_DebuffIconGlow[spellId] or HealBot_DebuffIconGlow[hbGlowSpellName] or 1
     else
@@ -624,7 +594,7 @@ function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId, 
                                           "ICONDEBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          dbiconAlpha)
         elseif HealBot_Globals.CDCBarColour[hbGlowSpellName] then
             HealBot_Action_EnableIconGlow(button, 
                                           HealBot_Globals.CDCBarColour[hbGlowSpellName].R or 1, 
@@ -633,7 +603,7 @@ function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId, 
                                           "ICONDEBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          dbiconAlpha)
         else
             HealBot_Action_EnableIconGlow(button,  
                                           HealBot_Globals.CDCBarColour[customDebuffPriority].R or 1, 
@@ -642,28 +612,131 @@ function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId, 
                                           "ICONDEBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          dbiconAlpha)
         end
     elseif button.glow.icon[index]>1 then
         HealBot_Action_DisableIconGlow(button, "ICONDEBUFF", index)
     end
 end
 
+local bSecsLeft, bRetAlpha, bFadeDiff, bNextAuraUpdate, bMaxAlpha=0,0,0,1,1
+function HealBot_Aura_BuffIconAlphaValue(button, iconData)
+    bNextAuraUpdate=999
+    if bSecsLeft>-2 then
+        if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFFADE"] then
+            if bSecsLeft<Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFFADESECS"] then
+                bNextAuraUpdate=0.2
+                if bSecsLeft<1 then
+                    bFadeDiff=0.5/Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFFADESECS"]
+                else
+                    bFadeDiff=bSecsLeft/Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFFADESECS"]
+                end
+                bRetAlpha=bFadeDiff+((1-bFadeDiff)/3)
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
+                    bMaxAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                    if bRetAlpha>bMaxAlpha then
+                        bRetAlpha=bMaxAlpha
+                    end
+                elseif bRetAlpha>button.status.alpha then
+                    bRetAlpha=button.status.alpha
+                end
+            else
+                bNextAuraUpdate=bSecsLeft-Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFFADESECS"]
+                if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
+                    bRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+                else
+                    bRetAlpha=button.status.alpha
+                end
+            end
+        elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
+            bRetAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+        else
+            bRetAlpha=button.status.alpha
+        end
+    else
+        bRetAlpha=0
+        HealBot_Check_UnitBuff(button)
+    end
+      --HealBot_setCall("HealBot_Aura_BuffIconAlphaValue")
+    return bRetAlpha, bNextAuraUpdate
+end
+
+local bAlphaNextUpdate, bDurNextUpdate, bIconAlpha=0,0,0
+function HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, lastSpellId, srcTimer)
+    if iconData.current and lastSpellId==iconData.spellId then
+        bAlphaNextUpdate=999
+        bDurNextUpdate=999
+        bSecsLeft=floor((iconData.expirationTime-HealBot_TimeNow)-0.5)
+        if iconData.expirationTime>0 then
+            bIconAlpha, bAlphaNextUpdate=HealBot_Aura_BuffIconAlphaValue(button, iconData)
+        elseif Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFI15EN"] then
+            bIconAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HA"], 1)
+        else
+            bIconAlpha=button.status.alpha
+        end
+        button.gref.icon[index]:SetAlpha(bIconAlpha)
+        if bSecsLeft>-2 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSDUR"] 
+                        and (not Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSSDUR"] or UnitIsUnit(iconData.unitCaster,"player")) then
+            if bSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"] then
+                if bSecsLeft<=Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURWARN"] then
+                    if UnitIsFriend("player",button.unit) then
+                        button.gref.txt.expire[index]:SetTextColor(1,0.5,0,bIconAlpha)
+                    else
+                        button.gref.txt.expire[index]:SetTextColor(1,0,0,bIconAlpha);
+                    end
+                    if bSecsLeft>-1 then
+                        button.gref.txt.expire[index]:SetText(bSecsLeft);
+                    else
+                        button.gref.txt.expire[index]:SetText("0")
+                    end
+                else
+                    button.gref.txt.expire[index]:SetTextColor(1,1,1,bIconAlpha);
+                    button.gref.txt.expire[index]:SetText(bSecsLeft)
+                end
+                bDurNextUpdate=1
+            else
+                button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
+                button.gref.txt.expire[index]:SetText(" ");
+                if (iconData.expirationTime-HealBot_TimeNow-1)>Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"] then
+                    bDurNextUpdate=(iconData.expirationTime-HealBot_TimeNow-1)-Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFDURTHRH"]
+                else
+                    bDurNextUpdate=1
+                end
+            end
+        else
+            button.gref.txt.expire[index]:SetTextColor(1,1,1,0)
+            button.gref.txt.expire[index]:SetText(" ");
+        end
+        if not srcTimer then
+            if Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SELFIND"] and UnitIsUnit(iconData.unitCaster,"player") then
+                button.gref.indicator.selfcast[index]:SetAlpha(HealBot_Action_BarColourAlpha(button, 1, 1))
+            else
+                button.gref.indicator.selfcast[index]:SetAlpha(0)
+            end
+            if iconData.count > 1 and Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSCNT"] 
+                                  and (not Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconData.iconSet]["BUFFSSCNT"] or UnitIsUnit(iconData.unitCaster,"player")) then
+                button.gref.txt.count[index]:SetText(iconData.count);
+                button.gref.txt.count[index]:SetTextColor(1,1,1,bIconAlpha);
+            else
+                button.gref.txt.count[index]:SetTextColor(1,1,1,0)
+                button.gref.txt.count[index]:SetText(" ");
+            end
+        end
+        if timer then
+            if bAlphaNextUpdate<bDurNextUpdate then
+                C_Timer.After(bAlphaNextUpdate, function() HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, true, lastSpellId, true) end)
+            elseif bDurNextUpdate<999 then
+                C_Timer.After(bDurNextUpdate, function() HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, true, lastSpellId, true) end)
+            end
+        end
+    end
+      --HealBot_setCall("HealBot_Aura_DoUpdateBuffIcon")
+end
+
 local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
-function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId, iconSet)
-    iAlpha=HealBot_Aura_UpdateIcon(button, iconData, index, timer, spellId,
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFFADE"],
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFFADESECS"],
-                                   Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFI15EN"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFSDUR"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFSSDUR"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFDURTHRH"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFDURWARN"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFSCNT"],
-                                   Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][button.frame][iconSet]["BUFFSSCNT"],
-                                   Healbot_Config_Skins.IconText[Healbot_Config_Skins.Current_Skin][button.frame]["SELFIND"],
-                                   true)
-    if iAlpha and HealBot_AuraBuffCache[spellId] then
+function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId)
+    HealBot_Aura_DoUpdateBuffIcon(button, iconData, index, timer, spellId, false)
+    if HealBot_AuraBuffCache[spellId] then
         hbGlowSpellName=HealBot_AuraBuffCache[spellId]["name"] or "x"
         hbGlowIdx=HealBot_BuffIconGlow[spellId] or HealBot_BuffIconGlow[hbGlowSpellName] or 1
     else
@@ -678,7 +751,7 @@ function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId, ic
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          bIconAlpha)
         elseif HealBot_Globals.CustomBuffBarColour[hbGlowSpellName] then
             HealBot_Action_EnableIconGlow(button, 
                                           HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].R or 0.45, 
@@ -687,7 +760,7 @@ function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId, ic
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          bIconAlpha)
         else
             HealBot_Action_EnableIconGlow(button, 
                                           HealBot_Globals.CustomBuffBarColour[customBuffPriority].R or 0.45, 
@@ -696,7 +769,7 @@ function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId, ic
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
-                                          iAlpha)
+                                          bIconAlpha)
         end
     elseif button.glow.icon[index]>1 then
         HealBot_Action_DisableIconGlow(button, "ICONBUFF", index)
@@ -712,15 +785,15 @@ end
 
 function HealBot_Aura_AddBuffIcon(button, index)
     button.gref.icon[index]:SetTexture(HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][index]["spellId"]]["texture"])
-    button.gref.iconf[index]:SetFrameLevel(1000)
-    HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][index], index, true, HealBot_UnitBuffIcons[button.id][index]["spellId"], HealBot_UnitBuffIcons[button.id][index]["iconSet"])
+    button.gref.iconf[index]:SetFrameLevel(100)
+    HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][index], index, true, HealBot_UnitBuffIcons[button.id][index]["spellId"])
       --HealBot_setCall("HealBot_Aura_AddBuffIcon")
 end
 
 function HealBot_Aura_DebuffAddIcon(button, index)
     button.gref.icon[index]:SetTexture(HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][index]["spellId"]]["texture"])
-    button.gref.iconf[index]:SetFrameLevel(1000)
-    HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][index], index, true, HealBot_UnitDebuffIcons[button.id][index]["spellId"], HealBot_UnitDebuffIcons[button.id][index]["iconSet"])
+    button.gref.iconf[index]:SetFrameLevel(100)
+    HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][index], index, true, HealBot_UnitDebuffIcons[button.id][index]["spellId"])
       --HealBot_setCall("HealBot_Aura_DebuffAddIcon")
 end
 
@@ -901,9 +974,9 @@ function HealBot_Aura_CacheDebuffIcon(button, id, spellId, index)
             if HealBot_UnitDebuffIcons[button.id][id]["spellId"]~=spellId then
                 HealBot_UnitDebuffIcons[button.id][id]["spellId"]=spellId
                 button.gref.icon[id]:SetTexture(HealBot_AuraDebuffCache[spellId]["texture"])
-                HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][id], id, true, spellId, HealBot_AuraDebuffCache[spellId]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][id], id, true, spellId)
             else
-                HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][id], id, false, spellId, HealBot_AuraDebuffCache[spellId]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][id], id, false, spellId)
             end
         else
             HealBot_UnitDebuffIcons[button.id][id]["spellId"]=spellId
@@ -975,9 +1048,9 @@ function HealBot_Aura_CacheBuffIcon(button, id, spellId, index)
             if HealBot_UnitBuffIcons[button.id][id]["spellId"]~=spellId then
                 HealBot_UnitBuffIcons[button.id][id]["spellId"]=spellId
                 button.gref.icon[id]:SetTexture(HealBot_AuraBuffCache[spellId]["texture"])
-                HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][id], id, true, spellId, HealBot_UnitBuffIcons[button.id][id]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][id], id, true, spellId)
             else
-                HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][id], id, false, spellId, HealBot_UnitBuffIcons[button.id][id]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][id], id, false, spellId)
             end
         else
             HealBot_UnitBuffIcons[button.id][id]["spellId"]=spellId
@@ -1599,7 +1672,9 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
                 HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
             end
         end
-        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.aura.buffcol then HealBot_RefreshUnit(button) end
+        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["BUFFBARCOL"] then 
+            HealBot_RefreshUnit(button) 
+        end
     end
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
 end
@@ -1679,7 +1754,9 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
                 HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
             end
         end
-        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.aura.debuffcol then HealBot_RefreshUnit(button) end
+        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["DEBUFFBARCOL"] then 
+            HealBot_RefreshUnit(button) 
+        end
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
 end
@@ -2118,8 +2195,6 @@ function HealBot_Aura_CheckUnitBuffs(button)
         end
         for z=1,3 do
             HealBot_Aura_prevIconCount["BUFF"][z]=button.icon.buff.count[z]
-        end
-        for z=1,3 do
             for x,_ in pairs(buffSort[z]) do
                 buffSort[z][x]=nil;
             end
@@ -2632,68 +2707,68 @@ end
 function HealBot_Aura_Update_UnitAllBuffIcons(button)
     if button then
         for i=1,button.icon.buff.count[1] do
-            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"], HealBot_UnitBuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
         for i=6,button.icon.buff.count[2]+5 do
-            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"], HealBot_UnitBuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
         for i=8,button.icon.buff.count[3]+7 do
-            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"], HealBot_UnitBuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
             for i=1,xButton.icon.buff.count[1] do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=6,xButton.icon.buff.count[2]+5 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=8,xButton.icon.buff.count[3]+7 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Private_Button) do
             for i=1,xButton.icon.buff.count[1] do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=6,xButton.icon.buff.count[2]+5 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=8,xButton.icon.buff.count[3]+7 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
             for i=1,xButton.icon.buff.count[1] do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=6,xButton.icon.buff.count[2]+5 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=8,xButton.icon.buff.count[3]+7 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Vehicle_Button) do
             for i=1,xButton.icon.buff.count[1] do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=6,xButton.icon.buff.count[2]+5 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=8,xButton.icon.buff.count[3]+7 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Extra_Button) do
             for i=1,xButton.icon.buff.count[1] do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=6,xButton.icon.buff.count[2]+5 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
             for i=8,xButton.icon.buff.count[3]+7 do
-                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"], HealBot_UnitBuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
     end
@@ -2702,68 +2777,68 @@ end
 function HealBot_Aura_Update_UnitAllDebuffIcons(button)
     if button then
         for i=51,button.icon.debuff.count[1]+50 do
-            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"], HealBot_UnitDebuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
         for i=56,button.icon.debuff.count[2]+55 do
-            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"], HealBot_UnitDebuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
         for i=58,button.icon.debuff.count[3]+57 do
-            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"], HealBot_UnitDebuffIcons[button.id][i]["iconSet"])
+            HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
     else
         for _,xButton in pairs(HealBot_Unit_Button) do
             for i=51,xButton.icon.debuff.count[1]+50 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=56,xButton.icon.debuff.count[2]+55 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=58,xButton.icon.debuff.count[3]+57 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Private_Button) do
             for i=51,xButton.icon.debuff.count[1]+50 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=56,xButton.icon.debuff.count[2]+55 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=58,xButton.icon.debuff.count[3]+57 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
             for i=51,xButton.icon.debuff.count[1]+50 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=56,xButton.icon.debuff.count[2]+55 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=58,xButton.icon.debuff.count[3]+57 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Vehicle_Button) do
             for i=51,xButton.icon.debuff.count[1]+50 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=56,xButton.icon.debuff.count[2]+55 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=58,xButton.icon.debuff.count[3]+57 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
         for _,xButton in pairs(HealBot_Extra_Button) do
             for i=51,xButton.icon.debuff.count[1]+50 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=56,xButton.icon.debuff.count[2]+55 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
             for i=58,xButton.icon.debuff.count[3]+57 do
-                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"], HealBot_UnitDebuffIcons[xButton.id][i]["iconSet"])
+                HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
     end

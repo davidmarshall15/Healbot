@@ -34,17 +34,21 @@ end
 if HEALBOT_GAME_VERSION>9 then
     HealBot_Aux_luVars["AbsorbMax"]=12000
     HealBot_Aux_luVars["InHealMax"]=12000
+    HealBot_Aux_luVars["HealAbsorbsMax"]=12000
 else
     HealBot_Aux_luVars["AbsorbMax"]=3000
     HealBot_Aux_luVars["InHealMax"]=3000
+    HealBot_Aux_luVars["HealAbsorbsMax"]=3000
 end
 function HealBot_Aux_setInHealAbsorbMax()
     local maxHlth=UnitHealthMax("player")
     if maxHlth and maxHlth>1 then
         HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/HealBot_Globals.AbsorbDiv)/1000)
         HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/HealBot_Globals.InHealDiv)/1000)
+        HealBot_Aux_luVars["HealAbsorbsMax"]=ceil((maxHlth/HealBot_Globals.HealAbsorbsDiv)/1000)
         HealBot_Aux_luVars["AbsorbMax"]=HealBot_Aux_luVars["AbsorbMax"]*1000
         HealBot_Aux_luVars["InHealMax"]=HealBot_Aux_luVars["InHealMax"]*1000
+        HealBot_Aux_luVars["HealAbsorbsMax"]=HealBot_Aux_luVars["HealAbsorbsMax"]*1000
         
         HealBot_Timers_Set("AUX","UpdateAllAuxInHealsBars")
         HealBot_Timers_Set("AUX","UpdateAllAuxAbsorbBars")
@@ -920,6 +924,68 @@ function HealBot_Aux_ClearHealInBar(button)
         HealBot_Aux_clearBar(button, id)
     end
 end
+
+-- TotalHealAbsorbs
+local hbAuxTotalHealAbsorbsAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+function HealBot_Aux_clearTotalHealAbsorbsAssigned(frame,id)
+    if frame and id then
+        if hbAuxTotalHealAbsorbsAssigned[frame] and hbAuxTotalHealAbsorbsAssigned[frame][id] then
+            HealBot_Aux_clearAllBar(id)
+            hbAuxTotalHealAbsorbsAssigned[frame][id]=nil
+        end
+    else
+        for f=1,9 do
+            for id in pairs(hbAuxTotalHealAbsorbsAssigned[f]) do
+                HealBot_Aux_clearAllBar(id)
+            end
+            hbAuxTotalHealAbsorbsAssigned[f]={};
+        end
+    end
+end
+
+function HealBot_Aux_setTotalHealAbsorbsAssigned(frame, id)
+    hbAuxTotalHealAbsorbsAssigned[frame][id]=true
+end
+
+local ohValue=0
+function HealBot_Aux_UpdateTotalHealAbsorbsBar(button)
+    for id in pairs(hbAuxTotalHealAbsorbsAssigned[button.frame]) do
+        if button.status.current<HealBot_Unit_Status["DEAD"] then
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+                button.aux[id]["R"]=0.7
+                button.aux[id]["G"]=0.2
+                button.aux[id]["B"]=0.9
+            end
+            if button.health.healabsorbs>0 then
+                hbAuxHlth10=floor(1000/(HealBot_Aux_luVars["HealAbsorbsMax"]/button.health.healabsorbs))
+                if hbAuxHlth10>1000 then hbAuxHlth10=1000 end
+            else
+                hbAuxHlth10=0
+            end
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.inhealr+0.2),(button.health.inhealg+0.2),(button.health.inhealb+0.2)
+                end
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==3 then
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, floor((button.health.healabsorbs/button.health.max)*100).."%")
+                else
+                    HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.healabsorbs, button.frame))
+                end
+            else
+                HealBot_Aux_setBar(button, id, hbAuxHlth10, true)
+            end
+        else
+            HealBot_Aux_clearBar(button, id)
+        end
+    end
+end
+
+function HealBot_Aux_ClearTotalHealAbsorbsBar(button)
+    for id in pairs(hbAuxTotalHealAbsorbsAssigned[button.frame]) do
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 
 -- OverHeal
 

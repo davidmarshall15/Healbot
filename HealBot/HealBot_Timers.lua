@@ -676,6 +676,7 @@ local hbTimerFuncs={["INIT"]={
                         ["OverrideClassColourUseToggle"]=HealBot_Options_Override_ColoursClassUse_Toggle,
                         ["OverrideRoleColourUseToggle"]=HealBot_Options_Override_ColoursRoleUse_Toggle,
                         ["OverridePowerColourUseToggle"]=HealBot_Options_Override_ColoursPowerUse_Toggle,
+                        ["BarColourAlphaSetFunc"]=HealBot_Action_BarColourAlphaSetFunc,
                     },
                    }
 

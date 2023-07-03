@@ -118,42 +118,42 @@ function HealBot_Aggro_AuraWatchClear()
     hbAuraWatchAggro={}
 end
 
-function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,threatValue,mobName)
+function HealBot_Aggro_UpdateUnit(button,status,threatData)
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
-            if threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+            if threatData["status"]>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
                 HealBot_Aggro_AuxSetAggroBar(button)
             else
                 HealBot_Aggro_AuxClearAggroBar(button)
             end
         else
-            threatStatus=0
+            threatData["status"]=0
             HealBot_Aggro_AuxClearAggroBar(button)
         end
     else
         HealBot_Aggro_AuxClearAggroBar(button)
-        threatPct=0
-        threatStatus=0
-        threatValue=0
-        mobName=""
+        threatData["threatpct"]=0
+        threatData["status"]=0
+        threatData["threatvalue"]=0
+        threatData["threatname"]=""
     end
-    if button.aggro.status~=threatStatus then
+    if button.aggro.status~=threatData["status"] then
         if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or 
-           threatStatus>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
-            button.aggro.status=threatStatus
+           threatData["status"]>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
+            button.aggro.status=threatData["status"]
             HealBot_Action_UpdateHealthButtonState(button)
         else
-            button.aggro.status=threatStatus
+            button.aggro.status=threatData["status"]
         end
         HealBot_Aggro_IndicatorUpdate(button)
         if hbAuraWatchAggro[button.id] then
             HealBot_Plugin_AuraWatch_AggroUpdate(button)
         end
     end
-    if button.aggro.threatpct~=threatPct or button.aggro.threatvalue~=threatValue or button.aggro.mobname~=mobName then 
-        button.aggro.threatpct=threatPct
-        button.aggro.threatvalue=threatValue
-        button.aggro.mobname=mobName
+    if button.aggro.threatpct~=threatData["threatpct"] or button.aggro.threatvalue~=threatData["threatvalue"] or button.aggro.mobname~=threatData["threatname"] then 
+        button.aggro.threatpct=threatData["threatpct"]
+        button.aggro.threatvalue=threatData["threatvalue"]
+        button.aggro.mobname=threatData["threatname"]
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"]>1 then
             HealBot_Text_setNameText(button)
         end
@@ -167,8 +167,12 @@ function HealBot_Aggro_UpdateUnit(button,status,threatStatus,threatPct,extra,thr
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end
 
+local hbClearThreat={["status"]=0,
+                     ["threatpct"]=0,
+                     ["threatvalue"]=0,
+                     ["threatname"]=""}
 function HealBot_Aggro_ClearUnitAggro(button)
-    HealBot_Aggro_UpdateUnit(button,false,0,0,"",0,"")
+    HealBot_Aggro_UpdateUnit(button,false,hbClearThreat)
       --HealBot_setCall("HealBot_Aggro_ClearUnitAggro")
 end
 

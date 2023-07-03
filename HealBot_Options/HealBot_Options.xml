@@ -2149,7 +2149,7 @@
             <Frames>
               <Frame name="HealBot_Options_GenFrame" inherits="BackdropTemplate">
                 <Size>
-                  <AbsDimension y="290"/>
+                  <AbsDimension y="220"/>
                 </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
@@ -2262,24 +2262,24 @@
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <Frame name="HealBot_Options_Theme" inherits="UIDropDownMenuTemplate">
+                  <Frame name="HealBot_Options_FrameStrata" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="40" y="70" />
+                          <AbsDimension x="40" y="10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("OPTTHEME",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("OPTTHEME",false)</OnLeave>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 175)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMESTRATA",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMESTRATA",false)</OnLeave>
                     </Scripts>
                     <Layers>
                       <Layer level="OVERLAY">
-                        <FontString name="HealBot_OptionThemet" inherits="GameFontNormal" text="HEALBOT_OPTIONS_THEME">
+                        <FontString name="HealBot_Options_FrameStratat" inherits="GameFontNormal" text="HEALBOT_OPTIONS_FRAMESTRATA">
                           <Anchors>
-                            <Anchor point="RIGHT" relativeTo="HealBot_Options_Theme" relativePoint="LEFT">
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_FrameStrata" relativePoint="LEFT">
                               <Offset>
                                 <AbsDimension x="3" y="3"/>
                               </Offset>
@@ -2289,26 +2289,53 @@
                       </Layer>
                     </Layers>
                   </Frame>
-                  <Slider name="HealBot_Options_OptionsOpacityAdj" inherits="HealBot_Options_SliderTemplate">
-                    <Size>
-                      <AbsDimension x="375" y="8" />
-                    </Size>
-                    <Anchors>
-                      <Anchor point="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="-0" y="32" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnValueChanged>HealBot_Options_OptionsOpacityAdj_OnValueChanged(self)</OnValueChanged>
-                      <OnEnter>HealBot_Options_Show_Help("OPTIONSOPACITY",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("OPTIONSOPACITY",false)</OnLeave>
-                    </Scripts>
-                  </Slider>
                 </Frames>
               </Frame>
 
+              <Frame name="HealBot_Options_Theme" inherits="UIDropDownMenuTemplate">
+                <Anchors>
+                  <Anchor point="TOPLEFT">
+                    <Offset>
+                      <AbsDimension x="170" y="-270" />
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 125)</OnLoad>
+                  <OnEnter>HealBot_Options_Show_Help("OPTTHEME",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("OPTTHEME",false)</OnLeave>
+                </Scripts>
+                <Layers>
+                  <Layer level="OVERLAY">
+                    <FontString name="HealBot_OptionThemet" inherits="GameFontNormal" text="HEALBOT_OPTIONS_THEME">
+                      <Anchors>
+                        <Anchor point="RIGHT" relativeTo="HealBot_Options_Theme" relativePoint="LEFT">
+                          <Offset>
+                            <AbsDimension x="5" y="1"/>
+                          </Offset>
+                        </Anchor>
+                      </Anchors>
+                    </FontString>
+                  </Layer>
+                </Layers>
+              </Frame>
+              <Slider name="HealBot_Options_OptionsOpacityAdj" inherits="HealBot_Options_SliderTemplate">
+                <Size>
+                  <AbsDimension x="225" y="8" />
+                </Size>
+                <Anchors>
+                  <Anchor point="LEFT" relativeTo="HealBot_Options_Theme" relativePoint="RIGHT">
+                    <Offset>
+                      <AbsDimension x="10" y="2"/>
+                    </Offset>
+                  </Anchor>
+                </Anchors>
+                <Scripts>
+                  <OnValueChanged>HealBot_Options_OptionsOpacityAdj_OnValueChanged(self)</OnValueChanged>
+                  <OnEnter>HealBot_Options_Show_Help("OPTIONSOPACITY",true)</OnEnter>
+                  <OnLeave>HealBot_Options_Show_Help("OPTIONSOPACITY",false)</OnLeave>
+                </Scripts>
+              </Slider>
               <Frame name="HealBot_Options_hbLangs" inherits="UIDropDownMenuTemplate">
                 <Anchors>
                   <Anchor point="TOPLEFT">

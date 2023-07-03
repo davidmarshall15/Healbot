@@ -976,6 +976,14 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_LOCKCTRLALT,
     }
     
+    HealBot_Options_Lists["FrameStrata"] = {
+        "BACKGROUND",
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "DIALOG",
+    }
+    
     HealBot_Options_Lists["AutoShow"] = {
         HEALBOT_WORD_OFF,
         HEALBOT_WORD_ONWITHOUTSOUND,
@@ -1092,6 +1100,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_TAB_NAMETEXT,
         HEALBOT_WORD_HEALTH,
         HEALBOT_OPTIONS_TAB_STATETEXT,
+        HEALBOT_OPTIONS_TOTALHEALABSORBS,
     }
     
     HealBot_Options_AuxBarColours_List = {
@@ -5106,9 +5115,11 @@ function HealBot_Options_BarFreq_setVars()
     end
     flashFreq=HealBot_Comm_round(HealBot_Options_luVars["FlashFreqAdj"]-(flashFreqUpd/8),4)
     stateFreq=HealBot_Comm_round(HealBot_Options_luVars["StateFreqAdj"]-(stateFreqUpd/8),4)
+    hazardFreq=hazardFreq-0.05
     if fluidFreq<0.01 then fluidFreq=0.01 end
     if stateFreq<0.01 then stateFreq=0.01 end
     if flashFreq<0.01 then flashFreq=0.01 end
+    if hazardFreq<0.1 then hazardFreq=0.1 end
     if smoothAdj<2 then smoothAdj=2 end
 
  --   HealBot_Action_setLuVars("FluidBarUpdate", fluidFreqUpd)
@@ -9056,6 +9067,23 @@ function HealBot_Options_CommandsButton_OnClick(self)
 end
 
 --------------------------------------------------------------------------------
+
+function HealBot_Options_FrameStrata_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_Lists["FrameStrata"]), 1 do
+        info.text = HealBot_Options_Lists["FrameStrata"][j];
+        info.func = function(self)
+                        if HealBot_Globals.FrameStrata~=HealBot_Options_Lists["FrameStrata"][self:GetID()] then
+                            HealBot_Globals.FrameStrata = HealBot_Options_Lists["FrameStrata"][self:GetID()]
+                            UIDropDownMenu_SetText(HealBot_Options_FrameStrata, HealBot_Globals.FrameStrata)
+                            HealBot_Options_ReloadUI()
+                        end
+                    end
+        info.checked = false;
+        if HealBot_Globals.FrameStrata==HealBot_Options_Lists["FrameStrata"][j] then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
 
 
 HealBot_Options_luVars["hbProfile"] = 1
@@ -13485,6 +13513,7 @@ function HealBot_Options_clearAuxBars(frame,id)
     HealBot_Aux_clearPowerAssigned(frame,id)
     HealBot_Aux_clearOverHealAssigned(frame,id)
     HealBot_Aux_clearCastBarAssigned(frame,id)
+    HealBot_Aux_clearTotalHealAbsorbsAssigned(frame,id)
     if frame then 
         HealBot_Options_setAuxBars(frame,id)
         HealBot_Timers_AuxFramesChanged()
@@ -13550,6 +13579,8 @@ local function HealBot_Options_setAuxBarsByID(f,x)
                 HealBot_Aux_setHealthAssigned(f, x)
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==21 then
                 HealBot_Aux_setStateAssigned(f, x)
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==22 then
+                HealBot_Aux_setTotalHealAbsorbsAssigned(f, x)
             end
         end
     elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][f]["USE"]==5 then
@@ -16687,19 +16718,6 @@ end
 function HealBot_Options_ClassColourUpdate()
     local a=1
     if HealBot_Globals.OverrideColours["USECLASS"]==1 then a=0.2 end
-    if not HealBot_Globals.OverrideColours["DEAT"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEAT", true) end
-    if not HealBot_Globals.OverrideColours["DEMO"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEMO", true) end
-    if not HealBot_Globals.OverrideColours["DRUI"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DRUI", true) end
-    if not HealBot_Globals.OverrideColours["EVOK"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "EVOK", true) end
-    if not HealBot_Globals.OverrideColours["HUNT"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "HUNT", true) end
-    if not HealBot_Globals.OverrideColours["MAGE"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MAGE", true) end
-    if not HealBot_Globals.OverrideColours["MONK"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MONK", true) end
-    if not HealBot_Globals.OverrideColours["PALA"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PALA", true) end
-    if not HealBot_Globals.OverrideColours["PRIE"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PRIE", true) end
-    if not HealBot_Globals.OverrideColours["ROGU"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "ROGU", true) end
-    if not HealBot_Globals.OverrideColours["SHAM"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "SHAM", true) end
-    if not HealBot_Globals.OverrideColours["WARL"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARL", true) end
-    if not HealBot_Globals.OverrideColours["WARR"] then HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARR", true) end
     HealBot_OverrideColClassDeathKnightpick:SetStatusBarColor(HealBot_Globals.OverrideColours["DEAT"].r,
                                                               HealBot_Globals.OverrideColours["DEAT"].g,
                                                               HealBot_Globals.OverrideColours["DEAT"].b,a)
@@ -16741,45 +16759,6 @@ function HealBot_Options_ClassColourUpdate()
                                                               HealBot_Globals.OverrideColours["WARR"].b,a)
     a=1
     if HealBot_Globals.OverrideColours["USECLASS"]==2 then a=0.2 end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEAT", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEMO"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DEMO", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DRUI"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "DRUI", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["EVOK"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "EVOK", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HUNT"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "HUNT", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MAGE"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MAGE", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MONK"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "MONK", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PALA"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PALA", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["PRIE"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "PRIE", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ROGU"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "ROGU", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["SHAM"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "SHAM", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARL"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARL", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["WARR"] then
-        HealBot_Skins_SetClassCol(Healbot_Config_Skins.Current_Skin, "WARR", false)
-    end
     HealBot_ColClassDeathKnightpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].r,
                                               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].g,
                                               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DEAT"].b,a)
@@ -16840,9 +16819,6 @@ function HealBot_Options_RoleColourUpdate()
     HealBot_Timers_Set("LAST","ResetUnitStatus")
     local a=1
     if HealBot_Globals.OverrideColours["USEROLE"]==1 then a=0.2 end
-    if not HealBot_Globals.OverrideColours["TANK"] then HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "TANK", true) end
-    if not HealBot_Globals.OverrideColours["HEALER"] then HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "HEALER", true) end
-    if not HealBot_Globals.OverrideColours["DAMAGER"] then HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "DAMAGER", true) end
     HealBot_OverrideColRoleTankpick:SetStatusBarColor(HealBot_Globals.OverrideColours["TANK"].r,
                                                       HealBot_Globals.OverrideColours["TANK"].g,
                                                       HealBot_Globals.OverrideColours["TANK"].b,a)
@@ -16854,15 +16830,6 @@ function HealBot_Options_RoleColourUpdate()
                                                       HealBot_Globals.OverrideColours["DAMAGER"].b,a)
     a=1
     if HealBot_Globals.OverrideColours["USEROLE"]==2 then a=0.2 end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"] then 
-        HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "TANK", false) 
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"] then 
-        HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "HEALER", false) 
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"] then 
-        HealBot_Skins_SetRoleCol(Healbot_Config_Skins.Current_Skin, "DAMAGER", false) 
-    end
     HealBot_ColRoleTankpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].r,
                                               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].g,
                                               Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"].b,a)
@@ -16879,13 +16846,6 @@ end
 function HealBot_Options_PowerColourUpdate()
     local a=1
     if HealBot_Globals.OverrideColours["USEPOWER"]==1 then a=0.2 end
-    if not HealBot_Globals.OverrideColours["LUNAR_POWER"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "LUNAR_POWER", true) end
-    if not HealBot_Globals.OverrideColours["ENERGY"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "ENERGY", true) end
-    if not HealBot_Globals.OverrideColours["FOCUS"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FOCUS", true) end
-    if not HealBot_Globals.OverrideColours["FURY"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FURY", true) end
-    if not HealBot_Globals.OverrideColours["MANA"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "MANA", true) end
-    if not HealBot_Globals.OverrideColours["RAGE"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RAGE", true) end
-    if not HealBot_Globals.OverrideColours["RUNIC_POWER"] then HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RUNIC_POWER", true) end
     HealBot_OverrideColPowerAstralpick:SetStatusBarColor(HealBot_Globals.OverrideColours["LUNAR_POWER"].r,
                                                          HealBot_Globals.OverrideColours["LUNAR_POWER"].g,
                                                          HealBot_Globals.OverrideColours["LUNAR_POWER"].b,a)
@@ -16909,27 +16869,6 @@ function HealBot_Options_PowerColourUpdate()
                                                          HealBot_Globals.OverrideColours["RUNIC_POWER"].b,a)
     a=1
     if HealBot_Globals.OverrideColours["USEPOWER"]==2 then a=0.2 end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "LUNAR_POWER", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["ENERGY"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "ENERGY", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FOCUS"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FOCUS", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["FURY"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "FURY", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["MANA"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "MANA", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RAGE"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RAGE", false)
-    end
-    if not Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["RUNIC_POWER"] then
-        HealBot_Skins_SetPowerCol(Healbot_Config_Skins.Current_Skin, "RUNIC_POWER", false)
-    end
     HealBot_ColPowerAstralpick:SetStatusBarColor(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].r,
                                                  Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].g,
                                                  Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["LUNAR_POWER"].b,a)
@@ -19850,6 +19789,8 @@ function HealBot_Options_GeneralTab(tab)
         HealBot_Options_hbProfileButtonText:SetText(HEALBOT_WORD_SET)
         HealBot_Options_hbProfile.initialize = HealBot_Options_hbProfile_DropDown
         UIDropDownMenu_SetText(HealBot_Options_hbProfile, HealBot_Options_hbProfile_List[HealBot_Config.Profile])
+        HealBot_Options_FrameStrata.initialize = HealBot_Options_FrameStrata_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_FrameStrata, HealBot_Globals.FrameStrata)
         HealBot_Options_SetText(HealBot_Options_NoAuraWhenRested,HEALBOT_OPTION_IGNORE_AURA_RESTED)
         HealBot_Options_SetText(HealBot_Options_ShowMinimapButton,HEALBOT_OPTIONS_SHOWMINIMAPBUTTON)
         HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
@@ -19875,6 +19816,7 @@ function HealBot_Options_GeneralTab(tab)
         HealBot_Options_SetLabel("healbotcrolesfontstr",HEALBOT_OPTIONS_EMERGFCLASS)
         HealBot_Options_SetLabel("healbotprofilefontstr",HEALBOT_OPTIONS_PROFILE)
         HealBot_Options_SetLabel("HealBot_OptionThemet",HEALBOT_OPTIONS_THEME)
+        HealBot_Options_SetLabel("HealBot_Options_FrameStratat",HEALBOT_OPTIONS_FRAMESTRATA)
         if HEALBOT_GAME_VERSION<4 then
             HealBot_Options_EFClassDemonHunter:Hide()
             HealBot_Options_EFClassMonk:Hide()
@@ -19941,7 +19883,7 @@ function HealBot_Options_OverridesEffectsTab(tab)
         HealBot_Options_SetLabel("HealBot_Options_OverrideHotBarDebuffPrio_FontStr",HEALBOT_OPTION_HOTBARSDEBUFFPRIO)
         HealBot_Options_Override_EffectsUse.initialize = HealBot_Options_Override_EffectsUse_DropDown
         UIDropDownMenu_SetText(HealBot_Options_Override_EffectsUse, HealBot_Options_UseOverrides_List[HealBot_Globals.OverrideEffects["USE"]])
-        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBorderHazardFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,10,90,5,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_OverrideBorderHazardFreq,HEALBOT_OPTIONS_AGGROFLASHFREQ,5,85,5,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
         HealBot_Options_OverrideBorderHazardFreq:SetValue((1-(HealBot_Globals.OverrideEffects["HAZARDFREQ"] or 0.3))*100)
         HealBot_Options_SetText(HealBot_Options_OverrideBorderHazardFreq, HEALBOT_OPTIONS_AGGROFLASHFREQ) 
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_OverrideBorderHazardMinAlpha,HEALBOT_OPTIONS_MINALPHA,0,0.75,0.05,2)
@@ -21078,8 +21020,8 @@ function HealBot_Options_SkinsFramesBarsAuxConfigTab(tab)
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarOverlayOOR,HEALBOT_OUTOFRANGE_LABEL)
         HealBot_Options_SkinBarAuxBarOverlayBuff:SetChecked(Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OVERLAYBUFF"])
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarOverlayBuff,HEALBOT_OPTIONS_BUFF)
-        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,40,1,5)
-        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-20,20,1,5)
+        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,50,1,5)
+        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-50,20,1,5)
         HealBot_Options_AuxBarOffset:SetValue(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OFFSET"])
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarSize,HEALBOT_OPTIONS_TXTSIZE,0.25,1,0.01,5)
         HealBot_Options_SetLabel("HealBot_SkinBarAuxBarOverlayRecentHealst",HEALBOT_SKIN_OVERLAYCOL_TEXT)

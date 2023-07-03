@@ -151,6 +151,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";
     HEALBOT_OPTIONS_HEAL_CHATOPT            = "Chat Options";
     HEALBOT_OPTIONS_BLIZZARD_FRAMES         = "Blizzard Frames";
+    HEALBOT_OPTIONS_TOTALHEALABSORBS        = "Total Heal Absorbs";
 
     HEALBOT_OPTIONS_FRAMESCALE              = "Frame scale"
     HEALBOT_OPTIONS_STICKFRAMEOFFSETH       = "Sticky frame horizontal offset"
@@ -1039,6 +1040,7 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_PLAYER                     = "Player"
     HEALBOT_OPTIONS_CPUUSAGE                = "CPU Usage"
     HEALBOT_OPTIONS_THEME                   = "Options theme"
+    HEALBOT_OPTIONS_FRAMESTRATA             = "Frame Strata"
     HEALBOT_OPTIONS_DONT_SHOW               = "Don't show"
     HEALBOT_OPTIONS_HAZARDONLY              = "Hazard Only"
     HEALBOT_OPTIONS_SAME_AS_HLTH_CURRENT    = "Same as health (current health)"
