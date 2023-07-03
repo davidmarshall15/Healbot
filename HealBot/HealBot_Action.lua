@@ -2355,18 +2355,24 @@ end
 function HealBot_Action_BarColourAlphaGD(button, a, dMult)
     if HealBot_Action_luVars["GlobalDimming"]>0 then
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
 function HealBot_Action_BarColourAlphaFG(button, a, dMult)
     if button.status.unittype==5 and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
 function HealBot_Action_BarColourAlphaHB(button, a, dMult)
     if not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
@@ -2375,6 +2381,8 @@ function HealBot_Action_BarColourAlphaGDFG(button, a, dMult)
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
     elseif button.status.unittype==5 and not HealBot_Action_luVars["FGroups"][button.group] then
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
@@ -2383,6 +2391,8 @@ function HealBot_Action_BarColourAlphaGDHB(button, a, dMult)
         hbBarColourAlpha=a/(HealBot_Action_luVars["GlobalDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
@@ -2391,6 +2401,8 @@ function HealBot_Action_BarColourAlphaFGHB(button, a, dMult)
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
@@ -2401,6 +2413,8 @@ function HealBot_Action_BarColourAlphaGDFGHB(button, a, dMult)
         hbBarColourAlpha=a/(HealBot_Action_luVars["FGDimming"]*dMult)
     elseif not button.hotbars.state then
         hbBarColourAlpha=a/(HealBot_Action_luVars["HotBarDimming"]*dMult)
+    else
+        hbBarColourAlpha=a
     end
 end
 
@@ -3118,6 +3132,8 @@ function HealBot_Action_InitButton(button)
         button:SetAttribute("checkfocuscast", false)
         erButton:SetAttribute("checkfocuscast", false)
     end
+    --button:SetFrameStrata(HealBot_Globals.FrameStrata)
+    --erButton:SetFrameStrata(HealBot_Globals.FrameStrata)
     button.guid="nil"
     button.unit="nil"
     erButton.unit="nil"
@@ -3210,11 +3226,11 @@ function HealBot_Action_InitButton(button)
     button.gref["Absorb"]:UnregisterAllEvents()
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
     button.gref["Absorb"]:SetValue(0)            
-    button:SetFrameLevel(10); 
+    button:SetFrameLevel(20); 
     button.gref["Back"]:SetFrameLevel(button:GetFrameLevel()+ 1)
-    button.gref["Top"]:SetFrameLevel(button:GetFrameLevel()+20)
-    button.gref["BackBorder"]:SetFrameLevel(40)
-    button.gref["IconTop"]:SetFrameLevel(50)
+    button.gref["Top"]:SetFrameLevel(button:GetFrameLevel()+30)
+    button.gref["BackBorder"]:SetFrameLevel(80)
+    button.gref["IconTop"]:SetFrameLevel(100)
     button.gref["BackBorder"]:SetBackdrop({
                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
                                            edgeSize = 1, 
@@ -3262,7 +3278,7 @@ function HealBot_Action_InitButton(button)
         button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
         if button.id<500 then
             button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
-            button.gref.iconh[x]:SetFrameLevel(51)
+            button.gref.iconh[x]:SetFrameLevel(101)
             button.gref.iconh[x]:SetBackdrop({
                                                edgeFile = "Interface\\Buttons\\WHITE8X8",
                                                edgeSize = 2, 
@@ -3280,7 +3296,7 @@ function HealBot_Action_InitButton(button)
         button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
         if button.id<500 then
             button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
-            button.gref.iconh[x]:SetFrameLevel(51)
+            button.gref.iconh[x]:SetFrameLevel(101)
             button.gref.iconh[x]:SetBackdrop({
                                                edgeFile = "Interface\\Buttons\\WHITE8X8",
                                                edgeSize = 2, 
@@ -5310,6 +5326,16 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             elseif frame==10 then
                 HealBot_Skins_ResetSkinWidth(hButton)
             end
+        else                
+            if unitType>10 then
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcEnemy",1)
+            elseif unitType==8 then 
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets",1)
+            elseif unitType==7 then
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcVehicle",1)
+            else
+                HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers",1)
+            end
         end
     end
     --HealBot_setCall("HealBot_Action_SetHealButton")
@@ -6276,7 +6302,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
     if self and self.aux then
         HealBot_Action_AuxSetHighlightBar(self)
     end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+1
         C_Timer.After(0.001, HealBot_Action_DisableGlobalDimming)
     end
@@ -6293,7 +6319,7 @@ function HealBot_Action_HealUnit_OnLeave(self)
     if self and self.aux then 
         HealBot_Action_AuxClearHighlightBar(self)
     end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+0.35
         C_Timer.After(0.4, HealBot_Action_EnableGlobalDimming)
     end
@@ -6314,7 +6340,7 @@ function HealBot_Action_EmergUnit_OnEnter(self)
             HealBot_Action_RefreshTooltip();
         end
     end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+1
         C_Timer.After(0.001, HealBot_Action_DisableGlobalDimming)
     end
@@ -6324,7 +6350,7 @@ end
 function HealBot_Action_EmergUnit_OnLeave(self)
     HealBot_Action_SetActiveButton(0)
     if HealBot_Data["TIPBUTTON"] then HealBot_Action_HideTooltip(HealBot_Data["TIPBUTTON"]) end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+0.35
         C_Timer.After(0.4, HealBot_Action_EnableGlobalDimming)
     end
@@ -6827,7 +6853,7 @@ function HealBot_Action_OnEnter(self)
         HealBot_Action_ToggleFrameTag(self)
     end
     HealBot_Action_luVars["ActiveFrame"]=self
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+1
         C_Timer.After(0.001, HealBot_Action_DisableGlobalDimming)
     end
@@ -6838,8 +6864,8 @@ function HealBot_Action_OnLeave(self)
     if hbFrameTags[self.id] then
         HealBot_Action_ToggleFrameTag(self)
     end
-    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 and HealBot_Action_luVars["GlobalDimming"]<1000 then
-        HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+0.35
+    if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
+        HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+0.25
         C_Timer.After(0.4, HealBot_Action_EnableGlobalDimming)
     end
 end

@@ -50,7 +50,7 @@ HealBot_Font_Outline={
     [3]= "THICKOUTLINE",
 };
 
-local Version=HealBot_Global_Version()
+local Version=HealBot_Global_InitVersion()
 HealBot_ConfigDefaults = {
   LastVersionUpdate=Version,
   MyFriend="x",
@@ -265,7 +265,6 @@ HealBot_HealGroupsTrans = { [HEALBOT_OPTIONS_SELFHEALS_en] = HEALBOT_OPTIONS_SEL
 HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
-    local Version=HealBot_Global_Version()
     HealBot_GlobalsDefaults = {
         LastVersionSkinUpdate=Version,
         FirstLoad = true,

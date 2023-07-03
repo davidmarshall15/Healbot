@@ -785,14 +785,14 @@ end
 
 function HealBot_Aura_AddBuffIcon(button, index)
     button.gref.icon[index]:SetTexture(HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][index]["spellId"]]["texture"])
-    button.gref.iconf[index]:SetFrameLevel(100)
+    button.gref.iconf[index]:SetFrameLevel(200)
     HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][index], index, true, HealBot_UnitBuffIcons[button.id][index]["spellId"])
       --HealBot_setCall("HealBot_Aura_AddBuffIcon")
 end
 
 function HealBot_Aura_DebuffAddIcon(button, index)
     button.gref.icon[index]:SetTexture(HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][index]["spellId"]]["texture"])
-    button.gref.iconf[index]:SetFrameLevel(100)
+    button.gref.iconf[index]:SetFrameLevel(200)
     HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][index], index, true, HealBot_UnitDebuffIcons[button.id][index]["spellId"])
       --HealBot_setCall("HealBot_Aura_DebuffAddIcon")
 end
