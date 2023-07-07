@@ -419,12 +419,12 @@ function HealBot_Text_DeadColours(button)
 end
 
 local tr,tg,tb=1,1,1
-function HealBot_Text_ColoursHealth(button)
+function HealBot_Text_ColoursHealth(button, cType)
     tr,tg,tb=button.health.rcol,button.health.gcol,0
 end
 
 local htvUnit=false
-function HealBot_Text_ColoursClass(button)
+function HealBot_Text_ColoursClass(button, cType)
     htvUnit=HealBot_retIsInVehicle(button.unit)
     if htvUnit and UnitExists(htvUnit) then
         tr,tg,tb=HealBot_Action_ClassColour(htvUnit)
@@ -433,31 +433,75 @@ function HealBot_Text_ColoursClass(button)
     end
 end
 
-function HealBot_Text_ColoursRole(button)
+function HealBot_Text_ColoursRole(button, cType)
     tr,tg,tb=hbCustomRoleCols[button.roletxt].r,hbCustomRoleCols[button.roletxt].g,hbCustomRoleCols[button.roletxt].b
 end
 
-function HealBot_Text_ColoursCustom(button)
-    if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
-        tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCR"]
-        tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCG"]
-        tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCB"]
-    elseif button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCT"] then
-        tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICR"]
-        tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICG"]
-        tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICB"]
+function HealBot_Text_ColoursCustom(button, cType)
+    if cType=="NAME" then
+        if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"]
+        elseif button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NICR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NICG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NICB"]
+        else
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCCB"]
+        end
+    elseif cType=="HEALTH" then
+        if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCB"]
+        elseif button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HICR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HICG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HICB"]
+        else
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCCB"]
+        end
+    elseif cType=="STATE" then
+        if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCB"]
+        elseif button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SICB"]
+        else
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCB"]
+        end
     else
-        tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCR"]
-        tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCG"]
-        tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCCB"]
+        if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACB"]
+        elseif button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCT"] then
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AICR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AICG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AICB"]
+        else
+            tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACCR"]
+            tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACCG"]
+            tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACCB"]
+        end
     end
 end
 
-function HealBot_Text_ColoursClassHlthMix(button)
+function HealBot_Text_ColoursClassHlthMix(button, cType)
     tr,tg,tb=button.health.mixcolr,button.health.mixcolg,button.health.mixcolb
 end
 
-function HealBot_Text_ColoursRoleHlthMix(button)
+function HealBot_Text_ColoursRoleHlthMix(button, cType)
     tr,tg,tb=button.health.rmixcolr,button.health.rmixcolg,button.health.rmixcolb
 end
 
@@ -475,7 +519,7 @@ function HealBot_Text_StateColours(button)
         tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCG"]
         tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCB"]
     else
-        HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]](button)
+        HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]](button, "STATE")
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return tr,tg,tb
@@ -489,19 +533,19 @@ function HealBot_Text_TextNameColours(button)
         tg=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCG"]
         tb=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCB"]
     else
-        HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]](button)
+        HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]](button, "NAME")
     end
       --HealBot_setCall("HealBot_Text_TextNameColours")
     return tr,tg,tb
 end
 
 function HealBot_Text_TextHealthColours(button)
-    HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]](button)
+    HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]](button, "HEALTH")
     return tr,tg,tb
 end
 
 function HealBot_Text_TextAggroColours(button)
-    HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]](button)
+    HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]](button, "AGGRO")
     return tr,tg,tb
 end
 

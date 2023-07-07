@@ -3196,7 +3196,7 @@ function HealBot_Action_InitButton(button)
     button.gref["Bar"]=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
     button.gref["Bar"]:UnregisterAllEvents()
     button.gref["Bar"]:SetMinMaxValues(0,1000)
-    erButton.bar=_G["HealBot_Action_EmergUnit"..button.id.."Bar"]
+    erButton.bar=_G["HB_Action_EmergUnit"..button.id.."Bar"]
     erButton.bar:UnregisterAllEvents()
     erButton.bar:SetMinMaxValues(0,1)
     erButton.bar:SetValue(1)
@@ -3707,13 +3707,13 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
     HealBot_Buttons[buttonId]=ghb
     ghb.id=buttonId
     ghb.isEmerg=false
-    local ehb=CreateFrame("Button", "HealBot_Action_EmergUnit"..buttonId, grpFrame[hbCurFrame], "HealingButtonTemplateEmerg")
+    local ehb=CreateFrame("Button", "HB_Action_EmergUnit"..buttonId, grpFrame[hbCurFrame], "HealingButtonTemplateEmerg")
     HealBot_Emerg_Button[buttonId]=ehb
     ehb.id=buttonId
     ehb.isEmerg=true
     local iBtns
     for x=1,12 do
-        iBtns=CreateFrame("Button", "HealBot_Action_HealUnit"..buttonId.."Icon"..x, ghb)
+        iBtns=CreateFrame("Frame", "HealBot_Action_HealUnit"..buttonId.."Icon"..x, ghb)
         iBtns.id=buttonId
         iBtns:SetScript("OnEnter", function() HealBot_Options_BuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
@@ -4966,7 +4966,7 @@ function HealBot_Action_PrepSetEnabledAttribs()
                 ghb.attribs["Enabled"]={}
                 ghb.binds["Enabled"]={}
             end
-            ehb= _G["HealBot_Action_EmergUnit"..i]
+            ehb= _G["HB_Action_EmergUnit"..i]
             if ehb then
                 ehb.attribs["Enabled"]={}
                 ehb.binds["Enabled"]={}
@@ -4986,7 +4986,7 @@ function HealBot_Action_PrepSetEnemyAttribs()
                 ghb.attribs["Enemy"]={}
                 ghb.binds["Enemy"]={}
             end
-            ehb= _G["HealBot_Action_EmergUnit"..i]
+            ehb= _G["HB_Action_EmergUnit"..i]
             if ehb then
                 ehb.attribs["Enemy"]={}
                 ehb.binds["Enemy"]={}
@@ -5007,7 +5007,7 @@ function HealBot_Action_PrepSetEmergAttribs()
                 ghb.attribs["Emerg"]={}
                 ghb.binds["Emerg"]={}
             end
-            ehb= _G["HealBot_Action_EmergUnit"..i]
+            ehb= _G["HB_Action_EmergUnit"..i]
             if ehb then
                 ehb.attribs["Emerg"]={}
                 ehb.binds["Emerg"]={}
@@ -5027,7 +5027,7 @@ function HealBot_Action_PrepSetAllAttribs()
                 ghb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
                 ghb.binds={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
             end
-            ehb= _G["HealBot_Action_EmergUnit"..i]
+            ehb= _G["HB_Action_EmergUnit"..i]
             if ehb then
                 ehb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
                 ehb.binds={["Emerg"]={},["Enemy"]={},["Enabled"]={}}

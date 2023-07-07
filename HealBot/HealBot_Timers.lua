@@ -226,15 +226,15 @@ function HealBot_Timers_DisableHealBot()
 end
 
 function HealBot_Timers_SpellsLoaded()
-    HealBot_Timers_Set("INIT","InitBuffList",0.025)
-    HealBot_Timers_Set("INIT","SpellsTabText",0.05)
-    HealBot_Timers_Set("INIT","FluidFlash",0.1)
+    HealBot_Timers_Set("INIT","InitBuffList",0.05)
+    HealBot_Timers_Set("INIT","SpellsTabText",0.1)
+    HealBot_Timers_Set("INIT","FluidFlash",0.15)
     HealBot_Timers_Set("AURA","BuffsReset",0.2)
-    HealBot_Timers_Set("LAST","ResetAllButtons",0.3)
-    HealBot_Timers_Set("SKINS","PowerIndicator",0.4)
-    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.5)
-    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.75)
-    HealBot_Timers_Set("AURA","InitAuraData",1)
+    HealBot_Timers_Set("LAST","ResetAllButtons",0.25)
+    HealBot_Timers_Set("SKINS","PowerIndicator",0.3)
+    HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.35)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.4)
+    HealBot_Timers_Set("AURA","InitAuraData",0.5)
 end
 
 function HealBot_Timers_SpellsResetTabs()
@@ -260,17 +260,17 @@ end
 function HealBot_Timers_LastUpdate()
     HealBot_setLuVars("DoSendGuildVersion", true)
     HealBot_Timers_Set("CHAT","SetChat")
-    HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.1)
-    HealBot_Timers_Set("LAST","DisableCheck",0.2)
-    HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.3)
-    HealBot_Timers_Set("LAST","UpdateAllHealth",0.4)
-    HealBot_Timers_Set("AURA","BuffsReset",0.5)
-    HealBot_Timers_Set("AURA","PlayerCheckExtended",0.6)
-    HealBot_Timers_Set("AURA","CheckUnits",0.7)
-    HealBot_Timers_Set("PLAYER","InvChange",0.8)
-	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.9)
-    HealBot_Timers_Set("LAST","CheckVersions",1)
-    HealBot_Timers_Set("LAST","LoadComplete",2)
+    HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.5)
+    HealBot_Timers_Set("LAST","DisableCheck",0.1)
+    HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.15)
+    HealBot_Timers_Set("LAST","UpdateAllHealth",0.2)
+    HealBot_Timers_Set("AURA","BuffsReset",0.25)
+    HealBot_Timers_Set("AURA","PlayerCheckExtended",0.3)
+    HealBot_Timers_Set("AURA","CheckUnits",0.35)
+    HealBot_Timers_Set("PLAYER","InvChange",0.4)
+	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.5)
+    HealBot_Timers_Set("LAST","CheckVersions",0.8)
+    HealBot_Timers_Set("LAST","LoadComplete",1)
     C_Timer.After(1, HealBot_Timers_nextRecalcAll)
 end
 
@@ -314,32 +314,36 @@ function HealBot_Timers_InitSpells()
 end
 
 function HealBot_Timers_LastLoad()
-    HealBot_Timers_Set("LAST","MountsPetsUse",0.025)
+    HealBot_Timers_Set("LAST","MountsPetsUse")
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.05)
-    HealBot_Timers_Set("SKINS","EmergHealthCol",0.075)
-    HealBot_Timers_Set("AURA","ConfigClassHoT",0.1)
-    HealBot_Timers_Set("AURA","ConfigDebuffs",0.125)
-    HealBot_Timers_Set("LAST","InitLoadSpells",0.15)
-    HealBot_Timers_Set("LAST","CheckZone",0.175)
-    HealBot_Timers_Set("PLAYER","InvReady",0.2)
-    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.225)
+    HealBot_Timers_Set("SKINS","EmergHealthCol",0.1)
+    HealBot_Timers_Set("AURA","ConfigClassHoT",0.15)
+    HealBot_Timers_Set("AURA","ConfigDebuffs",0.2)
+    HealBot_Timers_Set("LAST","InitLoadSpells",0.25)
+    HealBot_Timers_Set("LAST","CheckZone",0.3)
+    HealBot_Timers_Set("PLAYER","InvReady",0.35)
+    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.4)
     HealBot_Timers_Set("LAST","LastUpdate",0.5) 
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
+    if not HealBot_Timers_luVars["HelpNotice"] then
+        HealBot_Timers_Set("LAST","HealBotLoaded")
+        HealBot_Timers_luVars["HelpNotice"]=true
+    end
 end
 
 function HealBot_Timers_EnteringWorld2()
-    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.1)
-    HealBot_Timers_Set("LAST","CheckDC",2)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+    HealBot_Timers_Set("LAST","CheckDC",1)
     if HealBot_Timers_luVars["DoneBuffReset"] then
-        HealBot_Timers_Set("LAST","LastUpdate",0.25)
+        HealBot_Timers_Set("LAST","LastUpdate")
     end
 end
 
 function HealBot_Timers_EnteringWorld()
-    HealBot_Timers_Set("LAST","TargetFocusUpdate",0.1)
-    HealBot_Timers_Set("LAST","ResetUnitStatus",0.125)
+    HealBot_Timers_Set("LAST","TargetFocusUpdate",0.05)
+    HealBot_Timers_Set("LAST","ResetUnitStatus",0.1)
     HealBot_Timers_Set("SKINS","UpdateEmergBars",0.15)
-    HealBot_Timers_Set("LAST","EnteringWorld2",0.25)
+    HealBot_Timers_Set("LAST","EnteringWorld2",0.2)
 end
 
 function HealBot_Timer_Plugin_InitBinds()
