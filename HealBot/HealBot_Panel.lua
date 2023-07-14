@@ -2572,16 +2572,17 @@ function HealBot_Panel_TargetChangedCheckFocus()
     if hbPanelShowhbFocus then
         local tButton=HealBot_Extra_Button["target"]
         if tButton then
-            vFocusFrame=_G["HealBot_Action_HealUnit999"]
+            vFocusFrame=_G["hbExtra_HealUnit999"]
             local vFocusParent=_G["f8_HealBot_Action"]
             if not vFocusFrame then
-                vFocusFrame=CreateFrame("Button", "HealBot_Action_HealUnit999", vFocusParent, "HealBotFocusButtonTemplate") 
+                vFocusFrame=CreateFrame("Button", "hbExtra_HealUnit999", vFocusParent, "HealBotFocusButtonTemplate") 
                 local bar = _G[vFocusFrame:GetName().."Bar"]
                 bar:SetMinMaxValues(0,100);
                 bar:SetValue(100);
                 bar:UnregisterAllEvents()
                 HealBot_Action_SethbFocusButtonAttrib(vFocusFrame)
                 vFocusFrame.id=999
+                vFocusFrame.name="hbExtra_HealUnit999"
                 vFocusFrame.frame=8
                 HealBot_Action_OnLoad(vFocusFrame) 
                 vFocusFrame:RegisterForClicks("LeftButtonUp", "RightButtonUp")

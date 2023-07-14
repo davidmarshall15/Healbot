@@ -1628,18 +1628,8 @@ local hbBackgroundBorderColourFuncs={[1]=HealBot_Action_BackgroundBorderColourHa
                                      [9]=HealBot_Action_BackgroundBorderColourAdaptiveRoleMix,
                                     [10]=HealBot_Action_BackgroundBorderColourAdaptiveCustomMix,
                                     [11]=HealBot_Action_BackgroundBorderColourAdaptive}
-function HealBot_Action_UpdateHealthBackgroundBorder(button)
-    hbBackgroundBorderColourFuncs[Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]](button)
-end
-
 function HealBot_Action_UpdateBackgroundBorder(button)
-    --if button.frame>0 then
-        if button.status.current<HealBot_Unit_Status["DEAD"] then
-            HealBot_Action_UpdateHealthBackgroundBorder(button) 
-        else
-            button.gref["BackBorder"]:SetBackdropBorderColor(0,0,0,0)
-        end
-    --end
+    hbBackgroundBorderColourFuncs[Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BORDER"]](button)
 end
 
 function HealBot_Action_BackgroundColourHealth(button)
@@ -1748,11 +1738,7 @@ function HealBot_Action_UpdateHealthBackground(button)
 end
 
 function HealBot_Action_UpdateBackground(button)
-    if button.status.current<HealBot_Unit_Status["DEAD"] then
-            HealBot_Action_UpdateHealthBackground(button)
-    else
-        button.gref["Back"]:SetStatusBarColor(0,0,0,0)
-    end
+    HealBot_Action_UpdateHealthBackground(button)
     HealBot_Action_UpdateBackgroundBorder(button)
     --HealBot_setCall("HealBot_Action_UpdateBackground")
 end
@@ -2277,7 +2263,7 @@ function HealBot_Action_UpdateHealthButtonState(button)
         end
         HealBot_Action_UpdateHealthBackground(button)
         if not HealBot_Hazard_Buttons[button.id] then
-            HealBot_Action_UpdateHealthBackgroundBorder(button)
+            HealBot_Action_UpdateBackgroundBorder(button)
         end
     else
         button.health.hpct=0
@@ -3124,7 +3110,7 @@ function HealBot_Action_ResetrCalls()
     --HealBot_setCall("HealBot_Action_ResetrCalls")
 end 
 
-function HealBot_Action_InitButton(button)
+function HealBot_Action_InitButton(button, prefix)
     erButton=HealBot_Emerg_Button[button.id]
     button:SetAttribute("checkselfcast", false)
     erButton:SetAttribute("checkselfcast", false)
@@ -3193,18 +3179,18 @@ function HealBot_Action_InitButton(button)
     button.gref.indicator.selfcast={}
     button.gref.indicator.power={}
     HealBot_Aura_InitUnitAuraCurrent(button.id)
-    button.gref["Bar"]=_G["HealBot_Action_HealUnit"..button.id.."Bar"]
+    button.gref["Bar"]=_G[button.bName.."Bar"]
     button.gref["Bar"]:UnregisterAllEvents()
     button.gref["Bar"]:SetMinMaxValues(0,1000)
-    erButton.bar=_G["HB_Action_EmergUnit"..button.id.."Bar"]
+    erButton.bar=_G[erButton.bName.."Bar"]
     erButton.bar:UnregisterAllEvents()
     erButton.bar:SetMinMaxValues(0,1)
     erButton.bar:SetValue(1)
-    button.gref["InHeal"]=_G["HealBot_Action_HealUnit"..button.id.."Bar2"]
+    button.gref["InHeal"]=_G[button.bName.."Bar2"]
     button.gref["InHeal"]:UnregisterAllEvents()
     button.gref["InHeal"]:SetMinMaxValues(0,1000)
     button.gref["InHeal"]:SetValue(0)
-    button.gref["Back"]=_G["HealBot_Action_HealUnit"..button.id.."Bar5"]
+    button.gref["Back"]=_G[button.bName.."Bar5"]
     button.gref["Back"]:UnregisterAllEvents()
     button.gref["Back"]:SetValue(100)
     button.gref["Back"]:SetMinMaxValues(0,100)
@@ -3212,17 +3198,17 @@ function HealBot_Action_InitButton(button)
     button.gref["Back"]:GetStatusBarTexture():SetHorizTile(false)
     button.gref["BackBorder"]=CreateFrame("Frame", "HealBot_BarBackBorder_"..button.id , button.gref["Back"], BackdropTemplateMixin and "BackdropTemplate")
     button.gref["BackBorder"].size=0
-    button.gref["Top"]=_G["HealBot_Action_HealUnit"..button.id.."Bar7"]
+    button.gref["Top"]=_G[button.bName.."Bar7"]
     button.gref["Top"]:UnregisterAllEvents()
     button.gref["Top"]:SetValue(100)
     button.gref["Top"]:SetMinMaxValues(0,100)
     button.gref["Top"]:SetStatusBarColor(0, 0, 0, 0)
-    button.gref["IconTop"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8"]
+    button.gref["IconTop"]=_G[button.bName.."Bar8"]
     button.gref["IconTop"]:UnregisterAllEvents()
     button.gref["IconTop"]:SetValue(100)
     button.gref["IconTop"]:SetMinMaxValues(0,100)
     button.gref["IconTop"]:SetStatusBarColor(0, 0, 0, 0)
-    button.gref["Absorb"]=_G["HealBot_Action_HealUnit"..button.id.."Bar6"]
+    button.gref["Absorb"]=_G[button.bName.."Bar6"]
     button.gref["Absorb"]:UnregisterAllEvents()
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
     button.gref["Absorb"]:SetValue(0)            
@@ -3252,32 +3238,32 @@ function HealBot_Action_InitButton(button)
     button:Enable();
     erButton:Enable();
     for x=1,9 do
-        button.gref.aux[x]=_G["HealBot_Action_HealUnit"..button.id.."Aux"..x]
+        button.gref.aux[x]=_G[button.bName.."Aux"..x]
         button.gref.aux[x]:UnregisterAllEvents()
         button.gref.aux[x]:SetMinMaxValues(0,1000)
         button.gref.aux[x]:SetFrameLevel(button.gref["Bar"]:GetFrameLevel()+x)
-        button.gref.auxtxt[x]=_G["HealBot_Action_HealUnit"..button.id.."Aux"..x.."_Txt"]
+        button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
         button.gref.auxtxt[x]:SetSpacing(0)
         button.gref.auxtxt[x]:SetWordWrap(false)
     end
-    button.gref.txt["text"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text"]
+    button.gref.txt["text"]=_G[button.bName.."Bar_text"]
     button.gref.txt["text"]:SetWordWrap(false)
-    button.gref.txt["text2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text2"]
+    button.gref.txt["text2"]=_G[button.bName.."Bar_text2"]
     button.gref.txt["text2"]:SetWordWrap(false)
-    button.gref.txt["text3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text3"]
+    button.gref.txt["text3"]=_G[button.bName.."Bar_text3"]
     button.gref.txt["text3"]:SetWordWrap(false)
-    button.gref.txt["text4"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text4"]
+    button.gref.txt["text4"]=_G[button.bName.."Bar_text4"]
     button.gref.txt["text4"]:SetWordWrap(false)
-    button.gref.txt["text5"]=_G["HealBot_Action_HealUnit"..button.id.."Bar_text5"]
+    button.gref.txt["text5"]=_G[button.bName.."Bar_text5"]
     button.gref.txt["text5"]:SetWordWrap(false)
-    button.gref.icon["Icontm1"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm1"]
-    button.gref.icon["Icontm2"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm2"]
-    button.gref.icon["Icontm3"]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm3"]
+    button.gref.icon["Icontm1"]=_G[button.bName.."Bar8Icontm1"]
+    button.gref.icon["Icontm2"]=_G[button.bName.."Bar8Icontm2"]
+    button.gref.icon["Icontm3"]=_G[button.bName.."Bar8Icontm3"]
     for x=1,12 do
-        button.gref.icon[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icon"..x]
-        button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
+        button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
+        button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
         if button.id<500 then
-            button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
+            button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
             button.gref.iconh[x]:SetFrameLevel(101)
             button.gref.iconh[x]:SetBackdrop({
                                                edgeFile = "Interface\\Buttons\\WHITE8X8",
@@ -3292,10 +3278,10 @@ function HealBot_Action_InitButton(button)
         button.glow.icon[x]=0
     end
     for x=51,60 do
-        button.gref.icon[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icon"..x]
-        button.gref.iconf[x]=_G["HealBot_Action_HealUnit"..button.id.."Icon"..x]
+        button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
+        button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
         if button.id<500 then
-            button.gref.iconh[x]=CreateFrame("Frame", "HealBot_IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
+            button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
             button.gref.iconh[x]:SetFrameLevel(101)
             button.gref.iconh[x]:SetBackdrop({
                                                edgeFile = "Interface\\Buttons\\WHITE8X8",
@@ -3309,29 +3295,29 @@ function HealBot_Action_InitButton(button)
         end
         button.glow.icon[x]=0
     end
-    button.gref.icon[91]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraClass"]
-    button.gref.icon[92]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraTarget"]
-    button.gref.icon[93]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraRC"]
-    button.gref.icon[94]=_G["HealBot_Action_HealUnit"..button.id.."Bar8ExtraOOR"]
+    button.gref.icon[91]=_G[button.bName.."Bar8ExtraClass"]
+    button.gref.icon[92]=_G[button.bName.."Bar8ExtraTarget"]
+    button.gref.icon[93]=_G[button.bName.."Bar8ExtraRC"]
+    button.gref.icon[94]=_G[button.bName.."Bar8ExtraOOR"]
     for x=1,12 do
-        button.gref.txt.expire[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Expire"..x]
-        button.gref.txt.count[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Count"..x]
+        button.gref.txt.expire[x]=_G[button.bName.."Bar8Expire"..x]
+        button.gref.txt.count[x]=_G[button.bName.."Bar8Count"..x]
     end
     for x=51,60 do
-        button.gref.txt.expire[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Expire"..x]
-        button.gref.txt.count[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Count"..x]
+        button.gref.txt.expire[x]=_G[button.bName.."Bar8Expire"..x]
+        button.gref.txt.count[x]=_G[button.bName.."Bar8Count"..x]
     end
     for x=1,3 do
-        button.gref.indicator.aggro["Iconal"..x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Iconal"..x]
-        button.gref.indicator.aggro["Iconar"..x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Iconar"..x]
-        button.gref.indicator.mana[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Icontm"..x]
+        button.gref.indicator.aggro["Iconal"..x]=_G[button.bName.."Bar8Iconal"..x]
+        button.gref.indicator.aggro["Iconar"..x]=_G[button.bName.."Bar8Iconar"..x]
+        button.gref.indicator.mana[x]=_G[button.bName.."Bar8Icontm"..x]
     end
     for x=1,16 do
-        button.gref.indicator.selfcast[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Own"..x]
+        button.gref.indicator.selfcast[x]=_G[button.bName.."Bar8Own"..x]
         button.gref.indicator.selfcast[x]:SetAlpha(0)
     end
     for x=1,5 do
-        button.gref.indicator.power[x]=_G["HealBot_Action_HealUnit"..button.id.."Bar8Iconpi"..x]
+        button.gref.indicator.power[x]=_G[button.bName.."Bar8Iconpi"..x]
         button.gref.indicator.power[x]:SetAlpha(0);
     end
     button.frame=0
@@ -3687,8 +3673,8 @@ end
 local freeId=1
 HealBot_Action_luVars["ButtonHWM"]=0
 HealBot_Action_luVars["TestHWM"]=500
-function HealBot_Action_FreeId(test)
-    if test then
+function HealBot_Action_FreeId(prefix)
+    if prefix=="hbTest_" then
         freeId=HealBot_ButtonSeq[1]
     else
         freeId=HealBot_ButtonSeq[0]
@@ -3696,24 +3682,31 @@ function HealBot_Action_FreeId(test)
     return freeId
 end
 
-function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
+function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
     HealBot_Action_luVars["CreatedButtons"]=HealBot_Action_luVars["CreatedButtons"]+1
-    if test then
+    if prefix=="hbTest_" then
         HealBot_ButtonSeq[1]=HealBot_ButtonSeq[1]+1
     else
         HealBot_ButtonSeq[0]=HealBot_ButtonSeq[0]+1
     end
-    local ghb=CreateFrame("Button", "HealBot_Action_HealUnit"..buttonId, grpFrame[hbCurFrame], "HealBotButtonSecureTemplate") 
+    local bName=prefix.."HealUnit"..buttonId
+    local ghb=CreateFrame("Button", bName, grpFrame[hbCurFrame], "HealBotButtonSecureTemplate") 
     HealBot_Buttons[buttonId]=ghb
     ghb.id=buttonId
+    ghb.bName=bName
     ghb.isEmerg=false
-    local ehb=CreateFrame("Button", "HB_Action_EmergUnit"..buttonId, grpFrame[hbCurFrame], "HealingButtonTemplateEmerg")
+    if prefix=="HealBot_" then
+        prefix="HB_"
+    end
+    bName=prefix.."EmergUnit"..buttonId
+    local ehb=CreateFrame("Button", bName, grpFrame[hbCurFrame], "HealingButtonTemplateEmerg")
     HealBot_Emerg_Button[buttonId]=ehb
     ehb.id=buttonId
+    ehb.bName=bName
     ehb.isEmerg=true
     local iBtns
     for x=1,12 do
-        iBtns=CreateFrame("Frame", "HealBot_Action_HealUnit"..buttonId.."Icon"..x, ghb)
+        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb)
         iBtns.id=buttonId
         iBtns:SetScript("OnEnter", function() HealBot_Options_BuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
@@ -3722,7 +3715,7 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
         iBtns:UnregisterAllEvents()
     end
     for x=51,60 do
-        iBtns=CreateFrame("Frame", "HealBot_Action_HealUnit"..buttonId.."Icon"..x, ghb)
+        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb)
         iBtns.id=buttonId
         iBtns:SetScript("OnEnter", function() HealBot_Options_DebuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
@@ -3730,8 +3723,8 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
         iBtns:SetFrameLevel(0)
         iBtns:UnregisterAllEvents()
     end
-    HealBot_Action_InitButton(ghb)
-    if not test then
+    HealBot_Action_InitButton(ghb, prefix)
+    if prefix~="hbTest_" then
         if buttonId>HealBot_Action_luVars["ButtonHWM"] then HealBot_Action_luVars["ButtonHWM"]=buttonId end
         ghb:HookScript("OnEnter", function(self) HealBot_Action_HealUnit_OnEnter(self) end);
         ghb:HookScript("OnLeave", function(self) HealBot_Action_HealUnit_OnLeave(self) end);
@@ -3743,12 +3736,12 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
     return ghb
 end
 
-function HealBot_Action_CreateButton(hbCurFrame, test)
-    local buttonId=HealBot_Action_FreeId(test)
-    if (test and buttonId<998) or (not test and buttonId<500) then 
-        local ghb=_G["HealBot_Action_HealUnit"..buttonId]
+function HealBot_Action_CreateButton(hbCurFrame, prefix)
+    local buttonId=HealBot_Action_FreeId(prefix)
+    if (prefix=="hbTest_" and buttonId<998) or (prefix~="hbTest_" and buttonId<500) then 
+        local ghb=_G[prefix.."HealUnit"..buttonId]
         if not ghb then
-            ghb=HealBot_Action_CreateNewButton(hbCurFrame, buttonId, test)
+            ghb=HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
             if ghb then
                 HealBot_Action_PrepButton(ghb)
             end
@@ -4966,7 +4959,7 @@ function HealBot_Action_PrepSetEnabledAttribs()
                 ghb.attribs["Enabled"]={}
                 ghb.binds["Enabled"]={}
             end
-            ehb= _G["HB_Action_EmergUnit"..i]
+            ehb=HealBot_Emerg_Button[i]
             if ehb then
                 ehb.attribs["Enabled"]={}
                 ehb.binds["Enabled"]={}
@@ -4986,7 +4979,7 @@ function HealBot_Action_PrepSetEnemyAttribs()
                 ghb.attribs["Enemy"]={}
                 ghb.binds["Enemy"]={}
             end
-            ehb= _G["HB_Action_EmergUnit"..i]
+            ehb=HealBot_Emerg_Button[i]
             if ehb then
                 ehb.attribs["Enemy"]={}
                 ehb.binds["Enemy"]={}
@@ -5007,7 +5000,7 @@ function HealBot_Action_PrepSetEmergAttribs()
                 ghb.attribs["Emerg"]={}
                 ghb.binds["Emerg"]={}
             end
-            ehb= _G["HB_Action_EmergUnit"..i]
+            ehb=HealBot_Emerg_Button[i]
             if ehb then
                 ehb.attribs["Emerg"]={}
                 ehb.binds["Emerg"]={}
@@ -5027,7 +5020,7 @@ function HealBot_Action_PrepSetAllAttribs()
                 ghb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
                 ghb.binds={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
             end
-            ehb= _G["HB_Action_EmergUnit"..i]
+            ehb=HealBot_Emerg_Button[i]
             if ehb then
                 ehb.attribs={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
                 ehb.binds={["Emerg"]={},["Enemy"]={},["Enabled"]={}}
@@ -5188,37 +5181,37 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
     if guid then
         if unitType<5 then
             if not HealBot_Action_Private_Button[unit] then 
-                HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") --"hbPrivate_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Private_Button[unit]
         elseif unitType==8 then
             if not HealBot_Action_Pet_Button[unit] then 
-                HealBot_Action_Pet_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Pet_Button[unit]=HealBot_Action_CreateButton(frame, "hbPet_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Pet_Button[unit]
         elseif unitType==7 then
             if not HealBot_Action_Vehicle_Button[unit] then 
-                HealBot_Action_Vehicle_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Vehicle_Button[unit]=HealBot_Action_CreateButton(frame, "hbVehicle_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Vehicle_Button[unit]
         elseif unitType>10 then
             if not HealBot_Action_Enemy_Button[unit] then 
-                HealBot_Action_Enemy_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Enemy_Button[unit]=HealBot_Action_CreateButton(frame, "hbEnemy_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Enemy_Button[unit]
         elseif unitType>8 then
             if not HealBot_Action_Extra_Button[unit] then 
-                HealBot_Action_Extra_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Extra_Button[unit]=HealBot_Action_CreateButton(frame, "hbExtra_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Extra_Button[unit]
         else
             if not HealBot_Action_Unit_Button[unit] then 
-                HealBot_Action_Unit_Button[unit]=HealBot_Action_CreateButton(frame) 
+                HealBot_Action_Unit_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Unit_Button[unit]
@@ -5594,7 +5587,7 @@ end
 local tButton=false
 function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
     if not HealBot_Test_Button[unitText] then
-        tButton=HealBot_Action_CreateButton(frame, true)
+        tButton=HealBot_Action_CreateButton(frame, "hbTest_")
         if tButton then
             tButton.icon.reset=true
             tButton.text.reset=true

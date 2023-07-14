@@ -1385,10 +1385,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         h.bar:SetPoint("CENTER",back,"CENTER",0,0)
         h:Disable();
     elseif barType=="hbfocus" then
-        tBarsConcat[1]="HealBot_Action_HealUnit"
-        tBarsConcat[2]=button.id
-        tBarsConcat[3]="Bar"
-        bar = _G[HealBot_Skins_Concat(3)]
+        bar = _G["hbExtra_HealUnit999"]
         bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
         bar:GetStatusBarTexture():SetHorizTile(false)
 

@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
