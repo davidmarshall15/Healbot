@@ -846,7 +846,13 @@ function HealBot_Aura_UpdateState(button)
             elseif button.status.incombat then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
             else
-                HealBot_UnitExtraIcons[button.id][93]["texture"]=button.icon.extra.readycheck
+                if button.icon.extra.readycheck==HealBot_ReadyCheckStatus["WAITING"] then
+                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Waiting"
+                elseif button.icon.extra.readycheck==HealBot_ReadyCheckStatus["NOTREADY"] then
+                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-NotReady"
+                else
+                    HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\RAIDFRAME\\ReadyCheck-Ready"
+                end
                 if HealBot_Panel_RaidUnitGUID(button.guid) then HealBot_Action_setGuidData(button, "READYCHECK", button.icon.extra.readycheck) end
             end
             HealBot_UnitExtraIcons[button.id][93].current=true
@@ -2266,18 +2272,22 @@ function HealBot_Aura_CureSpellOnCD()
     HealBot_Aura_luVars["cureOffCd"]=false
 end
 
-local dbV1UnitBosses={["boss1"]=true,["boss2"]=true,["boss3"]=true,["boss4"]=true}
-function HealBot_Aura_GetDebuffsV1(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
-    if uaUnitCaster and (UnitClassification(uaUnitCaster)=="worldboss" or dbV1UnitBosses[uaUnitCaster]) then
-        uaIsBossDebuff=true
+function HealBot_Aura_IsBoss(unit)
+    if unit and (UnitClassification(unit)=="worldboss" or (UnitClassification(unit) == 'elite' and UnitLevel(unit) == -1)) then
+        return true
     else
-        uaIsBossDebuff=false
+        return false
     end
 end
 
+function HealBot_Aura_GetDebuffsV1(button)
+    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
+    uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
+end
+
 function HealBot_Aura_GetDebuffsV2(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff = UnitDebuff(button.unit,uaZ)
+    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitDebuff(button.unit,uaZ)
+    uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
 end
 
 local HealBot_Aura_GetDebuffs=HealBot_Aura_GetDebuffsV2

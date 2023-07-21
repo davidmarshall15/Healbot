@@ -761,6 +761,11 @@ HealBot_Unit_Status={   ["DISABLED"]=0,
                         ["RESERVED"]=99,
 }
 
+HealBot_ReadyCheckStatus={   ["WAITING"]=0,
+                             ["READY"]=1,
+                             ["NOTREADY"]=2,
+}
+
 HealBot_Spell_IDs = {};
 HealBot_Spell_Names = {};
 HealBot_Unit_Button={};

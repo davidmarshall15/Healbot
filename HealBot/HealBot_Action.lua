@@ -2134,7 +2134,7 @@ function HealBot_Action_IsUnitDead(button, guid)
             return true
         end
     else
-        local xButton,pButton = HealBot_Panel_RaidUnitButton(guid)
+        local xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
         if (xButton and HealBot_Action_IsUnitDead(xButton)) or (pButton and HealBot_Action_IsUnitDead(pButton)) then
             return true
         end
@@ -5181,7 +5181,7 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
     if guid then
         if unitType<5 then
             if not HealBot_Action_Private_Button[unit] then 
-                HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") --"hbPrivate_") 
+                HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") 
                 hAttrib=preCombat
             end
             hButton=HealBot_Action_Private_Button[unit]
@@ -5548,7 +5548,7 @@ function HealBot_Action_UpdateTestButton(button)
             elseif (testBarsDat["cnt"] % 2 == 0) and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCOMBAT"] then
                 button.status.incombat=true
             elseif Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRC"] then
-                button.icon.extra.readycheck=READY_CHECK_WAITING_TEXTURE
+                button.icon.extra.readycheck=HealBot_ReadyCheckStatus["WAITING"]
             end
         elseif button.frame<8 then
             if (testBarsDat["cnt"] % 5 == 0) and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWHOSTILE"] then

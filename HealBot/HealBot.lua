@@ -35,8 +35,8 @@ local hbPrevGUIDs={}
 local HealBot_ItemsInBags={}
 local HealBot_AuxAssigns={}
 local HealBot_ClearGUIDQueue={}
-local hbLTfps={[1]="<20",[2]="<30",[3]="<40",[4]="<55",[5]="<70",[6]="<85",[7]="<100",
-               [8]="<120",[9]=">120",[10]=">120",[11]=">120",[12]=">120",[13]=">120",[14]=">120",}
+local hbLTfps={[1]="<20",[2]="<30",[3]="<40",[4]="<50",[5]="<60",[6]="<70",[7]="<85",
+               [8]="<100",[9]=">100",[10]=">100",[11]=">100",[12]=">100",[13]=">100",[14]=">100",}
 HealBot_AuxAssigns["CastBar"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_AuxAssigns["OORBar"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_AuxAssigns["Range30Bar"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
@@ -1521,7 +1521,7 @@ function HealBot_UnitClass(button)
             button.status.classknown=true
             button.text.classtrim = strsub(uuUnitClassEN,1,4)
             button.text.r,button.text.g,button.text.b=HealBot_Action_ClassColour(button.unit, button.text.classtrim)
-            if HealBot_Panel_RaidUnitGUID(button.guid) then
+            if HealBot_Panel_RaidPetUnitGUID(button.guid) then
                 guName=HealBot_customTempUserName[button.guid] or UnitName(button.unit) or false
                 if guName and guName~=HEALBOT_WORDS_UNKNOWN then
                     button.name=guName
@@ -2472,7 +2472,7 @@ function HealBot_UnitID(unit, incEnemy)
     if idButton or pidButton then
         return unit, idButton, pidButton
     end
-    idUnit=HealBot_Panel_RaidUnitGUID(UnitGUID(unit) or "x")
+    idUnit=HealBot_Panel_RaidPetUnitGUID(UnitGUID(unit) or "x")
     if idUnit and UnitIsUnit(unit,idUnit) then
         if HealBot_Unit_Button[idUnit] or HealBot_Private_Button[idUnit] then
             return idUnit, HealBot_Unit_Button[idUnit], HealBot_Private_Button[idUnit]
@@ -2807,15 +2807,15 @@ function HealBot_Update_CPUUsage()
             HealBot_Globals.CPUUsage=2
         elseif HealBot_Globals.FPS<40 then
             HealBot_Globals.CPUUsage=3
-        elseif HealBot_Globals.FPS<55 then
+        elseif HealBot_Globals.FPS<50 then
             HealBot_Globals.CPUUsage=4
-        elseif HealBot_Globals.FPS<70 then
+        elseif HealBot_Globals.FPS<60 then
             HealBot_Globals.CPUUsage=5
-        elseif HealBot_Globals.FPS<85 then
+        elseif HealBot_Globals.FPS<70 then
             HealBot_Globals.CPUUsage=6
-        elseif HealBot_Globals.FPS<100 then
+        elseif HealBot_Globals.FPS<85 then
             HealBot_Globals.CPUUsage=7
-        elseif HealBot_Globals.FPS<120 then
+        elseif HealBot_Globals.FPS<100 then
             HealBot_Globals.CPUUsage=8
         else
             HealBot_Globals.CPUUsage=9
@@ -4007,7 +4007,7 @@ function HealBot_OnEvent_EnemyUnitHealth(button)
 end
 
 function HealBot_Plugin_TTDUpdate(guid)
-    xButton,pButton = HealBot_Panel_RaidUnitButton(guid)
+    xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
     if xButton and xButton.status.plugin then
         HealBot_Plugin_TimeToDie_UnitUpdate(xButton, xButton.health.current)
     elseif pButton and pButton.status.plugin then
@@ -4757,7 +4757,7 @@ function HealBot_OnEvent_Combat_Log()
                 LogAbsorbAmount=0
             end
             if LogAbsorbAmount>0 then
-                xButton,pButton = HealBot_Panel_RaidUnitButton(LogDestGUID)
+                xButton,pButton = HealBot_Panel_RaidPetUnitButton(LogDestGUID)
                 if xButton then HealBot_Classic_AbsorbsUpdate(xButton, LogAbsorbAmount) end
                 if pButton then HealBot_Classic_AbsorbsUpdate(pButton, LogAbsorbAmount) end
             end
@@ -4766,7 +4766,7 @@ function HealBot_OnEvent_Combat_Log()
     
     if HealBot_Data["PGUID"]==LogSourceGUID then
         if LogEvent=="SPELL_HEAL" then
-            xButton,pButton = HealBot_Panel_RaidUnitButton(LogDestGUID)
+            xButton,pButton = HealBot_Panel_RaidPetUnitButton(LogDestGUID)
             if xButton then HealBot_Update_RecentHealsBar(xButton) end
             if pButton then HealBot_Update_RecentHealsBar(pButton) end
         end
@@ -5272,7 +5272,7 @@ function HealBot_CalcThreat(button)
 end
 
 function HealBot_Plugin_ThreatUpdate(guid)
-    xButton,pButton = HealBot_Panel_RaidUnitButton(guid)
+    xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
     if xButton and xButton.status.plugin then
         HealBot_CalcThreat(xButton)
         HealBot_Plugin_Threat_UnitUpdate(xButton)
@@ -5924,7 +5924,7 @@ end
 
 function HealBot_SetUnitName(name, hbGUID)
     HealBot_customTempUserName[hbGUID]=name
-    xButton,pButton = HealBot_Panel_RaidUnitButton(hbGUID)
+    xButton,pButton = HealBot_Panel_RaidPetUnitButton(hbGUID)
     if xButton then
         xButton.name=name
         HealBot_Action_setGuidData(xButton, "NAME", name)
@@ -5939,7 +5939,7 @@ end
 
 function HealBot_DelUnitName(hbGUID)
     HealBot_customTempUserName[hbGUID]=nil
-    xButton,pButton = HealBot_Panel_RaidUnitButton(hbGUID)
+    xButton,pButton = HealBot_Panel_RaidPetUnitButton(hbGUID)
     if xButton and UnitExists(xButton.unit) then
         xButton.name=UnitName(xButton.unit)
         HealBot_Action_setGuidData(xButton, "NAME", xButton.name) 
@@ -6024,18 +6024,17 @@ end
 function HealBot_OnEvent_ReadyCheckUpdate(button,response)
     if HealBot_luVars["rcEnd"] and button.isplayer and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWRC"] then
         if response then
-            button.icon.extra.readycheck=READY_CHECK_READY_TEXTURE
-            HealBot_Aura_UpdateState(button)
+            button.icon.extra.readycheck=HealBot_ReadyCheckStatus["READY"]
         else
-            button.icon.extra.readycheck=READY_CHECK_NOT_READY_TEXTURE
-            HealBot_Aura_UpdateState(button)
+            button.icon.extra.readycheck=HealBot_ReadyCheckStatus["NOTREADY"]
         end
+        HealBot_Aura_UpdateState(button)
     end
       --HealBot_setCall("HealBot_OnEvent_ReadyCheckUpdate")
 end
 
 function HealBot_ReadyCheckUnit(button)
-    if HealBot_luVars["rcEnd"] and button.isplayer and HealBot_luVars["rcEnd"]>HealBot_TimeNow then
+    if HealBot_luVars["rcEnd"] and button.isplayer and HealBot_Panel_RaidUnitGUID(button.guid) and HealBot_luVars["rcEnd"]>HealBot_TimeNow then
         button.icon.extra.readycheck=HealBot_Action_getGuidData(button.guid, "READYCHECK")
     else
         button.icon.extra.readycheck=false
@@ -6062,13 +6061,13 @@ function HealBot_OnEvent_ReadyCheck(unitName,timer)
         HealBot_luVars["rcEnd"]=HealBot_TimeNow+timer
         for _,xButton in pairs(HealBot_Unit_Button) do
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then 
-                xButton.icon.extra.readycheck=READY_CHECK_WAITING_TEXTURE
+                xButton.icon.extra.readycheck=HealBot_ReadyCheckStatus["WAITING"]
                 HealBot_Aura_UpdateState(xButton)
             end
         end
         for _,xButton in pairs(HealBot_Private_Button) do
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][xButton.frame]["SHOWRC"] then
-                xButton.icon.extra.readycheck=READY_CHECK_WAITING_TEXTURE
+                xButton.icon.extra.readycheck=HealBot_ReadyCheckStatus["WAITING"]
                 HealBot_Aura_UpdateState(xButton)
             end
         end

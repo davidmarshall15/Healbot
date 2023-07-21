@@ -1580,7 +1580,12 @@ function HealBot_Panel_TestBarsOn()
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_PETHEALS_en and hbCurrentFrame<6 then
             if HealBot_Globals.TestBars["PETS"]>0 and healGroups[gl]["STATE"] then
-                HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
+                if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] and HealBot_Globals.TestBars["PETS"]>5 then
+                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS.." 1",HEALBOT_WORD_PET,1,5)
+                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS.." 2",HEALBOT_WORD_PET,6,HealBot_Globals.TestBars["PETS"])
+                else
+                    HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
+                end
             end
         elseif healGroups[gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en and hbCurrentFrame<6 then
             if healGroups[gl]["STATE"] then
@@ -1653,7 +1658,12 @@ function HealBot_Panel_TestBarsOn()
         for x,_ in pairs(HealBot_Action_HealButtons) do
             HealBot_Action_HealButtons[x]=nil;
         end 
-        HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
+        if Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["GROUPPETS"] and HealBot_Globals.TestBars["PETS"]>5 then
+            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS.." 1",HEALBOT_WORD_PET,1,5)
+            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS.." 2",HEALBOT_WORD_PET,6,HealBot_Globals.TestBars["PETS"])
+        else
+            HealBot_Panel_testAddButton(HEALBOT_OPTIONS_PETHEALS,HEALBOT_WORD_PET,1,HealBot_Globals.TestBars["PETS"])
+        end
         HealBot_Panel_SetupExtraBars(7, true)
     else
         HealBot_Action_HidePanel(7)
@@ -2841,7 +2851,7 @@ function HealBot_Panel_focusHeal(isOn)
 end
 
 function HealBot_Panel_RaidUnitGUID(guid)
-    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] 
+    return hbPanel_dataGUIDs[guid]
 end
 
 local ruxUnit, ruxButton, rupButton
@@ -2849,6 +2859,20 @@ function HealBot_Panel_RaidUnitButton(guid)
     ruxUnit=HealBot_Panel_RaidUnitGUID(guid)
     if ruxUnit then
         _, ruxButton, rupButton = HealBot_UnitID(ruxUnit)
+        return ruxButton, rupButton
+    else
+        return nil
+    end
+end
+
+function HealBot_Panel_RaidPetUnitGUID(guid)
+    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] 
+end
+
+function HealBot_Panel_RaidPetUnitButton(guid)
+    ruxUnit=HealBot_Panel_RaidPetUnitGUID(guid)
+    if ruxUnit then
+        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit, true)
         return ruxButton, rupButton
     else
         return nil
