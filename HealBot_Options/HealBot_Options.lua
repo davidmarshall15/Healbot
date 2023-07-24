@@ -5044,7 +5044,7 @@ function HealBot_Options_BuffTimer_OnValueChanged(self,bufftype)
             g=_G[self:GetName()]
             HealBot_Options_SetText(g,self.text .. ": " .. mins ..":".. secs .." mins")
         end
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_AOTimers_Set("AURA","CheckUnits")
     end
 end
 
@@ -6123,8 +6123,8 @@ function HealBot_Options_CDCCol_DropDown()
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Aura_ClearAllDebuffs()
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_AOTimers_Set("AURA","CheckUnits")
+                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6181,8 +6181,8 @@ function HealBot_Options_BuffDefaultBarColour_DropDown()
                             UIDropDownMenu_SetText(HealBot_Options_BuffDefaultBarColour,HealBot_Options_Lists["AuraBarCol"][self:GetID()])
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_AOTimers_Set("AURA","CheckUnits")
+                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6203,8 +6203,8 @@ function HealBot_Options_CDCDefaultBarColour_DropDown()
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Aura_ClearAllDebuffs()
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_AOTimers_Set("AURA","CheckUnits")
+                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6229,8 +6229,8 @@ function HealBot_Options_CustomBuffCol_DropDown()
                             end
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_AOTimers_Set("AURA","CheckUnits")
+                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -11626,7 +11626,7 @@ function HealBot_Options_GlowFrame_DropDown()
                         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] ~= self:GetID() then
                             Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] = self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_GlowFrame,HealBot_Options_Lists["GlowFrame"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"]]) 
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -15426,7 +15426,7 @@ function HealBot_Options_DebuffIconColUpdate(spellId, col)
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Aura_ClearAllDebuffs()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_AOTimers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -15608,7 +15608,7 @@ function HealBot_Options_BuffIconPrioUpdate(spellId, prio)
         HealBot_Globals.HealBot_Custom_Buffs[sName]=prio
     end
     HealBot_Aura_ResetBuffCache()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_AOTimers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -15618,7 +15618,7 @@ function HealBot_Options_BuffIconColUpdate(spellId, col)
     if sName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]=col end
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_AOTimers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
