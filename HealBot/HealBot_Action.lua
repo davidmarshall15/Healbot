@@ -2911,6 +2911,7 @@ function HealBot_Action_InitFrames()
             grpFrameBar[x]:SetScale(barScale + 0.01);
             grpFrameBar[x]:SetScale(barScale);
             grpFrameBar[x]:EnableMouse(false)
+            grpFrameBar[x]:UnregisterAllEvents()
             grpFrameText[x]=grpFrameBar[x]:CreateFontString("f"..x.."_HealBot_Action_Title", "ARTWORK", "GameFontNormal")
             for y=1,12 do
                 if not grpFrameStickyInd[x] then grpFrameStickyInd[x]={} end
@@ -2920,6 +2921,8 @@ function HealBot_Action_InitFrames()
                 grpFrameStickyInd[x][y]:SetPoint(StickIndPoints[y],grpFrame[x],FrameStickIndPoints[y])
                 grpFrameStickyInd[x][y]:SetMinMaxValues(0,100);
                 grpFrameStickyInd[x][y]:SetValue(100);
+                grpFrameStickyInd[x][y]:EnableMouse(false)
+                grpFrameStickyInd[x][y]:UnregisterAllEvents()
                 if (y>3 and y<7) or (y>9) then
                     grpFrameStickyInd[x][y]:SetOrientation("VERTICAL")
                     grpFrameStickyInd[x][y]:SetHeight(32);
@@ -3180,18 +3183,15 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref.indicator.power={}
     HealBot_Aura_InitUnitAuraCurrent(button.id)
     button.gref["Bar"]=_G[button.bName.."Bar"]
-    button.gref["Bar"]:UnregisterAllEvents()
     button.gref["Bar"]:SetMinMaxValues(0,1000)
     erButton.bar=_G[erButton.bName.."Bar"]
     erButton.bar:UnregisterAllEvents()
     erButton.bar:SetMinMaxValues(0,1)
     erButton.bar:SetValue(1)
     button.gref["InHeal"]=_G[button.bName.."Bar2"]
-    button.gref["InHeal"]:UnregisterAllEvents()
     button.gref["InHeal"]:SetMinMaxValues(0,1000)
     button.gref["InHeal"]:SetValue(0)
     button.gref["Back"]=_G[button.bName.."Bar5"]
-    button.gref["Back"]:UnregisterAllEvents()
     button.gref["Back"]:SetValue(100)
     button.gref["Back"]:SetMinMaxValues(0,100)
     button.gref["Back"]:SetStatusBarTexture("Interface\\Buttons\\WHITE8X8");
@@ -3199,24 +3199,29 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["BackBorder"]=CreateFrame("Frame", "HealBot_BarBackBorder_"..button.id , button.gref["Back"], BackdropTemplateMixin and "BackdropTemplate")
     button.gref["BackBorder"].size=0
     button.gref["Top"]=_G[button.bName.."Bar7"]
-    button.gref["Top"]:UnregisterAllEvents()
     button.gref["Top"]:SetValue(100)
     button.gref["Top"]:SetMinMaxValues(0,100)
     button.gref["Top"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["IconTop"]=_G[button.bName.."Bar8"]
-    button.gref["IconTop"]:UnregisterAllEvents()
     button.gref["IconTop"]:SetValue(100)
     button.gref["IconTop"]:SetMinMaxValues(0,100)
     button.gref["IconTop"]:SetStatusBarColor(0, 0, 0, 0)
     button.gref["Absorb"]=_G[button.bName.."Bar6"]
-    button.gref["Absorb"]:UnregisterAllEvents()
     button.gref["Absorb"]:SetMinMaxValues(0,1000)
     button.gref["Absorb"]:SetValue(0)            
     button:SetFrameLevel(20); 
     button.gref["Back"]:SetFrameLevel(button:GetFrameLevel()+ 1)
+    button.gref["Back"]:UnregisterAllEvents()
+    button.gref["Back"]:EnableMouse(false)
     button.gref["Top"]:SetFrameLevel(button:GetFrameLevel()+30)
+    button.gref["Top"]:UnregisterAllEvents()
+    button.gref["Top"]:EnableMouse(false)
     button.gref["BackBorder"]:SetFrameLevel(80)
+    button.gref["BackBorder"]:UnregisterAllEvents()
+    button.gref["BackBorder"]:EnableMouse(false)
     button.gref["IconTop"]:SetFrameLevel(100)
+    button.gref["IconTop"]:UnregisterAllEvents()
+    button.gref["IconTop"]:EnableMouse(false)
     button.gref["BackBorder"]:SetBackdrop({
                                            edgeFile = "Interface\\Buttons\\WHITE8X8",
                                            edgeSize = 1, 
@@ -3231,10 +3236,14 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref["BackBorder"].mask:Show()
     
     button.gref["Absorb"]:SetFrameLevel(button.gref["Back"]:GetFrameLevel()+ 1)
+    button.gref["Absorb"]:UnregisterAllEvents()
+    button.gref["Absorb"]:EnableMouse(false)
     button.gref["InHeal"]:SetFrameLevel(button.gref["Absorb"]:GetFrameLevel()+ 1)
+    button.gref["InHeal"]:UnregisterAllEvents()
+    button.gref["InHeal"]:EnableMouse(false)
     button.gref["Bar"]:SetFrameLevel(button.gref["InHeal"]:GetFrameLevel()+ 1)
-    erButton:SetFrameLevel(button:GetFrameLevel()+20)
-    erButton.bar:SetFrameLevel(button.gref["Top"]:GetFrameLevel()-1)
+    button.gref["Bar"]:UnregisterAllEvents()
+    button.gref["Bar"]:EnableMouse(false)
     button:Enable();
     erButton:Enable();
     for x=1,9 do
@@ -3242,6 +3251,7 @@ function HealBot_Action_InitButton(button, prefix)
         button.gref.aux[x]:UnregisterAllEvents()
         button.gref.aux[x]:SetMinMaxValues(0,1000)
         button.gref.aux[x]:SetFrameLevel(button.gref["Bar"]:GetFrameLevel()+x)
+        button.gref.aux[x]:EnableMouse(false)
         button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
         button.gref.auxtxt[x]:SetSpacing(0)
         button.gref.auxtxt[x]:SetWordWrap(false)
@@ -3262,6 +3272,9 @@ function HealBot_Action_InitButton(button, prefix)
     for x=1,12 do
         button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
         button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
+        button.gref.iconf[x]:EnableMouse(false)
+        button.gref.iconf[x]:UnregisterAllEvents()
+        button.gref.iconf[x]:SetFrameLevel(0)
         if button.id<500 then
             button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
             button.gref.iconh[x]:SetFrameLevel(101)
@@ -3273,6 +3286,7 @@ function HealBot_Action_InitButton(button, prefix)
             button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
             button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
             button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
+            button.gref.iconh[x]:EnableMouse(false)
             button.gref.iconh[x]:UnregisterAllEvents()
         end
         button.glow.icon[x]=0
@@ -3280,6 +3294,9 @@ function HealBot_Action_InitButton(button, prefix)
     for x=51,60 do
         button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
         button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
+        button.gref.iconf[x]:EnableMouse(false)
+        button.gref.iconf[x]:UnregisterAllEvents()
+        button.gref.iconf[x]:SetFrameLevel(0)
         if button.id<500 then
             button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
             button.gref.iconh[x]:SetFrameLevel(101)
@@ -3291,6 +3308,7 @@ function HealBot_Action_InitButton(button, prefix)
             button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
             button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
             button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
+            button.gref.iconh[x]:EnableMouse(false)
             button.gref.iconh[x]:UnregisterAllEvents()
         end
         button.glow.icon[x]=0
@@ -3712,6 +3730,7 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_BuffClick(ghb, x, button) end)
         iBtns:SetFrameLevel(0)
+        iBtns:EnableMouse(false)
         iBtns:UnregisterAllEvents()
     end
     for x=51,60 do
@@ -3721,6 +3740,7 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_DebuffClick(ghb, x, button) end)
         iBtns:SetFrameLevel(0)
+        iBtns:EnableMouse(false)
         iBtns:UnregisterAllEvents()
     end
     HealBot_Action_InitButton(ghb, prefix)
@@ -4166,10 +4186,10 @@ function HealBot_Action_AttribEmergSpellPattern(HB_combo_prefix)
     vAttribSpellName = HealBot_Action_GetSpell("EMERG", HB_combo_prefix)
     if vAttribSpellName then
         return vAttribSpellName, 
-               HealBot_Config_Spells.EnemySpellTarget[HB_combo_prefix], 
-               HealBot_Config_Spells.EnemySpellTrinket1[HB_combo_prefix], 
-               HealBot_Config_Spells.EnemySpellTrinket2[HB_combo_prefix], 
-               HealBot_Config_Spells.EnemyAvoidBlueCursor[HB_combo_prefix]
+               HealBot_Config_Spells.EmergSpellTarget[HB_combo_prefix], 
+               HealBot_Config_Spells.EmergSpellTrinket1[HB_combo_prefix], 
+               HealBot_Config_Spells.EmergSpellTrinket2[HB_combo_prefix], 
+               HealBot_Config_Spells.EmergAvoidBlueCursor[HB_combo_prefix]
     else
         return false, false, false, false, false 
     end
@@ -4646,6 +4666,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
     if HealBot_Globals.MacroSuppressError then smName=smName..'/hb se4\n' end
     smName=smName..scText
     if spellAvoidBC then smName=smName.."/use 4\n" end
+    if spellTar and HealBot_Config_Spells.SpellTargetLastTarget[cType] then smName=smName.."/targetlasttarget\n" end
     --HealBot_setCall("HealBot_Action_AlterSpell2Macro")
     return smName
 end

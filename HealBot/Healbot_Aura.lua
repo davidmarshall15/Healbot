@@ -797,6 +797,19 @@ function HealBot_Aura_DebuffAddIcon(button, index)
       --HealBot_setCall("HealBot_Aura_DebuffAddIcon")
 end
 
+local hbAuraWatchRaidTarget={}
+function HealBot_Aura_AuraWatchRaidTarget(id, state)
+    if state then
+        hbAuraWatchRaidTarget[id]=true
+    else
+        hbAuraWatchRaidTarget[id]=nil
+    end
+end
+
+function HealBot_Aura_AuraWatchRaidTargetClear()
+    hbAuraWatchRaidTarget={}
+end
+
 local rtuPrevId=false
 function HealBot_Aura_RaidTargetUpdate(button, iconID)
     rtuPrevId=button.icon.extra.targeticon
@@ -809,6 +822,9 @@ function HealBot_Aura_RaidTargetUpdate(button, iconID)
             HealBot_UnitExtraIcons[button.id][92]["texture"]=HealBot_TargetIconsTextures[button.icon.extra.targeticon]
             HealBot_UnitExtraIcons[button.id][92].current=true
             HealBot_Aura_AddExtraIcon(button, 92)
+        end
+        if hbAuraWatchRaidTarget[button.id] then
+            HealBot_Plugin_AuraWatch_RaidTargetUpdate(button)
         end
     end
         --HealBot_setCall("HealBot_Aura_RaidTargetUpdate")
@@ -1007,6 +1023,7 @@ function HealBot_Aura_SetDebuffIcon()
     return true
 end
 
+local debuffIconIdx,debuffIconPrio=0,0
 function HealBot_Aura_SortDebuffIcons(button)
     button.icon.debuff.count[1]=#debuffSort[1]
     if button.icon.debuff.count[1]>0 then
@@ -1017,6 +1034,10 @@ function HealBot_Aura_SortDebuffIcons(button)
         for j=1, button.icon.debuff.count[1], 1 do
             HealBot_Aura_CacheDebuffIcon(button, 50+j, debuffAuraCache[debuffSort[1][j]]["spellId"], debuffSort[1][j])
         end
+        debuffIconIdx=51
+        debuffIconPrio=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][51]["spellId"]]["priority"]
+    else
+        debuffIconIdx,debuffIconPrio=0,21
     end
     button.icon.debuff.count[2]=#debuffSort[2]
     if button.icon.debuff.count[2]>0 then
@@ -1027,6 +1048,10 @@ function HealBot_Aura_SortDebuffIcons(button)
         for j=1, button.icon.debuff.count[2], 1 do
             HealBot_Aura_CacheDebuffIcon(button, 56+j, debuffAuraCache[debuffSort[2][j]]["spellId"], debuffSort[2][j])
         end
+        if HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][57]["spellId"]]["priority"]<debuffIconPrio then
+            debuffIconIdx=57
+            debuffIconPrio=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][57]["spellId"]]["priority"]
+        end
     end
     button.icon.debuff.count[3]=#debuffSort[3]
     if button.icon.debuff.count[3]>0 then
@@ -1036,6 +1061,9 @@ function HealBot_Aura_SortDebuffIcons(button)
         end
         for j=1, button.icon.debuff.count[3], 1 do
             HealBot_Aura_CacheDebuffIcon(button, 58+j, debuffAuraCache[debuffSort[3][j]]["spellId"], debuffSort[3][j])
+        end
+        if HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][59]["spellId"]]["priority"]<debuffIconPrio then
+            debuffIconIdx=59
         end
     end
 end
@@ -1358,6 +1386,7 @@ function HealBot_Aura_SetBuffIcon()
       --HealBot_setCall("HealBot_Aura_SetBuffIcon")
 end
 
+local buffIconIdx,buffIconPrio=0,0
 function HealBot_Aura_SortBuffIcons(button)
     button.icon.buff.count[1]=#buffSort[1]
     if button.icon.buff.count[1]>0 then
@@ -1368,6 +1397,10 @@ function HealBot_Aura_SortBuffIcons(button)
         for j=1, button.icon.buff.count[1], 1 do
             HealBot_Aura_CacheBuffIcon(button, j, buffAuraCache[buffSort[1][j]]["spellId"], buffSort[1][j])
         end
+        buffIconIdx=1
+        buffIconPrio=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][1]["spellId"]]["priority"]
+    else
+        buffIconIdx,buffIconPrio=0,21
     end
     button.icon.buff.count[2]=#buffSort[2]
     if button.icon.buff.count[2]>0 then
@@ -1378,6 +1411,10 @@ function HealBot_Aura_SortBuffIcons(button)
         for j=1, button.icon.buff.count[2], 1 do
             HealBot_Aura_CacheBuffIcon(button, j+8, buffAuraCache[buffSort[2][j]]["spellId"], buffSort[2][j])
         end
+        if HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][9]["spellId"]]["priority"]<buffIconPrio then
+            buffIconIdx=9
+            buffIconPrio=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][9]["spellId"]]["priority"]
+        end
     end
     button.icon.buff.count[3]=#buffSort[3]
     if button.icon.buff.count[3]>0 then
@@ -1387,6 +1424,9 @@ function HealBot_Aura_SortBuffIcons(button)
         end
         for j=1, button.icon.buff.count[3], 1 do
             HealBot_Aura_CacheBuffIcon(button, j+10, buffAuraCache[buffSort[3][j]]["spellId"], buffSort[3][j])
+        end
+        if HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][11]["spellId"]]["priority"]<buffIconPrio then
+            buffIconIdx=11
         end
     end
 end
@@ -2171,35 +2211,7 @@ function HealBot_Aura_CheckUnitBuffOverDebuff(button)
     end
 end
 
-local buffP1,buffP9,buffP11=0,0,0
-function HealBot_Aura_CheckUnitBuffPrio(button)
-    if HealBot_UnitBuffIcons[button.id][1].current then
-        buffP1=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][1]["spellId"]]["priority"]
-    else
-        buffP1=21
-    end
-    if HealBot_UnitBuffIcons[button.id][9].current then
-        buffP9=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][9]["spellId"]]["priority"]
-    else
-        buffP9=21
-    end
-    if HealBot_UnitBuffIcons[button.id][11].current then
-        buffP11=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][11]["spellId"]]["priority"]
-    else
-        buffP11=21
-    end
-    if buffP1<buffP9 and buffP1<buffP11 then
-        return 1
-    elseif buffP9<buffP1 and buffP9<buffP11 then
-        return 9
-    elseif buffP11<buffP1 and buffP11<buffP9 then
-        return 11
-    else
-        return 0
-    end
-end
-
-local buffBarCol,buffPrio,buffIconIdx=0,99,0
+local buffBarCol,buffPrio=0,99
 function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
@@ -2248,7 +2260,6 @@ function HealBot_Aura_CheckUnitBuffs(button)
             HealBot_Aura_CheckUnitBuffIcons(button)
            
             if not curBuffName then
-                buffIconIdx=HealBot_Aura_CheckUnitBuffPrio(button)
                 if buffIconIdx>0 then
                     button.aura.buff.id=HealBot_UnitBuffIcons[button.id][buffIconIdx]["spellId"]
                     curBuffName=HealBot_AuraBuffCache[button.aura.buff.id]["name"]
@@ -2395,35 +2406,7 @@ if HEALBOT_GAME_VERSION>8 then
     HealBot_Aura_CheckDebuffs=HealBot_Aura_CheckDebuffsV9
 end
 
-local debuffP51,debuffP57,debuffP59=0,0,0
-function HealBot_Aura_CheckUnitDebuffPrio(button)
-    if HealBot_UnitDebuffIcons[button.id][51].current then
-        debuffP51=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][51]["spellId"]]["priority"]
-    else
-        debuffP51=21
-    end
-    if HealBot_UnitDebuffIcons[button.id][57].current then
-        debuffP57=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][57]["spellId"]]["priority"]
-    else
-        debuffP57=21
-    end
-    if HealBot_UnitDebuffIcons[button.id][59].current then
-        debuffP59=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][59]["spellId"]]["priority"]
-    else
-        debuffP59=21
-    end
-    if debuffP51<debuffP57 and debuffP51<debuffP59 then
-        return 51
-    elseif debuffP57<debuffP51 and debuffP57<debuffP59 then
-        return 57
-    elseif debuffP59<debuffP51 and debuffP59<debuffP57 then
-        return 59
-    else
-        return 0
-    end
-end
-
-local debuffBarCol,debuffIconIdx=0,0
+local debuffBarCol=0
 function HealBot_Aura_CheckUnitDebuffs(button)
     for z=1,3 do
         HealBot_Aura_prevIconCount["DEBUFF"][z]=button.icon.debuff.count[z]
@@ -2446,7 +2429,6 @@ function HealBot_Aura_CheckUnitDebuffs(button)
         if debuffCheck then
             HealBot_Aura_SortDebuffIcons(button)
             HealBot_Aura_CheckUnitDebuffIcons(button)
-            debuffIconIdx=HealBot_Aura_CheckUnitDebuffPrio(button)
             if debuffIconIdx>0 then
                 button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][debuffIconIdx]["spellId"]
                 button.aura.debuff.priority=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][debuffIconIdx]["spellId"]]["priority"]

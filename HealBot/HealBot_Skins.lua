@@ -445,10 +445,16 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      HealBot_Skins_setEmergAnchor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["ANCHOR"]),
                                      ceil(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["HOFFSET"]*frameScale),
                                      ceil(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][b.frame]["VOFFSET"]*frameScale))
+                erButton:SetFrameLevel(b:GetFrameLevel()+20)
+                erButton.bar:SetFrameLevel(b.gref["Top"]:GetFrameLevel()-1)
+                erButton:EnableMouse(true)
                 --erButton:Show()
             else
                 erButton.bar:ClearAllPoints()
                 erButton.bar:SetStatusBarColor(0,0,0,0)
+                erButton:SetFrameLevel(1)
+                erButton.bar:SetFrameLevel(1)
+                erButton:EnableMouse(false)
             end
 
             tBarsConcat[1]="f"

@@ -1264,7 +1264,6 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                         elseif dat=="true" then
                             Healbot_Config_Skins[varName][skinName][key][var]=true  
                         else
-                            HealBot_AddDebug("Import key="..key.." var="..var.." dat="..dat,"Import",true)
                             Healbot_Config_Skins[varName][skinName][key][var]=dat
                         end
                     end

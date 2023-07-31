@@ -194,31 +194,34 @@ local OptionThemes={[1]={["egdeFile"]="Interface\\DialogFrame\\UI-DialogBox-Gold
                    [17]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_DRUID
                          ["TitleBox"]="",
                          ["R"]=1,["G"]=0.49,["B"]=0.04,["A"]=1,["Classic"]=false},
-                   [18]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_HUNTER
+                   [18]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_EVOKER
+                         ["TitleBox"]="",
+                         ["R"]=0.22,["G"]=0.59,["B"]=0.49,["A"]=1,["Classic"]=false},
+                   [19]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_HUNTER
                          ["TitleBox"]="",
                          ["R"]=0.67,["G"]=0.83,["B"]=0.45,["A"]=1,["Classic"]=false},
-                   [19]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_MAGE
+                   [20]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_MAGE
                          ["TitleBox"]="",
                          ["R"]=0.25,["G"]=0.78,["B"]=0.92,["A"]=1,["Classic"]=false},
-                   [20]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_MONK
+                   [21]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_MONK
                          ["TitleBox"]="",
                          ["R"]=0,["G"]=1,["B"]=0.59,["A"]=1,["Classic"]=false},
-                   [21]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_PALADIN
+                   [22]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_PALADIN
                          ["TitleBox"]="",
                          ["R"]=0.96,["G"]=0.55,["B"]=0.73,["A"]=1,["Classic"]=false},
-                   [22]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_PRIEST
+                   [23]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_PRIEST
                          ["TitleBox"]="",
                          ["R"]=1,["G"]=1,["B"]=1,["A"]=1,["Classic"]=false},
-                   [23]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_ROGUE
+                   [24]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_ROGUE
                          ["TitleBox"]="",
                          ["R"]=1,["G"]=0.96,["B"]=0.41,["A"]=1,["Classic"]=false},
-                   [24]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_SHAMAN
+                   [25]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_SHAMAN
                          ["TitleBox"]="",
                          ["R"]=0,["G"]=0.44,["B"]=0.87,["A"]=1,["Classic"]=false},
-                   [25]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_WARLOCK
+                   [26]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_WARLOCK
                          ["TitleBox"]="",
                          ["R"]=0.53,["G"]=0.53,["B"]=0.93,["A"]=1,["Classic"]=false},
-                   [26]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_WARRIOR
+                   [27]={["egdeFile"]="Interface\\Tooltips\\UI-Tooltip-Border", ["egdeSize"]=22, --    HEALBOT_WARRIOR
                          ["TitleBox"]="",
                          ["R"]=0.78,["G"]=0.61,["B"]=0.43,["A"]=1,["Classic"]=false},
                     }
@@ -1303,6 +1306,7 @@ function HealBot_Options_setLists()
         HEALBOT_DEATHKNIGHT,
         HEALBOT_DEMONHUNTER,
         HEALBOT_DRUID,
+        HEALBOT_EVOKER,
         HEALBOT_HUNTER,
         HEALBOT_MAGE,
         HEALBOT_MONK,
@@ -8690,6 +8694,13 @@ function HealBot_Options_UseIconCmds_OnClick(self)
     end
 end
 
+function HealBot_Options_SpellTargetLastTarget_OnClick(self)
+    if HealBot_Config_Spells.SpellTargetLastTarget[HealBot_Options_luVars["ActionBarsComboTxt"]]~=self:GetChecked() then
+        HealBot_Config_Spells.SpellTargetLastTarget[HealBot_Options_luVars["ActionBarsComboTxt"]]=self:GetChecked()
+        HealBot_SpellAutoButton_PrepAttribs()
+    end
+end
+
 --------------------------------------------------------------------------------
 
 function HealBot_Options_SkinsSetCastModifierId()
@@ -10178,6 +10189,7 @@ end
 --------------------------------------------------------------------------------
 
 HealBot_Options_luVars["ActionBarsCombo"]=1
+HealBot_Options_luVars["ActionBarsComboTxt"]="Enabled"
 HealBot_Options_luVars["hbIconHelpSelectID"]=0
 function HealBot_Options_ActionBarsCombo_DropDown()
     local info = UIDropDownMenu_CreateInfo()
@@ -10185,6 +10197,13 @@ function HealBot_Options_ActionBarsCombo_DropDown()
         info.text = HealBot_Options_ActionBarsCombo_List[j];
         info.func = function(self)
                         HealBot_Options_luVars["ActionBarsCombo"] = self:GetID()
+                        if HealBot_Options_luVars["ActionBarsCombo"]==1 then
+                            HealBot_Options_luVars["ActionBarsComboTxt"]="Enabled"
+                        elseif HealBot_Options_luVars["ActionBarsCombo"]==2 then
+                            HealBot_Options_luVars["ActionBarsComboTxt"]="Enemy"
+                        elseif HealBot_Options_luVars["ActionBarsCombo"]==3 then
+                            HealBot_Options_luVars["ActionBarsComboTxt"]="Emerg"
+                        end
                         UIDropDownMenu_SetText(HealBot_Options_ActionBarsCombo,HealBot_Options_ActionBarsCombo_List[HealBot_Options_luVars["ActionBarsCombo"]]) 
                         HealBot_Options_ComboClass_Text();
                         if HealBot_Options_luVars["ActionBarsCombo"]<4 and HealBot_Options_luVars["hbIconHelpSelectID"]>0 then
@@ -10226,6 +10245,7 @@ function HealBot_Options_ComboClass_Text()
         HealBot_CtrlSpellAutoTarget:Hide()
         HealBot_AltSpellAutoTarget:Hide()
         HealBot_CtrlShiftSpellAutoTarget:Hide()
+        HealBot_Options_SpellTargetLastTarget:Hide()
         HealBot_SpellAutoTrinket1:Hide()
         HealBot_ShiftSpellAutoTrinket1:Hide()
         HealBot_CtrlSpellAutoTrinket1:Hide()
@@ -10258,6 +10278,7 @@ function HealBot_Options_ComboClass_Text()
         HealBot_CtrlSpellAutoTarget:Show()
         HealBot_AltSpellAutoTarget:Show()
         HealBot_CtrlShiftSpellAutoTarget:Show()
+        HealBot_Options_SpellTargetLastTarget:Show()
         HealBot_SpellAutoTrinket1:Show()
         HealBot_ShiftSpellAutoTrinket1:Show()
         HealBot_CtrlSpellAutoTrinket1:Show()
@@ -10278,6 +10299,8 @@ function HealBot_Options_ComboClass_Text()
         HealBot_Options_Bind3:Show()
         HealBot_Options_Bind4:Show()
         HealBot_Options_Bind5:Show()
+        
+        HealBot_Options_SpellTargetLastTarget:SetChecked(HealBot_Config_Spells.SpellTargetLastTarget[HealBot_Options_luVars["ActionBarsComboTxt"]])
         
         if HealBot_Options_luVars["ActionBarsCombo"]==1 then
             combo = HealBot_Config_Spells.EnabledSpellTarget;
@@ -18428,12 +18451,7 @@ function HealBot_Options_KnownSpellCheckButtonNum(bNo)
     return bNo
 end
 
-function HealBot_SpellAutoButton_OnClick(self, autoType, autoButton)
-    if self:GetChecked() then
-        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_luVars["ActionBarsCombo"], autoButton, "true")
-    else
-        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_luVars["ActionBarsCombo"], autoButton, "false")
-    end
+function HealBot_SpellAutoButton_PrepAttribs()
     if HealBot_Options_luVars["ActionBarsCombo"]==1 then
         HealBot_Timers_Set("INIT","PrepSetEnabledAttribs")
     elseif HealBot_Options_luVars["ActionBarsCombo"]==2 then
@@ -18441,7 +18459,15 @@ function HealBot_SpellAutoButton_OnClick(self, autoType, autoButton)
     elseif HealBot_Options_luVars["ActionBarsCombo"]==3 then
         HealBot_Timers_Set("INIT","PrepSetEmergAttribs")
     end
-    
+end
+
+function HealBot_SpellAutoButton_OnClick(self, autoType, autoButton)
+    if self:GetChecked() then
+        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_luVars["ActionBarsCombo"], autoButton, "true")
+    else
+        HealBot_SpellAutoButton_Update(autoType, HealBot_Options_ComboButton_ModifierKey(HealBot_Options_ComboButtons_Modifier), HealBot_Options_luVars["ActionBarsCombo"], autoButton, "false")
+    end
+    HealBot_SpellAutoButton_PrepAttribs()
 end
 
 function HealBot_Options_KnownSpellCheckSetColour(self,sName,cType)
@@ -20150,6 +20176,8 @@ function HealBot_Options_SpellsTab(tab)
         HealBot_Options_SetText(HealBot_Options_ModKeyCtrl,HEALBOT_OPTIONS_CTRL)
         HealBot_Options_ModKeyAlt:SetChecked(HealBot_Options_luVars["ModKeyAlt"])
         HealBot_Options_SetText(HealBot_Options_ModKeyAlt,HEALBOT_OPTIONS_ALT)
+        HealBot_Options_SpellTargetLastTarget:SetChecked(HealBot_Config_Spells.SpellTargetLastTarget[HealBot_Options_luVars["ActionBarsComboTxt"]])
+        HealBot_Options_SetText(HealBot_Options_SpellTargetLastTarget,HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET)
         g=_G["HealBot_Options_HealSpellsSelect"]
         g:SetText(HEALBOT_WORD_SELECT)
         HealBot_Options_SetLabel("healbotspellshelpotherfontstr",HEALBOT_OPTIONS_OTHERSPELLS)
