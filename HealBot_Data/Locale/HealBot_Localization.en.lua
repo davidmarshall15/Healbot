@@ -203,7 +203,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_ENABLEHEALTHY           = "Always use enabled";
     HEALBOT_OPTIONS_FADEONEXPIRE            = "Fade on expire";
     HEALBOT_OPTIONS_FADESTARTTIME           = "Fade start time";
-    HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET  = "Auto Target: After cast target last target"
+    HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET  = "Auto Target: After cast, target last target"
 
     HEALBOT_OPTIONS_CASTNOTIFY1             = "No messages";
     HEALBOT_OPTIONS_CASTNOTIFY2             = "Notify self";

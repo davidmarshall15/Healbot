@@ -6046,6 +6046,9 @@ function HealBot_Action_ClassColour(unit, cTrim)
             cTrim = "WARR"
         end
     end
+    if not hbCustomClassCols[cTrim] then
+        cTrim = "WARR"
+    end
     return hbCustomClassCols[cTrim].r,
            hbCustomClassCols[cTrim].g,
            hbCustomClassCols[cTrim].b

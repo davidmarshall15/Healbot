@@ -2324,6 +2324,7 @@ function HealBot_Load()
         HealBot_Data["POWERTYPE"]=UnitPowerType("player") or 0
         if HealBot_Data["POWERTYPE"]<0 or HealBot_Data["POWERTYPE"]>9 then HealBot_Data["POWERTYPE"]=0 end
         HealBot_Skins_ResetSkin("init")
+        HealBot_Timers_InitSpells()
         HealBot_Action_SetCustomClassCols()
         HealBot_Action_SetCustomRoleCols()
         HealBot_Action_SetCustomPowerCols()
@@ -2344,7 +2345,6 @@ function HealBot_Load()
         HealBot_Comms_PerfLevel(hbLTfps[HealBot_Globals.CPUUsage])
         HealBot_Timers_Set("INIT","CheckTalentInfo")
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
-        HealBot_Timers_InitSpells()
         HealBot_Timers_Set("INIT","InitPlugins")
         HealBot_Timers_Set("INIT","RegEvents")
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
@@ -3057,7 +3057,7 @@ function HealBot_Update_Skins()
                             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]>2 then
                                 Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["NAME"]+1
                             end
-                            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]>2 then
+                            if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]>2 and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]<6 then
                                 Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["HLTH"]+1
                             end
                             if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Skins[x]][f]["STATE"]>2 then

@@ -1624,6 +1624,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
         Buff_Spells_List = {
             HEALBOT_BLESSING_OF_THE_BRONZE,
             HEALBOT_SOURCE_OF_MAGIC,
+            HEALBOT_BLISTERING_SCALES,
         }
     elseif tClass=="HUNT" then
         Buff_Spells_List = {

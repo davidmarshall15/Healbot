@@ -1025,45 +1025,53 @@ end
 
 local debuffIconIdx,debuffIconPrio=0,0
 function HealBot_Aura_SortDebuffIcons(button)
-    button.icon.debuff.count[1]=#debuffSort[1]
-    if button.icon.debuff.count[1]>0 then
-        table.sort(debuffSort[1])
-        if button.icon.debuff.count[1]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXDICONS"] then
-            button.icon.debuff.count[1]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXDICONS"]
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXDICONS"]>0 then
+        button.icon.debuff.count[1]=#debuffSort[1]
+        if button.icon.debuff.count[1]>0 then
+            table.sort(debuffSort[1])
+            if button.icon.debuff.count[1]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXDICONS"] then
+                button.icon.debuff.count[1]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXDICONS"]
+            end
+            for j=1, button.icon.debuff.count[1], 1 do
+                HealBot_Aura_CacheDebuffIcon(button, 50+j, debuffAuraCache[debuffSort[1][j]]["spellId"], debuffSort[1][j])
+            end
+            debuffIconIdx=51
+            debuffIconPrio=HealBot_AuraDebuffCache[debuffAuraCache[debuffSort[1][1]]["spellId"]]["priority"]
+        else
+            debuffIconIdx,debuffIconPrio=0,21
         end
-        for j=1, button.icon.debuff.count[1], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, 50+j, debuffAuraCache[debuffSort[1][j]]["spellId"], debuffSort[1][j])
-        end
-        debuffIconIdx=51
-        debuffIconPrio=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][51]["spellId"]]["priority"]
     else
         debuffIconIdx,debuffIconPrio=0,21
     end
-    button.icon.debuff.count[2]=#debuffSort[2]
-    if button.icon.debuff.count[2]>0 then
-        table.sort(debuffSort[2])
-        if button.icon.debuff.count[2]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"] then
-            button.icon.debuff.count[2]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"]
-        end
-        for j=1, button.icon.debuff.count[2], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, 56+j, debuffAuraCache[debuffSort[2][j]]["spellId"], debuffSort[2][j])
-        end
-        if HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][57]["spellId"]]["priority"]<debuffIconPrio then
-            debuffIconIdx=57
-            debuffIconPrio=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][57]["spellId"]]["priority"]
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"]>0 then
+        button.icon.debuff.count[2]=#debuffSort[2]
+        if button.icon.debuff.count[2]>0 then
+            table.sort(debuffSort[2])
+            if button.icon.debuff.count[2]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"] then
+                button.icon.debuff.count[2]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXDICONS"]
+            end
+            for j=1, button.icon.debuff.count[2], 1 do
+                HealBot_Aura_CacheDebuffIcon(button, 56+j, debuffAuraCache[debuffSort[2][j]]["spellId"], debuffSort[2][j])
+            end
+            if HealBot_AuraDebuffCache[debuffAuraCache[debuffSort[2][1]]["spellId"]]["priority"]<debuffIconPrio then
+                debuffIconIdx=57
+                debuffIconPrio=HealBot_AuraDebuffCache[debuffAuraCache[debuffSort[2][1]]["spellId"]]["priority"]
+            end
         end
     end
-    button.icon.debuff.count[3]=#debuffSort[3]
-    if button.icon.debuff.count[3]>0 then
-        table.sort(debuffSort[3])
-        if button.icon.debuff.count[3]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"] then
-            button.icon.debuff.count[3]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"]
-        end
-        for j=1, button.icon.debuff.count[3], 1 do
-            HealBot_Aura_CacheDebuffIcon(button, 58+j, debuffAuraCache[debuffSort[3][j]]["spellId"], debuffSort[3][j])
-        end
-        if HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][59]["spellId"]]["priority"]<debuffIconPrio then
-            debuffIconIdx=59
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"]>0 then
+        button.icon.debuff.count[3]=#debuffSort[3]
+        if button.icon.debuff.count[3]>0 then
+            table.sort(debuffSort[3])
+            if button.icon.debuff.count[3]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"] then
+                button.icon.debuff.count[3]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXDICONS"]
+            end
+            for j=1, button.icon.debuff.count[3], 1 do
+                HealBot_Aura_CacheDebuffIcon(button, 58+j, debuffAuraCache[debuffSort[3][j]]["spellId"], debuffSort[3][j])
+            end
+            if HealBot_AuraDebuffCache[debuffAuraCache[debuffSort[3][1]]["spellId"]]["priority"]<debuffIconPrio then
+                debuffIconIdx=59
+            end
         end
     end
 end
@@ -1388,45 +1396,53 @@ end
 
 local buffIconIdx,buffIconPrio=0,0
 function HealBot_Aura_SortBuffIcons(button)
-    button.icon.buff.count[1]=#buffSort[1]
-    if button.icon.buff.count[1]>0 then
-        table.sort(buffSort[1])
-        if button.icon.buff.count[1]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXBICONS"] then
-            button.icon.buff.count[1]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXBICONS"]
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXBICONS"]>0 then
+        button.icon.buff.count[1]=#buffSort[1]
+        if button.icon.buff.count[1]>0 then
+            table.sort(buffSort[1])
+            if button.icon.buff.count[1]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXBICONS"] then
+                button.icon.buff.count[1]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][1]["MAXBICONS"]
+            end
+            for j=1, button.icon.buff.count[1], 1 do
+                HealBot_Aura_CacheBuffIcon(button, j, buffAuraCache[buffSort[1][j]]["spellId"], buffSort[1][j])
+            end
+            buffIconIdx=1
+            buffIconPrio=HealBot_AuraBuffCache[buffAuraCache[buffSort[1][1]]["spellId"]]["priority"]
+        else
+            buffIconIdx,buffIconPrio=0,21
         end
-        for j=1, button.icon.buff.count[1], 1 do
-            HealBot_Aura_CacheBuffIcon(button, j, buffAuraCache[buffSort[1][j]]["spellId"], buffSort[1][j])
-        end
-        buffIconIdx=1
-        buffIconPrio=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][1]["spellId"]]["priority"]
     else
         buffIconIdx,buffIconPrio=0,21
     end
-    button.icon.buff.count[2]=#buffSort[2]
-    if button.icon.buff.count[2]>0 then
-        table.sort(buffSort[2])
-        if button.icon.buff.count[2]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXBICONS"] then
-            button.icon.buff.count[2]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXBICONS"]
-        end
-        for j=1, button.icon.buff.count[2], 1 do
-            HealBot_Aura_CacheBuffIcon(button, j+8, buffAuraCache[buffSort[2][j]]["spellId"], buffSort[2][j])
-        end
-        if HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][9]["spellId"]]["priority"]<buffIconPrio then
-            buffIconIdx=9
-            buffIconPrio=HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][9]["spellId"]]["priority"]
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXBICONS"]>0 then
+        button.icon.buff.count[2]=#buffSort[2]
+        if button.icon.buff.count[2]>0 then
+            table.sort(buffSort[2])
+            if button.icon.buff.count[2]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXBICONS"] then
+                button.icon.buff.count[2]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][2]["MAXBICONS"]
+            end
+            for j=1, button.icon.buff.count[2], 1 do
+                HealBot_Aura_CacheBuffIcon(button, j+8, buffAuraCache[buffSort[2][j]]["spellId"], buffSort[2][j])
+            end
+            if HealBot_AuraBuffCache[buffAuraCache[buffSort[2][1]]["spellId"]]["priority"]<buffIconPrio then
+                buffIconIdx=9
+                buffIconPrio=HealBot_AuraBuffCache[buffAuraCache[buffSort[2][1]]["spellId"]]["priority"]
+            end
         end
     end
-    button.icon.buff.count[3]=#buffSort[3]
-    if button.icon.buff.count[3]>0 then
-        table.sort(buffSort[3])
-        if button.icon.buff.count[3]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXBICONS"] then
-            button.icon.buff.count[3]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXBICONS"]
-        end
-        for j=1, button.icon.buff.count[3], 1 do
-            HealBot_Aura_CacheBuffIcon(button, j+10, buffAuraCache[buffSort[3][j]]["spellId"], buffSort[3][j])
-        end
-        if HealBot_AuraBuffCache[HealBot_UnitBuffIcons[button.id][11]["spellId"]]["priority"]<buffIconPrio then
-            buffIconIdx=11
+    if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXBICONS"]>0 then
+        button.icon.buff.count[3]=#buffSort[3]
+        if button.icon.buff.count[3]>0 then 
+            table.sort(buffSort[3])
+            if button.icon.buff.count[3]>Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXBICONS"] then
+                button.icon.buff.count[3]=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][button.frame][3]["MAXBICONS"]
+            end
+            for j=1, button.icon.buff.count[3], 1 do
+                HealBot_Aura_CacheBuffIcon(button, j+10, buffAuraCache[buffSort[3][j]]["spellId"], buffSort[3][j])
+            end
+            if HealBot_AuraBuffCache[buffAuraCache[buffSort[3][1]]["spellId"]]["priority"]<buffIconPrio then
+                buffIconIdx=11
+            end
         end
     end
 end
@@ -1643,7 +1659,7 @@ function HealBot_Aura_SetCurDebuffIconCache(button)
     else
         HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]=HealBot_AuraDebuffCache[uaSpellId]["priority"]..uaSpellId..uaUnitCaster
     end
-    if not debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]then
+    if not debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]] then
         debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]={}
     end
     debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["spellId"]=uaSpellId
@@ -2431,7 +2447,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
             HealBot_Aura_CheckUnitDebuffIcons(button)
             if debuffIconIdx>0 then
                 button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][debuffIconIdx]["spellId"]
-                button.aura.debuff.priority=HealBot_AuraDebuffCache[HealBot_UnitDebuffIcons[button.id][debuffIconIdx]["spellId"]]["priority"]
+                button.aura.debuff.priority=HealBot_AuraDebuffCache[button.aura.debuff.id]["priority"]
             elseif unitCurrentDebuff.active then
                 button.aura.debuff.id=unitCurrentDebuff.id
                 button.aura.debuff.priority=unitCurrentDebuff.prio

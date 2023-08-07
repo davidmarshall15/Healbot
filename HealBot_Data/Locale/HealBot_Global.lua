@@ -6,10 +6,10 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.1.0.9.3"
+    return "10.1.5.1"
 end
 function HealBot_Global_InitVersion()
-    return "10.1.0.8"  -- Keep just behind the global version
+    return "10.1.5.0"  -- Keep just behind the global version
 end
 function HealBot_globalVars()
     --Consumables
@@ -344,6 +344,7 @@ function HealBot_globalVars()
     HBC_THORNS                              = 467
     --Evoker
     HEALBOT_BLESSING_OF_THE_BRONZE          = 364342
+    HEALBOT_BLISTERING_SCALES               = 360827
     HEALBOT_SOURCE_OF_MAGIC                 = 369459
     HEALBOT_LIFEBIND                        = 373270
     HEALBOT_TIME_DILATION                   = 357170

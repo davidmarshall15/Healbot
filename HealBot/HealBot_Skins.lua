@@ -1966,6 +1966,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["ACT"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["ACT"]=40 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["ACDA"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["ACDA"]=0.5 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["HLTH"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["HLTH"]=2 end
+        if Healbot_Config_Skins.BarTextCol[SkinName][gl]["HLTH"]>6 then Healbot_Config_Skins.BarTextCol[SkinName][gl]["HLTH"]=6 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["AGGRO"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["AGGRO"]=2 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["NDEBUFF"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["NDEBUFF"]=false end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["HDEBUFF"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["HDEBUFF"]=false end
