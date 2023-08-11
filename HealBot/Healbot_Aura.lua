@@ -1129,7 +1129,7 @@ function HealBot_Aura_CheckUnitDebuffIcons(button)
             break
         end
     end
-    for i=59,69 do
+    for i=59,60 do
         if i<=(58+button.icon.debuff.count[3]) then
             if not HealBot_UnitDebuffIcons[button.id][i].current then
                 HealBot_UnitDebuffIcons[button.id][i].current=true
@@ -2470,7 +2470,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                     button.aura.debuff.name="needUpdate"
                     button.aura.debuff.type=HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"]
                 end
-                if UnitIsFriend("player",button.unit) and (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group]) then 
+                if not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group] then 
                     HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"])
                 else
                     HealBot_Aura_ClearDebuff(button)
@@ -2487,8 +2487,6 @@ function HealBot_Aura_CheckUnitDebuffs(button)
 end
 
 function HealBot_Aura_CheckUnitAuras(button, debuff)
-    --if not UnitIsFriend("player",button.unit) then
-    --    HealBot_Aura_RefreshEnemyAuras(button)
     if debuff then
         HealBot_Aura_CheckUnitDebuffs(button)
     else
@@ -3424,6 +3422,7 @@ function HealBot_Aura_InitData()
             HealBot_BuffNameTypes = {
                 [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "x")] = HBC_INT_ID,
                 [(GetSpellInfo(HEALBOT_ARCANE_BRILLIANCE) or "x")] = HBC_INT_ID,
+                [(GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE) or "x")] = HBC_INT_ID,
             }
         elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
             HealBot_BuffNameTypes = {
@@ -3489,6 +3488,7 @@ function HealBot_Aura_InitData()
                                    [GetSpellInfo(HBC_GIFT_OF_THE_WILD)]=50,
                                    [GetSpellInfo(HBC_THORNS)]=6,
                                    [GetSpellInfo(HBC_ARCANE_BRILLIANCE)]=56,
+                                   [GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE)]=56,
                                    [GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT)]=52,
                                    [GetSpellInfo(HBC_BLESSING_OF_MIGHT)]=4,
                                    [GetSpellInfo(HBC_BLESSING_OF_SALVATION)]=26,

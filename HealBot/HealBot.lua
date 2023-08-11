@@ -2857,8 +2857,8 @@ function HealBot_UpdateMaxUnitsAdj()
     HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*2)
     if HealBot_luVars["MaxFastQueue"]<4 then
         HealBot_luVars["MaxFastQueue"]=4
-    elseif HealBot_luVars["MaxFastQueue"]>12 then 
-        HealBot_luVars["MaxFastQueue"]=12
+    elseif HealBot_luVars["MaxFastQueue"]>15 then
+        HealBot_luVars["MaxFastQueue"]=15
     end
     HealBot_Timers_TurboOff()
     HealBot_AddDebug("UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"], "Perf", true)
@@ -5012,28 +5012,24 @@ function HealBot_Update_Timer()
     HealBot_UpdateEveryFrame()
 end
 
-function HealBot_Update_InCombat()
-    HealBot_UpdateEveryFrame()
-end
-
-local hbFastFuncs={[1]=HealBot_Update_InCombat,   [2]=HealBot_Update_InCombat,  [3]=HealBot_Update_InCombat,  [4]=HealBot_Update_InCombat,
-                   [5]=HealBot_Update_InCombat,   [6]=HealBot_Update_InCombat,  [7]=HealBot_Update_InCombat,  [8]=HealBot_Update_InCombat,
-                   [9]=HealBot_Update_InCombat,  [10]=HealBot_Update_InCombat, [11]=HealBot_Update_InCombat, [12]=HealBot_Update_InCombat,
-                   [13]=HealBot_Update_InCombat, [14]=HealBot_Update_InCombat, [15]=HealBot_Update_InCombat, [16]=HealBot_Update_InCombat,
-                   [17]=HealBot_Update_InCombat, [18]=HealBot_Update_InCombat, [19]=HealBot_Update_InCombat, [20]=HealBot_UpdateLast, }
+local hbFastFuncs={[1]=HealBot_UpdateEveryFrame,   [2]=HealBot_UpdateEveryFrame,  [3]=HealBot_UpdateEveryFrame,  [4]=HealBot_UpdateEveryFrame,
+                   [5]=HealBot_UpdateEveryFrame,   [6]=HealBot_UpdateEveryFrame,  [7]=HealBot_UpdateEveryFrame,  [8]=HealBot_UpdateEveryFrame,
+                   [9]=HealBot_UpdateEveryFrame,  [10]=HealBot_UpdateEveryFrame, [11]=HealBot_UpdateEveryFrame, [12]=HealBot_UpdateEveryFrame,
+                   [13]=HealBot_UpdateEveryFrame, [14]=HealBot_UpdateEveryFrame, [15]=HealBot_UpdateEveryFrame, [16]=HealBot_UpdateEveryFrame,
+                   [17]=HealBot_UpdateEveryFrame, [18]=HealBot_UpdateEveryFrame, [19]=HealBot_UpdateEveryFrame, [20]=HealBot_UpdateLast, }
 function HealBot_FastFuncs()
     if HealBot_luVars["UILOCK"] then
         hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,       [2]=HealBot_UpdateEnemyHealth_Buttons,  [3]=HealBot_UpdateUnit_Buttons,       [4]=HealBot_UpdateUnit_Buttons,
-                     [5]=HealBot_Update_InCombat,          [6]=HealBot_UpdateUnit_Buttons,         [7]=HealBot_UpdateEnemyAura_Buttons,  [8]=HealBot_UpdateUnit_Buttons,
-                     [9]=HealBot_UpdateUnit_Buttons,      [10]=HealBot_Update_InCombat,           [11]=HealBot_UpdateUnit_Buttons,      [12]=HealBot_UpdateEnemyHealth_Buttons,
-                    [13]=HealBot_UpdateUnit_Buttons,      [14]=HealBot_UpdateUnit_Buttons,        [15]=HealBot_Update_InCombat,         [16]=HealBot_UpdateUnit_Buttons,
-                    [17]=HealBot_UpdateEnemyAura_Buttons, [18]=HealBot_UpdateUnit_Buttons,        [19]=HealBot_UpdateUnit_Buttons,      [20]=HealBot_UpdateLast, }
+                     [5]=HealBot_UpdateEveryFrame,         [6]=HealBot_UpdateUnit_Buttons,         [7]=HealBot_UpdateEnemyAura_Buttons,  [8]=HealBot_UpdateUnit_Buttons,
+                     [9]=HealBot_UpdateUnit_Buttons,      [10]=HealBot_UpdateEveryFrame,           [11]=HealBot_UpdateUnit_Buttons,      [12]=HealBot_UpdateEnemyHealth_Buttons,
+                    [13]=HealBot_UpdateUnit_Buttons,      [14]=HealBot_UpdateUnit_Buttons,         [15]=HealBot_UpdateEveryFrame,        [16]=HealBot_UpdateUnit_Buttons,
+                    [17]=HealBot_UpdateEnemyAura_Buttons, [18]=HealBot_UpdateUnit_Buttons,         [19]=HealBot_UpdateUnit_Buttons,      [20]=HealBot_UpdateLast, }
     elseif HealBot_luVars["isResting"] then
-        hbFastFuncs={[1]=HealBot_Update_Timer,       [2]=HealBot_Update_Timer,               [3]=HealBot_Update_Timer,        [4]=HealBot_Update_Timer,
-                     [5]=HealBot_UpdateUnit_Buttons, [6]=HealBot_Update_Timer,               [7]=HealBot_Update_Timer,        [8]=HealBot_Update_Timer,
-                     [9]=HealBot_Update_Timer,      [10]=HealBot_UpdateEnemyHealth_Buttons, [11]=HealBot_Update_Timer,       [12]=HealBot_Update_Timer,
-                    [13]=HealBot_Update_Timer,      [14]=HealBot_Update_Timer,              [15]=HealBot_UpdateUnit_Buttons, [16]=HealBot_Update_Timer,
-                    [17]=HealBot_Update_Timer,      [18]=HealBot_Update_Timer,              [19]=HealBot_UpdateUnit_Buttons, [20]=HealBot_UpdateLast, }
+        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons, [2]=HealBot_UpdateEnemyHealth_Buttons,  [3]=HealBot_Update_Timer,             [4]=HealBot_Update_Timer,
+                     [5]=HealBot_Update_Timer,       [6]=HealBot_UpdateUnit_Buttons,         [7]=HealBot_Update_Timer,             [8]=HealBot_Update_Timer,
+                     [9]=HealBot_Update_Timer,      [10]=HealBot_Update_Timer,              [11]=HealBot_UpdateUnit_Buttons,      [12]=HealBot_Update_Timer,
+                    [13]=HealBot_Update_Timer,      [14]=HealBot_Update_Timer,              [15]=HealBot_Update_Timer,            [16]=HealBot_UpdateUnit_Buttons,
+                    [17]=HealBot_Update_Timer,      [18]=HealBot_Update_Timer,              [19]=HealBot_UpdateEnemyAura_Buttons, [20]=HealBot_UpdateLast, }
     else
         hbFastFuncs={[1]=HealBot_Update_Timer,              [2]=HealBot_UpdateUnit_Buttons,  [3]=HealBot_Update_Timer,             [4]=HealBot_Update_Timer,
                      [5]=HealBot_UpdateEnemyHealth_Buttons, [6]=HealBot_Update_Timer,        [7]=HealBot_UpdateUnit_Buttons,       [8]=HealBot_Update_Timer,
@@ -5160,15 +5156,14 @@ end
 function HealBot_OnUpdate()
     HealBot_TimeNow=GetTime()
     if HealBot_luVars["UpdateSlowNext"]<HealBot_TimeNow then
-        HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+2
+        HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
         HealBot_Update_Slow()
-    elseif #HealBot_FastQueue>0 then
+    else
         if #HealBot_FastQueue>HealBot_luVars["MaxFastQueue"] then
             HealBot_FastUnitQueue(HealBot_luVars["MaxFastQueue"])
-        else
+        elseif #HealBot_FastQueue>0 then
             HealBot_FastUnitQueue(#HealBot_FastQueue)
         end
-    else
         hbFastCur()
     end
 end
@@ -7047,8 +7042,8 @@ function HealBot_EventSpellCD()
 end
 
 function HealBot_EventRegenDisabled()
-        HealBot_OnEvent_PlayerRegenDisabled();
-        HealBot_UpdateLocalUILock(true)
+    HealBot_OnEvent_PlayerRegenDisabled();
+    HealBot_UpdateLocalUILock(true)
 end
 
 function HealBot_EventRegenEnabled()
