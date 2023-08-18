@@ -1074,6 +1074,7 @@ function HealBot_Aura_SortDebuffIcons(button)
             end
         end
     end
+    return debuffIconIdx
 end
 
 function HealBot_Aura_CacheBuffIcon(button, id, spellId, index)
@@ -1445,6 +1446,7 @@ function HealBot_Aura_SortBuffIcons(button)
             end
         end
     end
+    return buffIconIdx
 end
 
 local castByListIndexed={[HEALBOT_CUSTOM_CASTBY_EVERYONE]=1,
@@ -2227,7 +2229,7 @@ function HealBot_Aura_CheckUnitBuffOverDebuff(button)
     end
 end
 
-local buffBarCol,buffPrio=0,99
+local buffBarCol,buffPrio,buffIconIndex=0,99,0
 function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
@@ -2272,12 +2274,12 @@ function HealBot_Aura_CheckUnitBuffs(button)
             if tGeneralBuffs and onlyPlayers then
                 HealBot_Aura_CheckGeneralBuff(button)
             end
-            HealBot_Aura_SortBuffIcons(button)
+            buffIconIndex=HealBot_Aura_SortBuffIcons(button)
             HealBot_Aura_CheckUnitBuffIcons(button)
            
             if not curBuffName then
-                if buffIconIdx>0 then
-                    button.aura.buff.id=HealBot_UnitBuffIcons[button.id][buffIconIdx]["spellId"]
+                if buffIconIndex>0 then
+                    button.aura.buff.id=HealBot_UnitBuffIcons[button.id][buffIconIndex]["spellId"]
                     curBuffName=HealBot_AuraBuffCache[button.aura.buff.id]["name"]
                     buffPrio=HealBot_AuraBuffCache[button.aura.buff.id]["priority"]
                 elseif unitCurrentBuff.active then
@@ -2422,7 +2424,7 @@ if HEALBOT_GAME_VERSION>8 then
     HealBot_Aura_CheckDebuffs=HealBot_Aura_CheckDebuffsV9
 end
 
-local debuffBarCol=0
+local debuffBarCol,debuffIconIndex=0,0
 function HealBot_Aura_CheckUnitDebuffs(button)
     for z=1,3 do
         HealBot_Aura_prevIconCount["DEBUFF"][z]=button.icon.debuff.count[z]
@@ -2443,10 +2445,10 @@ function HealBot_Aura_CheckUnitDebuffs(button)
             end
         end
         if debuffCheck then
-            HealBot_Aura_SortDebuffIcons(button)
+            debuffIconIndex=HealBot_Aura_SortDebuffIcons(button)
             HealBot_Aura_CheckUnitDebuffIcons(button)
-            if debuffIconIdx>0 then
-                button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][debuffIconIdx]["spellId"]
+            if debuffIconIndex>0 then
+                button.aura.debuff.id=HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["spellId"]
                 button.aura.debuff.priority=HealBot_AuraDebuffCache[button.aura.debuff.id]["priority"]
             elseif unitCurrentDebuff.active then
                 button.aura.debuff.id=unitCurrentDebuff.id

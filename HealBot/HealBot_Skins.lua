@@ -2060,6 +2060,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"]=4 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["BACK"]=1 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]=1 end
+        if Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]>11 then Healbot_Config_Skins.BarCol[SkinName][gl]["BORDER"]=11 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["HR"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["HR"]=0.4 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["HG"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["HG"]=0.7 end
         if Healbot_Config_Skins.BarCol[SkinName][gl]["HB"]==nil then Healbot_Config_Skins.BarCol[SkinName][gl]["HB"]=0.7 end

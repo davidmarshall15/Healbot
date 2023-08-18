@@ -5058,12 +5058,12 @@ end
 
 local function HealBot_Action_SetHealButtonAuraCols(button)
     if button.status.unittype<11 then
-        if HealBot_Config_Buffs.CBshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[HealBot_RetUnitGroups(button.unit)])  then
+        if HealBot_Config_Buffs.CBshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[HealBot_Panel_RetUnitGroups(button.unit)])  then
             button.aura.buff.showcol=true
         else
             button.aura.buff.showcol=false
         end
-        if HealBot_Config_Cures.CDCshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[HealBot_RetUnitGroups(button.unit)]) then
+        if HealBot_Config_Cures.CDCshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[HealBot_Panel_RetUnitGroups(button.unit)]) then
             button.icon.debuff.showcol=true
         else
             button.icon.debuff.showcol=false
@@ -5265,19 +5265,18 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             
             hButton.status.role=role
             hButton.status.duplicate=duplicate
-            hButton.group=HealBot_RetUnitGroups(unit)
-            hButton.rank=HealBot_RetUnitRank(unit)
-            if hButton.role~=HealBot_RetUnitPlayerRole(unit) then
-                hButton.role=HealBot_RetUnitPlayerRole(unit)
+            hButton.group=HealBot_Panel_RetUnitGroups(unit)
+            hButton.rank=HealBot_Panel_RetUnitRank(guid)
+            if hButton.role~=HealBot_Panel_RetUnitPlayerRole(guid) then
+                hButton.role=HealBot_Panel_RetUnitPlayerRole(guid)
                 HealBot_setLuVars("pluginClearDown", 1)
             end
-            hButton.roletxt=HealBot_Panel_UnitRoleDefault(unit,guid)
+            hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
                 if not duplicate then HealBot_Action_SmartCast_PlayerButtonID(hButton.id) end
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
-                hButton.reset=false
                 hButton.status.unittype = unitType            -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
                 if unitType>10 then                           -- 7=vehicle  8=pet  9=target  10=focus  11=enemy
                     HealBot_Enemy_Button[unit]=hButton
@@ -5302,7 +5301,8 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
                 hButton.status.change=true
                 hButton.status.update=true
-                if hButton.unit~=unit or hButton.guid~=guid then 
+                if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then 
+                    hButton.reset=false
                     hButton.unit=unit
                     erButton.unit=unit
                     if hButton.guid~=guid then 
@@ -6305,7 +6305,7 @@ function HealBot_Action_HealUnit_OnEnter(self)
         HealBot_Action_ShowDirectionArrow(self) 
     end
     HealBot_Action_SetActiveButton(self.id)
-    if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] and UnitExists(self.unit) then
+    if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] then
         HealBot_Data["TIPBUTTON"] = self
         if HealBot_Globals.ShowGameUnitInfo then
             HealBot_Data["TIPTYPE"] = "WoWUnit"

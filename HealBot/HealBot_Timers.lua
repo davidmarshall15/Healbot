@@ -81,6 +81,13 @@ function HealBot_Timers_FluidFlashUpdate()
     HealBot_Options_AuxBarFlashAlphaMinMaxSet()
 end
 
+function HealBot_Timer_ResetAllButtonsRecalcAll()
+    HealBot_Action_ResetAllButtons(true)
+    HealBot_Timers_luVars["UpdateAllBuffIcons"]=true
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+    HealBot_AddDebug("ResetAllButtonsRecalcAll Called", "Debug", true)
+end
+
 function HealBot_Timers_nextRecalcAll()
     HealBot_nextRecalcParty(0)
     if HealBot_Timers_luVars["UpdateAllBuffIcons"] then
@@ -606,6 +613,7 @@ local hbTimerFuncs={["INIT"]={
                         ["CheckFramesOnCombat"]=HealBot_CheckFramesOnCombat,
                         ["ResetUnitStatus"]=HealBot_Action_ResetUnitStatus,
                         ["ResetAllButtons"]=HealBot_Action_ResetAllButtons,
+                        ["ResetAllButtonsRecalcAll"]=HealBot_Timer_ResetAllButtonsRecalcAll,
                         ["LowManaTrig"]=HealBot_Action_setLowManaTrig,
                         ["CheckLowMana"]=HealBot_Timers_CheckLowMana,
                         ["EndAggro"]=HealBot_EndAggro,
