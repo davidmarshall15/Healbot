@@ -268,7 +268,7 @@ HealBot_GlobalsDefaults = {}
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
         LastVersionSkinUpdate=Version,
-        FirstLoad = true,
+        FirstLoad=true,
         PluginThreat=true,
         PluginTimeToDie=true,
         PluginExtraButtons=true,
@@ -300,20 +300,20 @@ function HealBot_Data_InitVars()
         CureCustomDefaultCastBy=1,
         TopRole="TANK",
         TargetBarRestricted=0,
-        ShowTooltip = true,
-        Tooltip_ShowTarget = true,
-        Tooltip_ShowMyBuffs = false,
-        Tooltip_ShowRequiredBuffs = true,
-        Tooltip_ShowSpellInfo = true,
-        Tooltip_ShowSpellExtra = true,
-        Tooltip_ShowSpec = true,
-        Tooltip_ShowLevel = true,
-        Tooltip_ShowHealth = true,
-        Tooltip_ShowMana = true,
-        Tooltip_ShowRank = false,
-        Tooltip_ShowRole = false,
-        Tooltip_HideRoleWhenRank = false,
-        Tooltip_MouseWheel = false,
+        ShowTooltip=true,
+        Tooltip_ShowTarget=true,
+        Tooltip_ShowMyBuffs=false,
+        Tooltip_ShowRequiredBuffs=true,
+        Tooltip_ShowSpellInfo=true,
+        Tooltip_ShowSpellExtra=true,
+        Tooltip_ShowSpec=true,
+        Tooltip_ShowLevel=true,
+        Tooltip_ShowHealth=true,
+        Tooltip_ShowMana=true,
+        Tooltip_ShowRank=false,
+        Tooltip_ShowRole=false,
+        Tooltip_HideRoleWhenRank=false,
+        Tooltip_MouseWheel=false,
         ShowGameUnitInfo=false,
         Tooltip_ShowHoT=false,
         Tooltip_ShowCD=false,
@@ -326,24 +326,25 @@ function HealBot_Data_InitVars()
         Tooltip_DetailFont=HealBot_Default_Fonts[15].name,
         Tooltip_DetailFontSize=12,
         DisableToolTipInCombat=false,
-        HideOptions = false,
-        ProtectPvP = false,
-        RightButtonOptions = false,
-        HideUnlockedTag = true,
-        SmartCast = true,
-        SmartCastDebuff = true,
-        SmartCastBuff = true,
-        SmartCastRes = true,
+        HideOptions=false,
+        ProtectPvP=false,
+        RightButtonOptions=false,
+        UltraPerf=false,
+        HideUnlockedTag=true,
+        SmartCast=true,
+        SmartCastDebuff=true,
+        SmartCastBuff=true,
+        SmartCastRes=true,
         HealBot_ButtonRadius=78,
         HealBot_ButtonPosition=300,
         MinimapIcon={hide = false, minimapPos = 220, radius = 80,},
         TestBars={["PETS"]=4,["TARGETS"]=5,["HEALERS"]=3,["TANKS"]=2,["PROFILE"]=3,["ENEMY"]=2},
         TestBarsIcons={["DEBUFF"]=false,["BUFF"]=false,["EXTRA"]=false},
-        EmergencyFClass = 4,
-        MacroSuppressSound = true,
-        MacroSuppressError = true,
-        AcceptSkins = 1,
-        FocusMonitor = {},
+        EmergencyFClass=4,
+        MacroSuppressSound=true,
+        MacroSuppressError=true,
+        AcceptSkins=1,
+        FocusMonitor={},
         OneTimeMsg={},
         dislikeMount={},
         excludeMount={},
@@ -441,13 +442,13 @@ function HealBot_Data_InitVars()
         CustomBuffTag={},
         IgnoreCustomBuff={},
         HealBot_Custom_Buffs={},
-        HealBot_Custom_Buffs_IconSet = {},
-        CustomBuffBarColour = {
+        HealBot_Custom_Buffs_IconSet={},
+        CustomBuffBarColour={
             [HEALBOT_CUSTOM_en.."Buff"] = { R = 0.25, G = 0.58, B = 0.8, },
         },
         HealBot_Custom_Buffs_ShowBarCol={["DEFAULT"] = 4},
-        HealBot_Custom_Buffs_IconGlow = {},
-        CustomBuffIDMethod = {},
+        HealBot_Custom_Buffs_IconGlow={},
+        CustomBuffIDMethod={},
         IconKeyCombo={},
         UseIconCommands=false,
         WatchHoT = {
@@ -680,57 +681,57 @@ HealBot_Config_SkinsData = {
 }
 
 HealBot_Config_SkinsDefaults = {
-  Skin_ID = 1,
-  Current_Skin = HEALBOT_SKINS_STD,
-  Skins = {HEALBOT_SKINS_STD, HEALBOT_OPTIONS_GROUPHEALS, HEALBOT_OPTIONS_RAID25, HEALBOT_OPTIONS_RAID40},
-  DuplicateBars = {},
-  Author = {},
-  Chat = {},
-  General = {},
-  Healing = {},
-  BarAggro = {},
-  BarSort = {},
-  BarVisibility = {},
-  FocusGroups = {},
-  FrameAlias = {},
-  FrameAliasBar = {},
-  Frame = {},
-  StickyFrames = {},
-  HealGroups = {},
-  Anchors = {},
-  HeadBar = {},
-  HeadText = {},
-  AuxBarFrame = {},
-  AuxBar = {},
-  AuxBarText = {},
-  HealBar = {},
-  BarCol = {},
-  BarIACol = {},
-  BarText = {},
-  BarTextCol = {},
-  Icons = {},
-  RaidIcon = {},
-  IconText = {},
-  IconSets = {},
-  IconSetsText = {},
-  Enemy = {},
-  Indicators = {},
-  Emerg = {},
-  ToolTip = {},
-  CustomCols = {},
+  Skin_ID=1,
+  Current_Skin=HEALBOT_SKINS_STD,
+  Skins={HEALBOT_SKINS_STD, HEALBOT_OPTIONS_GROUPHEALS, HEALBOT_OPTIONS_RAID25, HEALBOT_OPTIONS_RAID40},
+  DuplicateBars={},
+  Author={},
+  Chat={},
+  General={},
+  Healing={},
+  BarAggro={},
+  BarSort={},
+  BarVisibility={},
+  FocusGroups={},
+  FrameAlias={},
+  FrameAliasBar={},
+  Frame={},
+  StickyFrames={},
+  HealGroups={},
+  Anchors={},
+  HeadBar={},
+  HeadText={},
+  AuxBarFrame={},
+  AuxBar={},
+  AuxBarText={},
+  HealBar={},
+  BarCol={},
+  BarIACol={},
+  BarText={},
+  BarTextCol={},
+  Icons={},
+  RaidIcon={},
+  IconText={},
+  IconSets={},
+  IconSetsText={},
+  Enemy={},
+  Indicators={},
+  Emerg={},
+  ToolTip={},
+  CustomCols={},
 };
 
 
 
-HealBot_Config = {};
-HealBot_Globals = {};
-Healbot_Config_Skins = {};
-HealBot_Config_Spells = {};
-HealBot_Config_Buffs = {};
-HealBot_Config_Cures = {};
-HealBot_Class_Spells = {};
-HealBot_Class_Buffs = {};
-HealBot_Class_Cures = {};
+HealBot_Config={};
+HealBot_Globals={};
+Healbot_Config_Skins={};
+HealBot_Config_Spells={};
+HealBot_Config_Buffs={};
+HealBot_Config_Cures={};
+HealBot_Class_Spells={};
+HealBot_Class_Buffs={};
+HealBot_Class_Cures={};
 HealBot_customTempUserName={}
 
 HealBot_Data={  ["TIPBUTTON"] = false,
@@ -767,8 +768,8 @@ HealBot_ReadyCheckStatus={   ["WAITING"]=0,
                              ["NOTREADY"]=2,
 }
 
-HealBot_Spell_IDs = {};
-HealBot_Spell_Names = {};
+HealBot_Spell_IDs={};
+HealBot_Spell_Names={};
 HealBot_Unit_Button={};
 HealBot_Private_Button={};
 HealBot_Enemy_Button={};

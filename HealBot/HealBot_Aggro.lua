@@ -106,11 +106,11 @@ local function HealBot_Aggro_AuxClearAggroBar(button)
 end
 
 local hbAuraWatchAggro={}
-function HealBot_Aggro_AuraWatch(id, state)
+function HealBot_Aggro_AuraWatch(guid, state)
     if state then
-        hbAuraWatchAggro[id]=true
+        hbAuraWatchAggro[guid]=true
     else
-        hbAuraWatchAggro[id]=nil
+        hbAuraWatchAggro[guid]=nil
     end
 end
 
@@ -146,7 +146,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
             button.aggro.status=threatData["status"]
         end
         HealBot_Aggro_IndicatorUpdate(button)
-        if hbAuraWatchAggro[button.id] then
+        if hbAuraWatchAggro[button.guid] then
             HealBot_Plugin_AuraWatch_AggroUpdate(button)
         end
     end
@@ -197,4 +197,8 @@ function HealBot_Aggro_UpdateAggroText()
         xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton)
     end
+end
+
+function HealBot_Aggro_ClearGUID(guid)
+    hbAuraWatchAggro[guid]=nil
 end

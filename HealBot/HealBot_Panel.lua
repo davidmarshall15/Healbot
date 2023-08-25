@@ -192,6 +192,8 @@ function HealBot_Panel_updDataStore(button)
         elseif button.status.unittype==8 then
             HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPets",1)
         end
+    elseif button.status.unittype>8 then
+        hbPanel_dataExtraGUIDs[button.guid]=button.unit
     end
 end
 
@@ -2895,13 +2897,13 @@ function HealBot_Panel_RaidUnitButton(guid)
 end
 
 function HealBot_Panel_RaidPetUnitGUID(guid)
-    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] 
+    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid]
 end
 
 function HealBot_Panel_RaidPetUnitButton(guid)
     ruxUnit=HealBot_Panel_RaidPetUnitGUID(guid)
     if ruxUnit then
-        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit, true)
+        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit)
         return ruxButton, rupButton
     else
         return nil
@@ -2937,7 +2939,7 @@ end
 
 function HealBot_Panel_RaidUnitNameGetPlayerGUID(uName)
     if hbPanel_dataNames[uName] then
-        return UnitGUID(hbPanel_dataNames[uName])
+        return hbPanel_dataUnits[hbPanel_dataNames[uName]]
     else
         return nil
     end

@@ -3181,7 +3181,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref.indicator.mana={}
     button.gref.indicator.selfcast={}
     button.gref.indicator.power={}
-    HealBot_Aura_InitUnitAuraCurrent(button.id)
     button.gref["Bar"]=_G[button.bName.."Bar"]
     button.gref["Bar"]:SetMinMaxValues(0,1000)
     erButton.bar=_G[erButton.bName.."Bar"]
@@ -5274,7 +5273,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
-                if not duplicate then HealBot_Action_SmartCast_PlayerButtonID(hButton.id) end
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
                 hButton.status.unittype = unitType            -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
@@ -6982,18 +6980,9 @@ function HealBot_Action_retResSpell(button)
     return arResSpell
 end
 
-local scSpell,scSpellBlock,scPlayerButtonID=false, "x", 1
-function HealBot_Action_SmartCast_SpellBlocker(spellName)
-    scSpellBlock=spellName
-end
-
-function HealBot_Action_SmartCast_PlayerButtonID(id)
-    scPlayerButtonID=id
-end
-
+local scSpell=false
 function HealBot_Action_SmartCast(button)
     if button.player and HealBot_Action_IsUnitDead(button) then return nil; end
-    if HealBot_Aura_CurrentBuff(scPlayerButtonID, bscSpellBlockName) then return nil; end
     scSpell=false
  
     if HealBot_Globals.SmartCastRes and HealBot_Action_IsUnitDead(button) then

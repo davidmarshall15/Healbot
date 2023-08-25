@@ -29,11 +29,13 @@ HealBot_Timers_luVars["nProcs"]=9
 HealBot_Timers_luVars["turboEndTimer"]=0
 
 function HealBot_Timers_TurboOn(duration)
-    if HealBot_Timers_luVars["nProcs"]<HealBot_Globals.CPUUsage then
-        HealBot_Timers_luVars["nProcs"]=HealBot_Globals.CPUUsage
-        if HealBot_Timers_luVars["nProcs"]<3 then
-            HealBot_Timers_luVars["nProcs"]=3
-        end
+    if HealBot_Globals.UltraPerf then
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*1.5)
+    else
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.75)
+    end
+    if HealBot_Timers_luVars["nProcs"]<3 then
+        HealBot_Timers_luVars["nProcs"]=3
     end
     if HealBot_Timers_luVars["turboEndTimer"]<GetTime()+duration then
         HealBot_Timers_luVars["turboEndTimer"]=GetTime()+duration
@@ -44,11 +46,13 @@ end
 function HealBot_Timers_TurboOff()
     if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1)
-    elseif HealBot_Timers_luVars["nProcs"]~=floor(HealBot_Globals.CPUUsage/3) then
-        HealBot_Timers_luVars["nProcs"]=floor(HealBot_Globals.CPUUsage/3)
-        if HealBot_Timers_luVars["nProcs"]<1 then
-            HealBot_Timers_luVars["nProcs"]=1
-        end
+    elseif HealBot_Globals.UltraPerf then
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage/2)
+    else
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage/4)
+    end
+    if HealBot_Timers_luVars["nProcs"]<1 then
+        HealBot_Timers_luVars["nProcs"]=1
     end
 end
 
@@ -318,8 +322,10 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","EmergHealthCol",0.5)
     HealBot_Timers_Set("AURA","ConfigClassHoT",0.6)
     HealBot_Timers_Set("AURA","ConfigDebuffs",0.7)
-    HealBot_Timers_Set("LAST","CheckZone",0.8)
-    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.9)
+    HealBot_Timers_Set("LAST","CheckZone",0.75)
+    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.8)
+    HealBot_Timers_Set("AURA","BuffTagNames",0.9)
+    HealBot_Timers_Set("AURA","DebuffTagNames",0.95)
     HealBot_Timers_Set("LAST","LastUpdate",1) 
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
     if not HealBot_Timers_luVars["HelpNotice"] then
@@ -598,6 +604,8 @@ local hbTimerFuncs={["INIT"]={
                         ["CustomBuffList"]=HealBot_Options_setCustomBuffList,
                         ["CustomBuffListPrep"]=HealBot_Options_prepCustomBuffList,
                         ["ConfigDebuffs"]=HealBot_Aura_ConfigDebuffs,
+                        ["BuffTagNames"]=HealBot_Aura_BuffTagNames,
+                        ["DebuffTagNames"]=HealBot_Aura_DebuffTagNames,
                     },
                     ["CHAT"]={
                         ["OverrideChatUseToggle"]=HealBot_Options_Override_ChatUse_Toggle,

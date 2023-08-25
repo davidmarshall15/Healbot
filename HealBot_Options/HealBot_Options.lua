@@ -6779,6 +6779,16 @@ function HealBot_Options_ShowMinimapButton_OnClick(self)
     HealBot_MMButton_Toggle()
 end
 
+function HealBot_Options_UltraPerf_OnClick(self)
+    if self:GetChecked() then
+        HealBot_Globals.UltraPerf=true
+    else
+        HealBot_Globals.UltraPerf=false
+    end
+    HealBot_Comms_PerfLevel()
+    HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
+end
+
 function HealBot_Options_ShowTooltip_OnClick(self)
     if HealBot_Globals.ShowTooltip~=self:GetChecked() then
         HealBot_Globals.ShowTooltip = self:GetChecked()
@@ -12783,6 +12793,7 @@ function HealBot_Options_Class_HoTctlIDMethod_DropDown()
                         UIDropDownMenu_SetText(HealBot_Options_Class_HoTctlIDMethod,HealBot_Options_Class_HoTctlIDMethod_List[j])
                         HealBot_Timers_Set("AURA","ConfigClassHoT")
                         HealBot_Timers_Set("AURA","ResetBuffCache")
+                        HealBot_Timers_Set("AURA","BuffTagNames")
                     end
         info.checked = false;
         local sId=HealBot_Options_CDebuffGetId(HealBot_Options_luVars["HoTname"]) or 0
@@ -15077,6 +15088,7 @@ function HealBot_Options_CDCIDMethod_DropDown()
                         UIDropDownMenu_SetText(HealBot_Options_CDCIDMethod,HealBot_Options_Class_HoTctlIDMethod_List[j])
                         HealBot_Timers_Set("AURA","ConfigDebuffs")
                         HealBot_Timers_Set("AURA","DebuffPriority")
+                        HealBot_Timers_Set("AURA","DebuffTagNames")
                     end
         info.checked = false;
         if (HealBot_Globals.CustomDebuffIDMethod[HealBot_Options_luVars["CDebuffcustomSpellID"]] or 3)==j then info.checked = true; end 
@@ -15143,6 +15155,7 @@ function HealBot_Options_CDebuffTag_OnTextChanged(self)
         HealBot_Globals.CDCTag[HealBot_Options_luVars["CDebuffcustomSpellID"]]=nil
     end
     HealBot_Timers_Set("AURA","CustomDebuffListPrep")
+    HealBot_Timers_Set("AURA","DebuffTagNames",0.5)
 end
 
 function HealBot_Options_HoTBuffTag_OnTextChanged(self)
@@ -15154,6 +15167,7 @@ function HealBot_Options_HoTBuffTag_OnTextChanged(self)
         HealBot_Globals.CustomBuffTag[sId]=nil
     end
     HealBot_Timers_Set("AURA","CustomBuffListPrep")
+    HealBot_Timers_Set("AURA","BuffTagNames",0.5)
 end
 
 function HealBot_Options_BuffResetList()
@@ -19806,6 +19820,7 @@ function HealBot_Options_GeneralTab(tab)
         local mmButtonShown=false
         if HealBot_Globals.MinimapIcon.hide==false then mmButtonShown=true end
         HealBot_Options_ShowMinimapButton:SetChecked(mmButtonShown)
+        HealBot_Options_UltraPerf:SetChecked(HealBot_Globals.UltraPerf)
         HealBot_Options_HideOptions:SetChecked(HealBot_Globals.HideOptions)
         HealBot_Options_HideUnlocked:SetChecked(HealBot_Globals.HideUnlockedTag)
         HealBot_Options_RightButtonOptions:SetChecked(HealBot_Globals.RightButtonOptions)
@@ -19820,6 +19835,7 @@ function HealBot_Options_GeneralTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_FrameStrata, HealBot_Globals.FrameStrata)
         HealBot_Options_SetText(HealBot_Options_NoAuraWhenRested,HEALBOT_OPTION_IGNORE_AURA_RESTED)
         HealBot_Options_SetText(HealBot_Options_ShowMinimapButton,HEALBOT_OPTIONS_SHOWMINIMAPBUTTON)
+        HealBot_Options_SetText(HealBot_Options_UltraPerf,HEALBOT_OPTIONS_ULTRAPERF)
         HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
         HealBot_Options_SetText(HealBot_Options_HideUnlocked,HEALBOT_OPTIONS_HIDEUNLOCKEDTAG)
         HealBot_Options_SetText(HealBot_Options_RightButtonOptions,HEALBOT_OPTIONS_RIGHTBOPTIONS)

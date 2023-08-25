@@ -175,15 +175,22 @@ function HealBot_Comms_MacroSuppressSound()
     end
 end    
 
-function HealBot_Comms_PerfLevel(fps)
+local vCPU=1
+function HealBot_Comms_PerfLevel()
     if HealBot_retLuVars("CPUProfilerOn") then
         HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
         HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
     else
-        HealBot_Info_PerfLevelVal:SetText(HealBot_Globals.CPUUsage.."   ["..fps.."fps]")
-        if HealBot_Globals.CPUUsage<3 then
+        if HealBot_Globals.UltraPerf then
+            vCPU=HealBot_Globals.CPUUsage*2
+            HealBot_Info_PerfLevelVal:SetText(vCPU.." <Ultra>  ["..HealBot_Globals.FPS.."fps]")
+        else
+            vCPU=HealBot_Globals.CPUUsage
+            HealBot_Info_PerfLevelVal:SetText(vCPU.."   ["..HealBot_Globals.FPS.."fps]")
+        end
+        if vCPU<3 then
             HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
-        elseif HealBot_Globals.CPUUsage<5 then
+        elseif vCPU<5 then
             HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
         else
             HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)

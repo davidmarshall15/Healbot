@@ -2196,7 +2196,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideOptions" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-18" />
+                          <AbsDimension x="0" y="-15" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2224,7 +2224,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_HideUnlocked" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-18" />
+                          <AbsDimension x="0" y="-15" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2260,6 +2260,20 @@
                       <OnClick>HealBot_Options_DisableHealBotSolo_OnClick(self)</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_UltraPerf" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="0" y="-15" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_UltraPerf_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("ULTRAPERF",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ULTRAPERF",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
                   <Frame name="HealBot_Options_FrameStrata" inherits="UIDropDownMenuTemplate">
