@@ -2877,7 +2877,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_OverrideHotBarsPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="215"/>
+                      <AbsDimension y="175"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -2912,7 +2912,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-60" />
+                              <AbsDimension x="0" y="-50" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2926,7 +2926,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="0" y="-105" />
+                              <AbsDimension x="0" y="-85" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2956,7 +2956,7 @@
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="30" />
+                              <AbsDimension x="0" y="20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -2970,7 +2970,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_OverrideHealthDropPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="155"/>
+                      <AbsDimension y="195"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -3036,7 +3036,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-115" />
+                              <AbsDimension x="0" y="-110" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -3044,6 +3044,23 @@
                           <OnValueChanged>HealBot_Options_OverrideHealthDropSpeed_OnValueChanged(self)</OnValueChanged>
                           <OnEnter>HealBot_Options_Show_Help("HEALTHDROPSPEED",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALTHDROPSPEED",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_OverrideHealthDropCancel" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="250" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-155" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_OverrideHealthDropCancel_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPCANCEL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPCANCEL",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>
@@ -8287,7 +8304,7 @@
                 <Frames>
                   <Frame name="HealBot_Options_HotBarsPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="205"/>
+                      <AbsDimension y="175"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
@@ -8322,7 +8339,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-60" />
+                              <AbsDimension x="0" y="-50" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8336,7 +8353,7 @@
                         <Anchors>
                           <Anchor point="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="0" y="-105" />
+                              <AbsDimension x="0" y="-85" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8366,7 +8383,7 @@
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="25" />
+                              <AbsDimension x="0" y="20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8380,7 +8397,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_HealthDropPanel" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="150"/>
+                      <AbsDimension y="180"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -8429,7 +8446,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-65" />
+                              <AbsDimension x="0" y="-55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8446,7 +8463,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-115" />
+                              <AbsDimension x="0" y="-100" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -8454,6 +8471,23 @@
                           <OnValueChanged>HealBot_Options_HealthDropSpeed_OnValueChanged(self)</OnValueChanged>
                           <OnEnter>HealBot_Options_Show_Help("HEALTHDROPSPEED",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALTHDROPSPEED",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_HealthDropCancel" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="240" y="16" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-145" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_HealthDropCancel_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("HEALTHDROPCANCEL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALTHDROPCANCEL",false)</OnLeave>
                         </Scripts>
                       </Slider>
                     </Frames>

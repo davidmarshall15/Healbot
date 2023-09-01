@@ -6,10 +6,10 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.1.5.6"
+    return "10.1.5.8.1"
 end
 function HealBot_Global_InitVersion()
-    return "10.1.5.5"  -- Keep just behind the global version
+    return "10.1.5.7"  -- Keep just behind the global version
 end
 function HealBot_globalVars()
     --Consumables
@@ -270,6 +270,7 @@ function HealBot_globalVars()
     HEALBOT_SHADOW_MEND                     = 186263 --GetSpellInfo(186263) or "--Shadow Mend;"
     HEALBOT_HOLY_WORD_SANCTIFY              = 34861 --GetSpellInfo(34861) or "--Holy Word: Sanctify";
     HEALBOT_SPIRIT_OF_REDEMPTION            = 27827 --GetSpellInfo(20711) or "--Spirit of Redemption";
+    HEALBOT_SPIRIT_OF_REDEMPTION_NAME       = GetSpellInfo(27827) or GetSpellInfo(20711) or "Spirit of Redemption"
     HEALBOT_HOLY_WARD                       = 213610 --GetSpellInfo(213610) or "--Holy Ward";
     HBC_HOLY_NOVA                           = 15237
     HEALBOT_UNHOLY_HOVA                     = 324724

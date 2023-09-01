@@ -409,7 +409,6 @@ function HealBot_Init_SmartCast()
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
         rName=GetSpellInfo(HEALBOT_RESURRECTION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
-        rName=GetSpellInfo(HEALBOT_SPIRIT_OF_REDEMPTION)
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
         rName=GetSpellInfo(HEALBOT_REVITALIZE)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end

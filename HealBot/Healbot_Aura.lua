@@ -2049,8 +2049,11 @@ function HealBot_Aura_CheckUnitBuff(button)
         if not HealBot_UnitBuffCurrent[button.guid] then HealBot_UnitBuffCurrent[button.guid]={} end
         HealBot_UnitBuffCurrent[button.guid][uaName]=HealBot_TimeNow
         HealBot_Aura_BuffUpdate_Plugins(button, uaName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[uaName]] or HealBot_BuffTagNames[uaName], uaCount, true, uaUnitCasterIsPlayer)
+        if uaName==HEALBOT_SPIRIT_OF_REDEMPTION_NAME and button.health.current>0 then 
+            HealBot_OnEvent_UnitHealth(button)
+        end
         if not HealBot_ExcludeBuffInCache[uaSpellId] then
-            if not HealBot_Data["PALIVE"] or (button.player and uaSpellId==HEALBOT_SPIRIT_OF_REDEMPTION) then
+            if not HealBot_Data["PALIVE"] then
                 tGeneralBuffs=false
             elseif HealBot_Buff_Aura2Item[uaName] then
                 uaName=GetItemInfo(HealBot_Buff_Aura2Item[uaName]) or uaName
@@ -2240,7 +2243,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
     button.aura.buff.priority=99
-    if button.status.current<HealBot_Unit_Status["DEAD"] then
+    if button.status.current<HealBot_Unit_Status["DEAD"] or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME) then
         button.aura.buff.colbar=0
         curBuffName=false;
         unitCurrentBuff.active=false

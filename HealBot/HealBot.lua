@@ -99,6 +99,7 @@ HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
 HealBot_luVars["cpuAdj"]=0
 HealBot_luVars["rangeCheckAdj"]=0.5
 HealBot_luVars["HealthDropPct"]=999
+HealBot_luVars["HealthDropCancelPct"]=100
 HealBot_luVars["InInstance"]=false
 HealBot_luVars["DoSendGuildVersion"]=true
 HealBot_luVars["mapName"]=""
@@ -820,7 +821,6 @@ function HealBot_SlashCmd(cmd)
             --    HealBot_Plugin_AuraWatch_CancelNoIndex(button)
             end
             --HealBot_Aura_Counts(button)
-            HealBot_Options_SkinsColourRoleTab("ZZZ")
         else
             if x then HBcmd=HBcmd.." "..x end
             if y then HBcmd=HBcmd.." "..y end
@@ -2246,6 +2246,7 @@ function HealBot_Register_Events()
             HealBot:RegisterEvent("INCOMING_SUMMON_CHANGED")
             HealBot:RegisterEvent("PLAYER_ROLES_ASSIGNED");
             HealBot:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED")
+            HealBot:RegisterEvent("NEW_MOUNT_ADDED")
             if HEALBOT_GAME_VERSION>9 then
                 HealBot:RegisterEvent("TRAIT_CONFIG_UPDATED")
             end
@@ -2419,6 +2420,7 @@ function HealBot_UnRegister_Events()
     if HEALBOT_GAME_VERSION>3 then
         HealBot:UnregisterEvent("PET_BATTLE_OPENING_START");
         HealBot:UnregisterEvent("PET_BATTLE_OVER");
+        HealBot:UnregisterEvent("NEW_MOUNT_ADDED")
     end
     HealBot:UnregisterEvent("SPELL_UPDATE_COOLDOWN")
     HealBot:UnregisterEvent("RAID_TARGET_UPDATE")
@@ -3128,6 +3130,8 @@ function HealBot_Update_Skins()
         if not HealBot_Globals.OverrideColours["LUNAR_POWER"] then HealBot_Skins_SetPowerCol(nil, "LUNAR_POWER", true) end
         if not HealBot_Globals.OverrideColours["MAELSTROM"] then HealBot_Skins_SetPowerCol(nil, "MAELSTROM", true) end
         if not HealBot_Globals.OverrideColours["FURY"] then HealBot_Skins_SetPowerCol(nil, "FURY", true) end
+        if not HealBot_Globals.OverrideEffects["HEALTHDROPTIME"] then HealBot_Globals.OverrideEffects["HEALTHDROPTIME"]=3 end
+        if not HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"] then HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"]=200 end
         HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
     else
         HealBot_Skins_Check(Healbot_Config_Skins.Current_Skin)
@@ -3207,6 +3211,14 @@ function HealBot_setTooltipUpdateInterval()
       --HealBot_setCall("HealBot_setTooltipUpdateInterval")
 end
 
+function HealBot_IsUnitDead(button)
+    if (UnitIsDeadOrGhost(button.unit) or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME)) and not UnitIsFeignDeath(button.unit) then
+        return true
+    else
+        return false
+    end
+end
+
 function HealBot_SetPlayerData()
     local pClass, pClassEN=UnitClass("player")
     HealBot_Data["PCLASSTRIM"]=strsub(pClassEN,1,4)
@@ -3270,6 +3282,7 @@ function HealBot_OnEvent_AddOnLoaded(addonName, reset)
             HealBot_Config.LastLoadout=HealBot_Config.CurrentLoadout
         end
         HealBot_luVars["FPS"][0]=HealBot_Globals.FPS
+        HealBot_Data["PGUID"]=UnitGUID("player") or "x"
         HealBot_Options_setClassEn()
         HealBot_Options_setLists()
         HealBot_customTempUserName=HealBot_Options_copyTable(HealBot_Globals.HealBot_customPermUserName)
@@ -3931,22 +3944,21 @@ local HealBot_Health80 = {
   ["WARRIOR"] = 18000,
   ["DEATHKNIGHT"] = 18000,
 } 
-local health,healthMax=0,0
+local health,healthMax,healthDrop=0,0,false
 function HealBot_OnEvent_UnitHealth(button)
     button.health.updhlth=false
     if button.status.current<HealBot_Unit_Status["DC"] then
-        if UnitIsDeadOrGhost(button.unit) then
+        if HealBot_IsUnitDead(button) then
             healthMax=button.health.max
-            if UnitIsFeignDeath(button.unit) then
-                health=button.health.current
-            else
-                health=0
-            end
+            health=0
             if healthMax==0 then healthMax=1 end
         else
             if HealBot_UnitInVehicle[button.unit] and UnitExists(HealBot_UnitInVehicle[button.unit]) then
                 health,healthMax=UnitHealth(HealBot_UnitInVehicle[button.unit]),UnitHealthMax(HealBot_UnitInVehicle[button.unit])
                 button.health.updhlth=true
+            elseif UnitIsFeignDeath(button.unit) then
+                health=button.health.current
+                healthMax=UnitHealthMax(button.unit)
             else
                 health,healthMax=UnitHealth(button.unit),UnitHealthMax(button.unit)
             end
@@ -3977,15 +3989,25 @@ function HealBot_OnEvent_UnitHealth(button)
                     if HEALBOT_GAME_VERSION==3 then HealBot_OnEvent_SpecChange(button) end
                 end
             end
-            if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000)) then
-                if HealBot_luVars["UseHealthDrop"] then
-                    HealBot_Action_HealthDropAlertBarsAlpha(button)
-                end
-                HealBot_Update_HealthDropAuxBar(button)
+            if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000)) and not button.health.init and health>0 then
+               --and (button.status.unittype<7 or HealBot_luVars["UILOCK"]) then
+                healthDrop=true
+            else
+                healthDrop=false
             end
             button.health.current=health
             button.health.max=healthMax
             HealBot_Action_UpdateHealthButton(button, true)
+            if healthDrop then
+                if HealBot_luVars["UseHealthDrop"] then
+                    button.hazard.hpct=button.health.hpct+HealBot_luVars["HealthDropCancelPct"]
+                    if button.hazard.hpct>800 then button.hazard.hpct=800 end
+                    HealBot_Action_EnableBorderHazardType(button, button.health.mixcolr, button.health.mixcolg, button.health.mixcolb, "HLTHDROP")
+                end
+                HealBot_Update_HealthDropAuxBar(button)
+            elseif button.hazard.HlthDrop and button.health.hpct>button.hazard.hpct then
+                HealBot_Action_DisableBorderHazardType(button, "HLTHDROP")
+            end
             if hbHealthWatch[button.guid] then
                 HealBot_Plugin_HealthWatch_UnitUpdate(button)
             end
@@ -7155,6 +7177,7 @@ function HealBot_EventUIDisplayChange()
     HealBot_Timers_Set("SKINS","FramesSetPoint")
 end
 
+
 local hbEventFuncs={["UNIT_SPELLCAST_SENT"]=HealBot_OnEvent_UnitSpellCastSent,
                     ["SPELL_UPDATE_COOLDOWN"]=HealBot_EventSpellCD,
                     ["COMBAT_LOG_EVENT_UNFILTERED"]=HealBot_OnEvent_Combat_Log,
@@ -7198,6 +7221,7 @@ local hbEventFuncs={["UNIT_SPELLCAST_SENT"]=HealBot_OnEvent_UnitSpellCastSent,
                     ["PLAYER_SPECIALIZATION_CHANGED"]=HealBot_EventPlayerTalentUpdate,
                     ["ACTIVE_TALENT_GROUP_CHANGED"]=HealBot_EventPlayerTalentUpdate,
                     ["COMPANION_LEARNED"]=HealBot_EventCheckMount,
+                    ["NEW_MOUNT_ADDED"]=HealBot_EventCheckMount,
                     ["VARIABLES_LOADED"]=HealBot_OnEvent_VariablesLoaded,
                     ["ADDON_LOADED"]=HealBot_OnEvent_AddOnLoaded,
                     ["GET_ITEM_INFO_RECEIVED"]=HealBot_OnEvent_ItemInfoReceived,

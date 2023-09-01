@@ -813,7 +813,7 @@ function HealBot_Aux_ClearAuraDebuffBars(button)
     end
 end
 
--- HealIn and Absorbs (HoT in classic)
+-- HealIn and Absorbs
 local hbAuxAbsorbAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 local hbAuxHealInAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
 function HealBot_Aux_clearInHealsAssigned(frame,id)
@@ -1502,9 +1502,9 @@ function HealBot_Aux_UpdateHealthDropBar(button)
     for id in pairs(hbAuxHealthDropAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DC"] then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=1
-                button.aux[id]["G"]=0.58
-                button.aux[id]["B"]=0.2
+                button.aux[id]["R"]=button.health.mixcolr
+                button.aux[id]["G"]=button.health.mixcolg
+                button.aux[id]["B"]=button.health.mixcolb
             end
             HealBot_Aux_setBar(button, id, 1000, false)
         else
