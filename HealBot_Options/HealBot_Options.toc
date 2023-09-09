@@ -1,4 +1,4 @@
-## Interface: 100105
+## Interface: 100107
 ## Title: HealBot Options
 ## Author: Strife
 ## Notes: HealBot options and player settings

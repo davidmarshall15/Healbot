@@ -3989,8 +3989,8 @@ function HealBot_OnEvent_UnitHealth(button)
                     if HEALBOT_GAME_VERSION==3 then HealBot_OnEvent_SpecChange(button) end
                 end
             end
-            if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000)) and not button.health.init and health>0 then
-               --and (button.status.unittype<7 or HealBot_luVars["UILOCK"]) then
+            if button.frame<10 and health<button.health.current and HealBot_luVars["HealthDropPct"]<=(button.health.hpct-floor((health/healthMax)*1000))
+               and not button.health.init and health>0 and (button.status.unittype<7 or HealBot_luVars["UILOCK"]) then
                 healthDrop=true
             else
                 healthDrop=false

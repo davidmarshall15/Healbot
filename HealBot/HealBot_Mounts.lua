@@ -50,7 +50,11 @@ function HealBot_MountsPets_FavMount()
         elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
             VehicleExit()
         elseif C_MountJournal then 
-            C_MountJournal.SummonByID(0)
+            if HealBot_mountData["incFlying"] then
+                C_MountJournal.SummonByID(0)
+            else
+                HealBot_MountsPets_ToggelMount("ground")
+            end
         elseif HealBot_mountData["incFlying"] and HealBot_Config.FavMount and HealBot_MountIndex[HealBot_Config.FavMount] then
             CallCompanion("MOUNT", HealBot_MountIndex[HealBot_Config.FavMount])
         elseif HealBot_Config.FavGroundMount and HealBot_MountIndex[HealBot_Config.FavGroundMount] then
@@ -176,7 +180,7 @@ end
 function HealBot_MountsPets_ZoneChange()
     HealBot_mountData["incAQ"]=false
     if IsFlyableArea() then
-        if HEALBOT_GAME_VERSION>3 then
+        if HEALBOT_GAME_VERSION>4 then
             HealBot_mountData["incFlying"]=true
             --HealBot_AddDebug("Zone Is Flyable","Mount",true)
         else    
