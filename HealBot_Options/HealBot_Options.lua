@@ -13904,9 +13904,9 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                         HealBot_Timers_Set("LAST","PowerColourUpdate",0.28)
                     end
                     HealBot_Skins_ResetSkin("init")
-                    if not ddRefresh then
+                    --if not ddRefresh then
                         HealBot_Timers_Set("AURA","ResetClassIconTexture")
-                    end
+                    --end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
@@ -20172,11 +20172,19 @@ function HealBot_Options_OverrideFramesTab(tab)
         HealBot_Options_SetText(HealBot_Options_OverrideAlwaysRunEvents,HEALBOT_OPTIONS_ALWAYRUNEVENTS)
         HealBot_Options_OverridePlayerTargetFrames:SetChecked(HealBot_Globals.OverrideFrames["HIDEPTF"])
         HealBot_Options_SetText(HealBot_Options_OverridePlayerTargetFrames,HEALBOT_OPTIONS_HIDEPLAYERTARGET)
-        HealBot_Options_OverrideMiniBossFrames:SetChecked(HealBot_Globals.OverrideFrames["HIDEBOSSF"])
-        HealBot_Options_SetText(HealBot_Options_OverrideMiniBossFrames,HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES)
-        HealBot_Options_OverrideFocusFrame:SetChecked(HealBot_Globals.OverrideFrames["HIDEFOCUSF"])
-        HealBot_Options_SetText(HealBot_Options_OverrideFocusFrame,HEALBOT_OPTIONS_HIDEFOCUSFRAME)
-        
+
+        if HEALBOT_GAME_VERSION<2 then 
+            HealBot_Options_OverrideFocusFrame:Hide()
+            HealBot_Options_OverrideMiniBossFrames:Hide()
+            HealBot_Options_OverrideAlwaysRunEvents:SetPoint("TOP",-55,-150)
+            HealBot_Options_OverridePartyFrames:SetPoint("TOP",-55,-240)
+            HealBot_Options_OverrideRaidFrames:SetPoint("TOPLEFT",HealBot_Options_OverridePartyFrames,"BOTTOMLEFT",0,-55)
+        else
+            HealBot_Options_OverrideMiniBossFrames:SetChecked(HealBot_Globals.OverrideFrames["HIDEBOSSF"])
+            HealBot_Options_SetText(HealBot_Options_OverrideMiniBossFrames,HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES)
+            HealBot_Options_OverrideFocusFrame:SetChecked(HealBot_Globals.OverrideFrames["HIDEFOCUSF"])
+            HealBot_Options_SetText(HealBot_Options_OverrideFocusFrame,HEALBOT_OPTIONS_HIDEFOCUSFRAME)
+        end
         HealBot_Options_OverrideRaidFrames:SetChecked(HealBot_Globals.OverrideFrames["HIDERAIDF"])
         HealBot_Options_SetText(HealBot_Options_OverrideRaidFrames,HEALBOT_OPTIONS_HIDERAIDFRAMES)
         g=_G["HealBot_Options_OverrideEffectbTxt"]
@@ -20338,8 +20346,23 @@ function HealBot_Options_SkinsGeneralTab(tab)
         HealBot_Options_SkinDefaultRaid25:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID25])
         if HEALBOT_GAME_VERSION<2 then 
             HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID20)
+            HealBot_Options_FocusFrame:Hide()
+            HealBot_Options_MiniBossFrames:Hide()
+            HealBot_Options_PartyFrames:SetPoint("TOPLEFT",50,-62)
+            HealBot_Options_RaidFrames:SetPoint("TOPLEFT",HealBot_Options_PartyFrames,"TOPRIGHT",240,0)
         else
             HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid25,HEALBOT_OPTIONS_RAID25)
+            HealBot_Options_MiniBossFrames:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"])
+            HealBot_Options_SetText(HealBot_Options_MiniBossFrames,HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES)
+            HealBot_Options_FocusFrame:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEFOCUSF"])
+            HealBot_Options_SetText(HealBot_Options_FocusFrame,HEALBOT_OPTIONS_HIDEFOCUSFRAME)
+        end
+        if HEALBOT_GAME_VERSION<4 then 
+            HealBot_Options_SkinDefaultPet:Hide()
+            HealBot_Options_SkinDefaultArena:SetPoint("TOPLEFT",HealBot_Options_SkinDefaultSolo,"BOTTOMLEFT",40,-8)
+        else
+            HealBot_Options_SkinDefaultPet:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PETBATTLE])
+            HealBot_Options_SetText(HealBot_Options_SkinDefaultPet,HEALBOT_WORD_PETBATTLE)
         end
         HealBot_Options_SkinDefaultRaid40:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_OPTIONS_RAID40])
         HealBot_Options_SetText(HealBot_Options_SkinDefaultRaid40,HEALBOT_OPTIONS_RAID40)
@@ -20351,8 +20374,6 @@ function HealBot_Options_SkinsGeneralTab(tab)
         HealBot_Options_SetText(HealBot_Options_SkinDefaultBG15,HEALBOT_WORD_BG15)
         HealBot_Options_SkinDefaultBG40:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_BG40])
         HealBot_Options_SetText(HealBot_Options_SkinDefaultBG40,HEALBOT_WORD_BG40)
-        HealBot_Options_SkinDefaultPet:SetChecked(HealBot_Config.SkinDefault[Healbot_Config_Skins.Current_Skin][HEALBOT_WORD_PETBATTLE])
-        HealBot_Options_SetText(HealBot_Options_SkinDefaultPet,HEALBOT_WORD_PETBATTLE)
         HealBot_Options_UseStickyFrames:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"])
         HealBot_Options_SetText(HealBot_Options_UseStickyFrames,HEALBOT_OPTIONS_STICKYFRAMES)
         HealBot_Options_sliderlabels_Init(HealBot_Options_NotInUseOpacity,HEALBOT_OPTION_GLOBALDIMMING,10,40,1,5,HEALBOT_WORDS_NONE,HEALBOT_WORD_HIGH)
@@ -20367,10 +20388,6 @@ function HealBot_Options_SkinsGeneralTab(tab)
         HealBot_Options_SetLabel("HealBot_UnitInCombat_Txt",HEALBOT_OPTIONS_UNITINCOMBAT)
         HealBot_Options_PlayerTargetFrames:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"])
         HealBot_Options_SetText(HealBot_Options_PlayerTargetFrames,HEALBOT_OPTIONS_HIDEPLAYERTARGET)
-        HealBot_Options_MiniBossFrames:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"])
-        HealBot_Options_SetText(HealBot_Options_MiniBossFrames,HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES)
-        HealBot_Options_FocusFrame:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEFOCUSF"])
-        HealBot_Options_SetText(HealBot_Options_FocusFrame,HEALBOT_OPTIONS_HIDEFOCUSFRAME)
         HealBot_Options_RaidFrames:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"])
         HealBot_Options_SetText(HealBot_Options_RaidFrames,HEALBOT_OPTIONS_HIDERAIDFRAMES)
         g=_G["HealBot_GeneralSkin_FontStr"]

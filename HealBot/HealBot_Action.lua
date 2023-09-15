@@ -5599,6 +5599,9 @@ function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
             tButton:ClearAllPoints()
             tButton:SetParent(grpFrame[frame])
             tButton.frame=frame
+            HealBot_Panel_resetTestColsButton(tButton.id)
+        elseif tButton.skin~=Healbot_Config_Skins.Current_Skin then
+            HealBot_Panel_resetTestColsButton(tButton.id)
         end
         HealBot_Skins_ResetSkin("bar",tButton)
         if tButton.testup then

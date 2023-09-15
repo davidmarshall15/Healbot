@@ -1738,6 +1738,11 @@ function HealBot_Panel_resetTestCols(force)
     end
 end
 
+function HealBot_Panel_resetTestColsButton(index)
+    if HealBot_setTestCols[index] then HealBot_setTestCols[index]=false end
+end
+
+
 function HealBot_Panel_enemyBar(eUnit, pUnit)
     i[hbCurrentFrame]=i[hbCurrentFrame]+1
     table.insert(units,eUnit)

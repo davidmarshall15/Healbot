@@ -329,11 +329,11 @@ HEALBOT_HELP={  [1] = "[HealBot] /hb h -- Afficher l\'aide",
               }
 
 HEALBOT_HELP2={ [1] = "[HealBot] /hb d -- R\195\160Z des options",
-                [2] = "[HealBot] /hb aggro 2 <n> -- Fixe le niveau d\aggro 2 au \% de menace <n>",
-                [3] = "[HealBot] /hb aggro 3 <n> -- Fixe le niveau d\aggro 3 au \% de menace <n>",
+                [2] = "[HealBot] /hb aggro 2 <n> -- Fixe le niveau d\'aggro 2 au % de menace <n>",
+                [3] = "[HealBot] /hb aggro 3 <n> -- Fixe le niveau d\'aggro 3 au % de menace <n>",
                 [4] = "[HealBot] /hb tr <Role> -- D\195\169termine le r\195\180le prioritaire pour le sous-tri par r\195\180le. Les r\195\180les valides sont 'TANK', 'HEALER' ou 'DPS'",
                 [5] = "[HealBot] /hb use10 -- Utilisation auto. du slot 10 d\'ing\195\169nieur",
-                [6] = "[HealBot] /hb pcs <n> -- Ajuste la taille de l\indicateur de charge de Puissance Sacr\195\169e \195\160 <n>, valeur par d\195\169faut : 7 ",
+                [6] = "[HealBot] /hb pcs <n> -- Ajuste la taille de l\'indicateur de charge de Puissance Sacr\195\169e \195\160 <n>, valeur par d\195\169faut : 7 ",
                 [7] = "[HealBot] /hb spt -- Bascule Self Pet",
                 [8] = "[HealBot] /hb ws -- Bascule l\'affichage de l\'ic\195\180ne d\'Ame affaiblie au lieu de MdP : Bouclier avec un -",
                 [9] = "[HealBot] /hb rld <n> -- En secondes, dur\195\169e de l\'affichage en vert du nom du joueur apr\195\168s le res",
@@ -636,7 +636,7 @@ HEALBOT_ABOUT_FAQ_ANSWERS = {     [1]   = "Vous surveillez les buffs manquants \
                                           "(CD : Cooldown = Temps de recharge) \n\n" ..
                                           "Nota : Rien ne peut \195\170tre fait pour modifier cela car en combat, \n" ..
                                           "la totalit\195\169 de l\'interface est verrouill\195\169e.\n\n" ..
-                                          "La meilleure solution est de surveiller le CD dans la bulle d\info",
+                                          "La meilleure solution est de surveiller le CD dans la bulle d\'info",
                                   [3]   = "Oui \n\n"..
                                           "Exemple de macro pour g\195\169rer le CD de Main de salut du Paladin : \n\n" ..
                                           "    #show Main de salut \n" ..

@@ -336,7 +336,7 @@ function HealBot_Lang_huHU()
     HEALBOT_CHAT_SELFPETSOFF                = "Saját Pet kikapcsolva"
     HEALBOT_VISIBLE_RANGE                   = "100 méteren Belül"
     HEALBOT_SPELL_RANGE                     = "spell távolságon belül"
-    HEALBOT_ACTION_HBFOCUS                  = "Bal kattintás beállitása \ nfocus a célon"
+    HEALBOT_ACTION_HBFOCUS                  = "Bal kattintás beállitása \nfocus a célon"
     HEALBOT_WORD_OUTSIDE                    = "kivül"
     HEALBOT_OPTIONS_TAB_ALERT               = "riado"
     HEALBOT_OPTIONS_TAB_SORT                = "rendez"

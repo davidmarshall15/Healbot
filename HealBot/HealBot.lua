@@ -4184,14 +4184,13 @@ function HealBot_OnEvent_RaidTargetUpdateAll()
 end
 
 function HealBot_getDefaultSkin()
-    local _,z = IsInInstance()
     local LastAutoSkinChangeType="None"
     local newSkinName=Healbot_Config_Skins.Current_Skin
     local skinFound=false
     if not HealBot_Options_checkSkinName(Healbot_Config_Skins.Current_Skin) then
         newSkinName=HEALBOT_SKINS_STD
     end
-    if HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] then
+    if HEALBOT_GAME_VERSION>1 and HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec] then
         for x in pairs (Healbot_Config_Skins.Skins) do
             if HealBot_Config.SkinSpecEnabled[HealBot_Config.Spec]==Healbot_Config_Skins.Skins[x] then
                 LastAutoSkinChangeType=HealBot_Config.Spec
@@ -4212,6 +4211,7 @@ function HealBot_getDefaultSkin()
         end
     end
     if not skinFound then
+        local _,z = IsInInstance()
         if z=="arena" then
             for x in pairs (Healbot_Config_Skins.Skins) do
                 if HealBot_Config.SkinDefault[Healbot_Config_Skins.Skins[x]][HEALBOT_WORD_ARENA] then
@@ -5184,16 +5184,25 @@ function HealBot_FastUnitQueue(start)
     end
 end
 
+local hbQDiff,hbQLen=0,0
 function HealBot_OnUpdate()
     HealBot_TimeNow=GetTime()
     if HealBot_luVars["UpdateSlowNext"]<HealBot_TimeNow then
         HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
         HealBot_Update_Slow()
     else
-        if #HealBot_FastQueue>HealBot_luVars["MaxFastQueue"] then
+        hbQLen=#HealBot_FastQueue
+        if hbQLen>=HealBot_luVars["MaxFastQueue"] then
             HealBot_FastUnitQueue(HealBot_luVars["MaxFastQueue"])
-        elseif #HealBot_FastQueue>0 then
-            HealBot_FastUnitQueue(#HealBot_FastQueue)
+        elseif hbQLen>0 then
+            hbQDiff=HealBot_luVars["MaxFastQueue"]-hbQLen
+            HealBot_FastUnitQueue(hbQLen)
+            hbQLen=#HealBot_FastQueue
+            if hbQLen>hbQDiff then
+                HealBot_FastUnitQueue(hbQDiff)
+            elseif hbQLen>0 then
+                HealBot_FastUnitQueue(hbQLen)
+            end
         end
         hbFastCur()
     end
