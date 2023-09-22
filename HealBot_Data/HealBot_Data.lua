@@ -285,7 +285,7 @@ function HealBot_Data_InitVars()
         CompressExport=true,
         AllowPlayerRoles=false,
         VehicleFontSizeReduction=4,
-        CrashProtTime=0,
+        UseCrashProt=false,
         NoRanks=false,
         ClassicHoTTime=6,
         CPUUsage=5,

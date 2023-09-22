@@ -112,6 +112,7 @@ function HealBot_Action_SetCustomRoleCols()
     end
     HealBot_Aux_SetCustomRoleCols()
     HealBot_Text_SetCustomRoleCols()
+	HealBot_Panel_SetCustomRoleCols()
 end
 
 local hbCustomPowerCols={}
@@ -2174,6 +2175,7 @@ local hbBarColourFuncs={[1]=HealBot_Action_BarColourHealth,
                         [5]=HealBot_Action_BarColourClassHlthMix,
                         [6]=HealBot_Action_BarColourRoleHlthMix}
 local mixPct=0
+local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
 function HealBot_Action_UpdateHealthButton(button, healthEvent)
     if healthEvent then
         button.health.pct = button.health.current/button.health.max
@@ -2200,13 +2202,11 @@ function HealBot_Action_UpdateHealthButton(button, healthEvent)
             button.health.rmixcolr, button.health.rmixcolg, button.health.rmixcolb=button.health.rcol, button.health.gcol, 0
         end
 
-        if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==5 then 
+        if HealBot_TextColChangeWithHealth[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]] then 
             button.text.nameupdate=true 
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 and
-          (Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==1 or
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==5) then 
+           HealBot_TextColChangeWithHealth[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]] then 
             button.text.healthupdate=true 
         end
         HealBot_Action_UpdateHealthHotBar(button)
@@ -5160,45 +5160,38 @@ function HealBot_Action_MarkAttribUpdateButton(button, enabled, enemy, emerg)
     HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.1)
 end
 
-local hButton, hAttrib=false,false
+local hButton=false
 function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,preCombat)
     hButton=false
-    hAttrib=false
     if guid then
         if unitType<5 then
             if not HealBot_Action_Private_Button[unit] then 
                 HealBot_Action_Private_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Private_Button[unit]
         elseif unitType==8 then
             if not HealBot_Action_Pet_Button[unit] then 
                 HealBot_Action_Pet_Button[unit]=HealBot_Action_CreateButton(frame, "hbPet_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Pet_Button[unit]
         elseif unitType==7 then
             if not HealBot_Action_Vehicle_Button[unit] then 
                 HealBot_Action_Vehicle_Button[unit]=HealBot_Action_CreateButton(frame, "hbVehicle_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Vehicle_Button[unit]
         elseif unitType>10 then
             if not HealBot_Action_Enemy_Button[unit] then 
                 HealBot_Action_Enemy_Button[unit]=HealBot_Action_CreateButton(frame, "hbEnemy_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Enemy_Button[unit]
         elseif unitType>8 then
             if not HealBot_Action_Extra_Button[unit] then 
                 HealBot_Action_Extra_Button[unit]=HealBot_Action_CreateButton(frame, "hbExtra_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Extra_Button[unit]
         else
             if not HealBot_Action_Unit_Button[unit] then 
                 HealBot_Action_Unit_Button[unit]=HealBot_Action_CreateButton(frame, "HealBot_") 
-                hAttrib=preCombat
             end
             hButton=HealBot_Action_Unit_Button[unit]
         end
@@ -5282,13 +5275,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     end
                     hButton:SetAttribute("unit", unit);
                     erButton:SetAttribute("unit", unit);
-                    if hAttrib then
-                        HealBot_Action_SetAllButtonAttribs(hButton,"Enemy") 
-                        HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
-                        HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
-                    else
-                        HealBot_Action_MarkAttribUpdateButton(hButton, true, true, true)
-                    end
+                    HealBot_Action_SetAllButtonAttribs(hButton,"Enemy") 
+                    HealBot_Action_SetAllButtonAttribs(hButton,"Enabled")
+                    HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                     if not UnitExists(unit) then
                         HealBot_UpdateUnitNotExists(hButton, true)
                     else
@@ -5514,10 +5503,9 @@ function HealBot_Action_UpdateTestButton(button)
             button.gref.icon[92]:SetAlpha(0)
         end
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWCLASS"] then
-            if not unitRole then unitRole="DAMAGER" end
             local classTexture=HealBot_Panel_retClassRoleIcon(unitClass)
             if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-                classTexture=HealBot_Panel_retClassRoleIcon(unitRole)
+                classTexture=HealBot_Panel_retClassRoleIcon(button.roletxt or "DAMAGER")
             end
             button.gref.icon[91]:SetTexture(classTexture)
             button.gref.icon[91]:SetAlpha(1)
@@ -5579,6 +5567,7 @@ function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
             tButton.skinreset=true
             tButton.indreset=true
             tButton.auxreset=true
+            tButton.reset=true
             tButton.unit=unitText
             tButton.guid="TestBar"
             HealBot_Test_Button[unitText]=tButton
@@ -5595,12 +5584,18 @@ function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
         if tButton.regClicks then
             HealBot_Action_setRegisterForClicks(tButton)
         end
+        if tButton.roletxt~=unitRole then
+            tButton.roletxt=unitRole
+            tButton.reset=true
+        end
         if tButton.frame~=frame then
             tButton:ClearAllPoints()
             tButton:SetParent(grpFrame[frame])
             tButton.frame=frame
+            tButton.reset=true
             HealBot_Panel_resetTestColsButton(tButton.id)
         elseif tButton.skin~=Healbot_Config_Skins.Current_Skin then
+            tButton.reset=true
             HealBot_Panel_resetTestColsButton(tButton.id)
         end
         HealBot_Skins_ResetSkin("bar",tButton)
@@ -6956,7 +6951,7 @@ function HealBot_Action_SmartCast(button)
  
     if HealBot_Globals.SmartCastRes and HealBot_Action_IsUnitDead(button) then
         scSpell=HealBot_Action_retResSpell(button)
-        HealBot_AddDebug("Res spell="..(scSpell or "nil"),"SmartCast",true)
+        --HealBot_AddDebug("Res spell="..(scSpell or "nil"),"SmartCast",true)
     elseif button.aura.debuff.curespell and HealBot_Globals.SmartCastDebuff then
         scSpell=button.aura.debuff.curespell
     elseif button.aura.buff.missingbuff and HealBot_Globals.SmartCastBuff then
@@ -6978,12 +6973,12 @@ function HealBot_Action_SmartCast(button)
     end
 
     if scSpell and HealBot_UnitInRangeExc30(button, scSpell)>0 then
-        HealBot_AddDebug("In Range spell="..scSpell,"SmartCast",true)
+        --HealBot_AddDebug("In Range spell="..scSpell,"SmartCast",true)
         return scSpell
     else
-        if scSpell then 
-            HealBot_AddDebug("Out of Range spell="..scSpell,"SmartCast",true)   
-        end
+        --if scSpell then 
+        --    HealBot_AddDebug("Out of Range spell="..scSpell,"SmartCast",true)   
+        --end
         return nil
     end
 end

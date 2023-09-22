@@ -91,13 +91,10 @@ HealBot_Panel_luVars["MAPID"]=0
 HealBot_Panel_luVars["NumPrivate"]=0
 HealBot_Panel_luVars["NumPets"]=0
 HealBot_Panel_luVars["TankHealth"]=0
-HealBot_Panel_luVars["cpUse"]=false
 HealBot_Panel_luVars["cpGroup"]=false
 HealBot_Panel_luVars["cpRaid"]=false
 HealBot_Panel_luVars["FocusGroups"]=1
-HealBot_Panel_luVars["FirstLoad"]=true
-HealBot_Panel_luVars["LoadTime"]=GetTime()+5
-HealBot_Panel_luVars["cpMacro"]="hb-CrashProt"
+HealBot_Panel_luVars["cpMacro"]="HealBot-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
 HealBot_Panel_luVars["MainTankGUID"]=""
@@ -125,9 +122,7 @@ function HealBot_Panel_setAutoClose(frame)
 end
 
 function HealBot_Panel_setCP(cpType, useCP)
-    if cpType=="MAIN" then
-        HealBot_Panel_luVars["cpUse"]=useCP
-    elseif cpType=="GROUP" then
+    if cpType=="GROUP" then
         HealBot_Panel_luVars["cpGroup"]=useCP
     elseif cpType=="RAID" then
         HealBot_Panel_luVars["cpRaid"]=useCP
@@ -921,6 +916,7 @@ function HealBot_Panel_TestBarsOff()
         end
         HealBot_Action_DeleterCallsUnit(b.unit)
         b:Hide()
+        HealBot_Emerg_Button[b.id]:Hide()
         HealBot_TestBarsActive[x]=nil
     end
 end
@@ -1075,7 +1071,7 @@ function HealBot_Panel_PositionBars(preCombat)
                 end
             end
         elseif vPosButton.id and hbAnchoredButtons[vPosButton.id] then
-            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll")
+            HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll", 0.2)
             HealBot_AddDebug("AnchorButton button and relButton as the same - unit="..(xUnit or "nil"), "Panel", true)
         end
     end)
@@ -1389,6 +1385,19 @@ function HealBot_Panel_TestBarColUpdate(button)
     --end
 end
 
+local hbCustomRoleCols={}
+function HealBot_Panel_SetCustomRoleCols()
+    if HealBot_Globals.OverrideColours["USEROLE"]==1 then
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["DAMAGER"])
+    else
+        hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["TANK"])
+        hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["HEALER"])
+        hbCustomRoleCols["DAMAGER"]=HealBot_Options_copyTable(HealBot_Globals.OverrideColours["DAMAGER"])
+    end
+end
+
 local hbHealButtonsConcat={[1]="", [2]="~", [3]="1"}
 function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
     hbHealButtonsConcat[1]=button.unit
@@ -1396,68 +1405,96 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
     table.insert(HealBot_Action_HealButtons,table.concat(hbHealButtonsConcat))
     --HealBot_TrackUnit[5][button.unit]=true
     HealBot_TestBarsActive[index]=button
-    if not HealBot_setTestCols[index] then
+    if not HealBot_setTestCols[index] or button.reset then
         HealBot_setTestCols[index]=true
-        button.text.r,button.text.g,button.text.b=r,g,b
-        if (Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] >= 2) then
-            if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 2 or
-               Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"] == 4 then
-                HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = r,g,b
-            else
-                HealBot_colIndex["hcr"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HR"]
-                HealBot_colIndex["hcg"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HG"]
-                HealBot_colIndex["hcb"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HB"]
-            end
+        if button.reset then
+            button.text.r,button.text.g,button.text.b=r,g,b
+            HealBot_colIndex["hctr5"..index],HealBot_colIndex["hctg5"..index],HealBot_colIndex["hctb5"..index]=tpR,tpG,tpB
         else
+            r,g,b=button.text.r,button.text.g,button.text.b
+            HealBot_colIndex["hctr5"..index]=HealBot_colIndex["hctr5"..index] or tpR
+            HealBot_colIndex["hctg5"..index]=HealBot_colIndex["hctg5"..index] or tpG
+            HealBot_colIndex["hctb5"..index]=HealBot_colIndex["hctb5"..index] or tpB
+        end
+        button.reset=false
+        if not hbCustomRoleCols[button.roletxt] then button.roletxt="DAMAGER" end
+
+        if Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 or
+           Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==5 then
+            HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = r,g,b
+        elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==1 then
             HealBot_colIndex["hcr"..index],HealBot_colIndex["hcg"..index],HealBot_colIndex["hcb"..index] = 0,1,0
+        elseif Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==4 then
+            HealBot_colIndex["hcr"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HR"]
+            HealBot_colIndex["hcg"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HG"]
+            HealBot_colIndex["hcb"..index]=Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["HB"]
+        else
+            HealBot_colIndex["hcr"..index]=hbCustomRoleCols[button.roletxt].r
+            HealBot_colIndex["hcg"..index]=hbCustomRoleCols[button.roletxt].g
+            HealBot_colIndex["hcb"..index]=hbCustomRoleCols[button.roletxt].b
         end
 
         if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==2 or 
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==4 then
+           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==5 then
             HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = r,g,b
         elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==1 then
             HealBot_colIndex["hctr"..index],HealBot_colIndex["hctg"..index],HealBot_colIndex["hctb"..index] = 0,1,0
+        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]==4 then
+            HealBot_colIndex["hctr"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
+            HealBot_colIndex["hctg"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"]
+            HealBot_colIndex["hctb"..index]=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"]
         else
-            HealBot_colIndex["hctr"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
-            HealBot_colIndex["hctg"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCG"]
-            HealBot_colIndex["hctb"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCB"]
+            HealBot_colIndex["hctr"..index]=hbCustomRoleCols[button.roletxt].r
+            HealBot_colIndex["hctg"..index]=hbCustomRoleCols[button.roletxt].g
+            HealBot_colIndex["hctb"..index]=hbCustomRoleCols[button.roletxt].b
         end
         button.text.r,button.text.g,button.text.b=r,g,b
 
         if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==2 or 
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==4 then
+           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==5 then
             HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = r,g,b
         elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==1 then
             HealBot_colIndex["hctr2"..index],HealBot_colIndex["hctg2"..index],HealBot_colIndex["hctb2"..index] = 0,1,0
-        else
+        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]==4 then
             HealBot_colIndex["hctr2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCR"]
             HealBot_colIndex["hctg2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCG"]
             HealBot_colIndex["hctb2"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HCB"]
+        else
+            HealBot_colIndex["hctr2"..index]=hbCustomRoleCols[button.roletxt].r
+            HealBot_colIndex["hctg2"..index]=hbCustomRoleCols[button.roletxt].g
+            HealBot_colIndex["hctb2"..index]=hbCustomRoleCols[button.roletxt].b
         end
 
         if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==2 or 
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==4 then
+           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==5 then
             HealBot_colIndex["hctr3"..index],HealBot_colIndex["hctg3"..index],HealBot_colIndex["hctb3"..index] = r,g,b
         elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==1 then
             HealBot_colIndex["hctr3"..index],HealBot_colIndex["hctg3"..index],HealBot_colIndex["hctb3"..index] = 0,1,0
-        else
+        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]==4 then
             HealBot_colIndex["hctr3"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCR"]
             HealBot_colIndex["hctg3"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCG"]
             HealBot_colIndex["hctb3"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SCB"]
+        else
+            HealBot_colIndex["hctr3"..index]=hbCustomRoleCols[button.roletxt].r
+            HealBot_colIndex["hctg3"..index]=hbCustomRoleCols[button.roletxt].g
+            HealBot_colIndex["hctb3"..index]=hbCustomRoleCols[button.roletxt].b
         end
         
         if Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==2 or 
-           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==4 then
+           Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==5 then
             HealBot_colIndex["hctr4"..index],HealBot_colIndex["hctg4"..index],HealBot_colIndex["hctb4"..index] = r,g,b
         elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==1 then
             HealBot_colIndex["hctr4"..index],HealBot_colIndex["hctg4"..index],HealBot_colIndex["hctb4"..index] = 0,1,0
-        else
+        elseif Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]==4 then
             HealBot_colIndex["hctr4"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACR"]
             HealBot_colIndex["hctg4"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACG"]
             HealBot_colIndex["hctb4"..index] = Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["ACB"]
+        else
+            HealBot_colIndex["hctr4"..index]=hbCustomRoleCols[button.roletxt].r
+            HealBot_colIndex["hctg4"..index]=hbCustomRoleCols[button.roletxt].g
+            HealBot_colIndex["hctb4"..index]=hbCustomRoleCols[button.roletxt].b
         end
         
-        HealBot_colIndex["hctr5"..index],HealBot_colIndex["hctg5"..index],HealBot_colIndex["hctb5"..index]=tpR,tpG,tpB
         button.gref["Bar"]:SetValue(1000)
         button.health.mixcolr,button.health.mixcolg,button.health.mixcolb=button.text.r,button.text.g,button.text.b
         button.mana.r,button.mana.g,button.mana.b=HealBot_colIndex["hctr5"..index],HealBot_colIndex["hctg5"..index],HealBot_colIndex["hctb5"..index]
@@ -1469,9 +1506,12 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
     HealBot_Action_UpdateBackground(button)
     if button.frame<10 and Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["USE"] then
         if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==2 or
-           Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==4 then
+           Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==5 then
             HealBot_Emerg_Button[button.id].bar:SetStatusBarColor(button.text.r,button.text.g,button.text.b,1)
-        elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==3 then
+        elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==3 or
+           Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==6 then
+            HealBot_Emerg_Button[button.id].bar:SetStatusBarColor(hbCustomRoleCols[button.roletxt].r,hbCustomRoleCols[button.roletxt].g,hbCustomRoleCols[button.roletxt].b,1)
+        elseif Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["BARCOL"]==4 then
             HealBot_Emerg_Button[button.id].bar:SetStatusBarColor(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["HR"],
                                                                   Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["HG"],
                                                                   Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["HB"],1)
@@ -1479,6 +1519,8 @@ function HealBot_Panel_TestBarShow(index,button,tRole,r,g,b,tpR,tpG,tpB)
             HealBot_Emerg_Button[button.id].bar:SetStatusBarColor(0,1,0,1)
         end
         HealBot_Emerg_Button[button.id]:Show()
+    else
+        HealBot_Emerg_Button[button.id]:Hide()
     end
 end
 
@@ -1487,8 +1529,9 @@ function HealBot_Panel_testAddButton(gName,bName,minBar,maxBar,tRole,bClass)
     local k=i[hbCurrentFrame]
     for j=minBar,maxBar do
         if noBars>0 then
+            if not tRole then tRole="DAMAGER" end
             local tcR,tcG,tcB,tcC,tpR,tpG,tpB=HealBot_Panel_RandomClassColour(tRole, bClass)
-            local tstb=HealBot_Action_SetTestButton(hbCurrentFrame, HEALBOT_WORD_TEST..bName..j,tRole,tcC)
+            local tstb=HealBot_Action_SetTestButton(hbCurrentFrame, bName..j,tRole,tcC)
             if tstb then 
                 local bIndex=tstb.id
                 HealBot_Panel_TestBarShow(bIndex,tstb,tRole,tcR,tcG,tcB,tpR,tpG,tpB)
@@ -1721,6 +1764,7 @@ function HealBot_Panel_TestBarsOn()
         if not HealBot_TestBarsActive[xButton.id] then
            -- HealBot_setTestCols[xButton.id]=false
             xButton:Hide()
+            HealBot_Emerg_Button[xButton.id]:Hide()
         end
     end
     for xHeader,xButton in pairs(HealBot_Header_Frames) do
@@ -2279,7 +2323,7 @@ function HealBot_Panel_petHeals(preCombat)
     end
 end
 
-local vRaidTargetNum,vRaidTargetGroup,vRaidUnit,vRaidIndex,vCrashProtData,vCrashProtTmp=0,8,"",0,"",""
+local vRaidTargetNum,vRaidTargetGroup,vRaidUnit,vRaidIndex,vCrashProtData,vCrashProtTmp=0,8,"",0,"1","0"
 local vRaidPrevSort,vRaidHeadSort,vRaidSubSort,vRaidShowHeader="","","init",false
 function HealBot_Panel_raidHeals(preCombat)
     vRaidIndex=i[hbCurrentFrame]
@@ -2288,7 +2332,7 @@ function HealBot_Panel_raidHeals(preCombat)
     end
     
     vRaidTargetNum = nraid
-    if HealBot_Panel_luVars["cpUse"] and preCombat and nraid>0 and HealBot_Panel_luVars["cpRaid"] then
+    if preCombat and nraid>0 and HealBot_Panel_luVars["cpRaid"] then
         if vRaidTargetNum<11 then
             vRaidTargetNum=10
             vRaidTargetGroup=2
@@ -2316,7 +2360,7 @@ function HealBot_Panel_raidHeals(preCombat)
             end
             if hbPanel_dataUnits[vRaidUnit] then
                 HealBot_Panel_addUnit(vRaidUnit, 5, hbPanel_dataUnits[vRaidUnit], true)
-            elseif preCombat and HealBot_Panel_luVars["cpUse"] and (HealBot_Panel_luVars["cpCrash"] or HealBot_Panel_luVars["cpRaid"]) then
+            elseif preCombat and (HealBot_Panel_luVars["cpCrash"] or HealBot_Panel_luVars["cpRaid"]) then
                 HealBot_UnitGroups[vRaidUnit]=vRaidTargetGroup
                 HealBot_Panel_addUnit(vRaidUnit, 5, vRaidUnit, true)
             end
@@ -2325,7 +2369,7 @@ function HealBot_Panel_raidHeals(preCombat)
         for n,xUnit in ipairs(HealBot_Action_HealGroup) do
             if hbPanel_dataUnits[xUnit] then
                 HealBot_Panel_addUnit(xUnit, 5, hbPanel_dataUnits[xUnit], true)
-            elseif HealBot_Panel_luVars["cpUse"] and preCombat then
+            elseif preCombat then
                 if (IsInGroup() and HealBot_Panel_luVars["cpGroup"]) or
                    (HealBot_Panel_luVars["cpCrash"] and HealBot_Panel_luVars["cpCrashType"]=="g" and n<=HealBot_Panel_luVars["cpCrashNum"]) then
                     HealBot_UnitGroups[xUnit]=1
@@ -2456,7 +2500,7 @@ function HealBot_Panel_groupHeals(preCombat)
                 xUnit=hbPanel_dataGUIDs[UnitGUID(xUnit)] or xUnit
             end
             HealBot_Panel_addUnit(xUnit, 6, hbPanel_dataUnits[xUnit], false)
-        elseif nraid==0 and HealBot_Panel_luVars["cpUse"] and preCombat then
+        elseif nraid==0 and preCombat then
             if (IsInGroup() and HealBot_Panel_luVars["cpGroup"]) or
                (HealBot_Panel_luVars["cpCrash"] and HealBot_Panel_luVars["cpCrashType"]=="g" and n<=HealBot_Panel_luVars["cpCrashNum"]) then
                 HealBot_UnitGroups[xUnit]=1
@@ -3026,23 +3070,19 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
             vFocusWithPlayers=false
         end
         
-        if HealBot_Panel_luVars["cpCrashTime"]>0 then
-            if HealBot_Panel_luVars["LoadTime"]>GetTime()-HealBot_Panel_luVars["cpCrashTime"] then
-                HealBot_Panel_luVars["cpCrash"]=true
-                local mbody=GetMacroBody(HealBot_Panel_luVars["cpMacro"]) or "Solo:0"
-                HealBot_Panel_luVars["cpCrashType"],HealBot_Panel_luVars["cpCrashNum"] = string.split(":", mbody)
-                if not preCombat or HealBot_Panel_luVars["cpCrashType"]=="Solo" then
-                    HealBot_Panel_luVars["cpCrash"]=false
-                else
-                    HealBot_Panel_luVars["cpCrashNum"]=tonumber(HealBot_Panel_luVars["cpCrashNum"])
-                end
-            else
-                HealBot_Panel_luVars["cpCrashTime"]=0
+        if HealBot_Globals.UseCrashProt and not HealBot_retLuVars("Loaded") then
+            HealBot_Panel_luVars["cpCrash"]=true
+            local mbody=GetMacroBody(HealBot_Panel_luVars["cpMacro"]) or "Solo:0"
+            HealBot_Panel_luVars["cpCrashType"],HealBot_Panel_luVars["cpCrashNum"] = string.split(":", mbody)
+            --HealBot_Panel_luVars["cpCrashType"],HealBot_Panel_luVars["cpCrashNum"]="r","25"
+            if not preCombat or HealBot_Panel_luVars["cpCrashType"]=="Solo" then
                 HealBot_Panel_luVars["cpCrash"]=false
+            else
+                HealBot_Panel_luVars["cpCrashNum"]=tonumber(HealBot_Panel_luVars["cpCrashNum"])
             end
         end
         HealBot_Panel_PlayersChanged(preCombat)
-        if not preCombat and HealBot_Globals.CrashProtTime>0 then
+        if not preCombat and HealBot_Globals.UseCrashProt then
             if nraid>0 then
                 vCrashProtTmp="r:"..nraid
             elseif IsInGroup() then
@@ -3104,11 +3144,6 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
 end
 
 function HealBot_Panel_PrePartyChanged(preCombat, changeType)
-    if HealBot_Panel_luVars["FirstLoad"] then
-        HealBot_Panel_luVars["FirstLoad"]=false
-        HealBot_Panel_luVars["LoadTime"]=GetTime()
-        HealBot_Panel_luVars["cpCrashTime"]=HealBot_Globals.CrashProtTime or 0
-    end
     if changeType>0 then
         if changeType>5 then
             if (Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]<6) or

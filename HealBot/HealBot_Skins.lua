@@ -455,6 +455,7 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 erButton:SetFrameLevel(1)
                 erButton.bar:SetFrameLevel(1)
                 erButton:EnableMouse(false)
+                erButton:Hide()
             end
 
             tBarsConcat[1]="f"
@@ -2662,9 +2663,9 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
       --HealBot_setCall("HealBot_Skins_Check_Skin")
 end
 local hbRoleCols= {
-          ["TANK"]           = {r=0.82, g=0.65,  b=0.48, },
-          ["HEALER"]         = {r=0.45, g=0.85,  b=0.99, },
-          ["DAMAGER"]        = {r=1.0,  g=0.55,  b=0.1, },
+          ["TANK"]           = {r=0.85, g=0.65,  b=0.50, },
+          ["HEALER"]         = {r=0.30, g=0.90,  b=0.99, },
+          ["DAMAGER"]        = {r=1.0,  g=0.45,  b=0.05, },
       }
 function HealBot_Skins_SetRoleCol(SkinName, role, override)
     if override then

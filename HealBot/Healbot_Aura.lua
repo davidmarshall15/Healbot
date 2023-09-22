@@ -2341,10 +2341,10 @@ function HealBot_Aura_CureSpellOnCD()
     HealBot_Aura_luVars["cureOffCd"]=false
 end
 
-HealBot_Aura_luVars["bossHlth"]=120000
+HealBot_Aura_luVars["bossHlth"]=250000
 function HealBot_Aura_SetBossHealth(inInst)
     if HealBot_Data["PLEVEL"]<50 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*800
+        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*750
     elseif HealBot_Data["PLEVEL"]<60 then
         HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*900
     elseif HealBot_Data["PLEVEL"]<70 then
@@ -2352,9 +2352,11 @@ function HealBot_Aura_SetBossHealth(inInst)
     elseif HealBot_Data["PLEVEL"]<75 then
         HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1100
     elseif HealBot_Data["PLEVEL"]<80 then
-        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1200
+        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1250
+    elseif HealBot_Data["PLEVEL"]<85 then
+        HealBot_Aura_luVars["bossHlth"]=HealBot_Data["PLEVEL"]*1500
     else
-        HealBot_Aura_luVars["bossHlth"]=120000
+        HealBot_Aura_luVars["bossHlth"]=250000
     end
     if inInst then
         local difficultyID = GetDungeonDifficultyID()
@@ -2366,7 +2368,7 @@ function HealBot_Aura_SetBossHealth(inInst)
 end
 
 function HealBot_Aura_IsBoss(unit)
-    if unit and (UnitClassification(unit)=="worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealth(unit)>HealBot_Aura_luVars["bossHlth"]))) then
+    if unit and (UnitClassification(unit)=="worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealthMax(unit)>HealBot_Aura_luVars["bossHlth"]))) then
         return true
     else
         return false
@@ -3361,7 +3363,7 @@ function HealBot_Aura_InitItemsData()
     if HealBot_retLuVars("BagsScanned") then
         HealBot_Timers_Set("AURA","InitItemsDataReady")
     else
-        HealBot_Timers_Set("LAST","InitItemsData",0.5)
+        HealBot_Timers_Set("LAST","InitItemsData",1) -- All recall require a delay
         --HealBot_AddDebug("InitItemsData","Buff",true)
     end
 end

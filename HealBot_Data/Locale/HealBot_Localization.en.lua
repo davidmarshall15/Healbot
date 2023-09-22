@@ -1295,7 +1295,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_BLACKLISTREMOVE          = "Remove"
     HEALBOT_PLUGIN_BLACKLISTED              = "Blacklisted"
     HEALBOT_PLUGIN_BLACKLISTEDHELP          = "(*) = Permanently blacklisted"
-    HEALBOT_OPTIONS_USECP                   = "Use Crash and Combat Protection"
+    HEALBOT_OPTIONS_USECP                   = "Use Crash Protection"
     HEALBOT_OPTIONS_USECPGROUP              = "Use Combat Protection in groups"
     HEALBOT_OPTIONS_USECPRAID               = "Use Combat Protection in raids"
     HEALBOT_OPTIONS_CPLOGONDURATION         = "Crash Protection duration after logon"
