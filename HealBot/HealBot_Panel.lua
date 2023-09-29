@@ -922,12 +922,6 @@ function HealBot_Panel_TestBarsOff()
 end
 
 function HealBot_Panel_ToggleTestBars()
-    HealBot_Action_setLuVars("resetIcon", true)
-    HealBot_Action_setLuVars("resetSkin", true)
-    HealBot_Action_setLuVars("resetIndicator", true)
-    HealBot_Action_setLuVars("resetText", true)
-    HealBot_Action_setLuVars("resetAux", true)
-    HealBot_Action_ResetSkinAllButtons()
     if HealBot_setTestBars then
         HealBot_setTestBars=false
         HealBot_Panel_TestBarsOff()
@@ -954,8 +948,8 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_setTestBars=true
         HealBot_Panel_luVars["TestBarsDelAll"]=true
         HealBot_Options_TestBarsButton:SetText(HEALBOT_OPTIONS_TURNTESTBARSOFF)
-        HealBot_Timers_Set("AUX","UpdateAllAuxByType")
     end
+    HealBot_Timers_Set("AUX","UpdateAllAuxByType")
 end
 
 local vBar={[1]={["BUTTON"]="",["PREVROW"]="",["PREVCOL"]=""},
@@ -3190,7 +3184,8 @@ function HealBot_Panel_PartyChanged(preCombat, changeType)
         if not preCombat then
             HealBot_Panel_TestBarsOn()
         else
-            HealBot_Panel_ToggleTestBars() 
+            HealBot_Panel_ToggleTestBars()
+            HealBot_Action_ResetSkinAllElements()
             HealBot_Panel_PrePartyChanged(preCombat, 0)
         end
     else

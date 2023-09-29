@@ -3784,13 +3784,33 @@ function HealBot_Action_ResetSkinAllButtons()
         for i=1,HealBot_Action_luVars["ButtonHWM"] do
             HealBot_Action_ResetSkinButton(i)
         end
-        HealBot_Panel_ResetHeaders()
     end
+    HealBot_Panel_ResetHeaders()
     HealBot_Action_luVars["resetSkin"]=false
     HealBot_Action_luVars["resetIcon"]=false
     HealBot_Action_luVars["resetIndicator"]=false
     HealBot_Action_luVars["resetText"]=false
     HealBot_Action_luVars["resetAux"]=false
+end
+
+function HealBot_Action_ResetTestButtons()
+    if HealBot_Action_luVars["TestHWM"]>500 then
+        for i=500,HealBot_Action_luVars["TestHWM"] do
+            if HealBot_Buttons[i] then 
+                HealBot_Buttons[i].reset=true
+            end
+        end
+    end
+end
+
+function HealBot_Action_ResetSkinAllElements()
+    HealBot_Action_luVars["resetSkin"]=true
+    HealBot_Action_luVars["resetIcon"]=true
+    HealBot_Action_luVars["resetIndicator"]=true
+    HealBot_Action_luVars["resetText"]=true
+    HealBot_Action_luVars["resetAux"]=true
+    HealBot_Action_ResetTestButtons()
+    HealBot_Action_ResetSkinAllButtons()
 end
 
 function HealBot_Action_SpellCmdCodes(cType, cText)
@@ -4616,24 +4636,24 @@ function HealBot_Action_hbmenuFrame_DropDown_Initialize(self,level,menuList)
 end
 
 function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellTrin2, spellAvoidBC, unit, cType)
-    local smName=""
-    local spellType="help"
-    if cType=="Enemy" then spellType="harm" end
-    local scText="/cast [@"..unit..","..spellType.."] "..spellName.."\n"
-
-    if HealBot_Globals.MacroSuppressError then smName=smName..'/hb se3\n' end
-    if HealBot_Globals.MacroSuppressSound then smName=smName..'/hb se1\n' end
-    if spellTar then smName=smName.."/target "..unit.."\n" end
-    if spellTrin1 then smName=smName.."/use 13\n" end
-    if spellTrin2 then smName=smName.."/use 14\n" end
-    if HealBot_Config.MacroUse10 then smName=smName.."/use 10\n" end
-    if HealBot_Globals.MacroSuppressSound then smName=smName.."/hb se2\n" end
-    if HealBot_Globals.MacroSuppressError then smName=smName..'/hb se4\n' end
-    smName=smName..scText
-    if spellAvoidBC then smName=smName.."/use 4\n" end
-    if spellTar and HealBot_Config_Spells.SpellTargetLastTarget[cType] then smName=smName.."/targetlasttarget\n" end
+    local hbMacroText=""
+    if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se3\n' end
+    if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText..'/hb se1\n' end
+    if spellTar then hbMacroText=hbMacroText.."/target "..unit.."\n" end
+    if spellTrin1 then hbMacroText=hbMacroText.."/use 13\n" end
+    if spellTrin2 then hbMacroText=hbMacroText.."/use 14\n" end
+    if HealBot_Config.MacroUse10 then hbMacroText=hbMacroText.."/use 10\n" end
+    if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText.."/hb se2\n" end
+    if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se4\n' end
+    if cType=="Enemy" then
+        hbMacroText=hbMacroText.."/cast [@"..unit..",harm] "..spellName.."\n"
+    else
+        hbMacroText=hbMacroText.."/cast [@"..unit..",help] "..spellName.."\n"
+    end
+    if spellAvoidBC then hbMacroText=hbMacroText.."/stopspelltarget\n" end
+    if spellTar and HealBot_Config_Spells.SpellTargetLastTarget[cType] then hbMacroText=hbMacroText.."/targetlasttarget\n" end
     --HealBot_setCall("HealBot_Action_AlterSpell2Macro")
-    return smName
+    return hbMacroText
 end
 
 function HealBot_Action_UnitID(unit)
@@ -5330,8 +5350,6 @@ function HealBot_Action_UpdateTestButton(button)
     else
         button.mana.type=1
     end
-    HealBot_Skins_showPowerCounter(HealBot_Action_luVars["showTestPowerIndicator"])
-    HealBot_Action_luVars["showTestPowerIndicator"]=0
     for j=1,3 do
         button.gref.icon[j]:SetAlpha(0)
     end
@@ -5598,6 +5616,8 @@ function HealBot_Action_SetTestButton(frame, unitText, unitRole, unitClass)
             tButton.reset=true
             HealBot_Panel_resetTestColsButton(tButton.id)
         end
+        HealBot_Skins_showPowerCounter(HealBot_Action_luVars["showTestPowerIndicator"])
+        HealBot_Action_luVars["showTestPowerIndicator"]=0
         HealBot_Skins_ResetSkin("bar",tButton)
         if tButton.testup then
             HealBot_Action_ProcUpdateTestButtons()

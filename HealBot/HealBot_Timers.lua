@@ -530,6 +530,7 @@ local hbTimerFuncs={["INIT"]={
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
                         ["InitPlugins"]=HealBot_InitPlugins,
                         ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
+                        ["ResetSkinAllElements"]=HealBot_Action_ResetSkinAllElements,
                         ["RegisterForClicks"]=HealBot_Action_setRegisterForClicks,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["HealBotLoaded"]=HealBot_Loaded,
@@ -740,6 +741,7 @@ local hbTimerFuncs={["INIT"]={
                         ["OverridePowerColourUseToggle"]=HealBot_Options_Override_ColoursPowerUse_Toggle,
                         ["BarColourAlphaSetFunc"]=HealBot_Action_BarColourAlphaSetFunc,
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
+                        ["ClassicSpellRanks"]=HealBot_Init_ClassicSpellRanks,
                     },
                    }
 

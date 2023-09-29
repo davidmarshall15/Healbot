@@ -1086,6 +1086,7 @@ function HealBot_Share_SkinLoad(sIn, internal)
         hbWarnSharedMedia=false
         HealBot_AddChat(hbOptGetSkinName..HEALBOT_CHAT_SKINREC)
     end
+    HealBot_Timers_InitExtraOptions()
 end
 
 function HealBot_Share_ImportSkin_OnClick()

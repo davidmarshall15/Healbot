@@ -22715,6 +22715,7 @@ function HealBot_Options_SkinsFramesInit()
         HealBot_Options_ObjectsShowHide(HealBot_Options_luVars["CurrentSkinsTextAggroPanel"],true)
     end
     HealBot_Options_ObjectsShowHide("HealBot_Options_SkinsFramesTextColoursCustom",false)
+    HealBot_Options_ResetUpdate()
 end
 
 function HealBot_Options_CopyFrameTab()

@@ -860,7 +860,8 @@ end
 
 function HealBot_TestBars()
     HealBot_Panel_ToggleTestBars()
-    HealBot_Timers_nextRecalcAll()
+    HealBot_Timers_Set("INIT","ResetSkinAllElements")
+    HealBot_Timers_Set("SKINS","AllFramesChanged")
       --HealBot_setCall("HealBot_TestBars")
 end
 
@@ -2743,12 +2744,14 @@ function HealBot_ResetCustomDebuffs()
 end
 
 function HealBot_ResetSkins()
-    HealBot_Include_Skin(HEALBOT_OPTIONS_GROUPHEALS, true)
-    HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, true)
-    HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, true)
-    HealBot_Include_Skin(HEALBOT_SKINS_STD, false)
+    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_GROUPHEALS], true)
+    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_RAID25], true)
+    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_OPTIONS_RAID40], true)
+    HealBot_Share_SkinLoad(HealBot_Config_SkinsData[HEALBOT_SKINS_STD], true)
     HealBot_AddChat(HEALBOT_CHAT_CONFIRMSKINDEFAULTS)
     HealBot_Update_Skins()
+    HealBot_Timers_Set("INIT","ResetSkinAllElements")
+    HealBot_Timers_Set("SKINS","AllFramesChanged")
       --HealBot_setCall("HealBot_ResetSkins")
 end
 
