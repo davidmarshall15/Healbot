@@ -110,18 +110,10 @@ function HealBot_Init_TalentLookupImproved()
     end
 end
 
-function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
-    local cRank=false
-    if ( not id ) then return false; end
-
-    local spell, _, texture, msCast, _, _ = GetSpellInfo(id);
-
-    if ( not spell ) then return false; end
-    if not spellName then spellName=spell end
-   
-    local hbMana=GetSpellPowerCost(id)
+local function HealBot_Init_ManaCost(spellId, spellBookId)
+    local hbMana=GetSpellPowerCost(spellId)
     local manaCost=0
-    if hbMana[1] and hbMana[1].cost then
+    if hbMana and hbMana[1] and hbMana[1].cost then
         manaCost=hbMana[1].cost
     end
     if spellBookId then
@@ -143,6 +135,21 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
                 end
             end
         end
+    end
+    if not manaCost or type(manaCost)~="number" then manaCost=0 end
+    return manaCost
+end
+
+function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
+    local cRank=false
+    if ( not id ) then return false; end
+
+    local spell, _, texture, msCast, _, _ = GetSpellInfo(id);
+
+    if ( not spell ) then return false; end
+    if not spellName then spellName=spell end
+
+    if spellBookId then
         if HEALBOT_GAME_VERSION<4 then 
             local _, rank = GetSpellBookItemName(spellBookId, BOOKTYPE_SPELL)
             cRank = rank
@@ -173,9 +180,10 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local hbCastTime=tonumber(msCast or 0);
     if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
     
+
     HealBot_Spell_IDs[id]={}
     HealBot_Spell_IDs[id].CastTime=hbCastTime;
-    HealBot_Spell_IDs[id].Mana=manaCost
+    HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId)
     HealBot_Spell_IDs[id].texture=texture
     return cRank
 end
@@ -421,17 +429,12 @@ function HealBot_Init_ClassicSpellRanks()
                     local _, _, _, _, _, _, spellId = GetSpellInfo(sNameRank)
                     if spellId then
                         local _, _, texture, msCast, _, _ = GetSpellInfo(spellId);
-                        local hbMana=GetSpellPowerCost(spellId)
-                        local manaCost=0
-                        if hbMana[1] and hbMana[1].cost then
-                            manaCost=hbMana[1].cost
-                        end
                         local hbCastTime=tonumber(msCast or 0);
                         if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
                         
                         if not HealBot_Spell_IDs[spellId] then HealBot_Spell_IDs[spellId]={} end
                         HealBot_Spell_IDs[spellId].CastTime=hbCastTime;
-                        HealBot_Spell_IDs[spellId].Mana=manaCost
+                        HealBot_Spell_IDs[spellId].Mana=HealBot_Init_ManaCost(spellId)
                         HealBot_Spell_IDs[spellId].texture=texture
                         HealBot_Spell_IDs[spellId].name=sNameRank
                         HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)

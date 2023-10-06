@@ -104,23 +104,33 @@ end
 
 local function HealBot_Aux_clearAllBar(id)
     for _,xButton in pairs(HealBot_AuxStatic_Buttons) do
-        xButton.aux[id]["CLEAR"]=true
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+            xButton.aux[id]["CLEAR"]=true
+        end
     end
     for _,xButton in pairs(HealBot_Aux_Buttons) do
-        xButton.aux[id]["CLEAR"]=true
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+            xButton.aux[id]["CLEAR"]=true
+        end
     end
     for _,xButton in pairs(HealBot_AuxFluid_Buttons) do
-        xButton.aux[id]["CLEAR"]=true
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+            xButton.aux[id]["CLEAR"]=true
+        end
     end
     for _,xButton in pairs(HealBot_AuxTimed_Buttons) do
-        xButton.aux[id]["CLEAR"]=true
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+            xButton.aux[id]["CLEAR"]=true
+        end
     end
     for _,xButton in pairs(HealBot_AuxFluid_ButtonsAlpha) do
-        xButton.aux[id]["CLEAR"]=true
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][xButton.frame]["USE"]==1 then
+            xButton.aux[id]["CLEAR"]=true
+        end
     end
     if not HealBot_Aux_luVars["WaitOnFullClear"] then
         HealBot_Aux_luVars["WaitOnFullClear"]=true
-        HealBot_Timers_Set("LAST","AuxBarsReset",0.2)
+        HealBot_Timers_Set("LAST","AuxBarsReset")
     end
 end
 
@@ -346,11 +356,11 @@ end
 function HealBot_Aux_resetBars()
     if HealBot_retLuVars("Loaded") then
         if HealBot_Aux_luVars["WaitOnFullClear"] then
-            HealBot_Timers_Set("AUX","ResetBars",1) -- All recall require a delay
+            HealBot_Timers_Set("AUX","ResetBars",0.25) -- All recall require a delay
         else
             HealBot_Aux_luVars["WaitOnFullClear"]=true
-            HealBot_Timers_Set("AUX","ClearBars")
-            C_Timer.After(0.5, HealBot_Aux_doResetBars)
+            HealBot_Options_clearAuxBars()
+            HealBot_Timers_Set("AUX","doResetBars")
         end
     else
         HealBot_Timers_Set("AUX","ResetBars",1) -- All recall require a delay
@@ -2032,6 +2042,7 @@ local function HealBot_Aux_SetTestButton(button)
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==2 then
                 button.gref.aux[x]:SetStatusBarColor(button.text.r,button.text.g,button.text.b,1)
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==3 then
+                if not hbCustomRoleCols[button.roletxt] then button.roletxt="DAMAGER" end
                 button.gref.aux[x]:SetStatusBarColor(hbCustomRoleCols[button.roletxt].r,hbCustomRoleCols[button.roletxt].g,hbCustomRoleCols[button.roletxt].b,1)
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==4 then
                 button.gref.aux[x]:SetStatusBarColor(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["R"],

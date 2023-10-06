@@ -2822,10 +2822,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
         for i=1,button.icon.buff.count[1] do
             HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
-        for i=6,button.icon.buff.count[2]+5 do
+        for i=9,button.icon.buff.count[2]+8 do
             HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
-        for i=8,button.icon.buff.count[3]+7 do
+        for i=11,button.icon.buff.count[3]+10 do
             HealBot_Aura_UpdateBuffIcon(button, HealBot_UnitBuffIcons[button.id][i], i, false, HealBot_UnitBuffIcons[button.id][i]["spellId"])
         end
     else
@@ -2833,10 +2833,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=1,xButton.icon.buff.count[1] do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=6,xButton.icon.buff.count[2]+5 do
+            for i=9,xButton.icon.buff.count[2]+8 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=8,xButton.icon.buff.count[3]+7 do
+            for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2844,10 +2844,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=1,xButton.icon.buff.count[1] do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=6,xButton.icon.buff.count[2]+5 do
+            for i=9,xButton.icon.buff.count[2]+8 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=8,xButton.icon.buff.count[3]+7 do
+            for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2855,10 +2855,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=1,xButton.icon.buff.count[1] do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=6,xButton.icon.buff.count[2]+5 do
+            for i=9,xButton.icon.buff.count[2]+8 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=8,xButton.icon.buff.count[3]+7 do
+            for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2866,10 +2866,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=1,xButton.icon.buff.count[1] do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=6,xButton.icon.buff.count[2]+5 do
+            for i=9,xButton.icon.buff.count[2]+8 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=8,xButton.icon.buff.count[3]+7 do
+            for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2877,10 +2877,10 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=1,xButton.icon.buff.count[1] do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=6,xButton.icon.buff.count[2]+5 do
+            for i=9,xButton.icon.buff.count[2]+8 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
-            for i=8,xButton.icon.buff.count[3]+7 do
+            for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2892,10 +2892,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
         for i=51,button.icon.debuff.count[1]+50 do
             HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
-        for i=56,button.icon.debuff.count[2]+55 do
+        for i=57,button.icon.debuff.count[2]+56 do
             HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
-        for i=58,button.icon.debuff.count[3]+57 do
+        for i=59,button.icon.debuff.count[3]+58 do
             HealBot_Aura_UpdateDebuffIcon(button, HealBot_UnitDebuffIcons[button.id][i], i, false, HealBot_UnitDebuffIcons[button.id][i]["spellId"])
         end
     else
@@ -2903,10 +2903,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
             for i=51,xButton.icon.debuff.count[1]+50 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=56,xButton.icon.debuff.count[2]+55 do
+            for i=57,xButton.icon.debuff.count[2]+56 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=58,xButton.icon.debuff.count[3]+57 do
+            for i=59,xButton.icon.debuff.count[3]+58 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2914,10 +2914,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
             for i=51,xButton.icon.debuff.count[1]+50 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=56,xButton.icon.debuff.count[2]+55 do
+            for i=57,xButton.icon.debuff.count[2]+56 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=58,xButton.icon.debuff.count[3]+57 do
+            for i=59,xButton.icon.debuff.count[3]+58 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2925,10 +2925,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
             for i=51,xButton.icon.debuff.count[1]+50 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=56,xButton.icon.debuff.count[2]+55 do
+            for i=57,xButton.icon.debuff.count[2]+56 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=58,xButton.icon.debuff.count[3]+57 do
+            for i=59,xButton.icon.debuff.count[3]+58 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2936,10 +2936,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
             for i=51,xButton.icon.debuff.count[1]+50 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=56,xButton.icon.debuff.count[2]+55 do
+            for i=57,xButton.icon.debuff.count[2]+56 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=58,xButton.icon.debuff.count[3]+57 do
+            for i=59,xButton.icon.debuff.count[3]+58 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -2947,10 +2947,10 @@ function HealBot_Aura_Update_UnitAllDebuffIcons(button)
             for i=51,xButton.icon.debuff.count[1]+50 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=56,xButton.icon.debuff.count[2]+55 do
+            for i=57,xButton.icon.debuff.count[2]+56 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
-            for i=58,xButton.icon.debuff.count[3]+57 do
+            for i=59,xButton.icon.debuff.count[3]+58 do
                 HealBot_Aura_UpdateDebuffIcon(xButton, HealBot_UnitDebuffIcons[xButton.id][i], i, false, HealBot_UnitDebuffIcons[xButton.id][i]["spellId"])
             end
         end
@@ -3126,7 +3126,8 @@ function HealBot_Aura_ConfigClassHoT()
             end
         end
     end
-    HealBot_Aura_setCustomBuffFilterDisabled()
+    HealBot_Timers_Set("AURA","ResetBuffCache")
+    HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
       --HealBot_setCall("HealBot_configClassHoT")
 end
 
@@ -3177,6 +3178,7 @@ function HealBot_Aura_ConfigDebuffs()
             HealBot_Aura_ConfigDebuffIconSetGlow(id, sName, HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[id])
         end
     end
+    HealBot_Timers_Set("AURA","UpdateAllDebuffIcons")
 end
 
 function HealBot_Aura_BuffTagNames()

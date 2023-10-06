@@ -2402,19 +2402,13 @@ end
 
 function HealBot_FullReload()
     if not InCombatLockdown() then
-        HealBot_luVars["AddonLoaded"]=false
-        HealBot_luVars["VarsLoaded"]=false
-        HealBot_luVars["Loaded"]=false
-        HealBot_OnEvent_AddOnLoaded("HealBot")
-        HealBot_VariablesLoaded()
+        HealBot_ReloadAddon()
     else
         HealBot_Timers_Set("LAST","FullReload",1) -- All recall require a delay
     end
 end
 
 function HealBot_Reload()
-    HealBot_luVars["Loaded"]=false
-    HealBot_Timers_Set("INIT","AddonLoaded")
     HealBot_Timers_Set("RESET","Quick")
 end
 
@@ -2493,7 +2487,6 @@ function HealBot_EndAggro()
 end
 
 function HealBot_Reset_Full()
-    HealBot_luVars["Loaded"]=false
     HealBot_UnRegister_Events()
     HealBot_Panel_ClearBlackList()
     HealBot_Panel_ClearHealTargets()
@@ -2502,7 +2495,6 @@ function HealBot_Reset_Full()
     HealBot_Timers_Set("SKINS","AllFramesChanged")
     HealBot_Timers_Set("LAST","ZoneUpdate")
     HealBot_Timers_AuraReset()
-    HealBot_Timers_Set("INIT","AddonLoaded")
     HealBot_Timers_Set("INIT","RegEvents")
       --HealBot_setCall("HealBot_Reset_Full")
 end
@@ -3274,6 +3266,18 @@ function HealBot_SetPlayerData()
     end
     HealBot_Data["PGUID"]=UnitGUID("player")
     HealBot_Timers_Set("LAST", "SetInHealAbsorbMax")
+end
+
+function HealBot_ReloadAddon()
+    if HealBot_luVars["VarsLoaded"] then
+        HealBot_luVars["Loaded"]=false
+        HealBot_luVars["AddonLoaded"]=false
+        HealBot_luVars["VarsLoaded"]=false
+        HealBot_OnEvent_AddOnLoaded("HealBot")
+        HealBot_VariablesLoaded()
+    else
+        C_Timer.After(1, HealBot_ReloadAddon)
+    end
 end
 
 function HealBot_OnEvent_AddOnLoaded(addonName)
