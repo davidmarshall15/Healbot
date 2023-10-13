@@ -6997,7 +6997,9 @@ function HealBot_Options_ShowCombatState_OnClick(self)
     if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SHOWCOMBAT"]~=self:GetChecked() then
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SHOWCOMBAT"] = self:GetChecked()
         if HealBot_Options_luVars["TestBarsOn"] then 
-            HealBot_Timers_Set("SKINS","IconsFramesChanged") 
+            HealBot_Timers_Set("SKINS","IconsFramesChanged")
+        else
+            HealBot_AOTimers_Set("AURA","IconNotInCombat")
         end
     end
 end
@@ -7007,6 +7009,8 @@ function HealBot_Options_ShowHostile_OnClick(self)
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SHOWHOSTILE"] = self:GetChecked()
         if HealBot_Options_luVars["TestBarsOn"] then 
             HealBot_Timers_Set("SKINS","IconsFramesChanged") 
+        else
+            HealBot_AOTimers_Set("AURA","IconUpdHostile")
         end
     end
 end
@@ -7023,6 +7027,8 @@ function HealBot_Options_ShowLeader_OnClick(self)
         Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SHOWRANK"] = self:GetChecked()
         if HealBot_Options_luVars["TestBarsOn"] then 
             HealBot_Timers_Set("SKINS","IconsFramesChanged") 
+        else
+            HealBot_AOTimers_Set("AURA","IconUpdAllState")
         end
     end
 end

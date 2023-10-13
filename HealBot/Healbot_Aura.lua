@@ -889,6 +889,25 @@ function HealBot_Aura_UpdateState(button)
     end
 end
 
+function HealBot_Aura_UpdateAllState()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+       HealBot_Aura_UpdateState(xButton)
+    end
+      --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
+end
+
 function HealBot_Aura_OORUpdate(button, texture)
     button.icon.extra.oorarrow=texture
     if HealBot_UnitExtraIcons[button.id] then

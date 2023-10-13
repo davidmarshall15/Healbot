@@ -15942,8 +15942,6 @@
                               <OnLeave>HealBot_Options_Show_Help("BARSAUXOVERLAYCOLS",false)</OnLeave>
                             </Scripts>
                           </CheckButton>
-
-
                           <Slider name="HealBot_Options_AuxBarSize" inherits="HealBot_Options_SliderTemplate">
                             <Size>
                               <AbsDimension x="500" y="16" />

@@ -138,12 +138,10 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
         threatData["threatname"]=""
     end
     if button.aggro.status~=threatData["status"] then
-        if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or 
-           threatData["status"]>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
-            button.aggro.status=threatData["status"]
+        button.aggro.status=threatData["status"]
+        if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
             HealBot_Action_UpdateHealthButtonState(button)
-        else
-            button.aggro.status=threatData["status"]
+            HealBot_Aux_UpdateThreatBar(button)
         end
         HealBot_Aggro_IndicatorUpdate(button)
         if hbAuraWatchAggro[button.guid] then
@@ -162,7 +160,6 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
         end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
         if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
-        HealBot_Aux_UpdateThreatBar(button)
     end
       --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end

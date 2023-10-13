@@ -6794,24 +6794,42 @@ function  HealBot_Action_ResetFrameAlias()
 end
 
 local modKey=1 -- Not Locked
+function HealBot_Action_IsFrameLocked(frame)
+    modKey=1 -- Not Locked
+    if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["LOCKED"]>2 then
+        if IsAltKeyDown() then 
+            if IsControlKeyDown() then
+                modKey=5
+            else
+                modKey=4
+            end
+        elseif IsControlKeyDown() then
+            modKey=3
+        end
+    end
+    if (HealBot_Action_luVars["TestBarsOn"] and not Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][frame]["STUCK"]) 
+      or Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["LOCKED"]==modKey then
+        return false
+    else
+        return true
+    end
+end
+
+function HealBot_Action_LockFrame(self)
+    if not HealBot_Action_IsFrameLocked(self.id) then
+        HealBot_Action_luVars["FrameMoving"]=self
+        HealBot_StartMoving(self, self.id);
+    elseif Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["STICKYFRAME"] and self.id>1 then
+        if Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][self.id]["STUCK"] and
+           HealBot_Action_FrameIsVisible(Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][self.id]["STUCKTO"]) then
+            HealBot_Action_LockFrame(grpFrame[Healbot_Config_Skins.StickyFrames[Healbot_Config_Skins.Current_Skin][self.id]["STUCKTO"]])
+        end
+    end
+end
+
 function HealBot_Action_OnMouseDown(self,button)
     if button=="LeftButton" then
-        modKey=1 -- Not Locked
-        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]>2 then
-            if IsAltKeyDown() then 
-                if IsControlKeyDown() then
-                    modKey=5
-                else
-                    modKey=4
-                end
-            elseif IsControlKeyDown() then
-                modKey=3
-            end
-        end
-        if HealBot_Action_luVars["TestBarsOn"] or Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][self.id]["LOCKED"]==modKey then
-            HealBot_Action_luVars["FrameMoving"]=true
-            HealBot_StartMoving(self, self.id);
-        end
+        HealBot_Action_LockFrame(self)
     end
 end
 
@@ -6886,7 +6904,7 @@ end
 
 function HealBot_Action_OnMouseUp(self,button)
     if button=="LeftButton" and HealBot_Action_luVars["FrameMoving"] then
-        HealBot_StopMoving(self,self.id);
+        HealBot_StopMoving(HealBot_Action_luVars["FrameMoving"],HealBot_Action_luVars["FrameMoving"].id);
         HealBot_Action_luVars["FrameMoving"]=false
     elseif button=="RightButton" and not HealBot_Data["UILOCK"] and HealBot_Globals.RightButtonOptions then
         HealBot_Action_OptionsButton_OnClick();

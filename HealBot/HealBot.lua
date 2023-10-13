@@ -594,20 +594,20 @@ function HealBot_SlashCmd(cmd)
             x=string.lower(x)
             HealBot_ToggleSuppressSetting(x)
         elseif (HBcmd=="atd" and x) then
-            if (tonumber(x)>3) and (tonumber(x)<62) then
+            if (tonumber(x)>3) and (tonumber(x)<122) then
                 HealBot_Config_Cures.ShowTimeMaxDuration=tonumber(x)
                 HealBot_Lang_Options_enALL()
                 HealBot_AddChat("Auto Timed Debuff Duration set to "..x.."s")
             else
-                HealBot_AddChat("Invalid Value for Auto Timed Debuff Duration. valid range from 4 to 61")
+                HealBot_AddChat("Invalid Value for Auto Timed Debuff Duration. valid range from 4 to 121")
             end
         elseif (HBcmd=="atb" and x) then
-            if (tonumber(x)>3) and (tonumber(x)<62) then
+            if (tonumber(x)>3) and (tonumber(x)<122) then
                 HealBot_Config_Buffs.AutoBuffExpireTime=tonumber(x)
                 HealBot_Lang_Options_enALL()
                 HealBot_AddChat("Auto Timed Buff Duration set to "..x.."s")
             else
-                HealBot_AddChat("Invalid Value for Auto Timed Buff Duration. valid range from 4 to 61")
+                HealBot_AddChat("Invalid Value for Auto Timed Buff Duration. valid range from 4 to 121")
             end
         elseif (HBcmd=="test") then
             HealBot_TestBars()
@@ -1284,6 +1284,31 @@ function HealBot_updAllStateIconNotInCombat()
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
        HealBot_UnitAffectingCombat(xButton)
+    end
+      --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
+end
+
+function HealBot_updAllStateIconHostile()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+       HealBot_OnEvent_ClassificationChanged(xButton)
+    end
+    for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_OnEvent_ClassificationChanged(xButton)
     end
       --HealBot_setCall("HealBot_updAllStateIconNotInCombat")
 end

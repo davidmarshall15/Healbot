@@ -909,6 +909,9 @@ local HealBot_AOTimers_LastRun={
                      }
 local hbAOTimerFuncs={["AURA"]={
                           ["CheckUnits"]=HealBot_AuraCheck,
+                          ["IconNotInCombat"]=HealBot_updAllStateIconNotInCombat,
+                          ["IconUpdAllState"]=HealBot_Aura_UpdateAllState,
+                          ["IconUpdHostile"]=HealBot_updAllStateIconHostile,
                       },
                       ["LAST"]={
                           ["CheckUnits"]=UpdateButtonGlow,
