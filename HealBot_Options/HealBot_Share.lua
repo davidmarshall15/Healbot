@@ -68,7 +68,7 @@ function HealBot_Share_Decompress(s)
 end
 
 local function HealBot_Comms_SendShareAddonMsg(msg, pName)
-    C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", pName);
+    HealBot_Comms_SendInstantAddonMsg(msg,2,pName)
 end
 
 local function HealBot_Share_ClearExportComplete(sType)
@@ -1002,8 +1002,8 @@ end
 
 function HealBot_Share_ExportSkin(skinName, lData)
     local SkinVars={'Author', 'DuplicateBars'}
-    local SkinTabVars={'Chat', 'General', 'Healing', 'Enemy', 'FocusGroups'}
-    local SkinTabNestedVars={'CustomCols'}
+    local SkinTabVars={'Chat', 'General', 'Healing', 'Enemy', 'FocusGroups', 'Adaptive', 'AdaptiveOrder'}
+    local SkinTabNestedVars={'CustomCols', 'AdaptiveCol'}
     local SkinTabFrameVars={'FrameAlias', 'FrameAliasBar', 'Frame', 'StickyFrames', 'HealGroups', 'Anchors', 'HeadBar', 'HeadText', 'HealBar', 'BarCol', 'BarIACol', 'BarText', 'BarTextCol', 'Icons', 'RaidIcon', 'IconText', 'BarVisibility', 'BarSort', 'BarAggro', 'AuxBarFrame', 'Indicators', 'Emerg'}
     HealBot_Share_BuildSkinData("Init", skinName)
     for j=1, getn(SkinVars), 1 do
@@ -1104,6 +1104,17 @@ end
 
 local tmpRecParts={}
 local lFrame=1
+local function HealBot_Share_DecodeDat(v)
+    if v=="false" then                
+        v=false 
+    elseif v=="true" then
+        v=true
+    elseif tonumber(v) then 
+        v=tonumber(v)
+    end
+    return v
+end
+
 function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
     local varDat, vType, fNo = string.split("~", cmd)
     local varName, aID=string.split("^", varDat)
@@ -1148,18 +1159,12 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                 d=HealBot_Options_StringSplit(lMsg, ",")
                 for j=1,getn(d) do
                     local var, dat=string.split("=", d[j])
-                    if tonumber(dat) then dat=tonumber(dat) end
                     if var and dat then
+                        dat=HealBot_Share_DecodeDat(dat)
                         if varName=="AuxBar" and var=="USE" then
                             dat=HealBot_Share_SkinDecodeAux(dat, fNo)
                         end
-                        if dat=="false" then                
-                            Healbot_Config_Skins[varName][skinName][aID][fNo][var]=false 
-                        elseif dat=="true" then
-                            Healbot_Config_Skins[varName][skinName][aID][fNo][var]=true 
-                        else
-                            Healbot_Config_Skins[varName][skinName][aID][fNo][var]=dat 
-                        end
+                        Healbot_Config_Skins[varName][skinName][aID][fNo][var]=dat 
                     end
                     lFrame=fNo
                 end
@@ -1172,15 +1177,9 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                 d=HealBot_Options_StringSplit(lMsg, ",")
                 for j=1,getn(d) do
                     local var, dat=string.split("=", d[j])
-                    if tonumber(dat) then dat=tonumber(dat) end
                     if var and dat then
-                        if dat=="false" then                
-                            Healbot_Config_Skins[varName][skinName][fNo][aID][var]=false 
-                        elseif dat=="true" then
-                            Healbot_Config_Skins[varName][skinName][fNo][aID][var]=true 
-                        else
-                            Healbot_Config_Skins[varName][skinName][fNo][aID][var]=dat 
-                        end
+                        dat=HealBot_Share_DecodeDat(dat)
+                        Healbot_Config_Skins[varName][skinName][fNo][aID][var]=dat 
                     end
                     lFrame=fNo
                 end
@@ -1191,15 +1190,9 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
             d=HealBot_Options_StringSplit(lMsg, ",")
             for j=1,getn(d) do
                 local var, dat=string.split("=", d[j])
-                if tonumber(dat) then dat=tonumber(dat) end
                 if var and dat then
-                    if dat=="false" then                
-                        Healbot_Config_Skins[varName][skinName][fNo][var]=false 
-                    elseif dat=="true" then
-                        Healbot_Config_Skins[varName][skinName][fNo][var]=true 
-                    else
-                        Healbot_Config_Skins[varName][skinName][fNo][var]=dat 
-                    end
+                    dat=HealBot_Share_DecodeDat(dat)
+                    Healbot_Config_Skins[varName][skinName][fNo][var]=dat 
                 end
                 lFrame=fNo
             end
@@ -1231,15 +1224,12 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
         d=HealBot_Options_StringSplit(lMsg, ",")
         for j=1,getn(d) do
             local var, dat=string.split("=", d[j])
-            if tonumber(dat) then dat=tonumber(dat) end
             if var and dat then
-                if dat=="false" then                
-                    Healbot_Config_Skins[varName][skinName][var]=false 
-                elseif dat=="true" then
-                    Healbot_Config_Skins[varName][skinName][var]=true 
-                else
-                    Healbot_Config_Skins[varName][skinName][var]=dat 
-                end
+                dat=HealBot_Share_DecodeDat(dat)
+                Healbot_Config_Skins[varName][skinName][var]=dat
+            elseif var then
+                var=HealBot_Share_DecodeDat(var)
+                Healbot_Config_Skins[varName][skinName][j]=var
             end
         end
     elseif vType=="a" and Healbot_Config_Skins[varName] then
@@ -1258,15 +1248,12 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
                 d=HealBot_Options_StringSplit(tab, ",")
                 for j=1,getn(d) do
                     local var, dat=string.split("=", d[j])
-                    if tonumber(dat) then dat=tonumber(dat) end
                     if var and dat then
-                        if dat=="false" then                
-                            Healbot_Config_Skins[varName][skinName][key][var]=false 
-                        elseif dat=="true" then
-                            Healbot_Config_Skins[varName][skinName][key][var]=true  
-                        else
-                            Healbot_Config_Skins[varName][skinName][key][var]=dat
-                        end
+                        dat=HealBot_Share_DecodeDat(dat)
+                        Healbot_Config_Skins[varName][skinName][key][var]=dat
+                    elseif var then
+                        var=HealBot_Share_DecodeDat(var)
+                        Healbot_Config_Skins[varName][skinName][key][j]=var
                     end
                 end
             end
@@ -1548,16 +1535,12 @@ end
 function HealBot_Share_PostLink()
     local s="|cffe6cc80|Hgarrmission:healbot|hHealBot Share [~"..HealBot_Share_luVars["RequestString"].."~]|h|r"
     s=HealBot_Share_Compress(s)
-    if HealBot_Share_luVars["PostChannel"]<3 and IsInInstance() and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, "L:L~"..s, "INSTANCE_CHAT")
-    elseif HealBot_Share_luVars["PostChannel"]==1 and IsInGroup() then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, "L:L~"..s, "PARTY")
-    elseif HealBot_Share_luVars["PostChannel"]==2 and IsInRaid() then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, "L:L~"..s, "RAID")
-    elseif HealBot_Share_luVars["PostChannel"]==3 and IsInGuild() then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, "L:L~"..s, "GUILD")
+    if HealBot_Share_luVars["PostChannel"]<3 then
+        HealBot_Comms_SendInstantAddonMsg("L:L~"..s)
+    elseif HealBot_Share_luVars["PostChannel"]==3 then
+        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, 1)
     elseif HealBot_Share_luVars["PostChannel"]==4 and string.len(HealBot_Share_luVars["PostWhisper"])>1 then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, "L:L~"..s, "WHISPER", HealBot_Share_luVars["PostWhisper"]);
+        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, 2, HealBot_Share_luVars["PostWhisper"])
     end
 end
 

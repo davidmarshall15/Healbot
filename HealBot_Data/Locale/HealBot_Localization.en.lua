@@ -187,10 +187,15 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SKINFOUTLINE            = "Font Outline"
     HEALBOT_OPTIONS_BARALPHADIS             = "Disabled opacity"
     HEALBOT_OPTIONS_SHOWHEADERS             = "Show headers"
+    HEALBOT_OPTIONS_SKINSETTINGS            = "Skin settings"
+    HEALBOT_OPTIONS_OVERRIDESETTINGS        = "Override settings"
     HEALBOT_OPTIONS_PRESETCOLOURBTN         = "*"
     HEALBOT_OPTIONS_PRESET                  = "Preset"
     HEALBOT_OPTIONS_ICONPOSITION            = "Icon Position"
     HEALBOT_OPTIONS_ICONANCHOR              = "Icon Anchor"
+    HEALBOT_OPTIONS_PLUGINCOLS              = "Plugin Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_DEBUFFCOLS              = "Debuff Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_BUFFCOLS                = "Buff Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
 
     HEALBOT_OPTIONS_ITEMS                   = "Items";
     HEALBOT_OPTIONS_ITEM                    = "Item";
@@ -782,7 +787,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_BUTTONS             = "Buttons"
     HEALBOT_OPTIONS_TAB_ICONS               = "Icons"
     HEALBOT_OPTIONS_TAB_INDICATORS          = "Indicators"
-    HEALBOT_OPTIONS_AGGROADAPALERT          = "Adaptive alert level"
     HEALBOT_OPTIONS_TAB_AGGROINDICATORS     = "Aggro indicators"
     HEALBOT_OPTIONS_TAB_LOWMANAINDICATORS   = "Low mana indicators"
     HEALBOT_OPTIONS_TAB_SELFCASTINDICATORS  = "Self cast icon indicators"
@@ -793,6 +797,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_INCABSORB               = HEALBOT_classicABSORBHOT.."s"
     HEALBOT_OPTIONS_NOOVERHEALS             = "No overheals"
     HEALBOT_WORD_OVERHEALS                  = "Overheals"
+    HEALBOT_WORD_ABSORBS                    = "Absorbs"
     HEALBOT_WORD_ARENA                      = "Arena"
     HEALBOT_WORD_BATTLEGROUND               = "Battle Ground"
     HEALBOT_WORD_BG10                       = "BG 10"; 
@@ -1066,7 +1071,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_FRAME_GLOWBLIZZ            = "Alt Blizzard glow"
     HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
-    HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX
+    HEALBOT_SKIN_OVERLAYCOL_TEXT            = "Adaptive Overlay col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_HEALTHBACKCOL_TEXT         = "Background bar";
     HEALBOT_SKIN_BACKBORDERCOL_TEXT         = "Background border";
     HEALBOT_SKIN_INCHEALBARCOL_TEXT         = "Incoming heals";
@@ -1531,6 +1536,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_OVERRIDE_CLASSCOLS      = "Override Class Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_OVERRIDE_ROLECOLS       = "Override Role Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_OVERRIDE_POWERCOLS      = "Override Power Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
+    HEALBOT_OPTIONS_OVERRIDE_ADAPTIVECOLS   = "Override Adaptive Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_OVERRIDE_CHAT           = "Override Chat"
     HEALBOT_OPTIONS_OVERRIDE_FRAMES         = "Override Frames"
     HEALBOT_USE_OVERRIDE_NO                 = "Use current skin settings."
@@ -1719,7 +1725,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CLASSCOLOURS            = HEALBOT_SORTBY_CLASS.." "..HEALBOT_WORD_COLOURS
     HEALBOT_OPTIONS_ROLECOLOURS             = HEALBOT_SORTBY_ROLE.." "..HEALBOT_WORD_COLOURS
     HEALBOT_OPTIONS_POWERCOLOURS            = HEALBOT_OPTIONS_POWER.." "..HEALBOT_WORD_COLOURS
-    
+    HEALBOT_OPTIONS_ADAPTIVECOLOURS         = HEALBOT_OPTIONS_ADAPTIVE.." "..HEALBOT_SKIN_HEALTHBACKCOL_TEXT.." "..HEALBOT_WORD_AND.." "..HEALBOT_SKIN_BACKBORDERCOL_TEXT.." "..HEALBOT_WORD_COLOURS
     HEALBOT_WORD_SUPPORTERS                 = "Supporters"
     HEALBOT_CREDITS_PEOPLE = {  
                               [01] = "Acirac",

@@ -139,8 +139,8 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
     end
     if button.aggro.status~=threatData["status"] then
         button.aggro.status=threatData["status"]
+        HealBot_Action_AdaptiveAggroUpdate(button)
         if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
-            HealBot_Action_UpdateHealthButtonState(button)
             HealBot_Aux_UpdateThreatBar(button)
         end
         HealBot_Aggro_IndicatorUpdate(button)
@@ -150,6 +150,7 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
     end
     if button.aggro.threatpct~=threatData["threatpct"] or button.aggro.threatvalue~=threatData["threatvalue"] or button.aggro.mobname~=threatData["threatname"] then 
         button.aggro.threatpct=threatData["threatpct"]
+        HealBot_Action_AdaptiveThreatUpdate(button)
         button.aggro.threatvalue=threatData["threatvalue"]
         button.aggro.mobname=threatData["threatname"]
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWTEXT"]>1 then

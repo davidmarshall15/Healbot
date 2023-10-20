@@ -2621,7 +2621,6 @@ function HealBot_Panel_TargetShow(button)
     HealBot_setLuVars("TargetNeedReset", false)
     HealBot_Panel_UnitShow(button)
     HealBot_Panel_TargetChangedCheckFocus()
-    HealBot_AuxSetTargetBar()
 end
 
 local vTargetButton=""

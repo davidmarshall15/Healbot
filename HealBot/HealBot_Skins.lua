@@ -1544,7 +1544,10 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.Indicators[SkinName] then Healbot_Config_Skins.Indicators[SkinName]={} end
     if not Healbot_Config_Skins.Emerg[SkinName] then Healbot_Config_Skins.Emerg[SkinName]={} end
     if not Healbot_Config_Skins.CustomCols[SkinName] then Healbot_Config_Skins.CustomCols[SkinName]={} end
-    
+    if not Healbot_Config_Skins.Adaptive[SkinName] then Healbot_Config_Skins.Adaptive[SkinName]={} end
+    if not Healbot_Config_Skins.AdaptiveOrder[SkinName] then Healbot_Config_Skins.AdaptiveOrder[SkinName]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName] then Healbot_Config_Skins.AdaptiveCol[SkinName]={} end
+
     for g=1,9 do
         if not Healbot_Config_Skins.AuxBar[SkinName][g] then Healbot_Config_Skins.AuxBar[SkinName][g]={} end
         if not Healbot_Config_Skins.AuxBarText[SkinName][g] then Healbot_Config_Skins.AuxBarText[SkinName][g]={} end
@@ -1670,7 +1673,12 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["TAGAGGROONLYTIP"]=true end
         if Healbot_Config_Skins.BarText[SkinName][gl]["TAGSTATEONLYTIP"]==nil then Healbot_Config_Skins.BarText[SkinName][gl]["TAGSTATEONLYTIP"]=true end
         if not Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERT"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERT"]=2 end
-        if not Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"] then Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"]=2 end
+        if Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"] then 
+            if Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"]==1 then
+                Healbot_Config_Skins.Adaptive[SkinName]["Aggro"]=false
+            end
+            Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTADAP"]=nil 
+        end
         if not Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTIND"] then 
             if Healbot_Config_Skins.Aggro and Healbot_Config_Skins.Aggro[SkinName] then 
                 Healbot_Config_Skins.BarAggro[SkinName][gl]["ALERTIND"]=Healbot_Config_Skins.Aggro[SkinName]["ALERTIND"] or 2
@@ -2562,6 +2570,70 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.CustomCols[SkinName]["LUNAR_POWER"] then HealBot_Skins_SetPowerCol(SkinName, "LUNAR_POWER", false) end
     if not Healbot_Config_Skins.CustomCols[SkinName]["MAELSTROM"] then HealBot_Skins_SetPowerCol(SkinName, "MAELSTROM", false) end
     if not Healbot_Config_Skins.CustomCols[SkinName]["FURY"] then HealBot_Skins_SetPowerCol(SkinName, "FURY", false) end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Plugin"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Plugin"]=true end
+    if Healbot_Config_Skins.Adaptive[SkinName]["RecentHeals"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["RecentHeals"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Threat"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Threat"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Debuffs"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Debuffs"]=true end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Aggro"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Aggro"]=true end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Highlight"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Highlight"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Target"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Target"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["OOR"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["OOR"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Buffs"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Buffs"]=true end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Overheals"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Overheals"]=false end
+    if Healbot_Config_Skins.Adaptive[SkinName]["Absorbs"]==nil then Healbot_Config_Skins.Adaptive[SkinName]["Absorbs"]=false end
+    local setAllAdaptiveOrder=false
+    for x=1,11 do
+        if not Healbot_Config_Skins.AdaptiveOrder[SkinName][x] then 
+            setAllAdaptiveOrder=true 
+            break
+        end
+    end
+    if setAllAdaptiveOrder then
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][1]="Plugin"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][2]="RecentHeals"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][3]="Debuffs"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][4]="Aggro"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][5]="Threat" 
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][6]="Highlight"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][7]="Target"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][8]="OOR"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][9]="Buffs"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][10]="Overheals"
+        Healbot_Config_Skins.AdaptiveOrder[SkinName][11]="Absorbs" 
+    end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].R=0.1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].G=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["RecentHeals"].B=0.2 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].R=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].G=0.49 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Threat"].B=0.04 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].R=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].G=0 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Aggro"].B=0 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].R=0.4 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].G=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Highlight"].B=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].R=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].G=0.9 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Target"].B=0.2 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].R=0 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].G=0 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["OOR"].B=0 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].R=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].G=0.2 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Overheals"].B=0.2 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"] then Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"]={} end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].R then Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].R=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].G then Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].G=1 end
+    if not Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].B then Healbot_Config_Skins.AdaptiveCol[SkinName]["Absorbs"].B=1 end
+
     -- Fix Frames
     for id=1,10 do
         if Healbot_Config_Skins.HealGroups[SkinName][id]["NAME"]==HEALBOT_CUSTOM_CASTBY_ENEMY_en then

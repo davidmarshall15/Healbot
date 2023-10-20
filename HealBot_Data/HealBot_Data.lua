@@ -376,7 +376,15 @@ function HealBot_Data_InitVars()
         OverrideFocusGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
         OverrideChat={["USE"]=1,["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=10},
         OverrideFrames={["USE"]=1,["RUNBLIZZEVENTS"]=false,["HIDEPARTYF"]=false,["HIDEPTF"]=false,["HIDEFOCUSF"]=false,["HIDEBOSSF"]=true,["HIDERAIDF"]=true,},
-        OverrideColours={["USECLASS"]=1,["USEROLE"]=1,["USEPOWER"]=1},
+        OverrideColours={["USECLASS"]=1,["USEROLE"]=1,["USEPOWER"]=1,["USEADAPTIVE"]=1},
+        OverrideAdaptive={["Plugin"]=true,["RecentHeals"]=false,["Debuffs"]=true,["Aggro"]=true,["Threat"]=false,["Highlight"]=false,
+                          ["Target"]=false,["OOR"]=false,["Buffs"]=true,["Overheals"]=false,["Absorbs"]=false},
+        OverrideAdaptiveOrder={[1]="Plugin",[2]="RecentHeals",[3]="Debuffs",[4]="Aggro",[5]="Threat",
+                               [6]="Highlight",[7]="Target",[8]="OOR",[9]="Buffs",[10]="Overheals",[11]="Absorbs",},
+        OverrideAdaptiveCol={["RecentHeals"]={R=0.1,G=1,B=0.2},["Threat"]={R=1,G=0.49,B=0.04},
+                             ["Aggro"]={R=1,G=0,B=0},["Highlight"]={R=0.4,G=1,B=1},
+                             ["Target"]={R=1,G=0.9,B=0.2},["OOR"]={R=0,G=0,B=0},
+                             ["Overheals"]={R=1,G=0.2,B=0.2},["Absorbs"]={R=1,G=1,B=1}},
         AuxTextPrefs={},
         HealBot_customPermUserName={},
         HealBot_PermMyTargets={},
@@ -718,7 +726,10 @@ HealBot_Config_SkinsDefaults = {
   Indicators={},
   Emerg={},
   ToolTip={},
-  CustomCols={},
+  CustomCols={},        
+  Adaptive={},
+  AdaptiveOrder={},
+  AdaptiveCol={},
 };
 
 

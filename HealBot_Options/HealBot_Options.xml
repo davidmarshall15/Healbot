@@ -261,7 +261,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(0, nil, "About")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("About")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -293,7 +293,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(1, nil, "General")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("General")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -325,7 +325,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(10, nil, "Overrides", true)</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("Overrides")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -357,7 +357,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(2, nil, "Spells")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("Spells")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -389,7 +389,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(3, 301, "SkinsGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_GeneralSkinsFrame", 1001)</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("SkinsGeneral")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -419,7 +419,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 301, "SkinsGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_GeneralSkinsFrame", 1001)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsGeneral")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button303">
@@ -447,7 +447,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 303, "SkinsEffects"); HealBot_Options_ShowSkinsPanel("HealBot_Options_EffectsSkinsFrame", 1003)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsEffects")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button304">
@@ -475,7 +475,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 304, "SkinsColour", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_ColourSkinsFrame", 1004)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsColour")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button305">
@@ -503,7 +503,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 305, "SkinsEnemy"); HealBot_Options_ShowSkinsPanel("HealBot_Options_EnemySkinsFrame", 1005)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsEnemy")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button307">
@@ -531,7 +531,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 307, "SkinsChat"); HealBot_Options_ShowSkinsPanel("HealBot_Options_ChatSkinsFrame", 1007)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsChat")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button308">
@@ -559,7 +559,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 309, "SkinsFramesGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesGeneral")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button309">
@@ -587,7 +587,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 309, "SkinsFramesGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesGeneral")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button310">
@@ -615,7 +615,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 310, "SkinsFramesHealGroups"); HealBot_Options_ShowSkinsPanel("HealBot_Options_HealGroupsSkinsFrame", 1009)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesHealGroups")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button311">
@@ -643,7 +643,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 311, "SkinsFramesHeaders", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_HeadersSkinsFrame", 1010)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesHeaders")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button312">
@@ -671,7 +671,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 312, "SkinsFramesBars", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesBars")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button313">
@@ -699,7 +699,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 313, "SkinsFramesText", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_TextSkinsFrame", 1013)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesText")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button314">
@@ -727,7 +727,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 314, "SkinsFramesIcons", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_IconsSkinsFrame", 1014)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesIcons")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button315">
@@ -755,7 +755,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 315, "SkinsFramesIndicators", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_IndicatorsSkinsFrame", 1015)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesIndicators")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button316">
@@ -783,7 +783,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(3, 316, "SkinsFramesEmergency", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_EmergencyFrame", 1016)</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("SkinsFramesEmergency")</OnMouseDown>
                     </Scripts>
                   </Button>
           <StatusBar name="HealBot_Contents_ButtonT4">
@@ -812,7 +812,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(4, nil, "DebuffsGeneral")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("DebuffsGeneralRoot")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -842,7 +842,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(4, 41, "DebuffsGeneral"); HealBot_Options_ShowCurePanel("HealBot_Options_CureDispelCleanse")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("DebuffsGeneral")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button42">
@@ -870,7 +870,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(4, 42, "DebuffsCustom"); HealBot_Options_ShowCurePanel("HealBot_Options_CustomCureFrame")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("DebuffsCustom")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button43">
@@ -898,7 +898,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(4, 43, "DebuffsWarning"); HealBot_Options_ShowCurePanel("HealBot_Options_WarningCureFrame")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("DebuffsWarning")</OnMouseDown>
                     </Scripts>
                   </Button>
           
@@ -928,7 +928,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(5, nil, "BuffsGeneral", true)</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("BuffsGeneralRoot")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -958,7 +958,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(5, 51, "BuffsGeneral", true); HealBot_Options_ShowBuffPanel("HealBot_Options_BuffsPanel")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("BuffsGeneral")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button52">
@@ -986,7 +986,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(5, 52, "BuffsCustom"); HealBot_Options_ShowBuffPanel("HealBot_Options_BuffIconFrame")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("BuffsCustom")</OnMouseDown>
                     </Scripts>
                   </Button>
                   <Button name="HealBot_Contents_Button53">
@@ -1014,7 +1014,7 @@
                       </Layer>
                     </Layers>
                     <Scripts>
-                      <OnMouseDown>HealBot_Options_UpdateTab(5, 53, "BuffsWarning"); HealBot_Options_ShowBuffPanel("HealBot_Options_WarningBuffFrame")</OnMouseDown>
+                      <OnMouseDown>HealBot_Options_ShowTab("BuffsWarning")</OnMouseDown>
                     </Scripts>  
                   </Button>
           <StatusBar name="HealBot_Contents_ButtonT6">
@@ -1043,7 +1043,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(6, nil, "Tips", true)</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("Tips")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -1076,7 +1076,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(8, nil, "Test")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("Test")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -1108,7 +1108,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(9, nil, "ImportExport", true)</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("ImportExport")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -1140,7 +1140,7 @@
             </Layers>
             <Scripts>
               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100)</OnLoad>
-              <OnMouseDown>HealBot_Options_UpdateTab(99, nil, "Plugins")</OnMouseDown>
+              <OnMouseDown>HealBot_Options_ShowTab("Plugins")</OnMouseDown>
             </Scripts>
             <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
             <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -2875,6 +2875,23 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_Override_EffectsSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                    <Size>
+                      <AbsDimension x="125" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Override_EffectsUse" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="0" y="2"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("SkinsEffects")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_OverrideHotBarsPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="175"/>
@@ -3434,7 +3451,7 @@
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_UpdateTab(3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb", "SkinsFramesBarsAuxConfig", false); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb", "SkinsFramesBarsAuxConfig")</OnClick>
+                          <OnClick>HealBot_Options_ShowTab("SkinsFramesBars", "AuxConfig")</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
                         </Scripts>
@@ -3513,12 +3530,12 @@
                 <Frames>
                   <StatusBar name="HealBot_Options_OverrideColoursClassb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-190" y="-10"/>
+                          <AbsDimension x="-217" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -3542,12 +3559,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_OverrideColoursRoleb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-10"/>
+                          <AbsDimension x="-72" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -3571,12 +3588,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_OverrideColoursPowerb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="190" y="-10"/>
+                          <AbsDimension x="72" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -3594,6 +3611,35 @@
                       <OnMouseDown>HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursPower", "HealBot_Options_OverrideColoursPowerb", "OverridesColourPower")</OnMouseDown>
                       <OnEnter>HealBot_Options_Show_Help("COLPOWERTAB",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("COLPOWERTAB",false)</OnLeave>
+                    </Scripts>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                    <BarColor r="0.2" g="0.2" b="0.2"/>
+                  </StatusBar>
+                  <StatusBar name="HealBot_Options_OverrideColoursAdaptiveb">
+                    <Size>
+                      <AbsDimension x="135" y="24"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="217" y="-10"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Options_OverrideColoursAdaptivebTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ADAPTIVE">
+                          <Anchors>
+                            <Anchor point="CENTER"></Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                      <OnMouseDown>HealBot_Options_ShowOverrideColourPanel("HealBot_Options_OverrideColoursAdaptive", "HealBot_Options_OverrideColoursAdaptiveb", "OverridesColourAdaptive")</OnMouseDown>
+                      <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETAB",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETAB",false)</OnLeave>
                     </Scripts>
                     <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                     <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -3655,6 +3701,23 @@
                           <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <Button name="HealBot_Options_Override_ColoursClassSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                        <Size>
+                          <AbsDimension x="125" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_Override_ColoursClassUse" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="2"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("SkinsColour", "Class")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_OverrideColClassDeathKnightpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="80" y="22"/>
@@ -4602,6 +4665,23 @@
                           <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <Button name="HealBot_Options_Override_ColoursRoleSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                        <Size>
+                          <AbsDimension x="125" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_Override_ColoursRoleUse" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="2"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("SkinsColour", "Role")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_OverrideColRoleTankpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="140" y="25"/>
@@ -4879,6 +4959,23 @@
                           <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <Button name="HealBot_Options_Override_ColoursPowerSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                        <Size>
+                          <AbsDimension x="125" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_Override_ColoursPowerUse" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="2"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("SkinsColour", "Power")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_OverrideColPowerAstralpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="140" y="25"/>
@@ -5367,6 +5464,1112 @@
                       </Button>
                     </Frames>
                   </Frame>
+                  <Frame name="HealBot_Options_OverrideColoursAdaptive" hidden="true" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="575"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="1" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-1" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_Override_ColAdaptiveTxt" text="HEALBOT_OPTIONS_ADAPTIVECOLOURS" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                    
+                      <Frame name="HealBot_Options_Override_ColoursAdaptiveUse" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="20" y="-40" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotOverride_ColoursAdaptivefontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_OVERRIDE_ADAPTIVECOLS">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativeTo="HealBot_Options_Override_ColoursAdaptiveUse" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="10" y="3"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 250)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_Override_ColoursAdaptiveSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                        <Size>
+                          <AbsDimension x="125" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_Override_ColoursAdaptiveUse" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="2"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("SkinsColour", "Adaptive")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <Button name="healbotOverride_ColoursAdaptive1Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="92" y="-100"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 1)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive2Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-140"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 2)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive2Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-140"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 2)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive3Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-180"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 3)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive3Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-180"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 3)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive4Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-220"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 4)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive4Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-220"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 4)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive5Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-260"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 5)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive5Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-260"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 5)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive6Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-300"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 6)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive6Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-300"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 6)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive7Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-340"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 7)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive7Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-340"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 7)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive8Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-380"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 8)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive8Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-380"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 8)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive9Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-420"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 9)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive9Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-420"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 9)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive10Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="80" y="-460"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 10)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive10Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="105" y="-460"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDown_OnClick(self, 10)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptive11Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="92" y="-500"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveUp_OnClick(self, 11)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptivePlugin" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="100" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptivePlugin_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPPLUGIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPPLUGIN",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="healbotOverride_ColoursAdaptivePluginButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PLUGINCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptivePlugin" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptivePluginButton_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEPLUGIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEPLUGIN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveRecentHeals" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveRecentHeals_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPRHEALS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPRHEALS",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveRecentHealspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveRecentHeals" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveRecentHeals")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVERHEALS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVERHEALS",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveRecentHealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveRecentHealspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveRecentHealsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveRecentHealsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("RecentHeals", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveThreat" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveThreat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPHDROP",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveThreatpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveThreat" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveThreat")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHDROP",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveThreatPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveThreatpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveThreatResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveThreatPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Threat", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveDebuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveDebuffs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="healbotOverride_ColoursAdaptiveDebuffButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEBUFFCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveDebuffs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("DebuffsCustom")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEDEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveAggro" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveAggro_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPAGGRO",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPAGGRO",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveAggropick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveAggro" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveAggro")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveAggroPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveAggropick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveAggroResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveAggroPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Aggro", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveHighlight" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveHighlight_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPHIGHLIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPHIGHLIGHT",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveHighlightpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveHighlight" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveHighlight")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveHighlightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveHighlightpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveHighlightResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveHighlightPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Highlight", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveTarget" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveTarget_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTARGET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTARGET",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveTargetpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveTarget" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveTarget")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETARGET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETARGET",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveTargetPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveTargetpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveTargetResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveTargetPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Target", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveOOR" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveOOR_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPOOR",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveOORpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveOOR" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveOOR")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOOR",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveOORPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveOORpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveOORResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveOORPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("OOR", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveBuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveBuffs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPBUFF",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="healbotOverride_ColoursAdaptiveBuffsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUFFCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveBuffs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("BuffsCustom")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveOverheals" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveOverheals_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPOHEAL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPOHEAL",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveOverhealspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveOverheals" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveOverheals")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveOverhealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveOverhealspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveOverhealsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveOverhealsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Overheals", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="healbotOverride_ColoursAdaptiveAbsorbs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>healbotOverride_ColoursAdaptiveAbsorbs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPABSORB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPABSORB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="healbotOverride_ColoursAdaptiveAbsorbspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveAbsorbs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("OverrideAdaptiveAbsorbs")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEABSORB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEABSORB",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_OverrideAdaptiveAbsorbsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="healbotOverride_ColoursAdaptiveAbsorbspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="healbotOverride_ColoursAdaptiveAbsorbsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_OverrideAdaptiveAbsorbsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Absorbs", true)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                    </Frames>
+                  </Frame>
                 </Frames>
               </Frame>
               <Frame name="HealBot_Options_Override_ChatFrame" hidden="true" inherits="BackdropTemplate">
@@ -5426,6 +6629,23 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_Override_ChatSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                    <Size>
+                      <AbsDimension x="125" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Override_ChatUse" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="0" y="2"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("SkinsChat")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_OverrideChatPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="310"/>
@@ -5687,6 +6907,23 @@
                       <OnLeave>HealBot_Options_Show_Help("OVERRIDESEFFECTSUSE",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Button name="HealBot_Options_Override_FramesSkinLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_SKINSETTINGS">
+                    <Size>
+                      <AbsDimension x="125" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_Override_FramesUse" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="0" y="2"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("SkinsGeneral")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("OVERRIDESKINLINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("OVERRIDESKINLINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_OverrideFramesPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="510"/>
@@ -7625,6 +8862,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_Skin_FrameBlizzOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                        <Size>
+                          <AbsDimension x="122" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="5" y="-4"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("Overrides", "Frames")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <CheckButton name="HealBot_Options_AlwaysRunEvents" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPRIGHT">
@@ -8302,6 +9556,23 @@
                   </Layer>
                 </Layers>
                 <Frames>
+                  <Button name="HealBot_Options_Skin_EffectsOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                    <Size>
+                      <AbsDimension x="122" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="232" y="-4"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("Overrides", "Effects")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_HotBarsPanel" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="175"/>
@@ -8860,7 +10131,7 @@
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_UpdateTab(3, 312); HealBot_Options_ShowSkinsPanel("HealBot_Options_BarsSkinsFrame", 1011); HealBot_Options_ShowBarsPanel("HealBot_Options_SkinsFramesBarsAux", "HealBot_Options_SkinsFramesBarsAuxb", "SkinsFramesBarsAuxConfig", false); HealBot_Options_ShowBarsAuxPanel("HealBot_Options_SkinsFramesBarsAuxConfig", "HealBot_Options_SkinsFramesBarsAuxConfigb", "SkinsFramesBarsAuxConfig")</OnClick>
+                          <OnClick>HealBot_Options_ShowTab("SkinsFramesBars", "AuxConfig")</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("BARSAUX",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("BARSAUX",false)</OnLeave>
                         </Scripts>
@@ -8940,12 +10211,12 @@
                 <Frames>
                   <StatusBar name="HealBot_Options_SkinsColoursClassb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="-190" y="-10"/>
+                          <AbsDimension x="-217" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8969,12 +10240,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_SkinsColoursRoleb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-10"/>
+                          <AbsDimension x="-72" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8998,12 +10269,12 @@
                   </StatusBar>
                   <StatusBar name="HealBot_Options_SkinsColoursPowerb">
                     <Size>
-                      <AbsDimension x="175" y="24"/>
+                      <AbsDimension x="135" y="24"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOP">
                         <Offset>
-                          <AbsDimension x="190" y="-10"/>
+                          <AbsDimension x="72" y="-10"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -9021,6 +10292,35 @@
                       <OnMouseDown>HealBot_Options_ShowColourPanel("HealBot_Options_SkinsColoursPower", "HealBot_Options_SkinsColoursPowerb", "SkinsColourPower")</OnMouseDown>
                       <OnEnter>HealBot_Options_Show_Help("COLPOWERTAB",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("COLPOWERTAB",false)</OnLeave>
+                    </Scripts>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                    <BarColor r="0.2" g="0.2" b="0.2"/>
+                  </StatusBar>
+                  <StatusBar name="HealBot_Options_SkinsColoursAdaptiveb">
+                    <Size>
+                      <AbsDimension x="135" y="24"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="217" y="-10"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name= "HealBot_Options_SkinsColoursAdaptivebTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ADAPTIVE">
+                          <Anchors>
+                            <Anchor point="CENTER"></Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                      <OnMouseDown>HealBot_Options_ShowColourPanel("HealBot_Options_SkinsColoursAdaptive", "HealBot_Options_SkinsColoursAdaptiveb", "SkinsColoursAdaptive")</OnMouseDown>
+                      <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETAB",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETAB",false)</OnLeave>
                     </Scripts>
                     <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
                     <BarColor r="0.2" g="0.2" b="0.2"/>
@@ -9055,6 +10355,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_Skin_ColoursClassOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                        <Size>
+                          <AbsDimension x="122" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="232" y="-4"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("Overrides", "ColsClass")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_ColClassDeathKnightpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="70" y="22"/>
@@ -9975,6 +11292,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_Skin_ColoursRoleOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                        <Size>
+                          <AbsDimension x="122" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="232" y="-4"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("Overrides", "ColsRole")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_ColRoleTankpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="140" y="25"/>
@@ -10225,6 +11559,23 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_Skin_ColoursPowerOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                        <Size>
+                          <AbsDimension x="122" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="232" y="-4"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("Overrides", "ColsPower")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <StatusBar name="HealBot_ColPowerAstralpick" inherits="TextStatusBar">
                         <Size>
                           <AbsDimension x="140" y="25"/>
@@ -10713,6 +12064,1085 @@
                       </Button>
                     </Frames>
                   </Frame>
+                  <Frame name="HealBot_Options_SkinsColoursAdaptive" hidden="true" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="495"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="1" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-1" y="-45"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_Skins_ColAdaptiveTxt" text="HEALBOT_OPTIONS_ADAPTIVECOLOURS" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Frames>
+                      <Button name="HealBot_Options_Skin_ColoursAdaptiveOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                        <Size>
+                          <AbsDimension x="122" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="232" y="-4"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("Overrides", "ColsAdaptive")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <Button name="HealBot_Options_ColoursAdaptive1Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="52" y="-50"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 1)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive2Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-90"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 2)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive2Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-90"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 2)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive3Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-130"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 3)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive3Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-130"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 3)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive4Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-170"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 4)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive4Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-170"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 4)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive5Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-210"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 5)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive5Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-210"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 5)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive6Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-250"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 6)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive6Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-250"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 6)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive7Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-290"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 7)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive7Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-290"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 7)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive8Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-330"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 8)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive8Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-330"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 8)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive9Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-370"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 9)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive9Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-370"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 9)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive10Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="40" y="-410"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 10)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive10Down">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="65" y="-410"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\downArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\downArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDown_OnClick(self, 10)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDOWN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDOWN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptive11Up">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="52" y="-450"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <NormalTexture name="$parenttd" file="Interface\AddOns\HealBot\Images\upArrow"/>
+                        <HighlightTexture name="$parenttdh" file="Interface\AddOns\HealBot\Images\upArrowhl"/>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveUp_OnClick(self, 11)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPUP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPUP",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptivePlugin" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="100" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptivePlugin_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPPLUGIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPPLUGIN",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="HealBot_Options_ColoursAdaptivePluginButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PLUGINCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptivePlugin" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptivePluginButton_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEPLUGIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEPLUGIN",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveRecentHeals" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveRecentHeals_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPRHEALS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPRHEALS",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveRecentHealspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveRecentHeals" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveRecentHeals")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVERHEALS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVERHEALS",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveRecentHealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveRecentHealspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveRecentHealsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveRecentHealsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("RecentHeals", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveThreat" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveThreat_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPHDROP",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveThreatpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveThreat" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveThreat")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHDROP",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHDROP",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveThreatPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveThreatpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveThreatResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveThreatPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Threat", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveDebuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveDebuffs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPDEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="HealBot_Options_ColoursAdaptiveDebuffButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DEBUFFCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveDebuffs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("DebuffsCustom")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEDEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEDEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveAggro" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveAggro_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPAGGRO",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPAGGRO",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveAggropick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveAggro" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveAggro")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveAggroPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveAggropick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveAggroResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveAggroPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Aggro", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveHighlight" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveHighlight_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPHIGHLIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPHIGHLIGHT",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveHighlightpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveHighlight" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveHighlight")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveHighlightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveHighlightpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveHighlightResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveHighlightPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Highlight", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveTarget" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveTarget_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTARGET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTARGET",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveTargetpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveTarget" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveTarget")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETARGET",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETARGET",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveTargetPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveTargetpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveTargetResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveTargetPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Target", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveOOR" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveOOR_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPOOR",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveOORpick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveOOR" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveOOR")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOOR",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOOR",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveOORPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveOORpick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveOORResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveOORPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("OOR", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveBuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveBuffs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPBUFF",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <Button name="HealBot_Options_ColoursAdaptiveBuffsButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_BUFFCOLS">
+                        <Size>
+                          <AbsDimension x="170" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveBuffs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="120" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ShowTab("BuffsCustom")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEBUFF",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEBUFF",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveOverheals" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveOverheals_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPOHEAL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPOHEAL",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveOverhealspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveOverheals" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveOverheals")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveOverhealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveOverhealspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveOverhealsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveOverhealsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Overheals", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                      <CheckButton name="HealBot_Options_ColoursAdaptiveAbsorbs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="150" y="-100" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ColoursAdaptiveAbsorbs_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPABSORB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPABSORB",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <StatusBar name="HealBot_Options_ColoursAdaptiveAbsorbspick" inherits="TextStatusBar">
+                        <Size>
+                          <AbsDimension x="140" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveAbsorbs" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="124" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnMouseDown>HealBot_OverrideColorpick_OnClick("SkinAdaptiveAbsorbs")</OnMouseDown>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEABSORB",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEABSORB",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarColor r="0" g="1" b="0"/>
+                      </StatusBar>
+                      <Button name="HealBot_Options_SkinAdaptiveAbsorbsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                        <Size>
+                          <AbsDimension x="25" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ColoursAdaptiveAbsorbspick" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="2" y="1"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_ColoursAdaptiveAbsorbsResetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_RESET">
+                        <Size>
+                          <AbsDimension x="100" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_SkinAdaptiveAbsorbsPresetColour" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="20" y="0"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_AdaptiveResetColour_OnClick("Absorbs", false)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("RESETCOLS",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("RESETCOLS",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+
+                    </Frames>
+                  </Frame>
                 </Frames>
               </Frame>
               
@@ -11143,6 +13573,23 @@
                   </Layer>
                 </Layers>
                 <Frames>
+                  <Button name="HealBot_Options_Skin_ChatOverrideLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_OVERRIDESETTINGS">
+                    <Size>
+                      <AbsDimension x="122" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOP">
+                        <Offset>
+                          <AbsDimension x="232" y="-4"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("Overrides", "Chat")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("SKINOVERRIDELINK",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SKINOVERRIDELINK",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_ChatSkinsGeneralFrame" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="290"/>
@@ -14988,7 +17435,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-170"/>
+                              <AbsDimension x="0" y="-190"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15015,7 +17462,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-260"/>
+                              <AbsDimension x="0" y="-300"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -15038,33 +17485,7 @@
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROBARALERT",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <Frame name="HealBot_Options_AggroAdapAlertLevel" inherits="UIDropDownMenuTemplate" id="1">
-                        <Anchors>
-                          <Anchor point="TOP">
-                            <Offset>
-                              <AbsDimension x="0" y="-350"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="healbotaggroadapalertfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_AGGROADAPALERT">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="14"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                          <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROADAALERT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROADAALERT",false)</OnLeave>
-                        </Scripts>
-                      </Frame>
+
                       <Button name="HealBot_Options_AggroIndicatorsLink" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_TAB_AGGROINDICATORS">
                         <Size>
                           <AbsDimension x="220" y="22"/>
@@ -15077,7 +17498,7 @@
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnClick>HealBot_Options_UpdateTab(3, 315, "SkinsFramesIndicators", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_IndicatorsSkinsFrame", 1015); HealBot_Options_ShowIndicatorsPanel("HealBot_Options_SkinsFrameIndicatorsAggro", "HealBot_Options_SkinsFrameIndicatorsAggrob", "SkinsFramesIndicatorsAggro")</OnClick>
+                          <OnClick>HealBot_Options_ShowTab("SkinsFramesIndicators", "Aggro")</OnClick>
                           <OnEnter>HealBot_Options_Show_Help("HEALBARSAGGROINDLINK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEALBARSAGGROINDLINK",false)</OnLeave>
                         </Scripts>
@@ -20565,7 +22986,7 @@
                               </Anchor>
                             </Anchors>
                             <Scripts>
-                              <OnClick>HealBot_Options_UpdateTab(3, 315, "SkinsFramesIndicators", true); HealBot_Options_ShowSkinsPanel("HealBot_Options_IndicatorsSkinsFrame", 1015); HealBot_Options_ShowIndicatorsPanel("HealBot_Options_SkinsFrameIndicatorsSelfCast", "HealBot_Options_SkinsFrameIndicatorsSelfCastb", "SkinsFramesIndicatorsSelfCast")</OnClick>
+                              <OnClick>HealBot_Options_ShowTab("SkinsFramesIndicators", "SelfCast")</OnClick>
                               <OnEnter>HealBot_Options_Show_Help("ICONSELFCASTLINK",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("ICONSELFCASTLINK",false)</OnLeave>
                             </Scripts>
@@ -28605,7 +31026,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_UpdateTab(3, 309, "SkinsFramesGeneral"); HealBot_Options_ShowSkinsPanel("HealBot_Options_FramesSkinsFrame", 1008)</OnClick>
+                      <OnClick>HealBot_Options_ShowTab("SkinsFramesGeneral")</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITIONLINK",false)</OnLeave>
                     </Scripts>

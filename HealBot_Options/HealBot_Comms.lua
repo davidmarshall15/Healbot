@@ -21,12 +21,42 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
     end
 end
 
-function HealBot_Comms_SendInstantAddonMsg(msg)
-    if IsInInstance() and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE)) then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT");
+function HealBot_Comms_Set()
+    local inInst,inType = HealBot_ZoneType()
+    HealBot_Comms_SendTo(inInst,inType)
+    HealBot_Comms_GuildUpdate()
+end
+
+local hbCommsTo=0
+function HealBot_Comms_SendTo(inInst,inType)
+    if inInst and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
+        hbCommsTo=1
     elseif IsInRaid() then
-        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "RAID")
+        hbCommsTo=2
     elseif IsInGroup() then
+        hbCommsTo=3
+    else
+        hbCommsTo=0
+    end
+end
+
+local hbInGuild=false
+function HealBot_Comms_GuildUpdate()
+    hbInGuild=IsInGuild()
+end
+
+function HealBot_Comms_SendInstantAddonMsg(msg,notGroup,toPlayer)
+    if notGroup then
+        if notGroup==1 and hbInGuild then
+            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD")
+        elseif notGroup==2 then
+            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", toPlayer)
+        end
+    elseif hbCommsTo==1 then
+        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT")
+    elseif hbCommsTo==2 then
+        C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "RAID")
+    elseif hbCommsTo==3 then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "PARTY")
     end
 end
@@ -44,10 +74,10 @@ function HealBot_Comms_SendAddonMessage()
         elseif aType==2 and pName then
             local xUnit=HealBot_Panel_RaidUnitName(pName)
             if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit)==pName then
-                C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", pName );
+                HealBot_Comms_SendInstantAddonMsg(msg,2,pName)
             end
-        elseif aType==3 and IsInGuild() then
-            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD" );
+        elseif aType==3 then
+            HealBot_Comms_SendInstantAddonMsg(msg,1)
         end
         --HealBot_AddDebug("comms="..aMsg)
     end

@@ -1028,14 +1028,14 @@ end
 local ohValue=0
 function HealBot_Aux_UpdateOverHealBar(button)
     for id in pairs(hbAuxOverHealAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] then
+        if button.status.current<HealBot_Unit_Status["DEAD"] and button.status.range>-1 then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
                 button.aux[id]["R"]=1
                 button.aux[id]["G"]=0.2
                 button.aux[id]["B"]=0.2
             end
-            if button.health.auxincoming>0 then
-                ohValue=floor((button.health.auxoverheal/button.health.auxincoming)*1000)
+            if button.health.overheal>0 then
+                ohValue=floor((button.health.overheal/button.health.max)*10000)
             else
                 ohValue=0
             end
@@ -1046,7 +1046,7 @@ function HealBot_Aux_UpdateOverHealBar(button)
                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==3 then
                     HealBot_Aux_setBar(button, id, ohValue, true, ceil(ohValue/10).."%")
                 else
-                    HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.auxoverheal, button.frame))
+                    HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.overheal, button.frame))
                 end
             else
                 HealBot_Aux_setBar(button, id, ohValue, true)
@@ -1593,7 +1593,7 @@ function HealBot_Aux_CheckOverLays(button)
     end
     if nameLastOverlayType[button.id][6] then
         nameLastOverlayType[button.id][6]=false
-        HealBot_PlayerTargetChanged()
+        HealBot_nextRecalcParty(3)
     end
     if nameLastOverlayType[button.id][7] then
         if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYOOR"] or button.status.range==1 then
@@ -1635,7 +1635,7 @@ function HealBot_Aux_CheckOverLays(button)
     end
     if healthLastOverlayType[button.id][6] then
         healthLastOverlayType[button.id][6]=false
-        HealBot_PlayerTargetChanged()
+        HealBot_nextRecalcParty(3)
     end
     if healthLastOverlayType[button.id][7] then
         if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYOOR"] or button.status.range==1 then

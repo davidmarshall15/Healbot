@@ -991,7 +991,8 @@ function HealBot_Text_setInHealAbsorbsText(button)
 end
 
 function HealBot_Text_setOverHealText(button)
-    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and hbOverHeal[button.frame] and button.health.max and button.health.overheal>0 then
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.status.range>-1 and 
+       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and hbOverHeal[button.frame] and button.health.max and button.health.overheal>0 then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]<3 or floor((button.health.overheal/button.health.max)*100)>0 then
             tHealthConcat[1]=vTextChars["Space"]
             if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OVERHEALCOL"]==1 then

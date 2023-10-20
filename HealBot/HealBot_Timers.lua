@@ -230,7 +230,7 @@ function HealBot_Timers_FramesSetPoint()
 end
 
 function HealBot_Timers_TargetFocusUpdate()
-    HealBot_PlayerTargetChanged()
+    HealBot_nextRecalcParty(3)
     if HEALBOT_GAME_VERSION>1 then
         HealBot_FocusChanged()
     end
@@ -311,8 +311,8 @@ function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("AURA","CheckUnits",0.35)
     HealBot_Timers_Set("PLAYER","InvChange",0.4)
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.5)
-    HealBot_Timers_Set("LAST","CheckVersions",0.75)
     HealBot_Timers_Set("LAST","LoadComplete",1)
+    HealBot_Timers_Set("LAST","CheckVersions",2)
     C_Timer.After(0.5, HealBot_Timers_nextRecalcAll)
 end
 
@@ -367,7 +367,8 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("LAST","UpdateButtonGlow",0.4)
     HealBot_Timers_Set("AURA","BuffTagNames",0.45)
     HealBot_Timers_Set("AURA","DebuffTagNames",0.5)
-    HealBot_Timers_Set("INIT","LastUpdate",0.55)
+    HealBot_Timers_Set("SKINS","SetAdaptive",0.55)
+    HealBot_Timers_Set("INIT","LastUpdate",0.75)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
     if not HealBot_Timers_luVars["HelpNotice"] then
@@ -600,6 +601,7 @@ local hbTimerFuncs={["INIT"]={
                         ["AllFramesChanged"]=HealBot_Timers_AllFramesChanged,
                         ["UpdateAFK"]=HealBot_updAllStateIconAFK,
                         ["ZeroHiddenButtons"]=HealBot_Action_ZeroHiddenButtons,
+                        ["SetAdaptive"]=HealBot_Action_setAdaptive
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,
@@ -737,12 +739,15 @@ local hbTimerFuncs={["INIT"]={
                         ["ClassColourUpdate"]=HealBot_Options_ClassColourUpdate,
                         ["RoleColourUpdate"]=HealBot_Options_RoleColourUpdate,
                         ["PowerColourUpdate"]=HealBot_Options_PowerColourUpdate,
+                        ["AdaptiveColourUpdate"]=HealBot_Options_AdaptiveColourUpdate,
                         ["OverrideClassColourUseToggle"]=HealBot_Options_Override_ColoursClassUse_Toggle,
                         ["OverrideRoleColourUseToggle"]=HealBot_Options_Override_ColoursRoleUse_Toggle,
                         ["OverridePowerColourUseToggle"]=HealBot_Options_Override_ColoursPowerUse_Toggle,
+                        ["OverrideAdaptiveColourUseToggle"]=HealBot_Options_Override_ColoursAdaptiveUse_Toggle,
                         ["BarColourAlphaSetFunc"]=HealBot_Action_BarColourAlphaSetFunc,
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
                         ["ClassicSpellRanks"]=HealBot_Init_ClassicSpellRanks,
+                        ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
                     },
                    }
 
@@ -914,7 +919,8 @@ local hbAOTimerFuncs={["AURA"]={
                           ["IconUpdHostile"]=HealBot_updAllStateIconHostile,
                       },
                       ["LAST"]={
-                          ["CheckUnits"]=UpdateButtonGlow,
+                          ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
+                          ["SetComms"]=HealBot_Comms_Set,
                       },
                      }
                         
