@@ -19,6 +19,16 @@ local HealBot_Timers_NoDups={
                       ["CHAT"]={},
                       ["LAST"]={},
                      }
+local HealBot_Timers_LastRun={
+                      ["INIT"]={},
+                      ["RESET"]={},
+                      ["PLAYER"]={},
+                      ["SKINS"]={},
+                      ["AUX"]={},
+                      ["AURA"]={},
+                      ["CHAT"]={},
+                      ["LAST"]={},
+                     }
                      
 local HealBot_Timers_NoCalls={}
 local HealBot_Timers_luVars={}
@@ -666,6 +676,8 @@ local hbTimerFuncs={["INIT"]={
                         ["ConfigDebuffs"]=HealBot_Aura_ConfigDebuffs,
                         ["BuffTagNames"]=HealBot_Aura_BuffTagNames,
                         ["DebuffTagNames"]=HealBot_Aura_DebuffTagNames,
+                        ["IconUpdAllState"]=HealBot_Aura_UpdateAllState,
+                        ["IconUpdHostile"]=HealBot_updAllStateIconHostile,
                     },
                     ["CHAT"]={
                         ["OverrideChatUseToggle"]=HealBot_Options_Override_ChatUse_Toggle,
@@ -752,6 +764,7 @@ local hbTimerFuncs={["INIT"]={
                    }
 
 function HealBot_Timers_DoSet(cat,timer)
+    HealBot_Timers_LastRun[cat][timer]=GetTime()
     table.insert(HealBot_Timers[cat],timer)
     HealBot_setLuVars("HealBot_RunTimers", true)
 end
@@ -761,6 +774,8 @@ function HealBot_Timers_Set(cat,timer,delay)
         HealBot_Timers_NoDups[cat][timer]=true
         if delay then
             C_Timer.After(delay, function() HealBot_Timers_DoSet(cat,timer) end)
+        elseif HealBot_Timers_LastRun[cat][timer] and HealBot_Timers_LastRun[cat][timer]-(GetTime()-0.5)>0 then
+            C_Timer.After(HealBot_Timers_LastRun[cat][timer]-(GetTime()-0.5), function() HealBot_Timers_DoSet(cat,timer) end)
         else
             HealBot_Timers_DoSet(cat,timer)
         end
@@ -771,7 +786,7 @@ function HealBot_Timers_PluginsSet(tId)
     if tId==1 then
         HealBot_Timers_Set("INIT","RefreshPartyNextRecalcPlayers",0.5)
     elseif tId==2 then
-        HealBot_AOTimers_Set("AURA","CheckUnits",0.5)
+        HealBot_Timers_Set("AURA","CheckUnits",0.5)
     elseif tId==3 then
         HealBot_Timers_Set("INIT","PrepSetAllAttribs",1)
     elseif tId==4 then
@@ -892,88 +907,12 @@ function HealBot_Timers_Proc()
 end
 
 function HealBot_Timers_Run()
-    for x=1,HealBot_Timers_luVars["nProcs"] do
-        --HealBot_Timers_Proc()
-        if not HealBot_Timers_Proc() then break end
-    end
-end
-
--- Always On
-
-local HealBot_AOTimers={
-                      ["AURA"]={},
-                      ["LAST"]={},
-                     }
-local HealBot_AOTimers_NoDups={
-                      ["AURA"]={},
-                      ["LAST"]={},
-                     }
-local HealBot_AOTimers_LastRun={
-                      ["AURA"]={},
-                      ["LAST"]={},
-                     }
-local hbAOTimerFuncs={["AURA"]={
-                          ["CheckUnits"]=HealBot_AuraCheck,
-                          ["IconNotInCombat"]=HealBot_updAllStateIconNotInCombat,
-                          ["IconUpdAllState"]=HealBot_Aura_UpdateAllState,
-                          ["IconUpdHostile"]=HealBot_updAllStateIconHostile,
-                      },
-                      ["LAST"]={
-                          ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
-                          ["SetComms"]=HealBot_Comms_Set,
-                      },
-                     }
-                        
-
-function HealBot_AOTimers_DoSet(cat,timer)
-    table.insert(HealBot_AOTimers[cat],timer)
-    HealBot_AlwaysOnTimers_Run()
-end
-
-function HealBot_AOTimers_Set(cat,timer,delay)
-    if not HealBot_AOTimers_NoDups[cat][timer] then
-        HealBot_AOTimers_NoDups[cat][timer]=true
-        if delay then
-            C_Timer.After(delay, function() HealBot_AOTimers_DoSet(cat,timer) end)
-        else
-            HealBot_AOTimers_DoSet(cat,timer)
+    if HealBot_Data["UILOCK"] then
+        HealBot_Timers_Proc()
+    else
+        for x=1,HealBot_Timers_luVars["nProcs"] do
+            --HealBot_Timers_Proc()
+            if not HealBot_Timers_Proc() then break end
         end
-    end
-end
-
-
-function HealBot_Timers_RunAOTimer(cat, timer)
-    if hbAOTimerFuncs[cat][timer] then
-        HealBot_AOTimers_NoDups[cat][timer]=false
-        hbAOTimerFuncs[cat][timer]()
-    else
-        NoCallsInx=cat..":"..timer
-        HealBot_AddDebug(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. "ERROR: Timer " .._G["FONT_COLOR_CODE_CLOSE"] .. _G["YELLOW_FONT_COLOR_CODE"] .. NoCallsInx  .._G["FONT_COLOR_CODE_CLOSE"].. _G["ORANGE_FONT_COLOR_CODE"] .." not found.")
-        HealBot_AddDebug(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. "ERROR: Timer " .._G["FONT_COLOR_CODE_CLOSE"] .. _G["YELLOW_FONT_COLOR_CODE"] .. NoCallsInx  .._G["FONT_COLOR_CODE_CLOSE"].. _G["ORANGE_FONT_COLOR_CODE"] .." not found.","Timers",true)
-    end
-    C_Timer.After(0.001, HealBot_AOTimers_Proc)
-    --HealBot_Timers_Usage(cat, timer)
-          --HealBot_setCall("HealBot_Timers_RunTimer-"..cat..":"..timer)
-end
-
-function HealBot_AOTimers_Proc()
-    --HealBot_Timers_luVars["nCalls"]=HealBot_Timers_luVars["nCalls"]+1
-    if HealBot_AOTimers["AURA"][1] then
-        HealBot_Timers_RunAOTimer("AURA", HealBot_AOTimers["AURA"][1])
-        table.remove(HealBot_AOTimers["AURA"],1)
-    elseif HealBot_AOTimers["LAST"][1] then
-        HealBot_Timers_RunAOTimer("LAST", HealBot_AOTimers["LAST"][1])
-        table.remove(HealBot_AOTimers["LAST"],1)
-    else
-        HealBot_Timers_luVars["AORunning"]=false
-        --HealBot_AddDebug("Run timers off, #Calls="..HealBot_Timers_luVars["nCalls"],"Timers",true)
-        --HealBot_Timers_luVars["nCalls"]=0
-    end
-end
-
-function HealBot_AlwaysOnTimers_Run()
-    if not HealBot_Timers_luVars["AORunning"] then
-        HealBot_Timers_luVars["AORunning"]=true
-        HealBot_AOTimers_Proc()
     end
 end

@@ -1,5 +1,5 @@
 local major = "LibHealComm-4.0"
-local minor = 108
+local minor = 109
 assert(LibStub, format("%s requires LibStub.", major))
 
 local HealComm = LibStub:NewLibrary(major, minor)
@@ -2058,7 +2058,7 @@ end
 -- Keep track of where all the data should be going
 local instanceType
 local function updateDistributionChannel()
-    if IsInInstance() and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or instanceType == "pvp" or instanceType == "arena" or HasLFGRestrictions()) then
+    if HEALBOT_GAME_VERSION>2 and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or instanceType == "pvp" or instanceType == "arena" or HasLFGRestrictions()) then
 		distribution = "INSTANCE_CHAT"
 	elseif( IsInRaid() ) then
 		distribution = "RAID"

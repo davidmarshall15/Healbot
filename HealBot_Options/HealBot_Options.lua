@@ -5052,7 +5052,7 @@ function HealBot_Options_BuffTimer_OnValueChanged(self,bufftype)
             g=_G[self:GetName()]
             HealBot_Options_SetText(g,self.text .. ": " .. mins ..":".. secs .." mins")
         end
-        HealBot_AOTimers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckUnits")
     end
 end
 
@@ -6153,8 +6153,8 @@ function HealBot_Options_CDCCol_DropDown()
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Aura_ClearAllDebuffs()
-                            HealBot_AOTimers_Set("AURA","CheckUnits")
-                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6209,8 +6209,8 @@ function HealBot_Options_BuffDefaultBarColour_DropDown()
                             UIDropDownMenu_SetText(HealBot_Options_BuffDefaultBarColour,HealBot_Options_Lists["AuraBarCol"][self:GetID()])
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_AOTimers_Set("AURA","CheckUnits")
-                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6231,8 +6231,8 @@ function HealBot_Options_CDCDefaultBarColour_DropDown()
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Aura_ClearAllDebuffs()
-                            HealBot_AOTimers_Set("AURA","CheckUnits")
-                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -6257,8 +6257,8 @@ function HealBot_Options_CustomBuffCol_DropDown()
                             end
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_AOTimers_Set("AURA","CheckUnits")
-                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -7217,7 +7217,7 @@ function HealBot_Options_ShowCombatState_OnClick(self)
         if HealBot_Options_luVars["TestBarsOn"] then 
             HealBot_Timers_Set("SKINS","IconsFramesChanged")
         else
-            HealBot_AOTimers_Set("AURA","IconNotInCombat")
+            HealBot_Timers_Set("LAST","IconNotInCombat")
         end
     end
 end
@@ -7228,7 +7228,7 @@ function HealBot_Options_ShowHostile_OnClick(self)
         if HealBot_Options_luVars["TestBarsOn"] then 
             HealBot_Timers_Set("SKINS","IconsFramesChanged") 
         else
-            HealBot_AOTimers_Set("AURA","IconUpdHostile")
+            HealBot_Timers_Set("AURA","IconUpdHostile")
         end
     end
 end
@@ -7246,7 +7246,7 @@ function HealBot_Options_ShowLeader_OnClick(self)
         if HealBot_Options_luVars["TestBarsOn"] then 
             HealBot_Timers_Set("SKINS","IconsFramesChanged") 
         else
-            HealBot_AOTimers_Set("AURA","IconUpdAllState")
+            HealBot_Timers_Set("AURA","IconUpdAllState")
         end
     end
 end
@@ -10202,39 +10202,39 @@ function HealBot_Options_Override_ColoursAdaptiveUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptivePluginButton",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveRecentHeals",true)
         HealBot_Options_ColoursAdaptiveRecentHealspick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveRecentHeals") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveRecentHealsPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveRecentHealsPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveRecentHealsResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveThreat",true)
         HealBot_Options_ColoursAdaptiveThreatpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveThreat") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveThreatPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveThreatPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveThreatResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveDebuffs",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveDebuffButton",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAggro",true)
         HealBot_Options_ColoursAdaptiveAggropick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveAggro") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveAggroPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveAggroPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAggroResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveHighlight",true)
         HealBot_Options_ColoursAdaptiveHighlightpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveHighlight") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveHighlightPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveHighlightPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveHighlightResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveTarget",true)
         HealBot_Options_ColoursAdaptiveTargetpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveTarget") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveTargetPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveTargetPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveTargetResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOOR",true)
         HealBot_Options_ColoursAdaptiveOORpick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveOOR") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveOORPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveOORPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOORResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveBuffs",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveBuffsButton",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOverheals",true)
         HealBot_Options_ColoursAdaptiveOverhealspick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveOverheals") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveOverhealsPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveOverhealsPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOverhealsResetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAbsorbs",true)
         HealBot_Options_ColoursAdaptiveAbsorbspick:SetScript('OnMouseDown', function() HealBot_OverrideColorpick_OnClick("SkinAdaptiveAbsorbs") end)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveAbsorbsPresetColour",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveAbsorbsPresetColour",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAbsorbsResetColour",true)
         HealBot_Options_Override_ColoursAdaptiveSkinLink:Show()
         HealBot_Options_Skin_ColoursAdaptiveOverrideLink:Hide()
@@ -10323,39 +10323,39 @@ function HealBot_Options_Override_ColoursAdaptiveUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptivePluginButton",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveRecentHeals",false)
         HealBot_Options_ColoursAdaptiveRecentHealspick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveRecentHealsPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveRecentHealsPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveRecentHealsResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveThreat",false)
         HealBot_Options_ColoursAdaptiveThreatpick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveThreatPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveThreatPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveThreatResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveDebuffs",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveDebuffButton",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAggro",false)
         HealBot_Options_ColoursAdaptiveAggropick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveAggroPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveAggroPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAggroResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveHighlight",false)
         HealBot_Options_ColoursAdaptiveHighlightpick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveHighlightPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveHighlightPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveHighlightResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveTarget",false)
         HealBot_Options_ColoursAdaptiveTargetpick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveTargetPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveTargetPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveTargetResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOOR",false)
         HealBot_Options_ColoursAdaptiveOORpick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveOORPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveOORPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOORResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveBuffs",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveBuffsButton",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOverheals",false)
         HealBot_Options_ColoursAdaptiveOverhealspick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveOverhealsPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveOverhealsPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveOverhealsResetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAbsorbs",false)
         HealBot_Options_ColoursAdaptiveAbsorbspick:SetScript('OnMouseDown', nil)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideAdaptiveAbsorbsPresetColour",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SkinAdaptiveAbsorbsPresetColour",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_ColoursAdaptiveAbsorbsResetColour",false)
         HealBot_Options_Skin_ColoursAdaptiveOverrideLink:Show()
         HealBot_Options_Override_ColoursAdaptiveSkinLink:Hide()
@@ -12117,7 +12117,7 @@ function HealBot_Options_GlowFrame_DropDown()
                         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] ~= self:GetID() then
                             Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"] = self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_GlowFrame,HealBot_Options_Lists["GlowFrame"][Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOW"]]) 
-                            HealBot_AOTimers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
         info.checked = false;
@@ -15901,7 +15901,7 @@ function HealBot_Options_DebuffIconColUpdate(spellId, col)
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Aura_ClearAllDebuffs()
-    HealBot_AOTimers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -16081,7 +16081,7 @@ function HealBot_Options_BuffIconPrioUpdate(spellId, prio)
         HealBot_Globals.HealBot_Custom_Buffs[sName]=prio
     end
     HealBot_Aura_ResetBuffCache()
-    HealBot_AOTimers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -16091,7 +16091,7 @@ function HealBot_Options_BuffIconColUpdate(spellId, col)
     if sName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]=col end
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_AOTimers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -16558,7 +16558,6 @@ function HealBot_Options_ComboButton_ModifierKey(mod)
     return hbComboModifiers[mod]
 end
 
-local FirstDebuffLoad=true
 function HealBot_Options_Debuff_Reset()
     HealBot_Options_setDebuffTypes()
     HealBot_DebuffWatchTarget[HEALBOT_DISEASE_en] = {HEALBOT_DISEASE_en = {}};
@@ -16765,7 +16764,6 @@ function HealBot_Options_Debuff_Reset()
         end
     end
     HealBot_Timers_Set("AURA","DebuffPriority")
-    FirstDebuffLoad=nil
 end
 
 function HealBot_Options_ExtraBuff_Reset()
@@ -18754,7 +18752,7 @@ function HealBot_Options_PresetColourSelect_OnClick(id,cancel)
         if strsub(HealBot_Options_luVars["PresetColourCaller"],1,28)=="HealBot_Options_SkinAdaptive" then
             if HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinAdaptiveRecentHealsPresetColour" then
                 HealBot_ColourObjWaiting="SkinAdaptiveRecentHeals"
-            elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinAdaptiveHealthThreatColour" then
+            elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinAdaptiveThreatPresetColour" then
                 HealBot_ColourObjWaiting="SkinAdaptiveThreat"
             elseif HealBot_Options_luVars["PresetColourCaller"]=="HealBot_Options_SkinAdaptiveAggroPresetColour" then
                 HealBot_ColourObjWaiting="SkinAdaptiveAggro"

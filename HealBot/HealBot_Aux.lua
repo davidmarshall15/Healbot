@@ -1546,6 +1546,22 @@ overlayColours[5]={["R"]=0.4,["G"]=1,["B"]=1} -- Highlight
 overlayColours[6]={["R"]=1,["G"]=0.9,["B"]=0.2} -- Target
 overlayColours[7]={["R"]=0,["G"]=0,["B"]=0} -- Out Of Range
 
+function HealBot_Aux_setAdaptiveCols()
+    if HealBot_Globals.OverrideColours["USEADAPTIVE"]==2 then 
+        overlayColours[1]=HealBot_Options_copyTable(HealBot_Globals.OverrideAdaptiveCol["RecentHeals"])
+        overlayColours[4]=HealBot_Options_copyTable(HealBot_Globals.OverrideAdaptiveCol["Aggro"])
+        overlayColours[5]=HealBot_Options_copyTable(HealBot_Globals.OverrideAdaptiveCol["Highlight"])
+        overlayColours[6]=HealBot_Options_copyTable(HealBot_Globals.OverrideAdaptiveCol["Target"])
+        overlayColours[7]=HealBot_Options_copyTable(HealBot_Globals.OverrideAdaptiveCol["OOR"])
+    else
+        overlayColours[1]=HealBot_Options_copyTable(Healbot_Config_Skins.AdaptiveCol[Healbot_Config_Skins.Current_Skin]["RecentHeals"])
+        overlayColours[4]=HealBot_Options_copyTable(Healbot_Config_Skins.AdaptiveCol[Healbot_Config_Skins.Current_Skin]["Aggro"])
+        overlayColours[5]=HealBot_Options_copyTable(Healbot_Config_Skins.AdaptiveCol[Healbot_Config_Skins.Current_Skin]["Highlight"])
+        overlayColours[6]=HealBot_Options_copyTable(Healbot_Config_Skins.AdaptiveCol[Healbot_Config_Skins.Current_Skin]["Target"])
+        overlayColours[7]=HealBot_Options_copyTable(Healbot_Config_Skins.AdaptiveCol[Healbot_Config_Skins.Current_Skin]["OOR"])
+    end
+end
+
 function HealBot_Aux_AssignLastOverlayType(id)
     nameLastOverlayType[id]={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false}
     healthLastOverlayType[id]={[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false}

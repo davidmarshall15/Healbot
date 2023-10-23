@@ -326,7 +326,7 @@ function HealBot_Data_InitVars()
         Tooltip_DetailFont=HealBot_Default_Fonts[15].name,
         Tooltip_DetailFontSize=12,
         DisableToolTipInCombat=false,
-        HideOptions=false,
+        HideOptions=true,
         ProtectPvP=false,
         RightButtonOptions=false,
         UltraPerf=false,

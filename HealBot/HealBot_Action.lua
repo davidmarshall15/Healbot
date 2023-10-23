@@ -110,6 +110,7 @@ function HealBot_Action_setAdaptive()
     for x=1,11 do
         hbAdaptiveOrderName[hbAdaptiveOrder[x]]=x
     end
+    HealBot_Aux_setAdaptiveCols()
 end
 
 function HealBot_Action_AdaptiveDownButton(button, id)
@@ -3831,8 +3832,6 @@ function HealBot_Action_InitButton(button, prefix)
     --button.unit="nil"
     button.status.classknown=false
     button.status.plugin=false
-    button.health.updincoming=false
-    button.health.updabsorbs=false
     button.health.init=true
     button.mana.init=true
     button.status.current=HealBot_Unit_Status["CHECK"]
@@ -3852,7 +3851,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.auraabsorbs=0
     button.health.abptc=0
     button.health.overheal=0
-    button.health.updhlth=true
     button.spec=" "
     button.specupdate=0
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
@@ -6627,32 +6625,33 @@ local function HealBot_Action_AuxClearHighlightBar(button)
 end
 
 function HealBot_Action_HealUnit_OnEnter(self)
-    if not self.unit then return; end
-    self.mouseover=true
-    if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIR"] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then 
-        HealBot_Action_ShowDirectionArrow(self) 
-    end
-    HealBot_Action_SetActiveButton(self.id)
-    if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] then
-        HealBot_Data["TIPBUTTON"] = self
-        if HealBot_Globals.ShowGameUnitInfo then
-            HealBot_Data["TIPTYPE"] = "WoWUnit"
-        elseif not UnitIsFriend("player",self.unit) then
-            HealBot_Data["TIPTYPE"] = "Enemy"
-        else
-            HealBot_Data["TIPTYPE"] = "Enabled"
+    if self.unit then
+        self.mouseover=true
+        if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIR"] and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then 
+            HealBot_Action_ShowDirectionArrow(self) 
         end
-        HealBot_Action_RefreshTooltip();
-    end    
-    if hbAdaptive["Highlight"] then
-        if hbAdaptiveOrderName["Highlight"]<self.adaptive.current then
-            self.adaptive.current=hbAdaptiveOrderName["Highlight"]
-            HealBot_Action_UpdateBackground(self)
+        HealBot_Action_SetActiveButton(self.id)
+        if HealBot_Globals.ShowTooltip and HealBot_Data["TIPUSE"] then
+            HealBot_Data["TIPBUTTON"] = self
+            if HealBot_Globals.ShowGameUnitInfo then
+                HealBot_Data["TIPTYPE"] = "WoWUnit"
+            elseif not UnitIsFriend("player",self.unit) then
+                HealBot_Data["TIPTYPE"] = "Enemy"
+            else
+                HealBot_Data["TIPTYPE"] = "Enabled"
+            end
+            HealBot_Action_RefreshTooltip();
+        end    
+        if hbAdaptive["Highlight"] then
+            if hbAdaptiveOrderName["Highlight"]<self.adaptive.current then
+                self.adaptive.current=hbAdaptiveOrderName["Highlight"]
+                HealBot_Action_UpdateBackground(self)
+            end
+            self.adaptive[hbAdaptiveOrderName["Highlight"]]=true
         end
-        self.adaptive[hbAdaptiveOrderName["Highlight"]]=true
-    end
-    if self and self.aux then
-        HealBot_Action_AuxSetHighlightBar(self)
+        if self.aux then
+            HealBot_Action_AuxSetHighlightBar(self)
+        end
     end
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+1
@@ -6662,15 +6661,17 @@ function HealBot_Action_HealUnit_OnEnter(self)
 end
 
 function HealBot_Action_HealUnit_OnLeave(self)
-    HealBot_Action_HideTooltip(self);
-    self.mouseover=false
-    HealBot_Action_SetActiveButton(0)
-    HealBot_Action_AdaptiveNextActive(self, hbAdaptiveOrderName["Highlight"], true)
-    if self.status and self.status.dirarrowshown>0 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
-        HealBot_Action_HideDirectionArrow(self)
-    end
-    if self and self.aux then 
-        HealBot_Action_AuxClearHighlightBar(self)
+    if self.unit then
+        HealBot_Action_HideTooltip(self);
+        self.mouseover=false
+        HealBot_Action_SetActiveButton(0)
+        HealBot_Action_AdaptiveNextActive(self, hbAdaptiveOrderName["Highlight"], true)
+        if self.status and self.status.dirarrowshown>0 and Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][self.frame]["SHOWDIRMOUSE"] then
+            HealBot_Action_HideDirectionArrow(self)
+        end
+        if self and self.aux then 
+            HealBot_Action_AuxClearHighlightBar(self)
+        end
     end
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["GLOBALDIMMING"]>1 then
         HealBot_Action_luVars["EnableDimmingAfter"]=GetTime()+0.35

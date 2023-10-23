@@ -22,14 +22,15 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
 end
 
 function HealBot_Comms_Set()
-    local inInst,inType = HealBot_ZoneType()
-    HealBot_Comms_SendTo(inInst,inType)
+    local _,inType = HealBot_ZoneType()
+    HealBot_Comms_SendTo(inType)
     HealBot_Comms_GuildUpdate()
 end
 
 local hbCommsTo=0
-function HealBot_Comms_SendTo(inInst,inType)
-    if inInst and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
+function HealBot_Comms_SendTo(inType)
+    local lastCommsTo=hbCommsTo
+    if HEALBOT_GAME_VERSION>2 and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
         hbCommsTo=1
     elseif IsInRaid() then
         hbCommsTo=2
@@ -38,6 +39,10 @@ function HealBot_Comms_SendTo(inInst,inType)
     else
         hbCommsTo=0
     end
+    if lastCommsTo~=hbCommsTo then
+        HealBot_Timers_Set("LAST","CheckVersions",5)
+    end
+    HealBot_AddDebug("INFO: Comms is "..hbCommsTo,"Comms",true)
 end
 
 local hbInGuild=false
@@ -65,7 +70,7 @@ function HealBot_Comms_SendAddonMessage()
     if #qAddonMsg>0 then
         local aMsg=qAddonMsg[1]
         table.remove(qAddonMsg,1)
-        HealBot_AddDebug(aMsg,"Comms",true)
+        HealBot_AddDebug("SEND: "..aMsg,"Comms",true)
         
         local msg, aType, pName=string.split("~", aMsg)
         aType=tonumber(aType)
