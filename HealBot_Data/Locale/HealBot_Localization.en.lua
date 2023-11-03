@@ -215,7 +215,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CASTNOTIFY3             = "Notify target";
     HEALBOT_OPTIONS_CASTNOTIFY4             = "Notify party";
     HEALBOT_OPTIONS_CASTNOTIFY5             = "Notify raid";
-    HEALBOT_OPTIONS_CASTNOTIFY6             = "General channel";
+    HEALBOT_OPTIONS_CASTNOTIFY6             = "Notify say";
     HEALBOT_OPTIONS_CASTNOTIFYRESONLY       = "Notify for resurrection only";
     HEALBOT_OPTIONS_EOC_OOM                 = "After combat warn when out of mana"
     HEALBOT_OPTIONS_EOC_OOM_VALUE           = "When mana below"

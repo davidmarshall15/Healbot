@@ -68,7 +68,7 @@ function HealBot_Share_Decompress(s)
 end
 
 local function HealBot_Comms_SendShareAddonMsg(msg, pName)
-    HealBot_Comms_SendInstantAddonMsg(msg,2,pName)
+    HealBot_Comms_SendInstantAddonMsg(msg,true,pName)
 end
 
 local function HealBot_Share_ClearExportComplete(sType)
@@ -1538,9 +1538,9 @@ function HealBot_Share_PostLink()
     if HealBot_Share_luVars["PostChannel"]<3 then
         HealBot_Comms_SendInstantAddonMsg("L:L~"..s)
     elseif HealBot_Share_luVars["PostChannel"]==3 then
-        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, 1)
+        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, true)
     elseif HealBot_Share_luVars["PostChannel"]==4 and string.len(HealBot_Share_luVars["PostWhisper"])>1 then
-        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, 2, HealBot_Share_luVars["PostWhisper"])
+        HealBot_Comms_SendInstantAddonMsg("L:L~"..s, true, HealBot_Share_luVars["PostWhisper"])
     end
 end
 

@@ -1581,6 +1581,7 @@ function HealBot_Text_UpdateNameButton(button)
     cText=button.gref.txt["text"]:GetText() or button.text.namecomplete or "."
     button.gref.txt["text"]:SetText(cText.." ")
     button.gref.txt["text"]:SetText(cText)
+    button.text.name=button.text.name.." "
     HealBot_Text_setNameText(button)
 end
 
@@ -1610,6 +1611,7 @@ function HealBot_Text_UpdateHealthButton(button)
     cText=button.gref.txt["text2"]:GetText() or button.text.healthcomplete or "."
     button.gref.txt["text2"]:SetText(cText.." ")
     button.gref.txt["text2"]:SetText(cText)
+    button.text.health=button.text.health.." "
     HealBot_Text_setHealthText(button)
 end
 
@@ -1643,6 +1645,7 @@ function HealBot_Text_UpdateStateButton(button)
     else
         button.gref.txt["text3"]:SetText("")
     end
+    button.text.tag=button.text.tag.." "
     HealBot_Text_setNameTag(button)
 end
 

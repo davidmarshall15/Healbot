@@ -5695,7 +5695,7 @@ function HealBot_Options_OverridePartyFrames_OnClick(self)
     if HealBot_Globals.OverrideFrames["HIDEPARTYF"]~=self:GetChecked() then
         HealBot_Globals.OverrideFrames["HIDEPARTYF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","TogglePartyFrames")
+        HealBot_Timers_Set("OOC","TogglePartyFrames")
     end
 end
 
@@ -5703,7 +5703,7 @@ function HealBot_Options_PartyFrames_OnClick(self)
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"]~=self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPARTYF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","TogglePartyFrames")
+        HealBot_Timers_Set("OOC","TogglePartyFrames")
     end
 end
 
@@ -5725,7 +5725,7 @@ function HealBot_Options_OverridePlayerTargetFrames_OnClick(self)
     if HealBot_Globals.OverrideFrames["HIDEPTF"]~=self:GetChecked() then
         HealBot_Globals.OverrideFrames["HIDEPTF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","TogglePartyFrames")
+        HealBot_Timers_Set("OOC","TogglePartyFrames")
     end
 end
 
@@ -5733,7 +5733,7 @@ function HealBot_Options_PlayerTargetFrames_OnClick(self)
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"]~=self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEPTF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","TogglePartyFrames")
+        HealBot_Timers_Set("OOC","TogglePartyFrames")
     end
 end
 
@@ -5741,7 +5741,7 @@ function HealBot_Options_OverrideMiniBossFrames_OnClick(self)
     if HealBot_Globals.OverrideFrames["HIDEBOSSF"]~=self:GetChecked() then
         HealBot_Globals.OverrideFrames["HIDEBOSSF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleMiniBossFrames")
+        HealBot_Timers_Set("OOC","ToggleMiniBossFrames")
     end
 end
 
@@ -5749,7 +5749,7 @@ function HealBot_Options_MiniBossFrames_OnClick(self)
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"]~=self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEBOSSF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleMiniBossFrames")
+        HealBot_Timers_Set("OOC","ToggleMiniBossFrames")
     end
 end
 
@@ -5757,7 +5757,7 @@ function HealBot_Options_OverrideFocusFrame_OnClick(self)
     if HealBot_Globals.OverrideFrames["HIDEFOCUSF"]~=self:GetChecked() then
         HealBot_Globals.OverrideFrames["HIDEFOCUSF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleFocusFrame")
+        HealBot_Timers_Set("OOC","ToggleFocusFrame")
     end
 end
 
@@ -5765,7 +5765,7 @@ function HealBot_Options_FocusFrame_OnClick(self)
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEFOCUSF"]~=self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDEFOCUSF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleFocusFrame")
+        HealBot_Timers_Set("OOC","ToggleFocusFrame")
     end
 end
 
@@ -5773,7 +5773,7 @@ function HealBot_Options_OverrideRaidFrames_OnClick(self)
     if HealBot_Globals.OverrideFrames["HIDERAIDF"]~=self:GetChecked() then
         HealBot_Globals.OverrideFrames["HIDERAIDF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleRaidFrames")
+        HealBot_Timers_Set("OOC","ToggleRaidFrames")
     end
 end
 
@@ -5781,7 +5781,7 @@ function HealBot_Options_RaidFrames_OnClick(self)
     if Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"]~=self:GetChecked() then
         Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HIDERAIDF"] = self:GetChecked()
         HealBot_Options_SetFrames()
-        HealBot_Timers_Set("SKINS","ToggleRaidFrames")
+        HealBot_Timers_Set("OOC","ToggleRaidFrames")
     end
 end
 
@@ -6198,6 +6198,13 @@ function HealBot_Options_CDCIconSet_DropDown()
     end
 end
 
+function HealBot_Options_BuffUpdateAll()
+    HealBot_setLuVars("UpdateAllAura", 5)
+    HealBot_Aura_setLuVars("updateAll", true)
+    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("LAST","UpdateButtonGlow")
+end
+
 function HealBot_Options_BuffDefaultBarColour_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_Lists["AuraBarCol"]), 1 do
@@ -6207,16 +6214,21 @@ function HealBot_Options_BuffDefaultBarColour_DropDown()
                         if cbBarCol~=self:GetID() then
                             HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_BuffDefaultBarColour,HealBot_Options_Lists["AuraBarCol"][self:GetID()])
-                            HealBot_setLuVars("UpdateAllAura", 5)
-                            HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Options_BuffUpdateAll()
                         end
                     end
         info.checked = false;
         if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"] and HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
+end
+
+function HealBot_Options_CDCUpdateAll()
+    HealBot_setLuVars("UpdateAllAura", 5)
+    HealBot_Aura_setLuVars("updateAll", true)
+    HealBot_Aura_ClearAllDebuffs()
+    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("LAST","UpdateButtonGlow")
 end
 
 function HealBot_Options_CDCDefaultBarColour_DropDown()
@@ -6228,11 +6240,7 @@ function HealBot_Options_CDCDefaultBarColour_DropDown()
                         if cdBarCol~=self:GetID() then
                             HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"]=self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_CDCDefaultBarColour,HealBot_Options_Lists["AuraBarCol"][self:GetID()])
-                            HealBot_setLuVars("UpdateAllAura", 5)
-                            HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Aura_ClearAllDebuffs()
-                            HealBot_Timers_Set("AURA","CheckUnits")
-                            HealBot_Timers_Set("LAST","UpdateButtonGlow")
+                            HealBot_Options_CDCUpdateAll()
                         end
                     end
         info.checked = false;
@@ -6964,6 +6972,7 @@ function HealBot_Options_ColoursAdaptiveDebuffs_OnClick(self)
     if Healbot_Config_Skins.Adaptive[Healbot_Config_Skins.Current_Skin]["Debuffs"]~=self:GetChecked() then
         Healbot_Config_Skins.Adaptive[Healbot_Config_Skins.Current_Skin]["Debuffs"] = self:GetChecked()
         HealBot_Timers_Set("SKINS","SetAdaptive")
+        HealBot_Options_CDCUpdateAll()
     end
 end
 
@@ -7034,6 +7043,7 @@ function HealBot_Options_ColoursAdaptiveBuffs_OnClick(self)
     if Healbot_Config_Skins.Adaptive[Healbot_Config_Skins.Current_Skin]["Buffs"]~=self:GetChecked() then
         Healbot_Config_Skins.Adaptive[Healbot_Config_Skins.Current_Skin]["Buffs"] = self:GetChecked()
         HealBot_Timers_Set("SKINS","SetAdaptive")
+        HealBot_Options_BuffUpdateAll()
     end
 end
 
@@ -8910,7 +8920,7 @@ function HealBot_Options_ButtonCastMethod_DropDown()
                         HealBot_Config_Spells.ButtonCastMethod = self:GetID()
                         if x~=HealBot_Config_Spells.ButtonCastMethod then 
                             UIDropDownMenu_SetText(HealBot_Options_ButtonCastMethod, HealBot_Options_ButtonCastMethod_List[HealBot_Config_Spells.ButtonCastMethod])
-                            HealBot_Timers_Set("INIT","RegisterForClicks")
+                            HealBot_Timers_Set("OOC","RegisterForClicks")
                         end
                     end
         info.checked = false;
@@ -14359,7 +14369,7 @@ function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSet
         local initCurFrame=HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
         if initCurFrame then HealBot_Options_SetSkins(true) end
     else
-        C_Timer.After(1, function() HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins) end)
+        C_Timer.After(2, function() HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins) end)
     end
 end
 

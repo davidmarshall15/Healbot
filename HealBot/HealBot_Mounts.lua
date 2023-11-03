@@ -171,10 +171,15 @@ function HealBot_MountsPets_ClassicDalaranCheck()
         else
             HealBot_mountData["incFlying"]=false
         end
+        --HealBot_AddDebug("Zone x="..x.." y="..y,"Mount",true)
+        --if HealBot_mountData["incFlying"] then
+        --    HealBot_AddDebug("Zone Is Flyable","Mount",true)
+        --else
+        --    HealBot_AddDebug("Zone Not Flyable","Mount",true)
+        --end
     else
         HealBot_mountData["incFlying"]=false
     end
-    --HealBot_AddDebug("Zone x="..x.." y="..y,"Mount",true)
 end
 
 function HealBot_MountsPets_ZoneChange()
@@ -193,7 +198,7 @@ function HealBot_MountsPets_ZoneChange()
                 --HealBot_AddDebug("In Outlands no Expert Flying")
             elseif mapAreaID>0 then
                 if mapAreaID==125 then
-                    HealBot_Timers_Set("LAST","MountsPetsDalaran",1)
+                    HealBot_Timers_Set("LAST","MountsPetsDalaran",2)
                 else
                     HealBot_mountData["incFlying"]=true
                 end

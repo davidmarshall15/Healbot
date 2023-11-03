@@ -22,14 +22,15 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
 end
 
 function HealBot_Comms_Set()
-    local _,inType = HealBot_ZoneType()
-    HealBot_Comms_SendTo(inType)
+    local inInst,inType = HealBot_ZoneType()
+    HealBot_Comms_SendTo(inInst,inType)
     HealBot_Comms_GuildUpdate()
 end
 
-local hbCommsTo=0
-function HealBot_Comms_SendTo(inType)
+local hbCommsTo,hbInInst=0,false
+function HealBot_Comms_SendTo(inInst,inType)
     local lastCommsTo=hbCommsTo
+    hbInInst=inInst
     if HEALBOT_GAME_VERSION>2 and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
         hbCommsTo=1
     elseif IsInRaid() then
@@ -50,12 +51,29 @@ function HealBot_Comms_GuildUpdate()
     hbInGuild=IsInGuild()
 end
 
+function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay)
+    if toPlayer then
+        SendChatMessage(msg,"WHISPER",nil,toPlayer)
+        HealBot_AddDebug("==SENT--: Whisper to "..toPlayer,"Comms",true)
+    elseif toSay then
+        if hbInInst then
+            SendChatMessage(msg,"SAY",nil,nil)
+        end
+    elseif hbCommsTo==1 then
+        SendChatMessage(msg,"INSTANCE_CHAT",nil,nil)
+    elseif hbCommsTo==2 then
+        SendChatMessage(msg,"RAID",nil,nil)
+    elseif hbCommsTo==3 then
+        SendChatMessage(msg,"PARTY",nil,nil)
+    end
+end
+
 function HealBot_Comms_SendInstantAddonMsg(msg,notGroup,toPlayer)
     if notGroup then
-        if notGroup==1 and hbInGuild then
-            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD")
-        elseif notGroup==2 then
+        if toPlayer then
             C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", toPlayer)
+        elseif hbInGuild then
+            C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "GUILD")
         end
     elseif hbCommsTo==1 then
         C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "INSTANCE_CHAT")
@@ -79,10 +97,10 @@ function HealBot_Comms_SendAddonMessage()
         elseif aType==2 and pName then
             local xUnit=HealBot_Panel_RaidUnitName(pName)
             if xUnit and UnitExists(xUnit) and UnitIsConnected(xUnit) and UnitIsPlayer(xUnit) and UnitName(xUnit)==pName then
-                HealBot_Comms_SendInstantAddonMsg(msg,2,pName)
+                HealBot_Comms_SendInstantAddonMsg(msg,true,pName)
             end
         elseif aType==3 then
-            HealBot_Comms_SendInstantAddonMsg(msg,1)
+            HealBot_Comms_SendInstantAddonMsg(msg,true)
         end
         --HealBot_AddDebug("comms="..aMsg)
     end

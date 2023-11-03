@@ -603,35 +603,35 @@ function HealBot_Action_EnableBorderHazard(button, r, g, b)
 end
 
 function HealBot_Action_EnableBorderHazardHealthDrop(button, r, g, b)
-    button.hazard.HlthDrop=true
+    button.hazard.hlthdrop=true
     HealBot_Action_EnableBorderHazard(button, r, g, b)
     C_Timer.After(HealBot_Action_luVars["HealthDropTime"], function() HealBot_Action_DisableBorderHazardHealthDropTimer(button) end)
 end
 
 function HealBot_Action_EnableBorderHazardPlugin(button, r, g, b)
     button.hazard.plugin=true
-    if not button.hazard.HlthDrop then
+    if not button.hazard.hlthdrop then
         HealBot_Action_EnableBorderHazard(button, r, g, b)
     end
 end
 
 function HealBot_Action_EnableBorderHazardDebuff(button, r, g, b)
     button.hazard.debuff=true
-    if not button.hazard.plugin and not button.hazard.HlthDrop then
+    if not button.hazard.plugin and not button.hazard.hlthdrop then
         HealBot_Action_EnableBorderHazard(button, r, g, b)
     end
 end
 
 function HealBot_Action_EnableBorderHazardAggro(button, r, g, b)
     button.hazard.aggro=true
-    if not button.hazard.plugin and not button.hazard.debuff and not button.hazard.HlthDrop then
+    if not button.hazard.plugin and not button.hazard.debuff and not button.hazard.hlthdrop then
         HealBot_Action_EnableBorderHazard(button, r, g, b)
     end
 end
 
 function HealBot_Action_EnableBorderHazardBuff(button, r, g, b)
     button.hazard.buff=true
-    if not button.hazard.plugin and not button.hazard.debuff and not button.hazard.aggro and not button.hazard.HlthDrop then
+    if not button.hazard.plugin and not button.hazard.debuff and not button.hazard.aggro and not button.hazard.hlthdrop then
         HealBot_Action_EnableBorderHazard(button, r, g, b)
     end
 end
@@ -652,7 +652,7 @@ function HealBot_Action_DisableBorderHazard(button)
 end
 
 function HealBot_Action_DisableBorderHazardHealthDrop(button)
-    button.hazard.HlthDrop=false
+    button.hazard.hlthdrop=false
     if button.hazard.plugin then
         HealBot_Action_UpdateHazardBordersColoursNew(button, button.plugin.r, button.plugin.g, button.plugin.b)
     elseif button.hazard.debuff then
@@ -714,7 +714,7 @@ function HealBot_Action_DisableBorderHazardType(button, hType)
 end
 
 function HealBot_Action_DisableBorderHazardHealthDropTimer(button)
-    if button.hazard.HlthDrop then
+    if button.hazard.hlthdrop then
         HealBot_Action_DisableBorderHazardType(button, "HLTHDROP")
     end
 end
@@ -2194,7 +2194,7 @@ function HealBot_Action_UpdateDebuffButton(button)
         end
         if button.aura.debuff.colbar==2 or button.aura.debuff.colbar==3 then
             if button.icon.debuff.showcol then
-                if button.aura.debuff.curespell and button.status.rangespell~=button.aura.debuff.curespell then
+                if HealBot_Aura_IsCureSpell(button) and button.status.rangespell~=button.aura.debuff.curespell then
                     button.status.rangespellspecial=button.aura.debuff.curespell
                     HealBot_Action_SetRangeSpell(button)
                 end
@@ -2239,7 +2239,7 @@ function HealBot_Action_UpdateBuffButton(button)
         HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Buffs"])
     end
     if button.aura.buff.colbar==2 or button.aura.buff.colbar==3 then 
-        if button.aura.buff.showcol then
+        if button.aura.buff.showcol and button.status.current<HealBot_Unit_Status["DEBUFFBARCOL"] then
             if button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] and button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.missingbuff then
                 button.status.rangespellspecial=button.aura.buff.missingbuff
                 HealBot_Action_SetRangeSpell(button)
@@ -2558,8 +2558,8 @@ function HealBot_Action_UpdateHealthButton(button)
         HealBot_Action_UpdateHealthHotBar(button)
         HealBot_Text_setHealthText(button)
         HealBot_Text_UpdateText(button)
-        HealBot_Action_EmergBarCheck(button)
     end
+    HealBot_Action_EmergBarCheck(button)
     HealBot_Action_UpdateHealthButtonState(button)
 end
 
@@ -3851,6 +3851,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.auraabsorbs=0
     button.health.abptc=0
     button.health.overheal=0
+    button.health.updhlth=true
     button.spec=" "
     button.specupdate=0
     button.gref["Bar"]:SetStatusBarColor(0, 0, 0, 0)
@@ -5095,10 +5096,10 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             end
         elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_FAVMOUNT) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
-            if UnitIsUnit(unit, "player") then
+            --if UnitIsUnit(unit, "player") then
                 button:SetAttribute(HB_prefix.."type"..j, "macro")
                 button:SetAttribute(HB_prefix.."macrotext"..j, "/run HealBot_MountsPets_FavMount()")
-            end
+            --end
         elseif HEALBOT_GAME_VERSION>2 and strlower(sName)==strlower(HEALBOT_RANDOMMOUNT) then
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             if UnitIsUnit(unit, "player") then
@@ -6142,8 +6143,7 @@ function HealBot_Action_ProcMarkedCacheButtons()
             HealBot_Action_luVars["MarkedCacheButtonsActive"]=false
         end
     else
-        HealBot_Action_luVars["MarkedCacheButtonsActive"]=false
-        HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",1)
+        HealBot_Timers_Set("OOC","ProcMarkedCache")
     end
 end
 
@@ -6230,7 +6230,7 @@ function HealBot_Action_DelayCheckFrameSetPoint(hbCurFrame, setPoint, check)
         hbFrameGetCoords[hbCurFrame]=true
     end
     if check then hbFrameSetPointCheck[hbCurFrame]=true end
-    HealBot_Timers_Set("INIT","CheckFrameSetPoint",1)
+    HealBot_Timers_Set("OOC","CheckFrameSetPoint",1)
 end
 
 function HealBot_Action_CheckFrameSetPoint()
@@ -6714,9 +6714,7 @@ function HealBot_Action_OptionsButton_OnClick(self)
     HealBot_TogglePanel(HealBot_Options, true);
 end
 
-local usedSmartCast=nil
-local abutton=nil
-local aj=nil
+local usedSmartCast=false
 local uLevel=0
 
 function HealBot_Action_UseSmartCast(self,button)
@@ -6942,7 +6940,7 @@ function HealBot_Action_UseSmartCast(self,button)
 end
 
 function HealBot_Action_PreSmartCast(self,mButton,button)
-    if not usedSmartCast and mButton=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
+    if mButton=="LeftButton" and HealBot_Globals.SmartCast and not IsModifierKeyDown() then
         HealBot_Action_UseSmartCast(self,button)
     end
 end
@@ -6951,19 +6949,6 @@ function HealBot_Action_ButtonPreClick(self,mButton,button)
     usedSmartCast=false;
     if not InCombatLockdown() and button and self.id<999 and UnitExists(button.unit) and UnitIsFriend("player",button.unit) then
         HealBot_setLuVars("TargetUnitID", button.unit)
-        if mButton=="LeftButton" then 
-            abutton="Left"
-            aj=1
-        elseif mButton=="RightButton" then 
-            abutton="Right"
-            aj=2
-        elseif mButton=="MiddleButton" then 
-            abutton="Middle"
-            aj=3
-        else
-            abutton=mButton
-            aj=tonumber(strmatch(mButton, "(%d+)"))
-        end
         if button.unit=="target" and HealBot_Globals.TargetBarRestricted==1 then
             if mButton=="RightButton" then
                 HealBot_Panel_ToggelHealTarget(button.unit)
@@ -6991,8 +6976,8 @@ function HealBot_Action_PostClick(self,button)
     if self.id==999 then
         HealBot_Panel_clickToFocus("hide")
         HealBot_nextRecalcParty(3)
-    elseif UnitExists(self.unit) and UnitIsFriend("player",self.unit) and usedSmartCast and aj==1 then
-        HealBot_Action_SetButtonAttrib(self,abutton,"","Enabled",aj,self.unit)
+    elseif usedSmartCast then
+        HealBot_Action_SetButtonAttrib(self,"Left","","Enabled",1,self.unit)
     end
 end
 
@@ -7001,8 +6986,8 @@ function HealBot_EmergAction_PostClick(self,button)
     if self.id==999 then
         HealBot_Panel_clickToFocus("hide")
         HealBot_nextRecalcParty(3)
-    elseif xButton and UnitExists(xButton.unit) and UnitIsFriend("player",xButton.unit) and usedSmartCast and aj==1 then
-        HealBot_Action_SetButtonAttrib(self,abutton,"","Emerg",aj,xButton.unit)
+    elseif xButton and usedSmartCast then
+        HealBot_Action_SetButtonAttrib(self,"Left","","Emerg",1,xButton.unit)
     end
 end
 
@@ -7199,7 +7184,7 @@ local function HealBot_Action_ToggleFrameTag(self)
             end
             HealBot_Timers_nextRecalcAll()
         else
-            HealBot_Timers_Set("LAST","ModKey")
+            HealBot_Timers_Set("OOC","ModKey")
         end
     end
 end
@@ -7261,7 +7246,7 @@ function HealBot_Action_OnMouseUp(self,button)
     if button=="LeftButton" and HealBot_Action_luVars["FrameMoving"] then
         HealBot_StopMoving(HealBot_Action_luVars["FrameMoving"],HealBot_Action_luVars["FrameMoving"].id);
         HealBot_Action_luVars["FrameMoving"]=false
-    elseif button=="RightButton" and not HealBot_Data["UILOCK"] and HealBot_Globals.RightButtonOptions then
+    elseif button=="RightButton" and HealBot_Globals.RightButtonOptions then
         HealBot_Action_OptionsButton_OnClick();
     end
 end
@@ -7345,7 +7330,7 @@ function HealBot_Action_SmartCast(button)
     if HealBot_Globals.SmartCastRes and HealBot_Action_IsUnitDead(button) then
         scSpell=HealBot_Action_retResSpell(button)
         --HealBot_AddDebug("Res spell="..(scSpell or "nil"),"SmartCast",true)
-    elseif button.aura.debuff.curespell and HealBot_Globals.SmartCastDebuff then
+    elseif HealBot_Aura_IsCureSpell(button) and HealBot_Globals.SmartCastDebuff then
         scSpell=button.aura.debuff.curespell
     elseif button.aura.buff.missingbuff and HealBot_Globals.SmartCastBuff then
         if button.aura.buff.missingbuff==HEALBOT_WELL_FED then

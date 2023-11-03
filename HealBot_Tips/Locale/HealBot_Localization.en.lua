@@ -14,10 +14,10 @@
 --
 
 function HealBot_Lang_Options_enALL()
-    local hbSpellsTips1="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will\n".."|cff77c8ff".."change col"..HEALBOT_enWORD_COLOUR_SUFFIX.."and show up in the tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes"
+    local hbSpellsTips1="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: The spell can be typed directly into the textbox.\n--\n".."|cff77c8ff".."TIP: When typed correctly the text will\n".."|cff77c8ff".."change col"..HEALBOT_enWORD_COLOUR_SUFFIX.." and show up in the tooltip.\n--\n".."|cffffffff".."White: Spells\n".."|cff51ff7f".."Green: Macros\n".."|cff517fff".."Blue: Items\n".."|cffffff00".."Yellow: Commands\n".."|cffff8800".."Orange: Emotes"
     local hbSpellsTips2="\n--\n".."|cff77c8ff".."TIP: With the current modifier keys\n".."|cff77c8ff".."set spells with the same range as Left click.\n"
     local hbSpellsTips3="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: When using the Global profile:\n".._G["GREEN_FONT_COLOR_CODE"].."- Macros, Items, Commands and Emotes are saved for all characters.\n".._G["GREEN_FONT_COLOR_CODE"].."- Spells are saved for all characters of the same class."
-    local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Bar glow lines and Bar glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
+    local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n".._G["GREEN_FONT_COLOR_CODE"].."When using Background Bar or Background Border ensure this is enabled on the Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s Adaptive tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Bar glow lines and Bar glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
     local hbSpellsTips5="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are available under the Custom "..HEALBOT_CUSTOM_CATEGORY.."."
     local hbSpellsTips6="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Automatic buffs only show an icon."
     HEALBOT_OPTIONS_HELP_TITLES={
@@ -845,9 +845,9 @@ function HealBot_Lang_Options_enALL()
                                ["CHATNONE"]="Do not send chat messages.",
                                ["CHATSELF"]="Send chat messages only to yourself, good for testing.",
                                ["CHATTARGET"]="Send whisper to the target.",
-                               ["CHATPARTY"]="Send chat message to the group channel.",
-                               ["CHATRAID"]="Send chat message to the raid channel.",
-                               ["CHATCHAN"]="Send chat message to your own general channel.",
+                               ["CHATPARTY"]="Send chat message to the group channel.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only available in groups.",
+                               ["CHATRAID"]="Send chat message to the raid channel.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only available in raids.",
+                               ["CHATCHAN"]="Send chat message to the say channel.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Only available in instances.",
                                ["CHATRESONLY"]="Send chat messages only when casting resurrection type spells.",
                                ["CHATMSG"]="The format of the message to send.\n#s is substituted with the spell name.\n#n is substituted with the players name.",
                                ["EOCOOM"]="When enabled and mana drops below the select amount.\nAt the end of combat emote Out of Mana.",

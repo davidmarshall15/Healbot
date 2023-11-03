@@ -391,11 +391,32 @@ function HealBot_ToolTip_ShowHoT(button)
     end
 end
 
+local hbTipDebugText={}
 function HealBot_ToolTip_ShowDebug(button)
     HealBot_Tooltip_SetLine("  ",0,0,0,0)
     HealBot_Tooltip_SetLine("Debug On - Turn off in Tip with /hb debugtip",1,1,1,1)
     HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
     HealBot_Tooltip_SetLine("Button Name:"..button.bName,0.4,1,1,1,"Frame:"..button.frame)
+    if UnitExists(button.unit) then
+        if UnitIsFriend("player",button.unit) then
+            HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is True")
+        else
+            HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is False")
+        end
+    else
+        HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
+    end
+    if button.player then
+        hbTipDebugText["player"]="True"
+    else
+        hbTipDebugText["player"]="False"
+    end
+    if button.isplayer then
+        hbTipDebugText["isPlayer"]="True"
+    else
+        hbTipDebugText["isPlayer"]="False"
+    end
+    HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
 end
 
 function HealBot_ToolTip_ToggleDebug()

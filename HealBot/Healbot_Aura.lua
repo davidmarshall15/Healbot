@@ -1779,6 +1779,14 @@ function HealBot_Aura_AuxClearAuraDebuffBars(button)
     end
 end
 
+function HealBot_Aura_IsCureSpell(button)
+    if button.aura.debuff.curespell and HealBot_Spell_Names[button.aura.debuff.curespell] then
+        return true
+    else
+        return false
+    end
+end
+
 local curDebuffRange,curDebuffSpell=0,""
 function HealBot_Aura_DebuffWarnings(button, debuffName, force)
     if button.aura.debuff.name~=debuffName or force then
@@ -1786,7 +1794,11 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
         HealBot_Emerg_Button[button.id].debuffupdate=true
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
         button.aura.debuff.curespell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
-        curDebuffSpell=button.aura.debuff.curespell or button.status.rangespell
+        if HealBot_Aura_IsCureSpell(button) then 
+            curDebuffSpell=button.aura.debuff.curespell
+        else
+            curDebuffSpell=button.status.rangespell
+        end
         if button.status.rangespell~=curDebuffSpell then
             curDebuffRange=HealBot_UnitInRangeExc30(button, curDebuffSpell)
         else
@@ -2224,10 +2236,10 @@ if HEALBOT_GAME_VERSION>8 then
     HealBot_Aura_CheckBuffs=HealBot_Aura_CheckBuffsV9
 end
 
-function HealBot_Aura_ClearUnitBuffOverDebuff(button)
+function HealBot_Aura_ClearUnitBuffOverDebuff(button, callerIsBuff)
     button.aura.buff.overdb=false
     button.aura.debuff.update=true
-    HealBot_Check_UnitDebuff(button)
+    if callerIsBuff then HealBot_Check_UnitDebuff(button) end
 end
 
 local hbOverDebuff=false
@@ -2237,7 +2249,7 @@ function HealBot_Aura_SetUnitBuffOverDebuff(button, dCol)
     hbOverDebuff=true
 end
 
-function HealBot_Aura_CheckUnitBuffOverDebuff(button)
+function HealBot_Aura_CheckUnitBuffOverDebuff(button, callerIsBuff)
     hbOverDebuff=false
     if button.aura.buff.priority<button.aura.debuff.priority then
         if (button.aura.buff.colbar<5 or button.aura.buff.colbar==7) and (button.aura.debuff.colbar<5 or button.aura.debuff.colbar==7) then
@@ -2253,7 +2265,7 @@ function HealBot_Aura_CheckUnitBuffOverDebuff(button)
         end
     end
     if button.aura.buff.overdb and not hbOverDebuff then
-        HealBot_Aura_ClearUnitBuffOverDebuff(button)
+        HealBot_Aura_ClearUnitBuffOverDebuff(button, callerIsBuff)
     end
 end
 
@@ -2325,7 +2337,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                     if buffBarCol>1 and button.aura.buff.colbar==0 then
                         button.aura.buff.colbar=buffBarCol-1
                         button.aura.buff.priority=buffPrio
-                        HealBot_Aura_CheckUnitBuffOverDebuff(button)
+                        HealBot_Aura_CheckUnitBuffOverDebuff(button, true)
                     elseif button.aura.buff.overdb then
                         HealBot_Aura_ClearUnitBuffOverDebuff(button)
                     end
@@ -2603,19 +2615,11 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
     end
     
     if tmpBCheck~=buffCheck or tmpGBuffs~=generalBuffs or tmpDCheck~=debuffCheck then
-        if not HealBot_Data["UILOCK"] then
-            if debuffMounted or buffMounted or onTaxi or resting then
-                HealBot_Timers_Set("AURA","RemoveAllBuffIcons")
-                HealBot_Timers_Set("AURA","RemoveAllDebuffIcons")
-            end
-            HealBot_Timers_Set("AURA","CheckUnits")
-        else
-            if debuffMounted or buffMounted or onTaxi or resting then
-                HealBot_Aura_RemoveAllBuffIcons()
-                HealBot_Aura_RemoveAllDebuffIcons()
-            end
-            HealBot_AuraCheck()
+        if debuffMounted or buffMounted or onTaxi or resting then
+            HealBot_Timers_Set("AURA","RemoveAllBuffIcons")
+            HealBot_Timers_Set("AURA","RemoveAllDebuffIcons")
         end
+        HealBot_Timers_Set("AURA","CheckUnits")
         --HealBot_Timers_Set("PLAYER","SetRestingState")
     end
 end
