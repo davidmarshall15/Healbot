@@ -459,7 +459,7 @@ function HealBot_Share_LoadSpells(sIn)
             end
         end
     end
-    HealBot_Options_SaveProfile()
+    HealBot_Options_SaveSpellsProfile()
     HealBot_Timers_InitExtraOptions()
     HealBot_Options_ComboClass_Text()
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
@@ -851,7 +851,8 @@ local AuxLookupRetail={[0]={[1]="None",
                            [18]="HlthDrop",
                            [19]="Name",
                            [20]="Hlth",
-                           [21]="State",},
+                           [21]="State",
+                           [22]="TotalAbsorb",},
                        [8]={[1]="None",
                             [2]="Absorb",
                             [3]="InHeals",
@@ -886,7 +887,7 @@ function HealBot_Share_SkinDecodeAux(dat, frame)
     elseif frame<10 then
         frame=8
     end
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_GAME_VERSION<9 then
         for j=1, getn(AuxLookupClassic[frame]), 1 do
             if AuxLookupClassic[frame][j]==dat then
                 dat=j
@@ -911,7 +912,7 @@ function HealBot_Share_SkinEncodeAux(dat, frame)
     elseif frame<10 then
         frame=8
     end
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_GAME_VERSION<9 then
         dat=AuxLookupClassic[frame][dat] or dat
     else
         dat=AuxLookupRetail[frame][dat] or dat

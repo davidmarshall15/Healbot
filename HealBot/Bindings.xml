@@ -1,7 +1,7 @@
 <Bindings>
 	<Binding name="HEALBOTTOGGLEOPTIONS" header="HBBUTTONS" category="BINDING_CATEGORY_HEALBOT">
         if keystate == "down" then
-            HealBot_TogglePanel(HealBot_Options, true)
+            HealBot_Options_ShowHide()
         end
     </Binding>
 	<Binding name="HEALBOTTOGGLEENABLED" category="BINDING_CATEGORY_HEALBOT">

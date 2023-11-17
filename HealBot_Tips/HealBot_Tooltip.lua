@@ -919,6 +919,45 @@ function HealBot_Tooltip_Wrap(str, limit)
   return t
 end
 
+local tipDesc={["item"]={},["spell"]={},["macro"]={}}
+local function EnumerateTooltipLines_helper(td, ...)
+    for i = 1, select("#", ...) do
+        local region = select(i, ...)
+        if region and region:GetObjectType() == "FontString" then
+            td.dl[i] = region:GetText()
+            td.desc=i
+        end
+    end
+end
+
+function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info)
+    if HealBot_Tooltip_luVars["doInit"] then
+        HealBot_Tooltip_Init()
+    end
+    if infoID then infoID=tonumber(infoID) end
+    HealBot_ToolTip_SetTooltipPos(frame);
+    hbTip:ClearLines()
+
+    if infoType=="spell" then
+        hbTip:SetSpellByID(infoID, false, true)
+    elseif infoType=="item" then
+        local itemLoc=HealBot_IsItemInBag(infoID)
+        if itemLoc then
+            hbTip:SetBagItem(itemLoc.bag, itemLoc.slot)
+        end
+    elseif GetMacroInfo(infoID) then
+        HealBot_Tooltip_SetLine(GetMacroInfo(infoID),1,1,1,1)
+    elseif info and HealBot_ActionIcons_GetSpell(info) then
+        HealBot_Tooltip_SetLine(HealBot_ActionIcons_GetSpell(info),1,1,1,1)
+    else
+        pName=nil
+    end
+    if pName then
+        HealBot_Tooltip_SetLine(" ",1,1,1,0,"@"..pName,1,1,1,1)
+        HealBot_Tooltip_Show()
+    end
+end
+
 function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()

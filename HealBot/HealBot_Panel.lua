@@ -1131,14 +1131,20 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
         else
             HealBot_Action_HidePanel(frame)
         end
-        if HealBot_AutoCloseFrame[frame]>1 then
-            HealBot_CheckActiveFrames(frame, true)
-        else
-            HealBot_CheckActiveFrames(frame, false)
+        if not HealBot_setTestBars then 
+            if HealBot_AutoCloseFrame[frame]>1 then
+                HealBot_CheckActiveFrames(frame, true)
+            else
+                HealBot_CheckActiveFrames(frame, false)
+            end
+            HealBot_ActionIcons_UpdateActiveFrame(frame, true)
         end
     else
         HealBot_Action_HidePanel(frame)
-        HealBot_CheckActiveFrames(frame, false)
+        if not HealBot_setTestBars then 
+            HealBot_CheckActiveFrames(frame, false)
+            HealBot_ActionIcons_UpdateActiveFrame(frame, false)
+        end
     end
 end
 
@@ -1207,13 +1213,17 @@ function HealBot_Panel_SetupBars(preCombat)
             if vSetupBarsFrame==0 then 
                 vSetupBarsFrame=j
             end
-            if HealBot_AutoCloseFrame[j]>1 then
-                HealBot_CheckActiveFrames(j, true)
-            else
-                HealBot_CheckActiveFrames(j, false)
+            if not HealBot_setTestBars then 
+                if HealBot_AutoCloseFrame[j]>1 then
+                    HealBot_CheckActiveFrames(j, true)
+                else
+                    HealBot_CheckActiveFrames(j, false)
+                end
+                HealBot_ActionIcons_UpdateActiveFrame(j, true)
             end
-        else
+        elseif not HealBot_setTestBars then 
             HealBot_CheckActiveFrames(j, false)
+            HealBot_ActionIcons_UpdateActiveFrame(j, false)
         end
     end
 

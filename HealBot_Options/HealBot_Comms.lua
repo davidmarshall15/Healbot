@@ -51,13 +51,17 @@ function HealBot_Comms_GuildUpdate()
     hbInGuild=IsInGuild()
 end
 
-function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay)
+function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
     if toPlayer then
         SendChatMessage(msg,"WHISPER",nil,toPlayer)
         HealBot_AddDebug("==SENT--: Whisper to "..toPlayer,"Comms",true)
     elseif toSay then
         if hbInInst then
             SendChatMessage(msg,"SAY",nil,nil)
+        end
+    elseif toYell then
+        if hbInInst then
+            SendChatMessage(msg,"YELL",nil,nil)
         end
     elseif hbCommsTo==1 then
         SendChatMessage(msg,"INSTANCE_CHAT",nil,nil)

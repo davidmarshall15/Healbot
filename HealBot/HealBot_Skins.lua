@@ -1547,10 +1547,15 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.Adaptive[SkinName] then Healbot_Config_Skins.Adaptive[SkinName]={} end
     if not Healbot_Config_Skins.AdaptiveOrder[SkinName] then Healbot_Config_Skins.AdaptiveOrder[SkinName]={} end
     if not Healbot_Config_Skins.AdaptiveCol[SkinName] then Healbot_Config_Skins.AdaptiveCol[SkinName]={} end
+    if not Healbot_Config_Skins.ActionIcons[SkinName] then Healbot_Config_Skins.ActionIcons[SkinName]={} end
+    if not Healbot_Config_Skins.ActionIconsData[SkinName] then Healbot_Config_Skins.ActionIconsData[SkinName]={} end
 
     for g=1,9 do
         if not Healbot_Config_Skins.AuxBar[SkinName][g] then Healbot_Config_Skins.AuxBar[SkinName][g]={} end
         if not Healbot_Config_Skins.AuxBarText[SkinName][g] then Healbot_Config_Skins.AuxBarText[SkinName][g]={} end
+    end
+    for g=1,20 do
+        if not Healbot_Config_Skins.ActionIconsData[SkinName][g] then Healbot_Config_Skins.ActionIconsData[SkinName][g]={} end
     end
     for gl=1,10 do
         if not Healbot_Config_Skins.HeadText[SkinName][gl] then Healbot_Config_Skins.HeadText[SkinName][gl]={} end
@@ -1584,6 +1589,11 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.AuxBarFrame[SkinName][gl] then Healbot_Config_Skins.AuxBarFrame[SkinName][gl]={} end
         if not Healbot_Config_Skins.Indicators[SkinName][gl] then Healbot_Config_Skins.Indicators[SkinName][gl]={} end
         if not Healbot_Config_Skins.Emerg[SkinName][gl] then Healbot_Config_Skins.Emerg[SkinName][gl]={} end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl] then Healbot_Config_Skins.ActionIcons[SkinName][gl]={} end
+        if not Healbot_Config_Skins.ActionIconsData[SkinName][gl] then Healbot_Config_Skins.ActionIconsData[SkinName][gl]={} end
+        for g=1,20 do
+            if not Healbot_Config_Skins.ActionIconsData[SkinName][g][gl] then Healbot_Config_Skins.ActionIconsData[SkinName][g][gl]={} end
+        end
     end
 
     for g=1,8 do
@@ -2123,6 +2133,15 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.HealBar[SkinName][gl]["NUMCOLS"]==nil then Healbot_Config_Skins.HealBar[SkinName][gl]["NUMCOLS"]=1 end
         if Healbot_Config_Skins.HealBar[SkinName][gl]["RMARGIN"]==nil then Healbot_Config_Skins.HealBar[SkinName][gl]["RMARGIN"]=1 end
         if Healbot_Config_Skins.HealBar[SkinName][gl]["OFIX"]==nil then Healbot_Config_Skins.HealBar[SkinName][gl]["OFIX"]=1 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["ANCHOR"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["ANCHOR"]=2 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["OFFSETX"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["OFFSETX"]=0 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["OFFSETY"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["OFFSETY"]=0 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["SIZE"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["SIZE"]=28 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["SPACE"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["SPACE"]=4 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["NUMICONS"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["NUMICONS"]=0 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["FADE"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["FADE"]=0.2 end
+        if not Healbot_Config_Skins.ActionIcons[SkinName][gl]["HIGHLIGHT"] then Healbot_Config_Skins.ActionIcons[SkinName][gl]["HIGHLIGHT"]=1 end
+        
         if not Healbot_Config_Skins.Indicators[SkinName][gl]["ACOL"] then Healbot_Config_Skins.Indicators[SkinName][gl]["ACOL"]=1 end
         if not Healbot_Config_Skins.Indicators[SkinName][gl]["AANCHOR"] then Healbot_Config_Skins.Indicators[SkinName][gl]["AANCHOR"]=1 end
         if not Healbot_Config_Skins.Indicators[SkinName][gl]["AVOFF"] then Healbot_Config_Skins.Indicators[SkinName][gl]["AVOFF"]=-2 end

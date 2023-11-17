@@ -111,6 +111,7 @@ function HealBot_Action_setAdaptive()
         hbAdaptiveOrderName[hbAdaptiveOrder[x]]=x
     end
     HealBot_Aux_setAdaptiveCols()
+    HealBot_ActionIcons_setBorderHighlightCol()
 end
 
 function HealBot_Action_AdaptiveDownButton(button, id)
@@ -2521,9 +2522,8 @@ local hbBarColourFuncs={[1]=HealBot_Action_BarColourHealth,
                         [6]=HealBot_Action_BarColourRoleHlthMix}
 local mixPct=0
 local HealBot_TextColChangeWithHealth={[1]=true,[4]=true,[5]=true}
-function HealBot_Action_UpdateHealthButton(button)
-    if button.hlthevent then
-        button.hlthevent=false
+function HealBot_Action_UpdateHealthButton(button, hlthevent)
+    if hlthevent then
         button.health.pct = button.health.current/button.health.max
         button.health.hpct=floor(button.health.pct*1000)
         button.health.rcol, button.health.gcol=HealBot_Action_BarColourPct(button.health.pct)
@@ -3195,7 +3195,7 @@ local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_OnEvent_UnitPhase,
                          ["UNIT_NAME_UPDATE"]=HealBot_CheckUpdateUnitGUIDChange,
                          ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                    }
-                   
+
 function HealBot_Action_InitFrames()
     local StickIndPoints={[1]="BOTTOMLEFT",[2]="BOTTOM",[3]="BOTTOMRIGHT",[4]="TOPLEFT",[5]="LEFT",[6]="BOTTOMLEFT",[7]="TOPRIGHT",[8]="TOP",[9]="TOPLEFT",[10]="BOTTOMRIGHT",[11]="RIGHT",[12]="TOPRIGHT"}
     local FrameStickIndPoints={[1]="TOPLEFT",[2]="TOP",[3]="TOPRIGHT",[4]="TOPRIGHT",[5]="RIGHT",[6]="BOTTOMRIGHT",[7]="BOTTOMRIGHT",[8]="BOTTOM",[9]="BOTTOMLEFT",[10]="BOTTOMLEFT",[11]="LEFT",[12]="TOPLEFT"}
@@ -3816,6 +3816,8 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.role=0
     button.status.hasres=false
     button.status.nextcheck=0
+    button.status.falling=false
+    button.status.swimming=false
     button.group=1
     button.rank=0
     button.role=0
@@ -4343,6 +4345,7 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
     else
         HealBot_Globals.IconKeyCombo[cKey] = sText
     end
+    HealBot_Action_ClearSpellCache(cType, cKey)
     --HealBot_setCall("HealBot_Action_SetSpell")
 end
 
@@ -4391,27 +4394,51 @@ function HealBot_Action_GetComboSpec(key, button)
     return HealBot_Action_GetComboWithSpec(key, button, HealBot_Config.CurrentSpec)
 end
 
-local HealBot_Action_SpellCache={}
-HealBot_Action_SpellCache["ENABLED"]={}
-HealBot_Action_SpellCache["ENEMY"]={}
-HealBot_Action_SpellCache["EMERG"]={}
-HealBot_Action_SpellCache["ICON"]={}
+function HealBot_Action_GetActionIconSpecWithSkin(skinname)
+    sConcat[1]=skinname
+    sConcat[2]=HealBot_Config.CurrentSpec
+    sConcat[3]=HealBot_Config.LastLoadout
+    return HealBot_Action_Concat(3)
+end
 
-function HealBot_Action_ClearSpellCache(cType)
+function HealBot_Action_GetActionIconSpec()
+    sConcat[1]=Healbot_Config_Skins.Current_Skin
+    sConcat[2]=HealBot_Config.CurrentSpec
+    sConcat[3]=HealBot_Config.LastLoadout
+    return HealBot_Action_Concat(3)
+end
+
+local HealBot_Action_SpellCache={["ENABLED"]={},["ENEMY"]={},["EMERG"]={},["ICON"]={}}
+HealBot_Action_SpellCache["ENABLED"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+HealBot_Action_SpellCache["ENEMY"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+HealBot_Action_SpellCache["EMERG"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+HealBot_Action_SpellCache["ICON"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+
+function HealBot_Action_ClearSpellCache(cType, cKey)
     if cType then
-        HealBot_Action_SpellCache[cType]={}
+        if cKey then
+            HealBot_Action_SpellCache[cType]["NAME"][cKey]=nil
+            HealBot_Action_SpellCache[cType]["ICON"][cKey]=nil
+            HealBot_Action_SpellCache[cType]["TYPE"][cKey]=nil
+            HealBot_Action_SpellCache[cType]["ID"][cKey]=nil
+        else
+            HealBot_Action_SpellCache[cType]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+        end
     else
-        HealBot_Action_SpellCache["ENABLED"]={}
-        HealBot_Action_SpellCache["ENEMY"]={}
-        HealBot_Action_SpellCache["EMERG"]={}
-        HealBot_Action_SpellCache["ICON"]={}
+        HealBot_Action_SpellCache["ENABLED"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+        HealBot_Action_SpellCache["ENEMY"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+        HealBot_Action_SpellCache["EMERG"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
+        HealBot_Action_SpellCache["ICON"]={["NAME"]={},["ICON"]={},["TYPE"]={},["ID"]={}}
     end
     --HealBot_setCall("HealBot_Action_ClearSpellCache")
 end
 
-local vSpellText,cSpellText=nil,nil
+local vSpellText,cSpellText,vSpellIcon,vSpellType,vSpellID=nil,nil,nil
 function HealBot_Action_GetSpell(cType, cKey)
-    vSpellText=HealBot_Action_SpellCache[cType][cKey]
+    vSpellText=HealBot_Action_SpellCache[cType]["NAME"][cKey]
+    vSpellIcon=HealBot_Action_SpellCache[cType]["ICON"][cKey]
+    vSpellType=HealBot_Action_SpellCache[cType]["TYPE"][cKey]
+    vSpellID=HealBot_Action_SpellCache[cType]["ID"][cKey]
     if not vSpellText then
         if cType == "ENABLED" then
             vSpellText=HealBot_Config_Spells.EnabledKeyCombo[cKey]
@@ -4427,12 +4454,20 @@ function HealBot_Action_GetSpell(cType, cKey)
             if sType and sID then
                 if sType == "C" then
                     vSpellText=HealBot_Action_SpellCmdText(cType, sID)
+                    vSpellIcon=[[Interface\Addons\HealBot\Images\icon_command]]
+                    vSpellType="command"
                 elseif sType == "E" then
                     vSpellText=HEALBOT_EMOTE.."="..sID
+                    vSpellIcon=[[Interface\Addons\HealBot\Images\icon_emote]]
+                    vSpellType="emote"
                 elseif sType == "I" then
                     vSpellText=GetItemInfo(sID)
+                    _, _, _, _, vSpellIcon, _, _ = GetItemInfoInstant(sID) 
+                    vSpellType="item"
+                    vSpellID=sID
                 else
                     cSpellText=GetSpellInfo(sID)
+                    vSpellIcon=GetSpellTexture(sID)
                     if HEALBOT_GAME_VERSION<3 and cSpellText then
                         local rank = GetSpellSubtext(sID)
                         if rank then
@@ -4443,15 +4478,27 @@ function HealBot_Action_GetSpell(cType, cKey)
                         end
                     end
                     vSpellText=cSpellText or vSpellText
+                    vSpellType="spell"
+                    vSpellID=sID
                 end
+            elseif GetMacroIndexByName(vSpellText)>0 then
+                vSpellType="macro"
+                vSpellID=GetMacroIndexByName(vSpellText)
+                _, vSpellIcon=GetMacroInfo(vSpellText)
             end
-            if vSpellText then 
-                HealBot_Action_SpellCache[cType][cKey]=vSpellText
+            if vSpellText and vSpellIcon then 
+                HealBot_Action_SpellCache[cType]["NAME"][cKey]=vSpellText
+                HealBot_Action_SpellCache[cType]["ICON"][cKey]=vSpellIcon
+                HealBot_Action_SpellCache[cType]["TYPE"][cKey]=vSpellType
+                HealBot_Action_SpellCache[cType]["ID"][cKey]=vSpellID
             end
         end
         --HealBot_setCall("HealBot_Action_GetSpell")
     end
-    return vSpellText
+    return vSpellText, 
+           vSpellIcon,
+           vSpellType,
+           vSpellID
 end
 
 local hbModKeys=false
@@ -6711,7 +6758,7 @@ function HealBot_Action_EmergUnit_OnLeave(self)
 end
 
 function HealBot_Action_OptionsButton_OnClick(self)
-    HealBot_TogglePanel(HealBot_Options, true);
+    HealBot_Options_ShowHide()
 end
 
 local usedSmartCast=false
@@ -7000,7 +7047,6 @@ function HealBot_Action_EmergOnLoad(self)
     self:SetScript("PreClick", HealBot_EmergAction_PreClick); 
     self:SetScript("PostClick", HealBot_EmergAction_PostClick)
 end
-
 
 local function HealBot_Action_setButtonRegisterForClicks(button)
     if HealBot_Action_luVars["TestBarsOn"] then

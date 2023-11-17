@@ -397,14 +397,14 @@ function HealBot_Init_Spells_Defaults()
             for s=offset+1,offset+numEntries do
                 local sName = GetSpellBookItemName(s, BOOKTYPE_SPELL)
                 local sType, sId = GetSpellBookItemInfo(s, BOOKTYPE_SPELL)
-                if sType == "SPELL" then --and not IsPassiveSpell(sId) then
+                if sType == "SPELL" and not IsPassiveSpell(sId) then
                     HealBot_Init_Spells_addSpell(sId, sName, s)
                 elseif sType == "FLYOUT" then
                     local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
                     if flyoutKnown then
                         for f=1,numFlyoutSlots do
                             local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
-                            if fKnown then --and not IsPassiveSpell(fId) then
+                            if fKnown and not IsPassiveSpell(fId) then
                                 HealBot_Init_Spells_addSpell(fId, fName, s)
                             end
                         end
