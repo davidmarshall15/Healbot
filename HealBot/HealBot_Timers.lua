@@ -282,7 +282,7 @@ end
 
 function HealBot_Timers_SpellsLoaded()
     HealBot_Timers_Set("INIT","InitBuffList")
-    HealBot_Timers_Set("INIT","SpellsTabText")
+    HealBot_Timers_Set("OOC","SpellsTabText")
     HealBot_Timers_Set("INIT","FluidFlash")
     HealBot_Timers_Set("AURA","BuffsReset")
     HealBot_Timers_Set("LAST","ResetAllButtons")
@@ -513,7 +513,6 @@ end
 
 local hbTimerFuncs={["INIT"]={
                         ["InitSpells"]=HealBot_InitSpells,
-                        ["SpellsTabText"]=HealBot_Options_ComboClass_Text,
                         ["FluidFlash"]=HealBot_Timers_FluidFlashUpdate,
                         ["CheckTalentInfo"]=HealBot_Timers_CheckTalentInfo,
                         ["SetEnabledAttribs"]=HealBot_Action_SetEnabledAttribs,
@@ -613,6 +612,8 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsStateChange"]=HealBot_ActionIcons_CheckStateChange,
                         ["UpdateActiveFrameIdx"]=HealBot_ActionIcons_UpdateActiveFrameIdx,
                         ["ActionIconsSetGlowSize"]=HealBot_ActionIcons_SetGlowSize,
+                        ["ActionIconsSetFontChange"]=HealBot_ActionIcons_setFontChange,
+                        ["SelfCountTextUpdate"]=HealBot_ActionIcons_SelfCountTextUpdateAll,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,
@@ -627,7 +628,7 @@ local hbTimerFuncs={["INIT"]={
                         ["TestUpdate"]=HealBot_Aux_TestUpdate,
                         ["ResetRange"]=HealBot_AuxResetRange,
                         ["updAllAuxRangeBars"]=HealBot_updAllAuxRangeBars,
-                        ["updAllAuxRange30Bars"]=HealBot_updAllAuxRange30Bars,
+                        ["updAllAuxInRangeBars"]=HealBot_updAllAuxInRangeBars,
                         ["updAllAuxBuffBars"]=HealBot_updAllAuxBuffBars,
                         ["updAllAuxDebuffBars"]=HealBot_updAllAuxDebuffBars,
                         ["UpdateAllAuxPowerBars"]=HealBot_UpdateAllAuxPowerBars,
@@ -780,6 +781,8 @@ local hbTimerFuncs={["INIT"]={
                         ["SaveSpellsProfile"]=HealBot_Options_SaveSpellsProfile,
                         ["SaveActionIconsProfile"]=HealBot_Options_SaveActionIconsProfile,
                         ["ToggleOptions"]=HealBot_Options_ShowHide,
+                        ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
+                        ["SpellsTabText"]=HealBot_Options_ComboClass_Text,
                     },
                    }
 

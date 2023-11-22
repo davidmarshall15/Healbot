@@ -1400,7 +1400,7 @@ function HealBot_Action_EmergBarUpdate(button, eButton, rSpell, r, g, b)
         if button.status.rangespell==rSpell then
             ebRange=button.status.range
         else
-            ebRange=HealBot_UnitInRangeExc30(button, rSpell)
+            ebRange=HealBot_UnitInRange(button, rSpell)
         end
         if ebRange>0 then
             eButton.a=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["A"],1)
@@ -3837,7 +3837,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.init=true
     button.mana.init=true
     button.status.current=HealBot_Unit_Status["CHECK"]
-    button.status.range30=true
     button.health.current=-1
     button.health.max=100
     button.health.alert=1
@@ -7396,7 +7395,7 @@ function HealBot_Action_SmartCast(button)
         end
     end
 
-    if scSpell and HealBot_UnitInRangeExc30(button, scSpell)>0 then
+    if scSpell and HealBot_UnitInRange(button, scSpell)>0 then
         --HealBot_AddDebug("In Range spell="..scSpell,"SmartCast",true)
         return scSpell
     else

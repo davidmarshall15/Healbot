@@ -211,6 +211,7 @@ function HealBot_Lang_Options_enALL()
                                  ["HEALGROUPDOWN"]="Heal Group Down",
                                  ["HEALGROUPUP"]="Heal Group Up",
                                  ["HEALGROUPSALLOWDUPS"]=HEALBOT_ALLOW_DUPLICATES,
+                                 ["HEALGROUPCONFIGENEMY"]=HEALBOT_OPTIONS_CONFIG,
                         -- Skins Frames Headers Bars tab
                                  ["BARHEADERS"]="Bar Headers",
                                  ["HEADERBARSSHOW"]=HEALBOT_OPTIONS_SHOWHEADERS,
@@ -521,6 +522,9 @@ function HealBot_Lang_Options_enALL()
                                  ["ACTIONICONSGLOWTIME"]=HEALBOT_SKIN_ICONGLOWTIMEOUT,
                         -- Skins Frames ActionIcons Icons tab
                                  ["ACTIONICONSTEXT"]=HEALBOT_OPTIONS_TAB_ICONTEXT,
+                                 ["ACTIONICONHOFFSET"]=HEALBOT_OPTIONS_TEXTALIGNMENT,
+                                 ["ACTIONICONVOFFSET"]=HEALBOT_OPTIONS_TEXTOFFSET,
+                                 ["ACTIONICONTEXTCOLALPHA"]=HEALBOT_OPTIONS_ALPHA,
                         -- Skins Frames Indicators
                                  ["INDAGGRO"]=HEALBOT_OPTIONS_TAB_AGGRO,
                                  ["INDLOWMANA"]=HEALBOT_OPTIONS_LOWMANA,
@@ -930,6 +934,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALGROUPDOWN"]="Move the heal group down.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                                ["HEALGROUPUP"]="Move the heal group up.\nHeal Groups sharing frames are initially\nsorted by the order of this list.",
                                ["HEALGROUPSALLOWDUPS"]="Allow a duplicate bar in the Raid/Group/Pets Heal Group\nwhen a bar exists in the Tank/Healers/Self/Private List Heal Group.",
+                               ["HEALGROUPCONFIGENEMY"]="Configure the units shown in the Enemy frame.",
                         -- Skins Frames Headers Bars tab
                                ["BARHEADERS"]="Show the Skins Frames Headers Bars tab.",
                                ["HEADERBARSSHOW"]="Turn On/Off displaying the bars headers.\n".._G["GREEN_FONT_COLOR_CODE"].."- For the raid heal group the header is based on main sort.\n".._G["GREEN_FONT_COLOR_CODE"].."- For other heal groups the header is the heal group name.",
@@ -1240,6 +1245,9 @@ function HealBot_Lang_Options_enALL()
                                ["ACTIONICONSGLOWTIME"]="Stop the icon glow after the seconds set.",
                         -- Skins Frames ActionIcons Text tab
                                ["ACTIONICONSTEXT"]="Show the Skins Frames Action Icons Text tab.",
+                               ["ACTIONICONHOFFSET"]="Horizontally offset the text relative to the icon.",
+                               ["ACTIONICONVOFFSET"]="Vertically offset the text relative to the icon.",
+                               ["ACTIONICONTEXTCOLALPHA"]="Set the transparency of the text.",
                         -- Skins Frames Indicators
                                ["INDAGGRO"]="Show the Skins Frames Indicators Aggro tab",
                                ["INDLOWMANA"]="Show the Skins Frames Indicators Low Mana tab",

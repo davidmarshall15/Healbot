@@ -1258,44 +1258,36 @@ function HealBot_Aux_ClearOORBar(button)
     end
 end
 
--- Range30
+-- InRange
 
-local hbAuxRange30Assigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
-function HealBot_Aux_clearRange30Assigned(frame,id)
+local hbAuxInRangeAssigned={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={},[10]={}}
+function HealBot_Aux_clearInRangeAssigned(frame,id)
     if frame and id then
-        if hbAuxRange30Assigned[frame] and hbAuxRange30Assigned[frame][id] then
+        if hbAuxInRangeAssigned[frame] and hbAuxInRangeAssigned[frame][id] then
             HealBot_Aux_clearAllBar(id)
-            hbAuxRange30Assigned[frame][id]=nil
-            HealBot_setLuVars("AuxRange30InUse", false)
-            HealBot_setAuxAssigns("Range30Bar", frame, false)
-            for x=1,9 do
-                if hbAuxRange30Assigned[frame][x] then
-                    HealBot_setLuVars("AuxRange30InUse", true)
-                    break
-                end
-            end
+            hbAuxInRangeAssigned[frame][id]=nil
+            HealBot_setAuxAssigns("InRangeBar", frame, false)
         end
     else
-        HealBot_setLuVars("AuxRange30InUse", false)
         for f=1,10 do
-            for id in pairs(hbAuxRange30Assigned[f]) do
+            for id in pairs(hbAuxInRangeAssigned[f]) do
                 HealBot_Aux_clearAllBar(id)
             end
-            hbAuxRange30Assigned[f]={};
-            HealBot_setAuxAssigns("Range30Bar", f, false)
+            hbAuxInRangeAssigned[f]={};
+            HealBot_setAuxAssigns("InRangeBar", f, false)
         end
     end
 end
 
-function HealBot_Aux_setRange30Assigned(frame, id)
-    hbAuxRange30Assigned[frame][id]=true
-    HealBot_setAuxAssigns("Range30Bar", frame, true)
-    HealBot_setLuVars("AuxRange30InUse", true)
+-- This is now Range 40
+function HealBot_Aux_setInRangeAssigned(frame, id)
+    hbAuxInRangeAssigned[frame][id]=true
+    HealBot_setAuxAssigns("InRangeBar", frame, true)
     HealBot_Timers_Set("AUX","ResetRange")
 end
 
-function HealBot_Aux_UpdateRange30Bar(button)
-    for id in pairs(hbAuxRange30Assigned[button.frame]) do
+function HealBot_Aux_UpdateInRangeBar(button)
+    for id in pairs(hbAuxInRangeAssigned[button.frame]) do
         if button.status.current<HealBot_Unit_Status["DC"] then
             if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
                 button.aux[id]["R"]=1
@@ -1309,8 +1301,8 @@ function HealBot_Aux_UpdateRange30Bar(button)
     end
 end
 
-function HealBot_Aux_ClearRange30Bar(button)
-    for id in pairs(hbAuxRange30Assigned[button.frame]) do
+function HealBot_Aux_ClearInRangeBar(button)
+    for id in pairs(hbAuxInRangeAssigned[button.frame]) do
         HealBot_Aux_clearBar(button, id)
     end
 end
@@ -1975,8 +1967,8 @@ local function HealBot_Aux_UpdateAllAuxByTypeById(f, x)
         HealBot_Timers_Set("PLAYER","PlayerTargetChanged")
     elseif hbAuxOORAssigned[f][x] then
         HealBot_Timers_Set("AUX","updAllAuxRangeBars")
-    elseif hbAuxRange30Assigned[f][x] then
-        HealBot_Timers_Set("AUX","updAllAuxRange30Bars")
+    elseif hbAuxInRangeAssigned[f][x] then
+        HealBot_Timers_Set("AUX","updAllAuxInRangeBars")
     elseif hbAuxOverHealAssigned[f][x] then
         HealBot_Timers_Set("AUX","UpdateAllAuxOverHealsBars")
     elseif hbAuxHealInAssigned[f][x] then
@@ -2167,7 +2159,7 @@ local function HealBot_Aux_SetTestButton(button)
                     end
                     auxTestCol=true
                 else
-                    auxTestText=HEALBOT_RANGE30
+                    auxTestText=HEALBOT_INRANGE
                     if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
                         button.gref.aux[x]:SetStatusBarColor(1,1,1,1)
                     end
@@ -2262,7 +2254,7 @@ local function HealBot_Aux_SetTestButton(button)
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
                     button.gref.aux[x]:SetStatusBarColor(1,1,1,1)
                 end
-                auxTestText=HEALBOT_RANGE30
+                auxTestText=HEALBOT_INRANGE
             elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["USE"]==15 then
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["COLOUR"]==1 then
                     button.gref.aux[x]:SetStatusBarColor(0.1,1,0.2,1)

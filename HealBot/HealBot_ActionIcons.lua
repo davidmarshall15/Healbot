@@ -2,20 +2,16 @@ local HealBot_ActionIcons_luVars={}
 
 HealBot_ActionIcons_luVars["Loaded"]=false
 
+function HealBot_ActionIcons_InitFrames()
+    HealBot_Contents_Button315:Hide()
+    -- Future
+end
+
 function HealBot_ActionIcons_setLuVars(vName, vValue)
     -- Future
 end
 
-function HealBot_ActionIcons_LoadSpec(updateAll)
-    -- Future
-end
-
 function HealBot_ActionIcons_retLuVars(vName)
-    return false
-end
-
-function HealBot_ActionIcons_InitFrames()
-    HealBot_Contents_Button315:Hide()
     -- Future
 end
 
@@ -24,6 +20,10 @@ function HealBot_ActionIcons_setBorderHighlightCol()
 end
 
 function HealBot_ActionIcons_CursorChanged(isDefault, newCursorType)
+    -- Future
+end
+
+function HealBot_ActionIcons_LoadSpec(updateAll)
     -- Future
 end
 

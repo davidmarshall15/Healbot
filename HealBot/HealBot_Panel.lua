@@ -1137,13 +1137,11 @@ function HealBot_Panel_SetupExtraBars(frame, preCombat)
             else
                 HealBot_CheckActiveFrames(frame, false)
             end
-            HealBot_ActionIcons_UpdateActiveFrame(frame, true)
         end
     else
         HealBot_Action_HidePanel(frame)
         if not HealBot_setTestBars then 
             HealBot_CheckActiveFrames(frame, false)
-            HealBot_ActionIcons_UpdateActiveFrame(frame, false)
         end
     end
 end
@@ -1219,11 +1217,9 @@ function HealBot_Panel_SetupBars(preCombat)
                 else
                     HealBot_CheckActiveFrames(j, false)
                 end
-                HealBot_ActionIcons_UpdateActiveFrame(j, true)
             end
         elseif not HealBot_setTestBars then 
             HealBot_CheckActiveFrames(j, false)
-            HealBot_ActionIcons_UpdateActiveFrame(j, false)
         end
     end
 
@@ -2778,6 +2774,7 @@ function HealBot_Panel_EnemyChanged(preCombat)
 end
 
 local vPetsWithPlayers,vVehicleWithPlayers,vTargetWithPlayers,vFocusWithPlayers=false,false,false,false
+local vActiveFrames={}
 function HealBot_Panel_PlayersChanged(preCombat)
     TempMaxH=9;
     HealBot_Data["PUNIT"]="player"
@@ -2797,6 +2794,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
         HeaderPos[gl]={};
         hbBarsPerFrame[gl]=0
         i[gl]=0
+        vActiveFrames[gl]=false
     end
 
     if HealBot_Config.DisabledNow==1 then
@@ -2805,7 +2803,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
     else
         MyGroup["GROUP"]=0
         for gl=1,10 do
+            hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["STATE"] then
+                vActiveFrames[gl]=true
                 for x,_ in pairs(order) do
                     order[x]=nil;
                 end
@@ -2818,7 +2818,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 for x,_ in pairs(subunits) do
                     subunits[x]=nil;
                 end
-                hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_OPTIONS_EMERGENCYHEALS_en then
                     HealBot_Panel_raidHeals(preCombat)
                 elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_OPTIONS_GROUPHEALS_en then
@@ -2842,7 +2841,10 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 end
             end
         end
-    end   
+    end
+    for gl=1,5 do
+        HealBot_ActionIcons_UpdateActiveFrame(gl, vActiveFrames[gl])
+    end
     HealBot_Panel_SetupBars(preCombat)
     
     for xUnit,xButton in pairs(HealBot_Unit_Button) do
@@ -3106,31 +3108,72 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
             end
         end
     else
-        if changeType==2 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then
-            for x,_ in pairs(HealBot_TrackUnit[8]) do
-                HealBot_TrackUnit[8][x]=nil
-            end 
-            HealBot_Panel_PetsChanged(preCombat)
-        elseif changeType==3 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]==8 then
-            for x,_ in pairs(HealBot_TrackUnit[9]) do
-                HealBot_TrackUnit[9][x]=nil
-            end 
-            HealBot_Panel_TargetChanged(preCombat)
+        if changeType==2 then
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["FRAME"]==7 then
+                for x,_ in pairs(HealBot_TrackUnit[8]) do
+                    HealBot_TrackUnit[8][x]=nil
+                end 
+                HealBot_Panel_PetsChanged(preCombat)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][8]["STATE"] then
+                    HealBot_ActionIcons_UpdateActiveFrame(7, true)
+                else
+                    HealBot_ActionIcons_UpdateActiveFrame(7, false)
+                end
+            else
+                HealBot_ActionIcons_UpdateActiveFrame(7, false)
+            end
+        elseif changeType==3 then
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]==8 then
+                for x,_ in pairs(HealBot_TrackUnit[9]) do
+                    HealBot_TrackUnit[9][x]=nil
+                end 
+                HealBot_Panel_TargetChanged(preCombat)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
+                    HealBot_ActionIcons_UpdateActiveFrame(8, true)
+                else
+                    HealBot_ActionIcons_UpdateActiveFrame(8, false)
+                end
+            else
+                HealBot_ActionIcons_UpdateActiveFrame(8, false)
+            end
         elseif changeType==5 then
             for x,_ in pairs(HealBot_TrackUnit[11]) do
                 HealBot_TrackUnit[11][x]=nil
             end 
             HealBot_Panel_EnemyChanged(preCombat)
-        elseif changeType==4 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then
-            for x,_ in pairs(HealBot_TrackUnit[10]) do
-                HealBot_TrackUnit[10][x]=nil
-            end 
-            HealBot_Panel_FocusChanged(preCombat)
-        elseif changeType==1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
-            for x,_ in pairs(HealBot_TrackUnit[7]) do
-                HealBot_TrackUnit[7][x]=nil
-            end 
-            HealBot_Panel_VehicleChanged(preCombat)
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][11]["STATE"] then
+                HealBot_ActionIcons_UpdateActiveFrame(10, true)
+            else
+                HealBot_ActionIcons_UpdateActiveFrame(10, false)
+            end
+        elseif changeType==4 then
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then
+                for x,_ in pairs(HealBot_TrackUnit[10]) do
+                    HealBot_TrackUnit[10][x]=nil
+                end 
+                HealBot_Panel_FocusChanged(preCombat)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
+                    HealBot_ActionIcons_UpdateActiveFrame(9, true)
+                else
+                    HealBot_ActionIcons_UpdateActiveFrame(9, false)
+                end
+            else
+                HealBot_ActionIcons_UpdateActiveFrame(9, false)
+            end
+        elseif changeType==1 then
+            if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["FRAME"]==6 then
+                for x,_ in pairs(HealBot_TrackUnit[7]) do
+                    HealBot_TrackUnit[7][x]=nil
+                end 
+                HealBot_Panel_VehicleChanged(preCombat)
+                if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][7]["STATE"] then
+                    HealBot_ActionIcons_UpdateActiveFrame(6, true)
+                else
+                    HealBot_ActionIcons_UpdateActiveFrame(6, false)
+                end
+            else
+                HealBot_ActionIcons_UpdateActiveFrame(6, false)
+            end
         end
         if changeType>2 then
             for x,_ in pairs(hbPanel_dataExtraGUIDs) do

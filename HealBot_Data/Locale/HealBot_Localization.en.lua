@@ -310,6 +310,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Show tooltips";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
+    HEALBOT_OPTIONS_COOLDOWNTEXT            = "Cooldown Text";
+    HEALBOT_OPTIONS_COUNTTEXT               = "Count Text";
     HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignore spell global cooldown";
     HEALBOT_OPTIONS_SHOWMOUSEWHEELTOOLTIP   = "Show mouse wheel commands"
     HEALBOT_OPTIONS_SHOWUNITTOOLTIP         = "Show target information";
@@ -678,7 +680,7 @@ function HealBot_Lang_enALL()
     HEALBOT_RES_TAG                         = "RES "
     HEALBOT_SUMMONS_TAG                     = "SUM "
     HEALBOT_OUTOFRANGE_LABEL                = "Out of range"
-    HEALBOT_RANGE30                         = "In Range 27"
+    HEALBOT_INRANGE                         = "In Range"
     HEALBOT_RECENTHEALS                     = "Recent heals"
     HEALBOT_OUTOFRANGE_TAG                  = "OOR-"
     HEALBOT_RESERVED_LABEL                  = "Reserved"
@@ -1574,6 +1576,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_HIGHLIGHTFILTER01S      = "when off CoolDown"
     HEALBOT_OPTIONS_HIGHLIGHTFILTER02       = "when Ability is off CoolDown and Alert condition is met"
     HEALBOT_OPTIONS_HIGHLIGHTFILTER02S      = "when off CD and Alert met"
+    HEALBOT_OPTIONS_SHOWCOOLDOWN            = "Show cooldown"
+    HEALBOT_OPTIONS_SHOWCOUNT               = "Show count"
     
     HEALBOT_OPTIONS_LANG                    = "Language"
     

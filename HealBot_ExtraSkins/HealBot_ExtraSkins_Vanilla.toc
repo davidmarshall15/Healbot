@@ -1,4 +1,4 @@
-## Interface: 11404
+## Interface: 11500
 ## Title: HealBot Extra Skins
 ## Author: Strife
 ## Notes: Large store of extra skins for HealBot.

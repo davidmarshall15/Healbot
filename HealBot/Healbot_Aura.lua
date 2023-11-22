@@ -1710,11 +1710,11 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         HealBot_Emerg_Button[button.id].buffupdate=true
         button.aura.buff.r,button.aura.buff.g,button.aura.buff.b=HealBot_Options_RetBuffRGB(button)
         if button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.name then
-            curBuffRange=HealBot_UnitInRangeExc30(button, button.aura.buff.name)
+            curBuffRange=HealBot_UnitInRange(button, button.aura.buff.name)
         else
             curBuffRange=button.status.range
         end
-        if curBuffRange>-1 then
+        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
             if button.aura.buff.colbar==4 then
                 HealBot_Action_EnableBorderHazardType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF")
             elseif button.hazard.buff then
@@ -1800,11 +1800,11 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force)
             curDebuffSpell=button.status.rangespell
         end
         if button.status.rangespell~=curDebuffSpell then
-            curDebuffRange=HealBot_UnitInRangeExc30(button, curDebuffSpell)
+            curDebuffRange=HealBot_UnitInRange(button, curDebuffSpell)
         else
             curDebuffRange=button.status.range
         end
-        if curDebuffRange>-1 then
+        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
             if button.aura.debuff.colbar==4 then
                 HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
             elseif button.hazard.debuff then

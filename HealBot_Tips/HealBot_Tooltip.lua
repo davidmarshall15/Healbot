@@ -74,7 +74,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
                 return nil, 1, 0.2, 0
             else
                 if not button.player then
-                    if IsItemInRange(sName,button.unit) then
+                    if IsUsableItem(sName) and IsItemInRange(sName,button.unit) then
                         return sName, 0.2, 0.5, 1, true
                     else
                         return sName, 0.1, 0.25, 0.7, true
@@ -88,7 +88,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
 
-    if HealBot_UnitInRangeExc30(button,sName)<1 then
+    if HealBot_UnitInRange(button,sName)<1 then
         return sName, 1, 0.2, 0
     end
  
@@ -679,7 +679,7 @@ function HealBot_Action_DoRefreshTooltip()
                         else
                             HealBot_Tooltip_SetLine(uName,r,g,b,1,uSpec..uClass,r,g,b,1)
                         end
-                        local uRole=hbUnitRoles[uRoleIdx]
+                        local uRole=hbUnitRoles[uRoleIdx] or ""
                         if uRank==HEALBOT_CUSTOM_CASTBY_ENEMY then
                             HealBot_Tooltip_SetLine(uRank..uRole,1,0.25,0.25,1,uLvl..uRace,1,0.25,0.25,1)
                         else
@@ -930,7 +930,7 @@ local function EnumerateTooltipLines_helper(td, ...)
     end
 end
 
-function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info)
+function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info, target)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
@@ -954,8 +954,12 @@ function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName
     end
     if pName then
         HealBot_Tooltip_SetLine(" ",1,1,1,0,"@"..pName,1,1,1,1)
-        HealBot_Tooltip_Show()
+    elseif target then
+        HealBot_Tooltip_SetLine(" ",1,1,1,0,target,1,0.1,0.1,1)
+    else
+        HealBot_Tooltip_SetLine(" ",1,1,1,0,HEALBOT_WORDS_UNSET,1,0.5,0.3,1)
     end
+    HealBot_Tooltip_Show()
 end
 
 function HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)

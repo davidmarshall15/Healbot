@@ -478,40 +478,12 @@
                       <OnMouseDown>HealBot_Options_ShowTab("SkinsColour")</OnMouseDown>
                     </Scripts>
                   </Button>
-                  <Button name="HealBot_Contents_Button305">
-                    <Size>
-                      <AbsDimension x="168" y="20"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button304"  relativePoint="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="0" y="-20"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString  name= "HealBot_Contents_ButtonT305Txt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_CONTENT_SKINS_ENEMY">
-                          <Anchors>
-                            <Anchor point="LEFT" relativeTo="HealBot_Contents_Button305" relativePoint="LEFT">
-                              <Offset>
-                                <AbsDimension x="28" y="1"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnMouseDown>HealBot_Options_ShowTab("SkinsEnemy")</OnMouseDown>
-                    </Scripts>
-                  </Button>
                   <Button name="HealBot_Contents_Button307">
                     <Size>
                       <AbsDimension x="168" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button305"  relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button304"  relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-20"/>
                         </Offset>
@@ -9614,6 +9586,23 @@
                       <OnLeave>HealBot_Options_Show_Help("ENABLEHEALGROUP",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
+                  <Button name="HealBot_Options_HealGroups11Config" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CONFIG">
+                    <Size>
+                      <AbsDimension x="100" y="25"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_HealGroups11" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="58" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_ShowTab("SkinsEnemy")</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("HEALGROUPCONFIGENEMY",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("HEALGROUPCONFIGENEMY",false)</OnLeave>
+                    </Scripts>
+                  </Button>
                   <Frame name="HealBot_Options_HealGroups11Frame" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_HealGroups11" relativePoint="TOPLEFT">
@@ -24683,14 +24672,58 @@
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSANCHOR",false)</OnLeave>
                         </Scripts>
                       </Frame>
+                      <Frame name="HealBot_Options_ActionIconsCopyFrom" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="95" y="-65"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotactioniconscopyfromtxt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_COPY_FROM">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSCOPYFROMSKIN",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSCOPYFROMSKIN",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Button name="HealBot_Options_ActionIconsCopyFromButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_COPY">
+                        <Size>
+                          <AbsDimension x="75" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsCopyFrom" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="3"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_ActionIconsCopyFromButton_OnClick()</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSCOPYFROM",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSCOPYFROM",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_ActionIconsNumber" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="270" y="18" />
+                          <AbsDimension x="495" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="100" y="-68"/>
+                              <AbsDimension x="0" y="-140"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24716,12 +24749,12 @@
                       </CheckButton>
                       <Slider name="HealBot_Options_ActionIconsSize" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="235" y="18" />
+                          <AbsDimension x="315" y="18" />
                         </Size>
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsNumber" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-130" y="-155"/>
+                              <AbsDimension x="0" y="-70"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24733,7 +24766,7 @@
                       </Slider>
                       <Slider name="HealBot_Options_ActionIconsSpace" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="235" y="18" />
+                          <AbsDimension x="155" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsSize" relativePoint="RIGHT">
@@ -24750,7 +24783,7 @@
                       </Slider>
                       <Slider name="HealBot_Options_ActionIconsOffsetX" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="235" y="18" />
+                          <AbsDimension x="495" y="18" />
                         </Size>
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsSize" relativePoint="BOTTOMLEFT">
@@ -24767,23 +24800,6 @@
                       </Slider>
                       <Slider name="HealBot_Options_ActionIconsOffsetY" inherits="HealBot_Options_SliderTemplate">
                         <Size>
-                          <AbsDimension x="235" y="18" />
-                        </Size>
-                        <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsOffsetX" relativePoint="RIGHT">
-                            <Offset>
-                              <AbsDimension x="25" y="0"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnValueChanged>HealBot_Options_ActionIconsOffsetY_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSOFFSETY",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSOFFSETY",false)</OnLeave>
-                        </Scripts>
-                      </Slider>
-                      <Slider name="HealBot_Options_ActionIconsHighlight" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
                           <AbsDimension x="495" y="18" />
                         </Size>
                         <Anchors>
@@ -24794,33 +24810,16 @@
                           </Anchor>
                         </Anchors>
                         <Scripts>
-                          <OnValueChanged>HealBot_Options_ActionIconsHighlight_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSHIGHLIGHT",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSHIGHLIGHT",false)</OnLeave>
-                        </Scripts>
-                      </Slider>
-                      <Slider name="HealBot_Options_ActionIconsFade" inherits="HealBot_Options_SliderTemplate">
-                        <Size>
-                          <AbsDimension x="495" y="18" />
-                        </Size>
-                        <Anchors>
-                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsHighlight" relativePoint="BOTTOM">
-                            <Offset>
-                              <AbsDimension x="0" y="-55"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnValueChanged>HealBot_Options_ActionIconsFade_OnValueChanged(self)</OnValueChanged>
-                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSFADE",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSFADE",false)</OnLeave>
+                          <OnValueChanged>HealBot_Options_ActionIconsOffsetY_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSOFFSETY",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSOFFSETY",false)</OnLeave>
                         </Scripts>
                       </Slider>
                       <Frame name="HealBot_Options_ActionIconsGlowSize" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="BOTTOMLEFT">
+                          <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="40" y="20" />
+                              <AbsDimension x="0" y="20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24843,50 +24842,6 @@
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWSIZE",false)</OnLeave>
                         </Scripts>
                       </Frame>
-                      <Frame name="HealBot_Options_ActionIconsCopyFrom" inherits="UIDropDownMenuTemplate">
-                        <Anchors>
-                          <Anchor point="BOTTOM">
-                            <Offset>
-                              <AbsDimension x="40" y="20"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Layers>
-                          <Layer level="OVERLAY">
-                            <FontString name="healbotactioniconscopyfromtxt" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_COPY_FROM">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="14"/>
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                          </Layer>
-                        </Layers>
-                        <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
-                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSCOPYFROMSKIN",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSCOPYFROMSKIN",false)</OnLeave>
-                        </Scripts>
-                      </Frame>
-                      <Button name="HealBot_Options_ActionIconsCopyFromButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_COPY">
-                        <Size>
-                          <AbsDimension x="95" y="25"/>
-                        </Size>
-                        <Anchors>
-                          <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsCopyFrom" relativePoint="RIGHT">
-                            <Offset>
-                              <AbsDimension x="0" y="3"/>
-                            </Offset>
-                          </Anchor>
-                        </Anchors>
-                        <Scripts>
-                          <OnClick>HealBot_Options_ActionIconsCopyFromButton_OnClick()</OnClick>
-                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSCOPYFROM",true)</OnEnter>
-                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSCOPYFROM",false)</OnLeave>
-                        </Scripts>
-                      </Button>
                     </Frames>
                   </Frame>
                   <Frame name="HealBot_Options_SkinsFrameActionIconsIcons" hidden="true" inherits="BackdropTemplate">
@@ -24919,6 +24874,40 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Slider name="HealBot_Options_ActionIconsHighlight" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="495" y="18" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="0" y="-305"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_ActionIconsHighlight_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSHIGHLIGHT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSHIGHLIGHT",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
+                      <Slider name="HealBot_Options_ActionIconsFade" inherits="HealBot_Options_SliderTemplate">
+                        <Size>
+                          <AbsDimension x="495" y="18" />
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsHighlight" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="-55"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnValueChanged>HealBot_Options_ActionIconsFade_OnValueChanged(self)</OnValueChanged>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSFADE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSFADE",false)</OnLeave>
+                        </Scripts>
+                      </Slider>
                       <Button name="HealBot_Options_SkinsFrameActionIconsConfigButton" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CONFIG">
                         <Size>
                           <AbsDimension x="175" y="25"/>
@@ -24970,9 +24959,9 @@
                     <Frames>
                       <Frame name="HealBot_Options_ActionIconsConfigID" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOP">
+                          <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-45"/>
+                              <AbsDimension x="25" y="-45"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24980,9 +24969,9 @@
                           <Layer level="OVERLAY">
                             <FontString name="healbotactioniconsconfigidtxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONID">
                               <Anchors>
-                                <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsConfigID" relativePoint="LEFT">
+                                <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="-35" y="3"/>
+                                    <AbsDimension x="0" y="12"/>
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -25000,9 +24989,9 @@
                           <AbsDimension x="150" y="20"/>
                         </Size>
                         <Anchors>
-                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsConfigID" relativePoint="BOTTOM">
+                          <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="-110" y="-27"/>
+                              <AbsDimension x="0" y="-48"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25062,9 +25051,9 @@
                       </Button>
                       <Frame name="HealBot_Options_ActionIconsTarget" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsConfigID" relativePoint="BOTTOM">
+                          <Anchor point="TOPRIGHT">
                             <Offset>
-                              <AbsDimension x="110" y="-25"/>
+                              <AbsDimension x="-25" y="-45"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25082,16 +25071,16 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 100)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("ACTIONICONSTARGET",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSTARGET",false)</OnLeave>
                         </Scripts>
                       </Frame>
                       <Frame name="HealBot_Options_ActionIconsHighlightFilter" inherits="UIDropDownMenuTemplate">
                         <Anchors>
-                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsConfigID" relativePoint="BOTTOM">
+                          <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsConfigAbility" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-85"/>
+                              <AbsDimension x="0" y="-55"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25118,7 +25107,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsHighlightFilter" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="-70" y="-20"/>
+                              <AbsDimension x="-70" y="-50"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -25807,7 +25796,6 @@
                     </Frames>
                   </Frame>
 
-
                   <Frame name="HealBot_Options_SkinsFrameActionIconsText" hidden="true" inherits="BackdropTemplate">
                     <Size>
                       <AbsDimension y="495"/>
@@ -25824,21 +25812,428 @@
                         </Offset>
                       </Anchor>
                     </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_SkinsFrameActionIconsTextTxt" text="HEALBOT_OPTIONS_TAB_ICONTEXT" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="0" y="-8" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
                     <Frames>
+                      <StatusBar name="HealBot_Options_SkinsActionIconsTextCDb">
+                        <Size>
+                          <AbsDimension x="240" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-130" y="-10"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name= "HealBot_Options_SkinsActionIconsTextCDbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_COOLDOWNTEXT">
+                              <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnMouseDown>HealBot_Options_ShowActionIconsTextPanel("HealBot_Options_SkinsActionIconsTextCD", "HealBot_Options_SkinsActionIconsTextCDb", "SkinsFramesActionIconsText")</OnMouseDown>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSTEXT",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                        <BarColor r="0.2" g="0.2" b="0.2"/>
+                      </StatusBar>
+                      <StatusBar name="HealBot_Options_SkinsActionIconsTextStacksb">
+                        <Size>
+                          <AbsDimension x="240" y="24"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="130" y="-10"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name= "HealBot_Options_SkinsActionIconsTextStacksbTxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_COUNTTEXT">
+                              <Anchors>
+                                <Anchor point="CENTER"></Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                          <OnMouseDown>HealBot_Options_ShowActionIconsTextPanel("HealBot_Options_SkinsActionIconsTextStacks", "HealBot_Options_SkinsActionIconsTextStacksb", "SkinsFramesActionIconsText")</OnMouseDown>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSTEXT",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSTEXT",false)</OnLeave>
+                        </Scripts>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\tukuibar.tga"/>
+                        <BarColor r="0.2" g="0.2" b="0.2"/>
+                      </StatusBar>
+                      <Frame name="HealBot_Options_SkinsActionIconsTextCD" inherits="BackdropTemplate">
+                        <Size>
+                          <AbsDimension y="450"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_ActionIconsTextCD_FontStr" text="HEALBOT_OPTIONS_COOLDOWNTEXT" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-10" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Frames>
+                          <CheckButton name="HealBot_Options_ActionIconsCDTextShow" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="80" y="-70" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ActionIconsCDTextShow_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSONLYIG",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSONLYIG",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <StatusBar name="HealBot_Options_ActionIconsCDTextColpick" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="125" y="25"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="-120" y="-70"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healbotactioniconfontcoltxt" inherits="GameFontNormal" text="HEALBOT_SKIN_HEADERTEXTCOL">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_ActionIconsCDTextColpick" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="2"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnMouseDown>HealBot_SkinColorpick_OnClick("ActionIconsCDText")</OnMouseDown>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",false)</OnLeave>
+                            </Scripts>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
+                          </StatusBar> 
+                          <Button name="HealBot_Options_SkinActionIconsCDTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                            <Size>
+                              <AbsDimension x="25" y="25"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsCDTextColpick" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <Slider name="HealBot_Options_ActionIconsFontName" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="0" y="-155" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontName_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONT",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontHeight" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="310" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontName" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontHeight_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTSIZE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTSIZE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsTextOutLine" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="170" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontHeight" relativePoint="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="28" y="0" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsTextOutLine_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontVOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontHeight" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONVOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONVOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontVOffset" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONHOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONHOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                        </Frames>
+                      </Frame>
 
+                      <Frame name="HealBot_Options_SkinsActionIconsTextStacks" hidden="true" inherits="BackdropTemplate">
+                        <Size>
+                          <AbsDimension y="450"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOPLEFT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                          <Anchor point="TOPRIGHT">
+                            <Offset>
+                              <AbsDimension x="0" y="-45"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_ActionIconsTextStacks_FontStr" text="HEALBOT_OPTIONS_COUNTTEXT" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-10" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Frames>
+                          <CheckButton name="HealBot_Options_ActionIconsCountTextShow" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="80" y="-70" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_ActionIconsCountTextShow_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSONLYIG",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSONLYIG",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
+                          <StatusBar name="HealBot_Options_ActionIconsCountTextColpick" inherits="TextStatusBar">
+                            <Size>
+                              <AbsDimension x="125" y="25"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="-120" y="-70"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Layers>
+                              <Layer level="OVERLAY">
+                                <FontString name="healbotactioniconfontcountcoltxt" inherits="GameFontNormal" text="HEALBOT_SKIN_HEADERTEXTCOL">
+                                  <Anchors>
+                                    <Anchor point="BOTTOM" relativeTo="HealBot_Options_ActionIconsCountTextColpick" relativePoint="TOP">
+                                      <Offset>
+                                        <AbsDimension x="0" y="2"/>
+                                      </Offset>
+                                    </Anchor>
+                                  </Anchors>
+                                </FontString>
+                              </Layer>
+                            </Layers>
+                            <Scripts>
+                              <OnMouseDown>HealBot_SkinColorpick_OnClick("ActionIconsCountText")</OnMouseDown>
+                              <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",false)</OnLeave>
+                            </Scripts>
+                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarColor r="0" g="1" b="0"/>
+                          </StatusBar> 
+                          <Button name="HealBot_Options_SkinActionIconsCountTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
+                            <Size>
+                              <AbsDimension x="25" y="25"/>
+                            </Size>
+                            <Anchors>
+                              <Anchor point="LEFT" relativeTo="HealBot_Options_ActionIconsCountTextColpick" relativePoint="RIGHT">
+                                <Offset>
+                                  <AbsDimension x="2" y="1"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_PresetColourClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("PRESETCOLS",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("PRESETCOLS",false)</OnLeave>
+                            </Scripts>
+                          </Button>
+                          <Slider name="HealBot_Options_ActionIconsFontCountName" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOP">
+                                <Offset>
+                                  <AbsDimension x="0" y="-155" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontCountName_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONT",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONT",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontCountHeight" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="310" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontCountName" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontCountHeight_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTSIZE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTSIZE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsTextCountOutLine" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="170" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontCountHeight" relativePoint="TOPRIGHT">
+                                <Offset>
+                                  <AbsDimension x="28" y="0" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsTextCountOutLine_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ICONTXTFONTOUTLINE",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontCountVOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontCountHeight" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontCountVOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONVOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONVOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                          <Slider name="HealBot_Options_ActionIconsFontCountHOffset" inherits="HealBot_Options_SliderTemplate">
+                            <Size>
+                              <AbsDimension x="510" y="16" />
+                            </Size>
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionIconsFontCountVOffset" relativePoint="TOPLEFT">
+                                <Offset>
+                                  <AbsDimension x="0" y="-75" />
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnValueChanged>HealBot_Options_ActionIconsFontCountHOffset_OnValueChanged(self)</OnValueChanged>
+                              <OnEnter>HealBot_Options_Show_Help("ACTIONICONHOFFSET",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("ACTIONICONHOFFSET",false)</OnLeave>
+                            </Scripts>
+                          </Slider>
+                        </Frames>
+                      </Frame>
                     </Frames>
                   </Frame>
                 </Frames>
