@@ -461,7 +461,7 @@ function HealBot_Share_LoadSpells(sIn)
     end
     HealBot_Options_SaveSpellsProfile()
     HealBot_Timers_InitExtraOptions()
-    HealBot_Timers_Set("OOC","SpellsTabText")
+    HealBot_Timers_Set("INIT","SpellsTabText")
     HealBot_Timers_Set("INIT","PrepSetAllAttribs")
 end
 

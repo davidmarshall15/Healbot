@@ -553,7 +553,7 @@ function HealBot_Aux_UpdateFluidBars()
     end
 end
 
-HealBot_Aux_luVars["UpdateTimedFreq"]=0.02
+HealBot_Aux_luVars["UpdateTimedFreq"]=0.025
 function HealBot_Aux_AdjUpdateTimedFreq(freq)
     HealBot_Aux_luVars["UpdateTimedFreq"]=freq
 end

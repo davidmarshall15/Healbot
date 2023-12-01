@@ -148,6 +148,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUTOSHOW                = "Close automatically";
     HEALBOT_OPTIONS_FRAMEGLOWSIZE           = "Bar glow size";
     HEALBOT_OPTIONS_ICONGLOWSIZE            = "Icon glow size";
+    HEALBOT_OPTIONS_ICONLOCK                = "Icon lock";
     HEALBOT_OPTIONS_HIDEOPTIONS             = "Hide options button";
     HEALBOT_OPTIONS_HIDEUNLOCKEDTAG         = "Hide unlocked tag"
     HEALBOT_OPTIONS_PROTECTPVP              = "Avoid PvP";

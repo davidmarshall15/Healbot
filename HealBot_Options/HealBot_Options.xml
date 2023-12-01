@@ -7230,7 +7230,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_Button1Icon" inherits="SecureActionButtonTemplate">
+                  <Button name="HealBot_Options_Button1Icon">
                     <Size>
                       <AbsDimension x="24" y="24"/>
                     </Size>
@@ -7431,7 +7431,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_Button2Icon" inherits="SecureActionButtonTemplate">
+                  <Button name="HealBot_Options_Button2Icon">
                     <Size>
                       <AbsDimension x="24" y="24"/>
                     </Size>
@@ -7580,7 +7580,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONCTRLCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_Button3Icon" inherits="SecureActionButtonTemplate">
+                  <Button name="HealBot_Options_Button3Icon">
                     <Size>
                       <AbsDimension x="24" y="24"/>
                     </Size>
@@ -7729,7 +7729,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONALTCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_Button4Icon" inherits="SecureActionButtonTemplate">
+                  <Button name="HealBot_Options_Button4Icon">
                     <Size>
                       <AbsDimension x="24" y="24"/>
                     </Size>
@@ -7878,7 +7878,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SPELLSBUTTONSHIFTCTRLCLICK",false)</OnLeave>
                     </Scripts>
                   </EditBox>
-                  <Button name="HealBot_Options_Button5Icon" inherits="SecureActionButtonTemplate">
+                  <Button name="HealBot_Options_Button5Icon">
                     <Size>
                       <AbsDimension x="24" y="24"/>
                     </Size>
@@ -24817,9 +24817,9 @@
                       </Slider>
                       <Frame name="HealBot_Options_ActionIconsGlowSize" inherits="UIDropDownMenuTemplate" id="1">
                         <Anchors>
-                          <Anchor point="BOTTOM">
+                          <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="20" />
+                              <AbsDimension x="75" y="20" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24837,9 +24837,36 @@
                           </Layer>
                         </Layers>
                         <Scripts>
-                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
                           <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWSIZE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWSIZE",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <Frame name="HealBot_Options_ActionIconsLock" inherits="UIDropDownMenuTemplate" id="1">
+                        <Anchors>
+                          <Anchor point="BOTTOMRIGHT">
+                            <Offset>
+                              <AbsDimension x="-75" y="20" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotactioniconslocktxt" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONLOCK">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="14"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 150)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSLOCK",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSLOCK",false)</OnLeave>
                         </Scripts>
                       </Frame>
                     </Frames>
@@ -25014,7 +25041,7 @@
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSABILITYCLICK",false)</OnLeave>
                         </Scripts>
                       </EditBox>                  
-                      <Button name="HealBot_Options_Button9Icon" inherits="SecureActionButtonTemplate">
+                      <Button name="HealBot_Options_Button9Icon">
                         <Size>
                           <AbsDimension x="24" y="24"/>
                         </Size>

@@ -856,10 +856,10 @@ local hbIconRanks={[1]="Interface\\Addons\\HealBot\\Images\\leader.tga",
                    }
 function HealBot_Aura_UpdateState(button)
     if HealBot_UnitExtraIcons[button.id] then
-        if button.status.hostile or button.status.incombat or button.icon.extra.readycheck or button.status.afk then
+        if button.icon.extra.hostile or button.status.incombat or button.icon.extra.readycheck or button.status.afk then
             if button.status.afk then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\afk.tga"
-            elseif button.status.hostile then
+            elseif button.icon.extra.hostile then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\hostile.tga"
             elseif button.status.incombat then
                 HealBot_UnitExtraIcons[button.id][93]["texture"]="Interface\\Addons\\HealBot\\Images\\incombat.tga"
@@ -1173,7 +1173,8 @@ function HealBot_Aura_HasBuffTypes(spellName, pBuffTypes)
     return hasBuffTypes
 end
 
-local curBuffName,curBuffxTime=false,0
+local curBuffName=false
+local curBuffxTime={}
 local buffCheckThis, buffWatchTarget, buffSpellStart, buffSpellDur=false,false,0,0
 local weaponEnchantState={[1]={["Active"]=false,["Expire"]=0},[2]={["Active"]=false,["Expire"]=0}}
 function HealBot_Aura_SetGeneralBuff(button, bName)
@@ -1703,57 +1704,23 @@ function HealBot_Aura_AuxClearAuraBuffBars(button)
     end
 end
 
-local curBuffRange=0
 function HealBot_Aura_BuffWarnings(button, buffName, force)
     if button.aura.buff.name~=buffName or force then
         button.aura.buff.name=buffName
         HealBot_Emerg_Button[button.id].buffupdate=true
         button.aura.buff.r,button.aura.buff.g,button.aura.buff.b=HealBot_Options_RetBuffRGB(button)
-        if button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.name then
-            curBuffRange=HealBot_UnitInRange(button, button.aura.buff.name)
-        else
-            curBuffRange=button.status.range
-        end
-        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) then
-            if button.aura.buff.colbar==4 then
-                HealBot_Action_EnableBorderHazardType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF")
-            elseif button.hazard.buff then
-                HealBot_Action_DisableBorderHazardType(button, "BUFF")
-            end
-            if button.aura.buff.colbar>4 then
-                HealBot_Action_EnableButtonGlowType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF", "", button.aura.buff.colbar)
-            elseif button.glow.buff then
-                HealBot_Action_DisableButtonGlowType(button, "BUFF")
-            end
-            if button.aura.buff.colbar>0 then 
-                HealBot_Aura_AuxSetAuraBuffBars(button)
-            else
-                HealBot_Aura_AuxClearAuraBuffBars(button)
-            end
-        else
-            if button.hazard.buff then HealBot_Action_DisableBorderHazardType(button, "BUFF") end
-            if button.glow.buff then HealBot_Action_DisableButtonGlowType(button, "BUFF") end
-            HealBot_Aura_AuxClearAuraBuffBars(button) 
-        end
+        button.status.rangebuff=true
+        button.status.rangenextcheck=0
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_Action_RefreshTooltip() 
         end
         if buffWarnings and (not HealBot_Aura_WarningFilter[button.unit][buffName] or HealBot_Aura_WarningFilter[button.unit][buffName]<HealBot_TimeNow) then
             if button.aura.buff.missingbuff and HealBot_BuffWatch[button.aura.buff.name] then
-                HealBot_Aura_WarningFilter[button.unit][buffName]=HealBot_TimeNow+2
+                HealBot_Aura_WarningFilter[button.unit][buffName]=HealBot_TimeNow+5
             else
-                HealBot_Aura_WarningFilter[button.unit][buffName]=curBuffxTime
+                HealBot_Aura_WarningFilter[button.unit][buffName]=curBuffxTime[buffName] or HealBot_TimeNow+5
             end
-            if HealBot_Config_Buffs.ShowBuffWarning and curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Screen-3) then
-                UIErrorsFrame:AddMessage(button.text.nameonly.." requires "..button.aura.buff.name, 
-                                         button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, 1, UIERRORS_HOLD_TIME);
-            end
-            if HealBot_Config_Buffs.SoundBuffWarning and curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Sound-3) then
-                HealBot_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
-            end
-        end
-        if curBuffRange>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["BUFFBARCOL"] then 
-            HealBot_RefreshUnit(button) 
+            button.status.rangebuffwarn=true
         end
     end
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
@@ -1787,67 +1754,21 @@ function HealBot_Aura_IsCureSpell(button)
     end
 end
 
-local curDebuffRange,curDebuffSpell=0,""
-function HealBot_Aura_DebuffWarnings(button, debuffName, force)
+function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
     if button.aura.debuff.name~=debuffName or force then
         button.aura.debuff.name=debuffName
         HealBot_Emerg_Button[button.id].debuffupdate=true
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
         button.aura.debuff.curespell=HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
-        if HealBot_Aura_IsCureSpell(button) then 
-            curDebuffSpell=button.aura.debuff.curespell
-        else
-            curDebuffSpell=button.status.rangespell
-        end
-        if button.status.rangespell~=curDebuffSpell then
-            curDebuffRange=HealBot_UnitInRange(button, curDebuffSpell)
-        else
-            curDebuffRange=button.status.range
-        end
-        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) then
-            if button.aura.debuff.colbar==4 then
-                HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
-            elseif button.hazard.debuff then
-                HealBot_Action_DisableBorderHazardType(button, "DEBUFF")
-            end
-            if button.aura.debuff.colbar>4 then
-                HealBot_Action_EnableButtonGlowType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF", "", button.aura.debuff.colbar)
-            elseif button.glow.debuff then
-                HealBot_Action_DisableButtonGlowType(button, "DEBUFF")
-            end
-            if button.aura.debuff.colbar>0 then 
-                HealBot_Aura_AuxSetAuraDebuffBars(button) 
-            else
-                HealBot_Aura_AuxClearAuraDebuffBars(button)
-            end
-        else
-            if button.hazard.debuff then HealBot_Action_DisableBorderHazardType(button, "DEBUFF") end
-            if button.glow.debuff then HealBot_Action_DisableButtonGlowType(button, "DEBUFF") end
-            HealBot_Aura_AuxClearAuraDebuffBars(button)
-        end
+        button.status.rangedebuff=true
+        button.status.rangenextcheck=0
         if button.mouseover and HealBot_Data["TIPBUTTON"] then 
             HealBot_Action_RefreshTooltip() 
         end
-        if curDebuffRange>0 and button.isplayer and button.frame<10 and button.aura.debuff.priority<=HealBot_Aura_luVars["HotBarDebuff"] then
-            HealBot_Action_BarHotEnable(button, "DEBUFF")
-        elseif button.hotbars.debuff then
-            HealBot_Action_BarHotDisable(button, "DEBUFF")
-        end
-        
         if debuffWarnings and (not HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name] or HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]<HealBot_TimeNow) then
-            HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=HealBot_UnitDebuffIcons[button.id][51]["expirationTime"]
-            if HealBot_Config_Cures.ShowDebuffWarning then
-                if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Screen-3) then
-                    UIErrorsFrame:AddMessage(button.text.nameonly.." suffers from "..button.aura.debuff.name, 
-                                             button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b, 1, UIERRORS_HOLD_TIME);
-                end
-            end
-            if HealBot_Config_Cures.SoundDebuffWarning and curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Sound-3) then
-                HealBot_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
-            end
-        end
-        if curDebuffRange>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["DEBUFFBARCOL"] then 
-            HealBot_RefreshUnit(button) 
+            if debuffIconIndex==0 then debuffIconIndex=51 end
+            HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["expirationTime"]
+            button.status.rangedebuffwarn=true
         end
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
@@ -2177,7 +2098,7 @@ function HealBot_Aura_CheckUnitBuff(button)
             end
             uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff()
             if uaIsCurrent then
-                curBuffxTime=uaExpirationTime
+                curBuffxTime[uaName]=uaExpirationTime
                 if uaIsCustom then
                     HealBot_Aura_SetBuffIcon()
                 end
@@ -2605,7 +2526,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                     button.aura.debuff.type=HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"]
                 end
                 if not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group] then 
-                    HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"])
+                    HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"], false, debuffIconIndex)
                 else
                     HealBot_Aura_ClearDebuff(button)
                 end

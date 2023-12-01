@@ -249,6 +249,7 @@ HealBot_Options_luVars["BuffIconSet"]=1
 HealBot_Options_luVars["DebuffIconSet"]=1
 HealBot_Options_luVars["ActionIconsID"]=1
 HealBot_Options_luVars["ActionIconsCopyFrom"]=1
+HealBot_Options_luVars["perfCPUAdj"]=0
 
 function HealBot_Options_setLuVars(vName, vValue)
     HealBot_Options_luVars[vName]=vValue
@@ -1059,6 +1060,13 @@ function HealBot_Options_setLists()
     HealBot_Options_ActionLocked_List = {
         HEALBOT_OPTIONS_LOCKOFF,
         HEALBOT_OPTIONS_LOCKON,
+        HEALBOT_OPTIONS_LOCKCTRL,
+        HEALBOT_OPTIONS_LOCKALT,
+        HEALBOT_OPTIONS_LOCKCTRLALT,
+    }
+
+    HealBot_Options_Lists["IconLock"] = {
+        HEALBOT_OPTIONS_LOCKOFF,
         HEALBOT_OPTIONS_LOCKCTRL,
         HEALBOT_OPTIONS_LOCKALT,
         HEALBOT_OPTIONS_LOCKCTRLALT,
@@ -5367,19 +5375,20 @@ function HealBot_ReturnMinsSecs(s)
     return mins,secs
 end
 
-HealBot_Options_luVars["FluidFreqAdj"]=0.01
-HealBot_Options_luVars["FlashFreqAdj"]=0.04
-HealBot_Options_luVars["StateFreqAdj"]=0.04
+HealBot_Options_luVars["FluidFreqAdj"]=0.02
+HealBot_Options_luVars["FlashFreqAdj"]=0.05
+HealBot_Options_luVars["StateFreqAdj"]=0.05
 
 function HealBot_Options_PerfPlugin_adj(fluidAdj, flashAdj, stateAdj, cpuAdj)
-    local fluidVals={[7]=0.005, [6]=0.007, [5]=0.009, [4]=0.01,  [3]=0.015, [2]=0.02,  [1]=0.025}
-    local flashVals={[7]=0.025, [6]=0.03,  [5]=0.035, [4]=0.04,  [3]=0.045, [2]=0.05,  [1]=0.055}
-    local stateVals={[7]=0.025, [6]=0.03,  [5]=0.035, [4]=0.04,  [3]=0.045, [2]=0.05,  [1]=0.055}
-    local timedVals={[7]=0.005, [6]=0.01,  [5]=0.015, [4]=0.02,  [3]=0.024, [2]=0.27,  [1]=0.03}
+    local fluidVals={[7]=0.01,  [6]=0.014, [5]=0.017, [4]=0.02,  [3]=0.024, [2]=0.027, [1]=0.03}
+    local flashVals={[7]=0.04,  [6]=0.044, [5]=0.437, [4]=0.05,  [3]=0.055, [2]=0.06,  [1]=0.07}
+    local stateVals={[7]=0.04,  [6]=0.044, [5]=0.047, [4]=0.05,  [3]=0.055, [2]=0.06,  [1]=0.07}
+    local timedVals={[7]=0.014, [6]=0.017, [5]=0.022, [4]=0.025, [3]=0.03,  [2]=0.35,  [1]=0.05}
     HealBot_Options_luVars["FluidFreqAdj"]=fluidVals[fluidAdj]
     HealBot_Options_luVars["FlashFreqAdj"]=flashVals[flashAdj]
     HealBot_Options_luVars["StateFreqAdj"]=stateVals[stateAdj]
     local hbCPU=cpuAdj-6
+    HealBot_Options_luVars["perfCPUAdj"]=hbCPU
     HealBot_PerfPlugin_adj(hbCPU)
     HealBot_Timers_Set("LAST","BarFreqVars")
     HealBot_Aux_AdjUpdateTimedFreq(timedVals[fluidAdj])
@@ -7120,6 +7129,7 @@ function HealBot_Options_UltraPerf_OnClick(self)
         HealBot_Globals.UltraPerf=false
     end
     HealBot_Comms_PerfLevel()
+    HealBot_Timers_Set("LAST","PerfRangeFreq")
     HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
 end
 
@@ -9158,7 +9168,7 @@ function HealBot_Options_ModKeyShift_OnClick(self)
     if HealBot_Options_luVars["ModKeyShift"]~=self:GetChecked() then
         HealBot_Options_luVars["ModKeyShift"]=self:GetChecked()
         HealBot_Options_SetCastModifierId()
-        HealBot_Timers_Set("OOC","SpellsTabText")
+        HealBot_Timers_Set("INIT","SpellsTabText")
     end
 end
 
@@ -9166,7 +9176,7 @@ function HealBot_Options_ModKeyCtrl_OnClick(self)
     if HealBot_Options_luVars["ModKeyCtrl"]~=self:GetChecked() then
         HealBot_Options_luVars["ModKeyCtrl"]=self:GetChecked()
         HealBot_Options_SetCastModifierId()
-        HealBot_Timers_Set("OOC","SpellsTabText")
+        HealBot_Timers_Set("INIT","SpellsTabText")
     end
 end
 
@@ -9174,7 +9184,7 @@ function HealBot_Options_ModKeyAlt_OnClick(self)
     if HealBot_Options_luVars["ModKeyAlt"]~=self:GetChecked() then
         HealBot_Options_luVars["ModKeyAlt"]=self:GetChecked()
         HealBot_Options_SetCastModifierId()
-        HealBot_Timers_Set("OOC","SpellsTabText")
+        HealBot_Timers_Set("INIT","SpellsTabText")
     end
 end
 
@@ -11036,7 +11046,7 @@ function HealBot_Options_ActionBarsCombo_DropDown()
                             HealBot_Options_luVars["ActionBarsComboTxt"]="Emerg"
                         end
                         UIDropDownMenu_SetText(HealBot_Options_ActionBarsCombo,HealBot_Options_ActionBarsCombo_List[HealBot_Options_luVars["ActionBarsCombo"]]) 
-                        HealBot_Timers_Set("OOC","SpellsTabText")
+                        HealBot_Timers_Set("INIT","SpellsTabText")
                         if HealBot_Options_luVars["ActionBarsCombo"]<4 and HealBot_Options_luVars["hbIconHelpSelectID"]>0 then
                             HealBot_Options_HelpSpellsSelect_HideIconDropdown(HealBot_Options_luVars["hbIconHelpSelectID"])
                         end
@@ -12570,7 +12580,24 @@ function HealBot_Options_ActionIconsGlowSize_DropDown()
                         end
                     end
         info.checked = false;
-        if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOWSIZE"]==j then info.checked = true end
+        if (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOWSIZE"] or 3)==j then info.checked = true end
+        UIDropDownMenu_AddButton(info);
+    end
+end
+
+function HealBot_Options_ActionIconsLock_DropDown()
+    local info = UIDropDownMenu_CreateInfo()
+    for j=1, getn(HealBot_Options_Lists["IconLock"]), 1 do
+        info.text = HealBot_Options_Lists["IconLock"][j];
+        info.func = function(self)
+                        if (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCK"] or 1) ~= self:GetID() then
+                            Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCK"] = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_ActionIconsLock,HealBot_Options_Lists["IconLock"][Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCK"]]) 
+                            HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+                        end
+                    end
+        info.checked = false;
+        if (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCK"] or 1)==j then info.checked = true end
         UIDropDownMenu_AddButton(info);
     end
 end
@@ -12708,6 +12735,7 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.HeadText[s][frame]["A"]=Healbot_Config_Skins.HeadText[s][f]["A"]
     elseif tab==3 then
         Healbot_Config_Skins.FrameAlias[s][frame]["SHOW"]=Healbot_Config_Skins.FrameAlias[s][f]["SHOW"]
+        Healbot_Config_Skins.FrameAlias[s][frame]["SIZE"]=Healbot_Config_Skins.FrameAlias[s][f]["SIZE"]
         Healbot_Config_Skins.FrameAlias[s][frame]["FONT"]=Healbot_Config_Skins.FrameAlias[s][f]["FONT"]
         Healbot_Config_Skins.FrameAlias[s][frame]["OUTLINE"]=Healbot_Config_Skins.FrameAlias[s][f]["OUTLINE"]
         Healbot_Config_Skins.FrameAlias[s][frame]["R"]=Healbot_Config_Skins.FrameAlias[s][f]["R"]
@@ -15407,7 +15435,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Action_setAutoClose(true)
                     HealBot_Timers_Set("LAST","SetAutoClose", 1)
                     HealBot_Timers_Set("LAST","DisableAllButtonGlow")
-                    HealBot_Timers_TurboOn(3)
+                    HealBot_Timers_TurboOn(2)
                     HealBot_Config.LastAutoSkinChangeTime=GetTime()+300
                     optSetSkins=true
                     HealBot_setLuVars("showReloadMsg", true)
@@ -20765,11 +20793,11 @@ function HealBot_Options_Defaults_OnClick(self, global)
 end
 
 function HealBot_Options_ShowHide()
-    if not HealBot_Data["UILOCK"] then
+    --if not HealBot_Data["UILOCK"] then
         HealBot_TogglePanel(HealBot_Options, true)
-    else
-        HealBot_Timers_Set("OOC","ToggleOptions")
-    end
+    --else
+    --    HealBot_Timers_Set("OOC","ToggleOptions")
+    --end
 end
 
 function HealBot_Options_Reset_OnClick(self,mode)
@@ -22419,7 +22447,7 @@ end
 
 function HealBot_Options_SpellsTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Timers_Set("OOC","SpellsTabText")
+        HealBot_Timers_Set("INIT","SpellsTabText")
         local g=_G["healbotspellshelphealfontstr"]
         if HealBot_Options_luVars["ActionBarsCombo"]==1 then
             g:SetText(HEALBOT_OPTIONS_SMARTCASTHEAL)
@@ -24046,8 +24074,11 @@ function HealBot_Options_SkinsFramesActionIconsGeneralTab(tab)
         HealBot_Options_ActionIconsDoubleRow:SetChecked(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["DOUBLEROW"])
         HealBot_Options_SetText(HealBot_Options_ActionIconsDoubleRow,HEALBOT_OPTIONS_DOUBLEROW)
         HealBot_Options_SetLabel("healbotactioniconsglowsizetxt",HEALBOT_OPTIONS_ICONGLOWSIZE)
+        HealBot_Options_SetLabel("healbotactioniconslocktxt",HEALBOT_OPTIONS_ICONLOCK)
         HealBot_Options_ActionIconsGlowSize.initialize = HealBot_Options_ActionIconsGlowSize_DropDown
         UIDropDownMenu_SetText(HealBot_Options_ActionIconsGlowSize,HealBot_Options_Lists["GlowFrame"][(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["GLOWSIZE"] or 3)])
+        HealBot_Options_ActionIconsLock.initialize = HealBot_Options_ActionIconsLock_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_ActionIconsLock,HealBot_Options_Lists["IconLock"][(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOCK"] or 1)])
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
