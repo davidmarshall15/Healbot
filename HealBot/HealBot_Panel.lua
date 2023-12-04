@@ -54,6 +54,7 @@ local hbPanel_dataPetNames={}
 local hbPanel_dataPetGUIDs={}
 local hbPanel_dataExtraGUIDs={}
 local hbPanel_enemyUnits={}
+local hbPanel_enemyUnits={}
 local grpNo=1
 local tHeader={}
 local erButton=nil
@@ -98,6 +99,7 @@ HealBot_Panel_luVars["cpMacro"]="HealBot-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
 HealBot_Panel_luVars["MainTankGUID"]=""
+HealBot_Panel_luVars["PrevTankGUID"]=""
 
 local tClass={["WARR"]=true,["PALA"]=true,["DRUI"]=true,["DEAT"]=true}
 function HealBot_Panel_retLuVars(vName)
@@ -140,7 +142,12 @@ function HealBot_Panel_TankRole(unit,guid)
         HealBot_Panel_luVars["TankHealth"]=UnitHealth(unit)
         HealBot_setLuVars("TankUnit", unit)
         HealBot_Aura_setLuVars("TankUnit", unit)
+        HealBot_ActionIcons_setLuVars("TankUnit", unit)
         HealBot_Panel_luVars["MainTankGUID"]=guid
+        if HealBot_Panel_luVars["PrevTankGUID"]~=guid then
+            HealBot_Panel_luVars["PrevTankGUID"]=guid
+            HealBot_setLuVars("pluginClearDown", 1)
+        end
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
 end
@@ -296,6 +303,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
         hbPlayerRaidID=0
         HealBot_setLuVars("TankUnit", "x")
         HealBot_Aura_setLuVars("TankUnit", "x")
+        HealBot_ActionIcons_setLuVars("TankUnit", "x")
         HealBot_Panel_luVars["TankHealth"]=0
         HealBot_Panel_luVars["MainTankGUID"]=""
         if HealBot_Config.DisabledNow==0 then
@@ -1051,7 +1059,7 @@ function HealBot_Panel_PositionBars(preCombat)
                     maxRows[vFrame][1]=rowNo[vFrame]
                 end
             else
-                if barNo[vFrame]==1 or rowNo[vFrame]>maxRows[vFrame][maxCols[vFrame]] then
+                if barNo[vFrame]==1 or rowNo[vFrame]>(maxRows[vFrame][maxCols[vFrame]] or rowNo[vFrame]) then
                     if barNo[vFrame]==1 then
                         vBar[vFrame]["PREVROW"]=HealBot_Panel_PositionButton(vBar[vFrame]["BUTTON"],false,false,sameCol,preCombat)
                     else

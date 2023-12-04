@@ -446,6 +446,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_ICONGLOWTIMEOUT            = "Glow timeout"
     HEALBOT_SKIN_ICONGLOW                   = "Icon glow";
     HEALBOT_SKIN_ICONSET                    = "Icon set";
+    HEALBOT_OPTIONS_ACTIONICONSBETA         = "Action Icons is currently Experimental"
     HEALBOT_SKIN_ICONBUFFSET01              = "Buff icon set 1";
     HEALBOT_SKIN_ICONBUFFSET02              = "Buff icon set 2";
     HEALBOT_SKIN_ICONBUFFSET03              = "Buff icon set 3";

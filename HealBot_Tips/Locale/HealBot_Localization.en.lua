@@ -1212,7 +1212,7 @@ function HealBot_Lang_Options_enALL()
                                ["ACTIONICONSFADE"]="Set the opacity when the icon is faded.",
                                ["ACTIONICONSGLOWSIZE"]="When alert condition is met and Icon glow lines or Icon glow stars is used.\nUse this option to set the size of the effect.",
                                ["ACTIONICONSCOPYFROMSKIN"]="Select the skin to copy all Action Icon settings from.",
-                               ["ACTIONICONSLOCK"]="Set to always unlocked or only unlocked with modifier keys.",
+                               ["ACTIONICONSLOCK"]="Set to always unlocked or only unlocked with modifier keys.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Icons are always locked in combat.",
                                ["ACTIONICONSCOPYFROM"]="Copy Action Icon configuration from another skin.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: This will overwrite the current skins Action Icon settings.",
                         -- Skins Frames ActionIcons Icons tab
                                ["ACTIONICONSICONS"]="Show the Skins Frames Action Icons tab.",

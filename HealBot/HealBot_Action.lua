@@ -3207,6 +3207,9 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                     ["PLAYER_FLAGS_CHANGED"]=HealBot_OnEvent_UnitFlagsChanged,
                     ["UNIT_FLAGS"]=HealBot_OnEvent_UnitFlagsChanged,
+                    ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_PortraitUpdate,
+                    ["UNIT_MODEL_CHANGED"]=HealBot_OnEvent_ModelUpdate,
+                    ["UNIT_AREA_CHANGED"]=HealBot_OnEvent_ZoneUpdate,
                    }
 
 local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_OnEvent_UnitPhase,
@@ -3921,6 +3924,8 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_ATTACK")
     button:UnregisterEvent("UNIT_COMBAT")
     button:UnregisterEvent("UNIT_TARGETABLE_CHANGED")
+    button:UnregisterEvent("UNIT_PORTRAIT_UPDATE")
+    button:UnregisterEvent("UNIT_MODEL_CHANGED")
     if HEALBOT_GAME_VERSION==1 then
         button:UnregisterEvent("PLAYER_TARGET_SET_ATTACKING")
     end
@@ -3936,6 +3941,7 @@ function HealBot_Action_UnregisterUnitEvents(button)
         button:UnregisterEvent("PLAYER_SPECIALIZATION_CHANGED")
         button:UnregisterEvent("UNIT_POWER_POINT_CHARGE")
         button:UnregisterEvent("UNIT_HEALTH")
+        button:UnregisterEvent("UNIT_AREA_CHANGED")
     else
         button:UnregisterEvent("UNIT_HEALTH_FREQUENT")
     end
@@ -3980,10 +3986,13 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("UNIT_SPELLCAST_CHANNEL_STOP", button.unit)
         button:RegisterUnitEvent("UNIT_SPELLCAST_STOP", button.unit)
         button:RegisterUnitEvent("UNIT_HEAL_PREDICTION", button.unit)
+        button:RegisterUnitEvent("UNIT_PORTRAIT_UPDATE", button.unit)
+        button:RegisterUnitEvent("UNIT_MODEL_CHANGED", button.unit)
         if HEALBOT_GAME_VERSION>3 then
             button:RegisterUnitEvent("UNIT_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_HEALTH", button.unit)
+            button:RegisterUnitEvent("UNIT_AREA_CHANGED", button.unit)
         else
             button:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", button.unit)
         end

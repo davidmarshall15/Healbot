@@ -2784,10 +2784,10 @@ function HealBot_Aura_DebuffUpdate_Plugins(button, aura, tag, count, active, cas
         if hbAuraActionDebuffWatch[button.guid] and hbAuraActionDebuffWatch[button.guid][aura] then
             if not active then
                 hbAuraActionDebuffWatch[button.guid][aura]=0
-                HealBot_ActionIcons_DebuffUpdate(button, aura, count, active, casterIsPlayer)
+                HealBot_ActionIcons_DebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
             elseif hbAuraActionDebuffWatch[button.guid][aura]~=count then
                 hbAuraActionDebuffWatch[button.guid][aura]=count
-                HealBot_ActionIcons_DebuffUpdate(button, aura, count, active, casterIsPlayer)
+                HealBot_ActionIcons_DebuffUpdate(button.guid, aura, count, active, casterIsPlayer)
             end
         end
         if tag then

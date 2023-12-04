@@ -483,22 +483,22 @@ function HealBot_Options_InitVars()
     hbActionIcons_Text[0]["ID"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["ID"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["ID"]:SetText(HEALBOT_OPTIONS_ID)
-    hbActionIcons_Text[0]["ID"]:SetPoint("TOPLEFT", 40, -40)
+    hbActionIcons_Text[0]["ID"]:SetPoint("TOPLEFT", 40, -50)
     hbActionIcons_Text[0]["Ability"]=g:CreateFontString()
     hbActionIcons_Text[0]["Ability"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["Ability"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["Ability"]:SetText(HEALBOT_OPTIONS_ABILITY)
-    hbActionIcons_Text[0]["Ability"]:SetPoint("TOPLEFT", 100, -40)
+    hbActionIcons_Text[0]["Ability"]:SetPoint("TOPLEFT", 100, -50)
     hbActionIcons_Text[0]["Target"]=g:CreateFontString()
     hbActionIcons_Text[0]["Target"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["Target"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["Target"]:SetText(HEALBOT_OPTIONS_TARGETHEALS)
-    hbActionIcons_Text[0]["Target"]:SetPoint("TOPLEFT", 250, -40)
+    hbActionIcons_Text[0]["Target"]:SetPoint("TOPLEFT", 250, -50)
     hbActionIcons_Text[0]["Highlight"]=g:CreateFontString()
     hbActionIcons_Text[0]["Highlight"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["Highlight"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["Highlight"]:SetText(HEALBOT_OPTIONS_HIGHLIGHTSTATE)
-    hbActionIcons_Text[0]["Highlight"]:SetPoint("TOPLEFT", 400, -40)
+    hbActionIcons_Text[0]["Highlight"]:SetPoint("TOPLEFT", 400, -50)
     for x=1,20 do
         hbActionIcons_Text[x]={}
         hbActionIcons_Text[x]["ID"]=g:CreateFontString()
@@ -11198,16 +11198,18 @@ function HealBot_Options_ComboClass_SetIcon(bNo, cType, cKey, info)
     else
         sText, sIcon, sType, sID=HealBot_Action_GetSpell(cType, cKey)
     end
-    if sIcon then
-        object:SetNormalTexture(sIcon)
-        object.infoType=sType
-        object.infoID=sID
-        object.info=sText
-    else
-        object:SetNormalTexture([[Interface\Addons\HealBot\Images\icon_outline]])
-        object.infoType=false
-        object.infoID=false
-        object.info=false
+    if object then
+        if sIcon then
+            object:SetNormalTexture(sIcon)
+            object.infoType=sType
+            object.infoID=sID
+            object.info=sText
+        else
+            object:SetNormalTexture([[Interface\Addons\HealBot\Images\icon_outline]])
+            object.infoType=false
+            object.infoID=false
+            object.info=false
+        end
     end
 end
 
@@ -20382,8 +20384,9 @@ function HealBot_Options_ActionIconsCountTextShow_OnClick(self)
             Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HIDECOUNTTEXT"]=false
             HealBot_ActionIcons_SelfCountTextUpdate(HealBot_Options_luVars["FramesSelFrame"])
         end
-    else
+    elseif not Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HIDECOUNTTEXT"] then
         Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HIDECOUNTTEXT"]=true
+        HealBot_ActionIcons_SelfCountTextUpdate(HealBot_Options_luVars["FramesSelFrame"])
     end
 end
 
@@ -21713,6 +21716,18 @@ function HealBot_Options_Lang(region, msgchat)
         g=_G["HealBot_Options_SkinsFrameActionIconsGeneralTxt"]
         g:SetText(HEALBOT_OPTIONS_ACTIONICONSGENOPTTEXT)
         g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_SkinsFrameActionIconsExper01Txt"]
+        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
+        g:SetTextColor(1,0.2,0.2,1)
+        g=_G["HealBot_Options_SkinsFrameActionIconsExper02Txt"]
+        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
+        g:SetTextColor(1,0.2,0.2,1)
+        g=_G["HealBot_Options_SkinsFrameActionIconsExper03Txt"]
+        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
+        g:SetTextColor(1,0.2,0.2,1)
+        g=_G["HealBot_Options_SkinsFrameActionIconsExper04Txt"]
+        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
+        g:SetTextColor(1,0.2,0.2,1)
         g=_G["HealBot_Options_SkinsFrameActionIconsIconsTxt"]
         g:SetText(HEALBOT_OPTIONS_ACTIONICONSOPTTEXT)
         g:SetTextColor(1,1,1,1)

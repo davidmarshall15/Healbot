@@ -48,12 +48,12 @@ HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=0
 
 function HealBot_Timers_TurboOn(duration)
     if HealBot_Globals.UltraPerf then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage/2)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*1.5)
     else
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage/4)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.75)
     end
-    if HealBot_Timers_luVars["nProcs"]<2 then
-        HealBot_Timers_luVars["nProcs"]=2
+    if HealBot_Timers_luVars["nProcs"]<5 then
+        HealBot_Timers_luVars["nProcs"]=5
     end
     if HealBot_Timers_luVars["turboEndTimer"]<GetTime()+duration then
         HealBot_Timers_luVars["turboEndTimer"]=GetTime()+duration
@@ -65,9 +65,12 @@ function HealBot_Timers_TurboOff()
     if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1) -- All recall require a delay
     elseif HealBot_Globals.UltraPerf then
-        HealBot_Timers_luVars["nProcs"]=2
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
     else
-        HealBot_Timers_luVars["nProcs"]=1
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
+    end
+    if HealBot_Timers_luVars["nProcs"]<2 then
+        HealBot_Timers_luVars["nProcs"]=2
     end
 end
 
@@ -311,18 +314,18 @@ end
 
 function HealBot_Timers_LastUpdate()
     HealBot_setLuVars("DoSendGuildVersion", true)
-    HealBot_Timers_Set("CHAT","SetChat",0.1)
-    HealBot_Timers_Set("AURA","PlayerCheckExtended",0.2)
-    HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.3)
-    HealBot_Timers_Set("LAST","DisableCheck",0.4)
-    HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.5)
-    HealBot_Timers_Set("LAST","UpdateAllHealth",0.6)
-    HealBot_Timers_Set("PLAYER","InvChange",0.7)
-    HealBot_Timers_Set("AURA","CheckUnits",0.8)
-	HealBot_Timers_Set("LAST","UpdateAllUnitBars",1)
-    HealBot_Timers_Set("LAST","CheckVersions",2)
-    HealBot_Timers_Set("LAST","LoadComplete",5)
-    HealBot_Timers_Set("AURA","BuffsReset",15)
+    HealBot_Timers_Set("CHAT","SetChat",0.025)
+    HealBot_Timers_Set("AURA","PlayerCheckExtended",0.05)
+    HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.075)
+    HealBot_Timers_Set("LAST","DisableCheck",0.1)
+    HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.125)
+    HealBot_Timers_Set("LAST","UpdateAllHealth",0.15)
+    HealBot_Timers_Set("PLAYER","InvChange",0.175)
+    HealBot_Timers_Set("AURA","CheckUnits",0.2)
+	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.225)
+    HealBot_Timers_Set("LAST","CheckVersions",0.25)
+    HealBot_Timers_Set("LAST","LoadComplete",0.3)
+    HealBot_Timers_Set("AURA","BuffsReset",5)
     C_Timer.After(0.5, HealBot_Timers_nextRecalcAll)
 end
 
@@ -366,51 +369,41 @@ function HealBot_Timers_InitSpells()
 end
 
 function HealBot_Timers_LastLoad()
-    HealBot_Timers_Set("LAST","MountsPetsUse",0.1)
-    HealBot_Timers_Set("PLAYER","InvReady",0.2)
-    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.3)
-    HealBot_Timers_Set("LAST","InitLoadSpells",0.4)
-    HealBot_Timers_Set("SKINS","EmergHealthCol",0.5)
-    HealBot_Timers_Set("AURA","ConfigClassHoT",0.6)
-    HealBot_Timers_Set("AURA","ConfigDebuffs",0.7)
-    HealBot_Timers_Set("LAST","CheckZone",0.8)
-    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.9)
-    HealBot_Timers_Set("AURA","BuffTagNames",1)
-    HealBot_Timers_Set("AURA","DebuffTagNames",1.1)
-    HealBot_Timers_Set("SKINS","SetAdaptive",1.2)
-    HealBot_Timers_Set("LAST","SetPlayerData",1.5)
-    HealBot_Timers_Set("INIT","LastUpdate",2)
-    HealBot_Timers_Set("INIT","HealBotLoaded",5)
+    HealBot_Timers_Set("LAST","MountsPetsUse",0.025)
+    HealBot_Timers_Set("PLAYER","InvReady",0.05)
+    HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.075)
+    HealBot_Timers_Set("LAST","InitLoadSpells",0.1)
+    HealBot_Timers_Set("SKINS","EmergHealthCol",0.125)
+    HealBot_Timers_Set("AURA","ConfigClassHoT",0.25)
+    HealBot_Timers_Set("AURA","ConfigDebuffs",0.175)
+    HealBot_Timers_Set("LAST","CheckZone",0.2)
+    HealBot_Timers_Set("LAST","UpdateButtonGlow",0.225)
+    HealBot_Timers_Set("AURA","BuffTagNames",0.25)
+    HealBot_Timers_Set("AURA","DebuffTagNames",0.275)
+    HealBot_Timers_Set("SKINS","SetAdaptive",0.3)
+    HealBot_Timers_Set("LAST","SetPlayerData",0.325)
+    HealBot_Timers_Set("INIT","LastUpdate",0.35)
+    HealBot_Timers_Set("INIT","HealBotLoaded",1)
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
     end
-    if HealBot_Globals.CrashProtTime then
-        if HealBot_Globals.CrashProtTime>0 then
-            HealBot_Globals.UseCrashProt=true
-        end
-        local z=GetMacroIndexByName("hb-CrashProt")
-        if (z or 0) > 0 then
-            DeleteMacro(z)
-        end
-        HealBot_Globals.CrashProtTime=nil
-    end
 end
 
 function HealBot_Timers_EnteringWorld2()
-    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.2)
-    HealBot_Timers_Set("LAST","CheckDC",0.4)
+    HealBot_Timers_Set("INIT","RefreshPartyNextRecalcAll",0.025)
+    HealBot_Timers_Set("LAST","CheckDC",0.05)
     if HealBot_Timers_luVars["DoneBuffReset"] then
-        HealBot_Timers_Set("INIT","LastUpdate",1)
+        HealBot_Timers_Set("INIT","LastUpdate",0.1)
     end
 end
 
 function HealBot_Timers_EnteringWorld()
-    HealBot_Timers_Set("LAST","TargetFocusUpdate",0.2)
-    HealBot_Timers_Set("LAST","ResetUnitStatus",0.4)
-    HealBot_Timers_Set("SKINS","UpdateEmergBars",0.6)
-    HealBot_Timers_Set("INIT","EnteringWorld2",0.8)
+    HealBot_Timers_Set("LAST","TargetFocusUpdate",0.025)
+    HealBot_Timers_Set("LAST","ResetUnitStatus",0.05)
+    HealBot_Timers_Set("SKINS","UpdateEmergBars",0.075)
+    HealBot_Timers_Set("INIT","EnteringWorld2",0.1)
 end
 
 function HealBot_Timer_Plugin_InitBinds()
@@ -786,6 +779,7 @@ local hbTimerFuncs={["INIT"]={
                         ["SaveActionIconsProfile"]=HealBot_Options_SaveActionIconsProfile,
                         ["ToggleOptions"]=HealBot_Options_ShowHide,
                         ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
+                        ["ActionIconsInitFrames"]=HealBot_ActionIcons_InitFrames,
                     },
                    }
 

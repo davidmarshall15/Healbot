@@ -709,7 +709,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button314"  relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="00" y="-325"/>
+                          <AbsDimension x="0" y="-20"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -735,7 +735,7 @@
                       <AbsDimension x="168" y="20"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button314"  relativePoint="TOPLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Contents_Button315"  relativePoint="TOPLEFT">
                         <Offset>
                           <AbsDimension x="0" y="-20"/>
                         </Offset>
@@ -24642,6 +24642,15 @@
                             </Anchor>
                           </Anchors>
                         </FontString>
+                        <FontString name="HealBot_Options_SkinsFrameActionIconsExper01Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-28" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
                       </Layer>
                     </Layers>
                     <Frames>
@@ -24894,6 +24903,15 @@
                             <Anchor point="TOP">
                               <Offset>
                                 <AbsDimension x="0" y="-8" />
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                        <FontString name="HealBot_Options_SkinsFrameActionIconsExper02Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="-28" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -25920,7 +25938,16 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-10" />
+                                    <AbsDimension x="0" y="-8" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="HealBot_Options_SkinsFrameActionIconsExper03Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-28" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>
@@ -26102,7 +26129,16 @@
                               <Anchors>
                                 <Anchor point="TOP">
                                   <Offset>
-                                    <AbsDimension x="0" y="-10" />
+                                    <AbsDimension x="0" y="-8" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                            <FontString name="HealBot_Options_SkinsFrameActionIconsExper04Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="-28" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>

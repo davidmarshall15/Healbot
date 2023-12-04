@@ -744,13 +744,13 @@ end
 
 local function calculateGeneralAmount(level, amount, spellPower, spModifier, healModifier)
 	local penalty = level > 20 and 1 or (1 - ((20 - level) * 0.0375))
-	if isWrath then
-		--https://wowwiki-archive.fandom.com/wiki/Downranking
-		penalty = min(1,max(0,(22+(level+5)-playerLevel)/20))
-	elseif isTBC then
-		-- TBC added another downrank penalty
-		penalty = penalty * min(1, (level + 11) / playerLevel)
-	end
+    if isWrath then
+        --https://wowwiki-archive.fandom.com/wiki/Downranking
+        penalty = min(1,max(0,(22+(level+5)-playerLevel)/20))
+    elseif isTBC then
+        -- TBC added another downrank penalty
+        penalty = penalty * min(1, (level + 11) / playerLevel)
+    end
 	spellPower = spellPower * penalty
 
 	return healModifier * (amount + (spellPower * spModifier))
@@ -843,11 +843,12 @@ if( playerClass == "DRUID" ) then
 		if isWrath then
 			hotData[Rejuvenation] = { interval = 3, levels = { 4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 60, 63, 69, 75, 80, 80 }, averages = { 40, 70, 145, 225, 305, 380, 485, 610, 760, 945, 1110, 1165, 1325, 1490, 1690, 1800 }}
 			hotData[Lifebloom] = {interval = 1, ticks = 7, coeff = 0.66626, dhCoeff = 0.517928287, levels = {64, 72, 80}, averages = {224, 287, 371}, bomb = {480, 616, 776}}
-			hotData[WildGrowth] = {interval = 1, ticks = 7, coeff = 0.8056, levels = {60, 70, 75, 80}, averages = {686, 861, 1239, 1442}}
 		else
 			hotData[Rejuvenation] = { interval = 3, levels = { 4, 10, 16, 22, 28, 34, 40, 46, 52, 58, 60, 63, 69 }, averages = { 32, 56, 116, 180, 244, 304, 388, 488, 608, 756, 888, 932, 1060 }}
 			hotData[Lifebloom] = {interval = 1, ticks = 7, coeff = 0.52, dhCoeff = 0.34335, levels = {64}, averages = {273}, bomb = {600}}
 		end
+		hotData[WildGrowth] = {interval = 1, ticks = 7, coeff = 0.8056, levels = {60, 70, 75, 80}, averages = {686, 861, 1239, 1442}}
+
 		if isWrath then
 			spellData[HealingTouch] = { levels = {1, 8, 14, 20, 26, 32, 38, 44, 50, 56, 60, 62, 69, 74, 79}, averages = {
 				{avg(37, 51), avg(37, 52), avg(38, 53), avg(39, 54), avg(40, 55)},
@@ -966,6 +967,9 @@ if( playerClass == "DRUID" ) then
 		local wgTicks = {}
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not hotData[spellName].levels[spellRank] then
+                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1087,6 +1091,9 @@ if( playerClass == "DRUID" ) then
 		-- Calcualte direct and channeled heals
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1319,6 +1326,9 @@ if( playerClass == "PALADIN" ) then
 
 		CalculateHealing = function(guid, spellID, unit)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1511,6 +1521,9 @@ if( playerClass == "PRIEST" ) then
 
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not hotData[spellName].levels[spellRank] then
+                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1569,6 +1582,9 @@ if( playerClass == "PRIEST" ) then
 
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1731,6 +1747,9 @@ if( playerClass == "SHAMAN" ) then
 
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not hotData[spellName].levels[spellRank] then
+                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1767,6 +1786,9 @@ if( playerClass == "SHAMAN" ) then
 
 		CalculateHealing = function(guid, spellID, unit)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
 			local healModifier, spModifier = playerHealModifier, 1
@@ -1865,6 +1887,9 @@ if( playerClass == "HUNTER" ) then
 
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local amount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 
 			if( equippedSetCache["Giantstalker"] >= 3 ) then amount = amount * 1.1 end
@@ -1874,6 +1899,9 @@ if( playerClass == "HUNTER" ) then
 
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
+            if not spellData[spellName].levels[spellRank] then
+                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+            end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 
 			if( equippedSetCache["Giantstalker"] >= 3 ) then healAmount = healAmount * 1.1 end
@@ -3263,7 +3291,7 @@ function HealComm:OnInitialize()
 
 		CalculateHealing = function(guid, spellID, unit)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
-
+            if not spellData[spellName].averages[spellRank] and spellData[spellName].averages then spellRank=#spellData[spellName].averages end
 			if spellName == FirstAid then
 				local healAmount =  spellData[spellName].averages[spellRank]
 				if not healAmount then return end

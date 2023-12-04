@@ -283,7 +283,7 @@ function HealBot_Data_InitVars()
         PluginManaWatch=true,
         FrameStrata="LOW",
         CompressExport=true,
-        AllowPlayerRoles=false,
+        AllowPlayerRoles=true,
         VehicleFontSizeReduction=4,
         UseCrashProt=false,
         NoRanks=false,
