@@ -24919,6 +24919,53 @@
                       </Layer>
                     </Layers>
                     <Frames>
+                      <Button name="HealBot_Options_SkinsFrameActionIconsListPageBack" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PREV">
+                        <Size>
+                          <AbsDimension x="50" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="-64" y="-270"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_PageActionIcons" text="HEALBOT_OPTIONS_PAGE" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="62" y="-5" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                           </Layer>
+                         </Layers>
+                        <Scripts>
+                          <OnClick>HealBot_Options_UpdateActionIconsListStart(1)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSPAGE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSPAGE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
+                      <Button name="HealBot_Options_SkinsFrameActionIconsListPageForward" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_NEXT">
+                        <Size>
+                          <AbsDimension x="50" y="25"/>
+                        </Size>
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="64" y="-270"/>
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_UpdateActionIconsListStart(11)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("ACTIONICONSPAGE",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("ACTIONICONSPAGE",false)</OnLeave>
+                        </Scripts>
+                      </Button>
                       <Slider name="HealBot_Options_ActionIconsHighlight" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="495" y="18" />
@@ -24926,7 +24973,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-305"/>
+                              <AbsDimension x="0" y="-340"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -24943,7 +24990,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_Options_ActionIconsHighlight" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-55"/>
+                              <AbsDimension x="0" y="-40"/>
                             </Offset>
                           </Anchor>
                         </Anchors>

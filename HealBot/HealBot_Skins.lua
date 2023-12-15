@@ -1554,12 +1554,9 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.AuxBar[SkinName][g] then Healbot_Config_Skins.AuxBar[SkinName][g]={} end
         if not Healbot_Config_Skins.AuxBarText[SkinName][g] then Healbot_Config_Skins.AuxBarText[SkinName][g]={} end
     end
-    for g=1,10 do
+    for g=1,20 do
         if not Healbot_Config_Skins.ActionIconsData[SkinName][g] then Healbot_Config_Skins.ActionIconsData[SkinName][g]={} end        
     end
-        for g=11,20 do
-            if Healbot_Config_Skins.ActionIconsData[SkinName][g] then Healbot_Config_Skins.ActionIconsData[SkinName][g]=nil end        
-        end
     for gl=1,10 do
         if not Healbot_Config_Skins.HeadText[SkinName][gl] then Healbot_Config_Skins.HeadText[SkinName][gl]={} end
         if not Healbot_Config_Skins.HeadBar[SkinName][gl] then Healbot_Config_Skins.HeadBar[SkinName][gl]={} end
@@ -1593,8 +1590,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.Indicators[SkinName][gl] then Healbot_Config_Skins.Indicators[SkinName][gl]={} end
         if not Healbot_Config_Skins.Emerg[SkinName][gl] then Healbot_Config_Skins.Emerg[SkinName][gl]={} end
         if not Healbot_Config_Skins.ActionIcons[SkinName][gl] then Healbot_Config_Skins.ActionIcons[SkinName][gl]={} end
-        if not Healbot_Config_Skins.ActionIconsData[SkinName][gl] then Healbot_Config_Skins.ActionIconsData[SkinName][gl]={} end
-        for g=1,10 do
+        for g=1,20 do
             if not Healbot_Config_Skins.ActionIconsData[SkinName][g][gl] then Healbot_Config_Skins.ActionIconsData[SkinName][g][gl]={} end
         end
     end

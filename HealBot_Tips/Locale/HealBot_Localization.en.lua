@@ -1216,6 +1216,7 @@ function HealBot_Lang_Options_enALL()
                                ["ACTIONICONSCOPYFROM"]="Copy Action Icon configuration from another skin.\n--\n".._G["ORANGE_FONT_COLOR_CODE"].."WARNING: This will overwrite the current skins Action Icon settings.",
                         -- Skins Frames ActionIcons Icons tab
                                ["ACTIONICONSICONS"]="Show the Skins Frames Action Icons tab.",
+                               ["ACTIONICONSPAGE"]="Page through the Action Icons.",
                                ["ACTIONICONSCONFIG"]="Configure icons.",
                                ["ACTIONICONSCLOSE"]="Close configure icons.",
                                ["ACTIONICONSICONID"]="Select the icon to configure.",

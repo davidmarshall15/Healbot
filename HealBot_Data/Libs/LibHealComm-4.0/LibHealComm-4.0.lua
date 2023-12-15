@@ -968,7 +968,7 @@ if( playerClass == "DRUID" ) then
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not hotData[spellName].levels[spellRank] then
-                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+                if hotData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1092,7 +1092,7 @@ if( playerClass == "DRUID" ) then
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1327,7 +1327,7 @@ if( playerClass == "PALADIN" ) then
 		CalculateHealing = function(guid, spellID, unit)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1522,7 +1522,7 @@ if( playerClass == "PRIEST" ) then
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not hotData[spellName].levels[spellRank] then
-                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+                if hotData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1583,7 +1583,7 @@ if( playerClass == "PRIEST" ) then
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1748,7 +1748,7 @@ if( playerClass == "SHAMAN" ) then
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not hotData[spellName].levels[spellRank] then
-                if hotData[spellName].levels then spellRank=#hotData[spellName].levels else return end
+                if hotData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1787,7 +1787,7 @@ if( playerClass == "SHAMAN" ) then
 		CalculateHealing = function(guid, spellID, unit)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 			local spellPower = GetSpellBonusHealing()
@@ -1888,7 +1888,7 @@ if( playerClass == "HUNTER" ) then
 		CalculateHotHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local amount = getBaseHealAmount(hotData, spellName, spellID, spellRank)
 
@@ -1900,7 +1900,7 @@ if( playerClass == "HUNTER" ) then
 		CalculateHealing = function(guid, spellID)
 			local spellName, spellRank = GetSpellInfo(spellID), SpellIDToRank[spellID]
             if not spellData[spellName].levels[spellRank] then
-                if spellData[spellName].levels then spellRank=#spellData[spellName].levels else return end
+                if spellData[spellName] then spellRank=1 else return end
             end
 			local healAmount = getBaseHealAmount(spellData, spellName, spellID, spellRank)
 

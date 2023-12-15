@@ -2813,7 +2813,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
         for gl=1,10 do
             hbCurrentFrame=Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["FRAME"]
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["STATE"] then
-                vActiveFrames[gl]=true
+                vActiveFrames[hbCurrentFrame]=true
                 for x,_ in pairs(order) do
                     order[x]=nil;
                 end
@@ -2849,9 +2849,6 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 end
             end
         end
-    end
-    for gl=1,5 do
-        HealBot_ActionIcons_UpdateActiveFrame(gl, vActiveFrames[gl])
     end
     HealBot_Panel_SetupBars(preCombat)
     
@@ -2922,6 +2919,9 @@ function HealBot_Panel_PlayersChanged(preCombat)
                 HealBot_Action_MarkDeleteButton(vFocusButton)
             end
         end
+    end
+    for gl=1,5 do
+        HealBot_ActionIcons_UpdateActiveFrame(gl, vActiveFrames[gl])
     end
         
 end

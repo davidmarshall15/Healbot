@@ -483,22 +483,17 @@ function HealBot_Options_InitVars()
     hbActionIcons_Text[0]["ID"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["ID"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["ID"]:SetText(HEALBOT_OPTIONS_ID)
-    hbActionIcons_Text[0]["ID"]:SetPoint("TOPLEFT", 40, -50)
+    hbActionIcons_Text[0]["ID"]:SetPoint("TOPLEFT", 90, -50)
     hbActionIcons_Text[0]["Ability"]=g:CreateFontString()
     hbActionIcons_Text[0]["Ability"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["Ability"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["Ability"]:SetText(HEALBOT_OPTIONS_ABILITY)
-    hbActionIcons_Text[0]["Ability"]:SetPoint("TOPLEFT", 100, -50)
+    hbActionIcons_Text[0]["Ability"]:SetPoint("TOPLEFT", 125, -50)
     hbActionIcons_Text[0]["Target"]=g:CreateFontString()
     hbActionIcons_Text[0]["Target"]:SetFontObject(GameFontNormal)
     hbActionIcons_Text[0]["Target"]:SetTextColor(1,1,1,1)
     hbActionIcons_Text[0]["Target"]:SetText(HEALBOT_OPTIONS_TARGETHEALS)
-    hbActionIcons_Text[0]["Target"]:SetPoint("TOPLEFT", 250, -50)
-    hbActionIcons_Text[0]["Highlight"]=g:CreateFontString()
-    hbActionIcons_Text[0]["Highlight"]:SetFontObject(GameFontNormal)
-    hbActionIcons_Text[0]["Highlight"]:SetTextColor(1,1,1,1)
-    hbActionIcons_Text[0]["Highlight"]:SetText(HEALBOT_OPTIONS_HIGHLIGHTSTATE)
-    hbActionIcons_Text[0]["Highlight"]:SetPoint("TOPLEFT", 400, -50)
+    hbActionIcons_Text[0]["Target"]:SetPoint("TOPLEFT", 375, -50)
     for x=1,20 do
         hbActionIcons_Text[x]={}
         hbActionIcons_Text[x]["ID"]=g:CreateFontString()
@@ -507,18 +502,22 @@ function HealBot_Options_InitVars()
         hbActionIcons_Text[x]["Ability"]:SetFontObject(GameFontNormal)
         hbActionIcons_Text[x]["Target"]=g:CreateFontString()
         hbActionIcons_Text[x]["Target"]:SetFontObject(GameFontNormal)
-        hbActionIcons_Text[x]["Highlight"]=g:CreateFontString()
-        hbActionIcons_Text[x]["Highlight"]:SetFontObject(GameFontNormal)
     end
     hbActionIcons_Text[1]["ID"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["ID"], "BOTTOMLEFT", 0, -10)
     hbActionIcons_Text[1]["Ability"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["Ability"], "BOTTOMLEFT", 0, -10)
     hbActionIcons_Text[1]["Target"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["Target"], "BOTTOMLEFT", 0, -10)
-    hbActionIcons_Text[1]["Highlight"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["Highlight"], "BOTTOMLEFT", 0, -10)
-    for x=2,20 do
+    for x=2,10 do
         hbActionIcons_Text[x]["ID"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["ID"], "TOPLEFT", 0, -18)
         hbActionIcons_Text[x]["Ability"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["Ability"], "TOPLEFT", 0, -18)
         hbActionIcons_Text[x]["Target"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["Target"], "TOPLEFT", 0, -18)
-        hbActionIcons_Text[x]["Highlight"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["Highlight"], "TOPLEFT", 0, -18)
+    end
+    hbActionIcons_Text[11]["ID"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["ID"], "BOTTOMLEFT", 0, -10)
+    hbActionIcons_Text[11]["Ability"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["Ability"], "BOTTOMLEFT", 0, -10)
+    hbActionIcons_Text[11]["Target"]:SetPoint("TOPLEFT", hbActionIcons_Text[0]["Target"], "BOTTOMLEFT", 0, -10)
+    for x=12,20 do
+        hbActionIcons_Text[x]["ID"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["ID"], "TOPLEFT", 0, -18)
+        hbActionIcons_Text[x]["Ability"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["Ability"], "TOPLEFT", 0, -18)
+        hbActionIcons_Text[x]["Target"]:SetPoint("TOPLEFT", hbActionIcons_Text[x-1]["Target"], "TOPLEFT", 0, -18)
     end
 end
 
@@ -1825,6 +1824,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HBC_FROST_RESISTANCE_AURA,
             HBC_SHADOW_RESISTANCE_AURA,
             HEALBOT_BEACON_OF_LIGHT,
+            HEALBOT_BEACON_OF_FAITH,
             HEALBOT_BEACON_OF_VIRTUE,
             HEALBOT_SEAL_OF_RIGHTEOUSNESS,
             HEALBOT_SEAL_OF_INSIGHT,
@@ -9778,11 +9778,30 @@ function HealBot_Options_SaveActionIconsProfile()
     end
 end
 
+function HealBot_Options_CheckActionIconsProfile()
+    if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][20][10] then
+        for g=1,20 do
+            if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g] then
+                Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g]={}
+            end
+        end
+        for gl=1,10 do
+            for g=1,20 do
+                if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g][gl] then
+                    Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g][gl]={}
+                    HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+                end
+            end
+        end
+    end
+end
+
 function HealBot_Options_CopyActionIconsProfile(skinname)
     if HealBot_Data["PGUID"] then
         local spec=HealBot_Action_GetActionIconSpecWithSkin(skinname)
         if HealBot_Config_Spells.ActionIconsData and HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]] and HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]][spec] then
             Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]][spec])
+            HealBot_Options_CheckActionIconsProfile()
         end
         if HealBot_Config_Spells.ActionIcons and HealBot_Config_Spells.ActionIcons[HealBot_Data["PGUID"]] and HealBot_Config_Spells.ActionIcons[HealBot_Data["PGUID"]][spec] then
             Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_Config_Spells.ActionIcons[HealBot_Data["PGUID"]][spec])
@@ -14794,11 +14813,41 @@ function HealBot_Options_PagePrevCBuff()
     HealBot_Timers_Set("AURA","CustomBuffList")
 end
 
+HealBot_Options_luVars["ActionIconsListStart"]=1
+function HealBot_Options_SetSkinsFrameActionIconsListPageButtons()
+    if HealBot_Options_luVars["ActionIconsListStart"]>1 then
+        HealBot_Options_SkinsFrameActionIconsListPageBack:Enable()
+        HealBot_Options_SkinsFrameActionIconsListPageForward:Disable()
+        HealBot_Options_SetLabel("HealBot_Options_PageActionIcons",HEALBOT_OPTIONS_PAGE.." 2")
+    else
+        HealBot_Options_SkinsFrameActionIconsListPageBack:Disable()
+        HealBot_Options_SkinsFrameActionIconsListPageForward:Enable()
+        HealBot_Options_SetLabel("HealBot_Options_PageActionIcons",HEALBOT_OPTIONS_PAGE.." 1")
+    end
+end
+
+function HealBot_Options_UpdateActionIconsListStart(v)
+    if HealBot_Options_luVars["ActionIconsListStart"]~=v then
+        for x=HealBot_Options_luVars["ActionIconsListStart"],HealBot_Options_luVars["ActionIconsListStart"]+9 do
+            hbActionIcons_Text[x]["ID"]:SetText("")
+            hbActionIcons_Text[x]["Ability"]:SetText("")
+            hbActionIcons_Text[x]["Target"]:SetText("")
+        end
+        HealBot_Options_luVars["ActionIconsListStart"]=v
+        HealBot_Options_SetSkinsFrameActionIconsListPageButtons()
+        HealBot_Options_FramesActionIconsSetLists()
+    end
+end
+
 function HealBot_Options_SetActionIconsList()
     local hbAbility=HEALBOT_WORDS_UNSET
     local hbTarget=HEALBOT_WORDS_UNSET
     HealBot_ActionIcons_ValidateTarget(HealBot_Options_luVars["FramesSelFrame"])
-    for x=1,HealBot_ActionIcons_retLuVars("MaxIcons") do
+    for x=HealBot_Options_luVars["ActionIconsListStart"],HealBot_Options_luVars["ActionIconsListStart"]+9 do
+        local t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin]
+        t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x]
+        t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]
+        t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Ability"]
         hbAbility=HealBot_ActionIcons_GetSpell(Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Ability"])
         if not hbAbility then hbAbility=HEALBOT_WORDS_UNSET end
         hbTarget=HealBot_ActionIcons_ReturnTarget(HealBot_Options_luVars["FramesSelFrame"], x) or Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Target"] or HEALBOT_WORDS_UNSET
@@ -14811,14 +14860,7 @@ function HealBot_Options_SetActionIconsList()
             hbActionIcons_Text[x]["ID"]:SetTextColor(0.5,0.5,0.5,0.7)
             hbActionIcons_Text[x]["Ability"]:SetTextColor(0.5,0.5,0.5,0.7)
             hbActionIcons_Text[x]["Target"]:SetTextColor(0.5,0.5,0.5,0.7)
-            hbActionIcons_Text[x]["Highlight"]:SetTextColor(0.5,0.5,0.5,0.7)
-            hbActionIcons_Text[x]["Highlight"]:SetText(HEALBOT_WORDS_UNSET)
         else
-            if (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["HighlightFilter"] or 1)==1 then
-                hbActionIcons_Text[x]["Highlight"]:SetText(HEALBOT_OPTIONS_HIGHLIGHTFILTER01S)
-            else
-                hbActionIcons_Text[x]["Highlight"]:SetText(HEALBOT_OPTIONS_HIGHLIGHTFILTER02S)
-            end
             hbActionIcons_Text[x]["ID"]:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
                                                      OptionThemes[HealBot_Globals.OptionsTheme]["G"],
                                                      OptionThemes[HealBot_Globals.OptionsTheme]["B"],1)
@@ -14838,9 +14880,6 @@ function HealBot_Options_SetActionIconsList()
             else
                 hbActionIcons_Text[x]["Target"]:SetTextColor(0.58,0.58,0.58,0.9)
             end
-            hbActionIcons_Text[x]["Highlight"]:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
-                                                             OptionThemes[HealBot_Globals.OptionsTheme]["G"],
-                                                             OptionThemes[HealBot_Globals.OptionsTheme]["B"],1)
         end
     end
 end
@@ -24124,6 +24163,7 @@ function HealBot_Options_SkinsFramesActionIconsIconsTab(tab)
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_ActionIconsFade,HEALBOT_OPTIONS_FADEDOPACITY,0,1,0.01,5)
         HealBot_Options_ActionIconsFade:SetValue(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FADE"])
         HealBot_Options_SetText(HealBot_Options_ActionIconsFade,HEALBOT_OPTIONS_FADEDOPACITY..": "..Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FADE"])
+        HealBot_Options_SetSkinsFrameActionIconsListPageButtons()
         HealBot_Options_luVars["SetActionIconsList"]=true
     end
     HealBot_Options_FramesActionIconsLists()

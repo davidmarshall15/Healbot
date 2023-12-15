@@ -1379,7 +1379,7 @@ end
 
 function HealBot_Aux_UpdateResBar(button, text, startTime, endTime, CastIsChan)
     for id in pairs(hbAuxResAssigned[button.frame]) do
-        if HealBot_Action_IsUnitDead(button) then
+        if button.status.isdead then
             if startTime then
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
                     button.aux[id]["R"]=0.1 --Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCR"]-0.1

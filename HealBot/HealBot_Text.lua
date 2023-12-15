@@ -512,7 +512,7 @@ local HealBot_Text_StateColoursFuncs={[1]=HealBot_Text_ColoursHealth,
                                       [5]=HealBot_Text_ColoursClassHlthMix,
                                       [6]=HealBot_Text_ColoursRoleHlthMix}
 function HealBot_Text_StateColours(button)
-    if HealBot_Action_IsUnitDead(button) then
+    if button.status.isdead then
         tr,tg,tb=HealBot_Text_DeadColours(button)
     elseif button.status.summons and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSUM"] then
         tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSCR"]
@@ -526,7 +526,7 @@ function HealBot_Text_StateColours(button)
 end
 
 function HealBot_Text_TextNameColours(button)
-    if HealBot_Action_IsUnitDead(button) then
+    if button.status.isdead then
         tr,tg,tb=HealBot_Text_DeadColours(button)
     elseif button.status.summons and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SUM"] then
         tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NSCR"]
@@ -1468,7 +1468,7 @@ function HealBot_Text_UpdateText(button)
             HealBot_Text_UpdateHealthColour(button)
             button.gref.txt["text2"]:SetText(button.text.healthcomplete)
         elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGSTATEONLYTIP"] then
-            if HealBot_Action_IsUnitDead(button) then
+            if button.status.isdead then
                 if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["NAMEONBAR"] then
                     button.text.hr, button.text.hg, button.text.hb=0.4, 0.4, 0.4
                 else

@@ -23,6 +23,7 @@ local hbManaGUID={}
 local hbAggroGUID={}
 local hbFallGUID={}
 local hbSwimGUID={}
+local hbIconKey={}
 local activeFrames={}
 local activeFramesIdx={}
 local HealBot_ActionIcons_luVars={}
@@ -35,7 +36,7 @@ HealBot_ActionIcons_luVars["inGroup"]=false
 HealBot_ActionIcons_luVars["inInst"]=false
 HealBot_ActionIcons_luVars["HazardFreq"]=0.3
 HealBot_ActionIcons_luVars["HazardMinAlpha"]=0.25
-HealBot_ActionIcons_luVars["MaxIcons"]=10
+HealBot_ActionIcons_luVars["MaxIcons"]=20
 HealBot_ActionIcons_luVars["TankUnit"]="x"
 
 function HealBot_ActionIcons_setLuVars(vName, vValue)
@@ -52,6 +53,7 @@ function HealBot_ActionIcons_LoadSpec(updateAll)
     local spec=HealBot_Action_GetActionIconSpec()
     if HealBot_Config_Spells.ActionIconsData and HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]] and HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]][spec] then
         Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin]=HealBot_Options_copyTable(HealBot_Config_Spells.ActionIconsData[HealBot_Data["PGUID"]][spec])
+        HealBot_Options_CheckActionIconsProfile()
     else
         HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
     end
@@ -1219,8 +1221,15 @@ function HealBot_ActionIcons_CheckGUID(guid)
       --HealBot_setCall("HealBot_ActionIcons_CheckGUID")
 end
 
-function HealBot_ActionIcons_SetTarget(frame, id, target, name, null)
-    --if null then HealBot_ActionIcons_Debug(frame, id, "SetTarget null="..null) end
+function HealBot_ActionIcons_PlayerDied(guid)
+   -- for uid,_ in pairs(hbIconKey[guid]) do
+   --     if actionIcons[hbIconUID[uid]["Frame"]][hbIconUID[uid]["ID"]].highlight then
+   --         HealBot_ActionIcons_FadeIcon(hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
+   --     end
+   -- end
+end
+
+function HealBot_ActionIcons_SetTarget(frame, id, target, name)
     if not target or not name then
         --HealBot_ActionIcons_Debug(frame, id, "SetTarget NULL t="..(target or "nil").." n="..(name or "nil"))
         if actionIcons[frame][id].guid then HealBot_ActionIcons_CheckGUID(actionIcons[frame][id].guid) end
@@ -1231,6 +1240,9 @@ function HealBot_ActionIcons_SetTarget(frame, id, target, name, null)
             HealBot_ActionIcons_ConditionDel(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertFilter"])
             actionIcons[frame][id].filter=1
         end
+        --if actionIcons[frame][id].guid and hbIconKey[actionIcons[frame][id].guid][actionIcons[frame][id].uid] then
+        --    hbIconKey[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=nil
+        --end
         actionIcons[frame][id].guid=false
         actionIcons[frame][id].isSelf=false
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
@@ -1241,6 +1253,8 @@ function HealBot_ActionIcons_SetTarget(frame, id, target, name, null)
         actionIcons[frame][id].target=target
         actionIcons[frame][id].guid=UnitGUID(target)
         actionIcons[frame][id].isSelf=UnitIsUnit(target, "player")
+        --if not hbIconKey[actionIcons[frame][id].guid] then hbIconKey[actionIcons[frame][id].guid]={} end
+        --hbIconKey[actionIcons[frame][id].guid][actionIcons[frame][id].uid]=true
         HealBot_ActionIcons_ConditionCheck(frame, id)
         HealBot_ActionIconsInRange(actionIcons[frame][id].guid, true)
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
@@ -1264,9 +1278,9 @@ function HealBot_ActionIcons_UpdateActiveFrame(frame, active)
     if activeFrames[frame]~=active then
         activeFrames[frame]=active
         HealBot_ActionIcons_UpdateActiveFrameIdx()
-        HealBot_ActionIcons_ValidateTarget(frame)
+        C_Timer.After(frame/40, function() HealBot_ActionIcons_ValidateTarget(frame) end)
         if active then
-            HealBot_ActionIcons_ValidateAbilityFrame(frame)
+            C_Timer.After(frame/40, function() HealBot_ActionIcons_ValidateAbilityFrame(frame) end)
         end
     end
       --HealBot_setCall("HealBot_ActionIcons_UpdateActiveFrame")

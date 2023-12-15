@@ -2350,7 +2350,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                     end
                 end
             end
-            if curBuffName and (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[button.group]) then
+            if curBuffName and (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[button.group]) then --and (button.isplayer or (HealBot_Config_Buffs.IncEnemyNPCs or UnitIsFriend(button.unit, "player"))) then
                 if prevMissingbuff~=button.aura.buff.missingbuff or HealBot_Aura_luVars["updateAll"] then
                     button.aura.buff.name="needUpdate"
                 end
@@ -2525,7 +2525,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                     button.aura.debuff.name="needUpdate"
                     button.aura.debuff.type=HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"]
                 end
-                if not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group] then 
+                if (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group]) then --and (button.isplayer or (HealBot_Config_Cures.IncEnemyNPCs or UnitIsFriend(button.unit, "player")) then
                     HealBot_Aura_DebuffWarnings(button, HealBot_AuraDebuffCache[button.aura.debuff.id]["name"], false, debuffIconIndex)
                 else
                     HealBot_Aura_ClearDebuff(button)

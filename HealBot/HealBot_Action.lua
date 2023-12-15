@@ -2055,6 +2055,11 @@ end
 function HealBot_Action_setState(button, state)
     if button.status.current~=state then
         button.status.current=state
+        if state>HealBot_Unit_Status["PLUGINBARCOL"] and state<HealBot_Unit_Status["DC"] then
+            button.status.isdead=true
+        else
+            button.status.isdead=false
+        end
         if state>HealBot_Unit_Status["PLUGINBARCOL"] then 
             if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
             if HealBot_Hazard_Buttons[button.id] then 
@@ -2356,7 +2361,7 @@ end
 
 function HealBot_Action_UpdateTheDeadButton(button)
     if button.frame<10 then
-        if HealBot_Action_IsUnitDead(button) then
+        if button.status.isdead then
             if not HealBot_IsUnitDead(button) then
                 HealBot_Action_UpdateUnitNotDead(button)
             elseif not ripHadResEnd[button.guid] and (UnitHasIncomingResurrection(button.unit) or HealBot_MassRes()) then
@@ -2392,6 +2397,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 HealBot_PluginUpdate_TimeToLive[button.guid]=false
                 HealBot_Plugin_TimeToLive_UnitUpdate(button, true)
             end
+            -- HealBot_ActionIcons_PlayerDied(button.guid)
             HealBot_Action_setState(button, HealBot_Unit_Status["DEAD"])
             button.status.rangespellspecial=HealBot_Action_retResSpell(button)
             HealBot_Action_SetRangeSpell(button, true)
@@ -2446,7 +2452,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
         elseif button.status.resstart>0 then
             HealBot_Action_UpdateUnitNotDead(button)
         end
-    elseif HealBot_Action_IsUnitDead(button) then
+    elseif button.status.isdead then
         if not HealBot_IsUnitDead(button) then
             HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"])
             HealBot_Check_UnitAura(button)
@@ -2472,12 +2478,10 @@ end
 
 function HealBot_Action_IsUnitDead(button, guid)
     if button then
-        if button.status.current>HealBot_Unit_Status["PLUGINBARCOL"] and button.status.current<HealBot_Unit_Status["DC"] then
-            return true
-        end
+        return button.status.isdead
     else
         local xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
-        if (xButton and HealBot_Action_IsUnitDead(xButton)) or (pButton and HealBot_Action_IsUnitDead(pButton)) then
+        if (xButton and xButton.status.isdead) or (pButton and pButton.status.isdead) then
             return true
         end
     end
@@ -3207,7 +3211,7 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                     ["PLAYER_FLAGS_CHANGED"]=HealBot_OnEvent_UnitFlagsChanged,
                     ["UNIT_FLAGS"]=HealBot_OnEvent_UnitFlagsChanged,
-                    ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_PortraitUpdate,
+                    ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_ModelUpdate,
                     ["UNIT_MODEL_CHANGED"]=HealBot_OnEvent_ModelUpdate,
                     ["UNIT_AREA_CHANGED"]=HealBot_OnEvent_ZoneUpdate,
                    }
@@ -3825,6 +3829,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.dirarrowcords=0 
     button.status.dirarrowshown=0 
     button.status.castend=-1
+    button.status.isdead=false
     button.status.resstart=0
     button.status.range=1
     button.status.rangespell=HealBot_RangeSpells["HEAL"]
@@ -5566,9 +5571,7 @@ function HealBot_Action_SetRangeSpell(button, checkSoon)
     else
         button.status.rangespell=HealBot_RangeSpellsKeysFriendly[HealBot_Action_luVars["CurrentModKey"]]
     end
-    if prevRangeSpell~=button.status.rangespell then
-        HealBot_UpdateUnitRange(button)
-    elseif checkSoon then
+    if prevRangeSpell~=button.status.rangespell or checkSoon then
         button.status.rangenextcheck=0
     end
 end
@@ -5750,6 +5753,7 @@ function HealBot_Action_ClearTestIcon(button, id)
     button.gref.icon[id]:SetAlpha(0)
     button.gref.txt.expire[id]:SetText(" ")
     button.gref.txt.count[id]:SetText(" ")
+    button.gref.iconf[id]:SetFrameLevel(0)
 end
 
 local hbTestButtonUpdateQueue={}
@@ -7344,7 +7348,7 @@ function HealBot_Action_AlwaysEnabled(hbGUID)
 end
 
 local function HealBot_Action_IsPlayersDead(button)
-    if HealBot_Action_IsUnitDead(button) and button.status.range>-1 then
+    if button.status.isdead and button.status.range>-1 then
         return true
     else
         return false
@@ -7399,10 +7403,10 @@ end
 
 local scSpell=false
 function HealBot_Action_SmartCast(button)
-    if button.player and HealBot_Action_IsUnitDead(button) then return nil; end
+    if button.player and button.status.isdead then return nil; end
     scSpell=false
  
-    if HealBot_Globals.SmartCastRes and HealBot_Action_IsUnitDead(button) then
+    if HealBot_Globals.SmartCastRes and button.status.isdead then
         scSpell=HealBot_Action_retResSpell(button)
         --HealBot_AddDebug("Res spell="..(scSpell or "nil"),"SmartCast",true)
     elseif HealBot_Aura_IsCureSpell(button) and HealBot_Globals.SmartCastDebuff then
