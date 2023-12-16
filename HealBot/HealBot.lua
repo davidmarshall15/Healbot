@@ -85,7 +85,7 @@ HealBot_luVars["pluginThreat"]=false
 HealBot_luVars["pluginTimeToDie"]=false
 HealBot_luVars["mapAreaID"]=0
 HealBot_luVars["slowUpdateID"]=1
-HealBot_luVars["UpdateMaxUnits"]=5
+HealBot_luVars["UpdateMaxUnits"]=4
 HealBot_luVars["UpdateNumUnits"]=1
 HealBot_luVars["NumUnitsInQueue"]=0
 HealBot_luVars["UpdateID"]=1
@@ -2951,18 +2951,18 @@ end
 
 function HealBot_UpdateMaxUnitsAdj()
     if HealBot_Globals.UltraPerf then
-        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.4)+5
+        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.3)+3
     else
-        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.2)+5
+        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.15)+3
     end
     if HealBot_luVars["UpdateMaxUnits"]<2 then
         HealBot_luVars["UpdateMaxUnits"]=2
     end
     HealBot_UpdateNumUnits()
     if HealBot_Globals.UltraPerf then
-        HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*0.8)+5
+        HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*0.8)+4
     else
-        HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*0.4)+5
+        HealBot_luVars["MaxFastQueue"]=ceil(HealBot_Globals.CPUUsage*0.4)+4
     end
     HealBot_AddDebug("UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"], "Perf", true)
     HealBot_AddDebug("MaxFastQueue="..HealBot_luVars["MaxFastQueue"], "Perf", true)
@@ -2975,7 +2975,7 @@ function HealBot_UpdateNumUnits()
         HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.1)
     end
     if HealBot_luVars["NumUnitsInQueue"]>10 then
-        HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+5
+        HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+4
     elseif HealBot_luVars["NumUnitsInQueue"]>7 then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+2
     elseif HealBot_luVars["NumUnitsInQueue"]>4 then

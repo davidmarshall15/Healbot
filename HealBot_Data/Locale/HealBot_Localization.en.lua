@@ -228,6 +228,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
     HEALBOT_OPTIONS_RAIDGROUPWARN           = "Raid filter";
+    HEALBOT_OPTIONS_NPCGROUPWARN            = "NPC filter";
+    HEALBOT_OPTIONS_NPCGROUPWARNFRIEND      = "Include friendly npc's"
+    HEALBOT_OPTIONS_NPCGROUPWARNENEMY       = "Include enemy npc's"
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
     HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"

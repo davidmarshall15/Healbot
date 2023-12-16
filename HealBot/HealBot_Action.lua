@@ -2397,7 +2397,6 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 HealBot_PluginUpdate_TimeToLive[button.guid]=false
                 HealBot_Plugin_TimeToLive_UnitUpdate(button, true)
             end
-            -- HealBot_ActionIcons_PlayerDied(button.guid)
             HealBot_Action_setState(button, HealBot_Unit_Status["DEAD"])
             button.status.rangespellspecial=HealBot_Action_retResSpell(button)
             HealBot_Action_SetRangeSpell(button, true)
@@ -2423,6 +2422,9 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_Action_luVars["TimerDelay"]=HealBot_Action_luVars["TimerDelay"]+0.05
                     HealBot_Timers_Set("LAST","PluginManaWatchDead",HealBot_Action_luVars["TimerDelay"])
                 end
+                HealBot_ActionIcons_PlayerDied()
+            else
+                HealBot_ActionIcons_UnitDied(button.guid)
             end
             button.aura.buff.nextcheck=false
             button.text.nameupdate=true

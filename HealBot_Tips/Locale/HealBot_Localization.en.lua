@@ -603,6 +603,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSWARNINGSOUNDRANGE"]="Range",
                                  ["DEBUFFSWARNINGSOUNDSELECT"]=HEALBOT_OPTIONS_SOUND,
                                  ["DEBUFFSWARNINGSOUNDPREVIEW"]=HEALBOT_OPTIONS_SOUND,
+                                 ["DEBUFFSWARNNPCFILTER"]=HEALBOT_OPTIONS_NPCGROUPWARN,
                                  ["DEBUFFSWARNINGGROUPFILTER"]=HEALBOT_OPTIONS_RAIDGROUPWARN,
                         -- Buffs General tab
                                  ["BUFFSGENERAL"]=HEALBOT_OPTIONS_TAB_GENERALBUFFS,
@@ -1328,6 +1329,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSWARNINGSOUNDRANGE"]="Set the range when the sound is played.",
                                ["DEBUFFSWARNINGSOUNDSELECT"]="Select the sound to play.",
                                ["DEBUFFSWARNINGSOUNDPREVIEW"]="Test playing the sound.",
+                               ["DEBUFFSWARNNPCFILTER"]="Select the Non-Player Characters to receive warnings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This applies to all NPC frames.",
                                ["DEBUFFSWARNINGGROUPFILTER"]="Select the groups to receive warnings.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This applies to all frames when in a Raid.",
                         -- Buffs General tab
                                ["BUFFSGENERAL"]="Show the general buffs tab.",

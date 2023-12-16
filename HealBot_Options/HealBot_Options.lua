@@ -6798,6 +6798,38 @@ function HealBot_Options_OverrideEFGroup_OnClick(self,id)
     end
 end
 
+function HealBot_Options_CuresWarnNPCFriendly_OnClick(self)
+    if HealBot_Config_Cures.IncFriendlyNPCs~=self:GetChecked() then
+        HealBot_Config_Cures.IncFriendlyNPCs = self:GetChecked()
+        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+        HealBot_Timers_Set("AURA","CheckUnits")
+    end
+end
+
+function HealBot_Options_CuresWarnNPCEnemy_OnClick(self)
+    if HealBot_Config_Cures.IncEnemyNPCs~=self:GetChecked() then
+        HealBot_Config_Cures.IncEnemyNPCs = self:GetChecked()
+        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+        HealBot_Timers_Set("AURA","CheckUnits")
+    end
+end
+
+function HealBot_Options_BuffWarnNPCFriendly_OnClick(self)
+    if HealBot_Config_Buffs.IncFriendlyNPCs~=self:GetChecked() then
+        HealBot_Config_Buffs.IncFriendlyNPCs = self:GetChecked()
+        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+        HealBot_Timers_Set("AURA","CheckUnits")
+    end
+end
+
+function HealBot_Options_BuffWarnNPCEnemy_OnClick(self)
+    if HealBot_Config_Buffs.IncEnemyNPCs~=self:GetChecked() then
+        HealBot_Config_Buffs.IncEnemyNPCs = self:GetChecked()
+        HealBot_Timers_Set("SKINS","QuickFramesChanged")
+        HealBot_Timers_Set("AURA","CheckUnits")
+    end
+end
+
 function HealBot_Options_CuresWarnGroup_OnClick(self,id)
     if HealBot_Config_Cures.ShowGroups[id]~=self:GetChecked() then
         HealBot_Config_Cures.ShowGroups[id] = self:GetChecked()
@@ -9779,7 +9811,7 @@ function HealBot_Options_SaveActionIconsProfile()
 end
 
 function HealBot_Options_CheckActionIconsProfile()
-    if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][20][10] then
+    if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][20] then
         for g=1,20 do
             if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g] then
                 Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][g]={}
@@ -24665,8 +24697,11 @@ function HealBot_Options_DebuffsWarningTab(tab)
         HealBot_Options_CDCWarnRange4.initialize = HealBot_Options_CDCWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Sound])
         HealBot_Options_WarningSound:SetValue(soundsIndex[HealBot_Config_Cures.SoundDebuffPlay] or 0);
+        HealBot_Options_CuresWarnNPCFriendly:SetChecked(HealBot_Config_Cures.IncFriendlyNPCs)
+        HealBot_Options_CuresWarnNPCEnemy:SetChecked(HealBot_Config_Cures.IncEnemyNPCs)
         HealBot_Options_SetWarnCureGroups()
         HealBot_Options_SetLabel("HealBot_Options_CureWarnGroupTxt", HEALBOT_OPTIONS_RAIDGROUPWARN)
+        HealBot_Options_SetLabel("HealBot_Options_CureWarnNPCTxt", HEALBOT_OPTIONS_NPCGROUPWARN)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -24899,7 +24934,10 @@ function HealBot_Options_BuffsWarningTab(tab)
         HealBot_Options_BuffWarnRange4.initialize = HealBot_Options_BuffWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Sound])
         HealBot_Options_SetSliderValue(HealBot_Options_BuffWarningSound,soundsIndex[HealBot_Config_Buffs.SoundBuffPlay])
+        HealBot_Options_BuffWarnNPCFriendly:SetChecked(HealBot_Config_Buffs.IncFriendlyNPCs)
+        HealBot_Options_BuffWarnNPCEnemy:SetChecked(HealBot_Config_Buffs.IncEnemyNPCs)
         HealBot_Options_SetWarnBuffGroups()
+        HealBot_Options_SetLabel("HealBot_Options_BuffWarnNPCTxt", HEALBOT_OPTIONS_NPCGROUPWARN)
         HealBot_Options_SetLabel("HealBot_Options_BuffWarnGroupTxt", HEALBOT_OPTIONS_RAIDGROUPWARN)
         HealBot_Options_TabRunOnce[tab]=true
     end
