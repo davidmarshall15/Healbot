@@ -1166,7 +1166,8 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_HIGHLIGHTFILTER02,
     }
 
-    HealBot_Options_Lists["ActionIconsAlertFilter"] = {HEALBOT_PLUGIN_AURAWATCHBUFFEXISTS,
+    HealBot_Options_Lists["ActionIconsAlertFilter"] = {HEALBOT_WORDS_NONE,
+                                                       HEALBOT_PLUGIN_AURAWATCHBUFFEXISTS,
                                                        HEALBOT_PLUGIN_AURAWATCHBUFFEXISTSTAG,
                                                        HEALBOT_PLUGIN_AURAWATCHBUFFEXPIRE,
                                                        HEALBOT_PLUGIN_AURAWATCHBUFFNOTEXIST,
@@ -1473,6 +1474,8 @@ function HealBot_Options_setLists()
         HEALBOT_WORDS_NONE,
         HEALBOT_OPTIONS_SELFHEALS,
         HEALBOT_OPTIONS_SINGLETANK,
+        HEALBOT_FOCUS,
+        HEALBOT_OPTIONS_TARGETHEALS,
     }
 
     HealBot_Options_FrameAliasList()
@@ -13636,34 +13639,36 @@ function HealBot_Options_ActionIconsAlertFilterHideShow(ddId)
     HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertHealth",false)
     HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertMana",false)
     HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertAggro",false)
-    if ddId<5 then
-        if ddId~=2 then 
-            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffname",true)
-            if ddId~=4 then
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffSelfCast",true)
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffMinStacks",true)
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffMaxStacks",true)
+    if ddId and ddId>1 then
+        if ddId<6 then
+            if ddId~=3 then 
+                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffname",true)
+                if ddId~=5 then
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffSelfCast",true)
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffMinStacks",true)
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffMaxStacks",true)
+                end
+            else
+                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffTag",true)
             end
-        else
-            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertBuffTag",true)
-        end
-    elseif ddId<9 then
-        if ddId~=6 then 
-            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffname",true)
-            if ddId~=8 then
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffSelfCast",true)
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffMinStacks",true)
-                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffMaxStacks",true)
+        elseif ddId<10 then
+            if ddId~=7 then 
+                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffname",true)
+                if ddId~=9 then
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffSelfCast",true)
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffMinStacks",true)
+                    HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffMaxStacks",true)
+                end
+            else
+                HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffTag",true)
             end
-        else
-            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertDebuffTag",true)
+        elseif ddId==10 then
+            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertHealth",true)
+        elseif ddId==11 then
+            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertMana",true)
+        elseif ddId==12 then
+            HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertAggro",true)
         end
-    elseif ddId==9 then
-        HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertHealth",true)
-    elseif ddId==10 then
-        HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertMana",true)
-    elseif ddId==11 then
-        HealBot_Options_ObjectsShowHide("HealBot_Options_ActionIconsAlertAggro",true)
     end
 end
 
@@ -14874,6 +14879,7 @@ end
 function HealBot_Options_SetActionIconsList()
     local hbAbility=HEALBOT_WORDS_UNSET
     local hbTarget=HEALBOT_WORDS_UNSET
+    local isUnit=false
     HealBot_ActionIcons_ValidateTarget(HealBot_Options_luVars["FramesSelFrame"])
     for x=HealBot_Options_luVars["ActionIconsListStart"],HealBot_Options_luVars["ActionIconsListStart"]+9 do
         local t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin]
@@ -14882,7 +14888,7 @@ function HealBot_Options_SetActionIconsList()
         t=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Ability"]
         hbAbility=HealBot_ActionIcons_GetSpell(Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Ability"])
         if not hbAbility then hbAbility=HEALBOT_WORDS_UNSET end
-        hbTarget=HealBot_ActionIcons_ReturnTarget(HealBot_Options_luVars["FramesSelFrame"], x) or Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Target"] or HEALBOT_WORDS_UNSET
+        hbTarget, isUnit=HealBot_ActionIcons_ReturnTarget(HealBot_Options_luVars["FramesSelFrame"], x)
         if string.len(hbTarget)<1 then hbTarget=HEALBOT_WORDS_UNSET end
         hbActionIcons_Text[x]["ID"]:SetText(x)
         hbActionIcons_Text[x]["Ability"]:SetText(hbAbility)
@@ -14905,7 +14911,14 @@ function HealBot_Options_SetActionIconsList()
             else
                 hbActionIcons_Text[x]["Ability"]:SetTextColor(0.58,0.58,0.58,0.9)
             end
-            if HealBot_Panel_RaidUnitName(hbTarget) then
+            if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Target"] and Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][x][HealBot_Options_luVars["FramesSelFrame"]]["Target"]=="Target" then
+                if isUnit then
+                    HealBot_AddDebug("isUnit is true - name="..hbTarget, "ActionIcons", true)
+                else
+                    HealBot_AddDebug("isUnit is false - name="..hbTarget, "ActionIcons", true)
+                end
+            end
+            if isUnit or HealBot_Panel_RaidUnitName(hbTarget) then
                 hbActionIcons_Text[x]["Target"]:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
                                                              OptionThemes[HealBot_Globals.OptionsTheme]["G"],
                                                              OptionThemes[HealBot_Globals.OptionsTheme]["B"],1)
@@ -24184,6 +24197,17 @@ function HealBot_Options_FramesActionIconsSetLists()
         HealBot_Timers_Set("SKINS","FramesActionIconsLists",0.1)
     end
     HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)
+end
+
+function HealBot_Options_FramesActionIconsSetListsWhenVisible()
+    if HealBot_Options:IsVisible() then
+        HealBot_Options_luVars["SetActionIconsList"]=true
+        if HealBot_Options_luVars["CurrentTab"]=="SkinsFramesActionIconsIcons" then
+            HealBot_Timers_Set("SKINS","FramesActionIconsLists",0.1)
+        else
+            HealBot_Timers_Set("SKINS","FramesActionIconsLists",0.5)
+        end
+    end
 end
 
 function HealBot_Options_SkinsFramesActionIconsIconsTab(tab)

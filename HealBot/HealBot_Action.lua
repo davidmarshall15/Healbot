@@ -2584,10 +2584,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         HealBot_Text_UpdateText(button)
     end
     HealBot_Action_EmergBarCheck(button)
-    HealBot_Action_UpdateHealthButtonState(button)
-end
 
-function HealBot_Action_UpdateHealthButtonState(button)
     if button.status.current<HealBot_Unit_Status["DEAD"] then
         if button.status.hlthupd then 
             if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or HealBot_AlwaysEnabled[button.guid] or button.health.pct<=button.health.alert then
@@ -2630,7 +2627,7 @@ function HealBot_Action_UpdateHealthButtonState(button)
         if button.health.incoming>0 then HealBot_Action_UpdateHealsInButton(button) end
         if button.health.absorbs>0 then HealBot_Action_UpdateAbsorbsButton(button) end
     end
-      --HealBot_setCall("HealBot_Action_UpdateHealthButtonState")
+      --HealBot_setCall("HealBot_Action_UpdateHealthButton")
 end
 
 local HealBot_Action_HotBars={}
@@ -3853,6 +3850,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.roletxt="DAMAGER"
     button.player=false
     button.isplayer=false
+    button.ispet=false
     button.level=1
     button.status.events=false
     button.status.duplicate=false

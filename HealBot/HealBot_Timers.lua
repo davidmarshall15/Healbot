@@ -780,6 +780,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ToggleOptions"]=HealBot_Options_ShowHide,
                         ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
                         ["ActionIconsInitFrames"]=HealBot_ActionIcons_InitFrames,
+                        ["PostCombatSetAttribs"]=HealBot_ActionIcons_PostCombatSetAttribs,
                     },
                    }
 

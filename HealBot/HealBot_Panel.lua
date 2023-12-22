@@ -2947,6 +2947,10 @@ function HealBot_Panel_RaidUnitGUID(guid)
     return hbPanel_dataGUIDs[guid]
 end
 
+function HealBot_Panel_PetUnitGUID(guid)
+    return hbPanel_dataPetGUIDs[guid]
+end
+
 local ruxUnit, ruxButton, rupButton
 function HealBot_Panel_RaidUnitButton(guid)
     ruxUnit=HealBot_Panel_RaidUnitGUID(guid)
