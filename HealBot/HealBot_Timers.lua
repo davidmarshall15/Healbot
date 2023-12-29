@@ -781,6 +781,9 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsUnitChecks"]=HealBot_ActionIcons_UnitChecks,
                         ["ActionIconsInitFrames"]=HealBot_ActionIcons_InitFrames,
                         ["PostCombatSetAttribs"]=HealBot_ActionIcons_PostCombatSetAttribs,
+                        ["PostCombatClearAttribs"]=HealBot_ActionIcons_PostCombatClearAttribs,
+                        ["UpdateTargetMyFriend"]=HealBot_ActionIcons_UpdateTargetMyFriend,
+                        ["ActionIconsBindRecheck"]=HealBot_Options_ActionIconsBindRecheck,
                     },
                    }
 

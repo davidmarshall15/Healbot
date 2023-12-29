@@ -2373,7 +2373,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
             if buffCheckRaidNPC then
                 if button.player then
                     onlyPlayers=true
-                elseif HEALBOT_GAME_VERSION<7 or not button.ispet then
+                elseif HEALBOT_GAME_VERSION<7 or not HealBot_Panel_PetUnitGUID(button.guid) then
                     onlyPlayers=UnitIsFriend("player",button.unit)
                 end
             end

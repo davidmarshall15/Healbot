@@ -548,7 +548,12 @@ function HealBot_Action_DoRefreshTooltip()
     if not xButton then return end
     xUnit=xButton.unit
     xGUID=UnitGUID(xUnit)
-    local uName=xButton.text.nameonly
+    local uName=""
+    if HealBot_Globals.Tooltip_ShowTitle then
+        uName=UnitPVPName(xButton.unit) or xButton.text.nameonly
+    else
+        uName=xButton.text.nameonly
+    end
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
@@ -638,6 +643,10 @@ function HealBot_Action_DoRefreshTooltip()
                     if IsInRaid() then 
                         HealBot_Tooltip_luVars["uGroup"]=xButton.group
                     end
+                    local uGuild=""
+                    if HealBot_Globals.Tooltip_ShowGuild and xButton.guild then
+                        uGuild="<"..xButton.guild..">".." "..xButton.guildrank.." ("..xButton.guildranki..")"
+                    end
                     if HealBot_Globals.Tooltip_ShowRank or HealBot_Globals.Tooltip_ShowRole then
                         local uRankIdx=xButton.rank
                         local uRoleIdx=xButton.role
@@ -676,6 +685,8 @@ function HealBot_Action_DoRefreshTooltip()
                         end
                         if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uSpec..uClass,r,g,b,1)
+                        elseif string.len(uGuild)>0 then
+                            HealBot_Tooltip_SetLine(uName.." - "..uGuild,r,g,b,1,uSpec..uClass,r,g,b,1)
                         else
                             HealBot_Tooltip_SetLine(uName,r,g,b,1,uSpec..uClass,r,g,b,1)
                         end
@@ -685,6 +696,14 @@ function HealBot_Action_DoRefreshTooltip()
                         else
                             HealBot_Tooltip_SetLine(uRank..uRole,r,g,b,1,uLvl..uRace,r,g,b,1)
                         end
+                    elseif string.len(uGuild)>0 then
+                        local uRace=" "..(UnitRace(xButton.unit) or "")
+                        if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
+                            HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uSpec..uClass,r,g,b,1)
+                        else
+                            HealBot_Tooltip_SetLine(uName,r,g,b,1,uSpec..uClass,r,g,b,1)
+                        end
+                        HealBot_Tooltip_SetLine(uGuild,r,g,b,1,uLvl..uRace,r,g,b,1)
                     else
                         if mana and maxmana>0 and not UnitOffline and HealBot_Tooltip_luVars["uGroup"]>0 and string.len(UnitTag)>0 then
                             HealBot_Tooltip_SetLine(uName.." - "..UnitTag,r,g,b,1,uLvl..uSpec..uClass,r,g,b,1)
@@ -930,7 +949,7 @@ local function EnumerateTooltipLines_helper(td, ...)
     end
 end
 
-function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info, target)
+function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info, target, bind)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
@@ -958,6 +977,9 @@ function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName
         HealBot_Tooltip_SetLine(" ",1,1,1,0,target,1,0.1,0.1,1)
     else
         HealBot_Tooltip_SetLine(" ",1,1,1,0,HEALBOT_WORDS_UNSET,1,0.5,0.3,1)
+    end
+    if bind then
+        HealBot_Tooltip_SetLine(" ",1,1,1,0,"["..bind.."]",0.5,0.75,1,1)
     end
     HealBot_Tooltip_Show()
 end

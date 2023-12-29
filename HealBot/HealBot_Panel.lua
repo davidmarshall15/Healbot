@@ -84,6 +84,7 @@ local hbPanelNoRows={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=
 local HealBot_noBars=100
 local HealBot_setTestCols={}
 local HealBot_setTestBars=false
+local HealBot_RoleIDs={[HEALBOT_MAINTANK]=1, [HEALBOT_WORD_HEALER]=2, [HEALBOT_WORD_DPS]=3}
 local HealBot_Panel_luVars={}
 HealBot_Panel_luVars["SelfPets"]=false
 HealBot_Panel_luVars["OptionsShown"]=false
@@ -98,8 +99,20 @@ HealBot_Panel_luVars["FocusGroups"]=1
 HealBot_Panel_luVars["cpMacro"]="HealBot-CrashProt"
 HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
-HealBot_Panel_luVars["MainTankGUID"]=""
-HealBot_Panel_luVars["PrevTankGUID"]=""
+
+local hbRoleOnes={}
+local hbTANK=1
+local hbHEALER=2
+local hbDPS=3
+local hbRoleRef={[hbTANK]="TankUnit",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit"}
+for x=1,3 do
+    hbRoleOnes[x]={}
+    hbRoleOnes[x].guid=""
+    hbRoleOnes[x].prevguid="x"
+    hbRoleOnes[x].unit=""
+    hbRoleOnes[x].health=0
+end
+--local hbClassOnes={}
 
 local tClass={["WARR"]=true,["PALA"]=true,["DRUI"]=true,["DEAT"]=true}
 function HealBot_Panel_retLuVars(vName)
@@ -138,16 +151,10 @@ end
 function HealBot_Panel_TankRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
-    if UnitHealth(unit)>HealBot_Panel_luVars["TankHealth"] then
-        HealBot_Panel_luVars["TankHealth"]=UnitHealth(unit)
-        HealBot_setLuVars("TankUnit", unit)
-        HealBot_Aura_setLuVars("TankUnit", unit)
-        HealBot_ActionIcons_setLuVars("TankUnit", unit)
-        HealBot_Panel_luVars["MainTankGUID"]=guid
-        if HealBot_Panel_luVars["PrevTankGUID"]~=guid then
-            HealBot_Panel_luVars["PrevTankGUID"]=guid
-            HealBot_setLuVars("pluginClearDown", 1)
-        end
+    if UnitHealth(unit)>hbRoleOnes[hbTANK].health then
+        hbRoleOnes[hbTANK].health=UnitHealth(unit)
+        hbRoleOnes[hbTANK].guid=guid
+        hbRoleOnes[hbTANK].unit=unit
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
 end
@@ -155,7 +162,21 @@ end
 function HealBot_Panel_HealerRole(unit,guid)
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
     HealBot_MainHealers[guid]=unit
+    if UnitHealth(unit)>hbRoleOnes[hbHEALER].health then
+        hbRoleOnes[hbHEALER].health=UnitHealth(unit)
+        hbRoleOnes[hbHEALER].guid=guid
+        hbRoleOnes[hbHEALER].unit=unit
+    end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
+end
+
+function HealBot_Panel_DamagerRole(unit,guid)
+    HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
+    if UnitHealth(unit)>hbRoleOnes[hbDPS].health then
+        hbRoleOnes[hbDPS].health=UnitHealth(unit)
+        hbRoleOnes[hbDPS].guid=guid
+        hbRoleOnes[hbDPS].unit=unit
+    end
 end
 
 local aRole = nil
@@ -166,7 +187,7 @@ function HealBot_Panel_SetRole(unit,guid)
     elseif aRole=="HEALER" then
         HealBot_Panel_HealerRole(unit,guid)
     elseif aRole=="DAMAGER" then
-        HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
+        HealBot_Panel_DamagerRole(unit,guid)
     else
         HealBot_unitRole[unit]=hbRole[HEALBOT_WORDS_UNKNOWN]
     end
@@ -199,7 +220,11 @@ function HealBot_Panel_updDataStore(button)
     end
 end
 
-function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
+local hbPrevPlayerGUID={}
+for x=1,40 do
+    hbPrevPlayerGUID[x]=""
+end
+function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
     if UnitExists(unit) then
         local dsGUID=UnitGUID(unit)
         local dsName=UnitName(unit)
@@ -228,6 +253,10 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                 hbPanel_dataRoles[dsGUID]="DAMAGER"
             end
             if nRaidID>0 then
+                if hbPrevPlayerGUID[nRaidID]~=dsGUID then
+                    hbPrevPlayerGUID[nRaidID]=dsGUID
+                    HealBot_setLuVars("pluginClearDown", 1)
+                end
                 local hbFRole=false
                 local _, rank, hbSubgroup, _, _, _, _, _, _, hbRRole, isML, hbCombatRole = GetRaidRosterInfo(nRaidID);
                 HealBot_UnitGroups[unit]=hbSubgroup
@@ -274,6 +303,10 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer)
                     end
                 end
             else
+                if nPartyID and hbPrevPlayerGUID[nPartyID]~=dsGUID then
+                    hbPrevPlayerGUID[nPartyID]=dsGUID
+                    HealBot_setLuVars("pluginClearDown", 1)
+                end
                 HealBot_UnitGroups[unit]=1
                 HealBot_Panel_SetRole(unit,dsGUID)
                 if IsInGroup() then
@@ -301,11 +334,10 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             hbPanel_dataUnits[x]=false
         end
         hbPlayerRaidID=0
-        HealBot_setLuVars("TankUnit", "x")
-        HealBot_Aura_setLuVars("TankUnit", "x")
-        HealBot_ActionIcons_setLuVars("TankUnit", "x")
-        HealBot_Panel_luVars["TankHealth"]=0
-        HealBot_Panel_luVars["MainTankGUID"]=""
+        for x=1,3 do
+            hbRoleOnes[x].health=0
+            hbRoleOnes[x].guid=""
+        end
         if HealBot_Config.DisabledNow==0 then
             local nGroupMembers=GetNumGroupMembers()
             if nGroupMembers>0 then
@@ -318,12 +350,29 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
                     end
                 else
                     for j=1,nGroupMembers do
-                        HealBot_Panel_addDataStore("party"..j, 0, true)
+                        HealBot_Panel_addDataStore("party"..j, 0, true, j)
                     end
                 end
             end
         end
         HealBot_Panel_addDataStore("player", hbPlayerRaidID, true)
+        for x=1,3 do
+            if hbRoleOnes[x].prevguid~=hbRoleOnes[x].guid then
+                hbRoleOnes[x].prevguid=hbRoleOnes[x].guid
+                if hbRoleOnes[x].guid=="" then
+                    HealBot_setLuVars(hbRoleRef[x], "x")
+                    HealBot_Aura_setLuVars(hbRoleRef[x], "x")
+                    HealBot_ActionIcons_setLuVars(hbRoleRef[x], "x")
+                    HealBot_AddDebug(hbRoleRef[x].." is x","One Unit Role",true)
+                else
+                    HealBot_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
+                    HealBot_Aura_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
+                    HealBot_ActionIcons_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
+                    HealBot_AddDebug(hbRoleRef[x].." is "..UnitName(hbRoleOnes[x].unit),"One Unit Role",true)
+                end
+                HealBot_setLuVars("pluginClearDown", 1)
+            end
+        end
     end
     if doPets then
         HealBot_Panel_luVars["NumPets"]=0

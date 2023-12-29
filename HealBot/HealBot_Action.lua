@@ -2345,7 +2345,8 @@ function HealBot_Action_UpdateUnitNotDead(button)
     if button.player then 
         HealBot_Data["PALIVE"]=true
         HealBot_Timers_Set("INIT","ResetActiveUnitStatus")
-        HealBot_Timers_Set("AURA","PlayerCheckExtended",0.1)
+        HealBot_Timers_Set("SKINS","ActionIconsStateChange",0.1)
+        HealBot_Timers_Set("AURA","PlayerCheckExtended",0.2)
     end
     HealBot_OnEvent_UnitHealth(button)
     HealBot_Action_UpdateBackground(button)
@@ -3212,7 +3213,9 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["UNIT_FLAGS"]=HealBot_OnEvent_UnitFlagsChanged,
                     ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_ModelUpdate,
                     ["UNIT_MODEL_CHANGED"]=HealBot_OnEvent_ModelUpdate,
-                    ["UNIT_AREA_CHANGED"]=HealBot_OnEvent_ZoneUpdate,
+                    ["UNIT_AREA_CHANGED"]=HealBot_OnEvent_RangeUpdate,
+                    ["UNIT_DISTANCE_CHECK_UPDATE"]=HealBot_OnEvent_RangeUpdate,
+                    ["UNIT_IN_RANGE_UPDATE"]=HealBot_OnEvent_RangeUpdate,
                    }
 
 local hbEnemyEventFuncs={["UNIT_PHASE"]=HealBot_OnEvent_UnitPhase,
@@ -3819,6 +3822,9 @@ function HealBot_Action_InitButton(button, prefix)
     button.mana.lowcheck=true
     
     button.guid="init"
+    button.guild=false
+    button.guildrank=""
+    button.guildranki=99
     button.status.playerlastheal=0
     button.status.lasthealthdrop=0
     button.status.r=0
@@ -3850,7 +3856,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.roletxt="DAMAGER"
     button.player=false
     button.isplayer=false
-    button.ispet=false
     button.level=1
     button.status.events=false
     button.status.duplicate=false
@@ -3940,6 +3945,8 @@ function HealBot_Action_UnregisterUnitEvents(button)
     button:UnregisterEvent("UNIT_CLASSIFICATION_CHANGED")
     button:UnregisterEvent("PLAYER_FLAGS_CHANGED")
     button:UnregisterEvent("UNIT_FLAGS")
+    button:UnregisterEvent("UNIT_DISTANCE_CHECK_UPDATE")
+    button:UnregisterEvent("UNIT_IN_RANGE_UPDATE")
     if HEALBOT_GAME_VERSION>3 then
         button:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED")
         button:UnregisterEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED")
@@ -3993,6 +4000,8 @@ function HealBot_Action_RegisterUnitEvents(button)
         button:RegisterUnitEvent("UNIT_HEAL_PREDICTION", button.unit)
         button:RegisterUnitEvent("UNIT_PORTRAIT_UPDATE", button.unit)
         button:RegisterUnitEvent("UNIT_MODEL_CHANGED", button.unit)
+        button:RegisterUnitEvent("UNIT_DISTANCE_CHECK_UPDATE", button.unit)
+        button:RegisterUnitEvent("UNIT_IN_RANGE_UPDATE", button.unit)
         if HEALBOT_GAME_VERSION>3 then
             button:RegisterUnitEvent("UNIT_ABSORB_AMOUNT_CHANGED", button.unit)
             button:RegisterUnitEvent("UNIT_HEAL_ABSORB_AMOUNT_CHANGED", button.unit)
@@ -4676,6 +4685,7 @@ function HealBot_Action_DoToggelMyFriend(button)
         HealBot_Config.MyFriend=button.guid
     end
     HealBot_Check_UnitBuff(button)
+    HealBot_Timers_Set("OOC","UpdateTargetMyFriend")
 end
 
 function HealBot_Action_ToggelMyFriend(unit)
@@ -5665,10 +5675,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             hButton.status.duplicate=duplicate
             hButton.group=HealBot_Panel_RetUnitGroups(unit)
             hButton.rank=HealBot_Panel_RetUnitRank(guid)
-            if hButton.role~=HealBot_Panel_RetUnitPlayerRole(guid) then
-                hButton.role=HealBot_Panel_RetUnitPlayerRole(guid)
-                HealBot_setLuVars("pluginClearDown", 1)
-            end
             hButton.roletxt=HealBot_Panel_UnitRoleDefault(guid)
             if hButton.player then
                 HealBot_Data["PLAYERGROUP"]=hButton.group
@@ -7564,7 +7570,7 @@ end
 local vStickyFrameIsSticky,vStickyFrameLeft,vStickyFrameRight,vStickyFrameTop,vStickyFrameBottom=false,0,0,0,0
 local vStickyFrameCurAnchor=0
 local vStickyFrameParAnchor=0
-local vStickyFrameSen=25
+local vStickyFrameSen=10
 function HealBot_Action_CheckForStickyFrame(frame,stick)
     vStickyFrameIsSticky=false
     vStickyFrameCurAnchor=0

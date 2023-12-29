@@ -1,13 +1,13 @@
 HealBot_Default_Textures={
-    [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
-    [2]= {name="Waves", file=[[Interface\Addons\HealBot\Images\bar2.tga]]},
-    [3]= {name="HealBot 03", file=[[Interface\Addons\HealBot\Images\bar3.tga]]},
-    [4]= {name="HealBot 04", file=[[Interface\Addons\HealBot\Images\bar4.tga]]},
-    [5]= {name="HealBot 05", file=[[Interface\Addons\HealBot\Images\bar5.tga]]},
-    [6]= {name="BantoBar", file=[[Interface\Addons\HealBot\Images\bar6.tga]]},
-    [7]= {name="Otravi", file=[[Interface\Addons\HealBot\Images\bar7.tga]]},
-    [8]= {name="Smooth", file=[[Interface\Addons\HealBot\Images\bar8.tga]]},
-    [9]= {name="Charcoal", file=[[Interface\Addons\HealBot\Images\bar9.tga]]},
+     [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
+     [2]= {name="Waves", file=[[Interface\Addons\HealBot\Images\bar2.tga]]},
+     [3]= {name="HealBot 03", file=[[Interface\Addons\HealBot\Images\bar3.tga]]},
+     [4]= {name="HealBot 04", file=[[Interface\Addons\HealBot\Images\bar4.tga]]},
+     [5]= {name="HealBot 05", file=[[Interface\Addons\HealBot\Images\bar5.tga]]},
+     [6]= {name="BantoBar", file=[[Interface\Addons\HealBot\Images\bar6.tga]]},
+     [7]= {name="Otravi", file=[[Interface\Addons\HealBot\Images\bar7.tga]]},
+     [8]= {name="Smooth", file=[[Interface\Addons\HealBot\Images\bar8.tga]]},
+     [9]= {name="Charcoal", file=[[Interface\Addons\HealBot\Images\bar9.tga]]},
     [10]= {name="HealBot 10", file=[[Interface\Addons\HealBot\Images\bar10.tga]]},
     [11]= {name="Diagonal", file=[[Interface\Addons\HealBot\Images\bar11.tga]]},
     [12]= {name="Skewed", file=[[Interface\Addons\HealBot\Images\bar12.tga]]},
@@ -19,6 +19,7 @@ HealBot_Default_Textures={
     [18]= {name="Tukui4", file=[[Interface\Addons\HealBot\Images\tukuibar.tga]]},----TUKUI----
     [19]= {name="Flat", file=[[Interface\Addons\HealBot\Images\Flat.tga]]},
     [20]= {name="Smooth v2", file=[[Interface\Addons\HealBot\Images\Smoothv2.tga]]},
+    [21]= {name="Outline", file=[[Interface\Addons\HealBot\Images\Outline.tga]]},
 };
 HealBot_Default_Sounds={
     [1]= {name="Tribal Bass Drum", file=566027},
