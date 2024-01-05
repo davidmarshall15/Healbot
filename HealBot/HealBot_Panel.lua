@@ -104,8 +104,9 @@ local hbRoleOnes={}
 local hbTANK=1
 local hbHEALER=2
 local hbDPS=3
-local hbRoleRef={[hbTANK]="TankUnit",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit"}
-for x=1,3 do
+local hbDPSC=4
+local hbRoleRef={[hbTANK]="TankUnit",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit",[hbDPSC]="DPSUnitCaster"}
+for x=1,4 do
     hbRoleOnes[x]={}
     hbRoleOnes[x].guid=""
     hbRoleOnes[x].prevguid="x"
@@ -148,46 +149,53 @@ function HealBot_Panel_isSpecialUnit(unit)
     return HealBot_SpecialUnit[unit] or 0
 end
 
-function HealBot_Panel_TankRole(unit,guid)
+function HealBot_Panel_TankRole(unit, guid, isPlayer)
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
-    if UnitHealth(unit)>hbRoleOnes[hbTANK].health then
-        hbRoleOnes[hbTANK].health=UnitHealth(unit)
+    if isPlayer and UnitHealthMax(unit)>hbRoleOnes[hbTANK].health then
+        hbRoleOnes[hbTANK].health=UnitHealthMax(unit)
         hbRoleOnes[hbTANK].guid=guid
         hbRoleOnes[hbTANK].unit=unit
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
 end
  
-function HealBot_Panel_HealerRole(unit,guid)
+function HealBot_Panel_HealerRole(unit, guid, isPlayer)
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_HEALER]
     HealBot_MainHealers[guid]=unit
-    if UnitHealth(unit)>hbRoleOnes[hbHEALER].health then
-        hbRoleOnes[hbHEALER].health=UnitHealth(unit)
+    if isPlayer and UnitHealthMax(unit)>hbRoleOnes[hbHEALER].health then
+        hbRoleOnes[hbHEALER].health=UnitHealthMax(unit)
         hbRoleOnes[hbHEALER].guid=guid
         hbRoleOnes[hbHEALER].unit=unit
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
 end
 
-function HealBot_Panel_DamagerRole(unit,guid)
+function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
-    if UnitHealth(unit)>hbRoleOnes[hbDPS].health then
-        hbRoleOnes[hbDPS].health=UnitHealth(unit)
-        hbRoleOnes[hbDPS].guid=guid
-        hbRoleOnes[hbDPS].unit=unit
+    if isPlayer then
+        if UnitHealthMax(unit)>hbRoleOnes[hbDPS].health then
+            hbRoleOnes[hbDPS].health=UnitHealthMax(unit)
+            hbRoleOnes[hbDPS].guid=guid
+            hbRoleOnes[hbDPS].unit=unit
+        end
+        if (UnitPowerType(unit) or 1)==0 and UnitHealthMax(unit)>hbRoleOnes[hbDPSC].health then
+            hbRoleOnes[hbDPSC].health=UnitHealthMax(unit)
+            hbRoleOnes[hbDPSC].guid=guid
+            hbRoleOnes[hbDPSC].unit=unit
+        end
     end
 end
 
 local aRole = nil
-function HealBot_Panel_SetRole(unit,guid)
-    aRole = HealBot_Panel_UnitRole(unit,guid)
+function HealBot_Panel_SetRole(unit, guid, isPlayer)
+    aRole = HealBot_Panel_UnitRole(unit, guid, isPlayer)
     if aRole=="TANK" then
-        HealBot_Panel_TankRole(unit,guid)
+        HealBot_Panel_TankRole(unit, guid, isPlayer)
     elseif aRole=="HEALER" then
-        HealBot_Panel_HealerRole(unit,guid)
+        HealBot_Panel_HealerRole(unit, guid, isPlayer)
     elseif aRole=="DAMAGER" then
-        HealBot_Panel_DamagerRole(unit,guid)
+        HealBot_Panel_DamagerRole(unit, guid, isPlayer)
     else
         HealBot_unitRole[unit]=hbRole[HEALBOT_WORDS_UNKNOWN]
     end
@@ -293,13 +301,13 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     end
                 end
                 if not hbFRole then
-                    HealBot_Panel_SetRole(unit,dsGUID)
+                    HealBot_Panel_SetRole(unit, dsGUID, isPlayer)
                 else
                     hbPanel_dataRoles[dsGUID]=hbFRole
                     if hbFRole=="TANK" then
-                        HealBot_Panel_TankRole(unit,dsGUID)
+                        HealBot_Panel_TankRole(unit, dsGUID, isPlayer)
                     elseif hbFRole=="HEALER" then 
-                        HealBot_Panel_HealerRole(unit,dsGUID)
+                        HealBot_Panel_HealerRole(unit, dsGUID, isPlayer)
                     end
                 end
             else
@@ -308,7 +316,7 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     HealBot_setLuVars("pluginClearDown", 1)
                 end
                 HealBot_UnitGroups[unit]=1
-                HealBot_Panel_SetRole(unit,dsGUID)
+                HealBot_Panel_SetRole(unit, dsGUID, isPlayer)
                 if IsInGroup() then
                     if UnitIsGroupLeader(unit) then hbPanel_dataRanks[dsGUID]=4 end
                     if hbPanel_dataPlayerRoles[dsGUID]==0 then hbPanel_dataPlayerRoles[dsGUID]=6 end
@@ -334,7 +342,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             hbPanel_dataUnits[x]=false
         end
         hbPlayerRaidID=0
-        for x=1,3 do
+        for x=1,4 do
             hbRoleOnes[x].health=0
             hbRoleOnes[x].guid=""
         end
@@ -356,7 +364,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             end
         end
         HealBot_Panel_addDataStore("player", hbPlayerRaidID, true)
-        for x=1,3 do
+        for x=1,4 do
             if hbRoleOnes[x].prevguid~=hbRoleOnes[x].guid then
                 hbRoleOnes[x].prevguid=hbRoleOnes[x].guid
                 if hbRoleOnes[x].guid=="" then
@@ -657,11 +665,11 @@ function HealBot_Panel_UnitRoleOnSpec(guid, role)
     end
 end
 
-function HealBot_Panel_UnitRole(unit,guid)
+function HealBot_Panel_UnitRole(unit, guid, isPlayer)
     local role = hbPanel_dataRoles[guid]
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>2 then
-            role=UnitGroupRolesAssigned(unit) or "DAMAGER"
+            role=UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
             if HEALBOT_GAME_VERSION==3 then
                 if HealBot_Globals.AllowPlayerRoles then
                     if GetPartyAssignment('MAINTANK', unit) or role=="TANK" then 
@@ -671,10 +679,11 @@ function HealBot_Panel_UnitRole(unit,guid)
                     role=HealBot_Panel_UnitRoleOnSpec(guid, role)
                 end
             end
-        else
-            role="DAMAGER"
         end
         hbPanel_dataRoles[guid]=role
+    end
+    if role==HEALBOT_WORDS_UNKNOWN and isPlayer then
+        role="DAMAGER"
     end
     return role
 end
@@ -692,7 +701,7 @@ function HealBot_Action_SetClassIconTexture(button)
         local setRole=false
         local unitRole=HEALBOT_WORDS_UNKNOWN
         if Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWROLE"] then
-            unitRole=HealBot_Panel_UnitRole(button.unit,button.guid)
+            unitRole=HealBot_Panel_UnitRole(button.unit, button.guid, button.isplayer)
         end
         if roleTextures[unitRole] then
             HealBot_Aura_ClassUpdate(button, roleTextures[unitRole])

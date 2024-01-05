@@ -1496,6 +1496,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_SINGLETANK,
         HEALBOT_OPTIONS_SINGLEHEALER,
         HEALBOT_OPTIONS_SINGLEDAMAGER,
+        HEALBOT_OPTIONS_SINGLECASTER,
     }
 
     HealBot_Options_FrameAliasList()
@@ -15002,6 +15003,7 @@ function HealBot_Options_UpdateActionIconsListStart(v)
             hbActionIcons_Text[x]["ID"]:SetText("")
             hbActionIcons_Text[x]["Ability"]:SetText("")
             hbActionIcons_Text[x]["Target"]:SetText("")
+            hbActionIcons_Text[x]["Bind"]:SetText("")
         end
         HealBot_Options_luVars["ActionIconsListStart"]=v
         HealBot_Options_SetSkinsFrameActionIconsListPageButtons()

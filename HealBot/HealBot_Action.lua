@@ -2425,7 +2425,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 end
                 HealBot_ActionIcons_PlayerDied()
             else
-                HealBot_ActionIcons_UnitDied(button.guid)
+                HealBot_ActionIcons_UnitDied(button.guid, button.unit)
             end
             button.aura.buff.nextcheck=false
             button.text.nameupdate=true
@@ -3211,8 +3211,8 @@ local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
                     ["UNIT_CLASSIFICATION_CHANGED"]=HealBot_OnEvent_ClassificationChanged,
                     ["PLAYER_FLAGS_CHANGED"]=HealBot_OnEvent_UnitFlagsChanged,
                     ["UNIT_FLAGS"]=HealBot_OnEvent_UnitFlagsChanged,
-                    ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_ModelUpdate,
-                    ["UNIT_MODEL_CHANGED"]=HealBot_OnEvent_ModelUpdate,
+                    ["UNIT_PORTRAIT_UPDATE"]=HealBot_OnEvent_RangeUpdate,
+                    ["UNIT_MODEL_CHANGED"]=HealBot_OnEvent_RangeUpdate,
                     ["UNIT_AREA_CHANGED"]=HealBot_OnEvent_RangeUpdate,
                     ["UNIT_DISTANCE_CHECK_UPDATE"]=HealBot_OnEvent_RangeUpdate,
                     ["UNIT_IN_RANGE_UPDATE"]=HealBot_OnEvent_RangeUpdate,
@@ -3836,7 +3836,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.castend=-1
     button.status.isdead=false
     button.status.resstart=0
-    button.status.range=1
+    button.status.range=0
     button.status.rangespell=HealBot_RangeSpells["HEAL"]
     button.status.rangespellspecial=false
     button.status.rangenextcheck=0
@@ -5713,7 +5713,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     end
                     HealBot_Action_ResetrCallsUnit(hButton)
                     HealBot_Aura_setUnitIcons(unit)
-                    hButton.status.range=1
                     if hButton.frame<10 then
                         hButton:SetScript("OnEvent", function(self, event, arg1, arg2, arg3) hbEventFuncs[event](self, arg1, arg2, arg3) end)
                     elseif hbEnemyEventFuncs[event] then

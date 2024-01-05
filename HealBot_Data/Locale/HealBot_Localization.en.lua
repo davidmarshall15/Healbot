@@ -264,6 +264,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SINGLEHEALER            = "Single healer";
     HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private healers";
     HEALBOT_OPTIONS_SINGLEDAMAGER           = "Single damager";
+    HEALBOT_OPTIONS_SINGLECASTER            = "Single caster";
     HEALBOT_OPTIONS_PRIVATEDAMAGERS         = "Private damagers";
     HEALBOT_OPTIONS_TARGETHEALS             = "Target";
     HEALBOT_OPTIONS_EMERGENCYHEALS          = "Raid";

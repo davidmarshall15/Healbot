@@ -1484,7 +1484,7 @@ function HealBot_UpdateUnitClear(button, GUIDchange)
     if HealBot_luVars["pluginAuraWatch"] then
         HealBot_Plugin_AuraWatch_CancelNoIndex(button, GUIDchange)
     end
-	HealBot_ActionIcons_UnitDied(button.guid)
+	HealBot_ActionIcons_UnitDied(button.guid, button.unit)
     HealBot_Action_DisableButtonGlowType(button, "ALL")
     HealBot_Action_DisableBorderHazard(button)
     button.status.incombat=false
@@ -1563,13 +1563,13 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
                 HealBot_Action_UpdateTheDeadButton(button)
             end
         end
-        HealBot_RefreshUnit(button)
-        HealBot_SpecUpdate(button, HealBot_TimeNow)
         button.health.init=true
         button.mana.init=true
         button.status.update=true
         button.status.change=true
         button.status.guidupdate=true
+        HealBot_RefreshUnit(button)
+        HealBot_SpecUpdate(button, HealBot_TimeNow)
     end
       --HealBot_setCall("HealBot_UpdateUnitGUIDChange")
 end
@@ -5833,10 +5833,6 @@ function HealBot_OnEvent_UnitFlagsChanged(button)
     end
 end
 
-function HealBot_OnEvent_ModelUpdate(button)
-    button.status.rangenextcheck=0
-end
-
 function HealBot_OnEvent_UnitTarget(button)
     if button.status.current<HealBot_Unit_Status["DC"] and button.isplayer then
         if not HealBot_Data["UILOCK"] then
@@ -7081,9 +7077,9 @@ function HealBot_UpdateUnitRange(button)
                 if hbManaWatch[button.guid] then HealBot_Plugin_ManaWatch_UnitUpdate(button) end
                 if hbActionIconsInRange[button.guid] then
                     if button.status.range==1 then
-                        HealBot_ActionIcons_UpdateRange(button.guid, true)
+                        HealBot_ActionIcons_UpdateRange(button.unit, button.guid, true)
                     else
-                        HealBot_ActionIcons_UpdateRange(button.guid, false)
+                        HealBot_ActionIcons_UpdateRange(button.unit, button.guid, false)
                     end
                 end
                 if button.status.dirarrowshown>0 or (Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWDIR"] and button.status.range==0) then

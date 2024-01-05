@@ -227,6 +227,10 @@ function HealBot_Tooltip_Init()
                     [6]=HEALBOT_WORD_DAMAGER.." ",
                     [7]=HEALBOT_WORD_RAIDER.." ",
                    }
+    if HealBot_Globals.DebugOut and not HealBot_Tooltip_luVars["TipsFirstLoad"] then 
+        HealBot_Tooltip_luVars["debug"]=true
+        HealBot_Tooltip_luVars["TipsFirstLoad"]=true
+    end
 end
 
 local tipsRequests={}
@@ -395,26 +399,30 @@ local hbTipDebugText={}
 function HealBot_ToolTip_ShowDebug(button)
     HealBot_Tooltip_SetLine("  ",0,0,0,0)
     HealBot_Tooltip_SetLine("Debug On - Turn off in Tip with /hb debugtip",1,1,1,1)
-    HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
-    HealBot_Tooltip_SetLine("Button Name:"..button.bName,0.4,1,1,1,"Frame:"..button.frame)
-    if UnitExists(button.unit) then
-        if UnitIsFriend("player",button.unit) then
-            HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is True")
+    if button then
+        HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
+        HealBot_Tooltip_SetLine("Button Name:"..button.bName,0.4,1,1,1,"Frame:"..button.frame)
+        if UnitExists(button.unit) then
+            if UnitIsFriend("player",button.unit) then
+                HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is True")
+            else
+                HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is False")
+            end
         else
-            HealBot_Tooltip_SetLine("UnitExists is True",0.4,1,1,1,"UnitIsFriend is False")
+            HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
+        end
+        if button.player then
+            hbTipDebugText["player"]="True"
+        else
+            hbTipDebugText["player"]="False"
+        end
+        if button.isplayer then
+            hbTipDebugText["isPlayer"]="True"
+        else
+            hbTipDebugText["isPlayer"]="False"
         end
     else
-        HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
-    end
-    if button.player then
-        hbTipDebugText["player"]="True"
-    else
-        hbTipDebugText["player"]="False"
-    end
-    if button.isplayer then
-        hbTipDebugText["isPlayer"]="True"
-    else
-        hbTipDebugText["isPlayer"]="False"
+        HealBot_Tooltip_SetLine("No button found for unit",1,0.25,0.25,1)
     end
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
 end
@@ -949,30 +957,27 @@ local function EnumerateTooltipLines_helper(td, ...)
     end
 end
 
-function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName, info, target, bind)
+function HealBot_Tooltip_DisplayActionIconTooltip(icon, target, bind)
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
     end
-    if infoID then infoID=tonumber(infoID) end
-    HealBot_ToolTip_SetTooltipPos(frame);
+    HealBot_ToolTip_SetTooltipPos(icon.frame);
     hbTip:ClearLines()
 
-    if infoType=="spell" then
-        hbTip:SetSpellByID(infoID, false, true)
-    elseif infoType=="item" then
-        local itemLoc=HealBot_IsItemInBag(infoID)
+    if icon.infoType=="spell" then
+        hbTip:SetSpellByID(icon.infoID, false, true)
+    elseif icon.infoType=="item" then
+        local itemLoc=HealBot_IsItemInBag(icon.infoID)
         if itemLoc then
             hbTip:SetBagItem(itemLoc.bag, itemLoc.slot)
         end
-    elseif GetMacroInfo(infoID) then
-        HealBot_Tooltip_SetLine(GetMacroInfo(infoID),1,1,1,1)
-    elseif info and HealBot_ActionIcons_GetSpell(info) then
-        HealBot_Tooltip_SetLine(HealBot_ActionIcons_GetSpell(info),1,1,1,1)
-    else
-        pName=nil
+    elseif GetMacroInfo(icon.infoID) then
+        HealBot_Tooltip_SetLine(GetMacroInfo(icon.infoID),1,1,1,1)
+    elseif icon.info and HealBot_ActionIcons_GetSpell(icon.info) then
+        HealBot_Tooltip_SetLine(HealBot_ActionIcons_GetSpell(icon.info),1,1,1,1)
     end
-    if pName then
-        HealBot_Tooltip_SetLine(" ",1,1,1,0,"@"..pName,1,1,1,1)
+    if icon.name then
+        HealBot_Tooltip_SetLine(" ",1,1,1,0,"@"..icon.name,1,1,1,1)
     elseif target then
         HealBot_Tooltip_SetLine(" ",1,1,1,0,target,1,0.1,0.1,1)
     else
@@ -980,6 +985,32 @@ function HealBot_Tooltip_DisplayActionIconTooltip(frame, infoType, infoID, pName
     end
     if bind then
         HealBot_Tooltip_SetLine(" ",1,1,1,0,"["..bind.."]",0.5,0.75,1,1)
+    end
+    
+    if HealBot_Tooltip_luVars["debug"] then
+        _, xButton, pButton = HealBot_UnitID(icon.unit or "x")
+        if xButton then
+            HealBot_ToolTip_ShowDebug(xButton)
+        elseif pButton then
+            HealBot_ToolTip_ShowDebug(pButton)
+        else
+            HealBot_ToolTip_ShowDebug()
+            HealBot_Tooltip_SetLine("icon.name="..(icon.name or "nil"),1,0.25,0.25,1)
+            HealBot_Tooltip_SetLine("icon.unit="..(icon.unit or "nil"),1,0.25,0.25,1)
+            HealBot_Tooltip_SetLine("target="..(target or "nil"),1,0.25,0.25,1)
+        end
+        hbTipDebugText["isValid"]="False"
+        hbTipDebugText["inRange"]="False"
+        HealBot_Tooltip_SetLine("  ",0,0,0,0)
+        if icon.valid then hbTipDebugText["isValid"]="True" end
+        if icon.inRange then hbTipDebugText["inRange"]="True" end
+        HealBot_Tooltip_SetLine("icon.valid is "..hbTipDebugText["isValid"],0.4,1,1,1,"icon.inRange is "..hbTipDebugText["inRange"])
+        HealBot_Tooltip_SetLine("icon.health is "..icon.health,0.4,1,1,1,"icon.mana is "..icon.mana)
+        hbTipDebugText["isFalling"]="False"
+        hbTipDebugText["isSwimming"]="False"
+        if icon.falling then hbTipDebugText["isFalling"]="True" end
+        if icon.swimming then hbTipDebugText["isSwimming"]="True" end
+        HealBot_Tooltip_SetLine("icon.falling is "..hbTipDebugText["isFalling"],0.4,1,1,1,"icon.swimming is "..hbTipDebugText["isSwimming"])
     end
     HealBot_Tooltip_Show()
 end
