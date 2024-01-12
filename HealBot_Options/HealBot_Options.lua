@@ -135,6 +135,34 @@ HealBot_Options_BindsKeyListRead[56]="Up Arrow"
 HealBot_Options_BindsKeyListRead[57]="Left Arrow"
 HealBot_Options_BindsKeyListRead[58]="Down Arrow"
 HealBot_Options_BindsKeyListRead[59]="Right Arrow"
+HealBot_Options_BindsKeyList[60]="\\\\"
+HealBot_Options_BindsKeyList[61]="/"
+HealBot_Options_BindsKeyList[62]=","
+HealBot_Options_BindsKeyList[63]="."
+HealBot_Options_BindsKeyList[64]=";"
+HealBot_Options_BindsKeyList[65]="'"
+HealBot_Options_BindsKeyList[66]="#"
+HealBot_Options_BindsKeyList[67]="["
+HealBot_Options_BindsKeyList[68]="]"
+HealBot_Options_BindsKeyList[69]="-"
+HealBot_Options_BindsKeyList[70]="="
+HealBot_Options_BindsKeyList[71]="`"
+HealBot_Options_BindsKeyList[72]="LMETA"
+HealBot_Options_BindsKeyList[73]="RMETA"
+HealBot_Options_BindsKeyListRead[60]="\\"
+HealBot_Options_BindsKeyListRead[61]="/"
+HealBot_Options_BindsKeyListRead[62]=","
+HealBot_Options_BindsKeyListRead[63]="."
+HealBot_Options_BindsKeyListRead[64]=";"
+HealBot_Options_BindsKeyListRead[65]="'"
+HealBot_Options_BindsKeyListRead[66]="#"
+HealBot_Options_BindsKeyListRead[67]="["
+HealBot_Options_BindsKeyListRead[68]="]"
+HealBot_Options_BindsKeyListRead[69]="-"
+HealBot_Options_BindsKeyListRead[70]="="
+HealBot_Options_BindsKeyListRead[71]="`"
+HealBot_Options_BindsKeyListRead[72]="Left Windows"
+HealBot_Options_BindsKeyListRead[73]="Right Windows"
 function HealBot_Options_retBindKey(id)
     return HealBot_Options_BindsKeyList[id]
 end
@@ -9388,6 +9416,10 @@ function HealBot_OptionBinds_Level1Info(object, info, index)
     info.text = "     Nav Keys"
     info.menuList = 5
     UIDropDownMenu_AddButton(info)
+    UIDropDownMenu_AddButton(info)
+    info.text = "     Extra Keys"
+    info.menuList = 6
+    UIDropDownMenu_AddButton(info)
 end
 
 function HealBot_OptionBinds_09_Info(object, info, level, index)
@@ -9470,6 +9502,22 @@ function HealBot_OptionBinds_nav_Info(object, info, level, index)
     end
 end
 
+function HealBot_OptionBinds_extra_Info(object, info, level, index)
+    for j=60, 73, 1 do
+        info.text = HealBot_Options_BindsKeyListRead[j];
+        info.func = function(self)
+                        if HealBot_Config_Spells.Binds[index]~=self:GetID()+59 then
+                            HealBot_Config_Spells.Binds[index]=self:GetID()+59
+                            UIDropDownMenu_SetText(object,HealBot_Options_BindsKeyListRead[HealBot_Config_Spells.Binds[index]])
+                            HealBot_Options_CheckBindsOnChange(HealBot_Config_Spells.Binds[index], index)
+                        end
+                    end
+        info.checked = false;
+        if HealBot_Config_Spells.Binds[index]==j then info.checked = true end
+        UIDropDownMenu_AddButton(info, level);
+    end
+end
+
 function HealBot_OptionBinds_DropDown(self, level, menuList, index, object)
     local info = UIDropDownMenu_CreateInfo()
     info.keepShownOnClick=false
@@ -9485,6 +9533,8 @@ function HealBot_OptionBinds_DropDown(self, level, menuList, index, object)
         HealBot_OptionBinds_nz_Info(object, info, level, index)
     elseif menuList == 5 then
         HealBot_OptionBinds_nav_Info(object, info, level, index)
+    elseif menuList == 6 then
+        HealBot_OptionBinds_extra_Info(object, info, level, index)
     end
 end
 

@@ -1568,7 +1568,6 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
         button.status.update=true
         button.status.change=true
         button.status.guidupdate=true
-        HealBot_RefreshUnit(button)
         HealBot_SpecUpdate(button, HealBot_TimeNow)
     end
       --HealBot_setCall("HealBot_UpdateUnitGUIDChange")
@@ -4758,6 +4757,7 @@ function HealBot_UnitSlowUpdate(button)
             end
             HealBot_Check_UnitAura(button)
             HealBot_GetUnitGuild(button)
+            HealBot_RefreshUnit(button)
         elseif button.specchange then
             HealBot_SpecChange(button)
         elseif button.specupdate>0 and button.specupdate<HealBot_TimeNow and not button.status.isdead and HealBot_luVars["TalentQueryEnd"]<HealBot_TimeNow then
