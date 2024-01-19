@@ -24642,15 +24642,6 @@
                             </Anchor>
                           </Anchors>
                         </FontString>
-                        <FontString name="HealBot_Options_SkinsFrameActionIconsExper01Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="0" y="-28" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
                       </Layer>
                     </Layers>
                     <Frames>
@@ -24903,15 +24894,6 @@
                             <Anchor point="TOP">
                               <Offset>
                                 <AbsDimension x="0" y="-8" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                        <FontString name="HealBot_Options_SkinsFrameActionIconsExper02Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="0" y="-28" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -26183,15 +26165,6 @@
                                 </Anchor>
                               </Anchors>
                             </FontString>
-                            <FontString name="HealBot_Options_SkinsFrameActionIconsExper03Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="-28" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
                           </Layer>
                         </Layers>
                         <Frames>
@@ -26370,15 +26343,6 @@
                                 <Anchor point="TOP">
                                   <Offset>
                                     <AbsDimension x="0" y="-8" />
-                                  </Offset>
-                                </Anchor>
-                              </Anchors>
-                            </FontString>
-                            <FontString name="HealBot_Options_SkinsFrameActionIconsExper04Txt" text="HEALBOT_OPTIONS_ACTIONICONSBETA" inherits="GameFontNormal">
-                              <Anchors>
-                                <Anchor point="TOP">
-                                  <Offset>
-                                    <AbsDimension x="0" y="-28" />
                                   </Offset>
                                 </Anchor>
                               </Anchors>

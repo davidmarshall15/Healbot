@@ -800,6 +800,7 @@ function HealBot_Action_IconGlow(frame, key, enable, frameID)
     else
         lGlow.PixelGlow_Stop(frame, key)
     end
+    --HealBot_setCall("HealBot_Action_IconGlow")
 end
 
 function HealBot_Action_IconGlowBall(frame, key, enable, frameID)
@@ -808,6 +809,7 @@ function HealBot_Action_IconGlowBall(frame, key, enable, frameID)
     else
         lGlow.AutoCastGlow_Stop(frame, key)
     end
+    --HealBot_setCall("HealBot_Action_IconGlowBall")
 end
 
 function HealBot_Action_IconGlowBlizz(frame, key, enable)
@@ -816,6 +818,7 @@ function HealBot_Action_IconGlowBlizz(frame, key, enable)
     else
         lGlow.ButtonGlow_Stop(frame)
     end
+    --HealBot_setCall("HealBot_Action_IconGlowBlizz")
 end
 
 function HealBot_Action_ButtonGlow(frame, key, enable, frameID)
@@ -824,6 +827,7 @@ function HealBot_Action_ButtonGlow(frame, key, enable, frameID)
     else
         lGlow.PixelGlow_Stop(frame, key)
     end
+    --HealBot_setCall("HealBot_Action_ButtonGlow")
 end
 
 function HealBot_Action_ButtonGlowBall(frame, key, enable, frameID)
@@ -832,6 +836,7 @@ function HealBot_Action_ButtonGlowBall(frame, key, enable, frameID)
     else
         lGlow.AutoCastGlow_Stop(frame, key)
     end
+    --HealBot_setCall("HealBot_Action_ButtonGlowBall")
 end
 
 function HealBot_Action_ButtonGlowBlizz(frame, key, enable)
@@ -840,6 +845,7 @@ function HealBot_Action_ButtonGlowBlizz(frame, key, enable)
     else
         lGlow.ButtonGlow_Stop(frame)
     end
+    --HealBot_setCall("HealBot_Action_ButtonGlowBlizz")
 end
 
 function HealBot_Action_FramesGlowLen()
@@ -3468,6 +3474,7 @@ function HealBot_Action_InitButton(button, prefix)
         button:SetAttribute("checkfocuscast", false)
         erButton:SetAttribute("checkfocuscast", false)
     end
+    HealBot_FastQueueInit(button.id)
     --button:SetFrameStrata(HealBot_Globals.FrameStrata)
     --erButton:SetFrameStrata(HealBot_Globals.FrameStrata)
     button.guid="nil"

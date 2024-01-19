@@ -13854,6 +13854,10 @@ function HealBot_Options_ActionIconsAlertFilterValid(id)
     return true
 end
 
+function HealBot_Options_RetActionIconsAlertFilter(index)
+    return HealBot_Options_Lists["ActionIconsAlertFilter"][index] or "nil"
+end
+
 function HealBot_Options_ActionIconsAlertFilter_DropDown()
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_Lists["ActionIconsAlertFilter"]), 1 do
@@ -13883,14 +13887,17 @@ function HealBot_Options_ActionIconsAlertBuffTag_DropDown()
     for j=1, getn(tags), 1 do
         info.text = tags[j]
         info.func = function(self)
-                        if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]]~=self:GetText() then
+                        if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"] then
+                            Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"]={}
+                        end
+                        if (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")~=self:GetText() then
                             Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]]=self:GetText()
                             UIDropDownMenu_SetText(HealBot_Options_ActionIconsAlertBuffTag, (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or ""))
                             HealBot_ActionIcons_CheckAlertChangeFrameId(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["ActionIconsID"])
                         end
                     end
         info.checked = false;
-        if (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")==tags[j] then info.checked = true; end 
+        if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"] and (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertBuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")==tags[j] then info.checked = true; end 
         UIDropDownMenu_AddButton(info, level)
     end
 end
@@ -13901,14 +13908,17 @@ function HealBot_Options_ActionIconsAlertDebuffTag_DropDown()
     for j=1, getn(tags), 1 do
         info.text = tags[j]
         info.func = function(self)
-                        if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]]~=self:GetText() then
+                        if not Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"] then
+                            Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"]={}
+                        end
+                        if (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")~=self:GetText() then
                             Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]]=self:GetText()
                             UIDropDownMenu_SetText(HealBot_Options_ActionIconsAlertDebuffTag, (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or ""))
                             HealBot_ActionIcons_CheckAlertChangeFrameId(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["ActionIconsID"])
                         end
                     end
         info.checked = false;
-        if (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")==tags[j] then info.checked = true; end 
+        if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"] and (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["ActionIconsID"]][HealBot_Options_luVars["FramesSelFrame"]]["AlertDebuffTag"][HealBot_Options_luVars["ActionIconsCondNo"]] or "")==tags[j] then info.checked = true; end 
         UIDropDownMenu_AddButton(info, level)
     end
 end
@@ -22157,18 +22167,6 @@ function HealBot_Options_Lang(region, msgchat)
         g=_G["HealBot_Options_SkinsFrameActionIconsGeneralTxt"]
         g:SetText(HEALBOT_OPTIONS_ACTIONICONSGENOPTTEXT)
         g:SetTextColor(1,1,1,1)
-        g=_G["HealBot_Options_SkinsFrameActionIconsExper01Txt"]
-        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
-        g:SetTextColor(1,0.2,0.2,1)
-        g=_G["HealBot_Options_SkinsFrameActionIconsExper02Txt"]
-        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
-        g:SetTextColor(1,0.2,0.2,1)
-        g=_G["HealBot_Options_SkinsFrameActionIconsExper03Txt"]
-        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
-        g:SetTextColor(1,0.2,0.2,1)
-        g=_G["HealBot_Options_SkinsFrameActionIconsExper04Txt"]
-        g:SetText(HEALBOT_OPTIONS_ACTIONICONSBETA)
-        g:SetTextColor(1,0.2,0.2,1)
         g=_G["HealBot_Options_SkinsFrameActionIconsIconsTxt"]
         g:SetText(HEALBOT_OPTIONS_ACTIONICONSOPTTEXT)
         g:SetTextColor(1,1,1,1)

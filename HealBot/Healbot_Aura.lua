@@ -2166,7 +2166,7 @@ function HealBot_Aura_CheckUnitBuff(button)
                     HealBot_Aura_SetBuffIcon()
                 end
                 if tGeneralBuffs and onlyPlayers and (HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName]) then
-                    if HealBot_BuffNameTypes[uaName] and (not button.aura.buff.recheck[uaName] or button.aura.buff.recheck[uaName]>HealBot_TimeNow) then
+                    if not button.aura.buff.recheck[uaName] or button.aura.buff.recheck[uaName]>HealBot_TimeNow then
                         if HealBot_BuffNameTypes[uaName] then
                             if HealBot_BuffNameTypes[uaName]<7 and button.unit==uaUnitCaster then ownBlessing=true end
                             PlayerBuffTypes[HealBot_BuffNameTypes[uaName]]=true
@@ -3639,7 +3639,7 @@ function HealBot_Aura_InitData()
         -- Class buffs
     end
 
-    if HEALBOT_GAME_VERSION<4 then
+    if HEALBOT_GAME_VERSION<5 then
         
         local HBC_WISDOM_ID = 1 --Mana Regen
         local HBC_LIGHT_ID = 2 --Incoming Heals
