@@ -3704,10 +3704,12 @@ function HealBot_InitPlugins()
         HealBot_Aggro_setLuVars("pluginThreat", true)
         HealBot_luVars["pluginThreat"]=true
         HealBot_Action_setLuVars("pluginThreat", true)
+        HealBot_Timers_setLuVars("pluginThreat", true)
     else
         HealBot_Aggro_setLuVars("pluginThreat", false)
         HealBot_luVars["pluginThreat"]=false
         HealBot_Action_setLuVars("pluginThreat", false)
+        HealBot_Timers_setLuVars("pluginThreat", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_TimeToDie")
@@ -3717,9 +3719,11 @@ function HealBot_InitPlugins()
         HealBot_Plugin_TimeToDie_Init()
         HealBot_luVars["pluginTimeToDie"]=true
         HealBot_Action_setLuVars("pluginTimeToDie", true)
+        HealBot_Timers_setLuVars("pluginTimeToDie", true)
     else
         HealBot_luVars["pluginTimeToDie"]=false
         HealBot_Action_setLuVars("pluginTimeToDie", false)
+        HealBot_Timers_setLuVars("pluginTimeToDie", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_TimeToLive")
@@ -3729,9 +3733,11 @@ function HealBot_InitPlugins()
         HealBot_Plugin_TimeToLive_Init()
         HealBot_luVars["pluginTimeToLive"]=true
         HealBot_Action_setLuVars("pluginTimeToLive", true)
+        HealBot_Timers_setLuVars("pluginTimeToLive", true)
     else
         HealBot_luVars["pluginTimeToLive"]=false
         HealBot_Action_setLuVars("pluginTimeToLive", false)
+        HealBot_Timers_setLuVars("pluginTimeToLive", false)
     end
         
     loaded, reason = LoadAddOn("HealBot_Plugin_ExtraButtons")
@@ -3752,9 +3758,11 @@ function HealBot_InitPlugins()
     if loaded and HealBot_Globals.PluginCombatProt then 
         HealBot_Plugin_CombatProt_Init()
         HealBot_luVars["pluginCombatProt"]=true
+        HealBot_Timers_setLuVars("pluginCombatProt", true)
     else
         HealBot_luVars["pluginCombatProt"]=false
         HealBot_Globals.UseCrashProt=false
+        HealBot_Timers_setLuVars("pluginCombatProt", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_Performance")
@@ -3763,8 +3771,10 @@ function HealBot_InitPlugins()
     if loaded and HealBot_Globals.PluginPerformance then 
         HealBot_Plugin_Performance_Init()
         HealBot_luVars["pluginPerformance"]=true
+        HealBot_Timers_setLuVars("pluginPerformance", true)
     else
         HealBot_luVars["pluginPerformance"]=false
+        HealBot_Timers_setLuVars("pluginPerformance", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_Tweaks")
@@ -3773,8 +3783,10 @@ function HealBot_InitPlugins()
     if loaded and HealBot_Globals.PluginTweaks then 
         HealBot_Plugin_Tweaks_Init()
         HealBot_luVars["pluginTweaks"]=true
+        HealBot_Timers_setLuVars("pluginTweaks", true)
     else
         HealBot_luVars["pluginTweaks"]=false
+        HealBot_Timers_setLuVars("pluginTweaks", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_Requests")
@@ -3804,9 +3816,11 @@ function HealBot_InitPlugins()
         HealBot_Plugin_HealthWatch_Init()
         HealBot_Action_setLuVars("pluginHealthWatch", true)
         HealBot_luVars["pluginHealthWatch"]=true
+        HealBot_Timers_setLuVars("pluginHealthWatch", true)
     else
         HealBot_Action_setLuVars("pluginHealthWatch", false)
         HealBot_luVars["pluginHealthWatch"]=false
+        HealBot_Timers_setLuVars("pluginHealthWatch", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_ManaWatch")
@@ -3815,8 +3829,10 @@ function HealBot_InitPlugins()
     if loaded and HealBot_Globals.PluginManaWatch then 
         HealBot_Plugin_ManaWatch_Init()
         HealBot_luVars["pluginManaWatch"]=true
+        HealBot_Timers_setLuVars("pluginManaWatch", true)
     else
         HealBot_luVars["pluginManaWatch"]=false
+        HealBot_Timers_setLuVars("pluginManaWatch", false)
     end
     
     loaded, reason = LoadAddOn("HealBot_Plugin_MyCooldowns")
@@ -3825,8 +3841,10 @@ function HealBot_InitPlugins()
     if loaded and HealBot_Globals.PluginMyCooldowns then 
         HealBot_Plugin_MyCooldowns_Init()
         HealBot_luVars["pluginMyCooldowns"]=true
+        HealBot_Timers_setLuVars("pluginMyCooldowns", true)
     else
         HealBot_luVars["pluginMyCooldowns"]=false
+        HealBot_Timers_setLuVars("pluginMyCooldowns", false)
     end
 
     HealBot_Timers_Set("LAST","RegAggro")

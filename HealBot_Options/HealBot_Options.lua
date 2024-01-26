@@ -15735,6 +15735,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_ToggleBlizzardFrames()
                     HealBot_Timers_Set("SKINS","EmergHealthCol")
                     HealBot_Timers_Set("SKINS","SetAdaptive")
+                    HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
                     HealBot_Timers_Set("LAST","ShowFramesOnSkinChange",0.2)
@@ -18943,7 +18944,7 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
   --R, G, B = ColorPickerFrame:GetColorRGB(); -- added by Diacono
   --A = OpacitySliderFrame:GetValue();
     if A and not preset then
-        A = ((0-A)+1);
+        if HEALBOT_GAME_VERSION<10 then A = ((0-A)+1); end
         A=HealBot_Comm_round(A,2)
     end
     R=HealBot_Comm_round(R,3)
@@ -20417,25 +20418,42 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame:Hide();
     elseif A then
         ColorPickerFrame.hasOpacity = true;
-        ColorPickerFrame.opacity = 1-A;
-        ColorPickerFrame.func = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue() HealBot_Returned_Colours(lR,lG,lB,lA); end;
-        ColorPickerFrame.opacityFunc = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue() HealBot_Returned_Colours(lR,lG,lB,lA); end;
-        ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"], 1-HealBot_Options_luVars["prevA"]); end; --added by Diacono
+        if HEALBOT_GAME_VERSION<10 then
+            ColorPickerFrame.func = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            ColorPickerFrame.opacityFunc = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"], 1-HealBot_Options_luVars["prevA"]); end;
+            ColorPickerFrame:SetColorRGB(R, G, B);
+            ColorPickerFrame.opacity = 1-A;
+            OpacitySliderFrame:SetValue(1-A);
+        else
+            ColorPickerFrame.swatchFunc = function() local lR,lG,lB=ColorPickerFrame.Content.ColorPicker:GetColorRGB(); local lA=ColorPickerFrame:GetColorAlpha(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            ColorPickerFrame.opacityFunc = function() local lR,lG,lB=ColorPickerFrame.Content.ColorPicker:GetColorRGB(); local lA=ColorPickerFrame:GetColorAlpha(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"], HealBot_Options_luVars["prevA"]); end;
+            ColorPickerFrame.Content.ColorPicker:SetColorRGB(R, G, B);
+            ColorPickerFrame.opacity = A;
+        end
         ColorPickerFrame:ClearAllPoints();
         ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
-        OpacitySliderFrame:SetValue(1-A);
-        ColorPickerFrame:SetColorRGB(R, G, B);
         ColorPickerFrame:Show();
     else
         ColorPickerFrame.hasOpacity = false;
-        ColorPickerFrame.func = function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
+        if HEALBOT_GAME_VERSION<10 then
+            ColorPickerFrame.func = function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
+            ColorPickerFrame:SetColorRGB(R, G, B);
+        else
+            ColorPickerFrame.swatchFunc = function() HealBot_Returned_Colours(ColorPickerFrame.Content.ColorPicker:GetColorRGB()); end;
+            ColorPickerFrame.Content.ColorPicker:SetColorRGB(R, G, B);
+        end
         ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"]); end; --added by Diacono
         ColorPickerFrame:ClearAllPoints();
         ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
-        ColorPickerFrame:SetColorRGB(R, G, B);
-        ColorPickerFrame:Show();
+        ColorPickerFrame:Show(info);
     end
-    return ColorPickerFrame:GetColorRGB();
+    if HEALBOT_GAME_VERSION<10 then
+        return ColorPickerFrame:GetColorRGB();
+    else
+        return ColorPickerFrame.Content.ColorPicker:GetColorRGB();
+    end
 end
 
 function HealBot_Options_ColoursAdaptivePluginButton_OnClick()

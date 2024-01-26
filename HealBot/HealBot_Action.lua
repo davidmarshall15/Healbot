@@ -5078,14 +5078,18 @@ end
 
 function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellTrin2, spellAvoidBC, unit, cType)
     local hbMacroText=""
-    if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se3\n' end
-    if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText..'/hb se1\n' end
+    if spellTrin1 or spellTrin2 then
+        if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se3\n' end
+        if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText..'/hb se1\n' end
+    end
     if spellTar then hbMacroText=hbMacroText.."/target "..unit.."\n" end
     if spellTrin1 then hbMacroText=hbMacroText.."/use 13\n" end
     if spellTrin2 then hbMacroText=hbMacroText.."/use 14\n" end
     if HealBot_Config.MacroUse10 then hbMacroText=hbMacroText.."/use 10\n" end
-    if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText.."/hb se2\n" end
-    if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se4\n' end
+    if spellTrin1 or spellTrin2 then
+        if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText.."/hb se2\n" end
+        if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se4\n' end
+    end
     if cType=="Enemy" then
         hbMacroText=hbMacroText.."/cast [@"..unit..",harm] "..spellName.."\n"
     else

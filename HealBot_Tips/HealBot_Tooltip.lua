@@ -952,7 +952,10 @@ local function EnumerateTooltipLines_helper(td, ...)
 end
 
 function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
-    local cond=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][icon.id][icon.frame]["AlertFilter"][index] or 1
+    local cond=1
+    if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][icon.id][icon.frame]["AlertFilter"] then
+        cond=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][icon.id][icon.frame]["AlertFilter"][index] or 1
+    end
     if cond>1 then
         if cond<6 then
             if cond==3 then

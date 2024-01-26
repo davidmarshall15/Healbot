@@ -1599,8 +1599,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
         else
             actionIcons[frame][id]:SetNormalTexture([[Interface\Addons\HealBot\Images\icon_outline]])
             actionIcons[frame][id].isIcon=false
-            HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
-            HealBot_ActionIcons_HighlightIcon(frame, id)
+            actionIcons[frame][id]:SetAlpha(0.7)
         end
         if actionIcons[frame][id].valid then
             if not hbSelfAbility[hbAbility] then hbSelfAbility[hbAbility]={} end
@@ -2101,6 +2100,36 @@ function HealBot_ActionIcons_Debug(frame, id, msg)
     HealBot_AddDebug(" -"..id.."- "..msg,"aIcons_f"..frame.." i"..id, true)
 end
 
+local hbRangeQueue={}
+local hbRangeQueueList={}
+function HealBot_ActionIcons_CheckUnitInRange(frame, id)
+    if actionIcons[frame][id].unit and UnitExists(actionIcons[frame][id].unit) and HealBot_ActionIcons_IsInRange(actionIcons[frame][id].unit) then
+        HealBot_ActionIcons_CheckRange(frame, id, true)
+    end
+end
+
+function HealBot_ActionIcons_ProcRangeQueue()
+    if hbRangeQueue[1] then
+        HealBot_ActionIcons_CheckUnitInRange(hbIconUID[hbRangeQueue[1]]["Frame"], hbIconUID[hbRangeQueue[1]]["ID"])
+        hbRangeQueueList[hbRangeQueue[1]]=false
+        table.remove(hbRangeQueue, 1)
+        C_Timer.After(0.1, HealBot_ActionIcons_ProcRangeQueue)
+    else
+        HealBot_ActionIcons_luVars["ProcRangeQueue"]=false
+    end
+end
+
+function HealBot_ActionIcons_AddRangeQueue(uid)
+    if not hbRangeQueueList[uid] then
+        table.insert(hbRangeQueue, uid)
+        hbRangeQueueList[uid]=true
+        if not HealBot_ActionIcons_luVars["ProcRangeQueue"] then
+            HealBot_ActionIcons_luVars["ProcRangeQueue"]=true
+            C_Timer.After(0.1, HealBot_ActionIcons_ProcRangeQueue)
+        end
+    end
+end
+
 local hbOnGCDQueue={}
 local hbOnGCDQueueList={}
 function HealBot_ActionIcons_AddGCDQueue(uid)
@@ -2127,6 +2156,8 @@ function HealBot_ActionIcons_CheckValidHighlightIcon(spellName, frame, id)
             else
                 HealBot_ActionIcons_AddGCDQueue(actionIcons[frame][id].uid)
             end
+        else
+            HealBot_ActionIcons_AddRangeQueue(actionIcons[frame][id].uid)
         end
     else
         HealBot_ActionIcons_FadeIcon(frame, id)
@@ -2252,7 +2283,7 @@ function HealBot_ActionIcons_SelfCountText(frame, id)
     elseif actionIcons[frame][id].infoType=="spell" then
         actionIcons[frame][id].count=GetSpellCharges(actionIcons[frame][id].infoID) or GetSpellCount(actionIcons[frame][id].infoID) or 0
     elseif actionIcons[frame][id].infoType=="item" then
-        actionIcons[frame][id].count=GetItemCount(actionIcons[frame][id].infoID) or 0
+        actionIcons[frame][id].count=GetItemCount(actionIcons[frame][id].infoID, nil, true) or 0
     else
         actionIcons[frame][id].count=0
     end

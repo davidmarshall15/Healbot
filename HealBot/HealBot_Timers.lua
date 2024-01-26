@@ -170,6 +170,18 @@ function HealBot_Timers_nextRecalcEnemy()
     end
 end
 
+function HealBot_Timers_SkinChangePluginUpdate()
+    if HealBot_Timers_luVars["pluginThreat"] and HealBot_Plugin_Threat_Profile then HealBot_Plugin_Threat_Profile() end
+    if HealBot_Timers_luVars["pluginTimeToDie"] and HealBot_Plugin_TimeToDie_Profile then HealBot_Plugin_TimeToDie_Profile() end
+    if HealBot_Timers_luVars["pluginTimeToLive"] and HealBot_Plugin_TimeToLive_Profile then HealBot_Plugin_TimeToLive_Profile() end
+    if HealBot_Timers_luVars["pluginCombatProt"] and HealBot_Plugin_CombatProt_Profile then HealBot_Plugin_CombatProt_Profile() end
+    if HealBot_Timers_luVars["pluginPerformance"] and HealBot_Plugin_Performance_Profile then HealBot_Plugin_Performance_Profile() end
+    if HealBot_Timers_luVars["pluginTweaks"] and HealBot_Plugin_Tweaks_Profile then HealBot_Plugin_Tweaks_Profile() end
+    if HealBot_Timers_luVars["pluginHealthWatch"] and HealBot_Plugin_HealthWatch_Profile then HealBot_Plugin_HealthWatch_Profile() end
+    if HealBot_Timers_luVars["pluginManaWatch"] and HealBot_Plugin_ManaWatch_Profile then HealBot_Plugin_ManaWatch_Profile() end
+    if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile() end
+end
+
 function HealBot_Timers_HealthAlertLevel_OC()
     HealBot_HealthAlertLevel(false)
 end
@@ -382,7 +394,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","DebuffTagNames",0.275)
     HealBot_Timers_Set("SKINS","SetAdaptive",0.3)
     HealBot_Timers_Set("LAST","SetPlayerData",0.325)
-    HealBot_Timers_Set("INIT","LastUpdate",0.35)
+    HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
     if not HealBot_Timers_luVars["HelpNotice"] then
@@ -491,6 +503,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Action_ResetFrameAlias()
     HealBot_nextRecalcParty(0)
     HealBot_Timers_Set("AUX","ResetText")
+    HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end
                 
 function HealBot_Timers_InitExtraOptions()
@@ -606,6 +619,7 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsSetGlowSize"]=HealBot_ActionIcons_SetGlowSize,
                         ["ActionIconsSetFontChange"]=HealBot_ActionIcons_setFontChange,
                         ["SelfCountTextUpdate"]=HealBot_ActionIcons_SelfCountTextUpdateAll,
+                        ["SkinChangePluginUpdate"]=HealBot_Timers_SkinChangePluginUpdate,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,

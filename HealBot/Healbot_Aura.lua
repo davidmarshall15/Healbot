@@ -2168,7 +2168,7 @@ function HealBot_Aura_CheckUnitBuff(button)
                 if tGeneralBuffs and onlyPlayers and (HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName]) then
                     if not button.aura.buff.recheck[uaName] or button.aura.buff.recheck[uaName]>HealBot_TimeNow then
                         if HealBot_BuffNameTypes[uaName] then
-                            if HealBot_BuffNameTypes[uaName]<7 and button.unit==uaUnitCaster then ownBlessing=true end
+                            if HealBot_BuffNameTypes[uaName]<7 and uaUnitCasterIsPlayer then ownBlessing=true end
                             PlayerBuffTypes[HealBot_BuffNameTypes[uaName]]=true
                         end
                     end
