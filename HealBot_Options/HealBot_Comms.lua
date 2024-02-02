@@ -233,24 +233,24 @@ function HealBot_Comms_MacroSuppressSound()
 end    
 
 local vCPU=1
+local vMode={[1]="Chill",[2]="Normal",[3]="Ultra"}
 function HealBot_Comms_PerfLevel()
     if HealBot_retLuVars("CPUProfilerOn") then
         HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
         HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
     else
-        if HealBot_Globals.UltraPerf then
-            vCPU=HealBot_Globals.CPUUsage*2
-            HealBot_Info_PerfLevelVal:SetText(vCPU.." <Ultra>  ["..HealBot_Globals.FPS.."fps]")
-        else
-            vCPU=HealBot_Globals.CPUUsage
-            HealBot_Info_PerfLevelVal:SetText(vCPU.."   ["..HealBot_Globals.FPS.."fps]")
-        end
-        if vCPU<3 then
+        vCPU=HealBot_Globals.CPUUsage*HealBot_Globals.PerfMode
+        HealBot_Info_PerfLevelVal:SetText(vCPU.." <"..vMode[HealBot_Globals.PerfMode]..">  ["..HealBot_Globals.FPS.."fps]")
+        HealBot_Options_PerfLabel:SetText(vMode[HealBot_Globals.PerfMode].."  Lvl:"..vCPU.."  ["..HealBot_Globals.FPS.."fps]")
+        if vCPU<(1+(HealBot_Globals.PerfMode*3)) then
             HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
-        elseif vCPU<5 then
+            HealBot_Options_PerfLabel:SetTextColor(0.88,0.1,0.1)
+        elseif vCPU<(5+(HealBot_Globals.PerfMode*3)) then
             HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
+            HealBot_Options_PerfLabel:SetTextColor(0.88,0.88,0.1)
         else
             HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
+            HealBot_Options_PerfLabel:SetTextColor(0.1,1,0.1)
         end
     end
 end

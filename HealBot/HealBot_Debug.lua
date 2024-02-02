@@ -155,9 +155,7 @@ function HealBot_Debug_UpdateCalls()
         
         for name,count in pairs(msgs) do
             table.insert(order,name)
-            if count>maxcount then maxcount=count end
         end
-        local filtercount=floor(maxcount/100)
         table.sort(order,function (a,b)
             if msgs[a]>msgs[b] then return true end
             if msgs[a]<msgs[b] then return false end
@@ -165,7 +163,7 @@ function HealBot_Debug_UpdateCalls()
         end)
         --
         for j=1,#order do
-            if linenum<50 then --and msgs[order[j]]>filtercount then
+            if linenum<50 then
                 linenum=linenum+1
                 table.insert(debugText["Calls"],order[j].." = "..msgs[order[j]])
             end

@@ -7214,15 +7214,17 @@ function HealBot_Options_ShowMinimapButton_OnClick(self)
     HealBot_MMButton_Toggle()
 end
 
-function HealBot_Options_UltraPerf_OnClick(self)
-    if self:GetChecked() then
-        HealBot_Globals.UltraPerf=true
-    else
-        HealBot_Globals.UltraPerf=false
+function HealBot_Options_Perf_OnValueChanged(self)
+    local val=floor(self:GetValue()+0.5)
+    if val~=self:GetValue() then
+        self:SetValue(val) 
+    elseif HealBot_Globals.PerfMode~=val then
+        HealBot_Globals.PerfMode = val;
+        HealBot_Comms_PerfLevel()
+        HealBot_Timers_Set("LAST","PerfRangeFreq")
+        HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
+        HealBot_Timers_Set("LAST","SetEventQueues")
     end
-    HealBot_Comms_PerfLevel()
-    HealBot_Timers_Set("LAST","PerfRangeFreq")
-    HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
 end
 
 function HealBot_Options_ShowTooltip_OnClick(self)
@@ -15404,11 +15406,15 @@ local function HealBot_Options_AuxConfigTxtChange()
     fstr=_G["HealBot_AuxTextConfigAssign2_FontStr2"]
     fstr:SetText(list[assignment])
     if (HealBot_Options_luVars["FramesSelFrame"]==10 and assignment>8) or 
-           (HealBot_Options_luVars["FramesSelFrame"]<10 and HealBot_Options_luVars["FramesSelFrame"]>7 and assignment>13) or 
-           (HealBot_Options_luVars["FramesSelFrame"]<8 and assignment>18 and HEALBOT_GAME_VERSION>3) or 
-           (HealBot_Options_luVars["FramesSelFrame"]<8 and assignment>17 and HEALBOT_GAME_VERSION<4) then
+       (HealBot_Options_luVars["FramesSelFrame"]<10 and assignment>18 and HEALBOT_GAME_VERSION>3) or 
+       (HealBot_Options_luVars["FramesSelFrame"]<10 and assignment>17 and HEALBOT_GAME_VERSION<4) then
+        if (HealBot_Options_luVars["FramesSelFrame"]<10 and assignment==22 and HEALBOT_GAME_VERSION>3) or 
+           (HealBot_Options_luVars["FramesSelFrame"]<10 and assignment==21 and HEALBOT_GAME_VERSION<4) then
+            HealBot_Options_ObjectsEnableDisable("HealBot_Options_ShowTextOnAuxBar",true)
+        else
             HealBot_Options_ObjectsEnableDisable("HealBot_Options_ShowTextOnAuxBar",false)
-            HealBot_Options_ShowTextOnAuxBar:SetChecked(true)
+        end
+        HealBot_Options_ShowTextOnAuxBar:SetChecked(true)
     elseif (HealBot_Options_luVars["FramesSelFrame"]==10 and (assignment>5 and assignment<9)) or
            (HealBot_Options_luVars["FramesSelFrame"]<10 and HealBot_Options_luVars["FramesSelFrame"]>7 and (assignment==5 or assignment==8 or (assignment>10 and assignment<14))) or
            (HealBot_Options_luVars["FramesSelFrame"]<8 and (assignment==5 or assignment==8 or (assignment>11 and assignment<16))) or
@@ -18944,7 +18950,7 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
   --R, G, B = ColorPickerFrame:GetColorRGB(); -- added by Diacono
   --A = OpacitySliderFrame:GetValue();
     if A and not preset then
-        if HEALBOT_GAME_VERSION<10 then A = ((0-A)+1); end
+        if HEALBOT_GAME_VERSION<10 then A=1-A; end
         A=HealBot_Comm_round(A,2)
     end
     R=HealBot_Comm_round(R,3)
@@ -20447,7 +20453,7 @@ function HealBot_UseColourPick(R, G, B, A)
         ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"]); end; --added by Diacono
         ColorPickerFrame:ClearAllPoints();
         ColorPickerFrame:SetPoint("TOPLEFT","HealBot_Options","TOPRIGHT",0,-152);
-        ColorPickerFrame:Show(info);
+        ColorPickerFrame:Show();
     end
     if HEALBOT_GAME_VERSION<10 then
         return ColorPickerFrame:GetColorRGB();
@@ -22522,12 +22528,13 @@ function HealBot_Options_GeneralTab(tab)
         local mmButtonShown=false
         if HealBot_Globals.MinimapIcon.hide==false then mmButtonShown=true end
         HealBot_Options_ShowMinimapButton:SetChecked(mmButtonShown)
-        HealBot_Options_UltraPerf:SetChecked(HealBot_Globals.UltraPerf)
         HealBot_Options_HideOptions:SetChecked(HealBot_Globals.HideOptions)
         HealBot_Options_HideUnlocked:SetChecked(HealBot_Globals.HideUnlockedTag)
         HealBot_Options_RightButtonOptions:SetChecked(HealBot_Globals.RightButtonOptions)
         HealBot_Options_sliderlabels_Init(HealBot_Options_OptionsOpacityAdj,HEALBOT_OPTIONS_OPTIONSOPACITY,1,75,1,5,HEALBOT_WORD_LOW,HEALBOT_WORD_HIGH)
         HealBot_Options_OptionsOpacityAdj:SetValue(HealBot_Globals.OptionsOpacityAdj or 35)
+        HealBot_Options_sliderlabels_Init(HealBot_Options_Perf,HEALBOT_PERF,1,3,1,1,HEALBOT_OPTIONS_CHILL,HEALBOT_OPTIONS_ULTRA)
+        HealBot_Options_Perf:SetValue(HealBot_Globals.PerfMode)
         HealBot_Options_CommandsButton:SetText(HEALBOT_WORD_RUN)
         HealBot_Options_LangsButton:SetText(HEALBOT_WORD_SET)
         HealBot_Options_hbProfileButtonText:SetText(HEALBOT_WORD_SET)
@@ -22537,11 +22544,11 @@ function HealBot_Options_GeneralTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_FrameStrata, HealBot_Globals.FrameStrata)
         HealBot_Options_SetText(HealBot_Options_NoAuraWhenRested,HEALBOT_OPTION_IGNORE_AURA_RESTED)
         HealBot_Options_SetText(HealBot_Options_ShowMinimapButton,HEALBOT_OPTIONS_SHOWMINIMAPBUTTON)
-        HealBot_Options_SetText(HealBot_Options_UltraPerf,HEALBOT_OPTIONS_ULTRAPERF)
         HealBot_Options_SetText(HealBot_Options_HideOptions,HEALBOT_OPTIONS_HIDEOPTIONS)
         HealBot_Options_SetText(HealBot_Options_HideUnlocked,HEALBOT_OPTIONS_HIDEUNLOCKEDTAG)
         HealBot_Options_SetText(HealBot_Options_RightButtonOptions,HEALBOT_OPTIONS_RIGHTBOPTIONS)
         HealBot_Options_SetText(HealBot_Options_OptionsOpacityAdj,HEALBOT_OPTIONS_OPTIONSOPACITY)
+        HealBot_Options_SetText(HealBot_Options_Perf,HEALBOT_PERF)
         HealBot_Options_SetText(HealBot_Options_DisableHealBotOpt,HEALBOT_OPTIONS_DISABLEHEALBOT)
         HealBot_Options_SetText(HealBot_Options_DisableHealBotSolo,HEALBOT_OPTIONS_DISABLEHEALBOTSOLO)
         HealBot_Options_SetLabel("healbotcmdfontstr",HEALBOT_OPTIONS_COMMANDS)

@@ -43,6 +43,9 @@ local buffCheck, generalBuffs, buffWarnings, debuffCheck, debuffWarnings=false,f
 local tmpBCheck, tmpCBuffs, tmpGBuffs, tmpDCheck=false,false,false,false
 local uaName, uaTexture, uaCount, uaDebuffType, uaDuration = "","",0,"",0
 local uaExpirationTime, uaUnitCaster, uaSpellId, uaIsBossDebuff, uaUnitCasterIsPlayer = 0,"",0,false,false
+local uaBuffData={}
+local uaDebuffData={}
+local uaBuffSlot, uaDebuffSlot=0,0
 local classicAbsorbPWS=""
 local HealBot_Classic_Absorbs={}
 local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.tga]],
@@ -78,6 +81,932 @@ unitCurrentBuff.name=""
 unitCurrentBuff.prio=99
 local classicAbsorbBonus={["DEFAULT"]=0}
 local classicAbsorbPWSMulti={["DEFAULT"]=1}
+
+hbDebuffBleed={}
+hbDebuffBleed[703] = "Garrote"
+hbDebuffBleed[1079] = "Rip"
+hbDebuffBleed[1943] = "Rupture"
+hbDebuffBleed[3147] = "Rend Flesh"
+hbDebuffBleed[5597] = "Serious Wound"
+hbDebuffBleed[5598] = "Serious Wound"
+hbDebuffBleed[8818] = "Garrote"
+hbDebuffBleed[10266] = "Lung Puncture"
+hbDebuffBleed[11977] = "Rend"
+hbDebuffBleed[12054] = "Rend"
+hbDebuffBleed[13318] = "Rend"
+hbDebuffBleed[13443] = "Rend"
+hbDebuffBleed[13445] = "Rend"
+hbDebuffBleed[13738] = "Rend"
+hbDebuffBleed[14087] = "Rend"
+hbDebuffBleed[14118] = "Rend"
+hbDebuffBleed[14331] = "Vicious Rend"
+hbDebuffBleed[14874] = "Rupture"
+hbDebuffBleed[14903] = "Rupture"
+hbDebuffBleed[15583] = "Rupture"
+hbDebuffBleed[15976] = "Puncture"
+hbDebuffBleed[16095] = "Vicious Rend"
+hbDebuffBleed[16393] = "Rend"
+hbDebuffBleed[16403] = "Rend"
+hbDebuffBleed[16406] = "Rend"
+hbDebuffBleed[16509] = "Rend"
+hbDebuffBleed[17153] = "Rend"
+hbDebuffBleed[17504] = "Rend"
+hbDebuffBleed[18075] = "Rend"
+hbDebuffBleed[18078] = "Rend"
+hbDebuffBleed[18106] = "Rend"
+hbDebuffBleed[18200] = "Rend"
+hbDebuffBleed[18202] = "Rend"
+hbDebuffBleed[19771] = "Serrated Bite"
+hbDebuffBleed[21949] = "Rend"
+hbDebuffBleed[24192] = "Speed Slash"
+hbDebuffBleed[24331] = "Rake"
+hbDebuffBleed[24332] = "Rake"
+hbDebuffBleed[27555] = "Shred"
+hbDebuffBleed[27556] = "Rake"
+hbDebuffBleed[27638] = "Rake"
+hbDebuffBleed[28913] = "Flesh Rot"
+hbDebuffBleed[29574] = "Rend"
+hbDebuffBleed[29578] = "Rend"
+hbDebuffBleed[29583] = "Impale"
+hbDebuffBleed[29906] = "Ravage"
+hbDebuffBleed[29935] = "Gaping Maw"
+hbDebuffBleed[30285] = "Eagle Claw"
+hbDebuffBleed[30639] = "Carnivorous Bite"
+hbDebuffBleed[31041] = "Mangle"
+hbDebuffBleed[31410] = "Coral Cut"
+hbDebuffBleed[31956] = "Grievous Wound"
+hbDebuffBleed[32019] = "Gore"
+hbDebuffBleed[32901] = "Carnivorous Bite"
+hbDebuffBleed[33865] = "Singe"
+hbDebuffBleed[33912] = "Rip"
+hbDebuffBleed[35144] = "Vicious Rend"
+hbDebuffBleed[35318] = "Saw Blade"
+hbDebuffBleed[35321] = "Gushing Wound"
+hbDebuffBleed[36023] = "Deathblow"
+hbDebuffBleed[36054] = "Deathblow"
+hbDebuffBleed[36332] = "Rake"
+hbDebuffBleed[36383] = "Carnivorous Bite"
+hbDebuffBleed[36590] = "Rip"
+hbDebuffBleed[36617] = "Gaping Maw"
+hbDebuffBleed[36789] = "Diminish Soul"
+hbDebuffBleed[36965] = "Rend"
+hbDebuffBleed[36991] = "Rend"
+hbDebuffBleed[37066] = "Garrote"
+hbDebuffBleed[37123] = "Saw Blade"
+hbDebuffBleed[37487] = "Blood Heal"
+hbDebuffBleed[37641] = "Whirlwind"
+hbDebuffBleed[37662] = "Rend"
+hbDebuffBleed[37937] = "Flayed Flesh"
+hbDebuffBleed[37973] = "Coral Cut"
+hbDebuffBleed[38056] = "Flesh Rip"
+hbDebuffBleed[38363] = "Gushing Wound"
+hbDebuffBleed[38772] = "Grievous Wound"
+hbDebuffBleed[38801] = "Grievous Wound"
+hbDebuffBleed[38810] = "Gaping Maw"
+hbDebuffBleed[38848] = "Diminish Soul"
+hbDebuffBleed[39198] = "Carnivorous Bite"
+hbDebuffBleed[39215] = "Gushing Wound"
+hbDebuffBleed[39382] = "Carnivorous Bite"
+hbDebuffBleed[40199] = "Flesh Rip"
+hbDebuffBleed[41092] = "Carnivorous Bite"
+hbDebuffBleed[41932] = "Carnivorous Bite"
+hbDebuffBleed[42395] = "Lacerating Slash"
+hbDebuffBleed[42397] = "Rend Flesh"
+hbDebuffBleed[42658] = "Sic'em!"
+hbDebuffBleed[43093] = "Grievous Throw"
+hbDebuffBleed[43104] = "Deep Wound"
+hbDebuffBleed[43153] = "Lynx Rush"
+hbDebuffBleed[43246] = "Rend"
+hbDebuffBleed[43931] = "Rend"
+hbDebuffBleed[43937] = "Grievous Wound"
+hbDebuffBleed[48130] = "Gore"
+hbDebuffBleed[48261] = "Impale"
+hbDebuffBleed[48286] = "Grievous Slash"
+hbDebuffBleed[48374] = "Puncture Wound"
+hbDebuffBleed[48880] = "Rend"
+hbDebuffBleed[48920] = "Grievous Bite"
+hbDebuffBleed[49678] = "Flesh Rot"
+hbDebuffBleed[50729] = "Carnivorous Bite"
+hbDebuffBleed[50871] = "Savage Rend"
+hbDebuffBleed[51275] = "Gut Rip"
+hbDebuffBleed[52401] = "Gut Rip"
+hbDebuffBleed[52504] = "Lacerate"
+hbDebuffBleed[52771] = "Wounding Strike"
+hbDebuffBleed[52873] = "Open Wound"
+hbDebuffBleed[53317] = "Rend"
+hbDebuffBleed[53499] = "Rake"
+hbDebuffBleed[53602] = "Dart"
+hbDebuffBleed[54668] = "Rake"
+hbDebuffBleed[54703] = "Rend"
+hbDebuffBleed[54708] = "Rend"
+hbDebuffBleed[55102] = "Determined Gore"
+hbDebuffBleed[55249] = "Whirling Slash"
+hbDebuffBleed[55250] = "Whirling Slash"
+hbDebuffBleed[55276] = "Puncture"
+hbDebuffBleed[55550] = "Jagged Knife"
+hbDebuffBleed[55604] = "Death Plague"
+hbDebuffBleed[55622] = "Impale"
+hbDebuffBleed[55645] = "Death Plague"
+hbDebuffBleed[57661] = "Rip"
+hbDebuffBleed[58459] = "Impale"
+hbDebuffBleed[58517] = "Grievous Wound"
+hbDebuffBleed[58830] = "Wounding Strike"
+hbDebuffBleed[58978] = "Impale"
+hbDebuffBleed[59007] = "Flesh Rot"
+hbDebuffBleed[59239] = "Rend"
+hbDebuffBleed[59256] = "Impale"
+hbDebuffBleed[59262] = "Grievous Wound"
+hbDebuffBleed[59264] = "Gore"
+hbDebuffBleed[59268] = "Impale"
+hbDebuffBleed[59269] = "Carnivorous Bite"
+hbDebuffBleed[59343] = "Rend"
+hbDebuffBleed[59349] = "Dart"
+hbDebuffBleed[59444] = "Determined Gore"
+hbDebuffBleed[59682] = "Grievous Wound"
+hbDebuffBleed[59691] = "Rend"
+hbDebuffBleed[59824] = "Whirling Slash"
+hbDebuffBleed[59825] = "Whirling Slash"
+hbDebuffBleed[59826] = "Puncture"
+hbDebuffBleed[59881] = "Rake"
+hbDebuffBleed[59989] = "Rip"
+hbDebuffBleed[61164] = "Impale"
+hbDebuffBleed[61896] = "Lacerate"
+hbDebuffBleed[62318] = "Barbed Shot"
+hbDebuffBleed[62331] = "Impale"
+hbDebuffBleed[62418] = "Impale"
+hbDebuffBleed[63468] = "Careful Aim"
+hbDebuffBleed[64374] = "Savage Pounce"
+hbDebuffBleed[64666] = "Savage Pounce"
+hbDebuffBleed[65033] = "Constricting Rend"
+hbDebuffBleed[65406] = "Rake"
+hbDebuffBleed[66620] = "Old Wounds"
+hbDebuffBleed[67280] = "Dagger Throw"
+hbDebuffBleed[69203] = "Vicious Bite"
+hbDebuffBleed[70278] = "Puncture Wound"
+hbDebuffBleed[71926] = "Rip"
+hbDebuffBleed[74846] = "Bleeding Wound"
+hbDebuffBleed[75160] = "Bloody Rip"
+hbDebuffBleed[75161] = "Spinning Rake"
+hbDebuffBleed[75388] = "Rusty Cut"
+hbDebuffBleed[75930] = "Mangle"
+hbDebuffBleed[76507] = "Claw Puncture"
+hbDebuffBleed[76524] = "Grievous Whirl"
+hbDebuffBleed[76594] = "Rend"
+hbDebuffBleed[76807] = "Lacerate"
+hbDebuffBleed[78842] = "Carnivorous Bite"
+hbDebuffBleed[78859] = "Elementium Spike Shield"
+hbDebuffBleed[79444] = "Impale"
+hbDebuffBleed[79828] = "Mangle"
+hbDebuffBleed[79829] = "Rip"
+hbDebuffBleed[80028] = "Rock Bore"
+hbDebuffBleed[80051] = "Grievous Wound"
+hbDebuffBleed[81043] = "Razor Slice"
+hbDebuffBleed[81087] = "Puncture Wound"
+hbDebuffBleed[81568] = "Spinning Slash"
+hbDebuffBleed[81569] = "Spinning Slash"
+hbDebuffBleed[81690] = "Scent of Blood"
+hbDebuffBleed[82753] = "Ritual of Bloodletting"
+hbDebuffBleed[82766] = "Eye Gouge"
+hbDebuffBleed[83783] = "Impale"
+hbDebuffBleed[84642] = "Puncture"
+hbDebuffBleed[85415] = "Mangle"
+hbDebuffBleed[87395] = "Serrated Slash"
+hbDebuffBleed[89212] = "Eagle Claw"
+hbDebuffBleed[90098] = "Axe to the Head"
+hbDebuffBleed[91348] = "Tenderize"
+hbDebuffBleed[93587] = "Ritual of Bloodletting"
+hbDebuffBleed[93675] = "Mortal Wound"
+hbDebuffBleed[95334] = "Elementium Spike Shield"
+hbDebuffBleed[96570] = "Gaping Wound"
+hbDebuffBleed[96592] = "Ravage"
+hbDebuffBleed[96700] = "Ravage"
+hbDebuffBleed[97357] = "Gaping Wound"
+hbDebuffBleed[98282] = "Tiny Rend"
+hbDebuffBleed[99100] = "Mangle"
+hbDebuffBleed[102066] = "Flesh Rip"
+hbDebuffBleed[102925] = "Garrote"
+hbDebuffBleed[112896] = "Drain Blood"
+hbDebuffBleed[113344] = "Bloodbath"
+hbDebuffBleed[113855] = "Bleeding Wound"
+hbDebuffBleed[114056] = "Bloody Mess"
+hbDebuffBleed[114860] = "Rend"
+hbDebuffBleed[114881] = "Hawk Rend"
+hbDebuffBleed[115767] = "Deep Wounds"
+hbDebuffBleed[115774] = "Vicious Wound"
+hbDebuffBleed[115871] = "Rake"
+hbDebuffBleed[118146] = "Lacerate"
+hbDebuffBleed[119840] = "Serrated Blade"
+hbDebuffBleed[120166] = "Serrated Blade"
+hbDebuffBleed[120560] = "Rake"
+hbDebuffBleed[120699] = "Lynx Rush"
+hbDebuffBleed[121247] = "Impale"
+hbDebuffBleed[121411] = "Crimson Tempest"
+hbDebuffBleed[122962] = "Carnivorous Bite"
+hbDebuffBleed[123422] = "Arterial Bleeding"
+hbDebuffBleed[123852] = "Gored"
+hbDebuffBleed[124015] = "Gored"
+hbDebuffBleed[124296] = "Vicious Strikes"
+hbDebuffBleed[124341] = "Bloodletting"
+hbDebuffBleed[124678] = "Hacking Slash"
+hbDebuffBleed[124800] = "Pinch Limb"
+hbDebuffBleed[125099] = "Rake"
+hbDebuffBleed[125206] = "Rend Flesh"
+hbDebuffBleed[125431] = "Slice Bone"
+hbDebuffBleed[125624] = "Vicious Rend"
+hbDebuffBleed[126901] = "Mortal Rend"
+hbDebuffBleed[126912] = "Grievous Whirl"
+hbDebuffBleed[127872] = "Consume Flesh"
+hbDebuffBleed[127987] = "Bleeding Bite"
+hbDebuffBleed[128051] = "Serrated Slash"
+hbDebuffBleed[128903] = "Garrote"
+hbDebuffBleed[129463] = "Crane Kick"
+hbDebuffBleed[129497] = "Pounced"
+hbDebuffBleed[129537] = "Snap!"
+hbDebuffBleed[130191] = "Rake"
+hbDebuffBleed[130306] = "Ankle Bite"
+hbDebuffBleed[130785] = "My Eye!"
+hbDebuffBleed[130897] = "Vicious Bite"
+hbDebuffBleed[131662] = "Vicious Stabbing"
+hbDebuffBleed[133074] = "Puncture"
+hbDebuffBleed[133081] = "Rip"
+hbDebuffBleed[134691] = "Impale"
+hbDebuffBleed[135528] = "Bleeding Wound"
+hbDebuffBleed[135892] = "Razor Slice"
+hbDebuffBleed[136654] = "Rending Charge"
+hbDebuffBleed[136753] = "Slashing Talons"
+hbDebuffBleed[137497] = "Garrote"
+hbDebuffBleed[138956] = "Dark Bite"
+hbDebuffBleed[139514] = "Bloodstorm"
+hbDebuffBleed[140274] = "Vicious Wound"
+hbDebuffBleed[140275] = "Rend"
+hbDebuffBleed[140276] = "Rend"
+hbDebuffBleed[140396] = "Rend"
+hbDebuffBleed[143198] = "Garrote"
+hbDebuffBleed[144113] = "Chomp"
+hbDebuffBleed[144263] = "Rend"
+hbDebuffBleed[144264] = "Rend"
+hbDebuffBleed[144304] = "Rend"
+hbDebuffBleed[144853] = "Carnivorous Bite"
+hbDebuffBleed[145263] = "Chomp"
+hbDebuffBleed[145417] = "Rupture"
+hbDebuffBleed[146556] = "Pierce"
+hbDebuffBleed[146927] = "Rend"
+hbDebuffBleed[147396] = "Rake"
+hbDebuffBleed[148033] = "Grapple"
+hbDebuffBleed[148375] = "Brutal Hemorrhage"
+hbDebuffBleed[150807] = "Traumatic Strike"
+hbDebuffBleed[151092] = "Traumatic Strike"
+hbDebuffBleed[151475] = "Drain Life"
+hbDebuffBleed[152357] = "Rend"
+hbDebuffBleed[152623] = "Rend"
+hbDebuffBleed[152724] = "Lacerating Strike"
+hbDebuffBleed[153897] = "Rending Cleave"
+hbDebuffBleed[154489] = "Puncturing Horns"
+hbDebuffBleed[154953] = "Internal Bleeding"
+hbDebuffBleed[154960] = "Pinned Down"
+hbDebuffBleed[155065] = "Ripping Claw"
+hbDebuffBleed[155701] = "Serrated Slash"
+hbDebuffBleed[155722] = "Rake"
+hbDebuffBleed[157344] = "Vital Strike"
+hbDebuffBleed[158150] = "Goring Swipe"
+hbDebuffBleed[158341] = "Gushing Wounds"
+hbDebuffBleed[158453] = "Rending Swipe"
+hbDebuffBleed[158667] = "Warleader's Spear"
+hbDebuffBleed[159238] = "Shattered Bleed"
+hbDebuffBleed[161117] = "Puncturing Tusk"
+hbDebuffBleed[161229] = "Pounce"
+hbDebuffBleed[161765] = "Iron Axe"
+hbDebuffBleed[162487] = "Steel Trap"
+hbDebuffBleed[162516] = "Whirling Steel"
+hbDebuffBleed[162921] = "Peck"
+hbDebuffBleed[162951] = "Lacerating Spines"
+hbDebuffBleed[163276] = "Shredded Tendons"
+hbDebuffBleed[164218] = "Double Slash"
+hbDebuffBleed[164323] = "Precise Strike"
+hbDebuffBleed[164427] = "Ravage"
+hbDebuffBleed[165308] = "Gushing Wound"
+hbDebuffBleed[166185] = "Rending Slash"
+hbDebuffBleed[166638] = "Gushing Wound"
+hbDebuffBleed[166639] = "Item - Druid T17 Feral 4P Bonus Proc Driver"
+hbDebuffBleed[166917] = "Savage"
+hbDebuffBleed[167334] = "Windfang Bite"
+hbDebuffBleed[167597] = "Rending Nails"
+hbDebuffBleed[167978] = "Jagged Edge"
+hbDebuffBleed[168097] = "Shredder Bomb"
+hbDebuffBleed[168392] = "Fangs of the Predator"
+hbDebuffBleed[169584] = "Serrated Spines"
+hbDebuffBleed[170367] = "Vicious Throw"
+hbDebuffBleed[170373] = "Razor Teeth"
+hbDebuffBleed[170936] = "Talador Venom"
+hbDebuffBleed[172019] = "Stingtail Venom"
+hbDebuffBleed[172035] = "Thrash"
+hbDebuffBleed[172139] = "Lacerating Bite"
+hbDebuffBleed[172361] = "Puncturing Strike"
+hbDebuffBleed[172366] = "Jagged Slash"
+hbDebuffBleed[172657] = "Serrated Edge"
+hbDebuffBleed[172889] = "Charging Slash"
+hbDebuffBleed[173113] = "Hatchet Toss"
+hbDebuffBleed[173278] = "Spinal Shards"
+hbDebuffBleed[173299] = "Rip"
+hbDebuffBleed[173307] = "Serrated Spear"
+hbDebuffBleed[173378] = "Rending Bite"
+hbDebuffBleed[173643] = "Drill Fist"
+hbDebuffBleed[173876] = "Rending Claws"
+hbDebuffBleed[174423] = "Pinning Spines"
+hbDebuffBleed[174734] = "Axe to the Face!"
+hbDebuffBleed[174820] = "Rending Claws"
+hbDebuffBleed[175014] = "Rupture"
+hbDebuffBleed[175151] = "Thousand Fangs"
+hbDebuffBleed[175156] = "Painful Pinch"
+hbDebuffBleed[175372] = "Sharp Teeth"
+hbDebuffBleed[175461] = "Sadistic Slice"
+hbDebuffBleed[175747] = "Big Sharp Nasty Claws"
+hbDebuffBleed[176147] = "Ignite"
+hbDebuffBleed[176256] = "Talon Sweep"
+hbDebuffBleed[176575] = "Consume Flesh"
+hbDebuffBleed[176695] = "Bone Fragments"
+hbDebuffBleed[177337] = "Carnivorous Bite"
+hbDebuffBleed[177422] = "Thrash"
+hbDebuffBleed[181346] = "Lacerating Swipe"
+hbDebuffBleed[181533] = "Jagged Blade"
+hbDebuffBleed[182325] = "Phantasmal Wounds"
+hbDebuffBleed[182330] = "Coral Cut"
+hbDebuffBleed[182347] = "Impaling Coral"
+hbDebuffBleed[182795] = "Primal Mangle"
+hbDebuffBleed[182846] = "Thrash"
+hbDebuffBleed[183025] = "Rending Lash"
+hbDebuffBleed[183952] = "Shadow Claws"
+hbDebuffBleed[184025] = "Rending Claws"
+hbDebuffBleed[184090] = "Bloody Arc"
+hbDebuffBleed[184175] = "Primal Rake"
+hbDebuffBleed[185539] = "Rapid Rupture"
+hbDebuffBleed[185698] = "Bloody Hack"
+hbDebuffBleed[185855] = "Lacerate"
+hbDebuffBleed[186191] = "Bloodletting Slash"
+hbDebuffBleed[186365] = "Sweeping Blade"
+hbDebuffBleed[186594] = "Laceration"
+hbDebuffBleed[186639] = "Big Sharp Nasty Teeth"
+hbDebuffBleed[186730] = "Exposed Wounds"
+hbDebuffBleed[187647] = "Bloodletting Pounce"
+hbDebuffBleed[188353] = "Rip"
+hbDebuffBleed[189035] = "Barbed Cutlass"
+hbDebuffBleed[191977] = "Impaling Spear"
+hbDebuffBleed[192090] = "Thrash"
+hbDebuffBleed[192131] = "Throw Spear"
+hbDebuffBleed[192925] = "Blood of the Assassinated"
+hbDebuffBleed[193092] = "Bloodletting Sweep"
+hbDebuffBleed[193340] = "Fenri's Bite"
+hbDebuffBleed[193585] = "Bound"
+hbDebuffBleed[193639] = "Bone Chomp"
+hbDebuffBleed[194279] = "Caltrops"
+hbDebuffBleed[194636] = "Cursed Rend"
+hbDebuffBleed[194639] = "Rending Claws"
+hbDebuffBleed[194674] = "Barbed Spear"
+hbDebuffBleed[195094] = "Coral Slash"
+hbDebuffBleed[195279] = "Bind"
+hbDebuffBleed[195506] = "Razorsharp Axe"
+hbDebuffBleed[196111] = "Jagged Claws"
+hbDebuffBleed[196189] = "Bloody Talons"
+hbDebuffBleed[196313] = "Lacerating Talons"
+hbDebuffBleed[196376] = "Grievous Tear"
+hbDebuffBleed[196497] = "Ravenous Leap"
+hbDebuffBleed[197359] = "Shred"
+hbDebuffBleed[197381] = "Exposed Wounds"
+hbDebuffBleed[199108] = "Frantic Gore"
+hbDebuffBleed[199146] = "Bucking Charge"
+hbDebuffBleed[199337] = "Bear Trap"
+hbDebuffBleed[199847] = "Grievous Wound"
+hbDebuffBleed[200182] = "Festering Rip"
+hbDebuffBleed[200620] = "Frantic Rip"
+hbDebuffBleed[204175] = "Rend"
+hbDebuffBleed[204179] = "Rend Flesh"
+hbDebuffBleed[204968] = "Hemoraging Barbs"
+hbDebuffBleed[205437] = "Laceration"
+hbDebuffBleed[207662] = "Nightmare Wounds"
+hbDebuffBleed[207690] = "Bloodlet"
+hbDebuffBleed[208470] = "Necrotic Thrash"
+hbDebuffBleed[208945] = "Mangle"
+hbDebuffBleed[208946] = "Rip"
+hbDebuffBleed[209336] = "Mangle"
+hbDebuffBleed[209378] = "Whirling Blades"
+hbDebuffBleed[209667] = "Blade Surge"
+hbDebuffBleed[209858] = "Necrotic Wound"
+hbDebuffBleed[210013] = "Bloodletting Slash"
+hbDebuffBleed[210177] = "Spiked Shield"
+hbDebuffBleed[210723] = "Ashamane's Frenzy"
+hbDebuffBleed[211672] = "Mutilated Flesh"
+hbDebuffBleed[211846] = "Bloodletting Lunge"
+hbDebuffBleed[213431] = "Gnawing Eagle"
+hbDebuffBleed[213537] = "Bloody Pin"
+hbDebuffBleed[213824] = "Rending Pounce"
+hbDebuffBleed[213933] = "Harpoon Swipe"
+hbDebuffBleed[213990] = "Shard Bore"
+hbDebuffBleed[214676] = "Razorsharp Teeth"
+hbDebuffBleed[215442] = "Shred"
+hbDebuffBleed[215506] = "Jagged Quills"
+hbDebuffBleed[215537] = "Trauma"
+hbDebuffBleed[215721] = "Gut Slash"
+hbDebuffBleed[217023] = "Antler Gore"
+hbDebuffBleed[217041] = "Shred"
+hbDebuffBleed[217091] = "Puncturing Stab"
+hbDebuffBleed[217142] = "Mangle"
+hbDebuffBleed[217163] = "Rend"
+hbDebuffBleed[217200] = "Barbed Shot"
+hbDebuffBleed[217235] = "Rending Whirl"
+hbDebuffBleed[217363] = "Ashamane's Frenzy"
+hbDebuffBleed[217369] = "Rake"
+hbDebuffBleed[217868] = "Impale"
+hbDebuffBleed[218506] = "Jagged Slash"
+hbDebuffBleed[219167] = "Chomp"
+hbDebuffBleed[219240] = "Bloody Ricochet"
+hbDebuffBleed[219339] = "Thrash"
+hbDebuffBleed[219680] = "Impale"
+hbDebuffBleed[220222] = "Rending Snap"
+hbDebuffBleed[220874] = "Lacerate"
+hbDebuffBleed[221352] = "Cut the Flank"
+hbDebuffBleed[221422] = "Vicious Bite"
+hbDebuffBleed[221759] = "Feathery Stab"
+hbDebuffBleed[221770] = "Rend Flesh"
+hbDebuffBleed[222491] = "Gutripper"
+hbDebuffBleed[223111] = "Rake"
+hbDebuffBleed[223572] = "Rend"
+hbDebuffBleed[223954] = "Rake"
+hbDebuffBleed[223967] = "Tear Flesh"
+hbDebuffBleed[224435] = "Ashamane's Rip"
+hbDebuffBleed[225484] = "Grievous Rip"
+hbDebuffBleed[225963] = "Bloodthirsty Leap"
+hbDebuffBleed[227742] = "Garrote"
+hbDebuffBleed[228275] = "Rend"
+hbDebuffBleed[228281] = "Rend"
+hbDebuffBleed[228305] = "Unyielding Rend"
+hbDebuffBleed[229127] = "Powershot"
+hbDebuffBleed[229265] = "Garrote"
+hbDebuffBleed[229923] = "Talon Rend"
+hbDebuffBleed[230011] = "Cruel Garrote"
+hbDebuffBleed[231003] = "Barbed Talons"
+hbDebuffBleed[231998] = "Jagged Abrasion"
+hbDebuffBleed[232135] = "Bloody Jab"
+hbDebuffBleed[235832] = "Bloodletting Strike"
+hbDebuffBleed[237346] = "Rend"
+hbDebuffBleed[238594] = "Ripper Blade"
+hbDebuffBleed[238618] = "Fel Swipe"
+hbDebuffBleed[240449] = "Grievous Wound"
+hbDebuffBleed[240539] = "Wild Bite"
+hbDebuffBleed[240559] = "Grievous Wound"
+hbDebuffBleed[241070] = "Bloodletting Strike"
+hbDebuffBleed[241092] = "Rend"
+hbDebuffBleed[241212] = "Fel Slash"
+hbDebuffBleed[241465] = "Coral Cut"
+hbDebuffBleed[241644] = "Mangle"
+hbDebuffBleed[242376] = "Puncturing Strike"
+hbDebuffBleed[242828] = "Dire Thrash"
+hbDebuffBleed[242931] = "Rake"
+hbDebuffBleed[244040] = "Eskhandar's Rake"
+hbDebuffBleed[246904] = "Smoldering Rend"
+hbDebuffBleed[247932] = "Shrapnel Blast"
+hbDebuffBleed[247949] = "Shrapnel Blast"
+hbDebuffBleed[250393] = "Rake"
+hbDebuffBleed[251332] = "Rip"
+hbDebuffBleed[253384] = "Slaughter"
+hbDebuffBleed[253516] = "Hexabite"
+hbDebuffBleed[253610] = "Ripper Blade"
+hbDebuffBleed[254280] = "Jagged Maw"
+hbDebuffBleed[254575] = "Rend"
+hbDebuffBleed[254901] = "Blood Frenzy"
+hbDebuffBleed[255299] = "Bloodletting"
+hbDebuffBleed[255595] = "Chomp"
+hbDebuffBleed[255814] = "Rending Maul"
+hbDebuffBleed[256077] = "Gore"
+hbDebuffBleed[256314] = "Barbed Strike"
+hbDebuffBleed[256363] = "Ripper Punch"
+hbDebuffBleed[256476] = "Rending Whirl"
+hbDebuffBleed[256715] = "Jagged Maw"
+hbDebuffBleed[256880] = "Bone Splinter"
+hbDebuffBleed[256914] = "Barbed Blade"
+hbDebuffBleed[256965] = "Thorned Barrage"
+hbDebuffBleed[257036] = "Feral Charge"
+hbDebuffBleed[257170] = "Savage Tempest"
+hbDebuffBleed[257250] = "Bramblepelt"
+hbDebuffBleed[257544] = "Jagged Cut"
+hbDebuffBleed[257790] = "Gutripper"
+hbDebuffBleed[257971] = "Leaping Thrash"
+hbDebuffBleed[258058] = "Squeeze"
+hbDebuffBleed[258075] = "Itchy Bite"
+hbDebuffBleed[258143] = "Rending Claws"
+hbDebuffBleed[258718] = "Scratched!"
+hbDebuffBleed[258798] = "Razorsharp Teeth"
+hbDebuffBleed[258825] = "Vampiric Bite"
+hbDebuffBleed[259220] = "Barbed Net"
+hbDebuffBleed[259277] = "Kill Command"
+hbDebuffBleed[259328] = "Gory Whirl"
+hbDebuffBleed[259382] = "Shell Slash"
+hbDebuffBleed[259739] = "Stone Claws"
+hbDebuffBleed[259873] = "Rip"
+hbDebuffBleed[259983] = "Pierce"
+hbDebuffBleed[260016] = "Itchy Bite"
+hbDebuffBleed[260025] = "Rending Whirl"
+hbDebuffBleed[260400] = "Rend"
+hbDebuffBleed[260455] = "Serrated Fangs"
+hbDebuffBleed[260563] = "Gnaw"
+hbDebuffBleed[260582] = "Gushing Wound"
+hbDebuffBleed[260741] = "Jagged Nettles"
+hbDebuffBleed[261882] = "Steel Jaw Trap"
+hbDebuffBleed[262115] = "Deep Wounds"
+hbDebuffBleed[262143] = "Ravenous Claws"
+hbDebuffBleed[262557] = "Rake"
+hbDebuffBleed[262677] = "Keelhaul"
+hbDebuffBleed[262875] = "Papercut"
+hbDebuffBleed[263144] = "Talon Slash"
+hbDebuffBleed[264145] = "Shatter"
+hbDebuffBleed[264150] = "Shatter"
+hbDebuffBleed[264210] = "Jagged Mandible"
+hbDebuffBleed[264556] = "Tearing Strike"
+hbDebuffBleed[265019] = "Savage Cleave"
+hbDebuffBleed[265074] = "Rend"
+hbDebuffBleed[265165] = "Charging Gore"
+hbDebuffBleed[265232] = "Rend"
+hbDebuffBleed[265377] = "Hooked Snare"
+hbDebuffBleed[265533] = "Blood Maw"
+hbDebuffBleed[265948] = "Denticulated"
+hbDebuffBleed[266035] = "Bone Splinter"
+hbDebuffBleed[266191] = "Whirling Axe"
+hbDebuffBleed[266231] = "Severing Axe"
+hbDebuffBleed[266505] = "Rending Claw"
+hbDebuffBleed[267064] = "Bleeding"
+hbDebuffBleed[267080] = "Blight of G'huun"
+hbDebuffBleed[267103] = "Blight of G'huun"
+hbDebuffBleed[267441] = "Serrated Axe"
+hbDebuffBleed[267523] = "Cutting Surge"
+hbDebuffBleed[269576] = "Master Marksman"
+hbDebuffBleed[270084] = "Axe Barrage"
+hbDebuffBleed[270139] = "Gore"
+hbDebuffBleed[270343] = "Internal Bleeding"
+hbDebuffBleed[270473] = "Serrated Arrows"
+hbDebuffBleed[270487] = "Severing Blade"
+hbDebuffBleed[270979] = "Rend and Tear"
+hbDebuffBleed[271178] = "Ravaging Leap"
+hbDebuffBleed[271798] = "Click"
+hbDebuffBleed[272273] = "Rending Cleave"
+hbDebuffBleed[273436] = "Gore"
+hbDebuffBleed[273632] = "Gaping Maw"
+hbDebuffBleed[273794] = "Rezan's Fury"
+hbDebuffBleed[273900] = "Bramble Swipe"
+hbDebuffBleed[273909] = "Steelclaw Trap"
+hbDebuffBleed[274089] = "Rend"
+hbDebuffBleed[274389] = "Rat Traps"
+hbDebuffBleed[274838] = "Feral Frenzy"
+hbDebuffBleed[275895] = "Rend of Kimbul"
+hbDebuffBleed[276868] = "Impale"
+hbDebuffBleed[277077] = "Big Sharp Nasty Teeth"
+hbDebuffBleed[277309] = "Jagged Maw"
+hbDebuffBleed[277431] = "Hunter Toxin"
+hbDebuffBleed[277517] = "Serrated Slash"
+hbDebuffBleed[277569] = "Bloodthirsty Rend"
+hbDebuffBleed[277592] = "Blood Frenzy"
+hbDebuffBleed[277794] = "Paw Swipe"
+hbDebuffBleed[278175] = "Bramble Claw"
+hbDebuffBleed[278570] = "Boils and Sores"
+hbDebuffBleed[278733] = "Deep Wound"
+hbDebuffBleed[278866] = "Carve and Spit"
+hbDebuffBleed[279133] = "Rend"
+hbDebuffBleed[280286] = "Dagger in the Back"
+hbDebuffBleed[280321] = "Garrote"
+hbDebuffBleed[280940] = "Mangle"
+hbDebuffBleed[281711] = "Cut of Death"
+hbDebuffBleed[282444] = "Lacerating Claws"
+hbDebuffBleed[282845] = "Bear Trap"
+hbDebuffBleed[283419] = "Rend"
+hbDebuffBleed[283667] = "Rupture"
+hbDebuffBleed[283668] = "Crimson Tempest"
+hbDebuffBleed[283700] = "Rake"
+hbDebuffBleed[283708] = "Rip"
+hbDebuffBleed[284158] = "Circular Saw"
+hbDebuffBleed[285875] = "Rending Bite"
+hbDebuffBleed[286269] = "Mangle"
+hbDebuffBleed[288091] = "Gushing Wound"
+hbDebuffBleed[288266] = "Mangle"
+hbDebuffBleed[288535] = "Rip"
+hbDebuffBleed[288539] = "Mangle"
+hbDebuffBleed[289355] = "Smoldering Rend"
+hbDebuffBleed[289373] = "Lacerating Pounce"
+hbDebuffBleed[289848] = "Rending Claw"
+hbDebuffBleed[292348] = "Bloodletting"
+hbDebuffBleed[292611] = "Rake"
+hbDebuffBleed[292626] = "Rip"
+hbDebuffBleed[293670] = "Chainblade"
+hbDebuffBleed[294617] = "Rupture"
+hbDebuffBleed[294741] = "Saber Slash"
+hbDebuffBleed[294901] = "Serrated Blades"
+hbDebuffBleed[295008] = "Bloody Cleaver"
+hbDebuffBleed[295929] = "Rats!"
+hbDebuffBleed[295945] = "Rat Traps"
+hbDebuffBleed[296777] = "Bleeding Wound"
+hbDebuffBleed[299474] = "Ripping Slash"
+hbDebuffBleed[299502] = "Nanoslicer"
+hbDebuffBleed[299923] = "Tear Flesh"
+hbDebuffBleed[300610] = "Fanged Bite"
+hbDebuffBleed[301061] = "Thrash"
+hbDebuffBleed[301712] = "Pounce"
+hbDebuffBleed[302295] = "Slicing Claw"
+hbDebuffBleed[302474] = "Phantom Laceration"
+hbDebuffBleed[303162] = "Carve Flesh"
+hbDebuffBleed[303215] = "Shell Slash"
+hbDebuffBleed[303501] = "Rending Strike"
+hbDebuffBleed[308342] = "Bore"
+hbDebuffBleed[308859] = "Carnivorous Bite"
+hbDebuffBleed[308891] = "Jagged Chop"
+hbDebuffBleed[308938] = "Lacerating Swipe"
+hbDebuffBleed[309760] = "Raking Claws"
+hbDebuffBleed[311122] = "Jagged Wound"
+hbDebuffBleed[311744] = "Deep Wound"
+hbDebuffBleed[311748] = "Lacerating Swipe"
+hbDebuffBleed[313674] = "Jagged Wound"
+hbDebuffBleed[313734] = "Ravaging Leap"
+hbDebuffBleed[313747] = "Rend"
+hbDebuffBleed[313957] = "Rend"
+hbDebuffBleed[314130] = "Skewer"
+hbDebuffBleed[314160] = "Penetrating Lance"
+hbDebuffBleed[314454] = "Thrashing Lunge"
+hbDebuffBleed[314531] = "Tear Flesh"
+hbDebuffBleed[314533] = "Rend"
+hbDebuffBleed[314568] = "Deep Wound"
+hbDebuffBleed[314847] = "Decapitate"
+hbDebuffBleed[315311] = "Ravage"
+hbDebuffBleed[315711] = "Serrated Strike"
+hbDebuffBleed[315805] = "Crippler"
+hbDebuffBleed[316511] = "Scratch"
+hbDebuffBleed[317561] = "Swooping Lunge"
+hbDebuffBleed[317908] = "Razor Wing"
+hbDebuffBleed[317916] = "Razor Clip"
+hbDebuffBleed[318187] = "Gushing Wound"
+hbDebuffBleed[319127] = "Gore"
+hbDebuffBleed[319275] = "Razor Wing"
+hbDebuffBleed[320007] = "Gash"
+hbDebuffBleed[320147] = "Bleeding"
+hbDebuffBleed[320200] = "Stitchneedle"
+hbDebuffBleed[321538] = "Bloodshed"
+hbDebuffBleed[321807] = "Boneflay"
+hbDebuffBleed[322429] = "Severing Slice"
+hbDebuffBleed[322796] = "Wicked Gash"
+hbDebuffBleed[322965] = "Tearing Bite"
+hbDebuffBleed[323043] = "Bloodletting"
+hbDebuffBleed[323406] = "Jagged Gash"
+hbDebuffBleed[324073] = "Serrated Bone Spike"
+hbDebuffBleed[324149] = "Flayed Shot"
+hbDebuffBleed[324154] = "Dark Stride"
+hbDebuffBleed[324447] = "Slashing Rend"
+hbDebuffBleed[325021] = "Mistveil Tear"
+hbDebuffBleed[325022] = "Jagged Swipe"
+hbDebuffBleed[325037] = "Death Chakram"
+hbDebuffBleed[326298] = "Bleeding Wound"
+hbDebuffBleed[326586] = "Crimson Flurry"
+hbDebuffBleed[327258] = "Rend"
+hbDebuffBleed[327814] = "Wicked Gash"
+hbDebuffBleed[328287] = "Heart Strike"
+hbDebuffBleed[328897] = "Exsanguinated"
+hbDebuffBleed[328910] = "Tantrum"
+hbDebuffBleed[328940] = "Gore"
+hbDebuffBleed[329293] = "Vorpal Wound"
+hbDebuffBleed[329516] = "Swift Slash"
+hbDebuffBleed[329563] = "Goring Swipe"
+hbDebuffBleed[329906] = "Carnage"
+hbDebuffBleed[329986] = "Maul"
+hbDebuffBleed[329990] = "Craggy Swipe"
+hbDebuffBleed[330400] = "Bleeding Swipe"
+hbDebuffBleed[330457] = "Ripping Strike"
+hbDebuffBleed[330532] = "Jagged Quarrel"
+hbDebuffBleed[330632] = "Maul"
+hbDebuffBleed[331045] = "Talon Rake"
+hbDebuffBleed[331066] = "Bursting Plumage"
+hbDebuffBleed[331072] = "Talon Rake"
+hbDebuffBleed[331340] = "Plague Swipe"
+hbDebuffBleed[331415] = "Wicked Gash"
+hbDebuffBleed[332168] = "Maul"
+hbDebuffBleed[332610] = "Penetrating Insight"
+hbDebuffBleed[332678] = "Gushing Wound"
+hbDebuffBleed[332792] = "Gore"
+hbDebuffBleed[332835] = "Ruthless Strikes"
+hbDebuffBleed[332836] = "Chop"
+hbDebuffBleed[333235] = "Horn Rush"
+hbDebuffBleed[333250] = "Reaver"
+hbDebuffBleed[333478] = "Gut Slice"
+hbDebuffBleed[333861] = "Ricocheting Blade"
+hbDebuffBleed[333985] = "Culling Strike"
+hbDebuffBleed[334669] = "Tirnenn Wrath"
+hbDebuffBleed[334960] = "Vicious Wound"
+hbDebuffBleed[334971] = "Jagged Claws"
+hbDebuffBleed[335105] = "Dinner Time"
+hbDebuffBleed[336628] = "Eternal Polearm"
+hbDebuffBleed[336810] = "Ragged Claws"
+hbDebuffBleed[337349] = "Triple Thrash"
+hbDebuffBleed[337729] = "Kerim's Laceration"
+hbDebuffBleed[337892] = "Gore"
+hbDebuffBleed[338935] = "Razor Petals"
+hbDebuffBleed[339163] = "Wicked Gash"
+hbDebuffBleed[339189] = "Chain Bleed"
+hbDebuffBleed[339453] = "Darksworn Blast"
+hbDebuffBleed[339789] = "Darksworn Blast"
+hbDebuffBleed[339975] = "Grievous Strike"
+hbDebuffBleed[340058] = "Heart Piercer"
+hbDebuffBleed[340374] = "Bloody Tantrum"
+hbDebuffBleed[340431] = "Mutilated Flesh"
+hbDebuffBleed[341435] = "Lunge"
+hbDebuffBleed[341475] = "Crimson Flurry"
+hbDebuffBleed[341833] = "Rending Cleave"
+hbDebuffBleed[341863] = "Bleeding Out"
+hbDebuffBleed[342250] = "Jagged Swipe"
+hbDebuffBleed[342464] = "Javelin Flurry"
+hbDebuffBleed[342675] = "Bone Spear"
+hbDebuffBleed[343159] = "Stone Claws"
+hbDebuffBleed[343722] = "Crushing Bite"
+hbDebuffBleed[344312] = "Serrated Edge"
+hbDebuffBleed[344464] = "Shield Spike"
+hbDebuffBleed[344993] = "Jagged Swipe"
+hbDebuffBleed[345548] = "Spare Meat Hook"
+hbDebuffBleed[346770] = "Grinding Bite"
+hbDebuffBleed[346807] = "Rending Roar"
+hbDebuffBleed[347716] = "Letter Opener"
+hbDebuffBleed[347807] = "Barbed Arrow"
+hbDebuffBleed[348074] = "Assailing Lance"
+hbDebuffBleed[348385] = "Bloody Cleave"
+hbDebuffBleed[348726] = "Lethal Shot"
+hbDebuffBleed[351119] = "Shuriken Blitz"
+hbDebuffBleed[351976] = "Shredder"
+hbDebuffBleed[353068] = "Razor Trap"
+hbDebuffBleed[353466] = "Sadistic Glee"
+hbDebuffBleed[353919] = "Rury's Sleepy Tantrum"
+hbDebuffBleed[354334] = "Hook'd!"
+hbDebuffBleed[355087] = "Piercing Quill"
+hbDebuffBleed[355256] = "Rending Roar"
+hbDebuffBleed[355416] = "Sharpened Hide"
+hbDebuffBleed[355832] = "Quickblade"
+hbDebuffBleed[356445] = "Sharpened Hide"
+hbDebuffBleed[356620] = "Pouch of Razor Fragments"
+hbDebuffBleed[356808] = "Spiked"
+hbDebuffBleed[356923] = "Sever"
+hbDebuffBleed[356925] = "Carnage"
+hbDebuffBleed[357091] = "Cleave Flesh"
+hbDebuffBleed[357192] = "Dark Flurry"
+hbDebuffBleed[357239] = "Cleave Flesh"
+hbDebuffBleed[357322] = "Night Glaive"
+hbDebuffBleed[357665] = "Crystalline Flesh"
+hbDebuffBleed[357827] = "Frantic Rip"
+hbDebuffBleed[357953] = "Fanged Bite"
+hbDebuffBleed[358197] = "Searing Scythe"
+hbDebuffBleed[358224] = "Jagged Swipe"
+hbDebuffBleed[359587] = "Bloody Peck"
+hbDebuffBleed[359981] = "Rend"
+hbDebuffBleed[360194] = "Deathmark"
+hbDebuffBleed[360775] = "Puncture"
+hbDebuffBleed[360826] = "Rupture"
+hbDebuffBleed[360830] = "Garrote"
+hbDebuffBleed[361024] = "Thief's Blade"
+hbDebuffBleed[361049] = "Bleeding Gash"
+hbDebuffBleed[361756] = "Death Chakram"
+hbDebuffBleed[362149] = "Ascended Phalanx"
+hbDebuffBleed[362194] = "Suffering"
+hbDebuffBleed[362819] = "Rend"
+hbDebuffBleed[363830] = "Sickle of the Lion"
+hbDebuffBleed[363831] = "Bleeding Soul"
+hbDebuffBleed[365336] = "Rending Bite"
+hbDebuffBleed[365877] = "Jagged Blade"
+hbDebuffBleed[366075] = "Bloody Peck"
+hbDebuffBleed[366275] = "Rending Bite"
+hbDebuffBleed[366884] = "Ripped Secrets"
+hbDebuffBleed[367481] = "Bloody Bite"
+hbDebuffBleed[367521] = "Bone Bolt"
+hbDebuffBleed[367726] = "Lupine's Slash"
+hbDebuffBleed[368401] = "Puncture"
+hbDebuffBleed[368637] = "The Third Rune"
+hbDebuffBleed[368651] = "Vicious Wound"
+hbDebuffBleed[368701] = "Boon of Harvested Hope"
+hbDebuffBleed[369408] = "Rending Slash"
+hbDebuffBleed[369828] = "Chomp"
+hbDebuffBleed[370742] = "Jagged Strike"
+hbDebuffBleed[371472] = "Rake"
+hbDebuffBleed[372224] = "Dragonbone Axe"
+hbDebuffBleed[372397] = "Vicious Bite"
+hbDebuffBleed[372570] = "Bold Ambush"
+hbDebuffBleed[372718] = "Earthen Shards"
+hbDebuffBleed[372796] = "Blazing Rush"
+hbDebuffBleed[372860] = "Searing Wounds"
+hbDebuffBleed[373735] = "Dragon Strike"
+hbDebuffBleed[373947] = "Rending Swipe"
+hbDebuffBleed[375201] = "Talon Rip"
+hbDebuffBleed[375416] = "Bleeding"
+hbDebuffBleed[375475] = "Rending Bite"
+hbDebuffBleed[375803] = "Mammoth Trap"
+hbDebuffBleed[375893] = "Death Chakram"
+hbDebuffBleed[375937] = "Rending Strike"
+hbDebuffBleed[376997] = "Savage Peck"
+hbDebuffBleed[376999] = "Thrash"
+hbDebuffBleed[377002] = "Thrash"
+hbDebuffBleed[377344] = "Peck"
+hbDebuffBleed[377609] = "Dragon Rend"
+hbDebuffBleed[377732] = "Jagged Bite"
+hbDebuffBleed[378020] = "Gash Frenzy"
+hbDebuffBleed[381575] = "Lacerate"
+hbDebuffBleed[381628] = "Internal Bleeding"
+hbDebuffBleed[381672] = "Mutilated Flesh"
+hbDebuffBleed[381692] = "Swift Stab"
+hbDebuffBleed[384134] = "Pierce"
+hbDebuffBleed[384148] = "Ensnaring Trap"
+hbDebuffBleed[384575] = "Crippling Bite"
+hbDebuffBleed[385042] = "Gushing Wound"
+hbDebuffBleed[385060] = "Odyn's Fury"
+hbDebuffBleed[385511] = "Messy"
+hbDebuffBleed[385638] = "Razor Fragments"
+hbDebuffBleed[385834] = "Bloodthirsty Charge"
+hbDebuffBleed[385905] = "Tailstrike"
+hbDebuffBleed[386116] = "Messy"
+hbDebuffBleed[386640] = "Tear Flesh"
+hbDebuffBleed[387205] = "Beak Rend"
+hbDebuffBleed[387473] = "Big Sharp Teeth"
+hbDebuffBleed[387809] = "Splatter!"
+hbDebuffBleed[388301] = "Savage Tear"
+hbDebuffBleed[388377] = "Rending Slash"
+hbDebuffBleed[388473] = "Feeding Frenzy"
+hbDebuffBleed[388539] = "Rend"
+hbDebuffBleed[388912] = "Severing Slash"
+hbDebuffBleed[389505] = "Rending Slice"
+hbDebuffBleed[389881] = "Spearhead"
+hbDebuffBleed[390194] = "Rending Slash"
+hbDebuffBleed[390583] = "Logcutter"
+hbDebuffBleed[390834] = "Primal Rend"
+hbDebuffBleed[391098] = "Puncturing Impalement"
+hbDebuffBleed[391114] = "Cutting Winds"
+hbDebuffBleed[391140] = "Frenzied Assault"
+hbDebuffBleed[391308] = "Rending Swoop"
+hbDebuffBleed[391356] = "Tear"
+hbDebuffBleed[391725] = "Swooping Dive"
+hbDebuffBleed[392006] = "Vicious Chomp"
+hbDebuffBleed[392235] = "Furious Charge"
+hbDebuffBleed[392236] = "Furious Charge"
+hbDebuffBleed[392332] = "Horn Gore"
+hbDebuffBleed[392341] = "Mighty Swipe"
+hbDebuffBleed[392411] = "Beetle Thrust"
+hbDebuffBleed[392416] = "Beetle Charge"
+hbDebuffBleed[392841] = "Hungry Chomp"
+hbDebuffBleed[393426] = "Spear Swipe"
+hbDebuffBleed[393444] = "Gushing Wound"
+hbDebuffBleed[393718] = "Heartpiercer"
+hbDebuffBleed[393817] = "Hardened Shards"
+hbDebuffBleed[393820] = "Horn Swing"
+hbDebuffBleed[394021] = "Mutilated Flesh"
+hbDebuffBleed[394036] = "Serrated Bone Spike"
+hbDebuffBleed[394063] = "Rend"
+hbDebuffBleed[394371] = "Hit the Mark"
+hbDebuffBleed[394628] = "Peck"
+hbDebuffBleed[394647] = "Merciless Gore"
+hbDebuffBleed[395827] = "Severing Gore"
+hbDebuffBleed[395832] = "Jagged Cuts"
+hbDebuffBleed[396007] = "Vicious Peck"
+hbDebuffBleed[396093] = "Savage Leap"
+hbDebuffBleed[396348] = "Dismember"
+hbDebuffBleed[396353] = "Fatal Chomp"
+hbDebuffBleed[396476] = "Rending Claw"
+hbDebuffBleed[396639] = "Bloody Pounce"
+hbDebuffBleed[396641] = "Rending Slash"
+hbDebuffBleed[396674] = "Rupturing Slash"
+hbDebuffBleed[396675] = "Hemorrhaging Rend"
+hbDebuffBleed[396716] = "Splinterbark"
+hbDebuffBleed[396807] = "Savage Gore"
+hbDebuffBleed[397037] = "Slicing Winds"
+hbDebuffBleed[397092] = "Impaling Horn"
+hbDebuffBleed[397112] = "Primal Devastation"
+hbDebuffBleed[397364] = "Thunderous Roar"
+hbDebuffBleed[398392] = "Stomp"
+hbDebuffBleed[398497] = "Rock Needle"
+hbDebuffBleed[400050] = "Claw Rip"
+hbDebuffBleed[400344] = "Spike Traps"
+hbDebuffBleed[400941] = "Ragged Slash"
+hbDebuffBleed[401370] = "Deep Claws"
+hbDebuffBleed[403589] = "Gushing Wound"
+hbDebuffBleed[403662] = "Garrote"
+hbDebuffBleed[403790] = "Vicious Swipe"
+hbDebuffBleed[404907] = "Rupturing Slash"
+hbDebuffBleed[404945] = "Raking Slice"
+hbDebuffBleed[404978] = "Devastating Rend"
+hbDebuffBleed[405233] = "Thrash"
+hbDebuffBleed[406183] = "Time Slash"
+hbDebuffBleed[406365] = "Rending Charge"
+hbDebuffBleed[406499] = "Ravening Leaps"
+hbDebuffBleed[407120] = "Serrated Axe"
+hbDebuffBleed[407313] = "Shrapnel"
+hbDebuffBleed[411101] = "Artifact Shards"
+hbDebuffBleed[411437] = "Brutal Lacerations"
+hbDebuffBleed[411700] = "Slobbering Bite"
+hbDebuffBleed[411924] = "Drilljaws"
+hbDebuffBleed[412285] = "Stonebolt"
+hbDebuffBleed[412505] = "Rending Cleave"
+hbDebuffBleed[413131] = "Whirling Dagger"
+hbDebuffBleed[413136] = "Whirling Dagger"
+hbDebuffBleed[414466] = "Jagged Gills"
+hbDebuffBleed[414552] = "Stonecrack"
+hbDebuffBleed[416258] = "Stonebolt"
+hbDebuffBleed[418009] = "Serrated Arrows"
+hbDebuffBleed[418160] = "Sawblade-Storm"
+hbDebuffBleed[418624] = "Rending Slash"
 
 if HEALBOT_GAME_VERSION<2 then
     libCD = HealBot_Libs_CD()
@@ -925,6 +1854,7 @@ end
 
 function HealBot_Aura_InitUnitBuffIcons(buttonId)
     HealBot_UnitBuffIcons[buttonId]={}
+    uaBuffData[buttonId]={}
     for i = 1,12 do
         HealBot_UnitBuffIcons[buttonId][i]={}
         HealBot_UnitBuffIcons[buttonId][i]["count"]=0
@@ -935,10 +1865,23 @@ function HealBot_Aura_InitUnitBuffIcons(buttonId)
         HealBot_UnitBuffIcons[buttonId][i]["iconSet"]=1
         HealBot_UnitBuffIcons[buttonId][i].current=false
     end
+    for i = 1,20 do
+        uaBuffData[buttonId][i]={}
+        uaBuffData[buttonId][i].name=""
+        uaBuffData[buttonId][i].icon=""
+        uaBuffData[buttonId][i].count=0
+        uaBuffData[buttonId][i].debuffType=""
+        uaBuffData[buttonId][i].duration=0
+        uaBuffData[buttonId][i].expirationTime=0
+        uaBuffData[buttonId][i].sourceUnit="x"
+        uaBuffData[buttonId][i].sourceUnitIsPlayer=false
+        uaBuffData[buttonId][i].spellId=0
+    end
 end
 
 function HealBot_Aura_InitUnitDebuffIcons(buttonId)
     HealBot_UnitDebuffIcons[buttonId]={}
+    uaDebuffData[buttonId]={}
     for i = 51,60 do
         HealBot_UnitDebuffIcons[buttonId][i]={}
         HealBot_UnitDebuffIcons[buttonId][i]["count"]=0
@@ -948,6 +1891,19 @@ function HealBot_Aura_InitUnitDebuffIcons(buttonId)
         HealBot_UnitDebuffIcons[buttonId][i]["unitCaster"]="x"
         HealBot_UnitDebuffIcons[buttonId][i]["iconSet"]=1
         HealBot_UnitDebuffIcons[buttonId][i].current=false
+    end
+    for i = 1,20 do
+        uaDebuffData[buttonId][i]={}
+        uaDebuffData[buttonId][i].name=""
+        uaDebuffData[buttonId][i].icon=""
+        uaDebuffData[buttonId][i].count=0
+        uaDebuffData[buttonId][i].debuffType=""
+        uaDebuffData[buttonId][i].duration=0
+        uaDebuffData[buttonId][i].expirationTime=0
+        uaDebuffData[buttonId][i].sourceUnit="x"
+        uaDebuffData[buttonId][i].sourceUnitIsPlayer=false
+        uaDebuffData[buttonId][i].spellId=0
+        uaDebuffData[buttonId][i].isBossAura=false
     end
 end
 
@@ -963,7 +1919,7 @@ end
 function HealBot_Aura_setButtonIcons(buttonId)
     HealBot_Aura_InitUnitDebuffIcons(buttonId) 
     HealBot_Aura_InitUnitBuffIcons(buttonId) 
-    HealBot_Aura_InitUnitExtraIcons(buttonId) 
+    HealBot_Aura_InitUnitExtraIcons(buttonId)
       --HealBot_setCall("HealBot_Aura_setButtonIcons")
 end
 
@@ -1025,15 +1981,15 @@ end
 local hbCustomDebuffsCastBy={}
 local hbCustomDebuffsDisabled={}
 
-function HealBot_Aura_SetDebuffIcon()
-    if (hbCustomDebuffsDisabled[uaSpellId] and (hbCustomDebuffsDisabled[uaSpellId][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaSpellId]["ALL"])) or
-       (hbCustomDebuffsDisabled[uaName] and (hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaName]["ALL"])) then
+function HealBot_Aura_SetDebuffIcon(button)
+    if (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId]["ALL"])) or
+       (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name]["ALL"])) then
         return false
     else
-        debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["count"]=uaCount
-        debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["expiration"]=uaExpirationTime
-        debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["caster"]=uaUnitCaster
-        table.insert(debuffSort[HealBot_Aura_IconSet[uaSpellId]],HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"])
+        debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]]["count"]=uaDebuffData[button.id][uaDebuffSlot].count
+        debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]]["expiration"]=uaDebuffData[button.id][uaDebuffSlot].expirationTime
+        debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]]["caster"]=uaDebuffData[button.id][uaDebuffSlot].sourceUnit
+        table.insert(debuffSort[HealBot_Aura_IconSet[uaDebuffData[button.id][uaDebuffSlot].spellId]],HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"])
     end
       --HealBot_setCall("HealBot_Aura_SetDebuffIcon")
     return true
@@ -1278,35 +2234,35 @@ function HealBot_Aura_CheckGeneralBuff(button)
 end
 
 local buffCustomType,scbUnitClassEN=false,"XXXX"
-function HealBot_Aura_ShowCustomBuff()
-    buffCustomType=HealBot_Watch_HoT[uaName] or HealBot_Watch_HoT[uaSpellId] or false
+function HealBot_Aura_ShowCustomBuff(button)
+    buffCustomType=HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] or HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] or false
     if buffCustomType then
         if buffCustomType=="A" then
-            HealBot_Options_MissingBuffPrio(uaSpellId)
+            HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
             return true, false
         elseif buffCustomType=="S" then
-            if uaUnitCasterIsPlayer then
-                HealBot_Options_MissingBuffPrio(uaSpellId)
+            if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
+                HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                 return true, false
             end
         elseif buffCustomType=="C" then
-            _, scbUnitClassEN = UnitClass(uaUnitCaster)
+            _, scbUnitClassEN = UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
             if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
-                HealBot_Options_MissingBuffPrio(uaSpellId)
+                HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                 return true, false
             end
         end
     else
-        if uaExpirationTime>0 then
-            if HealBot_Config_Buffs.AutoBuff==3 or (HealBot_Config_Buffs.AutoBuff==2 and uaDuration<HealBot_Config_Buffs.AutoBuffExpireTime) then
+        if uaBuffData[button.id][uaBuffSlot].expirationTime>0 then
+            if HealBot_Config_Buffs.AutoBuff==3 or (HealBot_Config_Buffs.AutoBuff==2 and uaBuffData[button.id][uaBuffSlot].duration<HealBot_Config_Buffs.AutoBuffExpireTime) then
                 if HealBot_Config_Buffs.AutoBuffCastBy==1 then
-                    if uaUnitCasterIsPlayer then
+                    if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
                         return true, false
                     end
                 elseif HealBot_Config_Buffs.AutoBuffCastBy==3 then
                     return true, false
                 else
-                    _, scbUnitClassEN = UnitClass(uaUnitCaster)
+                    _, scbUnitClassEN = UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
                     if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
                         return true, false
                     end
@@ -1320,40 +2276,40 @@ function HealBot_Aura_ShowCustomBuff()
 end
 
 local ciCustomBuff,ciCanExclude=false,true
-function HealBot_Aura_CheckCurBuff()
-    ciCustomBuff,ciCanExclude=HealBot_Aura_ShowCustomBuff()
-    if ciCustomBuff or HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName] then
-        if not HealBot_AuraBuffCache[uaSpellId] or HealBot_AuraBuffCache[uaSpellId].reset then
-            if not HealBot_AuraBuffCache[uaSpellId] then HealBot_AuraBuffCache[uaSpellId]={} end
-            HealBot_AuraBuffCache[uaSpellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaName] or HealBot_Globals.HealBot_Custom_Buffs[uaSpellId] or 20
-            HealBot_AuraBuffCache[uaSpellId]["texture"]=uaTexture
-            HealBot_AuraBuffCache[uaSpellId]["name"]=uaName
-            HealBot_AuraBuffCache[uaSpellId]["type"]=uaDebuffType
-            HealBot_AuraBuffCache[uaSpellId]["iconSet"]=HealBot_Aura_IconSet[uaSpellId]
-            if HealBot_SpellID_LookupData[uaName] and HealBot_SpellID_LookupData[uaName]["CHECK"] then
-                HealBot_SpellID_LookupData[uaName]["CHECK"]=false
-                HealBot_SpellID_LookupData[uaName]["ID"]=uaSpellId
-                table.insert(HealBot_SpellID_LookupIdx,uaName)
+function HealBot_Aura_CheckCurBuff(button)
+    ciCustomBuff,ciCanExclude=HealBot_Aura_ShowCustomBuff(button)
+    if ciCustomBuff or HealBot_BuffWatch[uaBuffData[button.id][uaBuffSlot].name] or HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name] then
+        if not HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset then
+            if not HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId] then HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]={} end
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaBuffData[button.id][uaBuffSlot].name] or HealBot_Globals.HealBot_Custom_Buffs[uaBuffData[button.id][uaBuffSlot].spellId] or 20
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["texture"]=uaBuffData[button.id][uaBuffSlot].icon
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["name"]=uaBuffData[button.id][uaBuffSlot].name
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["type"]=uaBuffData[button.id][uaBuffSlot].debuffType
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["iconSet"]=HealBot_Aura_IconSet[uaBuffData[button.id][uaBuffSlot].spellId]
+            if HealBot_SpellID_LookupData[uaBuffData[button.id][uaBuffSlot].name] and HealBot_SpellID_LookupData[uaBuffData[button.id][uaBuffSlot].name]["CHECK"] then
+                HealBot_SpellID_LookupData[uaBuffData[button.id][uaBuffSlot].name]["CHECK"]=false
+                HealBot_SpellID_LookupData[uaBuffData[button.id][uaBuffSlot].name]["ID"]=uaBuffData[button.id][uaBuffSlot].spellId
+                table.insert(HealBot_SpellID_LookupIdx,uaBuffData[button.id][uaBuffSlot].name)
                 HealBot_Timers_Set("AURA","BuffIdLookup",1)
             end
         end
         if ciCustomBuff then
-            if not HealBot_AuraBuffIconCache[uaUnitCaster] then HealBot_AuraBuffIconCache[uaUnitCaster]={} end
-            if not HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId] or HealBot_AuraBuffCache[uaSpellId].reset then 
-                HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]={}
-                if HealBot_AuraBuffCache[uaSpellId]["priority"]<10 then
-                    HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]="0"..HealBot_AuraBuffCache[uaSpellId]["priority"]..uaSpellId..uaUnitCaster
+            if not HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit] then HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit]={} end
+            if not HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset then 
+                HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]={}
+                if HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"]<10 then
+                    HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]="0"..HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"]..uaBuffData[button.id][uaBuffSlot].spellId..uaBuffData[button.id][uaBuffSlot].sourceUnit
                 else
-                    HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]=HealBot_AuraBuffCache[uaSpellId]["priority"]..uaSpellId..uaUnitCaster
+                    HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]=HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"]..uaBuffData[button.id][uaBuffSlot].spellId..uaBuffData[button.id][uaBuffSlot].sourceUnit
                 end
-                if not buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]] then
-                    buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]={}
+                if not buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]] then
+                    buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]]={}
                 end
-                buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["spellId"]=uaSpellId
-                HealBot_AuraBuffCache[uaSpellId].reset=false
+                buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]]["spellId"]=uaBuffData[button.id][uaBuffSlot].spellId
+                HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset=false
             end
-        elseif HealBot_AuraBuffCache[uaSpellId].reset then 
-            HealBot_AuraBuffCache[uaSpellId].reset=false
+        elseif HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset then 
+            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset=false
         end
         return true, ciCustomBuff, ciCanExclude
     else
@@ -1397,17 +2353,17 @@ function HealBot_Aura_setCustomBuffFilterDisabled()
     HealBot_Timers_Set("AURA","DeleteExcludeBuffInCache")
 end
 
-function HealBot_Aura_SetBuffIcon()
-    if (hbCustomBuffsDisabled[uaSpellId] and (hbCustomBuffsDisabled[uaSpellId][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaSpellId]["ALL"])) or
-       (hbCustomBuffsDisabled[uaName] and (hbCustomBuffsDisabled[uaName][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaName]["ALL"])) then
+function HealBot_Aura_SetBuffIcon(button)
+    if (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].spellId]["ALL"])) or
+       (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name] and (hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name][HealBot_Aura_luVars["mapName"]] or hbCustomBuffsDisabled[uaBuffData[button.id][uaBuffSlot].name]["ALL"])) then
         return
-    elseif HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"] then
-        buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["count"]=uaCount
-        buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["expiration"]=uaExpirationTime
-        buffAuraCache[HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["caster"]=uaUnitCaster
-        table.insert(buffSort[HealBot_Aura_IconSet[uaSpellId]],HealBot_AuraBuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"])
-    elseif HealBot_AuraBuffCache[uaSpellId] then
-        HealBot_AuraBuffCache[uaSpellId].reset=true
+    elseif HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"] then
+        buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]]["count"]=uaBuffData[button.id][uaBuffSlot].count
+        buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]]["expiration"]=uaBuffData[button.id][uaBuffSlot].expirationTime
+        buffAuraCache[HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"]]["caster"]=uaBuffData[button.id][uaBuffSlot].sourceUnit
+        table.insert(buffSort[HealBot_Aura_IconSet[uaBuffData[button.id][uaBuffSlot].spellId]],HealBot_AuraBuffIconCache[uaBuffData[button.id][uaBuffSlot].sourceUnit][uaBuffData[button.id][uaBuffSlot].spellId]["prioIndex"])
+    elseif HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId] then
+        HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].reset=true
     end
       --HealBot_setCall("HealBot_Aura_SetBuffIcon")
 end
@@ -1540,15 +2496,15 @@ local dNamePriority, dTypePriority=99,99
 local debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 15, false, debuffType, false
 local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
 local ccdbWatchTarget={}
-function HealBot_Aura_CheckCurCustomDebuff(canBeAlways)
-    ccdbCasterID=hbCustomDebuffsCastBy[uaSpellId] or hbCustomDebuffsCastBy[uaName] or HealBot_Globals.CureCustomDefaultCastBy
+function HealBot_Aura_CheckCurCustomDebuff(button, canBeAlways)
+    ccdbCasterID=hbCustomDebuffsCastBy[uaDebuffData[button.id][uaDebuffSlot].spellId] or hbCustomDebuffsCastBy[uaDebuffData[button.id][uaDebuffSlot].name] or HealBot_Globals.CureCustomDefaultCastBy
     if ccdbCasterID~=castByListIndexed[HEALBOT_CUSTOM_CASTBY_EVERYONE] then
-        if uaUnitCasterIsPlayer then
+        if uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer then
             ccdbUnitCasterID=castByListIndexed[HEALBOT_OPTIONS_SELFHEALS]
             if ccdbCasterID==castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND] then 
                 ccdbCasterID=castByListIndexed[HEALBOT_OPTIONS_SELFHEALS]
             end
-        elseif UnitIsFriend("player",uaUnitCaster) then
+        elseif UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit) then
             ccdbUnitCasterID=castByListIndexed[HEALBOT_CUSTOM_CASTBY_FRIEND]
         else
             ccdbUnitCasterID=castByListIndexed[HEALBOT_CUSTOM_CASTBY_ENEMY]
@@ -1588,19 +2544,19 @@ function HealBot_Aura_CacheDebuff(spellId, spellName, debuffIsAlways, debuffText
 end
 
 function HealBot_Aura_CheckCurDebuff(button)
-    debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 20, false, uaDebuffType, false
-    dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaSpellId, uaName, uaDebuffType)
-    if (hbCustomDebuffsDisabled[uaSpellId] and (hbCustomDebuffsDisabled[uaSpellId][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaSpellId]["ALL"])) or
-       (hbCustomDebuffsDisabled[uaName] and (hbCustomDebuffsDisabled[uaName][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaName]["ALL"])) then
+    debuffIsCurrent, cDebuffPrio, debuffIsAlways, debuff_Type, debuffIsAuto=true, 20, false, uaDebuffData[button.id][uaDebuffSlot].debuffType, false
+    dNamePriority, dTypePriority=HealBot_Options_retDebuffPriority(uaDebuffData[button.id][uaDebuffSlot].spellId, uaDebuffData[button.id][uaDebuffSlot].name, uaDebuffData[button.id][uaDebuffSlot].debuffType)
+    if (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].spellId]["ALL"])) or
+       (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name] and (hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name][HealBot_Aura_luVars["mapName"]] or hbCustomDebuffsDisabled[uaDebuffData[button.id][uaDebuffSlot].name]["ALL"])) then
         debuffIsCurrent=false
     elseif dTypePriority>dNamePriority and dNamePriority<21 then
-        HealBot_Aura_CheckCurCustomDebuff(true)
+        HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
         ccdbCheckthis=false
-        if HealBot_Aura_CanDispell[uaSpellId] and dTypePriority<21 and HealBot_Aura_luVars["cureOffCd"] and 
-          (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaUnitCaster)) and
-          (uaDuration==0 or uaDuration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
-            ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffType);
+        if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId] and dTypePriority<21 and HealBot_Aura_luVars["cureOffCd"] and 
+          (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit)) and
+          (uaDebuffData[button.id][uaDebuffSlot].duration==0 or uaDebuffData[button.id][uaDebuffSlot].duration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
+            ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffData[button.id][uaDebuffSlot].debuffType);
             if ccdbWatchTarget then
                 if ccdbWatchTarget["Raid"] then
                     ccdbCheckthis=true;
@@ -1632,9 +2588,9 @@ function HealBot_Aura_CheckCurDebuff(button)
         end
         if ccdbCheckthis and dTypePriority<16 then
             cDebuffPrio=dTypePriority
-        elseif (not UnitIsFriend("player",uaUnitCaster) and uaIsBossDebuff and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
-           (HealBot_Config_Cures.AlwaysShowTimed and uaDuration>0 and uaDuration<HealBot_Config_Cures.ShowTimeMaxDuration) or 
-           (HealBot_Config_Cures.HealBot_Custom_Debuffs_All[uaDebuffType]) then
+        elseif (not UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit) and uaDebuffData[button.id][uaDebuffSlot].isBossAura and HealBot_Config_Cures.AlwaysShowBoss and UnitExists("boss1")) or 
+           (HealBot_Config_Cures.AlwaysShowTimed and uaDebuffData[button.id][uaDebuffSlot].duration>0 and uaDebuffData[button.id][uaDebuffSlot].duration<HealBot_Config_Cures.ShowTimeMaxDuration) or 
+           (HealBot_Config_Cures.HealBot_Custom_Debuffs_All[uaDebuffData[button.id][uaDebuffSlot].debuffType]) then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=15
             debuffIsAuto=true
@@ -1644,8 +2600,8 @@ function HealBot_Aura_CheckCurDebuff(button)
         elseif ccdbCheckthis then
             cDebuffPrio=dTypePriority
         elseif dNamePriority<21 then
-            HealBot_Aura_CheckCurCustomDebuff(false)
-        elseif uaUnitCasterIsPlayer and not UnitIsFriend("player",button.unit) then
+            HealBot_Aura_CheckCurCustomDebuff(button, false)
+        elseif uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer and not UnitIsFriend("player",button.unit) then
             debuff_Type=HEALBOT_CUSTOM_en
             cDebuffPrio=20
         else
@@ -1653,15 +2609,15 @@ function HealBot_Aura_CheckCurDebuff(button)
         end
     end
     if debuffIsCurrent then
-        if not HealBot_AuraDebuffCache[uaSpellId] or HealBot_AuraDebuffCache[uaSpellId].reset then
-            HealBot_Aura_CacheDebuff(uaSpellId, uaName, debuffIsAlways, uaTexture, uaDebuffType)
-            HealBot_AuraDebuffCache[uaSpellId]["priority"]=-1
+        if not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId] or HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId].reset then
+            HealBot_Aura_CacheDebuff(uaDebuffData[button.id][uaDebuffSlot].spellId, uaDebuffData[button.id][uaDebuffSlot].name, debuffIsAlways, uaDebuffData[button.id][uaDebuffSlot].icon, uaDebuffData[button.id][uaDebuffSlot].debuffType)
+            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]=-1
         end
-        HealBot_AuraDebuffCache[uaSpellId].isAuto=debuffIsAuto
-        HealBot_AuraDebuffCache[uaSpellId]["debuffType"]=debuff_Type
-        if not HealBot_AuraDebuffIconCache[uaUnitCaster] then HealBot_AuraDebuffIconCache[uaUnitCaster]={} end
-        if not HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId] or HealBot_AuraDebuffCache[uaSpellId]["priority"]~=cDebuffPrio then
-            HealBot_AuraDebuffCache[uaSpellId]["priority"]=cDebuffPrio
+        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId].isAuto=debuffIsAuto
+        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["debuffType"]=debuff_Type
+        if not HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit] then HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit]={} end
+        if not HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId] or HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]~=cDebuffPrio then
+            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]=cDebuffPrio
             HealBot_Aura_SetCurDebuffIconCache(button)
         end
     end
@@ -1670,18 +2626,18 @@ function HealBot_Aura_CheckCurDebuff(button)
 end
 
 function HealBot_Aura_SetCurDebuffIconCache(button)
-    if not HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId] then
-        HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]={}
+    if not HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId] then
+        HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]={}
     end
-    if HealBot_AuraDebuffCache[uaSpellId]["priority"]<10 then
-        HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]="0"..HealBot_AuraDebuffCache[uaSpellId]["priority"]..uaSpellId..uaUnitCaster
+    if HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]<10 then
+        HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]="0"..HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]..uaDebuffData[button.id][uaDebuffSlot].spellId..uaDebuffData[button.id][uaDebuffSlot].sourceUnit
     else
-        HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]=HealBot_AuraDebuffCache[uaSpellId]["priority"]..uaSpellId..uaUnitCaster
+        HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]..uaDebuffData[button.id][uaDebuffSlot].spellId..uaDebuffData[button.id][uaDebuffSlot].sourceUnit
     end
-    if not debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]] then
-        debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]={}
+    if not debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]] then
+        debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]]={}
     end
-    debuffAuraCache[HealBot_AuraDebuffIconCache[uaUnitCaster][uaSpellId]["prioIndex"]]["spellId"]=uaSpellId
+    debuffAuraCache[HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit][uaDebuffData[button.id][uaDebuffSlot].spellId]["prioIndex"]]["spellId"]=uaDebuffData[button.id][uaDebuffSlot].spellId
 end
 
 function HealBot_Aura_AuxSetAuraBuffBars(button)
@@ -1839,13 +2795,13 @@ end
 
 local asbtPrevEndTime=0
 function HealBot_Aura_SetUnitBuffTimer(button)
-    asbtPrevEndTime=button.aura.buff.recheck[uaName] or 0
-    if HealBot_ShortBuffs[uaName] then 
-        button.aura.buff.recheck[uaName] = uaExpirationTime-HealBot_Config_Buffs.ShortBuffTimer
+    asbtPrevEndTime=button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] or 0
+    if HealBot_ShortBuffs[uaBuffData[button.id][uaBuffSlot].name] then 
+        button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] = uaBuffData[button.id][uaBuffSlot].expirationTime-HealBot_Config_Buffs.ShortBuffTimer
     else
-        button.aura.buff.recheck[uaName] = uaExpirationTime-HealBot_Config_Buffs.LongBuffTimer
+        button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] = uaBuffData[button.id][uaBuffSlot].expirationTime-HealBot_Config_Buffs.LongBuffTimer
     end
-    if asbtPrevEndTime~=button.aura.buff.recheck[uaName] then
+    if asbtPrevEndTime~=button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] then
         HealBot_Aura_MarkCheckBuffsTime(button)
     end
       --HealBot_setCall("HealBot_Aura_SetUnitBuffTimer")
@@ -2132,80 +3088,70 @@ end
 local uaIsCurrent, uaIsCustom, uaNever, uaZ, tGeneralBuffs=false, false, false, 1, true
 local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
-    if uaExpirationTime then
-        if not HealBot_Aura_IconSet[uaSpellId] then
-            HealBot_Aura_IconSet[uaSpellId]=HealBot_BuffIconSet[uaSpellId] or HealBot_BuffIconSet[uaName] or 1
-            HealBot_Aura_ID[uaName]=uaSpellId
+    if not HealBot_Aura_IconSet[uaBuffData[button.id][uaBuffSlot].spellId] then
+        HealBot_Aura_IconSet[uaBuffData[button.id][uaBuffSlot].spellId]=HealBot_BuffIconSet[uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_BuffIconSet[uaBuffData[button.id][uaBuffSlot].name] or 1
+        HealBot_Aura_ID[uaBuffData[button.id][uaBuffSlot].name]=uaBuffData[button.id][uaBuffSlot].spellId
+    end
+    if not HealBot_UnitBuffCurrent[button.guid] then HealBot_UnitBuffCurrent[button.guid]={} end
+    HealBot_UnitBuffCurrent[button.guid][uaBuffData[button.id][uaBuffSlot].name]=HealBot_TimeNow
+    HealBot_Aura_BuffUpdate_Plugins(button, uaBuffData[button.id][uaBuffSlot].name, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[uaBuffData[button.id][uaBuffSlot].name]] or HealBot_BuffTagNames[uaBuffData[button.id][uaBuffSlot].name], uaBuffData[button.id][uaBuffSlot].count, true, uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer)
+    if uaBuffData[button.id][uaBuffSlot].name==HEALBOT_SPIRIT_OF_REDEMPTION_NAME and button.health.current>0 then 
+        HealBot_OnEvent_UnitHealth(button)
+    end
+    if not HealBot_ExcludeBuffInCache[uaBuffData[button.id][uaBuffSlot].spellId] then
+        if uaBuffData[button.id][uaBuffSlot].expirationTime>0 then HealBot_AddDebug("Buff is "..(uaBuffData[button.id][uaBuffSlot].name or "nil").." for slot "..uaBuffSlot,"NewAuras",true) end
+        if not HealBot_Data["PALIVE"] then
+            tGeneralBuffs=false
+        elseif HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name] then
+            uaBuffData[button.id][uaBuffSlot].name=GetItemInfo(HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name]) or uaBuffData[button.id][uaBuffSlot].name
         end
-        if uaUnitCaster then
-            if UnitIsUnit(uaUnitCaster,"player") then
-                uaUnitCasterIsPlayer=true
-            else
-                uaUnitCasterIsPlayer=false
+        uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff(button)
+        if uaIsCurrent then
+            curBuffxTime[uaBuffData[button.id][uaBuffSlot].name]=uaBuffData[button.id][uaBuffSlot].expirationTime
+            if uaIsCustom then
+                HealBot_Aura_SetBuffIcon(button)
             end
-        else
-            uaUnitCasterIsPlayer=false
-            uaUnitCaster="nil" 
-        end
-        if not HealBot_UnitBuffCurrent[button.guid] then HealBot_UnitBuffCurrent[button.guid]={} end
-        HealBot_UnitBuffCurrent[button.guid][uaName]=HealBot_TimeNow
-        HealBot_Aura_BuffUpdate_Plugins(button, uaName, HealBot_Globals.CustomBuffTag[HealBot_Aura_ID[uaName]] or HealBot_BuffTagNames[uaName], uaCount, true, uaUnitCasterIsPlayer)
-        if uaName==HEALBOT_SPIRIT_OF_REDEMPTION_NAME and button.health.current>0 then 
-            HealBot_OnEvent_UnitHealth(button)
-        end
-        if not HealBot_ExcludeBuffInCache[uaSpellId] then
-            if not HealBot_Data["PALIVE"] then
-                tGeneralBuffs=false
-            elseif HealBot_Buff_Aura2Item[uaName] then
-                uaName=GetItemInfo(HealBot_Buff_Aura2Item[uaName]) or uaName
-            end
-            uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff()
-            if uaIsCurrent then
-                curBuffxTime[uaName]=uaExpirationTime
-                if uaIsCustom then
-                    HealBot_Aura_SetBuffIcon()
-                end
-                if tGeneralBuffs and onlyPlayers and (HealBot_BuffWatch[uaName] or HealBot_BuffNameTypes[uaName]) then
-                    if not button.aura.buff.recheck[uaName] or button.aura.buff.recheck[uaName]>HealBot_TimeNow then
-                        if HealBot_BuffNameTypes[uaName] then
-                            if HealBot_BuffNameTypes[uaName]<7 and uaUnitCasterIsPlayer then ownBlessing=true end
-                            PlayerBuffTypes[HealBot_BuffNameTypes[uaName]]=true
-                        end
-                    end
-                    PlayerBuffs[uaName]=true
-                    if HealBot_CheckBuffs[uaName] and uaExpirationTime>0 and (HEALBOT_GAME_VERSION>1 or uaUnitCasterIsPlayer) then
-                        HealBot_Aura_SetUnitBuffTimer(button)
-                    elseif button.aura.buff.recheck[uaName] then
-                        button.aura.buff.recheck[uaName]=nil
-                        HealBot_Aura_MarkCheckBuffsTime(button)
+            if tGeneralBuffs and onlyPlayers and (HealBot_BuffWatch[uaBuffData[button.id][uaBuffSlot].name] or HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name]) then
+                if not button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] or button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name]>HealBot_TimeNow then
+                    if HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name] then
+                        if HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name]<7 and uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then ownBlessing=true end
+                        PlayerBuffTypes[HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name]]=true
                     end
                 end
-                if not unitCurrentBuff.active or unitCurrentBuff.prio>HealBot_AuraBuffCache[uaSpellId]["priority"] then
-                    unitCurrentBuff.active=true
-                    unitCurrentBuff.id=uaSpellId
-                    unitCurrentBuff.name=HealBot_AuraBuffCache[uaSpellId]["name"]
-                    unitCurrentBuff.prio=HealBot_AuraBuffCache[uaSpellId]["priority"]
+                PlayerBuffs[uaBuffData[button.id][uaBuffSlot].name]=true
+                if HealBot_CheckBuffs[uaBuffData[button.id][uaBuffSlot].name] and uaBuffData[button.id][uaBuffSlot].expirationTime>0 and (HEALBOT_GAME_VERSION>1 or uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer) then
+                    HealBot_Aura_SetUnitBuffTimer(button)
+                elseif button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name] then
+                    button.aura.buff.recheck[uaBuffData[button.id][uaBuffSlot].name]=nil
+                    HealBot_Aura_MarkCheckBuffsTime(button)
                 end
-            elseif uaNever and not HealBot_BuffWatch[uaName] and not HealBot_BuffNameTypes[uaName] then
-                HealBot_ExcludeBuffInCache[uaSpellId]=true
             end
+            if not unitCurrentBuff.active or unitCurrentBuff.prio>HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"] then
+                unitCurrentBuff.active=true
+                unitCurrentBuff.id=uaBuffData[button.id][uaBuffSlot].spellId
+                unitCurrentBuff.name=HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["name"]
+                unitCurrentBuff.prio=HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId]["priority"]
+            end
+        elseif uaNever and not HealBot_BuffWatch[uaBuffData[button.id][uaBuffSlot].name] and not HealBot_BuffNameTypes[uaBuffData[button.id][uaBuffSlot].name] then
+            HealBot_ExcludeBuffInCache[uaBuffData[button.id][uaBuffSlot].spellId]=true
         end
     end
 end
 
 function HealBot_Aura_CheckUnitDebuff(button)
-    --if uaSpellId==32407 or uaName=="Strange Aura" then
-    --    uaDebuffType=HEALBOT_DISEASE_en
-    --    uaDebuffType=HEALBOT_MAGIC_en
-    --    uaDebuffType=HEALBOT_CURSE_en
-    --    uaDebuffType=HEALBOT_POISON_en
-    --    HealBot_Aura_CanDispell[uaSpellId]=true
-    --    HealBot_Aura_IconSet[uaSpellId]=3
+    --if uaDebuffData[button.id][uaDebuffSlot].spellId==32407 or uaDebuffData[button.id][uaDebuffSlot].name=="Strange Aura" then
+    --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_DISEASE_en
+    --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_MAGIC_en
+    --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_CURSE_en
+    --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_POISON_en
+    --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_BLEED_en
+    --    HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId]=true
+    --    HealBot_Aura_IconSet[uaDebuffData[button.id][uaDebuffSlot].spellId]=3
     --end
-    if not HealBot_Aura_IconSet[uaSpellId] then
-        HealBot_Aura_IconSet[uaSpellId]=HealBot_DebuffIconSet[uaSpellId] or HealBot_DebuffIconSet[uaName] or 1
-        HealBot_Aura_ID[uaName]=uaSpellId
-        if HealBot_Aura_CanDispell[uaSpellId]==nil then
+    if not HealBot_Aura_IconSet[uaDebuffData[button.id][uaDebuffSlot].spellId] then
+        HealBot_Aura_IconSet[uaDebuffData[button.id][uaDebuffSlot].spellId]=HealBot_DebuffIconSet[uaDebuffData[button.id][uaDebuffSlot].spellId] or HealBot_DebuffIconSet[uaDebuffData[button.id][uaDebuffSlot].name] or 1
+        HealBot_Aura_ID[uaDebuffData[button.id][uaDebuffSlot].name]=uaDebuffData[button.id][uaDebuffSlot].spellId
+        if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId]==nil then
             local aId=1
             while true do
                 local aSpellName, _, _, _, _, _, _, _, _, aSpellId = UnitAura(button.unit,aId,"HARMFUL|RAID")
@@ -2213,11 +3159,11 @@ function HealBot_Aura_CheckUnitDebuff(button)
                     aId=aId+1
                     HealBot_Aura_CanDispell[aSpellId]=true
                 else
-                    if HealBot_Aura_CanDispell[uaSpellId]==nil then
-                        if HealBot_Options_retDebuffCureType(uaDebuffType) then
-                            HealBot_Aura_CanDispell[uaSpellId]=true
+                    if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId]==nil then
+                        if HealBot_Options_retDebuffCureType(uaDebuffData[button.id][uaDebuffSlot].debuffType) then
+                            HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId]=true
                         else
-                            HealBot_Aura_CanDispell[uaSpellId]=false
+                            HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId]=false
                         end
                     end
                     break
@@ -2225,67 +3171,255 @@ function HealBot_Aura_CheckUnitDebuff(button)
             end
         end
     end
-    if uaUnitCaster then
-        if UnitIsUnit(uaUnitCaster,"player") then
-            uaUnitCasterIsPlayer=true
-        else
-            uaUnitCasterIsPlayer=false
-        end
-    else
-        uaUnitCasterIsPlayer=false
-        uaUnitCaster="nil"
-    end
     if not HealBot_UnitDebuffCurrent[button.guid] then HealBot_UnitDebuffCurrent[button.guid]={} end
-    HealBot_UnitDebuffCurrent[button.guid][uaName]=HealBot_TimeNow
-    HealBot_Aura_DebuffUpdate_Plugins(button, uaName, HealBot_Globals.CDCTag[HealBot_Aura_ID[uaName]] or HealBot_DebuffTagNames[uaName], uaCount, true, uaUnitCasterIsPlayer)
-    if not HealBot_AuraDebuffCache[uaSpellId] or not HealBot_AuraDebuffCache[uaSpellId].always then
+    HealBot_UnitDebuffCurrent[button.guid][uaDebuffData[button.id][uaDebuffSlot].name]=HealBot_TimeNow
+    HealBot_Aura_DebuffUpdate_Plugins(button, uaDebuffData[button.id][uaDebuffSlot].name, HealBot_Globals.CDCTag[HealBot_Aura_ID[uaDebuffData[button.id][uaDebuffSlot].name]] or HealBot_DebuffTagNames[uaDebuffData[button.id][uaDebuffSlot].name], uaDebuffData[button.id][uaDebuffSlot].count, true, uaDebuffData[button.id][uaDebuffSlot].sourceUnitIsPlayer)
+    if not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId] or not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId].always then
         uaIsCurrent=HealBot_Aura_CheckCurDebuff(button)
     else
         uaIsCurrent=true
-        if not HealBot_AuraDebuffIconCache[uaUnitCaster] then HealBot_AuraDebuffIconCache[uaUnitCaster]={} end
+        if not HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit] then HealBot_AuraDebuffIconCache[uaDebuffData[button.id][uaDebuffSlot].sourceUnit]={} end
         HealBot_Aura_SetCurDebuffIconCache(button)
     end
     if uaIsCurrent then
-        HealBot_Aura_SetDebuffIcon()
-        if not unitCurrentDebuff.active or unitCurrentDebuff.prio>HealBot_AuraDebuffCache[uaSpellId]["priority"] then
+        HealBot_Aura_SetDebuffIcon(button)
+        if not unitCurrentDebuff.active or unitCurrentDebuff.prio>HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"] then
             unitCurrentDebuff.active=true
-            unitCurrentDebuff.id=uaSpellId
-            unitCurrentDebuff.prio=HealBot_AuraDebuffCache[uaSpellId]["priority"]
+            unitCurrentDebuff.id=uaDebuffData[button.id][uaDebuffSlot].spellId
+            unitCurrentDebuff.prio=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["priority"]
         end
     end
 end
 
-function HealBot_Aura_GetBuffsV1(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HELPFUL")
+local uaID,uaSlot="",0
+local function HealBot_Aura_UpdateUnitBuffsData(button)
+    if not HealBot_ExcludeBuffInCache[uaSpellId] and uaExpirationTime and uaSlot<20 then
+        uaSlot=uaSlot+1
+        uaBuffData[button.id][uaSlot].name=uaName
+        uaBuffData[button.id][uaSlot].icon=uaTexture
+        uaBuffData[button.id][uaSlot].count=uaCount
+        uaBuffData[button.id][uaSlot].debuffType=uaDebuffType
+        uaBuffData[button.id][uaSlot].duration=uaDuration
+        uaBuffData[button.id][uaSlot].expirationTime=uaExpirationTime
+        if uaUnitCaster then
+            uaBuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
+            if UnitIsUnit(uaUnitCaster,"player") then
+                uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+            else
+                uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+            end
+        else
+            uaBuffData[button.id][uaSlot].sourceUnit="nil" 
+            uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+        end
+        uaBuffData[button.id][uaSlot].spellId=uaSpellId
+        uaBuffData[button.id].lastslot=uaSlot
+    end
 end
 
-function HealBot_Aura_GetBuffsV2(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitBuff(button.unit,uaZ)
+local function HealBot_Aura_UpdateUnitBuffsV1(button)
+    uaZ=1
+    while true do
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HELPFUL")
+        if uaSpellId then
+            HealBot_Aura_UpdateUnitBuffsData(button)
+            uaZ=uaZ+1
+        else
+            break
+        end
+    end
 end
 
-local HealBot_Aura_GetBuffs=HealBot_Aura_GetBuffsV2
-if HEALBOT_GAME_VERSION<2 and libCD then
-    HealBot_Aura_GetBuffs=HealBot_Aura_GetBuffsV1
+local function HealBot_Aura_UpdateUnitBuffsV2(button)
+    uaZ=1
+    while true do
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitBuff(button.unit,uaZ)
+        if uaSpellId then
+            HealBot_Aura_UpdateUnitBuffsData(button)
+            uaZ=uaZ+1
+        else
+            break
+        end
+    end
+end
+
+local function HealBot_Aura_UpdateUnitBuffsV9(button)
+    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = ...
+        HealBot_Aura_UpdateUnitBuffsData(button)
+    end)
+end
+
+local function HealBot_Aura_UpdateUnitBuffsV9Data(auraData)
+    if not HealBot_ExcludeBuffInCache[auraData.spellId] and auraData.expirationTime and uaSlot<20 then
+        uaSlot=uaSlot+1
+        uaBuffData[uaID][uaSlot].name=auraData.name
+        uaBuffData[uaID][uaSlot].icon=auraData.icon
+        uaBuffData[uaID][uaSlot].count=auraData.applications
+        uaBuffData[uaID][uaSlot].debuffType=auraData.dispelName
+        uaBuffData[uaID][uaSlot].duration=auraData.duration
+        uaBuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
+        if auraData.sourceUnit then
+            uaBuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
+            if UnitIsUnit(auraData.sourceUnit,"player") then
+                uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=true
+            else
+                uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+            end
+        else
+            uaBuffData[uaID][uaSlot].sourceUnit="nil" 
+            uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+        end
+        uaBuffData[uaID][uaSlot].spellId=auraData.spellId
+        uaBuffData[uaID].lastslot=uaSlot
+        if uaBuffData[uaID][uaSlot].expirationTime>0 then HealBot_AddDebug("Update Buff is "..(uaBuffData[uaID][uaSlot].name or "nil").." for slot "..uaSlot,"NewAuras",true) end
+    end
+--    HealBot_Aura_CheckUnitBuff(uaButton)
+end
+
+local function HealBot_Aura_UpdateUnitBuffsV9Packed(button)
+    uaID=button.id
+    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, HealBot_Aura_UpdateUnitBuffsV9Data, true)
+end
+
+local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
+if HEALBOT_GAME_VERSION>8 then
+    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9Packed
+elseif HEALBOT_GAME_VERSION<2 and libCD then
+    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsData(button)
+    if not HealBot_ExcludeEnemyInCache[uaSpellId] and uaExpirationTime and uaSlot<20 then
+        uaSlot=uaSlot+1
+        uaDebuffData[button.id][uaSlot].name=uaName
+        uaDebuffData[button.id][uaSlot].icon=uaTexture
+        uaDebuffData[button.id][uaSlot].count=uaCount
+        if not uaDebuffType and hbDebuffBleed[uaSpellId] then
+            uaDebuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
+        else
+            uaDebuffData[button.id][uaSlot].debuffType=uaDebuffType
+        end
+        uaDebuffData[button.id][uaSlot].duration=uaDuration
+        uaDebuffData[button.id][uaSlot].expirationTime=uaExpirationTime
+        if uaUnitCaster then
+            uaDebuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
+            if UnitIsUnit(uaUnitCaster,"player") then
+                uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+            else
+                uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+            end
+        else
+            uaDebuffData[button.id][uaSlot].sourceUnit="nil" 
+            uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+        end
+        uaDebuffData[button.id][uaSlot].spellId=uaSpellId
+        uaDebuffData[button.id][uaSlot].isBossAura=uaIsBossDebuff
+        uaDebuffData[button.id].lastslot=uaSlot
+    end
+end
+
+local function HealBot_Aura_IsBoss(unit)
+    if unit and (UnitClassification(unit)=="worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealthMax(unit)>HealBot_Aura_luVars["bossHlth"]))) then
+        return true
+    else
+        return false
+    end
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsV1(button)
+    uaZ=1
+    while true do
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
+        if uaSpellId then
+            uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
+            HealBot_Aura_UpdateUnitDebuffsData(button)
+            uaZ=uaZ+1
+        else
+            break
+        end
+    end
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsV2(button)
+    uaZ=1
+    while true do
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitDebuff(button.unit,uaZ)
+        if uaSpellId then
+            uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
+            HealBot_Aura_UpdateUnitDebuffsData(button)
+            uaZ=uaZ+1
+        else
+            break
+        end
+    end
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsV9(button)
+    AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, function(...)
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff = ...
+        HealBot_Aura_UpdateUnitDebuffsData(button)
+    end)
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsV9Data(auraData)
+    if not HealBot_ExcludeEnemyInCache[auraData.spellId] and auraData.expirationTime and uaSlot<20 then
+        uaSlot=uaSlot+1
+        uaDebuffData[uaID][uaSlot].name=auraData.name
+        uaDebuffData[uaID][uaSlot].icon=auraData.icon
+        uaDebuffData[uaID][uaSlot].count=auraData.applications
+        if not auraData.dispelName and hbDebuffBleed[auraData.spellId] then
+            uaDebuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
+        else
+            uaDebuffData[uaID][uaSlot].debuffType=auraData.dispelName
+        end
+        uaDebuffData[uaID][uaSlot].duration=auraData.duration
+        uaDebuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
+        if auraData.sourceUnit then
+            uaDebuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
+            if UnitIsUnit(auraData.sourceUnit,"player") then
+                uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=true
+            else
+                uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+            end
+        else
+            uaDebuffData[uaID][uaSlot].sourceUnit="nil" 
+            uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+        end
+        uaDebuffData[uaID][uaSlot].spellId=auraData.spellId
+        uaDebuffData[uaID][uaSlot].isBossAura=auraData.isBossAura
+        uaDebuffData[uaID].lastslot=uaSlot
+        if uaDebuffData[uaID][uaSlot].expirationTime>0 then HealBot_AddDebug("Update Debuff is "..(uaDebuffData[uaID][uaSlot].name or "nil").." for slot "..uaSlot,"NewAuras",true) end
+    end
+--    HealBot_Aura_CheckUnitDebuff(uaButton)
+end
+
+local function HealBot_Aura_UpdateUnitDebuffsV9Packed(button)
+    uaID=button.id
+    AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, HealBot_Aura_UpdateUnitDebuffsV9Data, true)
+end
+
+local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2
+if HEALBOT_GAME_VERSION>8 then
+    HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV9Packed
+elseif HEALBOT_GAME_VERSION<2 and libCD then
+    HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV1
 end
 
 local hbClassicAbsorbTotal=0
 function HealBot_Aura_CheckBuffsV1(button)
-    uaZ=1
     hbClassicAbsorbTotal=0
-    while true do
-        HealBot_Aura_GetBuffs(button)
-        if uaSpellId then
-            uaZ=uaZ+1
-            if HealBot_Classic_Absorbs[uaName] then
-                if uaName==classicAbsorbPWS then
-                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaName][uaSpellId] or HealBot_Classic_Absorbs[uaName][0] or 0) * (classicAbsorbPWSMulti[button.guid] or classicAbsorbPWSMulti["DEFAULT"])) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
+    if uaBuffData[button.id].lastslot>0 then
+        for x=1,uaBuffData[button.id].lastslot do
+            uaBuffSlot=x
+            if HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name] then
+                if uaBuffData[button.id][uaBuffSlot].name==classicAbsorbPWS then
+                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) * (classicAbsorbPWSMulti[button.guid] or classicAbsorbPWSMulti["DEFAULT"])) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
                 else
-                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaName][uaSpellId] or HealBot_Classic_Absorbs[uaName][0] or 0) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
+                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
                 end
             end
             HealBot_Aura_CheckUnitBuff(button)
-        else
-            break
         end
     end
     if button.health.auraabsorbs~=hbClassicAbsorbTotal then
@@ -2294,24 +3428,13 @@ function HealBot_Aura_CheckBuffsV1(button)
     end
 end
 
-function HealBot_Aura_CheckBuffsV9Alt(button)
-    uaZ=1
-    while true do
-        HealBot_Aura_GetBuffs(button)
-        if uaSpellId then
-            uaZ=uaZ+1
+function HealBot_Aura_CheckBuffsV9(button)
+    if uaBuffData[button.id].lastslot>0 then
+        for x=1,uaBuffData[button.id].lastslot do
+            uaBuffSlot=x
             HealBot_Aura_CheckUnitBuff(button)
-        else
-            break
         end
     end
-end
-
-function HealBot_Aura_CheckBuffsV9(button)
-    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = ...
-        HealBot_Aura_CheckUnitBuff(button)
-    end)
 end
 
 local HealBot_Aura_CheckBuffs=HealBot_Aura_CheckBuffsV1
@@ -2357,7 +3480,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
     button.aura.buff.priority=99
-    if button.status.current<HealBot_Unit_Status["DEAD"] or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME) then
+    if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME) then
         button.aura.buff.colbar=0
         curBuffName=false;
         unitCurrentBuff.active=false
@@ -2393,6 +3516,12 @@ function HealBot_Aura_CheckUnitBuffs(button)
                 buffSort[z][x]=nil;
             end
         end
+        if button.aura.buff.update then
+            button.aura.buff.update=false
+            uaSlot=0
+            uaBuffData[button.id].lastslot=0
+            HealBot_Aura_UpdateUnitBuffs(button)
+        end
         HealBot_Aura_CheckBuffs(button)
         if HealBot_UnitBuffCurrent[button.guid] then
             for bName, bTime in pairs(HealBot_UnitBuffCurrent[button.guid]) do
@@ -2402,7 +3531,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                 end
             end
         end
-        if buffCheck then
+    --    if buffCheck then
             if tGeneralBuffs and onlyPlayers then
                 HealBot_Aura_CheckGeneralBuff(button)
             end
@@ -2441,9 +3570,9 @@ function HealBot_Aura_CheckUnitBuffs(button)
             else
                 HealBot_Aura_ClearBuff(button)
             end
-        else
-            HealBot_Aura_ClearBuff(button)
-        end
+    --    else
+    --        HealBot_Aura_ClearBuff(button)
+    --    end
     else
         HealBot_Aura_ClearBuff(button)
     end
@@ -2488,83 +3617,12 @@ function HealBot_Aura_SetBossHealth(inInst)
     HealBot_AddDebug("Boss Min Health "..HealBot_Aura_luVars["bossHlth"],"Mobs",true)
 end
 
-function HealBot_Aura_IsBoss(unit)
-    if unit and (UnitClassification(unit)=="worldboss" or (UnitClassification(unit) == 'elite' and (UnitLevel(unit) == -1 or UnitHealthMax(unit)>HealBot_Aura_luVars["bossHlth"]))) then
-        return true
-    else
-        return false
-    end
-end
-
-function HealBot_Aura_GetDebuffsV1(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = libCD:UnitAura(button.unit,uaZ,"HARMFUL")
-    uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
-end
-
-function HealBot_Aura_GetDebuffsV2(button)
-    uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = UnitDebuff(button.unit,uaZ)
-    uaIsBossDebuff=HealBot_Aura_IsBoss(uaUnitCaster)
-end
-
-local HealBot_Aura_GetDebuffs=HealBot_Aura_GetDebuffsV2
-if HEALBOT_GAME_VERSION<2 and libCD then
-    HealBot_Aura_GetDebuffs=HealBot_Aura_GetDebuffsV1
-end
-
-function HealBot_Aura_CheckDebuffsV1(button)
-    uaZ=1
-    while true do
-        HealBot_Aura_GetDebuffs(button)
-        if uaSpellId then
-            uaZ=uaZ+1
-            if uaExpirationTime then
-                HealBot_Aura_CheckUnitDebuff(button)
-            end
-        else
-            break
-        end
-    end
-end
-
-function HealBot_Aura_CheckDebuffsV9Alt(button)
-    uaZ=1
-    while true do
-        HealBot_Aura_GetDebuffs(button)
-        if uaSpellId then
-            uaZ=uaZ+1
-            if uaExpirationTime then
-                if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
-                    cureSpellCD, cureSpellName=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType)
-                    HealBot_Aura_luVars["cureOffCd"]=true
-                    if cureSpellName then
-                        if not cureSpellsOnCD[cureSpellName] then
-                            if cureSpellCD>2 then
-                                HealBot_Aura_CureSpellOnCD()
-                                HealBot_CheckAllActiveDebuffs()
-                            end
-                        elseif cureSpellsOnCD[cureSpellName]<HealBot_TimeNow then
-                            if cureSpellCD>2 then
-                                HealBot_Aura_CureSpellOnCD()
-                            end
-                        else
-                            HealBot_Aura_luVars["cureOffCd"]=false
-                        end
-                    end
-                end
-                HealBot_Aura_CheckUnitDebuff(button)
-            end
-        else
-            break
-        end
-    end
-end
-
-function HealBot_Aura_CheckDebuffsV9(button)
-    AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, function(...)
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff = ...
-        if uaExpirationTime then
-            if HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
-                cureSpellCD, cureSpellName=HealBot_Options_retDebuffWatchTargetCD(uaDebuffType)
+function HealBot_Aura_CheckDebuffs(button)
+    if uaDebuffData[button.id].lastslot>0 then
+        for x=1,uaDebuffData[button.id].lastslot do
+            uaDebuffSlot=x
+            if HEALBOT_GAME_VERSION>8 and HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
+                cureSpellCD, cureSpellName=HealBot_Options_retDebuffWatchTargetCD(uaDebuffData[button.id][uaDebuffSlot].debuffType)
                 HealBot_Aura_luVars["cureOffCd"]=true
                 if cureSpellName then
                     if not cureSpellsOnCD[cureSpellName] then
@@ -2583,12 +3641,7 @@ function HealBot_Aura_CheckDebuffsV9(button)
             end
             HealBot_Aura_CheckUnitDebuff(button)
         end
-    end)
-end
-
-local HealBot_Aura_CheckDebuffs=HealBot_Aura_CheckDebuffsV1
-if HEALBOT_GAME_VERSION>8 then
-    HealBot_Aura_CheckDebuffs=HealBot_Aura_CheckDebuffsV9
+    end
 end
 
 local debuffBarCol,debuffIconIndex=0,0
@@ -2596,7 +3649,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
     for z=1,3 do
         HealBot_Aura_prevIconCount["DEBUFF"][z]=button.icon.debuff.count[z]
     end
-    if button.status.current<HealBot_Unit_Status["DEAD"] then
+    if debuffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
         --button.aura.debuff.type=false
         for z=1,3 do
             for x,_ in pairs(debuffSort[z]) do
@@ -2604,6 +3657,12 @@ function HealBot_Aura_CheckUnitDebuffs(button)
             end
         end
         unitCurrentDebuff.active=false
+        if button.aura.debuff.update then
+            button.aura.debuff.update=false
+            uaSlot=0
+            uaDebuffData[button.id].lastslot=0
+            HealBot_Aura_UpdateUnitDebuffs(button)
+        end
         HealBot_Aura_CheckDebuffs(button)
         if HealBot_UnitDebuffCurrent[button.guid] then
             for dName, dTime in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
@@ -2613,7 +3672,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                 end
             end
         end
-        if debuffCheck then
+       -- if debuffCheck then
             debuffIconIndex=HealBot_Aura_SortDebuffIcons(button)
             HealBot_Aura_CheckUnitDebuffIcons(button)
             if debuffIconIndex>0 then
@@ -2646,9 +3705,9 @@ function HealBot_Aura_CheckUnitDebuffs(button)
             else
                 HealBot_Aura_ClearDebuff(button)
             end
-        else
-            HealBot_Aura_ClearDebuff(button)
-        end
+       -- else
+       --     HealBot_Aura_ClearDebuff(button)
+       -- end
     else
         HealBot_Aura_ClearDebuff(button)
     end

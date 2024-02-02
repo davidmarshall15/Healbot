@@ -2263,25 +2263,41 @@
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_UltraPerf" inherits="HealBotUIPanelCheckButton">
+                  <Slider name="HealBot_Options_Perf" inherits="HealBot_Options_SliderTemplate">
+                    <Size>
+                      <AbsDimension x="225" y="8" />
+                    </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="10" y="-52"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_UltraPerf_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("ULTRAPERF",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("ULTRAPERF",false)</OnLeave>
+                      <OnValueChanged>HealBot_Options_Perf_OnValueChanged(self)</OnValueChanged>
+                      <OnEnter>HealBot_Options_Show_Help("PERFMODE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("PERFMODE",false)</OnLeave>
                     </Scripts>
-                  </CheckButton>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="HealBot_Options_PerfLabel" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_FRAMESTRATA">
+                          <Anchors>
+                            <Anchor point="TOP" relativeTo="HealBot_Options_Perf" relativePoint="BOTTOM">
+                              <Offset>
+                                <AbsDimension x="0" y="-5"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                  </Slider>
                   <Frame name="HealBot_Options_FrameStrata" inherits="UIDropDownMenuTemplate">
                     <Anchors>
-                      <Anchor point="BOTTOM">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="10" />
+                          <AbsDimension x="-15" y="-48" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -2294,9 +2310,9 @@
                       <Layer level="OVERLAY">
                         <FontString name="HealBot_Options_FrameStratat" inherits="GameFontNormal" text="HEALBOT_OPTIONS_FRAMESTRATA">
                           <Anchors>
-                            <Anchor point="RIGHT" relativeTo="HealBot_Options_FrameStrata" relativePoint="LEFT">
+                            <Anchor point="BOTTOM" relativeTo="HealBot_Options_FrameStrata" relativePoint="TOP">
                               <Offset>
-                                <AbsDimension x="3" y="3"/>
+                                <AbsDimension x="0" y="3"/>
                               </Offset>
                             </Anchor>
                           </Anchors>

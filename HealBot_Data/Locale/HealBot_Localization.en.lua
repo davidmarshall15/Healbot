@@ -597,7 +597,8 @@ function HealBot_Lang_enALL()
     HEALBOT_ICONPREVSET                     = "Icon set prev";
     
     HEALBOT_OPTIONS_SHOWMINIMAPBUTTON       = "Show minimap button";
-    HEALBOT_OPTIONS_ULTRAPERF               = "Ultra performance"
+    HEALBOT_OPTIONS_ULTRA                   = "Ultra"
+    HEALBOT_OPTIONS_CHILL                   = "Chill"
     HEALBOT_OPTIONS_BARBUTTONSHOWRAIDICON   = "Show Raid Target";
     HEALBOT_OPTIONS_HOTONBAR                = "On bar";
     HEALBOT_OPTIONS_HOTOFFBAR               = "Off bar";
@@ -1040,6 +1041,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SUPPRESSSOUND                   = "Auto Trinket: Suppress sound"
     HEALBOT_SUPPRESSERROR                   = "Auto Trinket: Suppress errors"
     HEALBOT_PERFLEVEL                       = "Performance Level"
+    HEALBOT_PERF                            = "Performance"
     HEALBOT_SKIN_CHECK_DONE                 = "Integrity check of skins complete"
     HEALBOT_ENABLE_CUSTOM_BUFFS             = "All custom buffs have been enabled"
     HEALBOT_ENABLE_CUSTOM_DEBUFFS           = "All custom debuffs have been enabled"
@@ -1417,7 +1419,13 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_FORWARDTOHW              = "Forward to HealthWatch"
     HEALBOT_PLUGIN_FORWARDTOMW              = "Forward to ManaWatch"
     HEALBOT_PLUGIN_RETRYDURATION            = "Received from BuffWatch - Retry duration"
-    HEALBOT_PLUGIN_REPEATONCD               = "Repeat after timeout";
+    HEALBOT_PLUGIN_REPEATONCD               = "Repeat after timeout"
+    HEALBOT_PLUGIN_QUEUEVENTBUFF            = "Queue aura events (Buffs)"
+    HEALBOT_PLUGIN_QUEUEVENTDEBUFF          = "Queue aura events (Debuffs)"
+    HEALBOT_PLUGIN_QUEUEVENTHEALTH          = "Queue health events"
+    HEALBOT_PLUGIN_QUEUEVENTPOWER           = "Queue power events"
+    HEALBOT_PLUGIN_QUEUEVENTINHEALS         = "Queue incoming heal events"
+    HEALBOT_PLUGIN_QUEUEVENTABSORBS         = "Queue absorb events"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

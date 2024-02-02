@@ -3182,7 +3182,7 @@ function HealBot_Action_setFrameHeader(f)
     end
 end
 
-local hbEventFuncs={["UNIT_AURA"]=HealBot_Check_UnitAura,
+local hbEventFuncs={["UNIT_AURA"]=HealBot_Event_UnitAura,
                     ["UNIT_INVENTORY_CHANGED"]=HealBot_OnEvent_InvChange,
                     ["UNIT_HEALTH_FREQUENT"]=HealBot_OnEvent_UnitHealth,
                     ["UNIT_HEALTH"]=HealBot_OnEvent_UnitHealth,
@@ -3771,7 +3771,7 @@ function HealBot_Action_InitButton(button, prefix)
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
         button.gref.aux[x]:SetValue(0)
     end
-    button.aura.update=false
+    button.aura.buff.update=true
     button.aura.buff.name=false
     button.aura.buff.missingbuff=false
     button.aura.buff.id=0
@@ -3787,6 +3787,7 @@ function HealBot_Action_InitButton(button, prefix)
         button.icon.buff.count[z]=0
         button.icon.debuff.count[z]=0
     end
+    button.aura.debuff.update=true
     button.aura.debuff.type=false
     button.aura.debuff.name=false
     button.aura.debuff.id=0
@@ -5082,7 +5083,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
         if HealBot_Globals.MacroSuppressError then hbMacroText=hbMacroText..'/hb se3\n' end
         if HealBot_Globals.MacroSuppressSound then hbMacroText=hbMacroText..'/hb se1\n' end
     end
-    if spellTar then hbMacroText=hbMacroText.."/target "..unit.."\n" end
+    if spellTar and unit~="target" then hbMacroText=hbMacroText.."/target "..unit.."\n" end
     if spellTrin1 then hbMacroText=hbMacroText.."/use 13\n" end
     if spellTrin2 then hbMacroText=hbMacroText.."/use 14\n" end
     if HealBot_Config.MacroUse10 then hbMacroText=hbMacroText.."/use 10\n" end
@@ -5096,7 +5097,7 @@ function HealBot_Action_AlterSpell2Macro(spellName, spellTar, spellTrin1, spellT
         hbMacroText=hbMacroText.."/cast [@"..unit..",help] "..spellName.."\n"
     end
     if spellAvoidBC then hbMacroText=hbMacroText.."/stopspelltarget\n" end
-    if spellTar and HealBot_Config_Spells.SpellTargetLastTarget[cType] then hbMacroText=hbMacroText.."/targetlasttarget\n" end
+    if spellTar and unit~="target" and HealBot_Config_Spells.SpellTargetLastTarget[cType] then hbMacroText=hbMacroText.."/targetlasttarget\n" end
     --HealBot_setCall("HealBot_Action_AlterSpell2Macro")
     return hbMacroText
 end

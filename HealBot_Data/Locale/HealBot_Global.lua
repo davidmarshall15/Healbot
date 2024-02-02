@@ -784,3 +784,4 @@ HEALBOT_MAGIC_en                        = "Magic";  -- Do NOT localize this valu
 HEALBOT_CURSE_en                        = "Curse";  -- Do NOT localize this value.
 HEALBOT_POISON_en                       = "Poison";  -- Do NOT localize this value.
 HEALBOT_CUSTOM_en                       = "Custom";  -- Do NOT localize this value. 
+HEALBOT_BLEED_en                        = "Bleed";  -- Do NOT localize this value.

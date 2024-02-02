@@ -47,13 +47,15 @@ HealBot_Timers_luVars["ProcessRefreshTimePets"]=0
 HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=0
 
 function HealBot_Timers_TurboOn(duration)
-    if HealBot_Globals.UltraPerf then
+    if HealBot_Globals.PerfMode==3 then
         HealBot_Timers_luVars["nProcs"]=HealBot_Globals.CPUUsage
-    else
+    elseif HealBot_Globals.PerfMode==2 then
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
+    else
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
     end
-    if HealBot_Timers_luVars["nProcs"]<4 then
-        HealBot_Timers_luVars["nProcs"]=4
+    if HealBot_Timers_luVars["nProcs"]<2 then
+        HealBot_Timers_luVars["nProcs"]=2
     end
     if HealBot_Timers_luVars["turboEndTimer"]<GetTime()+duration then
         HealBot_Timers_luVars["turboEndTimer"]=GetTime()+duration
@@ -64,13 +66,15 @@ end
 function HealBot_Timers_TurboOff()
     if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1) -- All recall require a delay
-    elseif HealBot_Globals.UltraPerf then
+    elseif HealBot_Globals.PerfMode==3 then
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
-    else
+    elseif HealBot_Globals.PerfMode==2 then
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
+    else
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.125)
     end
-    if HealBot_Timers_luVars["nProcs"]<2 then
-        HealBot_Timers_luVars["nProcs"]=2
+    if HealBot_Timers_luVars["nProcs"]<1 then
+        HealBot_Timers_luVars["nProcs"]=1
     end
 end
 
@@ -394,6 +398,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","DebuffTagNames",0.275)
     HealBot_Timers_Set("SKINS","SetAdaptive",0.3)
     HealBot_Timers_Set("LAST","SetPlayerData",0.325)
+    HealBot_Timers_Set("LAST","SetEventQueues",0.35)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
@@ -641,6 +646,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllAuxOverHealsBars"]=HealBot_updAllAuxOverHealsBars,
                         ["UpdateAllAuxInHealsBars"]=HealBot_updAllAuxInHealsBars,
                         ["UpdateAllAuxAbsorbBars"]=HealBot_updAllAuxAbsorbBars,
+                        ["UpdateAllAuxTotalHealAbsorbBars"]=HealBot_updAllAuxTotalHealAbsorbBars,
                         ["UpdateAllAuxThreatBars"]=HealBot_updAllAuxThreatBars,
                         ["CheckInUse"]=HealBot_Options_CheckAuxInUse,
                         ["ClearAllMarkedBars"]=HealBot_Aux_clearAllMarkedBars,
@@ -771,6 +777,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PluginHealthWatchDead"]=HealBot_Plugin_HealthWatch_PlayerDead,
                         ["PluginManaWatchDead"]=HealBot_Plugin_ManaWatch_PlayerDead,
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
+                        ["SetEventQueues"]=HealBot_SetEventQueues,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
