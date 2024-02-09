@@ -2704,7 +2704,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
             end
         end
         if button.status.range>(HealBot_Config_Buffs.HealBot_CBWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["BUFFBARCOL"] then 
-            HealBot_RefreshUnit(button) 
+            HealBot_RefreshUnit(button)
         end
     end
         --HealBot_setCall("HealBot_Aura_BuffWarnings")
@@ -2787,7 +2787,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
             end
         end
         if button.status.range>(HealBot_Config_Cures.HealBot_CDCWarnRange_Bar-3) or button.status.current==HealBot_Unit_Status["DEBUFFBARCOL"] then 
-            HealBot_RefreshUnit(button) 
+            HealBot_RefreshUnit(button)
         end
     end
         --HealBot_setCall("HealBot_Aura_DebuffWarnings")
@@ -3837,45 +3837,58 @@ function HealBot_Aura_ClearBuff(button)
         if button.aura.buff.overdb then
             HealBot_Aura_ClearUnitBuffOverDebuff(button)
         end
+        if button.hazard.buff then
+            HealBot_Action_DisableBorderHazardType(button, "BUFF")
+        end
         HealBot_Aura_AuxClearAuraBuffBars(button)
         HealBot_RefreshUnit(button)
     end
         --HealBot_setCall("HealBot_Aura_ClearBuff")
 end
 
-function HealBot_Aura_ClearAllBuffs()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aura_ClearBuff(xButton)
+function HealBot_Aura_ClearAllBuffs(enemyOnly)
+    if not enemyOnly then
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Aura_ClearBuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            HealBot_Aura_ClearBuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Aura_ClearBuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+            HealBot_Aura_ClearBuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            HealBot_Aura_ClearBuff(xButton)
+        end
     end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aura_ClearBuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aura_ClearBuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aura_ClearBuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
+    for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Aura_ClearBuff(xButton)
     end
       --HealBot_setCall("HealBot_Aura_ClearAllBuffs")
 end
 
-function HealBot_Aura_ClearAllDebuffs()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Aura_ClearDebuff(xButton)
+function HealBot_Aura_ClearAllDebuffs(enemyOnly)
+    if not enemyOnly then
+        for _,xButton in pairs(HealBot_Unit_Button) do
+            HealBot_Aura_ClearDebuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Private_Button) do
+            HealBot_Aura_ClearDebuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Pet_Button) do
+            HealBot_Aura_ClearDebuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Vehicle_Button) do
+            HealBot_Aura_ClearDebuff(xButton)
+        end
+        for _,xButton in pairs(HealBot_Extra_Button) do
+            HealBot_Aura_ClearDebuff(xButton)
+        end
     end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Aura_ClearDebuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Aura_ClearDebuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Aura_ClearDebuff(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
+    for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Aura_ClearDebuff(xButton)
     end
         --HealBot_setCall("HealBot_Aura_ClearAllDebuffs")

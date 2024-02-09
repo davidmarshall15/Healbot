@@ -13300,19 +13300,81 @@
                   </Layer>
                 </Layers>
                 <Frames>
-                  <Frame name="HealBot_Options_EnemySkinsFrameTop" inherits="BackdropTemplate">
+
+                  <Frame name="HealBot_Options_EnemySkinsFrameAura" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="355"/>
+                      <AbsDimension y="50"/>
                     </Size>
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="20" y="-40"/>
+                          <AbsDimension x="20" y="-35"/>
                         </Offset>
                       </Anchor>
                       <Anchor point="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="-20" y="-40"/>
+                          <AbsDimension x="-20" y="-35"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Frames>
+                      <CheckButton name="HealBot_Options_EnemyShowBuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="20" y="-15" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_EnemyShowAuraStr" text="HEALBOT_OPTIONS_SHOWENEMYAURA" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT">
+                                  <Offset>
+                                    <AbsDimension x="-70" y="2" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnClick>HealBot_Options_EnemyShowAura_OnClick(self,"SHOWBUFFS")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWAURA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWAURA",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_EnemyShowDebuffs" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOP">
+                            <Offset>
+                              <AbsDimension x="125" y="-15" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_EnemyShowAura_OnClick(self,"SHOWDEBUFFS")</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWAURA",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("HEALBARSVISENEMYSHOWAURA",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                    </Frames>
+                  </Frame>
+
+                  <Frame name="HealBot_Options_EnemySkinsFrameTop" inherits="BackdropTemplate">
+                    <Size>
+                      <AbsDimension y="320"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="20" y="-95"/>
+                        </Offset>
+                      </Anchor>
+                      <Anchor point="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="-20" y="-95"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -13321,7 +13383,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="20" y="-40" />
+                              <AbsDimension x="20" y="-30" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13389,7 +13451,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncSelf" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20" />
+                              <AbsDimension x="0" y="-15" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13431,7 +13493,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncFocus" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20" />
+                              <AbsDimension x="0" y="-15" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13473,7 +13535,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncTanks" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20" />
+                              <AbsDimension x="0" y="-15" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13515,7 +13577,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowEnemyIncMyTargets" relativePoint="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="0" y="-20" />
+                              <AbsDimension x="0" y="-15" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13574,7 +13636,7 @@
                         <Anchors>
                           <Anchor point="TOP">
                             <Offset>
-                              <AbsDimension x="0" y="-300" />
+                              <AbsDimension x="0" y="-270" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13602,7 +13664,7 @@
                   </Frame>
                   <Frame name="HealBot_Options_EnemySkinsFrameBottom" inherits="BackdropTemplate">
                     <Size>
-                      <AbsDimension y="110"/>
+                      <AbsDimension y="95"/>
                     </Size>
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
@@ -13621,7 +13683,7 @@
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="95" y="70" />
+                              <AbsDimension x="95" y="55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13635,7 +13697,7 @@
                         <Anchors>
                           <Anchor point="BOTTOMLEFT">
                             <Offset>
-                              <AbsDimension x="320" y="70" />
+                              <AbsDimension x="320" y="55" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -13652,7 +13714,7 @@
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="20" />
+                              <AbsDimension x="0" y="15" />
                             </Offset>
                           </Anchor>
                         </Anchors>

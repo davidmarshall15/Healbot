@@ -2902,7 +2902,7 @@ function HealBot_Panel_PlayersChanged(preCombat)
                     HealBot_Panel_vehicleHeals(preCombat)
                 elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_OPTIONS_TARGETHEALS_en and hbCurrentFrame<6 then
                     HealBot_Panel_targetHeals(preCombat)
-                elseif Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_FOCUS_en and hbCurrentFrame<6 then
+                elseif HEALBOT_GAME_VERSION>1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][gl]["NAME"]==HEALBOT_FOCUS_en and hbCurrentFrame<6 then
                     HealBot_Panel_focusHeals(preCombat)
                 end
             end
@@ -3136,7 +3136,7 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
         else
             vTargetWithPlayers=false
         end
-        if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]<6 then
+        if HEALBOT_GAME_VERSION>1 and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]<6 then
             vFocusWithPlayers=true
             for x,_ in pairs(HealBot_TrackUnit[10]) do
                 HealBot_TrackUnit[10][x]=nil

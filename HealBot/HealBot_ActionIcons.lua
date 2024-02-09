@@ -1732,7 +1732,7 @@ function HealBot_ActionIcons_ValidateTargets(frame, num, caller)
 end
 
 function HealBot_ActionIcons_ValidateTarget(frame)
-    if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"]>0 then
+    if frame and Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"]>0 then
         HealBot_ActionIcons_ValidateTargets(frame, Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"], "ValidateTarget")
     end
       --HealBot_setCall("HealBot_ActionIcons_ValidateTarget")

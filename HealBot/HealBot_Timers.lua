@@ -48,9 +48,9 @@ HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=0
 
 function HealBot_Timers_TurboOn(duration)
     if HealBot_Globals.PerfMode==3 then
-        HealBot_Timers_luVars["nProcs"]=HealBot_Globals.CPUUsage
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*1.25)
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.75)
     else
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
     end
@@ -69,9 +69,9 @@ function HealBot_Timers_TurboOff()
     elseif HealBot_Globals.PerfMode==3 then
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.3)
     else
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.125)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.15)
     end
     if HealBot_Timers_luVars["nProcs"]<1 then
         HealBot_Timers_luVars["nProcs"]=1

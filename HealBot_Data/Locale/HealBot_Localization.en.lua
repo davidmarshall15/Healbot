@@ -1764,6 +1764,7 @@ function HealBot_Lang_enALL()
     HEALBOT_CMD_RESETSKINRAID40             = "Recover Raid 40 skin"
     HEALBOT_OPTIONS_ENTERINGCOMBAT          = "When entering combat"
     HEALBOT_OPTIONS_ALWAYSINCOMBAT          = "Always show"
+    HEALBOT_OPTIONS_SHOWENEMYAURA           = "Monitor enemy auras"
     HEALBOT_OPTIONS_OUTOFCOMBAT             = "When out of combat"
     HEALBOT_OPTIONS_ONLYINGCOMBAT           = "Only show in combat"
     HEALBOT_OPTIONS_ONLYOUTOFCOMBAT         = "Only show out of combat"

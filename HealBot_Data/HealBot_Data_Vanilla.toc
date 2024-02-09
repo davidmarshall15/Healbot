@@ -1,4 +1,4 @@
-## Interface: 11500
+## Interface: 11501
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
@@ -18,6 +18,7 @@ Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.xml
 Libs\LibClassicDurations\LibClassicDurations.xml
+Libs\LibPlug\HealBot_Plugins.lua
 
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua

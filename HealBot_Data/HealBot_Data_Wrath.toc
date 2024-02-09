@@ -17,6 +17,7 @@ Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.xml
 Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.xml
+Libs\LibPlug\HealBot_Plugins.lua
 
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua

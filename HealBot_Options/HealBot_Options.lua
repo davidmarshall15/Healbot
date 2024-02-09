@@ -2560,6 +2560,19 @@ function HealBot_Options_DeleteSkin_OnClick(self)
     end
 end
 
+function HealBot_Options_EnemyShowAura_OnClick(self,var)
+    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var]~=self:GetChecked() then
+        Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var]=self:GetChecked()
+        if not Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin][var] then
+            if var=="SHOWBUFFS" then
+                HealBot_Aura_ClearAllBuffs(true)
+            else
+                HealBot_Aura_ClearAllDebuffs(true)
+            end
+        end
+    end
+end
+
 function HealBot_Options_ShowEnemyIncSelf_OnClick(self)
     if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"]~=self:GetChecked() then
         Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"]=self:GetChecked()
@@ -21489,6 +21502,7 @@ function HealBot_Options_OnLoad(self, caller)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursPower"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_SkinsColoursAdaptive"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrameTop"], 0.5)
+    HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrameAura"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_EnemySkinsFrameBottom"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_FluidBarsPanel"], 0.5)
     HealBot_Options_Content_InnerPanel(_G["HealBot_Options_HealthDropPanel"], 0.5)
@@ -23368,6 +23382,10 @@ end
 
 function HealBot_Options_SkinsEnemyTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
+        HealBot_Options_EnemyShowBuffs:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWBUFFS"])
+        HealBot_Options_SetText(HealBot_Options_EnemyShowBuffs,HEALBOT_OPTIONS_TAB_BUFFS)
+        HealBot_Options_EnemyShowDebuffs:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWDEBUFFS"])
+        HealBot_Options_SetText(HealBot_Options_EnemyShowDebuffs,HEALBOT_OPTIONS_TAB_DEBUFFS)
         HealBot_Options_ShowEnemyIncSelf:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCSELF"])
         HealBot_Options_SetText(HealBot_Options_ShowEnemyIncSelf,HEALBOT_ENEMY_INCLUDE_SELF)
         HealBot_Options_ShowEnemyIncTanks:SetChecked(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["INCTANKS"])
@@ -23412,6 +23430,7 @@ function HealBot_Options_SkinsEnemyTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_EnemyExistsMyTargets, HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWMYTAR"]])
         HealBot_Options_EnemyExistsArena.initialize = HealBot_Options_EnemyExistsArena_DropDown
         UIDropDownMenu_SetText(HealBot_Options_EnemyExistsArena, HealBot_Options_EnemyOOC_List[Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["EXISTSHOWARENA"]])
+        HealBot_Options_SetLabel("HealBot_EnemyShowAuraStr",HEALBOT_OPTIONS_SHOWENEMYAURA)
         HealBot_Options_SetLabel("HealBot_EnemyOOC_FontStr",HEALBOT_OPTIONS_OUTOFCOMBAT)
         HealBot_Options_SetLabel("HealBot_EnemyCombat_FontStr",HEALBOT_OPTIONS_ENTERINGCOMBAT)
         HealBot_Options_TabRunOnce[tab]=true
@@ -25911,11 +25930,11 @@ function HealBot_Options_EnemyTab()
         HealBot_Options_ShowEnemyIncArena:Hide()
         HealBot_Options_ShowEnemyIncArenaPets:Hide()
         HealBot_Options_ShowEnemyIncSelf:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncSelf:SetPoint("TOPLEFT",20,-95)
+        HealBot_Options_ShowEnemyIncSelf:SetPoint("TOPLEFT",20,-70)
         HealBot_Options_ShowEnemyIncTanks:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncTanks:SetPoint("TOPLEFT",20,-170)
+        HealBot_Options_ShowEnemyIncTanks:SetPoint("TOPLEFT",20,-155)
         HealBot_Options_ShowEnemyIncMyTargets:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncMyTargets:SetPoint("TOPLEFT",20,-245)
+        HealBot_Options_ShowEnemyIncMyTargets:SetPoint("TOPLEFT",20,-240)
         HealBot_Options_EnemyExistsArena:Hide()
         HealBot_Options_EnemyCombatArena:Hide()
         HealBot_Options_ShowEnemyIncFocus:Hide()
@@ -25923,17 +25942,17 @@ function HealBot_Options_EnemyTab()
         HealBot_Options_EnemyCombatFocus:Hide()
         HealBot_Options_ShowEnemyNumBoss:Hide()
         HealBot_Options_EnemyExistsBosses:Hide()
-    elseif HEALBOT_GAME_VERSION<3 then 
+    elseif HEALBOT_GAME_VERSION<4 then 
         HealBot_Options_ShowEnemyIncSelf:ClearAllPoints()
         HealBot_Options_ShowEnemyIncSelf:SetPoint("TOPLEFT",20,-45)
         HealBot_Options_ShowEnemyIncFocus:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncFocus:SetPoint("TOPLEFT",20,-105)
+        HealBot_Options_ShowEnemyIncFocus:SetPoint("TOPLEFT",20,-95)
         HealBot_Options_ShowEnemyIncTanks:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncTanks:SetPoint("TOPLEFT",20,-165)
+        HealBot_Options_ShowEnemyIncTanks:SetPoint("TOPLEFT",20,-145)
         HealBot_Options_ShowEnemyIncMyTargets:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncMyTargets:SetPoint("TOPLEFT",20,-225)
+        HealBot_Options_ShowEnemyIncMyTargets:SetPoint("TOPLEFT",20,-195)
         HealBot_Options_ShowEnemyIncArena:ClearAllPoints()
-        HealBot_Options_ShowEnemyIncArena:SetPoint("TOPLEFT",20,-285)
+        HealBot_Options_ShowEnemyIncArena:SetPoint("TOPLEFT",20,-245)
         HealBot_Options_ShowEnemyNumBoss:Hide()
         HealBot_Options_EnemyExistsBosses:Hide()
     end
