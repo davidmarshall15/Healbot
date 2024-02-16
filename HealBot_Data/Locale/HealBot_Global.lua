@@ -6,10 +6,10 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.2.0.9"
+    return "10.2.5.1"
 end
 function HealBot_Global_InitVersion()
-    return "10.2.0.8"  -- Keep just behind the global version
+    return "10.2.5.0"  -- Keep just behind the global version
 end
 function HealBot_globalVars()
     --Consumables
@@ -621,6 +621,7 @@ function HealBot_globalVars()
     HEALBOT_WATER_SHIELD                    = 52127 --GetSpellInfo(52127) or "--Water Shield";
     HEALBOT_WATER_WALKING                   = 546 --GetSpellInfo(546) or "--Water Walking";
     HEALBOT_WATER_BREATHING                 = 131 --GetSpellInfo(131) or "--Water Breathing";
+    HEALBOT_SPIRIT_OF_THE_ALPHA             = 408696
     
     --Monk
     HEALBOT_BREATH_OF_THE_SERPENT           = 157535 --GetSpellInfo(157535) or "--Breath of the Serpent"

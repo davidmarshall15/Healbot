@@ -335,7 +335,7 @@ function HealBot_Options_InitDebuffTypes()
             [hbPURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [hbANTI_VENOM] = {HEALBOT_POISON_en},
             [hbPOWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
-            [hbSTONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbSTONEFORM] = {HEALBOT_BLEED_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HBC_SHAMAN_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_CURE_POISON] = {HEALBOT_POISON_en},
             [HBC_DRUID_ABOLISH_POISON] = {HEALBOT_POISON_en},
@@ -371,7 +371,7 @@ function HealBot_Options_InitDebuffTypes()
             [hbPOWERFUL_ANTI_VENOM] = {HEALBOT_POISON_en},
             [HEALBOT_CLEANSE_TOXIN] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [hbELIXIR_OF_POISON_RES] = {HEALBOT_POISON_en},
-            [hbSTONEFORM] = {HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [hbSTONEFORM] = {HEALBOT_BLEED_en, HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en},
             [HEALBOT_MASS_DISPEL] = {HEALBOT_MAGIC_en},
             [HEALBOT_CLEANSE_SPIRIT] = {HEALBOT_CURSE_en},
@@ -379,7 +379,7 @@ function HealBot_Options_InitDebuffTypes()
             [hbPOTION_OF_SOUL_PURITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [hbPHIAL_OF_SERENITY] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_NATURALIZE] = {HEALBOT_MAGIC_en, HEALBOT_POISON_en},
-            [HEALBOT_CAUTERIZING_FLAME] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
+            [HEALBOT_CAUTERIZING_FLAME] = {HEALBOT_BLEED_en, HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
             [HEALBOT_EXPUNGE] = {HEALBOT_POISON_en},
             [HEALBOT_DETOX] = {HEALBOT_MAGIC_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
         }
@@ -388,6 +388,7 @@ function HealBot_Options_InitDebuffTypes()
     HealBot_Debuff_Types[HEALBOT_CURSE] =  {HEALBOT_CURSE_en}
     HealBot_Debuff_Types[HEALBOT_MAGIC] =  {HEALBOT_MAGIC_en}
     HealBot_Debuff_Types[HEALBOT_DISEASE] =  {HEALBOT_DISEASE_en}
+    HealBot_Debuff_Types[HEALBOT_BLEED] =  {HEALBOT_BLEED_en}
 end
 
 local HealBot_ExtraSkins_Image
@@ -1338,6 +1339,7 @@ function HealBot_Options_setLists()
         HEALBOT_MAGIC,
         HEALBOT_CURSE,
         HEALBOT_POISON,
+        HEALBOT_BLEED,
     }
 
     HealBot_Options_cacheNames(HealBot_Options_Lists["DebuffItems"])
@@ -1931,6 +1933,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_WATER_SHIELD,
             HEALBOT_WATER_WALKING,
             HEALBOT_WATER_BREATHING,
+            HEALBOT_SPIRIT_OF_THE_ALPHA,
         }
         local sName=HealBot_KnownSpell(HEALBOT_FLAMETONGUE_SPELL)
         if sName then 
@@ -9830,6 +9833,7 @@ function HealBot_Options_LoadProfile()
                     HealBot_Config_Spells.Binds[x]=HealBot_Class_Spells["GLOBAL"].Binds[x]
                 end
             end
+            HealBot_Update_Skins()
             HealBot_Timers_InitExtraOptions()
             HealBot_Timers_Set("INIT","PrepSetAllAttribs",0.1)
         else
@@ -15811,7 +15815,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
 end
 
 function HealBot_Options_Set_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
-    if not InCombatLockdown() then
+    if not HealBot_Data["UILOCK"] then
         local initCurFrame=HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optSetSkins)
         if initCurFrame then HealBot_Options_SetSkins(true) end
     else
@@ -16521,9 +16525,11 @@ function HealBot_Options_CDCTxt_DropDown(object, id)
     info.checked = false;
     if HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(id)]==HEALBOT_WORDS_NONE then info.checked = true end
     UIDropDownMenu_AddButton(info);
+    local noDupSpells={}
     for j=1, getn(DebuffSpells_List), 1 do
         local sName=HealBot_KnownSpell(DebuffSpells_List[j])
-        if sName then
+        if sName and not noDupSpells[sName] then
+            noDupSpells[sName]=true
             info.text = sName;
             info.func = function(self)
                             HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(id)] = self:GetText()
@@ -16591,6 +16597,10 @@ function HealBot_Options_CDCTxt4_DropDown()
     HealBot_Options_CDCTxt_DropDown(HealBot_Options_CDCTxt4, 4)
 end
 
+function HealBot_Options_CDCTxt5_DropDown()
+    HealBot_Options_CDCTxt_DropDown(HealBot_Options_CDCTxt5, 5)
+end
+
 function HealBot_Options_CDCGroups_DropDown(object, id)
     local info = UIDropDownMenu_CreateInfo()
     for j=1, getn(HealBot_Options_BuffTxt_List), 1 do
@@ -16623,6 +16633,10 @@ function HealBot_Options_CDCGroups4_DropDown()
     HealBot_Options_CDCGroups_DropDown(HealBot_Options_CDCGroups4, 4)
 end
 
+function HealBot_Options_CDCGroups5_DropDown()
+    HealBot_Options_CDCGroups_DropDown(HealBot_Options_CDCGroups5, 5)
+end
+
 function HealBot_Options_CDCPriority_DropDown(object, dType)
     local info = UIDropDownMenu_CreateInfo()
     for j=1, 20, 1 do
@@ -16652,6 +16666,10 @@ end
 
 function HealBot_Options_CDCPriority4_DropDown()
     HealBot_Options_CDCPriority_DropDown(HealBot_Options_CDCPriority4, HEALBOT_CURSE_en)
+end
+
+function HealBot_Options_CDCPriority5_DropDown()
+    HealBot_Options_CDCPriority_DropDown(HealBot_Options_CDCPriority5, HEALBOT_BLEED_en)
 end
 
 function HealBot_Options_CDCPriorityC_DropDown()
@@ -18023,6 +18041,7 @@ function HealBot_Options_Debuff_Reset()
     HealBot_DebuffWatchTarget[HEALBOT_POISON_en] = {HEALBOT_POISON_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_MAGIC_en] = {HEALBOT_MAGIC_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_CURSE_en] = {HEALBOT_CURSE_en = {}};
+    HealBot_DebuffWatchTarget[HEALBOT_BLEED_en] = {HEALBOT_BLEED_en = {}};
     HealBot_DebuffWatchTarget[HEALBOT_CUSTOM_en] = {HEALBOT_CUSTOM_en = {}}; -- added by Diacono
     for x,_ in pairs(HealBot_DebuffSpell) do
         HealBot_DebuffSpell[x]=nil;
@@ -18033,7 +18052,7 @@ function HealBot_Options_Debuff_Reset()
     local DebuffTextClass = HealBot_Config_Cures.HealBotDebuffText
     local DebuffDropDownClass = HealBot_Config_Cures.HealBotDebuffDropDown
     
-    for k=1,4 do
+    for k=1,5 do
         if DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=DebuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]
             local sName = DebuffTextClass[HealBot_Options_getDropDownId_bySpec(k)] or "x"
@@ -18042,7 +18061,7 @@ function HealBot_Options_Debuff_Reset()
                 table.foreach(HealBot_Debuff_Types[sName], function (i,dName)
                     if not HealBot_DebuffSpell[dName] then
                         HealBot_DebuffSpell[dName]=sName;
-                        if sName==HEALBOT_POISON or sName==HEALBOT_CURSE or sName==HEALBOT_MAGIC or sName==HEALBOT_DISEASE then
+                        if sName==HEALBOT_BLEED or sName==HEALBOT_POISON or sName==HEALBOT_CURSE or sName==HEALBOT_MAGIC or sName==HEALBOT_DISEASE then
                             HealBot_DebuffType[dName]=true
                         end
                     end
@@ -20438,7 +20457,11 @@ function HealBot_UseColourPick(R, G, B, A)
     elseif A then
         ColorPickerFrame.hasOpacity = true;
         if HEALBOT_GAME_VERSION<10 then
-            ColorPickerFrame.func = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            if HEALBOT_GAME_VERSION==3 then
+                ColorPickerFrame.func = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            else
+                ColorPickerFrame.swatchFunc = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
+            end
             ColorPickerFrame.opacityFunc = function() local lR,lG,lB=ColorPickerFrame:GetColorRGB(); local lA=OpacitySliderFrame:GetValue(); HealBot_Returned_Colours(lR,lG,lB,lA); end;
             ColorPickerFrame.cancelFunc = function() HealBot_Returned_Colours(HealBot_Options_luVars["prevR"], HealBot_Options_luVars["prevG"], HealBot_Options_luVars["prevB"], 1-HealBot_Options_luVars["prevA"]); end;
             ColorPickerFrame:SetColorRGB(R, G, B);
@@ -20457,7 +20480,11 @@ function HealBot_UseColourPick(R, G, B, A)
     else
         ColorPickerFrame.hasOpacity = false;
         if HEALBOT_GAME_VERSION<10 then
-            ColorPickerFrame.func = function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
+            if HEALBOT_GAME_VERSION==3 then
+                ColorPickerFrame.func = function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
+            else
+                ColorPickerFrame.swatchFunc = function() HealBot_Returned_Colours(ColorPickerFrame:GetColorRGB()); end;
+            end
             ColorPickerFrame:SetColorRGB(R, G, B);
         else
             ColorPickerFrame.swatchFunc = function() HealBot_Returned_Colours(ColorPickerFrame.Content.ColorPicker:GetColorRGB()); end;
@@ -20530,6 +20557,10 @@ function HealBot_SetCDCBarColours()
     HealBot_CurseColorpick:SetStatusBarColor(HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].R or 0.83,
                                              HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].G or 0.43,
                                              HealBot_Config_Cures.CDCBarColour[HEALBOT_CURSE_en].B or 0.09,
+                                             Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HA"]);
+    HealBot_BleedColorpick:SetStatusBarColor(HealBot_Config_Cures.CDCBarColour[HEALBOT_BLEED_en].R or 0.58,
+                                             HealBot_Config_Cures.CDCBarColour[HEALBOT_BLEED_en].G or 0.02,
+                                             HealBot_Config_Cures.CDCBarColour[HEALBOT_BLEED_en].B or 0.02,
                                              Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HA"]);
     if HealBot_Options_luVars["CDebuffcustomSpellID"] and HealBot_Globals.CDCBarColour[HealBot_Options_luVars["CDebuffcustomSpellID"]] then
         HealBot_CustomColorpick:SetStatusBarColor(HealBot_Globals.CDCBarColour[HealBot_Options_luVars["CDebuffcustomSpellID"]].R or 0.45,
@@ -21289,8 +21320,7 @@ function HealBot_Options_Reset_OnClick(self,mode)
 end
 
 function HealBot_Options_SetDefaults(global)
-    HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_Version()
-    HealBot_Config.LastVersionUpdate=HealBot_Global_Version()
+    HealBot_Globals.LastVersionSkinUpdate=HealBot_Global_InitVersion()
     if global then
         HealBot_Config = HealBot_Options_copyTable(HealBot_ConfigDefaults)
         HealBot_Globals = HealBot_Options_copyTable(HealBot_GlobalsDefaults)
@@ -25062,6 +25092,10 @@ function HealBot_Options_DebuffsGeneralTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_CDCGroups3, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(3)]])
         HealBot_Options_CDCGroups4.initialize = HealBot_Options_CDCGroups4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCGroups4, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(4)]])
+        HealBot_Options_CDCTxt5.initialize = HealBot_Options_CDCTxt5_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCTxt5, HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(5)])
+        HealBot_Options_CDCGroups5.initialize = HealBot_Options_CDCGroups5_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCGroups5, HealBot_Options_BuffTxt_List[HealBot_Config_Cures.HealBotDebuffDropDown[HealBot_Options_getDropDownId_bySpec(5)]])
         HealBot_Options_IgnoreDebuffsDuration:SetChecked(HealBot_Config_Cures.IgnoreFastDurDebuffs)
         HealBot_Options_SetText(HealBot_Options_IgnoreDebuffsDuration,HEALBOT_OPTIONS_IGNOREDEBUFFDURATION)
         HealBot_Options_sliderlabels_Init(HealBot_Options_IgnoreDebuffsDurationSecs,HEALBOT_OPTIONS_HOTTEXTDURATION,1,5,1,1,"0.5","2.5")
@@ -25079,6 +25113,8 @@ function HealBot_Options_DebuffsGeneralTab(tab)
         UIDropDownMenu_SetText(HealBot_Options_CDCPriority3, HealBot_Config_Cures.HealBotDebuffPriority[HEALBOT_POISON_en])
         HealBot_Options_CDCPriority4.initialize = HealBot_Options_CDCPriority4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCPriority4, HealBot_Config_Cures.HealBotDebuffPriority[HEALBOT_CURSE_en])
+        HealBot_Options_CDCPriority5.initialize = HealBot_Options_CDCPriority5_DropDown
+        UIDropDownMenu_SetText(HealBot_Options_CDCPriority5, HealBot_Config_Cures.HealBotDebuffPriority[HEALBOT_BLEED_en])
         local cdBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol["DEFAULT"] or 3
         HealBot_Options_CDCDefaultBarColour.initialize = HealBot_Options_CDCDefaultBarColour_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCDefaultBarColour, HealBot_Options_Lists["AuraBarCol"][cdBarCol])
@@ -25089,7 +25125,9 @@ function HealBot_Options_DebuffsGeneralTab(tab)
         HealBot_Options_SetLabel("HealBot_Options_DebuffMagic_FontStr", HEALBOT_MAGIC)
         HealBot_Options_SetLabel("HealBot_Options_DebuffPoison_FontStr", HEALBOT_POISON)
         HealBot_Options_SetLabel("HealBot_Options_DebuffCurse_FontStr", HEALBOT_CURSE)
+        HealBot_Options_SetLabel("HealBot_Options_DebuffBleed_FontStr", HEALBOT_BLEED)
         HealBot_Options_SetLabel("HealBot_Options_Panel4_3", HEALBOT_WORD_PRIORITY)
+        HealBot_Options_SetLabel("HealBot_Options_CDCDefaultBarColourTxt", HEALBOT_OPTIONS_CDCBARS)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -25115,6 +25153,8 @@ function HealBot_Options_DebuffsCustomTab(tab)
         HealBot_Options_SetText(HealBot_Options_CDCAllPoison,HEALBOT_OPTIONS_CUSTOM_ALLPOISON)
         HealBot_Options_CDCAllCurse:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_CURSE_en])
         HealBot_Options_SetText(HealBot_Options_CDCAllCurse,HEALBOT_OPTIONS_CUSTOM_ALLCURSE)
+        HealBot_Options_CDCAllBleed:SetChecked(HealBot_Config_Cures.HealBot_Custom_Debuffs_All[HEALBOT_BLEED_en])
+        HealBot_Options_SetText(HealBot_Options_CDCAllBleed,HEALBOT_OPTIONS_CUSTOM_ALLBLEED)
         HealBot_Options_CDCAllBoss:SetChecked(HealBot_Config_Cures.AlwaysShowBoss)
         HealBot_Options_SetText(HealBot_Options_CDCAllBoss,HEALBOT_OPTIONS_CUSTOM_ALLBOSS)
         HealBot_Options_CDCAllTimed:SetChecked(HealBot_Config_Cures.AlwaysShowTimed)
@@ -26276,6 +26316,7 @@ function HealBot_Options_SetSkinBars()
     HealBot_MagicColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
     HealBot_PoisonColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
     HealBot_CurseColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
+    HealBot_BleedColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
     HealBot_CustomColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
     HealBot_BuffCustomColorpick:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
     HealBot_PresetColourpick1:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]));
@@ -26332,6 +26373,7 @@ function HealBot_Options_SetSkinBars()
     HealBot_MagicColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_PoisonColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_CurseColorpick:GetStatusBarTexture():SetHorizTile(false)
+    HealBot_BleedColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_CustomColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_BuffCustomColorpick:GetStatusBarTexture():SetHorizTile(false)
     HealBot_PresetColourpick1:GetStatusBarTexture():SetHorizTile(false)

@@ -732,7 +732,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 pZone=zone
                             end
                             if vUnit and UnitExists(vUnit) then 
-                                local lr,lg,lb=HealBot_Action_ClassColour(vUnit)
+                                local lr,lg,lb=HealBot_Action_ClassColour(xButton.unit, xButton.text.classtrim)
                                 HealBot_Tooltip_SetLine(UnitName(vUnit),lr,lg,lb,1,hlth.."/"..maxhlth.." ("..hPct.."%)",xButton.health.rcol,xButton.health.gcol,0,1)
                                 hlth,maxhlth=UnitHealth(xButton.unit),UnitHealthMax(xButton.unit)
                                 hPct=floor((hlth/maxhlth)*100)
@@ -857,7 +857,7 @@ function HealBot_Action_DoRefreshTooltip()
                 for x=1,HealBot_Globals.Tooltip_MaxButtons do
                     bId, bName=HealBot_Options_ComboClass_Button(x)
                     sName = HealBot_Action_SpellPattern(bId, string.upper(HealBot_Data["TIPTYPE"]))
-                    if x==1 and HealBot_Globals.SmartCast and xButton.status.current<HealBot_Unit_Status["DC"] and not IsModifierKeyDown() and UnitIsFriend("player",xButton.unit) and not InCombatLockdown() then 
+                    if x==1 and HealBot_Globals.SmartCast and xButton.status.current<HealBot_Unit_Status["DC"] and not IsModifierKeyDown() and UnitIsFriend("player",xButton.unit) and not HealBot_Data["UILOCK"] then 
                         sName=HealBot_Action_SmartCast(xButton) or sName
                     end
                     sDisplayName, bR, bG, bB, sType=HealBot_Tooltip_setspellName(xButton, sName)

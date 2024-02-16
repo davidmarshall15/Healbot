@@ -53,7 +53,6 @@ HealBot_Font_Outline={
 
 local Version=HealBot_Global_InitVersion()
 HealBot_ConfigDefaults = {
-  LastVersionUpdate=Version,
   MyFriend="x",
   CurrentSpec=9,
   Spec="",
@@ -201,13 +200,14 @@ HealBot_Config_CuresDefaults = {
   HealBot_CDCWarnRange_Bar=3,
   HealBot_CDCWarnRange_Screen=2,
   HealBot_CDCWarnRange_Sound=3,
-  HealBotDebuffText={},
-  HealBotDebuffDropDown={},
+  HealBotDebuffText={[1]=HEALBOT_WORDS_NONE, [2]=HEALBOT_WORDS_NONE, [3]=HEALBOT_WORDS_NONE, [4]=HEALBOT_WORDS_NONE, [5]=HEALBOT_WORDS_NONE, },
+  HealBotDebuffDropDown={[1]=1, [2]=1, [3]=1, [4]=1, [5]=1, },
   HealBotDebuffPriority={
     [HEALBOT_DISEASE_en] = 7,
     [HEALBOT_MAGIC_en] = 5,
     [HEALBOT_POISON_en] = 8,
     [HEALBOT_CURSE_en] = 6,
+    [HEALBOT_BLEED_en] = 9,
     [HEALBOT_CUSTOM_en] = 15,
   },
   CDCBarColour = {
@@ -215,12 +215,14 @@ HealBot_Config_CuresDefaults = {
     [HEALBOT_MAGIC_en] = { R = 0.26, G = 0.33, B = 0.83, },
     [HEALBOT_POISON_en] = { R = 0.12, G = 0.46, B = 0.24, },
     [HEALBOT_CURSE_en] = { R = 0.83, G = 0.43, B = 0.09, },
+    [HEALBOT_BLEED_en] = { R = 0.58, G = 0.02, B = 0.02, },
   },
   HealBot_Custom_Debuffs_All = {
     [HEALBOT_DISEASE_en] = false,
     [HEALBOT_MAGIC_en]   = false,
     [HEALBOT_POISON_en]  = false,
     [HEALBOT_CURSE_en]   = false,
+    [HEALBOT_BLEED_en]   = false,
   },
 };
 HealBot_Class_En = { 

@@ -77,7 +77,7 @@ end
 
 function HealBot_ActionIcons_InitFrames()
     if not HealBot_ActionIcons_luVars["Loaded"] then
-        if not InCombatLockdown() then
+        if not HealBot_Data["UILOCK"] then
             HealBot_ActionIcons_LoadSpec()
             cursorIcon.isVisible=false
             HealBot_ActionIcons_luVars["Loaded"]=true
@@ -820,9 +820,13 @@ function HealBot_ActionIcons_ConditionAdd(frame, id, cond, cNo)
     actionIcons[frame][id].alertfilter[cNo]=cond
     if cond and cond>1 then
         if cond<6 and cond~=3 then
-            HealBot_ActionIcons_AddBuff(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuff"][cNo], cNo)
+            if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuff"] then
+                HealBot_ActionIcons_AddBuff(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuff"][cNo], cNo)
+            end
         elseif cond>5 and cond<10 and cond~=7 then
-            HealBot_ActionIcons_AddDebuff(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertDebuff"][cNo], cNo)
+            if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertDebuff"] then
+                HealBot_ActionIcons_AddDebuff(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertDebuff"][cNo], cNo)
+            end
         elseif cond==3 then
             if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuffTag"] then
                 HealBot_ActionIcons_AddBuffTag(frame, id, Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuffTag"][cNo], cNo)
@@ -1451,7 +1455,7 @@ function HealBot_ActionIcons_SetTarget(frame, id, unit)
         if actionIcons[frame][id].unit then
             if actionIcons[frame][id].guid then HealBot_ActionIcons_CheckGUID(actionIcons[frame][id].guid) end
             actionIcons[frame][id].name=nil
-            if not InCombatLockdown() then
+            if not HealBot_Data["UILOCK"] then
                 actionIcons[frame][id]:SetAttribute("unit", "noone")
             else
                 HealBot_ActionIcons_PostCombatClear(actionIcons[frame][id].uid)
@@ -1478,7 +1482,7 @@ function HealBot_ActionIcons_SetTarget(frame, id, unit)
     elseif unit~=(actionIcons[frame][id].unit or "") or UnitGUID(unit)~=(actionIcons[frame][id].guid or "") or UnitName(unit)~=(actionIcons[frame][id].name or "") then
 --if unit=="target" then HealBot_ActionIcons_Debug(frame, id, "SetTarget t="..unit.." n="..(UnitName(unit) or unit)) end
         actionIcons[frame][id].name=UnitName(unit) or unit
-        if not InCombatLockdown() then
+        if not HealBot_Data["UILOCK"] then
             if hbPostCombatClear[actionIcons[frame][id].uid] then hbPostCombatClear[actionIcons[frame][id].uid]=nil end
             actionIcons[frame][id]:SetAttribute("unit", unit)
             actionIcons[frame][id].unit=unit
@@ -1839,7 +1843,11 @@ function HealBot_ActionIcons_CurrentBuffTag(frame, id, cNo)
             return false
         end
     end
-    return HealBot_Aura_ActionIconBuffTag(actionIcons[frame][id].guid, (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuffTag"][cNo] or ""))
+    if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuffTag"] then
+        return HealBot_Aura_ActionIconBuffTag(actionIcons[frame][id].guid, (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertBuffTag"][cNo] or ""))
+    else
+        return HealBot_Aura_ActionIconBuffTag(actionIcons[frame][id].guid, "")
+    end
 end
 
 function HealBot_ActionIcons_AlertBuffExists(frame, id, cNo)

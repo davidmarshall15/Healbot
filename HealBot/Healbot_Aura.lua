@@ -3099,7 +3099,6 @@ function HealBot_Aura_CheckUnitBuff(button)
         HealBot_OnEvent_UnitHealth(button)
     end
     if not HealBot_ExcludeBuffInCache[uaBuffData[button.id][uaBuffSlot].spellId] then
-        if uaBuffData[button.id][uaBuffSlot].expirationTime>0 then HealBot_AddDebug("Buff is "..(uaBuffData[button.id][uaBuffSlot].name or "nil").." for slot "..uaBuffSlot,"NewAuras",true) end
         if not HealBot_Data["PALIVE"] then
             tGeneralBuffs=false
         elseif HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name] then
@@ -3138,6 +3137,7 @@ function HealBot_Aura_CheckUnitBuff(button)
     end
 end
 
+--hbDebuffBleed[32407] = "Strange Aura"
 function HealBot_Aura_CheckUnitDebuff(button)
     --if uaDebuffData[button.id][uaDebuffSlot].spellId==32407 or uaDebuffData[button.id][uaDebuffSlot].name=="Strange Aura" then
     --    uaDebuffData[button.id][uaDebuffSlot].debuffType=HEALBOT_DISEASE_en
@@ -3272,7 +3272,6 @@ local function HealBot_Aura_UpdateUnitBuffsV9Data(auraData)
         end
         uaBuffData[uaID][uaSlot].spellId=auraData.spellId
         uaBuffData[uaID].lastslot=uaSlot
-        if uaBuffData[uaID][uaSlot].expirationTime>0 then HealBot_AddDebug("Update Buff is "..(uaBuffData[uaID][uaSlot].name or "nil").." for slot "..uaSlot,"NewAuras",true) end
     end
 --    HealBot_Aura_CheckUnitBuff(uaButton)
 end
@@ -3295,7 +3294,7 @@ local function HealBot_Aura_UpdateUnitDebuffsData(button)
         uaDebuffData[button.id][uaSlot].name=uaName
         uaDebuffData[button.id][uaSlot].icon=uaTexture
         uaDebuffData[button.id][uaSlot].count=uaCount
-        if not uaDebuffType and hbDebuffBleed[uaSpellId] then
+        if hbDebuffBleed[uaSpellId] then
             uaDebuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
         else
             uaDebuffData[button.id][uaSlot].debuffType=uaDebuffType
@@ -3368,7 +3367,7 @@ local function HealBot_Aura_UpdateUnitDebuffsV9Data(auraData)
         uaDebuffData[uaID][uaSlot].name=auraData.name
         uaDebuffData[uaID][uaSlot].icon=auraData.icon
         uaDebuffData[uaID][uaSlot].count=auraData.applications
-        if not auraData.dispelName and hbDebuffBleed[auraData.spellId] then
+        if hbDebuffBleed[auraData.spellId] then
             uaDebuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
         else
             uaDebuffData[uaID][uaSlot].debuffType=auraData.dispelName
@@ -3389,7 +3388,6 @@ local function HealBot_Aura_UpdateUnitDebuffsV9Data(auraData)
         uaDebuffData[uaID][uaSlot].spellId=auraData.spellId
         uaDebuffData[uaID][uaSlot].isBossAura=auraData.isBossAura
         uaDebuffData[uaID].lastslot=uaSlot
-        if uaDebuffData[uaID][uaSlot].expirationTime>0 then HealBot_AddDebug("Update Debuff is "..(uaDebuffData[uaID][uaSlot].name or "nil").." for slot "..uaSlot,"NewAuras",true) end
     end
 --    HealBot_Aura_CheckUnitDebuff(uaButton)
 end

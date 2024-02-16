@@ -82,6 +82,7 @@ function HealBot_Lang_enALL()
     HEALBOT_MAGIC                           = "Magic";
     HEALBOT_CURSE                           = "Curse";
     HEALBOT_POISON                          = "Poison";
+    HEALBOT_BLEED                           = "Bleed";
 
     HB_TOOLTIP_OFFLINE                      = "Offline";
 
@@ -1122,10 +1123,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_WARL   = "Show soul shards"
     HEALBOT_OPTIONS_SHOWPOWERCOUNTER_MONK   = "Show chi power"
     HEALBOT_OPTIONS_DISABLEHEALBOTSOLO      = "only when solo"
-    HEALBOT_OPTIONS_CUSTOM_ALLDISEASE       = "All Disease"
-    HEALBOT_OPTIONS_CUSTOM_ALLMAGIC         = "All Magic"
-    HEALBOT_OPTIONS_CUSTOM_ALLCURSE         = "All Curse"
-    HEALBOT_OPTIONS_CUSTOM_ALLPOISON        = "All Poison"
+    HEALBOT_OPTIONS_CUSTOM_ALLDISEASE       = "All Diseases"
+    HEALBOT_OPTIONS_CUSTOM_ALLMAGIC         = "All Magical"
+    HEALBOT_OPTIONS_CUSTOM_ALLCURSE         = "All Curses"
+    HEALBOT_OPTIONS_CUSTOM_ALLBLEED         = "All Bleeds"
+    HEALBOT_OPTIONS_CUSTOM_ALLPOISON        = "All Poisons"
     HEALBOT_OPTIONS_CUSTOM_ALLBOSS          = "All Bosses"
     HEALBOT_OPTIONS_CUSTOM_ALLTIMED         = "All Timed"
     HEALBOT_OPTIONS_CUSTOM_IDMETHOD         = "Identify By"

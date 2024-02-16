@@ -1619,7 +1619,7 @@ function HealBot_Aux_CheckOverLays(button)
     end
     if nameLastOverlayType[button.id][6] then
         nameLastOverlayType[button.id][6]=false
-        HealBot_nextRecalcParty(3)
+        HealBot_TargetChanged()
     end
     if nameLastOverlayType[button.id][7] then
         if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYOOR"] or button.status.range==1 then
@@ -1661,7 +1661,7 @@ function HealBot_Aux_CheckOverLays(button)
     end
     if healthLastOverlayType[button.id][6] then
         healthLastOverlayType[button.id][6]=false
-        HealBot_nextRecalcParty(3)
+        HealBot_TargetChanged()
     end
     if healthLastOverlayType[button.id][7] then
         if not Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][button.frame]["OVERLAYOOR"] or button.status.range==1 then

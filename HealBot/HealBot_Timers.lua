@@ -48,11 +48,11 @@ HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=0
 
 function HealBot_Timers_TurboOn(duration)
     if HealBot_Globals.PerfMode==3 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*1.25)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.8)
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.75)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
     else
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.25)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.2)
     end
     if HealBot_Timers_luVars["nProcs"]<2 then
         HealBot_Timers_luVars["nProcs"]=2
@@ -67,11 +67,11 @@ function HealBot_Timers_TurboOff()
     if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1) -- All recall require a delay
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
-    elseif HealBot_Globals.PerfMode==2 then
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.3)
+    elseif HealBot_Globals.PerfMode==2 then
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.2)
     else
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.15)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.1)
     end
     if HealBot_Timers_luVars["nProcs"]<1 then
         HealBot_Timers_luVars["nProcs"]=1
@@ -261,7 +261,7 @@ end
 function HealBot_Timers_TargetFocusUpdate()
     HealBot_nextRecalcParty(3)
     if HEALBOT_GAME_VERSION>1 then
-        HealBot_FocusChanged()
+        HealBot_nextRecalcParty(4)
     end
     HealBot_nextRecalcParty(2)
     HealBot_nextRecalcParty(1)
@@ -506,7 +506,7 @@ function HealBot_Timers_SetCurrentSkin()
     HealBot_Options_setAuxBars()
     HealBot_UpdateAllAuxBars()
     HealBot_Action_ResetFrameAlias()
-    HealBot_nextRecalcParty(0)
+    HealBot_nextRecalcDelay(0,0.025)
     HealBot_Timers_Set("AUX","ResetText")
     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
 end

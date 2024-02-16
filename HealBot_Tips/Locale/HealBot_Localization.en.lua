@@ -20,6 +20,7 @@ function HealBot_Lang_Options_enALL()
     local hbSpellsTips4="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Adaptive applies to the following:\n".._G["YELLOW_FONT_COLOR_CODE"].."- Name Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Health Aux bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Bar\n".._G["YELLOW_FONT_COLOR_CODE"].."- Background Border\n".._G["GREEN_FONT_COLOR_CODE"].."When using Background Bar or Background Border ensure this is enabled on the Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s Adaptive tab.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Bar glow lines and Bar glow stars can be used simultaneously by a debuff, a buff and plugins.\n".._G["YELLOW_FONT_COLOR_CODE"].."All other options will only show 1 col"..HEALBOT_enWORD_COLOUR_SUFFIX..", plugins have the highest priority, followed by debuffs."
     local hbSpellsTips5="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." options are available under the Custom "..HEALBOT_CUSTOM_CATEGORY.."."
     local hbSpellsTips6="\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Automatic buffs only show an icon."
+    local hbSpellsTips7="\n--\n".._G["GREEN_FONT_COLOR_CODE"].."NOTE: Debuff types can also be set on the Debuffs General tab."
     HEALBOT_OPTIONS_HELP_TITLES={
                         -- Reset Colours
                                  ["RESETCOLS"]="Reset Col"..HEALBOT_enWORD_COLOUR_SUFFIX,
@@ -593,6 +594,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMALLMAGIC"]=HEALBOT_OPTIONS_CUSTOM_ALLMAGIC,
                                  ["DEBUFFSCUSTOMALLPOISON"]=HEALBOT_OPTIONS_CUSTOM_ALLPOISON,
                                  ["DEBUFFSCUSTOMALLCURSE"]=HEALBOT_OPTIONS_CUSTOM_ALLCURSE,
+                                 ["DEBUFFSCUSTOMALLBLEED"]=HEALBOT_OPTIONS_CUSTOM_ALLBLEED,
                                  ["DEBUFFSCUSTOMALLBOSS"]=HEALBOT_OPTIONS_CUSTOM_ALLBOSS,
                                  ["DEBUFFSCUSTOMALLTIMED"]=HEALBOT_OPTIONS_CUSTOM_ALLTIMED,
                                  ["DEBUFFSCUSTOMSORT"]=HEALBOT_OPTIONS_TAB_SORT,
@@ -1323,12 +1325,13 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMSORT"]="Sort the debuff list by Priority, Name or Tag.",
                                ["DEBUFFSCUSTOMFILTER"]="Filter the debuff list on Priority, Tag or no filter.",
                                ["DEBUFFSCUSTOMPAGE"]="Page though the custom debuffs.",
-                               ["DEBUFFSCUSTOMALLDISEASE"]="Always show disease type debuffs."..hbSpellsTips5,
-                               ["DEBUFFSCUSTOMALLMAGIC"]="Always show magic type debuffs."..hbSpellsTips5,
-                               ["DEBUFFSCUSTOMALLPOISON"]="Always show poison type debuffs."..hbSpellsTips5,
-                               ["DEBUFFSCUSTOMALLCURSE"]="Always show curse type debuffs."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLDISEASE"]="Always show disease type debuffs."..hbSpellsTips5..hbSpellsTips7,
+                               ["DEBUFFSCUSTOMALLMAGIC"]="Always show magic type debuffs."..hbSpellsTips5..hbSpellsTips7,
+                               ["DEBUFFSCUSTOMALLPOISON"]="Always show poison type debuffs."..hbSpellsTips5..hbSpellsTips7,
+                               ["DEBUFFSCUSTOMALLCURSE"]="Always show curse type debuffs."..hbSpellsTips5..hbSpellsTips7,
+                               ["DEBUFFSCUSTOMALLBLEED"]="Always show bleed type debuffs."..hbSpellsTips5..hbSpellsTips7,
                                ["DEBUFFSCUSTOMALLBOSS"]="Always show debuffs cast by bosses."..hbSpellsTips5,
-                               ["DEBUFFSCUSTOMALLTIMED"]="Always show debuffs with a duration less than "..HealBot_Config_Cures.ShowTimeMaxDuration.." seconds.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes debuffs cast by friendly players.\n".._G["YELLOW_FONT_COLOR_CODE"].."Use '/hb atd n' to set the duration where n is the seconds."..hbSpellsTips5,
+                               ["DEBUFFSCUSTOMALLTIMED"]="Always show debuffs with a duration less than "..HealBot_Config_Cures.ShowTimeMaxDuration.." seconds.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes debuffs cast by friendly players.\n".._G["YELLOW_FONT_COLOR_CODE"].."Use '/hb atd n' to set the duration where n is the seconds.\n".._G["YELLOW_FONT_COLOR_CODE"].."The duration can also be set in the Tweaks plugin."..hbSpellsTips5,
                         -- Debuffs Warning tab
                                ["DEBUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom debuffs.",
                                ["DEBUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
@@ -1383,7 +1386,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCUSTOMCOLOURSHOW"]="Turn on/off changing the bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." for the selected custom buff.",
                                ["BUFFSCUSTOMRESET"]="Reset settings to defaults for the selected custom buff.",
                                ["BUFFSCUSTOMPAGE"]="Page though the custom buffs.",
-                               ["BUFFSCUSTOMAUTO"]="Turn On or Off showing automatic buffs.\nTimed buffs are buff with a duration less than "..HealBot_Config_Buffs.AutoBuffExpireTime.."s.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded.\n".._G["YELLOW_FONT_COLOR_CODE"].."Timed buffs: use '/hb atb n' to set the duration where n is the seconds."..hbSpellsTips6,
+                               ["BUFFSCUSTOMAUTO"]="Turn On or Off showing automatic buffs.\nTimed buffs are buff with a duration less than "..HealBot_Config_Buffs.AutoBuffExpireTime.."s.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded.\n".._G["YELLOW_FONT_COLOR_CODE"].."Timed Buffs: Use '/hb atb n' to set the duration where n is the seconds.\n".._G["YELLOW_FONT_COLOR_CODE"].."Timed Buffs: The duration can also be set in the Tweaks plugin."..hbSpellsTips6,
                                ["BUFFSCUSTOMSORT"]="Sort the buff list by Priority, Name or Tag.",
                                ["BUFFSCUSTOMFILTER"]="Filter the buff list on Priority, Tag or no filter.",
                                ["BUFFSCUSTOMAUTOCASTBY"]="Filter automatic buffs by the caster.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded."..hbSpellsTips6,
