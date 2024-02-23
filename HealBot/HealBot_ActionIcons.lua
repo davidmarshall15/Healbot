@@ -2425,8 +2425,10 @@ function HealBot_ActionIcons_UpdateAllCDs()
             end
         end
         for spellName,_ in pairs(hbOnCD) do
-            for uid,_ in pairs(hbSelfAbility[spellName]) do
-                HealBot_ActionIcons_SelfAbilityCD(spellName, hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
+            if hbSelfAbility[spellName] then
+                for uid,_ in pairs(hbSelfAbility[spellName]) do
+                    HealBot_ActionIcons_SelfAbilityCD(spellName, hbIconUID[uid]["Frame"], hbIconUID[uid]["ID"])
+                end
             end
         end
     end

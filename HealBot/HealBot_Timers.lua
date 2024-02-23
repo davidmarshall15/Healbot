@@ -40,11 +40,6 @@ HealBot_Timers_luVars["DoneBuffReset"]=false
 HealBot_Timers_luVars["nCalls"]=0
 HealBot_Timers_luVars["nProcs"]=9
 HealBot_Timers_luVars["turboEndTimer"]=0
-HealBot_Timers_luVars["ProcessRefreshTimeAll"]=0
-HealBot_Timers_luVars["ProcessRefreshTimePlayers"]=0
-HealBot_Timers_luVars["ProcessRefreshTimeEnemy"]=0
-HealBot_Timers_luVars["ProcessRefreshTimePets"]=0
-HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=0
 
 function HealBot_Timers_TurboOn(duration)
     if HealBot_Globals.PerfMode==3 then
@@ -114,64 +109,28 @@ function HealBot_Timer_ResetAllButtonsRecalcAll()
     HealBot_AddDebug("ResetAllButtonsRecalcAll Called", "Debug", true)
 end
 
-HealBot_Timers_luVars["ProcessRefreshDelay"]=0.4
 function HealBot_Timers_nextRecalcAll()
-    if HealBot_Timers_luVars["ProcessRefreshTimeAll"]<=HealBot_TimeNow then
-        HealBot_Timers_luVars["ProcessRefreshTimeAll"]=HealBot_TimeNow+HealBot_Timers_luVars["ProcessRefreshDelay"]
-        HealBot_Timers_luVars["ProcessRefreshDelayAll"]=false
-        HealBot_nextRecalcParty(0)
-        if HealBot_Timers_luVars["UpdateAllBuffIcons"] then
-            HealBot_Timers_luVars["UpdateAllBuffIcons"]=false
-            HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
-        end
-    elseif not HealBot_Timers_luVars["ProcessRefreshDelayAll"] then
-        HealBot_Timers_luVars["ProcessRefreshDelayAll"]=true
-        C_Timer.After(((HealBot_Timers_luVars["ProcessRefreshTimeAll"]+0.1)-HealBot_TimeNow), HealBot_Timers_nextRecalcAll)
+    HealBot_nextRecalcParty(0)
+    if HealBot_Timers_luVars["UpdateAllBuffIcons"] then
+        HealBot_Timers_luVars["UpdateAllBuffIcons"]=false
+        HealBot_Timers_Set("AURA","UpdateAllBuffIcons")
     end
 end
 
 function HealBot_Timers_nextRecalcPlayers()
-    if HealBot_Timers_luVars["ProcessRefreshTimePlayers"]<=HealBot_TimeNow then
-        HealBot_Timers_luVars["ProcessRefreshTimePlayers"]=HealBot_TimeNow+HealBot_Timers_luVars["ProcessRefreshDelay"]
-        HealBot_Timers_luVars["ProcessRefreshDelayPlayers"]=false
-        HealBot_nextRecalcParty(6)
-    elseif not HealBot_Timers_luVars["ProcessRefreshDelayPlayers"] then
-        HealBot_Timers_luVars["ProcessRefreshDelayPlayers"]=true
-        C_Timer.After(((HealBot_Timers_luVars["ProcessRefreshTimePlayers"]+0.1)-HealBot_TimeNow), HealBot_Timers_nextRecalcPlayers)
-    end
+    HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Timers_nextRecalcVehicle()
-    if HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]<=HealBot_TimeNow then
-        HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]=HealBot_TimeNow+HealBot_Timers_luVars["ProcessRefreshDelay"]
-        HealBot_Timers_luVars["ProcessRefreshDelayVehicle"]=false
-        HealBot_nextRecalcParty(1)
-    elseif not HealBot_Timers_luVars["ProcessRefreshDelayVehicle"] then
-        HealBot_Timers_luVars["ProcessRefreshDelayVehicle"]=true
-        C_Timer.After(((HealBot_Timers_luVars["ProcessRefreshTimeVehicle"]+0.1)-HealBot_TimeNow), HealBot_Timers_nextRecalcVehicle)
-    end
+    HealBot_nextRecalcParty(1)
 end
 
 function HealBot_Timers_nextRecalcPets()
-    if HealBot_Timers_luVars["ProcessRefreshTimePets"]<=HealBot_TimeNow then
-        HealBot_Timers_luVars["ProcessRefreshTimePets"]=HealBot_TimeNow+HealBot_Timers_luVars["ProcessRefreshDelay"]
-        HealBot_Timers_luVars["ProcessRefreshDelayPets"]=false
-        HealBot_nextRecalcParty(2)
-    elseif not HealBot_Timers_luVars["ProcessRefreshDelayPets"] then
-        HealBot_Timers_luVars["ProcessRefreshDelayPets"]=true
-        C_Timer.After(((HealBot_Timers_luVars["ProcessRefreshTimePets"]+0.1)-HealBot_TimeNow), HealBot_Timers_nextRecalcPets)
-    end
+    HealBot_nextRecalcParty(2)
 end
 
 function HealBot_Timers_nextRecalcEnemy()
-    if HealBot_Timers_luVars["ProcessRefreshTimeEnemy"]<=HealBot_TimeNow then
-        HealBot_Timers_luVars["ProcessRefreshTimeEnemy"]=HealBot_TimeNow+HealBot_Timers_luVars["ProcessRefreshDelay"]
-        HealBot_Timers_luVars["ProcessRefreshDelayEnemy"]=false
-        HealBot_nextRecalcParty(5)
-    elseif not HealBot_Timers_luVars["ProcessRefreshDelayEnemy"] then
-        HealBot_Timers_luVars["ProcessRefreshDelayEnemy"]=true
-        C_Timer.After(((HealBot_Timers_luVars["ProcessRefreshTimeEnemy"]+0.1)-HealBot_TimeNow), HealBot_Timers_nextRecalcEnemy)
-    end
+    HealBot_nextRecalcParty(5)
 end
 
 function HealBot_Timers_SkinChangePluginUpdate()
@@ -341,6 +300,7 @@ function HealBot_Timers_LastUpdate()
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.225)
     HealBot_Timers_Set("LAST","CheckVersions",0.25)
     HealBot_Timers_Set("LAST","LoadComplete",0.3)
+    HealBot_Timers_Set("LAST","UpdateRecalcDelay",1)
     HealBot_Timers_Set("AURA","BuffsReset",5)
     C_Timer.After(0.5, HealBot_Timers_nextRecalcAll)
 end
@@ -399,6 +359,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("SKINS","SetAdaptive",0.3)
     HealBot_Timers_Set("LAST","SetPlayerData",0.325)
     HealBot_Timers_Set("LAST","SetEventQueues",0.35)
+    HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
     C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
@@ -650,6 +611,7 @@ local hbTimerFuncs={["INIT"]={
                         ["UpdateAllAuxThreatBars"]=HealBot_updAllAuxThreatBars,
                         ["CheckInUse"]=HealBot_Options_CheckAuxInUse,
                         ["ClearAllMarkedBars"]=HealBot_Aux_clearAllMarkedBars,
+                        ["ResetTextButtons"]=HealBot_Aux_ResetTextButtons,
                     },
                     ["AURA"]={
                         ["CheckUnits"]=HealBot_AuraCheck,
@@ -778,6 +740,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PluginManaWatchDead"]=HealBot_Plugin_ManaWatch_PlayerDead,
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
                         ["SetEventQueues"]=HealBot_SetEventQueues,
+                        ["UpdateRecalcDelay"]=HealBot_UpdateRecalcDelay,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

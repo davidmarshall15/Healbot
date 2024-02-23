@@ -4423,6 +4423,7 @@ function HealBot_Options_AuxTextAlpha_OnValueChanged(self)
     if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLA"]~=HealBot_Comm_round(HealBot_Options_Pct_OnValueChanged(self),2) then
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLA"] = HealBot_Comm_round(HealBot_Options_Pct_OnValueChanged(self),2);
         if not HealBot_Options_luVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_Timers_Set("AUX","ResetTextButtons")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
     end
 end
@@ -4431,6 +4432,7 @@ function HealBot_Options_AuxTextDisAlpha_OnValueChanged(self)
     if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLDA"]~=HealBot_Comm_round(HealBot_Options_Pct_OnValueChanged(self),2) then
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLDA"] = HealBot_Comm_round(HealBot_Options_Pct_OnValueChanged(self),2);
         if not HealBot_Options_luVars["TestBarsOn"] then HealBot_Timers_Set("SKINS","SkinBarTextColours") end
+        HealBot_Timers_Set("AUX","ResetTextButtons")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
     end
 end
@@ -7239,6 +7241,7 @@ function HealBot_Options_Perf_OnValueChanged(self)
         HealBot_Comms_PerfLevel()
         HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
+        HealBot_Timers_Set("LAST","UpdateRecalcDelay")
         HealBot_Timers_Set("LAST","SetEventQueues")
     end
 end
@@ -9184,7 +9187,7 @@ function HealBot_Options_AuxTextColour_DropDown()
                         if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLTYPE"]~=self:GetID() then
                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLTYPE"] = self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_AuxTextColour,HealBot_Options_AuxBarColours_List[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLTYPE"]]) 
-                            HealBot_Aux_UpdateAllAuxByType(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxTxtBar"])
+                            HealBot_Timers_Set("AUX","ResetTextButtons")
                             if HealBot_Options_luVars["TestBarsOn"] then HealBot_Timers_Set("AUX","TestUpdate") end
                         end
                     end
@@ -19501,7 +19504,7 @@ local function HealBot_Returned_Colours(R, G, B, A, preset)
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLR"],
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLG"],
         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLB"] = R, G, B;
-        HealBot_Aux_UpdateAllAuxByType(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxTxtBar"])
+        HealBot_Timers_Set("AUX","ResetTextButtons")
     elseif HealBot_ColourObjWaiting=="CustomHealthText" then
         Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HCR"],
         Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HCG"],

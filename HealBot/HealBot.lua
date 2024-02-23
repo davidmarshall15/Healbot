@@ -129,48 +129,6 @@ function HealBot_setCall(Caller, start)
     end
 end
 
-function HealBot_reportCalls()
-    if HealBot_luVars["MaxCountName"] then HealBot_AddDebug("High Count:"..HealBot_luVars["MaxCountName"].."="..HealBot_luVars["MaxCount"]) end
-end
-
-function HealBot_retCalls()
-    return HealBot_Calls
-end
-
-local hbSpecialInGeneralFrame={[2]=8, [1]=7, [3]=9, [4]=10}
-function HealBot_nextRecalcParty(typeRequired)
-    if not HealBot_RecalcQueue[typeRequired] then
-        if hbSpecialInGeneralFrame[typeRequired] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][hbSpecialInGeneralFrame[typeRequired]]["FRAME"]<6 then
-            if not HealBot_luVars["UILOCK"] and HealBot_Action_FrameIsVisible(hbSpecialInGeneralFrame[typeRequired]-1) then 
-                HealBot_Action_HidePanel(hbSpecialInGeneralFrame[typeRequired]-1) 
-            end
-            typeRequired=6
-        end
-        if typeRequired==2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
-            HealBot_nextRecalcDelay(6,HealBot_luVars["RecalcDelay"])
-        end
-        
-        
-        HealBot_RefreshTypes[typeRequired]=true
-        HealBot_Timer_FramesRefresh()
-    end
-      --HealBot_setCall("HealBot_nextRecalcParty"..typeRequired)
-end
-
-function HealBot_nextRecalcEndDelay(typeRequired)
-    if HealBot_RecalcQueue[typeRequired] then
-        HealBot_RecalcQueue[typeRequired]=false
-        HealBot_nextRecalcParty(typeRequired)
-    end
-end
-
-function HealBot_nextRecalcDelay(typeRequired,delay)
-    if not HealBot_RecalcQueue[typeRequired] then
-        HealBot_RecalcQueue[typeRequired]=true
-        C_Timer.After(delay, function() HealBot_nextRecalcEndDelay(typeRequired) end)
-    end
-end
-
 function HealBot_setLuVars(vName, vValue)
     HealBot_luVars[vName]=vValue
 	--HealBot_setCall("HealBot_setLuVars - "..vName)
@@ -183,6 +141,46 @@ end
 
 function HealBot_setAuxAssigns(vName, frame, vValue)
     HealBot_AuxAssigns[vName][frame]=vValue
+end
+
+function HealBot_reportCalls()
+    if HealBot_luVars["MaxCountName"] then HealBot_AddDebug("High Count:"..HealBot_luVars["MaxCountName"].."="..HealBot_luVars["MaxCount"]) end
+end
+
+function HealBot_retCalls()
+    return HealBot_Calls
+end
+
+function HealBot_nextRecalcEndDelay(typeRequired)
+    if HealBot_RecalcQueue[typeRequired] then
+        HealBot_RecalcQueue[typeRequired]=false
+        HealBot_RefreshTypes[typeRequired]=true
+        HealBot_Timer_FramesRefresh()
+    end
+end
+
+local hbSpecialInGeneralFrame={[2]=8, [1]=7, [3]=9, [4]=10}
+function HealBot_nextRecalcDelay(typeRequired,delay)
+    if hbSpecialInGeneralFrame[typeRequired] and Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][hbSpecialInGeneralFrame[typeRequired]]["FRAME"]<6 then
+        if not HealBot_luVars["UILOCK"] and HealBot_Action_FrameIsVisible(hbSpecialInGeneralFrame[typeRequired]-1) then 
+            HealBot_Action_HidePanel(hbSpecialInGeneralFrame[typeRequired]-1) 
+        end
+        typeRequired=6
+    end
+    if typeRequired==2 and Healbot_Config_Skins.Healing[Healbot_Config_Skins.Current_Skin]["SELFPET"] then
+        HealBot_nextRecalcDelay(6,HealBot_luVars["RecalcDelay"])
+    end
+    if not HealBot_RecalcQueue[typeRequired] then
+        HealBot_RecalcQueue[typeRequired]=true
+        C_Timer.After(delay, function() HealBot_nextRecalcEndDelay(typeRequired) end)
+    end
+end
+
+function HealBot_nextRecalcParty(typeRequired)
+    if not HealBot_RecalcQueue[typeRequired] then
+        HealBot_nextRecalcDelay(typeRequired,HealBot_luVars["RecalcDelay"])
+    end
+      --HealBot_setCall("HealBot_nextRecalcParty"..typeRequired)
 end
 
 function HealBot_ClearPlayerButtonCache()
@@ -2850,6 +2848,7 @@ end
 function HealBot_AbsorbsUpdate(button)
     button.health.updabsorb=false
     HealBot_AbsorbsAmount(button)
+    HealBot_AddDebug("Absorb change Amount="..abuAbsorbAmount,"Absorbs",true)
     if button.status.range>0 and abuAbsorbAmount>0 then
         if button.health.absorbs~=abuAbsorbAmount then
             button.health.absorbs=abuAbsorbAmount
@@ -2858,7 +2857,9 @@ function HealBot_AbsorbsUpdate(button)
             HealBot_Action_UpdateAbsorbsButton(button)
             HealBot_Text_setInHealAbsorbsText(button)
             HealBot_Action_AdaptiveAbsorbsUpdate(button)
+            HealBot_AddDebug("Absorb change 1","Absorbs",true)
         end
+            HealBot_AddDebug("Absorb change 2","Absorbs",true)
     elseif button.health.absorbs>0 or button.gref["Absorb"]:GetValue()>0 then
         button.health.absorbs=0
         button.health.absorbspctc=0
@@ -3101,19 +3102,26 @@ function HealBot_OnEvent_RangeUpdate(button)
     --HealBot_UpdateUnitRange(button)
 end
 
+function HealBot_UpdateRecalcDelay()
+    if HealBot_Globals.PerfMode==3 then
+        HealBot_luVars["RecalcDelay"]=0.2
+    elseif HealBot_Globals.PerfMode==2 then
+        HealBot_luVars["RecalcDelay"]=0.35
+    else
+        HealBot_luVars["RecalcDelay"]=0.5
+    end
+end
+
 function HealBot_PerfRangeFreq()
     if HealBot_Globals.PerfMode==3 then
         HealBot_luVars["rangeCheckAdj"]=0.6-(HealBot_luVars["cpuAdj"]/20)
         HealBot_luVars["rangeCheckAdjEnabled"]=0.3-(HealBot_luVars["cpuAdj"]/20)
-        HealBot_luVars["RecalcDelay"]=0.1
     elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["rangeCheckAdj"]=1-(HealBot_luVars["cpuAdj"]/20)
         HealBot_luVars["rangeCheckAdjEnabled"]=0.5-(HealBot_luVars["cpuAdj"]/20)
-        HealBot_luVars["RecalcDelay"]=0.2
     else
         HealBot_luVars["rangeCheckAdj"]=1.4-(HealBot_luVars["cpuAdj"]/20)
         HealBot_luVars["rangeCheckAdjEnabled"]=0.7-(HealBot_luVars["cpuAdj"]/20)
-        HealBot_luVars["RecalcDelay"]=0.3
     end
     if HealBot_luVars["rangeCheckAdjEnabled"]<0.2 then HealBot_luVars["rangeCheckAdjEnabled"]=0.2 end
     if HealBot_luVars["rangeCheckAdj"]<0.5 then HealBot_luVars["rangeCheckAdj"]=0.5 end
@@ -5002,6 +5010,14 @@ function HealBot_UnitSlowUpdate(button)
         elseif hbActionSwimWatch[button.guid] and button.status.swimming~=IsSwimming(button.unit) then
             button.status.swimming=IsSwimming(button.unit)
             HealBot_ActionIcons_UpdateSwimming(button.guid, button.status.swimming)
+        elseif button.aura.debuff.slowupd then
+            button.aura.debuff.slowupd=false
+            button.aura.debuff.update=true
+            HealBot_Queue_UnitDebuff(button)
+        elseif button.aura.buff.slowupd then
+            button.aura.buff.slowupd=false
+            button.aura.buff.update=true
+            HealBot_Queue_UnitBuff(button)
         elseif button.frame<10 then
             if button.status.castend>0 and button.status.castend<(HealBot_TimeNow*1000) then
                 HealBot_Aux_ClearCastBar(button)
@@ -5100,7 +5116,7 @@ function HealBot_ProcessRefreshTypes()
             HealBot_luVars["ProcessRefresh"]=false
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
-                HealBot_Aux_ResetTextButtons()
+                HealBot_Timers_Set("AUX","ResetTextButtons")
             end
             HealBot_Skins_setLuVars("AuxReset", false)
             C_Timer.After(0.01, HealBot_SetTargetBar)
@@ -5317,7 +5333,7 @@ function HealBot_FastUnitUpdateBar(button)
         HealBot_HealsInUpdate(button)
     end
     if button.health.updabsorb then
-        HealBot_HealsInUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
     if button.mana.update then
         HealBot_UnitMana(button)
@@ -5940,23 +5956,31 @@ function HealBot_FastQueueInit(id)
     HealBot_FastQueue[id]={}
 end
 
+function HealBot_Queue_UnitDebuff(button)
+    if not HealBot_DebuffQueue[button.id] then
+        HealBot_DebuffQueue[button.id]=true
+        HealBot_InsertFastUnitQueue(button.id, "DEBUFF")
+    end
+end
+
 function HealBot_Check_UnitDebuff(button)
     if HealBot_Globals.EventQueues["DEBUFF"] then
-        if not HealBot_DebuffQueue[button.id] then
-            HealBot_DebuffQueue[button.id]=true
-            HealBot_InsertFastUnitQueue(button.id, "DEBUFF")
-        end
+        HealBot_Queue_UnitDebuff(button)
     else
         HealBot_Aura_CheckUnitAuras(button, true)
     end
 end
 
+function HealBot_Queue_UnitBuff(button)
+    if not HealBot_BuffQueue[button.id] then
+        HealBot_BuffQueue[button.id]=true
+        HealBot_InsertFastUnitQueue(button.id, "BUFF")
+    end
+end
+
 function HealBot_Check_UnitBuff(button)
     if HealBot_Globals.EventQueues["BUFF"] then
-        if not HealBot_BuffQueue[button.id] then
-            HealBot_BuffQueue[button.id]=true
-            HealBot_InsertFastUnitQueue(button.id, "BUFF")
-        end
+        HealBot_Queue_UnitBuff(button)
     else
         HealBot_Aura_CheckUnitAuras(button, false)
     end

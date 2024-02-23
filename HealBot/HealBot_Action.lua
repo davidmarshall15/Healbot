@@ -3776,6 +3776,9 @@ function HealBot_Action_InitButton(button, prefix)
         button.aux[x]["FLASH"]=false
         button.aux[x]["STATIC"]=false
         button.aux[x]["FIXED"]=true
+        button.auxtxt[x]["R"]=1
+        button.auxtxt[x]["G"]=1
+        button.auxtxt[x]["B"]=1
         button.gref.aux[x]:SetStatusBarColor(0, 0, 0, 0)
         button.gref.aux[x]:SetValue(0)
     end
@@ -5742,9 +5745,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     HealBot_Action_SetAllButtonAttribs(erButton,"Emerg")
                     if not UnitExists(unit) then
                         HealBot_UpdateUnitNotExists(hButton, true)
-                    elseif hButton.guid~=guid then
-                        HealBot_UpdateUnitGUIDChange(hButton)
                     else
+                        if hButton.guid~=guid then
+                            HealBot_UpdateUnitGUIDChange(hButton)
+                        end
                         HealBot_UpdateUnitExists(hButton)
                     end
                 end
