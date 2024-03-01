@@ -3267,7 +3267,7 @@ function HealBot_BarButtonMaxDebuffIcons_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","IconsFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckDebuffs")
         HealBot_Timers_Set("AURA","RemoveUnusedDebuffIcons")
     end
 end
@@ -3329,7 +3329,7 @@ function HealBot_BarButtonMaxBuffIcons_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","IconsFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
         HealBot_Timers_Set("AURA","RemoveUnusedBuffIcons")
     end
 end
@@ -5433,7 +5433,7 @@ function HealBot_Options_BuffTimer_OnValueChanged(self,bufftype)
             g=_G[self:GetName()]
             HealBot_Options_SetText(g,self.text .. ": " .. mins ..":".. secs .." mins")
         end
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -6517,7 +6517,7 @@ function HealBot_Options_CDCCol_ShowOnHealthBar_OnClick(self)
         HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckDebuffs")
     end
 end
 
@@ -6527,7 +6527,7 @@ function HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)
         HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -6545,7 +6545,7 @@ function HealBot_Options_CDCCol_DropDown()
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
                             HealBot_Aura_ClearAllDebuffs()
-                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("AURA","CheckDebuffs")
                             HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
@@ -6593,7 +6593,7 @@ end
 function HealBot_Options_BuffUpdateAll()
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckBuffs")
     HealBot_Timers_Set("LAST","UpdateButtonGlow")
 end
 
@@ -6619,7 +6619,7 @@ function HealBot_Options_CDCUpdateAll()
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Aura_ClearAllDebuffs()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckDebuffs")
     HealBot_Timers_Set("LAST","UpdateButtonGlow")
 end
 
@@ -6657,7 +6657,7 @@ function HealBot_Options_CustomBuffCol_DropDown()
                             end
                             HealBot_setLuVars("UpdateAllAura", 5)
                             HealBot_Aura_setLuVars("updateAll", true)
-                            HealBot_Timers_Set("AURA","CheckUnits")
+                            HealBot_Timers_Set("AURA","CheckBuffs")
                             HealBot_Timers_Set("LAST","UpdateButtonGlow")
                         end
                     end
@@ -6698,7 +6698,7 @@ function HealBot_Options_BuffIconSet_DropDown()
                         if cbBarCol~=self:GetID() then
                             HealBot_Globals.HealBot_Custom_Buffs_IconSet[sId]=self:GetID()
                             UIDropDownMenu_SetText(HealBot_Options_BuffIconSet,HealBot_Options_Lists["IconSets"][self:GetID()])
-                            HealBot_Aura_ResetBuffCache()
+                            HealBot_Timers_Set("AURA","ResetBuffCache")
                             HealBot_Timers_Set("AURA","ConfigClassHoT")
                         end
                     end
@@ -6880,7 +6880,7 @@ function HealBot_Options_CuresWarnNPCFriendly_OnClick(self)
     if HealBot_Config_Cures.IncFriendlyNPCs~=self:GetChecked() then
         HealBot_Config_Cures.IncFriendlyNPCs = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckDebuffs")
     end
 end
 
@@ -6888,7 +6888,7 @@ function HealBot_Options_CuresWarnNPCEnemy_OnClick(self)
     if HealBot_Config_Cures.IncEnemyNPCs~=self:GetChecked() then
         HealBot_Config_Cures.IncEnemyNPCs = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckDebuffs")
     end
 end
 
@@ -6896,7 +6896,7 @@ function HealBot_Options_BuffWarnNPCFriendly_OnClick(self)
     if HealBot_Config_Buffs.IncFriendlyNPCs~=self:GetChecked() then
         HealBot_Config_Buffs.IncFriendlyNPCs = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -6904,7 +6904,7 @@ function HealBot_Options_BuffWarnNPCEnemy_OnClick(self)
     if HealBot_Config_Buffs.IncEnemyNPCs~=self:GetChecked() then
         HealBot_Config_Buffs.IncEnemyNPCs = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -6912,7 +6912,7 @@ function HealBot_Options_CuresWarnGroup_OnClick(self,id)
     if HealBot_Config_Cures.ShowGroups[id]~=self:GetChecked() then
         HealBot_Config_Cures.ShowGroups[id] = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckDebuffs")
     end
 end
 
@@ -6920,7 +6920,7 @@ function HealBot_Options_BuffWarnGroup_OnClick(self,id)
     if HealBot_Config_Buffs.ShowGroups[id]~=self:GetChecked() then
         HealBot_Config_Buffs.ShowGroups[id] = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckUnits")
+        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -9436,7 +9436,6 @@ function HealBot_OptionBinds_Level1Info(object, info, index)
     UIDropDownMenu_AddButton(info)
     info.text = "     Nav Keys"
     info.menuList = 5
-    UIDropDownMenu_AddButton(info)
     UIDropDownMenu_AddButton(info)
     info.text = "     Extra Keys"
     info.menuList = 6
@@ -17117,7 +17116,6 @@ function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
     HealBot_Options_CDC_checkStatus(useId)
   --  UIDropDownMenu_SetSelectedValue(HealBot_Options_CDebuffTxt1, useId);
     HealBot_Timers_Set("AURA","DebuffPriority")
-    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Options_ResetUpdate()
 end
 
@@ -17349,9 +17347,8 @@ end
 
 function HealBot_Options_DebuffIconUpdate()
     HealBot_Aura_ResetDebuffCache()
-    HealBot_Aura_setCustomDebuffFilterDisabled()
-    HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Options_SetEnableDisableCDBtn()
+    HealBot_Timers_Set("AURA","CustomDebuffFilterDisabled")
     HealBot_Timers_Set("AURA","CustomDebuffListPrep")
 end
 
@@ -17381,7 +17378,7 @@ function HealBot_Options_DebuffIconColUpdate(spellId, col)
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
     HealBot_Aura_ClearAllDebuffs()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckDebuffs")
     HealBot_Options_ResetUpdate()
 end
 
@@ -17540,9 +17537,7 @@ function HealBot_Options_MissingBuffPrio(spellId)
 end
 
 function HealBot_Options_BuffIconUpdate()
-    HealBot_Aura_ResetBuffCache()
-    HealBot_Aura_setCustomBuffFilterDisabled()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","ResetBuffCache")
     HealBot_Options_SetEnableDisableBuffBtn()
 end
 
@@ -17560,8 +17555,7 @@ function HealBot_Options_BuffIconPrioUpdate(spellId, prio)
     if sName and HealBot_Globals.HealBot_Custom_Buffs[sName] then
         HealBot_Globals.HealBot_Custom_Buffs[sName]=prio
     end
-    HealBot_Aura_ResetBuffCache()
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","ResetBuffCache")
     HealBot_Options_ResetUpdate()
 end
 
@@ -17571,7 +17565,7 @@ function HealBot_Options_BuffIconColUpdate(spellId, col)
     if sName then HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]=col end
     HealBot_setLuVars("UpdateAllAura", 5)
     HealBot_Aura_setLuVars("updateAll", true)
-    HealBot_Timers_Set("AURA","CheckUnits")
+    HealBot_Timers_Set("AURA","CheckBuffs")
     HealBot_Options_ResetUpdate()
 end
 
@@ -17583,7 +17577,7 @@ end
 
 function HealBot_Options_BuffIconSetUpdate(spellId, set)
     HealBot_Globals.HealBot_Custom_Buffs_IconSet[spellId]=set
-    HealBot_Aura_ResetBuffCache()
+    HealBot_Timers_Set("AURA","ResetBuffCache")
     HealBot_Timers_Set("AURA","ConfigClassHoT")
     HealBot_Options_ResetUpdate()
 end
@@ -23935,8 +23929,8 @@ function HealBot_Options_SkinsFramesBarsAuxConfigTab(tab)
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarOverlayOOR,HEALBOT_OUTOFRANGE_LABEL)
         HealBot_Options_SkinBarAuxBarOverlayBuff:SetChecked(Healbot_Config_Skins.AuxBarFrame[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OVERLAYBUFF"])
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarOverlayBuff,HEALBOT_OPTIONS_BUFF)
-        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,50,1,5)
-        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-50,20,1,5)
+        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarDepth,HEALBOT_OPTIONS_TXTDEPTH,1,75,1,5)
+        HealBot_Options_val_OnLoad(HealBot_Options_AuxBarOffset,HEALBOT_OPTIONS_TXTOFFSET,-75,20,1,5)
         HealBot_Options_AuxBarOffset:SetValue(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OFFSET"])
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_Options_AuxBarSize,HEALBOT_OPTIONS_TXTSIZE,0.25,1,0.01,5)
         HealBot_Options_SetLabel("HealBot_SkinBarAuxBarOverlayRecentHealst",HEALBOT_SKIN_OVERLAYCOL_TEXT)

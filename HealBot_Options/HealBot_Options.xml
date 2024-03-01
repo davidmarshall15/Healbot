@@ -1899,31 +1899,34 @@
                     </FontString>
                     <FontString name="HealBot_Info_SuppressSounds" text="HEALBOT_SUPPRESSSOUND" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT"><Offset><AbsDimension x="20" y="15"/></Offset></Anchor></Anchors>
-                    </FontString>      
+                    </FontString>
                     <FontString name="HealBot_Info_SuppressErrors" text="HEALBOT_SUPPRESSERROR" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativeTo="HealBot_Info_SuppressSounds" relativePoint="TOPRIGHT"><Offset><AbsDimension x="0" y="5"/></Offset></Anchor></Anchors>
-                    </FontString>                    
+                    </FontString>
                     <FontString name="HealBot_Info_PerfLevel" text="HEALBOT_SUPPRESSERROR" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativeTo="HealBot_Info_SuppressErrors" relativePoint="TOPRIGHT"><Offset><AbsDimension x="0" y="5"/></Offset></Anchor></Anchors>
-                    </FontString>                    
+                    </FontString>
                      <FontString name="HealBot_Info_SuppressSoundsVal" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Info_SuppressSounds" relativePoint="TOPRIGHT"><Offset><AbsDimension x="7" y="0"/></Offset></Anchor></Anchors>
-                    </FontString>      
+                    </FontString>
                     <FontString name="HealBot_Info_SuppressErrorsVal" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Info_SuppressErrors" relativePoint="TOPRIGHT"><Offset><AbsDimension x="7" y="0"/></Offset></Anchor></Anchors>
-                    </FontString>                           
+                    </FontString>
                     <FontString name="HealBot_Info_PerfLevelVal" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Info_PerfLevel" relativePoint="TOPRIGHT"><Offset><AbsDimension x="7" y="0"/></Offset></Anchor></Anchors>
-                    </FontString>                           
+                    </FontString>
+                    <FontString name="HealBot_Info_PerfLevelCPUOff" inherits="GameFontNormal">
+                        <Anchors><Anchor point="TOPLEFT" relativeTo="HealBot_Info_SuppressErrorsVal" relativePoint="TOPRIGHT"><Offset><AbsDimension x="50" y="0"/></Offset></Anchor></Anchors>
+                    </FontString>
                     <FontString name="HealBot_Error_Clientx" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"><Offset><AbsDimension x="-20" y="45"/></Offset></Anchor></Anchors>
-                    </FontString>                
+                    </FontString>
                     <FontString name="HealBot_Error_Versionx" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"><Offset><AbsDimension x="-20" y="30"/></Offset></Anchor></Anchors>
-                    </FontString>                
+                    </FontString>
                     <FontString name="HealBot_Error_Classx" inherits="GameFontNormalSmall">
                         <Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"><Offset><AbsDimension x="-20" y="15"/></Offset></Anchor></Anchors>
-                    </FontString>        
+                    </FontString>
                 </Layer>
               </Layers> 
         <Frames>

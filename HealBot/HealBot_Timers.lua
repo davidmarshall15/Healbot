@@ -43,11 +43,11 @@ HealBot_Timers_luVars["turboEndTimer"]=0
 
 function HealBot_Timers_TurboOn(duration)
     if HealBot_Globals.PerfMode==3 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.8)
+        HealBot_Timers_luVars["nProcs"]=HealBot_Globals.CPUUsage
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.7)
     else
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.2)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.4)
     end
     if HealBot_Timers_luVars["nProcs"]<2 then
         HealBot_Timers_luVars["nProcs"]=2
@@ -62,9 +62,9 @@ function HealBot_Timers_TurboOff()
     if GetTime()<HealBot_Timers_luVars["turboEndTimer"] then
         HealBot_Timers_Set("LAST","TimerTurboOff",1) -- All recall require a delay
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.3)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.5)
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.2)
+        HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.3)
     else
         HealBot_Timers_luVars["nProcs"]=ceil(HealBot_Globals.CPUUsage*0.1)
     end
@@ -296,7 +296,6 @@ function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.125)
     HealBot_Timers_Set("LAST","UpdateAllHealth",0.15)
     HealBot_Timers_Set("PLAYER","InvChange",0.175)
-    HealBot_Timers_Set("AURA","CheckUnits",0.2)
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.225)
     HealBot_Timers_Set("LAST","CheckVersions",0.25)
     HealBot_Timers_Set("LAST","LoadComplete",0.3)
@@ -615,6 +614,8 @@ local hbTimerFuncs={["INIT"]={
                     },
                     ["AURA"]={
                         ["CheckUnits"]=HealBot_AuraCheck,
+                        ["CheckBuffs"]=HealBot_BuffCheck,
+                        ["CheckDebuffs"]=HealBot_DebuffCheck,
                         ["BuffReset"]=HealBot_Options_Buff_Reset,
                         ["ExtraBuffReset"]=HealBot_Options_ExtraBuff_Reset,
                         ["DebuffReset"]=HealBot_Options_Debuff_Reset,
@@ -632,6 +633,8 @@ local hbTimerFuncs={["INIT"]={
                         ["BuffsReset"]=HealBot_Timers_BuffsReset,
                         ["RemoveAllBuffIcons"]=HealBot_Aura_RemoveAllBuffIcons,
                         ["RemoveAllDebuffIcons"]=HealBot_Aura_RemoveAllDebuffIcons,
+                        ["ClearAllBuffs"]=HealBot_Aura_ClearAllBuffs,
+                        ["ClearAllDebuffs"]=HealBot_Aura_ClearAllDebuffs,
                         ["BuffBarColours"]=HealBot_SetBuffBarColours,
                         ["PlayerCheckExtended"]=HealBot_PlayerCheckExtended,
                         ["InitItemsDataReady"]=HealBot_Aura_InitItemsDataReady,

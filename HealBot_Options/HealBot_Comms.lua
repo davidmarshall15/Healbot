@@ -238,6 +238,8 @@ function HealBot_Comms_PerfLevel()
     if HealBot_retLuVars("CPUProfilerOn") then
         HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
         HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
+        HealBot_Info_PerfLevelCPUOff:SetText("Turn Off:   /hb cpu")
+        HealBot_Info_PerfLevelCPUOff:SetTextColor(0.88,0.1,0.1)
     else
         vCPU=HealBot_Globals.CPUUsage*HealBot_Globals.PerfMode
         HealBot_Info_PerfLevelVal:SetText(vCPU.." <"..vMode[HealBot_Globals.PerfMode]..">  ["..HealBot_Globals.FPS.."fps]")

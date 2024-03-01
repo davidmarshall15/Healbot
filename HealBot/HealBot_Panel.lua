@@ -1001,8 +1001,8 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_TestBarsState(false)
         HealBot_Options_setLuVars("TestBarsOn", false)
         HealBot_Skins_isTestBars(false)
-        HealBot_Aura_ClearAllBuffs()
-        HealBot_Aura_ClearAllDebuffs()
+        HealBot_Timers_Set("AURA","ClearAllBuffs")
+        HealBot_Timers_Set("AURA","ClearAllDebuffs")
         --HealBot_setTestCols={}
     else
         HealBot_Action_setLuVars("TestBarsOn", true)
@@ -2699,22 +2699,23 @@ local vTargetButton=""
 function HealBot_Panel_TargetChanged(preCombat)
     hbCurrentFrame=8
     hbBarsPerFrame[hbCurrentFrame]=0
-    vTargetButton = HealBot_Extra_Button["target"]
+    
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
         i[hbCurrentFrame]=0
         HeaderPos[hbCurrentFrame]={};
-        HealBot_Panel_targetHeals(preCombat)        
+        HealBot_Panel_targetHeals(preCombat)
+        vTargetButton = HealBot_Extra_Button["target"]
         if vTargetButton then
             if HealBot_TrackUnit[vTargetButton.status.unittype][vTargetButton.unit] and not HealBot_Panel_BlackList[vTargetButton.guid] then
                 HealBot_Panel_TargetShow(vTargetButton)
             else
-                HealBot_Action_HidePanel(hbCurrentFrame)
+                HealBot_Action_MarkDeleteButton(vTargetButton)
             end
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
     else
-        if vTargetButton then
-            HealBot_Action_MarkDeleteButton(vTargetButton)
+        if HealBot_Extra_Button["target"] then
+            HealBot_Action_MarkDeleteButton(HealBot_Extra_Button["target"])
         end
         HealBot_Action_HidePanel(hbCurrentFrame)
     end
@@ -2789,7 +2790,7 @@ function HealBot_Panel_FocusChanged(preCombat)
                 if HealBot_TrackUnit[vFocusButton.status.unittype][vFocusButton.unit] and not HealBot_Panel_BlackList[vFocusButton.guid] then
                     HealBot_Panel_FocusShow(vFocusButton)
                 else
-                    HealBot_Action_HidePanel(hbCurrentFrame)
+                    HealBot_Action_MarkDeleteButton(vFocusButton)
                 end
             end
             HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
@@ -3104,6 +3105,7 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
     for x,_ in pairs(subunits) do
         subunits[x]=nil;
     end
+
     if changeType>5 then
 
         for z=1,6 do
@@ -3195,7 +3197,7 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
             if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["FRAME"]==8 then
                 for x,_ in pairs(HealBot_TrackUnit[9]) do
                     HealBot_TrackUnit[9][x]=nil
-                end 
+                end
                 HealBot_Panel_TargetChanged(preCombat)
                 if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][9]["STATE"] then
                     HealBot_ActionIcons_UpdateActiveFrame(8, true)
@@ -3299,8 +3301,8 @@ function HealBot_Panel_PrePartyChanged(preCombat, changeType)
 end
 
 function HealBot_Panel_PartyChanged(preCombat, changeType)
-    HealBot_Action_setLuVars("CreatedButtons",0)
-    HealBot_Action_setLuVars("PartyChangedType",changeType)
+    --HealBot_Action_setLuVars("CreatedButtons",0)
+    --HealBot_Action_setLuVars("PartyChangedType",changeType)
     if HealBot_setTestBars then
         if not preCombat then
             HealBot_Panel_TestBarsOn()

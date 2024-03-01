@@ -1778,9 +1778,11 @@ function HealBot_ActionIcons_ValidateTargetAllIconFrames()
 end
 
 function HealBot_ActionIcons_CheckStateChangeFrame(frame)
-    for y=1,Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"] do
-        if actionIcons[frame][y].valid and (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][y][frame]["HighlightFilter"] or 1)==2 then
-            HealBot_ActionIcons_CheckHighlightIconAbility(frame, y)
+    if frame then
+        for y=1,Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"] do
+            if actionIcons[frame][y].valid and (Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][y][frame]["HighlightFilter"] or 1)==2 then
+                HealBot_ActionIcons_CheckHighlightIconAbility(frame, y)
+            end
         end
     end
 end
