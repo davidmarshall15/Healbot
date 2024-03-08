@@ -2518,7 +2518,6 @@ function HealBot_Load()
         HealBot_Vers[UnitName("player")]=HEALBOT_VERSION
         HealBot_Comms_PerfLevel()
         HealBot_ActionIcons_InitFrames()
-        HealBot_Timers_Set("AURA","CheckUnits",25)
         HealBot_Timers_Set("INIT","CheckTalentInfo")
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
         HealBot_Timers_Set("INIT","InitPlugins")
@@ -3058,11 +3057,11 @@ function HealBot_UpdateMaxUnitsAdj()
     if HealBot_luVars["CPUProfilerOn"] then
         HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage+1
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*1.75)+4
+        HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage+7
     elseif HealBot_Globals.PerfMode==2 then
-        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*1.5)+3
+        HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage+5
     else
-        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*1.25)+2
+        HealBot_luVars["UpdateMaxUnits"]=HealBot_Globals.CPUUsage+3
     end
     if HealBot_luVars["UpdateMaxUnits"]<5 then
         HealBot_luVars["UpdateMaxUnits"]=5
@@ -3073,19 +3072,19 @@ end
 
 function HealBot_UpdateNumUnits()
     if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.3)
+        HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.2)
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.9)
-    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.7)
-    else
+    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.5)
+    else
+        HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.3)
     end
     HealBot_luVars["UpdateUnitRecall"]=true
     if HealBot_luVars["NumUnitsInQueue"]>15 then
-        HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+5
-    elseif HealBot_luVars["NumUnitsInQueue"]>8 then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+3
+    elseif HealBot_luVars["NumUnitsInQueue"]>8 then
+        HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+2
     elseif HealBot_luVars["NumUnitsInQueue"]>4 then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateNumUnits"]+1
     else
@@ -3116,20 +3115,20 @@ end
 
 function HealBot_PerfRangeFreq()
     if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["rangeCheckAdj"]=1.8-(HealBot_luVars["cpuAdj"]/50)
-        HealBot_luVars["rangeCheckAdjEnabled"]=0.9-(HealBot_luVars["cpuAdj"]/50)
+        HealBot_luVars["rangeCheckAdj"]=2-(HealBot_luVars["cpuAdj"]/50)
+        HealBot_luVars["rangeCheckAdjEnabled"]=1-(HealBot_luVars["cpuAdj"]/50)
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_luVars["rangeCheckAdj"]=0.6-(HealBot_luVars["cpuAdj"]/20)
-        HealBot_luVars["rangeCheckAdjEnabled"]=0.3-(HealBot_luVars["cpuAdj"]/20)
-    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["rangeCheckAdj"]=1-(HealBot_luVars["cpuAdj"]/20)
         HealBot_luVars["rangeCheckAdjEnabled"]=0.5-(HealBot_luVars["cpuAdj"]/20)
-    else
+    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["rangeCheckAdj"]=1.4-(HealBot_luVars["cpuAdj"]/20)
         HealBot_luVars["rangeCheckAdjEnabled"]=0.7-(HealBot_luVars["cpuAdj"]/20)
+    else
+        HealBot_luVars["rangeCheckAdj"]=1.8-(HealBot_luVars["cpuAdj"]/20)
+        HealBot_luVars["rangeCheckAdjEnabled"]=0.9-(HealBot_luVars["cpuAdj"]/20)
     end
-    if HealBot_luVars["rangeCheckAdjEnabled"]<0.2 then HealBot_luVars["rangeCheckAdjEnabled"]=0.2 end
-    if HealBot_luVars["rangeCheckAdj"]<0.5 then HealBot_luVars["rangeCheckAdj"]=0.5 end
+    if HealBot_luVars["rangeCheckAdjEnabled"]<0.4 then HealBot_luVars["rangeCheckAdjEnabled"]=0.4 end
+    if HealBot_luVars["rangeCheckAdj"]<0.8 then HealBot_luVars["rangeCheckAdj"]=0.8 end
     HealBot_AddDebug("rangeCheckAdj="..HealBot_luVars["rangeCheckAdj"], "Perf", true)
     HealBot_AddDebug("rangeCheckAdjEnabled="..HealBot_luVars["rangeCheckAdjEnabled"], "Perf", true)
 end

@@ -228,10 +228,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
-    HEALBOT_OPTIONS_RAIDGROUPWARN           = "Raid filter";
-    HEALBOT_OPTIONS_NPCGROUPWARN            = "NPC filter";
-    HEALBOT_OPTIONS_NPCGROUPWARNFRIEND      = "Include friendly npc's"
-    HEALBOT_OPTIONS_NPCGROUPWARNENEMY       = "Include enemy npc's"
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
     HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"
@@ -477,7 +473,9 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFPARTY               = "on party";
     HEALBOT_OPTIONS_BUFFRAID                = "on raid";
     HEALBOT_OPTIONS_MONITORBUFFS            = "Monitor buffs";
-    HEALBOT_OPTIONS_MONITORBUFFSC           = "also in combat";
+    HEALBOT_OPTIONS_MONITORDEBUFFSC         = "also in combat";
+    HEALBOT_OPTIONS_MONITORGBUFFSC          = "include General in combat";
+    HEALBOT_OPTIONS_MONITORCBUFFSC          = "also in combat";
     HEALBOT_OPTIONS_ENABLESMARTCAST         = "SmartCast out of combat";
     HEALBOT_OPTIONS_SMARTCASTSPELLS         = "Include spells";
     HEALBOT_OPTIONS_SMARTCASTDISPELL        = "Remove debuffs";

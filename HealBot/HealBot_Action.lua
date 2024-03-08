@@ -2107,7 +2107,7 @@ function HealBot_Action_UpdateDebuffButton(button)
         HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Debuffs"])
     end
     if button.status.current<HealBot_Unit_Status["DEAD"] then
-        if button.aura.debuff.showcol and (button.aura.debuff.colbar==2 or button.aura.debuff.colbar==3) then 
+        if HealBot_Config_Cures.CDCshownHB and (button.aura.debuff.colbar==2 or button.aura.debuff.colbar==3) then 
             if HealBot_Aura_IsCureSpell(button) and button.status.rangespell~=button.aura.debuff.curespell then
                 button.status.rangespellspecial=button.aura.debuff.curespell
                 HealBot_Action_SetRangeSpell(button, true)
@@ -2150,7 +2150,7 @@ function HealBot_Action_UpdateBuffButton(button)
         HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Buffs"])
     end
     if button.status.current<HealBot_Unit_Status["DEBUFFBARCOL"] then
-        if button.aura.buff.showcol and (button.aura.buff.colbar==2 or button.aura.buff.colbar==3) then 
+        if HealBot_Config_Buffs.CBshownHB and (button.aura.buff.colbar==2 or button.aura.buff.colbar==3) then 
             if button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] and button.aura.buff.missingbuff and button.status.rangespell~=button.aura.buff.missingbuff then
                 button.status.rangespellspecial=button.aura.buff.missingbuff
                 HealBot_Action_SetRangeSpell(button, true)
@@ -3675,7 +3675,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.aura.buff.priority=99
     button.aura.buff.nextcheck=false
     button.aura.buff.resetcheck=false
-    button.aura.buff.showcol=true
     button.aura.buff.colbar=0
     button.aura.buff.r=1
     button.aura.buff.g=1
@@ -3691,7 +3690,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.aura.debuff.name=false
     button.aura.debuff.id=0
     button.aura.debuff.priority=99
-    button.aura.debuff.showcol=true
     button.aura.debuff.colbar=0
     button.aura.debuff.curespell=false
     button.aura.debuff.r=1
@@ -5388,42 +5386,6 @@ function HealBot_Action_PrepSetAllAttribs()
     end
 end
 
-local function HealBot_Action_SetHealButtonAuraCols(button)
-    if button.status.unittype<11 then
-        if HealBot_Config_Buffs.CBshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[HealBot_Panel_RetUnitGroups(button.unit)])  then
-            button.aura.buff.showcol=true
-        else
-            button.aura.buff.showcol=false
-        end
-        if HealBot_Config_Cures.CDCshownHB and (not HealBot_Action_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[HealBot_Panel_RetUnitGroups(button.unit)]) then
-            button.aura.debuff.showcol=true
-        else
-            button.aura.debuff.showcol=false
-        end
-    else
-        button.aura.buff.showcol=false
-        button.aura.debuff.showcol=false
-    end
-end
-
-function HealBot_Action_SetAllHealButtonAuraCols()
-    for _,xButton in pairs(HealBot_Unit_Button) do
-        HealBot_Action_SetHealButtonAuraCols(xButton)
-    end
-    for _,xButton in pairs(HealBot_Private_Button) do
-        HealBot_Action_SetHealButtonAuraCols(xButton)
-    end
-    for _,xButton in pairs(HealBot_Pet_Button) do
-        HealBot_Action_SetHealButtonAuraCols(xButton)
-    end
-    for _,xButton in pairs(HealBot_Vehicle_Button) do
-        HealBot_Action_SetHealButtonAuraCols(xButton)
-    end
-    for _,xButton in pairs(HealBot_Extra_Button) do
-        HealBot_Action_SetHealButtonAuraCols(xButton)
-    end
-end
-
 local hbGuidData={}
 local hbGuidDefault={["OFFLINE"]=false,
                      ["SPEC"]=" ",
@@ -5644,7 +5606,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
                 HealBot_HealthAlertLevel(preCombat, hButton)
-                HealBot_Action_SetHealButtonAuraCols(hButton)
             end
             if hButton.skinreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)

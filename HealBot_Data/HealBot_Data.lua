@@ -138,6 +138,7 @@ HealBot_Config_SpellsDefaults = {
 HealBot_Config_BuffsDefaults = {
   BuffWatch=true,
   BuffWatchInCombat=false,
+  BuffCustomWatchInCombat=true,
   PalaBlessingsAsOne=false,
   ShortBuffTimer=10,
   LongBuffTimer=120,
@@ -160,7 +161,6 @@ HealBot_Config_BuffsDefaults = {
   AlwaysShowClass = false,
   AlwaysShowTimed = false,
   CBshownHB=true,
-  ShowGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
   ShowBuffWarning=false,
   SoundBuffWarning=false,
   SoundBuffPlay=HealBot_Default_Sounds[1].name,
@@ -196,7 +196,6 @@ HealBot_Config_CuresDefaults = {
   ListSortFilterTag="",
   ShowTimeMaxDuration = 31,
   CDCshownHB=true,
-  ShowGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
   HealBot_CDCWarnRange_Bar=3,
   HealBot_CDCWarnRange_Screen=2,
   HealBot_CDCWarnRange_Sound=3,

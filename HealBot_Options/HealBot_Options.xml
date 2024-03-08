@@ -29710,7 +29710,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-95" />
+                          <AbsDimension x="40" y="-120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -29738,7 +29738,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75" />
+                          <AbsDimension x="0" y="-95" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -29766,7 +29766,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75" />
+                          <AbsDimension x="0" y="-95" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -29797,7 +29797,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundDebuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="35" y="-70" />
+                          <AbsDimension x="35" y="-80" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -29828,182 +29828,6 @@
                     <HighlightTexture file="Interface\Common\VoiceChat-On"/>
                     <PushedTexture file="Interface\Common\VoiceChat-On"/>
                   </Button>
-                  <CheckButton name="HealBot_Options_CuresWarnNPCFriendly" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="100" y="50"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CureWarnNPCTxt" text="HEALBOT_OPTIONS_NPCGROUPWARN" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="68" y="20" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_NPCGROUPWARNFRIEND)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnNPCFriendly_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnNPCEnemy" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_CuresWarnNPCFriendly" relativePoint="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="-5"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_NPCGROUPWARNENEMY)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnNPCEnemy_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup1" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="BOTTOMRIGHT">
-                        <Offset>
-                          <AbsDimension x="-250" y="50"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_CureWarnGroupTxt" text="HEALBOT_OPTIONS_RAIDGROUPWARN" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="68" y="20" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_ONE)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup2" inherits="SendMailRadioButtonTemplate" id="2">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup1" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_TWO)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup3" inherits="SendMailRadioButtonTemplate" id="3">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup2" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_THREE)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup4" inherits="SendMailRadioButtonTemplate" id="4">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup3" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_FOUR)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup5" inherits="SendMailRadioButtonTemplate" id="5">
-                    <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_CuresWarnGroup1" relativePoint="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="-5"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_FIVE)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup6" inherits="SendMailRadioButtonTemplate" id="6">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup5" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_SIX)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup7" inherits="SendMailRadioButtonTemplate" id="7">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup6" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_SEVEN)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_CuresWarnGroup8" inherits="SendMailRadioButtonTemplate" id="8">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CuresWarnGroup7" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_EIGHT)</OnLoad>
-                      <OnClick>HealBot_Options_CuresWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                 </Frames>
               </Frame>
             </Frames>
@@ -30042,11 +29866,25 @@
                       <OnLeave>HealBot_Options_Show_Help("MONITORBUFFS",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <CheckButton name="HealBot_Options_MonitorBuffsInCombat" inherits="SendMailRadioButtonTemplate">
+                  <CheckButton name="HealBot_Options_MonitorCustomBuffsInCombat" inherits="SendMailRadioButtonTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorBuffs" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="270" y="-5"/>
+                          <AbsDimension x="170" y="-5"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_MonitorCustomBuffsInCombat_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("MONITORCBUFFSIC",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("MONITORCBUFFSIC",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
+                  <CheckButton name="HealBot_Options_MonitorBuffsInCombat" inherits="SendMailRadioButtonTemplate">
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_MonitorCustomBuffsInCombat" relativePoint="TOPRIGHT">
+                        <Offset>
+                          <AbsDimension x="100" y="0"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -32950,7 +32788,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-95" />
+                          <AbsDimension x="40" y="-120" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -32978,7 +32816,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75" />
+                          <AbsDimension x="0" y="-95" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33006,7 +32844,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowBuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-75" />
+                          <AbsDimension x="0" y="-95" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33037,7 +32875,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SoundBuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="35" y="-70" />
+                          <AbsDimension x="35" y="-80" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33068,182 +32906,6 @@
                     <HighlightTexture file="Interface\Common\VoiceChat-On"/>
                     <PushedTexture file="Interface\Common\VoiceChat-On"/>
                   </Button>
-                  <CheckButton name="HealBot_Options_BuffWarnNPCFriendly" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="BOTTOMLEFT">
-                        <Offset>
-                          <AbsDimension x="100" y="50"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_BuffWarnNPCTxt" text="HEALBOT_OPTIONS_NPCGROUPWARN" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="68" y="20" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_NPCGROUPWARNFRIEND)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnNPCFriendly_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnNPCEnemy" inherits="SendMailRadioButtonTemplate">
-                    <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_BuffWarnNPCFriendly" relativePoint="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="-5"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_OPTIONS_NPCGROUPWARNENEMY)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnNPCEnemy_OnClick(self)</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNNPCFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup1" inherits="SendMailRadioButtonTemplate" id="1">
-                    <Anchors>
-                      <Anchor point="BOTTOMRIGHT">
-                        <Offset>
-                          <AbsDimension x="-250" y="50"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Layers>
-                      <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_BuffWarnGroupTxt" text="HEALBOT_OPTIONS_RAIDGROUPWARN" inherits="GameFontNormal">
-                          <Anchors>
-                            <Anchor point="TOP">
-                              <Offset>
-                                <AbsDimension x="68" y="20" />
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_ONE)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup2" inherits="SendMailRadioButtonTemplate" id="2">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup1" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_TWO)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup3" inherits="SendMailRadioButtonTemplate" id="3">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup2" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_THREE)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup4" inherits="SendMailRadioButtonTemplate" id="4">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup3" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_FOUR)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup5" inherits="SendMailRadioButtonTemplate" id="5">
-                    <Anchors>
-                      <Anchor point="TOP" relativeTo="HealBot_Options_BuffWarnGroup1" relativePoint="BOTTOM">
-                        <Offset>
-                          <AbsDimension x="0" y="-5"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_FIVE)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup6" inherits="SendMailRadioButtonTemplate" id="6">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup5" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_SIX)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup7" inherits="SendMailRadioButtonTemplate" id="7">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup6" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_SEVEN)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
-                  <CheckButton name="HealBot_Options_BuffWarnGroup8" inherits="SendMailRadioButtonTemplate" id="8">
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffWarnGroup7" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="25" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_SetText(self,HEALBOT_EIGHT)</OnLoad>
-                      <OnClick>HealBot_Options_BuffWarnGroup_OnClick(self,self:GetID())</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGGROUPFILTER",false)</OnLeave>
-                    </Scripts>
-                  </CheckButton>
                 </Frames>
               </Frame>
             </Frames>

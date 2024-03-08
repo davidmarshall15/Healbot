@@ -1386,8 +1386,6 @@ function HealBot_Options_setLists()
     HEALBOT_PLUGIN_AURAWATCH,
     HEALBOT_PLUGIN_HEALTHWATCH,
     HEALBOT_PLUGIN_MANAWATCH,
-    --HEALBOT_PLUGIN_EFFECTIVETANKS,
-    --HEALBOT_PLUGIN_EFFICIENTHEALERS,
     }
     
     HealBot_Options_Lists["IconPosition"] = {
@@ -6396,6 +6394,14 @@ function HealBot_Options_MonitorBuffsInCombat_OnClick(self)
     end
 end
 
+function HealBot_Options_MonitorCustomBuffsInCombat_OnClick(self)
+    if HealBot_Config_Buffs.BuffCustomWatchInCombat~=self:GetChecked() then
+        HealBot_Config_Buffs.BuffCustomWatchInCombat = self:GetChecked()
+        HealBot_Timers_Set("AURA","BuffReset")
+        HealBot_Timers_Set("AURA","PlayerCheckExtended")
+    end
+end
+
 function HealBot_Options_MonitorBuffsWhenMounted_OnClick(self)
     if HealBot_Config_Buffs.BuffWatchWhenMounted~=self:GetChecked() then
         HealBot_Config_Buffs.BuffWatchWhenMounted = self:GetChecked()
@@ -6408,6 +6414,8 @@ function HealBot_Options_MonitorExtraBuffsOnlyInInstance_OnClick(self)
     if HealBot_Config_Buffs.ExtraBuffsOnlyInInstance~=self:GetChecked() then
         HealBot_Config_Buffs.ExtraBuffsOnlyInInstance = self:GetChecked()
         HealBot_Timers_Set("LAST","InitItemsData")
+        HealBot_Timers_Set("AURA","BuffReset",0.25)
+        HealBot_Timers_Set("AURA","PlayerCheckExtended",0.25)
     end
 end
 
@@ -6415,6 +6423,9 @@ function HealBot_Options_MonitorBuffsWhenGrouped_OnClick(self)
     if HealBot_Config_Buffs.BuffWatchWhenGrouped~=self:GetChecked() then
         HealBot_Config_Buffs.BuffWatchWhenGrouped = self:GetChecked()
         HealBot_Timers_Set("AURA","BuffReset")
+        if HealBot_Config_Buffs.BuffWatchWhenGrouped and GetNumGroupMembers()<1 then
+            HealBot_Timers_Set("AURA","RemoveAllBuffIcons")
+        end
         HealBot_Timers_Set("AURA","PlayerCheckExtended")
     end
 end
@@ -6514,7 +6525,6 @@ end
 function HealBot_Options_CDCCol_ShowOnHealthBar_OnClick(self)
     if HealBot_Config_Cures.CDCshownHB~=self:GetChecked() then
         HealBot_Config_Cures.CDCshownHB = self:GetChecked()
-        HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
         HealBot_Timers_Set("AURA","CheckDebuffs")
@@ -6524,7 +6534,6 @@ end
 function HealBot_Options_BuffCol_ShowOnHealthBar_OnClick(self)
     if HealBot_Config_Buffs.CBshownHB~=self:GetChecked() then
         HealBot_Config_Buffs.CBshownHB = self:GetChecked()
-        HealBot_Action_SetAllHealButtonAuraCols()
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
         HealBot_Timers_Set("AURA","CheckBuffs")
@@ -6889,38 +6898,6 @@ function HealBot_Options_CuresWarnNPCEnemy_OnClick(self)
         HealBot_Config_Cures.IncEnemyNPCs = self:GetChecked()
         HealBot_Timers_Set("SKINS","QuickFramesChanged")
         HealBot_Timers_Set("AURA","CheckDebuffs")
-    end
-end
-
-function HealBot_Options_BuffWarnNPCFriendly_OnClick(self)
-    if HealBot_Config_Buffs.IncFriendlyNPCs~=self:GetChecked() then
-        HealBot_Config_Buffs.IncFriendlyNPCs = self:GetChecked()
-        HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckBuffs")
-    end
-end
-
-function HealBot_Options_BuffWarnNPCEnemy_OnClick(self)
-    if HealBot_Config_Buffs.IncEnemyNPCs~=self:GetChecked() then
-        HealBot_Config_Buffs.IncEnemyNPCs = self:GetChecked()
-        HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckBuffs")
-    end
-end
-
-function HealBot_Options_CuresWarnGroup_OnClick(self,id)
-    if HealBot_Config_Cures.ShowGroups[id]~=self:GetChecked() then
-        HealBot_Config_Cures.ShowGroups[id] = self:GetChecked()
-        HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckDebuffs")
-    end
-end
-
-function HealBot_Options_BuffWarnGroup_OnClick(self,id)
-    if HealBot_Config_Buffs.ShowGroups[id]~=self:GetChecked() then
-        HealBot_Config_Buffs.ShowGroups[id] = self:GetChecked()
-        HealBot_Timers_Set("SKINS","QuickFramesChanged")
-        HealBot_Timers_Set("AURA","CheckBuffs")
     end
 end
 
@@ -24946,7 +24923,7 @@ function HealBot_Options_SkinsFramesIndicatorsLowManaTab(tab)
         HealBot_Options_ManaIndicator.initialize = HealBot_Options_ManaIndicator_DropDown
         UIDropDownMenu_SetText(HealBot_Options_ManaIndicator, HealBot_Options_ManaIndicator_List[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["LOWMANA"]])
         HealBot_Options_ManaIndicatorInCombat:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["LOWMANACOMBAT"])
-        HealBot_Options_SetText(HealBot_Options_ManaIndicatorInCombat,HEALBOT_OPTIONS_MONITORBUFFSC)
+        HealBot_Options_SetText(HealBot_Options_ManaIndicatorInCombat,HEALBOT_OPTIONS_MONITORDEBUFFSC)
         HealBot_Options_LowManaIndColour.initialize = HealBot_Options_LowManaIndColour_DropDown
         UIDropDownMenu_SetText(HealBot_Options_LowManaIndColour, HealBot_Options_Lists["IndicatorCol"][Healbot_Config_Skins.Indicators[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["MCOL"]])
         HealBot_Options_LowManaIndAnchor.initialize = HealBot_Options_LowManaIndAnchor_DropDown
@@ -25232,11 +25209,6 @@ function HealBot_Options_DebuffsWarningTab(tab)
         HealBot_Options_CDCWarnRange4.initialize = HealBot_Options_CDCWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Sound])
         HealBot_Options_WarningSound:SetValue(soundsIndex[HealBot_Config_Cures.SoundDebuffPlay] or 0);
-        HealBot_Options_CuresWarnNPCFriendly:SetChecked(HealBot_Config_Cures.IncFriendlyNPCs)
-        HealBot_Options_CuresWarnNPCEnemy:SetChecked(HealBot_Config_Cures.IncEnemyNPCs)
-        HealBot_Options_SetWarnCureGroups()
-        HealBot_Options_SetLabel("HealBot_Options_CureWarnGroupTxt", HEALBOT_OPTIONS_RAIDGROUPWARN)
-        HealBot_Options_SetLabel("HealBot_Options_CureWarnNPCTxt", HEALBOT_OPTIONS_NPCGROUPWARN)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -25469,11 +25441,6 @@ function HealBot_Options_BuffsWarningTab(tab)
         HealBot_Options_BuffWarnRange4.initialize = HealBot_Options_BuffWarnRange4_DropDown
         UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Sound])
         HealBot_Options_SetSliderValue(HealBot_Options_BuffWarningSound,soundsIndex[HealBot_Config_Buffs.SoundBuffPlay])
-        HealBot_Options_BuffWarnNPCFriendly:SetChecked(HealBot_Config_Buffs.IncFriendlyNPCs)
-        HealBot_Options_BuffWarnNPCEnemy:SetChecked(HealBot_Config_Buffs.IncEnemyNPCs)
-        HealBot_Options_SetWarnBuffGroups()
-        HealBot_Options_SetLabel("HealBot_Options_BuffWarnNPCTxt", HEALBOT_OPTIONS_NPCGROUPWARN)
-        HealBot_Options_SetLabel("HealBot_Options_BuffWarnGroupTxt", HEALBOT_OPTIONS_RAIDGROUPWARN)
         HealBot_Options_TabRunOnce[tab]=true
     end
 end
@@ -25932,7 +25899,7 @@ function HealBot_Options_DebuffsTab()
     HealBot_Options_MonitorDebuffs:SetChecked(HealBot_Config_Cures.DebuffWatch)
     HealBot_Options_SetText(HealBot_Options_MonitorDebuffs,HEALBOT_OPTIONS_MONITORDEBUFFS)
     HealBot_Options_MonitorDebuffsInCombat:SetChecked(HealBot_Config_Cures.DebuffWatchInCombat)
-    HealBot_Options_SetText(HealBot_Options_MonitorDebuffsInCombat,HEALBOT_OPTIONS_MONITORBUFFSC)
+    HealBot_Options_SetText(HealBot_Options_MonitorDebuffsInCombat,HEALBOT_OPTIONS_MONITORDEBUFFSC)
     HealBot_Options_MonitorDebuffsWhenGrouped:SetChecked(HealBot_Config_Cures.DebuffWatchWhenGrouped)
     HealBot_Options_SetText(HealBot_Options_MonitorDebuffsWhenGrouped,HEALBOT_OPTIONS_IN_A_GROUP)
     HealBot_Options_MonitorDebuffsWhenMounted:SetChecked(HealBot_Config_Cures.DebuffWatchWhenMounted)
@@ -25944,7 +25911,9 @@ function HealBot_Options_BuffsTab()
     HealBot_Options_MonitorBuffs:SetChecked(HealBot_Config_Buffs.BuffWatch)
     HealBot_Options_SetText(HealBot_Options_MonitorBuffs,HEALBOT_OPTIONS_MONITORBUFFS)
     HealBot_Options_MonitorBuffsInCombat:SetChecked(HealBot_Config_Buffs.BuffWatchInCombat)
-    HealBot_Options_SetText(HealBot_Options_MonitorBuffsInCombat,HEALBOT_OPTIONS_MONITORBUFFSC)
+    HealBot_Options_SetText(HealBot_Options_MonitorBuffsInCombat,HEALBOT_OPTIONS_MONITORGBUFFSC)
+    HealBot_Options_MonitorCustomBuffsInCombat:SetChecked(HealBot_Config_Buffs.BuffCustomWatchInCombat)
+    HealBot_Options_SetText(HealBot_Options_MonitorCustomBuffsInCombat,HEALBOT_OPTIONS_MONITORCBUFFSC)
     HealBot_Options_MonitorBuffsWhenGrouped:SetChecked(HealBot_Config_Buffs.BuffWatchWhenGrouped)
     HealBot_Options_SetText(HealBot_Options_MonitorBuffsWhenGrouped,HEALBOT_OPTIONS_IN_A_GROUP)
     HealBot_Options_MonitorBuffsWhenMounted:SetChecked(HealBot_Config_Buffs.BuffWatchWhenMounted)
@@ -26213,32 +26182,6 @@ function HealBot_Options_SetEFGroups()
         HealBot_Options_SetText(g,x)
         g=_G["HealBot_Options_OverrideEFGroup"..x]
         if HealBot_Globals.OverrideFocusGroups[x] then 
-            g:SetChecked(true)
-        else
-            g:SetChecked(false)
-        end
-        HealBot_Options_SetText(g,x)
-    end
-end
-
-function HealBot_Options_SetWarnCureGroups()
-    local g=nil
-    for x=1,8 do
-        g=_G["HealBot_Options_CuresWarnGroup"..x]
-        if HealBot_Config_Cures.ShowGroups[x] then 
-            g:SetChecked(true)
-        else
-            g:SetChecked(false)
-        end
-        HealBot_Options_SetText(g,x)
-    end
-end
-
-function HealBot_Options_SetWarnBuffGroups()
-    local g=nil
-    for x=1,8 do
-        g=_G["HealBot_Options_BuffWarnGroup"..x]
-        if HealBot_Config_Buffs.ShowGroups[x] then 
             g:SetChecked(true)
         else
             g:SetChecked(false)
@@ -26590,20 +26533,16 @@ function HealBot_Options_ShowPanel(tabNo, subTabNo)
         elseif tabNo==9 then
             HealBot_Options_luVars["subTabNo9"]=subTabNo
         end
-        if subTabNo==51 then
-            HealBot_Options_MonitorBuffsInCombat:Show()
+        if subTabNo>50 and subTabNo<54 then
             HealBot_Options_MonitorBuffsWhenGrouped:Show()
             HealBot_Options_MonitorBuffsWhenMounted:Show()
-            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] and HEALBOT_GAME_VERSION<4 then
+            HealBot_Options_MonitorBuffsInCombat:Show()
+            HealBot_Options_MonitorCustomBuffsInCombat:Show()
+            if subTabNo==51 and HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] and HEALBOT_GAME_VERSION<4 then
                 HealBot_Options_MonitorBuffsPalaBlessing:Show()
             else
                 HealBot_Options_MonitorBuffsPalaBlessing:Hide()
             end
-        elseif subTabNo>51 and subTabNo<54 then
-            HealBot_Options_MonitorBuffsInCombat:Hide()
-            HealBot_Options_MonitorBuffsWhenGrouped:Hide()
-            HealBot_Options_MonitorBuffsPalaBlessing:Hide()
-            HealBot_Options_MonitorBuffsWhenMounted:Hide()
         end
     end;
 

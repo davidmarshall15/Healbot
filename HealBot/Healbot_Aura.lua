@@ -3403,7 +3403,7 @@ function HealBot_Aura_CheckUnitBuffOverDebuff(button, callerIsBuff)
     end
 end
 
-local buffBarCol,buffPrio,buffIconIndex,buffCheckRaid=0,99,0,false
+local buffBarCol,buffPrio,buffIconIndex=0,99,0
 function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
@@ -3412,20 +3412,14 @@ function HealBot_Aura_CheckUnitBuffs(button)
         button.aura.buff.colbar=0
         curBuffName=false;
         tGeneralBuffs=generalBuffs
-        if (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Buffs.ShowGroups[button.group]) and 
-           (button.isplayer or ((HealBot_Config_Buffs.IncEnemyNPCs and UnitIsEnemy(button.unit, "player")) or (HealBot_Config_Buffs.IncFriendlyNPCs and not UnitIsEnemy(button.unit, "player")))) then
-            buffCheckRaid=true
-        else
-            buffCheckRaid=false
-        end
+        
         if tGeneralBuffs then
-            onlyPlayers=false
-            if buffCheckRaid then
-                if button.player then
-                    onlyPlayers=true
-                elseif HEALBOT_GAME_VERSION<7 or not HealBot_Panel_PetUnitGUID(button.guid) then
-                    onlyPlayers=UnitIsFriend("player",button.unit)
-                end
+            if button.player then
+                onlyPlayers=true
+            elseif HEALBOT_GAME_VERSION>5 then
+                onlyPlayers=button.isplayer
+            else
+                onlyPlayers=UnitIsFriend("player",button.unit)
             end
             if onlyPlayers then 
                 for x,_ in pairs(PlayerBuffs) do
@@ -3437,6 +3431,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                 ownBlessing=false
             end
         end
+
         for z=1,3 do
             HealBot_Aura_prevIconCount["BUFF"][z]=button.icon.buff.count[z]
             for x,_ in pairs(buffSort[z]) do
@@ -3482,7 +3477,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                     if (HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1) > buffBarCol then
                         buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1
                     end
-                    if buffBarCol>1 and button.aura.buff.colbar==0 and buffCheckRaid then
+                    if buffBarCol>1 and button.aura.buff.colbar==0 then
                         button.aura.buff.colbar=buffBarCol-1
                         button.aura.buff.priority=buffPrio
                         HealBot_Aura_CheckUnitBuffOverDebuff(button, true)
@@ -3491,7 +3486,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
                     end
                 end
             end
-            if curBuffName and buffCheckRaid then               
+            if curBuffName then               
                 if prevMissingbuff~=button.aura.buff.missingbuff or HealBot_Aura_luVars["updateAll"] then
                     button.aura.buff.name="needUpdate"
                 end
@@ -3582,6 +3577,8 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                         elseif cureSpellsOnCD[cureSpellName]<HealBot_TimeNow then
                             if cureSpellCD>2 then
                                 HealBot_Aura_CureSpellOnCD()
+                            else
+                                cureSpellsOnCD[cureSpellName]=nil
                             end
                         else
                             HealBot_Aura_luVars["cureOffCd"]=false
@@ -3603,8 +3600,7 @@ function HealBot_Aura_CheckUnitDebuffs(button)
         else
             button.aura.debuff.id=0
         end
-        if button.aura.debuff.id>0 and (not HealBot_Aura_luVars["InRaid"] or HealBot_Config_Cures.ShowGroups[button.group]) and 
-           (button.isplayer or ((HealBot_Config_Cures.IncEnemyNPCs and UnitIsEnemy(button.unit, "player")) or (HealBot_Config_Cures.IncFriendlyNPCs and not UnitIsEnemy(button.unit, "player")))) then
+        if button.aura.debuff.id>0 and HealBot_Panel_RaidPetUnitGUID(button.guid) then
             if HealBot_AuraDebuffCache[button.aura.debuff.id].isAuto then 
                 debuffBarCol=HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC] or 4
             elseif HealBot_AuraDebuffCache[button.aura.debuff.id]["debuffType"]==HEALBOT_CUSTOM_en then
@@ -3691,12 +3687,13 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
 
     if not HealBot_Config_Buffs.NoAuraWhenRested then resting=false end
     if resting or onTaxi or buffMounted or not HealBot_Config_Buffs.BuffWatch then 
-        buffCheck=false 
-    else
+        buffCheck=false
+        HealBot_Action_setLuVars("CheckManaDrink", false)
+    elseif (not HealBot_Config_Buffs.BuffWatchWhenGrouped or GetNumGroupMembers()>0) and
+       (HealBot_Config_Buffs.BuffCustomWatchInCombat or not HealBot_Data["UILOCK"]) and
+        not inVehicle and not buffMounted and not UnitIsDeadOrGhost("player") then
         buffCheck=true
-        if (not HealBot_Config_Buffs.BuffWatchWhenGrouped or GetNumGroupMembers()>0) and 
-           (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) and
-            not inVehicle and not buffMounted and not UnitIsDeadOrGhost("player") then
+        if (HealBot_Config_Buffs.BuffWatchInCombat or not HealBot_Data["UILOCK"]) then
             generalBuffs=true
             if HealBot_Config_Buffs.CheckManaDrink then
                 HealBot_Action_setLuVars("CheckManaDrink", true)
@@ -3707,6 +3704,9 @@ function HealBot_Aura_SetAuraCheckFlags(debuffMounted, buffMounted, onTaxi, rest
             generalBuffs=false
             HealBot_Action_setLuVars("CheckManaDrink", false)
         end
+    else
+        buffCheck=false
+        HealBot_Action_setLuVars("CheckManaDrink", false)
     end
     
     if resting or onTaxi or debuffMounted or not HealBot_Config_Cures.DebuffWatch then 
