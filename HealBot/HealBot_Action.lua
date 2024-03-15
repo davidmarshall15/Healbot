@@ -2478,7 +2478,7 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
         end
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 and
            HealBot_TextColChangeWithHealth[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]] then 
-            button.text.healthupdate=true 
+            button.text.healthupdate=true
         end
         HealBot_Action_UpdateHealthHotBar(button)
         HealBot_Text_setHealthText(button)

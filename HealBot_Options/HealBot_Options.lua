@@ -2169,10 +2169,10 @@ function HealBot_Options_retDebuffWatchTargetCD(debuffType)
             end
             return hbDebuffSpellRemain, HealBot_DebuffSpell[debuffType]
         else
-            return nil, nil
+            return 0, HealBot_DebuffSpell[debuffType]
         end
     else
-        return nil, nil
+        return 0, nil
     end
 end
 

@@ -683,6 +683,7 @@ function HealBot_Lang_enALL()
 
     HEALBOT_DISCONNECTED_LABEL              = "Disconnected"
     HEALBOT_DISCONNECTED_TAG                = "DC "
+    HEALBOT_DEAD_SPIRIT                     = "Spirit"
     HEALBOT_DEAD_LABEL                      = "Dead"
     HEALBOT_DEAD_TAG                        = "RIP "
     HEALBOT_RES_TAG                         = "RES "

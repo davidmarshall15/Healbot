@@ -3407,7 +3407,7 @@ local buffBarCol,buffPrio,buffIconIndex=0,99,0
 function HealBot_Aura_CheckUnitBuffs(button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
-    if buffCheck and button.status.current<HealBot_Unit_Status["DEAD"] or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME) then
+    if buffCheck and (not button.status.isdead or button.status.isspirit) then
         button.aura.buff.priority=99
         button.aura.buff.colbar=0
         curBuffName=false;
@@ -3498,6 +3498,11 @@ function HealBot_Aura_CheckUnitBuffs(button)
     --        HealBot_Aura_ClearBuff(button)
     --    end
     else
+        if button.status.isspirit then
+            button.status.isspirit=false
+            button.text.healthupdate=true
+            HealBot_Text_setHealthText(button)
+        end
         HealBot_Aura_ClearBuff(button)
     end
 end
@@ -3572,13 +3577,14 @@ function HealBot_Aura_CheckUnitDebuffs(button)
                         if not cureSpellsOnCD[cureSpellName] then
                             if cureSpellCD>2 then
                                 HealBot_Aura_CureSpellOnCD()
-                                HealBot_CheckAllActiveDebuffs()
+                                --HealBot_CheckAllActiveDebuffs()
                             end
                         elseif cureSpellsOnCD[cureSpellName]<HealBot_TimeNow then
                             if cureSpellCD>2 then
                                 HealBot_Aura_CureSpellOnCD()
                             else
                                 cureSpellsOnCD[cureSpellName]=nil
+                                --HealBot_CheckAllActiveDebuffsSlow()
                             end
                         else
                             HealBot_Aura_luVars["cureOffCd"]=false
@@ -3621,7 +3627,6 @@ function HealBot_Aura_CheckUnitDebuffs(button)
             HealBot_Aura_ClearDebuff(button)
         end
 
-        
         if HealBot_UnitDebuffCurrent[button.guid] then
             for dName, dTime in pairs(HealBot_UnitDebuffCurrent[button.guid]) do
                 if dTime<HealBot_TimeNow then

@@ -31,7 +31,7 @@ local hbCommsTo,hbInInst=0,false
 function HealBot_Comms_SendTo(inInst,inType)
     local lastCommsTo=hbCommsTo
     hbInInst=inInst
-    if HEALBOT_GAME_VERSION>2 and (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
+    if (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
         hbCommsTo=1
     elseif IsInRaid() then
         hbCommsTo=2

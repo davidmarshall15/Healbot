@@ -90,7 +90,7 @@ HealBot_luVars["slowUpdateID"]=1
 HealBot_luVars["UpdateMaxUnits"]=8
 HealBot_luVars["UpdateNumUnits"]=4
 HealBot_luVars["NumUnitsInQueue"]=0
-HealBot_luVars["RecalcDelay"]=0.2
+HealBot_luVars["RecalcDelay"]=0.5
 HealBot_luVars["UpdateID"]=1
 HealBot_luVars["UpdateAllAura"]=0
 HealBot_luVars["CheckAuraFlags"]=true
@@ -427,32 +427,36 @@ function HealBot_TalentQuery(button)
             button.specupdate=0
         end
         button.spec=s
-    elseif button.isplayer and HealBot_Panel_AllUnitGUID(button.guid) and UnitExists(button.unit) then
-        if button.status.isdead or not UnitIsConnected(button.unit) then
-            HealBot_SpecUpdate(button, HealBot_TimeNow+5)
+    elseif HealBot_Panel_AllUnitGUID(button.guid) and UnitExists(button.unit) then
+        if not UnitIsConnected(button.unit) then
+            HealBot_SpecUpdate(button, HealBot_TimeNow+10)
         elseif HEALBOT_GAME_VERSION>5 then
             if UnitIsVisible(button.unit) then 
                 hbInspect=true 
             else
-                HealBot_SpecUpdate(button, HealBot_TimeNow+3)
+                HealBot_SpecUpdate(button, HealBot_TimeNow+5)
             end
         elseif HEALBOT_GAME_VERSION>2 and not HealBot_Globals.DenyTalentQuery then
             if UnitInRange(button.unit) then
-                local g,p,ip,t,tp,tpc="",false,false,false,false,false
-                if _G["PaperDollFrame"] then g=_G["PaperDollFrame"]; p=g:IsVisible() end
-                if _G["InspectPaperDollFrame"] then g=_G["InspectPaperDollFrame"]; ip=g:IsVisible() end
-                if _G["TalentFrame"] then g=_G["TalentFrame"]; t=g:IsVisible() end
-                if _G["InspectTalentFrame"] then g=_G["InspectTalentFrame"]; tp=g:IsVisible() end
-                if _G["InspectTalentFrameScrollChildFrame"] then g=_G["InspectTalentFrameScrollChildFrame"]; tpc=g:IsVisible() end
-                if not p and not ip and not t and not tp and not tpc then 
-                    hbInspect=true 
+                if CheckInteractDistance(button.unit, 4) then
+                    local g,p,ip,t,tp,tpc="",false,false,false,false,false
+                    if _G["PaperDollFrame"] then g=_G["PaperDollFrame"]; p=g:IsVisible() end
+                    if _G["InspectPaperDollFrame"] then g=_G["InspectPaperDollFrame"]; ip=g:IsVisible() end
+                    if _G["TalentFrame"] then g=_G["TalentFrame"]; t=g:IsVisible() end
+                    if _G["InspectTalentFrame"] then g=_G["InspectTalentFrame"]; tp=g:IsVisible() end
+                    if _G["InspectTalentFrameScrollChildFrame"] then g=_G["InspectTalentFrameScrollChildFrame"]; tpc=g:IsVisible() end
+                    if not p and not ip and not t and not tp and not tpc then 
+                        hbInspect=true 
+                    else
+                        HealBot_SpecUpdate(button, HealBot_TimeNow+10)
+                    end
                 else
-                    HealBot_SpecUpdate(button, HealBot_TimeNow+5)
+                    HealBot_SpecUpdate(button, HealBot_TimeNow+3)
                 end
             elseif UnitIsVisible(button.unit) then 
-                HealBot_SpecUpdate(button, HealBot_TimeNow+1)
+                HealBot_SpecUpdate(button, HealBot_TimeNow+5)
             else
-                HealBot_SpecUpdate(button, HealBot_TimeNow+3)
+                HealBot_SpecUpdate(button, HealBot_TimeNow+10)
             end
         else
             button.specupdate=0
@@ -1525,8 +1529,12 @@ function HealBot_CheckUnitStatus(button)
 end
 
 function HealBot_UpdateUnitClear(button, GUIDchange, unitExists)
-    if not unitExists or button.status.current>HealBot_Unit_Status["PLUGINBARCOL"] then
-        HealBot_Aura_RemoveIcons(button)
+    if not unitExists or button.status.isdead then
+        if not button.status.isspirit then
+            HealBot_Aura_RemoveIcons(button)
+        else
+            HealBot_Aura_RemoveDebuffIcons(button)
+        end
         button.adaptive.current=12
     else
         HealBot_UpdateUnitRange(button)
@@ -3103,13 +3111,13 @@ end
 
 function HealBot_UpdateRecalcDelay()
     if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["RecalcDelay"]=0.4
+        HealBot_luVars["RecalcDelay"]=0.5
     elseif HealBot_Globals.PerfMode==3 then
-        HealBot_luVars["RecalcDelay"]=0.1
-    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["RecalcDelay"]=0.2
-    else
+    elseif HealBot_Globals.PerfMode==2 then
         HealBot_luVars["RecalcDelay"]=0.3
+    else
+        HealBot_luVars["RecalcDelay"]=0.4
     end
 end
 
@@ -3510,6 +3518,14 @@ end
 
 function HealBot_IsUnitDead(button)
     if (UnitIsDeadOrGhost(button.unit) or HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME)) and not UnitIsFeignDeath(button.unit) then
+        if HealBot_Aura_CurrentBuff(button.guid, HEALBOT_SPIRIT_OF_REDEMPTION_NAME) then
+            button.status.isspirit=true
+        elseif button.status.isspirit then
+            button.status.isspirit=false
+            HealBot_Aura_RemoveIcons(button)
+            button.text.healthupdate=true
+            HealBot_Text_setHealthText(button)
+        end
         return true
     else
         return false
@@ -4955,7 +4971,7 @@ function HealBot_UnitSlowUpdate(button)
             HealBot_RefreshUnit(button)
         elseif button.specchange then
             HealBot_SpecChange(button)
-        elseif button.specupdate>0 and button.specupdate<HealBot_TimeNow and not button.status.isdead and HealBot_luVars["TalentQueryEnd"]<HealBot_TimeNow then
+        elseif not HealBot_Data["UILOCK"] and button.specupdate>0 and button.specupdate<HealBot_TimeNow and not button.status.isdead and HealBot_luVars["TalentQueryEnd"]<HealBot_TimeNow then
             if button.frame<10 then
                 if button.player then
                     HealBot_GetTalentInfo(button)
@@ -5620,14 +5636,14 @@ end
 function HealBot_Update_Fast()
     if HealBot_luVars["MaskAuraCheckDebuff"] and HealBot_luVars["MaskAuraCheckDebuff"]<HealBot_TimeNow then
         HealBot_luVars["MaskAuraCheckDebuff"]=false
-        HealBot_luVars["CheckAllActiveDebuffs"]=false
+    --    HealBot_luVars["CheckAllActiveDebuffs"]=false
         HealBot_CheckAllDebuffs()
-    elseif HealBot_luVars["CheckAllActiveDebuffs"] then
-        HealBot_luVars["CheckAllActiveDebuffs"]=false
-        HealBot_CheckAllActiveDebuffs()
-    elseif HealBot_luVars["CheckAllActiveBuffs"] then
-        HealBot_luVars["CheckAllActiveBuffs"]=false
-        HealBot_CheckAllActiveBuffs()
+    --elseif HealBot_luVars["CheckAllActiveDebuffs"] then
+    --    HealBot_luVars["CheckAllActiveDebuffs"]=false
+    --    HealBot_CheckAllActiveDebuffs()
+    --elseif HealBot_luVars["CheckAllActiveBuffs"] then
+    --    HealBot_luVars["CheckAllActiveBuffs"]=false
+    --    HealBot_CheckAllActiveBuffs()
     else
         HealBot_luVars["fastSwitch"]=HealBot_luVars["fastSwitch"]+1
         hbFastFuncs[HealBot_luVars["fastSwitch"]]()
@@ -5884,6 +5900,7 @@ function HealBot_OnEvent_AddonMsg(addon_id,msg,distribution,sender_id)
                             xButton,pButton = HealBot_Panel_RaidUnitButton(guid)
                             if xButton and xButton.spec~=" "..s.." " then
                                 HealBot_Action_setGuidSpec(xButton, s)
+                                if pButton then pButton.spec = " "..s.." " end
                             elseif pButton and pButton.spec~=" "..s.." " then
                                 HealBot_Action_setGuidSpec(pButton, s)
                             end
@@ -6516,6 +6533,35 @@ function HealBot_CheckAllDebuffs()
         --HealBot_setCall("HealBot_CheckAllActiveDebuffs")
 end
 
+function HealBot_CheckAllActiveDebuffsSlow()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if xButton.aura.debuff.type then
+            xButton.aura.debuff.slowupd=true
+        end
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        if xButton.aura.debuff.type then
+            xButton.aura.debuff.slowupd=true
+        end
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        if xButton.aura.debuff.type then
+            xButton.aura.debuff.slowupd=true
+        end
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        if xButton.aura.debuff.type then
+            xButton.aura.debuff.slowupd=true
+        end
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        if xButton.aura.debuff.type then
+            xButton.aura.debuff.slowupd=true
+        end
+    end
+        --HealBot_setCall("HealBot_CheckAllActiveDebuffsSlow")
+end
+
 function HealBot_CheckAllActiveDebuffs()
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.aura.debuff.type then
@@ -6548,27 +6594,27 @@ end
 function HealBot_CheckAllActiveBuffs()
     for _,xButton in pairs(HealBot_Unit_Button) do
         if xButton.aura.buff.name then
-            HealBot_Check_UnitBuff(xButton)
+            xButton.aura.buff.slowupd=true
         end
     end
     for _,xButton in pairs(HealBot_Private_Button) do
         if xButton.aura.buff.name then
-            HealBot_Check_UnitBuff(xButton)
+            xButton.aura.buff.slowupd=true
         end
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
         if xButton.aura.buff.name then
-            HealBot_Check_UnitBuff(xButton)
+            xButton.aura.buff.slowupd=true
         end
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
         if xButton.aura.buff.name then
-            HealBot_Check_UnitBuff(xButton)
+            xButton.aura.buff.slowupd=true
         end
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
         if xButton.aura.buff.name then
-            HealBot_Check_UnitBuff(xButton)
+            xButton.aura.buff.slowupd=true
         end
     end
         --HealBot_setCall("HealBot_CheckAllActiveBuffs")
@@ -6973,14 +7019,19 @@ function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID
     if button.player then C_Timer.After(0.02, function() HealBot_Check_SpellCooldown(spellID) end) end
 end
 
+local function HealBot_UnitPlayerSpellCastComplete(button, spellID)
+    if HEALBOT_GAME_VERSION>8 and HealBot_Config_Cures.IgnoreOnCooldownDebuffs and HealBot_Options_retIsDebuffSpell(spellID) then
+        HealBot_CheckAllActiveDebuffs()
+        --HealBot_luVars["CheckAllActiveDebuffs"]=true
+    --elseif HealBot_Aura_IsBuffSpell(spellID) then  
+    --    HealBot_luVars["CheckAllActiveBuffs"]=true
+    end
+    HealBot_Check_SpellCooldown(spellID)
+end
+
 function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spellID)
     if button.player then
-        if (HealBot_Config_Cures.IgnoreOnCooldownDebuffs and HealBot_Options_retIsDebuffSpell(spellID)) then
-            HealBot_luVars["CheckAllActiveDebuffs"]=true
-        elseif HealBot_Aura_IsBuffSpell(spellID) then  
-            HealBot_luVars["CheckAllActiveBuffs"]=true
-        end
-        C_Timer.After(0.02, function() HealBot_Check_SpellCooldown(spellID) end)
+        C_Timer.After(0.04, function() HealBot_UnitPlayerSpellCastComplete(button, spellID) end)
     end
 end
 

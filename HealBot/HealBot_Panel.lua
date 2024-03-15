@@ -371,12 +371,12 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
                     HealBot_setLuVars(hbRoleRef[x], "x")
                     HealBot_Aura_setLuVars(hbRoleRef[x], "x")
                     HealBot_ActionIcons_setLuVars(hbRoleRef[x], "x")
-                    HealBot_AddDebug(hbRoleRef[x].." is x","One Unit Role",true)
+                    --HealBot_AddDebug(hbRoleRef[x].." is x","One Unit Role",true)
                 else
                     HealBot_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
                     HealBot_Aura_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
                     HealBot_ActionIcons_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
-                    HealBot_AddDebug(hbRoleRef[x].." is "..UnitName(hbRoleOnes[x].unit),"One Unit Role",true)
+                    --HealBot_AddDebug(hbRoleRef[x].." is "..UnitName(hbRoleOnes[x].unit),"One Unit Role",true)
                 end
                 HealBot_setLuVars("pluginClearDown", 1)
             end
