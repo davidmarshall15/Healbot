@@ -28,6 +28,7 @@ local hbMountTypes={[230]="G",
                     }
 
 local function HealBot_MountsPets_CanMount()
+      --HealBot_setCall("HealBot_MountsPets_CanMount")
     if not HealBot_Data["UILOCK"] and not IsIndoors() then
         return true
     else
@@ -36,6 +37,7 @@ local function HealBot_MountsPets_CanMount()
 end
 
 function HealBot_MountsPets_Dismount()
+      --HealBot_setCall("HealBot_MountsPets_Dismount")
     if IsMounted() then
         Dismount()
     elseif HEALBOT_GAME_VERSION>2 and CanExitVehicle() then    
@@ -44,6 +46,7 @@ function HealBot_MountsPets_Dismount()
 end
 
 function HealBot_MountsPets_FavMount()
+      --HealBot_setCall("HealBot_MountsPets_FavMount")
     if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
@@ -64,12 +67,14 @@ function HealBot_MountsPets_FavMount()
 end
 
 function HealBot_MountsPets_RandomPet(isFav)
+      --HealBot_setCall("HealBot_MountsPets_RandomPet")
     if not HealBot_Data["UILOCK"] then
         C_PetJournal.SummonRandomPet(isFav)
     end
 end
 
 function HealBot_MountsPets_Mount(mount)
+      --HealBot_setCall("HealBot_MountsPets_Mount")
     if HealBot_MountIndex[mount] then 
         if HealBot_MountsPets_CanMount() then
             if C_MountJournal then
@@ -86,6 +91,7 @@ end
 
 local vToggleMountIndex=0
 function HealBot_MountsPets_ToggelMount(mountType)
+      --HealBot_setCall("HealBot_MountsPets_ToggelMount")
     if HealBot_MountsPets_CanMount() then
         if IsMounted() then
             Dismount()
@@ -157,12 +163,14 @@ function HealBot_MountsPets_ToggelMount(mountType)
 end
 
 function HealBot_MountsPets_InitUse()
+      --HealBot_setCall("HealBot_MountsPets_InitUse")
     if HEALBOT_GAME_VERSION>2 then
         HealBot_Timers_Set("LAST","MountsPetsInit")
     end
 end
 
 function HealBot_MountsPets_ClassicDalaranCheck()
+      --HealBot_setCall("HealBot_MountsPets_ClassicDalaranCheck")
     local mapPos = C_Map.GetPlayerMapPosition(125, "player")
     if mapPos then
         local x, y = mapPos:GetXY()
@@ -183,6 +191,7 @@ function HealBot_MountsPets_ClassicDalaranCheck()
 end
 
 function HealBot_MountsPets_ZoneChange()
+      --HealBot_setCall("HealBot_MountsPets_ZoneChange")
     HealBot_mountData["incAQ"]=false
     if IsFlyableArea() then
         if HEALBOT_GAME_VERSION>4 then
@@ -220,6 +229,7 @@ function HealBot_MountsPets_ZoneChange()
 end
 
 function HealBot_MountsPets_InitMount()
+      --HealBot_setCall("HealBot_MountsPets_InitMount")
     --SetMapToCurrentZone()
     local HealBot_SlowMount={}
     local HealBot_SlowFMount={}
@@ -356,6 +366,7 @@ function HealBot_MountsPets_InitMount()
 end
 
 function HealBot_MountsPets_FavClassicMount()
+      --HealBot_setCall("HealBot_MountsPets_FavClassicMount")
     if not IsMounted() then
         HealBot_AddChat("ERROR: Not Mounted\nMount first before setting favourite mount")
     else
@@ -411,6 +422,7 @@ function HealBot_MountsPets_FavClassicMount()
 end
 
 function HealBot_MountsPets_DislikeMount(action)
+      --HealBot_setCall("HealBot_MountsPets_DislikeMount")
     if not IsMounted() then
         HealBot_AddChat("ERROR: Not Mounted\nMount first before toggling exclude mount")
     else

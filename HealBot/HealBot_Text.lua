@@ -83,6 +83,7 @@ HealBot_Text_luVars["TestBarsOn"]=false
 
 local hbCustomRoleCols={}
 function HealBot_Text_SetCustomRoleCols()
+      --HealBot_setCall("HealBot_Text_SetCustomRoleCols")
     if HealBot_Globals.OverrideColours["USEROLE"]==1 then
         hbCustomRoleCols["TANK"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["TANK"])
         hbCustomRoleCols["HEALER"]=HealBot_Options_copyTable(Healbot_Config_Skins.CustomCols[Healbot_Config_Skins.Current_Skin]["HEALER"])
@@ -95,19 +96,22 @@ function HealBot_Text_SetCustomRoleCols()
 end
 
 function HealBot_Text_setAuxAssigns(vName, frame, vValue)
+      --HealBot_setCall("HealBot_Text_setAuxAssigns - "..vName)
     HealBot_Text_AuxAssigns[vName][frame]=vValue
 end
 
 function HealBot_Text_setLuVars(vName, vValue)
-    HealBot_Text_luVars[vName]=vValue
       --HealBot_setCall("HealBot_Text_setLuVars - "..vName)
+    HealBot_Text_luVars[vName]=vValue
 end
 
 function HealBot_Text_retLuVars(vName)
+      --HealBot_setCall("HealBot_Text_retLuVars - "..vName)
     return HealBot_Text_luVars[vName]
 end
 
 function HealBot_Text_Len(v)
+      --HealBot_setCall("HealBot_Text_Len")
     if "string" == type( v ) then
         return hbStringLen(v)
     else
@@ -116,12 +120,14 @@ function HealBot_Text_Len(v)
 end
 
 function HealBot_Text_Sub(v,s,l)
+      --HealBot_setCall("HealBot_Text_Sub")
     return hbStringSub(v,s,l)
 end
 
 local tConcat={}
 local tabconcat=table.concat
 function HealBot_Text_Concat(elements)
+      --HealBot_setCall("HealBot_Text_Concat")
     return tabconcat(tConcat,"",1,elements)
 end
 
@@ -129,15 +135,18 @@ local tHealthConcat={}
 local tShortConcat={}
 local tabconcat=table.concat
 function HealBot_Text_HealthConcat(elements)
+      --HealBot_setCall("HealBot_Text_HealthConcat")
     return tabconcat(tHealthConcat,"",1,elements)
 end
 
 function HealBot_Text_ShortConcat()
+      --HealBot_setCall("HealBot_Text_ShortConcat")
     return tabconcat(tShortConcat,"",1,2)
 end
 
 local vSetTextLenAux=0
 function HealBot_Text_setEnemyTextLen(bWidth, eBarID, tSize)
+      --HealBot_setCall("HealBot_Text_setEnemyTextLen")
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][10]["MAXCHARS"]==0 then
         HealBot_Text_EnemySizeWidth["HLTH"][eBarID]=100
     elseif eBarID==2 then
@@ -165,6 +174,7 @@ function HealBot_Text_setEnemyTextLen(bWidth, eBarID, tSize)
 end
 
 function HealBot_Text_setTextLen(curFrame)
+      --HealBot_setCall("HealBot_Text_setTextLen")
     if curFrame<10 or not Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGET"] then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][curFrame]["MAXCHARS"]==0 then
             hbBarTextLen[curFrame]=1000
@@ -185,10 +195,10 @@ function HealBot_Text_setTextLen(curFrame)
             HealBot_Aux_setTextMaxChars(curFrame, vSetTextLenAux, x)
         end
     end
-      --HealBot_setCall("HealBot_Text_setTextLen")
 end
 
 function HealBot_Text_setEnemySizeWidth(vName, vValue, tSize)
+      --HealBot_setCall("HealBot_Text_setEnemySizeWidth")
     if vName=="EnemySizeWidth1" then
         HealBot_Text_setEnemyTextLen(vValue, 1, tSize)
     else
@@ -197,6 +207,7 @@ function HealBot_Text_setEnemySizeWidth(vName, vValue, tSize)
 end
 
 function HealBot_Text_sethbNumberFormat()
+      --HealBot_setCall("HealBot_Text_sethbNumberFormat")
     for j=1,10 do
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==2 or Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==5 or Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][j]["NUMFORMAT1"]==8 then
             hbNumFormats["Places"][j]=0
@@ -302,10 +313,10 @@ function HealBot_Text_sethbNumberFormat()
             hbNumFormats["InHealRight"][j]="="
         end
     end
-      --HealBot_setCall("HealBot_Text_sethbNumberFormat")
 end
 
 function HealBot_Text_sethbAggroNumberFormat()
+      --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
     for j=1,9 do
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][j]["TEXTFORMAT"]==2 then
             aggroNumFormatSurLa[j]="("
@@ -362,10 +373,10 @@ function HealBot_Text_sethbAggroNumberFormat()
         end
         
     end
-      --HealBot_setCall("HealBot_Text_sethbAggroNumberFormat")
 end
 
 local function HealBot_Text_RGBPercToHex(r, g, b)
+      --HealBot_setCall("HealBot_Text_RGBPercToHex")
 	r = r <= 1 and r >= 0 and r or 0
 	g = g <= 1 and g >= 0 and g or 0
 	b = b <= 1 and b >= 0 and b or 0
@@ -374,6 +385,7 @@ end
 
 local vHex=""
 function HealBot_Text_setExtraCustomCols()
+      --HealBot_setCall("HealBot_Text_setExtraCustomCols")
     for j=1,10 do
         vHex=HealBot_Text_RGBPercToHex(Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][j]["HECR"] or 1,
                                        Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][j]["HECG"] or 1,
@@ -400,6 +412,7 @@ end
 
 local dR, dG, dB=0,0,0
 function HealBot_Text_DeadColours(button)
+      --HealBot_setCall("HealBot_Text_DeadColours", button)
     if UnitIsFriend("player",button.unit) then
         if button.status.current==HealBot_Unit_Status["RES"] and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["RES"] then
             dR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NRCR"]
@@ -419,6 +432,7 @@ function HealBot_Text_DeadColours(button)
 end
 
 function HealBot_Text_StateDeadColours(button)
+      --HealBot_setCall("HealBot_Text_StateDeadColours", button)
     if UnitIsFriend("player",button.unit) then
         if button.status.current==HealBot_Unit_Status["RES"] and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SRES"] then
             dR=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SRCR"]
@@ -439,11 +453,13 @@ end
 
 local tr,tg,tb=1,1,1
 function HealBot_Text_ColoursHealth(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursHealth", button)
     tr,tg,tb=button.health.rcol,button.health.gcol,0
 end
 
 local htvUnit=false
 function HealBot_Text_ColoursClass(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursClass", button)
     htvUnit=HealBot_retIsInVehicle(button.unit)
     if htvUnit and UnitExists(htvUnit) then
         tr,tg,tb=HealBot_Action_ClassColour(htvUnit)
@@ -453,10 +469,12 @@ function HealBot_Text_ColoursClass(button, cType)
 end
 
 function HealBot_Text_ColoursRole(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursRole", button)
     tr,tg,tb=hbCustomRoleCols[button.roletxt].r,hbCustomRoleCols[button.roletxt].g,hbCustomRoleCols[button.roletxt].b
 end
 
 function HealBot_Text_ColoursCustom(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursCustom", button)
     if cType=="NAME" then
         if button.health.pct>Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SIT"] then
             tr=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NCR"]
@@ -517,10 +535,12 @@ function HealBot_Text_ColoursCustom(button, cType)
 end
 
 function HealBot_Text_ColoursClassHlthMix(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursClassHlthMix", button)
     tr,tg,tb=button.health.mixcolr,button.health.mixcolg,button.health.mixcolb
 end
 
 function HealBot_Text_ColoursRoleHlthMix(button, cType)
+      --HealBot_setCall("HealBot_Text_ColoursRoleHlthMix", button)
     tr,tg,tb=button.health.rmixcolr,button.health.rmixcolg,button.health.rmixcolb
 end
 
@@ -531,6 +551,7 @@ local HealBot_Text_StateColoursFuncs={[1]=HealBot_Text_ColoursHealth,
                                       [5]=HealBot_Text_ColoursClassHlthMix,
                                       [6]=HealBot_Text_ColoursRoleHlthMix}
 function HealBot_Text_StateColours(button)
+      --HealBot_setCall("HealBot_Text_StateColours", button)
     if button.status.isdead then
         tr,tg,tb=HealBot_Text_StateDeadColours(button)
     elseif button.status.summons and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SSUM"] then
@@ -540,11 +561,11 @@ function HealBot_Text_StateColours(button)
     else
         HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["STATE"]](button, "STATE")
     end
-      --HealBot_setCall("HealBot_Text_TextNameColours")
     return tr,tg,tb
 end
 
 function HealBot_Text_TextNameColours(button)
+      --HealBot_setCall("HealBot_Text_TextNameColours", button)
     if button.status.isdead then
         tr,tg,tb=HealBot_Text_DeadColours(button)
     elseif button.status.summons and Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["SUM"] then
@@ -554,21 +575,23 @@ function HealBot_Text_TextNameColours(button)
     else
         HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["NAME"]](button, "NAME")
     end
-      --HealBot_setCall("HealBot_Text_TextNameColours")
     return tr,tg,tb
 end
 
 function HealBot_Text_TextHealthColours(button)
+      --HealBot_setCall("HealBot_Text_TextHealthColours", button)
     HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["HLTH"]](button, "HEALTH")
     return tr,tg,tb
 end
 
 function HealBot_Text_TextAggroColours(button)
+      --HealBot_setCall("HealBot_Text_TextAggroColours", button)
     HealBot_Text_StateColoursFuncs[Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][button.frame]["AGGRO"]](button, "AGGRO")
     return tr,tg,tb
 end
 
 function HealBot_Text_readNumber(n)
+      --HealBot_setCall("HealBot_Text_readNumber")
     if n<9999 then
         n=tostring(n)
     elseif n<99999 then
@@ -588,6 +611,7 @@ end
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
 local hbAbs=math.abs
 function HealBot_Text_shortHealTxt(amount, hbCurFrame)
+      --HealBot_setCall("HealBot_Text_shortHealTxt")
     vShortHealTxtAbsNum=hbAbs(amount)
     if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
         if hbNumFormats["Places"][hbCurFrame]<3 then 
@@ -619,13 +643,13 @@ function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     else
         return HealBot_Comm_round(amount, 0)
     end
-      --HealBot_setCall("HealBot_Text_shortHealTxt")
 end
 
 local vHealthTextConcatIndex,vHealthTextConcatResult,vSetHealthTextStrLen,vSetHealthTextBtnLen=0,"",0,0
 local vHealthTextTotal,sepHealTxt,absorbinTxt,ahtNumSuffix,ahitNumSuffix,ignoreInHeals,finalHealthTxt=0,0,0,"","",false,""
 local vHealthTextVehiclePlayer=""
 function HealBot_Text_ConcatHealthText(button)
+      --HealBot_setCall("HealBot_Text_ConcatHealthText", button)
     tHealthConcat[1]=button.text.health
     tHealthConcat[2]=button.text.inheal
     tHealthConcat[3]=button.text.overheal
@@ -691,6 +715,7 @@ function HealBot_Text_ConcatHealthText(button)
 end
 
 function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
+      --HealBot_setCall("HealBot_Text_DoSetHealthText", button)
     if button.health.current==0 then
         button.text.health=0
         force=true
@@ -811,10 +836,10 @@ function HealBot_Text_DoSetHealthText(button, IgnoreInHeals, force)
             HealBot_Aux_DoUpdateHealthOverLay(button) 
         end
     end
-      --HealBot_setCall("HealBot_Text_setHealthText")
 end
 
 function HealBot_Text_setHealthText(button)
+      --HealBot_setCall("HealBot_Text_setHealthText", button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and button.health.max then
         if button.status.current<HealBot_Unit_Status["DEAD"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] then
             ignoreInHeals=true
@@ -845,6 +870,7 @@ function HealBot_Text_setHealthText(button)
 end
 
 function HealBot_Text_ClearOverHeals()
+      --HealBot_setCall("HealBot_Text_ClearOverHeals")
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
@@ -878,6 +904,7 @@ function HealBot_Text_ClearOverHeals()
 end
 
 function HealBot_Text_ClearSeparateInHealsAbsorbs()
+      --HealBot_setCall("HealBot_Text_ClearSeparateInHealsAbsorbs")
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.text.inheal=vTextChars["Nothing"]
         xButton.text.inheallen=0
@@ -911,6 +938,7 @@ function HealBot_Text_ClearSeparateInHealsAbsorbs()
 end
 
 function HealBot_Text_setSeparateInHealsAbsorbs()
+      --HealBot_setCall("HealBot_Text_setSeparateInHealsAbsorbs")
     for x=1,10 do
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][x]["INCHEALS"]==3 or 
            Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][x]["INCABSORBS"]==3 then
@@ -935,6 +963,7 @@ end
 
 local hbConcatLater=false
 function HealBot_Text_setInHealAbsorbsText(button)
+      --HealBot_setCall("HealBot_Text_setInHealAbsorbsText", button)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and button.health.max then
         if button.status.current<HealBot_Unit_Status["DEAD"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["IGNOREONFULL"] then
             ignoreInHeals=true
@@ -1007,10 +1036,10 @@ function HealBot_Text_setInHealAbsorbsText(button)
         button.text.inheallen=0
         HealBot_Text_ConcatHealthText(button)
     end
-      --HealBot_setCall("HealBot_Text_setInHealAbsorbsText")
 end
 
 function HealBot_Text_setOverHealText(button)
+      --HealBot_setCall("HealBot_Text_setOverHealText", button)
     if button.status.current<HealBot_Unit_Status["DEAD"] and button.status.range>-1 and 
        Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and hbOverHeal[button.frame] and button.health.max and button.health.overheal>0 then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]<3 or floor((button.health.overheal/button.health.max)*100)>0 then
@@ -1051,10 +1080,10 @@ function HealBot_Text_setOverHealText(button)
         button.text.overheallen=0
         HealBot_Text_ConcatHealthText(button)
     end
-      --HealBot_setCall("HealBot_Text_setOverHealText")
 end
 
 function HealBot_Text_AggroFormat(side, frame)
+      --HealBot_setCall("HealBot_Text_AggroFormat")
     if side=="Left" then
         return aggroNumFormatSurLa[frame]
     else
@@ -1063,6 +1092,7 @@ function HealBot_Text_AggroFormat(side, frame)
 end
 
 function HealBot_Text_setAggroText(button)
+      --HealBot_setCall("HealBot_Text_setAggroText", button)
     if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGAGGROONLYTIP"] and button.aggro.threatpct>0 then
         tHealthConcat[1]=aggroNumFormatSurLa[button.frame]
         tHealthConcat[2]=button.aggro.threatpct
@@ -1079,11 +1109,11 @@ function HealBot_Text_setAggroText(button)
         button.text.aggroupdate=true
         HealBot_Text_UpdateText(button)
     end
-      --HealBot_setCall("HealBot_Text_setAggroText")
 end
 
 local prevTag=""
 function HealBot_Text_setNameTag(button)
+      --HealBot_setCall("HealBot_Text_setNameTag", button)
     prevTag=button.text.tag
     if UnitExists(button.unit) and button.status.current<HealBot_Unit_Status["RESERVED"] then
         if UnitIsFriend("player",button.unit) then
@@ -1139,11 +1169,11 @@ function HealBot_Text_setNameTag(button)
             end
         end
     end
-      --HealBot_setCall("HealBot_Text_setNameTag")
 end
 
 local vSetNameTextName,vSetNameTextClass,vSetNameTextRole,vSetNameTextStrLen,vSetNameTextBtnLen,vHealthTextConcatIndex="","","",0,0,0
 function HealBot_Text_ConcatNameText(button)
+      --HealBot_setCall("HealBot_Text_ConcatNameText", button)
     if button.text.namehealth~=vTextChars["Nothing"] then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEALEXTRACOL"]==2 then
             tConcat[1]=button.text.name
@@ -1166,6 +1196,7 @@ function HealBot_Text_ConcatNameText(button)
 end
 
 function HealBot_Text_setNameText(button)
+      --HealBot_setCall("HealBot_Text_setNameText", button)
     button.text.nameonly=HealBot_GetUnitName(button)
     if button.status.current<HealBot_Unit_Status["RESERVED"] then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["CLASSONBAR"] then
@@ -1248,13 +1279,13 @@ function HealBot_Text_setNameText(button)
     if HealBot_Text_AuxAssigns["Name"][button.frame] then
         HealBot_Aux_DoUpdateNameOverLay(button)
     end
-      --HealBot_setCall("HealBot_Text_setNameText")
 end
 
 local aufbButtonActive=false
 local aufbSetValue,aufbAlphaValue=0,0
 local aufbSetRValue,aufbSetGValue,aufbSetBValue=0,0,0
 function HealBot_Text_UpdateFluidTextAlpha()
+      --HealBot_setCall("HealBot_Text_UpdateFluidTextAlpha")
     HealBot_Text_luVars["FluidTextAlphaInUse"]=false
     
     for id,xButton in pairs(HealBot_Fluid_TextHealthAlpha) do
@@ -1380,10 +1411,10 @@ function HealBot_Text_UpdateFluidTextAlpha()
         C_Timer.After(HealBot_Text_luVars["FluidTextAlphaFreq"], HealBot_Text_UpdateFluidTextAlpha)
     end
     --HealBot_Aux_setLuVars("FluidTextAlphaInUse", HealBot_Text_luVars["FluidTextAlphaInUse"])
-      --HealBot_setCall("HealBot_Text_UpdateFluidTextAlpha")
 end
 
 local function HealBot_Text_UpdateStateColour(button)
+      --HealBot_setCall("HealBot_Text_UpdateStateColour", button)
     if HealBot_Text_luVars["FluidAlphaInUse"] then
         HealBot_Fluid_TextStateAlpha[button.id]=button
         if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
@@ -1393,10 +1424,10 @@ local function HealBot_Text_UpdateStateColour(button)
     else
         button.gref.txt["text3"]:SetTextColor(button.text.sr, button.text.sg, button.text.sb, button.text.sa)
     end
-      --HealBot_setCall("HealBot_Text_UpdateStateColour")
 end
 
 local function HealBot_Text_UpdateNameColour(button)
+      --HealBot_setCall("HealBot_Text_UpdateNameColour", button)
     if HealBot_Text_luVars["FluidAlphaInUse"] then
         HealBot_Fluid_TextNameAlpha[button.id]=button
         if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
@@ -1406,10 +1437,10 @@ local function HealBot_Text_UpdateNameColour(button)
     else
         button.gref.txt["text"]:SetTextColor(button.text.nr, button.text.ng, button.text.nb, button.text.na)
     end
-      --HealBot_setCall("HealBot_Text_UpdateNameColour")
 end
 
 local function HealBot_Text_UpdateHealthColour(button)
+      --HealBot_setCall("HealBot_Text_UpdateHealthColour", button)
     if HealBot_Text_luVars["FluidAlphaInUse"] and button.status.current<HealBot_Unit_Status["DC"] then
         HealBot_Fluid_TextHealthAlpha[button.id]=button
         if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
@@ -1419,10 +1450,10 @@ local function HealBot_Text_UpdateHealthColour(button)
     else
         button.gref.txt["text2"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
     end
-      --HealBot_setCall("HealBot_Text_UpdateHealthColour")
 end
 
 function HealBot_Text_UpdateAggroColour(button)
+      --HealBot_setCall("HealBot_Text_UpdateAggroColour", button)
     if HealBot_Text_luVars["FluidAlphaInUse"] and button.status.current<HealBot_Unit_Status["DC"] then
         HealBot_Fluid_TextAggroAlpha[button.id]=button
         if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
@@ -1432,11 +1463,11 @@ function HealBot_Text_UpdateAggroColour(button)
     else
         button.gref.txt["text4"]:SetTextColor(button.text.ar, button.text.ag, button.text.ab, button.text.aa)
     end
-      --HealBot_setCall("HealBot_Text_UpdateAggroColour")
 end
 
 local testNameTxt,vpR,vpG,vpB="",0,0,0
 function HealBot_Text_UpdateText(button)
+      --HealBot_setCall("HealBot_Text_UpdateText", button)
     if button.text.tagupdate then
         button.text.tagupdate=false
         if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGSTATEONLYTIP"] then
@@ -1552,10 +1583,10 @@ function HealBot_Text_UpdateText(button)
         button.gref.txt["text5"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
         button.gref.txt["text5"]:SetText(button.text.vphealth)
     end
-      --HealBot_setCall("HealBot_Text_UpdateText")
 end
 
 function HealBot_Text_UpdateTestText(button)
+      --HealBot_setCall("HealBot_Text_UpdateTestText", button)
     --HealBot_AddDebug("UpdateTestText unit="..button.unit,"Text",true)
     button.gref.txt["text"]:SetText("")
     button.gref.txt["text2"]:SetText("")
@@ -1606,6 +1637,7 @@ end
 
 local cText=""
 function HealBot_Text_UpdateNameButton(button)
+      --HealBot_setCall("HealBot_Text_UpdateNameButton", button)
     cText=button.gref.txt["text"]:GetText() or button.text.namecomplete or "."
     button.gref.txt["text"]:SetText(cText.." ")
     button.gref.txt["text"]:SetText(cText)
@@ -1614,6 +1646,7 @@ function HealBot_Text_UpdateNameButton(button)
 end
 
 function HealBot_Text_UpdateNames()
+      --HealBot_setCall("HealBot_Text_UpdateNames")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
@@ -1636,6 +1669,7 @@ function HealBot_Text_UpdateNames()
 end
 
 function HealBot_Text_UpdateHealthButton(button)
+      --HealBot_setCall("HealBot_Text_UpdateHealthButton", button)
     cText=button.gref.txt["text2"]:GetText() or button.text.healthcomplete or "."
     button.gref.txt["text2"]:SetText(cText.." ")
     button.gref.txt["text2"]:SetText(cText)
@@ -1644,6 +1678,7 @@ function HealBot_Text_UpdateHealthButton(button)
 end
 
 function HealBot_Text_UpdateHealth()
+      --HealBot_setCall("HealBot_Text_UpdateHealth")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Text_UpdateHealthButton(xButton)
     end
@@ -1666,6 +1701,7 @@ function HealBot_Text_UpdateHealth()
 end
 
 function HealBot_Text_UpdateStateButton(button)
+      --HealBot_setCall("HealBot_Text_UpdateStateButton", button)
     if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGSTATEONLYTIP"] then
         cText=button.gref.txt["text3"]:GetText() or button.text.tag or "."
         button.gref.txt["text3"]:SetText(cText.." ")
@@ -1678,6 +1714,7 @@ function HealBot_Text_UpdateStateButton(button)
 end
 
 function HealBot_Text_UpdateState()
+      --HealBot_setCall("HealBot_Text_UpdateState")
     for _,xButton in pairs(HealBot_Unit_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
@@ -1700,6 +1737,7 @@ function HealBot_Text_UpdateState()
 end
 
 function HealBot_Text_UpdateButton(button)
+      --HealBot_setCall("HealBot_Text_UpdateButton", button)
     button.text.nameupdate=true
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["STATETXTANCHOR"]~=4 then button.text.tagupdate=true end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 then button.text.healthupdate=true end
@@ -1707,6 +1745,7 @@ function HealBot_Text_UpdateButton(button)
 end
 
 function HealBot_Text_UpdateButtons()
+      --HealBot_setCall("HealBot_Text_UpdateButtons")
     if not HealBot_Text_luVars["TestBarsOn"] then
         for _,xButton in pairs(HealBot_Unit_Button) do
             HealBot_Text_UpdateButton(xButton)

@@ -40,14 +40,17 @@ HealBot_Share_luVars["PostChannel"]=1
 HealBot_Share_luVars["PostWhisper"]=""
 
 function HealBot_Share_setLuVars(vName, vValue)
+      --HealBot_setCall("HealBot_Share_setLuVars - "..vName)
     HealBot_Share_luVars[vName]=vValue
 end
 
 function HealBot_Share_retLuVars(vName)
+      --HealBot_setCall("HealBot_Share_retLuVars - "..vName)
     return HealBot_Share_luVars[vName]
 end
 
 function HealBot_Share_Compress(s)
+      --HealBot_setCall("HealBot_Share_Compress")
     local compressed = LibDeflate:CompressDeflate(s, {level = 9})
     if compressed then
         local encoded = LibDeflate:EncodeForPrint(compressed)
@@ -58,6 +61,7 @@ function HealBot_Share_Compress(s)
 end
 
 function HealBot_Share_Decompress(s)
+      --HealBot_setCall("HealBot_Share_Decompress")
     local decoded = LibDeflate:DecodeForPrint(s)
     if decoded then
         local decompressed = LibDeflate:DecompressDeflate(decoded)
@@ -68,10 +72,12 @@ function HealBot_Share_Decompress(s)
 end
 
 local function HealBot_Comms_SendShareAddonMsg(msg, pName)
+      --HealBot_setCall("HealBot_Comms_SendShareAddonMsg")
     HealBot_Comms_SendInstantAddonMsg(msg,true,pName)
 end
 
 local function HealBot_Share_ClearExportComplete(sType)
+      --HealBot_setCall("HealBot_Share_ClearExportComplete")
     local g
     if sType==HEALBOT_OPTIONS_SKIN then
         g=_G["HealBot_Options_ShareSkinStatusf"]
@@ -102,6 +108,7 @@ local function HealBot_Share_ClearExportComplete(sType)
 end
 
 local function HealBot_Share_ExportComplete(sType, sExtra)
+      --HealBot_setCall("HealBot_Share_ExportComplete")
     local g
     local sText=""
     if sExtra then
@@ -139,6 +146,7 @@ local function HealBot_Share_ExportComplete(sType, sExtra)
 end
 
 local function HealBot_Share_SendLinkRequest()
+      --HealBot_setCall("HealBot_Share_SendLinkRequest")
     HealBot_Comms_SendShareAddonMsg(HealBot_Share_luVars["LinkRequest"], HealBot_Share_luVars["LinkRequestPlayer"])
     hbLinkFrameObjects["YesBtn"]:Disable()
     hbLinkFrameObjects["NoBtn"]:Disable()
@@ -147,11 +155,13 @@ local function HealBot_Share_SendLinkRequest()
 end
 
 local function HealBot_Share_CancelLinkRequest()
+      --HealBot_setCall("HealBot_Share_CancelLinkRequest")
     HealBot_Share_luVars["LastLinkRequest"]=0
     HealBot_Share_LinkFrame_Hide()
 end
 
 local function HealBot_Share_ImportFail(import, reason)
+      --HealBot_setCall("HealBot_Share_ImportFail")
     StaticPopupDialogs["HEALBOT_SHARE_IMPORTFAIL"] = {
         text = HEALBOT_OPTIONS_IMPORT_FAIL1.." "..import.."\n\n"..HEALBOT_OPTIONS_IMPORT_FAIL2.." "..reason,
         button1 = CLOSE,
@@ -163,6 +173,7 @@ local function HealBot_Share_ImportFail(import, reason)
 end
 
 function HealBot_Share_TimeoutRequest()
+      --HealBot_setCall("HealBot_Share_TimeoutRequest")
     if hbLinkFrame:IsVisible() then
         if HealBot_Share_luVars["LastLinkTimeOut"]+15<GetTime() then
             HealBot_Share_CancelLinkRequest()
@@ -190,6 +201,7 @@ local function HealBot_Share_ThrottleLinkRequest()
 end
 
 function HealBot_Share_GetLink(sType, uName, eInfo)
+      --HealBot_setCall("HealBot_Share_GetLink")
     if sType>0 then
         if uName then
             if not eInfo then 
@@ -225,6 +237,7 @@ hooksecurefunc("SetItemRef", function(link, text)
 end)
 
 local function HealBot_Share_DoImportValid()
+      --HealBot_setCall("HealBot_Share_DoImportValid")
     if HealBot_Share_luVars["validImport"]==1 then
         HealBot_Share_SkinLoad(Skin_TextData)
     elseif HealBot_Share_luVars["validImport"]==2 then
@@ -239,6 +252,7 @@ local function HealBot_Share_DoImportValid()
 end
 
 local function HealBot_Share_ImportValid(importType)
+      --HealBot_setCall("HealBot_Share_ImportValid")
     StaticPopupDialogs["HEALBOT_SHARE_IMPORTVALID"] = {
         text = HEALBOT_OPTIONS_IMPORT_VALID1.."\n\n"..importType..HEALBOT_OPTIONS_IMPORT_VALID2,
         button1 = HEALBOT_WORDS_YES,
@@ -254,6 +268,7 @@ local function HealBot_Share_ImportValid(importType)
 end
 
 function HealBot_Share_ValidateData(sType, sIn)
+      --HealBot_setCall("HealBot_Share_ValidateData")
     local sStr=HealBot_Share_Decompress(sIn)
     local id=nil
     local extra=nil
@@ -282,6 +297,7 @@ end
 
 -- Preset Colours
 function HealBot_Share_ExportPresetCols(lData)
+      --HealBot_setCall("HealBot_Share_ExportPresetCols")
     local ssStr=validType[5].."\n"
     for x=1,10 do
         local alias=HealBot_Globals.PresetColoursAlias[x] or ""
@@ -304,10 +320,12 @@ function HealBot_Share_ExportPresetCols(lData)
 end
 
 function HealBot_Share_ExportPresetCols_OnClick()
+      --HealBot_setCall("HealBot_Share_ExportPresetCols_OnClick")
     HealBot_Share_ExportPresetCols()
 end
 
 function HealBot_Share_LoadPresetCols(sIn)
+      --HealBot_setCall("HealBot_Share_LoadPresetCols")
     local sStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -339,12 +357,14 @@ function HealBot_Share_LoadPresetCols(sIn)
 end
 
 function HealBot_Share_ImportPresetCols_OnClick()
+      --HealBot_setCall("HealBot_Share_ImportPresetCols_OnClick")
     PresetCols_TextData=HealBot_Options_SharePresetColsExternalEditBox:GetText()
     HealBot_Share_ValidateData(5, PresetCols_TextData)
 end
 
 -- Spells
 function HealBot_Share_ExportSpells(lData)
+      --HealBot_setCall("HealBot_Share_ExportSpells")
     local ssStr=validType[4].."\n"
     local sName, sTar, sTrin1, sTrin2, AvoidBC, HB_button, HB_combo_prefix, sText, sId=nil,nil,nil,nil,nil,nil,nil,nil,nil
     local HealBot_Keys_List=HealBot_Action_retComboKeysList()
@@ -406,10 +426,12 @@ function HealBot_Share_ExportSpells(lData)
 end
 
 function HealBot_Share_ExportSpells_OnClick()
+      --HealBot_setCall("HealBot_Share_ExportSpells_OnClick")
     HealBot_Share_ExportSpells()
 end
 
 function HealBot_Share_LoadSpells(sIn)
+      --HealBot_setCall("HealBot_Share_LoadSpells")
     local sStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -466,12 +488,14 @@ function HealBot_Share_LoadSpells(sIn)
 end
 
 function HealBot_Share_ImportSpells_OnClick()
+      --HealBot_setCall("HealBot_Share_ImportSpells_OnClick")
     Spells_TextData=HealBot_Options_ShareSpellsExternalEditBox:GetText()
     HealBot_Share_ValidateData(4, Spells_TextData)
 end
 
 -- Buffs
 function HealBot_Share_ExportBuffs(lData)
+      --HealBot_setCall("HealBot_Share_ExportBuffs")
     local ssStr=validType[3].."\n"
     local hbClassHoTwatch=HealBot_Globals.WatchHoT
     for xClass,_  in pairs(hbClassHoTwatch) do
@@ -520,11 +544,13 @@ function HealBot_Share_ExportBuffs(lData)
 end
 
 function HealBot_Share_ExportBuffs_OnClick()
+      --HealBot_setCall("HealBot_Share_ExportBuffs_OnClick")
     HealBot_Share_ExportBuffs()
 end
 
 local customBuffPriority=HEALBOT_CUSTOM_en.."Buff"
 function HealBot_Share_LoadBuffs(sIn)
+      --HealBot_setCall("HealBot_Share_LoadBuffs")
     local scbStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -626,12 +652,14 @@ function HealBot_Share_LoadBuffs(sIn)
 end
 
 function HealBot_Share_ImportBuffs_OnClick()
+      --HealBot_setCall("HealBot_Share_ImportBuffs_OnClick")
     Buffs_TextData=HealBot_Options_ShareBuffsExternalEditBox:GetText()
     HealBot_Share_ValidateData(3, Buffs_TextData)
 end
 
 -- Debuffs
 function HealBot_Share_ExportDebuffs(lData)
+      --HealBot_setCall("HealBot_Share_ExportDebuffs")
     local ssStr=validType[2].."\n"
     for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
         if (HealBot_Globals.Custom_Debuff_Categories[dId] or 10)>1 then
@@ -678,11 +706,13 @@ function HealBot_Share_ExportDebuffs(lData)
 end
 
 function HealBot_Share_ExportDebuffs_OnClick()
+      --HealBot_setCall("HealBot_Share_ExportDebuffs_OnClick")
     HealBot_Share_ExportDebuffs()
 end
 
 local customDebuffPriority=HEALBOT_CUSTOM_en.."15"
 function HealBot_Share_LoadDebuffs(sIn)
+      --HealBot_setCall("HealBot_Share_LoadDebuffs")
     local scdStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -779,6 +809,7 @@ function HealBot_Share_LoadDebuffs(sIn)
 end
 
 function HealBot_Share_ImportDebuffs_OnClick()
+      --HealBot_setCall("HealBot_Share_ImportDebuffs_OnClick")
     Debuffs_TextData=HealBot_Options_ShareCDebuffExternalEditBox:GetText()
     HealBot_Share_ValidateData(2, Debuffs_TextData)
 end
@@ -882,6 +913,7 @@ local AuxLookupRetail={[0]={[1]="None",
                            [11]="State",}
                       }
 function HealBot_Share_SkinDecodeAux(dat, frame)
+      --HealBot_setCall("HealBot_Share_SkinDecodeAux")
     if frame<8 then 
         frame=0
     elseif frame<10 then
@@ -907,6 +939,7 @@ function HealBot_Share_SkinDecodeAux(dat, frame)
 end
 
 function HealBot_Share_SkinEncodeAux(dat, frame)
+      --HealBot_setCall("HealBot_Share_SkinEncodeAux")
     if frame<8 then 
         frame=0
     elseif frame<10 then
@@ -922,6 +955,7 @@ end
 
 local ssData=""
 function HealBot_Share_BuildSkinData(cmd, msg, lData)
+      --HealBot_setCall("HealBot_Share_BuildSkinData")
     if cmd=="Init" then
         HealBot_Share_ExportComplete(HEALBOT_OPTIONS_SKIN, msg)
         if tonumber(msg) then msg=UnitName("player").."-"..msg end
@@ -943,6 +977,7 @@ function HealBot_Share_BuildSkinData(cmd, msg, lData)
 end
 
 local function HealBot_Share_ExportSkinFrames(skinName, varName, varNameAppend)
+      --HealBot_setCall("HealBot_Share_ExportSkinFrames")
     local dups=""
     local p={}
     local tabStr=""
@@ -1002,6 +1037,7 @@ local function HealBot_Share_ExportSkinFrames(skinName, varName, varNameAppend)
 end
 
 function HealBot_Share_ExportSkin(skinName, lData)
+      --HealBot_setCall("HealBot_Share_ExportSkin")
     local SkinVars={'Author', 'DuplicateBars'}
     local SkinTabVars={'Chat', 'General', 'Healing', 'Enemy', 'FocusGroups', 'Adaptive', 'AdaptiveOrder'}
     local SkinTabNestedVars={'CustomCols', 'AdaptiveCol'}
@@ -1058,6 +1094,7 @@ end
 local hbOptGetSkinName=" "
 local hbWarnSharedMedia=false
 function HealBot_Share_SkinLoad(sIn, internal)
+      --HealBot_setCall("HealBot_Share_SkinLoad")
     local ssStr=HealBot_Share_Decompress(sIn)
     local ssTab={}
     local i=0
@@ -1091,11 +1128,13 @@ function HealBot_Share_SkinLoad(sIn, internal)
 end
 
 function HealBot_Share_ImportSkin_OnClick()
+      --HealBot_setCall("HealBot_Share_ImportSkin_OnClick")
     Skin_TextData=HealBot_Options_ShareExternalEditBox:GetText()
     HealBot_Share_ValidateData(1, Skin_TextData)
 end
 
 function HealBot_Options_StringSplit(s, delimiter)
+      --HealBot_setCall("HealBot_Options_StringSplit")
     local result = {};
     for match in (s..delimiter):gmatch("(.-)"..delimiter) do
         table.insert(result, match);
@@ -1106,6 +1145,7 @@ end
 local tmpRecParts={}
 local lFrame=1
 local function HealBot_Share_DecodeDat(v)
+      --HealBot_setCall("HealBot_Share_DecodeDat")
     if v=="false" then                
         v=false 
     elseif v=="true" then
@@ -1117,6 +1157,7 @@ local function HealBot_Share_DecodeDat(v)
 end
 
 function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
+      --HealBot_setCall("HealBot_Share_BuildSkinRecMsg")
     local varDat, vType, fNo = string.split("~", cmd)
     local varName, aID=string.split("^", varDat)
     msg=string.gsub(msg,'\"', '' )
@@ -1272,6 +1313,7 @@ function HealBot_Share_BuildSkinRecMsg(skinName, cmd, parts, msg)
 end
 
 function HealBot_Share_WarnPossibleNoSharedMedia()
+      --HealBot_setCall("HealBot_Share_WarnPossibleNoSharedMedia")
     if not hbWarnSharedMedia then
         HealBot_AddChat(HEALBOT_CHAT_POSSIBLEMISSINGMEDIA)
         hbWarnSharedMedia=true
@@ -1281,6 +1323,7 @@ end
 local linkDataIn, nChunks, cChunk="", 1, 0
 local dChunk={}
 function HealBot_Share_LinkMsg(msg, sender)
+      --HealBot_setCall("HealBot_Share_LinkMsg")
     local mType,data=strsplit("~", msg)
     if mType=="L" then
         HealBot_Share_DisplayLink(data)
@@ -1349,10 +1392,12 @@ function HealBot_Share_LinkMsg(msg, sender)
 end
 
 local function HealBot_Share_SendLinkData(lType, data)
+      --HealBot_setCall("HealBot_Share_SendLinkData")
     HealBot_Comms_SendShareAddonMsg("L:"..lType.."~"..data, HealBot_Share_luVars["RequestName"])
 end
 
 function HealBot_Share_SentLinkData()
+      --HealBot_setCall("HealBot_Share_SentLinkData")
     HealBot_Share_luVars["RequestReady"]=true
     for sender,msg in pairs(RequestQueue) do
         RequestQueue[uName]=nil
@@ -1361,6 +1406,7 @@ function HealBot_Share_SentLinkData()
 end
 
 function HealBot_Share_ProcessLinkData(data)
+      --HealBot_setCall("HealBot_Share_ProcessLinkData")
     local chunks=ceil(string.len(data)/240)
     local tDelay=0.25
     local pointer=1
@@ -1377,6 +1423,7 @@ function HealBot_Share_ProcessLinkData(data)
 end
 
 function HealBot_Share_LinkData(sType, eInfo)
+      --HealBot_setCall("HealBot_Share_LinkData")
     if sType==1 then
         HealBot_Share_ExportSkin(eInfo, true)
     elseif sType==2 then
@@ -1391,6 +1438,7 @@ function HealBot_Share_LinkData(sType, eInfo)
 end
 
 local function HealBot_Share_LinkFrame_OnMouseDown(self, button)
+      --HealBot_setCall("HealBot_Share_LinkFrame_OnMouseDown")
     if button=="LeftButton" and not hbLinkFrame.isMoving then
         hbLinkFrame:StartMoving();
         hbLinkFrame.isMoving = true;
@@ -1398,6 +1446,7 @@ local function HealBot_Share_LinkFrame_OnMouseDown(self, button)
 end
 
 local function HealBot_Share_LinkFrame_OnMouseUp(self, button)
+      --HealBot_setCall("HealBot_Share_LinkFrame_OnMouseUp")
     if button=="LeftButton" and hbLinkFrame.isMoving then
 		hbLinkFrame:StopMovingOrSizing();
 		hbLinkFrame.isMoving = false;
@@ -1405,6 +1454,7 @@ local function HealBot_Share_LinkFrame_OnMouseUp(self, button)
 end
 
 function HealBot_Share_LinkFrame_SetStateText(state, pct)
+      --HealBot_setCall("HealBot_Share_LinkFrame_SetStateText")
     hbLinkFrameText["STATE"]:SetText(state)
     if pct then
         hbLinkFrameText["PCT"]:SetText(pct)
@@ -1418,6 +1468,7 @@ local inMethodTxt={[0]=HEALBOT_IMPORT_CREATEORREPLACE,
                    [2]=HEALBOT_IMPORT_MERGEALL,
                    [3]=HEALBOT_IMPORT_MERGENEW,}
 function HealBot_Share_LinkFrame_SetRequestText(sType, uName, eInfo)
+      --HealBot_setCall("HealBot_Share_LinkFrame_SetRequestText")
     if eInfo then
         hbLinkFrameText["RTYPE"]:SetText("|cffffffff"..HEALBOT_WORD_TYPE..": |cff55ff55"..shareType[sType].." ("..eInfo..")")
     else
@@ -1446,6 +1497,7 @@ function HealBot_Share_LinkFrame_SetRequestText(sType, uName, eInfo)
 end
 
 local function HealBot_Share_LinkFrame_CreateText()
+      --HealBot_setCall("HealBot_Share_LinkFrame_CreateText")
 	hbLinkFrameText["TITLE"]=hbLinkFrame:CreateFontString("HealBot_LinkFrameTitleText", "OVERLAY", "GameFontNormal")
 	hbLinkFrameText["TITLE"]:SetPoint("TOP", hbLinkFrame, "TOP", 0, -8)
 	hbLinkFrameText["TITLE"]:SetText(HEALBOT_OPTIONS_LINK_REQUEST1)
@@ -1465,12 +1517,14 @@ local function HealBot_Share_LinkFrame_CreateText()
 end
 
 function HealBot_Share_LinkFrame_Hide()
+      --HealBot_setCall("HealBot_Share_LinkFrame_Hide")
     if hbLinkFrame then 
         hbLinkFrame:Hide()
     end
 end
 
 function HealBot_Share_ShowLinkFrame()
+      --HealBot_setCall("HealBot_Share_ShowLinkFrame")
     if not hbLinkFrame then
 		hbLinkFrame=CreateFrame("Frame", "HealBot_Link_Frame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbLinkFrame:SetBackdrop({
@@ -1521,6 +1575,7 @@ function HealBot_Share_ShowLinkFrame()
 end
 
 function HealBot_Share_ClosePostLink()
+      --HealBot_setCall("HealBot_Share_ClosePostLink")
     if hbPostLinkFrame and hbPostLinkFrame:IsVisible() then
         hbPostLinkFrame:Hide()
         HealBot_Share_luVars["CurrentEditBox"]:Show()
@@ -1529,11 +1584,13 @@ function HealBot_Share_ClosePostLink()
 end
 
 function HealBot_Share_DisplayLink(s)
+      --HealBot_setCall("HealBot_Share_DisplayLink")
     s=HealBot_Share_Decompress(s)
     HealBot_AddChat(s)
 end
 
 function HealBot_Share_PostLink()
+      --HealBot_setCall("HealBot_Share_PostLink")
     local s="|cffe6cc80|Hgarrmission:healbot|hHealBot Share [~"..HealBot_Share_luVars["RequestString"].."~]|h|r"
     s=HealBot_Share_Compress(s)
     if HealBot_Share_luVars["PostChannel"]<3 then
@@ -1546,6 +1603,7 @@ function HealBot_Share_PostLink()
 end
 
 local function HealBot_Share_SetupDropDown(dropdown, width, x, y, text)
+      --HealBot_setCall("HealBot_Share_SetupDropDown")
 	dropdown:SetPoint("TOP", x, y)
 	UIDropDownMenu_SetWidth(dropdown, width)	
 	dropdown.Txt = dropdown:CreateFontString()
@@ -1555,6 +1613,7 @@ local function HealBot_Share_SetupDropDown(dropdown, width, x, y, text)
 end
 
 local function HealBot_Share_PostFrameChannel_DropDown()
+      --HealBot_setCall("HealBot_Share_PostFrameChannel_DropDown")
     local info = UIDropDownMenu_CreateInfo()
     for j=1, 4, 1 do
         info.text = linkChannelList[j];
@@ -1576,6 +1635,7 @@ local function HealBot_Share_PostFrameChannel_DropDown()
 end
 
 local function HealBot_Share_PostFrameWhisper_DropDown()
+      --HealBot_setCall("HealBot_Share_PostFrameWhisper_DropDown")
     local info = UIDropDownMenu_CreateInfo()    
     local wList=HealBot_GetInfo()
     local uID=""
@@ -1595,12 +1655,14 @@ local function HealBot_Share_PostFrameWhisper_DropDown()
 end
 
 local function HealBot_Share_SetLabel(object, text)
+      --HealBot_setCall("HealBot_Share_SetLabel")
 	local r,g,b,a=HealBot_Options_OptionsThemeCols()
 	object:SetText(text)
 	object:SetTextColor(r,g,b,a)
 end
 
 function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
+      --HealBot_setCall("HealBot_Share_ShowPostFrame")
     if not hbPostLinkFrame then
 		hbPostLinkFrame=CreateFrame("Frame", "HealBot_Link_PostFrame", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		hbPostLinkFrame:SetBackdrop({
@@ -1681,6 +1743,7 @@ function HealBot_Share_ShowPostFrame(g,h,f,tTxt)
 end
 
 function HealBot_Share_ShowPostSkinFrame()
+      --HealBot_setCall("HealBot_Share_ShowPostSkinFrame")
     local sType=1
     local g=_G["HealBot_Options_ShareExternalEditBox"]
     local h=_G["HealBot_Options_ShareExternalScroll"]
@@ -1690,6 +1753,7 @@ function HealBot_Share_ShowPostSkinFrame()
 end
 
 function HealBot_Share_ShowPostDebuffFrame()
+      --HealBot_setCall("HealBot_Share_ShowPostDebuffFrame")
     local sType=2
     local g=_G["HealBot_Options_ShareCDebuffExternalEditBox"]
     local h=_G["HealBot_Options_ShareCDebuffExternalScroll"]
@@ -1699,6 +1763,7 @@ function HealBot_Share_ShowPostDebuffFrame()
 end
 
 function HealBot_Share_ShowPostBuffFrame()
+      --HealBot_setCall("HealBot_Share_ShowPostBuffFrame")
     local sType=3
     local g=_G["HealBot_Options_ShareBuffsExternalEditBox"]
     local h=_G["HealBot_Options_ShareBuffsExternalScroll"]
@@ -1708,6 +1773,7 @@ function HealBot_Share_ShowPostBuffFrame()
 end
 
 function HealBot_Share_ShowPostSpellsFrame()
+      --HealBot_setCall("HealBot_Share_ShowPostSpellsFrame")
     local sType=4
     local g=_G["HealBot_Options_ShareSpellsExternalEditBox"]
     local h=_G["HealBot_Options_ShareSpellsExternalScroll"]
@@ -1717,6 +1783,7 @@ function HealBot_Share_ShowPostSpellsFrame()
 end
 
 function HealBot_Share_ShowPostPresetColsFrame()
+      --HealBot_setCall("HealBot_Share_ShowPostPresetColsFrame")
     local sType=5
     local g=_G["HealBot_Options_SharePresetColsExternalEditBox"]
     local h=_G["HealBot_Options_SharePresetColsExternalScroll"]

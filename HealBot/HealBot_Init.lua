@@ -9,22 +9,27 @@ local HealBot_Other_Ranks={}
 local _
 
 function HealBot_Init_retSmartCast_Res()
+      --HealBot_setCall("HealBot_Init_retSmartCast_Res")
     return SmartCast_Res
 end
 
 function HealBot_Init_retSmartCast_MassRes()
+      --HealBot_setCall("HealBot_Init_retSmartCast_MassRes")
     return SmartCast_MassRes
 end
 
 function HealBot_Init_retFoundHealSpells()
+      --HealBot_setCall("HealBot_Init_retFoundHealSpells")
     return HealBot_KnownHeal_Names
 end
 
 function HealBot_Init_knownClassicHealSpell(sName)
+      --HealBot_setCall("HealBot_Init_knownClassicHealSpell")
     return HealBot_KnownHeal_Names[sName]
 end
 
 function HealBot_Init_ClassicHealSpellMaxRank(sName)
+      --HealBot_setCall("HealBot_Init_ClassicHealSpellMaxRank")
     if HealBot_Spell_Ranks[sName] then
         return HealBot_Spell_Ranks[sName][0]
     else
@@ -48,6 +53,7 @@ local function EnumerateTooltipLines_helper(pattern, ...)
 end
 
 function HealBot_Init_TalentLookupImproved()
+      --HealBot_setCall("HealBot_Init_TalentLookupImproved")
     if HEALBOT_GAME_VERSION>9 then 
         local pattern=false
         local improved=false
@@ -111,6 +117,7 @@ function HealBot_Init_TalentLookupImproved()
 end
 
 local function HealBot_Init_ManaCost(spellId, spellBookId)
+      --HealBot_setCall("HealBot_Init_ManaCost")
     local hbMana=GetSpellPowerCost(spellId)
     local manaCost=0
     if hbMana and hbMana[1] and hbMana[1].cost then
@@ -141,6 +148,7 @@ local function HealBot_Init_ManaCost(spellId, spellBookId)
 end
 
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
+      --HealBot_setCall("HealBot_Init_FindSpellRangeCast")
     local cRank=false
     if ( not id ) then return false; end
 
@@ -190,11 +198,13 @@ end
 
 local skipSpells={}
 function HealBot_Init_SkipSpells()
+      --HealBot_setCall("HealBot_Init_SkipSpells")
     skipSpells={[HEALBOT_BLESSING_OF_MIGHT]=true}
 end
 
 local HealBot_Ranks={}
 function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
+      --HealBot_setCall("HealBot_Init_Spells_addSpell")
     if not skipSpells[spellName] then
         local cRank=HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId)
         if cRank and not HealBot_Globals.NoRanks then
@@ -248,6 +258,7 @@ end
 
 local sOtherName=""
 function HealBot_Init_Other_retRank(spellName, targetRank)
+      --HealBot_setCall("HealBot_Init_Other_retRank")
     sOtherName=false
     if HealBot_Other_Ranks[spellName] then
         if not HealBot_Other_Ranks[spellName][targetRank] then
@@ -265,6 +276,7 @@ end
 
 local sBuffName=""
 function HealBot_Init_Buffs_retRank(spellName, targetRank)
+      --HealBot_setCall("HealBot_Init_Buffs_retRank")
     sBuffName=false
     if HealBot_Buff_Ranks[spellName] then
         if not HealBot_Buff_Ranks[spellName][targetRank] then
@@ -282,6 +294,7 @@ end
 
 local sHealName=""
 function HealBot_Init_Spells_retRank(spellName, targetRank)
+      --HealBot_setCall("HealBot_Init_Spells_retRank")
     sHealName=false
     if HealBot_Spell_Ranks[spellName] then
         if not HealBot_Spell_Ranks[spellName][targetRank] then
@@ -299,6 +312,7 @@ end
 
 local sRankName=""
 function HealBot_Init_retRank(spellName, targetRank)
+      --HealBot_setCall("HealBot_Init_retRank")
     if HealBot_Ranks[spellName] then
         if HealBot_Init_Spells_retRank(spellName, targetRank) then
             sRankName=HealBot_Init_Spells_retRank(spellName, targetRank)
@@ -316,6 +330,7 @@ function HealBot_Init_retRank(spellName, targetRank)
 end
 
 function HealBot_InitValidateRanks()
+      --HealBot_setCall("HealBot_InitValidateRanks")
     for sName,maxRank in pairs(HealBot_Ranks) do
         for x=1, maxRank do
             if HealBot_Spell_Ranks[sName] then
@@ -349,6 +364,7 @@ function HealBot_InitValidateRanks()
 end
 
 function HealBot_Init_Spells_Defaults()
+      --HealBot_setCall("HealBot_Init_Spells_Defaults")
     for x,_ in pairs(HealBot_Spell_IDs) do
         HealBot_Spell_IDs[x]=nil
     end 
@@ -420,6 +436,7 @@ function HealBot_Init_Spells_Defaults()
 end
 
 function HealBot_Init_ClassicSpellRanks()
+      --HealBot_setCall("HealBot_Init_ClassicSpellRanks")
     local knownHealSpells=HealBot_Init_retFoundHealSpells()
     for hSpell,_ in pairs(knownHealSpells) do
         if HealBot_Ranks[hSpell] and HealBot_Ranks[hSpell]>1 then
@@ -447,6 +464,7 @@ function HealBot_Init_ClassicSpellRanks()
 end
 
 function HealBot_Init_SmartCast()
+      --HealBot_setCall("HealBot_Init_SmartCast")
     local rName=""
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
         rName=GetSpellInfo(HEALBOT_MASS_RESURRECTION)
@@ -488,6 +506,7 @@ end
 
 local HealBot_Spec = {}
 function HealBot_Init_ClassicSpecs()
+      --HealBot_setCall("HealBot_Init_ClassicSpecs")
     HealBot_Spec = {
         ["DRUI"] = { [1] = HEALBOT_BALANCE,       [2] = HEALBOT_FERAL,        [3] = HEALBOT_RESTORATION, },
         ["MAGE"] = { [1] = HEALBOT_ARCANE,        [2] = HEALBOT_FIRE,         [3] = HEALBOT_FROST,       },
@@ -503,6 +522,7 @@ function HealBot_Init_ClassicSpecs()
 end
 
 function HealBot_Init_retSpec(class,tab)
+      --HealBot_setCall("HealBot_Init_retSpec")
     if HealBot_Spec[class] and HealBot_Spec[class][tab] then
         return HealBot_Spec[class][tab]
     end

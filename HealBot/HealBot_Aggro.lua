@@ -6,19 +6,22 @@ local HealBot_Aggro_luVars={}
 HealBot_Aggro_luVars["pluginThreat"]=false
 
 function HealBot_Aggro_setLuVars(vName, vValue)
-    HealBot_Aggro_luVars[vName]=vValue
       --HealBot_setCall("HealBot_Aggro_setLuVars - "..vName)
+    HealBot_Aggro_luVars[vName]=vValue
 end
 
 function HealBot_Aggro_retLuVars(vName)
+      --HealBot_setCall("HealBot_Aggro_retLuVars - "..vName)
     return HealBot_Aggro_luVars[vName]
 end
 
 function HealBot_Aggro_setAuxAssigns(vName, frame, vValue)
+      --HealBot_setCall("HealBot_Aggro_setAuxAssigns - "..vName)
     HealBot_Aggro_AuxAssigns[vName][frame]=vValue
 end
 
 function HealBot_Aggro_IndicatorClear(button)
+      --HealBot_setCall("HealBot_Aggro_IndicatorClear", button)
     button.aggro.ind=0
     button.gref.indicator.aggro["Iconal1"]:SetAlpha(0)
     button.gref.indicator.aggro["Iconal2"]:SetAlpha(0)
@@ -29,10 +32,12 @@ function HealBot_Aggro_IndicatorClear(button)
 end
 
 function HealBot_Aggro_HazardClear(button)
+      --HealBot_setCall("HealBot_Aggro_HazardClear", button)
     HealBot_Action_DisableBorderHazardType(button, "AGGRO")
 end
 
 function HealBot_Aggro_IndicatorUpdate(button)
+      --HealBot_setCall("HealBot_Aggro_IndicatorUpdate", button)
     if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] and 
        button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 then
         if Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOWIND"] and
@@ -81,11 +86,10 @@ function HealBot_Aggro_IndicatorUpdate(button)
         if button.aggro.ind~=0 then HealBot_Aggro_IndicatorClear(button) end
         if button.hazard.aggro then HealBot_Aggro_HazardClear(button) end
     end
-    
-      --HealBot_setCall("HealBot_Aggro_IndicatorUpdate")
 end
 
 local function HealBot_Aggro_AuxSetAggroBar(button)
+      --HealBot_setCall("HealBot_Aggro_AuxSetAggroBar", button)
     HealBot_Aux_UpdateAggroBar(button)
     if HealBot_Aggro_AuxAssigns["NameOverlayAggro"][button.frame] then
         HealBot_Aux_UpdateNameOverLay(button, 4, true)
@@ -96,6 +100,7 @@ local function HealBot_Aggro_AuxSetAggroBar(button)
 end
 
 local function HealBot_Aggro_AuxClearAggroBar(button)
+      --HealBot_setCall("HealBot_Aggro_AuxClearAggroBar", button)
     HealBot_Aux_ClearAggroBar(button)
     if HealBot_Aggro_AuxAssigns["NameOverlayAggro"][button.frame] then
         HealBot_Aux_UpdateNameOverLay(button, 4, false)
@@ -108,6 +113,7 @@ end
 local hbAuraWatchAggro={}
 local hbActionWatchAggro={}
 function HealBot_Aggro_AuraWatch(guid, state)
+      --HealBot_setCall("HealBot_Aggro_AuraWatch", nil, guid)
     if state then
         hbAuraWatchAggro[guid]=true
     else
@@ -116,6 +122,7 @@ function HealBot_Aggro_AuraWatch(guid, state)
 end
 
 function HealBot_Aggro_ActionWatch(guid, state)
+      --HealBot_setCall("HealBot_Aggro_ActionWatch", nil, guid)
     if state then
         hbActionWatchAggro[guid]=true
     else
@@ -124,10 +131,12 @@ function HealBot_Aggro_ActionWatch(guid, state)
 end
 
 function HealBot_Aggro_AuraWatchClear()
+      --HealBot_setCall("HealBot_Aggro_AuraWatchClear")
     hbAuraWatchAggro={}
 end
 
 function HealBot_Aggro_UpdateUnit(button,status,threatData)
+      --HealBot_setCall("HealBot_Aggro_UpdateUnit", button)
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) and UnitAffectingCombat(button.unit) then
         if status and Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["SHOW"] then
             if threatData["status"]>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] then
@@ -172,9 +181,8 @@ function HealBot_Aggro_UpdateUnit(button,status,threatData)
             HealBot_Text_setAggroText(button)
         end
         if HealBot_Aggro_luVars["pluginThreat"] and button.status.plugin then HealBot_Plugin_Threat_UnitUpdate(button) end
-        if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_Action_RefreshTooltip() end
+        if button.mouseover and HealBot_Data["TIPBUTTON"] then HealBot_setTooltipUpdateNow() end
     end
-      --HealBot_setCall("HealBot_Aggro_UpdateUnit")
 end
 
 local hbClearThreat={["status"]=0,
@@ -182,11 +190,12 @@ local hbClearThreat={["status"]=0,
                      ["threatvalue"]=0,
                      ["threatname"]=""}
 function HealBot_Aggro_ClearUnitAggro(button)
+      --HealBot_setCall("HealBot_Aggro_ClearUnitAggro", button)
     HealBot_Aggro_UpdateUnit(button,false,hbClearThreat)
-      --HealBot_setCall("HealBot_Aggro_ClearUnitAggro")
 end
 
 function HealBot_Aggro_UpdateAggroText()
+        --HealBot_setCall("HealBot_Aggro_UpdateAggroText")
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.gref.txt["text4"]:SetText("")
         HealBot_Text_setAggroText(xButton)
@@ -210,6 +219,7 @@ function HealBot_Aggro_UpdateAggroText()
 end
 
 function HealBot_Aggro_ClearGUID(guid)
+        --HealBot_setCall("HealBot_Aggro_ClearGUID", nil, guid)
     hbAuraWatchAggro[guid]=nil
     hbActionWatchAggro[guid]=nil
 end

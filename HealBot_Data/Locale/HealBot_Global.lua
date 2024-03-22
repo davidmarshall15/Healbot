@@ -315,7 +315,7 @@ function HealBot_globalVars()
     HEALBOT_BLUR                            = 212800 --GetSpellInfo(198589) or "--Blur"
     --HEALBOT_EMPOWER_WARDS                   = 218256 --GetSpellInfo(218256) or "--Empower Wards";
     HEALBOT_METAMORPHOSIS                   = 187827 --GetSpellInfo(187827) or "--Metamorphosis";
-    
+
     --Druid
     HEALBOT_BARKSKIN                        = 22812 --GetSpellInfo(22812) or "--Barkskin";
     HEALBOT_CULTIVATION                     = 200389 --GetSpellInfo(200390) or "--Cultivation";
@@ -410,7 +410,7 @@ function HealBot_globalVars()
     HEALBOT_TENACITY                        = 159735 --GetSpellInfo(159735) or "--Tenacity"
     HEALBOT_TERRIFYING_ROAR                 = 90309 --GetSpellInfo(90309) or "--Terrifying Roar"
     HEALBOT_WILD_STRENGTH                   = 57386 --GetSpellInfo(57386) or "--Wild Strength"
-    
+
     --Mage
     HBC_AMPLIFY_MAGIC                       = 1008
     HEALBOT_ARCANE_BRILLIANCE               = 1459 --GetSpellInfo(1459) or "--Arcane Brilliance"; -- Arcane Intellect in Classic
@@ -569,6 +569,7 @@ function HealBot_globalVars()
     HBC_SHADOWGUARD                         = 18137
     HEALBOT_SHADOW_COVENANT                 = 204065 --GetSpellInfo(204065) or "--Shadow Covenant";
     HBC_SHADOW_PROTECTION                   = 976
+    HEALBOT_SHADOW_PROTECTION               = 27683
     HEALBOT_SHADOW_WORD_INSANITY            = 132573 --GetSpellInfo(132573) or "--Shadow Word: Insanity";
     HEALBOT_SHINING_FORCE                   = 204263 --GetSpellInfo(204263) or "--Shining Force";
     HEALBOT_SPIRIT_SHELL                    = 109964 --GetSpellInfo(109964) or "--Spirit Shell";

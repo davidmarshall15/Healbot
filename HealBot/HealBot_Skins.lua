@@ -23,12 +23,12 @@ local HealBot_Skins_luVars={}
 HealBot_Skins_luVars["AuxReset"]=false
 
 function HealBot_Skins_setLuVars(vName, vValue)
+      --HealBot_setCall("HealBot_Skins_setLuVars - "..vName)
     HealBot_Skins_luVars[vName]=vValue
-      --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
 end
 
 function HealBot_Skins_retLuVars(vName)
-    --HealBot_setCall("HealBot_Action_retLuVars")
+      --HealBot_setCall("HealBot_Skins_retLuVars - "..vName)
     return HealBot_Skins_luVars[vName]
 end
 
@@ -50,20 +50,24 @@ local indTextures={ [2]=[[Interface\Addons\HealBot\Images\indicator_gold]],
                         
 local tabconcat=table.concat
 local function HealBot_Skins_Concat(elements)
+      --HealBot_setCall("HealBot_Skins_Concat")
     return tabconcat(tBarsConcat,"",1,elements)
 end
 
 local testBarsOn=false
 function HealBot_Skins_isTestBars(state)
+      --HealBot_setCall("HealBot_Skins_isTestBars")
     testBarsOn=state
 end
 
 local testPowerOn=0
 function HealBot_Skins_showPowerCounter(maxPower)
+      --HealBot_setCall("HealBot_Skins_showPowerCounter")
     testPowerOn=maxPower
 end
 
 function HealBot_Skins_AdjustSpecialBarWidth(button)
+      --HealBot_setCall("HealBot_Skins_AdjustSpecialBarWidth", button)
     EnemyTargetBarSize=(Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["ENEMYTARGETSIZE"]/100)
     if HealBot_Panel_isSpecialUnit(button.unit)==1 then
         bWidth=bWidth*(1-EnemyTargetBarSize)
@@ -77,10 +81,10 @@ function HealBot_Skins_AdjustSpecialBarWidth(button)
         HealBot_Text_setEnemySizeWidth("EnemySizeWidth2", bWidth, EnemyTargetBarSize)
         HealBot_Action_SetBackSpecialWidth(10, bWidth+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"])
     end
-    
 end
 
 function HealBot_Skins_ResetSkinWidth(button)
+      --HealBot_setCall("HealBot_Skins_ResetSkinWidth", button)
     frameScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]
     bWidth = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
     bOutline = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BOUT"]*frameScale);
@@ -121,6 +125,7 @@ function HealBot_Skins_ResetSkinWidth(button)
 end
 
 function HealBot_Skins_setEmergAnchor(position)
+      --HealBot_setCall("HealBot_Skins_setEmergAnchor")
     if position==1 then
         return "TOPLEFT"
     elseif position==2 then
@@ -142,6 +147,7 @@ end
 
 iAnchors["TXTCOUNT"]="TOPLEFT"; iAnchors["TXTEXPIRE"]="BOTTOMRIGHT"; iAnchors["TXTEXPIREX"]=2; iAnchors["TXTCOUNTX"]=-2
 function HealBot_Skins_setIconAnchors(onBar, position, extra)
+      --HealBot_setCall("HealBot_Skins_setIconAnchors")
     if extra then
         if onBar==1 then
             if position==1 then
@@ -300,6 +306,7 @@ function HealBot_Skins_setIconAnchors(onBar, position, extra)
 end
 
 function HealBot_Skins_setIconSpacer(anchor, space)
+      --HealBot_setCall("HealBot_Skins_setIconSpacer")
     if anchor==2 or anchor==4 or anchor==5 or anchor==7 then
         iAnchors["ICONHSPACE"]=0-space
     else
@@ -314,6 +321,7 @@ end
 
 local indOffset=0
 function HealBot_Skins_IndicatorVOffset(anchor, offset, frame)
+      --HealBot_setCall("HealBot_Skins_IndicatorVOffset")
     if anchor==1 or anchor==5 or anchor==7 then
         indOffset=0+offset
     else
@@ -324,6 +332,7 @@ end
 
 local tmpHeightOffset=0
 function HealBot_Skins_ResetSkin(barType,button,numcols)
+      --HealBot_setCall("HealBot_Skins_Check", button)
     if button and button.frame then 
         frameScale=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]
         framePad=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["PADDING"] or 1
@@ -1379,10 +1388,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","UpdateTextButtons")
     end
-      --HealBot_setCall("HealBot_Skins_ResetSkin")
 end
 
 function HealBot_Skins_Check(SkinName)
+      --HealBot_setCall("HealBot_Skins_Check")
     if not Healbot_Config_Skins.General[SkinName] or not Healbot_Config_Skins.General[SkinName]["VC"] or Healbot_Config_Skins.General[SkinName]["VC"]~=HealBot_Global_Version() then
         HealBot_Skins_Check_Skin(SkinName)
     end
@@ -1390,6 +1399,7 @@ end
 
 local nVal={[1]="", [2]="", [3]=""}
 local function HealBot_Skins_Check_IconSets(SkinName, frame, oVar, nVar, v1, v2, v3)
+      --HealBot_setCall("HealBot_Skins_Check_IconSets")
     nVal[1]=v1
     nVal[2]=v2 or v1
     nVal[3]=v3 or v2 or v1
@@ -1424,6 +1434,7 @@ local function HealBot_Skins_Check_IconSets(SkinName, frame, oVar, nVar, v1, v2,
 end
 
 local function HealBot_Skins_Check_IconSetsText(SkinName, frame, oVar, nVar, v1, v2, v3)
+      --HealBot_setCall("HealBot_Skins_Check_IconSetsText")
     nVal[1]=v1
     nVal[2]=v2 or v1
     nVal[3]=v3 or v2 or v1
@@ -1458,6 +1469,7 @@ local function HealBot_Skins_Check_IconSetsText(SkinName, frame, oVar, nVar, v1,
 end
 
 function HealBot_Skins_Check_Skin(SkinName, fromImport)
+      --HealBot_setCall("HealBot_Skins_Check_Skin")
     if Healbot_Config_Skins.ExtraIncGroup then Healbot_Config_Skins.ExtraIncGroup=nil end
     if Healbot_Config_Skins.BarsHide then Healbot_Config_Skins.BarsHide=nil end
     if Healbot_Config_Skins.EmergIncMonitor then Healbot_Config_Skins.EmergIncMonitor=nil end
@@ -2707,7 +2719,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         end
     end
     Healbot_Config_Skins.General[SkinName]["VC"]=HealBot_Global_Version()
-      --HealBot_setCall("HealBot_Skins_Check_Skin")
 end
 local hbRoleCols= {
           ["TANK"]           = {r=0.85, g=0.65,  b=0.50, },
@@ -2715,6 +2726,7 @@ local hbRoleCols= {
           ["DAMAGER"]        = {r=1.0,  g=0.45,  b=0.05, },
       }
 function HealBot_Skins_SetRoleCol(SkinName, role, override)
+      --HealBot_setCall("HealBot_Skins_SetRoleCol")
     if override then
         HealBot_Globals.OverrideColours[role]={}
         HealBot_Globals.OverrideColours[role].r=hbRoleCols[role].r
@@ -2745,6 +2757,7 @@ local hbClassCols = {
           ["WARR"] = {r=0.78, g=0.61, b=0.43, },
       }
 function HealBot_Skins_SetClassCol(SkinName, class, override)
+      --HealBot_setCall("HealBot_Skins_SetClassCol")
     if override then
         HealBot_Globals.OverrideColours[class]={}
         HealBot_Globals.OverrideColours[class].r=hbClassCols[class].r
@@ -2771,6 +2784,7 @@ local hbPowerCols= {
           ["RUNIC_POWER"]    = {r=0.0,  g=0.82, b=1.0,  },
       }
 function HealBot_Skins_SetPowerCol(SkinName, powerType, override)
+      --HealBot_setCall("HealBot_Skins_SetPowerCol")
     if override then
         HealBot_Globals.OverrideColours[powerType]={}
         HealBot_Globals.OverrideColours[powerType].r=hbPowerCols[powerType].r

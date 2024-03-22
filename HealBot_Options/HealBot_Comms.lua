@@ -6,6 +6,7 @@ local _
 
 local qAddonMsg={}
 function HealBot_Comms_SendAddonMsg(msg, aType, pName)
+      --HealBot_setCall("HealBot_Comms_SendAddonMsg")
     local aMsg=""
     if pName then
         aMsg=msg.."~"..aType.."~"..pName
@@ -22,6 +23,7 @@ function HealBot_Comms_SendAddonMsg(msg, aType, pName)
 end
 
 function HealBot_Comms_Set()
+      --HealBot_setCall("HealBot_Comms_Set")
     local inInst,inType = HealBot_ZoneType()
     HealBot_Comms_SendTo(inInst,inType)
     HealBot_Comms_GuildUpdate()
@@ -29,6 +31,7 @@ end
 
 local hbCommsTo,hbInInst=0,false
 function HealBot_Comms_SendTo(inInst,inType)
+      --HealBot_setCall("HealBot_Comms_SendTo")
     local lastCommsTo=hbCommsTo
     hbInInst=inInst
     if (IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) or inType == "pvp" or inType == "arena" or HasLFGRestrictions()) then
@@ -48,10 +51,12 @@ end
 
 local hbInGuild=false
 function HealBot_Comms_GuildUpdate()
+      --HealBot_setCall("HealBot_Comms_GuildUpdate")
     hbInGuild=IsInGuild()
 end
 
 function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
+      --HealBot_setCall("HealBot_Comms_SendInstantMsg")
     if toPlayer then
         SendChatMessage(msg,"WHISPER",nil,toPlayer)
         HealBot_AddDebug("==SENT--: Whisper to "..toPlayer,"Comms",true)
@@ -73,6 +78,7 @@ function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
 end
 
 function HealBot_Comms_SendInstantAddonMsg(msg,notGroup,toPlayer)
+      --HealBot_setCall("HealBot_Comms_SendInstantAddonMsg")
     if notGroup then
         if toPlayer then
             C_ChatInfo.SendAddonMessage(HEALBOT_HEALBOT, msg, "WHISPER", toPlayer)
@@ -89,6 +95,7 @@ function HealBot_Comms_SendInstantAddonMsg(msg,notGroup,toPlayer)
 end
 
 function HealBot_Comms_SendAddonMessage()
+      --HealBot_setCall("HealBot_Comms_SendAddonMessage")
     if #qAddonMsg>0 then
         local aMsg=qAddonMsg[1]
         table.remove(qAddonMsg,1)
@@ -111,6 +118,7 @@ function HealBot_Comms_SendAddonMessage()
 end
 
 function HealBot_Comms_GetChan(chan)
+      --HealBot_setCall("HealBot_Comms_GetChan")
     if GetChannelName(chan)>0 then
         return GetChannelName(chan);
     else
@@ -119,11 +127,13 @@ function HealBot_Comms_GetChan(chan)
 end
 
 local function HealBot_Comms_Print_IncHealsSum(sender_id,addon_id,HealsCnt,linenum)
+      --HealBot_setCall("HealBot_Comms_Print_IncHealsSum")
     HealBot_Options_SetLabel("HBIncH"..linenum.."Healer",sender_id)
     HealBot_Options_SetLabel("HBIncH"..linenum.."Ver",addon_id)
 end
 
 function HealBot_Comms_About()
+      --HealBot_setCall("HealBot_Comms_About")
     local hbcommver=HealBot_GetInfo()
 
     local linenum=1
@@ -147,6 +157,7 @@ end
 
 local sPeople={}
 function HealBot_Comms_Print_Supports()
+      --HealBot_setCall("HealBot_Comms_Print_Supports")
     if not HEALBOT_CREDITS_PEOPLE[1] then return end
     local b=0
     for x,_ in pairs(sPeople) do
@@ -175,6 +186,7 @@ end
 
 local mult=0
 function HealBot_Comm_round(num, idp)
+      --HealBot_setCall("HealBot_Comm_round")
     mult = 10^(idp or 0)
     return math.floor(num * mult + 0.5) / mult
 end
@@ -183,6 +195,7 @@ local HealBot_MsgUpdateAvail=nil
 local hbMajor, hbMinor, hbPatch, hbHealbot = string.split(".", HEALBOT_VERSION)
 local hbVersionChecked = {}
 function HealBot_Comms_CheckVer(userName, version)
+      --HealBot_setCall("HealBot_Comms_CheckVer")
     if not hbVersionChecked[userName] then
         local tNewVer=nil
         hbVersionChecked[userName]=true
@@ -213,6 +226,7 @@ function HealBot_Comms_CheckVer(userName, version)
 end
 
 function HealBot_Comms_MacroSuppressError()
+      --HealBot_setCall("HealBot_Comms_MacroSuppressError")
     if HealBot_Globals.MacroSuppressError then
         HealBot_Info_SuppressErrorsVal:SetText("ON")
         HealBot_Info_SuppressErrorsVal:SetTextColor(0.1,1,0.1)
@@ -223,6 +237,7 @@ function HealBot_Comms_MacroSuppressError()
 end
 
 function HealBot_Comms_MacroSuppressSound()
+      --HealBot_setCall("HealBot_Comms_MacroSuppressSound")
     if HealBot_Globals.MacroSuppressSound then
         HealBot_Info_SuppressSoundsVal:SetText("ON")
         HealBot_Info_SuppressSoundsVal:SetTextColor(0.1,1,0.1)
@@ -232,27 +247,37 @@ function HealBot_Comms_MacroSuppressSound()
     end
 end    
 
-local vCPU=1
-local vMode={[1]="Chill",[2]="Normal",[3]="Ultra"}
+local vCPU,pCPU,pMode=1,1,0
+local vMode={[1]="Chill+",[2]="Chill",[3]="Normal",[4]="Ultra",[5]="Ultra+"}
 function HealBot_Comms_PerfLevel()
+      --HealBot_setCall("HealBot_Comms_PerfLevel")
     if HealBot_retLuVars("CPUProfilerOn") then
         HealBot_Info_PerfLevelVal:SetText("WARNING CPU Profiling is turned ON")
-        HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
+        HealBot_Info_PerfLevelVal:SetTextColor(0.98,0.25,0.25)
         HealBot_Info_PerfLevelCPUOff:SetText("Turn Off:   /hb cpu")
-        HealBot_Info_PerfLevelCPUOff:SetTextColor(0.88,0.1,0.1)
+        HealBot_Info_PerfLevelCPUOff:SetTextColor(0.98,0.25,0.25)
+        HealBot_Timers_SetnProcs(true)
+        pMode=0
     else
-        vCPU=HealBot_Globals.CPUUsage*HealBot_Globals.PerfMode
+        vCPU=ceil(HealBot_Globals.CPUUsage*(HealBot_Globals.PerfMode*0.35))
         HealBot_Info_PerfLevelVal:SetText(vCPU.." <"..vMode[HealBot_Globals.PerfMode]..">  ["..HealBot_Globals.FPS.."fps]")
         HealBot_Options_PerfLabel:SetText(vMode[HealBot_Globals.PerfMode].."  Lvl:"..vCPU.."  ["..HealBot_Globals.FPS.."fps]")
-        if vCPU<(1+(HealBot_Globals.PerfMode*3)) then
-            HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.1,0.1)
-            HealBot_Options_PerfLabel:SetTextColor(0.88,0.1,0.1)
-        elseif vCPU<(5+(HealBot_Globals.PerfMode*3)) then
-            HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
-            HealBot_Options_PerfLabel:SetTextColor(0.88,0.88,0.1)
-        else
-            HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
-            HealBot_Options_PerfLabel:SetTextColor(0.1,1,0.1)
+        if pCPU~=HealBot_Globals.CPUUsage or pMode~=HealBot_Globals.PerfMode then
+            pCPU=HealBot_Globals.CPUUsage
+            pMode=HealBot_Globals.PerfMode
+            HealBot_Debug_PerfUpdate("PerfMode", vMode[HealBot_Globals.PerfMode])
+            HealBot_Debug_PerfUpdate("PerfLevel", vCPU)
+            if HealBot_Globals.CPUUsage+(HealBot_Globals.PerfMode*0.5)<4 then
+                HealBot_Info_PerfLevelVal:SetTextColor(0.98,0.25,0.25)
+                HealBot_Options_PerfLabel:SetTextColor(0.98,0.25,0.25)
+            elseif HealBot_Globals.CPUUsage+(HealBot_Globals.PerfMode*0.5)<7 then
+                HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
+                HealBot_Options_PerfLabel:SetTextColor(0.88,0.88,0.1)
+            else
+                HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
+                HealBot_Options_PerfLabel:SetTextColor(0.1,1,0.1)
+            end
+            HealBot_Timers_SetnProcs()
         end
     end
 end
