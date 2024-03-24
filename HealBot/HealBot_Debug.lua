@@ -283,7 +283,7 @@ pFrame:SetMovable(true)
 pFrame:EnableMouse(true)
 pFrame:SetScript("OnMouseDown", function(self, button) HealBot_Debug_pFrameOnMouseDown(self, button) end)
 pFrame:SetScript("OnMouseUp", function(self, button) HealBot_Debug_pFrameOnMouseUp(self, button) end)
-pFrame:SetHeight(325)
+pFrame:SetHeight(370)
 pFrame:SetWidth(220)
 pFrame:SetPoint("TOPLEFT",20,-120)
 pFrame:SetBackdropColor(0.1,0.1,0.1,0.88)
@@ -308,10 +308,14 @@ local pIndex={["CPUUsage"]=1,
               ["QueueAbsorbs"]=14,
               ["QueueDebuffs"]=15,
               ["QueueBuffs"]=16,
+              ["aggroInt"]=17,
+              ["statusInt"]=18,
+              ["healthInt"]=19,
+              ["deadInt"]=20,
              }
 local pFrameText={}
 local pFrameTextVal={}
-for x=1,16 do
+for x=1,20 do
     pFrameText[x]=pFrame:CreateFontString("HealBot_Debug_pFrameFrameText"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]=pFrame:CreateFontString("HealBot_pFrameDebug_FrameTextVal"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]:SetTextColor(1,1,1,1)
@@ -355,6 +359,15 @@ pFrameText[15]:SetText("Queue Debuffs:")
 pFrameText[16]:SetPoint("TOPLEFT", pFrameText[15], "TOPLEFT", 0, -15)
 pFrameText[16]:SetText("Queue Buffs:")
 
+pFrameText[17]:SetPoint("TOPLEFT", pFrameText[16], "TOPLEFT", 0, -20)
+pFrameText[17]:SetText("Threat check interval:")
+pFrameText[18]:SetPoint("TOPLEFT", pFrameText[17], "TOPLEFT", 0, -15)
+pFrameText[18]:SetText("DC check Interval:")
+pFrameText[19]:SetPoint("TOPLEFT", pFrameText[18], "TOPLEFT", 0, -15)
+pFrameText[19]:SetText("Health check Interval:")
+pFrameText[20]:SetPoint("TOPLEFT", pFrameText[19], "TOPLEFT", 0, -15)
+pFrameText[20]:SetText("Dead check Interval:")
+
 pFrameTextVal[1]:SetPoint("TOPRIGHT", pFrame, "TOPRIGHT", -10, -35)
 pFrameTextVal[2]:SetPoint("TOPRIGHT", pFrameTextVal[1], "TOPRIGHT", 0, -15)
 pFrameTextVal[3]:SetPoint("TOPRIGHT", pFrameTextVal[2], "TOPRIGHT", 0, -15)
@@ -371,6 +384,10 @@ pFrameTextVal[13]:SetPoint("TOPRIGHT", pFrameTextVal[12], "TOPRIGHT", 0, -15)
 pFrameTextVal[14]:SetPoint("TOPRIGHT", pFrameTextVal[13], "TOPRIGHT", 0, -15)
 pFrameTextVal[15]:SetPoint("TOPRIGHT", pFrameTextVal[14], "TOPRIGHT", 0, -15)
 pFrameTextVal[16]:SetPoint("TOPRIGHT", pFrameTextVal[15], "TOPRIGHT", 0, -15)
+pFrameTextVal[17]:SetPoint("TOPRIGHT", pFrameTextVal[16], "TOPRIGHT", 0, -20)
+pFrameTextVal[18]:SetPoint("TOPRIGHT", pFrameTextVal[17], "TOPRIGHT", 0, -15)
+pFrameTextVal[19]:SetPoint("TOPRIGHT", pFrameTextVal[18], "TOPRIGHT", 0, -15)
+pFrameTextVal[20]:SetPoint("TOPRIGHT", pFrameTextVal[19], "TOPRIGHT", 0, -15)
 
 local pLeft,pTop=20,120
 function HealBot_Debug_PerfHideShow(show)

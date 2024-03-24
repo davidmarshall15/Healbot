@@ -1,4 +1,4 @@
-function HealBot_Plugin_Options_SetupFrame(frame, hide)
+function HealBot_Plugin_Options_SetupFrame(frame, hide, tall)
 	frame:SetBackdrop({
 		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -6,8 +6,13 @@ function HealBot_Plugin_Options_SetupFrame(frame, hide)
 		insets = { left = 0, right = 0, top = 0, bottom = 0, },
 	})
 	frame:SetBackdropColor(0,0,0,0);
-	frame:SetPoint("TOPLEFT", -5, -120)
-	frame:SetSize(600,470)
+    if tall then
+        frame:SetPoint("TOPLEFT", -5, -80)
+        frame:SetSize(600,510)
+    else
+        frame:SetPoint("TOPLEFT", -5, -120)
+        frame:SetSize(600,470)
+    end
 	if hide then
 		frame:Hide()
 	end

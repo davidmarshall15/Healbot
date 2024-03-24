@@ -871,6 +871,8 @@ function HealBot_Timers_PluginsSet(tId)
         HealBot_Timers_Set("AURA","ResetBuffCache",0.1)
     elseif tId==6 then
         HealBot_Timers_Set("AURA","ResetDebuffCache",0.1)
+    elseif tId==7 then
+        HealBot_Timers_Set("LAST","SetInHealAbsorbMax",0.1)
     end
 end
 

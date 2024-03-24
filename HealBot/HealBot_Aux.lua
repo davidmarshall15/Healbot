@@ -45,6 +45,8 @@ end
 function HealBot_Aux_setInHealAbsorbMax()
       --HealBot_setCall("HealBot_Aux_setInHealAbsorbMax")
     local maxHlth=UnitHealthMax("player")
+    if not HealBot_Globals.AbsorbDiv then HealBot_Globals.AbsorbDiv=12 end
+    if not HealBot_Globals.InHealDiv then HealBot_Globals.InHealDiv=12 end
     if maxHlth and maxHlth>1 then
         HealBot_Aux_luVars["AbsorbMax"]=ceil((maxHlth/HealBot_Globals.AbsorbDiv)/1000)
         HealBot_Aux_luVars["InHealMax"]=ceil((maxHlth/HealBot_Globals.InHealDiv)/1000)

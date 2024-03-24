@@ -1571,6 +1571,13 @@ function HealBot_Options_ObjectsEnableDisable(oName,oEnable)
     end
 end
 
+function HealBot_Options_CmdButtonsEnableDisable(state)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_Reload",state)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_Reset",state)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_Local_Defaults",state)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_Defaults",state)
+end
+
 local function HealBot_Options_ButtonHighlight(oName,oHighlight)
       --HealBot_setCall("HealBot_Options_ButtonHighlight")
     local g=_G[oName]
@@ -2146,7 +2153,11 @@ function HealBot_Options_ReloadUI(reason)
         button1 = HEALBOT_WORDS_YES,
         button2 = HEALBOT_WORDS_NO,
         OnAccept = function()
-            ReloadUI();
+            if not HealBot_Data["UILOCK"] then
+                ReloadUI();
+            else
+                HealBot_AddChat("Not In Combat")
+            end
         end,
         timeout = 0,
         whileDead = 1,

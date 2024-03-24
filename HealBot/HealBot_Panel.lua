@@ -1034,7 +1034,6 @@ function HealBot_Panel_TestBarsOff()
         for id=51,60 do
             HealBot_Action_ClearTestIcon(b, id)
         end
-        HealBot_Action_ResetrCallsUnit(b.unit)
         b:Hide()
         HealBot_Emerg_Button[b.id]:Hide()
         HealBot_TestBarsActive[x]=nil

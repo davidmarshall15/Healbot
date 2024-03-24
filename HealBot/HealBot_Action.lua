@@ -2383,6 +2383,7 @@ end
 
 function HealBot_Action_UpdateTheDeadButton(button)
       --HealBot_setCall("HealBot_Action_UpdateTheDeadButton", button)
+    HealBot_setNextDeadCheck(button)
     if button.status.current<HealBot_Unit_Status["DC"] then
         if button.frame<10 then
             if button.status.isdead then
@@ -3193,7 +3194,7 @@ function HealBot_Action_ShowDirectionArrow(button)
                 button.status.dirarrowcords=ooRhbD
                 HealBot_Aura_OORUpdate(button, "Interface\\AddOns\\HealBot\\Images\\arrow.blp")
             end
-            button.status.dirarrowshown=HealBot_TimeNow+0.25
+            button.status.dirarrowshown=HealBot_TimeNow+0.2
         elseif button.status.dirarrowshown>0 then
             HealBot_Action_HideDirectionArrow(button)
         end
@@ -3814,6 +3815,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.health.rmixcolr=0
     button.health.rmixcolg=0
     button.health.rmixcolb=0
+    button.health.nextcheck=0
     
     for x=1,9 do
         button.aux[x]["R"]=1
@@ -3871,6 +3873,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.aggro.status=-1
     button.aggro.threatpct=0
     button.aggro.threatvalue=0
+    button.aggro.nextcheck=0
     button.hotbars.state=false
     button.hotbars.debuff=false
     button.hotbars.health=false
@@ -3913,6 +3916,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.rangespell=HealBot_RangeSpells["HEAL"]
     button.status.rangespellspecial=false
     button.status.rangenextcheck=0
+    button.status.deadnextcheck=0
     button.status.unittype=0
     button.status.enabled=false
     button.status.summons=false
@@ -3923,6 +3927,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.nextcheck=0
     button.status.falling=false
     button.status.swimming=false
+    button.status.deadcheck=0
     button.debug.track=false
     button.debug.updtime="[]"
     button.debug.prevtime=false
@@ -5864,7 +5869,6 @@ local testBarsManaClass={["DRUI"]=true,["MAGE"]=true,["PALA"]=true,["PRIE"]=true
 function HealBot_Action_UpdateTestButton(button)
       --HealBot_setCall("HealBot_Action_UpdateTestButton")
     button.testup=false
-    HealBot_Action_ResetrCallsUnit(button)
     button.status.unittype=5
     if button.skin~=Healbot_Config_Skins.Current_Skin then
         button.skin=Healbot_Config_Skins.Current_Skin
