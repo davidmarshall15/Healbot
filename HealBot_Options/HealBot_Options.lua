@@ -6571,6 +6571,15 @@ function HealBot_Options_UseFluidBarsAlpha_OnClick(self)
     end
 end
 
+function HealBot_Options_AuxBarOutline_OnClick(self)
+      --HealBot_setCall("HealBot_Options_AuxBarOutline_OnClick")
+    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]~=self:GetChecked() then
+        Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"] = self:GetChecked()
+        HealBot_Aux_resetFrameBar(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxBar"])
+        HealBot_Options_clearAuxBars(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxBar"])
+    end
+end
+
 function HealBot_Options_SkinBarAuxBarManaOnly_OnClick(self)
       --HealBot_setCall("HealBot_Options_SkinBarAuxBarManaOnly_OnClick")
     if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["MANAONLY"]~=self:GetChecked() then
@@ -7594,7 +7603,7 @@ function HealBot_Options_Perf_OnValueChanged(self)
         HealBot_Comms_PerfLevel()
         HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
-        HealBot_Timers_Set("LAST","UpdateRecalcDelay")
+        HealBot_Timers_Set("LAST","UpdateCheckInterval")
         HealBot_Timers_Set("LAST","SetEventQueues")
     end
 end
@@ -16072,6 +16081,7 @@ end
 local function HealBot_Options_AuxConfigBarChange()
       --HealBot_setCall("HealBot_Options_AuxConfigBarChange")
     local assignment=Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["USE"]
+    HealBot_Options_AuxBarOutline:SetChecked(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
     HealBot_Options_AuxBarColour.initialize = HealBot_Options_AuxBarColour_DropDown
     UIDropDownMenu_SetText(HealBot_Options_AuxBarColour,HealBot_Options_AuxBarColours_List[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["COLOUR"]])  
     HealBot_Options_AuxBarOpacityType.initialize = HealBot_Options_AuxBarOpacityType_DropDown
@@ -24965,6 +24975,8 @@ function HealBot_Options_SkinsFramesBarsAuxConfigTab(tab)
         HealBot_Options_Pct_OnValueChanged(HealBot_Options_AuxBarOpacityCustom)
         g=_G["HealBot_AuxBarCustomColourt"]
         g:SetText(HEALBOT_CUSTOM_CAT_CUSTOM)
+        HealBot_Options_AuxBarOutline:SetChecked(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+        HealBot_Options_SetText(HealBot_Options_AuxBarOutline,HEALBOT_OPTIONS_OUTLINEAUXBAR)
         HealBot_Options_SkinBarAuxBarManaOnly:SetChecked(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["MANAONLY"])
         HealBot_Options_SetText(HealBot_Options_SkinBarAuxBarManaOnly,HEALBOT_OPTION_MANAONLY)
         HealBot_Options_SkinBarAuxBarHealersManaOnly:SetChecked(Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["HEALERSMANAONLY"])

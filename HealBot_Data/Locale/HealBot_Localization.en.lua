@@ -1352,8 +1352,8 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_CPMACRO                  = "Macro name: "
     HEALBOT_PLUGIN_AGGRO2THRESHOLD          = "Aggro level 2 threshold"
     HEALBOT_PLUGIN_AGGRO3THRESHOLD          = "Aggro level 3 threshold"
-    HEALBOT_PLUGIN_AUXMAXINHEALS            = "Aux max in-heals %max health"
-    HEALBOT_PLUGIN_AUXMAXABSORBS            = "Aux max absorbs %max health"
+    HEALBOT_PLUGIN_AUXMAXINHEALS            = "Aux in-heals max value"
+    HEALBOT_PLUGIN_AUXMAXABSORBS            = "Aux absorbs max value"
     HEALBOT_PLUGIN_INHEALHOTTIME            = "Incoming heals HoT time"
     HEALBOT_PLUGIN_AUTOTIMEDBUFFDURATION    = "Custom buff - auto All Timed duration less than"
     HEALBOT_PLUGIN_AUTOTIMEDDURATION        = "Custom debuff - auto All Timed duration less than"
@@ -1682,6 +1682,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_ABSORBCOL_TEXT             = HEALBOT_classicABSORBHOTUP.." effects";
     HEALBOT_OPTIONS_BARALPHAABSORB          = HEALBOT_classicABSORBHOTUP.." effects opacity";
     HEALBOT_OPTIONS_OUTLINE                 = "Outline"
+    HEALBOT_OPTIONS_OUTLINEAUXBAR           = "Border outline"
     HEALBOT_OPTIONS_FRAME                   = "Frame"
     HEALBOT_OPTIONS_FRAMESOPTTEXT           = "Frames options"
     HEALBOT_OPTIONS_SETTOOLTIP_POSITION     = "Set Tooltip Position"

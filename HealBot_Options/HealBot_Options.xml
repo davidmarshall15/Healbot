@@ -18291,11 +18291,25 @@
                               </Layer>
                             </Layers>
                           </Frame>
+                          <CheckButton name="HealBot_Options_AuxBarOutline" inherits="HealBotUIPanelCheckButton">
+                            <Anchors>
+                              <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour" relativePoint="BOTTOMLEFT">
+                                <Offset>
+                                  <AbsDimension x="20" y="-12"/>
+                                </Offset>
+                              </Anchor>
+                            </Anchors>
+                            <Scripts>
+                              <OnClick>HealBot_Options_AuxBarOutline_OnClick(self)</OnClick>
+                              <OnEnter>HealBot_Options_Show_Help("BARSAUXOUTLINE",true)</OnEnter>
+                              <OnLeave>HealBot_Options_Show_Help("BARSAUXOUTLINE",false)</OnLeave>
+                            </Scripts>
+                          </CheckButton>
                           <Frame name="HealBot_Options_AuxBarOpacityType" inherits="UIDropDownMenuTemplate">
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AuxBarColour" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-50" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>

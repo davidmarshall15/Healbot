@@ -335,7 +335,7 @@ function HealBot_Timers_LastUpdate()
 	HealBot_Timers_Set("LAST","UpdateAllUnitBars",0.225)
     HealBot_Timers_Set("LAST","CheckVersions",0.25)
     HealBot_Timers_Set("LAST","LoadComplete",0.3)
-    HealBot_Timers_Set("LAST","UpdateRecalcDelay",1)
+    HealBot_Timers_Set("LAST","UpdateCheckInterval",1)
     HealBot_Timers_Set("AURA","BuffsReset",5)
     C_Timer.After(0.5, HealBot_Timers_nextRecalcAll)
 end
@@ -800,7 +800,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PluginManaWatchDead"]=HealBot_Plugin_ManaWatch_PlayerDead,
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
                         ["SetEventQueues"]=HealBot_SetEventQueues,
-                        ["UpdateRecalcDelay"]=HealBot_UpdateRecalcDelay,
+                        ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,

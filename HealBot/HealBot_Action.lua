@@ -73,9 +73,8 @@ HealBot_Action_luVars["FGroups"]={[1]=true,[2]=true,[3]=true,[4]=true,[5]=true,[
 HealBot_Action_luVars["HazardFreq"]=0.3
 HealBot_Action_luVars["HazardMinAlpha"]=0.25
 HealBot_Action_luVars["PreCacheBars"]=0
---HealBot_Action_luVars["CreatedButtons"]=0
---HealBot_Action_luVars["PartyChangedType"]=0
 HealBot_Action_luVars["HealthDropTime"]=3
+HealBot_Action_luVars["deadCheckInterval"]=1
 
 function HealBot_Action_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
@@ -95,6 +94,11 @@ end
 function HealBot_Action_setAuxAssigns(vName, frame, vValue)
       --HealBot_setCall("HealBot_Action_setAuxAssigns")
     HealBot_Action_AuxAssigns[vName][frame]=vValue
+end
+
+function HealBot_Action_UpdateCheckInterval()
+    HealBot_Action_luVars["deadCheckInterval"]=0.8-(HealBot_Globals.PerfMode*0.1)
+    HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
 end
 
 function HealBot_Action_setAdaptive()
@@ -2383,7 +2387,7 @@ end
 
 function HealBot_Action_UpdateTheDeadButton(button)
       --HealBot_setCall("HealBot_Action_UpdateTheDeadButton", button)
-    HealBot_setNextDeadCheck(button)
+    button.status.deadnextcheck=HealBot_TimeNow+HealBot_Action_luVars["deadCheckInterval"]
     if button.status.current<HealBot_Unit_Status["DC"] then
         if button.frame<10 then
             if button.status.isdead then
@@ -2454,7 +2458,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.aura.buff.nextcheck=false
                 button.text.nameupdate=true
                 HealBot_UpdateUnitClear(button)
-                HealBot_OnEvent_UnitHealth(button)
+                HealBot_Queue_UnitHealth(button)
                 HealBot_Text_setNameTag(button)
                 HealBot_Text_UpdateText(button)
                 HealBot_Action_setEnabled(button, true, button.status.alpha)
@@ -2465,8 +2469,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_OnEvent_RaidTargetUpdate(button)
                 end
                 HealBot_Action_UpdateBackground(button)
-                if button.health.incoming>0 then HealBot_OnEvent_HealsInUpdate(button) end
-                if button.health.absorbs>0 then HealBot_OnEvent_AbsorbsUpdate(button) end
+                if button.health.incoming>0 then HealBot_Queue_HealsInUpdate(button) end
+                if button.health.absorbs>0 then HealBot_Queue_AbsorbsUpdate(button) end
                 HealBot_RefreshUnit(button)
                 --HealBot_Action_EmergBarCheck(button, true)
                 button.status.hasres=false
@@ -3590,6 +3594,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.gref={}
     button.gref.aux={}
     button.gref.auxtxt={}
+    button.gref.auxglow={}
     button.gref.txt={}
     button.gref.txt.expire={}
     button.gref.txt.count={}
@@ -3662,6 +3667,19 @@ function HealBot_Action_InitButton(button, prefix)
         button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
         button.gref.auxtxt[x]:SetSpacing(0)
         button.gref.auxtxt[x]:SetWordWrap(false)
+        if button.id<500 then
+            button.gref.auxglow[x]=CreateFrame("Frame", prefix.."AuxGlow_"..button.id..x , button.gref.aux[x], BackdropTemplateMixin and "BackdropTemplate")
+            button.gref.auxglow[x]:SetFrameLevel(1001)
+            button.gref.auxglow[x]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                                edgeSize = 1,
+                                                insets = { left = 0, right = 0, top = 0, bottom = 0}})
+            button.gref.auxglow[x]:SetPoint("TOPLEFT", button.gref.aux[x], "TOPLEFT",-1,1)
+            button.gref.auxglow[x]:SetPoint("BOTTOMRIGHT", button.gref.aux[x], "BOTTOMRIGHT",1,-1)
+            button.gref.auxglow[x]:SetBackdropColor(0,0,0,0)
+            button.gref.auxglow[x]:SetBackdropBorderColor(0,0,0,0)
+            button.gref.auxglow[x]:EnableMouse(false)
+            button.gref.auxglow[x]:UnregisterAllEvents()
+        end
     end
     button.gref.txt["text"]=_G[button.bName.."Bar_text"]
     button.gref.txt["text"]:SetWordWrap(false)
@@ -3685,11 +3703,9 @@ function HealBot_Action_InitButton(button, prefix)
         if button.id<500 then
             button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
             button.gref.iconh[x]:SetFrameLevel(101)
-            button.gref.iconh[x]:SetBackdrop({
-                                               edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                               edgeSize = 2, 
-                                               insets = { left = 0, right = 0, top = 0, bottom = 0}
-                                              })
+            button.gref.iconh[x]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                              edgeSize = 2, 
+                                              insets = { left = 0, right = 0, top = 0, bottom = 0}})
             button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
             button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
             button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
@@ -3911,6 +3927,7 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.dirarrowshown=0 
     button.status.castend=-1
     button.status.isdead=false
+    button.status.isspirit=false
     button.status.resstart=0
     button.status.range=0
     button.status.rangespell=HealBot_RangeSpells["HEAL"]

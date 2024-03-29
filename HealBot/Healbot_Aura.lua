@@ -3004,7 +3004,7 @@ local onlyPlayers,prevMissingbuff=false,false
 function HealBot_Aura_CheckUnitBuff(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitBuff", button)
     if uaBuffData[button.id][uaBuffSlot].name==HEALBOT_SPIRIT_OF_REDEMPTION_NAME and button.health.current>0 then 
-        HealBot_Queue_UnitHealth(button)
+        C_Timer.After(0.1, function() HealBot_Action_UpdateTheDeadButton(button) end)
     end
     if not HealBot_Data["PALIVE"] then
         tGeneralBuffs=false
@@ -3157,6 +3157,47 @@ local function HealBot_Aura_UpdateUnitBuffsV2(button)
             break
         end
     end
+end
+
+local bExists=false
+local function HealBot_Aura_CheckUnitBuffExistsV2(button, buffName)
+      --HealBot_setCall("HealBot_Aura_CheckUnitBuffExistsV2", button)
+    uaZ=1
+    bExists=false
+    while true do
+        uaName = UnitBuff(button.unit,uaZ)
+        if uaName then
+            if uaName==buffName then
+                bExists=true
+                break
+            end
+            uaZ=uaZ+1
+        else
+            break
+        end
+    end
+    return bExists
+end
+
+local function HealBot_Aura_CheckUnitBuffExistsV9(button, buffName)
+      --HealBot_setCall("HealBot_Aura_CheckUnitBuffExistsV9", button)
+    bExists=false
+    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
+        uaName = ...
+        if uaName==buffName then
+            bExists=true
+        end
+    end)
+    return bExists
+end
+
+local HealBot_Aura_CheckUnitBuffExists=HealBot_Aura_CheckUnitBuffExistsV2
+if HEALBOT_GAME_VERSION>8 then
+    HealBot_Aura_CheckUnitBuffExists=HealBot_Aura_CheckUnitBuffExistsV9
+end
+
+function HealBot_Aura_CheckUnitBuffCurrent(button, buffName)
+    return HealBot_Aura_CheckUnitBuffExists(button, buffName)
 end
 
 local function HealBot_Aura_UpdateUnitBuffsV9(button)

@@ -331,7 +331,7 @@ function HealBot_Data_InitVars()
         HideOptions=true,
         ProtectPvP=false,
         RightButtonOptions=false,
-        PerfMode=2,
+        PerfMode=3,
         EventQueues={["BUFF"]=true,["DEBUFF"]=true,["HEALTH"]=false,["INHEALS"]=false,["ABSORBS"]=false,["POWER"]=false},
         HideUnlockedTag=true,
         SmartCast=true,
