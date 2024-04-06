@@ -702,8 +702,8 @@ local hbTimerFuncs={["INIT"]={
                         ["ResetClassIconTexture"]=HealBot_ResetClassIconTexture,
                         ["UpdateAllBuffIcons"]=HealBot_Aura_Update_UnitAllBuffIcons,
                         ["UpdateAllDebuffIcons"]=HealBot_Aura_Update_UnitAllDebuffIcons,
+                        ["UpdateActiveDebuffs"]=HealBot_Aura_UpdateActiveDebuffs,
                         ["InitAuraData"]=HealBot_Aura_InitData,
-                        ["BuffIdLookup"]=HealBot_Aura_BuffIdLookup,
                         ["UpdateAllHotBars"]=HealBot_UpdateAllHotBars,
                         ["CustomDebuffList"]=HealBot_Options_setCustomDebuffList,
                         ["CustomDebuffListPrep"]=HealBot_Options_prepCustomDebuffList,
@@ -833,6 +833,7 @@ local hbTimerFuncs={["INIT"]={
                         ["RefreshPartyNextRecalcPets"]=HealBot_Timers_nextRecalcPets,
                         ["RefreshPartyNextRecalcVehicle"]=HealBot_Timers_nextRecalcVehicle,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
+                        ["BuffIdLookup"]=HealBot_Aura_BuffIdLookup,
                     },
                    }
 

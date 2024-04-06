@@ -75,6 +75,7 @@ HealBot_Action_luVars["HazardMinAlpha"]=0.25
 HealBot_Action_luVars["PreCacheBars"]=0
 HealBot_Action_luVars["HealthDropTime"]=3
 HealBot_Action_luVars["deadCheckInterval"]=1
+HealBot_Action_luVars["NumAuxOutlines"]=0
 
 function HealBot_Action_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Action_setLuVars - "..vName)
@@ -935,7 +936,7 @@ function HealBot_Action_EnableIconGlow(button, r, g, b, iKey, gStyle, iconIdx, a
     end
     button.glow.icon[iconIdx]=gStyle
     if gStyle==2 then
-        HealBot_Action_EnableIconBorderHazard(button.gref.iconh[iconIdx], button.id..iconIdx, r, g, b, a)
+        HealBot_Action_EnableIconBorderHazard(button.gref.iconf[iconIdx], button.id..iconIdx, r, g, b, a)
     elseif gStyle==3 then
         HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, true, button.frame)
     elseif gStyle==4 then
@@ -948,7 +949,7 @@ end
 function HealBot_Action_DisableIconGlow(button, iKey, iconIdx)
       --HealBot_setCall("HealBot_Action_DisableIconGlow", button)
     if button.glow.icon[iconIdx]==2 then
-        HealBot_Action_DisableIconBorderHazard(button.gref.iconh[iconIdx], button.id..iconIdx)
+        HealBot_Action_DisableIconBorderHazard(button.gref.iconf[iconIdx], button.id..iconIdx)
     elseif button.glow.icon[iconIdx]==3 then
         HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, false)
     elseif button.glow.icon[iconIdx]==4 then
@@ -2373,16 +2374,18 @@ function HealBot_Action_UpdateUnitNotDead(button)
         HealBot_Timers_Set("SKINS","ActionIconsStateChange",0.1)
         HealBot_Timers_Set("AURA","PlayerCheckExtended",0.2)
     end
-    HealBot_OnEvent_UnitHealth(button)
+    HealBot_Queue_UnitHealth(button)
     HealBot_Action_UpdateBackground(button)
     button.status.hasres=false
     if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
     button.text.nameupdate=true
     HealBot_Text_setNameTag(button)
     HealBot_Text_UpdateText(button)
+    HealBot_Queue_UnitBuff(button)
     HealBot_RefreshUnit(button)
-    HealBot_Check_UnitAura(button)
     HealBot_Aux_ClearResBar(button)
+    button.text.update=true
+    button.status.slowupdate=true
 end
 
 function HealBot_Action_UpdateTheDeadButton(button)
@@ -3527,6 +3530,72 @@ function HealBot_Action_ResetrCalls()
     end
 end 
 
+function HealBot_Action_SetAuxGlow(button, id)
+      --HealBot_setCall("HealBot_Action_SetAuxGlow")
+    if button.id<500 then
+        button.gref.auxglow[id]=CreateFrame("Frame", "HB_AuxGlow_"..button.id..id , button.gref.aux[id], BackdropTemplateMixin and "BackdropTemplate")
+        button.gref.auxglow[id]:SetFrameLevel(1001)
+        button.gref.auxglow[id]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                            edgeSize = 1,
+                                            insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        button.gref.auxglow[id]:SetPoint("TOPLEFT", button.gref.aux[id], "TOPLEFT",-1,1)
+        button.gref.auxglow[id]:SetPoint("BOTTOMRIGHT", button.gref.aux[id], "BOTTOMRIGHT",1,-1)
+        button.gref.auxglow[id]:SetBackdropColor(0,0,0,0)
+        button.gref.auxglow[id]:SetBackdropBorderColor(0,0,0,0)
+        button.gref.auxglow[id]:EnableMouse(false)
+        button.gref.auxglow[id]:UnregisterAllEvents()
+        button.aux[id]["OUTLINE"]=true
+        HealBot_Action_luVars["NumAuxOutlines"]=HealBot_Action_luVars["NumAuxOutlines"]+1
+        HealBot_Debug_PerfUpdate("auxOutlines", HealBot_Action_luVars["NumAuxOutlines"])
+        HealBot_AddDebug("AuxGlog for f="..button.frame.." id="..id,"Aux",true)
+    end
+end
+
+local hbInitAuxGlow={}
+function HealBot_Action_InitAuxGlow(id, frame, button)
+      --HealBot_setCall("HealBot_Action_InitAuxGlow")
+    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["OUTLINE"] and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][frame]["USE"]>1 then
+        if not hbInitAuxGlow[frame] then hbInitAuxGlow[frame]={} end
+        if button then
+            if button.frame==frame and not button.aux[id]["OUTLINE"] then
+                HealBot_Action_SetAuxGlow(button, id)
+            end
+        elseif not hbInitAuxGlow[frame][id] then
+            hbInitAuxGlow[frame][id]=true
+            for _,xButton in pairs(HealBot_Unit_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for _,xButton in pairs(HealBot_Private_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for _,xButton in pairs(HealBot_Extra_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for _,xButton in pairs(HealBot_Pet_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for _,xButton in pairs(HealBot_Vehicle_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for _,xButton in pairs(HealBot_Enemy_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+        end
+    end
+end
+
 function HealBot_Action_InitButton(button, prefix)
       --HealBot_setCall("HealBot_Action_InitButton")
     erButton=HealBot_Emerg_Button[button.id]
@@ -3667,19 +3736,6 @@ function HealBot_Action_InitButton(button, prefix)
         button.gref.auxtxt[x]=_G[button.bName.."Aux"..x.."_Txt"]
         button.gref.auxtxt[x]:SetSpacing(0)
         button.gref.auxtxt[x]:SetWordWrap(false)
-        if button.id<500 then
-            button.gref.auxglow[x]=CreateFrame("Frame", prefix.."AuxGlow_"..button.id..x , button.gref.aux[x], BackdropTemplateMixin and "BackdropTemplate")
-            button.gref.auxglow[x]:SetFrameLevel(1001)
-            button.gref.auxglow[x]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                                edgeSize = 1,
-                                                insets = { left = 0, right = 0, top = 0, bottom = 0}})
-            button.gref.auxglow[x]:SetPoint("TOPLEFT", button.gref.aux[x], "TOPLEFT",-1,1)
-            button.gref.auxglow[x]:SetPoint("BOTTOMRIGHT", button.gref.aux[x], "BOTTOMRIGHT",1,-1)
-            button.gref.auxglow[x]:SetBackdropColor(0,0,0,0)
-            button.gref.auxglow[x]:SetBackdropBorderColor(0,0,0,0)
-            button.gref.auxglow[x]:EnableMouse(false)
-            button.gref.auxglow[x]:UnregisterAllEvents()
-        end
     end
     button.gref.txt["text"]=_G[button.bName.."Bar_text"]
     button.gref.txt["text"]:SetWordWrap(false)
@@ -3697,43 +3753,11 @@ function HealBot_Action_InitButton(button, prefix)
     for x=1,12 do
         button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
         button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
-        button.gref.iconf[x]:EnableMouse(false)
-        button.gref.iconf[x]:UnregisterAllEvents()
-        button.gref.iconf[x]:SetFrameLevel(0)
-        if button.id<500 then
-            button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
-            button.gref.iconh[x]:SetFrameLevel(101)
-            button.gref.iconh[x]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                              edgeSize = 2, 
-                                              insets = { left = 0, right = 0, top = 0, bottom = 0}})
-            button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
-            button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
-            button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
-            button.gref.iconh[x]:EnableMouse(false)
-            button.gref.iconh[x]:UnregisterAllEvents()
-        end
         button.glow.icon[x]=0
     end
     for x=51,60 do
         button.gref.icon[x]=_G[button.bName.."Bar8Icon"..x]
         button.gref.iconf[x]=_G[prefix.."ID"..button.id.."Icon"..x]
-        button.gref.iconf[x]:EnableMouse(false)
-        button.gref.iconf[x]:UnregisterAllEvents()
-        button.gref.iconf[x]:SetFrameLevel(0)
-        if button.id<500 then
-            button.gref.iconh[x]=CreateFrame("Frame", prefix.."IconBackBorder_"..button.id..x , button.gref.iconf[x], BackdropTemplateMixin and "BackdropTemplate")
-            button.gref.iconh[x]:SetFrameLevel(101)
-            button.gref.iconh[x]:SetBackdrop({
-                                               edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                               edgeSize = 2, 
-                                               insets = { left = 0, right = 0, top = 0, bottom = 0}
-                                              })
-            button.gref.iconh[x]:SetPoint("TOPLEFT", button.gref.iconf[x], "TOPLEFT",-1,1)
-            button.gref.iconh[x]:SetPoint("BOTTOMRIGHT", button.gref.iconf[x], "BOTTOMRIGHT",1,-1)
-            button.gref.iconh[x]:SetBackdropBorderColor(0, 0, 0, 0)
-            button.gref.iconh[x]:EnableMouse(false)
-            button.gref.iconh[x]:UnregisterAllEvents()
-        end
         button.glow.icon[x]=0
     end
     button.gref.icon[91]=_G[button.bName.."Bar8ExtraClass"]
@@ -3846,6 +3870,7 @@ function HealBot_Action_InitButton(button, prefix)
         button.aux[x]["FLASH"]=false
         button.aux[x]["STATIC"]=false
         button.aux[x]["FIXED"]=true
+        button.aux[x]["OUTLINE"]=false
         button.auxtxt[x]["R"]=1
         button.auxtxt[x]["G"]=1
         button.auxtxt[x]["B"]=1
@@ -4186,21 +4211,29 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
     ehb.isEmerg=true
     local iBtns
     for x=1,12 do
-        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb)
+        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb, BackdropTemplateMixin and "BackdropTemplate")
         iBtns.id=buttonId
         iBtns:SetScript("OnEnter", function() HealBot_Options_BuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_BuffClick(ghb, x, button) end)
         iBtns:SetFrameLevel(0)
+        iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                          edgeSize = 2, 
+                                          insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        iBtns:SetBackdropBorderColor(0, 0, 0, 0)
         iBtns:EnableMouse(false)
         iBtns:UnregisterAllEvents()
     end
     for x=51,60 do
-        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb)
+        iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb, BackdropTemplateMixin and "BackdropTemplate")
         iBtns.id=buttonId
         iBtns:SetScript("OnEnter", function() HealBot_Options_DebuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_DebuffClick(ghb, x, button) end)
+        iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                          edgeSize = 2, 
+                                          insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        iBtns:SetBackdropBorderColor(0, 0, 0, 0)
         iBtns:SetFrameLevel(0)
         iBtns:EnableMouse(false)
         iBtns:UnregisterAllEvents()
@@ -5784,6 +5817,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 hButton.auxreset=true
                 hButton.reset=true
                 HealBot_Action_UpdateBackground(hButton)
+                for x=1,9 do
+                    HealBot_Action_InitAuxGlow(x, frame, hButton)
+                end
             end
             
             if not hButton.regClicks then

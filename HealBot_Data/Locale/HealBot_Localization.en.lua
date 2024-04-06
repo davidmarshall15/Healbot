@@ -975,10 +975,12 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_MAX                       = "max"
     HEALBOT_CHAT_SELFPETSON                 = "Self Pet switched on"
     HEALBOT_CHAT_SELFPETSOFF                = "Self Pet switched off"
-    HEALBOT_CHAT_PLAYERROLESON              = "Allow player roles switched on"
-    HEALBOT_CHAT_PLAYERROLESOFF             = "Allow player roles switched off"
-    HEALBOT_ALLOWTALENTQUERYON              = "Allow querying player talents On"
-    HEALBOT_ALLOWTALENTQUERYOFF             = "Allow querying player talents Off"
+    HEALBOT_CHAT_PLAYERROLESON              = "Allow player roles switched"
+    HEALBOT_CHAT_PLAYERROLESOFF             = "Deny player roles switched"
+    HEALBOT_ALLOWTALENTQUERYON              = "Allow querying player talents"
+    HEALBOT_ALLOWTALENTQUERYOFF             = "Deny querying player talents"
+    HEALBOT_CLEARINSPECTON                  = "Execute Clear Inspection after Talent Query"
+    HEALBOT_CLEARINSPECTOFF                 = "Do not execute Clear Inspection"
     HEALBOT_WORD_PRIORITY                   = "Priority"
     HEALBOT_VISIBLE_RANGE                   = "Within 100 yards"
     HEALBOT_SPELL_RANGE                     = "Within spell range"
@@ -1701,7 +1703,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTION_EXCLUDEMOUNT_ON          = "Now Excluding Mount"
     HEALBOT_OPTION_EXCLUDEMOUNT_OFF         = "No longer Excluding Mount"
     HEALBOT_CMD_TOGGLEEXCLUDEMOUNT          = "Toggle Exclude Mount"
-    HEALBOT_CMD_SETFAVMOUNT                 = "Set Favourite Mount"
+    HEALBOT_CMD_TOGGLETALENTQUERY           = "Toggle Talent Query"
+    HEALBOT_CMD_TOGGLECLEARINSPECT          = "Toggle execute Clear Inspect after Talent Query"
     HEALBOT_OPTIONS_HIDEMINIBOSSFRAMES      = "Hide mini boss frames";
     HEALBOT_OPTIONS_HIDERAIDFRAMES          = "Hide raid frames";
     HEALBOT_OPTIONS_HIDEFOCUSFRAME          = "Hide focus frame";

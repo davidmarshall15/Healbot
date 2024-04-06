@@ -1,4 +1,4 @@
-## Interface: 11501
+## Interface: 11502
 ## Title: HealBot Tooltips
 ## Author: Strife
 ## Notes: Show tooltips on HealBot frames and in HealBot options.

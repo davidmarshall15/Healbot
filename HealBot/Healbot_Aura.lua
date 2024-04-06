@@ -64,14 +64,14 @@ local HealBot_Aura_luVars={}
 HealBot_Aura_luVars["TankUnit"]="x"
 HealBot_Aura_luVars["mapName"]=HEALBOT_WORD_OUTSIDE
 HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]=-1
-HealBot_Aura_luVars["cureOffCd"]=true
 HealBot_Aura_luVars["HotBarDebuff"]=0
 HealBot_Aura_luVars["ManaDrink"]=""
 HealBot_Aura_luVars["WellFed"]=""
 local classicAbsorbBonus={["DEFAULT"]=0}
 local classicAbsorbPWSMulti={["DEFAULT"]=1}
+local hbDebuffOnCD={}
 
-hbDebuffBleed={}
+local hbDebuffBleed={}
 hbDebuffBleed[703] = "Garrote"
 hbDebuffBleed[1079] = "Rip"
 hbDebuffBleed[1943] = "Rupture"
@@ -1891,6 +1891,7 @@ function HealBot_Aura_InitUnitBuffIcons(buttonId)
         uaBuffData[buttonId][i].sourceUnitIsPlayer=false
         uaBuffData[buttonId][i].spellId=0
     end
+    uaBuffData[buttonId].lastslot=0
 end
 
 function HealBot_Aura_InitUnitDebuffIcons(buttonId)
@@ -1919,6 +1920,7 @@ function HealBot_Aura_InitUnitDebuffIcons(buttonId)
         uaDebuffData[buttonId][i].spellId=0
         uaDebuffData[buttonId][i].isBossAura=false
     end
+    uaDebuffData[buttonId].lastslot=0
 end
 
 function HealBot_Aura_InitUnitExtraIcons(buttonId)
@@ -2259,11 +2261,7 @@ function HealBot_Aura_ShowCustomBuff(button)
     else
         buffCustomType=HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].name] or HealBot_Watch_HoT[uaBuffData[button.id][uaBuffSlot].spellId] or false
         if buffCustomType then
-            if buffCustomType=="A" then
-                HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
-                HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
-                return true, false
-            elseif buffCustomType=="S" then
+            if buffCustomType=="S" then
                 if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
                     HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
                     return true, false
@@ -2272,8 +2270,15 @@ function HealBot_Aura_ShowCustomBuff(button)
                 _, scbUnitClassEN = UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
                 if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
                     HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
+                    HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
                     return true, false
+                else
+                    return false, true
                 end
+            elseif buffCustomType=="A" then
+                HealBot_Options_MissingBuffPrio(uaBuffData[button.id][uaBuffSlot].spellId)
+                HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
+                return true, false
             end
         else
             if uaBuffData[button.id][uaBuffSlot].expirationTime>0 then
@@ -2288,7 +2293,10 @@ function HealBot_Aura_ShowCustomBuff(button)
                     else
                         _, scbUnitClassEN = UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
                         if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
+                            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
                             return true, false
+                        else
+                            return false, true
                         end
                     end
                     return false, false
@@ -2422,7 +2430,6 @@ function HealBot_Aura_setCustomDebuffFilterDisabled()
     HealBot_Timers_Set("AURA","CheckDebuffs")
 end
 
-local cureSpellsOnCD={}
 local cureSpellCD, cureSpellName=0, ""
 local debuffIsCurrent, cDebuffPrio=true, 15
 local ccdbCasterID, ccdbUnitCasterID, ccdbCheckthis, ccdbAlways=0,1,false,false
@@ -2466,7 +2473,8 @@ function HealBot_Aura_CheckCurDebuff(button)
         HealBot_Aura_CheckCurCustomDebuff(button, true)
     else
         ccdbCheckthis=false
-        if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId] and HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["typePrio"]<21 and HealBot_Aura_luVars["cureOffCd"] and 
+        if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaDebuffSlot].spellId] and HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId]["typePrio"]<21 and 
+           hbDebuffOnCD[uaDebuffData[button.id][uaDebuffSlot].debuffType]<HealBot_TimeNow and 
           (not HealBot_Config_Cures.IgnoreFriendDebuffs or not UnitIsFriend("player",uaDebuffData[button.id][uaDebuffSlot].sourceUnit)) and
           (uaDebuffData[button.id][uaDebuffSlot].duration==0 or uaDebuffData[button.id][uaDebuffSlot].duration>=HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]) then
             ccdbWatchTarget=HealBot_Options_retDebuffWatchTarget(uaDebuffData[button.id][uaDebuffSlot].debuffType);
@@ -3011,8 +3019,11 @@ function HealBot_Aura_CheckUnitBuff(button)
     elseif HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name] then
         uaBuffData[button.id][uaBuffSlot].name=GetItemInfo(HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name]) or uaBuffData[button.id][uaBuffSlot].name
     end
-    if not HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always then
+    if not uaBuffData[button.id][uaBuffSlot].isCurrent then
         uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff(button)
+        if uaIsCurrent then 
+            uaBuffData[button.id][uaBuffSlot].isCurrent=true 
+        end
     else
         uaIsCurrent=true
         uaIsCustom=HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isCustom
@@ -3051,8 +3062,11 @@ end
 
 function HealBot_Aura_CheckUnitDebuff(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuff", button)
-    if not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaDebuffSlot].spellId].always then
+    if not uaDebuffData[button.id][uaDebuffSlot].isCurrent then
         uaIsCurrent=HealBot_Aura_CheckCurDebuff(button)
+        if uaIsCurrent and (hbDebuffOnCD[uaDebuffData[button.id][uaDebuffSlot].debuffType] or 0)<(HealBot_TimeNow+2) then
+            uaDebuffData[button.id][uaDebuffSlot].isCurrent=true
+        end
     else
         uaIsCurrent=true
     end
@@ -3068,66 +3082,72 @@ function HealBot_Aura_CheckUnitDebuff(button)
 end
 
 local uaID,uaSlot="",0
-local function HealBot_Aura_PostUpdateUnitBuffsData(button)
+local function HealBot_Aura_PostUpdateUnitBuffsData(button, spellID, spellName)
       --HealBot_setCall("HealBot_Aura_PostUpdateUnitBuffsData", button)
-    if not HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId] or HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId].reset then
-        if not HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId] then HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]={} end
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[uaBuffData[button.id][uaSlot].name] or HealBot_Globals.HealBot_Custom_Buffs[uaBuffData[button.id][uaSlot].spellId] or 20
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["texture"]=uaBuffData[button.id][uaSlot].icon
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["name"]=uaBuffData[button.id][uaSlot].name
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["iconSet"]=HealBot_Aura_IconSet[uaBuffData[button.id][uaSlot].spellId]
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["always"]=false
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["isCustom"]=false
-        if HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["priority"]<10 then
-            HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["pid"]="x0"..HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["priority"]..uaBuffData[button.id][uaSlot].spellId
+    if not HealBot_AuraBuffCache[spellID] or HealBot_AuraBuffCache[spellID].reset then
+        if not HealBot_AuraBuffCache[spellID] then HealBot_AuraBuffCache[spellID]={} end
+        HealBot_AuraBuffCache[spellID]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[spellName] or HealBot_Globals.HealBot_Custom_Buffs[spellID] or 20
+        HealBot_AuraBuffCache[spellID]["texture"]=uaBuffData[button.id][uaSlot].icon
+        HealBot_AuraBuffCache[spellID]["name"]=spellName
+        HealBot_AuraBuffCache[spellID]["iconSet"]=HealBot_Aura_IconSet[spellID]
+        HealBot_AuraBuffCache[spellID]["always"]=false
+        HealBot_AuraBuffCache[spellID]["isCustom"]=false
+        if HealBot_AuraBuffCache[spellID]["priority"]<10 then
+            HealBot_AuraBuffCache[spellID]["pid"]="x0"..HealBot_AuraBuffCache[spellID]["priority"]..spellID
         else
-            HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["pid"]="x"..HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["priority"]..uaBuffData[button.id][uaSlot].spellId
+            HealBot_AuraBuffCache[spellID]["pid"]="x"..HealBot_AuraBuffCache[spellID]["priority"]..spellID
         end
-        HealBot_AuraBuffXRef[HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId]["pid"]]=uaBuffData[button.id][uaSlot].spellId
-        if HealBot_SpellID_LookupData[uaBuffData[button.id][uaSlot].name] and HealBot_SpellID_LookupData[uaBuffData[button.id][uaSlot].name]["CHECK"] then
-            HealBot_SpellID_LookupData[uaBuffData[button.id][uaSlot].name]["CHECK"]=false
-            HealBot_SpellID_LookupData[uaBuffData[button.id][uaSlot].name]["ID"]=uaBuffData[button.id][uaSlot].spellId
-            table.insert(HealBot_SpellID_LookupIdx,uaBuffData[button.id][uaSlot].name)
-            HealBot_Timers_Set("AURA","BuffIdLookup",1)
+        HealBot_AuraBuffXRef[HealBot_AuraBuffCache[spellID]["pid"]]=spellID
+        if HealBot_SpellID_LookupData[spellName] and HealBot_SpellID_LookupData[spellName]["CHECK"] then
+            HealBot_SpellID_LookupData[spellName]["CHECK"]=false
+            HealBot_SpellID_LookupData[spellName]["ID"]=spellID
+            table.insert(HealBot_SpellID_LookupIdx,spellName)
+            HealBot_Timers_Set("OOC","BuffIdLookup",1)
         end
+        uaBuffData[button.id][uaSlot].isCurrent=false
     end
-    if not HealBot_Aura_IconSet[uaBuffData[button.id][uaSlot].spellId] or HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId].reset then
-        HealBot_Aura_IconSet[uaBuffData[button.id][uaSlot].spellId]=HealBot_BuffIconSet[uaBuffData[button.id][uaSlot].spellId] or HealBot_BuffIconSet[uaBuffData[button.id][uaSlot].name] or 1
-        HealBot_Aura_ID[uaBuffData[button.id][uaSlot].name]=uaBuffData[button.id][uaSlot].spellId
-        HealBot_AuraBuffCache[uaBuffData[button.id][uaSlot].spellId].reset=false
+    if not HealBot_Aura_IconSet[spellID] or HealBot_AuraBuffCache[spellID].reset then
+        HealBot_Aura_IconSet[spellID]=HealBot_BuffIconSet[spellID] or HealBot_BuffIconSet[spellName] or 1
+        HealBot_Aura_ID[spellName]=spellID
+        HealBot_AuraBuffCache[spellID].reset=false
     end
-    HealBot_UnitBuffCurrent[button.guid][uaBuffData[button.id][uaSlot].name]=HealBot_TimeNow
-    HealBot_Aura_BuffUpdate_Plugins(button, uaBuffData[button.id][uaSlot].name, HealBot_Globals.CustomBuffTag[uaBuffData[button.id][uaSlot].spellId] or HealBot_BuffTagNames[uaBuffData[button.id][uaSlot].name], uaBuffData[button.id][uaSlot].count, true, uaBuffData[button.id][uaSlot].sourceUnitIsPlayer)
+    HealBot_UnitBuffCurrent[button.guid][spellName]=HealBot_TimeNow
+    HealBot_Aura_BuffUpdate_Plugins(button, spellName, HealBot_Globals.CustomBuffTag[spellID] or HealBot_BuffTagNames[spellName], uaBuffData[button.id][uaSlot].count, true, uaBuffData[button.id][uaSlot].sourceUnitIsPlayer)
 end
 
 local function HealBot_Aura_UpdateUnitBuffsData(button)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsData", button)
     if not HealBot_ExcludeBuffInCache[uaSpellId] and uaExpirationTime and uaSlot<20 then
         uaSlot=uaSlot+1
-        uaBuffData[button.id][uaSlot].name=uaName
-        uaBuffData[button.id][uaSlot].icon=uaTexture
-        uaBuffData[button.id][uaSlot].count=uaCount
-        if hbDebuffBleed[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureType(uaDebuffType)) then
-            uaBuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
-        else
-            uaBuffData[button.id][uaSlot].debuffType=uaDebuffType
-        end
-        uaBuffData[button.id][uaSlot].duration=uaDuration
-        uaBuffData[button.id][uaSlot].expirationTime=uaExpirationTime
-        if uaUnitCaster then
-            uaBuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
-            if UnitIsUnit(uaUnitCaster,"player") then
-                uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+        if uaBuffData[button.id][uaSlot].spellId~=uaSpellId or uaBuffData[button.id][uaSlot].sourceUnit~=(uaUnitCaster or "nil") then
+            uaBuffData[button.id][uaSlot].name=uaName
+            uaBuffData[button.id][uaSlot].icon=uaTexture
+            if hbDebuffBleed[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureType(uaDebuffType)) then
+                uaBuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
             else
+                uaBuffData[button.id][uaSlot].debuffType=uaDebuffType
+            end
+            uaBuffData[button.id][uaSlot].duration=uaDuration
+            if uaUnitCaster then
+                uaBuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
+                if UnitIsUnit(uaUnitCaster,"player") then
+                    uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+                else
+                    uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+                end
+            else
+                uaBuffData[button.id][uaSlot].sourceUnit="nil"
                 uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=false
             end
-        else
-            uaBuffData[button.id][uaSlot].sourceUnit="nil" 
-            uaBuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+            uaBuffData[button.id][uaSlot].spellId=uaSpellId
+            if not HealBot_AuraBuffCache[uaSpellId] or not HealBot_AuraBuffCache[uaSpellId].always then
+                uaBuffData[button.id][uaSlot].isCurrent=false
+            end
         end
-        uaBuffData[button.id][uaSlot].spellId=uaSpellId
+        uaBuffData[button.id][uaSlot].count=uaCount
+        uaBuffData[button.id][uaSlot].expirationTime=uaExpirationTime
         uaBuffData[button.id].lastslot=uaSlot
-        HealBot_Aura_PostUpdateUnitBuffsData(button)
+        HealBot_Aura_PostUpdateUnitBuffsData(button, uaSpellId, uaName)
     end
 end
 
@@ -3159,6 +3179,64 @@ local function HealBot_Aura_UpdateUnitBuffsV2(button)
     end
 end
 
+local function HealBot_Aura_UpdateUnitBuffsV9(button)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
+    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
+        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = ...
+        HealBot_Aura_UpdateUnitBuffsData(button)
+    end)
+end
+
+local function HealBot_Aura_UpdateUnitBuffsV9Data(auraData)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Data")
+    if not HealBot_ExcludeBuffInCache[auraData.spellId] and auraData.expirationTime and uaSlot<20 then
+        uaSlot=uaSlot+1
+        if uaBuffData[uaID][uaSlot].spellId~=auraData.spellId or uaBuffData[uaID][uaSlot].sourceUnit~=(auraData.sourceUnit or "nil") then
+            uaBuffData[uaID][uaSlot].name=auraData.name
+            uaBuffData[uaID][uaSlot].icon=auraData.icon
+            if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureType(auraData.dispelName)) then
+                uaBuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
+            else
+                uaBuffData[uaID][uaSlot].debuffType=auraData.dispelName
+            end
+            uaBuffData[uaID][uaSlot].duration=auraData.duration
+            if auraData.sourceUnit then
+                uaBuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
+                if UnitIsUnit(auraData.sourceUnit,"player") then
+                    uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=true
+                else
+                    uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+                end
+            else
+                uaBuffData[uaID][uaSlot].sourceUnit="nil"
+                uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+            end
+            uaBuffData[uaID][uaSlot].spellId=auraData.spellId
+            if not HealBot_AuraBuffCache[auraData.spellId] or not HealBot_AuraBuffCache[auraData.spellId].always then
+                uaBuffData[uaID][uaSlot].isCurrent=false
+            end
+        end
+        uaBuffData[uaID][uaSlot].count=auraData.applications
+        uaBuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
+        uaBuffData[uaID].lastslot=uaSlot
+        HealBot_Aura_PostUpdateUnitBuffsData(HealBot_Buttons[uaID], auraData.spellId, auraData.name)
+    end
+--    HealBot_Aura_CheckUnitBuff(uaButton)
+end
+
+local function HealBot_Aura_UpdateUnitBuffsV9Packed(button)
+      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Packed", button)
+    uaID=button.id
+    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, HealBot_Aura_UpdateUnitBuffsV9Data, true)
+end
+
+local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
+if HEALBOT_GAME_VERSION>8 then
+    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9Packed
+elseif HEALBOT_GAME_VERSION<2 and libCD then
+    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
+end
+
 local bExists=false
 local function HealBot_Aura_CheckUnitBuffExistsV2(button, buffName)
       --HealBot_setCall("HealBot_Aura_CheckUnitBuffExistsV2", button)
@@ -3180,15 +3258,11 @@ local function HealBot_Aura_CheckUnitBuffExistsV2(button, buffName)
 end
 
 local function HealBot_Aura_CheckUnitBuffExistsV9(button, buffName)
-      --HealBot_setCall("HealBot_Aura_CheckUnitBuffExistsV9", button)
-    bExists=false
-    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
-        uaName = ...
-        if uaName==buffName then
-            bExists=true
-        end
-    end)
-    return bExists
+    if C_UnitAuras.GetAuraDataBySpellName(button.unit, buffName, "HELPFUL") then
+        return true
+    else
+        return false
+    end
 end
 
 local HealBot_Aura_CheckUnitBuffExists=HealBot_Aura_CheckUnitBuffExistsV2
@@ -3200,89 +3274,38 @@ function HealBot_Aura_CheckUnitBuffCurrent(button, buffName)
     return HealBot_Aura_CheckUnitBuffExists(button, buffName)
 end
 
-local function HealBot_Aura_UpdateUnitBuffsV9(button)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9", button)
-    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, function(...)
-        uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = ...
-        HealBot_Aura_UpdateUnitBuffsData(button)
-    end)
-end
-
-local function HealBot_Aura_UpdateUnitBuffsV9Data(auraData)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Data")
-    if not HealBot_ExcludeBuffInCache[auraData.spellId] and auraData.expirationTime and uaSlot<20 then
-        uaSlot=uaSlot+1
-        uaBuffData[uaID][uaSlot].name=auraData.name
-        uaBuffData[uaID][uaSlot].icon=auraData.icon
-        uaBuffData[uaID][uaSlot].count=auraData.applications
-        if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureType(auraData.dispelName)) then
-            uaBuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
-        else
-            uaBuffData[uaID][uaSlot].debuffType=auraData.dispelName
-        end
-        uaBuffData[uaID][uaSlot].duration=auraData.duration
-        uaBuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
-        if auraData.sourceUnit then
-            uaBuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
-            if UnitIsUnit(auraData.sourceUnit,"player") then
-                uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=true
-            else
-                uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-            end
-        else
-            uaBuffData[uaID][uaSlot].sourceUnit="nil" 
-            uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-        end
-        uaBuffData[uaID][uaSlot].spellId=auraData.spellId
-        uaBuffData[uaID].lastslot=uaSlot
-        HealBot_Aura_PostUpdateUnitBuffsData(HealBot_Buttons[uaID], auraData.spellId)
-    end
---    HealBot_Aura_CheckUnitBuff(uaButton)
-end
-
-local function HealBot_Aura_UpdateUnitBuffsV9Packed(button)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Packed", button)
-    uaID=button.id
-    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, HealBot_Aura_UpdateUnitBuffsV9Data, true)
-end
-
-local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
-if HEALBOT_GAME_VERSION>8 then
-    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9Packed
-elseif HEALBOT_GAME_VERSION<2 and libCD then
-    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
-end
-
-local function HealBot_Aura_PostUpdateUnitDebuffsData(button)
+local function HealBot_Aura_PostUpdateUnitDebuffsData(button, spellID, spellName)
       --HealBot_setCall("HealBot_Aura_PostUpdateUnitDebuffsData", button)
-    if not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId] or HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId].reset then
-        if not HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId] then HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]={} end
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["texture"]=uaDebuffData[button.id][uaSlot].icon
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["name"]=uaDebuffData[button.id][uaSlot].name
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["iconSet"]=HealBot_Aura_IconSet[uaDebuffData[button.id][uaSlot].spellId]
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["customPrio"], HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["typePrio"]
-          = HealBot_Options_retDebuffPriority(uaDebuffData[button.id][uaSlot].spellId, uaDebuffData[button.id][uaSlot].name, uaDebuffData[button.id][uaSlot].debuffType)
-        if HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["customPrio"]<HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["typePrio"] then
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["priority"]=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["customPrio"]
+    if not HealBot_AuraDebuffCache[spellID] or HealBot_AuraDebuffCache[spellID].reset then
+        if not HealBot_AuraDebuffCache[spellID] then HealBot_AuraDebuffCache[spellID]={} end
+        HealBot_AuraDebuffCache[spellID]["texture"]=uaDebuffData[button.id][uaSlot].icon
+        HealBot_AuraDebuffCache[spellID]["name"]=spellName
+        HealBot_AuraDebuffCache[spellID]["iconSet"]=HealBot_Aura_IconSet[spellID]
+        HealBot_AuraDebuffCache[spellID]["customPrio"], HealBot_AuraDebuffCache[spellID]["typePrio"] = HealBot_Options_retDebuffPriority(spellID, spellName, uaDebuffData[button.id][uaSlot].debuffType)
+        if HealBot_AuraDebuffCache[spellID]["customPrio"]<HealBot_AuraDebuffCache[spellID]["typePrio"] then
+            HealBot_AuraDebuffCache[spellID]["priority"]=HealBot_AuraDebuffCache[spellID]["customPrio"]
         else
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["priority"]=HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["typePrio"]
+            HealBot_AuraDebuffCache[spellID]["priority"]=HealBot_AuraDebuffCache[spellID]["typePrio"]
         end
-        if HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["priority"]<10 then
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["pid"]="x0"..HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["priority"]..uaDebuffData[button.id][uaSlot].spellId
+        if HealBot_AuraDebuffCache[spellID]["priority"]<10 then
+            HealBot_AuraDebuffCache[spellID]["pid"]="x0"..HealBot_AuraDebuffCache[spellID]["priority"]..spellID
         else
-            HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["pid"]="x"..HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["priority"]..uaDebuffData[button.id][uaSlot].spellId
+            HealBot_AuraDebuffCache[spellID]["pid"]="x"..HealBot_AuraDebuffCache[spellID]["priority"]..spellID
         end
-        HealBot_AuraDebuffXRef[HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId]["pid"]]=uaDebuffData[button.id][uaSlot].spellId
-        if not HealBot_Globals.HealBot_Custom_Debuffs[uaDebuffData[button.id][uaSlot].spellId] and not hbUpCustomDebuffsDone[uaDebuffData[button.id][uaSlot].name] then
-            hbUpCustomDebuffsDone[uaDebuffData[button.id][uaSlot].name]=true
-            HealBot_Aura_AutoUpdateCustomDebuff(button, uaDebuffData[button.id][uaSlot].name, uaDebuffData[button.id][uaSlot].spellId)
+        HealBot_AuraDebuffXRef[HealBot_AuraDebuffCache[spellID]["pid"]]=spellID
+        if not HealBot_Globals.HealBot_Custom_Debuffs[spellID] and not hbUpCustomDebuffsDone[spellName] then
+            hbUpCustomDebuffsDone[spellName]=true
+            HealBot_Aura_AutoUpdateCustomDebuff(button, spellName, spellID)
         end
+        uaDebuffData[button.id][uaSlot].isCurrent=false
+    elseif (hbDebuffOnCD[uaDebuffData[button.id][uaSlot].debuffType] or 0)>=(HealBot_TimeNow-2) then
+        uaDebuffData[button.id][uaSlot].isCurrent=false
     end
-    if not HealBot_Aura_IconSet[uaDebuffData[button.id][uaSlot].spellId] or HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId].reset then
-        HealBot_Aura_IconSet[uaDebuffData[button.id][uaSlot].spellId]=HealBot_DebuffIconSet[uaDebuffData[button.id][uaSlot].spellId] or HealBot_DebuffIconSet[uaDebuffData[button.id][uaSlot].name] or 1
-        HealBot_Aura_ID[uaDebuffData[button.id][uaSlot].name]=uaDebuffData[button.id][uaSlot].spellId
-        HealBot_AuraDebuffCache[uaDebuffData[button.id][uaSlot].spellId].reset=false
-        if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaSlot].spellId]==nil then
+    if not HealBot_Aura_IconSet[spellID] or HealBot_AuraDebuffCache[spellID].reset then
+        HealBot_Aura_IconSet[spellID]=HealBot_DebuffIconSet[spellID] or HealBot_DebuffIconSet[spellName] or 1
+        HealBot_Aura_ID[spellName]=spellID
+        HealBot_AuraDebuffCache[spellID].reset=false
+        if HealBot_Aura_CanDispell[spellID]==nil then
             local aId=1
             while true do
                 local _, _, _, _, _, _, _, _, _, aSpellId = UnitAura(button.unit,aId,"HARMFUL|RAID")
@@ -3290,11 +3313,11 @@ local function HealBot_Aura_PostUpdateUnitDebuffsData(button)
                     aId=aId+1
                     HealBot_Aura_CanDispell[aSpellId]=true
                 else
-                    if HealBot_Aura_CanDispell[uaDebuffData[button.id][uaSlot].spellId]==nil then
+                    if HealBot_Aura_CanDispell[spellID]==nil then
                         if uaDebuffData[button.id][uaSlot].debuffType and HealBot_Options_retDebuffCureType(uaDebuffData[button.id][uaSlot].debuffType) then
-                            HealBot_Aura_CanDispell[uaDebuffData[button.id][uaSlot].spellId]=true
+                            HealBot_Aura_CanDispell[spellID]=true
                         else
-                            HealBot_Aura_CanDispell[uaDebuffData[button.id][uaSlot].spellId]=false
+                            HealBot_Aura_CanDispell[spellID]=false
                         end
                     end
                     break
@@ -3302,8 +3325,8 @@ local function HealBot_Aura_PostUpdateUnitDebuffsData(button)
             end
         end
     end
-    HealBot_UnitDebuffCurrent[button.guid][uaDebuffData[button.id][uaSlot].name]=HealBot_TimeNow
-    HealBot_Aura_DebuffUpdate_Plugins(button, uaDebuffData[button.id][uaSlot].name, HealBot_Globals.CDCTag[uaDebuffData[button.id][uaSlot].spellId] or HealBot_DebuffTagNames[uaDebuffData[button.id][uaSlot].name], uaDebuffData[button.id][uaSlot].count, true, uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer)
+    HealBot_UnitDebuffCurrent[button.guid][spellName]=HealBot_TimeNow
+    HealBot_Aura_DebuffUpdate_Plugins(button, spellName, HealBot_Globals.CDCTag[spellID] or HealBot_DebuffTagNames[spellName], uaDebuffData[button.id][uaSlot].count, true, uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer)
 end
 
 --hbDebuffBleed[32407] = "Strange Aura"
@@ -3320,31 +3343,36 @@ local function HealBot_Aura_UpdateUnitDebuffsData(button)
         --    HealBot_Aura_IconSet[uaSpellId].spellId]=3
         --end
         uaSlot=uaSlot+1
-        uaDebuffData[button.id][uaSlot].name=uaName
-        uaDebuffData[button.id][uaSlot].icon=uaTexture
-        uaDebuffData[button.id][uaSlot].count=uaCount
-        if hbDebuffBleed[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureSpell(uaDebuffType)) then
-            uaDebuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
-        else
-            uaDebuffData[button.id][uaSlot].debuffType=uaDebuffType
-        end
-        uaDebuffData[button.id][uaSlot].duration=uaDuration
-        uaDebuffData[button.id][uaSlot].expirationTime=uaExpirationTime
-        if uaUnitCaster then
-            uaDebuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
-            if UnitIsUnit(uaUnitCaster,"player") then
-                uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+        if uaDebuffData[button.id][uaSlot].spellId~=uaSpellId or uaDebuffData[button.id][uaSlot].sourceUnit~=(uaUnitCaster or "nil") then
+            uaDebuffData[button.id][uaSlot].name=uaName
+            uaDebuffData[button.id][uaSlot].icon=uaTexture
+            if hbDebuffBleed[uaSpellId] and (not uaDebuffType or not HealBot_Options_retDebuffCureSpell(uaDebuffType)) then
+                uaDebuffData[button.id][uaSlot].debuffType=HEALBOT_BLEED_en
             else
+                uaDebuffData[button.id][uaSlot].debuffType=uaDebuffType
+            end
+            uaDebuffData[button.id][uaSlot].duration=uaDuration
+            if uaUnitCaster then
+                uaDebuffData[button.id][uaSlot].sourceUnit=uaUnitCaster
+                if UnitIsUnit(uaUnitCaster,"player") then
+                    uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=true
+                else
+                    uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+                end
+            else
+                uaDebuffData[button.id][uaSlot].sourceUnit="nil"
                 uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=false
             end
-        else
-            uaDebuffData[button.id][uaSlot].sourceUnit="nil" 
-            uaDebuffData[button.id][uaSlot].sourceUnitIsPlayer=false
+            uaDebuffData[button.id][uaSlot].spellId=uaSpellId
+            uaDebuffData[button.id][uaSlot].isBossAura=uaIsBossDebuff
+            if not HealBot_AuraDebuffCache[uaSpellId] or not HealBot_AuraDebuffCache[uaSpellId].always then
+                uaDebuffData[button.id][uaSlot].isCurrent=false
+            end
         end
-        uaDebuffData[button.id][uaSlot].spellId=uaSpellId
-        uaDebuffData[button.id][uaSlot].isBossAura=uaIsBossDebuff
+        uaDebuffData[button.id][uaSlot].count=uaCount
+        uaDebuffData[button.id][uaSlot].expirationTime=uaExpirationTime
         uaDebuffData[button.id].lastslot=uaSlot
-        HealBot_Aura_PostUpdateUnitDebuffsData(button)
+        HealBot_Aura_PostUpdateUnitDebuffsData(button, uaSpellId, uaName)
     end
 end
 
@@ -3408,31 +3436,36 @@ local function HealBot_Aura_UpdateUnitDebuffsV9Data(auraData)
         --    HealBot_Aura_IconSet[auraData.spellId].spellId]=3
         end
         uaSlot=uaSlot+1
-        uaDebuffData[uaID][uaSlot].name=auraData.name
-        uaDebuffData[uaID][uaSlot].icon=auraData.icon
-        uaDebuffData[uaID][uaSlot].count=auraData.applications
-        if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureSpell(auraData.dispelName)) then
-            uaDebuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
-        else
-            uaDebuffData[uaID][uaSlot].debuffType=auraData.dispelName
-        end
-        uaDebuffData[uaID][uaSlot].duration=auraData.duration
-        uaDebuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
-        if auraData.sourceUnit then
-            uaDebuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
-            if UnitIsUnit(auraData.sourceUnit,"player") then
-                uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=true
+        if uaDebuffData[uaID][uaSlot].spellId~=auraData.spellId or uaDebuffData[uaID][uaSlot].sourceUnit~=(auraData.sourceUnit or "nil") then
+            uaDebuffData[uaID][uaSlot].name=auraData.name
+            uaDebuffData[uaID][uaSlot].icon=auraData.icon
+            if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureSpell(auraData.dispelName)) then
+                uaDebuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
             else
+                uaDebuffData[uaID][uaSlot].debuffType=auraData.dispelName
+            end
+            uaDebuffData[uaID][uaSlot].duration=auraData.duration
+            if auraData.sourceUnit then
+                uaDebuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
+                if UnitIsUnit(auraData.sourceUnit,"player") then
+                    uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=true
+                else
+                    uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+                end
+            else
+                uaDebuffData[uaID][uaSlot].sourceUnit="nil"
                 uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
             end
-        else
-            uaDebuffData[uaID][uaSlot].sourceUnit="nil" 
-            uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
+            uaDebuffData[uaID][uaSlot].spellId=auraData.spellId
+            uaDebuffData[uaID][uaSlot].isBossAura=auraData.isBossAura
+            if not HealBot_AuraDebuffCache[auraData.spellId] or not HealBot_AuraDebuffCache[auraData.spellId].always then
+                uaDebuffData[uaID][uaSlot].isCurrent=false
+            end
         end
-        uaDebuffData[uaID][uaSlot].spellId=auraData.spellId
-        uaDebuffData[uaID][uaSlot].isBossAura=auraData.isBossAura
+        uaDebuffData[uaID][uaSlot].count=auraData.applications
+        uaDebuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
         uaDebuffData[uaID].lastslot=uaSlot
-        HealBot_Aura_PostUpdateUnitDebuffsData(HealBot_Buttons[uaID])
+        HealBot_Aura_PostUpdateUnitDebuffsData(HealBot_Buttons[uaID], auraData.spellId, auraData.name)
     end
 end
 
@@ -3625,17 +3658,20 @@ end
 
 function HealBot_Aura_resetSpellCD()
       --HealBot_setCall("HealBot_Aura_resetSpellCD")
-    cureSpellsOnCD={}
-    HealBot_Aura_luVars["cureOffCd"]=true
+    hbDebuffOnCD[HEALBOT_DISEASE_en]=0
+    hbDebuffOnCD[HEALBOT_MAGIC_en]=0
+    hbDebuffOnCD[HEALBOT_CURSE_en]=0
+    hbDebuffOnCD[HEALBOT_POISON_en]=0
+    hbDebuffOnCD[HEALBOT_BLEED_en]=0
+end
+HealBot_Aura_resetSpellCD()
+
+function HealBot_Aura_setDebuffTypeCD(dType, eTime)
+    hbDebuffOnCD[dType]=eTime
 end
 
-local cureSpellNextCheck=0
-function HealBot_Aura_CureSpellOnCD()
-      --HealBot_setCall("HealBot_Aura_CureSpellOnCD")
-    cureSpellNextCheck=(HealBot_TimeNow+cureSpellCD)-0.1
-    HealBot_setLuVars("MaskAuraCheckDebuff", cureSpellNextCheck)
-    cureSpellsOnCD[cureSpellName]=cureSpellNextCheck
-    HealBot_Aura_luVars["cureOffCd"]=false
+function HealBot_Aura_UpdateActiveDebuffs()
+    HealBot_Aura_UpdateAllIsCurrentDebuffs()
 end
 
 HealBot_Aura_luVars["bossHlth"]=250000
@@ -3665,6 +3701,12 @@ function HealBot_Aura_SetBossHealth(inInst)
     HealBot_AddDebug("Boss Min Health "..HealBot_Aura_luVars["bossHlth"],"Mobs",true)
 end
 
+function HealBot_Aura_UnitDebuffsUpdateWhenActive(button)
+    if uaDebuffData[button.id].lastslot>0 then
+        button.aura.debuff.update=true
+    end
+end
+
 local debuffBarCol,debuffIconIndex=0,0
 function HealBot_Aura_CheckUnitDebuffs(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuffs", button)
@@ -3690,27 +3732,6 @@ function HealBot_Aura_CheckUnitDebuffs(button)
         if uaDebuffData[button.id].lastslot>0 then
             for x=1,uaDebuffData[button.id].lastslot do
                 uaDebuffSlot=x
-                if HEALBOT_GAME_VERSION>8 and HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
-                    cureSpellCD, cureSpellName=HealBot_Options_retDebuffWatchTargetCD(uaDebuffData[button.id][uaDebuffSlot].debuffType)
-                    HealBot_Aura_luVars["cureOffCd"]=true
-                    if cureSpellName then
-                        if not cureSpellsOnCD[cureSpellName] then
-                            if cureSpellCD>2 then
-                                HealBot_Aura_CureSpellOnCD()
-                                --HealBot_CheckAllActiveDebuffs()
-                            end
-                        elseif cureSpellsOnCD[cureSpellName]<HealBot_TimeNow then
-                            if cureSpellCD>2 then
-                                HealBot_Aura_CureSpellOnCD()
-                            else
-                                cureSpellsOnCD[cureSpellName]=nil
-                                --HealBot_CheckAllActiveDebuffsSlow()
-                            end
-                        else
-                            HealBot_Aura_luVars["cureOffCd"]=false
-                        end
-                    end
-                end
                 HealBot_Aura_CheckUnitDebuff(button)
             end
         end
@@ -4210,6 +4231,49 @@ function HealBot_Aura_Update_UnitAllBuffIcons(button)
             for i=11,xButton.icon.buff.count[3]+10 do
                 HealBot_Aura_UpdateBuffIcon(xButton, HealBot_UnitBuffIcons[xButton.id][i], i, false, HealBot_UnitBuffIcons[xButton.id][i]["spellId"])
             end
+        end
+    end
+end
+
+function HealBot_Aura_UpdateAllIsCurrentDebuffs()
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        if uaDebuffData[xButton.id].lastslot>0 then
+            for x=1,uaDebuffData[xButton.id].lastslot do
+                uaDebuffData[xButton.id][x].isCurrent=false
+            end
+            HealBot_Queue_UnitDebuff(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        if uaDebuffData[xButton.id].lastslot>0 then
+            for x=1,uaDebuffData[xButton.id].lastslot do
+                uaDebuffData[xButton.id][x].isCurrent=false
+            end
+            HealBot_Queue_UnitDebuff(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        if uaDebuffData[xButton.id].lastslot>0 then
+            for x=1,uaDebuffData[xButton.id].lastslot do
+                uaDebuffData[xButton.id][x].isCurrent=false
+            end
+            HealBot_Queue_UnitDebuff(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        if uaDebuffData[xButton.id].lastslot>0 then
+            for x=1,uaDebuffData[xButton.id].lastslot do
+                uaDebuffData[xButton.id][x].isCurrent=false
+            end
+            HealBot_Queue_UnitDebuff(xButton)
+        end
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        if uaDebuffData[xButton.id].lastslot>0 then
+            for x=1,uaDebuffData[xButton.id].lastslot do
+                uaDebuffData[xButton.id][x].isCurrent=false
+            end
+            HealBot_Queue_UnitDebuff(xButton)
         end
     end
 end

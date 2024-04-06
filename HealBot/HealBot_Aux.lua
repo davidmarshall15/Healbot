@@ -113,7 +113,9 @@ local function HealBot_Aux_clearBar(button, id)
         button.gref.aux[id]:SetStatusBarColor(0,0,0,0)
         button.gref.aux[id]:SetValue(0)
     end
-    button.gref.auxglow[id]:SetBackdropBorderColor(0,0,0,0)
+    if button.aux[id]["OUTLINE"] then
+        button.gref.auxglow[id]:SetBackdropBorderColor(0,0,0,0)
+    end
 end
 
 local function HealBot_Aux_clearAllBar(id)
@@ -233,7 +235,7 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.gref.aux[id]:SetStatusBarColor(button.aux[id]["R"], button.aux[id]["G"], button.aux[id]["B"], button.status.alpha)
         end
     end
-    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OUTLINE"] then
+    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OUTLINE"] and button.aux[id]["OUTLINE"] then
         button.gref.auxglow[id]:SetBackdropBorderColor(button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"],1)
     end
     if text then

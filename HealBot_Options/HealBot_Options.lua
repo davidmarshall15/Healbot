@@ -396,6 +396,24 @@ function HealBot_Options_InitDebuffTypes()
     HealBot_Debuff_Types[HEALBOT_BLEED] =  {HEALBOT_BLEED_en}
 end
 
+local hbDebuffSpellEnd,hbDebuffSpellStart,hbDebuffSpellDuration=0,0,0
+function HealBot_Options_DebuffSpellAuraCD(spellName)
+      --HealBot_setCall("HealBot_Options_DebuffSpellAuraCD")
+    if HealBot_Debuff_Types[spellName] then
+        hbDebuffSpellStart, hbDebuffSpellDuration = GetSpellCooldown(spellName)
+        if hbDebuffSpellDuration>2 then
+            hbDebuffSpellEnd=((hbDebuffSpellStart or 0)+(hbDebuffSpellDuration or 0))-0.1
+            table.foreach(HealBot_Debuff_Types[spellName], function (i,dType)
+                HealBot_Aura_setDebuffTypeCD(dType, hbDebuffSpellEnd)
+            end)
+            HealBot_Timers_Set("AURA","UpdateActiveDebuffs")
+            C_Timer.After(hbDebuffSpellDuration-0.05, HealBot_CheckAllDebuffs)
+    --HealBot_AddDebug("DebuffSpellAuraCD spell="..spellName.." TimeNow="..HealBot_TimeNow,"DebuffCD",true)
+    --HealBot_AddDebug("Start="..hbDebuffSpellStart.." Duration="..hbDebuffSpellDuration.." Remain="..(hbDebuffSpellEnd-HealBot_TimeNow),"DebuffCD",true)
+        end
+    end
+end
+
 local HealBot_ExtraSkins_Image
 local hbCustomDebuff_Text={}
 local hbCustomBuff_Text={}
@@ -1030,7 +1048,7 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_GLOBAL,
     }
     
-    if HEALBOT_GAME_VERSION==3 then
+    if HEALBOT_GAME_VERSION==1 then
         HealBot_Options_hbCommands_List = {
             HEALBOT_WORDS_NONE,
             HEALBOT_CMD_CLEARBLACKLIST,
@@ -1051,7 +1069,6 @@ function HealBot_Options_setLists()
             HEALBOT_CMD_RESETSKINGROUP,
             HEALBOT_CMD_RESETSKINRAID25,
             HEALBOT_CMD_RESETSKINRAID40,
-            HEALBOT_CMD_SETFAVMOUNT,
         }
     else
         HealBot_Options_hbCommands_List = {
@@ -1074,6 +1091,8 @@ function HealBot_Options_setLists()
             HEALBOT_CMD_RESETSKINGROUP,
             HEALBOT_CMD_RESETSKINRAID25,
             HEALBOT_CMD_RESETSKINRAID40,
+            HEALBOT_CMD_TOGGLETALENTQUERY,
+            HEALBOT_CMD_TOGGLECLEARINSPECT,
         }
     end
 
@@ -2172,16 +2191,6 @@ function HealBot_Options_ReloadUIAreYouSure()
     HealBot_Options_ReloadUI(HEALBOT_OPTIONS_HARDRESET)
 end
 
-local retIsDebuffSpell=""
-function HealBot_Options_retIsDebuffSpell(spellID)
-      --HealBot_setCall("HealBot_Options_retIsDebuffSpell")
-    retIsDebuffSpell = GetSpellInfo(spellID) or GetItemInfoInstant(spellID) or spellID
-    if HealBot_Debuff_Types[retIsDebuffSpell] then
-        return true
-    end
-    return nil
-end
-
 function HealBot_Options_retDebuffWatchTarget(debuffType)
       --HealBot_setCall("HealBot_Options_retDebuffWatchTarget")
     if HealBot_DebuffSpell[debuffType] then
@@ -2199,25 +2208,6 @@ end
 function HealBot_Options_retDebuffCureType(debuffType)
       --HealBot_setCall("HealBot_Options_retDebuffCureType")
     return HealBot_DebuffType[debuffType]
-end
-
-local hbDebuffSpellRemain,hbDebuffSpellStart,hbDebuffSpellDuration=0,0,0
-function HealBot_Options_retDebuffWatchTargetCD(debuffType)
-      --HealBot_setCall("HealBot_Options_retDebuffWatchTargetCD")
-    hbDebuffSpellRemain=0
-    if HealBot_DebuffSpell[debuffType] then
-        hbDebuffSpellStart, hbDebuffSpellDuration, _, _ = GetSpellCooldown(HealBot_DebuffSpell[debuffType]);
-        if hbDebuffSpellStart and hbDebuffSpellDuration then
-            if hbDebuffSpellStart>0 and hbDebuffSpellDuration>1 then 
-                hbDebuffSpellRemain = hbDebuffSpellDuration-(HealBot_TimeNow-hbDebuffSpellStart)
-            end
-            return hbDebuffSpellRemain, HealBot_DebuffSpell[debuffType]
-        else
-            return 0, HealBot_DebuffSpell[debuffType]
-        end
-    else
-        return 0, nil
-    end
 end
 
 function HealBot_Options_retBuffWatchTarget(buffName)
@@ -6574,6 +6564,7 @@ end
 function HealBot_Options_AuxBarOutline_OnClick(self)
       --HealBot_setCall("HealBot_Options_AuxBarOutline_OnClick")
     if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]~=self:GetChecked() then
+        HealBot_Action_InitAuxGlow(HealBot_Options_luVars["AuxBar"], HealBot_Options_luVars["FramesSelFrame"])
         Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"] = self:GetChecked()
         HealBot_Aux_resetFrameBar(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxBar"])
         HealBot_Options_clearAuxBars(HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxBar"])
@@ -10245,6 +10236,33 @@ function HealBot_Options_ToggleMainAssist()
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers")
 end
 
+function HealBot_Options_ToggleTalentQuery()
+    if HEALBOT_GAME_VERSION>2 then
+        if HealBot_Globals.DenyTalentQuery then
+            HealBot_Globals.DenyTalentQuery=false
+            HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYON)
+        else
+            HealBot_Globals.DenyTalentQuery=true
+            HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYOFF)
+        end
+        if HEALBOT_GAME_VERSION<8 then
+            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",1)
+        end
+    end
+end
+
+function HealBot_Options_ToggleClearInspect()
+    if HEALBOT_GAME_VERSION>2 then
+        if HealBot_Globals.ClearInspect then
+            HealBot_Globals.ClearInspect=false
+            HealBot_AddChat(HEALBOT_CLEARINSPECTOFF)
+        else
+            HealBot_Globals.ClearInspect=true
+            HealBot_AddChat(HEALBOT_CLEARINSPECTON)
+        end
+    end
+end
+
 function HealBot_Options_CommandsButton_OnClick(self)
       --HealBot_setCall("HealBot_Options_CommandsButton_OnClick")
     if HealBot_Options_luVars["hbCommands"]==2 then
@@ -10283,8 +10301,10 @@ function HealBot_Options_CommandsButton_OnClick(self)
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID25, false)
     elseif HealBot_Options_luVars["hbCommands"]==19 then
         HealBot_Include_Skin(HEALBOT_OPTIONS_RAID40, false)
-    elseif HealBot_Options_luVars["hbCommands"]==20 and HEALBOT_GAME_VERSION==3 then
-        HealBot_MountsPets_FavClassicMount()
+    elseif HealBot_Options_luVars["hbCommands"]==20 then
+        HealBot_Options_ToggleTalentQuery()
+    elseif HealBot_Options_luVars["hbCommands"]==21 then
+        HealBot_Options_ToggleClearInspect()
     end
 end
 
@@ -13749,6 +13769,8 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
             Healbot_Config_Skins.AuxBar[s][x][frame]["G"]=Healbot_Config_Skins.AuxBar[s][x][f]["G"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["B"]=Healbot_Config_Skins.AuxBar[s][x][f]["B"]
             Healbot_Config_Skins.AuxBar[s][x][frame]["A"]=Healbot_Config_Skins.AuxBar[s][x][f]["A"]
+            Healbot_Config_Skins.AuxBar[s][x][frame]["OUTLINE"]=Healbot_Config_Skins.AuxBar[s][x][f]["OUTLINE"]
+            HealBot_Action_InitAuxGlow(x, frame)
         end
         HealBot_Timers_Set("AUX","ResetBars")
     elseif tab==23 then
@@ -15964,6 +15986,7 @@ function HealBot_Options_AuxAssign_DropDown(object, id)
                         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][HealBot_Options_luVars["FramesSelFrame"]]["USE"]~=self:GetID() then
                             Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][HealBot_Options_luVars["FramesSelFrame"]]["USE"]=self:GetID()
                             UIDropDownMenu_SetText(object,list[Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][HealBot_Options_luVars["FramesSelFrame"]]["USE"]]) 
+                            HealBot_Action_InitAuxGlow(id, HealBot_Options_luVars["FramesSelFrame"])
                             HealBot_Options_AuxDefaultShowText(HealBot_Options_luVars["FramesSelFrame"], self:GetID(), id)
                             HealBot_Options_clearAuxBars(HealBot_Options_luVars["FramesSelFrame"],id)
                             HealBot_Timers_Set("SKINS","SkinsAuxFramesChanged",0.5)

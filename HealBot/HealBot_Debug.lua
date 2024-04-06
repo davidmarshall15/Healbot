@@ -283,7 +283,7 @@ pFrame:SetMovable(true)
 pFrame:EnableMouse(true)
 pFrame:SetScript("OnMouseDown", function(self, button) HealBot_Debug_pFrameOnMouseDown(self, button) end)
 pFrame:SetScript("OnMouseUp", function(self, button) HealBot_Debug_pFrameOnMouseUp(self, button) end)
-pFrame:SetHeight(370)
+pFrame:SetHeight(390)
 pFrame:SetWidth(220)
 pFrame:SetPoint("TOPLEFT",20,-120)
 pFrame:SetBackdropColor(0.1,0.1,0.1,0.88)
@@ -312,10 +312,11 @@ local pIndex={["CPUUsage"]=1,
               ["statusInt"]=18,
               ["healthInt"]=19,
               ["deadInt"]=20,
+              ["auxOutlines"]=21,
              }
 local pFrameText={}
 local pFrameTextVal={}
-for x=1,20 do
+for x=1,21 do
     pFrameText[x]=pFrame:CreateFontString("HealBot_Debug_pFrameFrameText"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]=pFrame:CreateFontString("HealBot_pFrameDebug_FrameTextVal"..x, "ARTWORK", "GameFontNormal")
     pFrameTextVal[x]:SetTextColor(1,1,1,1)
@@ -368,6 +369,9 @@ pFrameText[19]:SetText("Health check Interval:")
 pFrameText[20]:SetPoint("TOPLEFT", pFrameText[19], "TOPLEFT", 0, -15)
 pFrameText[20]:SetText("Dead check Interval:")
 
+pFrameText[21]:SetPoint("TOPLEFT", pFrameText[20], "TOPLEFT", 0, -20)
+pFrameText[21]:SetText("Num Aux Outlines:")
+
 pFrameTextVal[1]:SetPoint("TOPRIGHT", pFrame, "TOPRIGHT", -10, -35)
 pFrameTextVal[2]:SetPoint("TOPRIGHT", pFrameTextVal[1], "TOPRIGHT", 0, -15)
 pFrameTextVal[3]:SetPoint("TOPRIGHT", pFrameTextVal[2], "TOPRIGHT", 0, -15)
@@ -388,6 +392,7 @@ pFrameTextVal[17]:SetPoint("TOPRIGHT", pFrameTextVal[16], "TOPRIGHT", 0, -20)
 pFrameTextVal[18]:SetPoint("TOPRIGHT", pFrameTextVal[17], "TOPRIGHT", 0, -15)
 pFrameTextVal[19]:SetPoint("TOPRIGHT", pFrameTextVal[18], "TOPRIGHT", 0, -15)
 pFrameTextVal[20]:SetPoint("TOPRIGHT", pFrameTextVal[19], "TOPRIGHT", 0, -15)
+pFrameTextVal[21]:SetPoint("TOPRIGHT", pFrameTextVal[20], "TOPRIGHT", 0, -20)
 
 local pLeft,pTop=20,120
 function HealBot_Debug_PerfHideShow(show)
