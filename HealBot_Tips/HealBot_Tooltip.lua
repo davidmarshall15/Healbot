@@ -269,28 +269,23 @@ function HealBot_Tooltip_RequestsClear()
     tipsRequests={}
 end
 
-local tipsAuraWatch={}
-function HealBot_Tooltip_AuraWatch(guid, buff, r, g, b)
+local tipsAuraWatch={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={}}
+function HealBot_Tooltip_AuraWatch(guid, index, buff, r, g, b)
       --HealBot_setCall("HealBot_Tooltip_AuraWatch", nil, guid)
     if buff then
-        tipsAuraWatch[guid]="      Ready for "..buff
-        tipsAuraWatch.r=r
-        tipsAuraWatch.g=g
-        tipsAuraWatch.b=b
+        tipsAuraWatch[index][guid]="      Ready for "..buff
+        tipsAuraWatch[index].r=r
+        tipsAuraWatch[index].g=g
+        tipsAuraWatch[index].b=b
     else
-        tipsAuraWatch[guid]=nil
+        tipsAuraWatch[index][guid]=nil
     end
     if HealBot_Data["TIPBUTTON"] and hbTip:IsVisible() then HealBot_Action_RefreshTooltip() end
 end
 
-function HealBot_Tooltip_BuffWatch(guid, buff, r, g, b)
-      --HealBot_setCall("HealBot_Tooltip_BuffWatch", nil, guid)
-    HealBot_Tooltip_AuraWatch(guid, buff, r, g, b)
-end
-
 function HealBot_Tooltip_AuraWatchClear()
       --HealBot_setCall("HealBot_Tooltip_AuraWatchClear")
-    tipsAuraWatch={}
+    tipsAuraWatch={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={}}
 end
 
 local tipsHealthWatch={}
@@ -673,7 +668,7 @@ function HealBot_Action_DoRefreshTooltip()
                     end
                     local uSpec=" "
                     if HealBot_Globals.Tooltip_ShowSpec then
-                        if HealBot_Panel_RaidUnitGUID(xButton.guid) then
+                        if HealBot_Panel_RaidUnitButtonCheck(xButton.guid) then
                             uSpec=HealBot_Action_getGuidData(xButton.guid, "SPEC")
                         else
                             uSpec=xButton.spec
@@ -704,7 +699,7 @@ function HealBot_Action_DoRefreshTooltip()
                                 uRoleIdx=0
                             end
                         else
-                            if HealBot_Panel_RaidUnitGUID(xButton.guid) then
+                            if HealBot_Panel_RaidUnitButtonCheck(xButton.guid) then
                                 if uRoleIdx==0 then
                                     if xButton.status.incombat then
                                         uRank=HEALBOT_WORD_INCOMBAT
@@ -862,9 +857,15 @@ function HealBot_Action_DoRefreshTooltip()
                         HealBot_Tooltip_SetLine("  ",0,0,0,0)
                         HealBot_Tooltip_SetLine(tipsRequests[xButton.guid],tipsRequests.r,tipsRequests.g,tipsRequests.b,1," ",0,0,0,0)
                     end
-                    if tipsAuraWatch[xButton.guid] then
-                        HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                        HealBot_Tooltip_SetLine(tipsAuraWatch[xButton.guid],tipsAuraWatch.r,tipsAuraWatch.g,tipsAuraWatch.b,1," ",0,0,0,0)
+                    HealBot_Tooltip_luVars["incSpace"]=true
+                    for x=1,8 do
+                        if tipsAuraWatch[x][xButton.guid] then
+                            if HealBot_Tooltip_luVars["incSpace"] then
+                                HealBot_Tooltip_SetLine("  ",0,0,0,0)
+                                HealBot_Tooltip_luVars["incSpace"]=false
+                            end
+                            HealBot_Tooltip_SetLine(tipsAuraWatch[x][xButton.guid],tipsAuraWatch[x].r,tipsAuraWatch[x].g,tipsAuraWatch[x].b,1," ",0,0,0,0)
+                        end
                     end
                     local d=false
                     if HealBot_Globals.Tooltip_ShowMyBuffs then
@@ -1508,7 +1509,9 @@ end
 function HealBot_Tooltip_ClearGUID(guid)
       --HealBot_setCall("HealBot_Tooltip_ClearGUID", nil, guid)
     tipsRequests[guid]=nil
-    tipsAuraWatch[guid]=nil
+    for x=1,8 do
+        tipsAuraWatch[x][guid]=nil
+    end
     tipsHealthWatch[guid]=nil
     tipsManaWatch[guid]=nil
 end

@@ -113,7 +113,6 @@ function HealBot_Comms_SendAddonMessage()
         elseif aType==3 then
             HealBot_Comms_SendInstantAddonMsg(msg,true)
         end
-        --HealBot_AddDebug("comms="..aMsg)
     end
 end
 

@@ -52,9 +52,12 @@ local hbPanel_dataPlayerRoles={}
 local hbPanel_dataPetUnits={}
 local hbPanel_dataPetNames={}
 local hbPanel_dataPetGUIDs={}
-local hbPanel_dataExtraGUIDs={}
 local hbPanel_enemyUnits={}
 local hbPanel_enemyUnits={}
+local hbPanel_buttonGUIDs={}
+local hbPanel_buttonpGUIDs={}
+local hbPanel_buttonPetGUIDs={}
+local hbPanel_buttonExtraGUIDs={}
 local grpNo=1
 local tHeader={}
 local erButton=nil
@@ -224,18 +227,24 @@ function HealBot_Panel_updDataStore(button)
             button.role=hbPanel_dataPlayerRoles[button.guid]
             HealBot_setLuVars("pluginClearDown", 1)
         end
+        if button.status.unittype<5 then
+            hbPanel_buttonpGUIDs[button.guid]=button
+        else
+            hbPanel_buttonGUIDs[button.guid]=button
+        end
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPlayers",1)
     elseif hbPanel_dataPetUnits[button.unit] then
         hbPanel_dataPetNames[button.name]=button.unit
         hbPanel_dataPetGUIDs[button.guid]=button.unit
         hbPanel_dataPetUnits[button.unit]=button.guid
+        hbPanel_buttonPetGUIDs[button.guid]=button
         if button.status.unittype==7 then
             HealBot_Timers_Set("OOC","RefreshPartyNextRecalcVehicle",1)
-        elseif button.status.unittype==8 then
+        else
             HealBot_Timers_Set("OOC","RefreshPartyNextRecalcPets",1)
         end
     elseif button.status.unittype>8 then
-        hbPanel_dataExtraGUIDs[button.guid]=button.unit
+        hbPanel_buttonExtraGUIDs[button.guid]=button
     end
 end
 
@@ -342,6 +351,12 @@ local hbPlayerRaidID=0
 function HealBot_Panel_buildDataStore(doPlayers, doPets)
       --HealBot_setCall("HealBot_Panel_buildDataStore")
     if doPlayers then
+        for x,_ in pairs(hbPanel_buttonGUIDs) do
+            hbPanel_buttonGUIDs[x]=nil
+        end 
+        for x,_ in pairs(hbPanel_buttonpGUIDs) do
+            hbPanel_buttonpGUIDs[x]=nil
+        end 
         for x,_ in pairs(hbPanel_dataNames) do
             hbPanel_dataNames[x]=nil
         end
@@ -384,12 +399,10 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
                     HealBot_setLuVars(hbRoleRef[x], "x")
                     HealBot_Aura_setLuVars(hbRoleRef[x], "x")
                     HealBot_ActionIcons_setLuVars(hbRoleRef[x], "x")
-                    --HealBot_AddDebug(hbRoleRef[x].." is x","One Unit Role",true)
                 else
                     HealBot_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
                     HealBot_Aura_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
                     HealBot_ActionIcons_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
-                    --HealBot_AddDebug(hbRoleRef[x].." is "..UnitName(hbRoleOnes[x].unit),"One Unit Role",true)
                 end
                 HealBot_setLuVars("pluginClearDown", 1)
             end
@@ -397,6 +410,9 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
     end
     if doPets then
         HealBot_Panel_luVars["NumPets"]=0
+        for x,_ in pairs(hbPanel_buttonPetGUIDs) do
+            hbPanel_buttonPetGUIDs[x]=nil
+        end 
         for x,_ in pairs(hbPanel_dataPetNames) do
             hbPanel_dataPetNames[x]=nil;
         end
@@ -685,7 +701,7 @@ end
 
 function HealBot_Panel_UnitRoleOnSpec(guid, role)
       --HealBot_setCall("HealBot_Panel_UnitRoleOnSpec", nil, guid)
-    if HealBot_Panel_RaidUnitGUID(guid) then
+    if HealBot_Panel_RaidUnitButtonCheck(guid) then
         local s=HealBot_Action_getGuidData(guid, "SPEC")
         if s==" "..HEALBOT_RESTORATION.." " or s==" "..HEALBOT_DISCIPLINE.." " or s==" "..HEALBOT_HOLY.." " or s==" "..HEALBOT_SHAMAN_RESTORATION.." " then
             return "HEALER"
@@ -3104,7 +3120,7 @@ function HealBot_Panel_focusHeal(isOn)
     focusHeal=isOn
 end
 
-function HealBot_Panel_RaidUnitGUID(guid)
+function HealBot_Panel_RaidUnitGUID_OLD(guid)
       --HealBot_setCall("HealBot_Panel_RaidUnitGUID")
     return hbPanel_dataGUIDs[guid]
 end
@@ -3114,8 +3130,28 @@ function HealBot_Panel_PetUnitGUID(guid)
     return hbPanel_dataPetGUIDs[guid]
 end
 
-local ruxUnit, ruxButton, rupButton
+function HealBot_Panel_setButtonGUID(button)
+    hbPanel_buttonGUIDs[button.guid]=button
+end
+
+function HealBot_Panel_setButtonpGUID(button)
+    hbPanel_buttonpGUIDs[button.guid]=button
+end
+
+function HealBot_Panel_setButtonPetGUID(button)
+    hbPanel_buttonPetGUIDs[button.guid]=button
+end
+
 function HealBot_Panel_RaidUnitButton(guid)
+    return hbPanel_buttonGUIDs[guid], hbPanel_buttonpGUIDs[guid] 
+end
+
+function HealBot_Panel_RaidUnitButtonCheck(guid)
+    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] 
+end
+
+local ruxUnit, ruxButton, rupButton
+function HealBot_Panel_RaidUnitButton_OLD(guid)
       --HealBot_setCall("HealBot_Panel_RaidUnitButton")
     ruxUnit=HealBot_Panel_RaidUnitGUID(guid)
     if ruxUnit then
@@ -3126,12 +3162,20 @@ function HealBot_Panel_RaidUnitButton(guid)
     end
 end
 
-function HealBot_Panel_RaidPetUnitGUID(guid)
+function HealBot_Panel_RaidPetUnitGUID_OLD(guid)
       --HealBot_setCall("HealBot_Panel_RaidPetUnitGUID")
     return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid]
 end
 
 function HealBot_Panel_RaidPetUnitButton(guid)
+    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid], hbPanel_buttonpGUIDs[guid] 
+end
+
+function HealBot_Panel_RaidPetUnitButtonCheck(guid)
+    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid]
+end
+
+function HealBot_Panel_RaidPetUnitButton_OLD(guid)
       --HealBot_setCall("HealBot_Panel_RaidPetUnitButton")
     ruxUnit=HealBot_Panel_RaidPetUnitGUID(guid)
     if ruxUnit then
@@ -3142,12 +3186,20 @@ function HealBot_Panel_RaidPetUnitButton(guid)
     end
 end
 
-function HealBot_Panel_AllUnitGUID(guid)
+function HealBot_Panel_AllUnitGUID_OLD(guid)
       --HealBot_setCall("HealBot_Panel_AllUnitGUID")
     return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] or hbPanel_dataExtraGUIDs[guid]
 end
 
 function HealBot_Panel_AllUnitButton(guid)
+    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
+end
+
+function HealBot_Panel_AllUnitButtonCheck(guid)
+    return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid]
+end
+
+function HealBot_Panel_AllUnitButton_OLD(guid)
       --HealBot_setCall("HealBot_Panel_AllUnitButton")
     ruxUnit=HealBot_Panel_AllUnitGUID(guid)
     if ruxUnit then
@@ -3165,9 +3217,8 @@ end
 
 function HealBot_Panel_RaidUnitNameGetPlayerButton(uName)
       --HealBot_setCall("HealBot_Panel_RaidUnitNameGetPlayerButton")
-    if hbPanel_dataNames[uName] then
-        _, ruxButton, rupButton = HealBot_UnitID(hbPanel_dataNames[uName])
-        return ruxButton, rupButton
+    if hbPanel_dataNames[uName] and hbPanel_dataUnits[hbPanel_dataNames[uName]] then
+        return HealBot_Panel_RaidUnitButton(hbPanel_dataUnits[hbPanel_dataNames[uName]])
     else
         return nil
     end
@@ -3362,14 +3413,14 @@ function HealBot_Panel_DoPartyChanged(preCombat, changeType)
             end
         end
         if changeType>2 then
-            for x,_ in pairs(hbPanel_dataExtraGUIDs) do
-                hbPanel_dataExtraGUIDs[x]=nil
+            for x,_ in pairs(hbPanel_buttonExtraGUIDs) do
+                hbPanel_buttonExtraGUIDs[x]=nil
             end
             for xUnit,xButton in pairs(HealBot_Enemy_Button) do
-                hbPanel_dataExtraGUIDs[xButton.guid]=xButton.unit
+                hbPanel_buttonExtraGUIDs[xButton.guid]=xButton
             end
             for xUnit,xButton in pairs(HealBot_Extra_Button) do
-                hbPanel_dataExtraGUIDs[xButton.guid]=xButton.unit
+                hbPanel_buttonExtraGUIDs[xButton.guid]=xButton
             end
         end
     end

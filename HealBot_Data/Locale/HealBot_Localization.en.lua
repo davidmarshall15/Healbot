@@ -460,6 +460,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFSTEXTWEMAIN         = "Main hand / 2H";
     HEALBOT_OPTIONS_BUFFSTEXTWEOFF          = "Off hand";
     HEALBOT_OPTIONS_ITEMNAME                = "Item name";
+    HEALBOT_OPTIONS_SPELLITEMNAME           = "Spell name / Item name";
     HEALBOT_OPTIONS_PRIMARYITEM             = "Primary Item";
     HEALBOT_OPTIONS_BACKUPITEM              = "Backup Item";
     HEALBOT_OPTIONS_BUFFSTEXT2              = "check members";
@@ -1408,6 +1409,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_AURAWATCHAGGROLEVEL      = "Aggro level"
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGET      = "Raid Target"
     HEALBOT_PLUGIN_AURAWATCHRAIDTARGETF     = "Filter raid target"
+    HEALBOT_PLUGIN_ALERTRANGE               = "Alert Range"
     HEALBOT_PLUGIN_TWEAKSDELETEALL          = "Delete All"
     HEALBOT_PLUGIN_TWEAKSENABLEALL          = "Enable All"
     HEALBOT_PLUGIN_TWEAKSDISABLEALL         = "Disable All"
@@ -1417,7 +1419,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_TWEAKSCOLOURNONE         = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to None for all"
     HEALBOT_PLUGIN_TWEAKSCOLOURADAPTIVE     = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Adaptive Only for all"
     HEALBOT_PLUGIN_TWEAKSCOLOURADAPTBAR     = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Adaptive and Health Bar for all"
-    HEALBOT_PLUGIN_TWEAKSCOLOURBARCOL       = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." Only for all"
+    HEALBOT_PLUGIN_TWEAKSCOLOURBARCOL       = "Set Bar Col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to Health Bar Only for all"
     HEALBOT_PLUGIN_HEALTHALERTLEVEL         = "Health alert level"
     HEALBOT_PLUGIN_MANAALERTLEVEL           = "Mana alert level"
     HEALBOT_PLUGIN_ALERTMETHOD              = "Alert method"
@@ -1650,7 +1652,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_IN_A_GROUP              = "Only in a Group or Raid"
     HEALBOT_OPTIONS_ALSO_WHEN_MOUNTED       = "also when mounted"
     HEALBOT_OPTIONS_PALADIN_BLESSINGS       = "View all my blessings as same"
-    HEALBOT_OPTIONS_ONLY_IN_INSTANCE        = "Only in instance"
+    HEALBOT_OPTIONS_ONLY_IN_INSTANCE        = "Only in an instance"
     
     HEALBOT_OPTIONS_TAB_EFFECTS              = "Effects"
     HEALBOT_OPTIONS_TAB_EMERG                = "Emergency"

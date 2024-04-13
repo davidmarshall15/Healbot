@@ -6,7 +6,7 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.2.6.1"
+    return "10.2.6.4"
 end
 function HealBot_Global_InitVersion()
     return "10.2.6.0"  -- Keep just behind the global version
@@ -710,6 +710,7 @@ function HealBot_globalVars()
     HEALBOT_RESURRECTION                    = 2006 --GetSpellInfo(2006) or "--Resurrection";
     HEALBOT_RESUSCITATE                     = 115178 --GetSpellInfo(115178) or "--Resuscitate"
     HEALBOT_REVIVE                          = 50769 --GetSpellInfo(50769) or "--Revive";
+    HBC_REVIVE                              = 437138
     HEALBOT_INTERCESSION                    = 391054
     HEALBOT_RETURN                          = 361227
     

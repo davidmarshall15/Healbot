@@ -690,60 +690,70 @@ end
 
 function HealBot_Action_DisableBorderHazardHealthDrop(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardHealthDrop", button)
-    button.hazard.hlthdrop=false
-    if button.hazard.plugin then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.plugin.r, button.plugin.g, button.plugin.b)
-    elseif button.hazard.debuff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
-    elseif button.hazard.aggro then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
-    elseif button.hazard.buff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
-    else
-        HealBot_Action_DisableBorderHazard(button)
+    if button.hazard.hlthdrop then
+        button.hazard.hlthdrop=false
+        if button.hazard.plugin then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.plugin.r, button.plugin.g, button.plugin.b)
+        elseif button.hazard.debuff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
+        elseif button.hazard.aggro then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
+        elseif button.hazard.buff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
     end
 end
 
 function HealBot_Action_DisableBorderHazardPlugin(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardPlugin", button)
-    button.hazard.plugin=false
-    if button.hazard.debuff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
-    elseif button.hazard.aggro then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
-    elseif button.hazard.buff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
-    else
-        HealBot_Action_DisableBorderHazard(button)
+    if button.hazard.plugin then
+        button.hazard.plugin=false
+        if button.hazard.debuff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b)
+        elseif button.hazard.aggro then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
+        elseif button.hazard.buff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
     end
 end
 
 function HealBot_Action_DisableBorderHazardDebuff(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardDebuff", button)
-    button.hazard.debuff=false
-    if button.hazard.aggro then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
-    elseif button.hazard.buff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
-    else
-        HealBot_Action_DisableBorderHazard(button)
+    if button.hazard.debuff then
+        button.hazard.debuff=false
+        if button.hazard.aggro then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, 1, 0, 0)
+        elseif button.hazard.buff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
     end
 end
 
 function HealBot_Action_DisableBorderHazardAggro(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardAggro", button)
-    button.hazard.aggro=false
-    if button.hazard.buff then
-        HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
-    else
-        HealBot_Action_DisableBorderHazard(button)
+    if button.hazard.aggro then
+        button.hazard.aggro=false
+        if button.hazard.buff then
+            HealBot_Action_UpdateHazardBordersColoursNew(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b)
+        else
+            HealBot_Action_DisableBorderHazard(button)
+        end
     end
 end
 
 function HealBot_Action_DisableBorderHazardBuff(button)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardBuff", button)
-    button.hazard.buff=false
-    HealBot_Action_DisableBorderHazard(button)
+    if button.hazard.buff then
+        button.hazard.buff=false
+        HealBot_Action_DisableBorderHazard(button)
+    end
 end
 
 local hbBorderDisableHazardTypeFuncs={["HLTHDROP"]=HealBot_Action_DisableBorderHazardHealthDrop,
@@ -1054,24 +1064,14 @@ function HealBot_Action_UpdateButtonGlow(button, enable)
       --HealBot_setCall("HealBot_Action_UpdateButtonGlow", button)
     if enable then
         if button.glow.plugin then
-            if button.aurawatch.colbar==5 then
-                for x=1,8 do
-                    if hbGlowStyle["AW"..x]==5 then
-                        HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..x, enable, button.frame)
-                    end
-                end
-            elseif button.aurawatch.colbar==6 then
-                for x=1,8 do
-                    if hbGlowStyle["AW"..x]==6 then
-                        HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..x, enable, button.frame)
-                    end
-                end
-            elseif button.aurawatch.colbar==7 then
-                for x=1,8 do
-                    if hbGlowStyle["AW"..x]==7 then
-                        HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..x, enable)
-                    end
-                end
+            if HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 5)>0 then
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 5), enable, button.frame)
+            end
+            if HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 6)>0 then
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 6), enable, button.frame)
+            end
+            if HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 7)>0 then
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 7), enable)
             end
             if button.healthwatch.colbar==5 then
                 HealBot_Action_ButtonGlow(button.gref["BackBorder"], "HW", enable, button.frame)
@@ -1108,12 +1108,14 @@ function HealBot_Action_UpdateButtonGlow(button, enable)
         end
     else
         if button.glow.plugin then
-            if button.aurawatch.colbar>4 then
-                for x=1,8 do
-                    HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..x, enable, button.frame) 
-                    HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..x, enable, button.frame)
-                    HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..x, enable)
-                end
+            if HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 5)>0 then
+                HealBot_Action_ButtonGlow(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 5), enable, button.frame) 
+            end
+            if button.aurawatch.HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 6)>0 then
+                HealBot_Action_ButtonGlowBall(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 6), enable, button.frame)
+            end
+            if HealBot_Plugin_AuraWatch_GlowIndex and HealBot_Plugin_AuraWatch_GlowIndex(button, 7)>0 then
+                HealBot_Action_ButtonGlowBlizz(button.gref["BackBorder"], "AW"..HealBot_Plugin_AuraWatch_GlowIndex(button, 7), enable)
             end
             if button.healthwatch.colbar>4 then
                 HealBot_Action_ButtonGlow(button.gref["BackBorder"], "HW", enable, button.frame) 
@@ -1175,7 +1177,7 @@ end
 function HealBot_Action_DisableBorderHazardTypeGUID(guid)
       --HealBot_setCall("HealBot_Action_DisableBorderHazardTypeGUID", nil, guid)
     if HealBot_retLuVars("pluginRequests") then HealBot_Plugin_Requests_CancelGUID(guid) end
-    if HealBot_retLuVars("pluginAuraWatch") then HealBot_Plugin_AuraWatch_CancelGUID(guid) end
+    if HealBot_retLuVars("pluginAuraWatch") then HealBot_Plugin_AuraWatch_CancelGUIDNoIndex(guid) end
     if HealBot_retLuVars("pluginHealthWatch") then HealBot_Plugin_HealthWatch_CancelGUID(guid) end
     if HealBot_retLuVars("pluginManaWatch") then HealBot_Plugin_ManaWatch_CancelGUID(guid) end
 end
@@ -2084,10 +2086,14 @@ function HealBot_Action_setState(button, state)
             if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
             if HealBot_Hazard_Buttons[button.id] then 
                 HealBot_Action_DisableBorderHazard(button)
-                if button.hazard.debuff then button.hazard.debuff=false end
+                button.hazard.hlthdrop=false
+                button.hazard.plugin=false
+                button.hazard.debuff=false
+                button.hazard.aggro=false
+                button.hazard.buff=false
             end
             button.status.hlthupd=false
-        elseif state==HealBot_Unit_Status["BUFFBARCOL"] or state==HealBot_Unit_Status["DEBUFFBARCOL"] then
+        elseif state==HealBot_Unit_Status["BUFFBARCOL"] or state==HealBot_Unit_Status["DEBUFFBARCOL"] or state==HealBot_Unit_Status["PLUGINBARCOL"] then
             button.status.hlthupd=false
         else
             button.status.hlthupd=true
@@ -2150,10 +2156,10 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
     else
         button.plugin.colbar=0
     end
-    if button.plugin.colbar>0 and button.status.current<HealBot_Unit_Status["DEAD"] then 
-        if r then
+    if button.plugin.colbar>0 then
+        if r and button.status.current<HealBot_Unit_Status["DEAD"] then
             button.plugin.r,button.plugin.g,button.plugin.b=r,g,b
-            if button.plugin.colbar==2 or button.plugin.colbar==3 then
+            if button.plugin.colbar>1 then
                 button.status.r,button.status.g,button.status.b=r, g, b
                 HealBot_Action_setState(button, HealBot_Unit_Status["PLUGINBARCOL"])
                 if button.status.range==1 then  
@@ -2162,8 +2168,10 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
                     curAlpha=HealBot_Action_BarColourAlpha(button, Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["ORA"],1)
                 end
                 HealBot_Action_setEnabled(button, true, curAlpha)
+                HealBot_Action_UpdateHealthStatusBarColor(button)
+                HealBot_Action_UpdateBackground(button)
             end
-            if hbAdaptive["Plugin"] then
+            if hbAdaptive["Plugin"] and button.plugin.colbar<3 then
                 if hbAdaptiveOrderName["Plugin"]<button.adaptive.current then
                     button.adaptive.current=hbAdaptiveOrderName["Plugin"]
                 end
@@ -2171,12 +2179,10 @@ function HealBot_Action_UpdatePluginBarCol(button, r, g, b)
             else
                 HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Plugin"])
             end
-            HealBot_Action_UpdateHealthStatusBarColor(button)
-            HealBot_Action_UpdateBackground(button)
         end
     elseif UnitExists(button.unit) then
         HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Plugin"])
-        if button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] and button.status.current<HealBot_Unit_Status["DEAD"] then HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"]) end
+        if button.status.current>HealBot_Unit_Status["DEBUFFBARCOL"] then HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"]) end
         --HealBot_Action_UpdateDebuffButton(button)
         HealBot_RefreshUnit(button)
     end
@@ -2192,13 +2198,14 @@ function HealBot_Action_UpdateRequestButton(button, r, g, b)
     end
 end
 
-function HealBot_Action_UpdateAuraWatchButton(button, r, g, b, index)
+function HealBot_Action_UpdateAuraWatchButton(button, index, barCol, r, g, b)
       --HealBot_setCall("HealBot_Action_UpdateAuraWatchButton", button)
-    HealBot_Action_UpdatePluginBarCol(button, r, g, b)
-    if button.aurawatch.colbar==4 then
+    if barCol==4 then
         HealBot_Action_EnableBorderHazardType(button, r, g, b, "PLUGIN")
-    elseif button.aurawatch.colbar>4 then
-        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "AW"..index, button.aurawatch.colbar)
+    elseif barCol>4 then
+        HealBot_Action_EnableButtonGlowType(button, r, g, b, "PLUGIN", "AW"..index, barCol)
+    elseif barCol<4 then
+        HealBot_Action_UpdatePluginBarCol(button, r, g, b)
     end
 end
 
@@ -2232,7 +2239,7 @@ function HealBot_Action_UpdateDebuffButton(button)
     else
         HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Debuffs"])
     end
-    if button.status.current<HealBot_Unit_Status["DEAD"] then
+    if button.status.current<HealBot_Unit_Status["PLUGINBARCOL"] then
         if HealBot_Config_Cures.CDCshownHB and (button.aura.debuff.colbar==2 or button.aura.debuff.colbar==3) then 
             if HealBot_Aura_IsCureSpell(button) and button.status.rangespell~=button.aura.debuff.curespell then
                 button.status.rangespellspecial=button.aura.debuff.curespell
@@ -2260,7 +2267,6 @@ function HealBot_Action_UpdateDebuffButton(button)
         end
         HealBot_Action_UpdateBuffButton(button)
     else
-        HealBot_Action_AdaptiveNextActive(button, hbAdaptiveOrderName["Debuffs"])
         HealBot_Action_UpdateHealthButton(button)
     end
 end
@@ -2436,23 +2442,18 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_Data["PALIVE"]=false
                     HealBot_setLuVars("pluginCDsCheckExisting", 0)
                     HealBot_Timers_Set("INIT","ResetActiveUnitStatus")
-                    HealBot_Action_luVars["TimerDelay"]=0.1
                     HealBot_Timers_Set("AURA","PlayerCheckExtended",HealBot_Action_luVars["TimerDelay"])
-                    if HealBot_retLuVars("pluginRequests") then
-                        HealBot_Action_luVars["TimerDelay"]=HealBot_Action_luVars["TimerDelay"]+0.05
-                        HealBot_Timers_Set("LAST","PluginRequestsDead",HealBot_Action_luVars["TimerDelay"])
+                    if HealBot_retLuVars("pluginRequests") then 
+                        C_Timer.After(0.025, function() HealBot_Plugin_Requests_PlayerDead() end)
                     end
                     if HealBot_retLuVars("pluginAuraWatch") then 
-                        HealBot_Action_luVars["TimerDelay"]=HealBot_Action_luVars["TimerDelay"]+0.05
-                        HealBot_Timers_Set("LAST","PluginAuraWatchDead",HealBot_Action_luVars["TimerDelay"])
+                        C_Timer.After(0.05, function() HealBot_Plugin_AuraWatch_PlayerDead() end)
                     end
                     if HealBot_retLuVars("pluginHealthWatch") then 
-                        HealBot_Action_luVars["TimerDelay"]=HealBot_Action_luVars["TimerDelay"]+0.05
-                        HealBot_Timers_Set("LAST","PluginHealthWatchDead",HealBot_Action_luVars["TimerDelay"])
+                        C_Timer.After(0.075, function() HealBot_Plugin_HealthWatch_PlayerDead() end)
                     end
                     if HealBot_retLuVars("pluginManaWatch") then 
-                        HealBot_Action_luVars["TimerDelay"]=HealBot_Action_luVars["TimerDelay"]+0.05
-                        HealBot_Timers_Set("LAST","PluginManaWatchDead",HealBot_Action_luVars["TimerDelay"])
+                        C_Timer.After(0.1, function() HealBot_Plugin_ManaWatch_PlayerDead() end)
                     end
                     HealBot_ActionIcons_PlayerDied()
                 else
@@ -3547,7 +3548,8 @@ function HealBot_Action_SetAuxGlow(button, id)
         button.aux[id]["OUTLINE"]=true
         HealBot_Action_luVars["NumAuxOutlines"]=HealBot_Action_luVars["NumAuxOutlines"]+1
         HealBot_Debug_PerfUpdate("auxOutlines", HealBot_Action_luVars["NumAuxOutlines"])
-        HealBot_AddDebug("AuxGlog for f="..button.frame.." id="..id,"Aux",true)
+        HealBot_Aux_UpdateAuxByTypeById(button, button.frame, id)
+       -- HealBot_AddDebug("AuxGlog for f="..button.frame.." id="..id,"Aux",true)
     end
 end
 
@@ -5887,6 +5889,13 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
                 HealBot_HealthAlertLevel(preCombat, hButton)
+            end
+            if unitType<5 then
+                HealBot_Panel_setButtonpGUID(hButton)
+            elseif unitType<7 then
+                HealBot_Panel_setButtonGUID(hButton)
+            elseif unitType<9 then
+                HealBot_Panel_setButtonPetGUID(hButton)
             end
             if hButton.skinreset or hButton.icon.reset or hButton.indreset or hButton.auxreset or hButton.text.reset then
                 HealBot_Skins_ResetSkin("bar",hButton)

@@ -1587,7 +1587,6 @@ end
 
 function HealBot_Text_UpdateTestText(button)
       --HealBot_setCall("HealBot_Text_UpdateTestText", button)
-    --HealBot_AddDebug("UpdateTestText unit="..button.unit,"Text",true)
     button.gref.txt["text"]:SetText("")
     button.gref.txt["text2"]:SetText("")
     button.gref.txt["text3"]:SetText("")
@@ -1609,7 +1608,6 @@ function HealBot_Text_UpdateTestText(button)
             end
         end
         button.gref.txt["text"]:SetText(testNameTxt)
-        --HealBot_AddDebug("testNameTxt="..testNameTxt,"Text",true)
     end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHONBAR"] and Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTXTANCHOR"]~=4 then
         if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then

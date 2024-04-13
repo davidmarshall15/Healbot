@@ -235,8 +235,12 @@ local function HealBot_Aux_setBar(button, id, value, isFluid, text, endTime, Cas
             button.gref.aux[id]:SetStatusBarColor(button.aux[id]["R"], button.aux[id]["G"], button.aux[id]["B"], button.status.alpha)
         end
     end
-    if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OUTLINE"] and button.aux[id]["OUTLINE"] then
-        button.gref.auxglow[id]:SetBackdropBorderColor(button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"],1)
+    if button.aux[id]["OUTLINE"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["OUTLINE"] then
+            button.gref.auxglow[id]:SetBackdropBorderColor(button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"],1)
+        else
+            button.gref.auxglow[id]:SetBackdropBorderColor(0,0,0,0)
+        end
     end
     if text then
         if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["ANCHOR"]>2 and Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["ANCHOR"]<5 then
@@ -658,51 +662,55 @@ function HealBot_Aux_setPowerAssigned(frame, id)
     hbAuxPowerAssigned[frame][id]=true
 end
 
+local function HealBot_Aux_setPowerBarsById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] then
+        local noPowerbar=false
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] then
+            if button.mana.type~=0 then
+                noPowerbar=true
+            elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["HEALERSMANAONLY"] and button.role~=3 and button.role~=5 then
+                noPowerbar=true
+            end
+        end
+        if button.mana.max==0 or noPowerbar then
+            button.aux[id]["R"]=0
+            button.aux[id]["G"]=0
+            button.aux[id]["B"]=0
+            HealBot_Aux_setBar(button, id, 0, true)
+        else
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+                button.aux[id]["R"]=button.mana.r
+                button.aux[id]["G"]=button.mana.g
+                button.aux[id]["B"]=button.mana.b
+            end
+            if button.mana.change then
+                button.mana.change=false
+                HealBot_Aux_UpdBar(button, true)
+            end
+            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.5),(button.mana.g+0.5),(button.mana.b+0.5)
+                end
+                if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
+                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
+                elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
+                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
+                else
+                    HealBot_Aux_setBar(button, id, button.mana.pctc, true, button.mana.pct.."%")
+                end
+            else
+                HealBot_Aux_setBar(button, id, button.mana.pctc, true)
+            end
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_setPowerBars(button)
       --HealBot_setCall("HealBot_Aux_setPowerBars", button)
     for id in pairs(hbAuxPowerAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] then
-            local noPowerbar=false
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["MANAONLY"] then
-                if button.mana.type~=0 then
-                    noPowerbar=true
-                elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["HEALERSMANAONLY"] and button.role~=3 and button.role~=5 then
-                    noPowerbar=true
-                end
-            end
-            if button.mana.max==0 or noPowerbar then
-                button.aux[id]["R"]=0
-                button.aux[id]["G"]=0
-                button.aux[id]["B"]=0
-                HealBot_Aux_setBar(button, id, 0, true)
-            else
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                    button.aux[id]["R"]=button.mana.r
-                    button.aux[id]["G"]=button.mana.g
-                    button.aux[id]["B"]=button.mana.b
-                end
-                if button.mana.change then
-                    button.mana.change=false
-                    HealBot_Aux_UpdBar(button, true)
-                end
-                if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                    if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                        button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.mana.r+0.5),(button.mana.g+0.5),(button.mana.b+0.5)
-                    end
-                    if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==1 then
-                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current, button.frame))
-                    elseif Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HLTHTYPE"]==2 then
-                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, HealBot_Text_shortHealTxt(button.mana.current-button.mana.max, button.frame))
-                    else
-                        HealBot_Aux_setBar(button, id, button.mana.pctc, true, button.mana.pct.."%")
-                    end
-                else
-                    HealBot_Aux_setBar(button, id, button.mana.pctc, true)
-                end
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_setPowerBarsById(button, id)
     end
 end
 
@@ -744,26 +752,30 @@ function HealBot_Aux_setAggroAssigned(aType, frame, id)
     end
 end
 
+local function HealBot_Aux_UpdateThreatBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.aggro.threatpct>0 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=1
+            button.aux[id]["G"]=1
+            button.aux[id]["B"]=0.2
+        end
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
+            end
+            HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, HealBot_Text_readNumber(button.aggro.threatvalue).." ("..button.aggro.threatpct.."%)")
+        else
+            HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, false)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateThreatBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateThreatBar", button)
     for id in pairs(hbAuxThreatAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] and button.aggro.threatpct>0 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=1
-                button.aux[id]["G"]=1
-                button.aux[id]["B"]=0.2
-            end
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
-                end
-                HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, HealBot_Text_readNumber(button.aggro.threatvalue).." ("..button.aggro.threatpct.."%)")
-            else
-                HealBot_Aux_setBar(button, id, button.aggro.threatpct*10, true, false)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateThreatBarById(button, id)
     end
 end
 
@@ -834,24 +846,28 @@ function HealBot_Aux_setAuraAssigned(aType, frame, id)
     end
 end
 
+local function HealBot_Aux_UpdateAuraBuffBarsById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"]=button.aura.buff.r,button.aura.buff.g,button.aura.buff.b
+        end
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.aura.buff.r+0.2),(button.aura.buff.g+0.2),(button.aura.buff.b+0.2)
+            end
+            HealBot_Aux_setBar(button, id, 1000, false, button.aura.buff.name)
+        else
+            HealBot_Aux_setBar(button, id, 1000, false, false)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateAuraBuffBars(button)
       --HealBot_setCall("HealBot_Aux_UpdateAuraBuffBars", button)
     for id in pairs(hbAuxBuffAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"]=button.aura.buff.r,button.aura.buff.g,button.aura.buff.b
-            end
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.aura.buff.r+0.2),(button.aura.buff.g+0.2),(button.aura.buff.b+0.2)
-                end
-                HealBot_Aux_setBar(button, id, 1000, false, button.aura.buff.name)
-            else
-                HealBot_Aux_setBar(button, id, 1000, false, false)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateAuraBuffBarsById(button, id)
     end
 end
 
@@ -862,24 +878,28 @@ function HealBot_Aux_ClearAuraBuffBars(button)
     end
 end
 
+local function HealBot_Aux_UpdateAuraDebuffBarsById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"]=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
+        end
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.aura.debuff.r+0.2),(button.aura.debuff.g+0.2),(button.aura.debuff.b+0.2)
+            end
+            HealBot_Aux_setBar(button, id, 1000, false, button.aura.debuff.name)
+        else
+            HealBot_Aux_setBar(button, id, 1000, false, false)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateAuraDebuffBars(button)
       --HealBot_setCall("HealBot_Aux_UpdateAuraDebuffBars", button)
     for id in pairs(hbAuxDebuffAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"],button.aux[id]["G"],button.aux[id]["B"]=button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b
-            end
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.aura.debuff.r+0.2),(button.aura.debuff.g+0.2),(button.aura.debuff.b+0.2)
-                end
-                HealBot_Aux_setBar(button, id, 1000, false, button.aura.debuff.name)
-            else
-                HealBot_Aux_setBar(button, id, 1000, false, false)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateAuraDebuffBarsById(button, id)
     end
 end
 
@@ -942,27 +962,31 @@ local function HealBot_Aux_SetAuxHlth10(button)
     end
 end
 
+local function HealBot_Aux_UpdateAbsorbBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxabsorbs>0 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=button.health.absorbr
+            button.aux[id]["G"]=button.health.absorbg
+            button.aux[id]["B"]=button.health.absorbb
+        end
+        HealBot_Aux_SetAuxHlth10(button)
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.absorbr+0.2),(button.health.absorbg+0.2),(button.health.absorbb+0.2)
+            end
+            HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.auxabsorbs, button.frame))
+        else
+            HealBot_Aux_setBar(button, id, hbAuxHlth10, true)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateAbsorbBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateAbsorbBar", button)
     for id in pairs(hbAuxAbsorbAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxabsorbs>0 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=button.health.absorbr
-                button.aux[id]["G"]=button.health.absorbg
-                button.aux[id]["B"]=button.health.absorbb
-            end
-            HealBot_Aux_SetAuxHlth10(button)
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.absorbr+0.2),(button.health.absorbg+0.2),(button.health.absorbb+0.2)
-                end
-                HealBot_Aux_setBar(button, id, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.auxabsorbs, button.frame))
-            else
-                HealBot_Aux_setBar(button, id, hbAuxHlth10, true)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateAbsorbBarById(button, id)
     end
 end
 
@@ -988,27 +1012,31 @@ local function HealBot_Aux_SetAuxHealIn10(button)
     end
 end
 
+local function HealBot_Aux_UpdateHealInBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxincoming>0 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=button.health.inhealr
+            button.aux[id]["G"]=button.health.inhealg
+            button.aux[id]["B"]=button.health.inhealb
+        end
+        HealBot_Aux_SetAuxHealIn10(button)
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.inhealr+0.2),(button.health.inhealg+0.2),(button.health.inhealb+0.2)
+            end
+            HealBot_Aux_setBar(button, id, hbAuxHealIn10, true, HealBot_Text_shortHealTxt(button.health.auxincoming, button.frame))
+        else
+            HealBot_Aux_setBar(button, id, hbAuxHealIn10, true)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateHealInBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateHealInBar", button)
     for id in pairs(hbAuxHealInAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.auxincoming>0 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=button.health.inhealr
-                button.aux[id]["G"]=button.health.inhealg
-                button.aux[id]["B"]=button.health.inhealb
-            end
-            HealBot_Aux_SetAuxHealIn10(button)
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=(button.health.inhealr+0.2),(button.health.inhealg+0.2),(button.health.inhealb+0.2)
-                end
-                HealBot_Aux_setBar(button, id, hbAuxHealIn10, true, HealBot_Text_shortHealTxt(button.health.auxincoming, button.frame))
-            else
-                HealBot_Aux_setBar(button, id, hbAuxHealIn10, true)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateHealInBarById(button, id)
     end
 end
 
@@ -1058,27 +1086,31 @@ local function HealBot_Aux_SetAuxTotalHeal10(button)
     end
 end
 
+local function HealBot_Aux_UpdateTotalHealAbsorbsBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.healabsorbs>0 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=0.7
+            button.aux[id]["G"]=0.2
+            button.aux[id]["B"]=0.9
+        end
+        HealBot_Aux_SetAuxTotalHeal10(button)
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
+            end
+            HealBot_Aux_setBar(button, id, hbAuxTotalHeal10, true, HealBot_Text_shortHealTxt(button.health.healabsorbs, button.frame))
+        else
+            HealBot_Aux_setBar(button, id, hbAuxTotalHeal10, true)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateTotalHealAbsorbsBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateTotalHealAbsorbsBar", button)
     for id in pairs(hbAuxTotalHealAbsorbsAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] and button.health.healabsorbs>0 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=0.7
-                button.aux[id]["G"]=0.2
-                button.aux[id]["B"]=0.9
-            end
-            HealBot_Aux_SetAuxTotalHeal10(button)
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
-                end
-                HealBot_Aux_setBar(button, id, hbAuxTotalHeal10, true, HealBot_Text_shortHealTxt(button.health.healabsorbs, button.frame))
-            else
-                HealBot_Aux_setBar(button, id, hbAuxTotalHeal10, true)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateTotalHealAbsorbsBarById(button, id)
     end
 end
 
@@ -1131,27 +1163,31 @@ local function HealBot_Aux_SetohValue(button)
     end
 end
 
+local function HealBot_Aux_UpdateOverHealBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DEAD"] and button.status.range>-1 and button.health.overheal>0 then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=1
+            button.aux[id]["G"]=0.2
+            button.aux[id]["B"]=0.2
+        end
+        HealBot_Aux_SetohValue(button)
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then 
+            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+                button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
+            end
+            HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.overheal, button.frame))
+        else
+            HealBot_Aux_setBar(button, id, ohValue, true)
+        end
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateOverHealBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateOverHealBar", button)
     for id in pairs(hbAuxOverHealAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DEAD"] and button.status.range>-1 and button.health.overheal>0 then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=1
-                button.aux[id]["G"]=0.2
-                button.aux[id]["B"]=0.2
-            end
-            HealBot_Aux_SetohValue(button)
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["TEXT"] then 
-                if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                    button.auxtxt[id]["R"],button.auxtxt[id]["G"],button.auxtxt[id]["B"]=1,1,1
-                end
-                HealBot_Aux_setBar(button, id, ohValue, true, HealBot_Text_shortHealTxt(button.health.overheal, button.frame))
-            else
-                HealBot_Aux_setBar(button, id, ohValue, true)
-            end
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateOverHealBarById(button, id)
     end
 end
 
@@ -1238,19 +1274,23 @@ function HealBot_Aux_setTargetAssigned(frame, id)
     HealBot_setLuVars("AuxTargetInUse", true)
 end
 
+function HealBot_Aux_UpdateTargetBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["RESERVED"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=1
+            button.aux[id]["G"]=0.9
+            button.aux[id]["B"]=0.2
+        end
+        HealBot_Aux_setBar(button, id, 1000, false)
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateTargetBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateTargetBar", button)
     for id in pairs(hbAuxTargetAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["RESERVED"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=1
-                button.aux[id]["G"]=0.9
-                button.aux[id]["B"]=0.2
-            end
-            HealBot_Aux_setBar(button, id, 1000, false)
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateTargetBarById(button, id)
     end
 end
 
@@ -1350,19 +1390,23 @@ function HealBot_Aux_setOORAssigned(frame, id)
     HealBot_Timers_Set("AUX","ResetRange")
 end
 
+local function HealBot_Aux_UpdateOORBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DC"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=0
+            button.aux[id]["G"]=0
+            button.aux[id]["B"]=0
+        end
+        HealBot_Aux_setBar(button, id, 1000, false)
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateOORBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateOORBar", button)
     for id in pairs(hbAuxOORAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DC"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=0
-                button.aux[id]["G"]=0
-                button.aux[id]["B"]=0
-            end
-            HealBot_Aux_setBar(button, id, 1000, false)
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateOORBarById(button, id)
     end
 end
 
@@ -1403,19 +1447,23 @@ function HealBot_Aux_setInRangeAssigned(frame, id)
     HealBot_Timers_Set("AUX","ResetRange")
 end
 
+local function HealBot_Aux_UpdateInRangeBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DC"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=1
+            button.aux[id]["G"]=1
+            button.aux[id]["B"]=1
+        end
+        HealBot_Aux_setBar(button, id, 1000, false)
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateInRangeBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateInRangeBar", button)
     for id in pairs(hbAuxInRangeAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DC"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=1
-                button.aux[id]["G"]=1
-                button.aux[id]["B"]=1
-            end
-            HealBot_Aux_setBar(button, id, 1000, false)
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateInRangeBarById(button, id)
     end
 end
 
@@ -2075,24 +2123,28 @@ function HealBot_Aux_setStateAssigned(frame, id)
     HealBot_Text_setAuxAssigns("State", frame, true)
 end
 
+local function HealBot_Aux_UpdateStateBarById(button, id)
+    if button.status.current<HealBot_Unit_Status["DC"] then
+        if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
+            button.aux[id]["R"]=0
+            button.aux[id]["G"]=0
+            button.aux[id]["B"]=0.1
+        end
+        if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
+            button.auxtxt[id]["R"]=0.9
+            button.auxtxt[id]["G"]=0.9
+            button.auxtxt[id]["B"]=0.9
+        end
+        HealBot_Aux_setBar(button, id, 1000, false, button.text.tag)
+    else
+        HealBot_Aux_clearBar(button, id)
+    end
+end
+
 function HealBot_Aux_UpdateStateBar(button)
       --HealBot_setCall("HealBot_Aux_UpdateStateBar", button)
     for id in pairs(hbAuxStateAssigned[button.frame]) do
-        if button.status.current<HealBot_Unit_Status["DC"] then
-            if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLOUR"]==1 then
-                button.aux[id]["R"]=0
-                button.aux[id]["G"]=0
-                button.aux[id]["B"]=0.1
-            end
-            if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][id][button.frame]["COLTYPE"]==1 then
-                button.auxtxt[id]["R"]=0.9
-                button.auxtxt[id]["G"]=0.9
-                button.auxtxt[id]["B"]=0.9
-            end
-            HealBot_Aux_setBar(button, id, 1000, false, button.text.tag)
-        else
-            HealBot_Aux_clearBar(button, id)
-        end
+        HealBot_Aux_UpdateStateBarById(button, id)
     end
 end
 
@@ -2104,6 +2156,38 @@ function HealBot_Aux_ClearStateBar(button)
 end
 
 -- Update by Type
+
+function HealBot_Aux_UpdateAuxByTypeById(button, frame, id)
+    if hbAuxNameAssigned[frame][id] then
+        HealBot_Aux_DoUpdateNameOverLay(button)
+    elseif hbAuxHealthAssigned[frame][id] then
+        HealBot_Aux_DoUpdateHealthOverLay(button)
+    elseif hbAuxStateAssigned[frame][id] then
+        HealBot_Aux_UpdateStateBarById(button, id)
+    elseif hbAuxPowerAssigned[frame][id] then
+        HealBot_Aux_setPowerBarsById(button, id)
+    elseif hbAuxBuffAssigned[frame][id] then
+        HealBot_Aux_UpdateAuraBuffBarsById(button, id)
+    elseif hbAuxDebuffAssigned[frame][id] then
+        HealBot_Aux_UpdateAuraDebuffBarsById(button, id)
+    elseif hbAuxTargetAssigned[frame][id] then
+        HealBot_Aux_UpdateTargetBarById(button, id)
+    elseif hbAuxOORAssigned[frame][id] then
+        HealBot_Aux_UpdateOORBarById(button, id)
+    elseif hbAuxInRangeAssigned[frame][id] then
+        HealBot_Aux_UpdateInRangeBarById(button, id)
+    elseif hbAuxOverHealAssigned[frame][id] then
+        HealBot_Aux_UpdateOverHealBarById(button, id)
+    elseif hbAuxHealInAssigned[frame][id] then
+        HealBot_Aux_UpdateHealInBarById(button, id)
+    elseif hbAuxAbsorbAssigned[frame][id] then
+        HealBot_Aux_UpdateAbsorbBarById(button, id)
+    elseif hbAuxThreatAssigned[frame][id] then
+        HealBot_Aux_UpdateThreatBarById(button, id)
+    elseif hbAuxTotalHealAbsorbsAssigned[frame][id] then
+        HealBot_Aux_UpdateTotalHealAbsorbsBarById(button, id)
+    end
+end
 
 local function HealBot_Aux_UpdateAllAuxByTypeById(f, x)
       --HealBot_setCall("HealBot_Aux_UpdateAllAuxByTypeById")
@@ -2155,7 +2239,6 @@ function HealBot_Aux_UpdateAllAuxByType(frame, id)
     end
 end
 
-
 local function HealBot_Aux_ResetTextByTypeById(button)
       --HealBot_setCall("HealBot_Aux_ResetTextByTypeById", button)
     for x=1,9 do
@@ -2171,29 +2254,29 @@ local function HealBot_Aux_ResetTextByTypeById(button)
         elseif Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][button.frame]["TEXT"] then
             if hbAuxPowerAssigned[button.frame][x] then
                 HealBot_Aux_setBar(button, x, button.mana.pctc, true, " ")
-                HealBot_Aux_setPowerBars(button)
+                HealBot_Aux_setPowerBarsById(button, x)
             elseif button.aura.buff.name and hbAuxBuffAssigned[button.frame][x] then
                 HealBot_Aux_setBar(button, x, 1000, false, button.aura.buff.name.." ")
-                HealBot_Aux_UpdateAuraBuffBars(button)
+                HealBot_Aux_UpdateAuraBuffBarsById(button, x)
             elseif button.aura.debuff.name and hbAuxDebuffAssigned[button.frame][x] then
                 HealBot_Aux_setBar(button, x, 1000, false, button.aura.debuff.name.." ")
-                HealBot_Aux_UpdateAuraDebuffBars(button)
+                HealBot_Aux_UpdateAuraDebuffBarsById(button, x)
             elseif hbAuxAbsorbAssigned[button.frame][x] then
                 HealBot_Aux_SetAuxHlth10(button)
                 HealBot_Aux_setBar(button, x, hbAuxHlth10, true, HealBot_Text_shortHealTxt(button.health.auxabsorbs+1, button.frame))
-                HealBot_Aux_UpdateAbsorbBar(button)
+                HealBot_Aux_UpdateAbsorbBarById(button, x)
             elseif hbAuxHealInAssigned[button.frame][x] then
                 HealBot_Aux_SetAuxHealIn10(button)
                 HealBot_Aux_setBar(button, x, hbAuxHealIn10, true, HealBot_Text_shortHealTxt(button.health.auxincoming+1, button.frame))
-                HealBot_Aux_UpdateHealInBar(button)
+                HealBot_Aux_UpdateHealInBarById(button, x)
             elseif hbAuxTotalHealAbsorbsAssigned[button.frame][x] then
                 HealBot_Aux_SetAuxTotalHeal10(button)
                 HealBot_Aux_setBar(button, x, hbAuxTotalHeal10, true, HealBot_Text_shortHealTxt(button.health.healabsorbs+1, button.frame))
-                HealBot_Aux_UpdateTotalHealAbsorbsBar(button)
+                HealBot_Aux_UpdateTotalHealAbsorbsBarById(button, x)
             elseif hbAuxOverHealAssigned[button.frame][x] then
                 HealBot_Aux_SetohValue(button)
                 HealBot_Aux_setBar(button, x, ohValue, true, HealBot_Text_shortHealTxt(button.health.overheal+1, button.frame))
-                HealBot_Aux_UpdateOverHealBar(button)
+                HealBot_Aux_UpdateOverHealBarById(button, x)
             end
         end
     end

@@ -794,10 +794,6 @@ local hbTimerFuncs={["INIT"]={
                         ["AuxBarsReset"]=HealBot_Aux_barsReset,
                         ["ClassicSpellRanks"]=HealBot_Init_ClassicSpellRanks,
                         ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
-                        ["PluginRequestsDead"]=HealBot_Plugin_Requests_PlayerDead,
-                        ["PluginAuraWatchDead"]=HealBot_Plugin_AuraWatch_PlayerDead,
-                        ["PluginHealthWatchDead"]=HealBot_Plugin_HealthWatch_PlayerDead,
-                        ["PluginManaWatchDead"]=HealBot_Plugin_ManaWatch_PlayerDead,
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
                         ["SetEventQueues"]=HealBot_SetEventQueues,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
@@ -894,7 +890,7 @@ function HealBot_Timers_RunTimer(cat, timer)
     else
         NoCallsInx=cat..":"..timer
         HealBot_AddDebug(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. "ERROR: Timer " .._G["FONT_COLOR_CODE_CLOSE"] .. _G["YELLOW_FONT_COLOR_CODE"] .. NoCallsInx  .._G["FONT_COLOR_CODE_CLOSE"].. _G["ORANGE_FONT_COLOR_CODE"] .." not found.")
-        HealBot_AddDebug(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. "ERROR: Timer " .._G["FONT_COLOR_CODE_CLOSE"] .. _G["YELLOW_FONT_COLOR_CODE"] .. NoCallsInx  .._G["FONT_COLOR_CODE_CLOSE"].. _G["ORANGE_FONT_COLOR_CODE"] .." not found.","Timers",true)
+        HealBot_AddDebug(HEALBOT_HEALBOT .. " " .. _G["ORANGE_FONT_COLOR_CODE"] .. " ERROR: Timer " .._G["FONT_COLOR_CODE_CLOSE"] .. _G["YELLOW_FONT_COLOR_CODE"] .. NoCallsInx  .._G["FONT_COLOR_CODE_CLOSE"].. _G["ORANGE_FONT_COLOR_CODE"] .." not found.","Timers",true)
     end
     --if HealBot_Globals.DebugOut then HealBot_Timers_Usage(cat, timer) end
 end
@@ -931,7 +927,6 @@ function HealBot_Timers_Proc()
         table.remove(HealBot_Timers["OOC"],1)
     else
         HealBot_setLuVars("HealBot_RunTimers", false)
-        --HealBot_AddDebug("Run timers off, #Calls="..HealBot_Timers_luVars["nCalls"],"Timers",true)
         --HealBot_Timers_luVars["nCalls"]=0
         return false
     end
