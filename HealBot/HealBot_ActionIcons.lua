@@ -1518,7 +1518,7 @@ function HealBot_ActionIcons_SetTarget(frame, id, unit)
                 if UnitIsUnit(unit, "player") then
                     actionIcons[frame][id].inRange=true
                 else
-                    actionIcons[frame][id].inRange=HealBot_ActionIcons_IsInRange(unit)
+                    actionIcons[frame][id].inRange=HealBot_ActionIcons_IsInRange(actionIcons[frame][id].guid)
                 end
                 HealBot_ActionIcons_ConditionCheck(frame, id)
                 HealBot_ActionIconsInRange(actionIcons[frame][id].guid, true)
@@ -2112,9 +2112,9 @@ function HealBot_ActionIcons_CheckAlertState(frame, id)
     end
 end
 
-function HealBot_ActionIcons_IsInRange(unit)
-        --HealBot_setCall("HealBot_ActionIcons_IsInRange", nil, nil, unit)
-    _, xButton, pButton = HealBot_UnitID(unit)
+function HealBot_ActionIcons_IsInRange(guid)
+        --HealBot_setCall("HealBot_ActionIcons_IsInRange")
+    xButton, pButton = HealBot_Panel_AllUnitButton(guid)
     if (xButton and xButton.status.range>0) or (pButton and pButton.status.range>0) then
         return true
     end
@@ -2150,7 +2150,7 @@ local hbRangeQueue={}
 local hbRangeQueueList={}
 function HealBot_ActionIcons_CheckUnitInRange(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_CheckUnitInRange")
-    if actionIcons[frame][id].unit and UnitExists(actionIcons[frame][id].unit) and HealBot_ActionIcons_IsInRange(actionIcons[frame][id].unit) then
+    if actionIcons[frame][id].unit and UnitExists(actionIcons[frame][id].unit) and HealBot_ActionIcons_IsInRange(actionIcons[frame][id].guid) then
         HealBot_ActionIcons_CheckRange(frame, id, true)
     end
 end

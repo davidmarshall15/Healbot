@@ -3120,11 +3120,6 @@ function HealBot_Panel_focusHeal(isOn)
     focusHeal=isOn
 end
 
-function HealBot_Panel_RaidUnitGUID_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_RaidUnitGUID")
-    return hbPanel_dataGUIDs[guid]
-end
-
 function HealBot_Panel_PetUnitGUID(guid)
       --HealBot_setCall("HealBot_Panel_PetUnitGUID")
     return hbPanel_dataPetGUIDs[guid]
@@ -3150,23 +3145,6 @@ function HealBot_Panel_RaidUnitButtonCheck(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] 
 end
 
-local ruxUnit, ruxButton, rupButton
-function HealBot_Panel_RaidUnitButton_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_RaidUnitButton")
-    ruxUnit=HealBot_Panel_RaidUnitGUID(guid)
-    if ruxUnit then
-        _, ruxButton, rupButton = HealBot_UnitID(ruxUnit)
-        return ruxButton, rupButton
-    else
-        return nil
-    end
-end
-
-function HealBot_Panel_RaidPetUnitGUID_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_RaidPetUnitGUID")
-    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid]
-end
-
 function HealBot_Panel_RaidPetUnitButton(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid], hbPanel_buttonpGUIDs[guid] 
 end
@@ -3175,39 +3153,12 @@ function HealBot_Panel_RaidPetUnitButtonCheck(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid]
 end
 
-function HealBot_Panel_RaidPetUnitButton_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_RaidPetUnitButton")
-    ruxUnit=HealBot_Panel_RaidPetUnitGUID(guid)
-    if ruxUnit then
-        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit)
-        return ruxButton, rupButton
-    else
-        return nil
-    end
-end
-
-function HealBot_Panel_AllUnitGUID_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_AllUnitGUID")
-    return hbPanel_dataGUIDs[guid] or hbPanel_dataPetGUIDs[guid] or hbPanel_dataExtraGUIDs[guid]
-end
-
 function HealBot_Panel_AllUnitButton(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
 end
 
 function HealBot_Panel_AllUnitButtonCheck(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid]
-end
-
-function HealBot_Panel_AllUnitButton_OLD(guid)
-      --HealBot_setCall("HealBot_Panel_AllUnitButton")
-    ruxUnit=HealBot_Panel_AllUnitGUID(guid)
-    if ruxUnit then
-        _,ruxButton,rupButton = HealBot_UnitID(ruxUnit, true)
-        return ruxButton, rupButton
-    else
-        return nil
-    end
 end
 
 function HealBot_Panel_RaidUnitName(uName)
@@ -3486,7 +3437,7 @@ end
 
 function HealBot_Panel_Init()
       --HealBot_setCall("HealBot_Panel_Init")
-    if HEALBOT_GAME_VERSION>3 then
+    if HEALBOT_GAME_VERSION>5 then
         HealBot_randomClCol = { [0] = { ["MAX"]=11, ["TE"]=5, ["HS"]=3, ["HE"]=7}, -- Correct mana colour for 12 and 13 before setting MAX=13 - Move Evoker to 8 and set HE=8
                                 [1] = { [1] = 0.77, [2] = 0.12, [3] = 0.23, [4]="DEAT", [5]=1, [6]=0, [7]=0},  
                                 [2] = { [1] = 0.78, [2] = 0.61, [3] = 0.43, [4]="WARR", [5]=1, [6]=0, [7]=0},  

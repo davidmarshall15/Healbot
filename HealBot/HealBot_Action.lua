@@ -2348,7 +2348,7 @@ function HealBot_Action_SetResTimes(button)
     ripHasResStart[button.guid]=HealBot_TimeNow
     button.status.resstart=HealBot_TimeNow
     if HealBot_Data["UILOCK"] then
-        if HEALBOT_GAME_VERSION>3 then
+        if HEALBOT_GAME_VERSION>4 then
             ripHasResEnd[button.guid]=HealBot_TimeNow+1.25
         elseif HEALBOT_GAME_VERSION>2 then
             ripHasResEnd[button.guid]=HealBot_TimeNow+1.5
@@ -2356,7 +2356,7 @@ function HealBot_Action_SetResTimes(button)
             ripHasResEnd[button.guid]=HealBot_TimeNow+1.75
         end
     else
-        if HEALBOT_GAME_VERSION>3 then
+        if HEALBOT_GAME_VERSION>4 then
             ripHasResEnd[button.guid]=HealBot_TimeNow+7
         elseif HEALBOT_GAME_VERSION>2 then
             ripHasResEnd[button.guid]=HealBot_TimeNow+8
@@ -2461,7 +2461,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 end
                 button.aura.buff.nextcheck=false
                 button.text.nameupdate=true
-                HealBot_UpdateUnitClear(button)
+                HealBot_UpdateUnitClear(button, true)
                 HealBot_Queue_UnitHealth(button)
                 HealBot_Text_setNameTag(button)
                 HealBot_Text_UpdateText(button)

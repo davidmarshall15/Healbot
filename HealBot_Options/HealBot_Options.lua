@@ -1044,53 +1044,29 @@ function HealBot_Options_setLists()
         HEALBOT_OPTIONS_GLOBAL,
     }
     
-    if HEALBOT_GAME_VERSION==1 then
-        HealBot_Options_hbCommands_List = {
-            HEALBOT_WORDS_NONE,
-            HEALBOT_CMD_CLEARBLACKLIST,
-            HEALBOT_CMD_COPYSPELLS,
-            HEALBOT_CMD_RESETICONS,
-            HEALBOT_CMD_RESETBARS,
-            HEALBOT_CMD_RESETBUFFS,
-            HEALBOT_CMD_RESETCURES,
-            HEALBOT_CMD_RESETCUSTOMDEBUFFS,
-            HEALBOT_CMD_RESETSKINS,
-            HEALBOT_CMD_RESETSPELLS,
-            HEALBOT_CMD_TOGGLEDISLIKEMOUNT,
-            HEALBOT_CMD_TOGGLEEXCLUDEMOUNT,
-            HEALBOT_CMD_SUPPRESSERRORS,
-            HEALBOT_CMD_SUPPRESSSOUND,
-            HEALBOT_CMD_TOGGLECUSTOMCURECASTBY,
-            HEALBOT_CMD_TOGGLEMAINASSIST,
-            HEALBOT_CMD_RESETSKINGROUP,
-            HEALBOT_CMD_RESETSKINRAID25,
-            HEALBOT_CMD_RESETSKINRAID40,
-        }
-    else
-        HealBot_Options_hbCommands_List = {
-            HEALBOT_WORDS_NONE,
-            HEALBOT_CMD_CLEARBLACKLIST,
-            HEALBOT_CMD_COPYSPELLS,
-            HEALBOT_CMD_RESETICONS,
-            HEALBOT_CMD_RESETBARS,
-            HEALBOT_CMD_RESETBUFFS,
-            HEALBOT_CMD_RESETCURES,
-            HEALBOT_CMD_RESETCUSTOMDEBUFFS,
-            HEALBOT_CMD_RESETSKINS,
-            HEALBOT_CMD_RESETSPELLS,
-            HEALBOT_CMD_TOGGLEDISLIKEMOUNT,
-            HEALBOT_CMD_TOGGLEEXCLUDEMOUNT,
-            HEALBOT_CMD_SUPPRESSERRORS,
-            HEALBOT_CMD_SUPPRESSSOUND,
-            HEALBOT_CMD_TOGGLECUSTOMCURECASTBY,
-            HEALBOT_CMD_TOGGLEMAINASSIST,
-            HEALBOT_CMD_RESETSKINGROUP,
-            HEALBOT_CMD_RESETSKINRAID25,
-            HEALBOT_CMD_RESETSKINRAID40,
-            HEALBOT_CMD_TOGGLETALENTQUERY,
-            HEALBOT_CMD_TOGGLECLEARINSPECT,
-        }
-    end
+    HealBot_Options_hbCommands_List = {
+        HEALBOT_WORDS_NONE,
+        HEALBOT_CMD_CLEARBLACKLIST,
+        HEALBOT_CMD_COPYSPELLS,
+        HEALBOT_CMD_RESETICONS,
+        HEALBOT_CMD_RESETBARS,
+        HEALBOT_CMD_RESETBUFFS,
+        HEALBOT_CMD_RESETCURES,
+        HEALBOT_CMD_RESETCUSTOMDEBUFFS,
+        HEALBOT_CMD_RESETSKINS,
+        HEALBOT_CMD_RESETSPELLS,
+        HEALBOT_CMD_TOGGLEDISLIKEMOUNT,
+        HEALBOT_CMD_TOGGLEEXCLUDEMOUNT,
+        HEALBOT_CMD_SUPPRESSERRORS,
+        HEALBOT_CMD_SUPPRESSSOUND,
+        HEALBOT_CMD_TOGGLECUSTOMCURECASTBY,
+        HEALBOT_CMD_TOGGLEMAINASSIST,
+        HEALBOT_CMD_RESETSKINGROUP,
+        HEALBOT_CMD_RESETSKINRAID25,
+        HEALBOT_CMD_RESETSKINRAID40,
+        HEALBOT_CMD_TOGGLETALENTQUERY,
+        HEALBOT_CMD_TOGGLECLEARINSPECT,
+    }
 
     HealBot_Options_EmergencyFClass_List = {
         HEALBOT_CLASSES_MELEE,
@@ -1933,7 +1909,7 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_SACRED_SHIELD,
             HBC_SACRED_SHIELD,
         }
-        if HEALBOT_GAME_VERSION>3 then
+        if HEALBOT_GAME_VERSION>5 then
             local i = GetSpecialization()
             local specID = 0
             if i then specID = GetSpecializationInfo(i,false,false) end
@@ -10235,29 +10211,25 @@ function HealBot_Options_ToggleMainAssist()
 end
 
 function HealBot_Options_ToggleTalentQuery()
-    if HEALBOT_GAME_VERSION>2 then
-        if HealBot_Globals.DenyTalentQuery then
-            HealBot_Globals.DenyTalentQuery=false
-            HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYON)
-        else
-            HealBot_Globals.DenyTalentQuery=true
-            HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYOFF)
-        end
-        if HEALBOT_GAME_VERSION<8 then
-            HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",1)
-        end
+    if HealBot_Globals.DenyTalentQuery then
+        HealBot_Globals.DenyTalentQuery=false
+        HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYON)
+    else
+        HealBot_Globals.DenyTalentQuery=true
+        HealBot_AddChat(HEALBOT_ALLOWTALENTQUERYOFF)
+    end
+    if HEALBOT_GAME_VERSION<8 then
+        HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll",1)
     end
 end
 
 function HealBot_Options_ToggleClearInspect()
-    if HEALBOT_GAME_VERSION>2 then
-        if HealBot_Globals.ClearInspect then
-            HealBot_Globals.ClearInspect=false
-            HealBot_AddChat(HEALBOT_CLEARINSPECTOFF)
-        else
-            HealBot_Globals.ClearInspect=true
-            HealBot_AddChat(HEALBOT_CLEARINSPECTON)
-        end
+    if HealBot_Globals.ClearInspect then
+        HealBot_Globals.ClearInspect=false
+        HealBot_AddChat(HEALBOT_CLEARINSPECTOFF)
+    else
+        HealBot_Globals.ClearInspect=true
+        HealBot_AddChat(HEALBOT_CLEARINSPECTON)
     end
 end
 

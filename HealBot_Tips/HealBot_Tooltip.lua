@@ -109,15 +109,15 @@ function HealBot_Tooltip_GCDV1()
 end
 
 local gcdDUR=0
-function HealBot_Tooltip_GCDV4()
+function HealBot_Tooltip_GCDV5()
       --HealBot_setCall("HealBot_Tooltip_GCDV4")
     _, gcdDUR = GetSpellCooldown(61304) -- GCD
     return gcdDUR
 end
 
 local HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV1
-if HEALBOT_GAME_VERSION>3 then
-    HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV4
+if HEALBOT_GAME_VERSION>4 then
+    HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV5
 end
 function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
@@ -673,7 +673,7 @@ function HealBot_Action_DoRefreshTooltip()
                         else
                             uSpec=xButton.spec
                         end
-                        if HEALBOT_GAME_VERSION>2 and uSpec==" " then
+                        if uSpec==" " then
                             HealBot_SpecUpdate(xButton, HealBot_TimeNow)
                         end
                     else

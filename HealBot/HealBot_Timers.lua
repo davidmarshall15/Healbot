@@ -35,6 +35,7 @@ local HealBot_Timers_LastRun={
                      
 local HealBot_Timers_NoCalls={}
 local HealBot_Timers_luVars={}
+local xButton,pButton
 HealBot_Timers_luVars["UpdateAllBuffIcons"]=false
 HealBot_Timers_luVars["DoneBuffReset"]=false
 HealBot_Timers_luVars["nCalls"]=0
@@ -176,21 +177,21 @@ end
 
 function HealBot_Timers_CheckPlayerAura()
       --HealBot_setCall("HealBot_Timers_CheckPlayerAura")
-    local _,xButton,pButton = HealBot_UnitID("player")
+    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_Check_UnitAura(xButton) end
     if pButton then HealBot_Check_UnitAura(pButton) end
 end
 
 function HealBot_Timers_CheckTalentInfo()
       --HealBot_setCall("HealBot_Timers_CheckTalentInfo")
-    local _,xButton,pButton = HealBot_UnitID("player")
+    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_GetTalentInfo(xButton) end
     if pButton then HealBot_GetTalentInfo(pButton) end
 end
 
 function HealBot_Timers_PowerIndicator()
       --HealBot_setCall("HealBot_Timers_PowerIndicator")
-    local _,xButton,pButton = HealBot_UnitID("player")
+    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then
         HealBot_Action_setpcClass(xButton)
         xButton.mana.power=-1
@@ -205,7 +206,7 @@ end
 
 function HealBot_Timers_TipPowerCol()
       --HealBot_setCall("HealBot_Timers_TipPowerCol")
-    local _,xButton,pButton = HealBot_UnitID("player")
+    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then
         HealBot_Tooltip_setPlayerPowerCols(xButton.mana.r,xButton.mana.g,xButton.mana.b)
     elseif pButton then
@@ -359,7 +360,7 @@ end
 
 function HealBot_Timers_SetPlayerRestingState()
       --HealBot_setCall("HealBot_Timers_SetPlayerRestingState")
-    local _,xButton,pButton = HealBot_UnitID("player")
+    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
     if xButton then HealBot_Aura_UpdateState(xButton) end
     if pButton then HealBot_Aura_UpdateState(pButton) end
 end
