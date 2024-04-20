@@ -537,6 +537,11 @@ function HealBot_CheckFrame(hbCurFrame, HBframe)
     end
 end
 
+HealBot_luVars["ClassicInteractDistance"]=4
+if HEALBOT_GAME_VERSION<3 then
+    HealBot_luVars["ClassicInteractDistance"]=3
+end
+
 function HealBot_TalentQuery(button)
       --HealBot_setCall("HealBot_TalentQuery", button)
     local hbInspect=false
@@ -560,7 +565,7 @@ function HealBot_TalentQuery(button)
             else
                 HealBot_SpecUpdate(button, HealBot_TimeNow+10)
             end
-        elseif CheckInteractDistance(button.unit, 4) then
+        elseif CheckInteractDistance(button.unit, HealBot_luVars["ClassicInteractDistance"]) then
             local g,p,ip,t,tp,tpc="",false,false,false,false,false
             if _G["PaperDollFrame"] then g=_G["PaperDollFrame"]; p=g:IsVisible() end
             if _G["InspectPaperDollFrame"] then g=_G["InspectPaperDollFrame"]; ip=g:IsVisible() end
