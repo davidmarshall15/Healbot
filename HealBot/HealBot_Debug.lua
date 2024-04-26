@@ -84,8 +84,6 @@ local function HealBot_Debug_SetupStatusBarButton(bar, x, text)
 	bar.Text = bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
 	bar.Text:SetPoint("CENTER")
-	bar.Text:SetJustifyH("CENTER")
-	bar.Text:SetJustifyV("CENTER")
     bar.Text:SetText(text)
 end
 

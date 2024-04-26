@@ -69,10 +69,12 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOff"]=1
     else
         HealBot_Timers_luVars["nProcsOn"]=ceil(HealBot_Globals.CPUUsage*(HealBot_Globals.PerfMode*0.2))
+        --HealBot_Timers_luVars["nProcsOn"]=ceil(HealBot_Globals.CPUUsage*0.5)
         if HealBot_Timers_luVars["nProcsOn"]<2 then
             HealBot_Timers_luVars["nProcsOn"]=2
         end
         HealBot_Timers_luVars["nProcsOff"]=ceil(HealBot_Globals.CPUUsage*(HealBot_Globals.PerfMode*0.05))
+        --HealBot_Timers_luVars["nProcsOff"]=ceil(HealBot_Globals.CPUUsage*0.2)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
             HealBot_Timers_luVars["nProcsOff"]=1
         end
@@ -365,19 +367,25 @@ function HealBot_Timers_SetPlayerRestingState()
     if pButton then HealBot_Aura_UpdateState(pButton) end
 end
 
-function HealBot_Timers_UpdateUsedIndex(mType)
-      --HealBot_setCall("HealBot_Timers_UpdateUsedIndex")
-    HealBot_Options_UpdateMedia(mType)
+function HealBot_Timers_UpdateUsedMediaAll()
+    C_Timer.After(0.1, HealBot_Options_MediaUpdateFonts)
+    C_Timer.After(0.2, HealBot_Options_MediaUpdateTextures)
+    C_Timer.After(0.3, HealBot_Options_MediaUpdateSounds)
+end
+
+function HealBot_Timers_UpdateUsedMedia(mType)
     if mType=="Fonts" then
-        C_Timer.After(0.1, function() HealBot_Timers_UpdateUsedIndex("Textures") end)
+        C_Timer.After(0.1, HealBot_Options_MediaUpdateFonts)
     elseif mType=="Textures" then
-        C_Timer.After(0.1, function() HealBot_Timers_UpdateUsedIndex("Sounds") end)
+        C_Timer.After(0.1, HealBot_Options_MediaUpdateTextures)
+    else
+        C_Timer.After(0.1, HealBot_Options_MediaUpdateSounds)
     end
 end
 
-function HealBot_Timers_UpdateMediaIndex()
-      --HealBot_setCall("HealBot_Timers_UpdateMediaIndex")
-    C_Timer.After(0.1, function() HealBot_Options_InitFonts(0) end)
+function HealBot_Timers_InitFonts()
+      --HealBot_setCall("HealBot_Timers_InitFonts")
+    C_Timer.After(1, function() HealBot_Media_InitFonts(1) end)
 end
     
 function HealBot_Timers_InitSpells()
@@ -405,7 +413,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
-    C_Timer.After(1, HealBot_Timers_UpdateMediaIndex)
+    HealBot_Timers_InitFonts()
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
@@ -495,6 +503,7 @@ end
 function HealBot_Timers_TextFramesChanged()
       --HealBot_setCall("HealBot_Timers_TextFramesChanged")
     HealBot_Options_framesChanged(false, false, false, true)
+    HealBot_Timers_Set("SKINS","SetSkinText",0.02)
 end
 
 function HealBot_Timers_AuxFramesChanged()
@@ -566,8 +575,6 @@ local hbTimerFuncs={["INIT"]={
                         ["UnRegEvents"]=HealBot_UnRegister_Events,
                         ["ResetActiveUnitStatus"]=HealBot_Action_ResetActiveUnitStatus,
                         ["InitPlugins"]=HealBot_InitPlugins,
-                        ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
-                        ["ResetSkinAllElements"]=HealBot_Action_ResetSkinAllElements,
                         ["LastLoad"]=HealBot_Timers_LastLoad,
                         ["HealBotLoaded"]=HealBot_Loaded,
                         ["LastUpdate"]=HealBot_Timers_LastUpdate,
@@ -643,6 +650,9 @@ local hbTimerFuncs={["INIT"]={
                         ["ActionIconsSetFontChange"]=HealBot_ActionIcons_setFontChange,
                         ["SelfCountTextUpdate"]=HealBot_ActionIcons_SelfCountTextUpdateAll,
                         ["SkinChangePluginUpdate"]=HealBot_Timers_SkinChangePluginUpdate,
+                        ["ClearReset"]=HealBot_Action_ClearReset,
+                        ["ResetSkinAllElements"]=HealBot_Action_ResetSkinAllElements,
+                        ["ResetSkinAllButtons"]=HealBot_Action_ResetSkinAllButtons,
                     },
                     ["AUX"]={
                         ["ClearBars"]=HealBot_Options_clearAuxBars,

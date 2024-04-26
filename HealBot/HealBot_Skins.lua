@@ -589,26 +589,32 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         end
         
         if b.text.reset then
-            b.gref.txt["text"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"]),
-                            btextheight,
-                            HealBot_Font_Outline[btextoutline]);
-            b.gref.txt["text2"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
-                            btextheight2,
-                            HealBot_Font_Outline[btextoutline2]);
-            b.gref.txt["text3"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["SFONT"]),
-                            btextheight3,
-                            HealBot_Font_Outline[btextoutline3]);
-            b.gref.txt["text4"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["AFONT"]),
-                            btextheight4,
-                            HealBot_Font_Outline[btextoutline4]);
+            HealBot_Media_UpdateFont(b.gref.txt["text"],
+                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["FONT"],
+                                     btextheight,
+                                     btextoutline)
+            HealBot_Media_UpdateFont(b.gref.txt["text2"],
+                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"],
+                                     btextheight2,
+                                     btextoutline2)
+            HealBot_Media_UpdateFont(b.gref.txt["text3"],
+                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["SFONT"],
+                                     btextheight3,
+                                     btextoutline3)
+            HealBot_Media_UpdateFont(b.gref.txt["text4"],
+                                     Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["AFONT"],
+                                     btextheight4,
+                                     btextoutline4)
             if btextheight2-HealBot_Globals.VehicleFontSizeReduction<2 then
-                b.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
-                                2,
-                                HealBot_Font_Outline[btextoutline2]);
+                HealBot_Media_UpdateFont(b.gref.txt["text5"],
+                                         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"],
+                                         2,
+                                         btextoutline2)
             else
-                b.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"]),
-                                btextheight2-HealBot_Globals.VehicleFontSizeReduction,
-                                HealBot_Font_Outline[btextoutline2]);
+                HealBot_Media_UpdateFont(b.gref.txt["text5"],
+                                         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][b.frame]["HFONT"],
+                                         btextheight2-HealBot_Globals.VehicleFontSizeReduction,
+                                         btextoutline2)
             end
 
             b.gref.txt["text"]:SetWidth(bWidth)
@@ -616,9 +622,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref.txt["text3"]:SetWidth(bWidth)
             b.gref.txt["text4"]:SetWidth(bWidth)
             for x=1,9 do
-                b.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["FONT"]),
-                                ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["HEIGHT"]*frameScale),
-                                HealBot_Font_Outline[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["OUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.auxtxt[x],
+                                         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["FONT"],
+                                         ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["HEIGHT"]*frameScale),
+                                         Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][b.frame]["OUTLINE"])
                 b.gref.auxtxt[x]:ClearAllPoints();
                 b.gref.auxtxt[x]:SetWidth(ceil((bWidth+auxWidth)*Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.frame]["SIZE"]))
                 if Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.frame]["ANCHOR"]<3 or Healbot_Config_Skins.AuxBar[Healbot_Config_Skins.Current_Skin][x][b.frame]["ANCHOR"]>4 then
@@ -713,12 +720,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=1,8 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["BUFFOUTLINE"])
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -737,12 +746,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=9,10 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["BUFFOUTLINE"])
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -761,12 +772,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=11,12 do
                 b.gref.icon[x]:SetHeight(iScale);
                 b.gref.icon[x]:SetWidth(iScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["BUFFOUTLINE"])
                 b.gref.iconf[x]:SetHeight(iScale)
                 b.gref.iconf[x]:SetWidth(iScale)
                 if HealBot_Globals.UseIconCommands then
@@ -785,12 +798,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=51,56 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][1]["DBOUTLINE"])
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -809,12 +824,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=57,58 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][2]["DBOUTLINE"])
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -833,12 +850,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             for x=59,60 do
                 b.gref.icon[x]:SetHeight(diScale);
                 b.gref.icon[x]:SetWidth(diScale);
-                b.gref.txt.expire[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"]]);
-                b.gref.txt.count[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"]),
-                                                Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
-                                                HealBot_Font_Outline[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"]]);
+                HealBot_Media_UpdateFont(b.gref.txt.expire[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"])
+                HealBot_Media_UpdateFont(b.gref.txt.count[x],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBFONT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBHEIGHT"],
+                                         Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][3]["DBOUTLINE"])
                 b.gref.iconf[x]:SetHeight(diScale)
                 b.gref.iconf[x]:SetWidth(diScale)
                 if HealBot_Globals.UseIconCommands then
@@ -1342,9 +1361,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         HealBot_Action_UpdateHeaderOpacity(h)
         h.bar:SetHeight(hheight);
         h.bar:SetWidth(hwidth);
-        h.bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
-                                ceil(Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"]*frameScale),
-                                HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
+        HealBot_Media_UpdateFont(h.bar.txt,
+                                       Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"],
+                                       ceil(Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"]*frameScale),
+                                       Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"])
         h.bar.txt:SetPoint("CENTER",h.bar,"CENTER",0,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OFFSET"])
         h.bar:EnableMouse(false)
         h.bar.txt2:SetTextColor(0,0,0,0);
@@ -1362,13 +1382,15 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         bar.txt = _G[HealBot_Skins_Concat(2)];
         tBarsConcat[2]="_text2"
         bar.txt2 = _G[HealBot_Skins_Concat(2)];
-        bar.txt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"]),
-                                            btextheight,
-                                            HealBot_Font_Outline[btextoutline]);
+        HealBot_Media_UpdateFont(bar.txt,
+                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"],
+                                 btextheight,
+                                 btextoutline)
         bar.txt:SetTextColor(0,0,0,1);
-        bar.txt2:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
-                                            btextheight2,
-                                            HealBot_Font_Outline[btextoutline2]);
+        HealBot_Media_UpdateFont(bar.txt2,
+                                 Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"],
+                                 btextheight2,
+                                 btextoutline2)
         bar.txt2:SetTextColor(0,0,0,1);
         iScale=0.84
         iScale=iScale+(numcols/10)

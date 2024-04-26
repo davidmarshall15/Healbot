@@ -293,8 +293,8 @@ function HealBot_Data_InitVars()
         CPUUsage=5,
         OptionsTheme=1,
         OptionsOpacityAdj=35,
-        AbsorbDiv=12,
-        InHealDiv=12,
+        AbsorbDiv=10,
+        InHealDiv=10,
         HealAbsorbsDiv=10,
         DebugOut=false,
         Debug01=false, -- Currently not used

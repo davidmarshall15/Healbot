@@ -803,7 +803,6 @@ function HealBot_Share_LoadDebuffs(sIn)
         end
     end
     HealBot_Timers_InitExtraOptions()
-    HealBot_Aura_ClearCustomDebuffsDone()
     HealBot_Timers_Set("AURA","CustomDebuffList")
     HealBot_Timers_Set("AURA","ConfigDebuffs")
 end

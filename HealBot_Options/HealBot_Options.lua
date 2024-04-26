@@ -8,8 +8,6 @@ local HealBot_DebuffWatchTarget={}
 local HealBot_BuffWatchTarget={}
 local BuffTextClass=nil
 local DoneInitTab={}
-local hb_textures=nil
-local texturesIndex={}
 local fonts=nil
 local fontsIndex={}
 local sounds=nil
@@ -95,6 +93,7 @@ local HealBot_Options_NoDuplcates={}
 local HealBot_Options_Lists={}
 local hbOptionsTooltip = CreateFrame("GameTooltip", "hbOptionsTooltip", nil, "GameTooltipTemplate")
 local HealBot_ComboKeys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
+local HealBot_Font_Outline={[1]="", [2]="OUTLINE", [3]="THICKOUTLINE"}
 local HealBot_Options_BindsKeyList={}
 local HealBot_Options_BindsKeyListRead={}
 HealBot_Options_BindsKeyList[1]=""
@@ -305,27 +304,6 @@ optionsText:SetPoint("TOPLEFT", optionsTitle, "BOTTOMLEFT", 0, -8)
 optionsText:SetText(HEALBOT_ABOUT_DESC1)
 local optionsButton = CreateFrame("Button", nil, optionsPanel, "UIPanelButtonTemplate")
 
-HealBot_Options_luVars["InitFontsRerun"]=false
-function HealBot_Options_InitFonts(id)
-      --HealBot_setCall("HealBot_Options_InitFonts")
-    if id<=#fonts then
-        if id==0 then
-            HealBot_Options_UpdateMediaIndex()
-        else
-            local g=_G["UsedToInitFonts"]
-            g:SetText("i"..id)
-            g:SetFont(LSM:Fetch('font',fonts[id]),10)
-        end
-        C_Timer.After(0.04, function() HealBot_Options_InitFonts(id+1) end)
-    elseif not HealBot_Options_luVars["InitFontsRerun"] then
-        HealBot_Timers_UpdateUsedIndex("Fonts")
-        HealBot_Options_luVars["InitFontsRerun"]=true
-        C_Timer.After(0.1, function() HealBot_Options_InitFonts(0) end)
-    else
-        HealBot_Timers_UpdateUsedIndex("Fonts")
-    end
-end
-
 function HealBot_Options_InitDebuffTypes()
       --HealBot_setCall("HealBot_Options_InitDebuffTypes")
     local hbPURIFICATION_POTION=GetItemInfoInstant(HEALBOT_PURIFICATION_POTION) or "Purification Potion"
@@ -418,7 +396,6 @@ function HealBot_Options_InitVars()
       --HealBot_setCall("HealBot_Options_InitVars")
     HealBot_Options_UpdateMediaIndex()
     if not HealBot_Globals.OptionsTheme then HealBot_Globals.OptionsTheme=1 end
-    LSM.RegisterCallback(HEALBOT_HEALBOT, "LibSharedMedia_SetGlobal", function(mediatype, key) HealBot_UpdateUsedMedia(mediatype, key) end)
     optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
     optionsButton:SetWidth(100)
     optionsButton:SetPoint("TOPLEFT", 14, -58)
@@ -1615,7 +1592,7 @@ function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate, textUp
         if indUpdate then HealBot_Action_setLuVars("resetIndicator", true) end
         if textUpdate then HealBot_Action_setLuVars("resetText", true) end
         if auxUpdate then HealBot_Action_setLuVars("resetAux", true) end
-        HealBot_Timers_Set("INIT","ResetSkinAllButtons")
+        HealBot_Timers_Set("SKINS","ResetSkinAllButtons")
     end
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
 end
@@ -3120,11 +3097,11 @@ function HealBot_Options_BarTextureS_OnValueChanged(self)
     if v~=self:GetValue() then
         self:SetValue(v) 
     else
-        if v > 0 and hb_textures then
-            if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=hb_textures[v] then
-                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = hb_textures[v];
+        if v > 0 then
+            if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=HealBot_Media_ReturnTextureName(v) then
+                Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = HealBot_Media_ReturnTextureName(v);
                 g=_G[self:GetName().."Text"]
-                g:SetText(self.text .. " "..v..": " .. hb_textures[v]);
+                g:SetText(self.text .. " "..v..": " .. HealBot_Media_ReturnTextureName(v));
                 HealBot_Timers_Set("SKINS","SkinsFramesChanged")
                 HealBot_Timers_Set("SKINS","SetSkinBars")
             end
@@ -3142,11 +3119,11 @@ function HealBot_EmergBarTexture_OnValueChanged(self)
     if v~=self:GetValue() then
         self:SetValue(v) 
     else
-        if v > 0 and hb_textures then
-            if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=hb_textures[v] then
-                Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = hb_textures[v];
+        if v > 0 then
+            if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=HealBot_Media_ReturnTextureName(v) then
+                Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = HealBot_Media_ReturnTextureName(v);
                 g=_G[self:GetName().."Text"]
-                g:SetText(self.text .. " "..v..": " .. hb_textures[v]);
+                g:SetText(self.text .. " "..v..": " .. HealBot_Media_ReturnTextureName(v));
                 HealBot_Timers_Set("SKINS","SkinsFramesChanged")
                 HealBot_Timers_Set("SKINS","SetSkinBars")
             end
@@ -3561,11 +3538,11 @@ function HealBot_Options_HeadTextureS_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        if val > 0 and hb_textures then
-            if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=hb_textures[val] then
-                Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = hb_textures[val];
+        if val > 0 then
+            if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=HealBot_Media_ReturnTextureName(val) then
+                Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = HealBot_Media_ReturnTextureName(val);
                 g=_G[self:GetName().."Text"]
-                g:SetText(self.text .. " " .. val..": " .. hb_textures[val]);
+                g:SetText(self.text .. " " .. val..": " .. HealBot_Media_ReturnTextureName(val));
                 HealBot_Timers_Set("SKINS","SkinsFramesChanged")
                 HealBot_Timers_Set("SKINS","SetSkinBars")
             end
@@ -3583,11 +3560,11 @@ function HealBot_Options_SkinFrameAliasTextureS_OnValueChanged(self)
     if val~=self:GetValue() then
         self:SetValue(val) 
     else
-        if val>0 and hb_textures then
-            if Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=hb_textures[val] then
-                Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = hb_textures[val];
+        if val>0 then
+            if Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]~=HealBot_Media_ReturnTextureName(val) then
+                Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"] = HealBot_Media_ReturnTextureName(val);
                 g=_G[self:GetName().."Text"]
-                g:SetText(self.text .. " " .. val..": " .. hb_textures[val]);
+                g:SetText(self.text .. " " .. val..": " .. HealBot_Media_ReturnTextureName(val));
                 HealBot_Timers_Set("SKINS","SkinsFramesChanged")
                 HealBot_Timers_Set("SKINS","SetSkinBars")
                 HealBot_Timers_Set("SKINS","FrameAliases")
@@ -3612,7 +3589,6 @@ function HealBot_Options_HeadFontNameS_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -3779,9 +3755,9 @@ function HealBot_BarButtonIconFont_OnValueChanged(self)
                 Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][HealBot_Options_luVars["DebuffIconSet"]]["DBFONT"] = fonts[val];
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
-                HealBot_UpdateUsedMedia("font")
+                HealBot_Media_UpdateUsedMedia("font")
                 HealBot_Timers_Set("SKINS","IconsFramesChanged")
-                HealBot_Timers_Set("SKINS","SetSkinText")
+                HealBot_Timers_Set("SKINS","SetSkinText",0.1)
             end
         else
             g=_G[self:GetName().."Text"]
@@ -3802,9 +3778,9 @@ function HealBot_BarButtonIconBuffFont_OnValueChanged(self)
                 Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][HealBot_Options_luVars["BuffIconSet"]]["BUFFFONT"] = fonts[val];
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
-                HealBot_UpdateUsedMedia("font")
+                HealBot_Media_UpdateUsedMedia("font")
                 HealBot_Timers_Set("SKINS","IconsFramesChanged")
-                HealBot_Timers_Set("SKINS","SetSkinText")
+                HealBot_Timers_Set("SKINS","SetSkinText",0.1)
             end
         else
             g=_G[self:GetName().."Text"]
@@ -3825,7 +3801,7 @@ function HealBot_Options_AliasFontName_OnValueChanged(self)
                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"] = fonts[val];
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
-                HealBot_UpdateUsedMedia("font")
+                HealBot_Media_UpdateUsedMedia("font")
             end
         else
             g=_G[self:GetName().."Text"]
@@ -3833,7 +3809,7 @@ function HealBot_Options_AliasFontName_OnValueChanged(self)
         end   
         if val>0 then
             HealBot_Timers_Set("SKINS","FrameAliases")
-            HealBot_Timers_Set("SKINS","SetSkinText")
+            HealBot_Timers_Set("SKINS","SetSkinText",0.1)
         end
     end
 end
@@ -3848,7 +3824,6 @@ function HealBot_Options_HeadFontHeightS_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -3862,7 +3837,6 @@ function HealBot_Options_HeadFontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -3914,7 +3888,6 @@ function HealBot_Options_AliasFontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","FrameAliases")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4014,7 +3987,6 @@ function HealBot_Options_FontName_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -4036,7 +4008,6 @@ function HealBot_Options_StateFontName_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -4058,7 +4029,6 @@ function HealBot_Options_AuxFontName_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -4080,7 +4050,6 @@ function HealBot_Options_HealthFontName_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -4144,7 +4113,6 @@ function HealBot_Options_AggroFontName_OnValueChanged(self)
                 g=_G[self:GetName().."Text"]
                 g:SetText(self.text .. " ".. val..": " ..fonts[val]);
                 HealBot_Timers_TextFramesChanged()
-                HealBot_Options_SetSkinText()
             end
         else
             g=_G[self:GetName().."Text"]
@@ -4163,7 +4131,6 @@ function HealBot_Options_FontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4177,7 +4144,6 @@ function HealBot_Options_StateFontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4192,7 +4158,6 @@ function HealBot_Options_AuxFontOffset_OnValueChanged(self)
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("AUX","UpdateAllAuxByType")
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4221,7 +4186,6 @@ function HealBot_Options_HealthFontOffset_OnValueChanged(self)
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("AUX","UpdateAllAuxByType")
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4235,7 +4199,6 @@ function HealBot_Options_AggroFontOffset_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4249,7 +4212,6 @@ function HealBot_Options_FontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4263,7 +4225,6 @@ function HealBot_Options_StateFontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4277,7 +4238,6 @@ function HealBot_Options_AuxFontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4291,7 +4251,6 @@ function HealBot_Options_HealthFontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4305,7 +4264,6 @@ function HealBot_Options_AggroFontHeight_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " .. val);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4373,7 +4331,6 @@ function HealBot_Options_TextOutLine_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4387,7 +4344,6 @@ function HealBot_Options_StateTextOutLine_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SOUTLINE"]]);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4401,7 +4357,6 @@ function HealBot_Options_AuxTextOutLine_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Options_FontOutline_List[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4415,7 +4370,6 @@ function HealBot_Options_HealthTextOutLine_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HOUTLINE"]]);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -4429,7 +4383,6 @@ function HealBot_Options_AggroTextOutLine_OnValueChanged(self)
         local g=_G[self:GetName().."Text"]
         g:SetText(self.text .. ": " ..HealBot_Options_FontOutline_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AOUTLINE"]]);
         HealBot_Timers_Set("SKINS","TextFramesChanged")
-        HealBot_Timers_Set("SKINS","SetSkinText")
     end
 end
 
@@ -8843,7 +8796,7 @@ function HealBot_Options_AliasFontOutline_DropDown()
                         Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_AliasFontOutline,HealBot_Options_FontOutline_List[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]) 
                         HealBot_Timers_Set("SKINS","FrameAliases")
-                        HealBot_Timers_Set("SKINS","SetSkinText")
+                        HealBot_Timers_Set("SKINS","SetSkinText",0.1)
                     end
         info.checked = false;
         if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]==j then info.checked = true end
@@ -8860,7 +8813,6 @@ function HealBot_Options_HeadFontOutline_DropDown()
                         Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_HeadFontOutline,HealBot_Options_FontOutline_List[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]) 
                         HealBot_Timers_Set("SKINS","TextFramesChanged")
-                        HealBot_Timers_Set("SKINS","SetSkinText")
                     end
         info.checked = false;
         if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]==j then info.checked = true end
@@ -9335,13 +9287,13 @@ local function HealBot_Options_BarHealthTextPosition_DropDown()
     for j=1, getn(HealBot_Options_BarHealthAnchor_List), 1 do
         info.text = HealBot_Options_BarHealthAnchor_List[j];
         info.func = function(self)
-                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"]==4 or self:GetID()==4 then
-                            HealBot_Timers_Set("SKINS","TextUpdateNames")
-                        end
                         Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"] = self:GetID()
                         UIDropDownMenu_SetText(HealBot_Options_BarHealthTextPosition, HealBot_Options_BarHealthAnchor_List[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"]])
                         HealBot_Text_setTextLen(HealBot_Options_luVars["FramesSelFrame"])
                         HealBot_Timers_Set("SKINS","TextFramesChanged")
+                        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HLTHTXTANCHOR"]==4 or self:GetID()==4 then
+                            HealBot_Timers_Set("SKINS","TextUpdateNames")
+                        end
                         HealBot_Timers_Set("SKINS","TextUpdateHealth")
                         HealBot_Options_HealthAnchor_Options()
                     end
@@ -18391,7 +18343,6 @@ function HealBot_Options_DeleteCDebuffBtn_OnClick()
       --HealBot_setCall("HealBot_Options_DeleteCDebuffBtn_OnClick")
     local sName=HealBot_Options_SpellGetName(HealBot_Options_luVars["CDebuffcustomSpellID"]) or "nil"
     HealBot_Options_DeleteCDebuff(HealBot_Options_luVars["CDebuffcustomSpellID"], sName)
-    HealBot_Aura_ClearCustomDebuffsDone()
 end
 
 function HealBot_Options_DeleteBuffHoT(classTr, sId, bName)
@@ -18928,7 +18879,6 @@ function HealBot_Options_ResetCDebuff()
     HealBot_Options_NewCDebuffBtn_SetCat(sName)
     HealBot_Timers_InitExtraOptions()
     HealBot_SetCDCBarColours();
-    HealBot_Aura_ClearCustomDebuffsDone()
     HealBot_Timers_Set("AURA","CustomDebuffListPrep")
 end
 
@@ -21153,9 +21103,9 @@ function HealBot_TextCustomColours_SetStatusBars()
         HealBot_SkinsFramesTextColoursCustom_Text:SetText(HEALBOT_OPTIONS_CUSTOMTEXTCOLAGGRO)
     end
     HealBot_TextHealthyCustomColourt:SetTextColor(r,g,b,1)
-    HealBot_TextHealthyCustomColourt:SetFont(LSM:Fetch('font',fn),fh,HealBot_Font_Outline[fo]);
-    HealBot_TextInjuredCustomColourt:SetFont(LSM:Fetch('font',fn),fh,HealBot_Font_Outline[fo]);
-    HealBot_TextCriticalCustomColourt:SetFont(LSM:Fetch('font',fn),fh,HealBot_Font_Outline[fo]);
+    HealBot_Media_UpdateFont(HealBot_TextHealthyCustomColourt, fn, fh, fo)
+    HealBot_Media_UpdateFont(HealBot_TextInjuredCustomColourt, fn, fh, fo)
+    HealBot_Media_UpdateFont(HealBot_TextCriticalCustomColourt, fn, fh, fo)
                                        
     if HealBot_Options_luVars["TextCustomColoursCaller"]=="Name" then
         r,g,b=Healbot_Config_Skins.BarTextCol[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["NICR"],
@@ -23809,7 +23759,7 @@ function HealBot_Options_AboutTab(tab)
         HealBot_Timers_Lang()
         local g=_G["UsedToInitFonts"]
         g:SetTextColor(0,0,0,0)
-        C_Timer.After(0.1, function() HealBot_Options_InitFonts(0) end)
+        C_Timer.After(0.01, function() HealBot_Media_InitFonts(1) end)
         HealBot_Options_luVars["OnLoad"]=false
     end
 end
@@ -24883,7 +24833,7 @@ function HealBot_Options_SkinsFramesHeadersBarsTab(tab)
         g:SetText(HEALBOT_SKIN_HEADERBARCOL)
         g=_G["HealBot_HeadTextColorpickt"]
         g:SetText(HEALBOT_SKIN_HEADERTEXTCOL)
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,texturesIndex[Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_Media_ReturnTextureIndex(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]),true)
         HealBot_Options_val_OnLoad(HealBot_Options_HeadHightS,HEALBOT_OPTIONS_SKINHEIGHT,5,80,1,5)
         HealBot_Options_HeadHightS:SetValue(Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"])
         HealBot_Options_SetText(HealBot_Options_HeadHightS, HEALBOT_OPTIONS_SKINHEIGHT..": "..Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"])
@@ -24911,7 +24861,7 @@ function HealBot_Options_SkinsFramesHeadersFramesTab(tab)
         HealBot_Options_FrameTitle:SetText(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["NAME"])
         HealBot_Options_SetText(HealBot_Options_FrameAliasShow,HEALBOT_OPTIONS_FRAME_TITLE_SHOW)
         HealBot_Options_FrameAliasShow:SetChecked(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SHOW"])
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,texturesIndex[Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_Media_ReturnTextureIndex(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]),true)
         HealBot_Options_val_OnLoad(HealBot_Options_SkinFrameAliasHeightS,HEALBOT_OPTIONS_SKINHEIGHT,5,80,1,5)
         HealBot_Options_SkinFrameAliasHeightS:SetValue(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"])
         HealBot_Options_SetText(HealBot_Options_SkinFrameAliasHeightS, HEALBOT_OPTIONS_SKINHEIGHT..": "..Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"])
@@ -24941,7 +24891,7 @@ end
 function HealBot_Options_SkinsFramesBarsGeneralTab(tab)
       --HealBot_setCall("HealBot_Options_SkinsFramesBarsGeneralTab")
     if not HealBot_Options_TabRunOnce[tab] then
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,texturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_Media_ReturnTextureIndex(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]),true)
         HealBot_Options_val_OnLoad(HealBot_Options_BarNumColsS,HEALBOT_OPTIONS_SKINBRSPACE,1,10,1,2)
         HealBot_Options_BarNumColsS:SetValue(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["NUMCOLS"] or 2)
         HealBot_Options_SetText(HealBot_Options_BarNumColsS,HealBot_Options_SetNoColsText() .. ": " .. Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["NUMCOLS"])
@@ -26346,7 +26296,7 @@ function HealBot_Options_SkinsFramesEmergencyGeneralTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_SkinsSpellsUse:SetChecked(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["USE"])
         HealBot_Options_SetText(HealBot_SkinsSpellsUse,HEALBOT_OPTIONS_EMERGBUTTONUSE)
-        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, texturesIndex[Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]])
+        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_Media_ReturnTextureIndex(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]))
         HealBot_Options_Pct_OnLoad_MinMax(HealBot_EmergBarHeight,HEALBOT_OPTIONS_SKINHEIGHT,0.01,2,0.01,5)
         HealBot_EmergBarHeight:SetValue(Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"]);
         HealBot_Options_Pct_OnValueChanged(HealBot_EmergBarHeight)
@@ -27391,17 +27341,17 @@ end
 
 function HealBot_Options_MediaUpdateFonts()
       --HealBot_setCall("HealBot_Options_MediaUpdateFonts")
-    HealBot_Options_UpdateMedia("Fonts")
+    HealBot_Media_UpdateType("Fonts", HealBot_Options_luVars["FramesSelFrame"], HealBot_Options_luVars["AuxTxtBar"])
 end
 
 function HealBot_Options_MediaUpdateTextures()
       --HealBot_setCall("HealBot_Options_MediaUpdateTextures")
-    HealBot_Options_UpdateMedia("Textures")
+    HealBot_Media_UpdateType("Textures", HealBot_Options_luVars["FramesSelFrame"])
 end
 
 function HealBot_Options_MediaUpdateSounds()
       --HealBot_setCall("HealBot_Options_MediaUpdateSounds")
-    HealBot_Options_UpdateMedia("Sounds")
+    HealBot_Media_UpdateType("Sounds", HealBot_Options_luVars["FramesSelFrame"])
 end
 
 local HealBot_Options_ExtraTabFuncs={
@@ -27614,29 +27564,35 @@ end
 
 function HealBot_Options_SetSkinText()
       --HealBot_setCall("HealBot_Options_SetSkinText")
-    local btextoutline=Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"];
-    HealBot_HeadBarColorpickt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
-                                       HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
-    HealBot_HeadTextColorpickt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
-                                       HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
-    HealBot_FrameAliasColorpickt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SIZE"],
-                                       HealBot_Font_Outline[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
-    HealBot_FrameAliasTextColorpickt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SIZE"],
-                                       HealBot_Font_Outline[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"]]);
-    HealBot_BarHealthyCustomColourt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
-                                       HealBot_Font_Outline[btextoutline]);
-    HealBot_BarInjuredCustomColourt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
-                                       HealBot_Font_Outline[btextoutline]);
-    HealBot_BarCriticalCustomColourt:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]),
-                                       Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
-                                       HealBot_Font_Outline[btextoutline]);
-    HealBot_UpdateUsedMedia("font")
+    HealBot_Media_UpdateFont(HealBot_HeadBarColorpickt,
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_HeadTextColorpickt,
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
+                             Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_FrameAliasColorpickt,
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SIZE"],
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_FrameAliasTextColorpickt,
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SIZE"],
+                             Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_BarHealthyCustomColourt,
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_BarInjuredCustomColourt,
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateFont(HealBot_BarCriticalCustomColourt,
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HEIGHT"],
+                             Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["OUTLINE"])
+    HealBot_Media_UpdateUsedMedia("font")
 end
 
 function HealBot_Options_SetSkinBars()
@@ -27878,7 +27834,7 @@ function HealBot_Options_SetSkinBars()
     HealBot_BarInjuredCustomColour:SetScale(barScale);
     HealBot_BarCriticalCustomColour:SetScale(barScale + 0.01);
     HealBot_BarCriticalCustomColour:SetScale(barScale);
-    HealBot_UpdateUsedMedia("statusbar")
+    HealBot_Media_UpdateUsedMedia("statusbar")
 end
 
 function HealBot_Options_ShowPanel(tabNo, subTabNo)
@@ -28904,23 +28860,16 @@ end
 
 function HealBot_Options_UpdateMediaTexture(object, index)
       --HealBot_setCall("HealBot_Options_UpdateMediaTexture")
-    if not index then index=texturesIndex[HealBot_Default_Textures[20].name] or 1 end
-    HealBot_Options_val_OnLoad(object,HEALBOT_OPTIONS_SKINTEXTURE,1,#hb_textures,1,5)
+    if not index then index=HealBot_Media_ReturnTextureIndex(HealBot_Default_Textures[20].name) end
+    HealBot_Options_val_OnLoad(object,HEALBOT_OPTIONS_SKINTEXTURE,1,HealBot_Media_ReturnTextureCount(),1,5)
     HealBot_Options_SetText(object,HEALBOT_OPTIONS_SKINTEXTURE)
     HealBot_Options_SetSliderValue(object,index)
     local g=_G[object:GetName().."Text"]
-    g:SetText(object.text .. " ".. index..": " ..hb_textures[index]);            
+    g:SetText(object.text .. " ".. index..": " ..HealBot_Media_ReturnTextureName(index));            
 end
 
 function HealBot_Options_UpdateMediaIndex()
       --HealBot_setCall("HealBot_Options_UpdateMediaIndex")
-    hb_textures = LSM:List('statusbar');
-    for x,_ in pairs(texturesIndex) do
-        texturesIndex[x]=nil
-    end 
-    for i=1,#hb_textures do
-        texturesIndex[hb_textures[i]] = i
-    end
     fonts = LSM:List('font');
     for x,_ in pairs(fontsIndex) do
         fontsIndex[x]=nil
@@ -28935,188 +28884,6 @@ function HealBot_Options_UpdateMediaIndex()
     end 
     for i=1,#sounds do
         soundsIndex[sounds[i]] = i
-    end
-end
-
-function HealBot_Options_UpdateMedia(mType)
-      --HealBot_setCall("HealBot_Options_UpdateMedia")
-    if mType == "Textures" then
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,texturesIndex[Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,texturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,texturesIndex[Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, texturesIndex[Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["TEXTURE"]])
-    elseif mType == "Fonts" then
-        HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,fontsIndex[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,fontsIndex[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,fontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["HFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,fontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["AFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,fontsIndex[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["AuxTxtBar"]][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,fontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["SFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,fontsIndex[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"] or HealBot_Default_Font)])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,fontsIndex[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONTCOUNT"] or HealBot_Default_Font)])
-        for z=1,3 do
-            HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,fontsIndex[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][z]["BUFFFONT"]])
-            HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, fontsIndex[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]][z]["DBFONT"]])
-        end
-        HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, fontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["FONT"]])
-    else
-        HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#sounds,1,2)
-        HealBot_Options_SetText(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND)
-        HealBot_Options_SetSliderValue(HealBot_Options_WarningSound,soundsIndex[HealBot_Config_Cures.SoundDebuffPlay])
-        HealBot_Options_val_OnLoad(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND,1,#sounds,1,2)
-        HealBot_Options_SetText(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND)
-        HealBot_Options_SetSliderValue(HealBot_Options_BuffWarningSound,soundsIndex[HealBot_Config_Buffs.SoundBuffPlay])
-    end
-end
-
-function HealBot_Options_UpdateUsedButtonText(button)
-      --HealBot_setCall("HealBot_Options_UpdateUsedButtonText", button)
-    button.gref.txt["text"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["FONT"]),
-                               ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HEIGHT"]*
-                                    Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
-                                    HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["OUTLINE"]]);
-    button.gref.txt["text2"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
-                                ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
-                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
-                                     HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
-    button.gref.txt["text3"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SFONT"]),
-                                ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SHEIGHT"]*
-                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
-                                     HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["SOUTLINE"]]);
-    button.gref.txt["text4"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AFONT"]),
-                                ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AHEIGHT"]*
-                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
-                                HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["AOUTLINE"]]);
-    if ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])-HealBot_Globals.VehicleFontSizeReduction<2 then
-        button.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
-                                         2,
-                                         HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
-
-    else
-        button.gref.txt["text5"]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HFONT"]),
-                                    ceil(Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HHEIGHT"]*
-                                         Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"])-HealBot_Globals.VehicleFontSizeReduction,
-                                         HealBot_Font_Outline[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HOUTLINE"]]);
-    end
-end
-
-function HealBot_Options_UpdateUsedTextures(button)
-      --HealBot_setCall("HealBot_Options_UpdateUsedTextures", button)
-    button.gref["Bar"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
-    button.gref["InHeal"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
-    for x=1,9 do
-        button.gref.aux[x]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]))
-    end
-    button.gref["Absorb"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
-    button.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
-    button.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
-    for x=1,9 do
-        button.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
-    end
-    button.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_Emerg_Button[button.id].bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
-    HealBot_Emerg_Button[button.id].bar:GetStatusBarTexture():SetHorizTile(false)
-end
-
-function HealBot_Options_UpdateUsedAuxText(button)
-      --HealBot_setCall("HealBot_Options_UpdateUsedAuxText")
-    for x=1,9 do
-        button.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["FONT"]),
-                                           ceil(Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["HEIGHT"]*
-                                                Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]),
-                                                HealBot_Font_Outline[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"]]);
-    end
-end
-
-function HealBot_UpdateUsedMedia(mediatype, key)
-      --HealBot_setCall("HealBot_UpdateUsedMedia")
-    if mediatype == "statusbar" then
-        if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin] then
-            local hFrames=HealBot_Panel_retHealBot_Header_Frames()
-            for _,h in pairs(hFrames) do
-                if h["GetName"] then
-                    local bar = _G[h:GetName().."Bar"]
-                    if bar then
-                        bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
-                        bar:GetStatusBarTexture():SetHorizTile(false)
-                    end
-                end
-            end
-        end
-        if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then 
-            for _,xButton in pairs(HealBot_Unit_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end
-            for _,xButton in pairs(HealBot_Private_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Pet_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Vehicle_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Enemy_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Extra_Button) do
-                HealBot_Options_UpdateUsedTextures(xButton)
-            end 
-        end
-    elseif mediatype == "font" then
-        if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
-            local hFrames=HealBot_Panel_retHealBot_Header_Frames()
-            for _,h in pairs(hFrames) do
-                if h["GetName"] then
-                    local bar = _G[h:GetName().."Bar_text"]
-                    if bar then
-                        bar:SetFont(LSM:Fetch('font',Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["FONT"]),
-                                        Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["HEIGHT"],
-                                        HealBot_Font_Outline[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][h.frame]["OUTLINE"]]);
-                    end
-                end
-            end
-        end
-        if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin] then
-            for _,xButton in pairs(HealBot_Unit_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Private_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end      
-            for _,xButton in pairs(HealBot_Pet_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Vehicle_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Enemy_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end 
-            for _,xButton in pairs(HealBot_Extra_Button) do
-                HealBot_Options_UpdateUsedButtonText(xButton)
-            end
-        end
-        if Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin] then
-            for _,xButton in pairs(HealBot_Unit_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Private_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Enemy_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Pet_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Vehicle_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-            for _,xButton in pairs(HealBot_Extra_Button) do
-                HealBot_Options_UpdateUsedAuxText(xButton)
-            end
-        end
     end
 end
 

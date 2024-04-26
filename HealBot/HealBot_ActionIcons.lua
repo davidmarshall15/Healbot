@@ -1,5 +1,4 @@
 local lGlow=HealBot_Libs_LibGlow()
-local LSM = HealBot_Libs_LSM()
 local grpFrame={}
 local iconFrame={}
 local actionIcons={}
@@ -185,9 +184,10 @@ function HealBot_ActionIcons_setFont(frame, id)
     actionIconFrame[frame][id].cdText:ClearAllPoints()
     actionIconFrame[frame][id].cdText:SetPoint("CENTER",(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTHOFFSET"] or 0),
                                                    (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTVOFFSET"] or 0))
-    actionIconFrame[frame][id].cdText:SetFont(LSM:Fetch('font',(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_Font)),
-                                          (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTSIZE"] or 18),--*frameScale),
-                                          HealBot_Font_Outline[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTOUTLINE"] or 2)])
+    HealBot_Media_UpdateFont(actionIconFrame[frame][id].cdText,
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_Font),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTSIZE"] or 18),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTOUTLINE"] or 2))
     if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"] then
         actionIconFrame[frame][id].cdText:SetTextColor(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"]["R"],
                                                        Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"]["G"],
@@ -200,9 +200,10 @@ function HealBot_ActionIcons_setFont(frame, id)
     actionIconFrame[frame][id].countText:ClearAllPoints()
     actionIconFrame[frame][id].countText:SetPoint("BOTTOMRIGHT",(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTHOFFSET"] or 0),
                                                    (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTVOFFSET"] or 0))
-    actionIconFrame[frame][id].countText:SetFont(LSM:Fetch('font',(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_Font)),
-                                          (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTSIZE"] or 12),--*frameScale),
-                                          HealBot_Font_Outline[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTOUTLINE"] or 2)])
+    HealBot_Media_UpdateFont(actionIconFrame[frame][id].countText,
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_Font),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTSIZE"] or 12),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTOUTLINE"] or 2))
     HealBot_ActionIcons_setCountFont(frame, id)
     actionIconFrame[frame][id].FontSet=true
 end

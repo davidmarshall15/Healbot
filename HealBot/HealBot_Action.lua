@@ -8,7 +8,6 @@ local HealBot_RangeSpellsKeysEnemy={}
 local HealBot_AlwaysEnabled={}
 local HealBot_pcClass={}
 local HealBot_AutoCloseFrame={[1]=1,[2]=1,[3]=1,[4]=1,[5]=1,[6]=1,[7]=1,[8]=1,[9]=1,[10]=1}
-local LSM = HealBot_Libs_LSM() --LibStub("LibSharedMedia-3.0") 
 local lGlow=HealBot_Libs_LibGlow()
 local HealBot_PluginUpdate_TimeToLive={}
 local grpFrame={}
@@ -99,6 +98,8 @@ end
 
 function HealBot_Action_UpdateCheckInterval()
     HealBot_Action_luVars["deadCheckInterval"]=0.8-(HealBot_Globals.PerfMode*0.1)
+    --HealBot_Action_luVars["deadCheckInterval"]=0.8-(HealBot_Globals.CPUUsage*0.05)
+    if HealBot_Action_luVars["deadCheckInterval"]<0.2 then HealBot_Action_luVars["deadCheckInterval"]=0.2 end
     HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
 end
 
@@ -3230,7 +3231,7 @@ function HealBot_Action_setFrameHeader(f)
         local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
         grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["SCALE"]));
         grpFrameBar[f]:SetWidth(hwidth);
-        grpFrameBar[f]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"]));
+        HealBot_Media_UpdateTexture(grpFrameBar[f], Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"])
         grpFrameBar[f]:GetStatusBarTexture():SetHorizTile(false)
         HealBot_Action_UpdateFrameHeaderOpacity(f)
     else
@@ -3326,7 +3327,7 @@ function HealBot_Action_InitFrames()
             for y=1,12 do
                 if not grpFrameStickyInd[x] then grpFrameStickyInd[x]={} end
                 grpFrameStickyInd[x][y]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_StickyInd"..y, grpFrame[x], "TextStatusBar")
-                grpFrameStickyInd[x][y]:SetStatusBarTexture(LSM:Fetch('statusbar',HealBot_Default_Textures[16].name));
+                HealBot_Media_UpdateTexture(grpFrameStickyInd[x][y], HealBot_Default_Textures[16].name)
                 grpFrameStickyInd[x][y]:SetStatusBarColor(1,1,0.25,0)
                 grpFrameStickyInd[x][y]:SetPoint(StickIndPoints[y],grpFrame[x],FrameStickIndPoints[y])
                 grpFrameStickyInd[x][y]:SetMinMaxValues(0,100);
@@ -4322,11 +4323,16 @@ function HealBot_Action_ResetSkinAllButtons()
         end
     end
     HealBot_Panel_ResetHeaders()
+    HealBot_setLuVars("ClearReset", true)
+end
+
+function HealBot_Action_ClearReset()
     HealBot_Action_luVars["resetSkin"]=false
     HealBot_Action_luVars["resetIcon"]=false
     HealBot_Action_luVars["resetIndicator"]=false
     HealBot_Action_luVars["resetText"]=false
     HealBot_Action_luVars["resetAux"]=false
+    HealBot_setLuVars("ClearReset", false)
 end
 
 function HealBot_Action_ResetTestButtons()
@@ -7416,10 +7422,11 @@ end
 function HealBot_Action_SetAliasFontSize(hbCurFrame)
       --HealBot_setCall("HealBot_Action_SetAliasFontSize")
     if Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame] and Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FONT"] then
-        grpFrameText[hbCurFrame]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FONT"]),
-                                                     ceil(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"]*
-                                                          Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"]),
-                                           HealBot_Font_Outline[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OUTLINE"]]);
+        HealBot_Media_UpdateFont(grpFrameText[hbCurFrame],
+                                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FONT"],
+                                 ceil(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"]*
+                                      Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"]),
+                                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OUTLINE"])
         grpFrameText[hbCurFrame]:SetTextHeight(ceil(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"]*
                                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"]))
         grpFrameText[hbCurFrame]:ClearAllPoints();

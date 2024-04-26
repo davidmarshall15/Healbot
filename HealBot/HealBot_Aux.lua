@@ -1,4 +1,3 @@
-local LSM = HealBot_Libs_LSM()
 local HealBot_Aux_Buttons={}
 local HealBot_AuxStatic_Buttons={}
 local HealBot_AuxFluid_Buttons={}
@@ -2640,8 +2639,10 @@ local function HealBot_Aux_SetTestButton(button)
                     else
                         auxTestNonTextTxtSize=auxTestNonTextBarSize
                     end
-                    button.gref.auxtxt[x]:SetFont(LSM:Fetch('font',Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["FONT"]),
-                          auxTestNonTextTxtSize, HealBot_Font_Outline[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"]])
+                    HealBot_Media_UpdateFont(button.gref.auxtxt[x],
+                                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["FONT"],
+                                             auxTestNonTextTxtSize,
+                                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"])
                 end
                 button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
             end

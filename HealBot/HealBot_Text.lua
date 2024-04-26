@@ -1636,7 +1636,7 @@ end
 local cText=""
 function HealBot_Text_UpdateNameButton(button)
       --HealBot_setCall("HealBot_Text_UpdateNameButton", button)
-    cText=button.gref.txt["text"]:GetText() or button.text.namecomplete or "."
+    cText=button.text.namecomplete or "."
     button.gref.txt["text"]:SetText(cText.." ")
     button.gref.txt["text"]:SetText(cText)
     button.text.name=button.text.name.." "
@@ -1668,7 +1668,7 @@ end
 
 function HealBot_Text_UpdateHealthButton(button)
       --HealBot_setCall("HealBot_Text_UpdateHealthButton", button)
-    cText=button.gref.txt["text2"]:GetText() or button.text.healthcomplete or "."
+    cText=button.text.healthcomplete or "."
     button.gref.txt["text2"]:SetText(cText.." ")
     button.gref.txt["text2"]:SetText(cText)
     button.text.health=button.text.health.." "

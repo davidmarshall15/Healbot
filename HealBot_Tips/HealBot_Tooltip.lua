@@ -2,7 +2,6 @@ local HealBot_CheckBuffs = {}
 local xUnit=nil
 local xGUID=nil
 local xButton=nil
-local LSM = HealBot_Libs_LSM()
 local _
 local powerCols={["r"]=1,["g"]=1,["b"]=1}
 local playerPowerCols={["r"]=1,["g"]=1,["b"]=1}
@@ -205,8 +204,8 @@ local function HealBot_Tooltip_SetFont(line,font,size)
     HealBot_Tooltip_SetLine(" ",1,1,1,0," ",1,1,1,0)
     local l=_G["HealBot_GameTooltipTextLeft"..line]
     local r=_G["HealBot_GameTooltipTextRight"..line]
-    l:SetFont(LSM:Fetch('font',font), size)
-    r:SetFont(LSM:Fetch('font',font), size)
+    HealBot_Media_UpdateFont(l, font, size, 1)
+    HealBot_Media_UpdateFont(r, font, size, 1)
 end
 
 function HealBot_Tooltip_SetScale()
