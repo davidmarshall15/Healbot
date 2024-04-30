@@ -163,6 +163,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SKINTEXT                = "Use skin"
     HEALBOT_SKINS_STD                       = "Standard"
     HEALBOT_OPTIONS_SKINTEXTURE             = "Texture"
+    HEALBOT_OPTIONS_SKINTEXTURES            = "Textures"
     HEALBOT_OPTIONS_SKINHEIGHT              = "Height"
     HEALBOT_OPTIONS_SKINWIDTH               = "Width"
     HEALBOT_OPTIONS_SKINNUMCOLS             = "Number of columns"
@@ -187,6 +188,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_BACKTEXT                   = "Background"
     HEALBOT_SKIN_BORDERTEXT                 = "Border"
     HEALBOT_OPTIONS_SKINFONT                = "Font"
+    HEALBOT_OPTIONS_SKINFONTS               = "Fonts"
     HEALBOT_OPTIONS_SKINFHEIGHT             = "Font Size"
     HEALBOT_OPTIONS_SKINFOUTLINE            = "Font Outline"
     HEALBOT_OPTIONS_BARALPHADIS             = "Disabled opacity"
@@ -241,6 +243,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
     HEALBOT_OPTIONS_SOUNDBUFFWARNING        = "Play sound on buff";
     HEALBOT_OPTIONS_SOUND                   = "Sound"
+    HEALBOT_OPTIONS_SOUNDS                  = "Sounds"
     HEALBOT_OPTIONS_WARN_CLASSCOL           = "Unable to change text col"..HEALBOT_enWORD_COLOUR_SUFFIX.." when\nCol"..HEALBOT_enWORD_COLOUR_SUFFIX.." text by class is on"
 
     HEALBOT_OPTIONS_PLAYERVISIBILITY        = "Player and Pet Visibility";
@@ -554,6 +557,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_IGNOREDEBUFFDURATION    = "Short duration";
     HEALBOT_OPTIONS_IGNOREDEBUFFCOOLDOWN    = "When cure spell CoolDown > 2 seconds";
     HEALBOT_OPTIONS_IGNOREDEBUFFFRIEND      = "When caster is known as friend";
+    HEALBOT_OPTIONS_IGNORECANNOTDISPELL     = "When debuff cannot be dispelled";
 
     HEALBOT_OPTIONS_OPTIONSOPACITY          = "Options opacity";
 
@@ -1322,6 +1326,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_PERFORMANCE              = "HealBot Performance"
     HEALBOT_PLUGIN_MYCOOLDOWNS              = "HealBot MyCooldowns"
     HEALBOT_PLUGIN_TWEAKS                   = "HealBot Tweaks"
+    HEALBOT_PLUGIN_MEDIA                    = "HealBot Media"
     HEALBOT_PLUGIN_REQUESTS                 = "HealBot Requests"
     HEALBOT_PLUGIN_AURAWATCH                = "HealBot AuraWatch"
     HEALBOT_PLUGIN_HEALTHWATCH              = "HealBot HealthWatch"
@@ -1433,6 +1438,7 @@ function HealBot_Lang_enALL()
     HEALBOT_PLUGIN_QUEUEVENTPOWER           = "Queue power events"
     HEALBOT_PLUGIN_QUEUEVENTINHEALS         = "Queue incoming heal events"
     HEALBOT_PLUGIN_QUEUEVENTABSORBS         = "Queue absorb events"
+    HEALBOT_PLUGIN_MEDIAEXAMPLEBAR          = "Example Status Bar 321"
 
     HEALBOT_CUSTOM_CASTBY_EVERYONE          = "Everyone"
     HEALBOT_CUSTOM_CASTBY_ENEMY             = "Enemy"

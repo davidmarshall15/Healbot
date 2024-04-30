@@ -3521,4 +3521,8 @@ function HealBot_Panel_ClearGUID(guid)
     hbPanel_dataRoles[guid]=nil
     hbPanel_dataPlayerRoles[guid]=nil
     hbPanel_dataRanks[guid]=nil
+    hbPanel_buttonGUIDs[guid]=nil
+    hbPanel_buttonPetGUIDs[guid]=nil
+    hbPanel_buttonExtraGUIDs[guid]=nil
+    hbPanel_buttonpGUIDs[guid]=nil
 end

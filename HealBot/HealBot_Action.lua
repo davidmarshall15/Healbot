@@ -2388,7 +2388,7 @@ function HealBot_Action_UpdateUnitNotDead(button)
     button.text.nameupdate=true
     HealBot_Text_setNameTag(button)
     HealBot_Text_UpdateText(button)
-    HealBot_Queue_UnitBuff(button)
+    HealBot_BuffSlowUpdate(button)
     HealBot_RefreshUnit(button)
     HealBot_Aux_ClearResBar(button)
     button.text.update=true

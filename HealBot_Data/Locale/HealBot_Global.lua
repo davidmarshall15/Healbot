@@ -6,7 +6,7 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.2.6.8"
+    return "10.2.6.9"
 end
 function HealBot_Global_InitVersion()
     return "10.2.6.7"  -- Keep just behind the global version

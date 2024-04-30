@@ -1,8 +1,8 @@
 local LSM = HealBot_Libs_LSM()
 local hbMediaRegister={}
-local HealBot_Bar_Textures=nil
+local HealBot_Textures=nil
 local HealBot_Fonts=nil
-local HealBot_Bar_TexturesIndex={}
+local HealBot_TexturesIndex={}
 local HealBot_FontsIndex={}
 local HealBot_Sounds=nil
 local HealBot_SoundsIndex={}
@@ -10,6 +10,20 @@ local HealBot_Media_luVars={}
 HealBot_Media_luVars["Registered"]=false
 HealBot_Media_luVars["InitFontsRerun"]=false
 HealBot_Media_luVars["DelayUpdateUsedMedia"]=false
+HealBot_Media_luVars["pluginMedia"]=false
+
+function HealBot_Media_PluginState(state)
+	if HealBot_Media_luVars["pluginMedia"]~=state then
+        HealBot_Media_luVars["pluginMedia"]=state
+        HealBot_Media_PluginChange()
+    end
+end
+
+function HealBot_Media_PluginChange()
+    HealBot_Media_UpdateIndexes()
+    HealBot_Options_ResetUpdate()
+    HealBot_Plugin_Media_Summary()
+end
 
 function HealBot_Media_Register()
     if not HealBot_Media_luVars["Registered"] and LSM then
@@ -44,7 +58,7 @@ function HealBot_Media_InitFonts(id)
 end
 
 local fontFile=""
-function HealBot_Media_UpdateFont(object, font, height, outline, callback)
+function HealBot_Media_UpdateFont(object, font, height, outline)
     object:SetFont(LSM:Fetch('font', font), height, HealBot_Font_Outline[outline])
 end
 
@@ -56,77 +70,120 @@ function HealBot_Media_ReturnSound(name)
     return LSM:Fetch('sound',name)
 end
 
-function HealBot_Media_PlaySound(name)
-    PlaySoundFile(LSM:Fetch('sound',name))
+local hbSounds={}
+hbSounds["TIME"]=0
+hbSounds["CALLBACKTIME"]=0
+function HealBot_Media_PlaySound(name, channel)
+    if hbSounds["TIME"]<HealBot_TimeNow then
+        hbSounds["TIME"]=HealBot_TimeNow+0.5
+        hbSounds["LASTID"]=name
+        PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
+    elseif name~=hbSounds["LASTID"] and hbSounds["CALLBACKTIME"]<HealBot_TimeNow then
+        hbSounds["DELAY"]=0.01+(hbSounds["TIME"]-HealBot_TimeNow)
+        hbSounds["CALLBACKTIME"]=HealBot_TimeNow+hbSounds["DELAY"]
+        C_Timer.After(hbSounds["DELAY"], function() HealBot_Media_PlaySound(id, channel) end)
+    end
 end
 
 function HealBot_Media_UpdateIndexes()
-    HealBot_Bar_Textures = LSM:List('statusbar');
-    for x,_ in pairs(HealBot_Bar_TexturesIndex) do
-        HealBot_Bar_TexturesIndex[x]=nil
+    for x,_ in pairs(HealBot_TexturesIndex) do
+        HealBot_TexturesIndex[x]=nil
     end 
-    for i=1,#HealBot_Bar_Textures do
-        HealBot_Bar_TexturesIndex[HealBot_Bar_Textures[i]] = i
-    end
-    HealBot_Fonts = LSM:List('font');
     for x,_ in pairs(HealBot_FontsIndex) do
         HealBot_FontsIndex[x]=nil
     end 
-    for i=1,#HealBot_Fonts do
-        HealBot_FontsIndex[HealBot_Fonts[i]] = i
-    end
-    HealBot_Sounds = LSM:List('sound');
     for x,_ in pairs(HealBot_SoundsIndex) do
         HealBot_SoundsIndex[x]=nil
     end 
+    
+    if HealBot_Media_luVars["pluginMedia"] then
+        HealBot_Textures = HealBot_Plugin_Media_TexturesEnabled()
+        HealBot_Fonts = HealBot_Plugin_Media_FontsEnabled()
+        HealBot_Sounds = HealBot_Plugin_Media_SoundsEnabled()
+    else
+        HealBot_Textures = LSM:List('statusbar')
+        HealBot_Fonts = LSM:List('font')
+        HealBot_Sounds = LSM:List('sound')
+    end
+    
+    for i=1,#HealBot_Textures do
+        HealBot_TexturesIndex[HealBot_Textures[i]] = i
+    end
+    for i=1,#HealBot_Fonts do
+        HealBot_FontsIndex[HealBot_Fonts[i]] = i
+    end
     for i=1,#HealBot_Sounds do
         HealBot_SoundsIndex[HealBot_Sounds[i]] = i
     end
 end
 
-function HealBot_Media_ReturnTextureIndex(texture)
-    return HealBot_Bar_TexturesIndex[texture] or HealBot_Bar_TexturesIndex[HealBot_Default_Textures[20].name] or 1
+function HealBot_Media_TextureIndex(texture)
+    if texture and HealBot_TexturesIndex[texture] then
+        return HealBot_TexturesIndex[texture]
+    else
+        return HealBot_TexturesIndex[HealBot_Default_Texture] or 1
+    end
 end
 
-function HealBot_Media_ReturnTextureName(index)
-    return HealBot_Bar_Textures[index] or HealBot_Bar_Textures[HealBot_Media_ReturnTextureIndex(HealBot_Default_Textures[20].name)]
+function HealBot_Media_TextureName(index)
+    if index and HealBot_Textures[index] then
+        return HealBot_Textures[index]
+    else
+        return HealBot_Textures[HealBot_Media_TextureIndex(HealBot_Default_Texture)]
+    end
 end
 
-function HealBot_Media_ReturnTextureCount()
-    return #HealBot_Bar_Textures
+function HealBot_Media_TexturesCount()
+    return #HealBot_Textures
 end
 
-function HealBot_Media_ReturnFontsIndex(font)
-    return HealBot_FontsIndex[font] or HealBot_FontsIndex[HealBot_Default_Fonts[15].name] or 1
+function HealBot_Media_FontIndex(font)
+    if font and HealBot_FontsIndex[font] then
+        return HealBot_FontsIndex[font]
+    else
+        return HealBot_FontsIndex[HealBot_Default_Font] or 1
+    end
 end
 
-function HealBot_Media_ReturnFontsName(index)
-    return HealBot_Fonts[index] or HealBot_Fonts[HealBot_Media_ReturnTextureIndex(HealBot_Default_Fonts[15].name)]
+function HealBot_Media_FontName(index)
+    if index and HealBot_Fonts[index] then
+        return HealBot_Fonts[index]
+    else
+        return HealBot_Fonts[HealBot_Media_FontIndex(HealBot_Default_Font)]
+    end
 end
 
-function HealBot_Media_ReturnFontsCount()
+function HealBot_Media_FontsCount()
     return #HealBot_Fonts
 end
 
-function HealBot_Media_ReturnSoundsIndex(sound)
-    return HealBot_SoundsIndex[sound] or HealBot_SoundsIndex[HealBot_Default_Sounds[1].name] or 1
+function HealBot_Media_SoundIndex(sound)
+    if sound and HealBot_SoundsIndex[sound] then
+        return HealBot_SoundsIndex[sound] 
+    else
+        return HealBot_SoundsIndex[HealBot_Default_Sound] or 1
+    end
 end
 
-function HealBot_Media_ReturnSoundsName(index)
-    return HealBot_Sounds[index] or HealBot_Sounds[HealBot_Media_ReturnTextureIndex(HealBot_Default_Sounds[1].name)]
+function HealBot_Media_SoundName(index)
+    if index and HealBot_Sounds[index] then
+        return HealBot_Sounds[index] 
+    else
+        return HealBot_Sounds[HealBot_Media_SoundIndex(HealBot_Default_Sound)]
+    end
 end
 
-function HealBot_Media_ReturnSoundsCount()
+function HealBot_Media_SoundsCount()
     return #HealBot_Sounds
 end
 
 function HealBot_Media_UpdateType(mType, frame, auxId)
       --HealBot_setCall("HealBot_Options_UpdateMedia")
     if mType == "Textures" then
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_Bar_TexturesIndex[Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_Bar_TexturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_Bar_TexturesIndex[Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
-        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_Bar_TexturesIndex[Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]],true)
+        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_TexturesIndex[Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
     elseif mType == "Fonts" then
         HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,HealBot_FontsIndex[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"]])
         HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,HealBot_FontsIndex[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["FONT"]])
@@ -153,19 +210,19 @@ end
 
 local function HealBot_Media_UpdateUsedTextures(button)
       --HealBot_setCall("HealBot_Media_UpdateUsedTextures", button)
-    button.gref["Bar"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
-    button.gref["InHeal"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
+    HealBot_Media_UpdateTexture(button.gref["Bar"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"])
+    HealBot_Media_UpdateTexture(button.gref["InHeal"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"])
     for x=1,9 do
-        button.gref.aux[x]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]))
+        HealBot_Media_UpdateTexture(button.gref.aux[x], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"])
     end
-    button.gref["Absorb"]:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
+    HealBot_Media_UpdateTexture(button.gref["Absorb"], Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"])
     button.gref["Bar"]:GetStatusBarTexture():SetHorizTile(false)
     button.gref["InHeal"]:GetStatusBarTexture():SetHorizTile(false)
     for x=1,9 do
         button.gref.aux[x]:GetStatusBarTexture():SetHorizTile(false)
     end
     button.gref["Absorb"]:GetStatusBarTexture():SetHorizTile(false)
-    HealBot_Emerg_Button[button.id].bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"]));
+    HealBot_Media_UpdateTexture(HealBot_Emerg_Button[button.id].bar, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["TEXTURE"])
     HealBot_Emerg_Button[button.id].bar:GetStatusBarTexture():SetHorizTile(false)
 end
 
@@ -219,14 +276,14 @@ end
 
 local hbUpdateDelay=0.2
 local hbUpdateDelayType={}
-function HealBot_Media_DoUpdateUsedMedia(mediatype)
+local function HealBot_Media_DoUpdateUsedMedia(mediatype)
     if HealBot_retLuVars("ClearReset") then
         if HealBot_Data["UILOCK"] then
             hbUpdateDelay=2
         else
             hbUpdateDelay=0.2
         end
-        C_Timer.After(hbUpdateDelay, function() hbUpdateDelayType[mediatype]=false; HealBot_Media_UpdateUsedMedia(mediatype, key) end)
+        C_Timer.After(hbUpdateDelay, function() HealBot_Media_UpdateUsedMedia(mediatype, key) end)
     else
         hbUpdateDelayType[mediatype]=false
       --HealBot_setCall("HealBot_Media_DoUpdateUsedMedia")
@@ -237,7 +294,7 @@ function HealBot_Media_DoUpdateUsedMedia(mediatype)
                     if h["GetName"] then
                         local bar = _G[h:GetName().."Bar"]
                         if bar then
-                            bar:SetStatusBarTexture(LSM:Fetch('statusbar',Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"]));
+                            HealBot_Media_UpdateTexture(bar, Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][h.frame]["TEXTURE"])
                             bar:GetStatusBarTexture():SetHorizTile(false)
                         end
                     end
@@ -326,6 +383,6 @@ function HealBot_Media_UpdateUsedMedia(mediatype, key)
       --HealBot_setCall("HealBot_Media_UpdateUsedMedia")
     if not hbUpdateDelayType[mediatype] then
         hbUpdateDelayType[mediatype]=true
-        C_Timer.After(0.05, function() HealBot_Media_DoUpdateUsedMedia(mediatype, key) end)
+        C_Timer.After(0.1, function() HealBot_Media_DoUpdateUsedMedia(mediatype, key) end)
     end
 end

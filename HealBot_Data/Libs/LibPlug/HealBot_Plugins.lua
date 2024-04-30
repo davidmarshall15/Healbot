@@ -52,8 +52,6 @@ function HealBot_Plugin_Options_SetupStatusBar(bar, width, height, x, y, text, t
 	bar.Text:SetFontObject(GameFontNormal)
     if txtCenter then
         bar.Text:SetPoint("CENTER")
-        bar.Text:SetJustifyH("CENTER")
-        bar.Text:SetJustifyV("CENTER")
     else
         bar.Text:SetPoint("TOP", 0, 15)
     end
@@ -67,8 +65,6 @@ function HealBot_Plugin_Options_SetupStatusBarButton(bar, width, x, text, y)
 	bar.Text = bar:CreateFontString()
 	bar.Text:SetFontObject(GameFontNormal)
     bar.Text:SetPoint("CENTER")
-    bar.Text:SetJustifyH("CENTER")
-    bar.Text:SetJustifyV("CENTER")
     bar.Text:SetText(text)
 end
 

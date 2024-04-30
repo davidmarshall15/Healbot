@@ -160,6 +160,7 @@ function HealBot_Timers_SkinChangePluginUpdate()
     if HealBot_Timers_luVars["pluginCombatProt"] and HealBot_Plugin_CombatProt_Profile then HealBot_Plugin_CombatProt_Profile() end
     if HealBot_Timers_luVars["pluginPerformance"] and HealBot_Plugin_Performance_Profile then HealBot_Plugin_Performance_Profile() end
     if HealBot_Timers_luVars["pluginTweaks"] and HealBot_Plugin_Tweaks_Profile then HealBot_Plugin_Tweaks_Profile() end
+    if HealBot_Timers_luVars["pluginMedia"] and HealBot_Plugin_Media_Profile then HealBot_Plugin_Media_Profile() end
     if HealBot_Timers_luVars["pluginHealthWatch"] and HealBot_Plugin_HealthWatch_Profile then HealBot_Plugin_HealthWatch_Profile() end
     if HealBot_Timers_luVars["pluginManaWatch"] and HealBot_Plugin_ManaWatch_Profile then HealBot_Plugin_ManaWatch_Profile() end
     if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile() end
@@ -808,6 +809,7 @@ local hbTimerFuncs={["INIT"]={
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
                         ["SetEventQueues"]=HealBot_SetEventQueues,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
+                        ["MediaPluginChange"]=HealBot_Media_PluginChange,
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
@@ -881,6 +883,8 @@ function HealBot_Timers_PluginsSet(tId)
         HealBot_Timers_Set("AURA","ResetDebuffCache",0.1)
     elseif tId==7 then
         HealBot_Timers_Set("LAST","SetInHealAbsorbMax",0.1)
+    elseif tId==8 then
+        HealBot_Timers_Set("LAST","MediaPluginChange",0.1)
     end
 end
 

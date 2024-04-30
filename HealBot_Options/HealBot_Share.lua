@@ -1406,18 +1406,19 @@ end
 
 function HealBot_Share_ProcessLinkData(data)
       --HealBot_setCall("HealBot_Share_ProcessLinkData")
-    local chunks=ceil(string.len(data)/240)
-    local tDelay=0.25
+    local chunkSize=150
+    local chunks=ceil(string.len(data)/chunkSize)
+    local tDelay=0.1
     local pointer=1
     HealBot_Share_SendLinkData("S", chunks)
     for x=1,chunks do
-        local dat=string.sub(data, pointer, pointer+239)
+        local dat=string.sub(data, pointer, pointer+(chunkSize-1))
         C_Timer.After(tDelay, function() HealBot_Share_SendLinkData("D~"..x, dat) end)
-        pointer=(240*x)+1
-        tDelay=tDelay+0.25
+        pointer=(chunkSize*x)+1
+        tDelay=tDelay+0.1
     end
     C_Timer.After(tDelay, function() HealBot_Share_SendLinkData("E", string.len(data)) end)
-    tDelay=tDelay+0.25
+    tDelay=tDelay+0.1
     C_Timer.After(tDelay, HealBot_Share_SentLinkData)
 end
 
