@@ -283,7 +283,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype)
         else
             hbUpdateDelay=0.2
         end
-        C_Timer.After(hbUpdateDelay, function() HealBot_Media_UpdateUsedMedia(mediatype, key) end)
+        C_Timer.After(hbUpdateDelay, function() HealBot_Media_DoUpdateUsedMedia(mediatype) end)
     else
         hbUpdateDelayType[mediatype]=false
       --HealBot_setCall("HealBot_Media_DoUpdateUsedMedia")
@@ -383,6 +383,6 @@ function HealBot_Media_UpdateUsedMedia(mediatype, key)
       --HealBot_setCall("HealBot_Media_UpdateUsedMedia")
     if not hbUpdateDelayType[mediatype] then
         hbUpdateDelayType[mediatype]=true
-        C_Timer.After(0.1, function() HealBot_Media_DoUpdateUsedMedia(mediatype, key) end)
+        C_Timer.After(0.02, function() HealBot_Media_DoUpdateUsedMedia(mediatype, key) end)
     end
 end

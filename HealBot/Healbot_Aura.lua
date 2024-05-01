@@ -1441,7 +1441,6 @@ function HealBot_Aura_DebuffIconAlphaValue(button, iconData)
         end
     else
         dbRetAlpha=0
-        button.aura.debuff.update=true
         HealBot_DebuffSlowUpdate(button)
     end
     return dbRetAlpha, dbNextAuraUpdate
@@ -1594,7 +1593,6 @@ function HealBot_Aura_BuffIconAlphaValue(button, iconData)
         end
     else
         bRetAlpha=0
-        button.aura.buff.update=true
         HealBot_BuffSlowUpdate(button)
     end
     return bRetAlpha, bNextAuraUpdate
@@ -3521,7 +3519,7 @@ function HealBot_Aura_CheckBuffsV1(button)
     end
     if button.health.auraabsorbs~=hbClassicAbsorbTotal then
         button.health.auraabsorbs=hbClassicAbsorbTotal
-        HealBot_OnEvent_AbsorbsUpdate(button)
+        HealBot_AbsorbsUpdate(button)
     end
 end
 

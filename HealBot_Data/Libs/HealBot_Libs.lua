@@ -34,7 +34,7 @@ function HealBot_Libs_LibGlow()
     return LibCustomGlow
 end
 
-if HEALBOT_GAME_VERSION<5 then
+if HEALBOT_GAME_VERSION<4 then
     if HEALBOT_GAME_VERSION==1 then 
         libCD = libCD or (LibStub and LibStub("LibClassicDurations"))
     end

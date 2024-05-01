@@ -212,7 +212,7 @@ function HealBot_ActionIcons_setFontChange()
         --HealBot_setCall("HealBot_ActionIcons_setFontChange")
     for x=1,10  do
         for y=1,HealBot_ActionIcons_luVars["MaxIcons"] do
-            if actionIconFrame[x][y].FontSet then
+            if actionIconFrame[x] and actionIconFrame[x][y] and actionIconFrame[x][y].FontSet then
                 HealBot_ActionIcons_setFont(x, y)
             end
         end

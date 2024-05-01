@@ -1391,7 +1391,7 @@ if( playerClass == "PRIEST" ) then
 		local GreaterHeal = GetSpellInfo(2060)
 		local PrayerofHealing = GetSpellInfo(596)
 		local FlashHeal = GetSpellInfo(2061)
-		local Heal = GetSpellInfo(2054)
+		local Heal = GetSpellInfo(2054) or "Heal"
 		local LesserHeal = GetSpellInfo(2050)
 		local SpiritualHealing = GetSpellInfo(14898)
 		local ImprovedRenew = GetSpellInfo(14908)

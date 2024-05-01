@@ -397,6 +397,7 @@ end
 
 function HealBot_Timers_LastLoad()
       --HealBot_setCall("HealBot_Timers_LastLoad")
+    HealBot_Globals.LAG=HealBot_Globals.LAG+0.1
     HealBot_Timers_Set("LAST","MountsPetsUse",0.025)
     HealBot_Timers_Set("PLAYER","InvReady",0.05)
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin",0.075)
@@ -410,7 +411,6 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AURA","DebuffTagNames",0.275)
     HealBot_Timers_Set("SKINS","SetAdaptive",0.3)
     HealBot_Timers_Set("LAST","SetPlayerData",0.325)
-    HealBot_Timers_Set("LAST","SetEventQueues",0.35)
     HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
@@ -807,7 +807,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ClassicSpellRanks"]=HealBot_Init_ClassicSpellRanks,
                         ["GuildUpdate"]=HealBot_Comms_GuildUpdate,
                         ["PerfRangeFreq"]=HealBot_PerfRangeFreq,
-                        ["SetEventQueues"]=HealBot_SetEventQueues,
                         ["UpdateCheckInterval"]=HealBot_UpdateCheckInterval,
                         ["MediaPluginChange"]=HealBot_Media_PluginChange,
                     },

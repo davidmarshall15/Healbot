@@ -715,35 +715,35 @@ function HealBot_globalVars()
     HEALBOT_RETURN                          = 361227
     
     --Cure Spells
-    HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or 64127
-    HEALBOT_CLEANSE                         = GetSpellInfo(4987) or 4987
-    HEALBOT_CLEANSE_SPIRIT                  = GetSpellInfo(51886) or 51886
-    HEALBOT_CLEANSE_TOXIN                   = GetSpellInfo(213644) or 213644
-    HBC_SHAMAN_CURE_DISEASE                 = GetSpellInfo(2870) or 2870
-    HBC_PRIEST_CURE_DISEASE                 = GetSpellInfo(528) or 528
-    HEALBOT_DISPELL_MAGIC                   = GetSpellInfo(528) or 528
-    HBC_PRIEST_ABOLISH_DISEASE              = GetSpellInfo(552) or 552
-    HBC_DISPELL_MAGIC                       = GetSpellInfo(527) or 527
-    HBC_SHAMAN_CURE_POISON                  = GetSpellInfo(526) or 526
-    HBC_DRUID_REMOVE_CURSE                  = GetSpellInfo(2782) or 2782
-    HBC_DRUID_CURE_POISON                   = GetSpellInfo(8946) or 8946
-    HBC_DRUID_ABOLISH_POISON                = GetSpellInfo(2893) or 2893
-    HEALBOT_DETOX                           = GetSpellInfo(115450) or 115450
-    HEALBOT_NATURES_CURE                    = GetSpellInfo(88423) or 88423
-    HEALBOT_PURIFY                          = GetSpellInfo(527) or 527
-    HBC_PURIFY                              = GetSpellInfo(1152) or 1152
-    HEALBOT_PURIFY_SPIRIT                   = GetSpellInfo(77130) or 77130
-    HEALBOT_PURIFY_DISEASE                  = GetSpellInfo(213634) or 213634
-    HEALBOT_MASS_DISPEL                     = GetSpellInfo(32375) or 32375
-    HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or 475
-    HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or 2782
-    HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or 53551
-    HEALBOT_NATURALIZE                      = GetSpellInfo(360823) or 360823
-    HEALBOT_CAUTERIZING_FLAME               = GetSpellInfo(374251) or 374251
-    HEALBOT_EXPUNGE                         = GetSpellInfo(365585) or 365585
-    HEALBOT_IMPROVEDPURIFY                  = GetSpellInfo(390632) or 390632
-    HEALBOT_IMPROVEDCLEANSE                 = GetSpellInfo(393024) or 393024
-    HEALBOT_IMPROVEDPURIFY_SPIRIT           = GetSpellInfo(383016) or 383016
+    HEALBOT_BODY_AND_SOUL                   = GetSpellInfo(64127) or "BODY_AND_SOUL"
+    HEALBOT_CLEANSE                         = GetSpellInfo(4987) or "CLEANSE"
+    HEALBOT_CLEANSE_SPIRIT                  = GetSpellInfo(51886) or "CLEANSE_SPIRIT"
+    HEALBOT_CLEANSE_TOXIN                   = GetSpellInfo(213644) or "CLEANSE_TOXIN"
+    HBC_SHAMAN_CURE_DISEASE                 = GetSpellInfo(2870) or "CURE_DISEASE"
+    HBC_PRIEST_CURE_DISEASE                 = GetSpellInfo(528) or "CURE_DISEASE"
+    HEALBOT_DISPELL_MAGIC                   = GetSpellInfo(528) or "DISPELL_MAGIC"
+    HBC_PRIEST_ABOLISH_DISEASE              = GetSpellInfo(552) or "ABOLISH_DISEASE"
+    HBC_DISPELL_MAGIC                       = GetSpellInfo(527) or "DISPELL_MAGIC"
+    HBC_SHAMAN_CURE_POISON                  = GetSpellInfo(526) or "SHAMAN_CURE_POISON"
+    HBC_DRUID_REMOVE_CURSE                  = GetSpellInfo(2782) or "DRUID_REMOVE_CURSE"
+    HBC_DRUID_CURE_POISON                   = GetSpellInfo(8946) or "DRUID_CURE_POISON"
+    HBC_DRUID_ABOLISH_POISON                = GetSpellInfo(2893) or "DRUID_ABOLISH_POISON"
+    HEALBOT_DETOX                           = GetSpellInfo(115450) or "DETOX"
+    HEALBOT_NATURES_CURE                    = GetSpellInfo(88423) or "NATURES_CURE"
+    HEALBOT_PURIFY                          = GetSpellInfo(527) or "PURIFY"
+    HBC_PURIFY                              = GetSpellInfo(1152) or "PURIFY"
+    HEALBOT_PURIFY_SPIRIT                   = GetSpellInfo(77130) or "PURIFY_SPIRIT"
+    HEALBOT_PURIFY_DISEASE                  = GetSpellInfo(213634) or "PURIFY_DISEASE"
+    HEALBOT_MASS_DISPEL                     = GetSpellInfo(32375) or "MASS_DISPEL"
+    HEALBOT_REMOVE_CURSE                    = GetSpellInfo(475) or "REMOVE_CURSE"
+    HEALBOT_REMOVE_CORRUPTION               = GetSpellInfo(2782) or "REMOVE_CORRUPTION"
+    HEALBOT_SACRED_CLEANSING                = GetSpellInfo(53551) or "SACRED_CLEANSING"
+    HEALBOT_NATURALIZE                      = GetSpellInfo(360823) or "NATURALIZE"
+    HEALBOT_CAUTERIZING_FLAME               = GetSpellInfo(374251) or "CAUTERIZING_FLAME"
+    HEALBOT_EXPUNGE                         = GetSpellInfo(365585) or "EXPUNGE"
+    HEALBOT_IMPROVEDPURIFY                  = GetSpellInfo(390632) or "IMPROVEDPURIFY"
+    HEALBOT_IMPROVEDCLEANSE                 = GetSpellInfo(393024) or "IMPROVEDCLEANSE"
+    HEALBOT_IMPROVEDPURIFY_SPIRIT           = GetSpellInfo(383016) or "IMPROVEDPURIFY_SPIRIT"
     
     --[[END OF SPELL LIST]]--
 

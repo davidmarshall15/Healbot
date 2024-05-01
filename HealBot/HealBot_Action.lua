@@ -2381,7 +2381,7 @@ function HealBot_Action_UpdateUnitNotDead(button)
         HealBot_Timers_Set("SKINS","ActionIconsStateChange",0.1)
         HealBot_Timers_Set("AURA","PlayerCheckExtended",0.2)
     end
-    HealBot_Queue_UnitHealth(button)
+    HealBot_UnitHealth(button)
     HealBot_Action_UpdateBackground(button)
     button.status.hasres=false
     if HealBot_Action_luVars["pluginTimeToLive"] and button.status.plugin then HealBot_Plugin_TimeToLive_UnitUpdate(button) end
@@ -2463,7 +2463,7 @@ function HealBot_Action_UpdateTheDeadButton(button)
                 button.aura.buff.nextcheck=false
                 button.text.nameupdate=true
                 HealBot_UpdateUnitClear(button, true)
-                HealBot_Queue_UnitHealth(button)
+                HealBot_UnitHealth(button)
                 HealBot_Text_setNameTag(button)
                 HealBot_Text_UpdateText(button)
                 HealBot_Action_setEnabled(button, true, button.status.alpha)
@@ -2474,8 +2474,8 @@ function HealBot_Action_UpdateTheDeadButton(button)
                     HealBot_OnEvent_RaidTargetUpdate(button)
                 end
                 HealBot_Action_UpdateBackground(button)
-                if button.health.incoming>0 then HealBot_Queue_HealsInUpdate(button) end
-                if button.health.absorbs>0 then HealBot_Queue_AbsorbsUpdate(button) end
+                if button.health.incoming>0 then HealBot_HealsInUpdate(button) end
+                if button.health.absorbs>0 then HealBot_AbsorbsUpdate(button) end
                 HealBot_RefreshUnit(button)
                 --HealBot_Action_EmergBarCheck(button, true)
                 button.status.hasres=false
@@ -3241,17 +3241,17 @@ end
 
 local hbEventFuncs={["UNIT_AURA"]=HealBot_Event_UnitAura,
                     ["UNIT_INVENTORY_CHANGED"]=HealBot_OnEvent_InvChange,
-                    ["UNIT_HEALTH_FREQUENT"]=HealBot_OnEvent_UnitHealth,
-                    ["UNIT_HEALTH"]=HealBot_OnEvent_UnitHealth,
-                    ["UNIT_MAXHEALTH"]=HealBot_OnEvent_UnitHealth,
+                    ["UNIT_HEALTH_FREQUENT"]=HealBot_UnitHealth,
+                    ["UNIT_HEALTH"]=HealBot_UnitHealth,
+                    ["UNIT_MAXHEALTH"]=HealBot_UnitHealth,
                     ["UNIT_THREAT_SITUATION_UPDATE"]=HealBot_CalcThreat,
                     ["UNIT_THREAT_LIST_UPDATE"]=HealBot_CalcThreat,
-                    ["UNIT_HEAL_PREDICTION"]=HealBot_OnEvent_HealsInUpdate,
+                    ["UNIT_HEAL_PREDICTION"]=HealBot_HealsInUpdate,
                     ["UNIT_HEAL_ABSORB_AMOUNT_CHANGED"]=HealBot_OnEvent_TotalHealAbsorbs,
-                    ["UNIT_ABSORB_AMOUNT_CHANGED"]=HealBot_OnEvent_AbsorbsUpdate,
-                    ["UNIT_POWER_UPDATE"]=HealBot_OnEvent_UnitMana,
+                    ["UNIT_ABSORB_AMOUNT_CHANGED"]=HealBot_AbsorbsUpdate,
+                    ["UNIT_POWER_UPDATE"]=HealBot_UnitMana,
                     ["UNIT_POWER_POINT_CHARGE"]=HealBot_Action_setPowerIndicators,
-                    ["UNIT_MAXPOWER"]=HealBot_OnEvent_UnitMana,
+                    ["UNIT_MAXPOWER"]=HealBot_UnitMana,
                     ["UNIT_ATTACK"]=HealBot_OnEvent_UnitThreat,
                     ["UNIT_COMBAT"]=HealBot_OnEvent_UnitThreat,
                     ["UNIT_SPELLCAST_START"]=HealBot_OnEvent_UnitSpellCastStart,
@@ -3608,7 +3608,6 @@ function HealBot_Action_InitButton(button, prefix)
         button:SetAttribute("checkfocuscast", false)
         erButton:SetAttribute("checkfocuscast", false)
     end
-    HealBot_FastQueueInit(button.id)
     --button:SetFrameStrata(HealBot_Globals.FrameStrata)
     --erButton:SetFrameStrata(HealBot_Globals.FrameStrata)
     button.guid="nil"

@@ -1581,6 +1581,7 @@ end
 function HealBot_Options_framesChanged(skinUpdate, iconUpdate, indUpdate, textUpdate, auxUpdate)
       --HealBot_setCall("HealBot_Options_framesChanged")
     if skinUpdate or iconUpdate or indUpdate or textUpdate or auxUpdate then
+        HealBot_Timers_TurboOn(3)
         if iconUpdate then HealBot_Action_setLuVars("resetIcon", true) end
         if skinUpdate then HealBot_Action_setLuVars("resetSkin", true) end
         if indUpdate then HealBot_Action_setLuVars("resetIndicator", true) end
@@ -2008,48 +2009,21 @@ end
 function HealBot_Options_GetDebuffSpells_List(class)
       --HealBot_setCall("HealBot_Options_GetDebuffSpells_List")
     local HealBot_Debuff_Spells = {}
-    if HEALBOT_GAME_VERSION<3 then 
-        HealBot_Debuff_Spells = {
-          ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON, HBC_DRUID_REMOVE_CURSE, },
-          ["HUNT"] = {},
-          ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
-          ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
-          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
-          ["ROGU"] = {},
-          ["SHAM"] = {HBC_SHAMAN_CURE_POISON, HBC_SHAMAN_CURE_DISEASE},
-          ["WARL"] = {},
-          ["WARR"] = {},
-        }
-    elseif HEALBOT_GAME_VERSION<5 then 
-        HealBot_Debuff_Spells = {
-          ["DEAT"] = {},
-          ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON, HBC_DRUID_REMOVE_CURSE, },
-          ["HUNT"] = {},
-          ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
-          ["PALA"] = {HEALBOT_CLEANSE, HBC_PURIFY},
-          ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE},
-          ["ROGU"] = {},
-          ["SHAM"] = {HBC_SHAMAN_CURE_POISON, HEALBOT_CLEANSE_SPIRIT},
-          ["WARL"] = {},
-          ["WARR"] = {},
-        }
-    else
-        HealBot_Debuff_Spells = {
-          ["DEAT"] = {},
-          ["DEMO"] = {}, -- Demon Hunter
-          ["DRUI"] = {HEALBOT_REMOVE_CORRUPTION, HEALBOT_NATURES_CURE,},
-          ["HUNT"] = {},
-          ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
-          ["MONK"] = {HEALBOT_DETOX,},
-          ["PALA"] = {HEALBOT_CLEANSE, HEALBOT_CLEANSE_TOXIN},
-          ["PRIE"] = {HEALBOT_PURIFY, HEALBOT_MASS_DISPEL, HEALBOT_PURIFY_DISEASE},
-          ["ROGU"] = {},
-          ["SHAM"] = {HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
-          ["WARL"] = {},
-          ["WARR"] = {},
-          ["EVOK"] = {HEALBOT_NATURALIZE,HEALBOT_CAUTERIZING_FLAME,HEALBOT_EXPUNGE,},
-        }
-    end
+    HealBot_Debuff_Spells = {
+      ["DEAT"] = {},
+      ["DEMO"] = {}, -- Demon Hunter
+      ["DRUI"] = {HBC_DRUID_CURE_POISON, HBC_DRUID_ABOLISH_POISON, HBC_DRUID_REMOVE_CURSE, HEALBOT_REMOVE_CORRUPTION, HEALBOT_NATURES_CURE,},
+      ["HUNT"] = {},
+      ["MAGE"] = {HEALBOT_REMOVE_CURSE,},
+      ["MONK"] = {HEALBOT_DETOX,},
+      ["PALA"] = {HBC_PURIFY, HEALBOT_CLEANSE, HEALBOT_CLEANSE_TOXIN},
+      ["PRIE"] = {HBC_DISPELL_MAGIC, HBC_PRIEST_CURE_DISEASE, HBC_PRIEST_ABOLISH_DISEASE, HEALBOT_PURIFY, HEALBOT_MASS_DISPEL, HEALBOT_PURIFY_DISEASE},
+      ["ROGU"] = {},
+      ["SHAM"] = {HBC_SHAMAN_CURE_POISON, HBC_SHAMAN_CURE_DISEASE, HEALBOT_PURIFY_SPIRIT, HEALBOT_CLEANSE_SPIRIT},
+      ["WARL"] = {},
+      ["WARR"] = {},
+      ["EVOK"] = {HEALBOT_NATURALIZE,HEALBOT_CAUTERIZING_FLAME,HEALBOT_EXPUNGE,},
+    }
     --if (strsub(GetLocale(),1,2)~="en") then
     --    HealBot_Debuff_Spells["SHAM"] = {HEALBOT_CLEANSE_SPIRIT}
     --end
@@ -7417,7 +7391,6 @@ function HealBot_Options_Perf_OnValueChanged(self)
         HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
         HealBot_Timers_Set("LAST","UpdateCheckInterval")
-        HealBot_Timers_Set("LAST","SetEventQueues")
     end
 end
 
