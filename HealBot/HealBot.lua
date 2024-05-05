@@ -13,6 +13,7 @@ local libCHC = HealBot_Libs_CHC()
 local HealBot_UnitInVehicle={}
 local HealBot_SlowUpdateQueue={}
 local HealBot_UpdateQueue={}
+local HealBot_CDQueue={}
 local HealBot_RecalcQueue={}
 local HealBot_notVisible={}
 local hbManaPlayers={}
@@ -105,7 +106,6 @@ HealBot_luVars["NumPetUnits"]=0
 HealBot_luVars["CurrentSpec"]=1
 HealBot_luVars["pluginClearDown"]=0
 HealBot_luVars["TalentQueryEnd"]=0
-HealBot_luVars["UpdateUnitRecall"]=false
 HealBot_luVars["NextWarnCallsActive"]=0
 HealBot_luVars["debugButton1Min"]=true
 HealBot_luVars["aggroCheckInterval"]=5
@@ -260,6 +260,11 @@ function HealBot_nextRecalcEndDelay(typeRequired)
         HealBot_RefreshTypes[typeRequired]=true
         HealBot_Timer_FramesRefresh()
     end
+end
+
+function HealBot_nextRecalc(typeRequired)
+    HealBot_RefreshTypes[typeRequired]=true
+    HealBot_Timer_FramesRefresh()
 end
 
 local hbSpecialInGeneralFrame={[2]=8, [1]=7, [3]=9, [4]=10}
@@ -746,17 +751,6 @@ function HealBot_SlashCmd(cmd)
             HealBot_TestBars()
         elseif (HBcmd=="tr" and x) then
             HealBot_Panel_SethbTopRole(x)
-        elseif (HBcmd=="tpr") then 
-            if HEALBOT_GAME_VERSION<4 then
-                if HealBot_Globals.AllowPlayerRoles then
-                    HealBot_Globals.AllowPlayerRoles=false
-                    HealBot_AddChat(HEALBOT_CHAT_PLAYERROLESOFF)
-                else
-                    HealBot_Globals.AllowPlayerRoles=true
-                    HealBot_AddChat(HEALBOT_CHAT_PLAYERROLESON)
-                end
-                HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
-            end
         elseif (HBcmd=="ttq") then
             HealBot_Options_ToggleTalentQuery()
         elseif (HBcmd=="tci") then
@@ -1014,7 +1008,9 @@ function HealBot_TestBars()
       --HealBot_setCall("HealBot_TestBars")
     HealBot_Panel_ToggleTestBars()
     HealBot_Timers_Set("SKINS","ResetSkinAllElements")
-    HealBot_Timers_Set("SKINS","AllFramesChanged")
+    HealBot_Timers_Set("SKINS","ResetFrameAlias")
+    HealBot_Options_framesChanged(true, true, true, true, true)
+    
 end
 
 local hbManaWatch={}
@@ -2637,6 +2633,8 @@ end
 function HealBot_Load()
       --HealBot_setCall("HealBot_Load")
     if not HealBot_luVars["Loaded"] then
+        HealBot_Media_Register()
+        HealBot_InitPlugins()
         HealBot_FastFuncs()
         HealBot_Timers_TurboOn(5)
         HealBot_Init_Spells_Defaults()
@@ -2671,7 +2669,7 @@ function HealBot_Load()
         HealBot_ActionIcons_InitFrames()
         HealBot_Timers_Set("INIT","CheckTalentInfo")
         HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
-        HealBot_Timers_Set("INIT","InitPlugins")
+        --HealBot_Timers_Set("INIT","InitPlugins")
         HealBot_Timers_Set("INIT","RegEvents")
         HealBot_Timers_Set("SKINS","RaidTargetUpdate")
         HealBot_Timers_Set("SKINS","TextExtraCustomCols")
@@ -2683,7 +2681,7 @@ function HealBot_Load()
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj",1)
         HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
-        HealBot_Debug_PerfUpdate("CPUUsage", HealBot_Globals.CPUUsage)
+        HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
         HealBot_Globals.FirstLoad=false
     end
 end
@@ -2793,17 +2791,19 @@ function HealBot_Reset_Full()
     HealBot_Panel_ClearHealTargets()
     HealBot_Action_ResethbInitButtons()
     HealBot_EndAggro()  
-    HealBot_Timers_Set("SKINS","AllFramesChanged")
+    HealBot_Options_framesChanged(true, true, true, true, true)
     HealBot_Timers_Set("LAST","ZoneUpdate")
     HealBot_Timers_AuraReset()
     HealBot_Timers_Set("INIT","RegEvents")
+    HealBot_Timers_Set("SKINS","ResetFrameAlias")
 end
 
 function HealBot_Reset_Quick()
       --HealBot_setCall("HealBot_Reset_Quick")
     HealBot_Timers_Set("AURA","ClearAllBuffs")
     HealBot_Timers_Set("AURA","ClearAllDebuffs")
-    HealBot_Timers_Set("SKINS","AllFramesChanged",0.2)
+    HealBot_Timers_Set("SKINS","ResetFrameAlias")
+    HealBot_Options_framesChanged(true, true, true, true, true)
 end
 
 local idGUID,idButton,pidButton,xidButton=false,false,false,false,false
@@ -3044,7 +3044,8 @@ function HealBot_ResetSkins()
     HealBot_AddChat(HEALBOT_CHAT_CONFIRMSKINDEFAULTS)
     HealBot_Update_Skins()
     HealBot_Timers_Set("SKINS","ResetSkinAllElements")
-    HealBot_Timers_Set("SKINS","AllFramesChanged")
+    HealBot_Timers_Set("SKINS","ResetFrameAlias")
+    HealBot_Options_framesChanged(true, true, true, true, true)
 end
 
 function HealBot_Reset_Button(button)
@@ -3140,62 +3141,37 @@ function HealBot_Update_CPUUsage()
     HealBot_Globals.LAG=lagCurWorld/1000
     HealBot_luVars["FPS"][0]=ceil((HealBot_luVars["FPS"][1][0]+HealBot_luVars["FPS"][2][0]+HealBot_luVars["FPS"][3][0])/3)
     if HealBot_luVars["CPUProfilerOn"] then
-        if HealBot_luVars["FPS"][0]<40 then
-            HealBot_Globals.CPUUsage=1
-        elseif HealBot_luVars["FPS"][0]<70 then
-            HealBot_Globals.CPUUsage=2
-        elseif HealBot_luVars["FPS"][0]<100 then
-            HealBot_Globals.CPUUsage=3
-        else
-            HealBot_Globals.CPUUsage=4
-        end
+        HealBot_Globals.CPUUsage=ceil(HealBot_Globals.FPS*0.1)
         if HealBot_luVars["CPUProfilerOn"] and not HealBot_luVars["warnCPUProfiler"] then
-            HealBot_Debug_PerfUpdate("CPUUsage", HealBot_Globals.CPUUsage.." profiler running")
+            HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage.." profiler running")
             HealBot_AddChat("WARNING: CPU profiler is running - FPS might be reduced.")
             HealBot_luVars["warnCPUProfiler"]=true
         end
     elseif HealBot_Globals.FPS~=HealBot_luVars["FPS"][0] or HealBot_luVars["cpuAdj"]~=prevCPUadj then
         prevCPUadj=HealBot_luVars["cpuAdj"]
         HealBot_Globals.FPS=HealBot_luVars["FPS"][0]
-        if HealBot_Globals.FPS<20 then
-            HealBot_Globals.CPUUsage=1
-        elseif HealBot_Globals.FPS<30 then
-            HealBot_Globals.CPUUsage=2
-        elseif HealBot_Globals.FPS<40 then
-            HealBot_Globals.CPUUsage=3
-        elseif HealBot_Globals.FPS<50 then
-            HealBot_Globals.CPUUsage=4
-        elseif HealBot_Globals.FPS<60 then
-            HealBot_Globals.CPUUsage=5
-        elseif HealBot_Globals.FPS<70 then
-            HealBot_Globals.CPUUsage=6
-        elseif HealBot_Globals.FPS<85 then
-            HealBot_Globals.CPUUsage=7
-        elseif HealBot_Globals.FPS<100 then
-            HealBot_Globals.CPUUsage=8
-        else
-            HealBot_Globals.CPUUsage=9
-        end
+        HealBot_Globals.CPUUsage=ceil(HealBot_Globals.FPS*0.25)
         HealBot_Globals.CPUUsage=HealBot_Globals.CPUUsage+HealBot_luVars["cpuAdj"]
         if HealBot_Globals.CPUUsage<1 then 
             HealBot_Globals.CPUUsage=1
-        elseif HealBot_Globals.CPUUsage>14 then
-            HealBot_Globals.CPUUsage=14
         end
         HealBot_Debug_PerfUpdate("fps", HealBot_Globals.FPS)
     end
     if prevLAG~=HealBot_Globals.LAG then
         if HealBot_Globals.LAG<0.05 then
-            HealBot_luVars["DelayCD"]=HealBot_Globals.LAG*2
+            HealBot_luVars["DelayCD"]=HealBot_Globals.LAG*2.5
         else
-            HealBot_luVars["DelayCD"]=HealBot_Globals.LAG+0.5
+            HealBot_luVars["DelayCD"]=HealBot_Globals.LAG+0.075
         end
         HealBot_Debug_PerfUpdate("lag", HealBot_Globals.LAG)
+        HealBot_Debug_PerfUpdate("CDdelay", HealBot_luVars["DelayCD"])
     end
     if prevCPU~=HealBot_Globals.CPUUsage then
-        HealBot_Debug_PerfUpdate("CPUUsage", HealBot_Globals.CPUUsage)
+        HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
         HealBot_Timers_Set("SKINS","FluidFlashInUse")
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
+        HealBot_Timers_Set("LAST","UpdateCheckInterval")
+        HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_Comms_PerfLevel()
     elseif prevFPS~=HealBot_Globals.FPS then
         HealBot_Comms_PerfLevel()
@@ -3207,10 +3183,9 @@ function HealBot_UpdateMaxUnitsAdj()
     if HealBot_luVars["CPUProfilerOn"] then
         HealBot_luVars["UpdateMaxUnits"]=2
     else
-        HealBot_luVars["UpdateMaxUnits"]=ceil((HealBot_Globals.CPUUsage*(HealBot_Globals.PerfMode*0.2))+3+(HealBot_Globals.PerfMode*0.5))
-        --HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.5)
-        if HealBot_luVars["UpdateMaxUnits"]<3 then
-            HealBot_luVars["UpdateMaxUnits"]=3
+        HealBot_luVars["UpdateMaxUnits"]=ceil(HealBot_Globals.CPUUsage*0.15)
+        if HealBot_luVars["UpdateMaxUnits"]<2 then
+            HealBot_luVars["UpdateMaxUnits"]=2
         end
     end
     HealBot_UpdateNumUnits()
@@ -3222,20 +3197,13 @@ function HealBot_UpdateNumUnits()
     if HealBot_luVars["CPUProfilerOn"] then
         HealBot_luVars["UpdateNumUnits"]=floor(HealBot_luVars["NumUnitsInQueue"]*0.2)
     else
-        HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*(0.1+(HealBot_Globals.PerfMode*0.1)))
-        --HealBot_luVars["UpdateNumUnits"]=floor(HealBot_luVars["NumUnitsInQueue"]*0.5)
+        HealBot_luVars["UpdateNumUnits"]=floor(HealBot_luVars["NumUnitsInQueue"]*0.5)
     end
-    
-    if HealBot_luVars["NumUnitsInQueue"]>4 then
-        HealBot_luVars["UpdateUnitRecall"]=true
-    else
-        HealBot_luVars["UpdateUnitRecall"]=false
-        if HealBot_luVars["NumUnitsInQueue"]<1 then
-            HealBot_luVars["NumUnitsInQueue"]=1
-        end
-    end
+
     if HealBot_luVars["UpdateNumUnits"]>HealBot_luVars["UpdateMaxUnits"] then
         HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateMaxUnits"]
+    elseif HealBot_luVars["NumUnitsInQueue"]<1 then
+        HealBot_luVars["NumUnitsInQueue"]=1
     end
     HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"])
 end
@@ -3257,15 +3225,10 @@ function HealBot_UpdateCheckInterval()
         HealBot_Action_setLuVars("deadCheckInterval", 1)
         HealBot_Debug_PerfUpdate("deadInt", 1)
     else
-        HealBot_luVars["RecalcDelay"]=0.7-(HealBot_Globals.PerfMode*0.1)
-        HealBot_luVars["aggroCheckInterval"]=8-HealBot_Globals.PerfMode
-        HealBot_luVars["statusCheckInterval"]=14-(HealBot_Globals.PerfMode*2)
-        HealBot_luVars["healthCheckInterval"]=10-HealBot_Globals.PerfMode
-        
-        --HealBot_luVars["RecalcDelay"]=0.8-(HealBot_Globals.CPUUsage*0.05)
-        --HealBot_luVars["aggroCheckInterval"]=7-(HealBot_Globals.CPUUsage*0.5)
-        --HealBot_luVars["statusCheckInterval"]=10-(HealBot_Globals.CPUUsage*0.75)
-        --HealBot_luVars["healthCheckInterval"]=12-(HealBot_Globals.CPUUsage*0.75)
+        HealBot_luVars["RecalcDelay"]=0.7-(HealBot_Globals.CPUUsage*0.02)
+        HealBot_luVars["aggroCheckInterval"]=10-ceil(HealBot_Globals.CPUUsage*0.25)
+        HealBot_luVars["statusCheckInterval"]=12-ceil(HealBot_Globals.CPUUsage*0.25)
+        HealBot_luVars["healthCheckInterval"]=12-ceil(HealBot_Globals.CPUUsage*0.15)
         
         if HealBot_luVars["aggroCheckInterval"]<1 then HealBot_luVars["aggroCheckInterval"]=1 end
         if HealBot_luVars["statusCheckInterval"]<2 then HealBot_luVars["statusCheckInterval"]=2 end
@@ -3285,10 +3248,8 @@ function HealBot_PerfRangeFreq()
         HealBot_luVars["rangeCheckInterval"]=2
         HealBot_luVars["rangeCheckIntEnabled"]=1
     else
-        HealBot_luVars["rangeCheckInterval"]=2-(HealBot_Globals.PerfMode*0.2)-(HealBot_luVars["cpuAdj"]/20)
-        HealBot_luVars["rangeCheckIntEnabled"]=1-(HealBot_Globals.PerfMode*0.1)-(HealBot_luVars["cpuAdj"]/20)
-        --HealBot_luVars["rangeCheckInterval"]=2-(HealBot_Globals.CPUUsage*0.1)
-        --HealBot_luVars["rangeCheckIntEnabled"]=1-(HealBot_Globals.CPUUsage*0.05)
+        HealBot_luVars["rangeCheckInterval"]=2-(HealBot_Globals.CPUUsage*0.034)
+        HealBot_luVars["rangeCheckIntEnabled"]=1-(HealBot_Globals.CPUUsage*0.017)
     end
     if HealBot_luVars["rangeCheckIntEnabled"]<0.4 then HealBot_luVars["rangeCheckIntEnabled"]=0.4 end
     if HealBot_luVars["rangeCheckInterval"]<0.8 then HealBot_luVars["rangeCheckInterval"]=0.8 end
@@ -3296,13 +3257,10 @@ function HealBot_PerfRangeFreq()
     HealBot_Debug_PerfUpdate("RangeEnabled", HealBot_luVars["rangeCheckIntEnabled"])
 end
 
-function HealBot_PerfPlugin_adj(cpuAdj)
+function HealBot_PerfPlugin_adj()
       --HealBot_setCall("HealBot_PerfPlugin_adj")
     HealBot_luVars["cpuAdj"]=HealBot_Options_retLuVars("perfCPUAdj")
     HealBot_Update_CPUUsage()
-    HealBot_Timers_Set("LAST","PerfRangeFreq",0.1)
-    HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj",0.1)
-    HealBot_Timers_Set("LAST","UpdateCheckInterval",0.1)
 end
 
 local fpsRow,fpsCol,fpsCurRate=1,1,1
@@ -3514,10 +3472,6 @@ function HealBot_Update_Skins()
                     HealBot_Globals.InHealAbsorbDiv=nil
                 end
                 if tonumber(tPatch)<6 then
-                    if not HealBot_Globals.SwitchAllowPlayerRoles then
-                        HealBot_Globals.SwitchAllowPlayerRoles=true
-                        HealBot_Globals.AllowPlayerRoles=true
-                    end
                     HealBot_Globals.AbsorbDiv=12
                     HealBot_Globals.InHealDiv=12
                 elseif tonumber(tPatch)==6 and tonumber(tHealbot)<1 then
@@ -3533,10 +3487,16 @@ function HealBot_Update_Skins()
             HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol["DEFAULT"]=4
         end
         if HealBot_Globals.UltraPerf~=nil then
-            if HealBot_Globals.UltraPerf then
-                HealBot_Globals.PerfMode=5
-            end
             HealBot_Globals.UltraPerf=nil
+        end
+        if HealBot_Globals.PerfMode~=nil then
+            HealBot_Globals.PerfMode=nil
+        end
+        if HealBot_Globals.SwitchAllowPlayerRoles then
+            HealBot_Globals.SwitchAllowPlayerRoles=nil
+        end
+        if HealBot_Globals.AllowPlayerRoles then
+            HealBot_Globals.AllowPlayerRoles=nil
         end
         HealBot_Update_BuffsForSpec("Debuff")
         if not HealBot_Globals.OverrideColours["TANK"] then HealBot_Skins_SetRoleCol(nil, "TANK", true) end         -- This is old when 10.0 is old.
@@ -3657,10 +3617,8 @@ function HealBot_setTooltipUpdateInterval()
       --HealBot_setCall("HealBot_setTooltipUpdateInterval")
     if not HealBot_Data["TIPUSE"] then
         HealBot_luVars["TipUpdateFreq"]=900
-    elseif HealBot_Globals.Tooltip_ShowCD then
-        HealBot_luVars["TipUpdateFreq"]=1
     else
-        HealBot_luVars["TipUpdateFreq"]=5
+        HealBot_luVars["TipUpdateFreq"]=1
     end
 end
 
@@ -3764,7 +3722,6 @@ function HealBot_OnEvent_AddOnLoaded(addonName)
                 Healbot_Config_Skins[key] = val;
             end
         end);
-        HealBot_Action_InitFrames()
         table.foreach(HealBot_Config_SpellsDefaults, function (key,val)
             if HealBot_Config_Spells[key]==nil then
                 HealBot_Config_Spells[key] = val;
@@ -3801,9 +3758,9 @@ function HealBot_OnEvent_AddOnLoaded(addonName)
         for x=1,8 do
             HealBot_ScanTooltip:AddDoubleLine(" "," ",1,1,1,1,1,1)
             g=_G["HealBot_ScanTooltipTextLeft"..x]
-            g:SetFont(HealBot_Default_Fonts[15].file, 12)
+            g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
             g=_G["HealBot_ScanTooltipTextRight"..x]
-            g:SetFont(HealBot_Default_Fonts[15].file, 12)
+            g:SetFont(HealBot_Supplied_Fonts[15].file, 12)
         end
         if HealBot_Config.LastLoadout==0 then HealBot_Action_UpdateLoadoutId() end
         HealBot_Config.LastAutoSkinChangeTime=0
@@ -3829,8 +3786,8 @@ end
 
 function HealBot_VariablesLoaded()
       --HealBot_setCall("HealBot_VariablesLoaded")
-    HealBot_Globals.PerfMode=5
     HealBot_Media_Register()
+    HealBot_Action_InitFrames()
     HealBot_SetPlayerData()
     HealBot_Include_Skin(HEALBOT_SKINS_STD, true)
     if HealBot_Globals.FirstLoad then
@@ -5488,8 +5445,9 @@ function HealBot_Update_Slow()
     end
 end
 
+local HealBot_CDKnown={}
 local hbStartTime, hbDuration, hbCDTime, hbCDEnd=0,0,0,0
-function HealBot_SpellCooldown(spellName, spellId)
+function HealBot_SpellCooldown(spellName, spellId, callback)
       --HealBot_setCall("HealBot_SpellCooldown")
     hbStartTime, hbDuration=GetSpellCooldown(spellName)
     hbCDEnd=(hbStartTime or 0)+(hbDuration or 0)
@@ -5498,8 +5456,17 @@ function HealBot_SpellCooldown(spellName, spellId)
         if HealBot_luVars["pluginMyCooldowns"] then
             HealBot_Plugin_MyCooldowns_PlayerUpdate(spellName, spellId, hbStartTime, hbDuration)
         end
+        if HealBot_Spell_IDs[spellId].cooldown>2 then HealBot_CDKnown[spellName]=true end
      --       HealBot_AddDebug("CD for spell "..spellName,"Cooldown",true)
      --       HealBot_AddDebug("Start="..(hbStartTime or "nil").."  hbCDEnd="..hbCDEnd.."  floor="..floor(hbCDEnd),"Cooldown",true)
+        if callback>0 then HealBot_AddDebug("CD for spell "..spellName.." found on callback "..callback,"Cooldown",true) end
+    elseif HealBot_CDKnown[spellName] then
+        if callback<3 then
+            callback=callback+1
+            C_Timer.After(HealBot_luVars["DelayCD"]+(0.1*callback), function() HealBot_SpellCooldown(spellName, spellId, callback)  end)
+        else
+            HealBot_AddDebug("CD for spell "..spellName.." NOT found on callback "..callback,"Cooldown",true)
+        end
     end
     if hbCDTime>0.4 then
         if HealBot_luVars["pluginAuraWatch"] then
@@ -5509,14 +5476,19 @@ function HealBot_SpellCooldown(spellName, spellId)
     end
 end
 
-function HealBot_Check_SpellCooldown(spellId)
+function HealBot_Check_SpellCooldown(spellId, caller)
       --HealBot_setCall("HealBot_Check_SpellCooldown")
-    --if HealBot_Spell_IDs[spellId] and (HealBot_luVars["pluginMyCooldowns"] or HealBot_luVars["pluginAuraWatch"]) then
-    if HealBot_luVars["pluginMyCooldowns"] or HealBot_luVars["pluginAuraWatch"] then
+    
+    if HealBot_Spell_IDs[spellId] then
+    --if HealBot_luVars["pluginMyCooldowns"] or HealBot_luVars["pluginAuraWatch"] then
         scName=GetSpellInfo(spellId)
         if scName then 
-            C_Timer.After(HealBot_luVars["DelayCD"], function() HealBot_SpellCooldown(scName, spellId)  end)
+            HealBot_CDQueue[spellId]=scName
+            --HealBot_AddDebug("SpellCooldown for spell "..scName.." caller="..caller,"Cooldown",true)
         end
+--        if scName then 
+--            C_Timer.After(HealBot_luVars["DelayCD"], function() HealBot_SpellCooldown(scName, spellId, 0)  end)
+--        end
     end
 end
 
@@ -5572,7 +5544,7 @@ function HealBot_CheckUnitRangeOOC(button)
 end
 
 local HealBot_CheckUnitRange=HealBot_CheckUnitRangeOOC
-function HealBot_UnitUpdateButton(button, recall)
+function HealBot_UnitUpdateButton(button)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
     if UnitExists(button.unit) then
         if button.guid~=UnitGUID(button.unit) then
@@ -5602,8 +5574,6 @@ function HealBot_UnitUpdateButton(button, recall)
             end
         elseif button.status.dirarrowshown>0 and button.status.dirarrowshown<HealBot_TimeNow then 
             HealBot_Action_ShowDirectionArrow(button)
-        elseif recall then 
-            HealBot_UpdateUnit_Button(false)
         end
         if button.status.rangenextcheck<HealBot_TimeNow then
             if HealBot_CheckUnitRange(button) then
@@ -5618,8 +5588,6 @@ function HealBot_UnitUpdateButton(button, recall)
         else
             HealBot_UpdateUnitNotExists(button)
         end
-    elseif recall then
-        HealBot_UpdateUnit_Button(false)
     end
 end
 
@@ -5718,11 +5686,11 @@ function HealBot_EnemyUpdateButton(button)
     end
 end
 
-function HealBot_UpdateUnit_Button(recall)
+function HealBot_UpdateUnit_Button()
       --HealBot_setCall("HealBot_UpdateUnit_Button", nil, nil, nil, true)
     HealBot_luVars["UpdateID"]=HealBot_luVars["UpdateID"]+1
     if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]] then
-        HealBot_UnitUpdateButton(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]], recall)
+        HealBot_UnitUpdateButton(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]])
     elseif HealBot_luVars["UpdateID"]>HealBot_luVars["NumUnitsInQueue"] then
         HealBot_luVars["UpdateID"]=0
     end
@@ -5731,12 +5699,16 @@ end
 function HealBot_UpdateUnit_Buttons()
       --HealBot_setCall("HealBot_UpdateUnit_Buttons", nil, nil, nil, true)
     for u=1,HealBot_luVars["UpdateNumUnits"] do
-        HealBot_UpdateUnit_Button(HealBot_luVars["UpdateUnitRecall"])
+        HealBot_UpdateUnit_Button()
     end
 end
 
 function HealBot_UpdateTimers()
       --HealBot_setCall("HealBot_UpdateTimers", nil, nil, nil, true)
+    for spellId, spellName in pairs(HealBot_CDQueue) do
+        HealBot_SpellCooldown(spellName, spellId, 0)
+        HealBot_CDQueue[spellId]=nil
+    end
     if HealBot_luVars["HealBot_RunTimers"] then
         HealBot_Timers_Run()
     end
@@ -6264,7 +6236,7 @@ end
 
 function HealBot_SpecUpdate(button, upTime)
           --HealBot_setCall("HealBot_SpecUpdate", button)
-    if button.specupdate<upTime then
+    if button.specupdate<upTime and (button.player or HealBot_Globals.TalentInspect) then
         button.specupdate=upTime
     end
 end
@@ -7188,7 +7160,7 @@ function HealBot_OnEvent_UnitSpellCastStart(button, unitTarget, castGUID, spellI
     else
         HealBot_CheckUnitStatus(button)
     end
-    if button.player then HealBot_Check_SpellCooldown(spellID) end
+    --if button.player then HealBot_Check_SpellCooldown(spellID, "CastStart") end
 end
 
 function HealBot_OnEvent_UnitSpellChanStart(button, unitTarget, castGUID, spellID)
@@ -7200,7 +7172,7 @@ function HealBot_OnEvent_UnitSpellChanStart(button, unitTarget, castGUID, spellI
             HealBot_Aux_UpdateCastBar(button, scName, scStartTime, scEndTime, true)
         end
     end
-    if button.player then HealBot_Check_SpellCooldown(spellID) end
+    --if button.player then HealBot_Check_SpellCooldown(spellID, "ChanStart") end
 end
 
 function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID)
@@ -7228,7 +7200,7 @@ function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID
 
     if HealBot_luVars["massResUnit"]==button.unit then HealBot_luVars["massResUnit"]="-nil" end
     if HealBot_luVars["massResAltUnit"]==button.unit then HealBot_luVars["massResAltUnit"]="-nil" end
-    if button.player then HealBot_Check_SpellCooldown(spellID) end
+    if button.player then HealBot_Check_SpellCooldown(spellID, "CastStop") end
 end
 
 function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spellID)
@@ -7237,7 +7209,7 @@ function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spe
         if HEALBOT_GAME_VERSION>8 and HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
             C_Timer.After(HealBot_luVars["DelayCD"], function() HealBot_Options_DebuffSpellAuraCD(GetSpellInfo(spellID) or GetItemInfoInstant(spellID) or spellID) end)
         end
-        HealBot_Check_SpellCooldown(spellID)
+        HealBot_Check_SpellCooldown(spellID, "CastComplete")
     end
 end
 
@@ -7304,7 +7276,7 @@ function HealBot_OnEvent_UnitSpellCastSent(caster,unitName,castGUID,spellID)
                 HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
             end
         end
-        HealBot_Check_SpellCooldown(spellID)
+        --HealBot_Check_SpellCooldown(spellID, "CastSent")
     end
 end
 

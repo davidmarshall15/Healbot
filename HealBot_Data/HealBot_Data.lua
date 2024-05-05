@@ -1,4 +1,4 @@
-HealBot_Default_Textures={
+HealBot_Supplied_Textures={
      [1]= {name="HealBot 01", file=[[Interface\Addons\HealBot\Images\bar1.tga]]},
      [2]= {name="Waves", file=[[Interface\Addons\HealBot\Images\bar2.tga]]},
      [3]= {name="HealBot 03", file=[[Interface\Addons\HealBot\Images\bar3.tga]]},
@@ -30,16 +30,34 @@ HealBot_Default_Textures={
     [29]= {name="Minimalist", file=[[Interface\Addons\HealBot\Images\Minimalist.tga]]},
     [30]= {name="Ruben", file=[[Interface\Addons\HealBot\Images\Ruben.tga]]},
 };
-HealBot_Default_Texture=HealBot_Default_Textures[20].name
+function HealBot_Data_Default_TextureIndex()
+    return 20
+end
+function HealBot_Data_Default_Texture()
+    --return HealBot_Supplied_Textures[HealBot_Data_Default_TextureIndex()].file
+    return 'Interface\\Addons\\HealBot\\Images\\Smoothv2.tga'
+end
+function HealBot_Data_Default_TextureName()
+    --return HealBot_Supplied_Textures[HealBot_Data_Default_TextureIndex()].name
+    return "Smooth v2"
+end
 
-HealBot_Default_Sounds={
+HealBot_Supplied_Sounds={
     [1]= {name="Tribal Bass Drum", file=566027},
     [2]= {name="Thorns", file=569022},
     [3]= {name="Elf Bell Toll", file=566558},
 };
-HealBot_Default_Sound=HealBot_Default_Sounds[3].name
+function HealBot_Data_Default_SoundIndex()
+    return 3
+end
+function HealBot_Data_Default_Sound()
+    return HealBot_Supplied_Sounds[HealBot_Data_Default_SoundIndex()].file
+end
+function HealBot_Data_Default_SoundName()
+    return HealBot_Supplied_Sounds[HealBot_Data_Default_SoundIndex()].name
+end
 
-HealBot_Default_Fonts={
+HealBot_Supplied_Fonts={
     [1]= {name="Aovel Sans Black", file=[[Interface\AddOns\HealBot\Fonts\ASansBlack.ttf]]},
     [2]= {name="Ace Futurism", file=[[Interface\AddOns\HealBot\Fonts\ace_futurism.ttf]]},
     [3]= {name="Oregon LDO Black", file=[[Interface\AddOns\HealBot\Fonts\Oregon_LDO_Black.ttf]]},
@@ -66,12 +84,15 @@ HealBot_Default_Fonts={
     [24]= {name="Impact", file=[[Interface\AddOns\HealBot\Fonts\Impact.ttf]]},
     [25]= {name="Olde English", file=[[Interface\AddOns\HealBot\Fonts\OldeEnglish.ttf]]},
 };
-HealBot_Default_Font=HealBot_Default_Fonts[15].name
-HealBot_Font_Outline={
-    [1]= "",
-    [2]= "OUTLINE",
-    [3]= "THICKOUTLINE",
-};
+function HealBot_Data_Default_FontIndex()
+    return 15
+end
+function HealBot_Data_Default_Font()
+    return HealBot_Supplied_Fonts[HealBot_Data_Default_FontIndex()].file
+end
+function HealBot_Data_Default_FontName()
+    return HealBot_Supplied_Fonts[HealBot_Data_Default_FontIndex()].name
+end
 
 local Version=HealBot_Global_InitVersion()
 HealBot_ConfigDefaults = {
@@ -185,7 +206,7 @@ HealBot_Config_BuffsDefaults = {
   CBshownHB=true,
   ShowBuffWarning=false,
   SoundBuffWarning=false,
-  SoundBuffPlay=HealBot_Default_Sound,
+  SoundBuffPlay=HealBot_Data_Default_SoundName(),
   HealBot_CBWarnRange_Bar=3,
   HealBot_CBWarnRange_Screen=2,
   HealBot_CBWarnRange_Sound=3,
@@ -207,7 +228,7 @@ HealBot_Config_CuresDefaults = {
   IgnoreOnCooldownDebuffs = false,
   IgnoreFriendDebuffs = false,
   IgnoreCannotDispell = false,
-  SoundDebuffPlay = HealBot_Default_Sound,
+  SoundDebuffPlay = HealBot_Data_Default_SoundName(),
   DebuffWatchInCombat = true,
   DebuffWatchWhenGrouped = false,
   DebuffWatchWhenMounted = false,
@@ -309,7 +330,6 @@ function HealBot_Data_InitVars()
         PluginMedia=true,
         FrameStrata="LOW",
         CompressExport=true,
-        AllowPlayerRoles=true,
         VehicleFontSizeReduction=4,
         UseCrashProt=false,
         NoRanks=false,
@@ -347,15 +367,15 @@ function HealBot_Data_InitVars()
         Tooltip_IgnoreGCD=false,
         Tooltip_Scale=1,
         Tooltip_Alpha=1,
-        Tooltip_HeaderFont=HealBot_Default_Fonts[14].name,
+        Tooltip_HeaderFont=HealBot_Supplied_Fonts[14].name,
         Tooltip_HeaderFontSize=14,
-        Tooltip_DetailFont=HealBot_Default_Font,
+        Tooltip_DetailFont=HealBot_Data_Default_FontName(),
         Tooltip_DetailFontSize=12,
         DisableToolTipInCombat=false,
         HideOptions=true,
         ProtectPvP=false,
         RightButtonOptions=false,
-        PerfMode=5,
+        TalentInspect=true,
         HideUnlockedTag=true,
         SmartCast=true,
         SmartCastDebuff=true,

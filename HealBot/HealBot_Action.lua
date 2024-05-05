@@ -97,9 +97,8 @@ function HealBot_Action_setAuxAssigns(vName, frame, vValue)
 end
 
 function HealBot_Action_UpdateCheckInterval()
-    HealBot_Action_luVars["deadCheckInterval"]=0.8-(HealBot_Globals.PerfMode*0.1)
-    --HealBot_Action_luVars["deadCheckInterval"]=0.8-(HealBot_Globals.CPUUsage*0.05)
-    if HealBot_Action_luVars["deadCheckInterval"]<0.2 then HealBot_Action_luVars["deadCheckInterval"]=0.2 end
+    HealBot_Action_luVars["deadCheckInterval"]=0.5-(HealBot_Globals.CPUUsage*0.02)
+    if HealBot_Action_luVars["deadCheckInterval"]<0.1 then HealBot_Action_luVars["deadCheckInterval"]=0.1 end
     HealBot_Debug_PerfUpdate("deadInt", HealBot_Action_luVars["deadCheckInterval"])
 end
 
@@ -825,18 +824,22 @@ function HealBot_Action_UpdateIconHazardBorders()
     end
 end
 
-function HealBot_Action_EnableIconBorderHazard(icon, id, r, g, b, a)
+function HealBot_Action_EnableIconBorderHazard(icon, id, r, g, b, a, gStyle)
       --HealBot_setCall("HealBot_Action_EnableIconBorderHazard")
     if not HealBot_Hazard_IconData[id] then HealBot_Hazard_IconData[id]={} end
     HealBot_Hazard_IconData[id].r=r
     HealBot_Hazard_IconData[id].g=g
     HealBot_Hazard_IconData[id].b=b
     HealBot_Hazard_IconData[id].a=a
-    HealBot_Hazard_ButtonIcons[id]=icon
-    if not HealBot_Action_luVars["IconHazardInUse"] then
-        HealBot_Action_luVars["IconHazardInUse"]=true
-        HealBot_Action_luVars["IconHazardAltAlpha"]=true
-        HealBot_Action_UpdateIconHazardBorders()
+    if gStyle==6 then
+        HealBot_Action_UpdateHazardIconBordersColours(icon, id, a)
+    else
+        HealBot_Hazard_ButtonIcons[id]=icon
+        if not HealBot_Action_luVars["IconHazardInUse"] then
+            HealBot_Action_luVars["IconHazardInUse"]=true
+            HealBot_Action_luVars["IconHazardAltAlpha"]=true
+            HealBot_Action_UpdateIconHazardBorders()
+        end
     end
 end
 
@@ -903,33 +906,45 @@ end
 function HealBot_Action_FramesGlowLen()
       --HealBot_setCall("HealBot_Action_FramesGlowLen")
     local l=100
-    local i=10
     for x=1,10 do
         l=ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["WIDTH"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
-        i=(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
         if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==1 then
             hbGlowLen[x]=ceil(l/12)
             hbGlowSize[x]=1*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
-            hbIconGlowLen[x]=i/12
-            hbIconGlowSize[x]=0.75*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==2 then
             hbGlowLen[x]=ceil(l/10)
             hbGlowSize[x]=2*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
-            hbIconGlowLen[x]=i/11
-            hbIconGlowSize[x]=1*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==4 then
             hbGlowLen[x]=ceil(l/7)
             hbGlowSize[x]=4*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
-            hbIconGlowLen[x]=i/9
-            hbIconGlowSize[x]=1.5*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["GLOW"]==5 then
             hbGlowLen[x]=ceil(l/5)
             hbGlowSize[x]=5*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
-            hbIconGlowLen[x]=i/8
-            hbIconGlowSize[x]=2*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         else
             hbGlowLen[x]=ceil(l/9)
             hbGlowSize[x]=3*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+        end
+    end
+end
+
+function HealBot_Action_FramesIconGlowLen()
+      --HealBot_setCall("HealBot_Action_FramesIconGlowLen")
+    local i=10
+    for x=1,10 do
+        i=(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][x]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"])
+        if Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["ICONGLOW"]==1 then
+            hbIconGlowLen[x]=i/12
+            hbIconGlowSize[x]=0.75*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["ICONGLOW"]==2 then
+            hbIconGlowLen[x]=i/11
+            hbIconGlowSize[x]=1*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["ICONGLOW"]==4 then
+            hbIconGlowLen[x]=i/9
+            hbIconGlowSize[x]=1.5*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+        elseif Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["ICONGLOW"]==5 then
+            hbIconGlowLen[x]=i/8
+            hbIconGlowSize[x]=2*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
+        else
             hbIconGlowLen[x]=i/10
             hbIconGlowSize[x]=1.25*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][x]["SCALE"]
         end
@@ -946,8 +961,8 @@ function HealBot_Action_EnableIconGlow(button, r, g, b, iKey, gStyle, iconIdx, a
         HealBot_Action_DisableIconGlow(button, iKey, iconIdx)
     end
     button.glow.icon[iconIdx]=gStyle
-    if gStyle==2 then
-        HealBot_Action_EnableIconBorderHazard(button.gref.iconf[iconIdx], button.id..iconIdx, r, g, b, a)
+    if gStyle==2 or gStyle==6 then
+        HealBot_Action_EnableIconBorderHazard(button.gref.iconf[iconIdx], button.id..iconIdx, r, g, b, a, gStyle)
     elseif gStyle==3 then
         HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, true, button.frame)
     elseif gStyle==4 then
@@ -959,7 +974,7 @@ end
 
 function HealBot_Action_DisableIconGlow(button, iKey, iconIdx)
       --HealBot_setCall("HealBot_Action_DisableIconGlow", button)
-    if button.glow.icon[iconIdx]==2 then
+    if button.glow.icon[iconIdx]==2 or button.glow.icon[iconIdx]==6 then
         HealBot_Action_DisableIconBorderHazard(button.gref.iconf[iconIdx], button.id..iconIdx)
     elseif button.glow.icon[iconIdx]==3 then
         HealBot_Action_IconGlow(button.gref.iconf[iconIdx], iKey, false)
@@ -1164,6 +1179,41 @@ function HealBot_Action_UpdateButtonsGlow(enable)
     end
 end
 
+function HealBot_Action_DisableIconsGlow(button)
+    for x=1,12 do
+        if button.glow.icon[x]>1 then
+            HealBot_Action_DisableIconGlow(button, "ICONBUFF", x)
+        end
+    end
+    for x=51,60 do
+        if button.glow.icon[x]>1 then
+            HealBot_Action_DisableIconGlow(button, "ICONDEBUFF", x)
+        end
+    end
+end
+
+function HealBot_Action_DisableButtonIconsGlow()
+      --HealBot_setCall("HealBot_Action_UpdateButtonsGlow")
+    for _,xButton in pairs(HealBot_Unit_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for _,xButton in pairs(HealBot_Private_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for _,xButton in pairs(HealBot_Pet_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for _,xButton in pairs(HealBot_Vehicle_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for _,xButton in pairs(HealBot_Extra_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+end
+
 function HealBot_Action_UpdateGlow()
       --HealBot_setCall("HealBot_Action_UpdateGlow")
     HealBot_Action_UpdateButtonsGlow(true)
@@ -1173,6 +1223,12 @@ function HealBot_Action_DisableGlow()
       --HealBot_setCall("HealBot_Action_DisableGlow")
     HealBot_Action_UpdateButtonsGlow(false)
     HealBot_Action_FramesGlowLen()
+end
+
+function HealBot_Action_DisableGlowIcons()
+      --HealBot_setCall("HealBot_Action_DisableIconGlow")
+    HealBot_Action_DisableButtonIconsGlow()
+    HealBot_Action_FramesIconGlowLen()
 end
 
 function HealBot_Action_DisableBorderHazardTypeGUID(guid)
@@ -2847,7 +2903,7 @@ function HealBot_Action_SetFocusGroups()
     end
     HealBot_Timers_Set("SKINS","UpdateTextButtons")
     HealBot_Panel_SetFocusGroups()
-    HealBot_Timers_Set("SKINS","QuickFramesChanged")
+    HealBot_Options_framesChanged(false)
     HealBot_Timers_Set("LAST","BarColourAlphaSetFunc")
 end
 
@@ -3231,7 +3287,7 @@ function HealBot_Action_setFrameHeader(f)
         local hwidth = ceil(fWidth*Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["WIDTH"])
         grpFrameBar[f]:SetHeight(ceil(Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][f]["SCALE"]));
         grpFrameBar[f]:SetWidth(hwidth);
-        HealBot_Media_UpdateTexture(grpFrameBar[f], Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"])
+        HealBot_Media_UpdateTexture(grpFrameBar[f], Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][f]["TEXTURE"], "Action_setFrameHeader - FrameAliasBar")
         grpFrameBar[f]:GetStatusBarTexture():SetHorizTile(false)
         HealBot_Action_UpdateFrameHeaderOpacity(f)
     else
@@ -3327,7 +3383,7 @@ function HealBot_Action_InitFrames()
             for y=1,12 do
                 if not grpFrameStickyInd[x] then grpFrameStickyInd[x]={} end
                 grpFrameStickyInd[x][y]=CreateFrame("StatusBar", "f"..x.."_HealBot_Action_StickyInd"..y, grpFrame[x], "TextStatusBar")
-                HealBot_Media_UpdateTexture(grpFrameStickyInd[x][y], HealBot_Default_Textures[16].name)
+                HealBot_Media_UpdateTexture(grpFrameStickyInd[x][y], HealBot_Supplied_Textures[16].name, "Action_InitFrames - 16")
                 grpFrameStickyInd[x][y]:SetStatusBarColor(1,1,0.25,0)
                 grpFrameStickyInd[x][y]:SetPoint(StickIndPoints[y],grpFrame[x],FrameStickIndPoints[y])
                 grpFrameStickyInd[x][y]:SetMinMaxValues(0,100);
@@ -4215,13 +4271,16 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
     for x=1,12 do
         iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb, BackdropTemplateMixin and "BackdropTemplate")
         iBtns.id=buttonId
+        iBtns.size=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["ICONGLOW"] or 2
         iBtns:SetScript("OnEnter", function() HealBot_Options_BuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_BuffClick(ghb, x, button) end)
         iBtns:SetFrameLevel(0)
-        iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                          edgeSize = 2, 
-                                          insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        if prefix~="hbTest_" then
+            iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                              edgeSize = iBtns.size, 
+                                              insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        end
         iBtns:SetBackdropBorderColor(0, 0, 0, 0)
         iBtns:EnableMouse(false)
         iBtns:UnregisterAllEvents()
@@ -4229,12 +4288,15 @@ function HealBot_Action_CreateNewButton(hbCurFrame, buttonId, prefix)
     for x=51,60 do
         iBtns=CreateFrame("Frame", prefix.."ID"..buttonId.."Icon"..x, ghb, BackdropTemplateMixin and "BackdropTemplate")
         iBtns.id=buttonId
+        iBtns.size=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["ICONGLOW"] or 2
         iBtns:SetScript("OnEnter", function() HealBot_Options_DebuffIconTooltip(ghb, x) end)
         iBtns:SetScript("OnLeave", function() HealBot_Action_HideTooltipFrame() end)
         iBtns:SetScript("OnMouseDown", function(self, button) HealBot_Options_DebuffClick(ghb, x, button) end)
-        iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                          edgeSize = 2, 
-                                          insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        if prefix~="hbTest_" then
+            iBtns:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                              edgeSize = iBtns.size, 
+                                              insets = { left = 0, right = 0, top = 0, bottom = 0}})
+        end
         iBtns:SetBackdropBorderColor(0, 0, 0, 0)
         iBtns:SetFrameLevel(0)
         iBtns:EnableMouse(false)
@@ -7425,7 +7487,8 @@ function HealBot_Action_SetAliasFontSize(hbCurFrame)
                                  Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["FONT"],
                                  ceil(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"]*
                                       Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"]),
-                                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OUTLINE"])
+                                 Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["OUTLINE"],
+                                 "Action_SetAliasFontSize - FrameAlias")
         grpFrameText[hbCurFrame]:SetTextHeight(ceil(Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SIZE"]*
                                                     Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"]))
         grpFrameText[hbCurFrame]:ClearAllPoints();

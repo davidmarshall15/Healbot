@@ -299,15 +299,7 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                             if HEALBOT_GAME_VERSION>3 then
                                 hbFRole = hbCombatRole
                             else
-                                if HealBot_Globals.AllowPlayerRoles then
-                                    if hbCombatRole=="HEALER" then
-                                        hbFRole = "HEALER"
-                                    else
-                                        hbFRole=HealBot_Panel_CheckRole(unit)
-                                    end
-                                else
-                                    hbFRole=HealBot_Panel_UnitRoleOnSpec(dsGUID, hbFRole)
-                                end
+                                hbFRole=HealBot_Panel_UnitRoleOnSpec(dsGUID, hbFRole)
                             end
                         end
                     end
@@ -721,15 +713,6 @@ function HealBot_Panel_UnitRole(unit, guid, isPlayer)
     if role==HEALBOT_WORDS_UNKNOWN then 
         if HEALBOT_GAME_VERSION>2 then
             role=UnitGroupRolesAssigned(unit) or HEALBOT_WORDS_UNKNOWN
-            if HEALBOT_GAME_VERSION==3 then
-                if HealBot_Globals.AllowPlayerRoles then
-                    if GetPartyAssignment('MAINTANK', unit) or role=="TANK" then 
-                        role=HealBot_Panel_CheckRole(unit)
-                    end
-                else
-                    role=HealBot_Panel_UnitRoleOnSpec(guid, role)
-                end
-            end
         end
         hbPanel_dataRoles[guid]=role
     end
@@ -818,9 +801,9 @@ function HealBot_Panel_DeleteHeader(hdrID, xHeader)
     HealBot_Header_Frames[xHeader]=nil
 end
 
-function HealBot_Panel_retHealBot_Header_Frames(hbCurFrame)
+function HealBot_Panel_retHealBot_Header_Frames()
       --HealBot_setCall("HealBot_Panel_retHealBot_Header_Frames")
-    return HealBot_Options_copyTable(HealBot_Header_Frames)
+    return HealBot_Header_Frames
 end
 
 local vPostFrameBF={}
@@ -1430,7 +1413,7 @@ function HealBot_Panel_InitOptBars()
         bar:UnregisterAllEvents()
         vSetupBarsOptionsFrame.frame=0
         bar.txt = _G[bar:GetName().."_text"];
-        bar.txt:SetFont(HealBot_Default_Fonts[15].file, 12)
+        HealBot_Media_UpdateDefaultFont(bar.txt, 12, 1, "Panel_InitOptBars")
         bar.txt:SetPoint("CENTER",0,-2)
         bar.txt:SetTextColor(0.8,0.8,0.2,0.85);
         bar.txt:SetText(HEALBOT_ACTION_OPTIONS);

@@ -375,7 +375,7 @@ function HealBot_Aux_doResetBars()
     HealBot_Timers_Set("AUX","UpdateAllAuxBars")
     HealBot_Timers_Set("AUX","UpdateAllAuxByType")
     HealBot_Timers_Set("PLAYER","PlayerTargetChanged")
-    HealBot_Timers_Set("SKINS","AuxFramesChanged")
+    HealBot_Options_framesChanged(false, false, false, false, true)
     HealBot_Timers_Set("LAST","UpdateAllUnitBars")
     HealBot_Timers_Set("AURA","CheckUnits")
     HealBot_Timers_Set("LAST","AuxBarsReset")
@@ -2642,7 +2642,8 @@ local function HealBot_Aux_SetTestButton(button)
                     HealBot_Media_UpdateFont(button.gref.auxtxt[x],
                                              Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["FONT"],
                                              auxTestNonTextTxtSize,
-                                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"])
+                                             Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][x][button.frame]["OUTLINE"],
+                                             "Aux_SetTestButton - AuxBarText")
                 end
                 button.gref.auxtxt[x]:SetTextColor(1,1,1,1)
             end

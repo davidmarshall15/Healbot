@@ -185,9 +185,10 @@ function HealBot_ActionIcons_setFont(frame, id)
     actionIconFrame[frame][id].cdText:SetPoint("CENTER",(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTHOFFSET"] or 0),
                                                    (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTVOFFSET"] or 0))
     HealBot_Media_UpdateFont(actionIconFrame[frame][id].cdText,
-                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_Font),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Data_Default_FontName()),
                              (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTSIZE"] or 18),
-                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTOUTLINE"] or 2))
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTOUTLINE"] or 2),
+                             "ActionIcons_setFont - ActionIcons")
     if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"] then
         actionIconFrame[frame][id].cdText:SetTextColor(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"]["R"],
                                                        Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOL"]["G"],
@@ -201,9 +202,10 @@ function HealBot_ActionIcons_setFont(frame, id)
     actionIconFrame[frame][id].countText:SetPoint("BOTTOMRIGHT",(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTHOFFSET"] or 0),
                                                    (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTVOFFSET"] or 0))
     HealBot_Media_UpdateFont(actionIconFrame[frame][id].countText,
-                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_Font),
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Data_Default_FontName()),
                              (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTSIZE"] or 12),
-                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTOUTLINE"] or 2))
+                             (Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNTOUTLINE"] or 2),
+                             "ActionIcons_setFont - ActionIcons")
     HealBot_ActionIcons_setCountFont(frame, id)
     actionIconFrame[frame][id].FontSet=true
 end
@@ -491,18 +493,22 @@ function HealBot_ActionIcons_UpdateIconHazardBorders()
     end
 end
 
-function HealBot_ActionIcons_EnableIconBorderHazard(iFrame, uid, r, g, b, a)
+function HealBot_ActionIcons_EnableIconBorderHazard(iFrame, uid, r, g, b, a, gStyle)
         --HealBot_setCall("HealBot_ActionIcons_EnableIconBorderHazard")
     if not hb_ActionHazard_IconData[uid] then hb_ActionHazard_IconData[uid]={} end
     hb_ActionHazard_IconData[uid].r=r
     hb_ActionHazard_IconData[uid].g=g
     hb_ActionHazard_IconData[uid].b=b
     hb_ActionHazard_IconData[uid].a=a
-    hb_ActionHazard_ButtonIcons[uid]=iFrame
-    if not HealBot_ActionIcons_luVars["IconHazardInUse"] then
-        HealBot_ActionIcons_luVars["IconHazardInUse"]=true
-        HealBot_ActionIcons_luVars["IconHazardAltAlpha"]=true
-        HealBot_ActionIcons_UpdateIconHazardBorders()
+    if gStyle==6 then
+        HealBot_ActionIcons_UpdateHazardIconBordersColours(iFrame, r, g, b, a)
+    else
+        hb_ActionHazard_ButtonIcons[uid]=iFrame
+        if not HealBot_ActionIcons_luVars["IconHazardInUse"] then
+            HealBot_ActionIcons_luVars["IconHazardInUse"]=true
+            HealBot_ActionIcons_luVars["IconHazardAltAlpha"]=true
+            HealBot_ActionIcons_UpdateIconHazardBorders()
+        end
     end
 end
 
@@ -536,6 +542,20 @@ function HealBot_ActionIcons_SetGlowSize()
         else
             hbIconGlowSize[x]=3
             hbIconGlowLen[x]=4
+            for y=1,10 do
+                if actionIcons[x][y].glowEnd>0 then
+                    HealBot_ActionIcons_EnableIconGlow(x, y)
+                end
+            end
+        end
+    end
+    for x=1,10 do
+        if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][x]["NUMICONS"]>0 then
+            for y=1,Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][x]["NUMICONS"] do
+                if actionIcons[x][y].glowEnd>0 then
+                    HealBot_ActionIcons_EnableIconGlow(x, y)
+                end
+            end
         end
     end
 end
@@ -569,7 +589,7 @@ end
 
 function HealBot_ActionIcons_DisableIconGlow(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_DisableIconGlow")
-    if actionIcons[frame][id].glowStyle==2 then
+    if actionIcons[frame][id].glowStyle==2 or actionIcons[frame][id].glowStyle==6 then
         HealBot_ActionIcons_DisableIconBorderHazard(actionIconFrame[frame][id], actionIcons[frame][id].uid)
     elseif actionIcons[frame][id].glowStyle==3 then
         HealBot_ActionIcons_IconGlow(frame, id, false)
@@ -604,8 +624,8 @@ function HealBot_ActionIcons_EnableIconGlow(frame, id)
         HealBot_ActionIcons_DisableIconGlow(frame, id)
     end
     actionIcons[frame][id].glowStyle=Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["AlertGlowStyle"]
-    if actionIcons[frame][id].glowStyle==2 then
-        HealBot_ActionIcons_EnableIconBorderHazard(actionIconFrame[frame][id], actionIcons[frame][id].uid, hbGlowCol[1], hbGlowCol[2], hbGlowCol[3], hbGlowCol[4])
+    if actionIcons[frame][id].glowStyle==2 or actionIcons[frame][id].glowStyle==6 then
+        HealBot_ActionIcons_EnableIconBorderHazard(actionIconFrame[frame][id], actionIcons[frame][id].uid, hbGlowCol[1], hbGlowCol[2], hbGlowCol[3], hbGlowCol[4], actionIcons[frame][id].glowStyle)
     elseif actionIcons[frame][id].glowStyle==3 then
         HealBot_ActionIcons_IconGlow(frame, id, true)
     elseif actionIcons[frame][id].glowStyle==4 then
@@ -1820,6 +1840,7 @@ end
 function HealBot_ActionIcons_CheckAlertChangeFrameId(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_CheckAlertChangeFrameId")
     if id<=Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"] then
+        HealBot_ActionIcons_FadeIcon(frame, id)
         HealBot_ActionIcons_CheckHighlightIconAbility(frame, id)
     end
     HealBot_Timers_Set("OOC","SaveActionIconsProfile",1)

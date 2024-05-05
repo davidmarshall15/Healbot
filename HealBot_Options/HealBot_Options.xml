@@ -3,7 +3,6 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
   <Script file="HealBot_Comms.lua" />
   <Script file="HealBot_Share.lua" />
-  <Script file="HealBot_Media.lua" />
   <Script file="HealBot_Options.lua" />
   
     <ScrollFrame name="HealBotUIPanelScrollFrameCodeTemplate" virtual="true">
@@ -1238,7 +1237,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect1" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1306,7 +1305,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect2" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1374,7 +1373,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect3" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1442,7 +1441,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect4" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1510,7 +1509,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect5" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1578,7 +1577,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect6" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1646,7 +1645,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect7" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1714,7 +1713,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect8" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1782,7 +1781,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect9" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -1850,7 +1849,7 @@
                 <Scripts>
                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                 </Scripts>
-                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                 <BarColor r="0" g="1" b="0"/>
               </StatusBar>
               <Button name="HealBot_PresetColourSelect10" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
@@ -2267,36 +2266,20 @@
                       <OnLeave>HealBot_Options_Show_Help("DISABLEHEALBOTSOLO",false)</OnLeave>
                     </Scripts>
                   </CheckButton>
-                  <Slider name="HealBot_Options_Perf" inherits="HealBot_Options_SliderTemplate">
-                    <Size>
-                      <AbsDimension x="225" y="8" />
-                    </Size>
+                  <CheckButton name="HealBot_Options_TalentInspect" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOP" relativeTo="HealBot_Options_DisableHealBotOpt" relativePoint="BOTTOM">>
                         <Offset>
-                          <AbsDimension x="10" y="-52"/>
+                          <AbsDimension x="0" y="-40" />
                         </Offset>
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnValueChanged>HealBot_Options_Perf_OnValueChanged(self)</OnValueChanged>
-                      <OnEnter>HealBot_Options_Show_Help("PERFMODE",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("PERFMODE",false)</OnLeave>
+                      <OnClick>HealBot_Options_TalentInspect_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("TALENTINSPECT",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("TALENTINSPECT",false)</OnLeave>
                     </Scripts>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="HealBot_Options_PerfLabel" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_FRAMESTRATA">
-                          <Anchors>
-                            <Anchor point="TOP" relativeTo="HealBot_Options_Perf" relativePoint="BOTTOM">
-                              <Offset>
-                                <AbsDimension x="0" y="-5"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                  </Slider>
+                  </CheckButton>
                   <Frame name="HealBot_Options_FrameStrata" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowMinimapButton" relativePoint="BOTTOMLEFT">
@@ -3769,7 +3752,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDEATHKNIGHT",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDEATHKNIGHT",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassDeathKnightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -3836,7 +3819,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDEMONHUNTER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDEMONHUNTER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassDemonHunterPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -3903,7 +3886,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDRUID",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDRUID",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassDruidPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -3970,7 +3953,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSEVOKER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSEVOKER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassEvokerPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4037,7 +4020,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSHUNTER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSHUNTER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassHunterPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4104,7 +4087,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSMAGE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSMAGE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassMagePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4171,7 +4154,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSMONK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSMONK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassMonkPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4238,7 +4221,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSPALADIN",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSPALADIN",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassPaladinPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4305,7 +4288,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSPRIEST",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSPRIEST",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassPriestPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4372,7 +4355,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSROGUE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSROGUE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassRoguePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4439,7 +4422,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSSHAMAN",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSSHAMAN",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassShamanPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4506,7 +4489,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSWARLOCK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSWARLOCK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassWarlockPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4573,7 +4556,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSWARRIOR",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSWARRIOR",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColClassWarriorPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4733,7 +4716,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLETANK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLETANK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColRoleTankPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4800,7 +4783,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLEHEAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLEHEAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColRoleHealPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -4867,7 +4850,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLEDPS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLEDPS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColRoleDPSPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5027,7 +5010,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERASTRAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERASTRAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerAstralPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5094,7 +5077,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERENERGY",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERENERGY",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerEnergyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5161,7 +5144,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERFOCUS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERFOCUS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerFocusPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5228,7 +5211,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERFURY",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERFURY",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerFuryPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5295,7 +5278,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERMANA",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERMANA",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerManaPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5362,7 +5345,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERRAGE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERRAGE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerRagePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -5429,7 +5412,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERRUNIC",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERRUNIC",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideColPowerRunicPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6005,7 +5988,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVERHEALS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVERHEALS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveRecentHealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6074,7 +6057,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHDROP",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHDROP",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveThreatPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6175,7 +6158,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveAggroPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6244,7 +6227,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveHighlightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6313,7 +6296,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETARGET",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETARGET",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveTargetPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6382,7 +6365,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOOR",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOOR",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveOORPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6483,7 +6466,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveOverhealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -6552,7 +6535,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEABSORB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEABSORB",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_OverrideAdaptiveAbsorbsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10530,7 +10513,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDEATHKNIGHT",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDEATHKNIGHT",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassDeathKnightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10597,7 +10580,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDEMONHUNTER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDEMONHUNTER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassDemonHunterPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10664,7 +10647,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSDRUID",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSDRUID",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassDruidPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10731,7 +10714,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSEVOKER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSEVOKER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassEvokerPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10798,7 +10781,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSHUNTER",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSHUNTER",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassHunterPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10865,7 +10848,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSMAGE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSMAGE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassMagePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10932,7 +10915,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSMONK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSMONK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassMonkPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -10999,7 +10982,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSPALADIN",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSPALADIN",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassPaladinPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11066,7 +11049,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSPRIEST",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSPRIEST",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassPriestPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11133,7 +11116,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSROGUE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSROGUE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassRoguePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11200,7 +11183,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSSHAMAN",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSSHAMAN",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassShamanPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11267,7 +11250,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSWARLOCK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSWARLOCK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassWarlockPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11334,7 +11317,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCLASSWARRIOR",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCLASSWARRIOR",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColClassWarriorPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11467,7 +11450,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLETANK",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLETANK",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColRoleTankPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11534,7 +11517,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLEHEAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLEHEAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColRoleHealPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11601,7 +11584,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLROLEDPS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLROLEDPS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColRoleDPSPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11734,7 +11717,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERASTRAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERASTRAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerAstralPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11801,7 +11784,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERENERGY",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERENERGY",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerEnergyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11868,7 +11851,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERFOCUS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERFOCUS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerFocusPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -11935,7 +11918,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERFURY",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERFURY",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerFuryPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12002,7 +11985,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERMANA",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERMANA",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerManaPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12069,7 +12052,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERRAGE",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERRAGE",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerRagePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12136,7 +12119,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLPOWERRUNIC",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLPOWERRUNIC",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinColPowerRunicPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12684,7 +12667,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVERHEALS",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVERHEALS",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveRecentHealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12753,7 +12736,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHDROP",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHDROP",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveThreatPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12854,7 +12837,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEAGGRO",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveAggroPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12923,7 +12906,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEHIGHLIGHT",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveHighlightPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -12992,7 +12975,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVETARGET",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVETARGET",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveTargetPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -13061,7 +13044,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOOR",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOOR",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveOORPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -13162,7 +13145,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEOHEAL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveOverhealsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -13231,7 +13214,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLADAPTIVEABSORB",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLADAPTIVEABSORB",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinAdaptiveAbsorbsPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -14757,7 +14740,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="50" y="-70"/>
+                          <AbsDimension x="50" y="-50"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14771,7 +14754,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FrameAlias" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="-23" y="-58" />
+                          <AbsDimension x="-23" y="-54" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14798,7 +14781,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionLocked" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-58" />
+                          <AbsDimension x="0" y="-54" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14828,7 +14811,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_AutoShow" relativePoint="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="28" y="-58" />
+                          <AbsDimension x="28" y="-54" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14842,7 +14825,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_FrameAlias" relativePoint="TOPRIGHT">
                         <Offset>
-                          <AbsDimension x="150" y="10" />
+                          <AbsDimension x="150" y="5" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14869,7 +14852,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionAnchor" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14896,7 +14879,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ActionBarsAnchor" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14923,7 +14906,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarsGrowDirection" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14950,7 +14933,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarsOrientation" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-15" />
+                          <AbsDimension x="0" y="-10" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14973,6 +14956,60 @@
                       <OnLeave>HealBot_Options_Show_Help("TOOLTIPPOSITION",false)</OnLeave>
                     </Scripts>
                   </Frame>
+                  <Frame name="HealBot_Options_GlowFrame" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="55" y="228" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotframeglowfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_FRAMEGLOWSIZE">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("FRAMEGLOWSIZE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("FRAMEGLOWSIZE",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Frame name="HealBot_Options_IconGlowFrame" inherits="UIDropDownMenuTemplate" id="1">
+                    <Anchors>
+                      <Anchor point="BOTTOMRIGHT">
+                        <Offset>
+                          <AbsDimension x="-55" y="228" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Layers>
+                      <Layer level="OVERLAY">
+                        <FontString name="healbotframeiconglowfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_ICONGLOWSIZE">
+                          <Anchors>
+                            <Anchor point="TOP">
+                              <Offset>
+                                <AbsDimension x="0" y="14"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("ICONGLOWSIZE",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("ICONGLOWSIZE",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
                   <Slider name="HealBot_FrameScale" inherits="HealBot_Options_SliderTemplate">
                     <Size>
                       <AbsDimension x="525" y="16" />
@@ -14980,7 +15017,7 @@
                     <Anchors>
                       <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="0" y="200" />
+                          <AbsDimension x="0" y="180" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -14997,7 +15034,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_FrameScale" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -15014,7 +15051,7 @@
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_FrameStickyOffsetVertical" relativePoint="TOP">
                         <Offset>
-                          <AbsDimension x="0" y="-55" />
+                          <AbsDimension x="0" y="-50" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -15031,7 +15068,7 @@
                     <Anchors>
                       <Anchor point="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="25"/>
+                          <AbsDimension x="40" y="20"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -15073,7 +15110,7 @@
                   </StatusBar>
                   <Button name="HealBot_Options_SkinFrameBackPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
                     <Size>
-                      <AbsDimension x="25" y="25"/>
+                      <AbsDimension x="25" y="20"/>
                     </Size>
                     <Anchors>
                       <Anchor point="LEFT" relativeTo="HealBot_BackgroundColorpick" relativePoint="RIGHT">
@@ -15304,7 +15341,7 @@
                           <OnEnter>HealBot_Options_Show_Help("HEADERBARSBARCOL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("HEADERBARSBARCOL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinHeaderBarPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -15368,7 +15405,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinHeaderTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -15625,7 +15662,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinFrameAliasPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -15689,7 +15726,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinFrameAliasTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -16155,7 +16192,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinBarHealthyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -16219,7 +16256,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinBarInjuredPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -16283,7 +16320,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinBarCriticalPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -16410,7 +16447,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarTextureS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-64" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -16441,7 +16478,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarNumColsS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-64" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -16458,7 +16495,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarHeightS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-64" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -16475,7 +16512,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarWidthS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-64" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -16492,7 +16529,7 @@
                             <Anchors>
                               <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BarBRSpaceS" relativePoint="TOPLEFT">
                                 <Offset>
-                                  <AbsDimension x="0" y="-64" />
+                                  <AbsDimension x="0" y="-70" />
                                 </Offset>
                               </Anchor>
                             </Anchors>
@@ -16502,33 +16539,6 @@
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSBCSPACE",false)</OnLeave>
                             </Scripts>
                           </Slider>
-                          <Frame name="HealBot_Options_GlowFrame" inherits="UIDropDownMenuTemplate" id="1">
-                            <Anchors>
-                              <Anchor point="BOTTOM">
-                                <Offset>
-                                  <AbsDimension x="0" y="20" />
-                                </Offset>
-                              </Anchor>
-                            </Anchors>
-                            <Layers>
-                              <Layer level="OVERLAY">
-                                <FontString name="healbotframeglowfontstr" inherits="GameFontNormal" text="HEALBOT_OPTIONS_FRAMEGLOWSIZE">
-                                  <Anchors>
-                                    <Anchor point="TOP">
-                                      <Offset>
-                                        <AbsDimension x="0" y="14"/>
-                                      </Offset>
-                                    </Anchor>
-                                  </Anchors>
-                                </FontString>
-                              </Layer>
-                            </Layers>
-                            <Scripts>
-                              <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 170)</OnLoad>
-                              <OnEnter>HealBot_Options_Show_Help("FRAMEGLOWSIZE",true)</OnEnter>
-                              <OnLeave>HealBot_Options_Show_Help("FRAMEGLOWSIZE",false)</OnLeave>
-                            </Scripts>
-                          </Frame>
                       </Frames>
                   </Frame>
                   <Frame name="HealBot_Options_SkinsFramesBarsColours" hidden="true" inherits="BackdropTemplate">
@@ -16616,7 +16626,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomHealthColourInjured" inherits="TextStatusBar">
@@ -16630,7 +16640,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="1" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomHealthColourHealthy" inherits="TextStatusBar">
@@ -16644,7 +16654,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Slider name="HealBot_Options_BarAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -16721,7 +16731,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomHealthBackColourInjured" inherits="TextStatusBar">
@@ -16735,7 +16745,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="1" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomHealthBackColourHealthy" inherits="TextStatusBar">
@@ -16749,7 +16759,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
 
@@ -16843,7 +16853,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomBorderColourInjured" inherits="TextStatusBar">
@@ -16857,7 +16867,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="1" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomBorderColourHealthy" inherits="TextStatusBar">
@@ -16871,7 +16881,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
 
@@ -16966,7 +16976,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomIHColourInjured" inherits="TextStatusBar">
@@ -16980,7 +16990,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="1" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomIHColourHealthy" inherits="TextStatusBar">
@@ -16994,7 +17004,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
 
@@ -17073,7 +17083,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="0" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomAbsorbColourInjured" inherits="TextStatusBar">
@@ -17087,7 +17097,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="1" g="1" b="0"/>
                       </StatusBar>
                       <StatusBar name="HealBot_BarCustomAbsorbColourHealthy" inherits="TextStatusBar">
@@ -17101,7 +17111,7 @@
                             </Offset>
                           </Anchor>
                         </Anchors>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
 
@@ -18394,7 +18404,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="0" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_SkinBarAuxBarPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -18861,7 +18871,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinTextHealthyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -18925,7 +18935,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinTextInjuredPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -18989,7 +18999,7 @@
                         <Scripts>
                           <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinTextCriticalPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -19541,7 +19551,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_NameTextCustomColourInjured" inherits="TextStatusBar">
@@ -19555,7 +19565,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_NameTextCustomColourHealthy" inherits="TextStatusBar">
@@ -19569,7 +19579,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
 
@@ -19651,7 +19661,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_NameTextDeadCol" inherits="HealBotUIPanelCheckButton">
@@ -19732,7 +19742,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_NameTextResCol" inherits="HealBotUIPanelCheckButton">
@@ -19813,7 +19823,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_NameTextSummonCol" inherits="HealBotUIPanelCheckButton">
@@ -20317,7 +20327,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_HealthTextCustomColourInjured" inherits="TextStatusBar">
@@ -20331,7 +20341,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_HealthTextCustomColourHealthy" inherits="TextStatusBar">
@@ -20345,7 +20355,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Slider name="HealBot_Options_HealthTextAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -20453,7 +20463,7 @@
                               <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTINHEAL",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTINHEAL",false)</OnLeave>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="0" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_SkinBarExtraHealthPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -20631,7 +20641,7 @@
                                   <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTINHEAL",true)</OnEnter>
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTINHEAL",false)</OnLeave>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="0" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_SkinBarExtraInHealPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -20781,7 +20791,7 @@
                                   <OnEnter>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTOVERHEAL",true)</OnEnter>
                                   <OnLeave>HealBot_Options_Show_Help("HEALBARSCOLCUSTOMTEXTOVERHEAL",false)</OnLeave>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="0" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_SkinBarExtraOverHealPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -21234,7 +21244,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_StateTextCustomColourInjured" inherits="TextStatusBar">
@@ -21248,7 +21258,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_StateTextCustomColourHealthy" inherits="TextStatusBar">
@@ -21262,7 +21272,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Slider name="HealBot_Options_StateTextAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -21343,7 +21353,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_StateTextDeadCol" inherits="HealBotUIPanelCheckButton">
@@ -21424,7 +21434,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_StateTextResCol" inherits="HealBotUIPanelCheckButton">
@@ -21505,7 +21515,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="1"/>
                           </StatusBar>
                           <CheckButton name="HealBot_Options_StateTextSummonCol" inherits="HealBotUIPanelCheckButton">
@@ -21891,7 +21901,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="0" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_AggroTextCustomColourInjured" inherits="TextStatusBar">
@@ -21905,7 +21915,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="1" g="1" b="0"/>
                           </StatusBar>
                           <StatusBar name="HealBot_AggroTextCustomColourHealthy" inherits="TextStatusBar">
@@ -21919,7 +21929,7 @@
                                 </Offset>
                               </Anchor>
                             </Anchors>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Slider name="HealBot_Options_AggroTextAlpha" inherits="HealBot_Options_SliderTemplate">
@@ -22401,7 +22411,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="0" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_SkinBarAuxTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -25383,7 +25393,7 @@
                           <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="1" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinActionIconsGlowPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -26308,7 +26318,7 @@
                               <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",false)</OnLeave>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar> 
                           <Button name="HealBot_Options_SkinActionIconsCDTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -26490,7 +26500,7 @@
                               <OnEnter>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",true)</OnEnter>
                               <OnLeave>HealBot_Options_Show_Help("ACTIONICONSGLOWCOL",false)</OnLeave>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar> 
                           <Button name="HealBot_Options_SkinActionIconsCountTextPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -27808,7 +27818,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCUSTOMCRIT",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCUSTOMCRIT",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinEmergCritPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -27858,7 +27868,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCUSTOMINJ",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCUSTOMINJ",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinEmergInjPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -27908,7 +27918,7 @@
                           <OnEnter>HealBot_Options_Show_Help("COLCUSTOMHEALTHY",true)</OnEnter>
                           <OnLeave>HealBot_Options_Show_Help("COLCUSTOMHEALTHY",false)</OnLeave>
                         </Scripts>
-                        <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                        <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                         <BarColor r="0" g="0" b="0"/>
                       </StatusBar>
                       <Button name="HealBot_Options_SkinEmergHealthyPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -28605,7 +28615,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_DebuffDiseasePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -28669,7 +28679,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_DebuffMagicPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -28733,7 +28743,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_DebuffPoisonPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -28797,7 +28807,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_DebuffCursePresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -28861,7 +28871,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_DebuffBleedPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -29042,7 +29052,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMIDMETHOD",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_CDCIDMethodCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                  <Button name="HealBot_Options_CDCIDMethodCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CUSTOM_IDMETHODSBOTH">
                       <Size>
                           <AbsDimension x="110" y="24"/>
                       </Size>
@@ -29094,7 +29104,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMCASTBY",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                  <Button name="HealBot_Options_CDCCastByCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CASTBY_EVERYONE">
                       <Size>
                           <AbsDimension x="110" y="24"/>
                       </Size>
@@ -29328,7 +29338,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_CustomDebuffPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -29375,7 +29385,7 @@
                       <OnLeave>HealBot_Options_Show_Help("DEBUFFSCUSTOMICONSET",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_CDCIconSetCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                  <Button name="HealBot_Options_CDCIconSetCustom" inherits="UIPanelButtonTemplate" text="1">
                       <Size>
                            <AbsDimension x="88" y="22"/>
                       </Size>
@@ -30182,7 +30192,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour1" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30261,7 +30271,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour2" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30340,7 +30350,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour3" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30419,7 +30429,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour4" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30498,7 +30508,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour5" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30577,7 +30587,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour6" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30656,7 +30666,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour7" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30735,7 +30745,7 @@
                             <Scripts>
                               <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                             </Scripts>
-                            <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                            <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                             <BarColor r="0" g="1" b="0"/>
                           </StatusBar>
                           <Button name="HealBot_Options_BuffPresetColour8" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30903,7 +30913,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour9" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -30981,7 +30991,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour10" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -31213,7 +31223,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour11" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -31445,7 +31455,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour16" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -31666,7 +31676,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour12" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -31799,7 +31809,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour13" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -31932,7 +31942,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour14" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -32065,7 +32075,7 @@
                                 <Scripts>
                                   <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                                 </Scripts>
-                                <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                                <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                                 <BarColor r="0" g="1" b="0"/>
                               </StatusBar>
                               <Button name="HealBot_Options_BuffPresetColour15" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -32328,17 +32338,17 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMPRIORITY",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_BuffPriorityCustom" inherits="UIPanelButtonTemplate" text="10">
+                  <Button name="HealBot_Options_BuffPriorityCustom" inherits="UIPanelButtonTemplate" text="20">
                     <Size>
                       <AbsDimension x="88" y="22"/>
                     </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_BuffPriorityCustomText" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_BuffPriorityCustomTxt" text="HEALBOT_WORD_PRIORITY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
-                                <AbsDimension x="0" y="25" />
+                                <AbsDimension x="0" y="20" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -32410,17 +32420,17 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMIDMETHOD",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HoTctlIDMethodCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                  <Button name="HealBot_Options_HoTctlIDMethodCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_CUSTOM_IDMETHODSBOTH">
                       <Size>
                           <AbsDimension x="115" y="22"/>
                       </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_HoTctlIDMethodCustomText" text="HEALBOT_OPTIONS_CUSTOM_IDMETHOD" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_HoTctlIDMethodCustomTxt" text="HEALBOT_OPTIONS_CUSTOM_IDMETHOD" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
-                                <AbsDimension x="0" y="25" />
+                                <AbsDimension x="0" y="20" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -32462,17 +32472,17 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMCASTBY",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_HoTctlActionCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORDS_NONE">
+                  <Button name="HealBot_Options_HoTctlActionCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_CUSTOM_CASTBY_EVERYONE">
                       <Size>
                           <AbsDimension x="115" y="22"/>
                       </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_HoTctlActionCustomText" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_HoTctlActionCustomTxt" text="HEALBOT_OPTIONS_CUSTOM_CASTBY" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
-                                <AbsDimension x="0" y="25" />
+                                <AbsDimension x="0" y="20" />
                               </Offset>
                             </Anchor>
                           </Anchors>
@@ -32533,6 +32543,18 @@
                       <OnEnter>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMENDIS",false)</OnLeave>
                     </Scripts>
+                  </Button>
+                  <Button name="HealBot_Options_EnableDisableBuffBtnCustom" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_DISABLE">
+                    <Size>
+                      <AbsDimension x="100" y="22"/>
+                    </Size>
+                    <Anchors>
+                      <Anchor point="LEFT" relativeTo="HealBot_Options_ResetBuffBtn" relativePoint="RIGHT">
+                        <Offset>
+                          <AbsDimension x="10" y="0"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
                   </Button>
                   <Button name="HealBot_Options_DeleteBuffHoTBtn" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
                     <Size>
@@ -32595,7 +32617,7 @@
                     <Scripts>
                       <OnLoad>self:SetMinMaxValues(0,100); self:SetValue(100);</OnLoad>
                     </Scripts>
-                    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+                    <BarTexture file="Interface\AddOns\HealBot\Images\Smoothv2.tga"/>
                     <BarColor r="0" g="1" b="0"/>
                   </StatusBar>
                   <Button name="HealBot_Options_BuffHoTPresetColour" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_PRESETCOLOURBTN">
@@ -32642,17 +32664,17 @@
                       <OnLeave>HealBot_Options_Show_Help("BUFFSCUSTOMICONSET",false)</OnLeave>
                     </Scripts>
                   </Frame>
-                  <Button name="HealBot_Options_BuffIconSetCustom" inherits="UIPanelButtonTemplate" text="10">
+                  <Button name="HealBot_Options_BuffIconSetCustom" inherits="UIPanelButtonTemplate" text="1">
                     <Size>
                       <AbsDimension x="88" y="22"/>
                     </Size>
                     <Layers>
                       <Layer level="BACKGROUND">
-                        <FontString name="HealBot_Options_BuffIconSetCustomText" text="HEALBOT_SKIN_ICONSET" inherits="GameFontNormal">
+                        <FontString name="HealBot_Options_BuffIconSetCustomTxt" text="HEALBOT_SKIN_ICONSET" inherits="GameFontNormal">
                           <Anchors>
                             <Anchor point="CENTER">
                               <Offset>
-                                <AbsDimension x="0" y="25" />
+                                <AbsDimension x="0" y="20" />
                               </Offset>
                             </Anchor>
                           </Anchors>

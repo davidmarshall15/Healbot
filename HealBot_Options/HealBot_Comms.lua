@@ -246,8 +246,7 @@ function HealBot_Comms_MacroSuppressSound()
     end
 end    
 
-local vCPU,pCPU=1,1
-local vMode={[1]="Chill+",[2]="Chill",[3]="Normal",[4]="Ultra",[5]="Ultra+"}
+local pCPU=1
 function HealBot_Comms_PerfLevel()
       --HealBot_setCall("HealBot_Comms_PerfLevel")
     if HealBot_retLuVars("CPUProfilerOn") then
@@ -257,21 +256,16 @@ function HealBot_Comms_PerfLevel()
         HealBot_Info_PerfLevelCPUOff:SetTextColor(0.98,0.25,0.25)
         HealBot_Timers_SetnProcs(true)
     else
-        vCPU=ceil(HealBot_Globals.CPUUsage*(HealBot_Globals.PerfMode*0.35))
-        HealBot_Info_PerfLevelVal:SetText(vCPU.." <"..vMode[HealBot_Globals.PerfMode]..">  ["..HealBot_Globals.FPS.."fps]")
-        HealBot_Options_PerfLabel:SetText(vMode[HealBot_Globals.PerfMode].."  Lvl:"..vCPU.."  ["..HealBot_Globals.FPS.."fps]")
+        HealBot_Info_PerfLevelVal:SetText(HealBot_Globals.CPUUsage.."  ["..HealBot_Globals.FPS.."fps]")
         if pCPU~=HealBot_Globals.CPUUsage then
             pCPU=HealBot_Globals.CPUUsage
-            HealBot_Debug_PerfUpdate("PerfLevel", vCPU)
-            if HealBot_Globals.CPUUsage+(HealBot_Globals.PerfMode*0.5)<4 then
+            HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
+            if HealBot_Globals.CPUUsage<8 then
                 HealBot_Info_PerfLevelVal:SetTextColor(0.98,0.25,0.25)
-                HealBot_Options_PerfLabel:SetTextColor(0.98,0.25,0.25)
-            elseif HealBot_Globals.CPUUsage+(HealBot_Globals.PerfMode*0.5)<7 then
+            elseif HealBot_Globals.CPUUsage<12 then
                 HealBot_Info_PerfLevelVal:SetTextColor(0.88,0.88,0.1)
-                HealBot_Options_PerfLabel:SetTextColor(0.88,0.88,0.1)
             else
                 HealBot_Info_PerfLevelVal:SetTextColor(0.1,1,0.1)
-                HealBot_Options_PerfLabel:SetTextColor(0.1,1,0.1)
             end
             HealBot_Timers_SetnProcs()
         end

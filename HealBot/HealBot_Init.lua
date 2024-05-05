@@ -153,6 +153,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     if ( not id ) then return false; end
 
     local spell, _, texture, msCast, _, _ = GetSpellInfo(id);
+    local cooldown = GetSpellBaseCooldown(id)
 
     if ( not spell ) then return false; end
     if not spellName then spellName=spell end
@@ -186,13 +187,16 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
         cRank = GetSpellSubtext(id)
     end
     local hbCastTime=tonumber(msCast or 0);
+    local hbCooldown=tonumber(cooldown or 0);
     if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
+    if hbCooldown>999 then hbCooldown=HealBot_Comm_round(hbCooldown/1000,2) end
     
 
     HealBot_Spell_IDs[id]={}
     HealBot_Spell_IDs[id].CastTime=hbCastTime;
     HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId)
     HealBot_Spell_IDs[id].texture=texture
+    HealBot_Spell_IDs[id].cooldown=hbCooldown
     return cRank
 end
 
@@ -446,8 +450,11 @@ function HealBot_Init_ClassicSpellRanks()
                     local _, _, _, _, _, _, spellId = GetSpellInfo(sNameRank)
                     if spellId then
                         local _, _, texture, msCast, _, _ = GetSpellInfo(spellId);
+                        local cooldown = GetSpellBaseCooldown(spellId)
                         local hbCastTime=tonumber(msCast or 0);
+                        local hbCooldown=tonumber(cooldown or 0);
                         if hbCastTime>999 then hbCastTime=HealBot_Comm_round(hbCastTime/1000,2) end
+                        if hbCooldown>999 then hbCooldown=HealBot_Comm_round(hbCooldown/1000,2) end
                         
                         if not HealBot_Spell_IDs[spellId] then HealBot_Spell_IDs[spellId]={} end
                         HealBot_Spell_IDs[spellId].CastTime=hbCastTime;
@@ -455,6 +462,7 @@ function HealBot_Init_ClassicSpellRanks()
                         HealBot_Spell_IDs[spellId].texture=texture
                         HealBot_Spell_IDs[spellId].name=sNameRank
                         HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
+                        HealBot_Spell_IDs[spellId].cooldown=hbCooldown
                         HealBot_Spell_Names[sNameRank]=spellId
                     end
                 end

@@ -204,8 +204,8 @@ local function HealBot_Tooltip_SetFont(line,font,size)
     HealBot_Tooltip_SetLine(" ",1,1,1,0," ",1,1,1,0)
     local l=_G["HealBot_GameTooltipTextLeft"..line]
     local r=_G["HealBot_GameTooltipTextRight"..line]
-    HealBot_Media_UpdateFont(l, font, size, 1)
-    HealBot_Media_UpdateFont(r, font, size, 1)
+    HealBot_Media_UpdateFont(l, font, size, 1, "Tooltip_SetFont")
+    HealBot_Media_UpdateFont(r, font, size, 1, "Tooltip_SetFont")
 end
 
 function HealBot_Tooltip_SetScale()

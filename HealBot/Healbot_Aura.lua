@@ -1029,6 +1029,7 @@ function HealBot_Aura_ResetBuffCache()
     for spellId,_ in pairs(HealBot_AuraBuffCache) do
         HealBot_AuraBuffCache[spellId].always=false
         HealBot_AuraBuffCache[spellId].isCustom=false
+        HealBot_AuraBuffCache[spellId].isAuto=false
         HealBot_AuraBuffCache[spellId].reset=true
     end
     HealBot_Timers_Set("AURA","CustomBuffFilterDisabled")
@@ -1525,9 +1526,9 @@ function HealBot_Aura_UpdateDebuffIcon(button, iconData, index, timer, spellId)
     if hbGlowIdx>1 then
         if HealBot_Globals.CDCBarColour[spellId] then
             HealBot_Action_EnableIconGlow(button, 
-                                          HealBot_Globals.CDCBarColour[spellId]["R"] or 1, 
-                                          HealBot_Globals.CDCBarColour[spellId]["G"] or 0.25, 
-                                          HealBot_Globals.CDCBarColour[spellId]["B"] or 0.25, 
+                                          HealBot_Globals.CDCBarColour[spellId].R or 1, 
+                                          HealBot_Globals.CDCBarColour[spellId].G or 0.25, 
+                                          HealBot_Globals.CDCBarColour[spellId].B or 0.25, 
                                           "ICONDEBUFF", 
                                           hbGlowIdx, 
                                           index,
@@ -1683,27 +1684,36 @@ function HealBot_Aura_UpdateBuffIcon(button, iconData, index, timer, spellId)
     if hbGlowIdx>1 then
         if HealBot_Globals.CustomBuffBarColour[spellId] then
             HealBot_Action_EnableIconGlow(button, 
-                                          HealBot_Globals.CustomBuffBarColour[spellId].R or 0.45, 
-                                          HealBot_Globals.CustomBuffBarColour[spellId].G or 0, 
-                                          HealBot_Globals.CustomBuffBarColour[spellId].B or 0.26, 
+                                          HealBot_Globals.CustomBuffBarColour[spellId].R or 0.25, 
+                                          HealBot_Globals.CustomBuffBarColour[spellId].G or 0.58, 
+                                          HealBot_Globals.CustomBuffBarColour[spellId].B or 0.8, 
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
                                           bIconAlpha)
         elseif HealBot_Globals.CustomBuffBarColour[hbGlowSpellName] then
             HealBot_Action_EnableIconGlow(button, 
-                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].R or 0.45, 
-                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].G or 0, 
-                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].B or 0.26, 
+                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].R or 0.25, 
+                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].G or 0.58, 
+                                          HealBot_Globals.CustomBuffBarColour[hbGlowSpellName].B or 0.8, 
+                                          "ICONBUFF", 
+                                          hbGlowIdx, 
+                                          index,
+                                          bIconAlpha)
+        elseif HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] then
+            HealBot_Action_EnableIconGlow(button, 
+                                          HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS].R or 0.25, 
+                                          HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS].G or 0.58, 
+                                          HealBot_Globals.CustomBuffBarColour[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS].B or 0.8, 
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
                                           bIconAlpha)
         else
             HealBot_Action_EnableIconGlow(button, 
-                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].R or 0.45, 
-                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].G or 0, 
-                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].B or 0.26, 
+                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].R or 0.25, 
+                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].G or 0.58, 
+                                          HealBot_Globals.CustomBuffBarColour[customBuffPriority].B or 0.8, 
                                           "ICONBUFF", 
                                           hbGlowIdx, 
                                           index,
@@ -2281,15 +2291,18 @@ function HealBot_Aura_ShowCustomBuff(button)
                 if HealBot_Config_Buffs.AutoBuff==3 or (HealBot_Config_Buffs.AutoBuff==2 and uaBuffData[button.id][uaBuffSlot].duration<HealBot_Config_Buffs.AutoBuffExpireTime) then
                     if HealBot_Config_Buffs.AutoBuffCastBy==1 then
                         if uaBuffData[button.id][uaBuffSlot].sourceUnitIsPlayer then
+                            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isAuto=true
                             return true, false
                         end
                     elseif HealBot_Config_Buffs.AutoBuffCastBy==3 then
                         HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
+                        HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isAuto=true
                         return true, false
                     else
                         _, scbUnitClassEN = UnitClass(uaBuffData[button.id][uaBuffSlot].sourceUnit)
                         if scbUnitClassEN and HealBot_Data["PCLASSTRIM"]==strsub(scbUnitClassEN,1,4) then
                             HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].always=true
+                            HealBot_AuraBuffCache[uaBuffData[button.id][uaBuffSlot].spellId].isAuto=true
                             return true, false
                         else
                             return false, true
@@ -3579,7 +3592,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitBuffs", button)
     prevMissingbuff=button.aura.buff.missingbuff
     button.aura.buff.missingbuff=false
-    if buffCheck and (not button.status.isdead or button.status.isspirit) then
+    if buffCheck and (not button.status.isdead or button.status.isspirit) and button.frame<10 or Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWBUFFS"] then
         button.aura.buff.priority=99
         button.aura.buff.colbar=0
         curBuffName=false;
@@ -3591,7 +3604,7 @@ function HealBot_Aura_CheckUnitBuffs(button)
         if tGeneralBuffs then
             if button.player then
                 onlyPlayers=true
-            elseif HEALBOT_GAME_VERSION>5 then
+            elseif HEALBOT_GAME_VERSION>3 then
                 onlyPlayers=button.isplayer
             else
                 onlyPlayers=UnitIsFriend("player",button.unit)
@@ -3649,7 +3662,11 @@ function HealBot_Aura_CheckUnitBuffs(button)
                     buffPrio=button.aura.buff.temp.priority
                 end
                 if curBuffName then
-                    buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[HealBot_AuraBuffCache[button.aura.buff.id]["name"]] or 1
+                    if HealBot_AuraBuffCache[button.aura.buff.id].isAuto then
+                        buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS] or 1
+                    else
+                        buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[HealBot_AuraBuffCache[button.aura.buff.id]["name"]] or 1
+                    end
                     if (HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1) > buffBarCol then
                         buffBarCol=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[button.aura.buff.id] or 1
                     end
@@ -3730,7 +3747,7 @@ end
 local debuffBarCol,debuffIconIndex=0,0
 function HealBot_Aura_CheckUnitDebuffs(button)
       --HealBot_setCall("HealBot_Aura_CheckUnitDebuffs", button)
-    if debuffCheck and button.status.current<HealBot_Unit_Status["DEAD"] then
+    if debuffCheck and button.status.current<HealBot_Unit_Status["DEAD"] and button.frame<10 or Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["SHOWDEBUFFS"] then
         for z=1,3 do
             HealBot_Aura_prevIconCount["DEBUFF"][z]=button.icon.debuff.count[z]
         end
