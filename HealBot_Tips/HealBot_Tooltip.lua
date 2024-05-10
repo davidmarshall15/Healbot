@@ -71,10 +71,10 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
       --HealBot_setCall("HealBot_Tooltip_GetHealSpell", button)
     if not sName or not HealBot_Spell_Names[sName] then
         if HealBot_Init_knownClassicHealSpell(sName) then
-            if button.status.range<1 or (button.status.rangespell~=sName and HealBot_UnitInRange(button,sName)<1) then
-                return sName, 1, 1, 1, false, false
-            else
+            if HealBot_Range_SpellInRange(button,sName) then
                 return sName, 1, 1, 1, false, true
+            else
+                return sName, 1, 0.2, 0, false, false
             end
         elseif sName then
             if not HealBot_IsKnownItem(sName) then
@@ -95,7 +95,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
         end
     end
         
-    if button.status.range<1 or (button.status.rangespell~=sName and HealBot_UnitInRange(button,sName)<1) then
+    if not HealBot_Range_SpellInRange(button,sName) then
         return sName, 1, 0.2, 0, false, false
     end
  
@@ -426,6 +426,7 @@ function HealBot_ToolTip_ShowDebug(button)
     hbTipDebugText["player"]="False"
     hbTipDebugText["isPlayer"]="False"
     hbTipDebugText["debugtrack"]="false"
+    hbTipDebugText["range40"]=-99
     hbTipDebugText["debugtime"]=""
     if button then
         HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
@@ -439,6 +440,7 @@ function HealBot_ToolTip_ShowDebug(button)
         else
             HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
         end
+        hbTipDebugText["range40"]=button.status.range
         if button.player then hbTipDebugText["player"]="True" end
         if button.isplayer then hbTipDebugText["isPlayer"]="True" end
         if button.debug.track then
@@ -450,6 +452,7 @@ function HealBot_ToolTip_ShowDebug(button)
     end
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
     HealBot_Tooltip_SetLine("Debug track is "..hbTipDebugText["debugtrack"],0.4,1,1,1,"Debug time is "..hbTipDebugText["debugtime"])
+    HealBot_Tooltip_SetLine("Range 40",0.4,1,1,1,hbTipDebugText["range40"],0.4,1,1,1)
 end
 
 function HealBot_ToolTip_ToggleDebug()
@@ -1159,7 +1162,7 @@ function HealBot_Tooltip_DebugActionIconCondition(icon, index, cond)
     HealBot_Tooltip_SetLine("  ",0,0,0,0)
 end
 
-function HealBot_Tooltip_DisplayActionIconTooltip(icon, target, bind)
+function HealBot_Tooltip_DisplayActionIconTooltip(icon, target)
       --HealBot_setCall("HealBot_Tooltip_DisplayActionIconTooltip")
     if HealBot_Tooltip_luVars["doInit"] then
         HealBot_Tooltip_Init()
@@ -1198,10 +1201,22 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target, bind)
             HealBot_ToolTip_ShowDebug(pButton)
         else
             HealBot_ToolTip_ShowDebug()
+            HealBot_Tooltip_SetLine("  ",0,0,0,0)
             HealBot_Tooltip_SetLine("icon.name="..(icon.name or "nil"),1,0.25,0.25,1)
             HealBot_Tooltip_SetLine("icon.unit="..(icon.unit or "nil"),1,0.25,0.25,1)
             HealBot_Tooltip_SetLine("target="..(target or "nil"),1,0.25,0.25,1)
         end
+        if icon.range<1 then
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 0",1,1,1,1)
+        elseif icon.range<35 then
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 30",1,1,1,1)
+        elseif icon.range<45 then
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 40",1,1,1,1)
+        else
+            HealBot_Tooltip_SetLine("icon SpellRangeNeeds 100",1,1,1,1)
+        end
+        HealBot_Tooltip_SetLine("icon.infoType="..(icon.infoType or "nil"),1,0.25,0.25,1)
+        HealBot_Tooltip_SetLine("icon.info="..(icon.info or "nil"),1,0.25,0.25,1)
         HealBot_Tooltip_SetLine("  ",0,0,0,0)
         if not icon.guid then
             HealBot_Tooltip_SetLine("icon.guid not valid",1,0.25,0.25,1)
@@ -1218,10 +1233,10 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target, bind)
                 else
                     HealBot_Tooltip_SetLine("icon.valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
                 end
-                if icon.inRange then 
-                    HealBot_Tooltip_SetLine("icon.inRange is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
+                if HealBot_ActionIcons_CheckValidTarget(icon.frame, icon.id) then 
+                    HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
                 else
-                    HealBot_Tooltip_SetLine("icon.inRange is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
+                    HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
                 end
                 HealBot_Tooltip_SetLine("  ",0,0,0,0)
                 if not HealBot_ActionIcons_DebugAlertState(icon.frame, icon.id) then

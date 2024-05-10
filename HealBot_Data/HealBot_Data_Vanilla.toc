@@ -20,6 +20,7 @@ Libs\LibHealComm-4.0\LibHealComm-4.0.xml
 Libs\LibClassicDurations\LibClassicDurations.xml
 Libs\LibPlug\HealBot_Plugins.lua
 Libs\LibMedia\HealBot_Media.lua
+Libs\LibRange\HealBot_Range.lua
 
 Locale\HealBot_Global.lua
 Locale\HealBot_Localization.en.lua

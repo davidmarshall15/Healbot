@@ -147,12 +147,102 @@ local function HealBot_Init_ManaCost(spellId, spellBookId)
     return manaCost
 end
 
+local HealBot_Spell_Ranges={}
+local HealBot_Spell_RangesPref={}
+local function HealBot_Init_Spell_RangesPref()
+    HealBot_Spell_Ranges={}
+    if HealBot_Data["PCLASSTRIM"]=="DRUI" then
+        HealBot_Spell_RangesPref[HEALBOT_WRATH]=true
+        HealBot_Spell_RangesPref[HEALBOT_HURRICANE]=true
+        HealBot_Spell_RangesPref[HEALBOT_REJUVENATION]=true
+        HealBot_Spell_RangesPref[HEALBOT_HEALING_TOUCH]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="MAGE" then
+        HealBot_Spell_RangesPref[HEALBOT_FROSTFIRE_BOLT]=true
+        HealBot_Spell_RangesPref[HEALBOT_FIRE_BLAST]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
+        HealBot_Spell_RangesPref[HEALBOT_HOLY_SHOCK]=true
+        HealBot_Spell_RangesPref[HEALBOT_JUDGMENT]=true
+        HealBot_Spell_RangesPref[HEALBOT_FLASH_OF_LIGHT]=true
+        HealBot_Spell_RangesPref[HEALBOT_HOLY_LIGHT]=true
+        HealBot_Spell_RangesPref[HBC_HOLY_LIGHT]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="PRIE" then
+        HealBot_Spell_RangesPref[HEALBOT_SMITE]=true
+        HealBot_Spell_RangesPref[HEALBOT_SHADOW_WORD_PAIN]=true
+        HealBot_Spell_RangesPref[HEALBOT_FLASH_HEAL]=true
+        HealBot_Spell_RangesPref[HEALBOT_RENEW]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
+        HealBot_Spell_RangesPref[HEALBOT_LIGHTNING_BOLT]=true
+        HealBot_Spell_RangesPref[HBC_LIGHTNING_BOLT]=true
+        HealBot_Spell_RangesPref[HEALBOT_HEALING_WAVE]=true
+        HealBot_Spell_RangesPref[HEALBOT_HEALING_SURGE]=true
+        HealBot_Spell_RangesPref[HBC_HEALING_WAVE]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
+        HealBot_Spell_RangesPref[HEALBOT_CRACKLING_JADE_LIGHTNING]=true
+        HealBot_Spell_RangesPref[HEALBOT_SOOTHING_MIST]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="WARL" then
+        HealBot_Spell_RangesPref[HEALBOT_CORRUPTION]=true
+        HealBot_Spell_RangesPref[HEALBOT_FEAR]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="WARR" then
+        HealBot_Spell_RangesPref[HEALBOT_TAUNT]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="HUNT" then
+        HealBot_Spell_RangesPref[HEALBOT_ARCANE_SHOT]=true
+        HealBot_Spell_RangesPref[HEALBOT_CONCUSSIVE_SHOT]=true
+        HealBot_Spell_RangesPref[HEALBOT_AIMED_SHOT]=true
+        HealBot_Spell_RangesPref[HEALBOT_MENDPET]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="ROGU" then
+        HealBot_Spell_RangesPref[HEALBOT_THROW]=true
+        HealBot_Spell_RangesPref[HEALBOT_GOUGE]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="DEAT" then
+        HealBot_Spell_RangesPref[HEALBOT_DEATH_COIL]=true
+        HealBot_Spell_RangesPref[HEALBOT_PLAGUE_STRIKE]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="DEMO" then
+        HealBot_Spell_RangesPref[185123]=true
+        HealBot_Spell_RangesPref[185245]=true
+    elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
+        HealBot_Spell_RangesPref[361469]=true
+        HealBot_Spell_RangesPref[362969]=true
+        HealBot_Spell_RangesPref[HEALBOT_LIVING_FLAME]=true
+        HealBot_Spell_RangesPref[HEALBOT_ECHO]=true
+    end
+end
+
+function HealBot_Init_SetRangeSpells(sType, spellName, spellId)
+    if HealBot_Spell_RangesPref[spellId] then
+        HealBot_Range_InitSpell(sType, spellName)
+        if (HealBot_Spell_Ranges[sType] or "z")~="Set" then HealBot_AddDebug("["..sType.."] Init range for "..spellName.." is Preferred | id="..spellId, "Init Range Spell",true) end
+        HealBot_Spell_Ranges[sType]="Set"
+    elseif not HealBot_Spell_Ranges[sType] then
+        HealBot_Spell_Ranges[sType]=spellName
+    end
+end
+
+function HealBot_Init_SetSpellRange(id, spellName, range)
+    HealBot_Spell_IDs[id].range=range
+    if range==30 then
+        if IsHelpfulSpell(spellName) then 
+            HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
+        --    HealBot_AddDebug("[HEAL30] Init range for "..spellName.." is "..range,"Range Helpful 30",true)
+        elseif IsHarmfulSpell(spellName) then
+            HealBot_Init_SetRangeSpells("HARM30", spellName, id)
+            --HealBot_AddDebug("[HARM30] Init range for "..spellName.." is "..range,"Range Harmful 30",true)
+        end
+    elseif range==40 then 
+        if IsHelpfulSpell(spellName) then
+            HealBot_Init_SetRangeSpells("HEAL", spellName, id)
+            --HealBot_AddDebug([HEAL] "Init range for "..spellName.." is "..range,"Range Helpful 40",true)
+        elseif IsHarmfulSpell(spellName) then 
+            HealBot_Init_SetRangeSpells("HARM", spellName, id)
+            --HealBot_AddDebug([HARM] "Init range for "..spellName.." is "..range,"Range Harmful 40",true)
+        end
+    end
+end
+
 function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
       --HealBot_setCall("HealBot_Init_FindSpellRangeCast")
     local cRank=false
     if ( not id ) then return false; end
 
-    local spell, _, texture, msCast, _, _ = GetSpellInfo(id);
+    local spell, _, texture, msCast, _, hbRange = GetSpellInfo(id);
     local cooldown = GetSpellBaseCooldown(id)
 
     if ( not spell ) then return false; end
@@ -197,6 +287,8 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId)
     HealBot_Spell_IDs[id].texture=texture
     HealBot_Spell_IDs[id].cooldown=hbCooldown
+    HealBot_Init_SetSpellRange(id, spellName, hbRange)
+    
     return cRank
 end
 
@@ -216,7 +308,7 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
             local rank=tonumber(string.match(cRank, "%d+")) or 0
             if HealBot_Ranks[spellName]<rank then HealBot_Ranks[spellName]=rank end
             if HealBot_Heal_Names[spellName] then 
-                HealBot_KnownHeal_Names[spellName]=true
+                HealBot_KnownHeal_Names[spellName]=spellId
                 if not HealBot_Spell_Ranks[spellName] then 
                     HealBot_Spell_Ranks[spellName]={} 
                     HealBot_Spell_Ranks[spellName][0]=1
@@ -396,6 +488,7 @@ function HealBot_Init_Spells_Defaults()
     for x,_ in pairs(HealBot_Ranks) do
         HealBot_Ranks[x]=nil
     end
+    HealBot_Init_Spell_RangesPref()
     local nTabs=GetNumSpellTabs()
     local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
     for j=1, getn(hbHeallist), 1 do
@@ -437,6 +530,23 @@ function HealBot_Init_Spells_Defaults()
         HealBot_InitValidateRanks()
         HealBot_Timers_Set("LAST","ClassicSpellRanks",1)
     end
+    if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then 
+        HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
+        HealBot_AddDebug("[HEAL30] Init range for "..HealBot_Spell_Ranges["HEAL30"], "Init Range Spell",true)
+    end
+    if HealBot_Spell_Ranges["HARM30"] and HealBot_Spell_Ranges["HARM30"]~="Set" then 
+        HealBot_Range_InitSpell("HARM30", HealBot_Spell_Ranges["HARM30"])
+        HealBot_AddDebug("[HARM30] Init range for "..HealBot_Spell_Ranges["HARM30"], "Init Range Spell",true)
+    end
+    if HealBot_Spell_Ranges["HEAL"] and HealBot_Spell_Ranges["HEAL"]~="Set" then 
+        HealBot_Range_InitSpell("HEAL", HealBot_Spell_Ranges["HEAL"])
+        HealBot_AddDebug("[HEAL] Init range for "..HealBot_Spell_Ranges["HEAL"], "Init Range Spell",true)
+    end
+    if HealBot_Spell_Ranges["HARM"] and HealBot_Spell_Ranges["HARM"]~="Set" then 
+        HealBot_Range_InitSpell("HARM", HealBot_Spell_Ranges["HARM"])
+        HealBot_AddDebug("[HARM] Init range for "..HealBot_Spell_Ranges["HARM"], "Init Range Spell",true)
+    end
+    HealBot_AddDebug("-- ", "Init Range Spell",true)
 end
 
 function HealBot_Init_ClassicSpellRanks()
@@ -449,7 +559,7 @@ function HealBot_Init_ClassicSpellRanks()
                 if sNameRank then
                     local _, _, _, _, _, _, spellId = GetSpellInfo(sNameRank)
                     if spellId then
-                        local _, _, texture, msCast, _, _ = GetSpellInfo(spellId);
+                        local _, _, texture, msCast, _, hbRange = GetSpellInfo(spellId);
                         local cooldown = GetSpellBaseCooldown(spellId)
                         local hbCastTime=tonumber(msCast or 0);
                         local hbCooldown=tonumber(cooldown or 0);
@@ -463,6 +573,8 @@ function HealBot_Init_ClassicSpellRanks()
                         HealBot_Spell_IDs[spellId].name=sNameRank
                         HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
                         HealBot_Spell_IDs[spellId].cooldown=hbCooldown
+                        
+                        HealBot_Init_SetSpellRange(spellId, sNameRank, hbRange)
                         HealBot_Spell_Names[sNameRank]=spellId
                     end
                 end

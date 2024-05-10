@@ -2038,7 +2038,7 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = UnitName(unit) or unit
             end
         elseif UnitExists(unit) then
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey = "ÿÿÿþ"..(UnitName(unit) or unit)
             else
                 vSubOrderKey = UnitName(unit) or unit
@@ -2054,7 +2054,7 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = HealBot_Panel_classEN(unit)
             end
         elseif UnitExists(unit) then
-            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey = "ÿÿÿþ"..HealBot_Panel_classEN(unit)
             else
                 vSubOrderKey = HealBot_Panel_classEN(unit)
@@ -2070,7 +2070,7 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = HealBot_UnitGroups[unit] or 1
             end 
         elseif UnitExists(unit) then
-            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey = 9+(HealBot_UnitGroups[unit] or 1)
             else
                 vSubOrderKey = HealBot_UnitGroups[unit] or 1
@@ -2086,7 +2086,7 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = 0-UnitHealthMax(unit)
             end
         elseif UnitExists(unit) then
-            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey = 9999999-UnitHealthMax(unit)
             else
                 vSubOrderKey = 0-UnitHealthMax(unit)
@@ -2103,7 +2103,7 @@ function HealBot_Panel_sortOrder(unit, barOrder, mainSort)
                 vSubOrderKey = HealBot_unitRole[unit] or 9
             end
         elseif UnitExists(unit) then
-            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not UnitInRange(unit) then
+            if allowOOR and Healbot_Config_Skins.BarSort[Healbot_Config_Skins.Current_Skin][hbCurrentFrame]["OORLAST"] and not HealBot_Range_UnitGUID(unit) then
                 vSubOrderKey = 59+(HealBot_unitRole[unit] or 9)
             else
                 vSubOrderKey = HealBot_unitRole[unit] or 9
@@ -2807,6 +2807,7 @@ function HealBot_Panel_TargetChanged(preCombat)
             end
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
+        HealBot_setLuVars("pluginClearDown", 1)
     else
         if HealBot_Extra_Button["target"] then
             HealBot_Action_MarkDeleteButton(HealBot_Extra_Button["target"])
@@ -2890,6 +2891,7 @@ function HealBot_Panel_FocusChanged(preCombat)
                 end
             end
             HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
+            HealBot_setLuVars("pluginClearDown", 1)
         else
             vFocusButton = HealBot_Extra_Button["focus"]
             if vFocusButton then
