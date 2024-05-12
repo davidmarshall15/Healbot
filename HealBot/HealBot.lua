@@ -948,6 +948,8 @@ function HealBot_SlashCmd(cmd)
          --   for k,v in pairs(HighScore, function(t,a,b) return t[b] < t[a] end) do
          --       HealBot_AddDebug("k="..k.." v="..v,"Sort",true)
          --   end
+         cIsForBlizz=HealBot_MountsPets_getContinent()
+         HealBot_AddDebug("Continent is "..cIsForBlizz,"Punt",true)
             HealBot_luVars["Loaded"]=false
             HealBot_VariablesLoaded()
         else
@@ -2636,9 +2638,9 @@ function HealBot_Load()
         HealBot_Timers_Set("AURA","InitAuraData")
         HealBot_Timers_Set("LAST","LowManaTrig")
         HealBot_Timers_Set("LAST","CheckFramesOnCombat")
-        HealBot_Timers_Set("INIT","LastLoad")
+        HealBot_Timers_Set("INIT","LastLoad",0.1)
         HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj",1)
-        HealBot_Timers_Set("LAST","PerfRangeFreq")
+        HealBot_Timers_Set("LAST","PerfRangeFreq",2)
         HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
         HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
         HealBot_Globals.FirstLoad=false
@@ -5645,10 +5647,6 @@ end
 
 function HealBot_UpdateTimers()
       --HealBot_setCall("HealBot_UpdateTimers", nil, nil, nil, true)
-    for spellId, spellName in pairs(HealBot_CDQueue) do
-        HealBot_SpellCooldown(spellName, spellId, 0)
-        HealBot_CDQueue[spellId]=nil
-    end
     if HealBot_luVars["HealBot_RunTimers"] then
         HealBot_Timers_Run()
     end
@@ -5675,6 +5673,10 @@ end
 function HealBot_UpdateLast()
       --HealBot_setCall("HealBot_UpdateLast", nil, nil, nil, true)
     HealBot_luVars["fastSwitch"]=0
+    for spellId, spellName in pairs(HealBot_CDQueue) do
+        HealBot_SpellCooldown(spellName, spellId, 0)
+        HealBot_CDQueue[spellId]=nil
+    end
     HealBot_UpdateSlow()
     HealBot_Update_Final()
 end
@@ -7090,7 +7092,9 @@ function HealBot_OnEvent_UnitSpellCastStart(button, unitTarget, castGUID, spellI
     else
         HealBot_CheckUnitStatus(button)
     end
-    --if button.player then HealBot_Check_SpellCooldown(spellID, "CastStart") end
+    if button.player and HealBot_Spell_IDs[spellID] then
+        C_Timer.After(HealBot_Spell_IDs[spellID].CastTime+HealBot_luVars["DelayCD"], function() HealBot_Check_SpellCooldown(spellID, "CastStart") end)
+    end
 end
 
 function HealBot_OnEvent_UnitSpellChanStart(button, unitTarget, castGUID, spellID)
@@ -7102,7 +7106,9 @@ function HealBot_OnEvent_UnitSpellChanStart(button, unitTarget, castGUID, spellI
             HealBot_Aux_UpdateCastBar(button, scName, scStartTime, scEndTime, true)
         end
     end
-    --if button.player then HealBot_Check_SpellCooldown(spellID, "ChanStart") end
+    if button.player and HealBot_Spell_IDs[spellID] then
+        C_Timer.After(HealBot_Spell_IDs[spellID].CastTime+HealBot_luVars["DelayCD"], function() HealBot_Check_SpellCooldown(spellID, "ChanStart") end)
+    end
 end
 
 function HealBot_OnEvent_UnitSpellCastStop(button, unitTarget, castGUID, spellID)
@@ -7206,7 +7212,9 @@ function HealBot_OnEvent_UnitSpellCastSent(caster,unitName,castGUID,spellID)
                 HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
             end
         end
-        --HealBot_Check_SpellCooldown(spellID, "CastSent")
+        if HealBot_Spell_IDs[spellID] then
+            C_Timer.After(HealBot_Spell_IDs[spellID].CastTime+HealBot_luVars["DelayCD"], function() HealBot_Check_SpellCooldown(spellID, "CastSent") end)
+        end
     end
 end
 

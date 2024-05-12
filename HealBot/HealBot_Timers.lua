@@ -359,9 +359,10 @@ function HealBot_Timers_SetPlayerRestingState()
     if pButton then HealBot_Aura_UpdateState(pButton) end
 end
 
-function HealBot_Timers_InitFonts()
+local function HealBot_Timers_MediaLastLoad()
       --HealBot_setCall("HealBot_Timers_InitFonts")
-    C_Timer.After(1, function() HealBot_Media_InitFonts(1) end)
+    C_Timer.After(2, HealBot_Media_UpdateIndexes)
+    C_Timer.After(3, HealBot_Media_InitFonts)
 end
     
 function HealBot_Timers_InitSpells()
@@ -390,7 +391,7 @@ function HealBot_Timers_LastLoad()
     HealBot_Timers_Set("AUX","ResetTextButtons",0.4)
     HealBot_Timers_Set("INIT","LastUpdate",0.5)
     HealBot_Timers_Set("INIT","HealBotLoaded",1)
-    HealBot_Timers_InitFonts()
+    HealBot_Timers_MediaLastLoad()
     if not HealBot_Timers_luVars["HelpNotice"] then
         HealBot_Timers_Set("LAST","HealBotLoadedChat")
         HealBot_Timers_luVars["HelpNotice"]=true
@@ -483,7 +484,7 @@ end
                 
 function HealBot_Timers_InitExtraOptions()
       --HealBot_setCall("HealBot_Timers_InitExtraOptions")
-    HealBot_Timers_Set("LAST","OptionsInitExtraTabs")
+    HealBot_Timers_Set("LAST","OptionsInitExtraTabs",0.1)
 end
 
 function HealBot_Timers_LoadedChat()

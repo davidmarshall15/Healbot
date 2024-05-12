@@ -15,7 +15,7 @@ local HealBot_SoundsIndex={}
 local HealBot_Media_luVars={}
 HealBot_Media_luVars["Indexed"]=false
 HealBot_Media_luVars["Registered"]=false
-HealBot_Media_luVars["InitFontsRerun"]=false
+HealBot_Media_luVars["InitFontsRerun"]=0
 HealBot_Media_luVars["DelayUpdateUsedMedia"]=false
 HealBot_Media_luVars["pluginMedia"]=false
 
@@ -68,16 +68,28 @@ function HealBot_Media_Register()
     end
 end
 
-function HealBot_Media_InitFonts(id)
+local function HealBot_Media_SetFonts(id)
       --HealBot_setCall("HealBot_Media_InitFonts")
     if id<=#HealBot_Fonts then
         local g=_G["UsedToInitFonts"]
-        g:SetFont(HealBot_Default_Font, 10, HealBot_Font_Outline[1])
+        g:SetFont(LSM:Fetch('font', HealBot_Fonts[id]), 10, HealBot_Font_Outline[1])
         g:SetText("i"..id)
-        C_Timer.After(0.05, function() HealBot_Media_InitFonts(id+1) end)
-    elseif not HealBot_Media_luVars["InitFontsRerun"] then
-        HealBot_Media_luVars["InitFontsRerun"]=true
-        C_Timer.After(3, function() HealBot_Media_InitFonts(1) end)
+        C_Timer.After(0.1, function() HealBot_Media_SetFonts(id+1) end)
+    elseif HealBot_Media_luVars["InitFontsRerun"]<3 then
+        HealBot_Media_luVars["InitFontsRerun"]=HealBot_Media_luVars["InitFontsRerun"]+1
+        HealBot_Media_luVars["InitFonts"]=false
+        C_Timer.After(HealBot_Media_luVars["InitFontsRerun"]*3, HealBot_Media_InitFonts)
+    else
+        HealBot_Media_luVars["InitFonts"]=false
+    end
+end
+
+function HealBot_Media_InitFonts()
+    if not HealBot_Media_luVars["InitFonts"] then
+        HealBot_Media_luVars["InitFonts"]=true
+        C_Timer.After(1, function() HealBot_Media_SetFonts(1) end)
+    else
+        C_Timer.After(15, HealBot_Media_InitFonts)
     end
 end
 
@@ -220,32 +232,34 @@ end
 
 function HealBot_Media_UpdateType(mType, frame, auxId)
       --HealBot_setCall("HealBot_Options_UpdateMedia")
-    if mType == "Textures" then
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
-        HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,HealBot_TexturesIndex[Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
-        HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, HealBot_TexturesIndex[Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"]])
-    elseif mType == "Fonts" then
-        HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,HealBot_FontsIndex[Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,HealBot_FontsIndex[Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,HealBot_FontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["HFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,HealBot_FontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["AFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,HealBot_FontsIndex[Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][auxId][frame]["FONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,HealBot_FontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["SFONT"]])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,HealBot_FontsIndex[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_FontName)])
-        HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,HealBot_FontsIndex[(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_FontName)])
-        for z=1,3 do
-            HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,HealBot_FontsIndex[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["BUFFFONT"]])
-            HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, HealBot_FontsIndex[Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["DBFONT"]])
+    if HealBot_Options:IsVisible() then
+        if mType == "Textures" then
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_SkinFrameAliasTextureS,Healbot_Config_Skins.FrameAliasBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_BarTextureS,Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_Options_HeadTextureS,Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+            HealBot_Options_UpdateMediaTexture(HealBot_EmergBarTexture, Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][frame]["TEXTURE"])
+        elseif mType == "Fonts" then
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HeadFontNameS,Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AliasFontName,Healbot_Config_Skins.FrameAlias[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_HealthFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["HFONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AggroFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["AFONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_AuxFontName,Healbot_Config_Skins.AuxBarText[Healbot_Config_Skins.Current_Skin][auxId][frame]["FONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_StateFontName,Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["SFONT"])
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontName,(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONT"] or HealBot_Default_FontName))
+            HealBot_Options_UpdateMediaFont(HealBot_Options_ActionIconsFontCountName,(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FONTCOUNT"] or HealBot_Default_FontName))
+            for z=1,3 do
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconBuffFont,Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["BUFFFONT"])
+                HealBot_Options_UpdateMediaFont(HealBot_BarButtonIconFont, Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][frame][z]["DBFONT"])
+            end
+            HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["FONT"])
+        else
+            HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
+            HealBot_Options_SetText(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND)
+            HealBot_Options_SetSliderValue(HealBot_Options_WarningSound,HealBot_SoundsIndex[HealBot_Config_Cures.SoundDebuffPlay])
+            HealBot_Options_val_OnLoad(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
+            HealBot_Options_SetText(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND)
+            HealBot_Options_SetSliderValue(HealBot_Options_BuffWarningSound,HealBot_SoundsIndex[HealBot_Config_Buffs.SoundBuffPlay])
         end
-        HealBot_Options_UpdateMediaFont(HealBot_Options_FontName, HealBot_FontsIndex[Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][frame]["FONT"]])
-    else
-        HealBot_Options_val_OnLoad(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
-        HealBot_Options_SetText(HealBot_Options_WarningSound,HEALBOT_OPTIONS_SOUND)
-        HealBot_Options_SetSliderValue(HealBot_Options_WarningSound,HealBot_SoundsIndex[HealBot_Config_Cures.SoundDebuffPlay])
-        HealBot_Options_val_OnLoad(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND,1,#HealBot_Sounds,1,2)
-        HealBot_Options_SetText(HealBot_Options_BuffWarningSound,HEALBOT_OPTIONS_SOUND)
-        HealBot_Options_SetSliderValue(HealBot_Options_BuffWarningSound,HealBot_SoundsIndex[HealBot_Config_Buffs.SoundBuffPlay])
     end
 end
 

@@ -2290,7 +2290,7 @@ end
 function HealBot_ActionIcons_FadeIcon(frame, id, caller)
         --HealBot_setCall("HealBot_ActionIcons_FadeIcon")
     if actionIcons[frame][id].highlight then
-        if id==3 then HealBot_ActionIcons_Debug(frame, id, "FadeIcon - caller="..caller) end
+        --if id==3 then HealBot_ActionIcons_Debug(frame, id, "FadeIcon - caller="..caller) end
         if actionIcons[frame][id].isIcon then 
             actionIcons[frame][id]:SetAlpha(Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["FADE"])
             actionIcons[frame][id].highlight=false
@@ -2467,7 +2467,7 @@ function HealBot_ActionIcons_UpdateAllCDs()
     if #activeFramesIdx>0 then
         if not onGCD then
             sbStartTime, sbDuration=GetSpellCooldown(61304)
-            gcd = sbDuration or 0
+            gcd = ((sbStartTime or 0)+(sbDuration or 0)) - HealBot_TimeNow
             if gcd>0.1 then
                 onGCD=true
                 C_Timer.After(gcd-0.05, HealBot_ActionIcons_EndGCD)

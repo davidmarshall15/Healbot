@@ -190,6 +190,21 @@ function HealBot_MountsPets_ClassicDalaranCheck()
     end
 end
 
+function HealBot_MountsPets_getContinent()
+    local mapID = C_Map.GetBestMapForUnit("player")
+    if(mapID) then
+        local info = C_Map.GetMapInfo(mapID)
+        if(info) then
+            while(info['mapType'] and info['mapType'] > 2) do
+                info = C_Map.GetMapInfo(info['parentMapID'])
+            end
+            if(info['mapType'] == 2) then
+                return info['mapID']
+            end
+        end
+    end
+end
+    
 function HealBot_MountsPets_ZoneChange()
       --HealBot_setCall("HealBot_MountsPets_ZoneChange")
     HealBot_mountData["incAQ"]=false
@@ -197,19 +212,25 @@ function HealBot_MountsPets_ZoneChange()
         if HEALBOT_GAME_VERSION>4 then
             HealBot_mountData["incFlying"]=true
             --HealBot_AddDebug("Zone Is Flyable","Mount",true)
-        else    
-            local mapAreaID = C_Map.GetBestMapForUnit("player") or 0
-            if mapAreaID>112 and mapAreaID<124 and not IsSpellKnown(54197) then
+        else
+            local Continent = HealBot_MountsPets_getContinent()
+            if Continent==113 and not IsSpellKnown(54197) then
                 HealBot_mountData["incFlying"]=false
                 --HealBot_AddDebug("In Northrend no Cold Weather Flying")
-            elseif mapAreaID>99 and mapAreaID<112 and not IsSpellKnown(34092) then
+            elseif Continent==1945 and not IsSpellKnown(34092) then
                 HealBot_mountData["incFlying"]=false
                 --HealBot_AddDebug("In Outlands no Expert Flying")
-            elseif mapAreaID>0 then
-                if mapAreaID==125 then
-                    HealBot_Timers_Set("LAST","MountsPetsDalaran",2)
-                else
-                    HealBot_mountData["incFlying"]=true
+            elseif Continent>1413 and Continent<1416 and not IsSpellKnown(90267) then
+                HealBot_mountData["incFlying"]=false
+                --HealBot_AddDebug("In Eastern Kingdoms, Kalimdor, and Deepholm no Flight Master's License")
+            else
+                local mapAreaID = C_Map.GetBestMapForUnit("player") or 0
+                if mapAreaID>0 then
+                    if mapAreaID==125 then
+                        HealBot_Timers_Set("LAST","MountsPetsDalaran",2)
+                    else
+                        HealBot_mountData["incFlying"]=true
+                    end
                 end
             end
             --if HealBot_mountData["incFlying"] then
