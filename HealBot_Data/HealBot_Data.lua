@@ -94,7 +94,6 @@ function HealBot_Data_Default_FontName()
     return HealBot_Supplied_Fonts[HealBot_Data_Default_FontIndex()].name
 end
 
-local Version=HealBot_Global_InitVersion()
 HealBot_ConfigDefaults = {
   MyFriend="x",
   CurrentSpec=9,
@@ -313,7 +312,7 @@ HealBot_GlobalsDefaults = {}
 
 function HealBot_Data_InitVars()
     HealBot_GlobalsDefaults = {
-        LastVersionSkinUpdate=Version,
+        LastVersionSkinUpdate=HealBot_Global_InitVersion(),
         FirstLoad=true,
         PluginThreat=true,
         PluginTimeToDie=true,
@@ -341,7 +340,6 @@ function HealBot_Data_InitVars()
         InHealDiv=10,
         HealAbsorbsDiv=10,
         DebugOut=false,
-        Debug01=false, -- Currently not used
         VersionResetDone={["ICONS"]="9.1.0.0",["BUFF"]="9.1.0.0",["CBUFF"]="9.1.0.0",["DEBUFF"]="9.1.0.0",["CDEBUFF"]="9.1.0.0"},
         CureCustomDefaultCastBy=1,
         TopRole="TANK",

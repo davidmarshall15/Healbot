@@ -595,13 +595,13 @@ function HealBot_Text_readNumber(n)
     if n<9999 then
         n=tostring(n)
     elseif n<99999 then
-        n=tostring(HealBot_Comm_round(n/1000,1)).."K"
+        n=tostring(HealBot_Util_Round(n/1000,1)).."K"
     elseif n<999999 then
         n=tostring(ceil(n/1000)).."K"
     elseif n<9999999 then
-        n=tostring(HealBot_Comm_round(n/1000000,2)).."M"
+        n=tostring(HealBot_Util_Round(n/1000000,2)).."M"
     elseif n<99999999 then
-        n=tostring(HealBot_Comm_round(n/1000000,1)).."M"
+        n=tostring(HealBot_Util_Round(n/1000000,1)).."M"
     else
         n=tostring(ceil(n/1000000)).."M"
     end
@@ -616,24 +616,24 @@ function HealBot_Text_shortHealTxt(amount, hbCurFrame)
     if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
         if hbNumFormats["Places"][hbCurFrame]<3 then 
             if vShortHealTxtAbsNum>999999 then
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,hbNumFormats["Places"][hbCurFrame]) 
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,hbNumFormats["Places"][hbCurFrame]) 
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
             else
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000,hbNumFormats["Places"][hbCurFrame]) 
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,hbNumFormats["Places"][hbCurFrame]) 
                 vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
             end
         else
             if vShortHealTxtAbsNum>9999999 then
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,0)
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,0)
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
             elseif vShortHealTxtAbsNum>999999 then
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000000,1)
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,1)
                 vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
             elseif vShortHealTxtAbsNum>9999 then
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000,0)
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,0)
                 vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
             else
-                vShortHealTxtAmount=HealBot_Comm_round(amount/1000,1)
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,1)
                 vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
             end
         end
@@ -641,7 +641,7 @@ function HealBot_Text_shortHealTxt(amount, hbCurFrame)
         tShortConcat[2]=vShortHealTxtSuffix
         return HealBot_Text_ShortConcat()
     else
-        return HealBot_Comm_round(amount, 0)
+        return HealBot_Util_Round(amount, 0)
     end
 end
 
@@ -1291,7 +1291,7 @@ function HealBot_Text_UpdateFluidTextAlpha()
     for id,xButton in pairs(HealBot_Fluid_TextHealthAlpha) do
         aufbButtonActive=false
         aufbAlphaValue=xButton.gref.txt["text2"]:GetAlpha()
-        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.ha then
             aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.ha then 
@@ -1320,7 +1320,7 @@ function HealBot_Text_UpdateFluidTextAlpha()
     for id,xButton in pairs(HealBot_Fluid_TextNameAlpha) do
         aufbButtonActive=false
         aufbAlphaValue=xButton.gref.txt["text"]:GetAlpha()
-        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.na then
             aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.na then 
@@ -1350,7 +1350,7 @@ function HealBot_Text_UpdateFluidTextAlpha()
     for id,xButton in pairs(HealBot_Fluid_TextStateAlpha) do
         aufbButtonActive=false
         aufbAlphaValue=xButton.gref.txt["text3"]:GetAlpha()
-        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.sa then
             aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.sa then 
@@ -1380,7 +1380,7 @@ function HealBot_Text_UpdateFluidTextAlpha()
     for id,xButton in pairs(HealBot_Fluid_TextAggroAlpha) do
         aufbButtonActive=false
         aufbAlphaValue=xButton.gref.txt["text4"]:GetAlpha()
-        aufbAlphaValue=HealBot_Comm_round(aufbAlphaValue, 2)
+        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
         if aufbAlphaValue>xButton.text.aa then
             aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
             if aufbSetValue<xButton.text.aa then 

@@ -538,7 +538,7 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button)
     for x=1,9 do
         if button.aux[x]["FLUIDSTATE"]>-1 then
             _,_,_,aBarGetValue=button.gref.aux[x]:GetStatusBarColor()
-            aBarGetValue=HealBot_Comm_round(aBarGetValue, 2)
+            aBarGetValue=HealBot_Util_Round(aBarGetValue, 2)
             if aBarGetValue>button.aux[x]["FLUIDSTATE"] then
                 aBarSetValue=aBarGetValue-HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue<button.aux[x]["FLUIDSTATE"] then 
@@ -561,7 +561,7 @@ local function HealBot_Aux_UpdateFluidBarsAlphaValue(button)
         end
         if button.aux[x]["FLUIDTEXT"]>-1 then
             _,_,_,aBarGetValue=button.gref.auxtxt[x]:GetTextColor()
-            aBarGetValue=HealBot_Comm_round(aBarGetValue, 2)
+            aBarGetValue=HealBot_Util_Round(aBarGetValue, 2)
             if aBarGetValue>button.aux[x]["FLUIDTEXT"] then
                 aBarSetValue=aBarGetValue-HealBot_Aux_luVars["AuxFluidBarAlphaUpdate"]
                 if aBarSetValue<button.aux[x]["FLUIDTEXT"] then 

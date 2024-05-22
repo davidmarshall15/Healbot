@@ -3,9 +3,15 @@
     xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
   <Script file="HealBot_Init.lua" />
+  <Script file="HealBot_Util.lua" />
   <Script file="HealBot_Aura.lua" />
   <Script file="HealBot_Aux.lua" />
   <Script file="HealBot_Debug.lua" />
+  <Script file="HealBot_Skins.lua" />
+  <Script file="HealBot_Panel.lua" />
+  <Script file="HealBot_Aggro.lua" />
+  <Script file="HealBot_Text.lua" />
+  <Script file="HealBot_Mounts.lua" />
   <Script file="HealBot.lua" />
   
   <!-- Comment Syntax -->

@@ -6,10 +6,10 @@ local vMajor         = string.split(".", select(1, GetBuildInfo()))
 HEALBOT_GAME_VERSION = tonumber(vMajor)
 
 function HealBot_Global_Version()
-    return "10.2.6.10"
+    return "10.2.7.3"
 end
 function HealBot_Global_InitVersion()
-    return "10.2.6.9"  -- Keep just behind the global version
+    return "10.2.7.2"  -- Keep just behind the global version
 end
 function HealBot_globalVars()
     --Consumables
@@ -725,7 +725,7 @@ function HealBot_globalVars()
     HBC_PRIEST_ABOLISH_DISEASE              = GetSpellInfo(552) or "ABOLISH_DISEASE"
     HBC_DISPELL_MAGIC                       = GetSpellInfo(527) or "DISPELL_MAGIC"
     HBC_SHAMAN_CURE_POISON                  = GetSpellInfo(526) or "SHAMAN_CURE_POISON"
-    HBC_DRUID_REMOVE_CURSE                  = GetSpellInfo(2782) or "DRUID_REMOVE_CURSE"
+    HBC_DRUID_REMOVE_CURSE                  = GetSpellInfo(2782) or "DRUID_REMOVE_CURSE" -- Cata+ is now named Remove Corruption
     HBC_DRUID_CURE_POISON                   = GetSpellInfo(8946) or "DRUID_CURE_POISON"
     HBC_DRUID_ABOLISH_POISON                = GetSpellInfo(2893) or "DRUID_ABOLISH_POISON"
     HEALBOT_DETOX                           = GetSpellInfo(115450) or "DETOX"

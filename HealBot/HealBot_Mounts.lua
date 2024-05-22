@@ -208,7 +208,7 @@ end
 function HealBot_MountsPets_ZoneChange()
       --HealBot_setCall("HealBot_MountsPets_ZoneChange")
     HealBot_mountData["incAQ"]=false
-    if IsFlyableArea() then
+    if IsFlyableArea() and HEALBOT_GAME_VERSION>1 then
         if HEALBOT_GAME_VERSION>4 then
             HealBot_mountData["incFlying"]=true
             --HealBot_AddDebug("Zone Is Flyable","Mount",true)

@@ -1614,7 +1614,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             hbSelfAbility[hbSelfAbilityRev[actionIcons[frame][id].uid]][actionIcons[frame][id].uid]=nil
             hbSelfAbilityRev[actionIcons[frame][id].uid]=false
         end
-        if HealBot_Spell_Names[hbAbility] or HealBot_Init_knownClassicHealSpell(hbAbility) then
+        if hbAbility and HealBot_Spell_Names[hbAbility] or HealBot_Init_knownClassicHealSpell(hbAbility) then
             actionIcons[frame][id]:SetAttribute("type1", "spell")
             actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
             if HealBot_Spell_IDs[aID] then
@@ -1640,7 +1640,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             actionIcons[frame][id]:SetAttribute("type1","macro")
             actionIcons[frame][id]:SetAttribute("macrotext1", mText)
             actionIconFrame[frame][id].countText:SetText("")
-        elseif HealBot_IsKnownItem(hbAbility) then
+        elseif hbAbility and HealBot_IsKnownItem(hbAbility) then
             actionIcons[frame][id]:SetAttribute("type1", "item")
             actionIcons[frame][id]:SetAttribute("item1", hbAbility)
             HealBot_ActionIcons_SelfCountText(frame, id)

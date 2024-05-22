@@ -20,14 +20,14 @@ HealBot_Media_luVars["DelayUpdateUsedMedia"]=false
 HealBot_Media_luVars["pluginMedia"]=false
 
 local HealBot_Font_Outline={
-    [1]= "",
-    [2]= "OUTLINE",
-    [3]= "THICKOUTLINE",
+    [1]="",
+    [2]="OUTLINE",
+    [3]="THICKOUTLINE",
 }
 
 function HealBot_Media_PluginState(state)
 	if HealBot_Media_luVars["pluginMedia"]~=state then
-        HealBot_Media_luVars["pluginMedia"]=state
+        HealBot_Media_luVars["pluginMedia"] = state
         HealBot_Media_PluginChange()
     elseif not HealBot_Media_luVars["Indexed"] then
         HealBot_Media_UpdateIndexes()    
@@ -71,13 +71,13 @@ end
 local function HealBot_Media_SetFonts(id)
       --HealBot_setCall("HealBot_Media_InitFonts")
     if id<=#HealBot_Fonts then
-        local g=_G["UsedToInitFonts"]
+        local g = _G["UsedToInitFonts"]
         g:SetFont(LSM:Fetch('font', HealBot_Fonts[id]), 10, HealBot_Font_Outline[1])
         g:SetText("i"..id)
         C_Timer.After(0.1, function() HealBot_Media_SetFonts(id+1) end)
     elseif HealBot_Media_luVars["InitFontsRerun"]<3 then
-        HealBot_Media_luVars["InitFontsRerun"]=HealBot_Media_luVars["InitFontsRerun"]+1
-        HealBot_Media_luVars["InitFonts"]=false
+        HealBot_Media_luVars["InitFontsRerun"] = HealBot_Media_luVars["InitFontsRerun"]+1
+        HealBot_Media_luVars["InitFonts"] = false
         C_Timer.After(HealBot_Media_luVars["InitFontsRerun"]*3, HealBot_Media_InitFonts)
     else
         HealBot_Media_luVars["InitFonts"]=false
@@ -114,7 +114,7 @@ function HealBot_Media_UpdateTexture(object, texture, caller)
 end
 
 function HealBot_Media_UpdateTextureRef(name, texture, caller)
-    local g=_G[name]
+    local g = _G[name]
     HealBot_Media_UpdateTexture(g, texture, caller)
 end
 
@@ -123,30 +123,32 @@ function HealBot_Media_ReturnSound(name)
 end
 
 local hbSounds={}
-hbSounds["TIME"]=0
-hbSounds["CALLBACKTIME"]=0
+hbSounds["TimeNextPlay"]=0
+hbSounds["TimeCallback"]=0
 function HealBot_Media_PlaySound(name, channel)
-    if hbSounds["TIME"]<HealBot_TimeNow then
-        hbSounds["TIME"]=HealBot_TimeNow+0.5
-        hbSounds["LASTID"]=name
-        PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
-    elseif name~=hbSounds["LASTID"] and hbSounds["CALLBACKTIME"]<HealBot_TimeNow then
-        hbSounds["DELAY"]=0.01+(hbSounds["TIME"]-HealBot_TimeNow)
-        hbSounds["CALLBACKTIME"]=HealBot_TimeNow+hbSounds["DELAY"]
-        C_Timer.After(hbSounds["DELAY"], function() HealBot_Media_PlaySound(id, channel) end)
+    if not hbSounds[name] then hbSounds[name]=0 end
+    if hbSounds[name]<HealBot_TimeNow then
+        if hbSounds["TimeNextPlay"]<HealBot_TimeNow then
+            hbSounds[name] = HealBot_TimeNow+1
+            hbSounds["TimeNextPlay"] = HealBot_TimeNow+0.25
+            PlaySoundFile(LSM:Fetch('sound',name), channel or "SFX")
+        elseif hbSounds["TimeCallback"]<HealBot_TimeNow then
+            hbSounds["TimeCallback"]=0.02+(hbSounds["TimeNextPlay"]-HealBot_TimeNow)
+            C_Timer.After(hbSounds["TimeCallback"], function() HealBot_Media_PlaySound(id, channel) end)
+        end
     end
 end
 
 function HealBot_Media_UpdateIndexes()
     HealBot_Media_luVars["Indexed"]=true
     for x,_ in pairs(HealBot_TexturesIndex) do
-        HealBot_TexturesIndex[x]=nil
+        HealBot_TexturesIndex[x] = nil
     end 
     for x,_ in pairs(HealBot_FontsIndex) do
-        HealBot_FontsIndex[x]=nil
+        HealBot_FontsIndex[x] = nil
     end 
     for x,_ in pairs(HealBot_SoundsIndex) do
-        HealBot_SoundsIndex[x]=nil
+        HealBot_SoundsIndex[x] = nil
     end 
     
     if HealBot_Media_luVars["pluginMedia"] then
@@ -341,15 +343,15 @@ local hbUpdateDelayType={}
 local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
     if HealBot_retLuVars("ClearReset") then
         if HealBot_Data["UILOCK"] then
-            hbUpdateDelay=2
+            hbUpdateDelay = 2
         else
-            hbUpdateDelay=0.2
+            hbUpdateDelay = 0.2
         end
         C_Timer.After(hbUpdateDelay, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
     else
-        hbUpdateDelayType[mediatype..frame]=false
+        hbUpdateDelayType[mediatype..frame] = false
       --HealBot_setCall("HealBot_Media_DoUpdateUsedMedia")
-        if mediatype == "statusbar" then
+        if mediatype=="statusbar" then
             if Healbot_Config_Skins.HeadBar[Healbot_Config_Skins.Current_Skin] then
                 local hFrames=HealBot_Panel_retHealBot_Header_Frames()
                 for _,h in pairs(hFrames) do
@@ -394,7 +396,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                     end
                 end 
             end
-        elseif mediatype == "font" then
+        elseif mediatype=="font" then
             if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
                 local hFrames=HealBot_Panel_retHealBot_Header_Frames()
                 for _,h in pairs(hFrames) do
@@ -418,9 +420,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                 end
                 for _,xButton in pairs(HealBot_Private_Button) do
                     if xButton.frame==frame then
-                    if xButton.frame==frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
-                    end
                     end
                 end      
                 for _,xButton in pairs(HealBot_Pet_Button) do
@@ -483,7 +483,7 @@ end
 function HealBot_Media_UpdateUsedMedia(mediatype, frame)
       --HealBot_setCall("HealBot_Media_UpdateUsedMedia")
     if not hbUpdateDelayType[mediatype..frame] then
-        hbUpdateDelayType[mediatype..frame]=true
+        hbUpdateDelayType[mediatype..frame] = true
         C_Timer.After(0.02, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
     end
 end

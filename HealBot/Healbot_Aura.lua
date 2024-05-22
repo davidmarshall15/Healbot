@@ -46,6 +46,7 @@ local uaBuffData={}
 local uaDebuffData={}
 local uaBuffSlot, uaDebuffSlot=0,0
 local classicAbsorbPWS=""
+local classicAbsorbDA=""
 local HealBot_Classic_Absorbs={}
 local HealBot_TargetIconsTextures = {[1]=[[Interface\Addons\HealBot\Images\Star.tga]],
                                      [2]=[[Interface\Addons\HealBot\Images\Circle.tga]],
@@ -70,7 +71,8 @@ HealBot_Aura_luVars["ManaDrink"]=""
 HealBot_Aura_luVars["WellFed"]=""
 
 local classicAbsorbBonus={["DEFAULT"]=0}
-local classicAbsorbPWSMulti={["DEFAULT"]=1}
+local classicAbsorbPWSMulti={["DEFAULT"]=1.1}
+local classicAbsorbDAMulti={["DEFAULT"]=0.2}
 local hbDebuffOnCD={}
 
 local hbDebuffBleed={}
@@ -3510,6 +3512,16 @@ elseif HEALBOT_GAME_VERSION<2 and libCD then
 end
 
 local hbClassicAbsorbTotal=0
+function HealBot_Aura_UpdateClassicAbsorbs(button, sourceGUID)
+    if uaBuffData[button.id][uaBuffSlot].name==classicAbsorbPWS then
+        hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) * classicAbsorbPWSMulti[sourceGUID]) + classicAbsorbBonus[sourceGUID]
+    elseif uaBuffData[button.id][uaBuffSlot].name==classicAbsorbDA then
+        hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_HealsInFromGUID(sourceGUID) * classicAbsorbDAMulti[sourceGUID]) + classicAbsorbBonus[sourceGUID]
+    else
+        hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) + classicAbsorbBonus[sourceGUID]
+    end
+end
+
 function HealBot_Aura_CheckBuffsV1(button)
       --HealBot_setCall("HealBot_Aura_CheckBuffsV1", button)
     hbClassicAbsorbTotal=0
@@ -3517,18 +3529,14 @@ function HealBot_Aura_CheckBuffsV1(button)
         for x=1,uaBuffData[button.id].lastslot do
             uaBuffSlot=x
             if HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name] then
-                if uaBuffData[button.id][uaBuffSlot].name==classicAbsorbPWS then
-                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) * (classicAbsorbPWSMulti[button.guid] or classicAbsorbPWSMulti["DEFAULT"])) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
-                else
-                    hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) + (classicAbsorbBonus[button.guid] or classicAbsorbBonus["DEFAULT"])
-                end
+                HealBot_Aura_UpdateClassicAbsorbs(button, HealBot_Panel_PlayerGUIDUnit(uaBuffData[button.id][uaBuffSlot].sourceUnit) or "DEFAULT")
             end
             HealBot_Aura_CheckUnitBuff(button)
         end
     end
     if button.health.auraabsorbs~=hbClassicAbsorbTotal then
         button.health.auraabsorbs=hbClassicAbsorbTotal
-        HealBot_AbsorbsUpdate(button)
+        HealBot_OnEvent_AbsorbsUpdate(button)
     end
 end
 
@@ -3817,8 +3825,10 @@ end
 function HealBot_Aura_CheckUnitAuras(button, debuff)
       --HealBot_setCall("HealBot_Aura_CheckUnitAuras", button)
     if debuff then
+        button.aura.debuff.updtime=HealBot_TimeNow
         HealBot_Aura_CheckUnitDebuffs(button)
     else
+        button.aura.buff.updtime=HealBot_TimeNow
         HealBot_Aura_CheckUnitBuffs(button)
     end
 end
@@ -4726,9 +4736,9 @@ function HealBot_Aura_UpdateItemData(iName, id)
     end
 end
 
-local hbCustomItemID,hbCustomSpellID=0,0
 function HealBot_Aura_InitItemsDataReady()
       --HealBot_setCall("HealBot_Aura_InitItemsDataReady")
+    local hbCustomItemID,hbCustomSpellID=0,0
     if HEALBOT_GAME_VERSION<4 then
         HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL)
         HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
@@ -5032,48 +5042,63 @@ function HealBot_Aura_InitData()
         classicAbsorbBonus[HealBot_Data["PGUID"]]=classicAbsorbBonus["DEFAULT"]
         
         classicAbsorbPWS=(GetSpellInfo(HEALBOT_POWER_WORD_SHIELD) or "Power Word:Shield")
-        HealBot_Classic_Absorbs={[classicAbsorbPWS]={[17]=48,
-                                                    [592]=94,
-                                                    [600]=166,
-                                                   [3747]=244,
-                                                   [6065]=313,
-                                                   [6066]=394,
-                                                  [10898]=499,
-                                                  [10899]=622,
-                                                  [10900]=783,
-                                                  [10901]=942,
-                                                  [25217]=1144,
-                                                  [25218]=1265,
-                                                  [48065]=1951,
-                                                  [48066]=2230,
-                                                      [0]=2230,},
-                                 [(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]={[11426]=455,
-                                                                                         [13031]=569,
-                                                                                         [13032]=700,
-                                                                                         [13033]=824,
-                                                                                         [27134]=952,
-                                                                                         [33405]=1075,
-                                                                                         [43038]=2860,
-                                                                                         [43039]=3300,
-                                                                                             [0]=3300,},
-                                 [(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]={[1463]=120,
-                                                                                     [8494]=210,
-                                                                                     [8495]=300,
-                                                                                    [10191]=390,
-                                                                                    [10192]=480,
-                                                                                    [10193]=570,
-                                                                                    [27131]=715,
-                                                                                    [43019]=1080,
-                                                                                    [43020]=1330,
-                                                                                        [0]=1330},
-                                }
-        if HEALBOT_GAME_VERSION<5 and HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
-            classicAbsorbPWSMulti[HealBot_Data["PGUID"]] = 1+(select(5, GetTalentInfo(1, 9))*0.05)
-            HealBot_Classic_Absorbs["Divine Aegis"]={}
-            HealBot_Classic_Absorbs["Divine Aegis"][47752]=250*(select(5, GetTalentInfo(1, 24)))
-            HealBot_Classic_Absorbs["Divine Aegis"][0]=HealBot_Classic_Absorbs["Divine Aegis"][47752]
-        else
+        classicAbsorbDA=(GetSpellInfo(47509) or "Divine Aegis")
+        if HEALBOT_GAME_VERSION<4 then
+            HealBot_Classic_Absorbs={[classicAbsorbPWS]={[17]=48,
+                                                        [592]=94,
+                                                        [600]=166,
+                                                       [3747]=244,
+                                                       [6065]=313,
+                                                       [6066]=394,
+                                                      [10898]=499,
+                                                      [10899]=622,
+                                                      [10900]=783,
+                                                      [10901]=942,
+                                                      [25217]=1144,
+                                                      [25218]=1265,
+                                                      [48065]=1951,
+                                                      [48066]=2230,
+                                                          [0]=2230,},
+                                     [(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")]={[11426]=455,
+                                                                                             [13031]=569,
+                                                                                             [13032]=700,
+                                                                                             [13033]=824,
+                                                                                             [27134]=952,
+                                                                                             [33405]=1075,
+                                                                                             [43038]=2860,
+                                                                                             [43039]=3300,
+                                                                                                 [0]=3300,},
+                                     [(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")]={[1463]=120,
+                                                                                         [8494]=210,
+                                                                                         [8495]=300,
+                                                                                        [10191]=390,
+                                                                                        [10192]=480,
+                                                                                        [10193]=570,
+                                                                                        [27131]=715,
+                                                                                        [43019]=1080,
+                                                                                        [43020]=1330,
+                                                                                            [0]=1330},
+                                    }
             classicAbsorbPWSMulti[HealBot_Data["PGUID"]] = 1
+            classicAbsorbDAMulti[HealBot_Data["PGUID"]] = 0
+        else
+            local ib=(GetSpellInfo(HEALBOT_ICE_BARRIER) or "Ice Barrier")
+            local ms=(GetSpellInfo(HBC_MANA_SHIELD) or "Mana Shield")
+            if not HealBot_Classic_Absorbs[classicAbsorbPWS] then HealBot_Classic_Absorbs[classicAbsorbPWS]={} end
+            if not HealBot_Classic_Absorbs[ib] then HealBot_Classic_Absorbs[ib]={} end
+            if not HealBot_Classic_Absorbs[ms] then HealBot_Classic_Absorbs[ms]={} end
+            HealBot_Classic_Absorbs[classicAbsorbPWS][0]=20*HealBot_Data["PLEVEL"]
+            HealBot_Classic_Absorbs[ib][0]=22*HealBot_Data["PLEVEL"]
+            HealBot_Classic_Absorbs[ms][0]=12*HealBot_Data["PLEVEL"]
+            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
+                classicAbsorbPWSMulti[HealBot_Data["PGUID"]] = 1+(select(5, GetTalentInfo(1, 15))*0.1)
+                if not HealBot_Classic_Absorbs[classicAbsorbDA] then HealBot_Classic_Absorbs[classicAbsorbDA]={} end
+                HealBot_Classic_Absorbs[classicAbsorbDA][0]=1 -- Absorb amount returned from HealsIn
+                classicAbsorbDAMulti[HealBot_Data["PGUID"]] = 0.1*(select(5, GetTalentInfo(1, 9)))
+            else
+                classicAbsorbPWSMulti[HealBot_Data["PGUID"]] = 1
+                classicAbsorbDAMulti[HealBot_Data["PGUID"]] = 0
+            end
         end
     end
     
@@ -5083,12 +5108,17 @@ end
 function HealBot_Aura_SendClassicData(rUser)
       --HealBot_setCall("HealBot_Aura_SendClassicData")
     if HEALBOT_GAME_VERSION<5 then
+        local hbAbsorbBonus=classicAbsorbBonus[HealBot_Data["PGUID"]] or classicAbsorbBonus["DEFAULT"] or 0
+        local hbPWSMulti=classicAbsorbPWSMulti[HealBot_Data["PGUID"]] or classicAbsorbPWSMulti["DEFAULT"] or 1
+        local hbDAMulti=classicAbsorbDAMulti[HealBot_Data["PGUID"]] or classicAbsorbDAMulti["DEFAULT"] or 0.1
         if rUser then
-            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~B~"..classicAbsorbBonus[HealBot_Data["PGUID"]], 2, rUser)
-            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~M~"..classicAbsorbPWSMulti[HealBot_Data["PGUID"]], 2, rUser)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~B~"..hbAbsorbBonus, 2, rUser)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~M~"..hbPWSMulti, 2, rUser)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~D~"..hbDAMulti, 2, rUser)
         else
-            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~B~"..classicAbsorbBonus[HealBot_Data["PGUID"]], 1)
-            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~M~"..classicAbsorbPWSMulti[HealBot_Data["PGUID"]], 1)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~B~"..hbAbsorbBonus, 1)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~M~"..hbPWSMulti, 1)
+            HealBot_Comms_SendAddonMsg("H:"..HealBot_Data["PGUID"].."~D~"..hbDAMulti, 1)
         end
     end
 end
@@ -5099,8 +5129,10 @@ function HealBot_Aura_RecClassicData(msg)
     if guid and t and v then
         if t=="B" then
             classicAbsorbBonus[guid]=v
-        else
+        elseif t=="M" then
             classicAbsorbPWSMulti[guid]=v
+        else
+            classicAbsorbDAMulti[guid]=v
         end
     end
 end

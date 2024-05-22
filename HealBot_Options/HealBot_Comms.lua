@@ -183,11 +183,9 @@ function HealBot_Comms_Print_Supports()
     end
 end
 
-local mult=0
 function HealBot_Comm_round(num, idp)
-      --HealBot_setCall("HealBot_Comm_round")
-    mult = 10^(idp or 0)
-    return math.floor(num * mult + 0.5) / mult
+      --HealBot_setCall("HealBot_Util_Round")
+    return HealBot_Util_Round(num, idp)
 end
 
 local HealBot_MsgUpdateAvail=nil

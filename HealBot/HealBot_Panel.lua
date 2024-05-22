@@ -3105,6 +3105,16 @@ function HealBot_Panel_focusHeal(isOn)
     focusHeal=isOn
 end
 
+function HealBot_Panel_PlayerGUIDUnit(unit)
+      --HealBot_setCall("HealBot_Panel_PlayerGUIDUnit")
+    return hbPanel_dataUnits[unit]
+end
+
+function HealBot_Panel_PlayerUnitGUID(guid)
+      --HealBot_setCall("HealBot_Panel_PlayerUnitGUID")
+    return hbPanel_dataGUIDs[guid]
+end
+
 function HealBot_Panel_PetUnitGUID(guid)
       --HealBot_setCall("HealBot_Panel_PetUnitGUID")
     return hbPanel_dataPetGUIDs[guid]

@@ -108,15 +108,15 @@ function HealBot_Tooltip_GCDV1()
 end
 
 local gcdDUR=0
-function HealBot_Tooltip_GCDV5()
+function HealBot_Tooltip_GCDV4()
       --HealBot_setCall("HealBot_Tooltip_GCDV4")
     _, gcdDUR = GetSpellCooldown(61304) -- GCD
     return gcdDUR
 end
 
 local HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV1
-if HEALBOT_GAME_VERSION>4 then
-    HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV5
+if HEALBOT_GAME_VERSION>3 then
+    HealBot_Tooltip_GCD=HealBot_Tooltip_GCDV4
 end
 function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
@@ -126,7 +126,7 @@ function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
         gcd=HealBot_Tooltip_GCD()
     end
     if HealBot_Globals.Tooltip_ShowCD and x and x>gcd then 
-        z = HealBot_Comm_round(x-(GetTime()-z),0)
+        z = HealBot_Util_Round(x-(GetTime()-z),0)
         local u=HEALBOT_TOOLTIP_SECS
         if z>59 then
             z = ceil(z/60)

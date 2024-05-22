@@ -39,7 +39,7 @@ function HealBot_Plugin_Options_SetupSlider(slider, point, width, x, y)
 end
 
 function HealBot_Plugin_Options_SetLabel(object, text)
-	local r,g,b,a=HealBot_Options_OptionsThemeCols()
+	local r,g,b,a = HealBot_Options_OptionsThemeCols()
 	object:SetText(text)
 	object:SetTextColor(r,g,b,a)
 end

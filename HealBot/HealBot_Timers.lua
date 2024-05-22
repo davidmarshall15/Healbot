@@ -67,11 +67,11 @@ function HealBot_Timers_SetnProcs(cpuProfilerOn)
         HealBot_Timers_luVars["nProcsOn"]=2
         HealBot_Timers_luVars["nProcsOff"]=1
     else
-        HealBot_Timers_luVars["nProcsOn"]=ceil(HealBot_Globals.CPUUsage*0.2)
+        HealBot_Timers_luVars["nProcsOn"]=HealBot_Util_PerfVal1(200)
         if HealBot_Timers_luVars["nProcsOn"]<2 then
             HealBot_Timers_luVars["nProcsOn"]=2
         end
-        HealBot_Timers_luVars["nProcsOff"]=ceil(HealBot_Globals.CPUUsage*0.1)
+        HealBot_Timers_luVars["nProcsOff"]=HealBot_Util_PerfVal1(100)
         if HealBot_Timers_luVars["nProcsOff"]<1 then
             HealBot_Timers_luVars["nProcsOff"]=1
         end
@@ -260,10 +260,12 @@ end
 function HealBot_Timers_EnableHealBot()
       --HealBot_setCall("HealBot_Timers_EnableHealBot")
     HealBot_Config.DisabledNow=0
+    HealBot_Timers_TurboOn(3)
     HealBot_Timers_Set("INIT","RegEvents")
     HealBot_Timers_Set("PLAYER","TalentsChanged")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
     HealBot_Timers_Set("SKINS","PartyUpdateCheckSkin")
+    HealBot_Timers_Set("AURA","PlayerCheckExtended")
     HealBot_Timers_ToggleBlizzardFrames()
     HealBot_AddChat(HEALBOT_CHAT_ENABLED)
 end
@@ -271,6 +273,7 @@ end
 function HealBot_Timers_DisableHealBot()
       --HealBot_setCall("HealBot_Timers_DisableHealBot")
     HealBot_Config.DisabledNow=1
+    HealBot_Timers_TurboOn(3)
     HealBot_Timers_Set("INIT","UnRegEvents")
     HealBot_Timers_Set("INIT","RegEvents")
     HealBot_Timers_Set("OOC","RefreshPartyNextRecalcAll")
@@ -299,6 +302,12 @@ function HealBot_Timers_SpellsResetTabs()
     HealBot_Options_setDebuffTypes()
 end
 
+function HealBot_Timers_TalentsLookupImprovedCallback()
+      --HealBot_setCall("HealBot_Timers_TalentsLookupImproved")
+    HealBot_Init_TalentLookupImproved(true)
+    HealBot_Options_setDebuffTypes()
+end
+
 function HealBot_Timers_TalentsLookupImproved()
       --HealBot_setCall("HealBot_Timers_TalentsLookupImproved")
     HealBot_Init_TalentLookupImproved()
@@ -323,7 +332,7 @@ function HealBot_Timers_LastUpdate()
     HealBot_Timers_Set("CHAT","SetChat",0.025)
     HealBot_Timers_Set("AURA","PlayerCheckExtended",0.05)
     HealBot_Timers_Set("AUX","UpdateAllAuxByType",0.075)
-    HealBot_Timers_Set("LAST","DisableCheck",0.1)
+    HealBot_Timers_Set("OOC","DisableCheck",0.1)
     HealBot_Timers_Set("LAST","ProcMarkedCacheButtons",0.125)
     HealBot_Timers_Set("LAST","UpdateAllHealth",0.15)
     HealBot_Timers_Set("PLAYER","InvChange",0.175)
@@ -504,8 +513,6 @@ local hbTimerFuncs={["INIT"]={
                         ["PrepSetEnabledAttribs"]=HealBot_Action_PrepSetEnabledAttribs,
                         ["PrepSetEnemyAttribs"]=HealBot_Action_PrepSetEnemyAttribs,
                         ["PrepSetEmergAttribs"]=HealBot_Action_PrepSetEmergAttribs,
-                        ["EnableHealBot"]=HealBot_Timers_EnableHealBot,
-                        ["DisableHealBot"]=HealBot_Timers_DisableHealBot,
                         ["InitBuffList"]=HealBot_Options_InitBuffList,
                         ["SpellsLoaded"]=HealBot_Timers_SpellsLoaded,
                         ["SpellsResetTabs"]=HealBot_Timers_SpellsResetTabs,
@@ -696,7 +703,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ReadyCheckClear"]=HealBot_OnEvent_ReadyCheckClear,
                         ["LoadComplete"]=HealBot_Timers_LoadComplete,
                         ["UpdateMaxUnitsAdj"]=HealBot_UpdateMaxUnitsAdj,
-                        ["DisableCheck"]=HealBot_Options_DisableCheck,
                         ["GetVersion"]=HealBot_Timers_GetVersion,
                         ["GetGuildVersion"]=HealBot_Timers_GetGuildVersion,
                         ["SendVersion"]=HealBot_Timers_SendVersion,
@@ -724,6 +730,7 @@ local hbTimerFuncs={["INIT"]={
                         ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
                         ["DisableAllIconGlow"]=HealBot_Action_DisableGlowIcons,
                         ["TalentsLookupImproved"]=HealBot_Timers_TalentsLookupImproved,
+                        ["TalentsLookupImprovedCallback"]=HealBot_Timers_TalentsLookupImprovedCallback,
                         ["UpdateFramesOpacity"]=HealBot_Action_UpdateFramesOpacity,
                         ["ClassColourUpdate"]=HealBot_Options_ClassColourUpdate,
                         ["RoleColourUpdate"]=HealBot_Options_RoleColourUpdate,
@@ -743,6 +750,8 @@ local hbTimerFuncs={["INIT"]={
                     },
                     ["OOC"]={
                         ["FullReload"]=HealBot_FullReload,
+                        ["EnableHealBot"]=HealBot_Timers_EnableHealBot,
+                        ["DisableHealBot"]=HealBot_Timers_DisableHealBot,
                         ["TogglePartyFrames"]=HealBot_Timer_TogglePartyFrames,
                         ["ToggleFocusFrame"]=HealBot_Timer_ToggleFocusFrame,
                         ["ToggleMiniBossFrames"]=HealBot_Timer_ToggleMiniBossFrames,
@@ -773,6 +782,8 @@ local hbTimerFuncs={["INIT"]={
                         ["RefreshPartyNextRecalcVehicle"]=HealBot_Timers_nextRecalcVehicle,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
                         ["BuffIdLookup"]=HealBot_Aura_BuffIdLookup,
+                        ["DisableCheck"]=HealBot_Options_DisableCheck,
+                        ["ToggleHealBot"]=HealBot_ToggleHealBotOOC,
                     },
                    }
 

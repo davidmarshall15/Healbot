@@ -1,10 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"     xsi:schemaLocation="http://www.blizzard.com/wow/ui/
     ..\FrameXML\UI.xsd">
-  <Script file="HealBot_Panel.lua" />
-  <Script file="HealBot_Aggro.lua" />
-  <Script file="HealBot_Skins.lua" />
-  <Script file="HealBot_Text.lua" />
-  <Script file="HealBot_Mounts.lua" />
   <Script file="HealBot_Action.lua" />
   <Script file="HealBot_ActionIcons.lua" />
   <Script file="HealBot_Timers.lua" />
