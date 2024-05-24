@@ -16567,6 +16567,7 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     --end
                     HealBot_setLuVars("TargetNeedReset", true)
                     HealBot_setLuVars("FocusNeedReset", true)
+                    HealBot_setLuVars("newSkin", true)
                     if HealBot_Data["TIPUSE"] then HealBot_Tooltip_CustomAnchor_Hide() end
                     HealBot_Timers_InitExtraOptions()
                 end

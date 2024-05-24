@@ -84,7 +84,6 @@ HealBot_luVars["pluginThreat"]=false
 HealBot_luVars["pluginTimeToDie"]=false
 HealBot_luVars["mapAreaID"]=0
 HealBot_luVars["slowUpdateID"]=1
-HealBot_luVars["UpdateMaxUnits"]=2
 HealBot_luVars["UpdateNumUnits"]=1
 HealBot_luVars["NumUnitsInQueue"]=0
 HealBot_luVars["RecalcDelay"]=0.5
@@ -108,14 +107,15 @@ HealBot_luVars["pluginClearDown"]=0
 HealBot_luVars["TalentQueryEnd"]=0
 HealBot_luVars["NextWarnCallsActive"]=0
 HealBot_luVars["debugButton1Min"]=true
-HealBot_luVars["aggroCheckInterval"]=5
-HealBot_luVars["statusCheckInterval"]=9
-HealBot_luVars["healthCheckInterval"]=7
+HealBot_luVars["aggroCheckInterval"]=3
+HealBot_luVars["statusCheckInterval"]=7
+HealBot_luVars["healthCheckInterval"]=5
 HealBot_luVars["deadCheckInterval"]=1
-HealBot_luVars["DelayCD"]=0.4
-HealBot_luVars["EventsDelay"]=0.3
-HealBot_luVars["EventsTime"]=1
+HealBot_luVars["DelayCD"]=0.2
+HealBot_luVars["EventsDelay"]=0.1
+HealBot_luVars["EventsTime"]=0
 HealBot_luVars["CataDAMinHeal"]=0
+HealBot_luVars["newSkin"]=true
 
 local HealBot_Calls={}
 local HealBot_FreqCalls={}
@@ -942,7 +942,7 @@ function HealBot_SlashCmd(cmd)
         elseif (HBcmd=="zzz") then
             xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
             local button=xButton or pButton
-            HealBot_AddDebug("#: UpdateMaxUnits="..HealBot_luVars["UpdateMaxUnits"].." UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
+            HealBot_AddDebug("#: UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
            -- HealBot_Action_EnableButtonGlowType(button, 1,0,0, "PLUGIN", "AW1", 6)
            -- HealBot_Action_setAdaptive()
             --HealBot_Aura_Counts(button)
@@ -951,11 +951,14 @@ function HealBot_SlashCmd(cmd)
          --       HealBot_AddDebug("k="..k.." v="..v,"Sort",true)
          --   end
             if HEALBOT_GAME_VERSION==4 then
-               for x=1, 15 do
-                    local tTab, tIndex=1, x
-                    local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
-                    HealBot_AddDebug("Talent(.."..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
-                end
+               --for x=1, 15 do
+               --     local tTab, tIndex=1, x
+               --     local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
+               --     HealBot_AddDebug("Talent(.."..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
+               -- end
+               local Continent = HealBot_MountsPets_getContinent()
+               HealBot_AddDebug("Continent is "..Continent,"Zone",true)
+               
             end
         else
             if x then HBcmd=HBcmd.." "..x end
@@ -2630,7 +2633,6 @@ function HealBot_Load()
         HealBot_Timers_Set("LAST","LowManaTrig")
         HealBot_Timers_Set("LAST","CheckFramesOnCombat")
         HealBot_Timers_Set("INIT","LastLoad",0.1)
-        HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj",1)
         HealBot_Timers_Set("LAST","PerfRangeFreq",2)
         HealBot_luVars["UpdateSlowNext"]=HealBot_TimeNow+1
         HealBot_Debug_PerfUpdate("PerfLevel", HealBot_Globals.CPUUsage)
@@ -2827,13 +2829,13 @@ function HealBot_HealsInAmountV1(button)
     end
 end
 
-function HealBot_HealsInFromGUID(guid)
+function HealBot_HealsInFromGUID(button, unit, guid)
     if hbCataDATimeGUIDs[guid] then
         if hbCataDATimeGUIDs[guid]>HealBot_TimeNow+4 then
             return hbCataDAHealGUIDs[guid]
         end
     end
-    return 0
+    return UnitGetIncomingHeals(button.unit, unit) or 0
 end
 
 local CataDiscPriestHeals=0
@@ -3162,43 +3164,12 @@ function HealBot_Update_CPUUsage()
     end
     if prevCPU~=HealBot_Globals.CPUUsage then
         HealBot_Timers_Set("SKINS","FluidFlashInUse")
-        HealBot_Timers_Set("LAST","UpdateMaxUnitsAdj")
         HealBot_Timers_Set("LAST","UpdateCheckInterval")
         HealBot_Timers_Set("LAST","PerfRangeFreq")
         HealBot_Comms_PerfLevel()
     elseif prevFPS~=HealBot_Globals.FPS then
         HealBot_Comms_PerfLevel()
     end
-end
-
-function HealBot_UpdateMaxUnitsAdj()
-      --HealBot_setCall("HealBot_UpdateMaxUnitsAdj")
-    if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["UpdateMaxUnits"]=2
-    else
-        HealBot_luVars["UpdateMaxUnits"]=HealBot_Util_PerfVal1(105)
-        if HealBot_luVars["UpdateMaxUnits"]<2 then
-            HealBot_luVars["UpdateMaxUnits"]=2
-        end
-    end
-    HealBot_UpdateNumUnits()
-    HealBot_Debug_PerfUpdate("UpdateMaxUnits", HealBot_luVars["UpdateMaxUnits"])
-end
-
-function HealBot_UpdateNumUnits()
-      --HealBot_setCall("HealBot_UpdateNumUnits")
-    if HealBot_luVars["CPUProfilerOn"] then
-        HealBot_luVars["UpdateNumUnits"]=floor(HealBot_luVars["NumUnitsInQueue"]*0.1)
-    else
-        HealBot_luVars["UpdateNumUnits"]=floor(HealBot_luVars["NumUnitsInQueue"]*0.3)
-    end
-
-    if HealBot_luVars["UpdateNumUnits"]>HealBot_luVars["UpdateMaxUnits"] then
-        HealBot_luVars["UpdateNumUnits"]=HealBot_luVars["UpdateMaxUnits"]
-    elseif HealBot_luVars["UpdateNumUnits"]<1 then
-        HealBot_luVars["UpdateNumUnits"]=1
-    end
-    HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..HealBot_luVars["NumUnitsInQueue"]..")")
 end
 
 function HealBot_UpdateCheckInterval()
@@ -5313,6 +5284,15 @@ function HealBot_UnitSlowUpdate(button)
     end
 end
 
+function HealBot_NewSkinLoaded()
+    for x=1,10 do
+        if not HealBot_Action_FrameIsVisible(x) then
+            HealBot_Action_ShowPanel(x, true)
+            HealBot_Action_HidePanel(x, true)
+        end
+    end
+end
+
 function HealBot_ProcessRefreshTypes()
       --HealBot_setCall("HealBot_ProcessRefreshTypes")
     if not InCombatLockdown() then
@@ -5369,6 +5349,10 @@ function HealBot_ProcessRefreshTypes()
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
                 HealBot_Timers_Set("AUX","ResetTextButtons")
+            end
+            if HealBot_luVars["newSkin"] then
+                HealBot_luVars["newSkin"]=false
+                HealBot_Timers_Set("OOC","NewSkinLoaded",0.5)
             end
             HealBot_Skins_setLuVars("AuxReset", false)
             C_Timer.After(0.01, HealBot_SetTargetBar)
@@ -5869,10 +5853,10 @@ function HealBot_FastFuncs()
                      [9]=HealBot_UpdateEnemy_Buttons, [10]=HealBot_UpdateLast,}
     else
         HealBot_Options_CmdButtonsEnableDisable(true)
-        hbFastFuncs={[1]=HealBot_UpdateEnemy_Buttons,  [2]=HealBot_UpdateUnit_Buttons,
-                     [3]=HealBot_UpdateSlow,           [4]=HealBot_UpdateUnit_Buttons,
-                     [5]=HealBot_Update_OutOfCombat,   [6]=HealBot_UpdateUnit_Buttons,
-                     [7]=HealBot_UpdateSlow,           [8]=HealBot_UpdateUnit_Buttons,
+        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_Buttons,
+                     [3]=HealBot_UpdateEnemy_Buttons,  [4]=HealBot_UpdateUnit_Buttons,
+                     [5]=HealBot_UpdateSlow,           [6]=HealBot_UpdateUnit_Buttons,
+                     [7]=HealBot_UpdateUnit_Buttons,   [8]=HealBot_UpdateUnit_Buttons,
                      [9]=HealBot_Update_OutOfCombat,  [10]=HealBot_UpdateLast,}
     end
 end
@@ -5938,7 +5922,12 @@ function HealBot_Update_ResetRefreshLists2()
     end
     if HealBot_luVars["NumUnitsInQueue"]~=#HealBot_UpdateQueue then
         HealBot_luVars["NumUnitsInQueue"]=#HealBot_UpdateQueue
-        HealBot_UpdateNumUnits()
+        if HealBot_luVars["CPUProfilerOn"] then
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.05)
+        else
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.1)
+        end
+        HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..HealBot_luVars["NumUnitsInQueue"]..")")
     end
     HealBot_TestBarsState(HealBot_luVars["TestBarsOn"])
 end

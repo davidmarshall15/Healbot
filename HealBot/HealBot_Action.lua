@@ -3315,18 +3315,20 @@ function HealBot_Action_InitFrames()
     HealBot_Action_luVars["FrameInitDone"]=true
 end
 
-function HealBot_Action_ShowPanel(frame)
+function HealBot_Action_ShowPanel(frame, initOnly)
       --HealBot_setCall("HealBot_Action_ShowPanel"..frame)
     if HealBot_Config.DisabledNow==0 then
         if not HealBot_Action_FrameIsVisible(frame) then
             ShowUIPanel(grpFrame[frame])
             grpFrame[frame].visible=true
-            if HealBot_AutoCloseFrame[frame]==3 then
-                PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
-            end
-            if hbUpdateFramesOpacity[frame] then
-                hbUpdateFramesOpacity[frame]=false
-                HealBot_Action_UpdateFrameOpacity(frame)
+            if not initOnly then
+                if HealBot_AutoCloseFrame[frame]==3 then
+                    PlaySound(SOUNDKIT.IG_ABILITY_OPEN)
+                end
+                if hbUpdateFramesOpacity[frame] then
+                    hbUpdateFramesOpacity[frame]=false
+                    HealBot_Action_UpdateFrameOpacity(frame)
+                end
             end
         end
     end
@@ -3357,12 +3359,12 @@ function HealBot_Action_FrameIsVisible(frame)
     return grpFrame[frame].visible
 end
 
-function HealBot_Action_HidePanel(frame)
+function HealBot_Action_HidePanel(frame, initOnly)
       --HealBot_setCall("HealBot_Action_HidePanel")
     if HealBot_Action_FrameIsVisible(frame) then 
         HideUIPanel(grpFrame[frame])
         grpFrame[frame].visible=false
-        if HealBot_AutoCloseFrame[frame]==3 then
+        if not initOnly and HealBot_AutoCloseFrame[frame]==3 then
             PlaySound(SOUNDKIT.IG_ABILITY_CLOSE)
         end
     end

@@ -3263,7 +3263,8 @@ end
 
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
 if HEALBOT_GAME_VERSION>8 then
-    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9Packed
+    --HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9Packed
+    HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV9
 elseif HEALBOT_GAME_VERSION<2 and libCD then
     HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV1
 end
@@ -3512,16 +3513,19 @@ elseif HEALBOT_GAME_VERSION<2 and libCD then
 end
 
 local hbClassicAbsorbTotal=0
-function HealBot_Aura_UpdateClassicAbsorbs(button, sourceGUID)
+function HealBot_Aura_UpdateClassicAbsorbs(button, sourceUnit, sourceGUID)
     if uaBuffData[button.id][uaBuffSlot].name==classicAbsorbPWS then
-        hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) * classicAbsorbPWSMulti[sourceGUID]) + classicAbsorbBonus[sourceGUID]
+        hbClassicAbsorbTotal=hbClassicAbsorbTotal+((HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) * (classicAbsorbPWSMulti[sourceGUID] or 1)) + (classicAbsorbBonus[sourceGUID] or 0)
     elseif uaBuffData[button.id][uaBuffSlot].name==classicAbsorbDA then
-        hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_HealsInFromGUID(sourceGUID) * classicAbsorbDAMulti[sourceGUID]) + classicAbsorbBonus[sourceGUID]
+        if sourceUnit then
+            hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_HealsInFromGUID(button, sourceUnit, sourceGUID) * (classicAbsorbDAMulti[sourceGUID] or 0.1)) + (classicAbsorbBonus[sourceGUID] or 0)
+        end
     else
-        hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) + classicAbsorbBonus[sourceGUID]
+        hbClassicAbsorbTotal=hbClassicAbsorbTotal+(HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][uaBuffData[button.id][uaBuffSlot].spellId] or HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name][0] or 0) + (classicAbsorbBonus[sourceGUID] or 0)
     end
 end
 
+local hbSourceGUID=""
 function HealBot_Aura_CheckBuffsV1(button)
       --HealBot_setCall("HealBot_Aura_CheckBuffsV1", button)
     hbClassicAbsorbTotal=0
@@ -3529,7 +3533,12 @@ function HealBot_Aura_CheckBuffsV1(button)
         for x=1,uaBuffData[button.id].lastslot do
             uaBuffSlot=x
             if HealBot_Classic_Absorbs[uaBuffData[button.id][uaBuffSlot].name] then
-                HealBot_Aura_UpdateClassicAbsorbs(button, HealBot_Panel_PlayerGUIDUnit(uaBuffData[button.id][uaBuffSlot].sourceUnit) or "DEFAULT")
+                hbSourceGUID=HealBot_Panel_PlayerGUIDUnit(uaBuffData[button.id][uaBuffSlot].sourceUnit)
+                if hbSourceGUID then
+                    HealBot_Aura_UpdateClassicAbsorbs(button, uaBuffData[button.id][uaBuffSlot].sourceUnit, hbSourceGUID)
+                else
+                    HealBot_Aura_UpdateClassicAbsorbs(button, nil, "DEFAULT")
+                end
             end
             HealBot_Aura_CheckUnitBuff(button)
         end
@@ -4038,7 +4047,7 @@ end
 function HealBot_Aura_BuffUpdate_Plugins(button, aura, tag, count, active, casterIsPlayer)
       --HealBot_setCall("HealBot_Aura_BuffUpdate_Plugins", button)
     if hbAuraWatch[button.guid] then
-        if count<1 then count=1 end
+        if active and not count or count<1 then count=1 end
         if hbAuraRequests[button.guid] and hbAuraRequests[button.guid][aura] and active and button.frame<7 then
             HealBot_Plugin_Requests_CancelGUID(button.guid)
             hbAuraRequests[button.guid][aura]=false

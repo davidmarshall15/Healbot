@@ -702,7 +702,6 @@ local hbTimerFuncs={["INIT"]={
                         ["ReadyCheck"]=HealBot_ReadyCheck,
                         ["ReadyCheckClear"]=HealBot_OnEvent_ReadyCheckClear,
                         ["LoadComplete"]=HealBot_Timers_LoadComplete,
-                        ["UpdateMaxUnitsAdj"]=HealBot_UpdateMaxUnitsAdj,
                         ["GetVersion"]=HealBot_Timers_GetVersion,
                         ["GetGuildVersion"]=HealBot_Timers_GetGuildVersion,
                         ["SendVersion"]=HealBot_Timers_SendVersion,
@@ -784,6 +783,7 @@ local hbTimerFuncs={["INIT"]={
                         ["BuffIdLookup"]=HealBot_Aura_BuffIdLookup,
                         ["DisableCheck"]=HealBot_Options_DisableCheck,
                         ["ToggleHealBot"]=HealBot_ToggleHealBotOOC,
+                        ["NewSkinLoaded"]=HealBot_NewSkinLoaded,
                     },
                    }
 
