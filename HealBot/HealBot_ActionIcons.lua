@@ -57,8 +57,7 @@ function HealBot_ActionIcons_retLuVars(vName)
 end
 
 local function HealBot_ActionIcons_aButton(frame, id)
-    xButton, pButton = HealBot_Panel_AllUnitButton(actionIcons[frame][id].guid)
-    return xButton or pButton
+    return HealBot_Panel_AllButton(actionIcons[frame][id].guid)
 end
 
 function HealBot_ActionIcons_LoadSpec(updateAll)
@@ -1319,9 +1318,8 @@ function HealBot_ActionIcons_UpdateTargetMyFriendFrame(frame)
         for y=1,Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["NUMICONS"] do
             if Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][y][frame]["Target"] and Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][y][frame]["Target"]==HEALBOT_OPTIONS_MYFRIEND then
                 if HealBot_Panel_RaidPetUnitButtonCheck(HealBot_Config.MyFriend) then
-                    xButton, pButton=HealBot_Panel_RaidPetUnitButton(HealBot_Config.MyFriend)
-                    local mButton=xButton or pButton
-                    HealBot_ActionIcons_UpdateSetTarget(frame, y, mButton.unit)
+                    aButton=HealBot_Panel_RaidPetButton(HealBot_Config.MyFriend)
+                    HealBot_ActionIcons_UpdateSetTarget(frame, y, aButton.unit)
                 else
                     HealBot_ActionIcons_SetTarget(frame, y)
                 end
@@ -1357,9 +1355,8 @@ function HealBot_ActionIcons_UpdateTarget(frame, id)
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_SINGLECASTER then
         HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["DPSUnitCaster"])
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_MYFRIEND and HealBot_Panel_RaidPetUnitButtonCheck(HealBot_Config.MyFriend) then
-        xButton, pButton=HealBot_Panel_RaidPetUnitButton(HealBot_Config.MyFriend)
-        local mButton=xButton or pButton
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, mButton.unit)
+        aButton=HealBot_Panel_RaidPetButton(HealBot_Config.MyFriend)
+        HealBot_ActionIcons_UpdateSetTarget(frame, id, aButton.unit)
     elseif HealBot_Panel_RaidUnitName(Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]) then
         HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_Panel_RaidUnitName(Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]))
     elseif actionIcons[frame][id].guid then

@@ -1051,6 +1051,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Action_setLuVars("TestBarsOn", false)
         HealBot_Text_setLuVars("TestBarsOn", false)
         HealBot_Aux_setLuVars("TestBarsOn", false)
+        HealBot_Aura_setLuVars("TestBarsOn", false)
         HealBot_TestBarsState(false)
         HealBot_Options_setLuVars("TestBarsOn", false)
         HealBot_Skins_isTestBars(false)
@@ -1061,6 +1062,7 @@ function HealBot_Panel_ToggleTestBars()
         HealBot_Action_setLuVars("TestBarsOn", true)
         HealBot_Text_setLuVars("TestBarsOn", true)
         HealBot_Aux_setLuVars("TestBarsOn", true)
+        HealBot_Aura_setLuVars("TestBarsOn", true)
         HealBot_TestBarsState(true)
         HealBot_Options_setLuVars("TestBarsOn", true)
         HealBot_Skins_isTestBars(true)
@@ -3136,6 +3138,11 @@ function HealBot_Panel_RaidUnitButton(guid)
     return hbPanel_buttonGUIDs[guid], hbPanel_buttonpGUIDs[guid] 
 end
 
+function HealBot_Panel_RaidButton(guid)
+    xButton, pButton = HealBot_Panel_RaidUnitButton(guid)
+    return xButton or pButton
+end
+
 function HealBot_Panel_RaidUnitButtonCheck(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] 
 end
@@ -3144,12 +3151,22 @@ function HealBot_Panel_RaidPetUnitButton(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid], hbPanel_buttonpGUIDs[guid] 
 end
 
+function HealBot_Panel_RaidPetButton(guid)
+    xButton, pButton = HealBot_Panel_RaidPetUnitButton(guid)
+    return xButton or pButton
+end
+
 function HealBot_Panel_RaidPetUnitButtonCheck(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonpGUIDs[guid] or hbPanel_buttonPetGUIDs[guid]
 end
 
 function HealBot_Panel_AllUnitButton(guid)
     return hbPanel_buttonGUIDs[guid] or hbPanel_buttonPetGUIDs[guid] or hbPanel_buttonExtraGUIDs[guid], hbPanel_buttonpGUIDs[guid]
+end
+
+function HealBot_Panel_AllButton(guid)
+    xButton, pButton = HealBot_Panel_AllUnitButton(guid)
+    return xButton or pButton
 end
 
 function HealBot_Panel_AllUnitButtonCheck(guid)

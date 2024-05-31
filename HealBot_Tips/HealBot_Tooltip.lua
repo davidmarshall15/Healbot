@@ -81,7 +81,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
                 return nil, 1, 0.2, 0, false, false
             else
                 if not button.player then
-                    if IsUsableItem(sName) and IsItemInRange(sName,button.unit) then
+                    if IsUsableItem(sName) and HealBot_Range_Unit(button.unit, button.status.range) then
                         return sName, 0.2, 0.5, 1, true, true
                     else
                         return sName, 0.1, 0.25, 0.7, true, false

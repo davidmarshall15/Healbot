@@ -107,6 +107,7 @@ HealBot_ConfigDefaults = {
   DisabledNow=0,
   LastAutoSkinChangeType="-",
   LastAutoSkinChangeTime=0,
+  ClassicAbsorbsFilter=0,
   KnownLoadouts={},
   SkinDefault = {[HEALBOT_SKINS_STD]          = {[HEALBOT_WORD_SOLO]=false, 
                                                  [HEALBOT_WORD_PARTY]=false, 

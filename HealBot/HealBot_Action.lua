@@ -11,7 +11,7 @@ local grpFrame={}
 local grpFrameBar={}
 local grpFrameText={}
 local grpFrameStickyInd={}
-local xButton, xButton=nil, nil
+local xButton, xButton, aButton=nil, nil, nil
 local HealBot_Keys_List = {"","Shift","Ctrl","Alt","Alt-Shift","Ctrl-Shift","Alt-Ctrl","Alt-Ctrl-Shift"}
 local hbAttribsMinReset = {}
 local hbAttribsFramesMinReset = {}
@@ -2480,8 +2480,8 @@ function HealBot_Action_IsUnitDead(button, guid)
     if button then
         return button.status.isdead
     else
-        local xButton,pButton = HealBot_Panel_RaidPetUnitButton(guid)
-        if (xButton and xButton.status.isdead) or (pButton and pButton.status.isdead) then
+        aButton=HealBot_Panel_RaidPetButton(guid)
+        if aButton and aButton.status.isdead then
             return true
         end
     end
@@ -5830,8 +5830,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                     hbShouldHealSomePlayerFrames[frame]=true
                     hButton:SetAttribute("toggleForVehicle", true)
                 end
-                --hButton.status.change=true
-                --hButton.status.update=true
                 if hButton.unit~=unit or hButton.guid~=guid or hButton.reset then 
                     hButton.reset=false
                     hButton.unit=unit
@@ -5856,6 +5854,9 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                         end
                         HealBot_UpdateUnitExists(hButton)
                     end
+                else
+                    hButton.status.change=true
+                    hButton.status.update=true
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
                 HealBot_HealthAlertLevel(preCombat, hButton)
@@ -6729,11 +6730,12 @@ function HealBot_Action_ShowFramesOnSkinChange()
     end
     for j=1,10 do
         if initFrame[j] and not HealBot_Action_FrameIsVisible(j) then
-            --HealBot_Action_ShowPanel(j)
+            HealBot_Action_ShowPanel(j, true)
             HealBot_Action_setPoint(j, true)
+            HealBot_Action_HidePanel(j, true)
         end
     end
-    HealBot_Timers_Set("LAST","CheckHideUnusedFrames")
+    HealBot_Timers_Set("OOC","CheckHideUnusedFrames")
 end
 
 function HealBot_Action_ShowHideFrames(button)

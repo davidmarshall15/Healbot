@@ -486,7 +486,7 @@ function HealBot_globalVars()
     HBC_SHADOW_RESISTANCE_AURA              = 19876
     HEALBOT_RIGHTEOUS_FURY                  = 25780 --GetSpellInfo(25780) or "--Righteous Fury";
     HBC_RIGHTEOUS_DEFENSE                   = 31789
-    HEALBOT_SACRED_SHIELD                   = 20925 --GetSpellInfo(20925) or "--Sacred Shield - Holy Shield in Classic";
+    HEALBOT_SACRED_SHIELD                   = 85285 --GetSpellInfo(85285) or "--Sacred Shield - Holy Shield in Classic";
     HBC_SACRED_SHIELD                       = 53601
     HEALBOT_SANCTITY_AURA                   = 167187 --GetSpellInfo(167187) or "--Sanctity Aura";
     HEALBOT_SEAL_OF_COMMAND                 = 105361 --GetSpellInfo(105361) or "--Seal of Command";

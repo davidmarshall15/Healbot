@@ -1479,7 +1479,7 @@ function HealBot_Lang_enALL()
                                       [2]   = "Casting - Sometimes the cursor turns blue and I can't do anything",
                                       [3]   = "Macros - Do you have any cooldown examples",
                                       [4]   = "Macros - Do you have any spell casting examples",
-                                      [5]   = "Mouse - How do I use my mouseover macros with the mouse wheel",
+                                      [5]   = "Mouse - How do I use my mouseover macros",
                                       [6]   = "Options - Can bars be sorted by groups, for example have 2 groups per column",
                                       [7]   = "Options - Can I hide all the bars and only show those needing a debuff removed",
                                       [8]   = "Options - Can I hide the incoming heals",
@@ -1517,7 +1517,7 @@ function HealBot_Lang_enALL()
                                       [4]   = "Yes \n\n"..
                                               "Visit "..HEALBOT_ABOUT_URL.." for examples",
                                       [5]   = "Create a macro using [@mouseover] \n\n\n" ..
-                                              "Eample macro: \n\n" ..
+                                              "Example macro: \n\n" ..
                                               "#showtooltip Flash Heal \n" ..
                                               "/cast [@mouseover] Flash Heal \n",
                                       [6]   = "Yes \n\n\n"..

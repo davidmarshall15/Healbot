@@ -3,6 +3,7 @@ local HealBot_RangeSpellsKeysFriendly = {}
 local HealBot_RangeSpellsKeysEnemy = {}
 local hbRangeRequests = {}
 local hbActionIconsInRange = {}
+local aButton = {}
 local HealBot_Range_luVars = {}
 HealBot_Range_luVars["rangeCheckInterval"] = 2
 HealBot_Range_luVars["rangeCheckIntEnabled"] = 1
@@ -180,11 +181,9 @@ function HealBot_Range_Unit(unit, prevRange)
 end
 
 function HealBot_Range_UnitGUID(unit)
-    xButton, pButton = HealBot_Panel_AllUnitButton(UnitGUID(unit) or "x")
-    if xButton then
-        return HealBot_Range_Unit(xButton.unit, xButton.status.range)
-    elseif pButton then
-        return HealBot_Range_Unit(pButton.unit, pButton.status.range)
+    aButton=HealBot_Panel_AllButton(UnitGUID(unit) or "x")
+    if aButton then
+        return HealBot_Range_Unit(aButton.unit, aButton.status.range)
     else
         return HealBot_Range_Unit(unit, 0)
     end
@@ -199,7 +198,7 @@ function HealBot_Range_UnitCurrent(button, spellName)
         uRange = 2
     elseif not UnitIsVisible(button.unit) then 
         uRange = -1
-    elseif (UnitIsEnemy(button.unit, "player") or not HealBot_Data["UILOCK"]) and CheckInteractDistance(button.unit, 4) then
+    elseif not HealBot_Data["UILOCK"] and CheckInteractDistance(button.unit, 4) then
         uRange = 2
     elseif spellName and HealBot_Spell_Names[spellName] then
         uRange = HealBot_Range_IsSpellInRange(button, spellName)

@@ -35,7 +35,7 @@ local HealBot_Timers_LastRun={
                      
 local HealBot_Timers_NoCalls={}
 local HealBot_Timers_luVars={}
-local xButton,pButton
+local xButton,pButton,aButton
 HealBot_Timers_luVars["DoneBuffReset"]=false
 HealBot_Timers_luVars["nCalls"]=0
 HealBot_Timers_luVars["nProcs"]=9
@@ -201,11 +201,9 @@ end
 
 function HealBot_Timers_TipPowerCol()
       --HealBot_setCall("HealBot_Timers_TipPowerCol")
-    xButton, pButton = HealBot_Panel_RaidUnitButton(HealBot_Data["PGUID"])
-    if xButton then
-        HealBot_Tooltip_setPlayerPowerCols(xButton.mana.r,xButton.mana.g,xButton.mana.b)
-    elseif pButton then
-        HealBot_Tooltip_setPlayerPowerCols(pButton.mana.r,pButton.mana.g,pButton.mana.b)
+    aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
+    if aButton then
+        HealBot_Tooltip_setPlayerPowerCols(aButton.mana.r,aButton.mana.g,aButton.mana.b)
     end
 end
 
@@ -459,7 +457,6 @@ end
 function HealBot_Timers_SendVersion()
       --HealBot_setCall("HealBot_Timers_SendVersion")
     HealBot_Comms_SendAddonMsg("S:"..HEALBOT_VERSION, 1)
-    HealBot_Timers_Set("LAST","SendClassicAuraData",15)
 end
 
 function HealBot_Timers_SendGuildVersion()
@@ -716,10 +713,7 @@ local hbTimerFuncs={["INIT"]={
                         ["InitLoadSpells"]=HealBot_Timers_InitSpells,
                         ["SetAutoClose"]=HealBot_Action_setAutoClose,
                         ["CheckHideFrames"]=HealBot_Action_CheckHideFrames,
-                        ["CheckHideUnusedFrames"]=HealBot_Action_CheckHideUnusedFrames,
-                        ["ShowFramesOnSkinChange"]=HealBot_Action_ShowFramesOnSkinChange,
                         ["MountsPetsDalaran"]=HealBot_MountsPets_ClassicDalaranCheck,
-                        ["SendClassicAuraData"]=HealBot_Aura_SendClassicData,
                         ["LoadTips"]=HealBot_Options_LoadTips,
                         ["SetPlayerData"]=HealBot_SetPlayerData,
                         ["SetInHealAbsorbMax"]=HealBot_Aux_setInHealAbsorbMax,
@@ -784,6 +778,8 @@ local hbTimerFuncs={["INIT"]={
                         ["DisableCheck"]=HealBot_Options_DisableCheck,
                         ["ToggleHealBot"]=HealBot_ToggleHealBotOOC,
                         ["NewSkinLoaded"]=HealBot_NewSkinLoaded,
+                        ["ShowFramesOnSkinChange"]=HealBot_Action_ShowFramesOnSkinChange,
+                        ["CheckHideUnusedFrames"]=HealBot_Action_CheckHideUnusedFrames,
                     },
                    }
 

@@ -16549,7 +16549,6 @@ function HealBot_Options_DoSet_Current_Skin(newSkin, ddRefresh, noCallback, optS
                     HealBot_Timers_Set("SKINS","SkinChangePluginUpdate")
                     HealBot_Timers_Set("INIT","SeparateInHealsAbsorbs")
                     HealBot_Timers_Set("LAST","CheckFramesOnCombat")
-                    HealBot_Timers_Set("LAST","ShowFramesOnSkinChange",0.2)
                     HealBot_Timers_Set("OOC","ActionIconsNumbers",1)
                     --HealBot_Timers_Set("LAST","UpdateFramesOpacity",0.15)
                     if HealBot_Globals.OverrideColours["USECLASS"]==1 then 
