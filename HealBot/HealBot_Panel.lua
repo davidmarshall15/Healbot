@@ -248,10 +248,6 @@ function HealBot_Panel_updDataStore(button)
     end
 end
 
-local hbPrevPlayerGUID={}
-for x=1,40 do
-    hbPrevPlayerGUID[x]=""
-end
 function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
       --HealBot_setCall("HealBot_Panel_addDataStore")
     if UnitExists(unit) then
@@ -282,10 +278,6 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                 hbPanel_dataRoles[dsGUID]="DAMAGER"
             end
             if nRaidID>0 then
-                if hbPrevPlayerGUID[nRaidID]~=dsGUID then
-                    hbPrevPlayerGUID[nRaidID]=dsGUID
-                    HealBot_setLuVars("pluginClearDown", 1)
-                end
                 local hbFRole=false
                 local _, rank, hbSubgroup, _, _, _, _, _, _, hbRRole, isML, hbCombatRole = GetRaidRosterInfo(nRaidID);
                 HealBot_UnitGroups[unit]=hbSubgroup
@@ -324,10 +316,6 @@ function HealBot_Panel_addDataStore(unit, nRaidID, isPlayer, nPartyID)
                     end
                 end
             else
-                if nPartyID and hbPrevPlayerGUID[nPartyID]~=dsGUID then
-                    hbPrevPlayerGUID[nPartyID]=dsGUID
-                    HealBot_setLuVars("pluginClearDown", 1)
-                end
                 HealBot_UnitGroups[unit]=1
                 HealBot_Panel_SetRole(unit, dsGUID, isPlayer)
                 if IsInGroup() then
@@ -2809,7 +2797,6 @@ function HealBot_Panel_TargetChanged(preCombat)
             end
         end
         HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
-        HealBot_setLuVars("pluginClearDown", 1)
     else
         if HealBot_Extra_Button["target"] then
             HealBot_Action_MarkDeleteButton(HealBot_Extra_Button["target"])
@@ -2893,7 +2880,6 @@ function HealBot_Panel_FocusChanged(preCombat)
                 end
             end
             HealBot_Panel_SetupExtraBars(hbCurrentFrame, preCombat)
-            HealBot_setLuVars("pluginClearDown", 1)
         else
             vFocusButton = HealBot_Extra_Button["focus"]
             if vFocusButton then

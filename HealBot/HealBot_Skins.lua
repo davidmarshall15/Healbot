@@ -11,7 +11,7 @@ local b,bar,icon,txt,pIcon,expire,count=nil,nil,nil,nil,nil,nil,nil,nil
 local Aux1,Aux2,Aux3,Aux4,Aux5,Aux6,Aux7,AuxBelow,AuxAbove,AuxLeft,AuxRight=nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil
 local AuxIdx={[1]={},[2]={},[3]={},[4]={},[5]={},[6]={},[7]={},[8]={},[9]={}}
 local icon1,expire1,count1,icon51,expire51,count51=nil,nil,nil,nil,nil,nil
-local barScale,h,hwidth,hheight,iScale,diScale,itScale,x,hcpct=nil,nil,nil,nil,nil,nil,nil,nil,nil
+local barScale,h,hwidth,hheight,iScale,iZoom,itScale,x,hcpct=nil,nil,nil,nil,nil,nil,nil,nil,nil
 local abtSize = {[0]=1,[1]=1,[2]=1,[3]=2,[4]=2,[5]=2,[6]=3,[7]=3,[8]=3,[9]=3,[10]=4,[11]=4,[12]=4,[13]=4,[14]=4,[15]=5}
 local auxWidth,auxHeight,auxTmp,auxOffsetBelow,auxOffsetLeft,auxOffsetRight=0,0,0,0,0,0
 local AuxOverlapOffset=0
@@ -350,8 +350,10 @@ function HealBot_Skins_UpdateBuffIcon(b, id, set)
     else
         iScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["BSCALE"])-2
     end
+    iZoom=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["BZOOM"] or 0
     b.gref.icon[id]:SetHeight(iScale);
     b.gref.icon[id]:SetWidth(iScale);
+    b.gref.icon[id]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
     HealBot_Media_UpdateFont(b.gref.txt.expire[id],
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["BUFFFONT"],
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["BUFFHEIGHT"],
@@ -369,12 +371,14 @@ end
 
 function HealBot_Skins_UpdateDebuffIcon(b, id, set)
     if Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["DEBUFFDOUBLE"] then
-        diScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2)*0.485)
+        iScale=floor(((bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][1]["DSCALE"])-2)*0.485)
     else
-        diScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["DSCALE"])-2
+        iScale=(bheight*Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["DSCALE"])-2
     end
-    b.gref.icon[id]:SetHeight(diScale);
-    b.gref.icon[id]:SetWidth(diScale);
+    iZoom=Healbot_Config_Skins.IconSets[Healbot_Config_Skins.Current_Skin][b.frame][set]["DZOOM"] or 0
+    b.gref.icon[id]:SetHeight(iScale);
+    b.gref.icon[id]:SetWidth(iScale);
+    b.gref.icon[id]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
     HealBot_Media_UpdateFont(b.gref.txt.expire[id],
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["DBFONT"],
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["DBHEIGHT"],
@@ -385,8 +389,8 @@ function HealBot_Skins_UpdateDebuffIcon(b, id, set)
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["DBHEIGHT"],
                              Healbot_Config_Skins.IconSetsText[Healbot_Config_Skins.Current_Skin][b.frame][set]["DBOUTLINE"],
                              "Skins_ResetSkin - IconSetsText")
-    b.gref.iconf[id]:SetHeight(diScale)
-    b.gref.iconf[id]:SetWidth(diScale)
+    b.gref.iconf[id]:SetHeight(iScale)
+    b.gref.iconf[id]:SetWidth(iScale)
     HealBot_Skins_UpdateIconGlowSize(b, id)
 end
 
@@ -2282,10 +2286,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if Healbot_Config_Skins.FrameAliasBar[SkinName][gl]["A"]==nil then Healbot_Config_Skins.FrameAliasBar[SkinName][gl]["A"]=0.5 end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]==nil then Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]=(49+gl) end
         if Healbot_Config_Skins.Anchors[SkinName][gl]["X"]==nil then Healbot_Config_Skins.Anchors[SkinName][gl]["X"]=(49+gl) end
-        if Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]>100 or Healbot_Config_Skins.Anchors[SkinName][gl]["X"]>100 then
-            Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]=HealBot_Util_Round(((Healbot_Config_Skins.Anchors[SkinName][gl]["Y"]/GetScreenHeight())*100),2)
-            Healbot_Config_Skins.Anchors[SkinName][gl]["X"]=HealBot_Util_Round(((Healbot_Config_Skins.Anchors[SkinName][gl]["X"]/GetScreenWidth())*100),2)
-        end
 
         HealBot_Skins_Check_IconSetsText(SkinName, gl, "HEIGHT", "DBHEIGHT", 9)
         HealBot_Skins_Check_IconSetsText(SkinName, gl, "BUFFHEIGHT", "BUFFHEIGHT", 9)

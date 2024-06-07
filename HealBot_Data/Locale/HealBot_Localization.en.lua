@@ -198,6 +198,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESETCOLOURBTN         = "*"
     HEALBOT_OPTIONS_PRESET                  = "Preset"
     HEALBOT_OPTIONS_ICONPOSITION            = "Icon Position"
+    HEALBOT_OPTIONS_POSITION                = "Position"
     HEALBOT_OPTIONS_ICONANCHOR              = "Icon Anchor"
     HEALBOT_OPTIONS_PLUGINCOLS              = "Plugin Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_DEBUFFCOLS              = "Debuff Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"

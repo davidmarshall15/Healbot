@@ -237,6 +237,15 @@ function HealBot_Timers_FramesSetPoint()
     end
 end
 
+function HealBot_Timers_FramesSetPointCheck()
+      --HealBot_setCall("HealBot_Timers_FramesSetPoint")
+    for x=1,10 do
+        if HealBot_Action_FrameIsVisible(x) then
+            HealBot_Action_setPoint(x, true)
+        end
+    end
+end
+
 function HealBot_Timers_TargetFocusUpdate()
       --HealBot_setCall("HealBot_Timers_TargetFocusUpdate")
     HealBot_nextRecalcParty(3)
@@ -570,6 +579,7 @@ local hbTimerFuncs={["INIT"]={
                         ["EmergHealthCol"]=HealBot_Action_EmergHealthCol,
                         ["ResetFrameAlias"]=HealBot_Action_ResetFrameAlias,
                         ["FramesSetPoint"]=HealBot_Timers_FramesSetPoint,
+                        ["FramesSetPointCheck"]=HealBot_Timers_FramesSetPointCheck,
                         ["UpdateAggroText"]=HealBot_Aggro_UpdateAggroText,
                         ["UpdateTextButtons"]=HealBot_Text_UpdateButtons,
                         ["UpdateEmergBars"]=HealBot_UpdateAllEmergBars,

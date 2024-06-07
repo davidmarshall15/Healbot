@@ -218,7 +218,6 @@ function HealBot_Range_UpdateUnit(button)
             HealBot_Range_ButtonSpellUpdate(button)
         end
         newRange = HealBot_Range_UnitCurrent(button, button.status.rangespell)
-        HealBot_Range_UpdateCheckTime(button, newRange)
         if newRange~=button.status.range then
             oldRange = button.status.range
             button.status.range = newRange
@@ -274,14 +273,15 @@ function HealBot_Range_UpdateUnit(button)
                 HealBot_setTooltipUpdateNow()
             end
         end
+        HealBot_Range_UpdateCheckTime(button)
     else
         button.status.range = -3
     end
 end
 
-function HealBot_Range_UpdateCheckTime(button, range)
+function HealBot_Range_UpdateCheckTime(button)
       --HealBot_setCall("HealBot_Range_UpdateCheckTime", button, nil, nil, true)
-    if range>-1 then
+    if button.status.range>-1 then
         if not HealBot_Data["UILOCK"] then
             if CheckInteractDistance(button.unit, 4) then
                 button.status.rangenextcheck = HealBot_TimeNow+HealBot_Range_luVars["rangeCheckInterval"]

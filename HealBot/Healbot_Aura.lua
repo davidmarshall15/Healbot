@@ -2591,7 +2591,7 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
         button.aura.buff.name=buffName
         HealBot_Emerg_Button[button.id].buffupdate=true
         button.aura.buff.r,button.aura.buff.g,button.aura.buff.b=HealBot_Options_RetBuffRGB(button)
-        if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.HealBot_CBWarnRange_Bar) then
+        if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Bar) then
             if button.aura.buff.colbar==4 then
                 HealBot_Action_EnableBorderHazardType(button, button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, "BUFF")
             elseif button.hazard.buff then
@@ -2621,15 +2621,15 @@ function HealBot_Aura_BuffWarnings(button, buffName, force)
             else
                 HealBot_Aura_WarningFilter[button.unit][buffName]=curBuffxTime[buffName] or HealBot_TimeNow+5
             end
-            if HealBot_Config_Buffs.ShowBuffWarning and HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.HealBot_CBWarnRange_Screen) then
+            if HealBot_Config_Buffs.ShowBuffWarning and HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Screen) then
                 UIErrorsFrame:AddMessage(button.text.nameonly.." requires "..button.aura.buff.name, 
                                          button.aura.buff.r, button.aura.buff.g, button.aura.buff.b, 1, UIERRORS_HOLD_TIME);
             end
-            if HealBot_Config_Buffs.SoundBuffWarning and HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.HealBot_CBWarnRange_Sound) then
+            if HealBot_Config_Buffs.SoundBuffWarning and HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Sound) then
                 HealBot_Media_PlaySound(HealBot_Config_Buffs.SoundBuffPlay)
             end
         end
-        if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.HealBot_CBWarnRange_Bar) or button.status.current==HealBot_Unit_Status["BUFFBARCOL"] then 
+        if HealBot_Range_WarnInRange(button, button.aura.buff.name, HealBot_Config_Buffs.WarnRange_Bar) or button.status.current==HealBot_Unit_Status["BUFFBARCOL"] then 
             HealBot_RefreshUnit(button)
         end
     end
@@ -2673,7 +2673,7 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
         HealBot_Emerg_Button[button.id].debuffupdate=true
         button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b=HealBot_Options_RetDebuffRGB(button)
         button.aura.debuff.curespell = HealBot_Options_retDebuffCureSpell(button.aura.debuff.type)
-        if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.HealBot_CDCWarnRange_Bar) then
+        if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Bar) then
             if button.aura.debuff.colbar==4 then
                 HealBot_Action_EnableBorderHazardType(button, button.aura.debuff.r, button.aura.debuff.g, button.aura.debuff.b, "DEBUFF")
             elseif button.hazard.debuff then
@@ -2706,16 +2706,16 @@ function HealBot_Aura_DebuffWarnings(button, debuffName, force, debuffIconIndex)
             if debuffIconIndex==0 then debuffIconIndex=51 end
             HealBot_Aura_WarningFilter[button.unit][button.aura.debuff.name]=HealBot_UnitDebuffIcons[button.id][debuffIconIndex]["expirationTime"]
             if HealBot_Config_Cures.ShowDebuffWarning then
-                if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.HealBot_CDCWarnRange_Screen) and type(button.aura.debuff.name)=="string" then
+                if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Screen) and type(button.aura.debuff.name)=="string" then
                     UIErrorsFrame:AddMessage(button.text.nameonly.." suffers from "..button.aura.debuff.name, 
                                              button.aura.debuff.r,button.aura.debuff.g,button.aura.debuff.b, 1, UIERRORS_HOLD_TIME);
                 end
             end
-            if HealBot_Config_Cures.SoundDebuffWarning and HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.HealBot_CDCWarnRange_Sound) then
+            if HealBot_Config_Cures.SoundDebuffWarning and HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Sound) then
                 HealBot_Media_PlaySound(HealBot_Config_Cures.SoundDebuffPlay)
             end
         end
-        if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.HealBot_CDCWarnRange_Bar) or button.status.current==HealBot_Unit_Status["DEBUFFBARCOL"] then 
+        if HealBot_Range_WarnInRange(button, button.aura.debuff.curespell, HealBot_Config_Cures.WarnRange_Bar) or button.status.current==HealBot_Unit_Status["DEBUFFBARCOL"] then 
             HealBot_RefreshUnit(button)
         end
     end
@@ -3250,15 +3250,6 @@ function HealBot_Aura_UpdateUnitBuffsV2(button)
     while true do
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, _, _, _, _, _, uaExtra17, uaExtra18, uaExtra19 = UnitBuff(button.unit,uaZ)
         if uaSpellId then
-            --if uaExtra17 and type(uaExtra17)=="number" then
-            --    HealBot_AddDebug("uaExtra17="..uaExtra17.." for buff "..uaName,"Absorbs",true)
-            --end
-            --if uaExtra18 and type(uaExtra18)=="number" then
-            --    HealBot_AddDebug("uaExtra18="..uaExtra18.." for buff "..uaName,"Absorbs",true)
-            --end
-            --if uaExtra19 and type(uaExtra19)=="number" then
-            --    HealBot_AddDebug("uaExtra19="..uaExtra19.." for buff "..uaName,"Absorbs",true)
-            --end
             HealBot_Aura_UpdateUnitBuffsData(button)
             HealBot_Aura_CheckClassicAbsorbs(button)
             uaZ=uaZ+1
@@ -3275,52 +3266,6 @@ function HealBot_Aura_UpdateUnitBuffsV9(button)
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId = ...
         HealBot_Aura_UpdateUnitBuffsData(button)
     end)
-end
-
-function HealBot_Aura_UpdateUnitBuffsV9Data_OLD(auraData)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Data")
-    if auraData.expirationTime then
-        if not HealBot_ExcludeBuffInCache[auraData.spellId] and uaSlot<20 then
-            uaSlot=uaSlot+1
-            if uaBuffData[uaID][uaSlot].spellId~=auraData.spellId or uaBuffData[uaID][uaSlot].sourceUnit~=(auraData.sourceUnit or "nil") then
-                uaBuffData[uaID][uaSlot].name=auraData.name
-                uaBuffData[uaID][uaSlot].icon=auraData.icon
-                if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureType(auraData.dispelName)) then
-                    uaBuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
-                else
-                    uaBuffData[uaID][uaSlot].debuffType=auraData.dispelName
-                end
-                uaBuffData[uaID][uaSlot].duration=auraData.duration
-                if auraData.sourceUnit then
-                    uaBuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
-                    if UnitIsUnit(auraData.sourceUnit,"player") then
-                        uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=true
-                    else
-                        uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-                    end
-                else
-                    uaBuffData[uaID][uaSlot].sourceUnit="nil"
-                    uaBuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-                end
-                uaBuffData[uaID][uaSlot].spellId=auraData.spellId
-                if not HealBot_AuraBuffCache[auraData.spellId] or not HealBot_AuraBuffCache[auraData.spellId].always then
-                    uaBuffData[uaID][uaSlot].isCurrent=false
-                end
-            end
-            uaBuffData[uaID][uaSlot].count=auraData.applications
-            uaBuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
-            uaBuffData[uaID].lastslot=uaSlot
-            HealBot_Aura_PostUpdateUnitBuffsData(HealBot_Buttons[uaID], auraData.spellId, auraData.name)
-            HealBot_Aura_PostUpdateUnitBuffsCurrent(HealBot_Buttons[uaID], auraData.spellId, auraData.name, auraData.applications, uaBuffData[uaID][uaSlot].sourceUnitIsPlayer)
-        end
-    end
---    HealBot_Aura_CheckUnitBuff(uaButton)
-end
-
-function HealBot_Aura_UpdateUnitBuffsV9Packed_OLD(button)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsV9Packed", button)
-    uaID=button.id
-    AuraUtil.ForEachAura(button.unit, "HELPFUL", nil, HealBot_Aura_UpdateUnitBuffsV9Data_OLD, true)
 end
 
 local HealBot_Aura_UpdateUnitBuffs=HealBot_Aura_UpdateUnitBuffsV2
@@ -3511,61 +3456,6 @@ function HealBot_Aura_UpdateUnitDebuffsV9(button)
         uaName, uaTexture, uaCount, uaDebuffType, uaDuration, uaExpirationTime, uaUnitCaster, _, _, uaSpellId, _, uaIsBossDebuff = ...
         HealBot_Aura_UpdateUnitDebuffsData(button)
     end)
-end
-
-function HealBot_Aura_UpdateUnitDebuffsV9Data_OLD(auraData)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Data", button)
-    if auraData.expirationTime then
-        if uaSlot<20 then
-            if auraData.spellId==32407 or auraData.name=="Strange Aura" then
-            --    auraData.dispelName=HEALBOT_DISEASE_en
-            --    auraData.dispelName=HEALBOT_MAGIC_en
-                auraData.dispelName=HEALBOT_CURSE_en
-            --    auraData.dispelName=HEALBOT_POISON_en
-            --    auraData.dispelName=HEALBOT_BLEED_en
-                HealBot_Aura_CanDispell[auraData.spellId]=true
-            --    HealBot_Aura_IconSet[auraData.spellId].spellId]=3
-            end
-            uaSlot=uaSlot+1
-            if uaDebuffData[uaID][uaSlot].spellId~=auraData.spellId or uaDebuffData[uaID][uaSlot].sourceUnit~=auraData.sourceUnit then
-                uaDebuffData[uaID][uaSlot].name=auraData.name
-                uaDebuffData[uaID][uaSlot].icon=auraData.icon
-                if hbDebuffBleed[auraData.spellId] and (not auraData.dispelName or not HealBot_Options_retDebuffCureSpell(auraData.dispelName)) then
-                    uaDebuffData[uaID][uaSlot].debuffType=HEALBOT_BLEED_en
-                else
-                    uaDebuffData[uaID][uaSlot].debuffType=auraData.dispelName
-                end
-                uaDebuffData[uaID][uaSlot].duration=auraData.duration
-                if auraData.sourceUnit then
-                    uaDebuffData[uaID][uaSlot].sourceUnit=auraData.sourceUnit
-                    if UnitIsUnit(auraData.sourceUnit,"player") then
-                        uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=true
-                    else
-                        uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-                    end
-                else
-                    uaDebuffData[uaID][uaSlot].sourceUnit="nil"
-                    uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer=false
-                end
-                uaDebuffData[uaID][uaSlot].spellId=auraData.spellId
-                uaDebuffData[uaID][uaSlot].isBossAura=auraData.isBossAura
-                if not HealBot_AuraDebuffCache[auraData.spellId] or not HealBot_AuraDebuffCache[auraData.spellId].always then
-                    uaDebuffData[uaID][uaSlot].isCurrent=false
-                end
-            end
-            uaDebuffData[uaID][uaSlot].count=auraData.applications
-            uaDebuffData[uaID][uaSlot].expirationTime=auraData.expirationTime
-            uaDebuffData[uaID].lastslot=uaSlot
-            HealBot_Aura_PostUpdateUnitDebuffsData(HealBot_Buttons[uaID], auraData.spellId, auraData.name)
-            HealBot_Aura_PostUpdateUnitDebuffsCurrent(HealBot_Buttons[uaID], auraData.spellId, auraData.name, auraData.applications, uaDebuffData[uaID][uaSlot].sourceUnitIsPlayer)
-        end
-    end
-end
-
-function HealBot_Aura_UpdateUnitDebuffsV9Packed_OLD(button)
-      --HealBot_setCall("HealBot_Aura_UpdateUnitDebuffsV9Packed", button)
-    uaID=button.id
-    AuraUtil.ForEachAura(button.unit, "HARMFUL", nil, HealBot_Aura_UpdateUnitDebuffsV9Data, true)
 end
 
 local HealBot_Aura_UpdateUnitDebuffs=HealBot_Aura_UpdateUnitDebuffsV2
@@ -4970,49 +4860,63 @@ function HealBot_Aura_InitData()
         local HBC_SP_ID = 10 --Shadow Resistance 
         local HBC_MOTW_ID = 11 --Wild 
         local HBC_INV_ID = 12
-        if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
+        local HBC_INNER_ID = 13
+        if HEALBOT_GAME_VERSION<4 then
+            if HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_DRUID] then
+                    HealBot_BuffNameTypes = {
+                        [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")] = HBC_MOTW_ID,
+                        [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "Gift of the Wild")] = HBC_MOTW_ID,
+                    }
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
+                HealBot_BuffNameTypes = {
+                    [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "Arcane Brilliance")] = HBC_INT_ID,
+                    [(GetSpellInfo(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")] = HBC_INT_ID,
+                    [(GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")] = HBC_INT_ID,
+                }
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
+                HealBot_BuffNameTypes = {
+                    [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")] = HBC_STATS_ID,
+                    [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "Blessing of Light")] = HBC_LIGHT_ID,
+                    [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "Blessing of Might")] = HBC_MIGHT_ID,
+                    [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "Hand of Salvation")] = HBC_SALVATION_ID,
+                    [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "Blessing of Sanctuary")] = HBC_SANCTUARY_ID,
+                    [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "Blessing of Wisdom")] = HBC_WISDOM_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "Greater Blessing of Kings")] = HBC_STATS_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "Greater Blessing of Light")] = HBC_LIGHT_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "Greater Blessing of Might")] = HBC_MIGHT_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "Greater Blessing of Salvation")] = HBC_SALVATION_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "Greater Blessing of Sanctuary")] = HBC_SANCTUARY_ID,
+                    [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "Greater Blessing of Wisdom")] = HBC_WISDOM_ID,
+                }
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
+                HealBot_BuffNameTypes = {
+                    [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")] = HBC_STAMINA_ID,
+                    [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")] = HBC_STAMINA_ID,
+                    [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "Divine Spirit")] = HBC_SPIRIT_ID,
+                    [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "Prayer of Spirit")] = HBC_SPIRIT_ID,
+                    [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "Shadow Protection")] = HBC_SP_ID,
+                    [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "Prayer of Shadow Protection")] = HBC_SP_ID,
+                }
+                if HealBot_Data["PLEVEL"]<80 then
+                    HealBot_BuffNameTypes[(GetSpellInfo(HBC_FEL_INTELLIGENCE) or "Fel Intelligence")] = HBC_SPIRIT_ID
+                end
+            elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
+                HealBot_BuffNameTypes = {
+                    [(GetSpellInfo(HBC_DETECT_LESSER_INVISIBILITY) or "Detect Lesser Invisibility")] = HBC_INV_ID,
+                    [(GetSpellInfo(HBC_DETECT_INVISIBILITY) or "Detect Invisibility")] = HBC_INV_ID,
+                    [(GetSpellInfo(HBC_DETECT_GREATER_INVISIBILITY) or "Detect Greater Invisibility")] = HBC_INV_ID,
+                }
+            end
+        elseif HEALBOT_GAME_VERSION<5 then
             HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")] = HBC_MOTW_ID,
-                [(GetSpellInfo(HBC_GIFT_OF_THE_WILD) or "Gift of the Wild")] = HBC_MOTW_ID,
-            }
-        elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_MAGE] then
-            HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_ARCANE_BRILLIANCE) or "Arcane Brilliance")] = HBC_INT_ID,
+                [(GetSpellInfo(HEALBOT_MARK_OF_THE_WILD) or "Mark of the Wild")] = HBC_STATS_ID,
+                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")] = HBC_STATS_ID,
+                [(GetSpellInfo(HBC_INNER_FIRE) or "Inner Fire")] = HBC_INNER_ID,
+                [(GetSpellInfo(HBC_INNER_WILL) or "Inner Will")] = HBC_INNER_ID,
+                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word: Fortitude")] = HBC_STAMINA_ID,
+                [(GetSpellInfo(HEALBOT_COMMANDING_SHOUT) or "Commanding Shout")] = HBC_STAMINA_ID,
                 [(GetSpellInfo(HEALBOT_ARCANE_BRILLIANCE) or "Arcane Brilliance")] = HBC_INT_ID,
                 [(GetSpellInfo(HEALBOT_DALARAN_BRILLIANCE) or "Dalaran Brilliance")] = HBC_INT_ID,
-            }
-        elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PALADIN] then
-            HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_BLESSING_OF_KINGS) or "Blessing of Kings")] = HBC_STATS_ID,
-                [(GetSpellInfo(HBC_BLESSING_OF_LIGHT) or "Blessing of Light")] = HBC_LIGHT_ID,
-                [(GetSpellInfo(HBC_BLESSING_OF_MIGHT) or "Blessing of Might")] = HBC_MIGHT_ID,
-                [(GetSpellInfo(HEALBOT_HAND_OF_SALVATION) or "Hand of Salvation")] = HBC_SALVATION_ID,
-                [(GetSpellInfo(HBC_BLESSING_OF_SANCTUARY) or "Blessing of Sanctuary")] = HBC_SANCTUARY_ID,
-                [(GetSpellInfo(HBC_BLESSING_OF_WISDOM) or "Blessing of Wisdom")] = HBC_WISDOM_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_KINGS) or "Greater Blessing of Kings")] = HBC_STATS_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_LIGHT) or "Greater Blessing of Light")] = HBC_LIGHT_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_MIGHT) or "Greater Blessing of Might")] = HBC_MIGHT_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SALVATION) or "Greater Blessing of Salvation")] = HBC_SALVATION_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_SANCTUARY) or "Greater Blessing of Sanctuary")] = HBC_SANCTUARY_ID,
-                [(GetSpellInfo(HBC_GREATER_BLESSING_OF_WISDOM) or "Greater Blessing of Wisdom")] = HBC_WISDOM_ID,
-            }
-        elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_PRIEST] then
-            HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")] = HBC_STAMINA_ID,
-                [(GetSpellInfo(HEALBOT_POWER_WORD_FORTITUDE) or "Power Word:Fortitude")] = HBC_STAMINA_ID,
-                [(GetSpellInfo(HBC_DIVINE_SPIRIT) or "Divine Spirit")] = HBC_SPIRIT_ID,
-                [(GetSpellInfo(HBC_PRAYER_OF_SPIRIT) or "Prayer of Spirit")] = HBC_SPIRIT_ID,
-                [(GetSpellInfo(HBC_SHADOW_PROTECTION) or "Shadow Protection")] = HBC_SP_ID,
-                [(GetSpellInfo(HBC_PRAYER_OF_SHADOW_PROTECTION) or "Prayer of Shadow Protection")] = HBC_SP_ID,
-            }
-            if HealBot_Data["PLEVEL"]<80 then
-                HealBot_BuffNameTypes[(GetSpellInfo(HBC_FEL_INTELLIGENCE) or "Fel Intelligence")] = HBC_SPIRIT_ID
-            end
-        elseif HealBot_Data["PCLASSTRIM"]==HealBot_Class_En[HEALBOT_WARLOCK] then
-            HealBot_BuffNameTypes = {
-                [(GetSpellInfo(HBC_DETECT_LESSER_INVISIBILITY) or "Detect Lesser Invisibility")] = HBC_INV_ID,
-                [(GetSpellInfo(HBC_DETECT_INVISIBILITY) or "Detect Invisibility")] = HBC_INV_ID,
-                [(GetSpellInfo(HBC_DETECT_GREATER_INVISIBILITY) or "Detect Greater Invisibility")] = HBC_INV_ID,
             }
         end
 

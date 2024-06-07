@@ -6370,18 +6370,18 @@ function HealBot_Options_FluidFlashInUse()
         if HealBot_Globals.OverrideEffects["USE"]==1 then
             HealBot_Aux_setLuVars("FluidInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"])
             HealBot_Action_setLuVars("FluidInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"])
-            HealBot_Action_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
-            HealBot_Text_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
-            HealBot_Aux_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
+            --HealBot_Action_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
+            --HealBot_Text_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
+            --HealBot_Aux_setLuVars("FluidAlphaInUse", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
             HealBot_setLuVars("UseHealthDrop", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HEALTHDROP"])
             HealBot_Action_setLuVars("HealthDropTime", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HEALTHDROPTIME"])
             HealBot_setLuVars("HealthDropCancelPct", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HEALTHDROPCANCEL"])
         else
             HealBot_Aux_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
             HealBot_Action_setLuVars("FluidInUse", HealBot_Globals.OverrideEffects["FLUIDBARS"])
-            HealBot_Action_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
-            HealBot_Text_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
-            HealBot_Aux_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
+            --HealBot_Action_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
+            --HealBot_Text_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
+            --HealBot_Aux_setLuVars("FluidAlphaInUse", HealBot_Globals.OverrideEffects["FLUIDALPHA"])
             HealBot_setLuVars("UseHealthDrop", HealBot_Globals.OverrideEffects["HEALTHDROP"])
             HealBot_Action_setLuVars("HealthDropTime", HealBot_Globals.OverrideEffects["HEALTHDROPTIME"])
             HealBot_setLuVars("HealthDropCancelPct", HealBot_Globals.OverrideEffects["HEALTHDROPCANCEL"])
@@ -6395,6 +6395,13 @@ function HealBot_Options_FluidFlashInUse()
         HealBot_Text_setLuVars("FluidAlphaInUse", false)
         HealBot_setLuVars("UseHealthDrop", false)
     end
+    
+    
+    HealBot_Action_setLuVars("FluidAlphaInUse", false)
+    HealBot_Aux_setLuVars("FluidAlphaInUse", false)
+    HealBot_Text_setLuVars("FluidAlphaInUse", false)
+        
+        
     if HealBot_Globals.OverrideEffects["USE"]==1 then
         HealBot_setLuVars("HealthDropPct", Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["HEALTHDROPPCT"])
     else
@@ -10712,10 +10719,11 @@ end
 function HealBot_Options_Override_EffectsUse_Toggle()
       --HealBot_setCall("HealBot_Options_Override_EffectsUse_Toggle")
     HealBot_Options_DoEffects_DropDowns()
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBarsAlpha",false)
+    HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBarsAlpha",false)
     if HealBot_Globals.OverrideEffects["USE"]==1 then
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseHealthDrop",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBarsAlpha",false)
         HealBot_Options_UseOverrideFocusGroups:SetAlpha(0.4)
         HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(0.4)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",false)
@@ -10733,7 +10741,6 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBorderHazardMinAlpha",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseHealthDrop",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBarsAlpha",true)
         HealBot_Options_UseFocusGroups:SetAlpha(1)
         HealBot_Options_HotBarDebuffPrio:SetAlpha(1)
         for x=1,8 do
@@ -10784,7 +10791,6 @@ function HealBot_Options_Override_EffectsUse_Toggle()
     else
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseHealthDrop",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBars",true)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideUseFluidBarsAlpha",true)
         HealBot_Options_UseOverrideFocusGroups:SetAlpha(1)
         HealBot_Options_OverrideHotBarDebuffPrio:SetAlpha(1)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBarUpdateFreq",true)
@@ -10802,7 +10808,6 @@ function HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_OverrideBorderHazardMinAlpha",true)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseHealthDrop",false)
         HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBars",false)
-        HealBot_Options_ObjectsEnableDisable("HealBot_Options_UseFluidBarsAlpha",false)
         HealBot_Options_UseFocusGroups:SetAlpha(0.4)
         HealBot_Options_HotBarDebuffPrio:SetAlpha(0.4)
         for x=1,8 do
@@ -13960,6 +13965,12 @@ function HealBot_Options_CopyTab2Frames(frame, tab)
         Healbot_Config_Skins.RaidIcon[s][frame]["SQUARE"]=Healbot_Config_Skins.RaidIcon[s][f]["SQUARE"]
         Healbot_Config_Skins.RaidIcon[s][frame]["CROSS"]=Healbot_Config_Skins.RaidIcon[s][f]["CROSS"]
         Healbot_Config_Skins.RaidIcon[s][frame]["SKULL"]=Healbot_Config_Skins.RaidIcon[s][f]["SKULL"]
+    elseif tab==24 then
+        Healbot_Config_Skins.Anchors[s][frame]["X"]=Healbot_Config_Skins.Anchors[s][f]["X"]
+        HealBot_Action_setPoint(frame, false)
+    elseif tab==25 then
+        Healbot_Config_Skins.Anchors[s][frame]["Y"]=Healbot_Config_Skins.Anchors[s][f]["Y"]
+        HealBot_Action_setPoint(frame, false)
     end
 
     if frame<10 then
@@ -14035,11 +14046,11 @@ end
 function HealBot_Options_CopyOptionsCopy()
       --HealBot_setCall("HealBot_Options_CopyOptionsCopy")
     local g, h
-    local tab5, tab9, tab16 =false, false, false
+    local tab5, tab9, tab16, sPoint=false, false, false, false
     for x=1,9 do
         g=_G["HealBot_Options_CopyFrame"..x]
         if g:GetChecked() then
-            for y=1,23 do
+            for y=1,25 do
                 h=_G["HealBot_Options_CopyTab"..y]
                 if h:GetChecked() then
                     HealBot_Options_CopyTab2Frames(hbCopyFrameIdx[x], y)
@@ -16504,7 +16515,7 @@ function HealBot_Options_Skins_DropDown()
         info.func = function(self)
                         if Healbot_Config_Skins.Skin_ID~=self:GetID() then
                             Healbot_Config_Skins.Skin_ID = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_Skins,Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
+                            UIDropDownMenu_SetText(HealBot_Options_SelectSkin,Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
                             if self:GetID()>=1 then HealBot_Options_Set_Current_Skin(self:GetText(), true) end
                         end
                     end
@@ -17111,14 +17122,14 @@ function HealBot_Options_BuffWarnRange_DropDown(id, var)
         info.text = HealBot_Options_Lists["RangeWarning"][j];
         info.func = function(self)
                         if id==1 then
-                            HealBot_Config_Buffs.HealBot_CBWarnRange_Bar = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange1,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Bar])
+                            HealBot_Config_Buffs.WarnRange_Bar = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange1,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Bar])
                         elseif id==3 then
-                            HealBot_Config_Buffs.HealBot_CBWarnRange_Screen = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange3,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Screen])
+                            HealBot_Config_Buffs.WarnRange_Screen = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange3,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Screen])
                         else
-                            HealBot_Config_Buffs.HealBot_CBWarnRange_Sound = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Sound])
+                            HealBot_Config_Buffs.WarnRange_Sound = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Sound])
                         end
                     end
         info.checked = false;
@@ -17129,17 +17140,17 @@ end
 
 function HealBot_Options_BuffWarnRange1_DropDown()
       --HealBot_setCall("HealBot_Options_BuffWarnRange1_DropDown")
-    HealBot_Options_BuffWarnRange_DropDown(1, HealBot_Config_Buffs.HealBot_CBWarnRange_Bar)
+    HealBot_Options_BuffWarnRange_DropDown(1, HealBot_Config_Buffs.WarnRange_Bar)
 end
 
 function HealBot_Options_BuffWarnRange3_DropDown()
       --HealBot_setCall("HealBot_Options_BuffWarnRange3_DropDown")
-    HealBot_Options_BuffWarnRange_DropDown(3, HealBot_Config_Buffs.HealBot_CBWarnRange_Screen)
+    HealBot_Options_BuffWarnRange_DropDown(3, HealBot_Config_Buffs.WarnRange_Screen)
 end
 
 function HealBot_Options_BuffWarnRange4_DropDown()
       --HealBot_setCall("HealBot_Options_BuffWarnRange4_DropDown")
-    HealBot_Options_BuffWarnRange_DropDown(4, HealBot_Config_Buffs.HealBot_CBWarnRange_Sound)
+    HealBot_Options_BuffWarnRange_DropDown(4, HealBot_Config_Buffs.WarnRange_Sound)
 end
 
 function HealBot_Options_BuffWeaponEnchantSetAura(x)
@@ -17834,14 +17845,14 @@ function HealBot_Options_CDCWarnRange_DropDown(id, var)
         info.text = HealBot_Options_Lists["RangeWarning"][j];
         info.func = function(self)
                         if id==1 then
-                            HealBot_Config_Cures.HealBot_CDCWarnRange_Bar=self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange1,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Bar])
+                            HealBot_Config_Cures.WarnRange_Bar=self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange1,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Bar])
                         elseif id==3 then
-                            HealBot_Config_Cures.HealBot_CDCWarnRange_Screen = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange3,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Screen]) 
+                            HealBot_Config_Cures.WarnRange_Screen = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange3,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Screen]) 
                         else
-                            HealBot_Config_Cures.HealBot_CDCWarnRange_Sound = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Sound]) 
+                            HealBot_Config_Cures.WarnRange_Sound = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4,HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Sound]) 
                         end
                     end
         info.checked = false;
@@ -17852,17 +17863,17 @@ end
 
 function HealBot_Options_CDCWarnRange1_DropDown()
       --HealBot_setCall("HealBot_Options_CDCWarnRange1_DropDown")
-    HealBot_Options_CDCWarnRange_DropDown(1, HealBot_Config_Cures.HealBot_CDCWarnRange_Bar)
+    HealBot_Options_CDCWarnRange_DropDown(1, HealBot_Config_Cures.WarnRange_Bar)
 end
 
 function HealBot_Options_CDCWarnRange3_DropDown()
       --HealBot_setCall("HealBot_Options_CDCWarnRange3_DropDown")
-    HealBot_Options_CDCWarnRange_DropDown(3, HealBot_Config_Cures.HealBot_CDCWarnRange_Screen)
+    HealBot_Options_CDCWarnRange_DropDown(3, HealBot_Config_Cures.WarnRange_Screen)
 end
 
 function HealBot_Options_CDCWarnRange4_DropDown()
       --HealBot_setCall("HealBot_Options_CDCWarnRange4_DropDown")
-    HealBot_Options_CDCWarnRange_DropDown(4, HealBot_Config_Cures.HealBot_CDCWarnRange_Sound)
+    HealBot_Options_CDCWarnRange_DropDown(4, HealBot_Config_Cures.WarnRange_Sound)
 end
 
 HealBot_Options_luVars["CDebuffCatID"] = 2
@@ -23413,6 +23424,9 @@ function HealBot_Options_Lang(region, msgchat)
         g=_G["healbottargetincombatfontstr"]
         g:SetText(HEALBOT_DISABLED_TARGET)
         g:SetTextColor(1,1,1,1)
+        g=_G["HealBot_Options_CopyTab24Txt"]
+        g:SetText(HEALBOT_OPTIONS_FRAME)
+        g:SetTextColor(0.4,1,0.5,1)
         g=_G["HealBot_Options_CopyTab1Txt"]
         g:SetText(HEALBOT_OPTIONS_TAB_GENERAL)
         g:SetTextColor(1,1,1,1)
@@ -23981,8 +23995,8 @@ function HealBot_Options_OverridesEffectsTab(tab)
         HealBot_Options_Override_EffectsUse_Toggle()
         HealBot_Options_OverrideUseFluidBars:SetChecked(HealBot_Globals.OverrideEffects["FLUIDBARS"])
         HealBot_Options_SetText(HealBot_Options_OverrideUseFluidBars,HEALBOT_OPTION_USE)
-        HealBot_Options_OverrideUseFluidBarsAlpha:SetChecked(HealBot_Globals.OverrideEffects["FLUIDALPHA"])
         HealBot_Options_SetText(HealBot_Options_OverrideUseFluidBarsAlpha,HEALBOT_OPTION_FLUIDBARSINCALPHA)
+        HealBot_Options_OverrideUseFluidBarsAlpha:SetChecked(false)
         HealBot_Options_OverrideUseHealthDrop:SetChecked(HealBot_Globals.OverrideEffects["HEALTHDROP"])
         HealBot_Options_SetText(HealBot_Options_OverrideUseHealthDrop,HEALBOT_OPTION_USE)
         HealBot_Options_DoEffects_DropDowns()
@@ -24478,8 +24492,8 @@ function HealBot_Options_SkinsEffectsTab(tab)
         HealBot_Options_SetText(HealBot_Options_UseHealthDrop,HEALBOT_OPTION_USE)
         HealBot_Options_UseFluidBars:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDBARS"])
         HealBot_Options_SetText(HealBot_Options_UseFluidBars,HEALBOT_OPTION_USE)
-        HealBot_Options_UseFluidBarsAlpha:SetChecked(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDALPHA"])
         HealBot_Options_SetText(HealBot_Options_UseFluidBarsAlpha,HEALBOT_OPTION_FLUIDBARSINCALPHA)
+        HealBot_Options_UseFluidBarsAlpha:SetChecked(false)
         HealBot_Options_DoEffects_DropDowns()
         HealBot_Options_sliderlabels_Init(HealBot_Options_BarUpdateFreq,HEALBOT_OPTION_BARUPDFREQ,1,19,1,2,HEALBOT_OPTIONS_WORD_SLOWER,HEALBOT_OPTIONS_WORD_FASTER)
         HealBot_Options_BarUpdateFreq:SetValue(Healbot_Config_Skins.General[Healbot_Config_Skins.Current_Skin]["FLUIDFREQ"] or 10)
@@ -26559,15 +26573,15 @@ function HealBot_Options_DebuffsWarningTab(tab)
         HealBot_Options_CDCCol_ShowOnHealthBar:SetChecked(HealBot_Config_Cures.CDCshownHB)
         HealBot_Options_SetText(HealBot_Options_CDCCol_ShowOnHealthBar,HEALBOT_OPTIONS_CDCSHOWHBARS)
         HealBot_Options_CDCWarnRange1.initialize = HealBot_Options_CDCWarnRange1_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange1, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Bar])
+        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange1, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Bar])
         HealBot_Options_ShowDebuffWarning:SetChecked(HealBot_Config_Cures.ShowDebuffWarning)
         HealBot_Options_SetText(HealBot_Options_ShowDebuffWarning,HEALBOT_OPTIONS_SHOWDEBUFFWARNING)
         HealBot_Options_CDCWarnRange3.initialize = HealBot_Options_CDCWarnRange3_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange3, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Screen])
+        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange3, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Screen])
         HealBot_Options_SoundDebuffWarning:SetChecked(HealBot_Config_Cures.SoundDebuffWarning)
         HealBot_Options_SetText(HealBot_Options_SoundDebuffWarning,HEALBOT_OPTIONS_SOUNDDEBUFFWARNING)
         HealBot_Options_CDCWarnRange4.initialize = HealBot_Options_CDCWarnRange4_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.HealBot_CDCWarnRange_Sound])
+        UIDropDownMenu_SetText(HealBot_Options_CDCWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Cures.WarnRange_Sound])
         HealBot_Options_UpdateMediaSound(HealBot_Options_WarningSound,HealBot_Config_Cures.SoundDebuffPlay)
         HealBot_Options_TabRunOnce[tab]=true
     end
@@ -26810,15 +26824,15 @@ function HealBot_Options_BuffsWarningTab(tab)
         HealBot_Options_BuffCol_ShowOnHealthBar:SetChecked(HealBot_Config_Buffs.CBshownHB)
         HealBot_Options_SetText(HealBot_Options_BuffCol_ShowOnHealthBar,HEALBOT_OPTIONS_CDCSHOWHBARS)
         HealBot_Options_BuffWarnRange1.initialize = HealBot_Options_BuffWarnRange1_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange1, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Bar])
+        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange1, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Bar])
         HealBot_Options_ShowBuffWarning:SetChecked(HealBot_Config_Buffs.ShowBuffWarning)
         HealBot_Options_SetText(HealBot_Options_ShowBuffWarning,HEALBOT_OPTIONS_SHOWBUFFWARNING)
         HealBot_Options_BuffWarnRange3.initialize = HealBot_Options_BuffWarnRange3_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange3, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Screen])
+        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange3, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Screen])
         HealBot_Options_SoundBuffWarning:SetChecked(HealBot_Config_Buffs.SoundBuffWarning)
         HealBot_Options_SetText(HealBot_Options_SoundBuffWarning,HEALBOT_OPTIONS_SOUNDBUFFWARNING)
         HealBot_Options_BuffWarnRange4.initialize = HealBot_Options_BuffWarnRange4_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.HealBot_CBWarnRange_Sound])
+        UIDropDownMenu_SetText(HealBot_Options_BuffWarnRange4, HealBot_Options_Lists["RangeWarning"][HealBot_Config_Buffs.WarnRange_Sound])
         HealBot_Options_UpdateMediaSound(HealBot_Options_BuffWarningSound,HealBot_Config_Buffs.SoundBuffPlay)
         HealBot_Options_TabRunOnce[tab]=true
     end
@@ -27151,8 +27165,8 @@ end
 
 function HealBot_Options_SkinsFramesInit()
       --HealBot_setCall("HealBot_Options_SkinsFramesInit")
-    HealBot_Options_Skins.initialize = HealBot_Options_Skins_DropDown
-    UIDropDownMenu_SetText(HealBot_Options_Skins, Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
+    HealBot_Options_SelectSkin.initialize = HealBot_Options_Skins_DropDown
+    UIDropDownMenu_SetText(HealBot_Options_SelectSkin, Healbot_Config_Skins.Skins[Healbot_Config_Skins.Skin_ID])
     HealBot_Options_FrameAliasList()
     HealBot_Options_FramesSelFrame.initialize = HealBot_Options_FramesSelFrame_DropDown
     UIDropDownMenu_SetText(HealBot_Options_FramesSelFrame, HealBot_Options_HealGroupsFrame_List[HealBot_Options_luVars["FramesSelFrame"]])
@@ -27180,6 +27194,7 @@ function HealBot_Options_SkinsFramesInit()
     HealBot_Options_SelectSpellsFrame:Hide()
     HealBot_Options_NewSkinb:Disable()
     HealBot_Options_SetLabel("HealBot_Options_ScaleFrameText",HEALBOT_OPTIONS_SKINTEXT)
+    HealBot_Options_SetLabel("HealBot_Options_SelectSkinDisabledTxt",HEALBOT_OPTIONS_SKINTEXT)
     HealBot_Options_DeleteSkin:SetText(HEALBOT_OPTIONS_DELSKIN)
     HealBot_Options_SetLabel("HealBot_Options_ScaleFrameText2",HEALBOT_OPTIONS_NEWSKINTEXT)
     HealBot_Options_NewSkinb:SetText(HEALBOT_OPTIONS_SAVESKIN)
@@ -27254,6 +27269,8 @@ end
 
 function HealBot_Options_CopyFrameTab()
       --HealBot_setCall("HealBot_Options_CopyFrameTab")
+    HealBot_Options_SetText(HealBot_Options_CopyTab24,"X")
+    HealBot_Options_SetText(HealBot_Options_CopyTab25,"Y")
     HealBot_Options_SetText(HealBot_Options_CopyTab1,HEALBOT_OPTIONS_TAB_GENERAL)
     HealBot_Options_SetText(HealBot_Options_CopyTab2,HEALBOT_OPTIONS_TAB_BARS)
     HealBot_Options_SetText(HealBot_Options_CopyTab3,HEALBOT_OPTIONS_TAB_FRAMES)
@@ -28084,7 +28101,7 @@ end
 function HealBot_Options_CopyTabsSelect(All)
       --HealBot_setCall("HealBot_Options_CopyTabsSelect")
     local g
-    for x=1,23 do
+    for x=1,25 do
         g=_G["HealBot_Options_CopyTab"..x]
         g:SetChecked(All)
     end
@@ -28175,10 +28192,22 @@ function HealBot_Options_ShowSkinsPanel(frameName, hbFrameID)
         frameName=HealBot_Options_luVars["SkinsPanelCopyBackName"]
         hbFrameID=HealBot_Options_luVars["SkinsPanelCopyBackID"]
         HealBot_Options_luVars["SkinsPanelCopyBackName"]=false
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_DeleteSkin",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_NewSkin",true)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_NewSkinb",true)
+        HealBot_Options_SelectSkin:Show()
+        HealBot_Options_SelectSkinDisabled:Hide()
     elseif hbFrameID==1000 then
         HealBot_Options_luVars["SkinsPanelCopyBackName"]=HealBot_Options_luVars["CurrentSkinsPanel"]
         HealBot_Options_luVars["SkinsPanelCopyBackID"]=hbCurSkinSubFrameID
         HealBot_Options_InitCopyTabs()
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_DeleteSkin",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_NewSkin",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_NewSkinb",false)
+        HealBot_Options_ObjectsEnableDisable("HealBot_Options_SelectSkinDisabled",false)
+        HealBot_Options_SelectSkinDisabled:SetText(Healbot_Config_Skins.Current_Skin)
+        HealBot_Options_SelectSkin:Hide()
+        HealBot_Options_SelectSkinDisabled:Show()
     end
     hbCurSkinSubFrameID=hbFrameID
     local g=_G[HealBot_Options_luVars["CurrentSkinsPanel"]]

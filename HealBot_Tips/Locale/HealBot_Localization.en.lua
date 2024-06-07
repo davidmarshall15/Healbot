@@ -185,6 +185,7 @@ function HealBot_Lang_Options_enALL()
                                  ["EOCOOM"]=HEALBOT_OPTIONS_EOC_OOM,
                         -- Skins Frames Copy Tabs
                                  ["COPYTAB"]=HEALBOT_OPTIONS_COPY_TABS,
+                                 ["COPYCOORD"]=HEALBOT_OPTIONS_POSITION,
                                  ["COPYFRAME"]=HEALBOT_OPTIONS_TO_FRAMES,
                         -- Skins Frames General tab
                                  ["GOTOHEALGROUPS"]=HEALBOT_OPTIONS_SET_FRAME_HEALGROUPS,
@@ -919,6 +920,7 @@ function HealBot_Lang_Options_enALL()
                                ["EOCOOM"]="When enabled and mana drops below the select amount.\nAt the end of combat emote Out of Mana.",
                         -- Skins Frames Copy Tabs
                                 ["COPYTAB"]="Select to copy the tab.",
+                                ["COPYCOORD"]="Select to copy the frame position.",
                                 ["COPYFRAME"]="Select to update the frame.",
                         -- Skins Frames General tab
                                ["GOTOHEALGROUPS"]="Go to the Heal Groups tab.",
@@ -1035,7 +1037,7 @@ function HealBot_Lang_Options_enALL()
                                ["HEALBARSVISENEMYINCMYTARGETS"]="Include enemy bars for all My Private List targets.",
                                ["HEALBARSVISENEMYNUMBOSSES"]="Maximum number of bars to show for bosses.",
                                ["HEALBARSVISENEMYHIDEOC"]="Hide the bars when out of combat as they will often be empty and reserved.",
-                               ["HEALBARSVISENEMYSHOWTARGET"]="Show a bar for the enemy target.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."For example:\n".._G["GREEN_FONT_COLOR_CODE"].."A boss might be boss2target (Retail Only)\n".._G["GREEN_FONT_COLOR_CODE"].."A tank might be raid2targettarget.",
+                               ["HEALBARSVISENEMYSHOWTARGET"]="Show a bar for the enemy target.\n--\n".._G["GREEN_FONT_COLOR_CODE"].."For example:\n".._G["GREEN_FONT_COLOR_CODE"].."A boss might be boss2target (Not available in Vanilla)\n".._G["GREEN_FONT_COLOR_CODE"].."A tank might be raid2targettarget.",
                                ["HEALBARSVISENEMYTARGETSIZE"]="The percentage of the enemy bar width\nto be used by the enemy target bar.\n--\n".."|cff77c8ff".."Tip: Set a large width for Enemy bars.",
                                ["HEALBARSVISENEMYDOUBLEWIDTH"]="Double the total width for the Enemy and Enemy Target bars.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This option only applies when "..HEALBOT_ENEMY_SHOW_TARGET.." is ON.",
                                ["HEALBARSVISENEMYSHOWSELF"]="When to show your target.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: This only applies when out of combat.\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: To use Always show: ensure Close automatically\n".._G["YELLOW_FONT_COLOR_CODE"].."is Off on the Skins>Frames>General tab.",

@@ -8476,85 +8476,131 @@
           </Frame>
           
           <Frame name="HealBot_Options_Panel3" hidden="true" setAllPoints="true">
+            <Layers>
+              <Layer level="BACKGROUND">
+                <FontString name="HealBot_Options_SkinAuthorText" text="HEALBOT_OPTIONS_SKINAUTHOR" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOPRIGHT">
+                      <Offset>
+                        <AbsDimension x="-110" y="-25" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="HealBot_Options_SkinAuthorName" text="HEALBOT_WORDS_UNKNOWN" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOP" relativeTo="HealBot_Options_SkinAuthorText" relativePoint="BOTTOM">
+                      <Offset>
+                        <AbsDimension x="0" y="-8" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="HealBot_Options_SkinURL" text="HEALBOT_OPTIONS_MORESKINSURL" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOP">
+                      <Offset>
+                        <AbsDimension x="0" y="-80" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="HealBot_Options_CopyTabsCurrentFrame" text="HEALBOT_OPTIONS_CURRENT_FRAME" inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="TOP">
+                      <Offset>
+                        <AbsDimension x="-20" y="-80" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+                <FontString name="HealBot_Options_CopyTabsCurrentFrameName" text=" " inherits="GameFontNormal">
+                  <Anchors>
+                    <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTabsCurrentFrame" relativePoint="RIGHT">
+                      <Offset>
+                        <AbsDimension x="5" y="0" />
+                      </Offset>
+                    </Anchor>
+                  </Anchors>
+                </FontString>
+              </Layer>
+            </Layers>
             <Frames>
-              <Frame name="HealBot_Options_Skins" inherits="UIDropDownMenuTemplate">
-                <Layers>
-                  <Layer level="BACKGROUND">
-                    <FontString name="HealBot_Options_ScaleFrameText" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormalSmall">
-                      <Anchors>
-                        <Anchor point="RIGHT" relativeTo="HealBot_Options_Skins" relativePoint="LEFT">
-                          <Offset>
-                            <AbsDimension x="10" y="2"/>
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_SkinAuthorText" text="HEALBOT_OPTIONS_SKINAUTHOR" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOPLEFT">
-                          <Offset>
-                            <AbsDimension x="380" y="-10" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_SkinAuthorName" text="HEALBOT_WORDS_UNKNOWN" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOP" relativeTo="HealBot_Options_SkinAuthorText" relativePoint="BOTTOM">
-                          <Offset>
-                            <AbsDimension x="0" y="-8" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_SkinURL" text="HEALBOT_OPTIONS_MORESKINSURL" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOP">
-                          <Offset>
-                            <AbsDimension x="152" y="-72" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CopyTabsCurrentFrame" text="HEALBOT_OPTIONS_CURRENT_FRAME" inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="TOP">
-                          <Offset>
-                            <AbsDimension x="132" y="-72" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                    <FontString name="HealBot_Options_CopyTabsCurrentFrameName" text=" " inherits="GameFontNormal">
-                      <Anchors>
-                        <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTabsCurrentFrame" relativePoint="RIGHT">
-                          <Offset>
-                            <AbsDimension x="5" y="0" />
-                          </Offset>
-                        </Anchor>
-                      </Anchors>
-                    </FontString>
-                  </Layer>
-                </Layers>
+              <Frame name="HealBot_Options_Skins" inherits="BackdropTemplate">
+                <Size>
+                  <AbsDimension y="140"/>
+                </Size>
                 <Anchors>
                   <Anchor point="TOPLEFT">
                     <Offset>
-                      <AbsDimension x="80" y="-10" />
+                      <AbsDimension x="45" y="110"/>
+                    </Offset>
+                  </Anchor>
+                  <Anchor point="TOPRIGHT">
+                    <Offset>
+                      <AbsDimension x="-15" y="110"/>
                     </Offset>
                   </Anchor>
                 </Anchors>
-                <Scripts>
-                  <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
-                  <OnEnter>HealBot_Options_Show_Help("SELECTSKIN",true)</OnEnter>
-                  <OnLeave>HealBot_Options_Show_Help("SELECTSKIN",false)</OnLeave>
-                </Scripts>
                 <Frames>
+                  <Frame name="HealBot_Options_SelectSkin" inherits="UIDropDownMenuTemplate">
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_ScaleFrameText" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_SelectSkin" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="14" y="3"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="22" y="20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 120)</OnLoad>
+                      <OnEnter>HealBot_Options_Show_Help("SELECTSKIN",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("SELECTSKIN",false)</OnLeave>
+                    </Scripts>
+                  </Frame>
+                  <Button name="HealBot_Options_SelectSkinDisabled" inherits="UIPanelButtonTemplate" text="">
+                    <Size>
+                      <AbsDimension x="140" y="25"/>
+                    </Size>
+                    <Layers>
+                      <Layer level="BACKGROUND">
+                        <FontString name="HealBot_Options_SelectSkinDisabledTxt" text="HEALBOT_OPTIONS_SKINTEXT" inherits="GameFontNormalSmall">
+                          <Anchors>
+                            <Anchor point="RIGHT" relativeTo="HealBot_Options_SelectSkinDisabled" relativePoint="LEFT">
+                              <Offset>
+                                <AbsDimension x="-2" y="0"/>
+                              </Offset>
+                            </Anchor>
+                          </Anchors>
+                        </FontString>
+                      </Layer>
+                    </Layers>
+                    <Anchors>
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                          <AbsDimension x="38" y="20"/>
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                  </Button>
                   <Button name="HealBot_Options_DeleteSkin" inherits="UIPanelButtonTemplate" text="HEALBOT_OPTIONS_DELSKIN">
                     <Size>
                       <AbsDimension x="105" y="22"/>
                     </Size>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="TOPRIGHT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelectSkin" relativePoint="TOPRIGHT">
                         <Offset>
                           <AbsDimension x="20" y="-1"/>
                         </Offset>
@@ -8584,7 +8630,7 @@
                       </Layer>
                     </Layers>
                     <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Skins" relativePoint="BOTTOMLEFT">
+                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelectSkin" relativePoint="BOTTOMLEFT">
                         <Offset>
                           <AbsDimension x="22" y="-2"/>
                         </Offset>
@@ -8613,7 +8659,7 @@
                       <OnLeave>HealBot_Options_Show_Help("SAVENEWSKIN",false)</OnLeave>
                     </Scripts>
                   </Button>
-                  <Frame name="HealBot_Options_FramesSelFrame"  hidden="true" inherits="UIDropDownMenuTemplate">
+                  <Frame name="HealBot_Options_FramesSelFrame" hidden="true" inherits="UIDropDownMenuTemplate">
                     <Anchors>
                       <Anchor point="TOP" relativeTo="HealBot_Options_NewSkinb" relativePoint="BOTTOM">
                         <Offset>
@@ -14058,11 +14104,52 @@
                       </Layer>
                     </Layers>
                     <Frames>
-                      <CheckButton name="HealBot_Options_CopyTab1" inherits="HealBotUIPanelCheckButton">
+                      <CheckButton name="HealBot_Options_CopyTab24" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="80" y="-35" />
+                              <AbsDimension x="80" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Layers>
+                          <Layer level="BACKGROUND">
+                            <FontString name="HealBot_Options_CopyTab24Txt" text="HEALBOT_OPTIONS_FRAME" inherits="GameFontNormal">
+                              <Anchors>
+                                <Anchor point="RIGHT" relativePoint="LEFT">
+                                  <Offset>
+                                    <AbsDimension x="-5" y="0" />
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYCOORD",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYCOORD",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab25" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="LEFT" relativeTo="HealBot_Options_CopyTab24" relativePoint="RIGHT">
+                            <Offset>
+                              <AbsDimension x="58" y="0" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_Options_CopyDummy_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("COPYCOORD",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("COPYCOORD",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
+                      <CheckButton name="HealBot_Options_CopyTab1" inherits="HealBotUIPanelCheckButton">
+                        <Anchors>
+                          <Anchor point="TOP" relativeTo="HealBot_Options_CopyTab24" relativePoint="BOTTOM">
+                            <Offset>
+                              <AbsDimension x="0" y="0" />
                             </Offset>
                           </Anchor>
                         </Anchors>

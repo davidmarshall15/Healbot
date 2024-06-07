@@ -541,6 +541,7 @@ function HealBot_globalVars()
     HEALBOT_GUARDIAN_SPIRIT                 = 47788 --GetSpellInfo(47788) or "--Guardian Spirit";
     HEALBOT_HOLY_NOVA                       = 132157 --GetSpellInfo(132157) or "--Holy Nova";
     HBC_INNER_FIRE                          = 588
+    HBC_INNER_WILL                          = 73413
     HEALBOT_INSPIRATION                     = 14893 --GetSpellInfo(14893) or "--Inspiration";
     HEALBOT_LEAP_OF_FAITH                   = 73325 --GetSpellInfo(73325) or "--Leap of Faith";
     HEALBOT_LEVITATE                        = 1706 --GetSpellInfo(1706) or "--Levitate";
@@ -552,8 +553,8 @@ function HealBot_globalVars()
     HEALBOT_POWER_INFUSION                  = 10060 --GetSpellInfo(10060) or "--Power Infusion";
     HEALBOT_POWER_OF_THE_DARK_SIDE          = 198069 --GetSpellInfo(198069) or "--Power of the Dark Side";
     HEALBOT_POWER_OF_THE_NAARU              = 196490 --GetSpellInfo(196490) or "--Power of the Naaru";
-    HEALBOT_POWER_WORD_BARRIER              = 81782 --GetSpellInfo(62618) or "--Power Word:Barrier";
-    HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word:Fortitude";
+    HEALBOT_POWER_WORD_BARRIER              = 81782 --GetSpellInfo(62618) or "--Power Word: Barrier";
+    HEALBOT_POWER_WORD_FORTITUDE            = 21562 --GetSpellInfo(21562) or "--Power Word: Fortitude";
     HBC_POWER_WORD_FORTITUDE                = 1243
     HEALBOT_POWER_WORD_SHIELD               = 17 --GetSpellInfo(17) or "--Power Word:Shield";
     HBC_PRAYER_OF_SHADOW_PROTECTION         = 27683

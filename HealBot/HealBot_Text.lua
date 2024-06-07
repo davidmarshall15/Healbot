@@ -705,12 +705,13 @@ function HealBot_Text_ConcatHealthText(button)
         end
         HealBot_Text_ConcatNameText(button)
     else
+        button.text.healthupdate=true
         if button.text.namehealth~=vTextChars["Nothing"] then
             button.text.namehealth=vTextChars["Nothing"]
             HealBot_Text_ConcatNameText(button)
+        else
+            HealBot_Text_UpdateText(button)
         end
-        button.text.healthupdate=true
-        HealBot_Text_UpdateText(button)
     end
 end
 
@@ -864,8 +865,9 @@ function HealBot_Text_setHealthText(button)
         if button.text.namehealth~=vTextChars["Nothing"] then
             button.text.namehealth=vTextChars["Nothing"]
             HealBot_Text_ConcatNameText(button)
+        else
+            HealBot_Text_UpdateText(button)
         end
-        HealBot_Text_UpdateText(button)
     end
 end
 
