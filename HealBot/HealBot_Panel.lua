@@ -109,12 +109,11 @@ local hbTANK2=2
 local hbHEALER=3
 local hbDPS=4
 local hbDPSC=5
-local hbRoleRef={[hbTANK1]="TankUnit",[hbTANK2]="TankUnit2",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit",[hbDPSC]="DPSUnitCaster"}
+local hbRoleRef={[hbTANK1]="TankGUID1",[hbTANK2]="TankGUID2",[hbHEALER]="HealerGUID",[hbDPS]="DPSGUID",[hbDPSC]="DPSGUIDCaster"}
 for x=1,5 do
     hbRoleOnes[x]={}
     hbRoleOnes[x].guid=""
     hbRoleOnes[x].prevguid="x"
-    hbRoleOnes[x].unit=""
     hbRoleOnes[x].health=0
 end
 --local hbClassOnes={}
@@ -168,21 +167,17 @@ function HealBot_Panel_TankRole(unit, guid, isPlayer)
             if hbRoleOnes[hbTANK1].health>0 then
                 if hbRoleOnes[hbTANK2].guid==guid then
                     hbRoleOnes[hbTANK2].health=0
-                    hbRoleOnes[hbTANK2].guid=""
-                    hbRoleOnes[hbTANK2].unit=""
+                    hbRoleOnes[hbTANK2].guid="x"
                 else
                     hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
                     hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
-                    hbRoleOnes[hbTANK2].unit=hbRoleOnes[hbTANK1].unit
                 end
             end
             hbRoleOnes[hbTANK1].health=UnitHealthMax(unit)
             hbRoleOnes[hbTANK1].guid=guid
-            hbRoleOnes[hbTANK1].unit=unit
         elseif UnitHealthMax(unit)>hbRoleOnes[hbTANK2].health then
             hbRoleOnes[hbTANK2].health=UnitHealthMax(unit)
             hbRoleOnes[hbTANK2].guid=guid
-            hbRoleOnes[hbTANK2].unit=unit
         end
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
@@ -195,7 +190,6 @@ function HealBot_Panel_HealerRole(unit, guid, isPlayer)
     if isPlayer and UnitHealthMax(unit)>hbRoleOnes[hbHEALER].health then
         hbRoleOnes[hbHEALER].health=UnitHealthMax(unit)
         hbRoleOnes[hbHEALER].guid=guid
-        hbRoleOnes[hbHEALER].unit=unit
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
 end
@@ -214,7 +208,6 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
         if UnitHealthMax(unit)>hbRoleOnes[hbDPS].health then
             hbRoleOnes[hbDPS].health=UnitHealthMax(unit)
             hbRoleOnes[hbDPS].guid=guid
-            hbRoleOnes[hbDPS].unit=unit
         end
         if (UnitPowerType(unit) or 1)==0 then
             local _, uuUnitClassEN = UnitClass(unit) or "X"
@@ -225,7 +218,6 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
             if maxHealth>hbRoleOnes[hbDPSC].health then
                 hbRoleOnes[hbDPSC].health=maxHealth
                 hbRoleOnes[hbDPSC].guid=guid
-                hbRoleOnes[hbDPSC].unit=unit
             end
         end
     end
@@ -384,7 +376,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
         hbPlayerRaidID=0
         for x=1,5 do
             hbRoleOnes[x].health=0
-            hbRoleOnes[x].guid=""
+            hbRoleOnes[x].guid="x"
         end
         if HealBot_Config.DisabledNow==0 then
             local nGroupMembers=GetNumGroupMembers()
@@ -407,15 +399,9 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
         for x=1,5 do
             if hbRoleOnes[x].prevguid~=hbRoleOnes[x].guid then
                 hbRoleOnes[x].prevguid=hbRoleOnes[x].guid
-                if hbRoleOnes[x].guid=="" then
-                    HealBot_setLuVars(hbRoleRef[x], "x")
-                    HealBot_Aura_setLuVars(hbRoleRef[x], "x")
-                    HealBot_ActionIcons_setLuVars(hbRoleRef[x], "x")
-                else
-                    HealBot_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
-                    HealBot_Aura_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
-                    HealBot_ActionIcons_setLuVars(hbRoleRef[x], hbRoleOnes[x].unit)
-                end
+                HealBot_setLuVars(hbRoleRef[x], hbRoleOnes[x].guid)
+                HealBot_Aura_setLuVars(hbRoleRef[x], hbRoleOnes[x].guid)
+                HealBot_ActionIcons_setLuVars(hbRoleRef[x], hbRoleOnes[x].guid)
                 HealBot_setLuVars("pluginClearDown", 1)
             end
         end

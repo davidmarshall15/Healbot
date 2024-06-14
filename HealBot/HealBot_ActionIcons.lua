@@ -44,10 +44,11 @@ HealBot_ActionIcons_luVars["AllowDebuffs"]=false
 HealBot_ActionIcons_luVars["HazardFreq"]=0.3
 HealBot_ActionIcons_luVars["HazardMinAlpha"]=0.25
 HealBot_ActionIcons_luVars["MaxIcons"]=20
-HealBot_ActionIcons_luVars["TankUnit"]="x"
-HealBot_ActionIcons_luVars["TankUnit2"]="x"
-HealBot_ActionIcons_luVars["HealerUnit"]="x"
-HealBot_ActionIcons_luVars["DPSUnit"]="x"
+HealBot_ActionIcons_luVars["TankGUID1"]="x"
+HealBot_ActionIcons_luVars["TankGUID2"]="x"
+HealBot_ActionIcons_luVars["HealerGUID"]="x"
+HealBot_ActionIcons_luVars["DPSGUID"]="x"
+HealBot_ActionIcons_luVars["DPSGUIDCaster"]="x"
 
 function HealBot_ActionIcons_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_ActionIcons_setLuVars - "..vName)
@@ -1348,6 +1349,7 @@ function HealBot_ActionIcons_UpdateTargetMyFriend()
     end
 end
 
+local utUnit=""
 function HealBot_ActionIcons_UpdateTarget(frame, id)
         --HealBot_setCall("HealBot_ActionIcons_UpdateTarget")
     --HealBot_ActionIcons_Debug(frame, id, "UpdateTarget "..(Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"] or ""))
@@ -1358,15 +1360,20 @@ function HealBot_ActionIcons_UpdateTarget(frame, id)
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_TARGETHEALS then
         HealBot_ActionIcons_SetTarget(frame, id, "target")
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_TANK1 then
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["TankUnit"])
+        utUnit=HealBot_Panel_PlayerUnitGUID(HealBot_ActionIcons_luVars["TankGUID1"])
+        if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_TANK2 then
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["TankUnit2"])
+        utUnit=HealBot_Panel_PlayerUnitGUID(HealBot_ActionIcons_luVars["TankGUID2"])
+        if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_SINGLEHEALER then
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["HealerUnit"])
+        utUnit=HealBot_Panel_PlayerUnitGUID(HealBot_ActionIcons_luVars["HealerGUID"])
+        if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_SINGLEDAMAGER then
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["DPSUnit"])
+        utUnit=HealBot_Panel_PlayerUnitGUID(HealBot_ActionIcons_luVars["DPSGUID"])
+        if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_SINGLECASTER then
-        HealBot_ActionIcons_UpdateSetTarget(frame, id, HealBot_ActionIcons_luVars["DPSUnitCaster"])
+        utUnit=HealBot_Panel_PlayerUnitGUID(HealBot_ActionIcons_luVars["DPSGUIDCaster"])
+        if utUnit then HealBot_ActionIcons_UpdateSetTarget(frame, id, utUnit) end
     elseif Healbot_Config_Skins.ActionIconsData[Healbot_Config_Skins.Current_Skin][id][frame]["Target"]==HEALBOT_OPTIONS_MYFRIEND and HealBot_Panel_RaidPetUnitButtonCheck(HealBot_Config.MyFriend) then
         aButton=HealBot_Panel_RaidPetButton(HealBot_Config.MyFriend)
         HealBot_ActionIcons_UpdateSetTarget(frame, id, aButton.unit)

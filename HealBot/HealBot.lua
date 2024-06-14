@@ -62,7 +62,8 @@ HealBot_luVars["ResetFlag"]=false
 HealBot_luVars["MovingFrame"]=0
 HealBot_luVars["TargetNeedReset"]=true
 HealBot_luVars["FocusNeedReset"]=true
-HealBot_luVars["TankUnit"]="x"
+HealBot_luVars["TankGUID1"]="x"
+HealBot_luVars["TankGUID2"]="x"
 HealBot_luVars["healthFactor"]=1
 HealBot_luVars["NextTipUpdate"]=HealBot_TimeNow
 HealBot_luVars["TipUpdateFreq"]=1
@@ -1822,7 +1823,7 @@ end
 
 function HealBot_UpdateUnitExists(button)
       --HealBot_setCall("HealBot_UpdateUnitExists", button)
-    HealBot_UnitClass(button)
+    --HealBot_UnitClass(button)
     if not button.status.classknown then 
         button.guid=button.unit
         HealBot_Action_setState(button, HealBot_Unit_Status["RESERVED"])
@@ -3713,13 +3714,13 @@ end
 function HealBot_OnEvent_AddOnLoaded(addonName)
       --HealBot_setCall("HealBot_OnEvent_AddOnLoaded")
     if addonName=="HealBot" and not HealBot_luVars["AddonLoaded"] then
-        HealBot_Action_SetCustomClassCols(0)
+        HealBot_Data_InitVars()
+        HealBot_Lang_InitVars()
         HealBot_Timers_Lang()
         HealBot_globalVars()
-        HealBot_Lang_InitVars()
-        HealBot_Data_InitVars()
         HealBot_Options_InitVars()
         HealBot_Panel_Init()
+        HealBot_Action_SetCustomClassCols(0)
         table.foreach(HealBot_ConfigDefaults, function (key,val)
             if HealBot_Config[key]==nil then
                 HealBot_Config[key] = val;
@@ -5338,6 +5339,7 @@ function HealBot_UnitSlowUpdate(button)
             end
         end
     elseif UnitExists(button.unit) then
+        if button.guid~=UnitGUID(button.unit) then HealBot_UpdateUnitGUIDChange(button, true) end
         HealBot_UpdateUnitExists(button)
     end
 end
@@ -5615,11 +5617,11 @@ function HealBot_UnitUpdateButton(button)
             end
         end
     elseif button.status.current<HealBot_Unit_Status["RESERVED"] then
-        if button.unit=="target" then
-            HealBot_TargetChanged()
-        else
+        --if button.unit=="target" then
+        --    HealBot_TargetChanged()
+        --else
             HealBot_UpdateUnitNotExists(button)
-        end
+        --end
     end
 end
 
@@ -6016,17 +6018,18 @@ function HealBot_UnRegister_ReadyCheck()
     HealBot_luVars["rcEnd"]=HealBot_TimeNow
 end
 
-local ctEnemyUnit=false
+local ctEnemyUnit,ctTankUnit=false,""
 local UnitThreatData={["status"]=0,["threatpct"]=0,["threatvalue"]=0,["threatname"]=false,["mobname"]=false,["mobGUID"]=false,["tmpstatus"]=0,["tmppct"]=0,["tmpvalue"]=0}
 function HealBot_CalcThreat(button)
       --HealBot_setCall("HealBot_CalcThreat", button)
     button.aggro.updtime=HealBot_TimeNow
     UnitThreatData["threatpct"],UnitThreatData["status"],UnitThreatData["threatvalue"],ctEnemyUnit,UnitThreatData["threatname"]=0,0,0,false,""
     if button.status.current<HealBot_Unit_Status["DEAD"] and UnitIsFriend("player",button.unit) then
+        ctTankUnit=HealBot_Panel_PlayerUnitGUID(HealBot_luVars["TankGUID1"])
         if HealBot_ValidLivingEnemy(button.unit, button.unit.."target") then 
             ctEnemyUnit=button.unit.."target"
-        elseif HealBot_ValidLivingEnemy(HealBot_luVars["TankUnit"], HealBot_luVars["TankUnit"].."target") then 
-            ctEnemyUnit=HealBot_luVars["TankUnit"].."target"
+        elseif ctTankUnit and HealBot_ValidLivingEnemy(ctTankUnit, ctTankUnit.."target") then 
+            ctEnemyUnit=ctTankUnit.."target"
         elseif HealBot_ValidLivingEnemy(button.unit, "boss1") then 
             ctEnemyUnit="boss1"
         elseif HealBot_ValidLivingEnemy(button.unit, "boss2") then 
@@ -6413,13 +6416,10 @@ end
 
 function HealBot_TargetChangedInCombat()
       --HealBot_setCall("HealBot_TargetChangedInCombat")
-    HealBot_luVars["TargetChangedInCombat"]=false
-    if HealBot_luVars["UILOCK"] then
-        if UnitExists("target") then
-            HealBot_UpdateUnitGUIDChange(HealBot_Extra_Button["target"], true)
-        else
-            HealBot_UpdateUnitNotExists(HealBot_Extra_Button["target"])
-        end
+    if UnitExists("target") then
+        HealBot_UpdateUnitGUIDChange(HealBot_Extra_Button["target"], true)
+    else
+        HealBot_UpdateUnitNotExists(HealBot_Extra_Button["target"])
     end
     HealBot_nextRecalcParty(3)
 end
@@ -6427,10 +6427,7 @@ end
 function HealBot_TargetChanged()
       --HealBot_setCall("HealBot_TargetChanged")
     if HealBot_Extra_Button["target"] and HealBot_luVars["UILOCK"] then
-        if not HealBot_luVars["TargetChangedInCombat"] then
-            HealBot_luVars["TargetChangedInCombat"]=true
-            C_Timer.After(0.05,HealBot_TargetChangedInCombat)
-        end
+        C_Timer.After(0.05,HealBot_TargetChangedInCombat)
     else
         HealBot_nextRecalcDelay(3,0.01)
     end

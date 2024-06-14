@@ -18552,7 +18552,7 @@ function HealBot_Options_DeleteBuffHoT(classTr, sId, bName)
     HealBot_Globals.HealBot_Custom_Buffs_IconSet[bName]=nil
     HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sId]=nil
     HealBot_Globals.HealBot_Custom_Buffs_IconGlow[bName]=nil
-    local sName=HealBot_Options_SpellGetName(sId)
+    local sName=bName or HealBot_Options_SpellGetName(sId)
     if sName and sName~=bName then 
         HealBot_Globals.IgnoreCustomBuff[sName]=nil
         HealBot_Globals.HealBot_Custom_Buffs[sName]=nil

@@ -62,7 +62,7 @@ HealBot_Aura_AuxAssigns["NameOverlayDebuff"]={[0]=false,[1]=false,[2]=false,[3]=
 HealBot_Aura_AuxAssigns["HealthOverlayBuff"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Aura_AuxAssigns["HealthOverlayDebuff"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 local HealBot_Aura_luVars={}
-HealBot_Aura_luVars["TankUnit"]="x"
+HealBot_Aura_luVars["TankGUID1"]="x"
 HealBot_Aura_luVars["mapName"]=HEALBOT_WORD_OUTSIDE
 HealBot_Aura_luVars["IgnoreFastDurDebuffsSecs"]=-1
 HealBot_Aura_luVars["HotBarDebuff"]=0
@@ -1974,6 +1974,12 @@ function HealBot_Aura_AutoUpdateCustomDebuff(button, name, spellId)
             if HealBot_Globals.IgnoreCustomDebuff[name] then
                 HealBot_Globals.IgnoreCustomDebuff[spellId]=HealBot_Options_copyTable(HealBot_Globals.IgnoreCustomDebuff[name])
             end
+            if HealBot_Globals.HealBot_Custom_Debuffs_IconSet[name] then
+                HealBot_Globals.HealBot_Custom_Debuffs_IconSet[spellId]=HealBot_Globals.HealBot_Custom_Debuffs_IconSet[name]
+            end
+            if HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[name] then
+                HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[spellId]=HealBot_Globals.HealBot_Custom_Debuffs_IconGlow[name]
+            end
             HealBot_Options_DeleteCDebuff(name, name)
             break
         end
@@ -2176,7 +2182,7 @@ function HealBot_Aura_CheckGeneralBuff(button)
                     buffCheckThis=true
                 elseif buffWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     buffCheckThis=true;
-                elseif buffWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
+                elseif buffWatchTarget["SingleTank"] and button.guid==HealBot_Aura_luVars["TankGUID1"] then
                     buffCheckThis=true
                 elseif buffWatchTarget[button.text.classtrim] then
                     buffCheckThis=true
@@ -2508,7 +2514,7 @@ function HealBot_Aura_CheckCurDebuff(button)
                     ccdbCheckthis=true;
                 elseif ccdbWatchTarget["MainTanks"] and HealBot_Panel_IsTank(button.guid) then
                     ccdbCheckthis=true;
-                elseif ccdbWatchTarget["SingleTank"] and UnitIsUnit(button.unit, HealBot_Aura_luVars["TankUnit"]) then
+                elseif ccdbWatchTarget["SingleTank"] and button.guid==HealBot_Aura_luVars["TankGUID1"] then
                     ccdbCheckthis=true
                 elseif ccdbWatchTarget["Self"] and button.player then
                     ccdbCheckthis=true
@@ -3120,7 +3126,7 @@ local function HealBot_Aura_PostUpdateUnitBuffsData(button, spellID, spellName)
                 HealBot_SpellID_LookupData[spellName]["CHECK"]=false
                 HealBot_SpellID_LookupData[spellName]["ID"]=spellID
                 table.insert(HealBot_SpellID_LookupIdx,spellName)
-                HealBot_Timers_Set("OOC","BuffIdLookup",1)
+                HealBot_Timers_Set("OOC","BuffIdLookup",0.1)
             end
         end
         HealBot_AuraBuffCache[spellID]["priority"]=HealBot_Globals.HealBot_Custom_Buffs[spellName] or HealBot_Globals.HealBot_Custom_Buffs[spellID] or 20
@@ -3143,7 +3149,6 @@ local function HealBot_Aura_PostUpdateUnitBuffsCurrent(button, spellID, spellNam
     HealBot_Aura_BuffUpdate_Plugins(button, spellName, HealBot_Globals.CustomBuffTag[spellID] or HealBot_BuffTagNames[spellName], count, true, casterIsPlayer)
 end
 
-local tDebug={}
 local function HealBot_Aura_UpdateUnitBuffsData(button)
       --HealBot_setCall("HealBot_Aura_UpdateUnitBuffsData", button)
       
@@ -3178,7 +3183,6 @@ local function HealBot_Aura_UpdateUnitBuffsData(button)
             HealBot_Aura_PostUpdateUnitBuffsData(button, uaSpellId, uaName)
         end
         HealBot_Aura_PostUpdateUnitBuffsCurrent(button, uaSpellId, uaName, uaCount, uaUnitIsPlayer)
-        if not tDebug[uaName] then tDebug[uaName]=true; HealBot_AddDebug("Buff "..uaName,"Action Icons",true) end
     end
 end
 
@@ -4620,8 +4624,15 @@ function HealBot_Aura_BuffIdLookup()
             if HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName] then
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sID]=HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[sName]
             end
+            if HealBot_Globals.HealBot_Custom_Buffs_IconSet[sName] then
+                HealBot_Globals.HealBot_Custom_Buffs_IconSet[sID]=HealBot_Globals.HealBot_Custom_Buffs_IconSet[sName]
+            end
+            if HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sName] then
+                HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sID]=HealBot_Globals.HealBot_Custom_Buffs_IconGlow[sName]
+            end
+            HealBot_Options_DeleteBuffHoT(class, sName, sName)
         end
-        C_Timer.After(0.2, HealBot_Aura_BuffIdLookup)
+        HealBot_Timers_Set("OOC","BuffIdLookup",0.2)
     end
 end
 
