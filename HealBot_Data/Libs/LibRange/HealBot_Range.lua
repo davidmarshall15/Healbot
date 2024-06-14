@@ -147,7 +147,7 @@ end
 local rSpellId=0
 function HealBot_Range_SpellInRange(button, spellName)
     spellName = spellName or HealBot_Range_Spell("HEAL")
-    rSpellId = HealBot_Spell_Names[spellName] or HealBot_Init_knownClassicHealSpell(spellName)
+    rSpellId = HealBot_Spell_Names[spellName]
     if rSpellId and HealBot_Spell_IDs[rSpellId].range then
         if button.player or
            (HealBot_Spell_IDs[rSpellId].range>45 and button.status.range>-1) or

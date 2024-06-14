@@ -417,7 +417,7 @@ function HealBot_Data_InitVars()
                        [8]={R = 0.9, G = 0.7, B = 0.5, A = 1 },
                        [9]={R = 1, G = 1, B = 1, A = 1 },
                        [10]={R = 0.7, G = 0.7, B = 0.7, A = 1 },},
-        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=1,["FLUIDBARS"]=true,["FLUIDALPHA"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["HOTBARHLTH"]=0,
+        OverrideEffects={["USE"]=1,["FOCUSGROUPS"]=1,["FLUIDBARS"]=true,["FLUIDFREQ"]=10,["OFREQ"]=0.07,["OMIN"]=0.1,["OMAX"]=0.95,["HOTBARHLTH"]=0,["GLOW"]=3,["ICONGLOW"]=2,
                          ["HOTBARDEBUFF"]=1,["FGDIMMING"]=2.5,["HEALTHDROP"]=true,["HEALTHDROPPCT"]=400,["HEALTHDROPCANCEL"]=200,["HEALTHDROPTIME"]=3,["HAZARDFREQ"]=0.3,["HAZARDMINALPHA"]=0.25},
         OverrideFocusGroups={[1]=true, [2]=true, [3]=true, [4]=true, [5]=true, [6]=true, [7]=true, [8]=true, },
         OverrideChat={["USE"]=1,["NOTIFY"]=1,["MSG"]=HEALBOT_NOTIFYOTHERMSG,["RESONLY"]=true,["EOCOOM"]=false,["EOCOOMV"]=10},
@@ -827,8 +827,6 @@ HealBot_ReadyCheckStatus={   ["WAITING"]=0,
                              ["NOTREADY"]=2,
 }
 
-HealBot_Spell_IDs={};
-HealBot_Spell_Names={};
 HealBot_Unit_Button={};
 HealBot_Private_Button={};
 HealBot_Enemy_Button={};

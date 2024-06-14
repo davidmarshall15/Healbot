@@ -83,6 +83,8 @@ function HealBot_Lang_enALL()
     HEALBOT_CURSE                           = "Curse";
     HEALBOT_POISON                          = "Poison";
     HEALBOT_BLEED                           = "Bleed";
+    HEALBOT_SPELL_HOLYWORDCHASTISE          = "Holy Word: Chastise"
+    HEALBOT_SPELL_HOLYWORDSERENITY          = "Holy Word: Serenity"
 
     HB_TOOLTIP_OFFLINE                      = "Offline";
 
@@ -199,6 +201,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_PRESET                  = "Preset"
     HEALBOT_OPTIONS_ICONPOSITION            = "Icon Position"
     HEALBOT_OPTIONS_POSITION                = "Position"
+    HEALBOT_OPTIONS_COORDINATES             = "Coordinates"
+    HEALBOT_OPTIONS_COORDINATESFIXED        = "Fixed Coordinates"
     HEALBOT_OPTIONS_ICONANCHOR              = "Icon Anchor"
     HEALBOT_OPTIONS_PLUGINCOLS              = "Plugin Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
     HEALBOT_OPTIONS_DEBUFFCOLS              = "Debuff Col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s"
@@ -212,7 +216,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CLICK                   = "Click";
     HEALBOT_OPTIONS_SHIFT                   = "Shift";
     HEALBOT_OPTIONS_CTRL                    = "Ctrl";
-    HEALBOT_OPTIONS_ENABLEHEALTHY           = "Always use enabled";
+    HEALBOT_OPTIONS_ENABLEHEALTHY           = "Always enabled";
     HEALBOT_OPTIONS_FADEONEXPIRE            = "Fade on expire";
     HEALBOT_OPTIONS_FADESTARTTIME           = "Fade start time";
     HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET  = "Auto Target: After cast, target last target"
@@ -261,6 +265,8 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TANKHEALS               = "Main tanks";
     HEALBOT_OPTIONS_SINGLE                  = "Single ";
     HEALBOT_OPTIONS_SINGLETANK              = "Single tank";
+    HEALBOT_OPTIONS_TANK1                   = "Tank 1";
+    HEALBOT_OPTIONS_TANK2                   = "Tank 2";
     HEALBOT_OPTIONS_PRIVATETANKS            = "Private tanks";
     HEALBOT_OPTIONS_SINGLEHEALER            = "Single healer";
     HEALBOT_OPTIONS_PRIVATEHEALERS          = "Private healers";
@@ -349,8 +355,10 @@ function HealBot_Lang_enALL()
     HEALBOT_WORDS_COOLDOWN                  = "Cooldown"
     HEALBOT_WORDS_TINY                      = "Tiny"
     HEALBOT_WORDS_SMALL                     = "Small"
+    HEALBOT_WORDS_SMALLER                   = "Smaller"
     HEALBOT_WORDS_MEDIUM                    = "Medium"
     HEALBOT_WORDS_LARGE                     = "Large"
+    HEALBOT_WORDS_LARGER                    = "Larger"
     HEALBOT_WORDS_HUGE                      = "Huge"
     HEALBOT_WORDS_SHORT                     = "Short";
     HEALBOT_WORDS_LONG                      = "Long";
@@ -451,6 +459,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_HEADERTEXTCOL              = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_SKIN_ICONGLOWCOL                = "Glow col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_ICONGLOWTIMEOUT            = "Glow timeout"
+    HEALBOT_SKIN_GLOWSIZE                   = "Glow Size"
     HEALBOT_SKIN_ICONGLOW                   = "Icon glow";
     HEALBOT_SKIN_ICONSET                    = "Icon set";
     HEALBOT_SKIN_ICONBUFFSET01              = "Buff icon set 1";
@@ -729,6 +738,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_MAXICONS                = "Max Icons"
     HEALBOT_OPTIONS_NUMICONS                = "Number of Icons"
     HEALBOT_OPTIONS_ICONSPACER              = "Icon Spacer"
+    HEALBOT_OPTIONS_ICONZOOM                = "Icon Zoom"
     HEALBOT_OPTIONS_ICONSIZE                = "Icon Size"
     HEALBOT_OPTIONS_EMERGBUTTONUSE          = "Use the Emergency Bar"
     HEALBOT_OPTIONS_BUFFSAUTOTIMED          = "Timed Buffs"
@@ -819,7 +829,9 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_ON                         = "On";
     HEALBOT_WORD_ONWITHOUTSOUND             = "On without sound";
     HEALBOT_WORD_ONWITHSOUND                = "On with sound";
-    HEALBOT_OPTION_FRAMEPADDING         = "Frame padding"
+    HEALBOT_OPTION_FRAMEPADDING             = "Frame padding"
+    HEALBOT_OPTIONS_ONBARS                  = "On bars"
+    HEALBOT_OPTIONS_ONICONS                 = "On icons"
 
     HEALBOT_OPTIONS_TAB_CHAT                = "Chat"
     HEALBOT_OPTIONS_TAB_HEADERS             = "Headers"

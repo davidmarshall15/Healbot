@@ -76,9 +76,6 @@ HealBot_Text_AuxAssigns["Health"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=f
 HealBot_Text_AuxAssigns["State"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 
 local HealBot_Text_luVars={}
-HealBot_Text_luVars["FluidAlphaInUse"]=false
-HealBot_Text_luVars["FluidTextAlphaUpdate"]=0.02
-HealBot_Text_luVars["FluidTextAlphaFreq"]=0.088
 HealBot_Text_luVars["TestBarsOn"]=false
 
 local hbCustomRoleCols={}
@@ -610,31 +607,31 @@ end
 
 local vShortHealTxtIsK,vShortHealTxtAmount,vShortHealTxtSuffix,vShortHealTxtAbsNum=true,0,"",0
 local hbAbs=math.abs
-function HealBot_Text_shortHealTxt(amount, hbCurFrame)
+function HealBot_Text_shortHealTxt(amount, frame)
       --HealBot_setCall("HealBot_Text_shortHealTxt")
     vShortHealTxtAbsNum=hbAbs(amount)
-    if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][hbCurFrame]>-1 then
-        if hbNumFormats["Places"][hbCurFrame]<3 then 
+    if vShortHealTxtAbsNum>999 and hbNumFormats["Places"][frame]>-1 then
+        if hbNumFormats["Places"][frame]<3 then 
             if vShortHealTxtAbsNum>999999 then
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,hbNumFormats["Places"][hbCurFrame]) 
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,hbNumFormats["Places"][frame]) 
+                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
             else
-                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,hbNumFormats["Places"][hbCurFrame]) 
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
+                vShortHealTxtAmount=HealBot_Util_Round(amount/1000,hbNumFormats["Places"][frame]) 
+                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
             end
         else
             if vShortHealTxtAbsNum>9999999 then
                 vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,0)
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
+                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
             elseif vShortHealTxtAbsNum>999999 then
                 vShortHealTxtAmount=HealBot_Util_Round(amount/1000000,1)
-                vShortHealTxtSuffix=hbNumFormats["SuffixM"][hbCurFrame]
+                vShortHealTxtSuffix=hbNumFormats["SuffixM"][frame]
             elseif vShortHealTxtAbsNum>9999 then
                 vShortHealTxtAmount=HealBot_Util_Round(amount/1000,0)
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
+                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
             else
                 vShortHealTxtAmount=HealBot_Util_Round(amount/1000,1)
-                vShortHealTxtSuffix=hbNumFormats["SuffixK"][hbCurFrame]
+                vShortHealTxtSuffix=hbNumFormats["SuffixK"][frame]
             end
         end
         tShortConcat[1]=vShortHealTxtAmount
@@ -1283,188 +1280,24 @@ function HealBot_Text_setNameText(button)
     end
 end
 
-local aufbButtonActive=false
-local aufbSetValue,aufbAlphaValue=0,0
-local aufbSetRValue,aufbSetGValue,aufbSetBValue=0,0,0
-function HealBot_Text_UpdateFluidTextAlpha()
-      --HealBot_setCall("HealBot_Text_UpdateFluidTextAlpha")
-    HealBot_Text_luVars["FluidTextAlphaInUse"]=false
-    
-    for id,xButton in pairs(HealBot_Fluid_TextHealthAlpha) do
-        aufbButtonActive=false
-        aufbAlphaValue=xButton.gref.txt["text2"]:GetAlpha()
-        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
-        if aufbAlphaValue>xButton.text.ha then
-            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue<xButton.text.ha then 
-                aufbSetValue=xButton.text.ha
-            else
-                aufbButtonActive=true
-            end
-        elseif aufbAlphaValue<xButton.text.ha then
-            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue>xButton.text.ha then 
-                aufbSetValue=xButton.text.ha
-            else
-                aufbButtonActive=true
-            end
-        else
-            aufbSetValue=xButton.text.ha
-        end
-        xButton.gref.txt["text2"]:SetTextColor(xButton.text.hr, xButton.text.hg, xButton.text.hb, aufbSetValue)
-        if not aufbButtonActive then
-            HealBot_Fluid_TextHealthAlpha[id]=nil
-        else
-            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
-        end
-    end
-	
-    for id,xButton in pairs(HealBot_Fluid_TextNameAlpha) do
-        aufbButtonActive=false
-        aufbAlphaValue=xButton.gref.txt["text"]:GetAlpha()
-        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
-        if aufbAlphaValue>xButton.text.na then
-            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue<xButton.text.na then 
-                aufbSetValue=xButton.text.na
-            else
-                aufbButtonActive=true
-            end
-        elseif aufbAlphaValue<xButton.text.na then
-            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue>xButton.text.na then 
-                aufbSetValue=xButton.text.na
-            else
-                aufbButtonActive=true
-            end
-        else
-            aufbSetValue=xButton.text.na
-        end
-        xButton.gref.txt["text"]:SetTextColor(xButton.text.nr, xButton.text.ng, xButton.text.nb, aufbSetValue)
-
-        if not aufbButtonActive then
-            HealBot_Fluid_TextNameAlpha[id]=nil
-        else
-            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
-        end
-    end
-    
-    for id,xButton in pairs(HealBot_Fluid_TextStateAlpha) do
-        aufbButtonActive=false
-        aufbAlphaValue=xButton.gref.txt["text3"]:GetAlpha()
-        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
-        if aufbAlphaValue>xButton.text.sa then
-            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue<xButton.text.sa then 
-                aufbSetValue=xButton.text.sa
-            else
-                aufbButtonActive=true
-            end
-        elseif aufbAlphaValue<xButton.text.sa then
-            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue>xButton.text.sa then 
-                aufbSetValue=xButton.text.sa
-            else
-                aufbButtonActive=true
-            end
-        else
-            aufbSetValue=xButton.text.sa
-        end
-        xButton.gref.txt["text3"]:SetTextColor(xButton.text.sr, xButton.text.sg, xButton.text.sb, aufbSetValue)
-
-        if not aufbButtonActive then
-            HealBot_Fluid_TextStateAlpha[id]=nil
-        else
-            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
-        end
-    end
-    
-    for id,xButton in pairs(HealBot_Fluid_TextAggroAlpha) do
-        aufbButtonActive=false
-        aufbAlphaValue=xButton.gref.txt["text4"]:GetAlpha()
-        aufbAlphaValue=HealBot_Util_Round(aufbAlphaValue, 2)
-        if aufbAlphaValue>xButton.text.aa then
-            aufbSetValue=aufbAlphaValue-HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue<xButton.text.aa then 
-                aufbSetValue=xButton.text.aa
-            else
-                aufbButtonActive=true
-            end
-        elseif aufbAlphaValue<xButton.text.aa then
-            aufbSetValue=aufbAlphaValue+HealBot_Text_luVars["FluidTextAlphaUpdate"]
-            if aufbSetValue>xButton.text.aa then 
-                aufbSetValue=xButton.text.aa
-            else
-                aufbButtonActive=true
-            end
-        else
-            aufbSetValue=xButton.text.aa
-        end
-        xButton.gref.txt["text4"]:SetTextColor(xButton.text.ar, xButton.text.ag, xButton.text.ab, aufbSetValue)
-
-        if not aufbButtonActive then
-            HealBot_Fluid_TextAggroAlpha[id]=nil
-        else
-            HealBot_Text_luVars["FluidTextAlphaInUse"]=true
-        end
-    end
-    
-    if HealBot_Text_luVars["FluidTextAlphaInUse"] then
-        C_Timer.After(HealBot_Text_luVars["FluidTextAlphaFreq"], HealBot_Text_UpdateFluidTextAlpha)
-    end
-    --HealBot_Aux_setLuVars("FluidTextAlphaInUse", HealBot_Text_luVars["FluidTextAlphaInUse"])
-end
-
 local function HealBot_Text_UpdateStateColour(button)
       --HealBot_setCall("HealBot_Text_UpdateStateColour", button)
-    if HealBot_Text_luVars["FluidAlphaInUse"] then
-        HealBot_Fluid_TextStateAlpha[button.id]=button
-        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
-            HealBot_Text_UpdateFluidTextAlpha()
-        end
-        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
-    else
-        button.gref.txt["text3"]:SetTextColor(button.text.sr, button.text.sg, button.text.sb, button.text.sa)
-    end
+    button.gref.txt["text3"]:SetTextColor(button.text.sr, button.text.sg, button.text.sb, button.text.sa)
 end
 
 local function HealBot_Text_UpdateNameColour(button)
       --HealBot_setCall("HealBot_Text_UpdateNameColour", button)
-    if HealBot_Text_luVars["FluidAlphaInUse"] then
-        HealBot_Fluid_TextNameAlpha[button.id]=button
-        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
-            HealBot_Text_UpdateFluidTextAlpha()
-        end
-        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
-    else
-        button.gref.txt["text"]:SetTextColor(button.text.nr, button.text.ng, button.text.nb, button.text.na)
-    end
+    button.gref.txt["text"]:SetTextColor(button.text.nr, button.text.ng, button.text.nb, button.text.na)
 end
 
 local function HealBot_Text_UpdateHealthColour(button)
       --HealBot_setCall("HealBot_Text_UpdateHealthColour", button)
-    if HealBot_Text_luVars["FluidAlphaInUse"] and button.status.current<HealBot_Unit_Status["DC"] then
-        HealBot_Fluid_TextHealthAlpha[button.id]=button
-        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
-            HealBot_Text_UpdateFluidTextAlpha()
-        end
-        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
-    else
-        button.gref.txt["text2"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
-    end
+    button.gref.txt["text2"]:SetTextColor(button.text.hr, button.text.hg, button.text.hb, button.text.ha)
 end
 
 function HealBot_Text_UpdateAggroColour(button)
       --HealBot_setCall("HealBot_Text_UpdateAggroColour", button)
-    if HealBot_Text_luVars["FluidAlphaInUse"] and button.status.current<HealBot_Unit_Status["DC"] then
-        HealBot_Fluid_TextAggroAlpha[button.id]=button
-        if not HealBot_Text_luVars["FluidTextAlphaInUse"] then
-            HealBot_Text_UpdateFluidTextAlpha()
-        end
-        --HealBot_Aux_setLuVars("FluidTextAlphaInUse", true)
-    else
-        button.gref.txt["text4"]:SetTextColor(button.text.ar, button.text.ag, button.text.ab, button.text.aa)
-    end
+    button.gref.txt["text4"]:SetTextColor(button.text.ar, button.text.ag, button.text.ab, button.text.aa)
 end
 
 local testNameTxt,vpR,vpG,vpB="",0,0,0

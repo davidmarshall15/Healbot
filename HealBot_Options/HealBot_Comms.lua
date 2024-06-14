@@ -63,10 +63,14 @@ function HealBot_Comms_SendInstantMsg(msg,toPlayer,toSay,toYell)
     elseif toSay then
         if hbInInst then
             SendChatMessage(msg,"SAY",nil,nil)
+        else
+            HealBot_AddChat(msg)
         end
     elseif toYell then
         if hbInInst then
             SendChatMessage(msg,"YELL",nil,nil)
+        else
+            HealBot_AddChat(msg)
         end
     elseif hbCommsTo==1 then
         SendChatMessage(msg,"INSTANCE_CHAT",nil,nil)

@@ -110,7 +110,7 @@ end
 local gcdDUR=0
 function HealBot_Tooltip_GCDV4()
       --HealBot_setCall("HealBot_Tooltip_GCDV4")
-    _, gcdDUR = GetSpellCooldown(61304) -- GCD
+    _, gcdDUR = HealBot_Spells_GetCooldown(61304) -- GCD
     return gcdDUR
 end
 
@@ -120,7 +120,7 @@ if HEALBOT_GAME_VERSION>3 then
 end
 function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
-    local z, x, _ = GetSpellCooldown(validSpellName);
+    local z, x = HealBot_Spells_GetCooldown(validSpellName);
     local gcd=0
     if HealBot_Globals.Tooltip_IgnoreGCD then
         gcd=HealBot_Tooltip_GCD()
@@ -1215,8 +1215,10 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target)
         else
             HealBot_Tooltip_SetLine("icon SpellRangeNeeds 100",1,1,1,1)
         end
-        HealBot_Tooltip_SetLine("icon.infoType="..(icon.infoType or "nil"),1,0.25,0.25,1)
-        HealBot_Tooltip_SetLine("icon.info="..(icon.info or "nil"),1,0.25,0.25,1)
+        HealBot_Tooltip_SetLine("icon.infoType="..(icon.infoType or "nil"),0.25,1,0.25,1)
+        HealBot_Tooltip_SetLine("icon.infoID="..(icon.infoID or "nil"),0.25,1,0.25,1)
+        HealBot_Tooltip_SetLine("icon.infoName="..(icon.infoName or "nil"),0.25,1,0.25,1)
+        HealBot_Tooltip_SetLine("icon.info="..(icon.info or "nil"),0.25,1,0.25,1)
         HealBot_Tooltip_SetLine("  ",0,0,0,0)
         if not icon.guid then
             HealBot_Tooltip_SetLine("icon.guid not valid",1,0.25,0.25,1)
@@ -1228,23 +1230,23 @@ function HealBot_Tooltip_DisplayActionIconTooltip(icon, target)
                 HealBot_Tooltip_SetLine("Ability valid",1,1,1,1,"On Cooldown",1,0.25,0.25,1)
             else
                 HealBot_Tooltip_SetLine("Ability valid",1,1,1,1,"Not on cooldown",1,1,1,1)
-                if icon.valid then 
-                    HealBot_Tooltip_SetLine("icon.valid is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                else
-                    HealBot_Tooltip_SetLine("icon.valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
-                end
-                if HealBot_ActionIcons_CheckValidTarget(icon.frame, icon.id) then 
-                    HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
-                else
-                    HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
-                end
-                HealBot_Tooltip_SetLine("  ",0,0,0,0)
-                if not HealBot_ActionIcons_DebugAlertState(icon.frame, icon.id) then
-                    HealBot_Tooltip_SetLine("Global conditions not met",1,0.25,0.25,1)
-                else
-                    for x=1,3 do
-                        HealBot_Tooltip_DebugActionIconCondition(icon, x)
-                    end
+            end
+            if icon.valid then 
+                HealBot_Tooltip_SetLine("icon.valid is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
+            else
+                HealBot_Tooltip_SetLine("icon.valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
+            end
+            if HealBot_ActionIcons_CheckValidTarget(icon.frame, icon.id) then 
+                HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"TRUE",0.25,1,0.25,1)
+            else
+                HealBot_Tooltip_SetLine("target valid is ",0.4,1,1,1,"FALSE",1,0.25,0.25,1)
+            end
+            HealBot_Tooltip_SetLine("  ",0,0,0,0)
+            if not HealBot_ActionIcons_DebugAlertState(icon.frame, icon.id) then
+                HealBot_Tooltip_SetLine("Global conditions not met",1,0.25,0.25,1)
+            else
+                for x=1,3 do
+                    HealBot_Tooltip_DebugActionIconCondition(icon, x)
                 end
             end
         end
@@ -1366,7 +1368,7 @@ function HealBot_Tooltip_AuraUpdateIconTooltip(frame, details, name, aType,  r, 
       --HealBot_setCall("HealBot_Tooltip_AuraUpdateIconTooltip")
     local spell = Spell:CreateFromSpellID(details.spellId)
     spell:ContinueOnSpellLoad(function()
-        local desc = spell:GetSpellDescription()
+        local desc = spell:HealBot_Spells_GetDesc()
         HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)
     end)
 end

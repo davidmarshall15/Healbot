@@ -104,12 +104,13 @@ HealBot_Panel_luVars["cpCrash"]=false
 HealBot_Panel_luVars["resetAuxText"]=false
 
 local hbRoleOnes={}
-local hbTANK=1
-local hbHEALER=2
-local hbDPS=3
-local hbDPSC=4
-local hbRoleRef={[hbTANK]="TankUnit",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit",[hbDPSC]="DPSUnitCaster"}
-for x=1,4 do
+local hbTANK1=1
+local hbTANK2=2
+local hbHEALER=3
+local hbDPS=4
+local hbDPSC=5
+local hbRoleRef={[hbTANK1]="TankUnit",[hbTANK2]="TankUnit2",[hbHEALER]="HealerUnit",[hbDPS]="DPSUnit",[hbDPSC]="DPSUnitCaster"}
+for x=1,5 do
     hbRoleOnes[x]={}
     hbRoleOnes[x].guid=""
     hbRoleOnes[x].prevguid="x"
@@ -162,10 +163,27 @@ function HealBot_Panel_TankRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_TankRole")
     HealBot_unitRole[unit]=hbRole[HEALBOT_MAINTANK]
     HealBot_MainTanks[guid]=unit
-    if isPlayer and UnitHealthMax(unit)>hbRoleOnes[hbTANK].health then
-        hbRoleOnes[hbTANK].health=UnitHealthMax(unit)
-        hbRoleOnes[hbTANK].guid=guid
-        hbRoleOnes[hbTANK].unit=unit
+    if isPlayer then
+        if UnitHealthMax(unit)>hbRoleOnes[hbTANK1].health then
+            if hbRoleOnes[hbTANK1].health>0 then
+                if hbRoleOnes[hbTANK2].guid==guid then
+                    hbRoleOnes[hbTANK2].health=0
+                    hbRoleOnes[hbTANK2].guid=""
+                    hbRoleOnes[hbTANK2].unit=""
+                else
+                    hbRoleOnes[hbTANK2].health=hbRoleOnes[hbTANK1].health
+                    hbRoleOnes[hbTANK2].guid=hbRoleOnes[hbTANK1].guid
+                    hbRoleOnes[hbTANK2].unit=hbRoleOnes[hbTANK1].unit
+                end
+            end
+            hbRoleOnes[hbTANK1].health=UnitHealthMax(unit)
+            hbRoleOnes[hbTANK1].guid=guid
+            hbRoleOnes[hbTANK1].unit=unit
+        elseif UnitHealthMax(unit)>hbRoleOnes[hbTANK2].health then
+            hbRoleOnes[hbTANK2].health=UnitHealthMax(unit)
+            hbRoleOnes[hbTANK2].guid=guid
+            hbRoleOnes[hbTANK2].unit=unit
+        end
     end
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=2 end
 end
@@ -182,6 +200,13 @@ function HealBot_Panel_HealerRole(unit, guid, isPlayer)
     if hbPanel_dataPlayerRoles[guid]==0 or hbPanel_dataPlayerRoles[guid]>5 then hbPanel_dataPlayerRoles[guid]=3 end
 end
 
+local hbClassCasterPrefBonus={}
+if HEALBOT_GAME_VERSION<4 then
+    hbClassCasterPrefBonus={["WARLOCK"]=2.1, ["MAGE"]=2, ["HUNTER"]=2, ["SHAMAN"]=1.9, ["DRUID"]=1.5, ["PALADIN"]=1}
+else
+    hbClassCasterPrefBonus={["WARLOCK"]=2.1, ["MAGE"]=2, ["SHAMAN"]=1.9, ["DRUID"]=1.5, ["PALADIN"]=1}
+end
+
 function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
       --HealBot_setCall("HealBot_Panel_DamagerRole")
     HealBot_unitRole[unit]=hbRole[HEALBOT_WORD_DPS]
@@ -191,10 +216,17 @@ function HealBot_Panel_DamagerRole(unit, guid, isPlayer)
             hbRoleOnes[hbDPS].guid=guid
             hbRoleOnes[hbDPS].unit=unit
         end
-        if (UnitPowerType(unit) or 1)==0 and UnitHealthMax(unit)>hbRoleOnes[hbDPSC].health then
-            hbRoleOnes[hbDPSC].health=UnitHealthMax(unit)
-            hbRoleOnes[hbDPSC].guid=guid
-            hbRoleOnes[hbDPSC].unit=unit
+        if (UnitPowerType(unit) or 1)==0 then
+            local _, uuUnitClassEN = UnitClass(unit) or "X"
+            local maxHealth=UnitHealthMax(unit)
+            if hbClassCasterPrefBonus[uuUnitClassEN] then
+                maxHealth=maxHealth*hbClassCasterPrefBonus[uuUnitClassEN]
+            end
+            if maxHealth>hbRoleOnes[hbDPSC].health then
+                hbRoleOnes[hbDPSC].health=maxHealth
+                hbRoleOnes[hbDPSC].guid=guid
+                hbRoleOnes[hbDPSC].unit=unit
+            end
         end
     end
 end
@@ -350,7 +382,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             hbPanel_dataUnits[x]=false
         end
         hbPlayerRaidID=0
-        for x=1,4 do
+        for x=1,5 do
             hbRoleOnes[x].health=0
             hbRoleOnes[x].guid=""
         end
@@ -372,7 +404,7 @@ function HealBot_Panel_buildDataStore(doPlayers, doPets)
             end
         end
         HealBot_Panel_addDataStore("player", hbPlayerRaidID, true)
-        for x=1,4 do
+        for x=1,5 do
             if hbRoleOnes[x].prevguid~=hbRoleOnes[x].guid then
                 hbRoleOnes[x].prevguid=hbRoleOnes[x].guid
                 if hbRoleOnes[x].guid=="" then
@@ -738,7 +770,7 @@ function HealBot_Action_SetClassIconTexture(button)
 end
 
 HealBot_Panel_luVars["HealerHWM"]=1
-function HealBot_Panel_CreateHeader(hbCurFrame)
+function HealBot_Panel_CreateHeader(frame)
       --HealBot_setCall("HealBot_Panel_CreateHeader")
     if HealBot_ActiveHeaders[0]>99 then HealBot_ActiveHeaders[0]=1 end
     local tryId,freeId=HealBot_ActiveHeaders[0],nil
@@ -757,7 +789,7 @@ function HealBot_Panel_CreateHeader(hbCurFrame)
         local hn="HealBot_Action_Header"..freeId
         local hhb=_G[hn]
         if not hhb then 
-            local hp=_G["f"..hbCurFrame.."_HealBot_Action"]
+            local hp=_G["f"..frame.."_HealBot_Action"]
             hhb=CreateFrame("Button", hn, hp, "HealingButtonTemplate3") 
             hhb.id=freeId
         end
@@ -975,41 +1007,41 @@ function HealBot_Panel_resetInitFrames()
 end
 
 local vSetHWFrame,vSetHWextraHeight,vSetHWextraWidth="",0,0
-function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,hbCurFrame)
+function HealBot_Action_SetHeightWidth(numRows,numCols,numHeaders,frame)
       --HealBot_setCall("HealBot_Action_SetHeightWidth")
-    vSetHWFrame = _G["f"..hbCurFrame.."_HealBot_Action"]
+    vSetHWFrame = _G["f"..frame.."_HealBot_Action"]
     vSetHWextraHeight=10
     vSetHWextraWidth=10
-    if hbOptionOn==hbCurFrame then
+    if hbOptionOn==frame then
         vSetHWextraHeight=vSetHWextraHeight+30
     end
-    if hbMoveMe==hbCurFrame then
+    if hbMoveMe==frame then
         vSetHWextraHeight=vSetHWextraHeight+20
     end
-    if hbFocusOn==hbCurFrame then
-        vSetHWextraHeight=vSetHWextraHeight+10+ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][hbCurFrame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["SCALE"])
+    if hbFocusOn==frame then
+        vSetHWextraHeight=vSetHWextraHeight+10+ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][frame]["HEIGHT"]*Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["SCALE"])
     end
     if numHeaders>0 then
-        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["GROW"]==1 then
-            vSetHWextraWidth=vSetHWextraWidth+(backBarsSize[hbCurFrame]["HEADWIDTH"]*numHeaders)
+        if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["GROW"]==1 then
+            vSetHWextraWidth=vSetHWextraWidth+(backBarsSize[frame]["HEADWIDTH"]*numHeaders)
         else
-            vSetHWextraHeight=vSetHWextraHeight+(backBarsSize[hbCurFrame]["HEADHEIGHT"]*numHeaders)
+            vSetHWextraHeight=vSetHWextraHeight+(backBarsSize[frame]["HEADHEIGHT"]*numHeaders)
         end
     end
-    vSetHWextraHeight=vSetHWextraHeight+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["PADDING"]*2)
-    vSetHWextraWidth=vSetHWextraWidth+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][hbCurFrame]["PADDING"]*2)
-    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][hbCurFrame]["GROW"]==1 then
-        vSetHWFrame:SetHeight(vSetHWextraHeight+(backBarsSize[hbCurFrame]["HEIGHT"]*numCols)+(backBarsSize[hbCurFrame]["RMARGIN"]*(numCols-1)))
-        vSetHWFrame:SetWidth(vSetHWextraWidth+(backBarsSize[hbCurFrame]["WIDTH"]*numRows)+(backBarsSize[hbCurFrame]["CMARGIN"]*((numHeaders+numRows-1))))
+    vSetHWextraHeight=vSetHWextraHeight+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["PADDING"]*2)
+    vSetHWextraWidth=vSetHWextraWidth+(Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][frame]["PADDING"]*2)
+    if Healbot_Config_Skins.Anchors[Healbot_Config_Skins.Current_Skin][frame]["GROW"]==1 then
+        vSetHWFrame:SetHeight(vSetHWextraHeight+(backBarsSize[frame]["HEIGHT"]*numCols)+(backBarsSize[frame]["RMARGIN"]*(numCols-1)))
+        vSetHWFrame:SetWidth(vSetHWextraWidth+(backBarsSize[frame]["WIDTH"]*numRows)+(backBarsSize[frame]["CMARGIN"]*((numHeaders+numRows-1))))
     else
-        vSetHWFrame:SetHeight(vSetHWextraHeight+(backBarsSize[hbCurFrame]["HEIGHT"]*numRows)+(backBarsSize[hbCurFrame]["RMARGIN"]*((numHeaders+numRows-1))))
-        vSetHWFrame:SetWidth(vSetHWextraWidth+(backBarsSize[hbCurFrame]["WIDTH"]*numCols)+(backBarsSize[hbCurFrame]["CMARGIN"]*(numCols-1)))
+        vSetHWFrame:SetHeight(vSetHWextraHeight+(backBarsSize[frame]["HEIGHT"]*numRows)+(backBarsSize[frame]["RMARGIN"]*((numHeaders+numRows-1))))
+        vSetHWFrame:SetWidth(vSetHWextraWidth+(backBarsSize[frame]["WIDTH"]*numCols)+(backBarsSize[frame]["CMARGIN"]*(numCols-1)))
     end
-    if HealBot_Panel_initFrame[hbCurFrame] then
-        HealBot_Panel_initFrame[hbCurFrame]=false
-        HealBot_Action_FrameSetPoint(hbCurFrame, vSetHWFrame)
+    if HealBot_Panel_initFrame[frame] then
+        HealBot_Panel_initFrame[frame]=false
+        HealBot_Action_FrameSetPoint(frame, vSetHWFrame)
     end
-    HealBot_Action_setPoint(hbCurFrame)
+    HealBot_Action_setPoint(frame)
 end
 
 function HealBot_Panel_TestBarsOff()

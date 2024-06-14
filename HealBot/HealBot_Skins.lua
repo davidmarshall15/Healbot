@@ -20,6 +20,7 @@ local erButton=nil
 local iAnchors={["ICON"]="", ["BUTTON"]="", ["DOUBLE"]="", ["RELATIVE"]="", ["TXTCOUNT"]="", ["TXTEXPIRE"]="", ["INDSELFCAST"]="", ["TXTEXPIREX"]=1, ["TXTCOUNTX"]=1}
 local HealBot_Skins_luVars={}
 HealBot_Skins_luVars["AuxReset"]=false
+HealBot_Skins_luVars["IconGlowSize"]=2
 
 function HealBot_Skins_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Skins_setLuVars - "..vName)
@@ -335,8 +336,8 @@ function HealBot_Skins_UpdateIconGlowSize(b, id)
     else
         b.gref.iconf[id]:EnableMouse(false)
     end
-    if b.gref.iconf[id].size~=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][b.frame]["ICONGLOW"] then
-        b.gref.iconf[id].size=Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][b.frame]["ICONGLOW"]
+    if b.gref.iconf[id].size~=HealBot_Skins_luVars["IconGlowSize"] then
+        b.gref.iconf[id].size=HealBot_Skins_luVars["IconGlowSize"]
         b.gref.iconf[id]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
                                   edgeSize = b.gref.iconf[id].size, 
                                   insets = { left = 0, right = 0, top = 0, bottom = 0}})
@@ -996,6 +997,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSVOFFSET"]*frameScale))
             b.gref.icon[91]:SetHeight((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSSCALE"])-2)
             b.gref.icon[91]:SetWidth((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSSCALE"])-2)
+            iZoom=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["CLASSZOOM"] or 0
+            b.gref.icon[91]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
             -- Raid Target 92
             HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETONBAR"],
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETANCHOR"], true)
@@ -1005,6 +1008,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETVOFFSET"]*frameScale))
             b.gref.icon[92]:SetHeight((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETSCALE"])-2)
             b.gref.icon[92]:SetWidth((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETSCALE"])-2)
+            iZoom=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["TARGETZOOM"] or 0
+            b.gref.icon[92]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
             -- Ready Check 93
             HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCONBAR"],
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCANCHOR"], true)
@@ -1014,6 +1019,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCVOFFSET"]*frameScale))
             b.gref.icon[93]:SetHeight((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCSCALE"])-2)
             b.gref.icon[93]:SetWidth((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCSCALE"])-2)
+            iZoom=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["RCZOOM"] or 0
+            b.gref.icon[93]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
             -- Out of range 94
             HealBot_Skins_setIconAnchors(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORONBAR"],
                                          Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORANCHOR"], true)
@@ -1023,6 +1030,8 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                                      ceil(Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORVOFFSET"]*frameScale))
             b.gref.icon[94]:SetHeight((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORSCALE"])-2)
             b.gref.icon[94]:SetWidth((bheight*Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORSCALE"])-2)
+            iZoom=Healbot_Config_Skins.Icons[Healbot_Config_Skins.Current_Skin][b.frame]["OORZOOM"] or 0
+            b.gref.icon[94]:SetTexCoord(iZoom,1-iZoom,iZoom,1-iZoom)
             b.icon.reset=false
         end
         
@@ -1807,10 +1816,12 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.Icons[SkinName][gl]["CLASSVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["CLASSHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSHOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["CLASSSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSSCALE"]=0.5 end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["CLASSZOOM"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSZOOM"]=0.05 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["CLASSEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["CLASSEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["TARGETVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETHOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETSCALE"]=0.5 end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETZOOM"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETZOOM"]=0.05 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["TARGETEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["RCVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCHOFFSET"]=0 end
@@ -1819,11 +1830,15 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         HealBot_Skins_Check_IconSets(SkinName, gl, "DHOFFSET", "DHOFFSET", 0)
         HealBot_Skins_Check_IconSets(SkinName, gl, "BVOFFSET", "BVOFFSET", 0)
         HealBot_Skins_Check_IconSets(SkinName, gl, "BHOFFSET", "BHOFFSET", 0)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "BZOOM", "BZOOM", 0.05)
+        HealBot_Skins_Check_IconSets(SkinName, gl, "DZOOM", "DZOOM", 0.05)
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCSCALE"]=0.5 end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["RCZOOM"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCZOOM"]=0.05 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["RCEN"]=false end
         if not Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"] then Healbot_Config_Skins.Icons[SkinName][gl]["OORVOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["OORHOFFSET"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OORHOFFSET"]=0 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["OORSCALE"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OORSCALE"]=0.5 end
+        if Healbot_Config_Skins.Icons[SkinName][gl]["OORZOOM"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OORZOOM"]=0.05 end
         if Healbot_Config_Skins.Icons[SkinName][gl]["OOREN"]==nil then Healbot_Config_Skins.Icons[SkinName][gl]["OOREN"]=false end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["NCR"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["NCR"]=0 end
         if Healbot_Config_Skins.BarTextCol[SkinName][gl]["NCG"]==nil then Healbot_Config_Skins.BarTextCol[SkinName][gl]["NCG"]=1 end
@@ -2443,7 +2458,6 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     if not Healbot_Config_Skins.General[SkinName]["UNITINCOMBAT"] then Healbot_Config_Skins.General[SkinName]["UNITINCOMBAT"]=2 end
     if Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]==nil then Healbot_Config_Skins.General[SkinName]["HIDERAIDF"]=true end
     if Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDBARS"]=false end
-    if Healbot_Config_Skins.General[SkinName]["FLUIDALPHA"]==nil then Healbot_Config_Skins.General[SkinName]["FLUIDALPHA"]=false end
     if Healbot_Config_Skins.General[SkinName]["HEALTHDROP"]==nil then Healbot_Config_Skins.General[SkinName]["HEALTHDROP"]=false end
     if not Healbot_Config_Skins.General[SkinName]["HEALTHDROPPCT"] then Healbot_Config_Skins.General[SkinName]["HEALTHDROPPCT"]=400 end
     if not Healbot_Config_Skins.General[SkinName]["HEALTHDROPCANCEL"] then Healbot_Config_Skins.General[SkinName]["HEALTHDROPCANCEL"]=200 end

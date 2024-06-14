@@ -265,7 +265,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local cRank=false
     if ( not id ) then return false; end
 
-    local spell, _, texture, msCast, _, hbRange = GetSpellInfo(id);
+    local spell, _, texture, msCast, _, hbRange = HealBot_Spells_GetInfo(id);
     local cooldown = GetSpellBaseCooldown(id)
 
     if ( not spell ) then return false; end
@@ -512,6 +512,24 @@ function HealBot_InitValidateRanks()
     end
 end
 
+function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
+    local _, _, _, _, _, hbRange = HealBot_Spells_GetInfo(spellID)
+    local cooldown = GetSpellBaseCooldown(spellID)
+    local hbCooldown=tonumber(cooldown or 25);
+    if not HealBot_Spell_IDs[spellID] then HealBot_Spell_IDs[spellID]={} end
+    
+    HealBot_Spell_IDs[spellID].CastTime=0;
+    HealBot_Spell_IDs[spellID].Mana=HealBot_Init_ManaCost(spellID)
+    if HealBot_Spell_IDs[spellID].Mana==0 then HealBot_Spell_IDs[spellID].Mana=1544 end
+    HealBot_Spell_IDs[spellID].texture=spellTexture
+    HealBot_Spell_IDs[spellID].name=spellName
+    HealBot_Spell_IDs[spellID].known=true
+    HealBot_Spell_IDs[spellID].cooldown=hbCooldown
+    HealBot_Spell_Names[spellName]=spellID
+    
+    HealBot_Init_SetSpellRange(spellID, spellName, hbRange)
+end
+
 function HealBot_Init_Spells_Defaults()
       --HealBot_setCall("HealBot_Init_Spells_Defaults")
     for x,_ in pairs(HealBot_Spell_IDs) do
@@ -542,35 +560,35 @@ function HealBot_Init_Spells_Defaults()
         HealBot_Ranks[x]=nil
     end
     HealBot_Init_Spell_RangesPref()
-    local nTabs=GetNumSpellTabs()
+    local nTabs=HealBot_Spells_NumTabs()
     local hbHeallist=HealBot_Options_FullHealSpellsCombo_list(1)
     for j=1, getn(hbHeallist), 1 do
-        if hbHeallist[j] and GetSpellInfo(hbHeallist[j]) then
-            HealBot_Heal_Names[GetSpellInfo(hbHeallist[j])]=true
+        if hbHeallist[j] and HealBot_Spells_GetName(hbHeallist[j]) then
+            HealBot_Heal_Names[HealBot_Spells_GetName(hbHeallist[j])]=true
         end
     end
     local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
     for j=1, getn(hbBufflist), 1 do
-        if hbBufflist[j] and GetSpellInfo(hbBufflist[j]) then
-            HealBot_Buff_Names[GetSpellInfo(hbBufflist[j])]=true
+        if hbBufflist[j] and HealBot_Spells_GetName(hbBufflist[j]) then
+            HealBot_Buff_Names[HealBot_Spells_GetName(hbBufflist[j])]=true
         end
     end
 	
     HealBot_Init_SkipSpells()
     for j=1,nTabs do
-        local _, _, offset, numEntries, _, offspecID = GetSpellTabInfo(j)
+        local _, _, offset, numEntries, _, offspecID = HealBot_Spells_TabInfo(j)
         if offspecID==0 then
             for s=offset+1,offset+numEntries do
                 local sName = GetSpellBookItemName(s, BOOKTYPE_SPELL)
-                local sType, sId = GetSpellBookItemInfo(s, BOOKTYPE_SPELL)
-                if sType == "SPELL" and not IsPassiveSpell(sId) then
+                local sType, sId = HealBot_Spells_ItemInfo(s, BOOKTYPE_SPELL)
+                if sType == "SPELL" and not HealBot_Spells_IsPassive(sId) then
                     HealBot_Init_Spells_addSpell(sId, sName, s)
                 elseif sType == "FLYOUT" then
                     local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
                     if flyoutKnown then
                         for f=1,numFlyoutSlots do
                             local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
-                            if fKnown and not IsPassiveSpell(fId) then
+                            if fKnown and not HealBot_Spells_IsPassive(fId) then
                                 HealBot_Init_Spells_addSpell(fId, fName, s)
                             end
                         end
@@ -582,6 +600,9 @@ function HealBot_Init_Spells_Defaults()
     if HEALBOT_GAME_VERSION<3 then 
         HealBot_InitValidateRanks()
         HealBot_Timers_Set("LAST","ClassicSpellRanks",1)
+    elseif HEALBOT_GAME_VERSION==4 and HealBot_Data["PCLASSTRIM"]=="PRIE" then
+        HealBot_Init_Spells_CataPriest(HEALBOT_HOLY_WORD_CHASTISE, HEALBOT_SPELL_HOLYWORDCHASTISE, 135886)
+        HealBot_Init_Spells_CataPriest(HBC_HOLY_WORD_SERENITY, HEALBOT_SPELL_HOLYWORDSERENITY, 135937)
     end
     if HealBot_Spell_Ranges["HEAL30"] and HealBot_Spell_Ranges["HEAL30"]~="Set" then 
         HealBot_Range_InitSpell("HEAL30", HealBot_Spell_Ranges["HEAL30"])
@@ -610,9 +631,9 @@ function HealBot_Init_ClassicSpellRanks()
             for f=1, HealBot_Ranks[hSpell]-1, 1 do
                 local sNameRank=HealBot_Init_retRank(hSpell, f) --hSpell.."(Rank "..f..")"
                 if sNameRank then
-                    local _, _, _, _, _, _, spellId = GetSpellInfo(sNameRank)
+                    local _, _, _, _, _, _, spellId = HealBot_Spells_GetInfo(sNameRank)
                     if spellId then
-                        local _, _, texture, msCast, _, hbRange = GetSpellInfo(spellId);
+                        local _, _, texture, msCast, _, hbRange = HealBot_Spells_GetInfo(spellId);
                         local cooldown = GetSpellBaseCooldown(spellId)
                         local hbCastTime=tonumber(msCast or 0);
                         local hbCooldown=tonumber(cooldown or 0);
@@ -640,39 +661,39 @@ function HealBot_Init_SmartCast()
       --HealBot_setCall("HealBot_Init_SmartCast")
     local rName=""
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        rName=GetSpellInfo(HEALBOT_MASS_RESURRECTION)
+        rName=HealBot_Spells_GetName(HEALBOT_MASS_RESURRECTION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_RESURRECTION)
+        rName=HealBot_Spells_GetName(HEALBOT_RESURRECTION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        rName=GetSpellInfo(HEALBOT_REVITALIZE)
+        rName=HealBot_Spells_GetName(HEALBOT_REVITALIZE)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_REVIVE) or GetSpellInfo(HBC_REVIVE)
+        rName=HealBot_Spells_GetName(HEALBOT_REVIVE) or HealBot_Spells_GetName(HBC_REVIVE)
         if rName and HealBot_Spell_Names[rName] then 
             SmartCast_Res=rName
         else
-            rName=GetSpellInfo(HEALBOT_REBIRTH)
+            rName=HealBot_Spells_GetName(HEALBOT_REBIRTH)
             if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        rName=GetSpellInfo(HEALBOT_REAWAKEN)
+        rName=HealBot_Spells_GetName(HEALBOT_REAWAKEN)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_RESUSCITATE)
+        rName=HealBot_Spells_GetName(HEALBOT_RESUSCITATE)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        rName=GetSpellInfo(HEALBOT_ABSOLUTION)
+        rName=HealBot_Spells_GetName(HEALBOT_ABSOLUTION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_REDEMPTION)
+        rName=HealBot_Spells_GetName(HEALBOT_REDEMPTION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        rName=GetSpellInfo(HEALBOT_ANCESTRAL_VISION)
+        rName=HealBot_Spells_GetName(HEALBOT_ANCESTRAL_VISION)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_ANCESTRALSPIRIT)
+        rName=HealBot_Spells_GetName(HEALBOT_ANCESTRALSPIRIT)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
-        rName=GetSpellInfo(HEALBOT_MASS_RETURN)
+        rName=HealBot_Spells_GetName(HEALBOT_MASS_RETURN)
         if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
-        rName=GetSpellInfo(HEALBOT_RETURN)
+        rName=HealBot_Spells_GetName(HEALBOT_RETURN)
         if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
     end
 end
