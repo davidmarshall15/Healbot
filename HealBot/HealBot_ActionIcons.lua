@@ -2547,15 +2547,6 @@ function HealBot_ActionIcons_GetSpell(spellCode)
                     vSpellID=sID
                     vSpellType="spell"
                     vSpellIcon=HealBot_Spells_Texture(sID)
-                    if HEALBOT_GAME_VERSION<3 and cSpellText then
-                        local rank = GetSpellSubtext(sID)
-                        if rank then
-                            local knownHealSpells=HealBot_Init_retFoundHealSpells()
-                            if knownHealSpells[cSpellText] then
-                                cSpellText=cSpellText.."("..rank..")"
-                            end
-                        end
-                    end
                     vSpellText=cSpellText or vSpellText
                 end
             elseif GetMacroIndexByName(spellCode)>0 then

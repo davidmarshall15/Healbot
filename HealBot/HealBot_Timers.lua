@@ -158,11 +158,6 @@ function HealBot_Timers_SkinChangePluginUpdate()
     if HealBot_Timers_luVars["pluginMyCooldowns"] and HealBot_Plugin_MyCooldowns_Profile then HealBot_Plugin_MyCooldowns_Profile() end
 end
 
-function HealBot_Timers_HealthAlertLevel_OC()
-      --HealBot_setCall("HealBot_Timers_HealthAlertLevel_OC")
-    HealBot_HealthAlertLevel(false)
-end
-
 function HealBot_Timers_SkinBarTextColours()
       --HealBot_setCall("HealBot_Timers_SkinBarTextColours")
     HealBot_Panel_resetTestCols(true)
@@ -522,7 +517,6 @@ local hbTimerFuncs={["INIT"]={
                         ["InitBuffList"]=HealBot_Options_InitBuffList,
                         ["SpellsLoaded"]=HealBot_Timers_SpellsLoaded,
                         ["SpellsResetTabs"]=HealBot_Timers_SpellsResetTabs,
-                        ["HealthAlertLevel"]=HealBot_Timers_HealthAlertLevel_OC,
                         ["SeparateInHealsAbsorbs"]=HealBot_Text_setSeparateInHealsAbsorbs,
                         ["RegEvents"]=HealBot_Register_Events,
                         ["UnRegEvents"]=HealBot_UnRegister_Events,

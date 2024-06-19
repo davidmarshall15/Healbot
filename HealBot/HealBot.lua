@@ -1649,26 +1649,32 @@ end
 
 function HealBot_UpdateUnitClear(button, unitExists)
       --HealBot_setCall("HealBot_UpdateUnitClear", button)
-    if not unitExists or button.status.isdead then
-        if unitExists and button.status.isspirit then
-            HealBot_Aura_RemoveDebuffIcons(button)
-            HealBot_Check_UnitBuff(button)
-        else
-            HealBot_Aura_RemoveIcons(button)
-        end
-        button.adaptive.current=12
-        HealBot_ActionIcons_FadeUnitIcons(button.guid, button.unit)
-    else
-        button.status.rangenextcheck=0
-        button.aura.debuff.update=true
-        button.aura.buff.update=true
-        HealBot_Check_UnitDebuff(button)
-        HealBot_Check_UnitBuff(button)
-    end
     button.health.init=true
     button.mana.init=true
-    HealBot_Aux_clearAllBars(button)
-    HealBot_Aggro_ClearUnitAggro(button)
+    button.spec=" "
+    if not unitExists or (button.status.isdead and not button.status.isspirit) then
+        HealBot_Aura_RemoveIcons(button)
+        button.adaptive.current=12
+        HealBot_ActionIcons_FadeUnitIcons(button.guid, button.unit)
+        button.status.incombat=false
+        button.status.hostile=false
+        HealBot_Aggro_ClearUnitAggro(button)
+        HealBot_Aux_clearAllBars(button)
+    else
+        button.status.rangenextcheck=0
+        button.aura.buff.update=true
+        HealBot_Check_UnitBuff(button)
+        HealBot_OnEvent_CalcThreat(button)
+        HealBot_UnitAffectingCombat(button)
+        HealBot_OnEvent_ClassificationChanged(button)
+        HealBot_Aux_ResetByTypeById(button)
+        if button.status.isdead then
+            HealBot_Aura_RemoveDebuffIcons(button)
+        else
+            button.aura.debuff.update=true
+            HealBot_Check_UnitDebuff(button)
+        end
+    end
     if HealBot_luVars["pluginAuraWatch"] then
         HealBot_Plugin_AuraWatch_ResetOnChangeNoIndex(button)
     end
@@ -1676,9 +1682,6 @@ function HealBot_UpdateUnitClear(button, unitExists)
     HealBot_Action_DisableBorderHazard(button)
     HealBot_Action_UpdateBackground(button)
     HealBot_RefreshUnit(button)
-    button.status.incombat=false
-    button.status.hostile=false
-    button.spec=" "
 end
 
 local uuUnitClassEN="XXXX"
@@ -1752,7 +1755,7 @@ function HealBot_UpdateUnitGUIDChange(button, notRecalc)
         button.status.guidupdate=true
         HealBot_SpecUpdate(button, HealBot_TimeNow)
     else
-        HealBot_UpdateUnitClear(button)
+        HealBot_UpdateUnitClear(button, true)
     end
 end
 
@@ -2626,6 +2629,7 @@ end
 function HealBot_SetResSpells()
       --HealBot_setCall("HealBot_SetResSpells")
     HealBot_ResSpells={[HealBot_Spells_GetName(HEALBOT_MASS_RESURRECTION) or "x"]=2,
+                       [HealBot_Spells_GetName(HBC_MASS_RESURRECTION) or "x"]=2,
                        [HealBot_Spells_GetName(HEALBOT_MASS_RETURN) or "x"]=2,
                        [HealBot_Spells_GetName(HEALBOT_ABSOLUTION) or "x"]=2,
                        [HealBot_Spells_GetName(HEALBOT_ANCESTRAL_VISION) or "x"]=2,
@@ -3226,8 +3230,8 @@ function HealBot_UpdateCheckInterval()
         HealBot_Action_setLuVars("deadCheckInterval", 1)
         HealBot_Debug_PerfUpdate("deadInt", 1)
     else
-        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(955)
-        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(975)
+        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(950)
+        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(970)
         HealBot_luVars["aggroCheckInterval"] = HealBot_Util_PerfVal2(700)
         HealBot_luVars["statusCheckInterval"] = HealBot_Util_PerfVal2(400)
         HealBot_luVars["healthCheckInterval"] = HealBot_Util_PerfVal2(100)
@@ -3235,15 +3239,15 @@ function HealBot_UpdateCheckInterval()
         if HealBot_luVars["aggroCheckInterval"]<1 then HealBot_luVars["aggroCheckInterval"] = 1 end
         if HealBot_luVars["statusCheckInterval"]<2 then HealBot_luVars["statusCheckInterval"] = 2 end
         if HealBot_luVars["healthCheckInterval"]<3 then HealBot_luVars["healthCheckInterval"] = 3 end
-        if HealBot_luVars["RecalcDelay"]<0.1 then 
-            HealBot_luVars["RecalcDelay"] = 0.1 
+        if HealBot_luVars["RecalcDelay"]<0.2 then 
+            HealBot_luVars["RecalcDelay"] = 0.2
         elseif HealBot_luVars["RecalcDelay"]>0.5 then
             HealBot_luVars["RecalcDelay"] = 0.5
         end
-        if HealBot_luVars["EventsDelay"]<0.1 then 
-            HealBot_luVars["EventsDelay"] = 0.1 
-        elseif HealBot_luVars["EventsDelay"]>0.25 then
-            HealBot_luVars["EventsDelay"] = 0.25
+        if HealBot_luVars["EventsDelay"]<0.125 then 
+            HealBot_luVars["EventsDelay"] = 0.125
+        elseif HealBot_luVars["EventsDelay"]>0.275 then
+            HealBot_luVars["EventsDelay"] = 0.275
         end
         HealBot_Action_UpdateCheckInterval()
     end
@@ -3859,21 +3863,27 @@ function HealBot_UpdateAllEmergBars()
       --HealBot_setCall("HealBot_UpdateAllEmergBars")
     for _,xButton in pairs(HealBot_Unit_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Private_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Vehicle_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
         xButton.status.emergupd=true
+        xButton.status.slowupdate=true
     end
 end
 
@@ -4965,55 +4975,6 @@ function HealBot_PartyUpdate_CheckSkin(preCombat)
     HealBot_Timers_Set("LAST","PartyUpdateCheckSolo")
 end
 
-function HealBot_HealthAlertLevel(preCombat, button)
-      --HealBot_setCall("HealBot_HealthAlertLevel", button)
-    if button then
-        if preCombat then
-            button.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTIC"]
-        else
-            button.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame]["ALERTOC"]
-        end
-    elseif preCombat then
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-        for _,xButton in pairs(HealBot_Vehicle_Button) do
-             xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTIC"]
-        end
-    else
-        for _,xButton in pairs(HealBot_Unit_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-        for _,xButton in pairs(HealBot_Private_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-        for _,xButton in pairs(HealBot_Pet_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-        for _,xButton in pairs(HealBot_Vehicle_Button) do
-             xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-        for _,xButton in pairs(HealBot_Extra_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-        for _,xButton in pairs(HealBot_Enemy_Button) do
-            xButton.health.alert=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][xButton.frame]["ALERTOC"]
-        end
-    end
-end
-
 function HealBot_AfterCombatCleanup()
       --HealBot_setCall("HealBot_AfterCombatCleanup")
     if HealBot_luVars["RegenDisabled"] then
@@ -5057,14 +5018,14 @@ function HealBot_Not_Fighting()
             HealBot_Data["UILOCK"]=false
             HealBot_luVars["CheckAuraFlags"]=true
             HealBot_PlayerCheck()
-            HealBot_Timers_Set("INIT","HealthAlertLevel")
+            HealBot_Action_setAlertState()
             if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
                 HealBot_setTooltipUpdateNow()
             end
             if HealBot_luVars["EOCOOM"] and HealBot_Data["POWERTYPE"]==0 then
                 aButton=HealBot_Panel_RaidButton(HealBot_Data["PGUID"])
                 if aButton and aButton.status.current<HealBot_Unit_Status["DEAD"] then
-                    HealBot_Timers_Set("PLAYER","EmoteOOM",0.2)
+                    HealBot_Timers_Set("PLAYER","EmoteOOM")
                 end
             end
             HealBot_luVars["TargetNeedReset"]=true
@@ -5409,7 +5370,7 @@ function HealBot_ProcessRefreshTypes()
             C_Timer.After(0.01, HealBot_SetTargetBar)
             return
         end
-        C_Timer.After(0.02, HealBot_ProcessRefreshTypes)
+        C_Timer.After(0.1, HealBot_ProcessRefreshTypes)
     else
         HealBot_Timers_Set("OOC","ProcessRefreshTypes")
     end
@@ -5587,13 +5548,11 @@ function HealBot_CheckUnitRange(button)
     end
 end
 
-function HealBot_UnitUpdateButton(button)
+function HealBot_UnitUpdateButton(button, updSlow)
       --HealBot_setCall("HealBot_UnitUpdateButton", button, nil, nil, true)
     if UnitExists(button.unit) then
         if button.guid~=UnitGUID(button.unit) then
             HealBot_UpdateUnitGUIDChange(button, true)
-        elseif button.status.slowupdate then --HealBot_Data["UILOCK"] and button.status.slowupdate then
-            HealBot_UnitSlowUpdate(button)
         elseif button.status.isdead and button.status.deadnextcheck<HealBot_TimeNow then
             HealBot_Action_UpdateTheDeadButton(button)
         elseif hbActionFallWatch[button.guid] and button.status.falling~=IsFalling(button.unit) then
@@ -5623,6 +5582,7 @@ function HealBot_UnitUpdateButton(button)
             HealBot_UpdateUnitNotExists(button)
         --end
     end
+    if updSlow then HealBot_UpdateSlow() end
 end
 
 local addonMsg=""
@@ -5717,11 +5677,11 @@ function HealBot_EnemyUpdateButton(button)
     end
 end
 
-function HealBot_UpdateUnit_Button()
+function HealBot_UpdateUnit_Button(updSlow)
       --HealBot_setCall("HealBot_UpdateUnit_Button", nil, nil, nil, true)
     HealBot_luVars["UpdateID"]=HealBot_luVars["UpdateID"]+1
     if HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]] then
-        HealBot_UnitUpdateButton(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]])
+        HealBot_UnitUpdateButton(HealBot_Buttons[HealBot_UpdateQueue[HealBot_luVars["UpdateID"]]], updSlow)
     elseif HealBot_luVars["UpdateID"]>HealBot_luVars["NumUnitsInQueue"] then
         HealBot_luVars["UpdateID"]=0
     end
@@ -5730,7 +5690,13 @@ end
 function HealBot_UpdateUnit_Buttons()
       --HealBot_setCall("HealBot_UpdateUnit_Buttons", nil, nil, nil, true)
     for u=1,HealBot_luVars["UpdateNumUnits"] do
-        HealBot_UpdateUnit_Button()
+        HealBot_UpdateUnit_Button(false)
+    end
+end
+
+function HealBot_UpdateUnit_ButtonsIncSlow()
+    for u=1,HealBot_luVars["UpdateNumUnits"] do
+        HealBot_UpdateUnit_Button(true)
     end
 end
 
@@ -5868,16 +5834,16 @@ function HealBot_FastFuncs()
         end
     elseif HealBot_luVars["UILOCK"] then
         HealBot_Options_CmdButtonsEnableDisable(false)
-        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_Buttons,
+        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_ButtonsIncSlow,
                      [3]=HealBot_UpdateEnemy_Buttons,  [4]=HealBot_UpdateUnit_Buttons,
-                     [5]=HealBot_UpdateSlow,           [6]=HealBot_UpdateUnit_Buttons,
+                     [5]=HealBot_UpdateSlow,           [6]=HealBot_UpdateUnit_ButtonsIncSlow,
                      [7]=HealBot_UpdateUnit_Buttons,   [8]=HealBot_UpdateUnit_Buttons,
                      [9]=HealBot_UpdateEnemy_Buttons, [10]=HealBot_UpdateLast,}
     else
         HealBot_Options_CmdButtonsEnableDisable(true)
-        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_Buttons,
+        hbFastFuncs={[1]=HealBot_UpdateUnit_Buttons,   [2]=HealBot_UpdateUnit_ButtonsIncSlow,
                      [3]=HealBot_UpdateEnemy_Buttons,  [4]=HealBot_UpdateUnit_Buttons,
-                     [5]=HealBot_UpdateSlow,           [6]=HealBot_UpdateUnit_Buttons,
+                     [5]=HealBot_UpdateSlow,           [6]=HealBot_UpdateUnit_ButtonsIncSlow,
                      [7]=HealBot_UpdateUnit_Buttons,   [8]=HealBot_UpdateUnit_Buttons,
                      [9]=HealBot_Update_OutOfCombat,  [10]=HealBot_UpdateLast,}
     end
@@ -5914,7 +5880,7 @@ local hbFastCur=HealBot_Update_Fast
 function HealBot_Update_ResetRefreshLists()
       --HealBot_setCall("HealBot_Update_ResetRefreshLists")
     for guid,_ in pairs(hbPrevGUIDs) do
-        if not HealBot_Panel_AllUnitButtonCheck(guid) then
+        if not HealBot_Panel_RaidUnitButtonCheck(guid) then
             HealBot_luVars["pluginClearDown"]=1
             hbPrevGUIDs[guid]=nil
         end
@@ -5940,9 +5906,9 @@ function HealBot_Update_ResetRefreshLists()
     if HealBot_luVars["NumUnitsInQueue"]~=#HealBot_UpdateQueue then
         HealBot_luVars["NumUnitsInQueue"]=#HealBot_UpdateQueue
         if HealBot_luVars["CPUProfilerOn"] then
-            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.025)
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.05)
         else
-            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.075)
+            HealBot_luVars["UpdateNumUnits"]=ceil(HealBot_luVars["NumUnitsInQueue"]*0.125)
         end
         HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..HealBot_luVars["NumUnitsInQueue"]..")")
     end
@@ -6603,7 +6569,7 @@ function HealBot_PlayerRegenDisabled()
             end
         end
     end
-    HealBot_HealthAlertLevel(true)
+    HealBot_Action_setAlertState()
     if HealBot_Globals.DisableToolTipInCombat and HealBot_Data["TIPBUTTON"] then
         HealBot_Action_HideTooltipFrame()
     end
@@ -7750,35 +7716,26 @@ end
 
 function HealBot_ClearGUID(guid)
       --HealBot_setCall("HealBot_ClearGUID", nil, guid)
-    if guid then
-        local clearGUID=true
-        if HealBot_Panel_AllUnitButtonCheck(guid) then
-            aButton=HealBot_Panel_AllButton(guid)
-            if aButton and UnitExists(aButton.unit) and UnitGUID(aButton.unit)==aButton.guid then
-                clearGUID=false
-            end
-        end
-        if clearGUID then
-            HealBot_Panel_ClearGUID(guid)
-            HealBot_Action_ClearGUID(guid)
-            HealBot_Aura_ClearGUID(guid)
-            HealBot_Aggro_ClearGUID(guid)
-            HealBot_ActionIcons_ClearGUID(guid)
-            HealBot_Range_ClearGUID(guid)
-            if HealBot_luVars["pluginAuraWatch"] then HealBot_Plugin_AuraWatch_ClearGUID(guid) end
-            hbHealthWatch[guid]=nil
-            hbManaWatch[guid]=nil
-            hbActionHealthWatch[guid]=nil
-            hbHealthExtra[guid]=nil
-            hbActionManaWatch[guid]=nil
-            hbAuraWatchMana[guid]=nil
-            hbAuraWatchHealth[guid]=nil
-            hbAuraTargetWatch[guid]=nil
-            hbManaExtra[guid]=nil
-            hbActionFallWatch[guid]=nil
-            hbActionSwimWatch[guid]=nil
-            if HealBot_Data["TIPUSE"] then HealBot_Tooltip_ClearGUID(guid) end
-        end
+    if guid and not HealBot_Panel_AllUnitButtonCheck(guid) then
+        HealBot_Panel_ClearGUID(guid)
+        HealBot_Action_ClearGUID(guid)
+        HealBot_Aura_ClearGUID(guid)
+        HealBot_Aggro_ClearGUID(guid)
+        HealBot_ActionIcons_ClearGUID(guid)
+        HealBot_Range_ClearGUID(guid)
+        if HealBot_luVars["pluginAuraWatch"] then HealBot_Plugin_AuraWatch_ClearGUID(guid) end
+        hbHealthWatch[guid]=nil
+        hbManaWatch[guid]=nil
+        hbActionHealthWatch[guid]=nil
+        hbHealthExtra[guid]=nil
+        hbActionManaWatch[guid]=nil
+        hbAuraWatchMana[guid]=nil
+        hbAuraWatchHealth[guid]=nil
+        hbAuraTargetWatch[guid]=nil
+        hbManaExtra[guid]=nil
+        hbActionFallWatch[guid]=nil
+        hbActionSwimWatch[guid]=nil
+        if HealBot_Data["TIPUSE"] then HealBot_Tooltip_ClearGUID(guid) end
     end
 end
 

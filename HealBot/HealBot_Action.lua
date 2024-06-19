@@ -31,6 +31,7 @@ local HealBot_Action_AuxAssigns={}
 HealBot_Action_AuxAssigns["NameOverlayHighlight"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 HealBot_Action_AuxAssigns["HealthOverlayHighlight"]={[0]=false,[1]=false,[2]=false,[3]=false,[4]=false,[5]=false,[6]=false,[7]=false,[8]=false,[9]=false,[10]=false}
 
+local hbAlert="ALERTOC"
 local hbAdaptive={["Plugin"]=true,["RecentHeals"]=false,["Threat"]=false,["Debuffs"]=true,["Aggro"]=true,["Highlight"]=false,
                   ["Target"]=false,["OOR"]=false,["Buffs"]=true,["Overheals"]=false,["Absorbs"]=false}
 local hbAdaptiveOrder={[1]="Plugin",[2]="RecentHeals",[3]="Debuffs",[4]="Aggro",[5]="Threat",[6]="Highlight",
@@ -82,6 +83,14 @@ end
 function HealBot_Action_retLuVars(vName)
       --HealBot_setCall("HealBot_Action_retLuVars - "..vName)
     return HealBot_Action_luVars[vName]
+end
+
+function HealBot_Action_setAlertState()
+    if HealBot_Data["UILOCK"] then
+        hbAlert="ALERTIC"
+    else
+        hbAlert="ALERTOC"
+    end
 end
 
 function HealBot_Action_retComboKeysList()
@@ -2145,6 +2154,8 @@ function HealBot_Action_UpdateDebuffButton(button)
             else
                 HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFNOCOL"])
             end
+        elseif button.aura.debuff.name then
+            HealBot_Action_setState(button, HealBot_Unit_Status["DEBUFFNOCOL"])
         elseif button.status.current>HealBot_Unit_Status["BUFFBARCOL"] then 
             HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"])
         end
@@ -2182,11 +2193,15 @@ function HealBot_Action_UpdateBuffButton(button)
                 if Healbot_Config_Skins.Emerg[Healbot_Config_Skins.Current_Skin][button.frame]["BUFFBARCOL"] then
                     HealBot_Action_EmergBarCheck(button)
                 end
-            else
+            elseif button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] then
                 HealBot_Action_setState(button, HealBot_Unit_Status["BUFFNOCOL"])
             end
-        elseif button.status.current>HealBot_Unit_Status["ENABLEDIR"] then 
-            HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"])
+        elseif button.status.current<HealBot_Unit_Status["DEBUFFNOCOL"] then
+            if button.aura.buff.missingbuff then
+                HealBot_Action_setState(button, HealBot_Unit_Status["BUFFNOCOL"])
+            elseif button.status.current>HealBot_Unit_Status["ENABLEDIR"] then
+                HealBot_Action_setState(button, HealBot_Unit_Status["CHECK"])
+            end
         end
     end
     HealBot_Action_UpdateHealthButton(button)
@@ -2511,7 +2526,9 @@ function HealBot_Action_UpdateHealthButton(button, hlthevent)
 
     if button.status.current<HealBot_Unit_Status["DEAD"] then --or (button.status.current==HealBot_Unit_Status["RESERVED"] and UnitHealth(button.unit)) then
         if button.status.hlthupd then 
-            if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or HealBot_AlwaysEnabled[button.guid] or button.health.pct<=button.health.alert then
+            if button.aggro.status>Healbot_Config_Skins.BarAggro[Healbot_Config_Skins.Current_Skin][button.frame]["ALERT"] or 
+               HealBot_AlwaysEnabled[button.guid] or button.status.current>HealBot_Unit_Status["ENABLEDIR"] or
+               button.health.pct<=Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][button.frame][hbAlert] then
                 if button.status.current<HealBot_Unit_Status["BUFFNOCOL"] then
                     HealBot_Range_ButtonSpell(button)
                 end
@@ -3885,7 +3902,6 @@ function HealBot_Action_InitButton(button, prefix)
     button.status.current=HealBot_Unit_Status["CHECK"]
     button.health.current=-1
     button.health.max=100
-    button.health.alert=1
     button.health.pct=.999
     button.health.hpct=999
     button.health.incoming=0
@@ -4568,15 +4584,6 @@ function HealBot_Action_GetSpell(cType, cKey)
                     sID=tonumber(sID)
                     cSpellText=HealBot_Spells_GetName(sID)
                     vSpellIcon=HealBot_Spells_Texture(sID)
-                    if HEALBOT_GAME_VERSION<3 and cSpellText then
-                        local rank = GetSpellSubtext(sID)
-                        if rank then
-                            local knownHealSpells=HealBot_Init_retFoundHealSpells()
-                            if knownHealSpells[cSpellText] then
-                                cSpellText=cSpellText.."("..rank..")"
-                            end
-                        end
-                    end
                     vSpellText=cSpellText or vSpellText
                     vSpellType="spell"
                     vSpellID=sID
@@ -5783,7 +5790,6 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 --    hButton.status.update=true
                 end
                 if not hButton.status.events then HealBot_Action_RegisterUnitEvents(hButton) end
-                HealBot_HealthAlertLevel(preCombat, hButton)
             end
             if unitType<5 then
                 HealBot_Panel_setButtonpGUID(hButton)

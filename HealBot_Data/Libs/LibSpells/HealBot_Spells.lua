@@ -109,14 +109,6 @@ local function HealBot_Spells_PickupSpellV11(spellId)
     C_Spell.PickupSpell(spellId)
 end
 
-local function HealBot_Spells_IsAttackSpellV1(spellId)
-    return IsAttackSpell(spellId)
-end
-
-local function HealBot_Spells_IsAttackSpellV11(spellId)
-    return C_Spell.IsAutoAttackSpell(spellId)
-end
-
 local function HealBot_Spells_GetSpellTextureV1(spellId)
     if HealBot_Spell_IDs[spellId] then 
         return HealBot_Spell_IDs[spellId].texture
@@ -143,7 +135,6 @@ local HealBot_Spells_GetSpellBookItemInfo=HealBot_Spells_GetSpellBookItemInfoV1
 local HealBot_Spells_GetSpellLink=HealBot_Spells_GetSpellLinkV1
 local HealBot_Spells_IsPassiveSpell=HealBot_Spells_IsPassiveSpellV1
 local HealBot_Spells_PickupSpell=HealBot_Spells_PickupSpellV1
-local HealBot_Spells_IsAttackSpell=HealBot_Spells_IsAttackSpellV1
 local HealBot_Spells_GetSpellTexture=HealBot_Spells_GetSpellTextureV1
 if C_Spell then
     if C_Spell.GetSpellName then
@@ -166,9 +157,6 @@ if C_Spell then
     end
     if C_Spell.PickupSpell then
         HealBot_Spells_PickupSpell=HealBot_Spells_PickupSpellV11
-    end
-    if C_Spell.IsAutoAttackSpell then
-        HealBot_Spells_IsAttackSpell=HealBot_Spells_IsAttackSpellV11
     end
     if C_Spell.GetSpellTexture then
         HealBot_Spells_GetSpellTexture=HealBot_Spells_GetSpellTextureV11
@@ -224,10 +212,6 @@ end
 
 function HealBot_Spells_Pickup(spellId)
     return HealBot_Spells_PickupSpell(spellId)
-end
-
-function HealBot_Spells_AttackSpell(spellId)
-    return HealBot_Spells_IsAttackSpell(spellId)
 end
 
 function HealBot_Spells_Texture(spellId)

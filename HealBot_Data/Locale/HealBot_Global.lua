@@ -703,11 +703,11 @@ function HealBot_globalVars()
     --Resurrection Spells
     HEALBOT_ANCESTRALSPIRIT                 = 2008 --HealBot_Spells_GetName(2008) or "--Ancestral Spirit";
     HEALBOT_DEBUFF_MASS_RESURRECTED         = 95223 --HealBot_Spells_GetName(95223) or "--Recently Mass Resurrected";
-    --HEALBOT_MASS_RESURRECTION               = HealBot_Spells_GetName(83968) or "--Mass Resurrection";
     
     HEALBOT_ABSOLUTION                      = 212056 --HealBot_Spells_GetName(212056) or "--Absolution";
     HEALBOT_ANCESTRAL_VISION                = 212048 --HealBot_Spells_GetName(212048) or "--Ancestral Vision";
     HEALBOT_MASS_RESURRECTION               = 212036 --HealBot_Spells_GetName(212036) or "--Mass Resurrection";
+    HBC_MASS_RESURRECTION                   = 83968
     HEALBOT_REAWAKEN                        = 212051 --HealBot_Spells_GetName(212051) or "--Reawaken";
     HEALBOT_REVITALIZE                      = 212040 --HealBot_Spells_GetName(212040) or "--Revitalize";
     HEALBOT_MASS_RETURN                     = 361178

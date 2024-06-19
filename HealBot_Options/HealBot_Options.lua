@@ -5657,7 +5657,6 @@ function HealBot_Options_AlertLevelIC_OnValueChanged(self)
       --HealBot_setCall("HealBot_Options_AlertLevelIC_OnValueChanged")
     if Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALERTIC"]~=HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2) then
         Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALERTIC"] = HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2);
-        HealBot_Timers_Set("INIT","HealthAlertLevel")
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Options_framesChanged(true)
     end
@@ -5667,7 +5666,6 @@ function HealBot_Options_AlertLevelOC_OnValueChanged(self)
       --HealBot_setCall("HealBot_Options_AlertLevelOC_OnValueChanged")
     if Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALERTOC"]~=HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2) then
         Healbot_Config_Skins.BarVisibility[Healbot_Config_Skins.Current_Skin][HealBot_Options_luVars["FramesSelFrame"]]["ALERTOC"] = HealBot_Util_Round(HealBot_Options_Pct_OnValueChanged(self),2);
-        HealBot_Timers_Set("INIT","HealthAlertLevel")
         HealBot_Timers_Set("LAST","ResetUnitStatus")
         HealBot_Options_framesChanged(true)
     end
@@ -12189,11 +12187,11 @@ function HealBot_Options_ComboClass_Text()
         HealBot_Options_Bind4:Hide()
         HealBot_Options_Bind5:Hide()
         HealBot_Options_Button1:ClearAllPoints()
-        HealBot_Options_Button1:SetPoint("TOPLEFT",220,-180)
+        HealBot_Options_Button1:SetPoint("TOPLEFT",220,-155)
         HealBot_Options_UseIconCmds:Show()
     else
         HealBot_Options_Button1:ClearAllPoints()
-        HealBot_Options_Button1:SetPoint("TOPLEFT",145,-180)
+        HealBot_Options_Button1:SetPoint("TOPLEFT",145,-155)
         HealBot_Options_Button1Icon:Show()
         HealBot_Options_UseIconCmds:Hide()
         HealBot_SpellAutoTarget:Show()
@@ -12294,456 +12292,52 @@ end
 
 --------------------------------------------------------------------------------
 
-HealBot_Options_luVars["HealSpellsComboID"] = 0
+HealBot_Options_luVars["HelpSpellsComboID"] = 0
 HealBot_Options_luVars["SkinsHealSpellsComboID"] = 0
-
-function HealBot_Options_FullHealSpellsCombo_list(sType)
-      --HealBot_setCall("HealBot_Options_FullHealSpellsCombo_list")
-    local HealBot_Options_SelectHealSpellsCombo_List = {}
-    if sType==2 then
-        HealBot_Options_SelectHealSpellsCombo_List = {
-            HEALBOT_MINDBENDER,
-            HEALBOT_SMITE,
-            HEALBOT_HOLY_WORD_CHASTISE,
-            HEALBOT_HOLY_FIRE,
-            HEALBOT_SHADOW_WORD_PAIN,
-            HEALBOT_WRATH,
-            HEALBOT_FAERIE_FIRE,
-            HEALBOT_JAB,
-            HEALBOT_TIGER_PALM,
-            HEALBOT_CHI_BURST,
-            HEALBOT_JUDGMENT,
-            HEALBOT_SHIELD_OF_THE_RIGHTEOUS,
-            HEALBOT_CRUSADER_STRIKE,
-            HEALBOT_CHAIN_LIGHTNING,
-            HEALBOT_ELEMENTAL_BLAST,
-            HEALBOT_FLAME_SHOCK,
-            HBC_FLAME_SHOCK,
-            HEALBOT_FROST_SHOCK,
-            HEALBOT_MAGE_BOMB,
-            HEALBOT_CONCUSSIVE_SHOT,
-            HEALBOT_PLAGUE_STRIKE,
-            HEALBOT_GOUGE,
-            HEALBOT_CORRUPTION,
-            HEALBOT_EXECUTE,
-            HEALBOT_EARTH_SHOCK,
-            HEALBOT_LAVA_BLAST,
-            HEALBOT_LIGHTNING_BOLT,
-            HBC_LIGHTNING_BOLT,
-            HEALBOT_FAERIE_SWARM,
-            HEALBOT_MOONFIRE,
-            HEALBOT_PRIMAL_STRIKE,
-            HEALBOT_MIND_SEAR,
-            HEALBOT_SHADOW_WORD_DEATH,
-            HEALBOT_BLACKOUT_KICK,
-            HEALBOT_TOUCH_OF_DEATH,
-            HEALBOT_CRACKLING_JADE_LIGHTNING,
-            HEALBOT_DENOUNCE,
-            HEALBOT_HAMMER_OF_WRATH,
-            HEALBOT_HOLY_SHOCK,
-            HEALBOT_TAUNT,
-            HEALBOT_FEAR,
-            HEALBOT_THROW,
-            HEALBOT_DEATH_COIL,
-            HEALBOT_ARCANE_SHOT,
-            HEALBOT_AIMED_SHOT,
-            HEALBOT_FIRE_BLAST,
-            HEALBOT_FROSTFIRE_BOLT,
-        }
-    else
-        HealBot_Options_SelectHealSpellsCombo_List = {
-            HEALBOT_BINDING_HEAL,
-            HEALBOT_HOLY_NOVA,
-            HEALBOT_UNHOLY_HOVA,
-            HEALBOT_CIRCLE_OF_HEALING,
-            HEALBOT_DESPERATE_PRAYER,
-            HEALBOT_CHAIN_HEAL,
-            HEALBOT_SPIRIT_LINK_TOTEM,
-            HEALBOT_FLASH_HEAL,
-            HEALBOT_POWER_WORD_LIFE,
-            HEALBOT_HOLY_WORD_SERENITY,
-            HBC_HOLY_WORD_SERENITY,
-            HEALBOT_SURGING_MIST,
-            HEALBOT_HOLY_WORD_SALVATION,
-            HEALBOT_FLASH_OF_LIGHT,
-            HEALBOT_GREATER_HEAL,
-            HEALBOT_HEALING_TOUCH,
-            HEALBOT_HEAL,
-            HBC_HEAL,
-            HBC_HOLY_NOVA,
-            HEALBOT_HEALING_WAVE,
-            HBC_HEALING_WAVE,
-            HBC_LESSER_HEALING_WAVE,
-            HBC_RU_LESSER_HEALING_WAVE,
-            HEALBOT_HEALING_SURGE,
-            HEALBOT_LIGHT_OF_DAWN,
-            HEALBOT_HOLY_LIGHT,
-            HBC_HOLY_LIGHT,
-            HEALBOT_HOLY_RADIANCE,
-            HEALBOT_HOLY_PRISM,
-            HEALBOT_WORD_OF_GLORY,
-            HEALBOT_DIVINE_LIGHT,
-            HEALBOT_LAY_ON_HANDS,
-            HEALBOT_TYRS_DELIVERANCE,
-            HEALBOT_HOLY_SHOCK,
-            HEALBOT_LIFEBLOOM,
-            HEALBOT_HEALING_STREAM_TOTEM,
-            HEALBOT_HEALING_TIDE_TOTEM,
-            HEALBOT_PENANCE,
-            HEALBOT_PRAYER_OF_HEALING,
-            HEALBOT_PRAYER_OF_MENDING,
-            HEALBOT_RIPTIDE,
-            HEALBOT_PRIMORDIAL_WAVE,
-            HEALBOT_WELLSPRING,
-            HEALBOT_DOWNPOUR,
-            HEALBOT_REGROWTH,
-            HEALBOT_NOURISH,
-            HBC_NOURISH,
-            HEALBOT_RENEW,
-            HEALBOT_DIVINE_HYMN,
-            HEALBOT_HEALING_RAIN,
-            HEALBOT_REJUVENATION,
-            HEALBOT_OVERGROWTH,
-            HEALBOT_WILD_GROWTH,
-            HEALBOT_SWIFTMEND,
-            HEALBOT_TRANQUILITY,
-            HEALBOT_GIFT_OF_THE_NAARU,
-            HEALBOT_MENDPET,
-            HEALBOT_HEALTH_FUNNEL,
-            HEALBOT_SOOTHING_MIST,
-            HEALBOT_ZEN_MEDITATION,
-            HEALBOT_LIFE_COCOON,
-            HEALBOT_ENVELOPING_MIST,
-            HEALBOT_REVIVAL,
-            HEALBOT_RENEWING_MIST,
-            HEALBOT_UPLIFT,
-            HEALBOT_SURGING_MIST,
-            HEALBOT_CHI_WAVE,
-            HEALBOT_ZEN_SPHERE,
-            HEALBOT_CHI_BURST,
-            HEALBOT_EXECUTION_SENTENCE,
-            HEALBOT_CASCADE,
-            HEALBOT_DIVINE_STAR,
-            HEALBOT_HALO,               
-            --HEALBOT_SAVING_GRACE,                    
-            HEALBOT_CLARITY_OF_PURPOSE,
-            HEALBOT_CENARION_WARD,
-            HEALBOT_BREATH_OF_THE_SERPENT,
-            HEALBOT_CHI_EXPLOSION,
-            HEALBOT_RUSHING_JADE_WIND,              
-            HEALBOT_CHI_TOROEDO,
-            HEALBOT_BEACON_OF_LIGHT,
-            --Legion Added
-            HEALBOT_PLEA, --Priest                           
-            HEALBOT_POWER_WORD_RADIANCE,            
-            HEALBOT_SHADOW_COVENANT,                
-            HEALBOT_SHADOW_MEND,
-            HEALBOT_HOLY_WORD_SANCTIFY,              
-            HEALBOT_BESTOW_FAITH, --Paladin                    
-            HEALBOT_LIGHT_OF_THE_MARTYR, 
-            HEALBOT_BEACON_OF_VIRTUE,     
-            HEALBOT_HAND_OF_THE_PROTECTOR,   
-            HEALBOT_ESSENCE_FONT,
-            HEALBOT_LIGHT_OF_TUURE, --Priest       
-            HEALBOT_LIVING_FLAME,
-            HEALBOT_EMERALD_BLOSSOM,
-            HEALBOT_ECHO,
-            HEALBOT_DREAM_FLIGHT,
-            HEALBOT_REVERSION,
-            HEALBOT_REWIND,
-            HEALBOT_DREAM_BREATH,
-            HEALBOT_SPIRITBLOOM,
-            HEALBOT_VERDANT_EMBRACE,
-            HEALBOT_RENEWING_BLAZE,
-            HEALBOT_DREAM_PROJECTION,
-            HEALBOT_EMERALD_COMMUNION,
-        }
-    end
-    return HealBot_Options_SelectHealSpellsCombo_List
-end
-
-local cHealDDClassicMaxRank={}
-function HealBot_Options_SelectClassicHealSpellsRanksCombo_DDlist(spellName)
-      --HealBot_setCall("HealBot_Options_SelectClassicHealSpellsRanksCombo_DDlist")
-    local rankHealDDlist={}
-    for j=1, cHealDDClassicMaxRank[spellName], 1 do
-        table.insert(rankHealDDlist, HealBot_Init_retRank(spellName, j))
-    end
-    return rankHealDDlist
-end
-    
-function HealBot_Options_SelectHealSpellsCombo_DDlist(sType)
-      --HealBot_setCall("HealBot_Options_SelectHealSpellsCombo_DDlist")
-    local tmpHealDDlist={}
-    for x,_ in pairs(HealBot_Options_NoDuplcates) do
-        HealBot_Options_NoDuplcates[x]=nil
-    end 
-    if sType==2 or HEALBOT_GAME_VERSION>2 or HealBot_Globals.NoRanks then
-        local fullHealDDlist=HealBot_Options_FullHealSpellsCombo_list(sType)
-        for j=1, getn(fullHealDDlist), 1 do
-            local spellName=HealBot_KnownSpell(fullHealDDlist[j])
-            if spellName and not HealBot_Options_NoDuplcates[spellName] then
-                table.insert(tmpHealDDlist, spellName)
-                HealBot_Options_NoDuplcates[spellName]=true
-            end
-        end
-    else
-        local knownHealSpells=HealBot_Init_retFoundHealSpells()
-        for kSpell,_ in pairs(knownHealSpells) do
-            if not HealBot_Options_NoDuplcates[kSpell] then
-                HealBot_Options_NoDuplcates[kSpell]=true
-                table.insert(tmpHealDDlist, kSpell)
-                cHealDDClassicMaxRank[kSpell]=HealBot_Init_ClassicHealSpellMaxRank(kSpell)
-            end
-        end
-    end
-    table.sort(tmpHealDDlist)
-    return tmpHealDDlist
-end
-
-local function HealBot_Options_SelectHealSpellsCombo_DropDown(self, level, menuList)
+function HealBot_Options_SelectHealSpellsCombo_DropDown(self, level, menuList)
       --HealBot_setCall("HealBot_Options_SelectHealSpellsCombo_DropDown")
     local info = UIDropDownMenu_CreateInfo()
-    local hbHealDDlist=HealBot_Options_SelectHealSpellsCombo_DDlist(HealBot_Options_luVars["ActionBarsCombo"])
-    if getn(hbHealDDlist)>0 then
-        if HealBot_Options_luVars["ActionBarsCombo"]==2 or HEALBOT_GAME_VERSION>2 or HealBot_Globals.NoRanks then
-            for j=1, getn(hbHealDDlist), 1 do
-                info.text = hbHealDDlist[j];
-                info.func = function(self)
-                            HealBot_Options_luVars["hbHelpHealSelect"] = self:GetText()
-                            HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
-                            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,hbHealDDlist[HealBot_Options_luVars["HealSpellsComboID"]]) 
-                        end
-                info.checked = false;
-                if HealBot_Options_luVars["HealSpellsComboID"]==j then info.checked = true end
-                UIDropDownMenu_AddButton(info);
+    local spells=HealBot_Options_SelectAllSpellsCombo_list()
+    if getn(spells)>10 then
+        if level == 1 then
+            for j=1, ceil(getn(spells)/10), 1 do
+                local n=j*10
+                if n > getn(spells) then n=getn(spells) end
+                info.text = "    "..((j*10)-9).." - "..n;
+                info.hasArrow = true
+                info.notCheckable = true
+                info.menuList = j, true, j
+                UIDropDownMenu_AddButton(info)
             end
         else
-            if level == 1 then
-                for j=1, getn(hbHealDDlist), 1 do
-                    info.text = "    "..hbHealDDlist[j];
-                    info.hasArrow = true
-                    info.notCheckable = true
-                    info.menuList = hbHealDDlist[j], true, hbHealDDlist[j]
-                    UIDropDownMenu_AddButton(info)
-                end
-            else
-                local cHealDDlist=HealBot_Options_SelectClassicHealSpellsRanksCombo_DDlist(menuList)
-                if getn(cHealDDlist)>0 then
-                    for j=1, getn(cHealDDlist), 1 do
-                        info.text = cHealDDlist[j];
-                        info.func = function(self)
-                                    HealBot_Options_luVars["hbHelpHealSelect"] = self:GetText()
-                                    HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
-                                    UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,cHealDDlist[HealBot_Options_luVars["HealSpellsComboID"]]) 
-                                end
-                        info.checked = false;
-                        --if HealBot_Options_luVars["HealSpellsComboID"]==j then info.checked = true end
-                        UIDropDownMenu_AddButton(info, level);
-                    end
-                else
-                    info.text = HEALBOT_TOOLTIP_NONE
-                    info.func = function(self)
-                                    HealBot_Options_luVars["hbHelpHealSelect"] = nil
-                                    HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
-                                    UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,HEALBOT_TOOLTIP_NONE) 
-                                end
-                    UIDropDownMenu_AddButton(info, level);
-                end
+            local n=menuList*10
+            if n > getn(spells) then n=getn(spells) end
+            for j=((menuList*10)-9), n, 1 do
+                local mText=spells[j]
+                info.text = mText
+                info.func = function(self)
+                                HealBot_Options_luVars["hbHelpSpellsSelect"] = self:GetText()
+                                HealBot_Options_luVars["HelpSpellsComboID"] = self:GetID()
+                                UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,mText)
+                            end
+                info.checked = false;
+                if HealBot_Options_luVars["HelpSpellsComboID"]==j then info.checked = true end
+                UIDropDownMenu_AddButton(info, level)
             end
         end
     else
-        info.text = HEALBOT_TOOLTIP_NONE
-        info.func = function(self)
-                        HealBot_Options_luVars["hbHelpHealSelect"] = nil
-                        HealBot_Options_luVars["HealSpellsComboID"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,HEALBOT_TOOLTIP_NONE) 
-                    end
-        info.checked = true;
-        UIDropDownMenu_AddButton(info);
-    end
-end
-
---------------------------------------------------------------------------------
-
-HealBot_Options_luVars["OtherSpellsComboID"] = 0
-HealBot_Options_luVars["SkinsOtherSpellsComboID"] = 0
-
-function HealBot_Options_SelectOtherSpellsCombo_DDlist()
-      --HealBot_setCall("HealBot_Options_SelectOtherSpellsCombo_DDlist")
-    local HealBot_Options_SelectOtherSpellsCombo_List = {}
-    local tmpOtherDDlist={}
-    for x,_ in pairs(HealBot_Options_NoDuplcates) do
-        HealBot_Options_NoDuplcates[x]=nil
-    end 
-    if HealBot_Options_luVars["ActionBarsCombo"]==2 then
-        HealBot_Options_SelectOtherSpellsCombo_List = {
-            HEALBOT_HEX,
-            HEALBOT_ENTANGLING_ROOTS,
-            HEALBOT_GROWL,
-            HEALBOT_SOOTHE,
-            HEALBOT_MASS_ENTANGLEMENT,
-            HEALBOT_PURGE,
-            HEALBOT_WIND_SHEAR,
-            HEALBOT_CYCLONE,
-            HEALBOT_DOMINATE_MIND,
-            HEALBOT_SHACKLE_UNDEAD,
-            HEALBOT_DISPELL_MAGIC,
-            HEALBOT_PROVOKE,
-            HEALBOT_DISABLE,
-            HEALBOT_EXPEL_HARM,
-            HEALBOT_SPEAR_HAND_STRIKE,
-            HEALBOT_PARALYSIS,
-            HEALBOT_HAMMER_OF_JUSTICE,
-            HEALBOT_REBUKE,
-            HEALBOT_RECKONING,
-            HEALBOT_REPENTANCE,
-            HEALBOT_TURN_EVIL,
-        }
-        for j=1, getn(HealBot_Options_SelectOtherSpellsCombo_List), 1 do
-            local spellName=HealBot_KnownSpell(HealBot_Options_SelectOtherSpellsCombo_List[j])
-            if spellName and not HealBot_Options_NoDuplcates[spellName] then
-                HealBot_Options_NoDuplcates[spellName]=true
-                table.insert(tmpOtherDDlist,spellName)
-            end
-        end
-    elseif HealBot_Options_luVars["ActionBarsCombo"]<4 then
-       HealBot_Options_SelectOtherSpellsCombo_List = {
-            HEALBOT_STONEFORM,
-            HEALBOT_DARKFLIGHT,
-            HEALBOT_GIFT_OF_THE_NAARU,
-            HEALBOT_POWER_WORD_SHIELD,
-            HEALBOT_SPIRIT_SHELL,
-            HEALBOT_REVIVE,
-            HEALBOT_INTERCESSION,
-            HEALBOT_GUARDIAN_SPIRIT,
-            HEALBOT_SHINING_FORCE,
-            HEALBOT_PAIN_SUPPRESSION,
-            HEALBOT_INTERVENE,
-            HEALBOT_RESURRECTION,
-            HEALBOT_REDEMPTION,
-            HEALBOT_REBIRTH,
-            HEALBOT_TREE_OF_LIFE,
-            HEALBOT_INNERVATE,
-            HEALBOT_ANCESTRALSPIRIT,
-            HEALBOT_RESUSCITATE,
-            HEALBOT_ABSOLUTION,
-            HEALBOT_ANCESTRAL_VISION,
-            HEALBOT_MASS_RESURRECTION,
-            HEALBOT_MASS_RETURN,
-            HEALBOT_RETURN,
-            HEALBOT_REAWAKEN,
-            HEALBOT_REVITALIZE,
-            HEALBOT_CLEANSE,
-            HEALBOT_REMOVE_CURSE,
-            HEALBOT_CLEANSE_TOXIN,
-            HEALBOT_REMOVE_CORRUPTION,
-            HEALBOT_NATURALIZE,
-            HEALBOT_CAUTERIZING_FLAME,
-            HEALBOT_EXPUNGE,
-            HEALBOT_NATURES_CURE,
-            HEALBOT_PURIFY_DISEASE,
-            HEALBOT_PURIFY,
-            HBC_PURIFY,
-            HBC_SHAMAN_CURE_DISEASE,
-            HBC_DRUID_ABOLISH_POISON,
-            HBC_PRIEST_ABOLISH_DISEASE,
-            --HBC_DRUID_CURE_POISON,
-            HBC_SHAMAN_CURE_POISON,
-            HEALBOT_BLOODLUST,
-            HEALBOT_HEROISM,
-            --HBC_DISPELL_MAGIC,
-            HEALBOT_CLEANSE_SPIRIT,
-            HEALBOT_PURIFY_SPIRIT,
-            HEALBOT_MASS_DISPEL,
-            HEALBOT_LIFE_TAP,
-            HEALBOT_DIVINE_SHIELD,
-            HEALBOT_DIVINE_PROTECTION,
-            HBC_DIVINE_INTERVENTION,
-            HBC_DIVINE_FAVOR,
-            HBC_DIVINE_FAVOR,
-            HEALBOT_ANACESTRAL_SWIFTNESS,
-            HEALBOT_LEAP_OF_FAITH,
-            HEALBOT_UNLEASH_ELEMENTS,
-            HEALBOT_DETOX,
-            HEALBOT_SPEED_OF_LIGHT,
-            HEALBOT_HAND_OF_PURITY,
-            HEALBOT_THUNDER_FOCUS_TEA,
-            HEALBOT_ASTRAL_SHIFT,
-            HEALBOT_GUARDIAN_ANCIENT_KINGS,
-            HEALBOT_UNLEASH_LIFE,
-            HEALBOT_CLOUDBURST_TOTEM,
-            HEALBOT_POWER_INFUSION,
-            HEALBOT_VAMPIRIC_EMBRACE,
-            HEALBOT_CLARITY_OF_WILL,
-            HEALBOT_DETONATE_CHI,
-            HEALBOT_BEACON_OF_FAITH,
-            HEALBOT_BEACON_OF_INSIGHT,
-            HEALBOT_RAPTURE,
-            HEALBOT_APOTHEOSIS,
-            HEALBOT_SYMBOL_OF_HOPE,
-            HEALBOT_BODY_AND_MIND,
-            HEALBOT_BLESSING_OF_SACRIFICE, --Paladin
-            HEALBOT_HOLY_WARD,
-            HEALBOT_RESCUE,
-            HEALBOT_ZEPHYR,
-            HEALBOT_OBSIDIAN_SCALES,
-            HEALBOT_TIME_DILATION,
-            HEALBOT_TIME_STOP,
-            HEALBOT_STASIS,
-            HEALBOT_FURY_OF_THE_ASPECTS,
-            HEALBOT_VISAGE,
-            HEALBOT_TEMPRAL_ANOMALY,
-            HEALBOT_NULLIFYING_SHROUD,
-        }
-        if HEALBOT_GAME_VERSION<5 then 
-            table.insert(HealBot_Options_SelectOtherSpellsCombo_List, HBC_PRIEST_CURE_DISEASE)
-            table.insert(HealBot_Options_SelectOtherSpellsCombo_List, HBC_RIGHTEOUS_DEFENSE)
-            table.insert(HealBot_Options_SelectOtherSpellsCombo_List, HBC_SEAL_OF_COMMAND)
-        end
-        for j=1, getn(HealBot_Options_SelectOtherSpellsCombo_List), 1 do
-            local spellName=HealBot_KnownSpell(HealBot_Options_SelectOtherSpellsCombo_List[j])
-            if spellName and not HealBot_Options_NoDuplcates[spellName] then
-                HealBot_Options_NoDuplcates[spellName]=true
-                table.insert(tmpOtherDDlist,spellName)
-            end
-        end
-        for j=1, getn(HealBot_Buff_Spells_List), 1 do
-            if not HealBot_Options_NoDuplcates[HealBot_Buff_Spells_List[j]] then
-                table.insert(tmpOtherDDlist,HealBot_Buff_Spells_List[j])
-                HealBot_Options_NoDuplcates[HealBot_Buff_Spells_List[j]]=true
-            end
-        end
-    end
-    table.sort(tmpOtherDDlist)
-    return tmpOtherDDlist
-end
-
-function HealBot_Options_SelectOtherSpellsCombo_DropDown()
-      --HealBot_setCall("HealBot_Options_SelectOtherSpellsCombo_DropDown")
-    local info = UIDropDownMenu_CreateInfo()
-    local hbOtherDDlist=HealBot_Options_SelectOtherSpellsCombo_DDlist()
-    if getn(hbOtherDDlist)>0 then
-        for j=1, getn(hbOtherDDlist), 1 do
-            info.text = hbOtherDDlist[j];
+        for j=1, getn(spells), 1 do
+            local sName = spells[j]
+            info.text = sName
             info.func = function(self)
-                        HealBot_Options_luVars["hbHelpOtherSelect"] = self:GetText()
-                        HealBot_Options_luVars["OtherSpellsComboID"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_SelectOtherSpellsCombo,hbOtherDDlist[HealBot_Options_luVars["OtherSpellsComboID"]]) 
-                    end
+                            HealBot_Options_luVars["hbHelpSpellsSelect"] = self:GetText()
+                            HealBot_Options_luVars["HelpSpellsComboID"] = self:GetID()
+                            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo,sName)
+                        end
             info.checked = false;
-            if HealBot_Options_luVars["OtherSpellsComboID"]==j then info.checked = true end
+            if HealBot_Options_luVars["HelpSpellsComboID"]==j then info.checked = true; end 
             UIDropDownMenu_AddButton(info);
         end
-    else
-        info.text = HEALBOT_TOOLTIP_NONE
-        info.func = function(self)
-                        HealBot_Options_luVars["hbHelpOtherSelect"] = nil
-                        HealBot_Options_luVars["OtherSpellsComboID"] = self:GetID()
-                        UIDropDownMenu_SetText(HealBot_Options_SelectOtherSpellsCombo,HEALBOT_TOOLTIP_NONE) 
-                    end
-        info.checked = true;
-        UIDropDownMenu_AddButton(info);
     end
 end
 
@@ -13208,10 +12802,8 @@ function HealBot_Options_SpellsSelect_OnClick(self, sType)
       --HealBot_setCall("HealBot_Options_SpellsSelect_OnClick")
     if sType~="Cancel" then
         local hbTmpText1=HEALBOT_TOOLTIP_NONE
-        if sType=="Heal" then
-            hbTmpText1=HealBot_Options_luVars["hbHelpHealSelect"] or ""
-        elseif sType=="Other" then
-            hbTmpText1=HealBot_Options_luVars["hbHelpOtherSelect"] or ""
+        if sType=="Spells" then
+            hbTmpText1=HealBot_Options_luVars["hbHelpSpellsSelect"] or ""
         elseif sType=="Macro" then
             hbTmpText1=HealBot_Options_luVars["hbHelpMacroSelect"] or ""
         elseif sType=="Item" then
@@ -14784,7 +14376,6 @@ function HealBot_Options_SelectAllSpellsCombo_list()
         if not HealBot_Options_NoDuplcates[kSpell] then
             HealBot_Options_NoDuplcates[kSpell]=true
             table.insert(tmpSpelllist, kSpell)
-            cHealDDClassicMaxRank[kSpell]=HealBot_Init_ClassicHealSpellMaxRank(kSpell)
         end
     end
     table.sort(tmpSpelllist)
@@ -24455,15 +24046,7 @@ function HealBot_Options_SpellsTab(tab)
     if not HealBot_Options_TabRunOnce[tab] then
         HealBot_Timers_Set("INIT","SpellsTabText")
         local g=_G["healbotspellshelphealfontstr"]
-        if HealBot_Options_luVars["ActionBarsCombo"]==1 then
-            g:SetText(HEALBOT_OPTIONS_SMARTCASTHEAL)
-        elseif HealBot_Options_luVars["ActionBarsCombo"]==2 then
-            g:SetText(HEALBOT_OPTIONS_HARMFUL_SPELLS)
-        elseif HealBot_Options_luVars["ActionBarsCombo"]==3 then
-            g:SetText(HEALBOT_OPTIONS_EMERGSPELLS)
-        else
-            g:SetText(HEALBOT_OPTIONS_ICONSCMD)
-        end
+        g:SetText(HEALBOT_OPTIONS_TAB_SPELLS)
         HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH1",hbOptionText[1])
         HealBot_Options_SetLabel("HealBot_Options_SelectSpellsFrame_TextH2",hbOptionText[2])
         HealBot_Options_UseIconCmds:SetChecked(HealBot_Globals.UseIconCommands)
@@ -24477,9 +24060,6 @@ function HealBot_Options_SpellsTab(tab)
         HealBot_Options_SpellTargetLastTarget:SetChecked(HealBot_Config_Spells.SpellTargetLastTarget[HealBot_Options_luVars["ActionBarsComboTxt"]])
         HealBot_Options_SetText(HealBot_Options_SpellTargetLastTarget,HEALBOT_OPTIONS_SPELLSTARGETLASTTARGET)
         g=_G["HealBot_Options_HealSpellsSelect"]
-        g:SetText(HEALBOT_WORD_SELECT)
-        HealBot_Options_SetLabel("healbotspellshelpotherfontstr",HEALBOT_OPTIONS_OTHERSPELLS)
-        g=_G["HealBot_Options_OtherSpellsSelect"]
         g:SetText(HEALBOT_WORD_SELECT)
         HealBot_Options_SetLabel("healbotspellshelpmacrofontstr",HEALBOT_WORD_MACROS)
         g=_G["HealBot_Options_MacrosSelect"]
@@ -24510,7 +24090,7 @@ function HealBot_Options_SpellsTab(tab)
         HealBot_Options_SetText(HealBot_Options_ProtectPvP,HEALBOT_OPTIONS_PROTECTPVP)
         HealBot_Options_EnableSmartCast:SetChecked(HealBot_Globals.SmartCast)
         HealBot_Options_SetText(HealBot_Options_EnableSmartCast,HEALBOT_OPTIONS_ENABLESMARTCAST)
-        HealBot_Options_SetLabel("healbotspellshelphealfontstr",HEALBOT_OPTIONS_SMARTCASTHEAL)
+        HealBot_Options_SetLabel("healbotspellshelphealfontstr",HEALBOT_OPTIONS_TAB_SPELLS)
         HealBot_Options_SetLabel("healbotsetspellsfontstr",HEALBOT_OPTIONS_SETSPELLS)
         HealBot_Options_SetLabel("HealBot_AutoTarget_ButtonText",HEALBOT_OPTIONS_COMBOAUTOTARGET)
         HealBot_Options_SetLabel("HealBot_AutoTrinket_ButtonText",HEALBOT_OPTIONS_COMBOAUTOTRINKET)
@@ -24538,17 +24118,7 @@ function HealBot_Options_SpellsTab(tab)
         HealBot_Options_SetText(HealBot_Options_Button4,HEALBOT_OPTIONS_BUTTON4)
         HealBot_Options_SetText(HealBot_Options_Button5,HEALBOT_OPTIONS_BUTTON5)
         HealBot_Options_SelectHealSpellsCombo.initialize = HealBot_Options_SelectHealSpellsCombo_DropDown
-        if HealBot_Options_luVars["ActionBarsCombo"]==1 then
-            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_SMARTCASTHEAL)
-        elseif HealBot_Options_luVars["ActionBarsCombo"]==2 then
-            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_HARMFUL_SPELLS)
-        elseif HealBot_Options_luVars["ActionBarsCombo"]==3 then
-            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_EMERGSPELLS)
-        else
-            UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_ICONSCMD)
-        end
-        HealBot_Options_SelectOtherSpellsCombo.initialize = HealBot_Options_SelectOtherSpellsCombo_DropDown
-        UIDropDownMenu_SetText(HealBot_Options_SelectOtherSpellsCombo, HEALBOT_OPTIONS_OTHERSPELLS)
+        UIDropDownMenu_SetText(HealBot_Options_SelectHealSpellsCombo, HEALBOT_OPTIONS_TAB_SPELLS)
         HealBot_Options_SelectMacrosCombo.initialize = HealBot_Options_SelectMacrosCombo_DropDown
         UIDropDownMenu_SetText(HealBot_Options_SelectMacrosCombo, HEALBOT_WORD_MACROS)
         HealBot_Options_SelectItemsCombo.initialize = HealBot_Options_SelectItemsCombo_DropDown

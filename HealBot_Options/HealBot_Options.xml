@@ -7191,9 +7191,9 @@
                   </Frame>
                   <CheckButton name="HealBot_Options_UseIconCmds" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
-                      <Anchor point="TOPLEFT">
+                      <Anchor point="BOTTOM">
                         <Offset>
-                          <AbsDimension x="220" y="-75" />
+                          <AbsDimension x="-70" y="20" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7207,7 +7207,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="200" y="-110" />
+                          <AbsDimension x="200" y="-85" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7274,7 +7274,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="155" y="-180"/>
+                          <AbsDimension x="155" y="-155"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7475,7 +7475,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button1" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7624,7 +7624,7 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button2" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-40"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7773,7 +7773,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_Button3" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-40"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -7922,7 +7922,7 @@
                     <Anchors>
                       <Anchor point="TOPRIGHT" relativeTo="HealBot_Options_Button4" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                          <AbsDimension x="0" y="-40"/>
+                          <AbsDimension x="0" y="-45"/>
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8123,7 +8123,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-110" />
+                          <AbsDimension x="80" y="-115" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8132,7 +8132,7 @@
                     </Size>
                     <Layers>
                       <Layer level="OVERLAY">
-                        <FontString name="healbotspellshelphealfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_SMARTCASTHEAL">
+                        <FontString name="healbotspellshelphealfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_TAB_SPELLS">
                           <Anchors>
                             <Anchor point="TOPLEFT">
                               <Offset>
@@ -8161,54 +8161,7 @@
                       </Anchor>
                     </Anchors>
                     <Scripts>
-                      <OnClick>HealBot_Options_SpellsSelect_OnClick(self,"Heal")</OnClick>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTSPELL",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTSPELL",false)</OnLeave>
-                    </Scripts>
-                  </Button>
-                  <Frame name="HealBot_Options_SelectOtherSpellsCombo" inherits="UIDropDownMenuTemplate">
-                    <Anchors>
-                      <Anchor point="TOPLEFT">
-                        <Offset>
-                          <AbsDimension x="80" y="-170" />
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Size>
-                      <AbsDimension x="270" y="20"/>
-                    </Size>
-                    <Layers>
-                      <Layer level="OVERLAY">
-                        <FontString name="healbotspellshelpotherfontstr" inherits="GameFontNormalSmall" text="HEALBOT_OPTIONS_OTHERSPELLS">
-                          <Anchors>
-                            <Anchor point="TOPLEFT">
-                              <Offset>
-                                <AbsDimension x="25" y="10"/>
-                              </Offset>
-                            </Anchor>
-                          </Anchors>
-                        </FontString>
-                      </Layer>
-                    </Layers>
-                    <Scripts>
-                      <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 245)</OnLoad>
-                      <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTSPELL",true)</OnEnter>
-                      <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTSPELL",false)</OnLeave>
-                    </Scripts>
-                  </Frame>
-                  <Button name="HealBot_Options_OtherSpellsSelect" inherits="UIPanelButtonTemplate" text="HEALBOT_WORD_SELECT">
-                    <Size>
-                      <AbsDimension x="115" y="27"/>
-                    </Size>
-                    <Anchors>
-                      <Anchor point="TOPLEFT" relativeTo="HealBot_Options_SelectOtherSpellsCombo" relativePoint="TOPRIGHT">
-                        <Offset>
-                          <AbsDimension x="5" y="0"/>
-                        </Offset>
-                      </Anchor>
-                    </Anchors>
-                    <Scripts>
-                      <OnClick>HealBot_Options_SpellsSelect_OnClick(self,"Other")</OnClick>
+                      <OnClick>HealBot_Options_SpellsSelect_OnClick(self,"Spells")</OnClick>
                       <OnEnter>HealBot_Options_Show_Help("SPELLSSELECTSPELL",true)</OnEnter>
                       <OnLeave>HealBot_Options_Show_Help("SPELLSSELECTSPELL",false)</OnLeave>
                     </Scripts>
@@ -8217,7 +8170,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-230" />
+                          <AbsDimension x="80" y="-185" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8264,7 +8217,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-290" />
+                          <AbsDimension x="80" y="-255" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8311,7 +8264,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-350" />
+                          <AbsDimension x="80" y="-325" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -8358,7 +8311,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="80" y="-410" />
+                          <AbsDimension x="80" y="-395" />
                         </Offset>
                       </Anchor>
                     </Anchors>

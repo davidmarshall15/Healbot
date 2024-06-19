@@ -427,6 +427,7 @@ function HealBot_ToolTip_ShowDebug(button)
     hbTipDebugText["isPlayer"]="False"
     hbTipDebugText["debugtrack"]="false"
     hbTipDebugText["range40"]=-99
+    hbTipDebugText["status"]=-99
     hbTipDebugText["debugtime"]=""
     if button then
         HealBot_Tooltip_SetLine("Button ID:"..button.id,0.4,1,1,1,"Unit ID:"..button.unit)
@@ -441,6 +442,7 @@ function HealBot_ToolTip_ShowDebug(button)
             HealBot_Tooltip_SetLine("UnitExists is False",0.4,1,1,1)
         end
         hbTipDebugText["range40"]=button.status.range
+        hbTipDebugText["status"]=button.status.current
         if button.player then hbTipDebugText["player"]="True" end
         if button.isplayer then hbTipDebugText["isPlayer"]="True" end
         if button.debug.track then
@@ -452,7 +454,7 @@ function HealBot_ToolTip_ShowDebug(button)
     end
     HealBot_Tooltip_SetLine("Button Player is "..hbTipDebugText["player"],0.4,1,1,1,"Button isPlayer is "..hbTipDebugText["isPlayer"])
     HealBot_Tooltip_SetLine("Debug track is "..hbTipDebugText["debugtrack"],0.4,1,1,1,"Debug time is "..hbTipDebugText["debugtime"])
-    HealBot_Tooltip_SetLine("Range 40",0.4,1,1,1,hbTipDebugText["range40"],0.4,1,1,1)
+    HealBot_Tooltip_SetLine("Range state is "..hbTipDebugText["range40"],0.4,1,1,1,"Current status="..hbTipDebugText["status"],0.4,1,1,1)
 end
 
 function HealBot_ToolTip_ToggleDebug()

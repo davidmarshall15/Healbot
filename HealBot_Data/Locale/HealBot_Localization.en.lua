@@ -494,12 +494,11 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SMARTCASTSPELLS         = "Include spells";
     HEALBOT_OPTIONS_SMARTCASTDISPELL        = "Remove debuffs";
     HEALBOT_OPTIONS_SMARTCASTBUFF           = "Add buffs";
-    HEALBOT_OPTIONS_SMARTCASTHEAL           = "Healing spells";
     HEALBOT_OPTIONS_BAR2SIZE                = "Power bar size";
     HEALBOT_OPTIONS_SETSPELLS               = "Set spells for";
     HEALBOT_OPTIONS_USEICONCMDS             = "Use icon commands";
-    HEALBOT_OPTIONS_ENABLEDBARS             = "Health Bars - Helpful spells on friendly characters";
-    HEALBOT_OPTIONS_EMERGBARS               = "Emergency Bars - All spells on all characters";
+    HEALBOT_OPTIONS_ENABLEDBARS             = "Health Bars - Friendly characters";
+    HEALBOT_OPTIONS_EMERGBARS               = "Emergency Bars - All characters";
     HEALBOT_OPTIONS_ICONS                   = "Icons: Commands that can be used on icons";
     HEALBOT_OPTIONS_MONITORDEBUFFS          = "Monitor debuffs";
     HEALBOT_OPTIONS_DEBUFFTEXT1             = "Spell to remove debuffs";
@@ -955,7 +954,6 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_BUFFNAME                = "Buff Name"
     HEALBOT_OPTIONS_DOUBLEROW               = "Double row"
     HEALBOT_OPTIONS_HOTBELOWBAR             = "Below bar"
-    HEALBOT_OPTIONS_OTHERSPELLS             = "Other spells"
     HEALBOT_WORD_MACROS                     = "Macros"
     HEALBOT_WORD_SELECT                     = "Select"
     HEALBOT_WORD_SELECT_ALL                 = "Select all"
@@ -1757,7 +1755,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"
 
     HEALBOT_ENEMY_NO_TARGET                 = "No target"
-    HEALBOT_OPTIONS_ENEMYBARS               = "Health Bars - Harmful spells on hostile characters";
+    HEALBOT_OPTIONS_ENEMYBARS               = "Health Bars - Enemy characters";
     HEALBOT_OPTIONS_HARMFUL_SPELLS          = "Harmful Spells"
     HEALBOT_ENEMY_INCLUDE_MYTARGETS         = "Include Private List targets"
     HEALBOT_ENEMY_NUMBER_BOSSES             = "Number of Bosses"
