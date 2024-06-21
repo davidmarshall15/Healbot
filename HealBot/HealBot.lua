@@ -975,14 +975,14 @@ function HealBot_SlashCmd(cmd)
             HealBot_AddDebug("#: UpdateNumUnits="..HealBot_luVars["UpdateNumUnits"].." nProcs="..HealBot_Timers_retLuVars("nProcs"))
             --local z=(UnitGetTotalAbsorbs(aButton.unit) or 0)
             local z=0
-            if HEALBOT_GAME_VERSION>1 then
-                z=GetMastery()
-                HealBot_AddDebug("Mastery="..z)
-            end
-            z=GetSpellBonusHealing()
-            HealBot_AddDebug("BonusHealing="..z)
-            local lActionTexture = GetActionTexture(2)
-            HealBot_AddDebug("lActionTexture="..(lActionTexture or "nil"))
+            --if HEALBOT_GAME_VERSION>1 then
+            --    z=GetMastery()
+            --    HealBot_AddDebug("Mastery="..z)
+            --end
+            --z=GetSpellBonusHealing()
+            --HealBot_AddDebug("BonusHealing="..z)
+            local hbSpell=HealBot_Spells_GetName(139)
+            HealBot_AddDebug("hbSpell="..(hbSpell or "nil"))
            -- HealBot_Action_EnableButtonGlowType(aButton, 1,0,0, "PLUGIN", "AW1", 6)
            -- HealBot_Action_setAdaptive()
             --HealBot_Aura_Counts(aButton)
@@ -991,13 +991,13 @@ function HealBot_SlashCmd(cmd)
          --       HealBot_AddDebug("k="..k.." v="..v,"Sort",true)
          --   end
             if HEALBOT_GAME_VERSION==4 then
-               --for x=1, 15 do
-               --     local tTab, tIndex=1, x
-               --     local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
-               --     HealBot_AddDebug("Talent(.."..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
-               -- end
-               local Continent = HealBot_MountsPets_getContinent()
-               HealBot_AddDebug("Continent is "..Continent,"Zone",true)
+               for x=1, 19 do
+                    local tTab, tIndex=3, x
+                    local name, iconTexture, tier, column, rank, maxRank, isExceptional, available, previewRank, previewAvailable = GetTalentInfo(tTab, tIndex)
+                    HealBot_AddDebug("Talent("..tTab..","..tIndex..") is "..name.." tier="..tier.." column="..column.." rank="..rank,"Talent",true)
+                end
+               --local Continent = HealBot_MountsPets_getContinent()
+               --HealBot_AddDebug("Continent is "..Continent,"Zone",true)
                
             end
         else
@@ -1853,11 +1853,14 @@ function HealBot_RecalcParty(changeType)
     if changeType==5 and not HealBot_luVars["UpdateEnemyFrame"] then
         HealBot_Timers_Set("OOC","RefreshPartyNextRecalcEnemy")
     else
+        HealBot_luVars["RefreshListsComplete"]=false
         HealBot_Action_resetShouldHealSomeFrames()
         HealBot_ClearPlayerButtonCache()
         HealBot_Panel_PartyChanged(HealBot_Data["UILOCK"], changeType)
         if not HealBot_luVars["TestBarsOn"] then
             HealBot_RefreshLists()
+        else
+            HealBot_luVars["RefreshListsComplete"]=true
         end
     end
 end
@@ -2095,110 +2098,110 @@ function HealBot_DoReset_Cures(pClassTrim)
     local i=1
     if pClassTrim=="DRUI" then
         if HEALBOT_GAME_VERSION<4 then
-            if HealBot_Spell_Names[HBC_DRUID_REMOVE_CURSE] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_DRUID_REMOVE_CURSE]) then
+            if HealBot_Spells_KnownByName(HBC_DRUID_REMOVE_CURSE) then
                 HealBot_Config_Cures.HealBotDebuffText[i]=HBC_DRUID_REMOVE_CURSE
                 i=i+1
             end
-            if HealBot_Spell_Names[HBC_DRUID_ABOLISH_POISON] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_DRUID_ABOLISH_POISON]) then
+            if HealBot_Spells_KnownByName(HBC_DRUID_ABOLISH_POISON) then
                 HealBot_Config_Cures.HealBotDebuffText[i]=HBC_DRUID_ABOLISH_POISON
-            elseif HealBot_Spell_Names[HBC_DRUID_CURE_POISON] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_DRUID_CURE_POISON]) then
+            elseif HealBot_Spells_KnownByName(HBC_DRUID_CURE_POISON) then
                 HealBot_Config_Cures.HealBotDebuffText[i]=HBC_DRUID_CURE_POISON
             end
         else
-            if HealBot_Spell_Names[HEALBOT_NATURES_CURE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_NATURES_CURE]) then
-                if HealBot_Spell_Names[HEALBOT_REMOVE_CORRUPTION] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_REMOVE_CORRUPTION]) then
+            if HealBot_Spells_KnownByName(HEALBOT_NATURES_CURE) then
+                if HealBot_Spells_KnownByName(HEALBOT_REMOVE_CORRUPTION) then
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_NATURES_CURE,[3]=HEALBOT_WORDS_NONE}
                 else
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURES_CURE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
                 end
-            elseif HealBot_Spell_Names[HEALBOT_REMOVE_CORRUPTION] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_REMOVE_CORRUPTION]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_REMOVE_CORRUPTION) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CORRUPTION,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
         end
     elseif pClassTrim=="MONK" then
-        if HealBot_Spell_Names[HEALBOT_DETOX] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_DETOX]) then
+        if HealBot_Spells_KnownByName(HEALBOT_DETOX) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_DETOX,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="PALA" then
         if HEALBOT_GAME_VERSION<4 then
-            if HealBot_Spell_Names[HEALBOT_CLEANSE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE]) then
+            if HealBot_Spells_KnownByName(HEALBOT_CLEANSE) then
                 HealBot_Config_Cures.HealBotDebuffText[i]=HEALBOT_CLEANSE
                 i=i+1
             end
-            if HealBot_Spell_Names[HBC_PURIFY] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_PURIFY]) then
+            if HealBot_Spells_KnownByName(HBC_PURIFY) then
                 HealBot_Config_Cures.HealBotDebuffText[i]=HBC_PURIFY
             end
         else
-            if HealBot_Spell_Names[HEALBOT_CLEANSE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE]) then
+            if HealBot_Spells_KnownByName(HEALBOT_CLEANSE) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
-            elseif HealBot_Spell_Names[HEALBOT_CLEANSE_TOXIN] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE_TOXIN]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_CLEANSE_TOXIN) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE_TOXIN,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
         end
     elseif pClassTrim=="PRIE" then
-        if HealBot_Spell_Names[HEALBOT_PURIFY] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY]) then
-            if HealBot_Spell_Names[HBC_PRIEST_ABOLISH_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_PRIEST_ABOLISH_DISEASE]) then
+        if HealBot_Spells_KnownByName(HEALBOT_PURIFY) then
+            if HealBot_Spells_KnownByName(HBC_PRIEST_ABOLISH_DISEASE) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HBC_PRIEST_ABOLISH_DISEASE,[3]=HEALBOT_WORDS_NONE}
-            elseif HealBot_Spell_Names[HEALBOT_MASS_DISPEL] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_MASS_DISPEL]) then
-                if HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_MASS_DISPEL) then
+                if HealBot_Spells_KnownByName(HEALBOT_PURIFY_DISEASE) then
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_PURIFY_DISEASE}
                 else
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_MASS_DISPEL,[3]=HEALBOT_WORDS_NONE}
                 end
-            elseif HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_PURIFY_DISEASE) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
             else
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
-        elseif HealBot_Spell_Names[HEALBOT_MASS_DISPEL] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_MASS_DISPEL]) then
-            if HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE]) then
+        elseif HealBot_Spells_KnownByName(HEALBOT_MASS_DISPEL) then
+            if HealBot_Spells_KnownByName(HEALBOT_PURIFY_DISEASE) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_PURIFY_DISEASE,[3]=HEALBOT_WORDS_NONE}
             else
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_MASS_DISPEL,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
-        elseif HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY_DISEASE]) then
+        elseif HealBot_Spells_KnownByName(HEALBOT_PURIFY_DISEASE) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY_DISEASE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="SHAM" then
         if HEALBOT_GAME_VERSION<3 then
-            if HealBot_Spell_Names[HBC_SHAMAN_CURE_POISON] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_SHAMAN_CURE_POISON]) then
-                if HealBot_Spell_Names[HBC_SHAMAN_CURE_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_SHAMAN_CURE_DISEASE]) then
+            if HealBot_Spells_KnownByName(HBC_SHAMAN_CURE_POISON) then
+                if HealBot_Spells_KnownByName(HBC_SHAMAN_CURE_DISEASE) then
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HBC_SHAMAN_CURE_POISON,[2]=HBC_SHAMAN_CURE_DISEASE,[3]=HEALBOT_WORDS_NONE}
                 else
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HBC_SHAMAN_CURE_POISON,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
                 end
-            elseif HealBot_Spell_Names[HBC_SHAMAN_CURE_DISEASE] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_SHAMAN_CURE_DISEASE]) then
+            elseif HealBot_Spells_KnownByName(HBC_SHAMAN_CURE_DISEASE) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HBC_SHAMAN_CURE_DISEASE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
         elseif HEALBOT_GAME_VERSION<4 then
-            if HealBot_Spell_Names[HBC_SHAMAN_CURE_POISON] and HealBot_KnownSpell(HealBot_Spell_Names[HBC_SHAMAN_CURE_POISON]) then
-                if HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT]) then
+            if HealBot_Spells_KnownByName(HBC_SHAMAN_CURE_POISON) then
+                if HealBot_Spells_KnownByName(HEALBOT_CLEANSE_SPIRIT) then
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HBC_SHAMAN_CURE_POISON,[2]=HEALBOT_CLEANSE_SPIRIT,[3]=HEALBOT_WORDS_NONE}
                 else
                     HealBot_Config_Cures.HealBotDebuffText = {[1]=HBC_SHAMAN_CURE_POISON,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
                 end
-            elseif HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_CLEANSE_SPIRIT) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE_SPIRIT,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
         else
-            if HealBot_Spell_Names[HEALBOT_PURIFY_SPIRIT] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_PURIFY_SPIRIT]) then
+            if HealBot_Spells_KnownByName(HEALBOT_PURIFY_SPIRIT) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_PURIFY_SPIRIT,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
-            elseif HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CLEANSE_SPIRIT]) then
+            elseif HealBot_Spells_KnownByName(HEALBOT_CLEANSE_SPIRIT) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_CLEANSE_SPIRIT,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
         end
     elseif pClassTrim=="MAGE" then
-        if HealBot_Spell_Names[HEALBOT_REMOVE_CURSE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_REMOVE_CURSE]) then
+        if HealBot_Spells_KnownByName(HEALBOT_REMOVE_CURSE) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_REMOVE_CURSE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     elseif pClassTrim=="EVOK" then
-        if HealBot_Spell_Names[HEALBOT_NATURALIZE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_NATURALIZE]) then
-            if HealBot_Spell_Names[HEALBOT_CAUTERIZING_FLAME] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_CAUTERIZING_FLAME]) then
+        if HealBot_Spells_KnownByName(HEALBOT_NATURALIZE) then
+            if HealBot_Spells_KnownByName(HEALBOT_CAUTERIZING_FLAME) then
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURALIZE,[2]=HEALBOT_CAUTERIZING_FLAME,[3]=HEALBOT_WORDS_NONE}
             else 
                 HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_NATURALIZE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
             end
-        elseif HealBot_Spell_Names[HEALBOT_EXPUNGE] and HealBot_KnownSpell(HealBot_Spell_Names[HEALBOT_EXPUNGE]) then
+        elseif HealBot_Spells_KnownByName(HEALBOT_EXPUNGE) then
             HealBot_Config_Cures.HealBotDebuffText = {[1]=HEALBOT_EXPUNGE,[2]=HEALBOT_WORDS_NONE,[3]=HEALBOT_WORDS_NONE}
         end
     end
@@ -2276,7 +2279,7 @@ local function HealBot_CacheItemIdsInBag(id, bag, slot)
     HealBot_ItemsInBags[id].bag=bag
     HealBot_ItemsInBags[id].slot=slot
     if not hbCacheItemNames[id] then
-        local itemName, _, _, _, _, _, _, _, _, itemTexture, _, classID = GetItemInfo(id)
+        local itemName, _, _, _, _, _, _, _, _, itemTexture, _, classID = HealBot_Spells_ItemInfo(id)
         if itemName then
             hbCacheItemNames[id]=itemName
             hbCacheItemIcons[itemName]=itemTexture
@@ -2381,146 +2384,141 @@ function HealBot_DoReset_Buffs(pClassTrim)
                                       [6]=HEALBOT_WORDS_NONE,[7]=HEALBOT_WORDS_NONE,[8]=HEALBOT_WORDS_NONE,[9]=HEALBOT_WORDS_NONE,[10]=HEALBOT_WORDS_NONE}
     HealBot_Config_Buffs.HealBotBuffDropDown = {[1]=4,[2]=4,[3]=4,[4]=4,[5]=4,[6]=4,[7]=4,[8]=4,[9]=2,[10]=2}
     if pClassTrim=="DRUI" then
-        if HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_MARK_OF_THE_WILD)
+        if HealBot_Spells_KnownByID(HEALBOT_MARK_OF_THE_WILD) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_MARK_OF_THE_WILD)
         end
-        if HealBot_KnownSpell(HBC_GIFT_OF_THE_WILD) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HBC_GIFT_OF_THE_WILD)
+        if HealBot_Spells_KnownByID(HBC_GIFT_OF_THE_WILD) then
+            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spells_KnownByID(HBC_GIFT_OF_THE_WILD)
             HealBot_Config_Buffs.HealBotBuffDropDown[1]=2
         end
-        if HealBot_KnownSpell(HBC_THORNS) then
-            HealBot_Config_Buffs.HealBotBuffText[3]=HealBot_KnownSpell(HBC_THORNS)
+        if HealBot_Spells_KnownByID(HBC_THORNS) then
+            HealBot_Config_Buffs.HealBotBuffText[3]=HealBot_Spells_KnownByID(HBC_THORNS)
             HealBot_Config_Buffs.HealBotBuffDropDown[3]=15
         end
     elseif pClassTrim=="MONK" then
         local i=1
-        if HealBot_KnownSpell(HEALBOT_LEGACY_EMPEROR) and HealBot_Config.CurrentSpec==3 then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_LEGACY_EMPEROR)
+        if HealBot_Spells_KnownByID(HEALBOT_LEGACY_EMPEROR) and HealBot_Config.CurrentSpec==3 then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_LEGACY_EMPEROR)
             i=i+1
-        elseif HealBot_KnownSpell(HEALBOT_LEGACY_WHITETIGER) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_LEGACY_WHITETIGER)
+        elseif HealBot_Spells_KnownByID(HEALBOT_LEGACY_WHITETIGER) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_LEGACY_WHITETIGER)
         end
     elseif pClassTrim=="PALA" then
         local i=1
-        if HealBot_KnownSpell(HEALBOT_BLESSING_OF_KINGS) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_BLESSING_OF_KINGS)
+        if HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_KINGS) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_KINGS)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
             i=i+1 
-        elseif HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_KINGS) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_KINGS)
+        elseif HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_KINGS) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_KINGS)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
             i=i+1
-        elseif HealBot_KnownSpell(HBC_BLESSING_OF_KINGS) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_BLESSING_OF_KINGS)
-            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
-            i=i+1
-        end
-        if HealBot_KnownSpell(HEALBOT_BLESSING_OF_MIGHT) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_BLESSING_OF_MIGHT)
-            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
-            i=i+1
-        elseif HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_MIGHT) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_MIGHT)
-            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
-            i=i+1
-        elseif HealBot_KnownSpell(HBC_BLESSING_OF_MIGHT) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_BLESSING_OF_MIGHT)
+        elseif HealBot_Spells_KnownByID(HBC_BLESSING_OF_KINGS) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_BLESSING_OF_KINGS)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
             i=i+1
         end
-        if HealBot_KnownSpell(HEALBOT_BLESSING_OF_WISDOM) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_BLESSING_OF_WISDOM)
+        if HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_MIGHT)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
-        elseif HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_WISDOM) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_GREATER_BLESSING_OF_WISDOM)
+            i=i+1
+        elseif HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_MIGHT)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
-        elseif HealBot_KnownSpell(HBC_BLESSING_OF_WISDOM) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_BLESSING_OF_WISDOM)
+            i=i+1
+        elseif HealBot_Spells_KnownByID(HBC_BLESSING_OF_MIGHT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_BLESSING_OF_MIGHT)
+            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
+            i=i+1
+        end
+        if HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_WISDOM) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_BLESSING_OF_WISDOM)
+            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
+        elseif HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_WISDOM) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_GREATER_BLESSING_OF_WISDOM)
+            HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
+        elseif HealBot_Spells_KnownByID(HBC_BLESSING_OF_WISDOM) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_BLESSING_OF_WISDOM)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=1
         end
     elseif pClassTrim=="PRIE" then
-        if HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE)
-        elseif HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
+        if HealBot_Spells_KnownByID(HBC_POWER_WORD_FORTITUDE) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HBC_POWER_WORD_FORTITUDE)
+        elseif HealBot_Spells_KnownByID(HEALBOT_POWER_WORD_FORTITUDE) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_POWER_WORD_FORTITUDE)
         end
         local i=2
-        if HealBot_KnownSpell(HBC_POWER_WORD_FORTITUDE) and HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HEALBOT_POWER_WORD_FORTITUDE)
-            HealBot_Config_Buffs.HealBotBuffDropDown[1]=2
-            i=i+1
-        end
-        if HealBot_KnownSpell(HEALBOT_FEAR_WARD) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_FEAR_WARD)
+        if HealBot_Spells_KnownByID(HEALBOT_FEAR_WARD) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_FEAR_WARD)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=15
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_INNER_FIRE) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_INNER_FIRE)
+        if HealBot_Spells_KnownByID(HBC_INNER_FIRE) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_INNER_FIRE)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=2
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_INNER_WILL) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_INNER_WILL)
+        if HealBot_Spells_KnownByID(HBC_INNER_WILL) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_INNER_WILL)
             HealBot_Config_Buffs.HealBotBuffDropDown[i]=2
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_DIVINE_SPIRIT) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_DIVINE_SPIRIT)
+        if HealBot_Spells_KnownByID(HBC_DIVINE_SPIRIT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_DIVINE_SPIRIT)
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_PRAYER_OF_SPIRIT) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_PRAYER_OF_SPIRIT)
+        if HealBot_Spells_KnownByID(HBC_PRAYER_OF_SPIRIT) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_PRAYER_OF_SPIRIT)
             HealBot_Config_Buffs.HealBotBuffDropDown[i-1]=2
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_SHADOW_PROTECTION) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_SHADOW_PROTECTION)
+        if HealBot_Spells_KnownByID(HBC_SHADOW_PROTECTION) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_SHADOW_PROTECTION)
             i=i+1
-        elseif HealBot_KnownSpell(HEALBOT_SHADOW_PROTECTION) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HEALBOT_SHADOW_PROTECTION)
+        elseif HealBot_Spells_KnownByID(HEALBOT_SHADOW_PROTECTION) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HEALBOT_SHADOW_PROTECTION)
             i=i+1
         end
-        if HealBot_KnownSpell(HBC_PRAYER_OF_SHADOW_PROTECTION) then
-            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_KnownSpell(HBC_PRAYER_OF_SHADOW_PROTECTION)
+        if HealBot_Spells_KnownByID(HBC_PRAYER_OF_SHADOW_PROTECTION) then
+            HealBot_Config_Buffs.HealBotBuffText[i]=HealBot_Spells_KnownByID(HBC_PRAYER_OF_SHADOW_PROTECTION)
             HealBot_Config_Buffs.HealBotBuffDropDown[i-1]=2
             i=i+1
         end
     elseif pClassTrim=="SHAM" then
-        if HealBot_KnownSpell(HEALBOT_WATER_SHIELD) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_WATER_SHIELD)
+        if HealBot_Spells_KnownByID(HEALBOT_WATER_SHIELD) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_WATER_SHIELD)
             HealBot_Config_Buffs.HealBotBuffDropDown[1]=2
         end
-        if HealBot_KnownSpell(HEALBOT_EARTH_SHIELD) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HEALBOT_EARTH_SHIELD)
+        if HealBot_Spells_KnownByID(HEALBOT_EARTH_SHIELD) then
+            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spells_KnownByID(HEALBOT_EARTH_SHIELD)
             HealBot_Config_Buffs.HealBotBuffDropDown[2]=15
-        elseif HealBot_KnownSpell(HBC_EARTH_SHIELD) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HBC_EARTH_SHIELD)
+        elseif HealBot_Spells_KnownByID(HBC_EARTH_SHIELD) then
+            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spells_KnownByID(HBC_EARTH_SHIELD)
             HealBot_Config_Buffs.HealBotBuffDropDown[2]=15
         end
-        if HealBot_KnownSpell(HEALBOT_SPIRIT_OF_THE_ALPHA) then
-            HealBot_Config_Buffs.HealBotBuffText[3]=HealBot_KnownSpell(HEALBOT_SPIRIT_OF_THE_ALPHA)
+        if HealBot_Spells_KnownByID(HEALBOT_SPIRIT_OF_THE_ALPHA) then
+            HealBot_Config_Buffs.HealBotBuffText[3]=HealBot_Spells_KnownByID(HEALBOT_SPIRIT_OF_THE_ALPHA)
             HealBot_Config_Buffs.HealBotBuffDropDown[3]=1
         end
     elseif pClassTrim=="MAGE" then
-        if HealBot_KnownSpell(HEALBOT_ARCANE_BRILLIANCE) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_ARCANE_BRILLIANCE)
+        if HealBot_Spells_KnownByID(HEALBOT_ARCANE_BRILLIANCE) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_ARCANE_BRILLIANCE)
         end
-        if HealBot_KnownSpell(HBC_ARCANE_BRILLIANCE) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HBC_ARCANE_BRILLIANCE)
+        if HealBot_Spells_KnownByID(HBC_ARCANE_BRILLIANCE) then
+            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spells_KnownByID(HBC_ARCANE_BRILLIANCE)
             HealBot_Config_Buffs.HealBotBuffDropDown[1]=2
         end
     elseif pClassTrim=="WARR" then
-        if HealBot_KnownSpell(HEALBOT_COMMANDING_SHOUT) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_COMMANDING_SHOUT)
+        if HealBot_Spells_KnownByID(HEALBOT_COMMANDING_SHOUT) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_COMMANDING_SHOUT)
         end
-        if HealBot_KnownSpell(HEALBOT_VIGILANCE) then
-            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_KnownSpell(HEALBOT_VIGILANCE)
+        if HealBot_Spells_KnownByID(HEALBOT_VIGILANCE) then
+            HealBot_Config_Buffs.HealBotBuffText[2]=HealBot_Spells_KnownByID(HEALBOT_VIGILANCE)
             HealBot_Config_Buffs.HealBotBuffDropDown[2]=2
         end
     elseif pClassTrim=="WARL" then
-        if HealBot_KnownSpell(HEALBOT_DARK_INTENT) then
-            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_KnownSpell(HEALBOT_DARK_INTENT)
+        if HealBot_Spells_KnownByID(HEALBOT_DARK_INTENT) then
+            HealBot_Config_Buffs.HealBotBuffText[1]=HealBot_Spells_KnownByID(HEALBOT_DARK_INTENT)
         end
     elseif pClassTrim=="EVOK" then
     end
@@ -3103,21 +3101,6 @@ function HealBot_Reset_Unit(unit)
     if pButton then
         HealBot_Reset_Button(pButton)
     end
-end
-
-local ksName=false
-function HealBot_KnownSpell(spellID)
-      --HealBot_setCall("HealBot_KnownSpell")
-    if not spellID then return nil end
-    if HealBot_Spell_IDs[spellID] and HealBot_Spell_IDs[spellID].known then   
-        return HealBot_Spell_IDs[spellID].name; 
-    else
-        ksName=HealBot_Spells_GetName(spellID) or false
-        if ksName and HealBot_Spell_Names[ksName] then
-            return ksName
-        end
-    end
-    return nil;
 end
 
 function HealBot_IncHeals_ClearUnit(button)
@@ -4026,6 +4009,7 @@ function HealBot_ResetClassIconTexture()
     end
 end
 
+local LoadAddOn=(C_AddOns and C_AddOns.LoadAddOn) or LoadAddOn
 function HealBot_InitPlugins()
       --HealBot_setCall("HealBot_InitPlugins")
     loaded, reason = LoadAddOn("HealBot_Plugin_Media")
@@ -5305,6 +5289,39 @@ function HealBot_UnitSlowUpdate(button)
     end
 end
 
+function HealBot_ProcessPluginClearDown()
+    if HealBot_luVars["pluginClearDown"]>0 then
+        if HealBot_luVars["pluginClearDown"]<2 then
+            HealBot_Timers_Set("OOC","ActionIconsValidateTarget")
+            HealBot_luVars["pluginClearDown"]=2
+        elseif HealBot_luVars["pluginClearDown"]<3 then
+            HealBot_Timers_Set("SKINS","ActionIconsPlayerNames")
+            HealBot_luVars["pluginClearDown"]=3
+        elseif HealBot_luVars["pluginClearDown"]<4 and HealBot_luVars["pluginThreat"] then 
+            HealBot_Plugin_Threat_Cleardown()
+            HealBot_luVars["pluginClearDown"]=4
+        elseif HealBot_luVars["pluginClearDown"]<5 and HealBot_luVars["pluginAuraWatch"] then
+            HealBot_Plugin_AuraWatch_Validate()
+            HealBot_luVars["pluginClearDown"]=5
+        elseif HealBot_luVars["pluginClearDown"]<6 and HealBot_luVars["pluginHealthWatch"] then 
+            HealBot_Plugin_HealthWatch_Validate()
+            HealBot_luVars["pluginClearDown"]=6
+        elseif HealBot_luVars["pluginClearDown"]<7 and HealBot_luVars["pluginManaWatch"] then 
+            HealBot_Plugin_ManaWatch_Validate()
+            HealBot_luVars["pluginClearDown"]=7
+        elseif HealBot_luVars["pluginClearDown"]<8 and HealBot_luVars["pluginTimeToLive"] then
+            HealBot_Plugin_TimeToLive_Cleardown()
+            HealBot_luVars["pluginClearDown"]=8
+        elseif HealBot_luVars["pluginClearDown"]<9 and HealBot_luVars["pluginTimeToDie"] then
+            HealBot_Plugin_TimeToDie_Cleardown()
+            HealBot_luVars["pluginClearDown"]=9
+        else
+            HealBot_luVars["pluginClearDown"]=0
+        end
+        C_Timer.After(0.02, HealBot_ProcessPluginClearDown)
+    end
+end
+
 function HealBot_ProcessRefreshTypes()
       --HealBot_setCall("HealBot_ProcessRefreshTypes")
     if not InCombatLockdown() then
@@ -5328,35 +5345,7 @@ function HealBot_ProcessRefreshTypes()
             HealBot_RecalcParty(4)
         elseif HealBot_RefreshTypes[5] then 
             HealBot_RecalcParty(5)
-        elseif HealBot_luVars["pluginClearDown"]>0 then
-            if HealBot_luVars["pluginClearDown"]<2 then
-                HealBot_Timers_Set("OOC","ActionIconsValidateTarget")
-                HealBot_luVars["pluginClearDown"]=2
-            elseif HealBot_luVars["pluginClearDown"]<3 then
-                HealBot_Timers_Set("SKINS","ActionIconsPlayerNames")
-                HealBot_luVars["pluginClearDown"]=3
-            elseif HealBot_luVars["pluginClearDown"]<4 and HealBot_luVars["pluginThreat"] then 
-                HealBot_Plugin_Threat_Cleardown()
-                HealBot_luVars["pluginClearDown"]=4
-            elseif HealBot_luVars["pluginClearDown"]<5 and HealBot_luVars["pluginAuraWatch"] then
-                HealBot_Plugin_AuraWatch_Validate()
-                HealBot_luVars["pluginClearDown"]=5
-            elseif HealBot_luVars["pluginClearDown"]<6 and HealBot_luVars["pluginHealthWatch"] then 
-                HealBot_Plugin_HealthWatch_Validate()
-                HealBot_luVars["pluginClearDown"]=6
-            elseif HealBot_luVars["pluginClearDown"]<7 and HealBot_luVars["pluginManaWatch"] then 
-                HealBot_Plugin_ManaWatch_Validate()
-                HealBot_luVars["pluginClearDown"]=7
-            elseif HealBot_luVars["pluginClearDown"]<8 and HealBot_luVars["pluginTimeToLive"] then
-                HealBot_Plugin_TimeToLive_Cleardown()
-                HealBot_luVars["pluginClearDown"]=8
-            elseif HealBot_luVars["pluginClearDown"]<9 and HealBot_luVars["pluginTimeToDie"] then
-                HealBot_Plugin_TimeToDie_Cleardown()
-                HealBot_luVars["pluginClearDown"]=9
-            else
-                HealBot_luVars["pluginClearDown"]=0
-            end
-        else
+        elseif HealBot_luVars["RefreshListsComplete"] then
             HealBot_luVars["ProcessRefresh"]=false
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
@@ -5367,10 +5356,11 @@ function HealBot_ProcessRefreshTypes()
                 HealBot_Timers_Set("OOC","ShowFramesOnSkinChange",0.1)
             end
             HealBot_Skins_setLuVars("AuxReset", false)
-            C_Timer.After(0.01, HealBot_SetTargetBar)
+            HealBot_SetTargetBar()
+            HealBot_ProcessPluginClearDown()
             return
         end
-        C_Timer.After(0.1, HealBot_ProcessRefreshTypes)
+        C_Timer.After(0.02, HealBot_ProcessRefreshTypes)
     else
         HealBot_Timers_Set("OOC","ProcessRefreshTypes")
     end
@@ -5913,6 +5903,7 @@ function HealBot_Update_ResetRefreshLists()
         HealBot_Debug_PerfUpdate("UpdateNumUnits", HealBot_luVars["UpdateNumUnits"].." ("..HealBot_luVars["NumUnitsInQueue"]..")")
     end
     HealBot_TestBarsState(HealBot_luVars["TestBarsOn"])
+    HealBot_luVars["RefreshListsComplete"]=true
 end
 
 function HealBot_RefreshLists()
@@ -7233,7 +7224,7 @@ function HealBot_OnEvent_UnitSpellCastComplete(button, unitTarget, castGUID, spe
       --HealBot_setCall("HealBot_OnEvent_UnitSpellCastComplete", button)
     if button.player then
         if HEALBOT_GAME_VERSION>8 and HealBot_Config_Cures.IgnoreOnCooldownDebuffs then
-            C_Timer.After(HealBot_luVars["DelayCD"], function() HealBot_Options_DebuffSpellAuraCD(HealBot_Spells_GetName(spellID) or GetItemInfoInstant(spellID) or spellID) end)
+            C_Timer.After(HealBot_luVars["DelayCD"], function() HealBot_Options_DebuffSpellAuraCD(HealBot_Spells_GetName(spellID) or HealBot_Spells_ItemInfoInstant(spellID) or spellID) end)
         end
         if HealBot_Spell_IDs[spellID] then
             HealBot_Check_SpellCooldown(spellID, HealBot_luVars["DelayCD"])
@@ -7300,7 +7291,7 @@ function HealBot_OnEvent_UnitSpellCastSent(caster,unitName,castGUID,spellID)
                         HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
                     end
                 end
-            elseif HealBot_Spell_Names[uscSpellName] and uscUnit and uscUnitName then
+            elseif HealBot_Spells_KnownByName(uscSpellName) and uscUnit and uscUnitName then
                 HealBot_CastNotify(uscUnitName,uscSpellName,uscUnit)
             end
         end

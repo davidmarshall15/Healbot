@@ -57,6 +57,8 @@ function HealBot_Init_TalentLookupImproved(callback)
             pattern=HEALBOT_IMPROVEDCLEANSE
         elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
             pattern=HEALBOT_IMPROVEDPURIFY_SPIRIT
+        elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
+            pattern=HEALBOT_IMPROVEDNATURES_CURE
         end
         if pattern then
             local specID = PlayerUtil.GetCurrentSpecID()
@@ -99,6 +101,12 @@ function HealBot_Init_TalentLookupImproved(callback)
                         else
                             HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", false)
                         end
+                    elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
+                        if improved then
+                            HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
+                        else
+                            HealBot_Options_setLuVars("DruidImprovedNaturesCure", false)
+                        end
                     end
                 elseif not callback then
                     HealBot_Timers_Set("LAST","TalentsLookupImprovedCallback",15)
@@ -133,17 +141,19 @@ function HealBot_Init_TalentLookupImproved(callback)
     end
 end
 
-local function HealBot_Init_ManaCost(spellId, spellBookId)
+local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
       --HealBot_setCall("HealBot_Init_ManaCost")
-    local hbMana=GetSpellPowerCost(spellId)
+    local hbMana=HealBot_Spells_PowerCost(spellId)
     local manaCost=0
     if hbMana and hbMana[1] and hbMana[1].cost then
         manaCost=hbMana[1].cost
     end
     if spellBookId then
         if manaCost==0 then
-            HealBot_SetToolTip(HealBot_ScanTooltip)
-            HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+            if not tipSet then
+                HealBot_SetToolTip(HealBot_ScanTooltip)
+                HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL);
+            end
             local ttText = getglobal("HealBot_ScanTooltipTextLeft2");
             if (ttText:GetText()) then
                 local line = ttText:GetText();
@@ -236,7 +246,7 @@ end
 function HealBot_Init_SetSpellRange(id, spellName, range)
     HealBot_Spell_IDs[id].range=range
     if range==30 then
-        if IsHelpfulSpell(spellName) then 
+        if HealBot_Spells_IsHelpful(spellName) then 
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
         --    HealBot_AddDebug("[HEAL30] Init range for "..spellName.." is "..range,"Range Helpful 30",true)
         elseif IsHarmfulSpell(spellName) then
@@ -244,7 +254,7 @@ function HealBot_Init_SetSpellRange(id, spellName, range)
             --HealBot_AddDebug("[HARM30] Init range for "..spellName.." is "..range,"Range Harmful 30",true)
         end
     elseif range==40 then 
-        if IsHelpfulSpell(spellName) then
+        if HealBot_Spells_IsHelpful(spellName) then
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
             --HealBot_AddDebug([HEAL] "Init range for "..spellName.." is "..range,"Range Helpful 40",true)
         elseif IsHarmfulSpell(spellName) then 
@@ -264,79 +274,75 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
 
     if ( not spell ) then return false; end
     if not spellName then spellName=spell end
-
-    if spellBookId then
-        if HEALBOT_GAME_VERSION<4 then 
-            local _, rank = GetSpellBookItemName(spellBookId, BOOKTYPE_SPELL)
-            cRank = rank
-        elseif HealBot_Data["PCLASSTRIM"]=="PRIE" then
-            if spellName==HEALBOT_PURIFY then 
-                if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
-                    HealBot_Options_setLuVars("PriestImprovedPurify", true)
-                else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                end
+    
+    if spellBookId then HealBot_SetToolTip(HealBot_ScanTooltip); HealBot_ScanTooltip:SetSpellBookItem(spellBookId, BOOKTYPE_SPELL) end
+    if HealBot_Data["PCLASSTRIM"]=="PRIE" then
+        if spellName==HEALBOT_PURIFY then 
+            if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("PriestImprovedPurify", true)
+            else
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
             end
-        elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-            if spellName==HEALBOT_CLEANSE then
-                if HEALBOT_GAME_VERSION>9 then
-                    if EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
-                        HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
-                    else
-                        HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                    end
-                else
-                    if HealBot_Config.CurrentSpec==1 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
-                        HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
-                    else
-                        HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                    end
-                end
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-            if spellName==HEALBOT_PURIFY_SPIRIT then
-                if EnumerateTooltipLines_helper(HEALBOT_CURSE, HealBot_ScanTooltip:GetRegions()) then
-                    HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
-                else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                end
-            elseif spellName==HEALBOT_CLEANSE_SPIRIT then
-                if HealBot_Config.CurrentSpec==3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
-                    HealBot_Options_setLuVars("ShamanImprovedCleanseSpirit", true)
-                else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                end
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-            if spellName==HEALBOT_NATURES_CURE then
-                if HealBot_Config.CurrentSpec==3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
-                    HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
-                else
-                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
-                end
-            end
-        elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-            --HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
         end
+    elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
+        if spellName==HEALBOT_CLEANSE then
+            if HEALBOT_GAME_VERSION>9 then
+                if spellBookId and EnumerateTooltipLines_helper(HEALBOT_DISEASE, HealBot_ScanTooltip:GetRegions()) or EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
+                    HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
+                else
+                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                end
+            else
+                if spellBookId and HealBot_Config.CurrentSpec==1 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
+                    HealBot_Options_setLuVars("PaladinImprovedCleanse", true)
+                else
+                    HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+                end
+            end
+        end
+    elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
+        if spellName==HEALBOT_PURIFY_SPIRIT then
+            if spellBookId and EnumerateTooltipLines_helper(HEALBOT_CURSE, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("ShamanImprovedPurifySpirit", true)
+            else
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+            end
+        elseif spellName==HEALBOT_CLEANSE_SPIRIT then
+            if spellBookId and HealBot_Config.CurrentSpec==3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("ShamanImprovedCleanseSpirit", true)
+            else
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+            end
+        end
+    elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
+        if spellName==HEALBOT_NATURES_CURE then
+            if spellBookId and EnumerateTooltipLines_helper(HEALBOT_POISON, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
+            else
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+            end
+        elseif spellName==HBC_DRUID_REMOVE_CURSE then
+            if spellBookId and HealBot_Config.CurrentSpec==3 and EnumerateTooltipLines_helper(HEALBOT_MAGIC, HealBot_ScanTooltip:GetRegions()) then
+                HealBot_Options_setLuVars("DruidImprovedNaturesCure", true)
+            else
+                HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
+            end
+        end
+    elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
+        --HealBot_Timers_Set("LAST","TalentsLookupImproved",1)
     end
 
-    --if HEALBOT_GAME_VERSION<4 and not cRank then 
-    --    cRank = GetSpellSubtext(id)
-    --end
     local hbCastTime=tonumber(msCast or 0);
     local hbCooldown=tonumber(cooldown or 0);
     if hbCastTime>999 then hbCastTime=HealBot_Util_Round(hbCastTime/1000,2) end
     if hbCooldown>999 then hbCooldown=HealBot_Util_Round(hbCooldown/1000,2) end
-    
 
     HealBot_Spell_IDs[id]={}
     HealBot_Spell_IDs[id].CastTime=hbCastTime;
-    HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId)
+    HealBot_Spell_IDs[id].Mana=HealBot_Init_ManaCost(id, spellBookId, true)
     HealBot_Spell_IDs[id].texture=texture
     HealBot_Spell_IDs[id].cooldown=hbCooldown
     HealBot_Init_SetSpellRange(id, spellName, hbRange)
-    
-    return cRank
 end
 
 local skipSpells={}
@@ -346,10 +352,10 @@ function HealBot_Init_SkipSpells()
 end
 
 local HealBot_Ranks={}
-function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
+function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId, cRank)
       --HealBot_setCall("HealBot_Init_Spells_addSpell")
     if not skipSpells[spellName] then
-        local cRank=HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId)
+        HealBot_Init_FindSpellRangeCast(spellId, spellName, spellBookId)
         if cRank and string.len(cRank)>1 and not HealBot_Globals.NoRanks then
             if not HealBot_Ranks[spellName] then HealBot_Ranks[spellName]=0 end
             local rank=tonumber(string.match(cRank, "%d+")) or 0
@@ -383,7 +389,6 @@ function HealBot_Init_Spells_addSpell(spellId, spellName, spellBookId)
             end
         end
         HealBot_Spell_IDs[spellId].name=spellName
-        HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
         HealBot_Spell_Names[spellName]=spellId
     end
 end
@@ -472,6 +477,287 @@ function HealBot_InitValidateRanks()
     end
 end
 
+-- Temporary workaround for TWW spellbook
+local TWWFixList={
+    HEALBOT_MINDBENDER,
+    HEALBOT_SMITE,
+    HEALBOT_HOLY_WORD_CHASTISE,
+    HEALBOT_HOLY_FIRE,
+    HEALBOT_SHADOW_WORD_PAIN,
+    HEALBOT_WRATH,
+    HEALBOT_FAERIE_FIRE,
+    HEALBOT_JAB,
+    HEALBOT_TIGER_PALM,
+    HEALBOT_CHI_BURST,
+    HEALBOT_JUDGMENT,
+    HEALBOT_SHIELD_OF_THE_RIGHTEOUS,
+    HEALBOT_CRUSADER_STRIKE,
+    HEALBOT_CHAIN_LIGHTNING,
+    HEALBOT_ELEMENTAL_BLAST,
+    HEALBOT_FLAME_SHOCK,
+    HBC_FLAME_SHOCK,
+    HEALBOT_FROST_SHOCK,
+    HEALBOT_MAGE_BOMB,
+    HEALBOT_CONCUSSIVE_SHOT,
+    HEALBOT_PLAGUE_STRIKE,
+    HEALBOT_GOUGE,
+    HEALBOT_CORRUPTION,
+    HEALBOT_EXECUTE,
+    HEALBOT_EARTH_SHOCK,
+    HEALBOT_LAVA_BLAST,
+    HEALBOT_LIGHTNING_BOLT,
+    HBC_LIGHTNING_BOLT,
+    HEALBOT_FAERIE_SWARM,
+    HEALBOT_MOONFIRE,
+    HEALBOT_PRIMAL_STRIKE,
+    HEALBOT_MIND_SEAR,
+    HEALBOT_SHADOW_WORD_DEATH,
+    HEALBOT_BLACKOUT_KICK,
+    HEALBOT_TOUCH_OF_DEATH,
+    HEALBOT_CRACKLING_JADE_LIGHTNING,
+    HEALBOT_DENOUNCE,
+    HEALBOT_HAMMER_OF_WRATH,
+    HEALBOT_HOLY_SHOCK,
+    HEALBOT_TAUNT,
+    HEALBOT_FEAR,
+    HEALBOT_THROW,
+    HEALBOT_DEATH_COIL,
+    HEALBOT_ARCANE_SHOT,
+    HEALBOT_AIMED_SHOT,
+    HEALBOT_FIRE_BLAST,
+    HEALBOT_FROSTFIRE_BOLT,
+    HEALBOT_BINDING_HEAL,
+    HEALBOT_HOLY_NOVA,
+    HEALBOT_UNHOLY_HOVA,
+    HEALBOT_CIRCLE_OF_HEALING,
+    HEALBOT_DESPERATE_PRAYER,
+    HEALBOT_CHAIN_HEAL,
+    HEALBOT_SPIRIT_LINK_TOTEM,
+    HEALBOT_FLASH_HEAL,
+    HEALBOT_POWER_WORD_LIFE,
+    HEALBOT_HOLY_WORD_SERENITY,
+    HBC_HOLY_WORD_SERENITY,
+    HEALBOT_SURGING_MIST,
+    HEALBOT_HOLY_WORD_SALVATION,
+    HEALBOT_FLASH_OF_LIGHT,
+    HEALBOT_GREATER_HEAL,
+    HEALBOT_HEALING_TOUCH,
+    HEALBOT_HEAL,
+    HBC_HEAL,
+    HBC_HOLY_NOVA,
+    HEALBOT_HEALING_WAVE,
+    HBC_HEALING_WAVE,
+    HBC_LESSER_HEALING_WAVE,
+    HBC_RU_LESSER_HEALING_WAVE,
+    HEALBOT_HEALING_SURGE,
+    HEALBOT_LIGHT_OF_DAWN,
+    HEALBOT_HOLY_LIGHT,
+    HBC_HOLY_LIGHT,
+    HEALBOT_HOLY_RADIANCE,
+    HEALBOT_HOLY_PRISM,
+    HEALBOT_WORD_OF_GLORY,
+    HEALBOT_DIVINE_LIGHT,
+    HEALBOT_LAY_ON_HANDS,
+    HEALBOT_TYRS_DELIVERANCE,
+    HEALBOT_LIFEBLOOM,
+    HEALBOT_HEALING_STREAM_TOTEM,
+    HEALBOT_HEALING_TIDE_TOTEM,
+    HEALBOT_PENANCE,
+    HEALBOT_PRAYER_OF_HEALING,
+    HEALBOT_PRAYER_OF_MENDING,
+    HEALBOT_RIPTIDE,
+    HEALBOT_PRIMORDIAL_WAVE,
+    HEALBOT_WELLSPRING,
+    HEALBOT_DOWNPOUR,
+    HEALBOT_REGROWTH,
+    HEALBOT_NOURISH,
+    HBC_NOURISH,
+    HEALBOT_RENEW,
+    HEALBOT_DIVINE_HYMN,
+    HEALBOT_HEALING_RAIN,
+    HEALBOT_REJUVENATION,
+    HEALBOT_OVERGROWTH,
+    HEALBOT_WILD_GROWTH,
+    HEALBOT_SWIFTMEND,
+    HEALBOT_TRANQUILITY,
+    HEALBOT_GIFT_OF_THE_NAARU,
+    HEALBOT_MENDPET,
+    HEALBOT_HEALTH_FUNNEL,
+    HEALBOT_SOOTHING_MIST,
+    HEALBOT_ZEN_MEDITATION,
+    HEALBOT_LIFE_COCOON,
+    HEALBOT_ENVELOPING_MIST,
+    HEALBOT_REVIVAL,
+    HEALBOT_RENEWING_MIST,
+    HEALBOT_UPLIFT,
+    HEALBOT_CHI_WAVE,
+    HEALBOT_ZEN_SPHERE,
+    HEALBOT_EXECUTION_SENTENCE,
+    HEALBOT_CASCADE,
+    HEALBOT_DIVINE_STAR,
+    HEALBOT_HALO,                               
+    HEALBOT_CLARITY_OF_PURPOSE,
+    HEALBOT_CENARION_WARD,
+    HEALBOT_BREATH_OF_THE_SERPENT,
+    HEALBOT_CHI_EXPLOSION,
+    HEALBOT_RUSHING_JADE_WIND,              
+    HEALBOT_CHI_TOROEDO,
+    HEALBOT_BEACON_OF_LIGHT,
+    HEALBOT_PLEA,                       
+    HEALBOT_POWER_WORD_RADIANCE,            
+    HEALBOT_SHADOW_COVENANT,                
+    HEALBOT_SHADOW_MEND,
+    HEALBOT_HOLY_WORD_SANCTIFY,              
+    HEALBOT_BESTOW_FAITH,                 
+    HEALBOT_LIGHT_OF_THE_MARTYR, 
+    HEALBOT_BEACON_OF_VIRTUE,     
+    HEALBOT_HAND_OF_THE_PROTECTOR,   
+    HEALBOT_ESSENCE_FONT,
+    HEALBOT_LIGHT_OF_TUURE,   
+    HEALBOT_LIVING_FLAME,
+    HEALBOT_EMERALD_BLOSSOM,
+    HEALBOT_ECHO,
+    HEALBOT_DREAM_FLIGHT,
+    HEALBOT_REVERSION,
+    HEALBOT_REWIND,
+    HEALBOT_DREAM_BREATH,
+    HEALBOT_SPIRITBLOOM,
+    HEALBOT_VERDANT_EMBRACE,
+    HEALBOT_RENEWING_BLAZE,
+    HEALBOT_DREAM_PROJECTION,
+    HEALBOT_EMERALD_COMMUNION,
+    HEALBOT_HEX,
+    HEALBOT_ENTANGLING_ROOTS,
+    HEALBOT_GROWL,
+    HEALBOT_SOOTHE,
+    HEALBOT_MASS_ENTANGLEMENT,
+    HEALBOT_PURGE,
+    HEALBOT_WIND_SHEAR,
+    HEALBOT_CYCLONE,
+    HEALBOT_DOMINATE_MIND,
+    HEALBOT_SHACKLE_UNDEAD,
+    HEALBOT_DISPELL_MAGIC,
+    HEALBOT_PROVOKE,
+    HEALBOT_DISABLE,
+    HEALBOT_EXPEL_HARM,
+    HEALBOT_SPEAR_HAND_STRIKE,
+    HEALBOT_PARALYSIS,
+    HEALBOT_HAMMER_OF_JUSTICE,
+    HEALBOT_REBUKE,
+    HEALBOT_RECKONING,
+    HEALBOT_REPENTANCE,
+    HEALBOT_TURN_EVIL,
+    HEALBOT_STONEFORM,
+    HEALBOT_DARKFLIGHT,
+    HEALBOT_POWER_WORD_SHIELD,
+    HEALBOT_SPIRIT_SHELL,
+    HEALBOT_REVIVE,
+    HEALBOT_INTERCESSION,
+    HEALBOT_GUARDIAN_SPIRIT,
+    HEALBOT_SHINING_FORCE,
+    HEALBOT_PAIN_SUPPRESSION,
+    HEALBOT_INTERVENE,
+    HEALBOT_RESURRECTION,
+    HEALBOT_REDEMPTION,
+    HEALBOT_REBIRTH,
+    HEALBOT_TREE_OF_LIFE,
+    HEALBOT_INNERVATE,
+    HEALBOT_ANCESTRALSPIRIT,
+    HEALBOT_RESUSCITATE,
+    HEALBOT_ABSOLUTION,
+    HEALBOT_ANCESTRAL_VISION,
+    HEALBOT_MASS_RESURRECTION,
+    HEALBOT_MASS_RETURN,
+    HEALBOT_RETURN,
+    HEALBOT_REAWAKEN,
+    HEALBOT_REVITALIZE,
+    HEALBOT_CLEANSE,
+    HEALBOT_REMOVE_CURSE,
+    HEALBOT_CLEANSE_TOXIN,
+    HEALBOT_REMOVE_CORRUPTION,
+    HEALBOT_NATURALIZE,
+    HEALBOT_CAUTERIZING_FLAME,
+    HEALBOT_EXPUNGE,
+    HEALBOT_NATURES_CURE,
+    HEALBOT_PURIFY_DISEASE,
+    HEALBOT_PURIFY,
+    HBC_PURIFY,
+    HBC_SHAMAN_CURE_DISEASE,
+    HBC_DRUID_ABOLISH_POISON,
+    HBC_PRIEST_ABOLISH_DISEASE,
+    HBC_DRUID_CURE_POISON,
+    HBC_SHAMAN_CURE_POISON,
+    HEALBOT_BLOODLUST,
+    HEALBOT_HEROISM,
+    HBC_DISPELL_MAGIC,
+    HEALBOT_CLEANSE_SPIRIT,
+    HEALBOT_PURIFY_SPIRIT,
+    HEALBOT_MASS_DISPEL,
+    HEALBOT_LIFE_TAP,
+    HEALBOT_DIVINE_SHIELD,
+    HEALBOT_DIVINE_PROTECTION,
+    HBC_DIVINE_INTERVENTION,
+    HBC_DIVINE_FAVOR,
+    HEALBOT_ANACESTRAL_SWIFTNESS,
+    HEALBOT_LEAP_OF_FAITH,
+    HEALBOT_UNLEASH_ELEMENTS,
+    HEALBOT_DETOX,
+    HEALBOT_SPEED_OF_LIGHT,
+    HEALBOT_HAND_OF_PURITY,
+    HEALBOT_THUNDER_FOCUS_TEA,
+    HEALBOT_ASTRAL_SHIFT,
+    HEALBOT_GUARDIAN_ANCIENT_KINGS,
+    HEALBOT_UNLEASH_LIFE,
+    HEALBOT_CLOUDBURST_TOTEM,
+    HEALBOT_POWER_INFUSION,
+    HEALBOT_VAMPIRIC_EMBRACE,
+    HEALBOT_CLARITY_OF_WILL,
+    HEALBOT_DETONATE_CHI,
+    HEALBOT_BEACON_OF_FAITH,
+    HEALBOT_BEACON_OF_INSIGHT,
+    HEALBOT_RAPTURE,
+    HEALBOT_APOTHEOSIS,
+    HEALBOT_SYMBOL_OF_HOPE,
+    HEALBOT_BODY_AND_MIND,
+    HEALBOT_BLESSING_OF_SACRIFICE,
+    HEALBOT_HOLY_WARD,
+    HEALBOT_RESCUE,
+    HEALBOT_ZEPHYR,
+    HEALBOT_OBSIDIAN_SCALES,
+    HEALBOT_TIME_DILATION,
+    HEALBOT_TIME_STOP,
+    HEALBOT_STASIS,
+    HEALBOT_FURY_OF_THE_ASPECTS,
+    HEALBOT_VISAGE,
+    HEALBOT_TEMPRAL_ANOMALY,
+    HEALBOT_NULLIFYING_SHROUD,
+}
+
+local TWWSpellList={}
+local TWWNoDups={}
+function HealBot_Init_Spells_TWWFix()
+    local sID, sName
+    for x,_ in pairs(TWWSpellList) do
+        TWWSpellList[x]=nil
+    end
+    for x,_ in pairs(TWWNoDups) do
+        TWWNoDups[x]=nil
+    end
+    for j=1, getn(TWWFixList), 1 do
+        if type(TWWFixList[j])=="number" then
+            sID=TWWFixList[j]
+            sName=HealBot_Spells_KnownByID(sID)
+        else
+            sName=TWWFixList[j]
+            sID=HealBot_Spells_KnownByName(sName)
+        end
+        if sID and sName and not TWWNoDups[sName] then
+            TWWNoDups[sName]=true
+            TWWSpellList[sID]=sName
+        end
+    end
+end
+
 function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
     local _, _, _, _, _, hbRange = HealBot_Spells_GetInfo(spellID)
     local cooldown = GetSpellBaseCooldown(spellID)
@@ -483,7 +769,6 @@ function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
     if HealBot_Spell_IDs[spellID].Mana==0 then HealBot_Spell_IDs[spellID].Mana=1544 end
     HealBot_Spell_IDs[spellID].texture=spellTexture
     HealBot_Spell_IDs[spellID].name=spellName
-    HealBot_Spell_IDs[spellID].known=true
     HealBot_Spell_IDs[spellID].cooldown=hbCooldown
     HealBot_Spell_Names[spellName]=spellID
     
@@ -514,7 +799,7 @@ function HealBot_Init_Spells_Defaults()
         HealBot_Ranks[x]=nil
     end
     HealBot_Init_Spell_RangesPref()
-    local nTabs=HealBot_Spells_NumTabs()
+    local nTabs=HealBot_Spells_NumSpellTabs()
 
     local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
     for j=1, getn(hbBufflist), 1 do
@@ -524,21 +809,33 @@ function HealBot_Init_Spells_Defaults()
     end
 	
     HealBot_Init_SkipSpells()
-    for j=1,nTabs do
-        local _, _, offset, numEntries, _, offspecID = HealBot_Spells_TabInfo(j)
-        if offspecID==0 then
-            for s=offset+1,offset+numEntries do
-                local sName, spellSubName = GetSpellBookItemName(s, BOOKTYPE_SPELL)
-                local sType, sId = HealBot_Spells_ItemInfo(s, BOOKTYPE_SPELL)
-                if sType == "SPELL" and IsSpellKnown(sId) and not HealBot_Spells_IsPassive(sId) and (string.len(spellSubName)<1 or string.find(spellSubName,"Rank")) and not string.find(sName," Rune Ability") then
-                    HealBot_Init_Spells_addSpell(sId, sName, s)
-                elseif sType == "FLYOUT" then
-                    local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
-                    if flyoutKnown then
-                        for f=1,numFlyoutSlots do
-                            local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
-                            if fKnown and not HealBot_Spells_IsPassive(fId) then
-                                HealBot_Init_Spells_addSpell(fId, fName, s)
+    if HEALBOT_GAME_VERSION>10 then
+        HealBot_Init_Spells_TWWFix()
+        for sID,sName in pairs(TWWSpellList) do
+            HealBot_Init_Spells_addSpell(sID, sName)
+        end
+    else
+        for j=1,nTabs do
+            local _, _, offset, numEntries, _, offspecID = HealBot_Spells_SpellTabInfo(j)
+            if not offspecID then offspecID=1 end
+            --HealBot_AddDebug("offset="..offset.."  numEntries"..numEntries.."  offspecID="..offspecID,"Init Spells",true)
+            if offspecID==0 then
+                for s=offset+1,offset+numEntries do
+                    --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
+                    local sName, cRank = HealBot_Spells_SpellBookItemName(s, BOOKTYPE_SPELL)
+                    local sType, sId = HealBot_Spells_SpellBookItemInfo(s, BOOKTYPE_SPELL)
+                    --local sName, cRank = HealBot_Spells_GetInfo(sId)
+                    if not cRank then cRank="" end
+                    if sType == "SPELL" and not HealBot_Spells_IsPassive(sId) and HealBot_Spells_KnownByName(sName) and not string.find(sName," Rune Ability") then -- and (string.len(cRank)<1 or string.find(cRank,"Rank")) 
+                        HealBot_Init_Spells_addSpell(sId, sName, s, cRank)
+                    elseif sType == "FLYOUT" then
+                        local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
+                        if flyoutKnown then
+                            for f=1,numFlyoutSlots do
+                                local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
+                                if fKnown and not HealBot_Spells_IsPassive(fId) and HealBot_Spells_KnownByName(fName) then
+                                    HealBot_Init_Spells_addSpell(fId, fName, s, cRank)
+                                end
                             end
                         end
                     end
@@ -593,7 +890,6 @@ function HealBot_Init_ClassicSpellRanks()
                         HealBot_Spell_IDs[spellId].Mana=HealBot_Init_ManaCost(spellId)
                         HealBot_Spell_IDs[spellId].texture=texture
                         HealBot_Spell_IDs[spellId].name=sNameRank
-                        HealBot_Spell_IDs[spellId].known=IsSpellKnown(spellId)
                         HealBot_Spell_IDs[spellId].cooldown=hbCooldown
                         
                         HealBot_Init_SetSpellRange(spellId, sNameRank, hbRange)
@@ -610,39 +906,39 @@ function HealBot_Init_SmartCast()
     local rName=""
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
         rName=HealBot_Spells_GetName(HEALBOT_MASS_RESURRECTION) or HealBot_Spells_GetName(HBC_MASS_RESURRECTION)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_RESURRECTION)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
         rName=HealBot_Spells_GetName(HEALBOT_REVITALIZE)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_REVIVE) or HealBot_Spells_GetName(HBC_REVIVE)
-        if rName and HealBot_Spell_Names[rName] then 
+        if rName and HealBot_Spells_KnownByName(rName) then 
             SmartCast_Res=rName
         else
             rName=HealBot_Spells_GetName(HEALBOT_REBIRTH)
-            if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+            if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
         rName=HealBot_Spells_GetName(HEALBOT_REAWAKEN)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_RESUSCITATE)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
         rName=HealBot_Spells_GetName(HEALBOT_ABSOLUTION)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_REDEMPTION)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
         rName=HealBot_Spells_GetName(HEALBOT_ANCESTRAL_VISION)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_ANCESTRALSPIRIT)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
         rName=HealBot_Spells_GetName(HEALBOT_MASS_RETURN)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_MassRes=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
         rName=HealBot_Spells_GetName(HEALBOT_RETURN)
-        if rName and HealBot_Spell_Names[rName] then SmartCast_Res=rName end
+        if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     end
 end
 

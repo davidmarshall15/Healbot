@@ -49,7 +49,7 @@ function HealBot_Range_SetSpells()
       --HealBot_setCall("HHealBot_Range_SetSpells)
     local x = HealBot_GetBandageType() or HEALBOT_LINEN_BANDAGE
     local y = GetInventoryItemID("player", INVSLOT_MAINHAND) or HEALBOT_WORDS_UNKNOWN
-    if y~=HEALBOT_WORDS_UNKNOWN then y = GetItemInfo(y) or y end
+    if y~=HEALBOT_WORDS_UNKNOWN then y = HealBot_Spells_ItemInfo(y) or y end
     if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
     if (HealBot_RangeSpells["HARM"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HARM"]=y end
     if (HealBot_RangeSpells["HEAL30"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL30"]=x end
@@ -59,12 +59,12 @@ function HealBot_Range_SetSpells()
     local HealBot_Keys_List = HealBot_Action_retComboKeysList()
     for y = 1, getn(HealBot_Keys_List), 1 do
         sName = HealBot_Action_GetSpell("ENABLED", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
-        if not sName or not HealBot_Spell_Names[sName] then
+        if not sName or not HealBot_Spells_KnownByName(sName) then
             sName = HealBot_RangeSpells["HEAL"]
         end
         HealBot_RangeSpellsKeysFriendly[HealBot_Keys_List[y]] = sName
         sName = HealBot_Action_GetSpell("ENEMY", HealBot_Action_GetComboSpec(HealBot_Keys_List[y], "Left"))
-        if not sName or not HealBot_Spell_Names[sName] then
+        if not sName or not HealBot_Spells_KnownByName(sName) then
             sName=HealBot_RangeSpells["HARM"]
         end
         HealBot_RangeSpellsKeysEnemy[HealBot_Keys_List[y]] = sName
@@ -132,7 +132,8 @@ function HealBot_Range_WarnInRange(button, spellName, warnRange)
     end
 end
 
-local IsSpellInRange,UnitInRange=IsSpellInRange,UnitInRange
+local IsSpellInRange=(C_Spell and C_Spell.IsSpellInRange) or IsSpellInRange
+local UnitInRange=UnitInRange
 local sRange=0
 local function HealBot_Range_IsSpellInRange(button, spellName)
     sRange = IsSpellInRange(spellName, button.unit)
@@ -200,7 +201,7 @@ function HealBot_Range_UnitCurrent(button, spellName)
         uRange = -1
     elseif not HealBot_Data["UILOCK"] and CheckInteractDistance(button.unit, 4) then
         uRange = 2
-    elseif spellName and HealBot_Spell_Names[spellName] then
+    elseif spellName and HealBot_Spells_KnownByName(spellName) then
         uRange = HealBot_Range_IsSpellInRange(button, spellName)
     elseif HealBot_Range_Unit(button.unit, button.status.range) then
         uRange = 1

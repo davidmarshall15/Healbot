@@ -1623,7 +1623,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             hbSelfAbility[hbSelfAbilityRev[actionIcons[frame][id].uid]][actionIcons[frame][id].uid]=nil
             hbSelfAbilityRev[actionIcons[frame][id].uid]=false
         end
-        if hbAbility and HealBot_Spell_Names[hbAbility] or HealBot_Init_knownClassicHealSpell(hbAbility) then
+        if hbAbility and HealBot_Spells_KnownByName(hbAbility) then
             actionIcons[frame][id]:SetAttribute("type1", "spell")
             actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
             if HealBot_Spell_IDs[aID] then
@@ -2358,7 +2358,7 @@ function HealBot_ActionIcons_SelfCountText(frame, id)
     if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["HIDECOUNTTEXT"] then
         actionIcons[frame][id].count=0
     elseif actionIcons[frame][id].infoType=="spell" then
-        actionIcons[frame][id].count=GetSpellCharges(actionIcons[frame][id].infoID) or GetSpellCount(actionIcons[frame][id].infoID) or 0
+        actionIcons[frame][id].count=HealBot_Spells_Charges(actionIcons[frame][id].infoID) or HealBot_Spells_Count(actionIcons[frame][id].infoID) or 0
     elseif actionIcons[frame][id].infoType=="item" then
         actionIcons[frame][id].count=GetItemCount(actionIcons[frame][id].infoID, nil, true) or 0
     else
@@ -2504,7 +2504,7 @@ function HealBot_ActionIcons_SetSpell(sText)
             if spellId then 
                 sText = "S:"..spellId
             else
-                local itemID = GetItemInfoInstant(sText)
+                local itemID = HealBot_Spells_ItemInfoInstant(sText)
                 if itemID then 
                     sText = "I:"..itemID
                 elseif hbLocalItems[sText] then
@@ -2536,12 +2536,15 @@ function HealBot_ActionIcons_GetSpell(spellCode)
         if spellCode and HealBot_Text_Len(spellCode)>2 then
             local sType,sID = string.split(":", spellCode)
             if HEALBOT_GAME_VERSION==4 and spellCode==HEALBOT_SPELL_HOLYWORDSERENITY then sType="S"; sID=HBC_HOLY_WORD_SERENITY end
+            if sType and not sID and HealBot_Spells_KnownByName(sType) then
+                _, _, _, _, _, _, sID=HealBot_Spells_GetInfo(sType)
+            end
             if sType and sID then
                 if sType == "I" then
-                    vSpellText=GetItemInfo(sID)
+                    vSpellText=HealBot_Spells_ItemInfo(sID)
                     vSpellType="item"
                     vSpellID=sID
-                    _, _, _, _, vSpellIcon, _, _ = GetItemInfoInstant(sID) 
+                    _, _, _, _, vSpellIcon, _, _ = HealBot_Spells_ItemInfoInstant(sID) 
                 elseif sType == "S" then
                     cSpellText=HealBot_Spells_GetName(sID)
                     vSpellID=sID

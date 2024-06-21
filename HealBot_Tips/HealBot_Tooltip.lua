@@ -69,14 +69,8 @@ end
 
 function HealBot_Tooltip_GetHealSpell(button,sName)
       --HealBot_setCall("HealBot_Tooltip_GetHealSpell", button)
-    if not sName or not HealBot_Spell_Names[sName] then
-        if HealBot_Init_knownClassicHealSpell(sName) then
-            if HealBot_Range_SpellInRange(button,sName) then
-                return sName, 1, 1, 1, false, true
-            else
-                return sName, 1, 0.2, 0, false, false
-            end
-        elseif sName then
+    if not HealBot_Spells_KnownByName(sName) then
+        if sName then
             if not HealBot_IsKnownItem(sName) then
                 return nil, 1, 0.2, 0, false, false
             else

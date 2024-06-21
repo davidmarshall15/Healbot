@@ -4429,7 +4429,7 @@ function HealBot_Action_SetSpell(cType, cKey, sText)
                 if spellId then 
                     sText = "S:"..spellId
                 else
-                    local itemID = GetItemInfoInstant(sText)
+                    local itemID = HealBot_Spells_ItemInfoInstant(sText)
                     if itemID then 
                         sText = "I:"..itemID 
                     else
@@ -4564,6 +4564,9 @@ function HealBot_Action_GetSpell(cType, cKey)
         end
         if vSpellText and HealBot_Text_Len(vSpellText)>2 then
             local sType,sID = string.split(":", vSpellText)
+            if sType and not sID and HealBot_Spells_KnownByName(sType) then
+                _, _, _, _, _, _, sID=HealBot_Spells_GetInfo(sType)
+            end
             if sType and sID then
                 if sType == "C" then
                     vSpellText=HealBot_Action_SpellCmdText(cType, sID)
@@ -4575,8 +4578,8 @@ function HealBot_Action_GetSpell(cType, cKey)
                     vSpellType="emote"
                 elseif sType == "I" then
                     sID=tonumber(sID)
-                    vSpellText=GetItemInfo(sID)
-                    _, _, _, _, vSpellIcon, _, _ = GetItemInfoInstant(sID) 
+                    vSpellText=HealBot_Spells_ItemInfo(sID)
+                    _, _, _, _, vSpellIcon, _, _ = HealBot_Spells_ItemInfoInstant(sID) 
                     vSpellType="item"
                     vSpellID=sID
                 else
@@ -5297,7 +5300,7 @@ function HealBot_Action_DoSetButtonAttrib(button,cType,j,unit,HB_prefix,buttonTy
             button:SetAttribute(HB_prefix..buttonType..j, nil);
             button:SetAttribute(HB_prefix.."type"..j, "macro")
             button:SetAttribute(HB_prefix.."macrotext"..j, '/run HealBot_Action_DisableBorderHazardTypeGUID("'..button.guid..'", "PLUGIN")')
-        elseif HealBot_Spell_Names[sName] then
+        elseif HealBot_Spells_KnownByName(sName) then
             if sTar or sTrin1 or sTrin2 or AvoidBC then
                 local mText = HealBot_Action_AlterSpell2Macro(sName, sTar, sTrin1, sTrin2, AvoidBC, unit, cType)
                 button:SetAttribute(HB_prefix..buttonType..j, nil);
@@ -6963,7 +6966,7 @@ function HealBot_Action_UseSmartCast(self,button)
       --HealBot_setCall("HealBot_Action_UseSmartCast", self)
     local sName=HealBot_Action_SmartCast(button);
     if sName then
-        if HealBot_Spell_Names[sName] then
+        if HealBot_Spells_KnownByName(sName) then
             if HEALBOT_GAME_VERSION<4 then
                 uLevel=button.level
                 if uLevel and uLevel>0 then

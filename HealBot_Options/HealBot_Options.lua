@@ -275,6 +275,7 @@ HealBot_Options_luVars["ActionIconsID"]=1
 HealBot_Options_luVars["ActionIconsCopyFrom"]=1
 HealBot_Options_luVars["perfCPUAdj"]=0
 HealBot_Options_luVars["ActionIconsCondNo"]=1
+HealBot_Options_luVars["CDebuffcustomSpellID"]=1
 
 function HealBot_Options_setLuVars(vName, vValue)
       --HealBot_setCall("HealBot_Options_setLuVars - "..vName)
@@ -290,21 +291,27 @@ local HealBot_Debuff_Types = {}
 
 local optionsPanel = CreateFrame("Frame")
 optionsPanel.name = HEALBOT_HEALBOT
-InterfaceOptions_AddCategory(optionsPanel)
-local optionsTitle = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+local optionsTitle, optionsText, optionsButton
+if InterfaceOptions_AddCategory then
+	InterfaceOptions_AddCategory(optionsPanel)
+else
+	local category = Settings.RegisterCanvasLayoutCategory(optionsPanel, optionsPanel.name);
+	Settings.RegisterAddOnCategory(category);
+end
+optionsTitle = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 optionsTitle:SetPoint("TOPLEFT", 16, -16)
 optionsTitle:SetText(HEALBOT_HEALBOT)
-local optionsText = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+optionsText = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 optionsText:SetPoint("TOPLEFT", optionsTitle, "BOTTOMLEFT", 0, -8)
 optionsText:SetText(HEALBOT_ABOUT_DESC1)
-local optionsButton = CreateFrame("Button", nil, optionsPanel, "UIPanelButtonTemplate")
+optionsButton = CreateFrame("Button", nil, optionsPanel, "UIPanelButtonTemplate")
 
 function HealBot_Options_InitDebuffTypes()
       --HealBot_setCall("HealBot_Options_InitDebuffTypes")
-    local hbPURIFICATION_POTION=GetItemInfoInstant(HEALBOT_PURIFICATION_POTION) or "Purification Potion"
-    local hbANTI_VENOM=GetItemInfoInstant(HEALBOT_ANTI_VENOM) or "Anti-Venom"
-    local hbPOWERFUL_ANTI_VENOM=GetItemInfoInstant(HEALBOT_POWERFUL_ANTI_VENOM) or "Powerful Anti-Venom"
-    local hbSTONEFORM=HealBot_Spells_GetName(HEALBOT_STONEFORM)
+    local hbPURIFICATION_POTION=HealBot_Spells_ItemInfoInstant(HEALBOT_PURIFICATION_POTION) or "Purification Potion"
+    local hbANTI_VENOM=HealBot_Spells_ItemInfoInstant(HEALBOT_ANTI_VENOM) or "Anti-Venom"
+    local hbPOWERFUL_ANTI_VENOM=HealBot_Spells_ItemInfoInstant(HEALBOT_POWERFUL_ANTI_VENOM) or "Powerful Anti-Venom"
+    local hbSTONEFORM=HealBot_Spells_GetName(HEALBOT_STONEFORM) or "Stoneform"
     if HEALBOT_GAME_VERSION<5 then 
         HealBot_Debuff_Types = {
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
@@ -332,14 +339,14 @@ function HealBot_Options_InitDebuffTypes()
         end
         HealBot_Options_luVars["HEALBOT_LAY_ON_HANDS"]=HealBot_Spells_GetName(HEALBOT_LAY_ON_HANDS)
     else
-        local hbELIXIR_OF_POISON_RES=GetItemInfoInstant(HEALBOT_ELIXIR_OF_POISON_RES) or "Potion of Curing"
-        local hbPOTION_OF_SOUL_PURITY=GetItemInfoInstant(HEALBOT_POTION_OF_SOUL_PURITY) or "Potion of Soul Purity"
-        local hbPHIAL_OF_SERENITY=GetItemInfoInstant(HEALBOT_PHIAL_OF_SERENITY) or "Phial of Serenity"
+        local hbELIXIR_OF_POISON_RES=HealBot_Spells_ItemInfoInstant(HEALBOT_ELIXIR_OF_POISON_RES) or "Potion of Curing"
+        local hbPOTION_OF_SOUL_PURITY=HealBot_Spells_ItemInfoInstant(HEALBOT_POTION_OF_SOUL_PURITY) or "Potion of Soul Purity"
+        local hbPHIAL_OF_SERENITY=HealBot_Spells_ItemInfoInstant(HEALBOT_PHIAL_OF_SERENITY) or "Phial of Serenity"
         HealBot_Debuff_Types = {
             [HEALBOT_CLEANSE] = {HEALBOT_MAGIC_en},
             [HEALBOT_REMOVE_CURSE] = {HEALBOT_CURSE_en},
             [HEALBOT_REMOVE_CORRUPTION] = {HEALBOT_CURSE_en, HEALBOT_POISON_en},
-            [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en},
+            [HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en},
             [HEALBOT_PURIFY_DISEASE] = {HEALBOT_DISEASE_en},
             [HEALBOT_PURIFY] = {HEALBOT_MAGIC_en},
             [hbPURIFICATION_POTION] = {HEALBOT_CURSE_en, HEALBOT_DISEASE_en, HEALBOT_POISON_en},
@@ -393,9 +400,9 @@ function HealBot_Options_InitVars()
     optionsButton:SetText(HEALBOT_ACTION_OPTIONS)
     optionsButton:SetWidth(100)
     optionsButton:SetPoint("TOPLEFT", 14, -58)
-	optionsButton:SetScript('OnClick', function()
-		HealBot_Options_ShowHide()
-	end)
+    optionsButton:SetScript('OnClick', function()
+        HealBot_Options_ShowHide()
+    end)
     local f=_G["HealBot_Options_ShareExternalEditBoxFrame"]
     HealBot_ExtraSkins_Image = f:CreateTexture(nil, "BACKGROUND")
    -- HealBot_ExtraSkins_Image:SetAllPoints(f)
@@ -556,7 +563,7 @@ function HealBot_Options_cacheNames(list)
       --HealBot_setCall("HealBot_Options_cacheNames")
     local iName
     for j=1, getn(list), 1 do
-        iName=GetItemInfo(list[j]);
+        iName=HealBot_Spells_ItemInfo(list[j]);
     end
 end
 
@@ -1814,16 +1821,16 @@ function HealBot_Options_UpdateBuffSpellsWeaponEnchantList()
       --HealBot_setCall("HealBot_Options_UpdateBuffSpellsWeaponEnchantList")
     local sName=nil
     if HEALBOT_GAME_VERSION<4 then
-        sName=GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
+        sName=HealBot_Spells_ItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
-        sName=GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
+        sName=HealBot_Spells_ItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
-        sName=GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
+        sName=HealBot_Spells_ItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         if HEALBOT_GAME_VERSION>1 then
-            sName=GetItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL)
+            sName=HealBot_Spells_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL)
             if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
-            sName=GetItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
+            sName=HealBot_Spells_ItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
             if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
         end
     end
@@ -1996,34 +2003,34 @@ function HealBot_Options_InitBuffSpellsClassList(tClass)
             HEALBOT_WATER_BREATHING,
             HEALBOT_SPIRIT_OF_THE_ALPHA,
         }
-        local sName=HealBot_KnownSpell(HEALBOT_FLAMETONGUE_SPELL)
+        local sName=HealBot_Spells_KnownByID(HEALBOT_FLAMETONGUE_SPELL)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2)
         end
-        sName=HealBot_KnownSpell(HEALBOT_WINDFURY_SPELL)
+        sName=HealBot_Spells_KnownByID(HEALBOT_WINDFURY_SPELL)
         if sName then HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1) end
-        sName=HealBot_KnownSpell(HBC_ROCKBITER_WEAPON)
+        sName=HealBot_Spells_KnownByID(HBC_ROCKBITER_WEAPON)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
         end
-        sName=HealBot_KnownSpell(HBC_EARTHLIVING_WEAPON)
+        sName=HealBot_Spells_KnownByID(HBC_EARTHLIVING_WEAPON)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
         end
-        sName=HealBot_KnownSpell(HEALBOT_EARTHLIVING_WEAPON)
+        sName=HealBot_Spells_KnownByID(HEALBOT_EARTHLIVING_WEAPON)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
         end
-        sName=HealBot_KnownSpell(HBC_FLAMETONGUE_WEAPON)
+        sName=HealBot_Spells_KnownByID(HBC_FLAMETONGUE_WEAPON)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
         end
-        sName=HealBot_KnownSpell(HBC_WINDFURY_WEAPON)
+        sName=HealBot_Spells_KnownByID(HBC_WINDFURY_WEAPON)
         if sName then 
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 1)
             HealBot_Options_InsertBuffSpellsWeaponEnchantList(sName, 2) 
@@ -2069,7 +2076,7 @@ function HealBot_Options_InitBuffList()
         HealBot_Options_NoDuplcates[x]=nil
     end 
     for j=1, getn(HealBot_Buff_Spells_Class_List), 1 do
-        local spellName=HealBot_KnownSpell(HealBot_Buff_Spells_Class_List[j])
+        local spellName=HealBot_Spells_KnownByID(HealBot_Buff_Spells_Class_List[j])
         if spellName and not HealBot_Options_NoDuplcates[spellName] then
             table.insert(HealBot_Buff_Spells_List,spellName)
             HealBot_Options_NoDuplcates[spellName]=true
@@ -2102,7 +2109,7 @@ function HealBot_Options_GetDebuffSpells_List(class)
     --    HealBot_Debuff_Spells["SHAM"] = {HEALBOT_CLEANSE_SPIRIT}
     --end
     for x=#hbDebuffSpells,1,-1 do
-        if not HealBot_Spell_Names[hbDebuffSpells[x]] then
+        if not HealBot_Spells_KnownByName(hbDebuffSpells[x]) then
             table.remove(hbDebuffSpells, x)
         end
     end
@@ -2154,6 +2161,11 @@ function HealBot_Options_setDebuffTypes()
             HealBot_Debuff_Types[HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en}
         else
             HealBot_Debuff_Types[HEALBOT_PURIFY_SPIRIT] = {HEALBOT_MAGIC_en}
+        end
+        if HealBot_Options_luVars["DruidImprovedNaturesCure"] then
+            HealBot_Debuff_Types[HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en, HEALBOT_CURSE_en, HEALBOT_POISON_en}
+        else
+            HealBot_Debuff_Types[HEALBOT_NATURES_CURE] = {HEALBOT_MAGIC_en}
         end
     elseif HEALBOT_GAME_VERSION>3 then
         if HealBot_Data["PCLASSTRIM"]=="SHAM" then
@@ -7652,6 +7664,7 @@ function HealBot_Options_AddonFail(reason, addon)
     StaticPopup_Show("HEALBOT_OPTIONS_ADDONFAIL");
 end
 
+local LoadAddOn=(C_AddOns and C_AddOns.LoadAddOn) or LoadAddOn
 function HealBot_Options_LoadTips()
       --HealBot_setCall("HealBot_Options_LoadTips")
     local loaded, reason=HealBot_Options_luVars["TIPLOADED"],""
@@ -12439,48 +12452,48 @@ function HealBot_Options_itemsByLevel()
     end 
     local hbTmpText1=nil
     if HEALBOT_GAME_VERSION>3 then
-        hbTmpText1 = GetItemInfo(19009) or "Healthstone"
+        hbTmpText1 = HealBot_Spells_ItemInfo(19009) or "Healthstone"
         if not HealBot_Options_NoDuplcates[hbTmpText1] then
             table.insert(hbItemsByLevel,hbTmpText1)
             HealBot_Options_NoDuplcates[hbTmpText1]=true
         end
     else
         if hbLevel <= 20 then
-            hbTmpText1 = GetItemInfo(19004) or "Minor Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(19004) or "Minor Healthstone"
             table.insert(hbItemsByLevel,hbTmpText1)
             HealBot_Options_NoDuplcates[hbTmpText1]=true
         elseif hbLevel <= 30 then
-            hbTmpText1 = GetItemInfo(19007) or "Lesser Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(19007) or "Lesser Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
         elseif hbLevel <= 40 then
-            hbTmpText1 = GetItemInfo(19009) or "Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(19009) or "Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
         elseif hbLevel <= 50 then
-            hbTmpText1 = GetItemInfo(19011) or "Greater Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(19011) or "Greater Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
         elseif hbLevel <= 60 then
-            hbTmpText1 = GetItemInfo(9421) or "Major Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(9421) or "Major Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
         elseif hbLevel <= 70 then
-            hbTmpText1 = GetItemInfo(19008) or "Master Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(19008) or "Master Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
             end
         else
-            hbTmpText1 = GetItemInfo(36892) or "Fel Healthstone"
+            hbTmpText1 = HealBot_Spells_ItemInfo(36892) or "Fel Healthstone"
             if not HealBot_Options_NoDuplcates[hbTmpText1] then
                 table.insert(hbItemsByLevel,hbTmpText1)
                 HealBot_Options_NoDuplcates[hbTmpText1]=true
@@ -15592,7 +15605,7 @@ function HealBot_Options_SetActionIconsList()
             hbActionIcons_Text[x]["ID"]:SetTextColor(OptionThemes[HealBot_Globals.OptionsTheme]["R"],
                                                      OptionThemes[HealBot_Globals.OptionsTheme]["G"],
                                                      OptionThemes[HealBot_Globals.OptionsTheme]["B"],1)
-            if HealBot_Spell_Names[hbAbility] or HealBot_Init_knownClassicHealSpell(hbAbility) then
+            if HealBot_Spells_KnownByName(hbAbility) then
                 hbActionIcons_Text[x]["Ability"]:SetTextColor(1,1,1,1)
             elseif GetMacroIndexByName(hbAbility)>0 then
                 hbActionIcons_Text[x]["Ability"]:SetTextColor(0.2,1,0.5,1)
@@ -17312,7 +17325,7 @@ function HealBot_Options_CDCTxt_DropDown(object, id)
     UIDropDownMenu_AddButton(info);
     local noDupSpells={}
     for j=1, getn(DebuffSpells_List), 1 do
-        local sName=HealBot_KnownSpell(DebuffSpells_List[j])
+        local sName=HealBot_Spells_KnownByID(DebuffSpells_List[j])
         if sName and not noDupSpells[sName] then
             noDupSpells[sName]=true
             info.text = sName;
@@ -17327,7 +17340,7 @@ function HealBot_Options_CDCTxt_DropDown(object, id)
         end
     end
     for j=1, getn(RacialDebuffSpells_List), 1 do
-        local rName = HealBot_KnownSpell(RacialDebuffSpells_List[j]);
+        local rName = HealBot_Spells_KnownByID(RacialDebuffSpells_List[j]);
         info.text = rName
         info.func = function(self)
                         HealBot_Config_Cures.HealBotDebuffText[HealBot_Options_getDropDownId_bySpec(id)] = self:GetText()
@@ -17339,7 +17352,7 @@ function HealBot_Options_CDCTxt_DropDown(object, id)
         UIDropDownMenu_AddButton(info);
     end
     for j=1, getn(HealBot_Options_Lists["DebuffItems"]), 1 do
-        local iName = GetItemInfo(HealBot_Options_Lists["DebuffItems"][j]);
+        local iName = HealBot_Spells_ItemInfo(HealBot_Options_Lists["DebuffItems"][j]);
         if iName then
             info.text = iName
             info.func = function(self)
@@ -17598,10 +17611,14 @@ HealBot_Options_luVars["CDebuffCatID"] = 2
 
 function HealBot_Options_CDebuffTextID(dName)
       --HealBot_setCall("HealBot_Options_CDebuffTextID")
-    local cdName=dName
-    local name, _, _, _, _, _, spellId = HealBot_Spells_GetInfo(dName)
-    if name and spellId then cdName=name.." ("..spellId..")" end
-    return cdName
+    if dName then
+        local cdName=dName
+        local name, _, _, _, _, _, spellId = HealBot_Spells_GetInfo(dName)
+        if name and spellId then cdName=name.." ("..spellId..")" end
+        return cdName
+    else
+        return ""
+    end
 end
 
 function HealBot_Options_CDebuffCat_genList()
@@ -17944,6 +17961,7 @@ function HealBot_Options_NewCDebuffBtn_OnClick(NewCDebuffTxt)
   --  UIDropDownMenu_SetSelectedValue(HealBot_Options_CDebuffTxt1, useId);
     HealBot_Timers_Set("AURA","DebuffPriority")
     HealBot_Options_ResetUpdate()
+    HealBot_Timers_Set("AURA","CustomDebuffListPrep")
 end
 
 function HealBot_Options_UpperFirstChar(str)
@@ -18118,6 +18136,7 @@ function HealBot_Options_DeleteCDebuff(dId, dName)
     HealBot_Options_setDebuffPriority()
     HealBot_SetCDCBarColours();
     HealBot_Options_ResetUpdate()
+    HealBot_Timers_Set("AURA","CustomDebuffListPrep")
 end
 
 function HealBot_Options_DeleteCDebuffBtn_OnClick()
@@ -19119,7 +19138,7 @@ function HealBot_Options_ExtraBuff_Reset()
     local buffbarcolbClass = HealBot_Config_Buffs.HealBotBuffColB or 1
     if HealBot_Config_Buffs.CheckWellFed then
         local wellFedItem=HealBot_Config_Buffs.WellFedItem
-        local hbCustomItemID=GetItemInfoInstant(wellFedItem) or 0
+        local hbCustomItemID=HealBot_Spells_ItemInfoInstant(wellFedItem) or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) then
             HealBot_buffbarcolr[wellFedItem]=buffbarcolrClass[11] or 1
             HealBot_buffbarcolg[wellFedItem]=buffbarcolgClass[11] or 1
@@ -19128,7 +19147,7 @@ function HealBot_Options_ExtraBuff_Reset()
             HealBot_BuffWatchTarget[wellFedItem]["Self"]=true
         else
             wellFedItem=HealBot_Config_Buffs.BackupWellFedItem
-            hbCustomItemID=GetItemInfoInstant(wellFedItem) or 0
+            hbCustomItemID=HealBot_Spells_ItemInfoInstant(wellFedItem) or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) then
                 HealBot_buffbarcolr[wellFedItem]=buffbarcolrClass[11] or 1
                 HealBot_buffbarcolg[wellFedItem]=buffbarcolgClass[11] or 1
@@ -19140,7 +19159,7 @@ function HealBot_Options_ExtraBuff_Reset()
     end
     if HealBot_Config_Buffs.CheckManaDrink then
         local manaDrinkItem=HealBot_Config_Buffs.ManaDrinkItem
-        local hbCustomItemID=GetItemInfoInstant(manaDrinkItem) or 0
+        local hbCustomItemID=HealBot_Spells_ItemInfoInstant(manaDrinkItem) or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) then
             HealBot_buffbarcolr[manaDrinkItem]=buffbarcolrClass[15] or 1
             HealBot_buffbarcolg[manaDrinkItem]=buffbarcolgClass[15] or 1
@@ -19149,7 +19168,7 @@ function HealBot_Options_ExtraBuff_Reset()
             HealBot_BuffWatchTarget[manaDrinkItem]["Self"]=true
         else
             manaDrinkItem=HealBot_Config_Buffs.BackupManaDrinkItem
-            local hbCustomItemID=GetItemInfoInstant(manaDrinkItem) or 0
+            local hbCustomItemID=HealBot_Spells_ItemInfoInstant(manaDrinkItem) or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) then
                 HealBot_buffbarcolr[manaDrinkItem]=buffbarcolrClass[16] or 1
                 HealBot_buffbarcolg[manaDrinkItem]=buffbarcolgClass[16] or 1
@@ -19163,7 +19182,7 @@ function HealBot_Options_ExtraBuff_Reset()
         if HealBot_Config_Buffs.CustomBuffCheck[x] and string.len(HealBot_Config_Buffs.CustomBuffName[x])>0 then
             local extraItem=HealBot_Config_Buffs.CustomItemName[x]
             local _,_,_,_,_,_,hbCustomSpellID=HealBot_Spells_GetInfo(extraItem)
-            local hbCustomItemID=GetItemInfoInstant(extraItem) or 0
+            local hbCustomItemID=HealBot_Spells_ItemInfoInstant(extraItem) or 0
             if hbCustomSpellID or (hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID)) then
                 HealBot_buffbarcolr[extraItem]=buffbarcolrClass[11+x] or 1
                 HealBot_buffbarcolg[extraItem]=buffbarcolgClass[11+x] or 1
@@ -19208,7 +19227,7 @@ function HealBot_Options_Buff_Reset()
         if BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)] and BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]>1 then
             local dropdownID=BuffDropDownClass[HealBot_Options_getDropDownId_bySpec(k)]
             local sName=BuffTextClass[HealBot_Options_getDropDownId_bySpec(k)]
-            if HealBot_Spell_Names[sName] or HealBot_IsKnownItem(sName) then  
+            if HealBot_Spells_KnownByName(sName) or HealBot_IsKnownItem(sName) then
            
                 if not spells[sName] then
                     spells[sName]=true;
@@ -21605,7 +21624,7 @@ end
 
 function HealBot_Options_KnownSpellCheckSetColour(self,sName,cType,incEmote)
       --HealBot_setCall("HealBot_Options_KnownSpellCheckSetColour")
-    if HealBot_Spell_Names[sName] or HealBot_Init_knownClassicHealSpell(sName) then
+    if HealBot_Spells_KnownByName(sName) then
         self:SetTextColor(1,1,1,1)
     elseif GetMacroIndexByName(sName)>0 then
         self:SetTextColor(0.2,1,0.5,1)
@@ -21658,9 +21677,9 @@ end
 function HealBot_Options_DoSpellsOnTextChanged(self, cType, bNo, key, spellText)
       --HealBot_setCall("HealBot_Options_DoSpellsOnTextChanged")
     local mButton = HealBot_Options_ComboClass_Button(bNo)
-    if not HealBot_Spell_Names[spellText] and not HealBot_Init_knownClassicHealSpell(spellText) then
+    if not HealBot_Spells_KnownByName(spellText) then
         local uSpell=HealBot_Options_UpperFirstChar(spellText)
-        if HealBot_Spell_Names[uSpell] or HealBot_Init_knownClassicHealSpell(uSpell) then
+        if HealBot_Spells_KnownByName(uSpell) then
             spellText=uSpell
         end
     end
@@ -21888,9 +21907,9 @@ local spellText,spellCode=nil,nil
 function HealBot_Options_ActionIconsConfigAbilityTextChanged(self)
       --HealBot_setCall("HealBot_Options_ActionIconsConfigAbilityTextChanged")
     spellText=strtrim(self:GetText())
-    if not HealBot_Spell_Names[spellText] and not HealBot_Init_knownClassicHealSpell(spellText) then
+    if not HealBot_Spells_KnownByName(spellText) then
         local uSpell=HealBot_Options_UpperFirstChar(spellText)
-        if HealBot_Spell_Names[uSpell] or HealBot_Init_knownClassicHealSpell(uSpell) then
+        if HealBot_Spells_KnownByName(uSpell) then
             spellText=uSpell
         end
     end

@@ -2148,6 +2148,7 @@ function HealBot_Aura_SetGeneralBuff(button, bName)
 end
 
 local buffWatchName=""
+local PlayerBuffsList={}
 function HealBot_Aura_CheckGeneralBuff(button)
       --HealBot_setCall("HealBot_Aura_CheckGeneralBuff", button)
     PlayerBuffsList=button.aura.buff.recheck
@@ -2669,7 +2670,7 @@ end
 
 function HealBot_Aura_IsCureSpell(button)
         --HealBot_setCall("HealBot_Aura_IsCureSpell", button)
-    if button.aura.debuff.curespell and HealBot_Spell_Names[button.aura.debuff.curespell] then
+    if button.aura.debuff.curespell and HealBot_Spells_KnownByName(button.aura.debuff.curespell) then
         return true
     else
         return false
@@ -3044,7 +3045,7 @@ function HealBot_Aura_CheckUnitBuff(button)
         C_Timer.After(0.1, function() HealBot_Action_UpdateTheDeadButton(button) end)
     end
     if HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name] then
-        uaBuffData[button.id][uaBuffSlot].name=GetItemInfo(HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name]) or uaBuffData[button.id][uaBuffSlot].name
+        uaBuffData[button.id][uaBuffSlot].name=HealBot_Spells_ItemInfo(HealBot_Buff_Aura2Item[uaBuffData[button.id][uaBuffSlot].name]) or uaBuffData[button.id][uaBuffSlot].name
     end
     if not uaBuffData[button.id][uaBuffSlot].isCurrent then
         uaIsCurrent, uaIsCustom, uaNever=HealBot_Aura_CheckCurBuff(button)
@@ -3749,7 +3750,6 @@ function HealBot_Aura_CheckUnitAuras(button, debuff)
 end
 
 local lowTime=0
-local PlayerBuffsList={}
 function HealBot_Aura_ResetCheckBuffsTime(button)
       --HealBot_setCall("HealBot_Aura_ResetCheckBuffsTime", button)
     lowTime=HealBot_TimeNow+10000000
@@ -4645,8 +4645,8 @@ function HealBot_Aura_WeaponEnchants(spell, x)
       --HealBot_setCall("HealBot_Aura_WeaponEnchants")
     if hbWeaponEnchants[spell] and HealBot_Spells_GetName(spell) then
         HealBot_Weapon_Enchant[x]=HealBot_Spells_GetName(spell)
-    elseif hbWeaponEnchants[spell] and GetItemInfo(spell) then
-        HealBot_Weapon_Enchant[x]=GetItemInfo(spell)
+    elseif hbWeaponEnchants[spell] and HealBot_Spells_ItemInfo(spell) then
+        HealBot_Weapon_Enchant[x]=HealBot_Spells_ItemInfo(spell)
     else
         HealBot_Weapon_Enchant[x]=false
     end
@@ -4668,12 +4668,12 @@ function HealBot_Aura_InitItemsDataReady()
       --HealBot_setCall("HealBot_Aura_InitItemsDataReady")
     local hbCustomItemID,hbCustomSpellID=0,0
     if HEALBOT_GAME_VERSION<4 then
-        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL)
-        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
-        HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL), HEALBOT_BLESSED_WIZARD_OIL_SPELL)
+        HealBot_Aura_UpdateItemData(HealBot_Spells_ItemInfo(HEALBOT_BRILLIANT_MANA_OIL_SPELL), HEALBOT_BRILLIANT_MANA_OIL_SPELL)
+        HealBot_Aura_UpdateItemData(HealBot_Spells_ItemInfo(HEALBOT_BRILLIANT_WIZARD_OIL_SPELL), HEALBOT_BRILLIANT_WIZARD_OIL_SPELL)
+        HealBot_Aura_UpdateItemData(HealBot_Spells_ItemInfo(HEALBOT_BLESSED_WIZARD_OIL_SPELL), HEALBOT_BLESSED_WIZARD_OIL_SPELL)
         if HEALBOT_GAME_VERSION>1 then
-            HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL), HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
-            HealBot_Aura_UpdateItemData(GetItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL), HEALBOT_SUPERIOR_MANA_OIL_SPELL)
+            HealBot_Aura_UpdateItemData(HealBot_Spells_ItemInfo(HEALBOT_SUPERIOR_WIZARD_OIL_SPELL), HEALBOT_SUPERIOR_WIZARD_OIL_SPELL)
+            HealBot_Aura_UpdateItemData(HealBot_Spells_ItemInfo(HEALBOT_SUPERIOR_MANA_OIL_SPELL), HEALBOT_SUPERIOR_MANA_OIL_SPELL)
         end
     end
 
@@ -4683,7 +4683,7 @@ function HealBot_Aura_InitItemsDataReady()
     
     HealBot_Aura_luVars["ManaDrink"]=""
     if HealBot_Config_Buffs.CheckManaDrink then
-        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem or "x") or 0
+        hbCustomItemID=HealBot_Spells_ItemInfoInstant(HealBot_Config_Buffs.ManaDrinkItem or "x") or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             if HealBot_BuffWatch[HealBot_Config_Buffs.BackupManaDrinkItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupManaDrinkItem) end
             HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK] = hbCustomItemID
@@ -4693,7 +4693,7 @@ function HealBot_Aura_InitItemsDataReady()
             end
         else
             if HealBot_BuffWatch[HealBot_Config_Buffs.ManaDrinkItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.ManaDrinkItem) end
-            hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.BackupManaDrinkItem or "x") or 0
+            hbCustomItemID=HealBot_Spells_ItemInfoInstant(HealBot_Config_Buffs.BackupManaDrinkItem or "x") or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Item[HEALBOT_MANA_DRINK] = hbCustomItemID
                 HealBot_Aura_luVars["ManaDrink"]=HealBot_Config_Buffs.BackupManaDrinkItem
@@ -4707,7 +4707,7 @@ function HealBot_Aura_InitItemsDataReady()
     end
 
     if HealBot_Config_Buffs.CheckWellFed then
-        hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.WellFedItem or "x") or 0
+        hbCustomItemID=HealBot_Spells_ItemInfoInstant(HealBot_Config_Buffs.WellFedItem or "x") or 0
         if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
             if HealBot_BuffWatch[HealBot_Config_Buffs.BackupWellFedItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.BackupWellFedItem) end
             HealBot_Buff_Aura2Item[HEALBOT_WELL_FED] = hbCustomItemID
@@ -4717,7 +4717,7 @@ function HealBot_Aura_InitItemsDataReady()
             end
         else
             if HealBot_BuffWatch[HealBot_Config_Buffs.WellFedItem] then HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.WellFedItem) end
-            hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.BackupWellFedItem or "x") or 0
+            hbCustomItemID=HealBot_Spells_ItemInfoInstant(HealBot_Config_Buffs.BackupWellFedItem or "x") or 0
             if hbCustomItemID>0 and HealBot_IsItemInBag(hbCustomItemID) and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Item[HEALBOT_WELL_FED] = hbCustomItemID
                 HealBot_Aura_luVars["WellFed"]=HealBot_Config_Buffs.BackupWellFedItem
@@ -4734,7 +4734,7 @@ function HealBot_Aura_InitItemsDataReady()
         if string.len(HealBot_Config_Buffs.CustomBuffName[x])>0 then
             _,_,_,_,_,_,hbCustomSpellID=HealBot_Spells_GetInfo(HealBot_Config_Buffs.CustomItemName[x])
             if not hbCustomSpellID then
-                hbCustomItemID=GetItemInfoInstant(HealBot_Config_Buffs.CustomItemName[x]) or 0
+                hbCustomItemID=HealBot_Spells_ItemInfoInstant(HealBot_Config_Buffs.CustomItemName[x]) or 0
             end
             if HealBot_Config_Buffs.CustomBuffCheck[x] and hbCustomSpellID and (IsInInstance() or not HealBot_Config_Buffs.ExtraBuffsOnlyInInstance) then
                 HealBot_Buff_Aura2Spell[HealBot_Config_Buffs.CustomBuffName[x]] = hbCustomSpellID
@@ -4746,7 +4746,7 @@ function HealBot_Aura_InitItemsDataReady()
                 if not HealBot_BuffWatch[HealBot_Config_Buffs.CustomItemName[x]] then
                     HealBot_Aura_SetBuffWatch(HealBot_Config_Buffs.CustomItemName[x])
                 end
-            elseif HealBot_BuffWatch[HealBot_Config_Buffs.CustomItemName[x]] then
+            elseif HealBot_BuffWatch[HealBot_Config_Buffs.CustomItemName[x]] and not HealBot_Options_retBuffWatchTarget(HealBot_Config_Buffs.CustomItemName[x]) then
                 HealBot_Aura_ClearBuffWatch(HealBot_Config_Buffs.CustomItemName[x])
             end
         end
@@ -4756,7 +4756,7 @@ function HealBot_Aura_InitItemsDataReady()
         HealBot_Buff_ItemIDs[x]=nil;
     end
     for _,id in pairs(HealBot_Buff_Aura2Item) do
-        local itemName=GetItemInfo(id)
+        local itemName=HealBot_Spells_ItemInfo(id)
         if itemName then
             HealBot_Buff_ItemIDs[itemName]=id
         end
