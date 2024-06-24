@@ -1,4 +1,4 @@
-## Interface: 100207
+## Interface: 100207, 110000
 ## Title: HealBot Data
 ## Author: Strife
 ## Notes: HealBot data, localizations, player saved variables and libraries
@@ -16,6 +16,7 @@ Libs\LibDeflate\lib.xml
 Libs\LibCustomGlow-1.0\LibCustomGlow-1.0.xml
 Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
+Libs\LibWoWAPI\HealBot_WoWAPI.lua
 Libs\LibSpells\HealBot_Spells.lua
 Libs\LibPlug\HealBot_Plugins.lua
 Libs\LibMedia\HealBot_Media.lua

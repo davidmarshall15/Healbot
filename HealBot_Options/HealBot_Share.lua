@@ -501,7 +501,7 @@ function HealBot_Share_ExportBuffs(lData)
     for xClass,_  in pairs(hbClassHoTwatch) do
         local HealBot_configClassHoTClass=HealBot_Globals.WatchHoT[xClass]
         for bId,x  in pairs(HealBot_configClassHoTClass) do
-            ssStr=ssStr..(HealBot_Spells_GetName(bId) or HEALBOT_WORDS_UNKNOWN).."~"
+            ssStr=ssStr..(HealBot_WoWAPI_SpellName(bId) or HEALBOT_WORDS_UNKNOWN).."~"
             ssStr=ssStr..xClass.."~"
             if not HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId] then
                 HealBot_Globals.HealBot_Custom_Buffs_ShowBarCol[bId]=1
@@ -593,7 +593,7 @@ function HealBot_Share_LoadBuffs(sIn)
             iconSet=tonumber(iconSet) or 1
             iconGlow=tonumber(iconGlow) or 1
             if not HealBot_Globals.WatchHoT[c][bId] or HealBot_Share_luVars["InMethodBuff"]<3 then
-                local bName=HealBot_Spells_GetName(bId) or bId
+                local bName=HealBot_WoWAPI_SpellName(bId) or bId
                 HealBot_Globals.WatchHoT[c][bId]=filter
                 if prio>0 then 
                     HealBot_Globals.HealBot_Custom_Buffs[bId]=prio 
@@ -663,7 +663,7 @@ function HealBot_Share_ExportDebuffs(lData)
     local ssStr=validType[2].."\n"
     for dId, x in pairs(HealBot_Globals.HealBot_Custom_Debuffs) do
         if (HealBot_Globals.Custom_Debuff_Categories[dId] or 10)>1 then
-            ssStr=ssStr..(HealBot_Spells_GetName(dId) or HEALBOT_WORDS_UNKNOWN).."~"
+            ssStr=ssStr..(HealBot_WoWAPI_SpellName(dId) or HEALBOT_WORDS_UNKNOWN).."~"
             ssStr=ssStr..(HealBot_Globals.Custom_Debuff_Categories[dId] or 10).."~"
             if not HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId] then
                 HealBot_Globals.HealBot_Custom_Debuffs_ShowBarCol[dId]=1
@@ -757,7 +757,7 @@ function HealBot_Share_LoadDebuffs(sIn)
             iconSet=tonumber(iconSet) or 1
             iconGlow=tonumber(iconGlow) or 1
             if not HealBot_Globals.HealBot_Custom_Debuffs[dId] or HealBot_Share_luVars["InMethodDebuff"]<3 then
-                local dName=HealBot_Spells_GetName(dId) or dId
+                local dName=HealBot_WoWAPI_SpellName(dId) or dId
                 HealBot_Globals.Custom_Debuff_Categories[dId]=c
                 HealBot_Globals.HealBot_Custom_Debuffs[dId]=prio
                 if filter then HealBot_Globals.FilterCustomDebuff[dId]=filter end

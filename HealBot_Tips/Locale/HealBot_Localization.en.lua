@@ -567,7 +567,11 @@ function HealBot_Lang_Options_enALL()
                                  ["COLCUSTOMDISABLED"]=HEALBOT_OPTIONS_BARALPHADIS,
                                  ["COLCUSTOMOOR"]=HEALBOT_OPTIONS_BARALPHAEOR,
                                  ["EMERGBARCOLBUFF"]=HEALBOT_OPTIONS_BUFFWARNINGS,
+                                 ["EMERGBARCOLDEBUFFDISPEL"]=HEALBOT_OPTIONS_EMERGDEBUFFWARNINGS,
+                                 ["EMERGBARCOLBUFFMISSING"]=HEALBOT_OPTIONS_EMERGBUFFWARNINGS,
                                  ["EMERGBARCOLDEBUFF"]=HEALBOT_OPTIONS_CDCWARNINGS,
+                                 ["EMERGBARBUFFGLOW"]=HEALBOT_SKIN_GLOWEFFECT,
+                                 ["EMERGBARDEBUFFGLOW"]=HEALBOT_SKIN_GLOWEFFECT,
                         -- Debuffs General tab
                                  ["MONITORDEBUFFS"]=HEALBOT_OPTIONS_MONITORDEBUFFS,
                                  ["MONITORDEBUFFSIC"]=HEALBOT_OPTIONS_MONITORDEBUFFSC,
@@ -608,6 +612,7 @@ function HealBot_Lang_Options_enALL()
                                  ["DEBUFFSCUSTOMFILTER"]=HEALBOT_PLUGIN_FILTER,
                         -- Debuffs Warning tab
                                  ["DEBUFFSWARNINGBAR"]=HEALBOT_OPTIONS_CDCSHOWHBARS,
+                                 ["DEBUFFSWARNINGENABLEBAR"]=HEALBOT_OPTIONS_ALWAYSENABLEBAR,
                                  ["DEBUFFSWARNINGBARRANGE"]="Range",
                                  ["DEBUFFSWARNINGSHOW"]=HEALBOT_OPTIONS_SHOWDEBUFFWARNING,
                                  ["DEBUFFSWARNINGSHOWRANGE"]="Range",
@@ -667,6 +672,7 @@ function HealBot_Lang_Options_enALL()
                                  ["BUFFSCUSTOMAUTOCASTBY"]=HEALBOT_OPTIONS_CUSTOM_CASTBY,
                         -- Buffs Warning tab
                                  ["BUFFSWARNINGBAR"]=HEALBOT_OPTIONS_CDCSHOWHBARS,
+                                 ["BUFFSWARNINGENABLEBAR"]=HEALBOT_OPTIONS_ALWAYSENABLEBAR,
                                  ["BUFFSWARNINGBARRANGE"]="Range",
                                  ["BUFFSWARNINGSHOW"]=HEALBOT_OPTIONS_SHOWBUFFWARNING,
                                  ["BUFFSWARNINGSHOWRANGE"]="Range",
@@ -1308,7 +1314,11 @@ function HealBot_Lang_Options_enALL()
                                ["COLCUSTOMOOR"]="When the player is injured or\nhas a buff/debuff that changes the bar\nbut is out of range for the spell.",
                                ["COLCUSTOMDISABLED"]="When the player is healthy and\nhas no buff/debuff that would change the bar.",
                                ["EMERGBARCOLBUFF"]="When the emergency bar is in use,\nBuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed on the emergency bar.",
+                               ["EMERGBARCOLBUFFMISSING"]="Only use glow effects for missing buffs.",
+                               ["EMERGBARBUFFGLOW"]="When the emergency bar is in use with buff warnings enabled,\nA glow effect can be displayed on the emergency bar.",
                                ["EMERGBARCOLDEBUFF"]="When the emergency bar is in use,\nDebuff col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s can be displayed on the emergency bar.",
+                               ["EMERGBARDEBUFFGLOW"]="When the emergency bar is in use with debuff warnings enabled,\nA glow effect can be displayed on the emergency bar.",
+                               ["EMERGBARCOLDEBUFFDISPEL"]="Only use glow effects for dispellable debuffs.",
                         -- Debuffs General tab
                                ["MONITORDEBUFFS"]="Turn on/off debuff monitoring.",
                                ["MONITORDEBUFFSIC"]="Turn on/off monitoring for debuffs in combat.",
@@ -1349,6 +1359,7 @@ function HealBot_Lang_Options_enALL()
                                ["DEBUFFSCUSTOMALLTIMED"]="Always show debuffs with a duration less than "..HealBot_Config_Cures.ShowTimeMaxDuration.." seconds.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Excludes debuffs cast by friendly players.\n".._G["YELLOW_FONT_COLOR_CODE"].."Use '/hb atd n' to set the duration where n is the seconds.\n".._G["YELLOW_FONT_COLOR_CODE"].."The duration can also be set in the Tweaks plugin."..hbSpellsTips5,
                         -- Debuffs Warning tab
                                ["DEBUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom debuffs.",
+                               ["DEBUFFSWARNINGENABLEBAR"]="When not setting the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the debuff col"..HEALBOT_enWORD_COLOUR_SUFFIX..".\nEnable the bar if not enabled by other means and use the normal bar col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["DEBUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
                                ["DEBUFFSWARNINGSHOW"]="Display a text warning on screen.\nThis applies to all General and Custom debuffs.",
                                ["DEBUFFSWARNINGSHOWRANGE"]="Set the range when the on screen text is displayed.",
@@ -1408,6 +1419,7 @@ function HealBot_Lang_Options_enALL()
                                ["BUFFSCUSTOMAUTOCASTBY"]="Filter automatic buffs by the caster.\n--\n".._G["YELLOW_FONT_COLOR_CODE"].."NOTE: Buffs with no duration are always excluded."..hbSpellsTips6,
                         -- Buffs Warning tab
                                ["BUFFSWARNINGBAR"]="Change the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the settings defined.\nThis applies to all General and Custom buffs.",
+                               ["BUFFSWARNINGENABLEBAR"]="When not setting the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." to the buff col"..HEALBOT_enWORD_COLOUR_SUFFIX..".\nEnable the bar if not enabled by other means and use the normal bar col"..HEALBOT_enWORD_COLOUR_SUFFIX..".",
                                ["BUFFSWARNINGBARRANGE"]="Set the range when the health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.." is changed.",
                                ["BUFFSWARNINGSHOW"]="Display a text warning on screen.\nThis applies to all General and Custom buffs.",
                                ["BUFFSWARNINGSHOWRANGE"]="Set the range when the on screen text is displayed.",

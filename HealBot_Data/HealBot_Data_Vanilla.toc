@@ -18,6 +18,7 @@ Libs\UTF8\utf8data.lua
 Libs\UTF8\utf8.lua
 Libs\LibHealComm-4.0\LibHealComm-4.0.xml
 Libs\LibClassicDurations\LibClassicDurations.xml
+Libs\LibWoWAPI\HealBot_WoWAPI.lua
 Libs\LibSpells\HealBot_Spells.lua
 Libs\LibPlug\HealBot_Plugins.lua
 Libs\LibMedia\HealBot_Media.lua

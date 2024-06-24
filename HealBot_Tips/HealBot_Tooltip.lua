@@ -75,7 +75,7 @@ function HealBot_Tooltip_GetHealSpell(button,sName)
                 return nil, 1, 0.2, 0, false, false
             else
                 if not button.player then
-                    if IsUsableItem(sName) and HealBot_Range_Unit(button.unit, button.status.range) then
+                    if HealBot_WoWAPI_UsableItem(sName) and HealBot_Range_Unit(button.unit, button.status.range) then
                         return sName, 0.2, 0.5, 1, true, true
                     else
                         return sName, 0.1, 0.25, 0.7, true, false
@@ -104,7 +104,7 @@ end
 local gcdDUR=0
 function HealBot_Tooltip_GCDV4()
       --HealBot_setCall("HealBot_Tooltip_GCDV4")
-    _, gcdDUR = HealBot_Spells_GetCooldown(61304) -- GCD
+    _, gcdDUR = HealBot_WoWAPI_SpellCooldown(61304) -- GCD
     return gcdDUR
 end
 
@@ -114,7 +114,7 @@ if HEALBOT_GAME_VERSION>3 then
 end
 function HealBot_Tooltip_getSpellCD(validSpellName, isMacro)
       --HealBot_setCall("HealBot_Tooltip_getSpellCD")
-    local z, x = HealBot_Spells_GetCooldown(validSpellName);
+    local z, x = HealBot_WoWAPI_SpellCooldown(validSpellName);
     local gcd=0
     if HealBot_Globals.Tooltip_IgnoreGCD then
         gcd=HealBot_Tooltip_GCD()
@@ -1364,7 +1364,7 @@ function HealBot_Tooltip_AuraUpdateIconTooltip(frame, details, name, aType,  r, 
       --HealBot_setCall("HealBot_Tooltip_AuraUpdateIconTooltip")
     local spell = Spell:CreateFromSpellID(details.spellId)
     spell:ContinueOnSpellLoad(function()
-        local desc = spell:HealBot_Spells_GetDesc()
+        local desc = spell:HealBot_WoWAPI_SpellDesc()
         HealBot_Tooltip_DisplayIconTooltip(frame, details, name, aType, desc, r, g, b, id)
     end)
 end

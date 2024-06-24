@@ -233,16 +233,19 @@ function HealBot_Lang_enALL()
 
     HEALBOT_OPTIONS_CDCBARS                 = "Bar col"..HEALBOT_enWORD_COLOUR_SUFFIX.."s";
     HEALBOT_OPTIONS_CDCSHOWHBARS            = "Change health bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
+    HEALBOT_OPTIONS_ALWAYSENABLEBAR         = "Always enable bar";
     HEALBOT_OPTIONS_CDCSHOWABARS            = "Change aggro bar col"..HEALBOT_enWORD_COLOUR_SUFFIX;
     HEALBOT_OPTIONS_CDCWARNINGS             = "Debuff warnings";
     HEALBOT_OPTIONS_BUFFWARNINGS            = "Buff warnings";
+    HEALBOT_OPTIONS_EMERGDEBUFFWARNINGS     = "Glow only when dispellable";
+    HEALBOT_OPTIONS_EMERGBUFFWARNINGS       = "Glow only when missing";
     HEALBOT_OPTIONS_BUFFCUSTOM              = "Custom buffs";
     HEALBOT_OPTIONS_DEBUFFCUSTOM            = "Custom debuffs"
     HEALBOT_OPTIONS_BUFFMISSING             = "Missing buffs";
     HEALBOT_OPTIONS_BUFFEXTRA               = "Extra Buffs";
     HEALBOT_OPTIONS_CHECKWELLFED            = "Check well fed";
     HEALBOT_OPTIONS_CHECKLOWMANA            = "Check low mana"
-    HEALBOT_OPTIONS_DEBUFFDISPELL           = "Dispellable debuffs";
+    HEALBOT_OPTIONS_DEBUFFDISPELL           = "General debuffs";
     HEALBOT_OPTIONS_SHOWDEBUFFWARNING       = "Display warning on debuff";
     HEALBOT_OPTIONS_SOUNDDEBUFFWARNING      = "Play sound on debuff";
     HEALBOT_OPTIONS_SHOWBUFFWARNING         = "Display warning on buff";
@@ -460,6 +463,7 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_ICONGLOWCOL                = "Glow col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_ICONGLOWTIMEOUT            = "Glow timeout"
     HEALBOT_SKIN_GLOWSIZE                   = "Glow Size"
+    HEALBOT_SKIN_GLOWEFFECT                 = "Glow effect"
     HEALBOT_SKIN_ICONGLOW                   = "Icon glow";
     HEALBOT_SKIN_ICONSET                    = "Icon set";
     HEALBOT_SKIN_ICONBUFFSET01              = "Buff icon set 1";
@@ -829,8 +833,8 @@ function HealBot_Lang_enALL()
     HEALBOT_WORD_ONWITHOUTSOUND             = "On without sound";
     HEALBOT_WORD_ONWITHSOUND                = "On with sound";
     HEALBOT_OPTION_FRAMEPADDING             = "Frame padding"
-    HEALBOT_OPTIONS_ONBARS                  = "On bars"
-    HEALBOT_OPTIONS_ONICONS                 = "On icons"
+    HEALBOT_OPTIONS_ONBARS                  = "On health bars"
+    HEALBOT_OPTIONS_ONICONS                 = "On icons and emergency bars"
 
     HEALBOT_OPTIONS_TAB_CHAT                = "Chat"
     HEALBOT_OPTIONS_TAB_HEADERS             = "Headers"
@@ -1122,8 +1126,8 @@ function HealBot_Lang_enALL()
     HEALBOT_SKIN_BORDER_HAZARD              = "Border hazard"
     HEALBOT_SKIN_BORDER_HAZARDU             = "Border Hazard"
     HEALBOT_SKIN_BORDER_SOLID               = "Border solid"
-    HEALBOT_SKIN_FRAME_GLOW                 = "Bar glow lines"
-    HEALBOT_SKIN_FRAME_GLOWSTARS            = "Bar glow stars"
+    HEALBOT_SKIN_FRAME_GLOW                 = "Glow lines"
+    HEALBOT_SKIN_FRAME_GLOWSTARS            = "Glow stars"
     HEALBOT_SKIN_FRAME_GLOWBLIZZ            = "Alt Blizzard glow"
     HEALBOT_SKIN_BORDER_COL                 = "Border col"..HEALBOT_enWORD_COLOUR_SUFFIX
     HEALBOT_SKIN_NAMETEXTCOL_TEXT           = "Text col"..HEALBOT_enWORD_COLOUR_SUFFIX
@@ -1471,7 +1475,10 @@ function HealBot_Lang_enALL()
     
     HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC     = "Automatic Debuffs"
     HEALBOT_CUSTOM_CAT_CUSTOM_AUTOBUFFS     = "Automatic Buffs"
-    HEALBOT_CUSTOM_DEBUFF_CATS = {}
+    HEALBOT_CUSTOM_DEBUFF_CATS = {
+         -- Defaults
+        [HEALBOT_CUSTOM_CAT_CUSTOM_AUTOMATIC]  = 1,
+    }
 
     HEALBOT_ABOUT_DESC1                    = "Add frames with skinable bars for healing, decursive, buffing, ressing, aggro tracking"
     HEALBOT_ABOUT_WEBSITE                  = "Website:"

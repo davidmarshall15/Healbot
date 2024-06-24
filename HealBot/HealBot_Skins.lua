@@ -339,8 +339,8 @@ function HealBot_Skins_UpdateIconGlowSize(b, id)
     if b.gref.iconf[id].size~=HealBot_Skins_luVars["IconGlowSize"] then
         b.gref.iconf[id].size=HealBot_Skins_luVars["IconGlowSize"]
         b.gref.iconf[id]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                  edgeSize = b.gref.iconf[id].size, 
-                                  insets = { left = 0, right = 0, top = 0, bottom = 0}})
+                                      edgeSize = b.gref.iconf[id].size, 
+                                      insets = { left = 0, right = 0, top = 0, bottom = 0}})
         b.gref.iconf[id]:SetBackdropBorderColor(0, 0, 0, 0)
     end
 end
@@ -522,6 +522,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 erButton:SetFrameLevel(b:GetFrameLevel()+20)
                 erButton.bar:SetFrameLevel(b.gref["Top"]:GetFrameLevel()-1)
                 erButton:EnableMouse(true)
+                b.gref["EmergBorder"]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8X8",
+                                                   edgeSize = HealBot_Skins_luVars["IconGlowSize"],
+                                                   insets = { left = 0, right = 0, top = 0, bottom = 0}})
+                b.gref["EmergBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
                 --erButton:Show()
             else
                 erButton.bar:ClearAllPoints()
@@ -532,6 +536,10 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
                 erButton:Hide()
             end
 
+			-- bgFile = "Interface\\Addons\\HealBot\\Images\\WhiteLine",
+			-- edgeFile = "Interface\\Addons\\HealBot\\Images\\border",
+            -- edgeFile = "Interface\\Buttons\\WHITE8X8",
+            
             tBarsConcat[1]="f"
             tBarsConcat[2]=b.frame
             tBarsConcat[3]="_HealBot_Action"
@@ -541,14 +549,14 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
             b.gref["Bar"]:ClearAllPoints()
             b.gref["Bar"]:SetPoint("BOTTOMLEFT",b.gref["Back"],"BOTTOMLEFT",auxOffsetLeft+bOutline,auxOffsetBelow+bOutline)
             if b.gref["BackBorder"].size~=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale) then
+                b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
                 b.gref["BackBorder"]:SetBackdrop({
                                             edgeFile = "Interface\\Buttons\\WHITE8X8",
-                                            edgeSize = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale),
+                                            edgeSize = b.gref["BackBorder"].size,
                                             })
                 b.gref["BackBorder"]:SetPoint("TOPLEFT", b.gref["Back"], "TOPLEFT",0,0)
                 b.gref["BackBorder"]:SetPoint("BOTTOMRIGHT", b.gref["Back"], "BOTTOMRIGHT",0,0)
                 b.gref["BackBorder"]:SetBackdropBorderColor(0, 0, 0, 0)
-                b.gref["BackBorder"].size=ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][b.frame]["BORSIZE"]*frameScale)
             end
             HealBot_Action_UpdateBackgroundBorder(button)
 
@@ -2199,6 +2207,8 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["BARCOL"] then 
             Healbot_Config_Skins.Emerg[SkinName][gl]["BARCOL"]=Healbot_Config_Skins.BarCol[SkinName][gl]["HLTH"]
         end
+        if not Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFGLOW"] then Healbot_Config_Skins.Emerg[SkinName][gl]["BUFFGLOW"]=1 end
+        if not Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFGLOW"] then Healbot_Config_Skins.Emerg[SkinName][gl]["DEBUFFGLOW"]=1 end
         if Healbot_Config_Skins.Emerg[SkinName][gl]["BARCOL"]>6 then Healbot_Config_Skins.Emerg[SkinName][gl]["BARCOL"]=6 end
         if not Healbot_Config_Skins.Emerg[SkinName][gl]["HEIGHT"] then 
             if Healbot_Config_Skins.HealBar[SkinName][gl]["HEIGHT"]>40 then

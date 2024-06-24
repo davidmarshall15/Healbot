@@ -478,6 +478,12 @@ function HealBot_Timer_UpdateIconGlow()
       --HealBot_setCall("HealBot_Timer_UpdateIconGlow")
     HealBot_Action_DisableGlowIcons()
     HealBot_Timers_Set("AURA","UpdateAllIcons")
+    HealBot_Timers_Set("LAST","UpdateEmergIconGlow")
+end
+
+function HealBot_Timer_UpdateEmergIconGlow()
+    HealBot_Action_DisableAllEmergButtonGlow()
+    HealBot_Timers_Set("SKINS","UpdateEmergBars",0.1)
 end
 
 function HealBot_Timers_SetCurrentSkin()
@@ -723,6 +729,7 @@ local hbTimerFuncs={["INIT"]={
                         ["SetInHealAbsorbMax"]=HealBot_Aux_setInHealAbsorbMax,
                         ["UpdateButtonGlow"]=HealBot_Timer_UpdateGlow,
                         ["UpdateIconGlow"]=HealBot_Timer_UpdateIconGlow,
+                        ["UpdateEmergIconGlow"]=HealBot_Timer_UpdateEmergIconGlow,
                         ["ClearClassGuidData"]=HealBot_clearClassGuidData,
                         ["DisableAllButtonGlow"]=HealBot_Action_DisableGlow,
                         ["DisableAllIconGlow"]=HealBot_Action_DisableGlowIcons,

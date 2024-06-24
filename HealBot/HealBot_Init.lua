@@ -143,7 +143,7 @@ end
 
 local function HealBot_Init_ManaCost(spellId, spellBookId, tipSet)
       --HealBot_setCall("HealBot_Init_ManaCost")
-    local hbMana=HealBot_Spells_PowerCost(spellId)
+    local hbMana=HealBot_WoWAPI_SpellPowerCost(spellId)
     local manaCost=0
     if hbMana and hbMana[1] and hbMana[1].cost then
         manaCost=hbMana[1].cost
@@ -246,7 +246,7 @@ end
 function HealBot_Init_SetSpellRange(id, spellName, range)
     HealBot_Spell_IDs[id].range=range
     if range==30 then
-        if HealBot_Spells_IsHelpful(spellName) then 
+        if HealBot_WoWAPI_HelpfulSpell(spellName) then 
             HealBot_Init_SetRangeSpells("HEAL30", spellName, id)
         --    HealBot_AddDebug("[HEAL30] Init range for "..spellName.." is "..range,"Range Helpful 30",true)
         elseif IsHarmfulSpell(spellName) then
@@ -254,7 +254,7 @@ function HealBot_Init_SetSpellRange(id, spellName, range)
             --HealBot_AddDebug("[HARM30] Init range for "..spellName.." is "..range,"Range Harmful 30",true)
         end
     elseif range==40 then 
-        if HealBot_Spells_IsHelpful(spellName) then
+        if HealBot_WoWAPI_HelpfulSpell(spellName) then
             HealBot_Init_SetRangeSpells("HEAL", spellName, id)
             --HealBot_AddDebug([HEAL] "Init range for "..spellName.." is "..range,"Range Helpful 40",true)
         elseif IsHarmfulSpell(spellName) then 
@@ -269,7 +269,7 @@ function HealBot_Init_FindSpellRangeCast(id, spellName, spellBookId)
     local cRank=false
     if ( not id ) then return false; end
 
-    local spell, _, texture, msCast, _, hbRange = HealBot_Spells_GetInfo(id);
+    local spell, _, texture, msCast, _, hbRange = HealBot_WoWAPI_SpellInfo(id);
     local cooldown = GetSpellBaseCooldown(id)
 
     if ( not spell ) then return false; end
@@ -759,7 +759,7 @@ function HealBot_Init_Spells_TWWFix()
 end
 
 function HealBot_Init_Spells_CataPriest(spellID, spellName, spellTexture)
-    local _, _, _, _, _, hbRange = HealBot_Spells_GetInfo(spellID)
+    local _, _, _, _, _, hbRange = HealBot_WoWAPI_SpellInfo(spellID)
     local cooldown = GetSpellBaseCooldown(spellID)
     local hbCooldown=tonumber(cooldown or 25);
     if not HealBot_Spell_IDs[spellID] then HealBot_Spell_IDs[spellID]={} end
@@ -799,12 +799,12 @@ function HealBot_Init_Spells_Defaults()
         HealBot_Ranks[x]=nil
     end
     HealBot_Init_Spell_RangesPref()
-    local nTabs=HealBot_Spells_NumSpellTabs()
+    local nTabs=HealBot_WoWAPI_NumSpellTabs()
 
     local hbBufflist=HealBot_Options_InitBuffSpellsClassList(HealBot_Data["PCLASSTRIM"])
     for j=1, getn(hbBufflist), 1 do
-        if hbBufflist[j] and HealBot_Spells_GetName(hbBufflist[j]) then
-            HealBot_Buff_Names[HealBot_Spells_GetName(hbBufflist[j])]=true
+        if hbBufflist[j] and HealBot_WoWAPI_SpellName(hbBufflist[j]) then
+            HealBot_Buff_Names[HealBot_WoWAPI_SpellName(hbBufflist[j])]=true
         end
     end
 	
@@ -816,24 +816,24 @@ function HealBot_Init_Spells_Defaults()
         end
     else
         for j=1,nTabs do
-            local _, _, offset, numEntries, _, offspecID = HealBot_Spells_SpellTabInfo(j)
+            local _, _, offset, numEntries, _, offspecID = HealBot_WoWAPI_SpellTabInfo(j)
             if not offspecID then offspecID=1 end
             --HealBot_AddDebug("offset="..offset.."  numEntries"..numEntries.."  offspecID="..offspecID,"Init Spells",true)
             if offspecID==0 then
                 for s=offset+1,offset+numEntries do
                     --HealBot_AddDebug("Tabinfo slot="..s,"Init Spells",true)
-                    local sName, cRank = HealBot_Spells_SpellBookItemName(s, BOOKTYPE_SPELL)
-                    local sType, sId = HealBot_Spells_SpellBookItemInfo(s, BOOKTYPE_SPELL)
-                    --local sName, cRank = HealBot_Spells_GetInfo(sId)
+                    local sName, cRank = HealBot_WoWAPI_SpellBookItemName(s, BOOKTYPE_SPELL)
+                    local sType, sId = HealBot_WoWAPI_SpellBookItemInfo(s, BOOKTYPE_SPELL)
+                    --local sName, cRank = HealBot_WoWAPI_SpellInfo(sId)
                     if not cRank then cRank="" end
-                    if sType == "SPELL" and not HealBot_Spells_IsPassive(sId) and HealBot_Spells_KnownByName(sName) and not string.find(sName," Rune Ability") then -- and (string.len(cRank)<1 or string.find(cRank,"Rank")) 
+                    if sType == "SPELL" and not HealBot_WoWAPI_IsSpellPassive(sId) and HealBot_Spells_KnownByName(sName) and not string.find(sName," Rune Ability") then -- and (string.len(cRank)<1 or string.find(cRank,"Rank")) 
                         HealBot_Init_Spells_addSpell(sId, sName, s, cRank)
                     elseif sType == "FLYOUT" then
                         local _, _, numFlyoutSlots, flyoutKnown = GetFlyoutInfo(sId)
                         if flyoutKnown then
                             for f=1,numFlyoutSlots do
                                 local fId, _, fKnown, fName = GetFlyoutSlotInfo(sId, f)
-                                if fKnown and not HealBot_Spells_IsPassive(fId) and HealBot_Spells_KnownByName(fName) then
+                                if fKnown and not HealBot_WoWAPI_IsSpellPassive(fId) and HealBot_Spells_KnownByName(fName) then
                                     HealBot_Init_Spells_addSpell(fId, fName, s, cRank)
                                 end
                             end
@@ -876,9 +876,9 @@ function HealBot_Init_ClassicSpellRanks()
             for f=1, HealBot_Ranks[hSpell]-1, 1 do
                 local sNameRank=HealBot_Init_retRank(hSpell, f) --hSpell.."(Rank "..f..")"
                 if sNameRank then
-                    local _, _, _, _, _, _, spellId = HealBot_Spells_GetInfo(sNameRank)
+                    local _, _, _, _, _, _, spellId = HealBot_WoWAPI_SpellInfo(sNameRank)
                     if spellId then
-                        local _, _, texture, msCast, _, hbRange = HealBot_Spells_GetInfo(spellId);
+                        local _, _, texture, msCast, _, hbRange = HealBot_WoWAPI_SpellInfo(spellId);
                         local cooldown = GetSpellBaseCooldown(spellId)
                         local hbCastTime=tonumber(msCast or 0);
                         local hbCooldown=tonumber(cooldown or 0);
@@ -905,39 +905,39 @@ function HealBot_Init_SmartCast()
       --HealBot_setCall("HealBot_Init_SmartCast")
     local rName=""
     if HealBot_Data["PCLASSTRIM"]=="PRIE" then
-        rName=HealBot_Spells_GetName(HEALBOT_MASS_RESURRECTION) or HealBot_Spells_GetName(HBC_MASS_RESURRECTION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_MASS_RESURRECTION) or HealBot_WoWAPI_SpellName(HBC_MASS_RESURRECTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_RESURRECTION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_RESURRECTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="DRUI" then
-        rName=HealBot_Spells_GetName(HEALBOT_REVITALIZE)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_REVITALIZE)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_REVIVE) or HealBot_Spells_GetName(HBC_REVIVE)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_REVIVE) or HealBot_WoWAPI_SpellName(HBC_REVIVE)
         if rName and HealBot_Spells_KnownByName(rName) then 
             SmartCast_Res=rName
         else
-            rName=HealBot_Spells_GetName(HEALBOT_REBIRTH)
+            rName=HealBot_WoWAPI_SpellName(HEALBOT_REBIRTH)
             if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
         end
     elseif HealBot_Data["PCLASSTRIM"]=="MONK" then
-        rName=HealBot_Spells_GetName(HEALBOT_REAWAKEN)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_REAWAKEN)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_RESUSCITATE)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_RESUSCITATE)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="PALA" then
-        rName=HealBot_Spells_GetName(HEALBOT_ABSOLUTION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_ABSOLUTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_REDEMPTION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_REDEMPTION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="SHAM" then
-        rName=HealBot_Spells_GetName(HEALBOT_ANCESTRAL_VISION)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_ANCESTRAL_VISION)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_ANCESTRALSPIRIT)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_ANCESTRALSPIRIT)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     elseif HealBot_Data["PCLASSTRIM"]=="EVOK" then
-        rName=HealBot_Spells_GetName(HEALBOT_MASS_RETURN)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_MASS_RETURN)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_MassRes=rName end
-        rName=HealBot_Spells_GetName(HEALBOT_RETURN)
+        rName=HealBot_WoWAPI_SpellName(HEALBOT_RETURN)
         if rName and HealBot_Spells_KnownByName(rName) then SmartCast_Res=rName end
     end
 end

@@ -403,7 +403,7 @@ function HealBot_ActionIcons_OnMouseDown(self, button)
                 if actionIcons[self.frame][self.id].infoType=="item" then
                     PickupItem(actionIcons[self.frame][self.id].infoID)
                 elseif actionIcons[self.frame][self.id].infoType=="spell" then
-                    HealBot_Spells_Pickup(actionIcons[self.frame][self.id].infoID)
+                    HealBot_WoWAPI_SpellPickup(actionIcons[self.frame][self.id].infoID)
                 elseif actionIcons[self.frame][self.id].infoType=="macro" then
                     PickupMacro(actionIcons[self.frame][self.id].infoID)
                 end
@@ -450,7 +450,7 @@ function HealBot_ActionIcons_CursorUpdateIcon(infoType, frame, id, info)
             if prevType=="item" then
                 PickupItem(prevID)
             elseif prevType=="spell" then
-                HealBot_Spells_Pickup(prevID)
+                HealBot_WoWAPI_SpellPickup(prevID)
             elseif prevType=="macro" then
                 PickupMacro(prevID)
             end
@@ -2222,7 +2222,7 @@ end
 function HealBot_ActionIcons_CheckValidHighlightIcon(spellName, frame, id)
         --HealBot_setCall("HealBot_ActionIcons_CheckValidHighlightIcon")
     --HealBot_ActionIcons_Debug(frame, id, "CheckHighlightIcon sName="..spellName.." CD="..(hbCDRunning[spellName] or "nil"))
-    if actionIcons[frame][id].valid and not hbOnCD[spellName] and (actionIcons[frame][id].infoType~="item" or IsUsableItem(actionIcons[frame][id].infoID)) then
+    if actionIcons[frame][id].valid and not hbOnCD[spellName] and (actionIcons[frame][id].infoType~="item" or HealBot_WoWAPI_UsableItem(actionIcons[frame][id].infoID)) then
         if HealBot_ActionIcons_CheckValidTarget(frame, id) then
             if not onGCD then
                 HealBot_ActionIcons_CheckHighlightIcon(frame, id)
@@ -2325,7 +2325,7 @@ local sbStartTime, sbDuration, sbCDTime, sbCDEnd=0,0,0,0
 function HealBot_ActionIcons_SelfAbilityCD(spellName, frame, id)
         --HealBot_setCall("HealBot_ActionIcons_SelfAbilityCD")
     if actionIcons[frame][id].infoType=="spell" then
-        sbStartTime, sbDuration=HealBot_Spells_GetCooldown(spellName)
+        sbStartTime, sbDuration=HealBot_WoWAPI_SpellCooldown(spellName)
     elseif actionIcons[frame][id].infoType=="item" and HEALBOT_GAME_VERSION>9 then
         sbStartTime, sbDuration=GetItemCooldown(spellName)
     else
@@ -2358,7 +2358,7 @@ function HealBot_ActionIcons_SelfCountText(frame, id)
     if Healbot_Config_Skins.ActionIcons[Healbot_Config_Skins.Current_Skin][frame]["HIDECOUNTTEXT"] then
         actionIcons[frame][id].count=0
     elseif actionIcons[frame][id].infoType=="spell" then
-        actionIcons[frame][id].count=HealBot_Spells_Charges(actionIcons[frame][id].infoID) or HealBot_Spells_Count(actionIcons[frame][id].infoID) or 0
+        actionIcons[frame][id].count=HealBot_WoWAPI_SpellCharges(actionIcons[frame][id].infoID) or HealBot_WoWAPI_SpellCount(actionIcons[frame][id].infoID) or 0
     elseif actionIcons[frame][id].infoType=="item" then
         actionIcons[frame][id].count=GetItemCount(actionIcons[frame][id].infoID, nil, true) or 0
     else
@@ -2469,7 +2469,7 @@ function HealBot_ActionIcons_UpdateAllCDs()
         --HealBot_setCall("HealBot_ActionIcons_UpdateAllCDs")
     if #activeFramesIdx>0 then
         if not onGCD then
-            sbStartTime, sbDuration=HealBot_Spells_GetCooldown(61304)
+            sbStartTime, sbDuration=HealBot_WoWAPI_SpellCooldown(61304)
             gcd = ((sbStartTime or 0)+(sbDuration or 0)) - HealBot_TimeNow
             if gcd>0.1 then
                 onGCD=true
@@ -2500,11 +2500,11 @@ function HealBot_ActionIcons_SetSpell(sText)
         --HealBot_setCall("HealBot_ActionIcons_SetSpell")
     if sText then
         if HealBot_Text_Len(sText)>0 then
-            local _, _, _, _, _, _, spellId = HealBot_Spells_GetInfo(sText)
+            local _, _, _, _, _, _, spellId = HealBot_WoWAPI_SpellInfo(sText)
             if spellId then 
                 sText = "S:"..spellId
             else
-                local itemID = HealBot_Spells_ItemInfoInstant(sText)
+                local itemID = HealBot_WoWAPI_ItemInfoInstant(sText)
                 if itemID then 
                     sText = "I:"..itemID
                 elseif hbLocalItems[sText] then
@@ -2537,19 +2537,19 @@ function HealBot_ActionIcons_GetSpell(spellCode)
             local sType,sID = string.split(":", spellCode)
             if HEALBOT_GAME_VERSION==4 and spellCode==HEALBOT_SPELL_HOLYWORDSERENITY then sType="S"; sID=HBC_HOLY_WORD_SERENITY end
             if sType and not sID and HealBot_Spells_KnownByName(sType) then
-                _, _, _, _, _, _, sID=HealBot_Spells_GetInfo(sType)
+                _, _, _, _, _, _, sID=HealBot_WoWAPI_SpellInfo(sType)
             end
             if sType and sID then
                 if sType == "I" then
-                    vSpellText=HealBot_Spells_ItemInfo(sID)
+                    vSpellText=HealBot_WoWAPI_ItemInfo(sID)
                     vSpellType="item"
                     vSpellID=sID
-                    _, _, _, _, vSpellIcon, _, _ = HealBot_Spells_ItemInfoInstant(sID) 
+                    _, _, _, _, vSpellIcon, _, _ = HealBot_WoWAPI_ItemInfoInstant(sID) 
                 elseif sType == "S" then
-                    cSpellText=HealBot_Spells_GetName(sID)
+                    cSpellText=HealBot_WoWAPI_SpellName(sID)
                     vSpellID=sID
                     vSpellType="spell"
-                    vSpellIcon=HealBot_Spells_Texture(sID)
+                    vSpellIcon=HealBot_WoWAPI_SpellTexture(sID)
                     vSpellText=cSpellText or vSpellText
                 end
             elseif GetMacroIndexByName(spellCode)>0 then

@@ -12,6 +12,12 @@ HealBot_Range_luVars["CurrentModKey"] = ""
 HealBot_RangeSpells["HEAL"] = ""
 HealBot_RangeSpells["HARM"] = ""
 
+local UnitInRange=UnitInRange
+local UnitIsVisible=UnitIsVisible
+local CheckInteractDistance=CheckInteractDistance
+local GetInventoryItemID=GetInventoryItemID
+local UnitPhaseReason=UnitPhaseReason
+
 function HealBot_Range_setLuVars(vName, vValue)
 	  --HealBot_setCall("HealBot_setLuVars - "..vName)
     HealBot_Range_luVars[vName]=vValue
@@ -49,7 +55,7 @@ function HealBot_Range_SetSpells()
       --HealBot_setCall("HHealBot_Range_SetSpells)
     local x = HealBot_GetBandageType() or HEALBOT_LINEN_BANDAGE
     local y = GetInventoryItemID("player", INVSLOT_MAINHAND) or HEALBOT_WORDS_UNKNOWN
-    if y~=HEALBOT_WORDS_UNKNOWN then y = HealBot_Spells_ItemInfo(y) or y end
+    if y~=HEALBOT_WORDS_UNKNOWN then y = HealBot_WoWAPI_ItemInfo(y) or y end
     if (HealBot_RangeSpells["HEAL"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL"]=x end
     if (HealBot_RangeSpells["HARM"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HARM"]=y end
     if (HealBot_RangeSpells["HEAL30"] or HEALBOT_WORDS_UNKNOWN)==HEALBOT_WORDS_UNKNOWN then HealBot_RangeSpells["HEAL30"]=x end
@@ -132,11 +138,9 @@ function HealBot_Range_WarnInRange(button, spellName, warnRange)
     end
 end
 
-local IsSpellInRange=(C_Spell and C_Spell.IsSpellInRange) or IsSpellInRange
-local UnitInRange=UnitInRange
 local sRange=0
 local function HealBot_Range_IsSpellInRange(button, spellName)
-    sRange = IsSpellInRange(spellName, button.unit)
+    sRange = HealBot_WoWAPI_SpellInRange(spellName, button.unit)
     if type(sRange)=="number" then
         return sRange
     elseif sRange or HealBot_Range_Unit(button.unit, button.status.range) then

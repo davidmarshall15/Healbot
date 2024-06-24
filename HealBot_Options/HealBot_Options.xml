@@ -28236,7 +28236,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_EmergInjTrig" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-45"/>
+                              <AbsDimension x="0" y="-35"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -28250,7 +28250,7 @@
                         <Anchors>
                           <Anchor point="TOPLEFT">
                             <Offset>
-                              <AbsDimension x="145" y="-250" />
+                              <AbsDimension x="110" y="-225" />
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -28260,11 +28260,55 @@
                           <OnLeave>HealBot_Options_Show_Help("EMERGBARCOLBUFF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
+                      <Frame name="HealBot_EmergBarColBuffGlow" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_EmergBarColBuff" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="-30" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Size>
+                          <AbsDimension x="200" y="20"/>
+                        </Size>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotemergbarbuffglowstr" inherits="GameFontNormal" text="HEALBOT_SKIN_GLOWEFFECT">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="" y="10"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("EMERGBARBUFFGLOW",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("EMERGBARBUFFGLOW",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <CheckButton name="HealBot_EmergBarColBuffGlowMissing" inherits="SendMailRadioButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_EmergBarColBuffGlow" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="18" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_EmergBarColBuffGlowMissing_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("EMERGBARCOLBUFFMISSING",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("EMERGBARCOLBUFFMISSING",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <CheckButton name="HealBot_EmergBarColDebuff" inherits="HealBotUIPanelCheckButton">
                         <Anchors>
                           <Anchor point="LEFT" relativeTo="HealBot_EmergBarColBuff" relativePoint="RIGHT">
                             <Offset>
-                              <AbsDimension x="155" y="0"/>
+                              <AbsDimension x="200" y="0"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -28274,6 +28318,50 @@
                           <OnLeave>HealBot_Options_Show_Help("EMERGBARCOLDEBUFF",false)</OnLeave>
                         </Scripts>
                       </CheckButton>
+                      <Frame name="HealBot_EmergBarColDebuffGlow" inherits="UIDropDownMenuTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_EmergBarColDebuff" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="-30" y="-12" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Size>
+                          <AbsDimension x="200" y="20"/>
+                        </Size>
+                        <Layers>
+                          <Layer level="OVERLAY">
+                            <FontString name="healbotemergbardebuffglowstr" inherits="GameFontNormal" text="HEALBOT_SKIN_GLOWEFFECT">
+                              <Anchors>
+                                <Anchor point="TOP">
+                                  <Offset>
+                                    <AbsDimension x="0" y="10"/>
+                                  </Offset>
+                                </Anchor>
+                              </Anchors>
+                            </FontString>
+                          </Layer>
+                        </Layers>
+                        <Scripts>
+                          <OnLoad>HealBot_Options_UIDropDownMenu_OnLoad(self, 140)</OnLoad>
+                          <OnEnter>HealBot_Options_Show_Help("EMERGBARDEBUFFGLOW",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("EMERGBARDEBUFFGLOW",false)</OnLeave>
+                        </Scripts>
+                      </Frame>
+                      <CheckButton name="HealBot_EmergBarColDebuffGlowDispellable" inherits="SendMailRadioButtonTemplate">
+                        <Anchors>
+                          <Anchor point="TOPLEFT" relativeTo="HealBot_EmergBarColDebuffGlow" relativePoint="BOTTOMLEFT">
+                            <Offset>
+                              <AbsDimension x="18" y="-10" />
+                            </Offset>
+                          </Anchor>
+                        </Anchors>
+                        <Scripts>
+                          <OnClick>HealBot_EmergBarColDebuffGlowDispellable_OnClick(self)</OnClick>
+                          <OnEnter>HealBot_Options_Show_Help("EMERGBARCOLDEBUFFDISPEL",true)</OnEnter>
+                          <OnLeave>HealBot_Options_Show_Help("EMERGBARCOLDEBUFFDISPEL",false)</OnLeave>
+                        </Scripts>
+                      </CheckButton>
                       <Slider name="HealBot_EmergBarEnabledOpacity" inherits="HealBot_Options_SliderTemplate">
                         <Size>
                           <AbsDimension x="495" y="18" />
@@ -28281,7 +28369,7 @@
                         <Anchors>
                           <Anchor point="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="155"/>
+                              <AbsDimension x="0" y="135"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -28298,7 +28386,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_EmergBarEnabledOpacity" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-45"/>
+                              <AbsDimension x="0" y="-35"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -28315,7 +28403,7 @@
                         <Anchors>
                           <Anchor point="TOP" relativeTo="HealBot_EmergBarOOROpacity" relativePoint="BOTTOM">
                             <Offset>
-                              <AbsDimension x="0" y="-45"/>
+                              <AbsDimension x="0" y="-35"/>
                             </Offset>
                           </Anchor>
                         </Anchors>
@@ -30019,11 +30107,25 @@
                   </Layer>
                 </Layers>
                 <Frames>
+                  <CheckButton name="HealBot_Options_CDCCol_AlwaysEnableBar" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="215" y="-70" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_CDCCol_AlwaysEnableBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("DEBUFFSWARNINGENABLEBAR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("DEBUFFSWARNINGENABLEBAR",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_CDCCol_ShowOnHealthBar" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-120" />
+                          <AbsDimension x="40" y="-150" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -30051,7 +30153,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_CDCCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-95" />
+                          <AbsDimension x="0" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -30079,7 +30181,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowDebuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-95" />
+                          <AbsDimension x="0" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33242,11 +33344,25 @@
                   </Layer>
                 </Layers>
                 <Frames>
+                  <CheckButton name="HealBot_Options_BuffCol_AlwaysEnableBar" inherits="HealBotUIPanelCheckButton">
+                    <Anchors>
+                      <Anchor point="TOPLEFT">
+                        <Offset>
+                          <AbsDimension x="215" y="-70" />
+                        </Offset>
+                      </Anchor>
+                    </Anchors>
+                    <Scripts>
+                      <OnClick>HealBot_Options_BuffCol_AlwaysEnableBar_OnClick(self)</OnClick>
+                      <OnEnter>HealBot_Options_Show_Help("BUFFSWARNINGENABLEBAR",true)</OnEnter>
+                      <OnLeave>HealBot_Options_Show_Help("BUFFSWARNINGENABLEBAR",false)</OnLeave>
+                    </Scripts>
+                  </CheckButton>
                   <CheckButton name="HealBot_Options_BuffCol_ShowOnHealthBar" inherits="HealBotUIPanelCheckButton">
                     <Anchors>
                       <Anchor point="TOPLEFT">
                         <Offset>
-                          <AbsDimension x="40" y="-120" />
+                          <AbsDimension x="40" y="-150" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33274,7 +33390,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_BuffCol_ShowOnHealthBar"  relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-95" />
+                          <AbsDimension x="0" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>
@@ -33302,7 +33418,7 @@
                     <Anchors>
                       <Anchor point="TOPLEFT" relativeTo="HealBot_Options_ShowBuffWarning" relativePoint="BOTTOMLEFT">
                         <Offset>
-                          <AbsDimension x="0" y="-95" />
+                          <AbsDimension x="0" y="-75" />
                         </Offset>
                       </Anchor>
                     </Anchors>

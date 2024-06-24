@@ -25,6 +25,7 @@ local hbMountTypes={[230]="G",
                     [412]="F",
                     [424]="F",
                     [428]="F",
+                    [436]="F",
                     }
 
 local function HealBot_MountsPets_CanMount()
@@ -327,62 +328,6 @@ function HealBot_MountsPets_InitMount()
         HealBot_mountData["ValidUse"]=true
     end
     HealBot_Timers_Set("LAST","MountsPetsZone")
-end
-
-function HealBot_MountsPets_FavClassicMount()
-      --HealBot_setCall("HealBot_MountsPets_FavClassicMount")
-    if not IsMounted() then
-        HealBot_AddChat("ERROR: Not Mounted\nMount first before setting favourite mount")
-    else
-        local z = GetNumCompanions("MOUNT")
-        local mount=false
-        for i=1,z do
-            local _, creatureName, _, _, active = GetCompanionInfo("MOUNT", i)
-            if active then
-                mount=creatureName
-                break
-            end
-        end
-        if mount then
-            for z,_ in pairs(HealBot_FMount) do
-                if HealBot_FMount[z]==mount then
-                    HealBot_Config.FavMount=mount
-                    HealBot_AddChat(mount.." set as Favourite flying mount")
-                    mount=nil
-                    break
-                end
-            end
-        end
-        if mount then
-            for z,_ in pairs(HealBot_PrevFMounts) do
-                if HealBot_PrevFMounts[z]==mount then
-                    HealBot_Config.FavMount=mount
-                    HealBot_AddChat(mount.." set as Favourite flying mount")
-                    mount=nil
-                    break
-                end
-            end
-        end
-        if mount then
-            for z,_ in pairs(HealBot_GMount) do
-                if HealBot_GMount[z]==mount then
-                    HealBot_Config.FavGroundMount=mount
-                    HealBot_AddChat(mount.." set as Favourite ground mount")
-                    mount=nil
-                    break
-                end
-            end
-        end
-        if mount then
-            for z,_ in pairs(HealBot_PrevGMounts) do
-                if HealBot_PrevGMounts[z]==mount then
-                    HealBot_Config.FavGroundMount=mount
-                    HealBot_AddChat(mount.." set as Favourite ground mount")
-                    break
-                end
-            end
-        end
-    end
 end
 
 function HealBot_MountsPets_DislikeMount(action)
