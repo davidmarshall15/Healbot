@@ -55,7 +55,6 @@ end
 
 local HealBot_WoWAPI_GetSpellName=HealBot_WoWAPI_GetSpellNameV1
 local HealBot_WoWAPI_GetSpellInfo=HealBot_WoWAPI_GetInfoV1
-local HealBot_WoWAPI_GetSpellDesc=GetSpellDescription
 local HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV1
 local HealBot_WoWAPI_GetSpellLink=GetSpellLink
 local HealBot_WoWAPI_IsPassiveSpell=IsPassiveSpell
@@ -75,10 +74,9 @@ if C_Spell then
         HealBot_WoWAPI_GetSpellInfo=HealBot_WoWAPI_GetInfoV11
         GetSpellInfo=C_Spell.GetSpellInfo
     end
-    HealBot_WoWAPI_GetSpellDesc=C_Spell.GetSpellDescription or GetSpellDescription
     if C_Spell.GetSpellCooldown then
-        HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
-        GetSpellCooldown=C_Spell.GetSpellCooldown
+    --    HealBot_WoWAPI_GetSpellCooldown=HealBot_WoWAPI_GetCooldownV11
+    --    GetSpellCooldown=C_Spell.GetSpellCooldown
     end
     HealBot_WoWAPI_GetSpellLink=C_Spell.GetSpellLink or GetSpellLink
     HealBot_WoWAPI_IsPassiveSpell=C_Spell.IsSpellPassive or IsPassiveSpell
@@ -106,10 +104,6 @@ end
 
 function HealBot_WoWAPI_SpellInfo(spellId)
     return HealBot_WoWAPI_GetSpellInfo(spellId or "X")
-end
-
-function HealBot_WoWAPI_SpellDesc(spellId)
-    return HealBot_WoWAPI_GetSpellDesc(spellId or "X")
 end
 
 function HealBot_WoWAPI_SpellCooldown(spellId)
@@ -148,8 +142,8 @@ function HealBot_WoWAPI_HelpfulSpell(spellId)
     return HealBot_WoWAPI_IsHelpfulSpell(spellId or "X")
 end
 
-function HealBot_WoWAPI_SpellInRange(spellId)
-    return HealBot_WoWAPI_IsSpellInRange(spellId or "X")
+function HealBot_WoWAPI_SpellInRange(spellId, unit)
+    return HealBot_WoWAPI_IsSpellInRange(spellId or "X", unit)
 end
 
 

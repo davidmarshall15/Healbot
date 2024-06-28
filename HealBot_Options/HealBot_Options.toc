@@ -1,4 +1,4 @@
-## Interface: 100207, 110000
+## Interface: 100207
 ## Title: HealBot Options
 ## Author: Strife
 ## Notes: HealBot options and player settings

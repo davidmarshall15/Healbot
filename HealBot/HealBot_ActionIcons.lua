@@ -1627,7 +1627,7 @@ function HealBot_ActionIcons_ValidateAbility(frame, id, itemsOnly)
             actionIcons[frame][id]:SetAttribute("type1", "spell")
             actionIcons[frame][id]:SetAttribute("spell1", hbAbility)
             if HealBot_Spell_IDs[aID] then
-                actionIcons[frame][id].range=HealBot_Spell_IDs[aID].range
+                actionIcons[frame][id].range=HealBot_Spell_IDs[aID].range or 40
             else
                 actionIcons[frame][id].range=40
             end
@@ -2546,7 +2546,7 @@ function HealBot_ActionIcons_GetSpell(spellCode)
                     vSpellID=sID
                     _, _, _, _, vSpellIcon, _, _ = HealBot_WoWAPI_ItemInfoInstant(sID) 
                 elseif sType == "S" then
-                    cSpellText=HealBot_WoWAPI_SpellName(sID)
+                    cSpellText=HealBot_Spells_KnownByName(sID)
                     vSpellID=sID
                     vSpellType="spell"
                     vSpellIcon=HealBot_WoWAPI_SpellTexture(sID)

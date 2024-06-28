@@ -1183,6 +1183,9 @@ function HealBot_UpdateAllAuxPowerBars()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_OnEvent_UnitManaUpdate(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_OnEvent_UnitManaUpdate(xButton)
+    end
 end
 
 function HealBot_CheckAllAuxOverLays()
@@ -1203,6 +1206,9 @@ function HealBot_CheckAllAuxOverLays()
         HealBot_Aux_CheckOverLays(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Aux_CheckOverLays(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Aux_CheckOverLays(xButton)
     end
 end
@@ -1233,6 +1239,10 @@ function HealBot_ResetAllAuxText()
         HealBot_Aux_ResetNameBar(xButton)
         HealBot_Aux_ResetHealthBar(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Aux_ResetNameBar(xButton)
+        HealBot_Aux_ResetHealthBar(xButton)
+    end
 end
 
 function HealBot_UpdateAllBackground()
@@ -1255,6 +1265,9 @@ function HealBot_UpdateAllBackground()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_UpdateBackground(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Action_UpdateBackground(xButton)
+    end
 end
 
 function HealBot_UpdateAllAuxBars()
@@ -1275,6 +1288,9 @@ function HealBot_UpdateAllAuxBars()
         HealBot_Aux_UpdBar(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Aux_UpdBar(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Aux_UpdBar(xButton)
     end
 end
@@ -1306,6 +1322,9 @@ function HealBot_updAllAuxBuffBars()
         HealBot_updAuxBuffBars(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_updAuxBuffBars(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_updAuxBuffBars(xButton)
     end
 end
@@ -1497,6 +1516,9 @@ function HealBot_updAllStateIconHostile()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_OnEvent_ClassificationChanged(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_OnEvent_ClassificationChanged(xButton)
+    end
 end
 
 function HealBot_updAuxDebuffBars(button)
@@ -1528,6 +1550,9 @@ function HealBot_updAllAuxDebuffBars()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_updAuxDebuffBars(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_updAuxDebuffBars(xButton)
+    end
 end
 
 function HealBot_updAllAuxRangeBars()
@@ -1550,6 +1575,9 @@ function HealBot_updAllAuxRangeBars()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Update_OORBar(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Update_OORBar(xButton)
+    end
 end
 
 function HealBot_updAllAuxInRangeBars()
@@ -1570,6 +1598,9 @@ function HealBot_updAllAuxInRangeBars()
         HealBot_Update_InRangeBar(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Update_InRangeBar(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Update_InRangeBar(xButton)
     end
 end
@@ -1601,6 +1632,10 @@ function HealBot_UpdateAllUnitBars(playersOnly)
             xButton.status.slowupdate=true
             xButton.status.update=true
         end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+            xButton.status.slowupdate=true
+            xButton.status.update=true
+        end
     end
 end
 
@@ -1627,7 +1662,7 @@ end
 function HealBot_GetUnitGuild(button)
       --HealBot_setCall("HealBot_GetUnitGuild", button)
     if button.isplayer and GetGuildInfo(button.unit) then
-        button.guild, button.guildrank, button.guildranki=GetGuildInfo(button.unit)
+        button.guild, button.guildtitle, button.guildrank=GetGuildInfo(button.unit)
     else
         button.guild=false
     end
@@ -2835,8 +2870,8 @@ function HealBot_UnitID(unit, incEnemy)
     aButton=xButton or pButton
     if aButton and UnitIsUnit(aButton.unit, unit) then
         return aButton.unit, xButton, pButton
-    elseif incEnemy and HealBot_Enemy_Button[unit] then
-        return unit, HealBot_Enemy_Button[unit], false
+    elseif incEnemy and (HealBot_Enemy_Button[unit] or HealBot_DuplicateEnemy_Button[unit]) then
+        return unit, HealBot_Enemy_Button[unit] or HealBot_DuplicateEnemy_Button[unit], false
     end
     return false,false,false
 end
@@ -3211,8 +3246,8 @@ function HealBot_UpdateCheckInterval()
         HealBot_Action_setLuVars("deadCheckInterval", 1)
         HealBot_Debug_PerfUpdate("deadInt", 1)
     else
-        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(925)
-        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(950)
+        HealBot_luVars["RecalcDelay"] = HealBot_Util_PerfVal2(955)
+        HealBot_luVars["EventsDelay"] = HealBot_Util_PerfVal2(970)
         HealBot_luVars["aggroCheckInterval"] = HealBot_Util_PerfVal2(700)
         HealBot_luVars["statusCheckInterval"] = HealBot_Util_PerfVal2(400)
         HealBot_luVars["healthCheckInterval"] = HealBot_Util_PerfVal2(100)
@@ -3220,15 +3255,15 @@ function HealBot_UpdateCheckInterval()
         if HealBot_luVars["aggroCheckInterval"]<1 then HealBot_luVars["aggroCheckInterval"] = 1 end
         if HealBot_luVars["statusCheckInterval"]<2 then HealBot_luVars["statusCheckInterval"] = 2 end
         if HealBot_luVars["healthCheckInterval"]<3 then HealBot_luVars["healthCheckInterval"] = 3 end
-        if HealBot_luVars["RecalcDelay"]<0.2 then 
-            HealBot_luVars["RecalcDelay"] = 0.2
-        elseif HealBot_luVars["RecalcDelay"]>0.5 then
-            HealBot_luVars["RecalcDelay"] = 0.5
+        if HealBot_luVars["RecalcDelay"]<0.1 then 
+            HealBot_luVars["RecalcDelay"] = 0.1
+        elseif HealBot_luVars["RecalcDelay"]>0.4 then
+            HealBot_luVars["RecalcDelay"] = 0.4
         end
-        if HealBot_luVars["EventsDelay"]<0.175 then 
-            HealBot_luVars["EventsDelay"] = 0.175
-        elseif HealBot_luVars["EventsDelay"]>0.35 then
-            HealBot_luVars["EventsDelay"] = 0.35
+        if HealBot_luVars["EventsDelay"]<0.125 then 
+            HealBot_luVars["EventsDelay"] = 0.125
+        elseif HealBot_luVars["EventsDelay"]>0.275 then
+            HealBot_luVars["EventsDelay"] = 0.275
         end
         HealBot_Action_UpdateCheckInterval()
     end
@@ -3864,6 +3899,10 @@ function HealBot_UpdateAllEmergBars()
         xButton.status.slowupdate=true
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        xButton.status.emergupd=true
+        xButton.status.slowupdate=true
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         xButton.status.emergupd=true
         xButton.status.slowupdate=true
     end
@@ -4777,6 +4816,9 @@ function HealBot_OnEvent_RaidTargetUpdateAll()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_OnEvent_RaidTargetUpdate(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_OnEvent_RaidTargetUpdate(xButton)
+    end
 end
 
 function HealBot_getDefaultSkin(preCombat)
@@ -5325,9 +5367,6 @@ function HealBot_ProcessRefreshTypes()
     if not InCombatLockdown() then
         if HealBot_RefreshTypes[0] then
             HealBot_RecalcParty(0)
-            if HealBot_luVars["ClearReset"] then
-                HealBot_Timers_Set("SKINS","ClearReset")
-            end
         elseif HealBot_RefreshTypes[6] then
             HealBot_RecalcParty(6)
             if not HealBot_RefreshTypes[5] then
@@ -5344,6 +5383,9 @@ function HealBot_ProcessRefreshTypes()
         elseif HealBot_RefreshTypes[5] then 
             HealBot_RecalcParty(5)
         elseif HealBot_luVars["RefreshListsComplete"] then
+            if HealBot_luVars["ClearReset"] then
+                HealBot_Timers_Set("SKINS","ClearReset")
+            end
             HealBot_luVars["ProcessRefresh"]=false
             if HealBot_Panel_retLuVars("resetAuxText") then
                 HealBot_Panel_setLuVars("resetAuxText", false)
@@ -5351,7 +5393,7 @@ function HealBot_ProcessRefreshTypes()
             end
             if HealBot_luVars["newSkin"] then
                 HealBot_luVars["newSkin"]=false
-                HealBot_Timers_Set("OOC","ShowFramesOnSkinChange",0.1)
+                HealBot_Timers_Set("OOC","ShowFramesOnSkinChange",0.05)
             end
             HealBot_Skins_setLuVars("AuxReset", false)
             HealBot_SetTargetBar()
@@ -5622,6 +5664,9 @@ function HealBot_UpdateAllEnemyAWTarget()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         xButton.awtarget=true
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        xButton.awtarget=true
+    end
 end
 
 local hbEnemyAura={}
@@ -5714,6 +5759,9 @@ end
 function HealBot_UpdateEnemy_Buttons()
       --HealBot_setCall("HealBot_UpdateEnemy_Buttons", nil, nil, nil, true)
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_EnemyUpdateButton(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_EnemyUpdateButton(xButton)
     end
 end
@@ -5889,6 +5937,9 @@ function HealBot_Update_ResetRefreshLists()
         HealBot_Update_RefreshList(xButton, true, false)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Update_RefreshList(xButton, false, HealBot_luVars["auraWatchIncEnemy"])
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Update_RefreshList(xButton, false, HealBot_luVars["auraWatchIncEnemy"])
     end
     if HealBot_luVars["NumUnitsInQueue"]~=#HealBot_UpdateQueue then
@@ -6485,9 +6536,6 @@ function HealBot_PlayerRegenDisabled()
         HealBot_RefreshTypes[6]=true
         HealBot_RefreshTypes[0]=false
         HealBot_RecalcQueue[0]=false
-        if HealBot_luVars["ClearReset"] then
-            HealBot_Timers_Set("SKINS","ClearReset")
-        end
     end
     if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["STATE"] then
         if Healbot_Config_Skins.HealGroups[Healbot_Config_Skins.Current_Skin][10]["FRAME"]==9 then
@@ -7018,6 +7066,11 @@ function HealBot_RaidTargetToggle(switch)
                 HealBot_Aura_RaidTargetUpdate(xButton,0)
             end
         end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+            if xButton.icon.extra.targeticon>0 then
+                HealBot_Aura_RaidTargetUpdate(xButton,0)
+            end
+        end
         for _,xButton in pairs(HealBot_Pet_Button) do
             if xButton.icon.extra.targeticon>0 then
                 HealBot_Aura_RaidTargetUpdate(xButton,0)
@@ -7437,6 +7490,9 @@ function HealBot_AuxResetRange()
         HealBot_Update_AuxRange(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Update_AuxRange(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Update_AuxRange(xButton)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do

@@ -20,4 +20,3 @@ function HealBot_Spells_KnownByName(spellName)
         return nil
     end
 end
-

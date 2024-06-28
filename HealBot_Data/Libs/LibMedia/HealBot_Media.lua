@@ -364,7 +364,7 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                     end
                 end
             end
-            if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then 
+            if Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin] then
                 for _,xButton in pairs(HealBot_Unit_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
@@ -390,11 +390,21 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
                 end 
+                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedTextures(xButton)
+                    end
+                end
                 for _,xButton in pairs(HealBot_Extra_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedTextures(xButton)
                     end
-                end 
+                end
+                for _,xButton in pairs(HealBot_Test_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedTextures(xButton)
+                    end
+                end
             end
         elseif mediatype=="font" then
             if Healbot_Config_Skins.HeadText[Healbot_Config_Skins.Current_Skin] then
@@ -438,7 +448,17 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
                 end 
+                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedButtonText(xButton)
+                    end
+                end
                 for _,xButton in pairs(HealBot_Extra_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedButtonText(xButton)
+                    end
+                end
+                for _,xButton in pairs(HealBot_Test_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedButtonText(xButton)
                     end
@@ -460,6 +480,11 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
+                for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedAuxText(xButton)
+                    end
+                end
                 for _,xButton in pairs(HealBot_Pet_Button) do
                     if xButton.frame==frame then
                         HealBot_Media_UpdateUsedAuxText(xButton)
@@ -475,6 +500,11 @@ local function HealBot_Media_DoUpdateUsedMedia(mediatype, frame)
                         HealBot_Media_UpdateUsedAuxText(xButton)
                     end
                 end
+                for _,xButton in pairs(HealBot_Test_Button) do
+                    if xButton.frame==frame then
+                        HealBot_Media_UpdateUsedAuxText(xButton)
+                    end
+                end
             end
         end
     end
@@ -484,6 +514,6 @@ function HealBot_Media_UpdateUsedMedia(mediatype, frame)
       --HealBot_setCall("HealBot_Media_UpdateUsedMedia")
     if not hbUpdateDelayType[mediatype..frame] then
         hbUpdateDelayType[mediatype..frame] = true
-        C_Timer.After(0.02, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
+        C_Timer.After(0.1, function() HealBot_Media_DoUpdateUsedMedia(mediatype, frame) end)
     end
 end

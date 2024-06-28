@@ -327,6 +327,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_SHOWTOOLTIP             = "Show tooltips";
     HEALBOT_OPTIONS_SHOWDETTOOLTIP          = "Show detailed spell information";
     HEALBOT_OPTIONS_SHOWCDTOOLTIP           = "Show spell cooldown";
+    HEALBOT_OPTIONS_SHOWICONINFOTIP         = "Show icon info";
     HEALBOT_OPTIONS_COOLDOWNTEXT            = "Cooldown Text";
     HEALBOT_OPTIONS_COUNTTEXT               = "Count Text";
     HEALBOT_OPTIONS_IGNOREGCDTOOLTIP        = "Ignore spell global cooldown";
@@ -715,6 +716,8 @@ function HealBot_Lang_enALL()
     
     HEALBOT_OPTIONS_SHOWUNITBUFFTIME        = "Show my buffs";
     HEALBOT_OPTIONS_SHOWGUILD               = "Show guild";
+    HEALBOT_OPTIONS_SHOWGUILDTITLE          = "Include guild title";
+    HEALBOT_OPTIONS_SHOWGUILDRANK           = "Include guild rank";
     HEALBOT_OPTIONS_SHOWTITLE               = "Show title";
     HEALBOT_OPTIONS_SHOWUNITBUFFREQUIRED    = "Show required buffs";
     HEALBOT_OPTIONS_BUFFSTEXTTIMER          = "Show buff before it expires";
@@ -839,6 +842,10 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_TAB_CHAT                = "Chat"
     HEALBOT_OPTIONS_TAB_HEADERS             = "Headers"
     HEALBOT_OPTIONS_TAB_BARS                = "Bars"
+    HEALBOT_OPTIONS_TAB_AURAS               = "Auras"
+    HEALBOT_OPTIONS_TAB_UNITTARGETS         = "Unit Targets"
+    HEALBOT_OPTIONS_TAB_ENEMYUNITS          = "Enemy Units"
+    HEALBOT_OPTIONS_TAB_TARGETOFTARGET      = "Target of Target"
     HEALBOT_OPTIONS_TAB_BUTTONS             = "Buttons"
     HEALBOT_OPTIONS_TAB_ICONS               = "Icons"
     HEALBOT_OPTIONS_TAB_INDICATORS          = "Indicators"
@@ -1072,7 +1079,7 @@ function HealBot_Lang_enALL()
     HEALBOT_OPTIONS_AUXASSIGN               = "Auxiliary Bars Assignments"
     HEALBOT_OPTIONS_AUXCONFIG               = "Auxiliary Bar Configuration"
     HEALBOT_OPTIONS_VISSTANDARD             = "Standard Frames"
-    HEALBOT_OPTIONS_ENEMYFRAME              = "Enemy Frame"
+    HEALBOT_OPTIONS_ENEMYAURAS              = "Enemy Auras"
     HEALBOT_OPTIONS_AUXFLASH                = "Variable Opacity"
     HEALBOT_WORD_ASSIGNMENT                 = "Assignment:"
     HEALBOT_WORD_ANCHOR                     = "Anchor:"
@@ -1757,6 +1764,7 @@ function HealBot_Lang_enALL()
     HEALBOT_ENEMY_INCLUDE_SELF              = "Include Target"
     HEALBOT_ENEMY_INCLUDE_FOCUS             = "Include Focus"
     HEALBOT_ENEMY_INCLUDE_TANKS             = "Include Tank targets"
+    HEALBOT_ENEMY_INCLUDE_GROUP             = "Include Group targets"
     HEALBOT_OPTIONS_ENEMY_OPT               = "Enemy Visibility";
     HEALBOT_OPTIONS_SHARE_OPT               = "Share Options";
     HEALBOT_OPTIONS_CONTENT_SKINS_SHARE     = "    " .. "Share"

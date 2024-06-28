@@ -23,6 +23,7 @@ local HealBot_Action_Private_Button={}
 local HealBot_Action_Pet_Button={}
 local HealBot_Action_Vehicle_Button={}
 local HealBot_Action_Enemy_Button={}
+local HealBot_Action_DupEnemy_Button={}
 local HealBot_Action_Extra_Button={}
 local HealBot_Action_Unit_Button={}
 local hbUpdateFramesOpacity={}
@@ -1260,6 +1261,9 @@ function HealBot_Action_DisableButtonIconsGlow()
         HealBot_Action_DisableIconsGlow(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Action_DisableIconsGlow(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Action_DisableIconsGlow(xButton)
     end
 end
@@ -2961,6 +2965,11 @@ function HealBot_Action_ShouldHealSome(frame)
                 return true
             end
         end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+            if xButton.status.enabled then
+                return true
+            end
+        end
     end
     return false
 end
@@ -3485,6 +3494,9 @@ function HealBot_Action_ResetUnitOpacity()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_ResetUnitButtonOpacity(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Action_ResetUnitButtonOpacity(xButton)
+    end
     --HealBot_Timers_Set("LAST","ResetUnitStatus")
 end
 
@@ -3513,6 +3525,9 @@ function HealBot_Action_ResetUnitStatus()
         HealBot_RefreshUnit(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_RefreshUnit(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_RefreshUnit(xButton)
     end
 end
@@ -3571,6 +3586,9 @@ function HealBot_Action_ResetrCalls()
         HealBot_Action_ResetrCallsUnit(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Action_ResetrCallsUnit(xButton)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Action_ResetrCallsUnit(xButton)
     end
 end 
@@ -3634,6 +3652,11 @@ function HealBot_Action_InitAuxGlow(id, frame, button)
                 end
             end
             for _,xButton in pairs(HealBot_Enemy_Button) do
+                if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
+                    HealBot_Action_SetAuxGlow(xButton, id)
+                end
+            end
+            for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
                 if xButton.frame==frame and not xButton.aux[id]["OUTLINE"] then
                     HealBot_Action_SetAuxGlow(xButton, id)
                 end
@@ -3996,8 +4019,8 @@ function HealBot_Action_InitButton(button, prefix)
     
     button.guid="init"
     button.guild=false
-    button.guildrank=""
-    button.guildranki=99
+    button.guildtitle=""
+    button.guildrank=99
     button.status.playerlastheal=0
     button.status.lasthealthdrop=0
     button.status.r=0
@@ -4286,6 +4309,7 @@ function HealBot_Action_CreateNewButton(frame, buttonId, prefix)
         end
         iBtns:SetBackdropBorderColor(0, 0, 0, 0)
         iBtns:EnableMouse(false)
+        iBtns:EnableMouseMotion(true)
         iBtns:UnregisterAllEvents()
     end
     for x=51,60 do
@@ -4739,7 +4763,7 @@ function HealBot_Action_GetSpell(cType, cKey)
                 else
                     if HEALBOT_GAME_VERSION==4 and vSpellText==HEALBOT_SPELL_HOLYWORDSERENITY then sID=HBC_HOLY_WORD_SERENITY end
                     sID=tonumber(sID)
-                    cSpellText=HealBot_WoWAPI_SpellName(sID)
+                    cSpellText=HealBot_Spells_KnownByID(sID)
                     vSpellIcon=HealBot_WoWAPI_SpellTexture(sID)
                     vSpellText=cSpellText or vSpellText
                     vSpellType="spell"
@@ -5841,6 +5865,11 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
                 HealBot_Action_Vehicle_Button[unit]=HealBot_Action_CreateButton(frame, "hbVehicle_") 
             end
             hButton=HealBot_Action_Vehicle_Button[unit]
+        elseif unitType>11 then
+            if not HealBot_Action_DupEnemy_Button[unit] then 
+                HealBot_Action_DupEnemy_Button[unit]=HealBot_Action_CreateButton(frame, "hbDupEnemy_") 
+            end
+            hButton=HealBot_Action_DupEnemy_Button[unit]
         elseif unitType>10 then
             if not HealBot_Action_Enemy_Button[unit] then 
                 HealBot_Action_Enemy_Button[unit]=HealBot_Action_CreateButton(frame, "hbEnemy_") 
@@ -5896,7 +5925,10 @@ function HealBot_Action_SetHealButton(unit,guid,frame,unitType,duplicate,role,pr
             end
             if hButton.unit~=unit or hButton.reset or hButton.guid~=guid or hButton.status.unittype~=unitType then
                 hButton.status.unittype = unitType            -- 1=Tanks  2=Healers  3=Self  4=Private  5=Raid  6=Group
-                if unitType>10 then                           -- 7=vehicle  8=pet  9=target  10=focus  11=enemy
+                if unitType>11 then                           -- 7=vehicle  8=pet  9=target  10=focus  11=enemy 12=enemy dup
+                    HealBot_DuplicateEnemy_Button[unit]=hButton
+                    hButton:SetAttribute("toggleForVehicle", false)
+                elseif unitType>10 then 
                     HealBot_Enemy_Button[unit]=hButton
                     hButton:SetAttribute("toggleForVehicle", false)
                 elseif unitType==8 then 
@@ -6304,6 +6336,9 @@ function HealBot_Action_SetEnabledAttribs()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_MarkAttribUpdateButton(xButton, true, false, false)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Action_MarkAttribUpdateButton(xButton, true, false, false)
+    end
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_MarkAttribUpdateButton(xButton, true, false, false)
     end
@@ -6327,6 +6362,9 @@ function HealBot_Action_SetEnemyAttribs()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_MarkAttribUpdateButton(xButton, false, true, false)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Action_MarkAttribUpdateButton(xButton, false, true, false)
+    end
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_MarkAttribUpdateButton(xButton, false, true, false)
     end
@@ -6348,6 +6386,9 @@ function HealBot_Action_SetEmergAttribs()
         HealBot_Action_MarkAttribUpdateButton(xButton, false, false, true)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Action_MarkAttribUpdateButton(xButton, false, false, true)
+    end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Action_MarkAttribUpdateButton(xButton, false, false, true)
     end
     for _,xButton in pairs(HealBot_Pet_Button) do
@@ -6380,6 +6421,9 @@ function HealBot_Action_ResethbInitButtons()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end 
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Action_MarkDeleteButton(xButton)
+    end
     for _,xButton in pairs(HealBot_Pet_Button) do
         HealBot_Action_MarkDeleteButton(xButton)
     end 
@@ -6480,6 +6524,9 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Enemy_Button[button.unit] and HealBot_Enemy_Button[button.unit].id==button.id then 
         HealBot_Enemy_Button[button.unit]=nil 
     end
+    if HealBot_DuplicateEnemy_Button[button.unit] and HealBot_DuplicateEnemy_Button[button.unit].id==button.id then 
+        HealBot_DuplicateEnemy_Button[button.unit]=nil 
+    end
     if HealBot_Pet_Button[button.unit] and HealBot_Pet_Button[button.unit].id==button.id then 
         HealBot_Pet_Button[button.unit]=nil 
     end
@@ -6495,9 +6542,9 @@ function HealBot_Action_MarkDeleteButton(button)
     if HealBot_Unit_Button[button.unit] and HealBot_Unit_Button[button.unit].id==button.id then 
         HealBot_Unit_Button[button.unit]=nil 
     end
-    --if HealBot_Test_Button[button.unit] and HealBot_Test_Button[button.unit].id==button.id then 
-    --    HealBot_Test_Button[button.unit]=nil
-    --end
+    if HealBot_Test_Button[button.unit] and HealBot_Test_Button[button.unit].id==button.id then 
+        HealBot_Test_Button[button.unit]=nil
+    end
     if button.hotbars.state then HealBot_Action_BarHotRemove(button) end
     if HealBot_Fluid_BarButtons[button.id] then HealBot_Fluid_BarButtons[button.id]=nil end
     if HealBot_Fluid_InHealButtons[button.id] then HealBot_Fluid_InHealButtons[button.id]=nil end
@@ -6761,7 +6808,6 @@ function HealBot_Action_HideTooltip(self)
       --HealBot_setCall("HealBot_Action_HideTooltip")
     if HealBot_Data["TIPBUTTON"] then
         HealBot_Data["TIPBUTTON"] = false;
-        HealBot_Data["TIPTYPE"] = "NONE";
         HealBot_Action_HideTooltipFrame()
     end
 end
@@ -6797,6 +6843,12 @@ function HealBot_Action_CheckHideFrames()
             end
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do
+            if xButton.status.enabled then
+                hideFrame[xButton.frame]=false
+                break
+            end
+        end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
             if xButton.status.enabled then
                 hideFrame[xButton.frame]=false
                 break
@@ -6839,6 +6891,9 @@ function HealBot_Action_CheckHideUnusedFrames()
             showFrame[xButton.frame]=true
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do
+            showFrame[xButton.frame]=true
+        end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
             showFrame[xButton.frame]=true
         end
         for _,xButton in pairs(HealBot_Pet_Button) do
@@ -7437,6 +7492,9 @@ function HealBot_Action_setRegisterForClicks(button)
             HealBot_Action_setButtonRegisterForClicks(xButton)
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do
+            HealBot_Action_setButtonRegisterForClicks(xButton)
+        end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
             HealBot_Action_setButtonRegisterForClicks(xButton)
         end
         for _,xButton in pairs(HealBot_Pet_Button) do

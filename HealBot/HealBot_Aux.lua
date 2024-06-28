@@ -315,6 +315,9 @@ function HealBot_Aux_clearAllMarkedBars()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Aux_clearMarkedBars(xButton)
     end
+    for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Aux_clearMarkedBars(xButton)
+    end
     HealBot_Aux_luVars["WaitOnFullClear"]=false
 end
 
@@ -2251,6 +2254,9 @@ function HealBot_Aux_ResetTextButtons()
             HealBot_Aux_ResetTextByTypeById(xButton, x)
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do
+            HealBot_Aux_ResetTextByTypeById(xButton, x)
+        end
+        for xUnit,xButton in pairs(HealBot_DuplicateEnemy_Button) do
             HealBot_Aux_ResetTextByTypeById(xButton, x)
         end
         for _,xButton in pairs(HealBot_Extra_Button) do

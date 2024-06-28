@@ -364,6 +364,7 @@ function HealBot_Data_InitVars()
         ShowGameUnitInfo=false,
         Tooltip_ShowHoT=false,
         Tooltip_ShowCD=false,
+        Tooltip_ShowIconInfo=true,
         Tooltip_MaxButtons=5,
         Tooltip_IgnoreGCD=false,
         Tooltip_Scale=1,
@@ -831,6 +832,7 @@ HealBot_ReadyCheckStatus={   ["WAITING"]=0,
 HealBot_Unit_Button={};
 HealBot_Private_Button={};
 HealBot_Enemy_Button={};
+HealBot_DuplicateEnemy_Button={};
 HealBot_Extra_Button={};
 HealBot_Pet_Button={};
 HealBot_Vehicle_Button={};
@@ -838,4 +840,3 @@ HealBot_Emerg_Button={};
 HealBot_Buttons={};
 HealBot_Test_Button={};
 HealBot_TimeNow=GetTime()
-

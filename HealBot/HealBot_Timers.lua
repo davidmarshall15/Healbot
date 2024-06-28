@@ -42,6 +42,7 @@ HealBot_Timers_luVars["nProcs"]=9
 HealBot_Timers_luVars["nProcsOn"]=4
 HealBot_Timers_luVars["nProcsOff"]=2
 HealBot_Timers_luVars["turboEndTimer"]=0
+HealBot_Timers_luVars["ResetSkins"]=false
 
 function HealBot_Timers_TurboOn(duration)
       --HealBot_setCall("HealBot_Timers_TurboOn")
@@ -119,29 +120,66 @@ function HealBot_Timer_ResetAllButtonsRecalcAll()
     HealBot_AddDebug("ResetAllButtonsRecalcAll Called", "Debug", true)
 end
 
+function HealBot_Timers_ResetSkins()
+    HealBot_Timers_luVars["ResetSkins"]=false
+    HealBot_Action_setLuVars("resetSkin", true)
+    HealBot_Action_ResetSkinAllButtons()
+end
+
 function HealBot_Timers_nextRecalcAll()
       --HealBot_setCall("HealBot_Timers_nextRecalcAll")
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
     HealBot_nextRecalcParty(0)
 end
 
 function HealBot_Timers_nextRecalcPlayers()
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
       --HealBot_setCall("HealBot_Timers_nextRecalcPlayers")
     HealBot_nextRecalcParty(6)
 end
 
 function HealBot_Timers_nextRecalcVehicle()
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
       --HealBot_setCall("HealBot_Timers_nextRecalcVehicle")
     HealBot_nextRecalcParty(1)
 end
 
 function HealBot_Timers_nextRecalcPets()
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
       --HealBot_setCall("HealBot_Timers_nextRecalcPets")
     HealBot_nextRecalcParty(2)
 end
 
 function HealBot_Timers_nextRecalcEnemy()
       --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
     HealBot_nextRecalcParty(5)
+end
+
+function HealBot_Timers_nextRecalcTarget()
+      --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
+    HealBot_nextRecalcParty(3)
+end
+
+function HealBot_Timers_nextRecalcFocus()
+      --HealBot_setCall("HealBot_Timers_nextRecalcEnemy")
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
+    HealBot_nextRecalcParty(4)
 end
 
 function HealBot_Timers_SkinChangePluginUpdate()
@@ -243,6 +281,9 @@ end
 
 function HealBot_Timers_TargetFocusUpdate()
       --HealBot_setCall("HealBot_Timers_TargetFocusUpdate")
+    if HealBot_Timers_luVars["ResetSkins"] then
+        HealBot_Timers_ResetSkins()
+    end
     HealBot_nextRecalcParty(3)
     if HEALBOT_GAME_VERSION>1 then
         HealBot_nextRecalcParty(4)
@@ -785,6 +826,8 @@ local hbTimerFuncs={["INIT"]={
                         ["RefreshPartyNextRecalcPets"]=HealBot_Timers_nextRecalcPets,
                         ["RefreshPartyNextRecalcVehicle"]=HealBot_Timers_nextRecalcVehicle,
                         ["RefreshPartyNextRecalcEnemy"]=HealBot_Timers_nextRecalcEnemy,
+                        ["RefreshPartyNextRecalcTarget"]=HealBot_Timers_nextRecalcTarget,
+                        ["RefreshPartyNextRecalcFocus"]=HealBot_Timers_nextRecalcFocus,
                         ["BuffIdLookup"]=HealBot_Aura_BuffIdLookup,
                         ["DisableCheck"]=HealBot_Options_DisableCheck,
                         ["ToggleHealBot"]=HealBot_ToggleHealBotOOC,

@@ -653,7 +653,7 @@ function HealBot_Text_ConcatHealthText(button)
     finalHealthTxt=HealBot_Text_HealthConcat(3)
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["HMAXCHARS"]>0 then
         vSetHealthTextStrLen=hbStringLen(hbutf8sub(button.text.health, "%s+", ""))
-        if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
+        if HealBot_Panel_isSpecialUnit(button.unit)>0 then
             vSetHealthTextBtnLen=HealBot_Text_EnemySizeWidth["HLTH"][HealBot_Panel_isSpecialUnit(button.unit)]
         else
             vSetHealthTextBtnLen=hbBarHealthTextLen[button.frame]
@@ -673,7 +673,7 @@ function HealBot_Text_ConcatHealthText(button)
                 button.text.healthcomplete=HealBot_Text_HealthConcat(2)
             end
         elseif vSetHealthTextStrLen>vSetHealthTextBtnLen then
-            if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
+            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
                 tConcat[1]=hbStringSub(button.text.health,1,HealBot_Text_EnemySizeWidth["HLTH"][HealBot_Panel_isSpecialUnit(button.unit)])
             else
                 tConcat[1]=hbStringSub(button.text.health,1,hbBarHealthTextLen[button.frame])
@@ -895,6 +895,11 @@ function HealBot_Text_ClearOverHeals()
         xButton.text.overheallen=0
         HealBot_Text_ConcatHealthText(xButton)
     end
+    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        xButton.text.overheal=vTextChars["Nothing"]
+        xButton.text.overheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
+    end
     for _,xButton in pairs(HealBot_Extra_Button) do
         xButton.text.overheal=vTextChars["Nothing"]
         xButton.text.overheallen=0
@@ -925,6 +930,11 @@ function HealBot_Text_ClearSeparateInHealsAbsorbs()
         HealBot_Text_ConcatHealthText(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        xButton.text.inheal=vTextChars["Nothing"]
+        xButton.text.inheallen=0
+        HealBot_Text_ConcatHealthText(xButton)
+    end
+    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         xButton.text.inheal=vTextChars["Nothing"]
         xButton.text.inheallen=0
         HealBot_Text_ConcatHealthText(xButton)
@@ -1093,10 +1103,10 @@ end
 function HealBot_Text_setAggroText(button)
       --HealBot_setCall("HealBot_Text_setAggroText", button)
     if not Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["TAGAGGROONLYTIP"] and button.aggro.threatpct>0 then
-        tHealthConcat[1]=aggroNumFormatSurLa[button.frame]
+        tHealthConcat[1]=aggroNumFormatSurLa[button.frame] or ""
         tHealthConcat[2]=button.aggro.threatpct
         tHealthConcat[3]=vTextChars["Percent"]
-        tHealthConcat[4]=aggroNumFormatSurRa[button.frame]
+        tHealthConcat[4]=aggroNumFormatSurRa[button.frame] or ""
         vHealthTextConcatResult=HealBot_Text_HealthConcat(4)
         if button.text.aggro~=vHealthTextConcatResult then
             button.text.aggro=vHealthTextConcatResult
@@ -1255,13 +1265,13 @@ function HealBot_Text_setNameText(button)
     end
     if Healbot_Config_Skins.BarText[Healbot_Config_Skins.Current_Skin][button.frame]["MAXCHARS"]>0 then
         vSetNameTextStrLen=hbStringLen(hbutf8sub(vSetNameTextName, "%s+", ""))
-        if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
+        if HealBot_Panel_isSpecialUnit(button.unit)>0 then
             vSetNameTextBtnLen=HealBot_Text_EnemySizeWidth["NAME"][HealBot_Panel_isSpecialUnit(button.unit)]-vSetNameTextStrLen
         else
             vSetNameTextBtnLen=hbBarTextLen[button.frame]-vSetNameTextStrLen
         end
         if vSetNameTextBtnLen<0 then
-            if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
+            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
                 tConcat[1]=hbStringSub(vSetNameTextName,1,HealBot_Text_EnemySizeWidth["NAME"][HealBot_Panel_isSpecialUnit(button.unit)])
             else
                 tConcat[1]=hbStringSub(vSetNameTextName,1,hbBarTextLen[button.frame])
@@ -1495,6 +1505,9 @@ function HealBot_Text_UpdateNames()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
+    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Text_UpdateNameButton(xButton)
+    end
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_UpdateNameButton(xButton)
     end
@@ -1525,6 +1538,9 @@ function HealBot_Text_UpdateHealth()
         HealBot_Text_UpdateHealthButton(xButton)
     end
     for _,xButton in pairs(HealBot_Enemy_Button) do
+        HealBot_Text_UpdateHealthButton(xButton)
+    end
+    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
         HealBot_Text_UpdateHealthButton(xButton)
     end
     for _,xButton in pairs(HealBot_Extra_Button) do
@@ -1563,6 +1579,9 @@ function HealBot_Text_UpdateState()
     for _,xButton in pairs(HealBot_Enemy_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
+    for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
+        HealBot_Text_UpdateStateButton(xButton)
+    end
     for _,xButton in pairs(HealBot_Extra_Button) do
         HealBot_Text_UpdateStateButton(xButton)
     end
@@ -1590,6 +1609,9 @@ function HealBot_Text_UpdateButtons()
             HealBot_Text_UpdateButton(xButton)
         end
         for _,xButton in pairs(HealBot_Vehicle_Button) do
+            HealBot_Text_UpdateButton(xButton)
+        end
+        for _,xButton in pairs(HealBot_DuplicateEnemy_Button) do
             HealBot_Text_UpdateButton(xButton)
         end
         for _,xButton in pairs(HealBot_Enemy_Button) do

@@ -88,7 +88,7 @@ function HealBot_Skins_ResetSkinWidth(button)
     frameScale = Healbot_Config_Skins.Frame[Healbot_Config_Skins.Current_Skin][button.frame]["SCALE"]
     bWidth = ceil(Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["WIDTH"]*frameScale);
     bOutline = ceil(Healbot_Config_Skins.BarCol[Healbot_Config_Skins.Current_Skin][button.frame]["BOUT"]*frameScale);
-    if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
+    if HealBot_Panel_isSpecialUnit(button.unit)>0 then
         HealBot_Skins_AdjustSpecialBarWidth(button)
     end
     button.gref["Bar"]:SetWidth(bWidth)
@@ -335,6 +335,11 @@ function HealBot_Skins_UpdateIconGlowSize(b, id)
         b.gref.iconf[id]:EnableMouse(true)
     else
         b.gref.iconf[id]:EnableMouse(false)
+        if HealBot_Globals.Tooltip_ShowIconInfo then
+            b.gref.iconf[id]:EnableMouseMotion(true)
+        else
+            b.gref.iconf[id]:EnableMouseMotion(false)
+        end
     end
     if b.gref.iconf[id].size~=HealBot_Skins_luVars["IconGlowSize"] then
         b.gref.iconf[id].size=HealBot_Skins_luVars["IconGlowSize"]
@@ -453,11 +458,19 @@ function HealBot_Skins_ResetSkin(barType,button,numcols)
         b=button
         if b.skinreset then
             pWidth=bWidth
-            if button.frame==10 and HealBot_Panel_isSpecialUnit(button.unit)>0 then
-                HealBot_Skins_AdjustSpecialBarWidth(button)        
-                if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then 
+            if HealBot_Panel_isSpecialUnit(button.unit)>0 then
+                HealBot_Skins_AdjustSpecialBarWidth(button)
+                if HealBot_Panel_isSpecialPlayerUnit(button.unit)>0 then
+                    if Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then
+                        pWidth=(pWidth+auxWidth)*3
+                    else
+                        pWidth=((pWidth+bOutline+auxWidth)*2)+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
+                    end
+                elseif Healbot_Config_Skins.Enemy[Healbot_Config_Skins.Current_Skin]["DOUBLEWIDTH"] then 
                     pWidth=pWidth*(2-(pWidth/7800))
                 end
+            elseif HealBot_Panel_isSpecialPlayerUnit(button.unit)>0 then
+                pWidth=((pWidth+bOutline+auxWidth)*2)+Healbot_Config_Skins.HealBar[Healbot_Config_Skins.Current_Skin][button.frame]["CMARGIN"]
             end
             if HealBot_Action_SetBackBarHeightWidth(button.frame, (bheight+auxHeight+(bOutline*2)), (pWidth+auxWidth+(bOutline*2)), framePad) then
                 HealBot_Skins_luVars["AuxReset"]=true
@@ -2515,6 +2528,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     elseif Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]==true then
         Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWTANK"]=1
     end
+    if not Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWGROUP"] then Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWGROUP"]=2 end
     if not Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWLIST"] then 
         Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWLIST"]=2 
     elseif Healbot_Config_Skins.Enemy[SkinName]["INCOMBATSHOWLIST"]==true then
@@ -2546,6 +2560,7 @@ function HealBot_Skins_Check_Skin(SkinName, fromImport)
     elseif Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWTANK"]==true then
         Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWTANK"]=2
     end
+    if not Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWGROUP"] then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWGROUP"]=1 end
     if Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]==nil then Healbot_Config_Skins.Enemy[SkinName]["EXISTSHOWBOSS"]=true end
     if Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]==nil then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGET"]=false end
     if not Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"] then Healbot_Config_Skins.Enemy[SkinName]["ENEMYTARGETSIZE"]=40 end
